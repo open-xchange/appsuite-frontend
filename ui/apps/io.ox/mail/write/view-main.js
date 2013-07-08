@@ -22,6 +22,8 @@ define("io.ox/mail/write/view-main",
      'io.ox/contacts/util',
      'io.ox/mail/util',
      'io.ox/preview/main',
+     'io.ox/core/api/user',
+     'io.ox/core/capabilities',
      'io.ox/core/tk/dialogs',
      'io.ox/core/tk/autocomplete',
      'io.ox/core/api/autocomplete',
@@ -31,7 +33,7 @@ define("io.ox/mail/write/view-main",
      'io.ox/core/config',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, config, settings, gt) {
+    ], function (ext, links, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, userAPI, capabilities, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, config, settings, gt) {
 
     'use strict';
 
@@ -66,7 +68,7 @@ define("io.ox/mail/write/view-main",
 
     var contactPictureOptions = { width: 42, height: 42, scaleType: 'contain' };
 
-    var autocompleteAPI = new AutocompleteAPI({ id: 'mailwrite', contacts: true });
+    var autocompleteAPI = new AutocompleteAPI({ id: 'mailwrite', contacts: true, msisdn: true });
 
     var view = View.extend({
 
@@ -203,7 +205,7 @@ define("io.ox/mail/write/view-main",
                                 hash[rcpt] = true;
                             });
                             list = _(data).filter(function (o) {
-                                return hash[o.email] === undefined;
+                                return o.email !== '' ? hash[o.email] === undefined : hash[mailUtil.cleanupPhone(o.phone)] === undefined;
                             });
 
                             //return number of query hits and the filtered list
@@ -251,19 +253,49 @@ define("io.ox/mail/write/view-main",
             var node = $('<div class="fromselect-wrapper">').append(
                    $('<label for="from" class="wrapping-label">').text(gt('From'))
                 ),
-                select = $('<select name="from">').css('width', '100%');
+                select = $('<select name="from">').css('width', '100%'),
+                accounts, msisdns;
 
-            accountAPI.getAllSenderAddresses().done(function (addresses) {
+            //get accounts
+            accounts = accountAPI.getAllSenderAddresses().then(function (addresses) {
                 // sort by mail address (across all accounts)
-                addresses.sort(function (a, b) {
+                return addresses.sort(function (a, b) {
                     a = mailUtil.formatSender(a);
                     b = mailUtil.formatSender(b);
                     return a < b ? -1 : +1;
                 });
+
+            });
+
+            //get msisdn numbers
+            msisdns = !capabilities.has('msisdn') ? [] : userAPI.get({id: ox.user_id}).then(function (data) {
+                return _(contactsAPI.getMapping('msisdn', 'names'))
+                        .chain()
+                        .map(function (field) {
+                            if (data[field]) {
+                                return [
+                                    data.display_name,
+                                    mailUtil.cleanupPhone(data[field]) + mailUtil.getChannelSuffixes().msisdn,
+                                    data.display_name + ' <' + mailUtil.cleanupPhone(data[field]) + mailUtil.getChannelSuffixes().msisdn + '>',
+                                    data.display_name + ' <' + data[field] + '>'
+                                ];
+                            }
+                        })
+                        .compact()
+                        .value();
+            });
+
+            //append to selectbox
+            new $.when(accounts, msisdns).then(function (addresses, numbers) {
                 _(addresses).each(function (address) {
                     var value = mailUtil.formatSender(address),
                         option = $('<option>', { value: value }).text(_.noI18n(value))
                         .data({ displayname: address[0], primaryaddress: address[1] });
+                    select.append(option);
+                });
+                _(numbers).each(function (number) {
+                    var option = $('<option>', { value: number[2] }).text(number[3])
+                        .data({ displayname: number[0], primaryaddress: number[1]});
                     select.append(option);
                 });
             });
@@ -336,14 +368,15 @@ define("io.ox/mail/write/view-main",
                 });
                 // ignore doublets and draw remaining
                 list = _(list).filter(function (recipient) {
-                    if (hash[recipient.email] === undefined) {
+                    if (hash[recipient.email] === undefined && hash[mailUtil.cleanupPhone(recipient.phone)] === undefined) {
                         //draw recipient
-                        var node = $('<div>');
+                        var node = $('<div>'), value;
                         drawContact(id, node, recipient);
                         // add to proper section (to, CC, ...)
                         this.sections[id + 'List'].append(node);
                         // if list itself contains doublets
-                        return hash[recipient.email] = true;
+                        value = recipient.email !== '' ? recipient.email : mailUtil.cleanupPhone(recipient.phone);
+                        return hash[value] = true;
                     }
                 }, this);
                 this.sections[id + 'List'].show().trigger('show');
@@ -490,11 +523,7 @@ define("io.ox/mail/write/view-main",
                 .append(createRadio('priority', '5', gt('Low')))
                 .on('change', 'input', function () {
                     var radio = $(this);
-                    if (radio.val() === '1' && radio.prop('checked')) {
-                        self.applyHighPriority(true);
-                    } else {
-                        self.applyHighPriority(false);
-                    }
+                    if (radio.prop('checked')) self.app.setPriority(radio.val());
                 }),
                 // Attach vCard
                 $('<div>').addClass('section-item')
@@ -504,30 +533,25 @@ define("io.ox/mail/write/view-main",
 
             this.addLink('options', gt('More'));
 
-            var fnChangeFormat = function (e) {
-                e.preventDefault();
-                $(this).addClass('active').siblings().removeClass('active');
-                app.setFormat(e.data.format).done(function () {
-                    app.getEditor().focus();
-                });
-            };
-
             if (!Modernizr.touch) {
                 var format = settings.get('messageFormat', 'html');
-                this.addSection('format', gt('Text format'), true, false)
-                    .append(
-                        $('<div>').addClass('change-format').append(
-                            $('<a>', { href: '#' })
-                                .text(gt('Text'))
-                                .addClass(format === 'text' ? 'active' : '')
-                                .on('click', { format: 'text' }, fnChangeFormat),
-                            $.txt(_.noI18n(' \u00A0\u2013\u00A0 ')), // &ndash;
-                            $('<a>', { href: '#' })
-                                .text(gt('HTML'))
-                                .addClass(format === 'html' || format === 'alternative' ? 'active' : '')
-                                .on('click', { format: 'html' }, fnChangeFormat)
-                        )
-                    );
+                this.addSection('format', gt('Text format'), true, false).append(
+
+                    $('<div class="section-item">').append(
+                        createRadio('format', 'text', gt('Text'), format === 'text'),
+                        createRadio('format', 'html', gt('HTML'), format === 'html' || format === 'alternative')
+                    )
+                    .css({
+                        paddingTop: '1em',
+                        paddingBottom: '1em'
+                    })
+                    .on('change', 'input', function () {
+                        var radio = $(this), format = radio.val();
+                        app.setFormat(format).done(function () {
+                            app.getEditor().focus();
+                        });
+                    })
+                );
             }
 
             /*
@@ -692,6 +716,9 @@ define("io.ox/mail/write/view-main",
         }
 
         if (list.length) {
+            var $section = view.sections.attachments,
+                $upload = $section.children().last();
+
             // loop over all attachments
             _(list).each(function (file) {
 
@@ -724,7 +751,7 @@ define("io.ox/mail/write/view-main",
                 }
 
                 // draw
-                view.sections.attachments.append(
+                $section.append(
                     $('<div>').addClass('section-item file').append(
                         // icon
                         icon,
@@ -739,15 +766,16 @@ define("io.ox/mail/write/view-main",
                             $.txt('\u00A0')
                         ),
                         // remove
-                        $('<a>', { href: '#', tabindex: '6' })
-                        .addClass('remove')
+                        $('<a href="#" class="remove" tabindex="6">')
+                        .attr('title', gt('Remove attachment'))
                         .append(
-                            $('<div>').addClass('icon').text(_.noI18n('\u00D7')) // 00D7 = &times;
+                            $('<i class="icon-trash">')
                         )
                         .on('click', function (e) {
                             e.preventDefault();
-                            $(this).parent().prev().remove();
-                            $(this).parent().remove();
+                            //remove upload container and all file 'label divs'
+                            $upload.nextUntil('.upload', '.file').remove();
+                            $upload.replaceWith('');
                         })
                     )
                 );
@@ -824,9 +852,23 @@ define("io.ox/mail/write/view-main",
     function getNormalized(list) {
         var elem;
         return list.map(function (elem) {
+
+            //parsed object?
+            if (_.isArray(elem)) {
+                var channel = mailUtil.getChannel ? mailUtil.getChannel(elem[1]) : 'email',
+                    custom = {
+                        display_name: elem[0]
+                    };
+                //email or phone property?
+                custom[channel] = elem[1];
+                elem = custom;
+            }
+
             var obj = {
-                display_name: (_.isArray(elem) ? elem[0] || '' : elem.display_name || '').replace(/^('|")|('|")$/g, ''),
-                email: _.isArray(elem) ? elem[1] : elem.email || elem.mail || '',
+                display_name: (elem.display_name || '').replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''),
+                email: elem.email || elem.mail || '',
+                phone: elem.phone || '',
+                field: elem.field || '',
                 image1_url: elem.image1_url || '',
                 folder_id: elem.folder_id || '',
                 id: elem.id || ''
@@ -836,13 +878,38 @@ define("io.ox/mail/write/view-main",
         });
     }
 
+    /**
+     * mapping for getFieldLabel()
+     * @type {object}
+     */
+    var mapping = {
+        telephone_business1: gt('Phone (business)'),
+        telephone_business2: gt('Phone (business)'),
+        telephone_home1: gt('Phone (private)'),
+        telephone_home2: gt('Phone (private)'),
+        cellular_telephone1: gt('Mobile'),
+        cellular_telephone2: gt('Mobile')
+    };
+
+    /**
+     * fieldname to fieldlabel
+     * @param  {string} field
+     * @return {string} label
+     */
+    function getFieldLabel(field) {
+        return mapping[field] || '';
+    }
+
     function drawAutoCompleteItem(node, data, query) {
-        var url = contactsUtil.getImage(data.data, contactPictureOptions);
+        var url = contactsUtil.getImage(data.data, contactPictureOptions), labelnode = '';
+        //source field label
+        if (getFieldLabel(data.field) !== '')
+            labelnode = ' <span style="color: #888;">(' + getFieldLabel(data.field) + ')</span>';
 
         node.addClass('io-ox-mail-write-contact').append(
             $('<div class="contact-image">').css('backgroundImage', 'url(' + url + ')'),
             $('<div class="person-link ellipsis">').text(_.noI18n(data.display_name + '\u00A0')),
-            $('<div class="ellipsis">').text(_.noI18n(data.email))
+            $('<div class="ellipsis">').html(_.noI18n(data.email) + _.noI18n(data.phone || '') + labelnode)
         );
     }
 
@@ -859,12 +926,12 @@ define("io.ox/mail/write/view-main",
             // display name
             $('<div>').append(contactsAPI.getDisplayName(data)),
             // email address
-            $('<div>').text(_.noI18n(String(data.email || '').toLowerCase())),
+            $('<div>').text(_.noI18n(String(data.email || '' + data.phone || '').toLowerCase())),
             // remove
-            $('<a>', { href: '#' })
-                .addClass('remove')
+            $('<a href="#" class="remove">')
+                .attr('title', gt('Remove from recipient list'))
                 .append(
-                    $('<div>').addClass('icon').text(_.noI18n('\u00D7')) // &times;
+                    $('<i class="icon-trash">')
                 )
                 .on('click', { id: id }, function (e) {
                     e.preventDefault();
@@ -883,7 +950,7 @@ define("io.ox/mail/write/view-main",
     function serialize(obj) {
         // display_name might be null!
         return obj.display_name ?
-             '"' + obj.display_name.replace(/"/g, '\"') + '" <' + obj.email + '>' : '<' + obj.email + '>';
+             '"' + obj.display_name.replace(/"/g, '\"') + '" <' + obj.email + (obj.phone || '') + '>' : '<' + obj.email + (obj.phone || '') + '>';
     }
 
     // function clickRadio(e) {

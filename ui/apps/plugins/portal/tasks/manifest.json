@@ -1,4 +1,4 @@
 {
-	namespace: "portal",
-	requires: "tasks"
+    namespace: "portal",
+    requires: "tasks"
 }

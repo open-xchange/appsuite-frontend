@@ -12,18 +12,18 @@
  */
 
 define('io.ox/core/settings/user', [
-	'io.ox/core/extensions',
-	'io.ox/core/api/user',
-	'io.ox/contacts/model',
-	'io.ox/contacts/edit/view-form',
-	'io.ox/core/tk/dialogs',
-	'io.ox/contacts/util'
+    'io.ox/core/extensions',
+    'io.ox/core/api/user',
+    'io.ox/contacts/model',
+    'io.ox/contacts/edit/view-form',
+    'io.ox/core/tk/dialogs',
+    'io.ox/contacts/util'
 ], function (ext, api, contactModel, ViewForm, dialogs, util) {
 
     'use strict';
 
 
-	// Model Factory for use with the edit dialog
+    // Model Factory for use with the edit dialog
     var factory = contactModel.protectedMethods.buildFactory('io.ox/core/user/model', api);
 
     // The edit dialog
@@ -33,11 +33,20 @@ define('io.ox/core/settings/user', [
         editCurrentUser: function ($node) {
             // Load the user
             return factory.realm('edit').get({}).done(function (user) {
+                var $userEditView = new UserEdit({model: user}).render().$el;
 
-                $node.append(new UserEdit({model: user}).render().$el);
+                /* remove image edit dialog for PIM users, because they cannot access the place where the image is stored */
+                require(['io.ox/core/api/folder'], function (folderAPI) {
+                    /* I would have preferred to use folderAPI.can('read', 6)... */
+                    folderAPI.get({ folder: 6, cache: false }).fail(function (data) {
+                        $userEditView.find('div.header-pic').remove();
+                    });
+                });
+
+                $node.append($userEditView);
 
                 user.on('change:first_name change:last_name', function () {
-                    user.set('display_name', util.getFullName(user.toJSON()));
+                    user.set('display_name', util.getFullName(user.toJSON(), {validate: true}));
                     //app.setTitle(util.getFullName(contact.toJSON()));
                 });
 

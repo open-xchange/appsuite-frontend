@@ -77,13 +77,13 @@ define('io.ox/core/permissions/permissions',
                     type    = link.attr('data-type'),
                     newbits = api.Bitmask(this.model.get('bits')).set(type, value).get();
                 link.text($el.text());
-                this.model.set('bits', newbits);
+                this.model.set('bits', newbits, {validate: true});
                 this.updateRole();
             },
 
             applyRole: function (e) {
                 var node = $(e.target), bits = node.attr('data-value');
-                this.model.set('bits', parseInt(bits, 10));
+                this.model.set('bits', parseInt(bits, 10), {validate: true});
                 this.render();
             },
 
@@ -200,7 +200,7 @@ define('io.ox/core/permissions/permissions',
         index: 200,
         id: 'entitysentence',
         draw: function (baton) {
-            var node;
+            var node, options;
             this.append(
                 $('<div class="entity">').append(
                     node = $('<div>').append(
@@ -211,47 +211,39 @@ define('io.ox/core/permissions/permissions',
                     )
                 )
             );
+
+            options = $('<div>').append(
+                // folder rights
+                gt('Folder permissions'), $.txt(_.noI18n(': ')),
+                    addDropdown('folder', baton), $.txt(_.noI18n('. ')),
+                // object rights
+                gt('Object permissions'), $.txt(_.noI18n(': ')),
+                addDropdown('read', baton), $.txt(_.noI18n(', ')),
+                addDropdown('write', baton), $.txt(_.noI18n(', ')),
+                addDropdown('delete', baton), $.txt(_.noI18n('. ')),
+                // admin
+                gt('The user has administrative rights'), $.txt(_.noI18n(': ')),
+                    addDropdown('admin', baton), $.txt(_.noI18n('. ')));
             if (baton.admin) {
-                node.append(
-                    $('<div class="readwrite">').append(
-                        // folder rights
-                        gt('Folder permissions'), $.txt(_.noI18n(': ')),
-                            addDropdown('folder', baton), $.txt(_.noI18n('. ')),
-                        // object rights
-                        gt('Object permissions'), $.txt(_.noI18n(': ')),
-                        addDropdown('read', baton), $.txt(_.noI18n(', ')),
-                        addDropdown('write', baton), $.txt(_.noI18n(', ')),
-                        addDropdown('delete', baton), $.txt(_.noI18n('. ')),
-                        // admin
-                        gt('The user has administrative rights'), $.txt(_.noI18n(': ')),
-                            addDropdown('admin', baton), $.txt(_.noI18n('. '))
-                    ),
-                    addRemoveButton(baton.model.get('entity'))
-                );
+                options.addClass('readwrite');
             } else {
-                node.append(
-                    $('<div class="readonly">').append(
-                        // folder rights
-                        gt('Folder permissions'), $.txt(_.noI18n(': ')),
-                            addDropdown('folder', baton), $.txt(_.noI18n('. ')),
-                        // object rights
-                        gt('Object permissions'), $.txt(_.noI18n(': ')),
-                        addDropdown('read', baton), $.txt(_.noI18n(', ')),
-                        addDropdown('write', baton), $.txt(_.noI18n(', ')),
-                        addDropdown('delete', baton), $.txt(_.noI18n('. ')),
-                        // admin
-                        gt('The user has administrative rights'), $.txt(_.noI18n(': ')),
-                            addDropdown('admin', baton), $.txt(_.noI18n('. '))
-                    )
-                );
+                options.addClass('readonly');
             }
+            node.append(
+                addRemoveButton(baton.model.get('entity')),
+                options
+            );
+
             baton.view.updateRole();
         }
     });
 
     addRemoveButton = function (entity) {
-        if (isFolderAdmin && entity !== ox.user_id)
+        if (isFolderAdmin && entity !== ox.user_id) {
             return $('<div class="remove">').append($('<div class="icon">').append($('<i class="icon-remove">')));
+        } else {
+            return $();
+        }
     };
 
     addDropdown = function (permission, baton) {
@@ -306,9 +298,7 @@ define('io.ox/core/permissions/permissions',
                         isFolderAdmin = false;
                     }
 
-                    var dialog = new dialogs.ModalDialog({
-                        width: 800
-                    })
+                    var dialog = new dialogs.ModalDialog()
                     .header(
                         api.getBreadcrumb(data.id, { subfolders: false, prefix: gt('Folder permissions') })
                     );

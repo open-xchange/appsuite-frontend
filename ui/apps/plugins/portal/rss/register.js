@@ -77,8 +77,8 @@ define('plugins/portal/rss/register',
             _(data.items).each(function (entry) {
                 $content.append(
                     $('<div class="paragraph">').append(
-                        $('<span class="gray">').text(entry.feedTitle + ' '),
-                        $('<span class="bold">').text(entry.subject), $.txt('')
+                        $('<span class="gray">').text(_.noI18n(entry.feedTitle + ' ')),
+                        $('<span class="bold">').text(_.noI18n(entry.subject)), $.txt('')
                     )
                 );
             });
@@ -101,10 +101,10 @@ define('plugins/portal/rss/register',
 
                 this.append(
                     $('<div class="text">').append(
-                        $('<h2>').text(item.subject),
-                        $('<div class="text-body">').append($body),
+                        $('<h2>').text(_.noI18n(item.subject)),
+                        $('<div class="text-body noI18n">').append($body),
                         $('<div class="rss-url">').append(
-                            $('<a>').attr({ href: item.url, target: '_blank' }).text(item.feedTitle + ' - ' + publishedDate)
+                            $('<a>').attr({ href: item.url, target: '_blank' }).text(_.noI18n(item.feedTitle + ' - ' + publishedDate))
                         )
                     )
                 );
@@ -116,7 +116,7 @@ define('plugins/portal/rss/register',
                     node = $('<div class="portal-feed">');
 
                 if (data.title) {
-                    node.append($('<h1>').text(data.title));
+                    node.append($('<h1>').text(_.noI18n(data.title)));
                 }
 
                 _(data.items).each(drawItem, node);
@@ -178,7 +178,7 @@ define('plugins/portal/rss/register',
                 model.set({
                     title: description,
                     props: { url: url.split(/\n/), description: description }
-                });
+                }, {validate: true});
                 model.unset('candidate');
             });
 

@@ -13,9 +13,9 @@
  *
  */
 
-define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
+define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], function (Events, ext) {
 
-    "use strict";
+    'use strict';
 
     // default columns for each module
     var idMapping = {
@@ -364,26 +364,69 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
 
     var that = {};
 
+    var isLoss = function (status) {
+        return (/^(0|4\d\d|5\d\d)$/).test(status);
+    };
+
     // error log
     var log = {
+
+        SLOW: 1000,
 
         collection: Backbone ? new Backbone.Collection([]) : null,
 
         add: function (error, options) {
             if (log.collection) {
-                var params = $.param(options.params || {}),
-                    url = options.url + (params ? '?' + params : '');
                 log.collection.add(
                     new Backbone.Model(error)
                     .set({
+                        params: options.params,
+                        data: options.data,
                         index: log.collection.length,
                         timestamp: _.now(),
-                        url: url
+                        url: options.url
                     })
                 );
             }
         }
     };
+
+    // statistics
+    (function () {
+
+        var list = [], n = 0, loss = 0;
+
+        log.took = function (t) {
+            list.push(t);
+            n++;
+        };
+
+        log.loss = function () {
+            loss++;
+        };
+
+        log.statistics = {
+
+            avg: function () {
+                var sum = _(list).reduce(function (sum, num) { return sum + num; }, 0);
+                return Math.round(sum / n);
+            },
+
+            count: function () {
+                return n;
+            },
+
+            data: function () {
+                return list;
+            },
+
+            isLoss: isLoss,
+
+            loss: function () {
+                return Math.round(loss / n * 100) / 100;
+            }
+        };
+    }());
 
     /**
      * get all columns of a module
@@ -624,11 +667,15 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                 };
             }
 
-            var ajax = $.ajax(ajaxOptions);
+            var t0, ajax;
+
+            t0 = _.now();
+            ajax = $.ajax(ajaxOptions);
 
             // add an 'abort()' method to the Deferred and all Promises it creates
             var abortFunc = function () { ajax.abort(); },
                 promiseFunc = _.bind(r.def.promise, r.def);
+
             _.extend(r.def, {
                 abort: abortFunc,
                 promise: function () {
@@ -637,7 +684,16 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             });
 
             // log errors
-            r.def.fail(function (error) {
+            r.def.fail(function (error, xhr) {
+
+                var took = _.now() - t0;
+                log.took(took);
+
+                // regard 404 and 503 as loss
+                var status = (xhr && xhr.status) || 200;
+                if (isLoss(status)) log.loss();
+
+                error = _.extend({ status: status, took: took }, error);
                 log.add(error, r.o);
             });
 
@@ -652,6 +708,12 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                     }
                 })
                 .done(function (response) {
+                    // slow?
+                    var took = _.now() - t0;
+                    log.took(took);
+                    if (took > log.SLOW) {
+                        log.add({ error: 'Took: ' + (Math.round(took / 100) / 10) + 's', status: 200, took: took }, r.o);
+                    }
                     // trigger event first since HTTP layer finishes work
                     that.trigger("stop done", r.xhr);
                     // process response
@@ -877,10 +939,13 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
 
             window[callback] = function (response) {
                 // skip warnings
-                for (var key in response.data) {
-                    if (key === 'category' && response.data[key] === 13) {
-                        delete response.data[key];
-                    }
+                if (_.isArray(response.data)) {
+                    // Skip Warnings (category: 13)
+                    response.data = _(response.data).map(function (o) {
+                        if (o.category !== 13) {
+                            return o;
+                        }
+                    });
                 }
                 def[(response && response.error ? 'reject' : 'resolve')](response);
                 window[callback] = data = form = def = null;
@@ -1078,7 +1143,9 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
          */
         log: function () {
             return log.collection;
-        }
+        },
+
+        statistics: log.statistics
     };
 
     Events.extend(that);

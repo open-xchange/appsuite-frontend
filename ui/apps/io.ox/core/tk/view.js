@@ -43,7 +43,7 @@ define('io.ox/core/tk/view',
         // #1: capture all changes of form elements
         this.node.on('update.model', function (e, o) {
             e.stopPropagation();
-            self.model.set(o.property, o.value);
+            self.model.set(o.property, o.value, {validate: true});
         });
 
         // #2: update form elements if model changes

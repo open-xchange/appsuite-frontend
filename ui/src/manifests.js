@@ -21,6 +21,17 @@ define(function () {
             path: 'plugins/owm/portal'
         },
         {
+            path: 'io.ox/editor/main',
+            title: "Editor",
+            company: "Open-Xchange",
+            icon: "default.png",
+            category: "Productivity",
+            settings: false,
+            requires: "infostore",
+            refreshable: true,
+            visible: false
+        },
+        {
             path: 'io.ox/mail/main',
             title: "Mail",
             company: "Open-Xchange",
@@ -28,6 +39,7 @@ define(function () {
             category: "Basic",
             settings: true,
             requires: "webmail",
+            refreshable: true,
             index: 200
         },
         {
@@ -38,6 +50,7 @@ define(function () {
             category: "Productivity",
             settings: true,
             requires: "tasks",
+            refreshable: true,
             index: 1000
         },
         {
@@ -48,6 +61,7 @@ define(function () {
             category: "Basic",
             settings: true,
             requires: "contacts",
+            refreshable: true,
             index: 700
         },
         {
@@ -58,6 +72,7 @@ define(function () {
             category: "Productivity",
             settings: true,
             requires: "calendar",
+            refreshable: true,
             index: 800
         },
         {
@@ -68,6 +83,7 @@ define(function () {
             category: "Productivity",
             settings: true,
             requires: "infostore",
+            refreshable: true,
             index: 900
         },
         {
@@ -78,6 +94,7 @@ define(function () {
             category: "Productivity",
             settings: true,
             requires: "!deniedPortal",
+            refreshable: true,
             index: 100
         }
     ];

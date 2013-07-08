@@ -23,9 +23,10 @@ define('io.ox/mail/view-detail',
      'settings!io.ox/mail',
      'gettext!io.ox/mail',
      'io.ox/core/api/folder',
+     'moxiecode/tiny_mce/plugins/emoji/main',
      'io.ox/mail/actions',
      'less!io.ox/mail/style.less'
-    ], function (ext, links, util, api, config, http, account, settings, gt, folder) {
+    ], function (ext, links, util, api, config, http, account, settings, gt, folder, emoji) {
 
     'use strict';
 
@@ -91,28 +92,33 @@ define('io.ox/mail/view-detail',
     var insertEmoticons = (function () {
 
         var emotes = {
-            ':-)': 'smile',
-            ':)': 'smile',
-            ';-)': 'wink',
-            ';)': 'wink',
-            ':-D': 'laugh',
-            ':D': 'laugh',
-            ':-|': 'neutral',
-            ':|': 'neutral',
-            ':-(': 'sad',
-            ':(': 'sad'
+            ':-)': '&#x1F60A;',
+            ':)': '&#x1F60A;',
+            ';-)': '&#x1F609;',
+            ';)': '&#x1F609;',
+            ':-D': '&#x1F603;',
+            ':D': '&#x1F603;',
+            ':-|': '&#x1F614;', // may be, switch to &#x1F610; once we have the icon for it (neutral face)
+            ':|': '&#x1F614;', // may be, switch to &#x1F610; once we have the icon for it (neutral face)
+            ':-(': '&#x1F61E;',
+            ':(': '&#x1F61E;'
         };
 
         var regex = /(&quot)?([:;]-?[(|)D])/g;
 
         return function (text) {
-            if (!settings.get('displayEmoticons')) return text;
-            return text.replace(regex, function (all, quot, match) {
-                // if we hit &quot;-) we just return
-                if (quot) return all;
-                // otherwise find emote
-                var emote = emotes[match];
-                return !emote ? match : '<i class="emote ' + emote + '"></i>';
+            if (settings.get('displayEmoticons')) {
+                text = text.replace(regex, function (all, quot, match) {
+                    // if we hit &quot;-) we just return
+                    if (quot) return all;
+                    // otherwise find emote
+                    var emote = $('<div>').html(emotes[match]).text();
+                    return !emote ? match : emote;
+                });
+            }
+            text = emoji.getInstance().softbankToUnified(text);
+            return emoji.unifiedToImageTag(text, {
+                forceEmojiIcons: settings.get('emoji/forceEmojiIcons', false)
             });
         };
     }());
@@ -143,7 +149,7 @@ define('io.ox/mail/view-detail',
         var split = (type || 'unknown').split(/;/);
         return split[0];
     };
-    
+
     var openTaskLink = function (e) {
         e.preventDefault();
         ox.launch('io.ox/tasks/main', { folder: e.data.folder}).done(function () {
@@ -175,7 +181,7 @@ define('io.ox/mail/view-detail',
             });
         });
     };
-    
+
     var openAppointmentLink = function (e) {
         e.preventDefault();
         ox.launch('io.ox/calendar/main', { folder: e.data.folder, perspective: 'list' }).done(function () {
@@ -224,7 +230,7 @@ define('io.ox/mail/view-detail',
         }
         return link;
     };
-    
+
     var drawAppointmentLink = function (matches, title) {
         var link, href, folder, id;
         // create link
@@ -246,7 +252,7 @@ define('io.ox/mail/view-detail',
         }
         return link;
     };
-    
+
     var drawTaskLink = function (matches, title) {
         var link, href, folder, id;
         // create link
@@ -376,6 +382,9 @@ define('io.ox/mail/view-detail',
 
                 // replace images on source level
                 source = source.replace(regImageSrc, '$1' + ox.apiRoot);
+                if (isHTML && !isLarge) {
+                    source = emoji.unifiedToImageTag(source);
+                }
 
                 // robust constructor for large HTML
                 content = document.createElement('DIV');
@@ -586,7 +595,6 @@ define('io.ox/mail/view-detail',
         },
 
         draw: function (baton) {
-
             if (!baton) {
                 return $('<div>');
             }
@@ -927,8 +935,8 @@ define('io.ox/mail/view-detail',
         index: 130,
         id: 'flag',
         draw: function (baton) {
-            var data = baton.data,
-            flagclass = 'flag_' + util.getFlag(data);
+            var data = baton.data, flagclass = 'flag_' + api.tracker.getColorLabel(data);
+
             this.append(
                 $('<div class="dropdown flag-dropdown clear-title flag">')
                 .addClass(flagclass)
@@ -945,7 +953,7 @@ define('io.ox/mail/view-detail',
                                     $.txt(colorNames[color])
                                 )
                                 .on('click', { data: data, color: index, flagclass: flagclass }, changeLabel)
-                                .addClass(data.color_label === index ? 'active-label' : undefined)
+                                .addClass(color === index ? 'active-label' : undefined)
                             ));
                         }, $())
                     )

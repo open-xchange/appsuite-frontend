@@ -202,10 +202,10 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                     overwritePositioning: true,
                     initialStateDisabled: timeFrameState ? false : true,
                     updateModelDate: function () {
-                        this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model));
+                        this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model), {validate: true});
                     },
                     updateModelTime: function () {
-                        this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model));
+                        this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model), {validate: true});
                     }
                 }));
 
@@ -220,10 +220,10 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                     overwritePositioning: true,
                     initialStateDisabled: timeFrameState ? false : true,
                     updateModelDate: function () {
-                        this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model));
+                        this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model), {validate: true});
                     },
                     updateModelTime: function () {
-                        this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model));
+                        this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model), {validate: true});
                     }
                 }));
 

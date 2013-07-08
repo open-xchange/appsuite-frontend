@@ -1,2 +1,2 @@
 #!/bin/sh
-rm -r /opt/open-xchange/appsuite/apps/themes/*/less || true
+rm -rf /opt/open-xchange/appsuite/apps/themes/*/less || true

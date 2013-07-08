@@ -1,6 +1,10 @@
+* 2013-06-13 - stefan.preuss@open-xchange.com
+
+  - Fixed bug #27079 : TinyMCE background color-picker shows the same color two times
+
 * 2013-05-16 - marcus.klein@open-xchange.com
 
- - Fix for bug 26276: Added dependencies including versions to upgrade packages in the correct order after moving files between packages.
+ - Fixed bug #26276: Added dependencies including versions to upgrade packages in the correct order after moving files between packages.
 
 * 2013-04-12 - stefan.preuss@open-xchange.com
 

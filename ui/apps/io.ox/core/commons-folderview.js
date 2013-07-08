@@ -193,11 +193,11 @@ define('io.ox/core/commons-folderview',
             id: 'publications',
             index: 500,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="publications">').text(gt('Publication'));
+                var link = $('<a href="#" data-action="publications">').text(gt('Publication')),
+                    contacts = baton.data.module === 'contacts',
+                    files = baton.data.module === 'infostore';
                 this.append($('<li class="divider">'), $('<li>').append(link));
-                if (capabilities.has('publication') &&
-                    (baton.data.module === 'contacts' || baton.data.module === 'infostore')
-                ) {
+                if (capabilities.has('publication') &&  (contacts || (files && api.can('publish', baton.data)))) {
                     link.on('click', { baton: baton }, publish);
                 } else {
                     link.addClass('disabled').on('click', $.preventDefault);
@@ -283,14 +283,16 @@ define('io.ox/core/commons-folderview',
             id: 'export',
             index: 250,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="export">').text(gt('Export'));
-                this.append(
-                    $('<li>').append(link)
-                );
-                if (api.can('export', baton.data)) {
-                    link.on('click', { baton: baton }, exportData);
-                } else {
-                    link.addClass('disabled').on('click', $.preventDefault);
+                if (_.device('!ios && !android')) {
+                    var link = $('<a href="#" data-action="export">').text(gt('Export'));
+                    this.append(
+                        $('<li>').append(link)
+                    );
+                    if (api.can('export', baton.data)) {
+                        link.on('click', { baton: baton }, exportData);
+                    } else {
+                        link.addClass('disabled').on('click', $.preventDefault);
+                    }
                 }
             }
         });
@@ -306,14 +308,16 @@ define('io.ox/core/commons-folderview',
             id: 'import',
             index: 245,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="import">').text(gt('Import'));
-                this.append(
-                    $('<li>').append(link)
-                );
-                if (api.can('import', baton.data)) {
-                    link.on('click', { baton: baton }, importData);
-                } else {
-                    link.addClass('disabled').on('click', $.preventDefault);
+                if (_.device('!ios && !android')) {
+                    var link = $('<a href="#" data-action="import">').text(gt('Import'));
+                    this.append(
+                        $('<li>').append(link)
+                    );
+                    if (api.can('import', baton.data)) {
+                        link.on('click', { baton: baton }, importData);
+                    } else {
+                        link.addClass('disabled').on('click', $.preventDefault);
+                    }
                 }
             }
         });
@@ -579,22 +583,19 @@ define('io.ox/core/commons-folderview',
                 app.getWindow().nodes.body.removeClass('side-shift').attr('style', '');
                 sidepanel.removeClass('side-shift slideout').attr('style', '').hide();
             }
-
         };
 
         fnHide = function () {
             app.settings.set('folderview/visible/' + _.display(), visible = false).save();
             app.getWindow().nodes.title.find('.' + UP).removeClass(UP).addClass(DOWN);
             top = container.scrollTop();
-
             if (_.device('small')) {
                 sidepanel.addClass('slideout');
-
             } else {
                 app.getWindow().nodes.body.removeClass('side-shift').attr('style', '');
                 sidepanel.removeClass('side-shift').attr('style', '').hide();
             }
-
+            app.trigger('folderview:close');
         };
 
         fnShow = function () {
@@ -606,6 +607,7 @@ define('io.ox/core/commons-folderview',
                 sidepanel.addClass('slidein');
             }
             app.getWindow().nodes.title.find('.' + DOWN).removeClass(DOWN).addClass(UP);
+            app.trigger('folderview:open');
             return $.when();
         };
 
@@ -759,11 +761,21 @@ define('io.ox/core/commons-folderview',
         sidepanel = baton.$.sidepanel;
         container = baton.$.container;
 
+        var icon = $('<i class="icon-folder-close">').attr('aria-label', gt('Toggle folder'));
+
+        app.on('folderview:open', function () {
+            icon.attr('class', 'icon-folder-open');
+        });
+
+        app.on('folderview:close', function () {
+            icon.attr('class', 'icon-folder-close');
+        });
+
         new links.ActionGroup(TOGGLE, {
             id: 'folder',
             index: 200,
             icon: function () {
-                return $('<i class="icon-folder-close">');
+                return icon;
             }
         });
 

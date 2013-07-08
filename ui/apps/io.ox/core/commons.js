@@ -151,76 +151,95 @@ define('io.ox/core/commons',
 
         addGridToolbarFolder: function (app, grid) {
 
-            ext.point(app.get('name') + '/vgrid/toolbar').extend({
-                id: 'info',
-                index: 200,
-                draw: function () {
-                    this.append($('<div class="grid-info">'));
-                }
-            });
-
             function fnOpen(e) {
                 e.preventDefault();
                 app.showFolderView();
             }
 
-            function fnCancel(e) {
-                e.preventDefault();
-                app.getWindow().search.stop();
-            }
-
-            // right now, only mail folders support "total"
-            var supportsTotal = app.get('name') === 'io.ox/mail';
-
-            function updateFolderCount(id, data) {
-                var total = data.total,
-                    node = grid.getToolbar().find('.folder-count[data-folder-id="' + id + '"]');
-
-                //cannot use .show() .hide() here because in firefox this keeps adding display: block to the span instead of inline
-                if (total > 0) {
-                    node.css('display', 'inline');
-                } else {
-                    node.css('display', 'none');
-                }
-                node.text('(' + total + ')');
-            }
-
-            function drawFolderName(folder_id) {
-                var link = $('<a href="#" data-action="open-folderview">')
-                    .append(folderAPI.getTextNode(folder_id))
-                    .on('click', fnOpen);
-                if (supportsTotal) {
-                    link.after(
-                        $.txt(' '),
-                        $('<span class="folder-count">').attr('data-folder-id', folder_id).hide()
-                    );
-                }
-                return link;
-            }
-
-            grid.on('change:prop:folder change:mode', function (e, value) {
-                var folder_id = grid.prop('folder'), mode = grid.getMode(),
-                    node = grid.getToolbar().find('.grid-info').empty();
-                if (mode === 'all') {
-                    node.append(drawFolderName(folder_id));
-                } else if (mode === 'search') {
-                    node.append(
-                        $('<a href="#" data-action="cancel-search">')
-                        .addClass('btn btn-danger')
-                        .text(gt('Cancel search'))
-                        .on('click', fnCancel)
+            ext.point(app.get('name') + '/vgrid/toolbar').extend({
+                id: 'info',
+                index: 200,
+                draw: function () {
+                    this.append(
+                        $('<div class="grid-info">')
+                        .on('click', '.folder-name', fnOpen)
                     );
                 }
             });
 
-            // unread counter for mail
-            if (supportsTotal) {
-                folderAPI.on('update:total', function (e, id, data) {
-                    updateFolderCount(id, data);
+            // right now, only mail folders support "total"
+            var name = app.get('name'),
+                searchAcrossFolders = name !== 'io.ox/mail';
+
+            function getInfoNode() {
+                return grid.getToolbar().find('.grid-info');
+            }
+
+            function drawFolderInfo(folder_id) {
+
+                if (!folder_id) return;
+
+                var node = getInfoNode();
+
+                node.empty()
+                .attr('data-folder-id', folder_id)
+                .append(
+                    $('<a href="#" class="folder-name" data-action="open-folderview" tabindex="1">'),
+                    $.txt(' '),
+                    $('<span class="folder-count">').attr('data-folder-id', folder_id)
+                );
+
+                folderAPI.get({ folder: folder_id }).done(function (data) {
+
+                    var total = data.total,
+                        node = grid.getToolbar().find('[data-folder-id="' + folder_id + '"]');
+
+                    node.find('.folder-name').text(data.title);
+
+                    if (total > 0) {
+                        node.find('.folder-count').text('(' + total + ')');
+                    }
                 });
             }
 
+            grid.on('change:prop:folder change:mode', function (e, value) {
+
+                var folder_id = grid.prop('folder'), mode = grid.getMode(), node;
+
+                if (mode === 'all') {
+                    // non-search; show foldername
+                    drawFolderInfo(folder_id);
+                }
+                else if (mode === 'search') {
+                    node = getInfoNode().empty();
+                    // search across all folders
+                    if (searchAcrossFolders) {
+                        node.append(
+                            $.txt(gt('Searched in all folders'))
+                        );
+                    } else {
+                        node.append(
+                            $.txt(
+                                //#. Searched in: <folder name>
+                                gt('Searched in')
+                            ),
+                            $.txt(': '),
+                            folderAPI.getTextNode(folder_id)
+                        );
+                    }
+                }
+            });
+
+            // unread counter for mail
+            folderAPI.on('update:total', function (e, id, data) {
+                drawFolderInfo(id, data);
+            });
+
             ext.point(app.get('name') + '/vgrid/toolbar').invoke('draw', grid.getToolbar());
+
+            // try to set initial value
+            var id = app.folder.get();
+            drawFolderInfo(id);
         },
 
         /**
@@ -240,9 +259,6 @@ define('io.ox/core/commons',
          */
         wireGridAndRefresh: function (grid, api, win) {
             var refreshAll = function (e) {
-                    if (e.type === 'refresh:all:local') {
-                        grid.invalidateLabels();
-                    }
                     grid.refresh(true);
                 },
                 refreshList = function () {
@@ -290,7 +306,7 @@ define('io.ox/core/commons',
                 grid.setMode('search');
             });
             // on cancel search
-            win.on('cancel-search', function () {
+            win.on('search:clear cancel-search', function () {
                 grid.setMode('all');
             });
         },

@@ -1,7 +1,7 @@
 Name:           open-xchange-appsuite
 Version:        7.2.0
 %define         ox_release 0
-Release:        7_%{ox_release}_<CI_CNT>.<B_CNT>
+Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
 URL:            http://open-xchange.com
@@ -114,7 +114,7 @@ fi
 
 %postun manifest
 if [ "$1" = 0 ]; then
-    rm -r /opt/open-xchange/appsuite/apps/themes/*/less || true
+    rm -rf /opt/open-xchange/appsuite/apps/themes/*/less || true
 else
     UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
     [ -x $UPDATE ] && $UPDATE

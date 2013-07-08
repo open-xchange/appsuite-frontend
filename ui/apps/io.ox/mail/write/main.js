@@ -24,11 +24,12 @@ define('io.ox/mail/write/main',
      'io.ox/core/tk/upload',
      'io.ox/mail/model',
      'io.ox/mail/write/view-main',
+     'moxiecode/tiny_mce/plugins/emoji/main',
      'io.ox/core/notifications',
      'settings!io.ox/mail',
      'gettext!io.ox/mail',
      'less!io.ox/mail/style.less',
-     'less!io.ox/mail/write/style.less'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, notifications, settings, gt) {
+     'less!io.ox/mail/write/style.less'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, emoji, notifications, settings, gt) {
 
     'use strict';
 
@@ -55,6 +56,7 @@ define('io.ox/mail/write/main',
     });
 
     var UUID = 1;
+    var blocked = {};
     var timerScale = {
         minute: 60000, //60s
         minutes: 60000
@@ -80,6 +82,27 @@ define('io.ox/mail/write/main',
         };
     }
 
+    function prepareMailForSending(mail) {
+        // get flat ids for data.infostore_ids
+        if (mail.data.infostore_ids) {
+            mail.data.infostore_ids = _(mail.data.infostore_ids).pluck('id');
+        }
+        // get flat cids for data.contacts_ids
+        if (mail.data.contacts_ids) {
+            mail.data.contacts_ids = _(mail.data.contacts_ids).map(function (o) { return _.pick(o, 'folder_id', 'id'); });
+        }
+        // move nested messages into attachment array
+        _(mail.data.nested_msgs).each(function (obj) {
+            mail.data.attachments.push({
+                id: mail.data.attachments.length + 1,
+                filemname: obj.subject,
+                content_type: 'message/rfc822',
+                msgref: obj.msgref
+            });
+        });
+        delete mail.data.nested_msgs;
+    }
+
     // multi instance pattern
     function createInstance() {
 
@@ -97,6 +120,15 @@ define('io.ox/mail/write/main',
 
         if (Modernizr.touch) messageFormat = 'text'; // See Bug 24802
 
+        function blockReuse(sendtype) {
+            blocked[sendtype] = (blocked[sendtype] || 0) + 1;
+        }
+
+        function unblockReuse(sendtype) {
+            blocked[sendtype] = (blocked[sendtype] || 0) - 1;
+            if (blocked[sendtype] <= 0)
+                delete blocked[sendtype];
+        }
 
         function getDefaultEditorMode() {
             return messageFormat === 'text' ? 'text' : 'html';
@@ -339,13 +371,22 @@ define('io.ox/mail/write/main',
         };
 
         app.setFrom = function (data) {
-            var folder_id = 'folder_id' in data ? data.folder_id : 'default0/INBOX';
+            var folder_id = 'folder_id' in data ? data.folder_id : 'default0/INBOX',
+                $select = view.leftside.find('.fromselect-wrapper select');
             return accountAPI.getPrimaryAddressFromFolder(data.account_id || folder_id).done(function (from) {
                 if (data.from && data.from.length === 2) {
                     // from is already set in the mail, prefer this
                     from = { displayname: data.from[0], primaryaddress: data.from[1] };
                 }
-                view.leftside.find('.fromselect-wrapper select').val(mailUtil.formatSender(from.displayname, from.primaryaddress));
+
+                $select.val(mailUtil.formatSender(from.displayname, from.primaryaddress));
+                //identify option via data.primaryadress
+                _.each($select.children(), function (option) {
+                    var $option = $(option),
+                        data = $option.data();
+                    if (data.primaryaddress === from.primaryaddress)
+                        $select.val($option.attr('value'));
+                });
             });
         };
 
@@ -776,10 +817,22 @@ define('io.ox/mail/write/main',
             data.msgref = data.folder_id + '/' + data.id;
 
             function getMail(data) {
-                // for plain-text editing we need a fresh mail if allowHtmlMessages is turned on
-                if (messageFormat === 'text' && settings.get('allowHtmlMessages', true) === true) {
+                if (data.content_type !== 'text/html' &&
+                    messageFormat === 'text' &&
+                    settings.get('allowHtmlMessages', true) === true
+                ) {
+                    // for plain-text editing we need a fresh mail if allowHtmlMessages is turned on
                     var options = _.extend({ view: 'text', edit: '1' }, mailAPI.reduce(data));
                     return mailAPI.get(options);
+                } else if (data.content_type === 'text/html' &&
+                           messageFormat === 'text' &&
+                           settings.get('allowHtmlMessages', true) === true
+                ) {
+                    // we are editing a message with html format, keep it
+                    data.format = 'html';
+                    view.form.find('input[name=format][value=text]').attr('checked', null);
+                    view.form.find('input[name=format][value=html]').attr('checked', 'checked');
+                    return $.Deferred().resolve(data);
                 } else {
                     return $.Deferred().resolve(data);
                 }
@@ -789,7 +842,8 @@ define('io.ox/mail/write/main',
                 // get fresh plain textt mail
                 getMail(data).then(
                     function success(data) {
-                        app.setMail({ data: data, mode: 'compose', initial: false })
+                        data.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
+                        app.setMail({ data: data, mode: 'compose', initial: false, format: data.format })
                         .done(function () {
                             app.setFrom(data || {});
                             win.idle();
@@ -834,7 +888,8 @@ define('io.ox/mail/write/main',
                 parse = function (list) {
                     return _(mailUtil.parseRecipients([].concat(list).join(', ')))
                         .map(function (recipient) {
-                            return ['"' + recipient[0] + '"', recipient[1]];
+                            var typesuffix = mailUtil.getChannel(recipient[1]) === 'email' ? '' : mailUtil.getChannelSuffixes().msisdn;
+                            return ['"' + recipient[0] + '"', recipient[1], typesuffix];
                         });
                 },
                 replyTo = parse(data.replyTo)[0] || [];
@@ -848,6 +903,8 @@ define('io.ox/mail/write/main',
                         // reverse img fix
                         .replace(/(<img[^>]+src=")(\/appsuite\/)?api\//g, '$1/ajax/')
                 };
+                //don’t send emoji images, but unicode characters
+                content.content = emoji.imageTagsToUnified(content.content);
             } else {
                 content = {
                     content: (app.getEditor() ? app.getEditor().getContent() : ''),
@@ -931,24 +988,9 @@ define('io.ox/mail/write/main',
         app.send = function () {
             // get mail
             var mail = this.getMail(), def = $.Deferred();
-            // get flat ids for data.infostore_ids
-            if (mail.data.infostore_ids) {
-                mail.data.infostore_ids = _(mail.data.infostore_ids).pluck('id');
-            }
-            // get flat cids for data.contacts_ids
-            if (mail.data.contacts_ids) {
-                mail.data.contacts_ids = _(mail.data.contacts_ids).map(function (o) { return _.pick(o, 'folder_id', 'id'); });
-            }
-            // move nested messages into attachment array
-            _(mail.data.nested_msgs).each(function (obj) {
-                mail.data.attachments.push({
-                    id: mail.data.attachments.length + 1,
-                    filemname: obj.subject,
-                    content_type: 'message/rfc822',
-                    msgref: obj.msgref
-                });
-            });
-            delete mail.data.nested_msgs;
+
+            blockReuse(mail.data.sendtype);
+            prepareMailForSending(mail);
 
             function cont() {
                 // start being busy
@@ -961,6 +1003,7 @@ define('io.ox/mail/write/main',
                         win.idle().show();
                         // TODO: check if backend just says "A severe error occured"
                         notifications.yell(result);
+                        unblockReuse(mail.data.sendtype);
                     } else {
                         if (result.warnings)
                             //warnings
@@ -1009,6 +1052,7 @@ define('io.ox/mail/write/main',
                         }
                         app.dirty(false);
                         app.quit();
+                        unblockReuse(mail.data.sendtype);
                     }
                     def.resolve(result);
                 });
@@ -1055,14 +1099,8 @@ define('io.ox/mail/write/main',
             var mail = this.getMail(),
                 def = new $.Deferred();
 
-            // get flat ids for data.infostore_ids
-            if (mail.data.infostore_ids) {
-                mail.data.infostore_ids = _(mail.data.infostore_ids).pluck('id');
-            }
-            // get flat cids for data.contacts_ids
-            if (mail.data.contacts_ids) {
-                mail.data.contacts_ids = _(mail.data.contacts_ids).map(function (o) { return _.pick(o, 'folder_id', 'id'); });
-            }
+            prepareMailForSending(mail);
+
             // send!
             mail.data.sendtype = mailAPI.SENDTYPE.DRAFT;
 
@@ -1071,6 +1109,10 @@ define('io.ox/mail/write/main',
             } else if (mail.data.flags & 4 === 0) {
                 mail.data.flags += mailAPI.FLAGS.DRAFT;
             }
+
+            // never append vcard when saving as draft
+            // backend will append vcard for every send operation (which save as draft is)
+            delete mail.data.vcard;
 
             mailAPI.send(mail.data, mail.files, view.form.find('.oldschool'))
                 .always(function (result) {
@@ -1091,9 +1133,12 @@ define('io.ox/mail/write/main',
                     id = base.last(),
                     folder = base.without(id).join(mailAPI.separator);
                 mailAPI.get({ folder_id: folder, id: id }).then(function (draftMail) {
+                    var format = draftMail.content_type === 'text/plain' ? 'text' : 'html';
+
                     view.form.find('.section-item.file').remove();
                     $(_.initial(view.form.find(':input[name][type=file]'))).remove();
-                    app.setMail({ data: draftMail, mode: mail.mode, initial: false, replaceBody: 'no' });
+                    draftMail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
+                    app.setMail({ data: draftMail, mode: mail.mode, initial: false, replaceBody: 'no', format: format});
                 });
             });
         };
@@ -1169,16 +1214,20 @@ define('io.ox/mail/write/main',
         getApp: createInstance,
 
         reuse: function (type, data) {
-            if (type === 'reply') {
+            //disable reuse if at least one app is sending (depends on type)
+            var unblocked = function (sendtype) {
+                    return blocked[sendtype] === undefined || blocked[sendtype] <= 0;
+                };
+            if (type === 'reply' && unblocked(mailAPI.SENDTYPE.REPLY)) {
                 return ox.ui.App.reuse('io.ox/mail:reply.' + _.cid(data));
             }
-            if (type === 'replyall') {
+            if (type === 'replyall' && unblocked(mailAPI.SENDTYPE.REPLY)) {
                 return ox.ui.App.reuse('io.ox/mail:replyall.' + _.cid(data));
             }
-            if (type === 'forward') {
+            if (type === 'forward' && unblocked(mailAPI.SENDTYPE.FORWARD)) {
                 return ox.ui.App.reuse('io.ox/mail:forward.' + _.cid(data));
             }
-            if (type === 'edit') {
+            if (type === 'edit' && unblocked(mailAPI.SENDTYPE.DRAFT)) {
                 return ox.ui.App.reuse('io.ox/mail:edit.' + _.cid(data));
             }
         }

@@ -28,12 +28,12 @@ define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
         params[index - 1] = _.noI18n(value);
         return { format: _.noI18n('%' + index + '$s'), params: params };
     }
-    
+
     return {
 
         getImage: function (obj, options) {
             if (obj.mark_as_distributionlist) {
-                return ox.base + '/apps/themes/default/dummypicture_group.xpng';
+                return ox.base + '/apps/themes/default/dummypicture_group.png';
             } else if (obj.image1_url) {
                 return obj.image1_url
                     .replace(/^https?\:\/\/[^\/]+/i, '')
@@ -50,7 +50,7 @@ define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
             obj.title = '';
             return this.getFullName(obj).toLowerCase();
         },
-        
+
         /**
          * Computes the format of a displayed full name.
          * @param obj {Object} A contact object.
@@ -88,7 +88,7 @@ define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
                     params: [_.noI18n(obj.first_name), _.noI18n(obj.last_name)]
                 };
             }
-            
+
             // use existing display name?
             if (obj.display_name) {
                 return single(4, String(obj.display_name).replace(/"|'/g, ''));
@@ -98,7 +98,7 @@ define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
             if (obj.first_name) return single(1, obj.first_name);
             return { format: _.noI18n(''), params: [] };
         },
-        
+
         getFullName: function (obj) {
             var fmt = this.getFullNameFormat(obj);
             return gt.format(fmt.format, fmt.params);
@@ -175,7 +175,7 @@ define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
             if (obj.email3) return single(3, obj.email3);
             return { format: _.noI18n(''), params: [] };
         },
-        
+
         getMail: function (obj) {
             // get the first mail address
             return (obj.email1 || obj.email2 || obj.email3 || obj.mail || '').toLowerCase();

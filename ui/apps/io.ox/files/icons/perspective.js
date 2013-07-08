@@ -155,12 +155,13 @@ define('io.ox/files/icons/perspective',
                     error: iconError
                 });
             }
-
             this.addClass('file-icon pull-left selectable')
                 .attr('data-obj-id', _.cid(file))
                 .append(
                     (img ? wrap.append(img) : wrap),
-                    $('<div class="title drag-title">').text(gt.noI18n(cut(file.title, 55))),
+                    $('<div class="title drag-title">').text(gt.noI18n(cut(file.filename || file.title, 55))).prepend(
+                            (file.locked_until ? $('<i class="icon-lock">') : '')
+                        ),
                     $('<input type="checkbox" class="reflect-selection" style="display:none">')
                 );
         }
@@ -224,7 +225,8 @@ define('io.ox/files/icons/perspective',
                .on('folder:change', function (e, id, folder) {
                     app.currentFile = null;
                     dropZoneInit(app);
-                    app.getWindow().search.close();
+                    app.getWindow().search.clear();
+                    app.getWindow().search.active = false;
                     self.main.closest('.search-open').removeClass('search-open');
                     allIds = [];
                     self.selection.clear();
@@ -329,11 +331,12 @@ define('io.ox/files/icons/perspective',
                         redraw(allIds.slice(start, end));
                     }
                 });
-                _.debounce($('img.img-polaroid').imageloader({
+                $('img.img-polaroid').imageloader({
                     callback: function (elm) {
                         $(elm).fadeIn();
-                    }
-                }), 300);
+                    },
+                    timeout: 60000
+                });
 
                 self.selection.update();
             };
@@ -412,7 +415,7 @@ define('io.ox/files/icons/perspective',
                         win.busy(pct + sub / files.length, sub);
                     })
                     .fail(function (e) {
-                        if (e && e.code && e.code === 'UPL-0005') {
+                        if (e && e.code && (e.code === 'UPL-0005' || e.code === 'IFO-1700')) {
                             notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
                         }
                         else if (e && e.code && e.code === 'FLS-0024') {
@@ -446,7 +449,7 @@ define('io.ox/files/icons/perspective',
                             var sub = e.loaded / e.total;
                             win.busy(pct + sub / files.length, sub);
                         }).fail(function (e) {
-                            if (e && e.code && e.code === 'UPL-0005') {
+                            if (e && e.code && (e.code === 'UPL-0005' || e.code === 'IFO-1700')) {
                                 notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
                             }
                             else if (e && e.code && e.code === 'FLS-0024') {

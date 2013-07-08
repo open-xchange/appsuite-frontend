@@ -392,9 +392,11 @@ exports.list = function(dir, globs) {
         dir = "";
     }
     if (typeof globs == "string") globs = [globs];
-    globs = _.map(globs, function (s) {
+    globs = _.chain(globs).map(function (s) {
         return path.join(dir, s.replace(/\/$/, '/**/*'));
-    });
+    }).filter(function (s) {
+        return path.existsSync(jake.basedir(s));
+    }).value();
     var retval = new jake.FileList(globs);
     retval.exclude(function(name) {
         try {
@@ -403,11 +405,7 @@ exports.list = function(dir, globs) {
             return true;
         }
     });
-    try {
-        retval = retval.toArray();
-    } catch (e) {
-        return [];
-    }
+    retval = retval.toArray();
     retval = _.map(retval, function (s) { return path.relative(dir, s); });
     retval.dir = dir;
     return retval;

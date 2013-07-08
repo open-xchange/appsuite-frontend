@@ -98,12 +98,10 @@ define("plugins/portal/calendar/register",
 
                     var declined = util.getConfirmationStatus(nextApp) === 2,
                         start = new date.Local(nextApp.start_date),
-                        timespan;
+                        timespan = util.getSmartDate(nextApp, true);
 
-                    if (nextApp.full_time) {
-                        timespan = util.getSmartDate(date.Local.utc(nextApp.start_date), true);
-                    } else {
-                        timespan = util.getSmartDate(nextApp.start_date, true) + ' ' + start.format(date.TIME);
+                    if (!nextApp.full_time) {
+                        timespan += ' ' + start.format(date.TIME);
                     }
 
                     if (showDeclined || !declined) {
@@ -112,9 +110,9 @@ define("plugins/portal/calendar/register",
                             .css('text-decoration', declined ? 'line-through' : 'none')
                             .data('item', nextApp)
                             .append(
-                                $('<span class="normal accent">').text(timespan), $.txt(gt.noI18n('\u00A0')),
-                                $('<span class="bold">').text(nextApp.title || ''), $.txt(gt.noI18n('\u00A0')),
-                                $('<span class="gray">').text(nextApp.location || '')
+                                $('<span class="normal accent">').text(_.noI18n(timespan)), $.txt(gt.noI18n('\u00A0')),
+                                $('<span class="bold">').text(_.noI18n(nextApp.title || '')), $.txt(gt.noI18n('\u00A0')),
+                                $('<span class="gray">').text(_.noI18n(nextApp.location || ''))
                             )
                         );
                     }

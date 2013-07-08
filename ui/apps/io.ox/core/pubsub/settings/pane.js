@@ -18,11 +18,12 @@ define('io.ox/core/pubsub/settings/pane',
          'io.ox/core/api/folder',
          'io.ox/core/tk/dialogs',
          'io.ox/core/notifications',
+         'io.ox/core/capabilities',
          'settings!io.ox/core/pubsub',
          'gettext!io.ox/core/pubsub',
          'less!io.ox/core/pubsub/style.less'
         ],
-         function (ext, model, views, folderAPI, dialogs, notifications, settings, gt) {
+         function (ext, model, views, folderAPI, dialogs, notifications, capabilities, settings, gt) {
 
     'use strict';
 
@@ -174,6 +175,21 @@ define('io.ox/core/pubsub/settings/pane',
         return getSiteName(data.displayName) || data.displayName || '';
     }
 
+    function isDestructiveRefresh(data) {
+        return isDestructiveRefresh.needsWarning[data.source];
+    }
+
+    isDestructiveRefresh.needsWarning = {
+        "com.openexchange.subscribe.crawler.google.calendar": true
+    };
+
+    function refreshWarning(data) {
+        if (isDestructiveRefresh(data)) {
+            return $('<span class="text-warning"></span>').text(gt("Note: Refreshing this subscription will replace the calendar content with the external content. Changes you have made inside appsuite will be overwritten"));
+        }
+        return $();
+    }
+
     ext.point('io.ox/core/pubsub/settings/list/itemview').extend({
         id: 'itemview',
         draw: function (baton) {
@@ -188,6 +204,9 @@ define('io.ox/core/pubsub/settings/pane',
             if (data.source && (baton.model.refreshState() === 'ready')) {
                 // this is a subscription
                 dynamicAction = $('<a href="#" class="action" data-action="refresh">').text(gt('Refresh'));
+                if (isDestructiveRefresh(data)) {
+                    dynamicAction.addClass("text-error");
+                }
             } else if (data.source && (baton.model.refreshState() !== 'pending')) {
                 // this is a subscription and refresh should be disabled
                 dynamicAction = $('<span>');
@@ -211,7 +230,9 @@ define('io.ox/core/pubsub/settings/pane',
                             $('<a target="_blank">').attr('href', url).text(getShortUrl(url) || '\u00A0') :
                             $('<i>').text(getShortUrl(url))
                     ),
-                    createPathInformation(baton.model)
+                    createPathInformation(baton.model),
+                    refreshWarning(data)
+
                 )
             );
 
@@ -259,8 +280,8 @@ define('io.ox/core/pubsub/settings/pane',
             var model = this.model;
             ev.preventDefault();
 
-            model.set('enabled', !model.get('enabled')).save().fail(function (res) {
-                model.set('enabled', !model.get('enabled'));
+            model.set('enabled', !model.get('enabled'), {validate: true}).save().fail(function (res) {
+                model.set('enabled', !model.get('enabled'), {validate: true});
             });
             this.render();
         },
@@ -309,6 +330,11 @@ define('io.ox/core/pubsub/settings/pane',
         var filteredList = collection.forFolder(filter),
             hintNode, hint;
 
+        if (!capabilities.has(type)) {
+            node.after($('<div class="empty">').text(gt('This feature is deactivated') + '.'));
+            return;
+        }
+
         _.each(filteredList, function (model) {
             node.append(
                 createPubSubItem(model).render().el
@@ -329,7 +355,7 @@ define('io.ox/core/pubsub/settings/pane',
             if (filteredIndex === 0) {
                 node.prepend(item);
             } else {
-                node.children('li:nth-child(' + options.index + ')').after(item);
+                node.children('li:nth-child(' + collection.indexOf(model) + ')').after(item);
             }
         });
 
@@ -345,8 +371,8 @@ define('io.ox/core/pubsub/settings/pane',
 
             var isEmpty = filteredList.length === 0,
                 isFiltered = !!filter.folder,
-                hasPublications = folderState.isPublished && type === 'pub',
-                hasSubscriptions = folderState.isSubscribed && type === 'sub',
+                hasPublications = folderState.isPublished && type === 'publication',
+                hasSubscriptions = folderState.isSubscribed && type === 'subscription',
                 notAccessible = isEmpty && (hasPublications || hasSubscriptions);
 
             if (notAccessible) {
@@ -358,11 +384,11 @@ define('io.ox/core/pubsub/settings/pane',
 
             if (isEmpty) {
                 if (isFiltered) {
-                    return type === 'pub' ?
+                    return type === 'publication' ?
                         gt('This folder has no publications') :
                         gt('This folder has no subscriptions');
                 }
-                return type === 'pub' ?
+                return type === 'publication' ?
                     gt('You don\'t have any publications yet') :
                     gt('You don\'t have any subscriptions yet');
             }
@@ -395,8 +421,8 @@ define('io.ox/core/pubsub/settings/pane',
                 baton.subListNode = $('<ul class="subscriptions">')
             );
 
-            setupList(baton.pubListNode.empty(), baton.publications, 'pub');
-            setupList(baton.subListNode.empty(), baton.subscriptions, 'sub');
+            setupList(baton.pubListNode.empty(), baton.publications, 'publication');
+            setupList(baton.subListNode.empty(), baton.subscriptions, 'subscription');
         }
     });
 });

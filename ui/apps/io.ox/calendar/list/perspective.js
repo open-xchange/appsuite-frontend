@@ -34,7 +34,8 @@ define('io.ox/calendar/list/perspective',
             left = vsplit.left.addClass('border-right'),
             right = vsplit.right.addClass('default-content-padding calendar-detail-pane').scrollable(),
             grid = new VGrid(left, {settings: settings}),
-            findRecurrence = false;
+            findRecurrence = false,
+            optDropdown = null;
 
         if (_.url.hash('id') && _.url.hash('id').split(',').length === 1) {// use only for single items
             findRecurrence = _.url.hash('id').split('.').length === 2;//check if recurrencePosition is missing
@@ -59,7 +60,13 @@ define('io.ox/calendar/list/perspective',
         grid.addLabelTemplate(tmpl.label);
 
         // requires new label?
-        grid.requiresLabel = tmpl.requiresLabel;
+        grid.requiresLabel = function (i, data, current) {
+            // disable labels in search mode
+            if (grid.getMode() === 'search') {
+                return false;
+            }
+            return tmpl.requiresLabel(i, data, current);
+        };
 
         api.on('create', function (e, data) {
             if (app.folder.get() === data.folder) {
@@ -70,6 +77,13 @@ define('io.ox/calendar/list/perspective',
         // special search: list request
         grid.setListRequest("search", function (ids) {
             return $.Deferred().resolve(ids);
+        });
+
+        // hide grid toolbar options on search
+        grid.on('change:mode', function (e, cur) {
+            if (optDropdown && cur) {
+                optDropdown[cur === 'search' ? 'hide' : 'show']();
+            }
         });
 
         var directAppointment;//directly linked appointments are stored here
@@ -153,7 +167,7 @@ define('io.ox/calendar/list/perspective',
             index: 100,
             draw: function () {
                 this.prepend(
-                    $('<div>').addClass('grid-options dropdown').css({ display: 'inline-block', 'float': 'right' })
+                    optDropdown = $('<div>').addClass('grid-options dropdown').css({ display: 'inline-block', 'float': 'right' })
                         .append(
                             $('<a>', { href: '#' })
                                 .attr('data-toggle', 'dropdown')
@@ -202,20 +216,11 @@ define('io.ox/calendar/list/perspective',
                     folder: settings.get('showAllPrivateAppointments', false) && folder.type === 1 ? undefined : prop.folder,
                     order: prop.order
                 }).pipe(function (data) {
-                    var now = _.now();
                     if (!settings.get('showDeclinedAppointments', false)) {
                         data = _.filter(data, function (obj) {
                             return util.getConfirmationStatus(obj) !== 2;
                         });
                     }
-                    _.map(data, function (obj) {
-                        // show pending appointments under today label
-                        if (obj.start_date < now) {
-                            obj.fixed_start_date = now;
-                        }
-                        return obj;
-                    });
-                    //if recurrence_position is missing we look for the oldest appearing one.
                     if (findRecurrence) {
 
                         var foundRecurrence = false,

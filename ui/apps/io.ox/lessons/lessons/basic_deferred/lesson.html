@@ -1,211 +1,211 @@
 <div style="padding: 20px">
-	<div class="row">
-		<div class="span3 navigation">&nbsp;</div>
-		<div class="content span9">
+    <div class="row">
+        <div class="span3 navigation">&nbsp;</div>
+        <div class="content span9">
 
-			<div class="page-header">
-				<h1>Deferred objects<small>... and all we hear are promises and promises</small></h1>
-			</div>
+            <div class="page-header">
+                <h1>Deferred objects<small>... and all we hear are promises and promises</small></h1>
+            </div>
 
-			<p class="lead">
-				Since the introduction of AJAX, asynchronous operations have become a mainstay of JavaScript applications. The mantra of "never lock the user interface" coupled with JavaScripts single-threaded run loop model means every developer sooner or later deals with callbacks notifying the system of a concluded asynchronous operation. jQueries Deferred objects – introduced in version 1.5 – are a powerful architecture for simplifying dealing with callbacks.
-			</p>
+            <p class="lead">
+                Since the introduction of AJAX, asynchronous operations have become a mainstay of JavaScript applications. The mantra of "never lock the user interface" coupled with JavaScripts single-threaded run loop model means every developer sooner or later deals with callbacks notifying the system of a concluded asynchronous operation. jQueries Deferred objects – introduced in version 1.5 – are a powerful architecture for simplifying dealing with callbacks.
+            </p>
 
 
-			<h2>Who should read this document?</h2>
-			<p>
-				In OX App Suite we use Deferred Objects extensively. Whenever our APIs have to carry out an asynchronous operation, most commonly talking to the backend to load or modify something, they return a deferred object. When you write a plugin, you are sometimes asked to return a deferred object to let the surrounding system know when you're done. A good understanding of the Deferred Object is crucial for effectively developing in an OX App Suite context. If you already feel confident wielding and chaining deferreds, you can skip this tutorial.
-			</p>
+            <h2>Who should read this document?</h2>
+            <p>
+                In OX App Suite we use Deferred Objects extensively. Whenever our APIs have to carry out an asynchronous operation, most commonly talking to the backend to load or modify something, they return a deferred object. When you write a plugin, you are sometimes asked to return a deferred object to let the surrounding system know when you're done. A good understanding of the Deferred Object is crucial for effectively developing in an OX App Suite context. If you already feel confident wielding and chaining deferreds, you can skip this tutorial.
+            </p>
 
-			<section id="then_and_now">
-				<h2>How to handle asynchronous calls - a bit of history</h2>
-				<p>
-					Traditionally when making an asynchronous call (like an AJAX call), you would directly pass callback methods for the <b>success</b> and <b>error</b> cases to the function. For example, let's find out who you are and pass the callbacks the classic way:
-					<pre class="experiment">
+            <section id="then_and_now">
+                <h2>How to handle asynchronous calls - a bit of history</h2>
+                <p>
+                    Traditionally when making an asynchronous call (like an AJAX call), you would directly pass callback methods for the <b>success</b> and <b>error</b> cases to the function. For example, let's find out who you are and pass the callbacks the classic way:
+                    <pre class="experiment">
 $.ajax({
-	url: "/appsuite/api/user?action=get&amp;session=" + ox.session,
-	dataType: "json",
-	success: function (response) {
-		print("Hello there, " + response.data.first_name + "! I'm pleased to make your acquaintance");
-	},
-	error: function () {
-		print("Geebus! An error occurred!");
-	}
+    url: "/appsuite/api/user?action=get&amp;session=" + ox.session,
+    dataType: "json",
+    success: function (response) {
+        print("Hello there, " + response.data.first_name + "! I'm pleased to make your acquaintance");
+    },
+    error: function () {
+        print("Geebus! An error occurred!");
+    }
 });
 </pre>
-					What's wrong with that? Well, nothing really, only once we get to more complicated use cases, this system turns out to be a bit too inflexible.
-				</p>
+                    What's wrong with that? Well, nothing really, only once we get to more complicated use cases, this system turns out to be a bit too inflexible.
+                </p>
 
-				<p>
-					Now, let's see how this plays out using the deferred object. jQueries <code>#ajax</code> method returns a Deferred Object. On it you can call <code>#done</code> with a callback parameter, for the <strong>success</strong> callback, and <code>#fail</code> for the <strong>error</strong> callback:
-						<pre class="experiment">
+                <p>
+                    Now, let's see how this plays out using the deferred object. jQueries <code>#ajax</code> method returns a Deferred Object. On it you can call <code>#done</code> with a callback parameter, for the <strong>success</strong> callback, and <code>#fail</code> for the <strong>error</strong> callback:
+                        <pre class="experiment">
 $.ajax({
-	url: "/appsuite/api/user?action=get&amp;session=" + ox.session,
-	dataType: "json"
+    url: "/appsuite/api/user?action=get&amp;session=" + ox.session,
+    dataType: "json"
 }).done(function (response) {
-	print("Hello there, " + response.data.first_name + "! I'm pleased to make your acquaintance");
+    print("Hello there, " + response.data.first_name + "! I'm pleased to make your acquaintance");
 }).fail(function () {
-	print("Geebus! An error occurred!");
+    print("Geebus! An error occurred!");
 });
 </pre>
-					Looks pretty similar. The strengths of the Deferred Objects way of handling asynchronous operations will become apparent, once we look at more complex use cases. But first: A bit of theory
-				</p>
+                    Looks pretty similar. The strengths of the Deferred Objects way of handling asynchronous operations will become apparent, once we look at more complex use cases. But first: A bit of theory
+                </p>
 
-			</section>
+            </section>
 
-			<section id="using">
-				<h2>Consuming deferreds</h2>
-				<h3>State management</h3>
-				<p>
-					A Deferred Object can be in one of three states. It starts out in the <strong>initial</strong> state and is then either <code>resolved</code>, if the operation completed successfully, or <code>rejected</code>. Once the deferred object transition to its <code>resolved</code> state, all the callbacks registered with <code>#done</code> are called. If a callback is registered <strong>after</strong> the deferred has already been <code>resolved</code>, it will be called immediately with the result of the operation. Conversely the same happens on rejection with the <code>#fail</code> callbacks. This turns out to be a very powerful concept, for something this simple. For one thing, this means an operation can be triggered in a different (typically lower level) layer of your application, and its deferred passed along, possibly already resolved, possibly not, with handlers coming in at their leisure. Let's build a (contrived) example. Instead of displaying the greeting above immediately, we want to do so only when a button is pressed, but we want to start loading the user data immediately anyway. First, the example using the classic way, where we have to manage state ourselves:
-					<pre class="experiment">
+            <section id="using">
+                <h2>Consuming deferreds</h2>
+                <h3>State management</h3>
+                <p>
+                    A Deferred Object can be in one of three states. It starts out in the <strong>initial</strong> state and is then either <code>resolved</code>, if the operation completed successfully, or <code>rejected</code>. Once the deferred object transition to its <code>resolved</code> state, all the callbacks registered with <code>#done</code> are called. If a callback is registered <strong>after</strong> the deferred has already been <code>resolved</code>, it will be called immediately with the result of the operation. Conversely the same happens on rejection with the <code>#fail</code> callbacks. This turns out to be a very powerful concept, for something this simple. For one thing, this means an operation can be triggered in a different (typically lower level) layer of your application, and its deferred passed along, possibly already resolved, possibly not, with handlers coming in at their leisure. Let's build a (contrived) example. Instead of displaying the greeting above immediately, we want to do so only when a button is pressed, but we want to start loading the user data immediately anyway. First, the example using the classic way, where we have to manage state ourselves:
+                    <pre class="experiment">
 var firstName = null;
 var cb = null;
 $.ajax({
-	url: "/appsuite/api/user?action=get&amp;session=" + ox.session,
-	dataType: "json",
-	success: function (response) {
-		firstName = response.data.first_name;
-		if (cb) {
-			// Looks like someone is waiting, so notify!
-			cb(firstName);
-		}
-	}
+    url: "/appsuite/api/user?action=get&amp;session=" + ox.session,
+    dataType: "json",
+    success: function (response) {
+        firstName = response.data.first_name;
+        if (cb) {
+            // Looks like someone is waiting, so notify!
+            cb(firstName);
+        }
+    }
 });
 
 this.append(
-	$("&lt;button&gt;").text("Show greeting").on('click', function () {
-		function printGreeting(firstName) {
-			print("Hello there, " + firstName + "! I'm pleased to make your acquaintance");
-		}
-		if (firstName) {
-			// Loading has completed, so take action immediately
-			printGreeting(firstName);
-		} else {
-			// Hm, loading hasn't completed yet, so let's stick around
-			cb = printGreeting;
-		}
-	})
+    $("&lt;button&gt;").text("Show greeting").on('click', function () {
+        function printGreeting(firstName) {
+            print("Hello there, " + firstName + "! I'm pleased to make your acquaintance");
+        }
+        if (firstName) {
+            // Loading has completed, so take action immediately
+            printGreeting(firstName);
+        } else {
+            // Hm, loading hasn't completed yet, so let's stick around
+            cb = printGreeting;
+        }
+    })
 );
 </pre>
-					Next, let's try the deferred way:
-					<pre class="experiment">
+                    Next, let's try the deferred way:
+                    <pre class="experiment">
 var userLoaded = $.ajax({
-	url: "/appsuite/api/user?action=get&amp;session=" + ox.session,
-	dataType: "json"
+    url: "/appsuite/api/user?action=get&amp;session=" + ox.session,
+    dataType: "json"
 });
 this.append(
-	$("&lt;button&gt;").text("Show greeting").on('click', function () {
-		userLoaded.done(function (response) {
-			print("Hello there, " + response.data.first_name + "! I'm pleased to make your acquaintance");
-		});
-	})
+    $("&lt;button&gt;").text("Show greeting").on('click', function () {
+        userLoaded.done(function (response) {
+            print("Hello there, " + response.data.first_name + "! I'm pleased to make your acquaintance");
+        });
+    })
 );
-					</pre>
-					We don't know (and don't have to know!) when the button is pressed in relation to when the user data has been loaded. We just call the <code>#done</code> method, and the Deferred Objects system takes care of the state management.
-				</p>
-				<h3>Registering multiple handlers</h3>
-				<p>
-					Another advantage of deferred objects is that you can register multiple handlers for each state change. As an example, let's say we want to manage the state of a busy indicator in addition to printing out a greeting. Since loading the current user is pretty fast, we won't see the busy indicator, so we're going to cheat a bit and use a delayed version of the jQuery ajax call (that's otherwise identical).	When tackling this in the classic fashion, we might be tempted to do this:
-					<pre class="experiment" data-context="delayedAjax">
+                    </pre>
+                    We don't know (and don't have to know!) when the button is pressed in relation to when the user data has been loaded. We just call the <code>#done</code> method, and the Deferred Objects system takes care of the state management.
+                </p>
+                <h3>Registering multiple handlers</h3>
+                <p>
+                    Another advantage of deferred objects is that you can register multiple handlers for each state change. As an example, let's say we want to manage the state of a busy indicator in addition to printing out a greeting. Since loading the current user is pretty fast, we won't see the busy indicator, so we're going to cheat a bit and use a delayed version of the jQuery ajax call (that's otherwise identical).  When tackling this in the classic fashion, we might be tempted to do this:
+                    <pre class="experiment" data-context="delayedAjax">
 var loadIndicator = $("&lt;div&gt;").css({
-	minHeight: "100px"
+    minHeight: "100px"
 }).appendTo(this);
 
 loadIndicator.busy();
 ctx.delayedAjax({
-	url: "/appsuite/api/user?action=get&amp;session=" + ox.session,
-	dataType: "json",
-	success: function (response) {
-		loadIndicator.idle();
-		print("Hello there, " + response.data.first_name + "! I'm pleased to make your acquaintance");
-	},
-	error: function (response) {
-		loadIndicator.idle();
-	}
+    url: "/appsuite/api/user?action=get&amp;session=" + ox.session,
+    dataType: "json",
+    success: function (response) {
+        loadIndicator.idle();
+        print("Hello there, " + response.data.first_name + "! I'm pleased to make your acquaintance");
+    },
+    error: function (response) {
+        loadIndicator.idle();
+    }
 });
 
 </pre>
-					Probably though, we want a bit more layering, where a low-level API takes care of both loading things and managing the busy indicator (like the one in the OX App Suite toolbar), and the higher level API actually doing something with the data:
-					<pre class="experiment" data-context="delayedAjax">
+                    Probably though, we want a bit more layering, where a low-level API takes care of both loading things and managing the busy indicator (like the one in the OX App Suite toolbar), and the higher level API actually doing something with the data:
+                    <pre class="experiment" data-context="delayedAjax">
 var loadIndicator = $("&lt;div&gt;").css({
-	minHeight: "100px"
+    minHeight: "100px"
 }).appendTo(this);
 
 // Low level
 function ajaxWithLoadIndicator(options) {
-	// Keep the original callbacks around, so we can call them later
-	var realSuccessHandler = options.success;
-	var realErrorHandler = options.error;
+    // Keep the original callbacks around, so we can call them later
+    var realSuccessHandler = options.success;
+    var realErrorHandler = options.error;
 
-	// Redefine the success and error callbacks, so we can deal with the loadIndicator before
-	options.success = function (response) {
-		loadIndicator.idle();
-		// Call the original handler
-		realSuccessHandler(response);
-	};
-	options.error = function (response) {
-		loadIndicator.idle();
-		// Call the original handler
-		realErrorHandler(response);
-	};
+    // Redefine the success and error callbacks, so we can deal with the loadIndicator before
+    options.success = function (response) {
+        loadIndicator.idle();
+        // Call the original handler
+        realSuccessHandler(response);
+    };
+    options.error = function (response) {
+        loadIndicator.idle();
+        // Call the original handler
+        realErrorHandler(response);
+    };
 
-	// Indicate we're loading something
-	loadIndicator.busy();
-	// make the ajax call
-	ctx.delayedAjax(options);
+    // Indicate we're loading something
+    loadIndicator.busy();
+    // make the ajax call
+    ctx.delayedAjax(options);
 }
 
 // Higher up
 
 ajaxWithLoadIndicator({
-	url: "/appsuite/api/user?action=get&amp;session=" + ox.session,
-	dataType: "json",
-	success: function (response) {
-		print("Hello there, " + response.data.first_name + "! I'm pleased to make your acquaintance");
-	}
+    url: "/appsuite/api/user?action=get&amp;session=" + ox.session,
+    dataType: "json",
+    success: function (response) {
+        print("Hello there, " + response.data.first_name + "! I'm pleased to make your acquaintance");
+    }
 });
 
 </pre>
 
-					The more aspects we want to tack onto a task as it traverses the layers of our application (logging and caching come to mind), the more wrappers we have to build.
-					Let's in turn look at the deferred way of handling this:
+                    The more aspects we want to tack onto a task as it traverses the layers of our application (logging and caching come to mind), the more wrappers we have to build.
+                    Let's in turn look at the deferred way of handling this:
 
-					<pre class="experiment" data-context="delayedAjax">
+                    <pre class="experiment" data-context="delayedAjax">
 var loadIndicator = $("&lt;div&gt;").css({
-	minHeight: "100px"
+    minHeight: "100px"
 }).appendTo(this);
 
 // Lower level API
 
 function ajaxWithLoadIndicator(options) {
-	loadIndicator.busy();
-	return ctx.delayedAjax(options)
-				.done(function () {
-					loadIndicator.idle();
-				})
-				.fail(function () {
-					loadIndicator.idle();
-				});
+    loadIndicator.busy();
+    return ctx.delayedAjax(options)
+                .done(function () {
+                    loadIndicator.idle();
+                })
+                .fail(function () {
+                    loadIndicator.idle();
+                });
 }
 
 // Higher up
 
 ajaxWithLoadIndicator({
-		url: "/appsuite/api/user?action=get&amp;session=" + ox.session,
-		dataType: "json"
+        url: "/appsuite/api/user?action=get&amp;session=" + ox.session,
+        dataType: "json"
 })
 .done(function (response) {
-	print("Hello there, " + response.data.first_name + "! I'm pleased to make your acquaintance");
+    print("Hello there, " + response.data.first_name + "! I'm pleased to make your acquaintance");
 });
-					</pre>
+                    </pre>
 
-					Traversing the layers, other aspects of http handling would simply add more <code>#done</code> and <code>#fail</code> handlers.
-				</p>
-				<h3>Coordinating multiple asynchronous actions</h3>
-				<p>
-					Consider the following scenario: You want to trigger two or more asynchronous operations and only continue once they have all completed succesfully. For example, let's load two pieces of information from the backend. As always, we'll implement the 'classic' method first:
-					<pre class="experiment">
+                    Traversing the layers, other aspects of http handling would simply add more <code>#done</code> and <code>#fail</code> handlers.
+                </p>
+                <h3>Coordinating multiple asynchronous actions</h3>
+                <p>
+                    Consider the following scenario: You want to trigger two or more asynchronous operations and only continue once they have all completed succesfully. For example, let's load two pieces of information from the backend. As always, we'll implement the 'classic' method first:
+                    <pre class="experiment">
 var folderData  = null,
     userData    = null;
 
@@ -235,10 +235,10 @@ $.ajax({
     }
 });
 </pre>
-				</p>
-				<p>
-				    For this use case jQuery provides the <code>$.when(...)</code> method. It expects one or many deferreds and creates a composite deferred. The composite will be resolved once all original deferreds have been resolved, and it will be rejected if any of the original deferreds were rejected (it's an all-or-nothing-deal). To return to our example:
-				    <pre class="experiment">
+                </p>
+                <p>
+                    For this use case jQuery provides the <code>$.when(...)</code> method. It expects one or many deferreds and creates a composite deferred. The composite will be resolved once all original deferreds have been resolved, and it will be rejected if any of the original deferreds were rejected (it's an all-or-nothing-deal). To return to our example:
+                    <pre class="experiment">
 var userLoaded = $.ajax({
     url: "/appsuite/api/user?action=get&amp;session=" + ox.session,
     dataType: "json"
@@ -258,10 +258,10 @@ $.when(userLoaded, foldersLoaded).done(function (userResponse, folderResponse) {
 });
 </pre>
                     Much shorter. The only somewhat arcane piece about this is the way we have to unpack the variables. Let's fix that by ...
-				</p>
-				<h3>Modifying results in-flight</h3>
-				<p>
-				    With deferreds it is possible to register a handler that transforms a result before it is passed on to the done handlers. Let's see this in action:
+                </p>
+                <h3>Modifying results in-flight</h3>
+                <p>
+                    With deferreds it is possible to register a handler that transforms a result before it is passed on to the done handlers. Let's see this in action:
                     <pre class="experiment">
 var userLoaded = $.ajax({
     url: "/appsuite/api/user?action=get&amp;session=" + ox.session,
@@ -283,15 +283,15 @@ $.when(userLoaded, foldersLoaded).done(function (name, folderData) {
     print("See the folder data for " + name, folderData);
 });
 </pre>
-				    The handler you register with <code>#pipe</code> is given the result of the operation, and in turn, whatever the handler returns is passed on to the done handlers.
-				</p>
-			</section>
+                    The handler you register with <code>#pipe</code> is given the result of the operation, and in turn, whatever the handler returns is passed on to the done handlers.
+                </p>
+            </section>
 
-			<section id="creating">
-				<h2>Creating deferreds</h2>
-				<p>
-				    Let's look at the other side of the deferreds equation. Sometimes our plugin system will call on you to create a deferred object to let it know when a operation finished. For example: The portal plugins are expected to implement a <code>#load</code> method, that returns a deferred which resolves to the data needed by the plugin. Oftentimes this just means having another part of our api (for example the HTTP layer) create the deferred, tacking on a <code>pipe</code> handler to adapt the result and passing on the deferred. Sometimes you will have to create a deferred yourself though, so let's look at how this works:
-				    <pre class="experiment">
+            <section id="creating">
+                <h2>Creating deferreds</h2>
+                <p>
+                    Let's look at the other side of the deferreds equation. Sometimes our plugin system will call on you to create a deferred object to let it know when a operation finished. For example: The portal plugins are expected to implement a <code>#load</code> method, that returns a deferred which resolves to the data needed by the plugin. Oftentimes this just means having another part of our api (for example the HTTP layer) create the deferred, tacking on a <code>pipe</code> handler to adapt the result and passing on the deferred. Sometimes you will have to create a deferred yourself though, so let's look at how this works:
+                    <pre class="experiment">
 function myAsynchronousFunction(number) {
     // New deferreds can be created simply by calling the $.Deferred() method
     var def = $.Deferred();
@@ -328,17 +328,17 @@ myAsynchronousFunction(23).done(function (result) {
     print("Failure! " + message);
 });
 </pre>
-				</p>
-				<h3>Chaining deferreds</h3>
-				<p>
-				    More typically than the above (very contrived) example, you might need to create a new deferred and resolve/reject it based on the state of another deferred. For example, we can more closely tie the AJAX calls we've been making to OX App Suites HTTP API conventions. When the backend runs into an error it returns a JSON object with an error attribute. So, it would be nice if we could build a function that:
-				    <ul>
-				        <li>Fails, when the HTTP protocol call fails</li>
-	                    <li>Fails, when the server returns an error</li>
-	                    <li>Succeeds, when the server completes the operation</li>
-				    </ul>
-				    And here we go:
-				    <pre class="experiment">
+                </p>
+                <h3>Chaining deferreds</h3>
+                <p>
+                    More typically than the above (very contrived) example, you might need to create a new deferred and resolve/reject it based on the state of another deferred. For example, we can more closely tie the AJAX calls we've been making to OX App Suites HTTP API conventions. When the backend runs into an error it returns a JSON object with an error attribute. So, it would be nice if we could build a function that:
+                    <ul>
+                        <li>Fails, when the HTTP protocol call fails</li>
+                        <li>Fails, when the server returns an error</li>
+                        <li>Succeeds, when the server completes the operation</li>
+                    </ul>
+                    And here we go:
+                    <pre class="experiment">
 function callBackend(options) {
     var def = $.Deferred();
 
@@ -387,11 +387,11 @@ callBackend({
     print("(third call) Frowny face :(");
 });
 </pre>
-				</p>
-				<h3>Empty deferreds that resolve immediately</h3>
-				<p>
-				    Sometimes you want to immediately pass a value back, but the calling code expects a deferred object. This can work in two fashions:
-				    <pre class="code">
+                </p>
+                <h3>Empty deferreds that resolve immediately</h3>
+                <p>
+                    Sometimes you want to immediately pass a value back, but the calling code expects a deferred object. This can work in two fashions:
+                    <pre class="code">
 function myNotQuiteAsynchronousFunction() {
     // Immediately resolve the deferred to the value
     // Sometimes plugin hooks will give plugin code the opportunity
@@ -402,31 +402,31 @@ function myNotQuiteAsynchronousFunction() {
 }
 </pre>
 
-				    or, if you don't even want to pass a value:
-				    <pre class="code">
+                    or, if you don't even want to pass a value:
+                    <pre class="code">
 function myNotQuiteAsynchronousFunction() {
     // $.when() creates a deferred that is immediately resolved without a result value
     return $.when();
 }
 </pre>
-				</p>
-			</section>
+                </p>
+            </section>
 
-			<section id="summary">
-				<h2>Summary</h2>
-				<p>
-				    In OX App Suite we use jQuery Deferreds extensively to model and deal with asynchronous operations. This is our quick cheat sheet for deferreds:
-				    <ul>
-				        <li>Asynchronous operations (like HTTP calls or modal dialog style user interactions) return a deferred</li>
-				        <li>You can register success handlers with the <code>done</code> method, and error handlers with the <code>fail</code> method on a deferred</li>
-				        <li>You can call <code>pipe</code> on a deferred to modify a return value in flight, before it is passed to the success handlers</li>
-				        <li>You can combine deferreds by calling <code>$.when(d1, d2, d3, ...)</code> with the deferreds as arguments. This method takes any number of deferreds.</li>
-				        <li>You can create your own deferreds by calling <code>$.Deferred</code>. This is sometimes useful if you want to modify the control flow of an asynchronous processing chain.</li>
-				    </ul>
+            <section id="summary">
+                <h2>Summary</h2>
+                <p>
+                    In OX App Suite we use jQuery Deferreds extensively to model and deal with asynchronous operations. This is our quick cheat sheet for deferreds:
+                    <ul>
+                        <li>Asynchronous operations (like HTTP calls or modal dialog style user interactions) return a deferred</li>
+                        <li>You can register success handlers with the <code>done</code> method, and error handlers with the <code>fail</code> method on a deferred</li>
+                        <li>You can call <code>pipe</code> on a deferred to modify a return value in flight, before it is passed to the success handlers</li>
+                        <li>You can combine deferreds by calling <code>$.when(d1, d2, d3, ...)</code> with the deferreds as arguments. This method takes any number of deferreds.</li>
+                        <li>You can create your own deferreds by calling <code>$.Deferred</code>. This is sometimes useful if you want to modify the control flow of an asynchronous processing chain.</li>
+                    </ul>
 
-				    Finally I can heartily recommend you read up on deferreds in their offical documentation at <a href="http://api.jquery.com/category/deferred-object/" target="_blank">http://api.jquery.com/category/deferred-object/</a>
-				</p>
-			</section>
-		</div>
-	</div>
+                    Finally I can heartily recommend you read up on deferreds in their offical documentation at <a href="http://api.jquery.com/category/deferred-object/" target="_blank">http://api.jquery.com/category/deferred-object/</a>
+                </p>
+            </section>
+        </div>
+    </div>
 </div>

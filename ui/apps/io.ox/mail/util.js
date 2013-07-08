@@ -16,8 +16,10 @@ define('io.ox/mail/util',
     ['io.ox/core/extensions',
      'io.ox/core/date',
      'io.ox/core/api/account',
+     'io.ox/core/capabilities',
      'settings!io.ox/mail',
-     'gettext!io.ox/core'], function (ext, date, accountAPI, settings, gt) {
+     'settings!io.ox/contacts',
+     'gettext!io.ox/core'], function (ext, date, accountAPI, capabilities, settings, contactsSetting, gt) {
 
     'use strict';
 
@@ -64,6 +66,10 @@ define('io.ox/mail/util',
         rRecipient = /^("(\\.|[^"])+"\s|[^<]+)(<[^\>]+\>)$/,
         // regex: remove < > from mail address
         rMailCleanup = /(^<|>$)/g,
+        // regex: remove special characters from telephone number
+        rTelephoneCleanup = /[^0-9+]/g,
+        // regex: used to identify phone numbers
+        rNotDigitAndAt = /[^A-Za-z@]/g,
         // regex: clean up display name
         rDisplayNameCleanup = /(^["'\\\s]+|["'\\\s]+$)/g,
 
@@ -79,19 +85,106 @@ define('io.ox/mail/util',
 
     that = {
 
+        /**
+         * currently registred types
+         * @example: { MSISND : '/TYPE=PLMN' }
+         * @return {array} list of types
+         */
+        getChannelSuffixes: (function () {
+            //important: used for global replacements so keep this value unique
+            var types = { msisdn: contactsSetting.get('msisdn/suffix', '/TYPE=PLMN') };
+            return function () {
+                return types;
+            };
+        }()),
+
+        /**
+         * identify channel (email or phone)
+         * @param  {string} value
+         * @param  {boolean} check for activated cap first (optional: default is true)
+         * @return {string} channel
+         */
+        getChannel: function (value, check) {
+            //default value
+            check = check || typeof check === 'undefined';
+            var type = value.indexOf(that.getChannelSuffixes().msisdn) > -1,
+                //no check OR activated cap
+                setting = !(check) || capabilities.has('msisdn'),
+                //no '@' AND no alphabetic digit AND at least one numerical digit
+                phoneval = function () {
+                            return value.replace(rNotDigitAndAt, '').length === 0 &&
+                                   value.replace(rTelephoneCleanup, '').length > 0;
+                        };
+            return type || (setting && phoneval()) ? 'phone' : 'email';
+        },
+
+        cleanupPhone: function (phone) {
+            return phone.replace(rTelephoneCleanup, '');
+        },
+
         parseRecipient: function (s) {
-            var recipient = $.trim(s), match, name, email;
+            var recipient = $.trim(s), match, name, target;
             if ((match = recipient.match(rRecipient)) !== null) {
-                // case 1: display name plus email address
-                email = match[3].replace(rMailCleanup, '').toLowerCase();
+                // case 1: display name plus email address / telephone number
+                if (that.getChannel(match[3]) === 'email') {
+                    target = match[3].replace(rMailCleanup, '').toLowerCase();
+                } else {
+                    target = that.cleanupPhone(match[3]);
+                }
                 name = match[1].replace(rDisplayNameCleanup, '');
             } else {
-                // case 2: assume plain email address
-                email = recipient.replace(rMailCleanup, '').toLowerCase();
-                name = email.split(/@/)[0];
+                // case 2: assume plain email address / telephone number
+                if (that.getChannel(recipient) === 'email') {
+                    target = recipient.replace(rMailCleanup, '').toLowerCase();
+                    name = target.split(/@/)[0];
+                } else {
+                    name = target = that.cleanupPhone(recipient);
+                }
             }
-            return [name, email];
+            return [name, target];
         },
+
+        /**
+         * remove typesuffix from sender/reciepients
+         * @param  {object|string} mail
+         * @return {undefined}
+         */
+        removeChannelSuffix: !capabilities.has('msisdn') ? _.identity :
+            function (mail) {
+                var types = that.getChannelSuffixes(),
+                    //remove typesuffx from string
+                    remove = function (value) {
+                        _.each(types, function (type) {
+                            value = value.replace(new RegExp(type, 'ig'), '');
+                        });
+                        return value;
+                    };
+                if (!_.isEmpty(types)) {
+                    if (_.isString(mail)) {
+                        mail = remove(mail);
+                    } else if (_.isArray(mail)) {
+                        //array of nested mails
+                        _.each(mail, function (message) {
+                            message = that.removeChannelSuffix(message);
+                        });
+                    } else if (_.isObject(mail)) {
+                        if (_.isArray(mail.from[0]) && mail.from[0][1])
+                            mail.from[0][1] = remove(mail.from[0][1]);
+                        if (_.isArray(mail.to)) {
+                            _.each(mail.to, function (recipient) {
+                                recipient[1] = remove(recipient[1]);
+                            });
+                        }
+                        ///nestedm mail
+                        if (_.isArray(mail.nested_msgs)) {
+                            _.each(mail.nested_msgs, function (message) {
+                                message = that.removeChannelSuffix(message);
+                            });
+                        }
+                    }
+                }
+                return mail;
+            },
 
         /**
          * Parse comma or semicolon separated list of recipients
@@ -108,7 +201,7 @@ define('io.ox/mail/util',
                 //look Bug 23983
                 var msExchange = recipient[0] === recipient[1];
                 // add to list? (stupid check but avoids trash)
-                if (msExchange || recipient[1].indexOf('@') > -1) {
+                if (msExchange || recipient[1].indexOf('@') > -1 || that.getChannel(recipient[1]) === 'phone') {
                     list.push(recipient);
                 }
             }
@@ -220,10 +313,6 @@ define('io.ox/mail/util',
             return name === '' ? address : '"' + name + '" <' + address + '>';
         },
 
-        getFlag: function (data) {
-            return data.color_label || 0;
-        },
-
         getPriority: function (data) {
             // normal?
             if (data.priority === 3) return $();
@@ -317,6 +406,7 @@ define('io.ox/mail/util',
             }, 0);
         },
 
+        //deprecated?
         getInitialDefaultSender: function () {
             var mailArray = _(settings.get('defaultSendAddress', []));
             return mailArray._wrapped[0];
@@ -327,6 +417,15 @@ define('io.ox/mail/util',
             var isWinmailDATPart = function (obj) {
                 return !('filename' in obj) && obj.attachments &&
                     obj.attachments.length === 1 && obj.attachments[0].content === null;
+            };
+
+            //remove last element from id (previewing during compose)
+            //TODO: there must be a better solution (frank)
+            var fixIds = function (data, obj) {
+                if (data.parent && data.parent.needsfix) {
+                    var tmp = obj.id.split('.');
+                    obj.id = obj.id.split('.').length > 1 ? tmp.splice(1, tmp.length).join('.') : obj.id;
+                }
             };
 
             return function (data) {
@@ -344,6 +443,7 @@ define('io.ox/mail/util',
                             _.extend({}, dat, { mail: mail, title: obj.filename || '' })
                         );
                     } else {
+                        fixIds(data, obj);
                         attachments.push({
                             id: obj.id,
                             content_type: 'message/rfc822',
@@ -357,10 +457,18 @@ define('io.ox/mail/util',
                     }
                 }
 
+                //fix referenced mail
+                if (data.parent && mail && mail.folder_id === undefined) {
+                    console.log('fixed mail', data, mail);
+                    mail.id =  data.parent.id;
+                    mail.folder_id = data.parent.folder_id;
+                }
+
                 // get non-inline attachments
                 for (i = 0, $i = (data.attachments || []).length; i < $i; i++) {
                     obj = data.attachments[i];
                     if (obj.disp === 'attachment') {
+                        fixIds(data, obj);
                         attachments.push(
                             _.extend(obj, { mail: mail, title: obj.filename || '', parent: data.parent || mail })
                         );

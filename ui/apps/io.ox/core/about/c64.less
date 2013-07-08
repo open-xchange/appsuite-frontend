@@ -1,0 +1,85 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+@font-face {
+    font-family: 'C64';
+    src: url('C64_User_Mono_v1.0-STYLE.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@-webkit-keyframes blink {
+    0%   { background: rgb(165, 165, 255); }
+    49%  { background: rgb(165, 165, 255); }
+    50%  { background: transparent; }
+    100% { background: transparent; }
+}
+
+.c64 {
+
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background-color: rgb(165, 165, 255);
+    z-index: 100000;
+
+    @size: 16px;
+
+    .inner {
+
+        font-family: C64;
+        font-size: @size;
+        line-height: @size + 2;
+        color: rgb(165, 165, 255);
+        background-color: rgb(66, 66, 231);
+
+        position: absolute;
+        top: 50px;
+        bottom: 50px;
+        left: 50%;
+        width: 640px;
+        margin-left: -320px;
+
+        white-space: pre;
+
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        .user-select(text);
+        outline: 0;
+    }
+
+    .cursor {
+        position: absolute;
+        top: 24 * (@size + 2);
+        width: @size;
+        height: @size;
+        background-color: rgb(165, 165, 255);
+        -webkit-animation: blink 1.25s linear 0s infinite;
+    }
+}
+
+@media (min-width: 1024px) {
+    .c64 {
+        @size: 20px;
+        .inner {
+            font-size: @size;
+            line-height: @size + 2;
+            width: 800px;
+            margin-left: -400px,
+        }
+        .cursor {
+            top: 24 * (@size + 2);
+            width: @size;
+            height: @size;
+        }
+    }
+}

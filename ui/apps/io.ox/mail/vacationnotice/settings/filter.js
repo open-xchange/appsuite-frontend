@@ -87,7 +87,7 @@ define('io.ox/mail/vacationnotice/settings/filter', [
 
                 if (data[0] && data[0].active === true) {
                     _(vacationData.addresses).each(function (mail) {
-                        vacationNotice.model.set(mail, true);
+                        vacationNotice.model.set(mail, true, {validate: true});
                     });
                 }
 

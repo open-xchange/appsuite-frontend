@@ -37,16 +37,18 @@ define('io.ox/core/api/export',
      * @return {deferred}
      */
     var get = function (type, folder, simulate, columns) {
-        var def = $.Deferred();
-        folder = _.isString(folder) ? folder : folder.id || '';
+        var def = $.Deferred(),
+            params = {
+                action: type,
+                folder: _.isString(folder) ? folder : folder.id || ''
+            };
+        if (columns) {
+            params.columns = columns;
+        }
         http.GET({
             simulate: !!simulate,
             module: 'export',
-            params: {
-                action: type,
-                folder: folder,
-                columns: columns
-            },
+            params: params,
             dataType: 'text'
         })
         .done(function (data) {
@@ -75,7 +77,7 @@ define('io.ox/core/api/export',
      * @return {deferred}
      */
     api.getCSV = function (folder, simulate, columns) {
-        return get('CSV', folder, simulate, '501');
+        return get('CSV', folder, simulate, columns);
     };
 
     /**

@@ -12,14 +12,14 @@
 
 define('io.ox/portal/feed', ['io.ox/core/extensions'], function (ext) {
 
-	'use strict';
+    'use strict';
 
-	function Feed(options) {
+    function Feed(options) {
 
-		this.options = _.extend({}, options || {});
-	}
+        this.options = _.extend({}, options || {});
+    }
 
-	Feed.prototype.load = function (count, offset) {
+    Feed.prototype.load = function (count, offset) {
 
         var callback = 'feed_callback_' + _.now(), url, self = this;
 
@@ -39,17 +39,17 @@ define('io.ox/portal/feed', ['io.ox/core/extensions'], function (ext) {
             jsonpCallback: callback
         })
         .pipe(function (data) {
-			return self.process(data);
+            return self.process(data);
         });
-	};
+    };
 
-	Feed.prototype.process = function (response) {
-		return response;
-	};
+    Feed.prototype.process = function (response) {
+        return response;
+    };
 
-	Feed.prototype.appendLimitOffset = function (url, count, offset) {
-		return url;
-	};
+    Feed.prototype.appendLimitOffset = function (url, count, offset) {
+        return url;
+    };
 
-	return Feed;
+    return Feed;
 });

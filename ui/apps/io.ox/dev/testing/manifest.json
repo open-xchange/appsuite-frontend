@@ -4,5 +4,6 @@
     icon: "default.png",
     category: "Dev",
     settings: false,
-    requires: "dev"
+    requires: "dev",
+    refreshable: true
 }

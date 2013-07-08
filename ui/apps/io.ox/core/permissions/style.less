@@ -15,6 +15,7 @@
 
  .permissions-dialog {
 
+    width: 800px;
     min-width: 800px;
 
     .modal-header {
@@ -45,7 +46,6 @@
 
     .permission {
 
-        position: relative;
         margin: 0 0 13px 0;
 
         .contact-picture {
@@ -76,8 +76,11 @@
         }
 
         .entity {
+
             padding-left: 64px + 13;
             a { white-space: nowrap; }
+            span.dropdown { position:static; }
+            span.dropdown.open { position:relative; }
         }
 
         .name {
@@ -95,13 +98,8 @@
         }
 
         .remove {
-            display: inline-block;
-            position: absolute;
-            top: 1px;
-            right: 1px;
-            bottom: 1px;
-            width: 36px;
-            line-height: 1em;
+            float:right;
+            padding:6px;
             background-color: #fff;
             color: #ccc;
             cursor:pointer;
@@ -111,15 +109,13 @@
                 color: #fff;
                 text-decoration: none;
             }
-
-            .icon {
-                position:absolute;
-                top:50%;
-                left:0;
-                right:0;
-                margin-top: -0.5em;
-                text-align: center;
-            }
         }
+    }
+}
+
+@media (min-width: 768px) and (max-width: 979px) {
+    .permissions-dialog {
+        min-width: 600px;
+        max-width: 768px;
     }
 }

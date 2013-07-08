@@ -11,7 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define.async('io.ox/core/tk/html-editor', [], function () {
+define.async('io.ox/core/tk/html-editor',
+    ['moxiecode/tiny_mce/plugins/emoji/main',
+     'io.ox/core/capabilities',
+     'settings!io.ox/core',
+     'io.ox/core/extensions'
+     ], function (emoji, capabilities, settings, ext) {
 
     'use strict';
 
@@ -44,6 +49,7 @@ define.async('io.ox/core/tk/html-editor', [], function () {
             .replace(/([^=])"([\w\- ]+)"/g, '$1\u201C$2\u201D')
             // beautify dashes
             .replace(/(\w\s)-(\s\w)/g, '$1\u2013$2');
+        o.content = emoji.unifiedToImageTag(o.content);
     }
 
     // simplify DOM tree
@@ -184,11 +190,12 @@ define.async('io.ox/core/tk/html-editor', [], function () {
         var node = $(o.node), done;
         //console.debug('post', node.html());
         // remove iframes and other stuff that shouldn't be in an email
-        // images too - doesn't work with copy/paste
+        // images too - doesn't work with copy/paste (except for emoji classed images)
         node.find(
             'iframe, object, applet, input, textarea, button, select, ' +
             'canvas, script, noscript, audio, video, img'
-            ).remove();
+            )
+            .filter(':not(img.emoji)').remove();
         // beautify SUP tags
         node.find('sup').css('lineHeight', '0');
         // unwrap
@@ -371,12 +378,37 @@ define.async('io.ox/core/tk/html-editor', [], function () {
     }
 
     function Editor(textarea) {
-        var def = $.Deferred(), ed;
+
+        var def = $.Deferred(), ed,
+            toolbar1, toolbar2, toolbar3;
+
+        // toolbar default
+        toolbar1 = 'undo,redo,|,bold,italic,underline,strikethrough' +
+            ',|,emoji,|,bullist,numlist,outdent,indent' +
+            ',|,justifyleft,justifycenter,justifyright' +
+            //',|,formatselect,fontselect,fontsizeselect' +
+            ',|,forecolor,backcolor';
+
+        toolbar2 = '';
+        toolbar3 = '';
+
+        // consider custom configurations
+        toolbar1 = settings.get('tinyMCE/theme_advanced_buttons1', toolbar1);
+        toolbar2 = settings.get('tinyMCE/theme_advanced_buttons2', toolbar2);
+        toolbar3 = settings.get('tinyMCE/theme_advanced_buttons3', toolbar3);
+
+        // remove unsupported stuff
+        if (!capabilities.has('emoji')) {
+            toolbar1 = toolbar1.replace(/(,\|,)?emoji(,\|,)?/g, ',|,');
+            toolbar2 = toolbar2.replace(/(,\|,)?emoji(,\|,)?/g, ',|,');
+            toolbar3 = toolbar3.replace(/(,\|,)?emoji(,\|,)?/g, ',|,');
+        }
+
         (textarea = $(textarea)).tinymce({
 
             gecko_spellcheck: true,
             language: lookupTinyMCELanguage(),
-            plugins: 'autolink,paste',
+            plugins: 'autolink,paste,emoji',
             relative_urls: false,
             remove_script_host: false,
             script_url: ox.base + '/apps/moxiecode/tiny_mce/tiny_mce.js',
@@ -410,24 +442,19 @@ define.async('io.ox/core/tk/html-editor', [], function () {
                 }
             },
 
-            theme_advanced_buttons1:
-                'bold,italic,underline,strikethrough,|,' +
-                'bullist,numlist,outdent,indent,|,' +
-                'justifyleft,justifycenter,justifyright,|,' +
-                'forecolor,backcolor,|,formatselect,|,' +
-                'undo,redo,',
-            theme_advanced_buttons2: '',
-            theme_advanced_buttons3: '',
-            theme_advanced_toolbar_location: 'top',
-            theme_advanced_toolbar_align: 'left',
+            theme_advanced_buttons1: toolbar1,
+            theme_advanced_buttons2: toolbar2,
+            theme_advanced_buttons3: toolbar3,
+            theme_advanced_toolbar_location: settings.get('tinyMCE/theme_advanced_toolbar_location', 'top'),
+            theme_advanced_toolbar_align: settings.get('tinyMCE/theme_advanced_toolbar_align', 'left'),
 
             // formats
             theme_advanced_blockformats: 'h1,h2,h3,h4,p,blockquote',
 
             // colors
             theme_advanced_more_colors: false,
-            theme_advanced_text_colors: '000000,555555,AAAAAA,0088CC,AA0000',
-            theme_advanced_background_colors: 'FFFFFF,FFFF00,00FFFF,00FF00,00FFFF,FFBE33',
+            //theme_advanced_text_colors: '000000,555555,AAAAAA,0088CC,AA0000',
+            //theme_advanced_background_colors: 'FFFFFF,FFFF00,00FFFF,00FF00,00FFFF,FFBE33',
             theme_advanced_default_foreground_color: '#000000',
             theme_advanced_default_background_color: '#FFFFFF',
 
@@ -439,7 +466,7 @@ define.async('io.ox/core/tk/html-editor', [], function () {
             paste_auto_cleanup_on_paste: true,
             paste_remove_styles: true,
             paste_remove_styles_if_webkit: true,
-            paste_strip_class_attributes: 'all',
+            paste_strip_class_attributes: 'mso', // 'all' kills emoji support!
             paste_block_drop: false,
 
             // post processing (string-based)
@@ -459,6 +486,11 @@ define.async('io.ox/core/tk/html-editor', [], function () {
                         }
                     }
                 });
+
+                ext.point('3rd.party/emoji/editor_css').each(function (point) {
+                    var url = ed.convertURL(require.toUrl(point.css));
+                    ed.contentCSS.push(url);
+                });
             }
         });
 
@@ -469,7 +501,7 @@ define.async('io.ox/core/tk/html-editor', [], function () {
         var resizeEditor = _.debounce(function () {
                 var p = textarea.parent(), w = p.width(), h = p.height(),
                     iframeHeight = h - p.find('td.mceToolbar').outerHeight() - 2;
-                p.find('table.mceLayout').css({ width: w + 'px', height: h + 'px' });
+                p.find('table.mceLayout').css({ width: w + 'px', height: iframeHeight + 'px' });
                 p.find('iframe').css('height', iframeHeight + 'px');
             }, 100),
 
@@ -486,7 +518,7 @@ define.async('io.ox/core/tk/html-editor', [], function () {
             },
 
             set = function (str) {
-                ed.setContent(str + '');
+                ed.setContent(emoji.unifiedToImageTag(str) + '');
             },
 
             clear = function () {
@@ -534,10 +566,14 @@ define.async('io.ox/core/tk/html-editor', [], function () {
             // loop over top-level nodes
             var tmp = '';
             $(ed.getBody()).children().each(function () {
-                var text = '';
+                var text = '',
+                    content;
                 // get text via selection
+                // use jQuery to parse HTML, because there is no obvious way to
+                // transform the emoji img tags to unicode before getContent call
                 ed.selection.select(this, true);
-                text = ed.selection.getContent({ format: 'text' });
+                content = emoji.imageTagsToUnified(ed.selection.getContent());
+                text = $('<div>').html(content).text();
                 switch (this.tagName) {
                 case 'BLOCKQUOTE':
                     tmp += quote(text) + '\n\n';

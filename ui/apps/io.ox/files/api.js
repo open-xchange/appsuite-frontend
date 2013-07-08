@@ -18,10 +18,85 @@ define('io.ox/files/api',
     ['io.ox/core/http',
      'io.ox/core/api/factory',
      'io.ox/core/config',
-     'io.ox/core/cache'
-    ], function (http, apiFactory, config, cache) {
+     'io.ox/core/cache',
+     'io.ox/core/date'
+    ], function (http, apiFactory, config, cache, date) {
 
     'use strict';
+
+
+    var DELAY = 1000 * 3; // 3 seconds
+
+    var tracker = (function () {
+
+        var fileLocks = {},
+        explicitFileLocks = {},
+        fileLockTimers = {};
+
+        var getCID = function (param) {
+            return _.isString(param) ? param : _.cid(param);
+        };
+
+        var self = {
+
+            // check if file is locked
+            isLocked: function (obj) {
+                var cid = getCID(obj);
+                return fileLocks[cid] > _.now();
+            },
+
+            // check if file is explicitly locked by other user (modified_by + locked_until)
+            isLockedByOthers: function (obj) {
+                var cid = getCID(obj);
+                return explicitFileLocks[cid] > _.now();
+            },
+
+            isLockedByMe: function (obj) {
+                var cid = getCID(obj);
+                return this.isLocked(cid) && !this.isLockedByOthers(cid);
+            },
+
+            /**
+             * returns local date time string of lock expiry if expiry is sometime in the next week
+             * @param  {object} file
+             * @return {string|false}
+             */
+            getLockTime: function (obj) {
+                var cid = getCID(obj);
+                if (obj.locked_until < _.now() + date.WEEK) {
+                    return new date.Local(obj.locked_until).format(date.DATE_TIME);
+                } else {
+                    return false;
+                }
+            },
+
+            // add file to tracker
+            addFile: function (obj) {
+                if (obj.locked_until === 0) return;
+                var cid = getCID(obj);
+                fileLocks[cid] = obj.locked_until;
+                if (obj.modified_by !== ox.user_id) {
+                    explicitFileLocks[cid] = obj.locked_until;
+                }
+            },
+
+            // remove file from tracker
+            removeFile: function (obj) {
+                var cid = getCID(obj);
+                delete fileLocks[cid];
+                delete explicitFileLocks[cid];
+            },
+
+            // clear tracker and clear timeouts
+            clear: function (obj) {
+                fileLocks = {};
+                explicitFileLocks = {};
+            }
+        };
+
+        return self;
+
+    }());
 
     var mime_types = {
         // images
@@ -34,6 +109,9 @@ define('io.ox/files/api',
         // audio
         'mp3' : 'audio/mpeg',
         'ogg' : 'audio/ogg',
+        'aac' : 'audio/aac',
+        'm4a' : 'audio/mp4',
+        'm4b' : 'audio/mp4',
         // video
         'mp4' : 'video/mp4',
         'm4v' : 'video/mp4',
@@ -90,7 +168,7 @@ define('io.ox/files/api',
         return data;
     };
 
-    var allColumns = '20,1,5,700,702,703,705';
+    var allColumns = '20,1,5,700,702,703,705,707,3';
 
     // generate basic API
     var api = apiFactory({
@@ -106,7 +184,7 @@ define('io.ox/files/api',
             },
             list: {
                 action: 'list',
-                columns: '20,1,5,700,702,703,704',
+                columns: '20,1,5,700,702,703,704,707,3',
                 extendColumns: 'io.ox/files/api/list'
             },
             get: {
@@ -136,19 +214,40 @@ define('io.ox/files/api',
                 });
                 return data;
             },
+            allPost: function (data) {
+                _(data).each(function (obj) {
+                    api.tracker.addFile(obj);
+                });
+                return data;
+            },
             list: function (data) {
-                _(data).each(fixContentType);
+                _(data).each(function (obj) {
+                    fixContentType(obj);
+                });
+                return data;
+            },
+            listPost: function (data) {
+                _(data).each(function (obj) {
+                    api.tracker.addFile(obj);
+                });
                 return data;
             },
             get: function (data) {
+                api.tracker.addFile(data);
                 return fixContentType(data);
             },
             search: function (data) {
-                _(data).each(fixContentType);
+                _(data).each(function (obj) {
+                    fixContentType(obj);
+                    api.tracker.addFile(obj);
+                });
                 return data;
             }
         }
     });
+
+    // publish tracker
+    api.tracker = tracker;
 
     /**
      * TOOD: deprecated/unused? (31f5a4a, b856ca5)
@@ -224,7 +323,7 @@ define('io.ox/files/api',
 
             return http.UPLOAD({
                     module: 'files',
-                    params: { action: 'new' },
+                    params: { action: 'new', filename: options.filename },
                     data: formData,
                     fixPost: true
                 })
@@ -277,7 +376,7 @@ define('io.ox/files/api',
 
         return http.UPLOAD({
                 module: 'files',
-                params: { action: 'update', timestamp: _.now(), id: options.id },
+                params: { action: 'update', timestamp: _.now(), id: options.id, filename: options.filename },
                 data: formData,
                 fixPost: true // TODO: temp. backend fix
             })
@@ -415,12 +514,15 @@ define('io.ox/files/api',
      * @param  {string} type ('change', 'new', 'delete')
      * @param  {file} obj
      * @param  {boolean} silent (no events will be fired) [optional]
+     * @param  {boolean} noRefreshAll (refresh.all will not be triggered) [optional]
      * @fires  api#update
      * @fires  api#update: + cid
      * @fires  api#refresh.all
      * @return {promise}
+     *
+     * TODO: api.propagate should be changed to be able to process arrays
      */
-    api.propagate = function (type, obj, silent) {
+    api.propagate = function (type, obj, silent, noRefreshAll) {
 
         var id, fid, all, list, get, versions, caches = api.caches, ready = $.when();
 
@@ -452,10 +554,10 @@ define('io.ox/files/api',
                     if (type === 'change') {
                         return api.get(obj).done(function (data) {
                             api.trigger('update update:' + encodeURIComponent(_.cid(data)), data);
-                            api.trigger('refresh.all');
+                            if (!noRefreshAll) api.trigger('refresh.all');
                         });
                     } else {
-                        api.trigger('refresh.all');
+                        if (!noRefreshAll) api.trigger('refresh.all');
                     }
                 }
                 return ready;
@@ -496,6 +598,7 @@ define('io.ox/files/api',
      * returns url
      * @param  {object} file
      * @param  {string} mode
+     * @param  {string} options
      * @return {string} url
      */
     api.getUrl = function (file, mode, options) {
@@ -503,7 +606,7 @@ define('io.ox/files/api',
         var url = ox.apiRoot + '/files',
             query = '?action=document&folder=' + file.folder_id + '&id=' + file.id +
                 (file.version !== undefined && options.version !== false ? '&version=' + file.version : ''),
-            name = '/' + encodeURIComponent(file.filename),
+            name = (file.filename ? '/' + encodeURIComponent(file.filename) : ''),
             thumbnail = 'thumbnailWidth' in options && 'thumbnailHeight' in options ?
                 '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight : '';
         switch (mode) {
@@ -615,25 +718,88 @@ define('io.ox/files/api',
      * @return {boolean}
      */
     api.checkMediaFile = function (type, filename) {
+
+        /*  NOTE: See comments in mediaplayer.js */
+
         var pattern;
         if (type === 'video') {
             if (!Modernizr.video) { return false; }
-            // Disabled for Safari
-            // Not sure yet why it doesn't play any video files, this should be temporary
-            // Direct links to Files that are normally supported also don't work
-            if (_.browser.Safari) { return false; }
-            pattern =                             '\\.(mp4|m4v|mov|wmv|mpe?g|ogv|webm|3gp)';
-            if (_.browser.Chrome) {     pattern = '\\.(mp4|m4v|wmv|mpe?g|ogv|webm)'; }
-            if (_.browser.Safari) {     pattern = '\\.(mp4|m4v|mpe?g)'; }
-            if (_.browser.IE) {         pattern = '\\.(mp4|m4v|wmv|mpe?g)'; }
-            if (_.browser.Firefox) {    pattern = '\\.(ogv|webm)'; }
+            if (_.browser.Chrome) {          pattern = '\\.(mp4|m4v|ogv|webm)'; }
+            else if (_.browser.Safari) {     pattern = '\\.(mp4|m4v|mpe?g)'; }
+            else if (_.browser.IE) {         pattern = '\\.(mp4|m4v)'; }
+            else if (_.browser.Firefox) {    pattern = '\\.(ogv|webm)'; }
+            else { return false; }
         } else {
             if (!Modernizr.audio) { return false; }
-            pattern =                             '\\.(mp3|m4a|m4b|wma|wav|ogg)';
-            if (_.browser.Safari) {     pattern = '\\.(mp3|m4a|m4b|wav)'; }
-            if (_.browser.IE) {         pattern = '\\.(mp3|m4a|m4b|wma|wav)'; }
+            if (_.browser.Chrome) {          pattern = '\\.(mp3|wav|m4a|m4b|mp4|ogg)'; }
+            else if (_.browser.Safari) {     pattern = '\\.(mp3|wav|m4a|m4b|aac)'; }
+            else if (_.browser.IE) {         pattern = '\\.(mp3|wav|m4a|m4b)'; }
+            else if (_.browser.Firefox) {    pattern = '\\.(mp3|wav|ogg)'; }
+            else { return false; }
         }
         return (new RegExp(pattern, 'i')).test(filename);
+    };
+
+    var lockToggle = function (list, action) {
+        // allow single object and arrays
+        list = _.isArray(list) ? list : [list];
+        // pause http layer
+        http.pause();
+        // process all updates
+        _(list).map(function (o) {
+            return http.PUT({
+                module: 'files',
+                params: {
+                    action: action,
+                    id: o.id,
+                    folder: o.folder_id || o.folder,
+                    timezone: 'UTC'
+                    // diff: 10000 // Use 10s diff for debugging purposes
+                },
+                appendColumns: false
+            });
+        });
+
+        // resume & trigger refresh
+        return http.resume().then(function () {
+            if (action === 'lock') {
+                // lock
+                return api.getList(list, false).then(function (list) {
+                    return _(list).map(function (obj, index) {
+                        // addFile is done by getList
+                        var isNotLast = index < list.length - 1;
+                        // last one triggers refresh.all
+                        return api.propagate('change', obj, false, isNotLast);
+                    });
+                });
+            } else {
+                // unlock
+                return _(list).map(function (obj, index) {
+                    api.tracker.removeFile(obj);
+                    var isNotLast = index < list.length - 1;
+                    // last one triggers refresh.all
+                    return api.propagate('change', obj, false, isNotLast);
+                });
+            }
+        });
+    };
+
+    /**
+     * unlocks files
+     * @param  {array} list
+     * @return {deferred}
+     */
+    api.unlock = function (list) {
+        return lockToggle(list, 'unlock');
+    };
+
+    /**
+     * locks files
+     * @param  {array} list
+     * @return {deferred}
+     */
+    api.lock = function (list, targetFolderId) {
+        return lockToggle(list, 'lock');
     };
 
     return api;

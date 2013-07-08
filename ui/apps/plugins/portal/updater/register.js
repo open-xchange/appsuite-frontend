@@ -18,7 +18,7 @@ define('plugins/portal/updater/register',
 
     ext.point('io.ox/portal/widget/updater').extend({
 
-        title: _.noI18n('Updater'),
+        title: gt('Updater'),
 
         preview: function (baton) {
 

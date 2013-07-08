@@ -92,7 +92,7 @@
         'Safari'    : 5,
         'Firefox'   : 10,
         'IE'        : 9,
-        'Android'   : 4.2,
+        'Android'   : 4.1,
         'iOS'       : 6.0
     };
 
@@ -162,7 +162,6 @@
         retina: 'only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 240dpi)'
     };
 
-
     var display = {};
 
     _(queries).each(function (query, key) {
@@ -178,6 +177,12 @@
     // extend underscore utilities
     _.mixin({
 
+        // make this public so that it can be patched by UI plugins
+        hasNativeEmoji: function () {
+            var support = _.browser.ios > 5 || _.browser.Android > 4.1 || (_.browser.MacOS && _.browser.Safari);
+            return support;
+        },
+
         // returns current device size
         display: function () {
             if (display.small) return 'small';
@@ -192,6 +197,7 @@
             misc[lang] = true;
             misc[lang.split('_')[0] + '_*'] = true;
             misc.touch = Modernizr.touch;
+            misc.emoji = _.hasNativeEmoji();
             // no arguments?s
             if (arguments.length === 0) {
                 return _.extend({}, browserLC, display, misc);
@@ -350,9 +356,10 @@
                 .value();
         },
 
-        setCookie: function (key, value) {
+        setCookie: function (key, value, lifetime) {
             // yep, works this way:
-            document.cookie = key + "=" + encodeURIComponent(value);
+            var c = key + "=" + encodeURIComponent(value) + (lifetime ? '; expires=' + new Date(new Date().getTime() + lifetime).toGMTString() + '; path=/' : '');
+            document.cookie = c;
         },
 
         /**

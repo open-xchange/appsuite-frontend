@@ -196,9 +196,9 @@ TaskBase = new (function () {
     var self = this;
     this._currentPrereqIndex++;
     if (this._currentPrereqIndex < this.prereqs.length) {
-      (global.setImmediate || setTimeout)(function () {
+      (global.setImmediate || process.nextTick)(function () {
         self.nextPrereq();
-      }, 0);
+      });
     }
     else {
       this.run();

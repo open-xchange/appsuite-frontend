@@ -2,29 +2,25 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Chapitre 9. Fichiers</title>
-<link rel="stylesheet" type="text/css" href="book-appsuite.css">
+<link rel="stylesheet" type="text/css" href="../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="index.html" title="OX App Suite">
 <link rel="up" href="index.html" title="OX App Suite">
-<link rel="prev" href="ox.appsuite.user.sect.calendar.settings.html" title="8.7. Réglages de l'agenda">
+<link rel="prev" href="ox.appsuite.user.sect.calendar.share.freebusy.html" title="8.6.4. Planifier des rendez-vous avec plusieurs participants">
 <link rel="next" href="ox.appsuite.user.sect.files.gui.html" title="9.1. Les composants de Fichiers">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Note légale">
+<link rel="stylesheet" type="text/css" href="http://www.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css"/> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<div class="navheader">
-<table width="100%" summary="Navigation header">
-<tr><th colspan="3" align="center">Chapitre 9. <span class="phrase">Fichiers</span>   </th></tr>
-<tr>
-<td width="20%" align="left">
-<a accesskey="p" href="ox.appsuite.user.sect.calendar.settings.html">Précédent</a> </td>
-<th width="60%" align="center"> </th>
-<td width="20%" align="right"> <a accesskey="n" href="ox.appsuite.user.sect.files.gui.html">Suivant</a>
-</td>
-</tr>
-</table>
-<hr>
-</div>
-<div lang="fr-FR" class="chapter">
+<div class="oxhelp-navigation-top"><div class="navbar navbar-inverse navbar-fixed-top"><div class="navbar-inner"><ul class="nav">
+<a class="brand"></a><li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.calendar.share.freebusy.html">Précédent</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Sommaire</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">TdM</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.gui.html">Suivant</a></li>
+</ul></div></div></div>
+<div class="oxhelp-content">
+  <div lang="fr-FR" class="chapter">
 <div class="titlepage"><div><div><h1 class="title">
 <a name="ox.appsuite.user.chap.files"></a>Chapitre 9. <span class="phrase">Fichiers</span>   </h1></div></div></div>
 <div class="toc">
@@ -54,8 +50,9 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.files.manage.copy.html">9.5.7 Copier des fichiers</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.files.manage.addportal.html">9.5.8 Ajouter des fichiers au portail</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.files.manage.delete.html">9.5.9 Supprimer des fichiers</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.manage.versions.html">9.5.10 Travailler avec des versions</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.manage.multiple.html">9.5.11 Modifier plusieurs fichiers à la fois</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.manage.lock.html">9.5.10 Verrouiller et déverrouiller des fichiers</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.manage.versions.html">9.5.11 Travailler avec des versions</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.manage.multiple.html">9.5.12 Modifier plusieurs fichiers à la fois</a></span></dt>
 </dl></dd>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.files.webdav.html">9.6 Accéder aux fichiers avec WebDAV</a></span></dt>
 <dd><dl>
@@ -68,7 +65,7 @@
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.files.settings.html">9.8 Réglages des fichiers</a></span></dt>
 </dl>
 </div>
-<a class="indexterm" name="idm139979155774032"></a><a class="indexterm" name="idm139979155687648"></a><a class="indexterm" name="idm139979155978928"></a><div class="concept">
+<a class="indexterm" name="idm140383284097408"></a><a class="indexterm" name="idm140383285855984"></a><a class="indexterm" name="idm140383282844272"></a><div class="concept">
 <a name="ox.appsuite.user.concept.files"></a><p>Apprenez à vous servir de l'application <span class="phrase"><span class="guilabel"><strong>Fichiers</strong></span>.</span>    </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>les <a class="link" href="ox.appsuite.user.sect.files.gui.html" title="9.1. Les composants de Fichiers">composants de <span class="phrase"><span class="guilabel"><strong>Fichiers</strong></span></span>    </a></p></li>
@@ -85,31 +82,9 @@
   </p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.files.start"></a><p class="title"><b>Pour démarrer l'application <span class="phrase"><span class="guilabel"><strong>Fichiers</strong></span>,</span>    les possibilités suivantes s'offrent à vous :</b></p>
-<div class="procedure"><ul class="procedure"><li class="step">
-<p>Cliquez sur <span class="phrase"><span class="guimenu"><strong>Fichiers</strong></span></span>    dans la barre de menu. </p>
-<p>Cliquez sur <span class="phrase"><span class="guimenu"><strong>Fichiers</strong></span></span>    sous <span class="guilabel"><strong>Vos applications</strong></span> sur la page <span class="guimenu"><strong>Vos applications</strong></span>. </p>
-</li></ul></div>
+<a name="ox.appsuite.user.task.files.start"></a><p class="title"><b>Pour démarrer l'app <span class="phrase"><span class="guilabel"><strong>Fichiers</strong></span></span>    : </b></p>
+<div class="procedure"><ul class="procedure"><li class="step"><p>Cliquez sur <span class="phrase"><span class="guimenu"><strong>Fichiers</strong></span></span>    dans la barre de menu. </p></li></ul></div>
 </div>
-</div>
-<div class="navfooter">
-<hr>
-<table width="100%" summary="Navigation footer">
-<tr>
-<td width="40%" align="left">
-<a accesskey="p" href="ox.appsuite.user.sect.calendar.settings.html">Précédent</a> </td>
-<td width="20%" align="center"> </td>
-<td width="40%" align="right"> <a accesskey="n" href="ox.appsuite.user.sect.files.gui.html">Suivant</a>
-</td>
-</tr>
-<tr>
-<td width="40%" align="left" valign="top">8.7. Réglages de l'agenda </td>
-<td width="20%" align="center">
-<a accesskey="h" href="index.html">Sommaire</a> | <a accesskey="t" href="bk01-toc.html">TdM</a>
-</td>
-<td width="40%" align="right" valign="top"> 9.1. Les composants de <span class="phrase"><span class="guilabel"><strong>Fichiers</strong></span></span>   </td>
-</tr>
-</table>
 </div>
 </body>
 </html>

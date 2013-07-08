@@ -17,11 +17,12 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                                           'io.ox/core/notifications',
                                           'io.ox/backbone/forms',
                                           'io.ox/calendar/util',
+                                          'io.ox/calendar/edit/recurrence-view',
                                           'io.ox/participants/views',
                                           'io.ox/core/tk/attachments',
                                           'io.ox/tasks/api',
                                           'io.ox/core/extensions'],
-                                          function (gt, views, date, notifications, forms, util, pViews, attachments, api, ext) {
+                                          function (gt, views, date, notifications, forms, util, RecurrenceView, pViews, attachments, api, ext) {
     'use strict';
 
     var point = views.point('io.ox/tasks/edit/view');
@@ -67,14 +68,14 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
             this.updateChoice();
             this.nodes.select.on('change', function () {
                 if (self.nodes.select.prop('selectedIndex') === 0) {
-                    self.model.set('percent_completed', 0);
+                    self.model.set('percent_completed', 0, {validate: true});
                 } else if (self.nodes.select.prop('selectedIndex') === 2) {
-                    self.model.set('percent_completed', 100);
+                    self.model.set('percent_completed', 100, {validate: true});
                 } else if (self.nodes.select.prop('selectedIndex') === 1 && (self.model.get('percent_completed') === 0 || self.model.get('percent_completed') === 100)) {
-                    self.model.set('percent_completed', 25);
+                    self.model.set('percent_completed', 25, {validate: true});
                 }
-                
-                self.model.set(self.attribute, parseInt(self.nodes.select.val(), 10));
+
+                self.model.set(self.attribute, parseInt(self.nodes.select.val(), 10), {validate: true});
             });
         },
         attribute: 'status',
@@ -106,7 +107,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
             this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
             this.updateChoice();
             this.nodes.select.on('change', function () {
-                self.model.set(self.attribute, self.nodes.select.val());
+                self.model.set(self.attribute, self.nodes.select.val(), {validate: true});
             });
         },
         attribute: 'priority',
@@ -143,7 +144,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                 if (value === '') {
                     value = null;
                 }
-                this.model.set(this.attribute, value);
+                this.model.set(this.attribute, value, {validate: true});
             } else {
                 setTimeout(function () {notifications.yell('error', gt('Please enter a correct number.')); }, 300);
                 this.nodes.inputField.val(this.model.get(this.attribute));
@@ -166,7 +167,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                 if (value === '') {
                     value = null;
                 }
-                this.model.set(this.attribute, value);
+                this.model.set(this.attribute, value, {validate: true});
             } else {
                 setTimeout(function () {notifications.yell('error', gt('Please enter a correct number.')); }, 300);
                 this.nodes.inputField.val(this.model.get(this.attribute));
@@ -189,7 +190,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                 if (value === '') {
                     value = null;
                 }
-                this.model.set(this.attribute, value);
+                this.model.set(this.attribute, value, {validate: true});
             } else {
                 setTimeout(function () {notifications.yell('error', gt('Please enter a correct number.')); }, 300);
                 this.nodes.inputField.val(this.model.get(this.attribute));
@@ -212,7 +213,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                 if (value === '') {
                     value = null;
                 }
-                this.model.set(this.attribute, value);
+                this.model.set(this.attribute, value, {validate: true});
             } else {
                 setTimeout(function () {notifications.yell('error', gt('Please enter a correct number.')); }, 300);
                 this.nodes.inputField.val(this.model.get(this.attribute));
@@ -238,7 +239,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
             this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
             this.updateChoice();
             this.nodes.select.on('change', function () {
-                self.model.set(self.attribute, self.nodes.select.val());
+                self.model.set(self.attribute, self.nodes.select.val(), {validate: true});
             });
         },
         attribute: 'currency',
@@ -458,10 +459,10 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         attribute: 'start_date',
         label: gt('Starts on'),
         updateModelDate: function () {
-            this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model));
+            this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model), {validate: true});
         },
         updateModelTime: function () {
-            this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model));
+            this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model), {validate: true});
         }
     }));
 
@@ -475,10 +476,10 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         attribute: 'end_date',
         label: gt('Due date'),
         updateModelDate: function () {
-            this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model));
+            this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model), {validate: true});
         },
         updateModelTime: function () {
-            this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model));
+            this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model), {validate: true});
         }
     }));
 
@@ -492,10 +493,10 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         attribute: 'alarm',
         label: gt('Date'),
         updateModelDate: function () {
-            this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model));
+            this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model), {validate: true});
         },
         updateModelTime: function () {
-            this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model));
+            this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model), {validate: true});
         }
     }));
 
@@ -548,6 +549,13 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
             $node.append($('<div>').addClass('span12').append($inputWrap));
         }
     });
+    
+    // recurrence
+    point.extend(new RecurrenceView({
+        id: 'recurrence',
+        className: 'span12',
+        index: 2100
+    }));
 
     ext.point('io.ox/tasks/edit/dnd/actions').extend({
         id: 'attachment',

@@ -32,10 +32,10 @@ define('io.ox/contacts/model',
                     var currentDistListArray = this.get('distribution_list');
 
                     if (currentDistListArray === undefined) {
-                        this.set('distribution_list', [member]);
+                        this.set('distribution_list', [member], {validate: true});
                     } else {
                         currentDistListArray.push(member);
-                        this.set('distribution_list', currentDistListArray);
+                        this.set('distribution_list', currentDistListArray, {validate: true});
                     }
 
                     this.trigger("change");

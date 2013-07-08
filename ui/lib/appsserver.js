@@ -65,7 +65,7 @@ http.createServer(function (request, response) {
     var list = url.parse(request.url).pathname.split(',');
     list.shift();
     for (var i in list) {
-        var m = /^(?:\/(text|raw);)?([\w\/-]+(?:\.[\w\/-]+)*)$/.exec(list[i]);
+        var m = /^(?:\/(text|raw);)?([\w\/+-]+(?:\.[\w\/+-]+)*)$/.exec(list[i]);
         if (!m) {
             console.log('Invalid module name: ' + list[i]);
             response.write("console.log('Invalid module name: \"" +

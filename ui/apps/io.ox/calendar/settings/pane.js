@@ -17,20 +17,20 @@ define('io.ox/calendar/settings/pane',
      'io.ox/calendar/settings/model',
      'dot!io.ox/calendar/settings/form.html',
      'io.ox/core/extensions',
-     'gettext!io.ox/calendar/calendar'
+     'gettext!io.ox/calendar'
     ], function (settings, date, calendarSettingsModel, tmpl, ext, gt) {
 
     'use strict';
 
     var calendarSettings =  settings.createModel(calendarSettingsModel),
         staticStrings =  {
-            TITLE_CALENDAR: gt('Calendar'),
+            TITLE_CALENDAR: gt.pgettext('app', 'Calendar'),
             TITLE_TIME: gt('Time'),
             INTERVAL_IN_MINUTES: gt('Time scale in minutes'),
             WORKING_TIME_START: gt('Start of working time'),
             WORKING_TIME_END: gt('End of working time'),
             TITLE_VIEW: gt('Default calendar view'),
-            VIEW: gt('View'),
+            VIEW: gt('Default view'),
             TR_CALENDAR_VIEW: gt('Time range for the calender view'),
             TR_TEAM_VIEW: gt('Time range for the team view'),
             TR_LIST_VIEW: gt('Time range for the list view'),

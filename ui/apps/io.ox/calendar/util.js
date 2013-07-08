@@ -142,9 +142,10 @@ define("io.ox/calendar/util",
 //            return d.format(date.locale.date);
 //        },
 
-        getSmartDate: function (timestamp, showDate) {
+        getSmartDate: function (data, showDate) {
 
-            var d = timestamp !== undefined ? new date.Local(timestamp) : new date.Local(),
+            var timestamp = data.full_time ? date.Local.utc(data.start_date) : data.start_date,
+                d = timestamp !== undefined ? new date.Local(timestamp) : new date.Local(),
                 now = new date.Local(),
                 showDate = showDate || false,
                 weekStart = this.floor(now.getTime(), "week"),

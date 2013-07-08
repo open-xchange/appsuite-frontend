@@ -43,14 +43,14 @@ define('io.ox/participants/model',
                 this.set({
                     id: this.get('internal_userid'),
                     type: this.TYPE_USER
-                });
+                }, {validate: true});
             }
             else if (this.get('entity')) {
                 this.cid = 'entity_' + parseInt(this.get('entity'), 10);
                 this.set({
                     id: parseInt(this.get('entity'), 10),
                     type: this.TYPE_USER
-                });
+                }, {validate: true});
             }
             else {
                 switch (this.get('type')) {
@@ -68,7 +68,7 @@ define('io.ox/participants/model',
                     break;
                 case this.TYPE_EXTERNAL_USER:
                     this.cid = 'external_' + this.getEmail();
-                    this.set('id', this.getEmail());
+                    this.set('id', this.getEmail(), {validate: true});
                     break;
                 case this.TYPE_DISTLIST_USER_GROUP:
                     this.cid = 'distlist_' + this.get('id');
@@ -89,12 +89,12 @@ define('io.ox/participants/model',
             case self.TYPE_USER:
                 //fetch user contact
                 userAPI.get({id: self.get('id')}).done(function (user) {
-                    self.set(user);
+                    self.set(user, {validate: true});
                     self.trigger('change', self);
                     df.resolve();
                 }).fail(function () {
                     if (!self.get('display_name')) {
-                        self.set('display_name', self.get('mail'));
+                        self.set('display_name', self.get('mail'), {validate: true});
                     }
                     df.resolve();
                 });
@@ -102,14 +102,14 @@ define('io.ox/participants/model',
             case self.TYPE_USER_GROUP:
                 //fetch user group
                 groupAPI.get({id: self.get('id')}).done(function (group) {
-                    self.set(group);
+                    self.set(group, {validate: true});
                     self.trigger('change', self);
                     df.resolve();
                 });
                 break;
             case self.TYPE_RESOURCE:
                 resourceAPI.get({id: self.get('id')}).done(function (resource) {
-                    self.set(resource);
+                    self.set(resource, {validate: true});
                     self.trigger('change', self);
                     df.resolve();
                 });
@@ -128,11 +128,11 @@ define('io.ox/participants/model',
                             image1_url: data.image1_url,
                             type: data.internal_userid ? self.TYPE_USER : self.TYPE_EXTERNAL_USER,
                             id: data.internal_userid ? data.internal_userid : self.get('id')
-                        });
+                        }, {validate: true});
                         self.id = self.get('id');
                         self.trigger('change');
                     } else {
-                        self.set({display_name: (self.get('display_name') || '').replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''), email1: self.get('mail') || self.get('email1')});
+                        self.set({display_name: (self.get('display_name') || '').replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''), email1: self.get('mail') || self.get('email1')}, {validate: true});
                     }
                     self.trigger('change', self);
                     df.resolve();
@@ -141,13 +141,13 @@ define('io.ox/participants/model',
             case self.TYPE_DISTLIST_USER_GROUP:
                 //fetch user group
                 contactAPI.get({id: self.get('id'), folder_id: self.get('folder_id')}).done(function (group) {
-                    self.set(group);
+                    self.set(group, {validate: true});
                     self.trigger('change', self);
                     df.resolve();
                 });
                 break;
             default:
-                self.set({display_name: 'unknown'});
+                self.set({display_name: 'unknown'}, {validate: true});
                 self.trigger('change', self);
                 df.resolve();
                 break;
@@ -166,7 +166,7 @@ define('io.ox/participants/model',
             return util.getImage(this.toJSON(), { scaleType: 'cover', width: 54, height: 54 });
         },
         markAsUnremovable: function () {
-            this.set('ui_removable', false);
+            this.set('ui_removable', false, {validate: true});
         }
 
     });

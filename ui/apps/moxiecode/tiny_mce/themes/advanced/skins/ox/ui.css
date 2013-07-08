@@ -1,5 +1,5 @@
 /* Reset */
-.oxSkin table, .oxSkin tbody, .oxSkin a, .oxSkin img, .oxSkin tr, .oxSkin div, .oxSkin td, .oxSkin iframe, .oxSkin span, .oxSkin *, .oxSkin .mceText {border:0; margin:0; padding:0; background:transparent; white-space:nowrap; text-decoration:none; font-weight:normal; cursor:default; color:#000; vertical-align:baseline; width:auto; border-collapse:separate; text-align:left}
+.oxSkin table, .oxSkin tbody, .oxSkin a, .oxSkin img, .oxSkin tr, .oxSkin div, .oxSkin td, .oxSkin iframe, .oxSkin span, .oxSkin *, .oxSkin .mceText {border:0; margin:0; padding:0; white-space:nowrap; text-decoration:none; font-weight:normal; cursor:default; color:#000; vertical-align:baseline; width:auto; border-collapse:separate; text-align:left}
 .oxSkin a:hover, .oxSkin a:link, .oxSkin a:visited, .oxSkin a:active {text-decoration:none; font-weight:normal; cursor:default; color:#000}
 .oxSkin table td {vertical-align:middle}
 

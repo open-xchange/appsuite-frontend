@@ -139,6 +139,11 @@ define('io.ox/calendar/freebusy/controller',
                 return model ? model.index : 0;
             }
 
+            function getResourceTitleByIndex(index) {
+                var model = self.participants.at(index);
+                return model ? model.get('display_name') : '';
+            }
+
             this.loadAppointments = function (useCache) {
                 var list = self.getParticipants(),
                     options = self.getCalendarView().getRequestParam();
@@ -158,6 +163,11 @@ define('io.ox/calendar/freebusy/controller',
                                         obj.index = getColorByIndex(index);
                                         // add appointments without access to cache
                                         cache[_.cid(obj)] = obj;
+                                        // check participnat type
+                                        var part = list[index];
+                                        if (part && part.type === 3) {
+                                            obj.title = getResourceTitleByIndex(index);
+                                        }
                                         return obj;
                                     })
                                     .value();

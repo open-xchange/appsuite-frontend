@@ -9,22 +9,22 @@ body {
 }
 
 th {
-	font-style: italic;
+    font-style: italic;
 }
 
 td, th {
-	text-align: left;
-	vertical-align: top;
+    text-align: left;
+    vertical-align: top;
 }
 
 h3 {
-	text-align: left;
+    text-align: left;
 }
 
 .name {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 .spacer {
-	height: 15px;
+    height: 15px;
 }

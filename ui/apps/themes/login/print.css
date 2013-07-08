@@ -75,12 +75,17 @@ pre.content {
     font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
     white-space: pre-line;
 }
+/* only apply for html-mail content*/
+section.mail pre.content {
+    line-height: normal;
+    white-space: normal;
+}
 
 table {
     width: 100%;
 }
 
-th {
+div.phonelist th {
     line-height: 1.2em;
     padding: 1em 1em 1em 0;
     text-align: left;
@@ -89,7 +94,7 @@ th {
     font-style: italic;
 }
 
-td {
+div.phonelist td {
     line-height: 1.2em;
     padding: 0 1em 0 0;
     vertical-align: top;

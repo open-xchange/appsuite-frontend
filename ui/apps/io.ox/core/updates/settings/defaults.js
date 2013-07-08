@@ -12,10 +12,10 @@
  */
 
 define('io.ox/core/updates/settings/defaults', function () {
-	'use strict';
+    'use strict';
 
-	return {
-		states: {}
-	};
-	
+    return {
+        states: {}
+    };
+
 });

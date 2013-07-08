@@ -90,10 +90,10 @@ define('plugins/portal/recentfiles/register',
                     }
                     content.append(
                         $('<div class="item">').data('item', file).append(
-                            $('<b>').text(filename), $.txt(' '),
+                            $('<b>').text(_.noI18n(filename)), $.txt(' '),
                             $('<span class="gray">').text(
                                 type === 'recentfiles' ?
-                                    file.modified_by.display_name : // show WHO changed it
+                                    _.noI18n(file.modified_by.display_name) : // show WHO changed it
                                     new date.Local(file.last_modified).format(date.DATE_TIME) // show WHEN it was changed
                             )
                         )

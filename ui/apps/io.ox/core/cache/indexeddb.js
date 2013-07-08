@@ -12,7 +12,7 @@
 
 define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (ext) {
 
-	'use strict';
+    'use strict';
 
     var SCHEMA = 1,
         QUEUE_DELAY = 5000,
@@ -23,7 +23,14 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         opened,
         that;
 
-    if ((defunct = !(Modernizr.indexeddb && window.indexedDB))) {
+    // Android 4.1.x do have a indexddb implementation in their stock browser!
+    // Cool, but this implementation is based on old spec of indexddb. That's not so cool
+    // and will make the script down here break on each newer Android device.
+    // So we force localsstorage for Android 4.x devices even if modernizr tells us about
+    // indexddb support on theses devices
+
+    // we test for this by looking for the IDBVersionChangeEvent which these devices do not have
+    if ((defunct = !(window.IDBVersionChangeEvent !== undefined && Modernizr.indexeddb && window.indexedDB))) {
         return $.when();
     }
 
@@ -46,8 +53,13 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
 
         function operation(fn, readwrite) {
             return dbOpened.then(function (db) {
-                var tx = db.transaction('cache', readwrite ? 'readwrite' : 'readonly');
-                return fn(tx.objectStore('cache'));
+                try {
+                    var tx = db.transaction('cache', readwrite ? 'readwrite' : 'readonly');
+                    return fn(tx.objectStore('cache'));
+                } catch (e) {
+                    console.error('IndexedDB.operation()', e.message, e);
+                    return $.Deferred().reject(e);
+                }
             });
         }
 
@@ -148,7 +160,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 //     return OP(cache.put({ key: key, data: data }));
                 // });
                 // go back to work
-                return $.when();
+                return $.Deferred().resolve(key);
             },
 
             remove: function (key) {

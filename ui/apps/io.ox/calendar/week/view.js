@@ -564,7 +564,9 @@ define('io.ox/calendar/week/view',
          */
         render: function () {
             // create timelabels
-            var timeLabel = [];
+            var timeLabel = [],
+                self = this;
+
             for (var i = 1; i < this.slots; i++) {
                 var number = new date.Local(0, 0, 0, i, 0, 0, 0).format(date.TIME);
                 timeLabel.push(
@@ -575,9 +577,17 @@ define('io.ox/calendar/week/view',
             }
             timeLabel = $('<div>').addClass('week-container-label').append(timeLabel);
 
+            /**
+             * change the timeline css top value to the current time position
+             * @param  {Object} tl Timeline as jQuery object
+             */
+            var renderTimeline = function () {
+                var d = new date.Local();
+                self.timeline.css({ top: ((d.getHours() / 24 + d.getMinutes() / 1440) * 100) + '%'});
+            };
             // create and animate timeline
-            this.renderTimeline(this.timeline);
-            setInterval(this.renderTimeline, 60000, this.timeline);
+            renderTimeline();
+            setInterval(renderTimeline, 60000);
 
             if (!Modernizr.touch) {
                 this.fulltimePane.empty().append(this.fulltimeNote.text(gt('Doubleclick in this row for whole day appointment')).attr('unselectable', 'on'));
@@ -687,15 +697,6 @@ define('io.ox/calendar/week/view',
                 $('.time', this.pane).height(this.cellHeight * this.fragmentation);
             }
             return this;
-        },
-
-        /**
-         * change the timeline css top value to the current time position
-         * @param  {Object} tl Timeline as jQuery object
-         */
-        renderTimeline: function (tl) {
-            var d = new date.Local();
-            tl.css({ top: ((d.getHours() / 24 + d.getMinutes() / 1440) * 100) + '%'});
         },
 
         /**
@@ -846,6 +847,14 @@ define('io.ox/calendar/week/view',
             if (this.showFulltime) {
                 ftHeight = (fulltimeColPos.length <= this.fulltimeMax ? fulltimeColPos.length : (this.fulltimeMax + 0.5)) * (this.fulltimeHeight + 1);
                 this.fulltimePane.css({ height: fulltimeColPos.length * (this.fulltimeHeight + 1) + 'px'});
+                this.fulltimeCon.resizable({
+                    handles: "s",
+                    minHeight: this.fulltimeHeight,
+                    maxHeight: fulltimeColPos.length * (this.fulltimeHeight + 1),
+                    resize: function (event, ui) {
+                        self.pane.css({ top: self.fulltimeCon.outerHeight() });
+                    }
+                });
             }
             this.fulltimeCon.css({ height: ftHeight + 'px' });
             this.pane.css({ top: ftHeight + 'px' });
@@ -1586,8 +1595,8 @@ define('io.ox/calendar/week/view',
                     .addClass('appointment-content')
                     .append(
                         $('<span class="private-flag"><i class="icon-lock"></i></span>')[a.get('private_flag') ? 'show' : 'hide'](),
-                        $('<div>').addClass('title').text(gt.format(confString, gt.noI18n(a.get('title')))),
-                        $('<div>').addClass('location').text(gt.noI18n(a.get('location') || ''))
+                        $('<div>').addClass('title').text(gt.format(confString, gt.noI18n(a.get('title') || '\u00A0'))),
+                        $('<div>').addClass('location').text(gt.noI18n(a.get('location') || '\u00A0'))
                     )
                 )
                 .attr({

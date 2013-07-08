@@ -25,8 +25,9 @@ define("io.ox/contacts/main",
      "io.ox/core/commons",
      "gettext!io.ox/contacts",
      "settings!io.ox/contacts",
+     "io.ox/core/api/folder",
      "less!io.ox/contacts/style.less"
-    ], function (util, api, VGrid, hints, viewDetail, config, ext, actions, commons, gt, settings) {
+    ], function (util, api, VGrid, hints, viewDetail, config, ext, actions, commons, gt, settings, folderAPI) {
 
     "use strict";
 
@@ -48,7 +49,8 @@ define("io.ox/contacts/main",
 
     // launcher
     app.setLauncher(function (options) {
-
+        var showSwipeButton = false,
+            hasDeletePermission;
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/contacts',
@@ -73,8 +75,67 @@ define("io.ox/contacts/main",
         // folder tree
         commons.addFolderView(app, { type: 'contacts', view: 'FolderList' });
 
+        ext.point('io.ox/contacts/swipeDelete').extend({
+            index: 666,
+            id: 'deleteButton',
+            draw: function (baton) {
+                // remove old buttons first
+                if (showSwipeButton) {
+                    removeButton();
+                }
+                this.append(
+                    $('<div class="btn btn-danger swipeDelete fadein">')
+                        .text(gt('Delete'))
+                        .on('mousedown', function (e) {
+                            // we have to use mousedown as the selection listens to this, too
+                            // otherwise we are to late to get the event
+                            e.preventDefault();
+
+                            actions.invoke('io.ox/contacts/actions/delete', null, baton);
+                            removeButton();
+                        })
+                );
+                showSwipeButton = true;
+            }
+        });
+
+
+        // swipe handler
+        var swipeRightHandler = function (e, id, cell) {
+            var obj = _.cid(id);
+
+            if (hasDeletePermission === undefined) {
+                folderAPI.get({folder: obj.folder_id, cache: true}).done(function (data) {
+                    if (folderAPI.can('delete', data)) {
+                        hasDeletePermission = true;
+                        api.getList([obj]).done(function (list) {
+                            ext.point('io.ox/contacts/swipeDelete').invoke('draw', cell, list[0]);
+                        });
+                    }
+                });
+            } else if (hasDeletePermission) {
+                api.getList([obj]).done(function (list) {
+                    ext.point('io.ox/contacts/swipeDelete').invoke('draw', cell, list[0]);
+                });
+            }
+        };
+
         // grid
-        grid = new VGrid(gridContainer, {settings: settings});
+        grid = new VGrid(gridContainer, {
+            settings: settings,
+            swipeRightHandler: swipeRightHandler
+        });
+
+        // helper to remove button from grid
+        var removeButton = function () {
+            if (showSwipeButton) {
+                var g = grid.getContainer();
+                $('.swipeDelete', g).remove();
+                showSwipeButton = false;
+            }
+        };
+
+        grid.selection.on('change', removeButton);
 
         // add template
         grid.addTemplate({
@@ -140,6 +201,13 @@ define("io.ox/contacts/main",
         commons.wireGridAndAPI(grid, api);
         commons.wireGridAndSearch(grid, win, api);
 
+        //
+        grid.setAllRequest('search', function () {
+            var options = win.search.getOptions();
+            options.folder = grid.prop('folder');
+            options.order = grid.prop('order');
+            return api.advancedsearch(win.search.query, options);
+        });
         // LFO callback
         var showContact, drawContact, drawFail;
 
@@ -163,7 +231,9 @@ define("io.ox/contacts/main",
 
         drawContact = function (data) {
             var baton = ext.Baton({ data: data, app: app });
-            baton.disable('io.ox/contacts/detail', 'breadcrumb');
+            if (grid.getMode() === 'all') {
+                baton.disable('io.ox/contacts/detail', 'breadcrumb');
+            }
             right.idle().empty().append(viewDetail.draw(baton));
         };
 
@@ -209,9 +279,19 @@ define("io.ox/contacts/main",
         // draw thumb index
         var baton = new ext.Baton({ app: app, data: [], Thumb: Thumb });
 
+        grid.selection.on('change', function () {
+            if (showSwipeButton) {
+                removeButton();
+            }
+        });
+        // folder change
         grid.on('change:ids', function () {
-            ext.point('io.ox/contacts/thumbIndex')
+            hasDeletePermission = undefined;
+            removeButton();
+            if (_.device('!small')) {
+                ext.point('io.ox/contacts/thumbIndex')
                 .invoke('draw', thumbs, baton);
+            }
         });
 
         ext.point('io.ox/contacts/thumbIndex').extend({
@@ -220,7 +300,7 @@ define("io.ox/contacts/main",
             draw: function () {
                 // get labels
                 baton.labels = grid.getLabels().textIndex || {};
-                // update thumb list
+                // update thumb listf
                 ext.point('io.ox/contacts/thumbIndex')
                     .invoke('getIndex', thumbs, baton);
 
@@ -233,6 +313,34 @@ define("io.ox/contacts/main",
                 baton.data = _.map(fullIndex, baton.Thumb);
             }
         });
+
+        // extend search form
+
+        ext.point('io.ox/contacts/search/defaults').extend({
+            names: true,
+            phones: false,
+            addresses: false
+        });
+
+        ext.point('io.ox/contacts/search/checkboxes').extend({
+            names: true,
+            phones: true,
+            addresses: true
+        });
+
+
+        win.nodes.search.find('.input-append').append(
+            _(ext.point('io.ox/contacts/search/checkboxes').options()).map(function (flag, name) {
+                var defaults = ext.point('io.ox/contacts/search/defaults').options();
+                return flag === true ?
+                    $('<label class="checkbox margin-right">').append(
+                        $('<input type="checkbox" value="on">').attr({ name: name, checked: defaults[name] ? 'checked' : null }),
+                        $.txt({ names: gt('Names and e-mail addresses'), phones: gt('Phone numbers'), addresses: gt('Addresses')}[name])
+                    ) :
+                    $();
+            })
+        );
+
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, right);
         commons.wireGridAndWindow(grid, win);

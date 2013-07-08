@@ -1,4 +1,4 @@
 {
-	namespace: "portal",
-	requires: "webmail"
+    namespace: "portal",
+    requires: "webmail"
 }

@@ -13,19 +13,23 @@
 
 define('io.ox/mail/settings/pane',
    ['settings!io.ox/mail',
+    'io.ox/core/api/user',
+    'io.ox/core/capabilities',
+    'io.ox/contacts/api',
+    'io.ox/mail/util',
     'io.ox/mail/settings/model',
     'dot!io.ox/mail/settings/form.html',
     'io.ox/core/extensions',
     'io.ox/core/notifications',
     'gettext!io.ox/mail',
-    'io.ox/core/api/account'], function (settings, mailSettingsModel, tmpl, ext, notifications, gt, api) {
+    'io.ox/core/api/account'], function (settings, userAPI, capabilities, contactsAPI, mailUtil, mailSettingsModel, tmpl, ext, notifications, gt, api) {
 
     'use strict';
 
     var mailSettings =  settings.createModel(mailSettingsModel),
 
         staticStrings =  {
-            TITLE_MAIL: gt('Mail'),
+            TITLE_MAIL: gt.pgettext('app', 'Mail'),
             TITLE_COMMON: gt('Common'),
             PERMANENT_REMOVE_MAILS: gt('Permanently remove deleted E-Mails'),
             COLLECT_CONTACTS_SENDING: gt('Automatically collect contacts in the folder "Collected addresses" while sending'),
@@ -72,7 +76,7 @@ define('io.ox/mail/settings/pane',
             this._modelBinder = new Backbone.ModelBinder();
         },
         render: function () {
-            var self = this;
+            var self = this, accounts, msisdns;
             /* TODO: only the default account (id: 0) can have multiple aliases for now
              * all other accounts can only have one address (the primary address)
              * So the option is only for the default account, for now. This should
@@ -81,13 +85,38 @@ define('io.ox/mail/settings/pane',
              *
              * THIS COMMENT IS IMPORTANT, DON’T REMOVE
              */
-            api.getSenderAddresses(0).done(function (addresses) {
+            accounts = api.getSenderAddresses(0).then(function (addresses) {
+                return _.map(addresses, function (address) {
+                    //use value also as label
+                    return {value: address[1], label: address[1]};
+                });
+            });
 
+            //get msisdn numbers
+            msisdns = !capabilities.has('msisdn') ? [] : userAPI.get({id: ox.user_id}).then(function (data) {
+                return _(contactsAPI.getMapping('msisdn', 'names'))
+                        .chain()
+                        .map(function (field) {
+                            if (data[field]) {
+                                return {
+                                    label: data[field],
+                                    value: mailUtil.cleanupPhone(data[field]) + mailUtil.getChannelSuffixes().msisdn
+                                };
+                            }
+                        })
+                        .compact()
+                        .value();
+            });
+
+            new $.when(accounts, msisdns).then(function (addresses, numbers) {
                 self.$el.empty().append(
                     tmpl.render('io.ox/mail/settings', {
                         strings: staticStrings,
                         optionsAutoSaveMinutes: optionsAutoSave,
-                        optionsAllAccounts: addresses.map(function (address) { return address[1]; })
+                        optionsAllAccounts: [].concat(addresses, numbers),
+                        caps:  {
+                            contactCollect: capabilities.has('collect_email_addresses') ? 'true' : 'false'
+                        }
                     })
                 );
 

@@ -111,7 +111,7 @@ define('io.ox/preview/main',
     }));
 
     // register audio typed renderer
-    if (Modernizr.audio) {
+    if (Modernizr.audio && _.device('!android')) {
         Renderer.point.extend(new Engine({
             id: 'audio',
             index: 10,
@@ -236,9 +236,24 @@ define('io.ox/preview/main',
         supports: ['eml', 'message/rfc822'],
         draw: function (file) {
             var self = this;
-            require(['io.ox/mail/view-detail'], function (view) {
+            require(['io.ox/mail/view-detail',
+                      'io.ox/mail/util'], function (view, util) {
                 var data = file.data.nested_message;
                 data.parent = file.parent;
+                //preview during compose (forward mail as attachment)
+                if (!data.parent && data.msgref) {
+                    //get folder and id via msgref
+                    var ids = data.msgref.split('/'),
+                        id = ids.pop(),
+                        folder = ids.join('/');
+                    //set parent
+                    data.parent = {
+                        id: id,
+                        folder: folder,
+                        folder_id: folder,
+                        needsfix: true
+                    };
+                }
                 self.append(view.draw(data).css('padding', 0));
             });
         },
@@ -252,21 +267,7 @@ define('io.ox/preview/main',
             var node = this;
             $.ajax({ url: file.dataURL, dataType: 'text' }).done(function (text) {
                 // plain text preview
-                node.css({
-                    fontFamily: 'monospace',
-                    fontSize: '13px',
-                    width: '100%',
-                    padding: '13px',
-                    border: '1px dotted silver',
-                    boxSizing: 'border-box',
-                    MozBoxSizing: 'border-box',
-                    whiteSpace: 'pre-wrap',
-                    MozUserSelect: 'text',
-                    webkitUserSelect: 'text',
-                    userSelect: 'text',
-                    cursor: 'auto'
-                })
-                .text(text);
+                node.addClass('plaintext').text(_.noI18n(text));
             });
         },
         omitClick: true

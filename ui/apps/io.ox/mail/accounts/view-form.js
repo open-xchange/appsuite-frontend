@@ -56,6 +56,15 @@ define('io.ox/mail/accounts/view-form',
 
         optionsRefreshRatePop = _([3, 5, 10, 15, 30, 60, 360]).map(gt.noI18n),
 
+        //conditional defaults
+        defaults = {
+            pop3: {
+                pop3_refresh_rate: optionsRefreshRatePop[0],
+                pop3_delete_write_through: false,
+                pop3_expunge_on_quit: false
+            }
+        },
+
         AccountDetailView = Backbone.View.extend({
             tagName: "div",
             _modelBinder: undefined,
@@ -87,7 +96,7 @@ define('io.ox/mail/accounts/view-form',
                 }
 
                 function syncLogin(model, value) {
-                    model.set('login', value);
+                    model.set('login', value, {validate: true});
                 }
 
                 if (self.model.get('id') !== 0) {//check for primary account
@@ -97,13 +106,18 @@ define('io.ox/mail/accounts/view-form',
                         if (value !== 'pop3') {
                             pop3nodes.hide();
                         } else {
+                            //conditional defaults
+                            _.each(defaults.pop3, function (value, key) {
+                                if (!model.has(key))
+                                    model.set(key, value);
+                            });
                             pop3nodes.show();
                         }
                     });
 
                     //login for server should be email-address by default;
-                    if (self.model.get('login') === undefined) {
-                        self.model.set('login', self.model.get('primary_address'));
+                    if (self.model.get('login') === undefined && self.model.get('primary_address') !== '') {
+                        self.model.set('login', self.model.get('primary_address'), {validate: true});
                     }
 
                     //if login and mailadress are the same change login if mailadress changes
@@ -203,7 +217,7 @@ define('io.ox/mail/accounts/view-form',
                         .done(function (action) {
                             if (action === 'select') {
                                 var target = _(tree.selection.get()).first();
-                                self.model.set(property, target);
+                                self.model.set(property, target, {validate: true});
                             }
                             tree.destroy().done(function () {
                                 tree = dialog = null;

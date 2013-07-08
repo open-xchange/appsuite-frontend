@@ -1,9 +1,10 @@
 {
-	title: "Portal",
+    title: "Portal",
     company: "Open-Xchange",
     icon: "portal.png",
     category: "Productivity",
     settings: true,
     requires: "!deniedPortal",
+    refreshable: true,
     index: 100
 }

@@ -1,0 +1,197 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Julian Bäume <julian.baeume@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+@font-face {
+    font-family: 'AndroidEmojiRegular';
+    src: url('font/androidemoji.eot');
+    src: url('font/androidemoji.eot') format('embedded-opentype'),
+         url('font/androidemoji.woff') format('woff'),
+         url('font/androidemoji.ttf') format('truetype');
+}
+
+.emojifont {
+    font-family: 'AndroidEmojiRegular';
+}
+
+img.emoji {
+    border: 0;
+}
+
+.oxSkin .mceIcon.mce_emoji {
+    background: url('img/emoji.png');
+    width: 20px;
+    height: 20px;
+}
+
+.oxSkin .table-cell-fix {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    .box-sizing(border-box);
+}
+
+.oxSkin .mceEmojiPane {
+
+    height: 100%;
+    width: 255px;
+    vertical-align: top;
+
+    border: 1px solid #ccc;
+    border-width: 1px 1px 1px 0;
+
+    @background: #f5f5f5;
+    @emojiTabHeight: 34px;
+
+    .emoji-tabs {
+        height: @emojiTabHeight;
+        bottom: auto;
+    }
+
+    .emoji-tab {
+        font-size: 12px;
+        line-height: 20px;
+        color: white;
+        padding: 7px 14px;
+        background-color: #ccc;
+        border: 1px solid white;
+        cursor: pointer;
+        .box-sizing(border-box);
+    }
+
+    .emoji-tab.left {
+        right: 50%;
+        border-right: 0px none;
+    }
+
+    .emoji-tab.right {
+        left: 50%;
+    }
+
+    .emoji-tab.active {
+        background-color: #333;
+    }
+
+    .emoji-tab:focus, .emoji-tab:active {
+        outline: 0;
+        background-color: #555;
+    }
+
+    .emoji-header {
+
+        line-height: 20px;
+        height: 34px;
+        bottom: auto;
+
+        padding: 0 0 0 14px;
+        background-color: @background;
+
+        .emoji-category {
+            line-height: 34px;
+            font-weight: bold;
+            color: #333;
+            display: inline-block;
+            width: 100%;
+            padding-right: 30px;
+            .ellipsis();
+            .box-sizing(border-box);
+        }
+
+        i {
+            line-height: 20px;
+        }
+    }
+
+    .emoji-use-tabs .emoji-header {
+        top: @emojiTabHeight;
+    }
+
+    .emoji-options {
+        .dropdown-toggle {
+            width: 34px;
+            height: 20px;
+            padding: 7px 0;
+            display: inline-block;
+            text-align: center;
+        }
+        .dropdown-toggle:focus {
+            outline: 0;
+            background-color: #08c;
+            i { color: white; }
+        }
+    }
+
+    .emoji-icons {
+
+        top: 34px;
+        bottom: 65px;
+        padding: 14px;
+        white-space: normal;
+
+        overflow: auto;
+        background-color: white;
+    }
+
+    .emoji-use-tabs .emoji-icons {
+        top: 34px + @emojiTabHeight;
+    }
+
+    .reset-recents {
+        color: @linkColor;
+        cursor: pointer;
+        display: block;
+        margin: 7px 0;
+        text-align: right;
+        &:hover { text-decoration: underline; }
+    }
+
+    .emoji {
+
+        width: 20px;
+        margin: 0 7px 7px 0;
+        cursor: pointer;
+
+        &:focus {
+            outline: 5px solid #ccc;
+            background-color: #ccc;
+        }
+    }
+
+    .emoji-footer {
+
+        top: auto;
+        height: 50px;
+        padding: 7px 0 7px 14px;
+        white-space: normal;
+        border-top: 1px solid #fff;
+
+        overflow: hidden;
+        background-color: @background;
+        .vertical-gradient(@background, darken(@background, 10%));
+
+        .emoji {
+            margin: 0 27px 3px 0;
+        }
+    }
+
+    /* bootstrap re-resets */
+
+    .dropdown-toggle, .dropdown-toggle * { cursor: pointer; }
+
+    .dropdown-menu {
+        padding: 5px 0;
+        margin: 2px 0 0;
+        background-color: #FFF;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        a { cursor: pointer; }
+    }
+}

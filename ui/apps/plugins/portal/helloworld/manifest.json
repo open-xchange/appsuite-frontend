@@ -1,4 +1,4 @@
 {
-	namespace: "portal",
-	requires: "disabled"
+    namespace: "portal",
+    requires: "disabled"
 }

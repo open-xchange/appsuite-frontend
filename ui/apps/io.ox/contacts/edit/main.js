@@ -18,8 +18,9 @@ define('io.ox/contacts/edit/main',
      'io.ox/core/extensions',
      'io.ox/contacts/util',
      'io.ox/core/extPatterns/dnd',
+     'io.ox/core/capabilities',
      'less!io.ox/contacts/edit/style.less'
-     ], function (view, model, gt, ext, util, dnd) {
+     ], function (view, model, gt, ext, util, dnd, capabilities) {
 
     'use strict';
 
@@ -81,21 +82,21 @@ define('io.ox/contacts/edit/main',
                                 app.quit();
                             });
 
-                            if (_.browser.IE === undefined || _.browser.IE > 9) {
+                            if ((_.browser.IE === undefined || _.browser.IE > 9) && capabilities.has('infostore')) {
                                 app.dropZone = new dnd.UploadZone({
                                     ref: 'io.ox/contacts/edit/dnd/actions'
                                 }, editView);
+
+                                win.on('show', function () {
+                                    if (app.dropZone) {app.dropZone.include(); }
+                                });
+
+                                win.on('hide', function () {
+                                    if (app && app.dropZone) {
+                                        app.dropZone.remove();
+                                    }
+                                });
                             }
-
-                            win.on('show', function () {
-                                if (app.dropZone) {app.dropZone.include(); }
-                            });
-
-                            win.on('hide', function () {
-                                if (app && app.dropZone) {
-                                    app.dropZone.remove();
-                                }
-                            });
 
                             ext.point('io.ox/contacts/edit/main/model').invoke('customizeModel', contact, contact);
 
@@ -173,7 +174,7 @@ define('io.ox/contacts/edit/main',
             customizeModel: function (contact, value, options) {
                 contact.on('change:first_name change:last_name change:title',
                     function (model, value, options) {
-                        if (options.changes.display_name) return;
+                        if (model.changed.display_name) return;
                         var dn = model.get('display_name');
                         // only change display name if empty or previous default
                         if (!dn || dn === util.getFullName(model.previousAttributes()))

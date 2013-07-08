@@ -14,16 +14,13 @@
 define('io.ox/tasks/settings/pane',
        ['settings!io.ox/tasks', 'io.ox/tasks/settings/model',
         'dot!io.ox/tasks/settings/form.html', 'io.ox/core/extensions',
-        'gettext!io.ox/tasks/tasks'], function (settings, tasksSettingsModel, tmpl, ext, gt) {
+        'gettext!io.ox/tasks'], function (settings, tasksSettingsModel, tmpl, ext, gt) {
 
     'use strict';
 
-
-
-
     var tasksSettings =  settings.createModel(tasksSettingsModel),
         staticStrings =  {
-        TITLE_TASKS: gt('Tasks'),
+        TITLE_TASKS: gt.pgettext('app', 'Tasks'),
         TITLE_NOTIFICATIONS_FOR_TASKS: gt('E-Mail notification for task'),
         TITLE_NOTIFICATIONS_FOR_ACCEPTDECLINED: gt('E-Mail notification for Accept/Declined'),
         NOTIFICATIONS_FOR_ACCEPTDECLINEDCREATOR: gt('E-Mail notification for task creator?'),
@@ -43,19 +40,26 @@ define('io.ox/tasks/settings/pane',
 
         },
         render: function () {
-            var self = this;
-            //change attributetypes to string otherwise settings would be empty...
-            self.model.set('notifyAcceptedDeclinedAsCreator', self.model.get('notifyAcceptedDeclinedAsCreator').toString());
-            self.model.set('notifyAcceptedDeclinedAsParticipant', self.model.get('notifyAcceptedDeclinedAsParticipant').toString());
-            self.model.set('notifyNewModifiedDeleted', self.model.get('notifyNewModifiedDeleted').toString());
+            var self = this,
+                needBoolParser = [
+                    'notifyAcceptedDeclinedAsCreator',
+                    'notifyAcceptedDeclinedAsParticipant',
+                    'notifyNewModifiedDeleted'
+                ],
+                boolParser = function (direction, value) {
+                    return direction === 'ModelToView' ? value + '' : value === 'true';
+                };
             self.$el.empty().append(tmpl.render('io.ox/tasks/settings', {
                 strings: staticStrings,
                 optionsYesAnswers: optionsYes,
                 optionsNoAnswers: optionsNo
             }));
             var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
+            _(needBoolParser).each(function (prop) {
+                defaultBindings[prop].converter = boolParser;
+            });
             self._modelBinder.bind(self.model, self.el, defaultBindings);
-            
+
             return self;
 
         }
@@ -74,17 +78,6 @@ define('io.ox/tasks/settings/pane',
         },
 
         save: function () {
-            //change to correct attributetypes before saving
-            function makeBool(attribute) {
-                if (tasksViewSettings.model.get(attribute) === "true" || tasksViewSettings.model.get(attribute) === true) {
-                    tasksViewSettings.model.set(attribute, true);
-                } else {
-                    tasksViewSettings.model.set(attribute, false);
-                }
-            }
-            makeBool('notifyAcceptedDeclinedAsCreator');
-            makeBool('notifyAcceptedDeclinedAsParticipant');
-            makeBool('notifyNewModifiedDeleted');
             tasksViewSettings.model.save();
         }
     });

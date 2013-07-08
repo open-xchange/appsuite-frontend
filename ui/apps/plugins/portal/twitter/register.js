@@ -86,7 +86,7 @@ define('plugins/portal/twitter/register',
     };
 
     var loadFromTwitter = function (params) {
-        var def = proxy.request({api: 'twitter', url: 'https://api.twitter.com/1/statuses/home_timeline.json', params: params});
+        var def = proxy.request({api: 'twitter', url: 'https://api.twitter.com/1.1/statuses/home_timeline.json', params: params});
         return def.pipe(function (response) {
             if (response) {
                 var jsonResponse = JSON.parse(response);
@@ -282,7 +282,7 @@ define('plugins/portal/twitter/register',
         },
 
         requiresSetUp: function () {
-            return keychain.isEnabled('twitter') && ! keychain.hasStandardAccount('twitter');
+            return keychain.isEnabled('twitter') && !keychain.hasStandardAccount('twitter');
         },
 
         performSetUp: function () {
@@ -291,6 +291,10 @@ define('plugins/portal/twitter/register',
         },
 
         load: function (baton) {
+
+            if (!keychain.hasStandardAccount('twitter'))
+                return $.Deferred().reject({ code: 'OAUTH-0006' });
+
             return loadFromTwitter({ count: loadEntriesPerPage, include_entities: true }).done(function (data) {
                 baton.data = data;
             });
@@ -386,17 +390,19 @@ define('plugins/portal/twitter/register',
         },
 
         error: function (error) {
-            if (error.code !== "OAUTH-0006")
-                return; //let the default handling do the job
+
+            if (error.code !== "OAUTH-0006") return; // let the default handling do the job
 
             $(this).empty().append(
-                $('<h2>').text(gt('Twitter')),
+                $('<h2>').append(
+                    $('<a href="#" class="disable-widget"><i class="icon-remove"/></a>'),
+                    $('<span class="title">').text(gt('Twitter'))
+                ),
                 $('<div class="content">').text(gt('Click here to add your account'))
                 .on('click', {}, function () {
                     ext.point('io.ox/portal/widget/twitter').invoke('performSetUp');
                 })
             );
-            console.log("DEBUG", error);
         }
     });
 

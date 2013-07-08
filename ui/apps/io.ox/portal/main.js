@@ -104,18 +104,31 @@ define('io.ox/portal/main',
     // widget scaffold
     ext.point('io.ox/portal/widget-scaffold').extend({
         draw: function (baton) {
+
             var data = baton.model.toJSON(),
                 decoration = this.find('.decoration').length ? this.find('.decoration') : this;
+
             this.attr({
                 'data-widget-cid': baton.model.cid,
                 'data-widget-id': baton.model.get('id'),
                 'data-widget-type': baton.model.get('type')
             })
             .addClass('widget' + (baton.model.get('inverse') ? ' inverse' : ''));
-            //border decoration
+
+            // border decoration
             decoration
-            .addClass('pending')
-            .append($('<h2 class="title">').text('\u00A0'));
+                .addClass('pending')
+                .append(
+                    $('<h2>').append(
+                        // add remove icon
+                        baton.model.get('protectedWidget') ? [] :
+                            $('<a href="#" class="disable-widget"><i class="icon-remove"/></a>')
+                            .attr('title', gt('Disable widget')),
+                        // title span
+                        $('<span class="title">').text('\u00A0')
+                    )
+                );
+
             setColor(this, baton.model);
         }
     });
@@ -136,7 +149,7 @@ define('io.ox/portal/main',
         // clean up
         if (model.has('baton')) {
             delete model.get('baton').model;
-            model.set('baton', null);
+            model.set('baton', null, {validate: true});
             model.isDeleted = true;
         }
     });
@@ -155,22 +168,22 @@ define('io.ox/portal/main',
     };
 
     collection.on('change', function (model, e) {
-        if ('enabled' in e.changes) {
+        if ('enabled' in model.changed) {
             if (model.get('enabled')) {
                 app.getWidgetNode(model).show();
                 app.drawWidget(model);
             } else {
                 app.getWidgetNode(model).hide();
             }
-        } else if ('color' in e.changes) {
+        } else if ('color' in model.changed) {
             setColor(app.getWidgetNode(model), model);
         } else if (this.wasElementDeleted(model)) {
             // element was removed, no need to refresh it.
             return;
-        } else if ('unset' in e && 'candidate' in e.changes) {
+        } else if ('unset' in e && 'candidate' in model.changed) {
             // redraw fresh widget
             app.refreshWidget(model);
-        } else if ('props' in e.changes && model.drawn) {
+        } else if ('props' in model.changed && model.drawn) {
             // redraw existing widget due to config change
             app.refreshWidget(model);
         } else {
@@ -203,7 +216,7 @@ define('io.ox/portal/main',
             // get widget cid
             cid = node.attr('data-widget-cid'),
             // get model
-            model = collection.getByCid(cid), baton;
+            model = collection.get(cid), baton;
         if (model) {
             baton = model.get('baton');
             baton.item = target.data('item');
@@ -319,14 +332,14 @@ define('io.ox/portal/main',
         }
 
         // set/update title
-        title = node.find('h2.title').text(getTitle(model.toJSON(), point.prop('title')));
+        title = node.find('h2 .title').text(_.noI18n(getTitle(model.toJSON(), point.prop('title'))));
 
         if (!model.drawn) {
 
             model.drawn = true;
 
             // remember
-            model.set('baton', baton);
+            model.set('baton', baton, {validate: true});
 
             // setup?
             if (requiresSetUp) {
@@ -402,6 +415,17 @@ define('io.ox/portal/main',
 
             // add side popup
             sidepopup.delegate(appBaton.$.widgets, '.item, .content.pointer, .action.pointer', openSidePopup);
+
+            // react on 'remove'
+            win.nodes.main.on('click', '.disable-widget', function (e) {
+                e.preventDefault();
+                var id = $(this).closest('.widget').attr('data-widget-id'),
+                    model = widgets.getModel(id);
+                if (model) {
+                    // disable widget
+                    model.set('enabled', false, { validate: true });
+                }
+            });
 
             // add -webkit-overflow-scroll only for iOS to enable momentum scroll
             // (will cause errors on android chrome)

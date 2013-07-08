@@ -16,8 +16,9 @@ define('io.ox/backbone/forms',
     ['io.ox/core/extensions',
      'io.ox/core/event',
      'io.ox/core/date',
+     'settings!io.ox/calendar',
      'gettext!io.ox/core',
-     'less!io.ox/backbone/forms.less'], function (ext, Events, date, gt) {
+     'less!io.ox/backbone/forms.less'], function (ext, Events, date, settings, gt) {
 
     "use strict";
 
@@ -112,7 +113,7 @@ define('io.ox/backbone/forms',
         };
 
         this.setValueInModel = function (valueFromElement) {
-            this.model.set(this.attribute, valueFromElement);
+            this.model.set(this.attribute, valueFromElement, {validate: true});
         };
 
         this.updateElement = function () {
@@ -322,7 +323,7 @@ define('io.ox/backbone/forms',
                 this.nodes.inputField.val(this.model.get(this.attribute));
             },
             updateModel: function () {
-                this.model.set(this.attribute, this.nodes.inputField.val());
+                this.model.set(this.attribute, this.nodes.inputField.val(), {validate: true});
             }
 
         };
@@ -356,7 +357,7 @@ define('io.ox/backbone/forms',
                 }
                 this.nodes.checkbox.attr('checked', this.model.get(this.attribute));
                 this.nodes.checkbox.on('change', function () {
-                    self.model.set(self.attribute, self.nodes.checkbox.is(':checked'));
+                    self.model.set(self.attribute, self.nodes.checkbox.is(':checked'), {validate: true});
                 });
             },
             updateCheckbox: function () {
@@ -392,7 +393,7 @@ define('io.ox/backbone/forms',
                 this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
                 this.updateChoice();
                 this.nodes.select.on('change', function () {
-                    self.model.set(self.attribute, self.nodes.select.val());
+                    self.model.set(self.attribute, self.nodes.select.val(), {validate: true});
                 });
             },
             updateChoice: function () {
@@ -737,15 +738,16 @@ define('io.ox/backbone/forms',
         };
 
         var hours_typeahead = [],
-            filldate = new date.Local().setHours(0, 0, 0, 0);
-        for (var i = 0; i < 48; i++) {
+            filldate = new date.Local().setHours(0, 0, 0, 0),
+            interval = parseInt(settings.get('interval'), 10);
+        for (var i = 0; i < 1440; i += interval) {
             hours_typeahead.push(filldate.format(date.TIME));
-            filldate.add(date.HOUR / 2);
+            filldate.add(interval * date.MINUTE);
         }
 
         var comboboxHours = {
             source: hours_typeahead,
-            items: 48,
+            items: hours_typeahead.length,
             menu: '<ul class="typeahead dropdown-menu calendaredit"></ul>',
             sorter: function (items) {
                 items = _(items).sortBy(function (item) {
@@ -848,12 +850,12 @@ define('io.ox/backbone/forms',
                 }
             },
             updateModelDate: function () {
-                this.model.set(this.attribute, BinderUtils.convertDate('ViewToModel', this.nodes.dayField.val(), this.attribute, this.model));
+                this.model.set(this.attribute, BinderUtils.convertDate('ViewToModel', this.nodes.dayField.val(), this.attribute, this.model), {validate: true});
             },
             updateModelTime: function () {
                 var time = BinderUtils.convertTime('ViewToModel', this.nodes.timeField.val(), this.attribute, this.model);
                 if (time && _.isNumber(time)) {
-                    this.model.set(this.attribute, time);
+                    this.model.set(this.attribute, time, {validate: true});
                     this.model.trigger("valid");
                 } else {
                     this.model.trigger("invalid:" + this.attribute, [gt('Please enter a valid date')]);

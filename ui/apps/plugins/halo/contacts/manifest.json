@@ -1,4 +1,4 @@
 {
-	namespace: "plugins/halo",
-	requires: "contacts"
+    namespace: "plugins/halo",
+    requires: "contacts"
 }

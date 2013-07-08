@@ -53,6 +53,8 @@ define('io.ox/core/api/factory',
             keyGenerator: null, // ~ use default
             // module
             module: '',
+            //column mapping
+            mapping: {},
             // for all, list, and get
             requests: {
                 all: { action: 'all', timezone: 'utc' },
@@ -350,6 +352,10 @@ define('io.ox/core/api/factory',
                     defs.push(api.caches.list.remove(ids));
                     defs.push(api.caches.get.remove(ids));
                 }
+                // reset trash?
+                if (api.resetTrashFolders) {
+                    defs.push(api.resetTrashFolders());
+                }
                 // clear
                 return $.when.apply($, defs).done(function () {
                     // trigger item specific events to be responsive
@@ -429,6 +435,30 @@ define('io.ox/core/api/factory',
             caches: caches
         };
 
+        /**
+         * columns ids or names specified by id (example: 'email' fields from 'contacts' )
+         * @param  {string} id
+         * @param  {string} format ('ids', 'names')
+         * @example getMapping('cellular') of contactsAPI returns ['551', '552']
+         * @return {array} list of columnids or names
+         */
+        api.getMapping = function (id, format) {
+            //columns ids or names
+            format = format || 'ids';
+            //get ids
+            var names,
+                mappings = o.mapping[id] || [],
+                columns = [].concat(_.clone(mappings));
+            //map columnids to columnnames
+            if (format === 'names') {
+                names = http.getColumnMapping(o.module);
+                columns = _.map(columns, function (id) {
+                    return names[id];
+                });
+            }
+            return columns;
+        };
+
         // add search?
         if (o.requests.search) {
             /**
@@ -439,12 +469,54 @@ define('io.ox/core/api/factory',
              */
             api.search = function (query, options) {
                 // merge defaults for search
-                var opt = $.extend({}, o.requests.search, options || {}),
+                var opt = $.extend({}, o.requests.search, options || {}), list,
                     getData = opt.getData;
 
                 options = options || {};
 
                 if (o.requests.search.omitFolder && options.omitFolder !== false) {
+                    delete opt.folder;
+                }
+
+                // remove omitFolder & getData functions
+                delete opt.omitFolder;
+                delete opt.getData;
+
+                //add extra fields via keywords defined in extra property
+                if (opt.extra && opt.extra.length) {
+                    list = [].concat(opt.columns);
+                    _.each(opt.extra, function (id) {
+                        list = list.concat(api.getMapping(id));
+                    });
+                    opt.columns = _.uniq(list).join(',');
+                }
+                delete opt.extra;
+
+                // go!
+                return http.PUT({
+                    module: o.module,
+                    params: opt,
+                    data: getData(query, options)
+                });
+            };
+        }
+
+        // add advancedsearch?
+        if (o.requests.advancedsearch) {
+            /**
+             * advancedsearch
+             * @param  {string} query   [description]
+             * @param  {object} options
+             * @return {deferred}
+             */
+            api.advancedsearch = function (query, options) {
+                // merge defaults for search
+                var opt = $.extend({}, o.requests.advancedsearch, options || {}),
+                    getData = opt.getData;
+
+                options = options || {};
+
+                if (o.requests.advancedsearch.omitFolder && options.omitFolder !== false) {
                     delete opt.folder;
                 }
 

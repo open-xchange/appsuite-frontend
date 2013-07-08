@@ -72,7 +72,7 @@ define('io.ox/calendar/freebusy/main',
                             start_date: data.start_date,
                             end_date: data.end_date,
                             participants: data.participants
-                        });
+                        }, {validate: true});
                         /* falls through */
                     case 'cancel':
                         options.app.getWindow().show();

@@ -1,3 +1,51 @@
+open-xchange-appsuite (7.2.2-7) stable; urgency=low
+
+  * Third candidate for 7.2.2 release
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Tue, 02 Jul 2013 13:51:37 +0200
+
+open-xchange-appsuite (7.2.2-6) stable; urgency=low
+
+  * Second candidate for 7.2.2 release
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Fri, 28 Jun 2013 16:17:19 +0200
+
+open-xchange-appsuite (7.2.2-5) stable; urgency=low
+
+  * Release candidate for 7.2.2 release
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Wed, 26 Jun 2013 19:18:51 +0200
+
+open-xchange-appsuite (7.2.2-4) stable; urgency=low
+
+  * Second feature freeze for 7.2.2 release
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Fri, 21 Jun 2013 16:36:47 +0200
+
+open-xchange-appsuite (7.2.2-3) stable; urgency=low
+
+  * Feature freeze for 7.2.2 release
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Mon, 17 Jun 2013 09:11:26 +0200
+
+open-xchange-appsuite (7.2.2-2) unstable; urgency=low
+
+  * First sprint increment for 7.2.2 release
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Mon, 03 Jun 2013 13:30:35 +0200
+
+open-xchange-appsuite (7.2.2-1) unstable; urgency=low
+
+  * First candidate for 7.2.2 release
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Wed, 29 May 2013 17:38:49 +0200
+
+open-xchange-appsuite (7.2.2-0) unstable; urgency=low
+
+  * prepare for 7.2.2
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Mon, 27 May 2013 17:21:59 +0200
+
 open-xchange-appsuite (7.2.1-6) stable; urgency=low
 
   * Build for patch 2013-06-20

@@ -49,7 +49,7 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
             if (this.init) {
                 this.init();
             }
-
+            this.url = "invalidURL";
         },
         point: function (subpath) {
             if (/^\//.test(subpath)) {
@@ -63,9 +63,7 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
                 errors = new ValidationErrors();
 
             attributes = attributes || this.toJSON();
-
             this.point("validation").invoke("validate", errors, attributes, errors, this);
-
             if (options.isSave) {
                 this.point("validation/save").invoke("validate", errors, attributes, errors, this);
             }
@@ -103,6 +101,9 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
                     this.trigger('valid');
                 }
             }
+        },
+        parse: function (model, resp) {
+            return {};
         },
         sync: function (action, model, callbacks) {
 
@@ -157,6 +158,7 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
             });
         },
         isValid: function () {
+            this.validate(this.toJSON());
             return this._valid;
         },
         hasValidAttributes: function () {
