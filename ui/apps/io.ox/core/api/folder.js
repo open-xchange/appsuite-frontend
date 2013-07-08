@@ -65,7 +65,8 @@ define('io.ox/core/api/folder',
                 })
                 .fail(function (error) {
                     if (error.categories === 'PERMISSION_DENIED') {
-                        notifications.yell(error);
+                        if (!opt.suppressYell)
+                            notifications.yell(error);
                     } else {
                         if (ox.debug) {
                             console.error('folder.get', id, error);
