@@ -343,10 +343,9 @@ define.async('io.ox/office/tk/utils',
      *      If specified, the iterator will be called with this context (the
      *      symbol 'this' will be bound to the context inside the iterator
      *      function).
-     *  @param {Number} [options.step]
+     *  @param {Number} [options.step=1]
      *      If specified, the current value will be increased or decreased by
-     *      this amount. If omitted, 'step' defaults to 1, if parameter 'begin'
-     *      is less then parameter 'end', otherwise 'step' defaults to -1.
+     *      this amount.
      *
      * @returns {Utils.BREAK|Undefined}
      *  A reference to the Utils.BREAK object, if the iterator has returned
@@ -357,11 +356,11 @@ define.async('io.ox/office/tk/utils',
         var // context for iterator function
             context = Utils.getOption(options, 'context'),
             // step value
-            step = Utils.getNumberOption(options, 'step', (begin <= end) ? 1 : -1),
+            step = Utils.getNumberOption(options, 'step', 1),
             // the current value
             value = begin;
 
-        while ((begin <= end) ? (value < end) : (value > end)) {
+        while ((step > 0) ? (value < end) : (value > end)) {
             if (iterator.call(context, value) === Utils.BREAK) { return Utils.BREAK; }
             value += step;
         }
