@@ -33,7 +33,7 @@ define('io.ox/calendar/month/perspective',
         showAll: $(),       // show all folders check-box
         showAllCon: $(),    // container
         tops: {},           // scrollTop positions of the shown weeks
-        fisrtWeek: 0,       // timestamp of the first week
+        firstWeek: 0,       // timestamp of the first week
         lastWeek: 0,        // timestamp of the last week
         updateLoad: 8,      // amount of weeks to be loaded on scroll events
         initLoad: 2,        // amount of initial called updates
