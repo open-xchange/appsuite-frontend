@@ -783,7 +783,7 @@ define('io.ox/core/main',
             }
 
             // always use portal on small devices!
-            //if (_.device('small')) return ['io.ox/portal'];
+            if (_.device('small')) return ['io.ox/portal'];
 
             var appURL = _.url.hash('app'),
                 manifest = appURL && ox.manifests.apps[getAutoLaunchDetails(appURL).app];
