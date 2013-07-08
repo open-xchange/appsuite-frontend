@@ -473,7 +473,6 @@ define('io.ox/mail/util',
 
                 //fix referenced mail
                 if (data.parent && mail && mail.folder_id === undefined) {
-                    console.log('fixed mail', data, mail);
                     mail.id =  data.parent.id;
                     mail.folder_id = data.parent.folder_id;
                 }
