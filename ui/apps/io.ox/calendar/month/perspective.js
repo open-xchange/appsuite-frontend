@@ -429,12 +429,14 @@ define('io.ox/calendar/month/perspective',
             );
 
             this.pane
-            .on('scroll', $.proxy(function (e) {
-                    if (e.target.offsetHeight + e.target.scrollTop >= e.target.scrollHeight - this.scrollOffset) {
-                        this.drawWeeks();
-                    }
-                    if (this.scrollTop() <= this.scrollOffset) {
-                        this.drawWeeks({up: true});
+                .on('scroll', $.proxy(function (e) {
+                    if (!this.isScrolling) {
+                        if (e.target.offsetHeight + e.target.scrollTop >= e.target.scrollHeight - this.scrollOffset) {
+                            this.drawWeeks();
+                        }
+                        if (this.scrollTop() <= this.scrollOffset) {
+                            this.drawWeeks({up: true});
+                        }
                     }
                 }, this))
                 .on('scrollstop', $.proxy(function (e) {
