@@ -241,7 +241,7 @@ define('io.ox/files/actions',
 
                                 _(list).map(function (file) {
                                     var url = ox.abs + ox.root +
-                                        '/#app=io.ox/files&perspective=list' +
+                                        '/#!&app=io.ox/files&perspective=list' +
                                         '&folder=' + encodeURIComponent(file.folder_id) +
                                         '&id=' + encodeURIComponent(file.folder_id) + '.' + encodeURIComponent(file.id);
 
