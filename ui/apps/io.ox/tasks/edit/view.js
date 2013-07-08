@@ -17,13 +17,14 @@ define('io.ox/tasks/edit/view',
      'io.ox/tasks/util',
      'io.ox/tasks/model',
      'io.ox/core/date',
+     'io.ox/core/api/account',
      'io.ox/tasks/edit/util',
      'io.ox/core/extensions',
      'io.ox/core/notifications',
      'io.ox/backbone/views',
      'io.ox/backbone/forms',
      'io.ox/core/capabilities'
-    ], function (gt, template, reminderUtil, model, date, util, ext, notifications, views, forms, capabilities) {
+    ], function (gt, template, reminderUtil, model, date, account, util, ext, notifications, views, forms, capabilities) {
 
     'use strict';
 
@@ -37,6 +38,8 @@ define('io.ox/tasks/edit/view',
             this.rows = [];
             this.collapsed = true;
             this.on('dispose', this.close);
+            this.isPIM = account.isPIM(); //pending
+
             //if recurrence is set make sure we have start and end date
             //this prevents errors on saving because recurrence needs both fields filled
             this.model.on('change:recurrence_type', function (model, value, changes) {
@@ -164,6 +167,27 @@ define('io.ox/tasks/edit/view',
             }
 
             temp = tabs = null;
+
+            //hide participants tab for PIM user
+            this.isPIM.done(function () {
+                var node = self.$el;
+
+                //hide participant tab and tabcontent
+                node.find('.tab-link:eq(0)').hide();
+                participantsTab.hide();
+
+                //only details tab left?
+                if (!ox.uploadsEnabled || !capabilities.has('infostore')) {
+                    //use display content and add sectiontitle
+                    detailsTab.addClass('collapsed');
+                    node.find('.nav-tabs')
+                        .replaceWith($('<legend class="sectiontitle collapsed">' + gt('Details') + '</legend>'));
+                } else {
+                    //switch to attachment as active tab
+                    node.find('.tab-link:eq(1)')
+                        .tab('show');
+                }
+            });
 
             //detailstab
             util.buildExtensionRow(detailsTab, this.getRow(0, app, 'details'), self.baton);
