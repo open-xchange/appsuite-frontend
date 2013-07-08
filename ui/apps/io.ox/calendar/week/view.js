@@ -273,6 +273,7 @@ define('io.ox/calendar/week/view',
                 settings.set('showAllPrivateAppointments', cT.prop('checked')).save();
             }
             this.trigger('onRefresh');
+            return false;
         },
 
         /**
