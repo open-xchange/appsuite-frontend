@@ -11,8 +11,7 @@
  */
 
 
-    define(["io.ox/contacts/edit/main"], function (main) {
-
+    define(["io.ox/contacts/main", "io.ox/core/main"], function (main, core) {
 
     "use strict";
 
@@ -104,9 +103,7 @@
         userfield18: 'userfield',
         userfield19: 'userfield',
         userfield20: 'userfield'
-    },
-
-    TIMEOUT = ox.testTimeout;
+    };
 
     /*
      * Suite: Contacts Test
@@ -114,10 +111,15 @@
 
     describe("Contact edit", function () {
 
-        it('opens contact app ', function () {
-
-            expect(true).toBeTruthy();
-            });
+        it ('should provide a getApp function ', function () {
+            expect(main.getApp).toBeTruthy();
         });
+
+        it ('should provide a launch function ', function () {
+            var app = main.getApp();
+            expect(app.launch).toBeTruthy();
+        });
+
+    });
 
 });
