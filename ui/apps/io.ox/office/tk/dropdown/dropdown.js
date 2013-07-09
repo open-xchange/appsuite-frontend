@@ -372,6 +372,7 @@ define('io.ox/office/tk/dropdown/dropdown',
          * Handles keyboard events inside the open drop-down menu.
          */
         function menuKeyHandler(event) {
+
             var // MacOS is handled differently
                 macos = _.device('macos'),
                 // distinguish between event types
@@ -389,8 +390,9 @@ define('io.ox/office/tk/dropdown/dropdown',
                 }
                 break;
             case KeyCodes.ESCAPE:
-                if (event.type === 'keyup') {
-                    self.trigger('cancel');
+                if (keydown) {
+                    hideMenu();
+                    return false;
                 }
                 break;
             }
@@ -545,7 +547,7 @@ define('io.ox/office/tk/dropdown/dropdown',
         this.addFocusableControl(menuButton);
 
         // register event handlers
-        this.on('change cancel', hideMenu)
+        this.on('change cancel private:cancel', hideMenu)
             .on('show enable', function (event, state) { if (!state) { hideMenu(); } });
         groupNode
             .on('keydown keypress keyup', groupKeyHandler)

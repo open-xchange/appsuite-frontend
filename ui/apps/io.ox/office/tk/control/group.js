@@ -95,10 +95,10 @@ define('io.ox/office/tk/control/group',
         function keyHandler(event) {
 
             var // distinguish between event types
-                keyup = event.type === 'keyup';
+                keydown = event.type === 'keydown';
 
             if (event.keyCode === KeyCodes.ESCAPE) {
-                if (keyup) { self.trigger('cancel'); }
+                if (keydown) { self.trigger('cancel'); }
                 return false;
             }
         }
@@ -235,9 +235,15 @@ define('io.ox/office/tk/control/group',
          */
         this.registerPrivateGroup = function (group) {
 
-            // forward events of the group to listeners of this drop-down group
-            group.on('change cancel', function (event, value) {
-                self.trigger(event.type, value);
+            // forward change events of the group to listeners of this drop-down group
+            group.on('change', function (event, value) {
+                self.trigger('change', value);
+            });
+
+            // do not forward cancel events directly, but generate a new event
+            // that can be handled separately
+            group.on('cancel', function () {
+                self.trigger('private:cancel');
             });
 
             // forward updates of this drop-down group to the inserted group
