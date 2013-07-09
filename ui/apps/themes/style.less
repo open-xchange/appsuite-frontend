@@ -2675,11 +2675,30 @@ input.flat-input {
         .io-ox-action-link:last-child {
             margin: 0;
         };
-    }
-    .dropdown-menu li>a:focus {
-        background-color: initial;
-        background-image: none;
-        color: initial;
+
+        .dropdown-menu li>a:focus {
+            background-color: initial;
+            background-image: none;
+            color: initial;
+        }
+         /* fixes for mail flags */
+        .flag-example, .color-example {
+            display: inline-block;
+            left: 10px;
+            width: 10px;
+            height: 30px;
+            position: absolute;
+        }
+        .color-black { background-color: #333; }
+        .color-red { background-color: @red; }
+        .color-orange { background-color: @orange; }
+        .color-lightgreen { background-color: darken(@greenLight, 10%); }
+        .color-green { background-color: @green; }
+        .color-lightblue { background-color: darken(@blueLight, 20%); }
+        .color-blue { background-color: @blue; }
+        .color-purple { background-color: @purple; }
+        .color-pink { background-color: darken(@pink, 10%); }
+        .color-gray { background-color: darken(@grayLight, 20%); }
     }
 
     #background_loader.secure.block {

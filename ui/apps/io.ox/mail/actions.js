@@ -1196,25 +1196,38 @@ define('io.ox/mail/actions',
 
 
     // Mobile multi select extension points
-    // action unread
+    // action markunread
     ext.point('io.ox/mail/mobileMultiSelect/toolbar').extend({
         id: 'unread',
         index: 10,
         draw: function (data) {
+            var selection = data.data,
+                allUnread = true;
+            // what do we want to do?
+            // if all selected mails are unread, show "read" action and vice versa
+            for (var i = 0; i < selection.length; i++) {
+                if (!api.tracker.isUnseen(selection[i])) {
+                    allUnread = false;
+                }
+            }
+
             var baton = new ext.Baton({data: data.data});
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i class="icon-envelope">').on('click', function (e) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            actions.invoke('io.ox/mail/actions/markunread', null, baton);
-                        })
+                        $('<i>')
+                            .addClass((allUnread ? 'icon-envelope' : 'icon-envelope-alt'))
+                            .on('click', function (e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                actions.invoke('io.ox/mail/actions/' + (allUnread ? 'markread' : 'markunread'), null, baton);
+                            })
                     )
                 )
             );
         }
     });
+
     // action delete
     ext.point('io.ox/mail/mobileMultiSelect/toolbar').extend({
         id: 'delete',
@@ -1224,7 +1237,7 @@ define('io.ox/mail/actions',
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i class="icon-trash">').on('click', function (e) {
+                        $('<i class="icon-trash">').on('tap', function (e) {
                             e.preventDefault();
                             e.stopPropagation();
                             actions.invoke('io.ox/mail/actions/delete', null, baton);
@@ -1243,7 +1256,7 @@ define('io.ox/mail/actions',
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i class="icon-signin">').on('click', function (e) {
+                        $('<i class="icon-signin">').on('tap', function (e) {
                             e.preventDefault();
                             e.stopPropagation();
                             actions.invoke('io.ox/mail/actions/move', null, baton);
