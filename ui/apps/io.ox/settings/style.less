@@ -188,6 +188,7 @@
 }
 
 .settings-detail-pane legend.sectiontitle {
+    font-family: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
     display: block;
     width: 100%;
     padding: 0;
@@ -206,8 +207,35 @@
     }
     .settings-detail-pane {
         h1:first-child, h1.pane-headline:first-child {
-            margin: 0 0 1em 0;
+            margin: 0 0 0 0;
         }
+        
+        h1 + .sectiondelimiter {
+            border: none;
+            margin-top: 0px;
+        }
+        
+        .io-ox-mail-settings {
+            
+            .form-horizontal .control-group>label {
+                float: none;
+                width: 160px;
+             }
+             
+             .form-inline .controls {
+                text-align: left;
+             }
+             
+             .form-inline .controls input {
+                width: 70px;
+             }
+             
+             legend+.control-group {
+                margin-top: 0px;
+             }
+            
+        }
+        
         .form-horizontal {
 
             .control-group > label {
@@ -217,6 +245,7 @@
             .controls, .help-inline {
                 margin-left: 5px;
             }
+           
         }
 
    }

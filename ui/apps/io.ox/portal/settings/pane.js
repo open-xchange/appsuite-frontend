@@ -110,6 +110,22 @@ define('io.ox/portal/settings/pane',
         );
     }
 
+    function appendIconText(target, text, type, activeColor) {
+        if (type === 'color') {
+            if (_.device('small')) {
+                return $(target).addClass('widget-color-' + activeColor).append($('<i>').addClass('icon-tint').css('font-size', '20px'));
+            } else {
+                return target.text(text);
+            }
+        } else {
+            if (_.device('small')) {
+                return $(target).append($('<i>').addClass('icon-off').css('font-size', '20px'));
+            } else {
+                return target.text(text);
+            }
+        }
+    }
+
     ext.point(POINT + '/pane').extend({
         index: 200,
         id: "add",
@@ -133,7 +149,7 @@ define('io.ox/portal/settings/pane',
 
         return function (activeColor) {
             return $('<div class="action dropdown colors">').append(
-                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" tabindex="1">').text(gt('Color')),
+                    appendIconText($('<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" tabindex="1">'), gt('Color'), 'color', activeColor),
                 $('<ul class="dropdown-menu" role="menu">').append(
                     _(colorNames).map(function (name, color) {
                         return $('<li>').append(
@@ -210,7 +226,7 @@ define('io.ox/portal/settings/pane',
                 // editable?
                 if (baton.view.options.editable) {
                     this.append(
-                        $('<a href="#" class="action" data-action="edit" tabindex="1">').text(gt('Edit'))
+                        appendIconText($('<a href="#" class="action" data-action="edit" tabindex="1">'), gt('Edit'), 'edit')
                     );
                 }
                 var $node = drawChangeColor(data.color);
@@ -225,11 +241,12 @@ define('io.ox/portal/settings/pane',
                 }
                 this.append(
                     $node,
-                    $('<a href="#" class="action" data-action="toggle" tabindex="1">').text(gt('Disable'))
+                    drawChangeColor(data.color),
+                    appendIconText($('<a href="#" class="action" data-action="toggle" tabindex="1">'), gt('Disable'), 'edit')
                 );
             } else if (!data.protectedWidget) {
                 this.append(
-                    $('<a href="#" class="action" data-action="toggle" tabindex="1">').text(gt('Enable'))
+                    appendIconText($('<a href="#" class="action" data-action="toggle" tabindex="1">'), gt('Enable'), 'edit')
                 );
             } else {
                 this.append("&nbsp;");
