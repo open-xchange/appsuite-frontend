@@ -54,15 +54,18 @@
 
         // when user clicks on emoji category
         onSelectCategory: function (e) {
-            var node = $(e.target);
-            this.setCategory(node.attr('data-category'));
+            e.preventDefault();
+            var node = $(e.target),
+                category = node.attr('data-category');
+            this.setCategory(category);
         },
 
         // when user select emoji set in drop-down
         onSelectEmojiCollection: function (e) {
             e.preventDefault();
-            var node = $(e.target);
-            this.setCollection(node.attr('data-collection'));
+            var node = $(e.target),
+                collection = node.attr('data-collection');
+            this.setCollection(collection);
         },
 
         // when user clicks on "Reset" in "Recently used" list
