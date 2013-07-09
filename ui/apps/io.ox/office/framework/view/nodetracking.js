@@ -38,7 +38,8 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
         DEFERRED_EVENT_MAP = {
             mousedown: cancelTracking,
             touchstart: cancelTracking,
-            focusout: cancelTracking
+            focusin: focusInHandler,
+            focusout: focusOutHandler
         },
 
         // the node that is currently tracked
@@ -55,6 +56,9 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
 
         // whether the mouse or touch point has been moved after tracking has started
         moved = false,
+
+        // whether the focus is inside the page
+        hasFocus = false,
 
         // the browser timer used for auto-scrolling
         scrollTimer = null;
@@ -190,6 +194,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
         startX = lastX = pageX;
         startY = lastY = pageY;
         moved = false;
+        hasFocus = true;
 
         // set the mouse pointer of the target node at the overlay node
         overlayNode.css('cursor', $(targetNode).css('cursor'));
@@ -342,6 +347,26 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
         if (event.keyCode === KeyCodes.ESCAPE) {
             cancelTracking();
         }
+    }
+
+    /**
+     * Event handler for 'focusin' browser events.
+     */
+    function focusInHandler(event) {
+        hasFocus = true;
+    }
+
+    /**
+     * Event handler for 'focusout' browser events.
+     */
+    function focusOutHandler(event) {
+        hasFocus = false;
+        _.delay(function () {
+            // Cancel tracking if focus has been lost (browser or page inactive).
+            // If focus remains in the page, a 'focusin' event will follow immediately
+            // after the 'focusout' event and has set hasFocus back to true.
+            if (!hasFocus) { cancelTracking(); }
+        }, 50);
     }
 
     // static initialization ==================================================
