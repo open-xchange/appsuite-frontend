@@ -11,7 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/preview/controller',
+define('io.ox/office/preview/app/controller',
     ['io.ox/office/tk/utils',
      'io.ox/office/framework/app/basecontroller'
     ], function (Utils, BaseController) {

@@ -11,12 +11,11 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/preview/pagegroup',
+define('io.ox/office/preview/view/pagegroup',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/control/group',
-     'io.ox/office/preview/viewutils',
-     'io.ox/office/preview/pageloader'
-    ], function (Utils, Group, ViewUtils, PageLoader) {
+     'io.ox/office/preview/view/pageloader'
+    ], function (Utils, Group, PageLoader) {
 
     'use strict';
 
@@ -74,14 +73,12 @@ define('io.ox/office/preview/pagegroup',
          *
          * @param {jQuery} pageNode
          *  The page node.
-         *
-         * @param {Object} [pageSize]
-         *  The original page size, in pixels, in the properties 'width' and
-         *  'height'. If missing, uses a default page size.
          */
-        function updatePageSize(pageNode, pageSize) {
+        function updatePageSize(pageNode) {
 
-            var // the child node in the page, containing the SVG
+            var // the original size of the passed page
+                pageSize = pageLoader.getPageSize(pageNode),
+                // the child node in the page, containing the SVG
                 childNode = pageNode.children().first(),
                 // the parent button node
                 buttonNode = pageNode.closest(Utils.BUTTON_SELECTOR),
@@ -91,23 +88,16 @@ define('io.ox/office/preview/pagegroup',
                 // the zoom factor according to available size
                 widthFactor = 0, heightFactor = 0, zoomFactor = 0;
 
-            // use parent node as cache for page size, fall back to default size
-            if (pageSize) {
-                pageNode.data('page-size', pageSize);
-            } else {
-                pageSize = pageNode.data('page-size') || { width: 1000, height: 1414 };
-            }
-
             // calculate zoom factor for the page
             widthFactor = Math.min(maxWidth / pageSize.width, 1);
             heightFactor = Math.min(maxHeight / pageSize.height, 1);
             zoomFactor = Math.min(widthFactor, heightFactor);
-            ViewUtils.setZoomFactor(pageNode, pageSize, zoomFactor);
+            pageLoader.setZoomFactor(pageNode, zoomFactor);
 
             // Firefox has serious performance issues when rendering/scrolling
             // nodes with many SVG contents, convert to inline bitmaps instead
             if (_.browser.Firefox && childNode.is('img') && !/^data:/.test(childNode.attr('src'))) {
-                ViewUtils.convertImageToBitmap(childNode, pageSize);
+                pageLoader.convertImageToBitmap(childNode, pageSize);
             }
         }
 
@@ -155,9 +145,8 @@ define('io.ox/office/preview/pagegroup',
                 if (pageNode.children().length > 0) { return; }
 
                 // load page and update node size with real page size
-                pageLoader.loadPage(pageNode, page, 'low')
-                .done(function (pageSize) {
-                    updatePageSize(pageNode, pageSize);
+                pageLoader.loadPage(pageNode, page, 'low').done(function () {
+                    updatePageSize(pageNode);
                 });
             });
         }

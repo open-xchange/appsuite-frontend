@@ -11,7 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/preview/controls',
+define('io.ox/office/preview/view/controls',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/control/button',
      'io.ox/office/tk/control/textfield',

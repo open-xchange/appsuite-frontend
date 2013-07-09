@@ -11,7 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/preview/model',
+define('io.ox/office/preview/model/model',
     ['io.ox/office/tk/utils',
      'io.ox/office/framework/model/basemodel'
     ], function (Utils, BaseModel) {

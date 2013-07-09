@@ -11,7 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/preview/view',
+define('io.ox/office/preview/view/view',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/control/button',
      'io.ox/office/framework/view/baseview',
@@ -20,24 +20,17 @@ define('io.ox/office/preview/view',
      'io.ox/office/framework/view/sidepane',
      'io.ox/office/framework/view/component',
      'io.ox/office/framework/view/toolbox',
-     'io.ox/office/preview/viewutils',
-     'io.ox/office/preview/pageloader',
-     'io.ox/office/preview/controls',
-     'io.ox/office/preview/pagegroup',
+     'io.ox/office/preview/view/controls',
+     'io.ox/office/preview/view/pagegroup',
+     'io.ox/office/preview/view/pageloader',
      'gettext!io.ox/office/main',
-     'less!io.ox/office/preview/style.less'
-    ], function (Utils, Button, BaseView, BaseControls, Pane, SidePane, Component, ToolBox, ViewUtils, PageLoader, PreviewControls, PageGroup, gt) {
+     'less!io.ox/office/preview/view/style.less'
+    ], function (Utils, Button, BaseView, BaseControls, Pane, SidePane, Component, ToolBox, PreviewControls, PageGroup, PageLoader, gt) {
 
     'use strict';
 
     var // shortcut for the KeyCodes object
         KeyCodes = Utils.KeyCodes,
-
-        // default page size used before a page has been loaded
-        DEFAULT_PAGE_SIZE = {
-            width: Utils.convertLength(210, 'mm', 'px', 0),
-            height: Utils.convertLength(297, 'mm', 'px', 0)
-        },
 
         // predefined zoom factors
         ZOOM_FACTORS = [25, 35, 50, 75, 100, 150, 200, 300, 400, 600, 800, 1200, 1600];
@@ -273,8 +266,7 @@ define('io.ox/office/preview/view',
 
             // do not load initialized page again
             if (pageNode.children().length === 0) {
-                pageLoader.loadPage(pageNode, page, priority).done(function (pageSize) {
-                    pageNode.data('size', pageSize);
+                pageLoader.loadPage(pageNode, page, priority).done(function () {
                     updatePageZoom(pageNode);
                     // new pages may have moved into the visible area
                     updateVisiblePages();
@@ -345,7 +337,7 @@ define('io.ox/office/preview/view',
         function updatePageZoom(pageNode) {
 
             var // the original size of the current page
-                pageSize = pageNode.data('size') || DEFAULT_PAGE_SIZE,
+                pageSize = pageLoader.getPageSize(pageNode),
                 // the effective zoom factor for the page
                 pageZoomFactor = 100;
 
@@ -360,7 +352,7 @@ define('io.ox/office/preview/view',
             pageZoomFactor = Utils.minMax(pageZoomFactor, self.getMinZoomFactor(), self.getMaxZoomFactor());
 
             // set the zoom factor at the page node
-            ViewUtils.setZoomFactor(pageNode, pageSize, pageZoomFactor / 100);
+            pageLoader.setZoomFactor(pageNode, pageZoomFactor / 100);
             return pageZoomFactor;
         }
 

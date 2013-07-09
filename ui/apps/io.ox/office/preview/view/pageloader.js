@@ -11,11 +11,17 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/preview/pageloader', ['io.ox/office/tk/utils'], function (Utils) {
+define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], function (Utils) {
 
     'use strict';
 
-    var // the maximum number of simultaneous pending AJAX page requests
+    var // default page size used before a page has been loaded
+        DEFAULT_PAGE_SIZE = {
+            width: Utils.convertLength(210, 'mm', 'px', 0),
+            height: Utils.convertLength(297, 'mm', 'px', 0)
+        },
+
+        // the maximum number of simultaneous pending AJAX page requests
         MAX_REQUESTS = 5,
 
         // the number of AJAX requests currently running
@@ -91,8 +97,10 @@ define('io.ox/office/preview/pageloader', ['io.ox/office/tk/utils'], function (U
             var // the Deferred object waiting for the image
                 def = null;
 
-            function resolveSize(imageNode) {
-                return calculateImageSize(imageNode) || $.Deferred().reject();
+            function resolveSize() {
+                var pageSize = calculateImageSize(pageNode.children().first());
+                if (pageSize) { pageNode.data('page-size', pageSize); }
+                return pageSize || $.Deferred().reject();
             }
 
             if (_.browser.Chrome) {
@@ -100,20 +108,23 @@ define('io.ox/office/preview/pageloader', ['io.ox/office/tk/utils'], function (U
                 def = app.getModel().loadPageAsSvg(page).then(function (svgMarkup) {
                     pageNode[0].innerHTML = svgMarkup;
                     // resolve with original image size
-                    return resolveSize(pageNode.children().first());
+                    return resolveSize();
                 });
             } else {
                 // preferred: as an image element linking to the SVG file (Safari cannot parse SVG mark-up)
                 def = app.getModel().loadPageAsImage(page).then(function (imgNode) {
                     pageNode.empty().append(imgNode);
                     // resolve with original image size (naturalWidth/naturalHeight with SVG does not work in IE10)
-                    return resolveSize(imgNode);
+                    return resolveSize();
                 });
             }
 
             return def.promise();
         }
 
+        /**
+         * Registers a page node for deferred loading.
+         */
         function registerPageNode(pageNode, page, priority) {
 
             var // the pending data to be inserted into the array
@@ -226,6 +237,91 @@ define('io.ox/office/preview/pageloader', ['io.ox/office/tk/utils'], function (U
          *  page has been loaded successfully; or rejected on error.
          */
         this.loadPage = app.createDebouncedMethod(registerPageNode, loadQueuedPages);
+
+        /**
+         * returns the original size of the image in the passed page node. The
+         * size will be stored in the page node after the page has been loaded.
+         * If the passed page has not been loaded yet, returns a default page
+         * size.
+         *
+         * @returns {Object}
+         *  The original page size (in pixels), in the properties 'width' and
+         *  'height'.
+         */
+        this.getPageSize = function (pageNode) {
+            return $(pageNode).data('page-size') || DEFAULT_PAGE_SIZE;
+        };
+
+        /**
+         * Recalculates the size of the passed page node, according to the
+         * original page size and zoom factor.
+         *
+         * @param {HTMLElement|jQuery} pageNode
+         *  The page node containing the SVG contents.
+         *
+         * @param {Number} zoomFactor
+         *  The new zoom factor.
+         *
+         * @returns {PageLoader}
+         *  A reference to this instance.
+         */
+        this.setZoomFactor = function (pageNode, zoomFactor) {
+
+            var // the original size of the page
+                pageSize = this.getPageSize(pageNode),
+                // the child node in the page, containing the SVG
+                childNode = $(pageNode).children().first(),
+                // the resulting width/height
+                width = Math.floor(pageSize.width * zoomFactor),
+                height = Math.floor(pageSize.height * zoomFactor);
+
+            if (childNode.is('img')) {
+                // <img> element: resize with CSS width/height
+                childNode.width(width).height(height);
+            } else {
+                // <svg> element (Chrome): scale with CSS zoom (supported in WebKit)
+                childNode.css('zoom', zoomFactor);
+            }
+
+            // Chrome bug/problem: sometimes, the page node has width 0 (e.g., if browser zoom is
+            // not 100%) regardless of existing SVG, must set its size explicitly to see anything...
+            $(pageNode).width(width).height(height);
+
+            return this;
+        };
+
+        /**
+         * Converts the image data of the passed <img> element to an inline
+         * bitmap represented by a data URL.
+         *
+         * @param {HTMLImageElement|jQuery} imgNode
+         *  The <img> element.
+         *
+         * @param {Object} imageSize
+         *  The original image size, as pixels, in 'width' and 'height'
+         *  properties.
+         *
+         * @returns {PageLoader}
+         *  A reference to this instance.
+         */
+        this.convertImageToBitmap = function (imgNode, imageSize) {
+
+            var // the size of the canvas (maximum four times the current image size)
+                bitmapWidth = Math.min($(imgNode).width() * 4, imageSize.width),
+                bitmapHeight = Math.min($(imgNode).height() * 4, imageSize.height),
+                // the <canvas> element for SVG/bitmap conversion
+                canvas = $('<canvas>').attr({ width: bitmapWidth, height: bitmapHeight })[0];
+
+            try {
+                canvas.getContext('2d').drawImage(Utils.getDomNode(imgNode), 0, 0, imageSize.width, imageSize.height, 0, 0, bitmapWidth, bitmapHeight);
+                // currently, canvas.toDataURL() works in Firefox only, even with images from same origin
+                $(imgNode).attr('src', canvas.toDataURL());
+            } catch (ex) {
+                Utils.error('PageLoader.convertImageToBitmap(): exception caucht: ' + ex);
+            }
+
+            return this;
+        };
 
     } // class PageLoader
 

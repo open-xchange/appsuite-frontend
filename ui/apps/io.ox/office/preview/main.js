@@ -17,11 +17,10 @@ define('io.ox/office/preview/main',
      'io.ox/office/framework/app/baseapplication',
      'io.ox/office/framework/app/toolbaractions',
      'io.ox/office/framework/app/extensionregistry',
-     'io.ox/office/preview/model',
-     'io.ox/office/preview/view',
-     'io.ox/office/preview/controller',
-     'gettext!io.ox/office/main',
-     'less!io.ox/office/preview/style.less'
+     'io.ox/office/preview/model/model',
+     'io.ox/office/preview/view/view',
+     'io.ox/office/preview/app/controller',
+     'gettext!io.ox/office/main'
     ], function (Utils, BaseApplication, ToolBarActions, ExtensionRegistry, PreviewModel, PreviewView, PreviewController, gt) {
 
     'use strict';
