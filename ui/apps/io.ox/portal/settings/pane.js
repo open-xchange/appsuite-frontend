@@ -241,7 +241,6 @@ define('io.ox/portal/settings/pane',
                 }
                 this.append(
                     $node,
-                    drawChangeColor(data.color),
                     appendIconText($('<a href="#" class="action" data-action="toggle" tabindex="1">'), gt('Disable'), 'edit')
                 );
             } else if (!data.protectedWidget) {
