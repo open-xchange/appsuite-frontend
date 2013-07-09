@@ -181,7 +181,7 @@ define('io.ox/office/preview/view/view',
 
             // set focus to application pane after import
             app.on('docs:import:after', function () {
-                self.on('refresh:layout', updateZoom);
+                self.on('refresh:layout', refreshLayout);
                 self.grabFocus();
                 app.getController().update();
             });
@@ -191,7 +191,7 @@ define('io.ox/office/preview/view/view',
                 // attach the scroll event handler
                 self.getAppPaneNode().on('scroll', app.createDebouncedMethod($.noop, updateVisiblePages, { delay: 100, maxDelay: 500 }));
                 // initialize zoom and scroll position
-                updateZoom();
+                refreshLayout();
                 // update visible pages once manually (no scroll event is triggered,
                 // if the first page is shown which does not cause any scrolling).
                 updateVisiblePages();
@@ -373,19 +373,22 @@ define('io.ox/office/preview/view/view',
 
         /**
          * Recalculates the size of the page nodes, according to the original
-         * page sizes and the current zoom type.
+         * page sizes and the current zoom type, and performs other adjustments
+         * after the global view layout has changed.
          */
-        function updateZoom() {
+        function refreshLayout() {
 
             var // the application pane node
                 appPaneNode = self.getAppPaneNode(),
-                // the current content margin between application pane border and page nodes
-                contentMargin = self.getContentMargin();
+                // content margin according to browser window size
+                contentMargin = ((window.innerWidth <= 1024) || (window.innerHeight <= 640)) ? 0 : 30;
+
+            // set the current content margin between application pane border and page nodes
+            self.setContentMargin(contentMargin);
 
             // the available inner size in the application pane
-            availableSize.width = appPaneNode[0].clientWidth - contentMargin.left - contentMargin.right;
-            availableSize.height = appPaneNode[0].clientHeight - contentMargin.top - contentMargin.bottom;
-            Utils.log('availableSize=' + JSON.stringify(availableSize));
+            availableSize.width = appPaneNode[0].clientWidth - 2 * contentMargin;
+            availableSize.height = appPaneNode[0].clientHeight - 2 * contentMargin;
 
             // process all page nodes
             pageNodes.each(function (index) {
@@ -396,7 +399,6 @@ define('io.ox/office/preview/view/view',
                 // set as 'current zoom factor' for the selected page
                 if (index + 1 === selectedPage) {
                     zoomFactor = pageZoomFactor;
-                    Utils.log('zoom factor is ' + zoomFactor);
                 }
             });
 
@@ -568,7 +570,7 @@ define('io.ox/office/preview/view/view',
         this.setZoomType = function (newZoomType) {
             if (zoomType !== newZoomType) {
                 zoomType = newZoomType;
-                updateZoom();
+                refreshLayout();
                 updateZoomStatus();
             }
             return this;
