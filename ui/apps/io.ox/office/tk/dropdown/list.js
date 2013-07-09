@@ -96,6 +96,11 @@ define('io.ox/office/tk/dropdown/list',
             case KeyCodes.END:
                 if (keydown) { controls.last().focus(); }
                 return false;
+            case KeyCodes.TAB:
+                if (keydown) {
+                    if (controls.eq(index).hasClass('button')) { controls.eq(index).click(); }
+                }
+                break;
             }
         }
 

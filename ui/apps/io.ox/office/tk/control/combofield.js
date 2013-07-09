@@ -139,6 +139,15 @@ define('io.ox/office/tk/control/combofield',
             case KeyCodes.PAGE_DOWN:
                 if (keydown) { moveListItem(List.PAGE_SIZE); }
                 return false;
+            case KeyCodes.ESCAPE:
+                if (keydown) {
+                    if (self.isMenuVisible()) {
+                        self.hideMenu();
+                    } else {
+                        self.trigger('cancel');
+                    }
+                }
+                return false;
             }
         }
 

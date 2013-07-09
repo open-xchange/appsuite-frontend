@@ -139,6 +139,11 @@ define('io.ox/office/tk/dropdown/grid',
             case KeyCodes.END:
                 if (keydown) { buttons.last().focus(); }
                 return false;
+            case KeyCodes.TAB:
+                if (keydown) {
+                    if (buttons.eq(index).hasClass('button')) { buttons.eq(index).click(); }
+                }
+                break;
             }
         }
 
