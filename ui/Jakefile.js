@@ -269,28 +269,28 @@ _.each(_.map(['core', 'signin', 'core.appcache', 'signin.appcache'], utils.dest)
 
 utils.concat("boot.js",
     [utils.string("// NOJSHINT\ndependencies = "), "tmp/dependencies.json",
-     utils.string(';\n'), "src/plugins.js", "src/jquery.plugins.js",
-     "apps/io.ox/core/gettext.js", "src/util.js", "src/boot.js"],
-    { to: "tmp", type: "source" });
-
-
-utils.concat("boot.js", [
-        "lib/jquery.min.js",
-        "lib/jquery.mobile.touch.min.js",
-        "lib/underscore.js", // load this before require.js to keep global object
-        "lib/require.js",
-        "lib/require-fix.js",
-        "lib/modernizr.js",
-        "lib/bigscreen.js",
-        "lib/placeholder.min.js",
-        //add backbone and dot.js may be a AMD-variant would be better
-        "lib/backbone.js",
-        "lib/backbone.modelbinder.js",
-        "lib/backbone.collectionbinder.js",
-        "lib/backbone.validation.js",
-        "lib/backbone.custom.js",
-        "lib/doT.js",
-        "tmp/boot.js"]);
+     utils.string(';\n'),
+     "lib/jquery.min.js",
+     "lib/jquery.mobile.touch.min.js",
+     "lib/underscore.js", // load this before require.js to keep global object
+     "lib/require.js",
+     "lib/require-fix.js",
+     "lib/modernizr.js",
+     "lib/bigscreen.js",
+     "lib/placeholder.min.js",
+     //add backbone and dot.js may be a AMD-variant would be better
+     "lib/backbone.js",
+     "lib/backbone.modelbinder.js",
+     "lib/backbone.collectionbinder.js",
+     "lib/backbone.validation.js",
+     "lib/backbone.custom.js",
+     "lib/doT.js",
+     "src/plugins.js",
+     "src/jquery.plugins.js",
+     "apps/io.ox/core/gettext.js",
+     "src/util.js",
+     "src/boot.js"],
+    { type: "source" });
 
 // Twitter Bootstrap
 utils.copy(utils.list("lib/bootstrap", ["img/*"]),
