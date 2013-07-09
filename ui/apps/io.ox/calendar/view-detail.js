@@ -480,7 +480,7 @@ define("io.ox/calendar/view-detail",
 
             try {
                 var node = $.createViewContainer(data, calAPI).on('redraw', { view: this }, redraw);
-                node.addClass('calendar-detail view').attr('data-cid', String(_.cid(data)));
+                node.addClass('calendar-detail view user-select-text').attr('data-cid', String(_.cid(data)));
                 ext.point("io.ox/calendar/detail").invoke("draw", node, data, options);
 
                 return node;
