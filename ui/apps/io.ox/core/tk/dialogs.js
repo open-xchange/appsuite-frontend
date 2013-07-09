@@ -218,7 +218,8 @@ define("io.ox/core/tk/dialogs",
                 click: options.click || invoke,
                 dataaction: dataaction,
                 purelink: options.purelink,
-                inverse: options.inverse
+                inverse: options.inverse,
+                tabIndex: options.tabIndex
             };
 
             if (options.type) {
