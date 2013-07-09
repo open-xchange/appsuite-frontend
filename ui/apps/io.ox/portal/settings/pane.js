@@ -213,8 +213,18 @@ define('io.ox/portal/settings/pane',
                         $('<a href="#" class="action" data-action="edit" tabindex="1">').text(gt('Edit'))
                     );
                 }
+                var $node = drawChangeColor(data.color);
+                // Delegate fix for mobile dropdowns.
+                // On mobile we need to bind the action directly to the hrefs
+                // as the delegate is bound to parent element which is not longer
+                // valid
+                if (_.device('smartphone')) {
+                    $node.find("[data-action='change-color']").on('click', function (e) {
+                        baton.view.onChangeColor(e);
+                    });
+                }
                 this.append(
-                    drawChangeColor(data.color),
+                    $node,
                     $('<a href="#" class="action" data-action="toggle" tabindex="1">').text(gt('Disable'))
                 );
             } else if (!data.protectedWidget) {
