@@ -475,9 +475,7 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.triggerChange = function (control, options) {
-            if (Utils.containsNode(groupNode, control)) {
-                $(control).first().trigger(INTERNAL_TRIGGER_EVENT, options);
-            }
+            $(control).first().trigger(INTERNAL_TRIGGER_EVENT, options);
             return this;
         };
 
