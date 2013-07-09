@@ -60,7 +60,7 @@ define('io.ox/office/tk/dialogs',
             // the title text
             title = Utils.getStringOption(options, 'title'),
             // the dummy input to catch the cursor
-            focusCatcher = $('<input>').css({width: '1px', height: '1px'});
+            focusCatcher = $('<input>').css({position: 'absolute', top: '-10000px', left: '-10000px', width: '1px', height: '1px'});
 
         // add title
         if (_.isString(title)) {
@@ -70,16 +70,21 @@ define('io.ox/office/tk/dialogs',
         // add dummy input to catch the cursor on dialog open
         dialog.getFooter().append(focusCatcher);
 
+        // set focus to dummy input
         dialog.getPopup().on('show', function () {
-            // set focus to dummy input
             focusCatcher.focus();
-            // make buttons reachable by tab key
-            dialog.getFooter().find('button.btn').attr('tabindex', 1);
         });
 
         // remove dummy input
         dialog.getPopup().on('shown', function () {
             focusCatcher.remove();
+        });
+
+        // The dialog is opened with nodes.popup.show() instead of nodes.popup.modal('show')
+        // which prevents the 'show' and 'shown' events being triggered.
+        // We call tab('show') to trigger the events.
+        dialog.on('show', function () {
+            dialog.getPopup().tab('show');
         });
 
         return dialog;
