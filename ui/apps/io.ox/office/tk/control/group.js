@@ -28,7 +28,10 @@ define('io.ox/office/tk/control/group',
         DISABLED_CLASS = 'disabled',
 
         // CSS class for the group node while any embedded control is focused
-        FOCUSED_CLASS = 'focused';
+        FOCUSED_CLASS = 'focused',
+
+        // DOM event that will cause a 'change' event from a group
+        INTERNAL_TRIGGER_EVENT = 'private:trigger';
 
     // class Group ============================================================
 
@@ -199,22 +202,22 @@ define('io.ox/office/tk/control/group',
                 // the resolver function for the control value
                 valueResolver = Utils.getFunctionOption(options, 'valueResolver', Utils.getControlValue);
 
-            function eventHandler(event) {
-                var value =  self.isEnabled() ? valueResolver.call(self, $(this)) : null;
+            function eventHandler(event, options) {
+                var value = self.isEnabled() ? valueResolver.call(self, $(this)) : null;
                 if (_.isNull(value)) {
-                    self.trigger('cancel');
+                    self.trigger('cancel', options);
                 } else {
                     self.update(value);
-                    self.trigger('change', value);
+                    self.trigger('change', value, options);
                 }
                 return false;
             }
 
             // attach event handler to the node
             if (selector) {
-                node.on(type, selector, eventHandler);
+                node.on(type + ' ' + INTERNAL_TRIGGER_EVENT, selector, eventHandler);
             } else {
-                node.on(type, eventHandler);
+                node.on(type + ' ' + INTERNAL_TRIGGER_EVENT, eventHandler);
             }
 
             return this;
@@ -236,14 +239,14 @@ define('io.ox/office/tk/control/group',
         this.registerPrivateGroup = function (group) {
 
             // forward change events of the group to listeners of this drop-down group
-            group.on('change', function (event, value) {
-                self.trigger('change', value);
+            group.on('change', function (event, value, options) {
+                self.trigger('change', value, options);
             });
 
             // do not forward cancel events directly, but generate a new event
             // that can be handled separately
-            group.on('cancel', function () {
-                self.trigger('private:cancel');
+            group.on('cancel', function (options) {
+                self.trigger('private:cancel', options);
             });
 
             // forward updates of this drop-down group to the inserted group
@@ -400,6 +403,7 @@ define('io.ox/office/tk/control/group',
 
             var // enable/disable the entire group node with all its descendants
                 enabled = Utils.enableControls(groupNode, state),
+                // set tabindex dependent on state to make it (in)accessible for F6 traveling
                 selector = '[tabindex="';
 
             // Set tabindex dependent on state to make it (in)accessible for
@@ -450,6 +454,32 @@ define('io.ox/office/tk/control/group',
         this.refresh = _.debounce(function () {
             self.update(groupValue);
         });
+
+        /**
+         * Triggers a special event at the passed DOM control node contained in
+         * this Group instance. The group will catch the event, and will
+         * trigger a 'change' event by itself with the value associated to the
+         * DOM control node.
+         *
+         * @param {HTMLElement|jQuery}
+         *  A DOM control node of this group that must have been configured as
+         *  source of change events with the Group.registerChangeHandler()
+         *  method. If this object is a jQuery collection, uses the first DOM
+         *  node it contains.
+         *
+         * @param {Object} [options]
+         *  A map with additional options that will be passed to the 'change'
+         *  event listeners of this class.
+         *
+         * @returns {Group}
+         *  A reference to this group.
+         */
+        this.triggerChange = function (control, options) {
+            if (Utils.containsNode(groupNode, control)) {
+                $(control).first().trigger(INTERNAL_TRIGGER_EVENT, options);
+            }
+            return this;
+        };
 
         this.destroy = function () {
             this.events.destroy();

@@ -122,7 +122,7 @@ define('io.ox/office/framework/view/component',
             // always forward 'cancel' events (e.g. closed drop-down menu),
             // update focusability depending on the group's enabled state
             group.on({
-                cancel: function () { self.trigger('cancel'); },
+                cancel: function (event, options) { self.trigger('cancel', options); },
                 'show enable layout': updateFocusable
             });
 
@@ -266,8 +266,8 @@ define('io.ox/office/framework/view/component',
 
             // forward 'change' events to listeners of this view component
             (groupsByKey[key] || (groupsByKey[key] = [])).push(group);
-            group.on('change', function (event, value) {
-                self.trigger('change', key, value);
+            group.on('change', function (event, value, options) {
+                self.trigger('change', key, value, options);
             });
 
             // set the key as data attribute

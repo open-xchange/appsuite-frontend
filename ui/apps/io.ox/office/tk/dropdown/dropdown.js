@@ -382,6 +382,14 @@ define('io.ox/office/tk/dropdown/dropdown',
             case KeyCodes.TAB:
                 if (keydown && !event.ctrlKey && !event.altKey && !event.metaKey) {
                     hideMenu();
+                    // To prevent problems with event bubbling (Firefox continues
+                    // to bubble to the parent of the menu node, while Chrome
+                    // always bubbles from the focused DOM node, in this case
+                    // from the menu *button*), stop propagation of the original
+                    // event, and simulate a TAB key event from the menu button
+                    // to move the focus to the next control.
+                    menuButton.trigger({ type: 'keydown', keyCode: KeyCodes.TAB, shiftKey: event.shiftKey });
+                    return false;
                 }
                 break;
             case KeyCodes.F6:

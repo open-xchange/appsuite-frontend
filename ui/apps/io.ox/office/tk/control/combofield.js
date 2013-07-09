@@ -189,11 +189,6 @@ define('io.ox/office/tk/control/combofield',
                 // the textual representation of the button value
                 buttonValueText = null;
 
-            // show the drop-down menu when the text has been changed
-            if (typeAhead && (fieldText !== oldFieldState.value)) {
-                self.showMenu();
-            }
-
             // find the first button whose text representation starts with the entered text
             button = self.getItems().filter(function () {
                 var buttonValueText = self.valueToText(Utils.getControlValue($(this)));

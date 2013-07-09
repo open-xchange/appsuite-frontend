@@ -186,13 +186,20 @@ define('io.ox/office/framework/app/basecontroller',
              * value), and moves the browser focus back to the application
              * pane.
              *
-             * @param value
+             * @param {Any} value
              *  The new value of the item.
+             *
+             * @param {Object} [options]
+             *  A map with options controlling the behavior of this method. The
+             *  following options are supported:
+             *  @param {Boolean} [options.preserveFocus=false]
+             *      If set to true, the browser focus will not be modified,
+             *      regardless of the focus mode configured for this item.
              *
              * @returns {Item}
              *  A reference to this item.
              */
-            this.change = function (value) {
+            this.change = function (value, options) {
 
                 var // the result Deferred object
                     def = null;
@@ -223,11 +230,13 @@ define('io.ox/office/framework/app/basecontroller',
                 // focus back to application
                 switch (focus) {
                 case 'direct':
-                    grabApplicationFocus();
+                    grabApplicationFocus(options);
                     break;
                 case 'wait':
-                    // execute in a timeout, needed for dialogs which are closed after resolve/reject
-                    def.always(function () { app.executeDelayed(grabApplicationFocus); });
+                    def.always(function () {
+                        // execute in a timeout, needed for dialogs which are closed *after* resolve/reject
+                        app.executeDelayed(function () { grabApplicationFocus(options); });
+                    });
                     break;
                 case 'never':
                     break;
@@ -284,37 +293,40 @@ define('io.ox/office/framework/app/basecontroller',
         /**
          * Moves the browser focus to the application pane.
          */
-        function grabApplicationFocus() {
-            app.getView().grabFocus();
+        function grabApplicationFocus(options) {
+            if (!Utils.getBooleanOption(options, 'preserveFocus', false)) {
+                app.getView().grabFocus();
+            }
         }
 
         /**
          * Calls the set handler of the item with the registered key, and moves
          * the browser focus back to the application pane.
          */
-        function callSetHandler(key, value) {
+        function callSetHandler(key, value, options) {
             if (key in items) {
                 // do not clear cache if called recursively from another setter
                 if (runningSetters === 0) { clearResultCache(); }
-                items[key].change(value);
+                items[key].change(value, options);
             } else {
-                grabApplicationFocus();
+                grabApplicationFocus(options);
             }
         }
 
         /**
-         * The event handler function that will listen to 'change' and 'cancel'
-         * events in all registered view components.
+         * The event handler function that will listen to 'change' events in
+         * all registered view components.
          */
-        function componentEventHandler(event, key, value) {
-            switch (event.type) {
-            case 'change':
-                callSetHandler(key, value);
-                break;
-            case 'cancel':
-                grabApplicationFocus();
-                break;
-            }
+        function componentChangeHandler(event, key, value, options) {
+            callSetHandler(key, value, options);
+        }
+
+        /**
+         * The event handler function that will listen to 'cancel' events in
+         * all registered view components.
+         */
+        function componentCancelHandler(event, options) {
+            grabApplicationFocus(options);
         }
 
         /**
@@ -335,7 +347,7 @@ define('io.ox/office/framework/app/basecontroller',
                     value = _.isFunction(shortcut.definition.value) ?
                         shortcut.definition.value(self.get(shortcut.key)) : shortcut.definition.value;
 
-                callSetHandler(shortcut.key, value, event);
+                callSetHandler(shortcut.key, value);
                 if (!Utils.getBooleanOption(shortcut.definition, 'propagate', false)) {
                     event.stopPropagation();
                     event.preventDefault();
@@ -552,7 +564,7 @@ define('io.ox/office/framework/app/basecontroller',
          *  A reference to this controller instance.
          */
         this.registerViewComponent = function (component) {
-            component.on('change cancel', componentEventHandler);
+            component.on({ change: componentChangeHandler, cancel: componentCancelHandler });
             return this;
         };
 
@@ -628,14 +640,22 @@ define('io.ox/office/framework/app/basecontroller',
          * @param {String} key
          *  The key of the item to be changed.
          *
-         * @param value
+         * @param {Any} value
          *  The new value of the item.
+         *
+         * @param {Object} [options]
+         *  A map with options controlling the behavior of this method. The
+         *  following options are supported:
+         *  @param {Boolean} [options.preserveFocus=false]
+         *      If set to true, the browser focus will not be modified after
+         *      executing the item, regardless of the focus mode configured for
+         *      that item.
          *
          * @returns {BaseController}
          *  A reference to this controller.
          */
-        this.change = function (key, value) {
-            callSetHandler(key, value);
+        this.change = function (key, value, options) {
+            callSetHandler(key, value, options);
             return this;
         };
 

@@ -19,6 +19,9 @@ define('io.ox/office/tk/dropdown/items',
 
     'use strict';
 
+    var // shortcut for the KeyCodes object
+        KeyCodes = Utils.KeyCodes;
+
     // class Items ============================================================
 
     /**
@@ -127,6 +130,16 @@ define('io.ox/office/tk/dropdown/items',
                 sectionNode = Utils.createContainerNode('item-section').attr('data-section', sectionId).appendTo(itemGroupNode);
             }
             return sectionNode;
+        }
+
+        /**
+         * Handles key events in the embedded item list group.
+         */
+        function itemKeyDownHandler(event) {
+            // TAB key executes the item currently selected, but keeps the focus on the menu button
+            if ((event.keyCode === KeyCodes.TAB) && !event.altKey && !event.ctrlKey && !event.metaKey) {
+                itemGroup.triggerChange(event.target, { preserveFocus: true });
+            }
         }
 
         // methods ------------------------------------------------------------
@@ -269,13 +282,15 @@ define('io.ox/office/tk/dropdown/items',
          *  A reference to this instance.
          */
         this.grabMenuFocus = function () {
+
             var // all focusable list items
                 items = self.getFocusableMenuControls(),
                 selectedButtons = Utils.getSelectedButtons(items);
+
             if (selectedButtons.length) {
-                selectedButtons.eq(0).focus();
-            } else if (items.length) {
-                items.eq(0).focus();
+                selectedButtons.first().focus();
+            } else {
+                items.first().focus();
             }
 
             return this;
@@ -292,6 +307,7 @@ define('io.ox/office/tk/dropdown/items',
             selector: Utils.BUTTON_SELECTOR,
             valueResolver: Utils.getFunctionOption(options, 'itemValueResolver')
         });
+        itemGroup.getNode().on('keydown', itemKeyDownHandler);
 
         // default sort functor: sort by button label text, case insensitive
         sortFunctor = _.isFunction(sortFunctor) ? sortFunctor : function (button) {
