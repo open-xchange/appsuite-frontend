@@ -716,10 +716,10 @@ define('io.ox/core/tk/selection',
                     }
                 }
                 this.update();
-                if (_.device('!smartphone')) {
-                    changed();
-                } else {
+                if (mobileSelectMode) {
                     selectOnly();
+                } else {
+                    changed();
                 }
             }
         };
@@ -798,7 +798,7 @@ define('io.ox/core/tk/selection',
                 this.clear();
                 this.set(tmp);
             } else {
-                if (_.device('smartphone')) {
+                if (mobileSelectMode) {
                     selectOnly();
                 } else {
                     changed();
