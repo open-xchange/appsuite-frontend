@@ -21,25 +21,26 @@ define('io.ox/office/preview/view',
      'io.ox/office/framework/view/component',
      'io.ox/office/framework/view/toolbox',
      'io.ox/office/preview/viewutils',
+     'io.ox/office/preview/pageloader',
      'io.ox/office/preview/controls',
      'io.ox/office/preview/pagegroup',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/style.less'
-    ], function (Utils, Button, BaseView, BaseControls, Pane, SidePane, Component, ToolBox, ViewUtils, PreviewControls, PageGroup, gt) {
+    ], function (Utils, Button, BaseView, BaseControls, Pane, SidePane, Component, ToolBox, ViewUtils, PageLoader, PreviewControls, PageGroup, gt) {
 
     'use strict';
 
     var // shortcut for the KeyCodes object
         KeyCodes = Utils.KeyCodes,
 
+        // default page size used before a page has been loaded
+        DEFAULT_PAGE_SIZE = {
+            width: Utils.convertLength(210, 'mm', 'px', 0),
+            height: Utils.convertLength(297, 'mm', 'px', 0)
+        },
+
         // predefined zoom factors
-        ZOOM_FACTORS = [25, 35, 50, 75, 100, 150, 200, 300, 400, 600, 800, 1200, 1600],
-
-        // margins between page and border of application pane
-        CONTENT_MARGIN = { left: 30, right: 30, top: 52, bottom: 52 + Utils.SCROLLBAR_HEIGHT },
-
-        // margins between overlay panes and border of application pane
-        OVERLAY_MARGIN = { left: 8, right: Utils.SCROLLBAR_WIDTH + 8, bottom: Utils.SCROLLBAR_HEIGHT };
+        ZOOM_FACTORS = [25, 35, 50, 75, 100, 150, 200, 300, 400, 600, 800, 1200, 1600];
 
     // class PreviewView ======================================================
 
@@ -77,20 +78,26 @@ define('io.ox/office/preview/view',
             // the page preview control
             pageGroup = null,
 
-            // the root node containing the current page contents
-            pageNode = $(),
+            // the root node containing all page nodes
+            pageContainerNode = $('<div>').addClass('page-container'),
 
-            // unique page-change counter to synchronize deferred page loading
-            uniqueId = 0,
+            // all page nodes as permanent jQuery collection, for performance
+            pageNodes = null,
 
-            // current page index (one-based!)
-            page = 0,
+            // the queue for AJAX page requests
+            pageLoader = new PageLoader(app),
+
+            // one-based index of the selected page
+            selectedPage = 0,
 
             // current zoom type (percentage or keyword)
             zoomType = 100,
 
             // the current effective zoom factor, in percent
-            zoomFactor = 100;
+            zoomFactor = 100,
+
+            // the size available in the application pane
+            availableSize = { width: 0, height: 0 };
 
         // base constructor ---------------------------------------------------
 
@@ -98,7 +105,7 @@ define('io.ox/office/preview/view',
             initHandler: initHandler,
             grabFocusHandler: grabFocusHandler,
             scrollable: true,
-            contentMargin: CONTENT_MARGIN,
+            contentMargin: 30,
             overlayMargin: { left: 8, right: Utils.SCROLLBAR_WIDTH + 8, bottom: Utils.SCROLLBAR_HEIGHT }
         });
 
@@ -177,12 +184,9 @@ define('io.ox/office/preview/view',
             // initially, hide the side pane, and show the overlay tool bars
             self.toggleSidePane(false);
 
-            // listen to specific scroll keys to switch to previous/next page
-            self.getAppPaneNode().on('keydown', keyHandler);
-
             // set focus to application pane after import
             app.on('docs:import:after', function () {
-                self.on('refresh:layout', function () { updateZoom(); });
+                self.on('refresh:layout', updateZoom);
                 self.grabFocus();
             });
         }
@@ -197,57 +201,16 @@ define('io.ox/office/preview/view',
         }
 
         /**
-         * Handles 'keydown' events and show the previous/next page, if the
-         * respective page boundary has been reached.
-         */
-        function keyHandler(event) {
-
-            var // the scrollable application pane node
-                scrollNode = self.getAppPaneNode()[0],
-                // the original scroll position
-                scrollPos = scrollNode.scrollTop;
-
-            // ignore all key events with additional control keys
-            if (event.shiftKey || event.ctrlKey || event.altKey || event.metaKey) {
-                return;
-            }
-
-            // handle supported keys
-            switch (event.keyCode) {
-
-            case KeyCodes.UP_ARROW:
-            case KeyCodes.PAGE_UP:
-                app.executeDelayed(function () {
-                    if ((scrollPos === 0) && (scrollNode.scrollTop === 0) && !pageNode.hasClass('busy')) {
-                        showPage(page - 1, 'bottom');
-                        app.getController().update();
-                    }
-                });
-                break;
-
-            case KeyCodes.DOWN_ARROW:
-            case KeyCodes.PAGE_DOWN:
-                app.executeDelayed(function () {
-                    var bottomPos = Math.max(0, scrollNode.scrollHeight - scrollNode.clientHeight);
-                    if ((scrollPos === bottomPos) && (scrollNode.scrollTop === bottomPos) && !pageNode.hasClass('busy')) {
-                        showPage(page + 1, 'top');
-                        app.getController().update();
-                    }
-                });
-                break;
-            }
-        }
-
-        /**
          * Updates the status label with the current page number.
          */
         function updatePageStatus() {
             statusLabel.update({
                 caption:
-                    //#. %1$s is the current page index in office document preview
-                    //#. %2$s is the number of pages in office document preview
+                    //#. A label showing the current page index in the OX Documents preview application
+                    //#. %1$d is the current page index
+                    //#. %2$d is the total number of pages
                     //#, c-format
-                    gt('Page %1$s of %2$s', page, model.getPageCount()),
+                    gt('Page %1$d of %2$d', selectedPage, model.getPageCount()),
                 type: 'info'
             });
         }
@@ -267,131 +230,214 @@ define('io.ox/office/preview/view',
         }, updatePageStatus, { delay: 1000 });
 
         /**
-         * Fetches the specified page from the preview model and shows it with
-         * the current zoom level in the page node.
+         * Selects the specified page. Updates the status label, the thumbnail
+         * preview, and optionally scrolls the view to the specified page.
          *
-         * @param {Number} newPage
-         *  The one-based index of the page to be shown.
-         *
-         * @param {String} [scrollTo]
-         *  If set to the string 'top', the new page will be scrolled to the
-         *  top border. If set to the string 'bottom', the new page will be
-         *  scrolled to the bottom border. Otherwise, the scroll position will
-         *  not be changed.
+         * @param {Number} page
+         *  The one-based index of the selected page.
          */
-        function showPage(newPage, scrollTo) {
-
-            var // the new page node
-                newPageNode = $('<div>').addClass('page'),
-                // unique index for current call of this method
-                currentId = 0;
-
-            // check that the page changes inside the allowed page range
-            if ((page === newPage) || (newPage < 1) || (newPage > model.getPageCount())) {
-                return;
+        function selectPage(page) {
+            if ((1 <= page) && (page <= model.getPageCount()) && (page !== selectedPage)) {
+                selectedPage = page;
+                pageGroup.selectAndShowPage(page);
+                updatePageStatus();
             }
-
-            // store new page index, update preview, and show overlay status label
-            currentId = (uniqueId += 1);
-            page = newPage;
-            pageGroup.selectAndShowPage(page);
-            updatePageStatus();
-
-            // switch application pane to busy state (this keeps the Close button active)
-            self.appPaneBusy();
-            pageNode.addClass('busy');
-
-            // new page node must be part of the DOM for page size calculations
-            self.insertTemporaryNode(newPageNode);
-
-            // load the requested page, post-processing only if the current
-            // page has not been changed again in the meantime
-            ViewUtils.loadPageIntoNode(newPageNode, model, page, { fetchSiblings: true })
-            .always(function () {
-                if (currentId === uniqueId) {
-                    self.appPaneIdle();
-                    pageNode = newPageNode;
-                    self.removeAllContentNodes().insertContentNode(pageNode);
-                }
-            })
-            .done(function (size) {
-                if (currentId === uniqueId) {
-                    // store original image size in page node (will be used in method updateZoom())
-                    pageNode.data('size', size);
-                    updateZoom(scrollTo);
-                }
-            })
-            .fail(function () {
-                if (currentId === uniqueId) {
-                    self.showError(
-                        gt('Load Error'),
-                        //#. %1$d is the current page number that caused the error
-                        //#, c-format
-                        gt('An error occurred while loading page %1$d.', newPage),
-                        { closeable: true }
-                    );
-                }
-            });
         }
 
         /**
-         * Recalculates the CSS zoom and margins, according to the current page
-         * size and zoom level.
+         * Scrolls the view to the specified page.
          *
-         * @param {String} [scrollTo]
-         *  If set to the string 'top', the new page will be scrolled to the
-         *  top border. If set to the string 'bottom', the new page will be
-         *  scrolled to the bottom border. Otherwise, the scroll position will
-         *  not be changed.
+         * @param {Number} page
+         *  The one-based index of the page to be scrolled to.
          */
-        function updateZoom(scrollTo) {
+        function scrollToPage(page) {
 
-            var // the original size of the page
-                pageSize = pageNode.data('size'),
-                // the application pane node
+            var // the scrollable application pane node
                 appPaneNode = self.getAppPaneNode(),
-                // the available width for a page in the application pane
-                availableWidth = appPaneNode[0].clientWidth - CONTENT_MARGIN.left - CONTENT_MARGIN.right,
-                // the available height for a page in the application pane
-                availableHeight = appPaneNode[0].clientHeight - CONTENT_MARGIN.top - CONTENT_MARGIN.bottom;
+                // the new page node (prevent selecting nodes from end of array for negative values)
+                pageNode = (page > 0) ? pageNodes.eq(page - 1) : $();
 
-            // calculate the effective zoom factor
-            if (_.isNumber(zoomType)) {
-                zoomFactor = zoomType;
-            } else if (_.isObject(pageSize)) {
-                switch (zoomType) {
-                case 'width':
-                    zoomFactor = Math.min(Math.floor(availableWidth / pageSize.width * 100), 100);
-                    break;
-                case 'page':
-                    zoomFactor = Math.min(Math.floor(availableWidth / pageSize.width * 100), Math.floor(availableHeight / pageSize.height * 100), 100);
-                    break;
-                default:
-                    Utils.warn('PreviewView.updateZoom(): unsupported zoom type "' + zoomType + '"');
-                    zoomFactor = 100;
-                }
-            } else {
-                zoomFactor = 100;
-            }
-            zoomFactor = Utils.minMax(zoomFactor, self.getMinZoomFactor(), self.getMaxZoomFactor());
-
-            // set the current zoom factor to the page (prevent zooming on invalid pages)
-            if (_.isObject(pageSize)) {
-                ViewUtils.setZoomFactor(pageNode, pageSize, zoomFactor / 100);
-            }
-
-            // update scroll position
-            switch (scrollTo) {
-            case 'top':
-                appPaneNode.scrollTop(0);
-                break;
-            case 'bottom':
-                appPaneNode.scrollTop(appPaneNode[0].scrollHeight);
-                break;
+            if (pageNode.length > 0) {
+                appPaneNode.scrollTop(Utils.getChildNodePositionInNode(appPaneNode, pageNode).top - self.getContentMargin().top);
             }
         }
 
+        /**
+         * Loads the specified page, and stores the original page size at the
+         * page node.
+         */
+        function loadPage(page, priority) {
+
+            var // the page node of the specified page
+                pageNode = pageNodes.eq(page - 1);
+
+            // do not load initialized page again
+            if (pageNode.children().length === 0) {
+                pageLoader.loadPage(pageNode, page, priority).done(function (pageSize) {
+                    pageNode.data('size', pageSize);
+                    updatePageZoom(pageNode);
+                    // new pages may have moved into the visible area
+                    updateVisiblePages();
+                });
+            }
+        }
+
+        /**
+         * Updates all pages that are currently visible in the application
+         * pane.
+         */
+        function updateVisiblePages() {
+
+            // loads the specified page with high priority
+            function loadPageHighPriority(page) {
+                loadPage(page, 'high');
+            }
+
+            // loads the specified page with low priority
+            function loadPageMediumPriority(page) {
+                loadPage(page, 'medium');
+            }
+
+            // clears the specified page
+            function clearPage(page) {
+                pageNodes.eq(page - 1).empty();
+            }
+
+            var // the (scrollable) root node of the application pane
+                appPaneNode = self.getAppPaneNode(),
+                // find the first page that is visible at the top border of the visible area
+                beginPage = _(pageNodes).sortedIndex(appPaneNode.scrollTop(), function (value) {
+                    if (_.isNumber(value)) { return value; }
+                    var pagePosition = Utils.getChildNodePositionInNode(appPaneNode, value);
+                    return pagePosition.top + pagePosition.height - 1;
+                }) + 1,
+                // find the first page that is not visible anymore at the bottom border of the visible area
+                endPage = _(pageNodes).sortedIndex(appPaneNode.scrollTop() + appPaneNode[0].clientHeight, function (value) {
+                    if (_.isNumber(value)) { return value; }
+                    return Utils.getChildNodePositionInNode(appPaneNode, value).top;
+                }) + 1;
+
+            // abort old requests not yet running
+            pageLoader.abortQueuedRequests();
+
+            // load visible pages with high priority
+            Utils.iterateRange(beginPage, endPage, loadPageHighPriority);
+
+            // load 2 pages above and below the visible area with low priority
+            Utils.iterateRange(Math.max(1, beginPage - 2), beginPage, loadPageMediumPriority);
+            Utils.iterateRange(endPage, Math.min(endPage + 2, model.getPageCount() + 1), loadPageMediumPriority);
+
+            // clear all other pages
+            Utils.iterateRange(1, beginPage - 2, clearPage);
+            Utils.iterateRange(endPage + 2, model.getPageCount() + 1, clearPage);
+
+            // activate the page located at the top border of the visible area
+            selectPage(beginPage);
+        }
+
+        /**
+         * Recalculates the size of the specified page node, according to the
+         * original page size and the current zoom type.
+         *
+         * @returns {Number}
+         *  The effective zoom factor of the page.
+         */
+        function updatePageZoom(pageNode) {
+
+            var // the original size of the current page
+                pageSize = pageNode.data('size') || DEFAULT_PAGE_SIZE,
+                // the effective zoom factor for the page
+                pageZoomFactor = 100;
+
+            // calculate the effective zoom factor
+            if (_.isNumber(zoomType)) {
+                pageZoomFactor = zoomType;
+            } else if (zoomType === 'width') {
+                pageZoomFactor = Math.floor(availableSize.width / pageSize.width * 100);
+            } else if (zoomType === 'page') {
+                pageZoomFactor = Math.min(Math.floor(availableSize.width / pageSize.width * 100), Math.floor(availableSize.height / pageSize.height * 100));
+            }
+            pageZoomFactor = Utils.minMax(pageZoomFactor, self.getMinZoomFactor(), self.getMaxZoomFactor());
+
+            // set the zoom factor at the page node
+            ViewUtils.setZoomFactor(pageNode, pageSize, pageZoomFactor / 100);
+            return pageZoomFactor;
+        }
+
+        /**
+         * Recalculates the size of the page nodes, according to the original
+         * page sizes and the current zoom type.
+         */
+        function updateZoom() {
+
+            var // the application pane node
+                appPaneNode = self.getAppPaneNode(),
+                // the current content margin between application pane border and page nodes
+                contentMargin = self.getContentMargin();
+
+            // the available inner size in the application pane
+            availableSize.width = appPaneNode[0].clientWidth - contentMargin.left - contentMargin.right;
+            availableSize.height = appPaneNode[0].clientHeight - contentMargin.top - contentMargin.bottom;
+
+            // process all page nodes
+            pageNodes.each(function (index) {
+
+                var // update the zoom of the page node
+                    pageZoomFactor = updatePageZoom($(this));
+
+                // set as 'current zoom factor' for the selected page
+                if (index + 1 === selectedPage) {
+                    zoomFactor = pageZoomFactor;
+                }
+            });
+
+            updateVisiblePages();
+        }
+
         // methods ------------------------------------------------------------
+
+        /**
+         * Initializes the view after the document has been opened.
+         *
+         * @param {Object} point
+         *  A save point that may have been created before by the method
+         *  PreviewView.getSavePoint().
+         */
+        this.initializeAfterImport = function (point) {
+
+            var // the number of pages in the document
+                pageCount = model.getPageCount(),
+                // the HTML mark-up for the empty page nodes
+                pageMarkup = '';
+
+            // initialize all page nodes
+            _(pageCount).times(function (index) {
+                pageMarkup += '<div class="page" data-page="' + (index + 1) + '"></div>';
+            });
+            this.insertContentNode(pageContainerNode.html(pageMarkup));
+            pageNodes = pageContainerNode.children();
+
+            // restore zoom type
+            zoomType = Utils.getOption(point, 'zoom');
+            if (_.isNumber(zoomType)) {
+                zoomType = Math.round(zoomType);
+            } else if (!_.isString(zoomType) || (zoomType.length === 0)) {
+                zoomType = 100;
+            }
+
+            // Scroll to the last visited page before attaching the scroll event handler.
+            // Update visible pages once manually (no scroll event is triggered, if the
+            // first page is shown which does not cause any scrolling).
+            selectPage(Utils.getIntegerOption(point, 'page', 1, 1, pageCount));
+            scrollToPage(selectedPage);
+
+            // update zoom factor, which will load the visible pages automatically
+            updateZoom();
+
+            // attach the scroll event handler, and update the view
+            this.getAppPaneNode().on('scroll', app.createDebouncedMethod($.noop, updateVisiblePages, { delay: 100, maxDelay: 500 }));
+            app.getController().update();
+        };
 
         /**
          * Returns whether the main side pane is currently visible.
@@ -430,42 +476,39 @@ define('io.ox/office/preview/view',
          *  The one-based index of the current page.
          */
         this.getPage = function () {
-            return page;
+            return selectedPage;
         };
 
         /**
          * Shows the specified page of the current document.
          *
-         * @param {Number|String} newPage
+         * @param {Number|String} page
          *  The one-based index of the page to be shown; or one of the keywords
          *  'first', 'previous', 'next', or 'last'.
          *
          * @returns {PreviewView}
          *  A reference to this instance.
          */
-        this.showPage = function (newPage) {
+        this.showPage = function (page) {
 
-            // fixed page number
-            if (_.isNumber(newPage)) {
-                showPage(newPage, 'top');
-            }
-
-            // page keyword
-            switch (newPage) {
+            // convert page keyword to page number
+            switch (page) {
             case 'first':
-                showPage(1, 'top');
+                page = 1;
                 break;
             case 'previous':
-                showPage(page - 1, 'top');
+                page = this.getPage() - 1;
                 break;
             case 'next':
-                showPage(page + 1, 'top');
+                page = this.getPage() + 1;
                 break;
             case 'last':
-                showPage(model.getPageCount(), 'bottom');
+                page = model.getPageCount();
                 break;
             }
 
+            selectPage(page);
+            scrollToPage(page);
             return this;
         };
 
@@ -571,29 +614,7 @@ define('io.ox/office/preview/view',
          *  A save point with all view settings.
          */
         this.getSavePoint = function () {
-            return { page: page, zoom: zoomType };
-        };
-
-        /**
-         * Restores the view from the passed save point.
-         *
-         * @param {Object} point
-         *  A save point that has been created before by the method
-         *  PreviewView.getSavePoint().
-         */
-        this.restoreFromSavePoint = function (point) {
-
-            // restore zoom type
-            zoomType = Utils.getOption(point, 'zoom');
-            if (_.isNumber(zoomType)) {
-                zoomType = Math.round(zoomType);
-            } else if (!_.isString(zoomType) || (zoomType.length === 0)) {
-                zoomType = 100;
-            }
-
-            // show the last visited page, update GUI
-            showPage(Utils.getIntegerOption(point, 'page', 1, 1, model.getPageCount()), 'top');
-            app.getController().update();
+            return { page: selectedPage, zoom: zoomType };
         };
 
     } // class PreviewView

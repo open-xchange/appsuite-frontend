@@ -27,10 +27,20 @@ define('io.ox/office/framework/view/baseview',
 
     // global functions =======================================================
 
-    function getMarginOption(options, name) {
-
-        var // the raw margin property
-            margin = Utils.getOption(options, name);
+    /**
+     * Converts the passed number or object to a complete margin descriptor
+     * with the properties 'left', 'right', 'top', and 'bottom'.
+     *
+     * @param {Number|Object} margin
+     *  The margins, as number (for all margins) or as object with the optional
+     *  properties 'left', 'right', 'top', and 'bottom'. Missing properties
+     *  default to the value zero.
+     *
+     * @returns {Object}
+     *  The margins (in pixels), in the properties 'left', 'right', 'top', and
+     *  'bottom'.
+     */
+    function getMarginFromValue(margin) {
 
         if (_.isObject(margin)) {
             return _({ left: 0, right: 0, top: 0, bottom: 0 }).extend(margin);
@@ -40,14 +50,6 @@ define('io.ox/office/framework/view/baseview',
             margin = 0;
         }
         return { left: margin, right: margin, top: margin, bottom: margin };
-    }
-
-    function getCssMarginOption(options, name) {
-
-        var // the margin property, as object
-            margin = getMarginOption(options, name);
-
-        return margin.top + 'px ' + margin.right + 'px ' + margin.bottom + 'px ' + margin.left + 'px';
     }
 
     // class BaseView =========================================================
@@ -98,7 +100,8 @@ define('io.ox/office/framework/view/baseview',
      *      margins will be set to the specified value. Otherwise, an object
      *      with the optional properties 'left', 'right', 'top', and 'bottom'
      *      for specific margins for each border. Missing properties default to
-     *      the value zero.
+     *      the value zero. The content margin can also be modified at runtime
+     *      with the method BaseView.setContentMargin().
      *  @param {Number|Object} [options.overlayMargin=0]
      *      The margins between the overlay panes and the inner borders of the
      *      application pane, in pixels. If set to a number, all margins will
@@ -146,7 +149,7 @@ define('io.ox/office/framework/view/baseview',
             tempNode = $('<div>').addClass(windowNodeClasses).appendTo(tempStorageNode),
 
             // margins of overlay panes to the borders of the application pane
-            overlayMargin = getMarginOption(options, 'overlayMargin'),
+            overlayMargin = getMarginFromValue(Utils.getOption(options, 'overlayMargin', 0)),
 
             // whether the application is hidden explicitly
             viewHidden = false;
@@ -371,6 +374,45 @@ define('io.ox/office/framework/view/baseview',
          */
         this.attachAppPane = function () {
             this.getAppPaneNode().prepend(appContainerNode);
+            return this;
+        };
+
+        /**
+         * returns the current margins between the fixed application pane and
+         * the embedded application container node.
+         *
+         * @returns {Object}
+         *  The margins between the fixed application pane and the embedded
+         *  application container node (in pixels), in the properties 'left',
+         *  'right', 'top', and 'bottom'.
+         */
+        this.getContentMargin = function () {
+            return {
+                left: Utils.convertCssLength(appContainerNode.css('margin-left'), 'px', 0),
+                right: Utils.convertCssLength(appContainerNode.css('margin-right'), 'px', 0),
+                top: Utils.convertCssLength(appContainerNode.css('margin-top'), 'px', 0),
+                bottom: Utils.convertCssLength(appContainerNode.css('margin-bottom'), 'px', 0)
+            };
+        };
+
+        /**
+         * Changes the margin between the fixed application pane and the
+         * embedded application container node.
+         *
+         * @param {Number|Object} margin
+         *  The margins between the fixed application pane and the embedded
+         *  application container node, in pixels. If set to a number, all
+         *  margins will be set to the specified value. Otherwise, an object
+         *  with the optional properties 'left', 'right', 'top', and 'bottom'
+         *  for specific margins for each border. Missing properties default to
+         *  the value zero.
+         *
+         * @returns {BaseView}
+         *  A reference to this instance.
+         */
+        this.setContentMargin = function (margin) {
+            margin = getMarginFromValue(margin);
+            appContainerNode.css('margin', margin.top + 'px ' + margin.right + 'px ' + margin.bottom + 'px ' + margin.left + 'px');
             return this;
         };
 
@@ -726,7 +768,10 @@ define('io.ox/office/framework/view/baseview',
         appPane = new Pane(app, { classes: 'app-pane unselectable' });
         appPane.getNode()
             .toggleClass('scrolling', Utils.getBooleanOption(options, 'scrollable', false))
-            .append(appContainerNode.css('margin', getCssMarginOption(options, 'contentMargin')), appBusyNode.hide());
+            .append(appContainerNode, appBusyNode.hide());
+
+        // initialize content margin from passed options
+        this.setContentMargin(Utils.getOption(options, 'contentMargin', 0));
 
         // add the main application pane to the application window
         app.getWindowNode().addClass(windowNodeClasses).append(appPane.getNode());

@@ -22,64 +22,6 @@ define('io.ox/office/preview/viewutils', ['io.ox/office/tk/utils'], function (Ut
     // methods ----------------------------------------------------------------
 
     /**
-     * Loads the specified page into the passed DOM node, after clearing all
-     * its old contents. Loads either SVG mark-up as text and inserts it into
-     * the passed DOM node, or an <img> element linking to an SVG file on the
-     * server, depending on the current browser.
-     *
-     * @param {HTMLElement|jQuery} node
-     *  The target node that will contain the loaded page.
-     *
-     * @param {PreviewModel} model
-     *  The model that actually loads the page from the server.
-     *
-     * @param {Number} page
-     *  The one-based page index.
-     *
-     * @param {Object} [options]
-     *  A map with options to control the behavior of this method. The
-     *  following options are supported:
-     *  @param {Boolean} [options.fetchSiblings=false]
-     *      If set to true, additional sibling pages will be loaded and
-     *      stored in the internal page cache.
-     *
-     * @returns {jQuery.Promise}
-     *  The Promise of a Deferred object waiting for the image data. Will be
-     *  resolved with the original size of the page (as object with the
-     *  properties 'width' and 'height', in pixels).
-     */
-    ViewUtils.loadPageIntoNode = function (node, model, page, options) {
-
-        var // the Deferred object waiting for the image
-            def = null;
-
-        function resolveSize(childNode) {
-            var size = { width: childNode.width(), height: childNode.height() };
-            return ((size.width > 0) && (size.height > 0)) ? size : $.Deferred().reject();
-        }
-
-        node = $(node);
-        if (_.browser.Chrome) {
-            // as SVG mark-up (Chrome does not show embedded images in <img> elements linked to an SVG file)
-            def = model.loadPageAsSvg(page, options).then(function (svgMarkup) {
-                node[0].innerHTML = svgMarkup;
-                // resolve with original image size
-                return resolveSize(node.children().first());
-            });
-        } else {
-            // preferred: as an image element linking to the SVG file (Safari cannot parse SVG mark-up)
-            def = model.loadPageAsImage(page, options).then(function (imgNode) {
-                node.empty().append(imgNode.css({ maxWidth: '', width: '', height: '' }));
-                // resolve with original image size (naturalWidth/naturalHeight with SVG does not work in IE10)
-                return resolveSize(imgNode);
-            });
-        }
-
-        // clear node on error
-        return def.fail(function () { node.empty(); }).promise();
-    };
-
-    /**
      * Recalculates the size of the passed page node, according to the original
      * page size and zoom factor.
      *

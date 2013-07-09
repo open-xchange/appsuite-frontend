@@ -14,8 +14,9 @@
 define('io.ox/office/preview/pagegroup',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/control/group',
-     'io.ox/office/preview/viewutils'
-    ], function (Utils, Group, ViewUtils) {
+     'io.ox/office/preview/viewutils',
+     'io.ox/office/preview/pageloader'
+    ], function (Utils, Group, ViewUtils, PageLoader) {
 
     'use strict';
 
@@ -44,6 +45,9 @@ define('io.ox/office/preview/pagegroup',
             // all button elements, mapped by one-based page index
             buttonNodes = [],
 
+            // the queue for AJAX page requests
+            pageLoader = new PageLoader(app),
+
             // number of pages per row
             columns = 0,
 
@@ -66,147 +70,46 @@ define('io.ox/office/preview/pagegroup',
 
         /**
          * Updates the size of the specified page node, so that it will fit
-         * into the button node.
-         *
-         * @param {jQuery} buttonNode
-         *  The outer button node.
+         * into the parent button node.
          *
          * @param {jQuery} pageNode
-         *  The inner page node.
+         *  The page node.
          *
-         * @param {Object} pageSize
+         * @param {Object} [pageSize]
          *  The original page size, in pixels, in the properties 'width' and
-         *  'height'.
+         *  'height'. If missing, uses a default page size.
          */
-        function updatePageSize(buttonNode, pageNode, pageSize) {
+        function updatePageSize(pageNode, pageSize) {
 
             var // the child node in the page, containing the SVG
                 childNode = pageNode.children().first(),
+                // the parent button node
+                buttonNode = pageNode.closest(Utils.BUTTON_SELECTOR),
                 // the available width and height inside the button node
                 maxWidth = buttonNode.width(),
                 maxHeight = buttonNode.height() - 20,
                 // the zoom factor according to available size
-                widthFactor = Math.min(maxWidth / pageSize.width, 1),
-                heightFactor = Math.min(maxHeight / pageSize.height, 1),
-                zoomFactor = Math.min(widthFactor, heightFactor);
+                widthFactor = 0, heightFactor = 0, zoomFactor = 0;
 
-            // set the calculated zoom factor
+            // use parent node as cache for page size, fall back to default size
+            if (pageSize) {
+                pageNode.data('page-size', pageSize);
+            } else {
+                pageSize = pageNode.data('page-size') || { width: 1000, height: 1414 };
+            }
+
+            // calculate zoom factor for the page
+            widthFactor = Math.min(maxWidth / pageSize.width, 1);
+            heightFactor = Math.min(maxHeight / pageSize.height, 1);
+            zoomFactor = Math.min(widthFactor, heightFactor);
             ViewUtils.setZoomFactor(pageNode, pageSize, zoomFactor);
 
             // Firefox has serious performance issues when rendering/scrolling
-            // nodes with many SVG contents, convert SVG pages to inline bitmaps
-            if (_.browser.Firefox && childNode.is('img')) {
+            // nodes with many SVG contents, convert to inline bitmaps instead
+            if (_.browser.Firefox && childNode.is('img') && !/^data:/.test(childNode.attr('src'))) {
                 ViewUtils.convertImageToBitmap(childNode, pageSize);
             }
         }
-
-        /**
-         * Creates a new button element representing the page with the passed
-         * index, and loads the page contents in a background task.
-         *
-         * @param {Number} page
-         *  The one-based index of the page.
-         *
-         * @returns {jQuery}
-         *  The button element created by this method.
-         */
-        var updateButtonNode = (function () {
-
-            var // list of pending buttons waiting to load their page contents
-                pendingInfos = [],
-                // the background loop processing the pending pages
-                timer = null,
-                // the number of pages currently loaded (number of running AJAX requests)
-                runningRequests = 0;
-
-            // direct callback: called every time when updateButtonNode() has been called
-            function registerButtonNode(buttonNode, page, visible) {
-
-                var // the object containing all information about the button node
-                    pendingInfo = null;
-
-                // clear the button if it is not visible anymore
-                if (!visible) {
-                    pendingInfos = _(pendingInfos).filter(function (pendingInfo) { return page !== pendingInfo.page; });
-                    buttonNode.find('.page').remove();
-                    return;
-                }
-
-                // do nothing if the button node is already initialized
-                if (buttonNode.find('.page').length > 0) {
-                    return;
-                }
-
-                // create the target page node, and a temporary busy node
-                pendingInfo = {
-                    page: page,
-                    buttonNode: buttonNode,
-                    busyNode: $('<div>').addClass('page'),
-                    pageNode: $('<div>').addClass('page')
-                };
-
-                // insert the page node into the DOM before loading the image
-                app.getView().insertTemporaryNode(pendingInfo.pageNode);
-
-                // set default page size (DIN A* Portrait) before loading the page (in case of error)
-                buttonNode.append(pendingInfo.busyNode);
-                updatePageSize(buttonNode, pendingInfo.busyNode, { width: 210, height: 297 });
-                pendingInfo.busyNode.append($('<div>').addClass('abs').busy());
-
-                // register the nodes for the deferred callback loading the page contents
-                pendingInfos.push(pendingInfo);
-            }
-
-            // deferred callback: starts a background loop that loads all pending pages into the button nodes
-            function loadPages() {
-
-                // check if the background loop is already running
-                if (timer) { return; }
-
-                // create a new background loop that processes all pages contained in pendingInfos
-                timer = app.repeatDelayed(function () {
-
-                    var // pending nodes and page number
-                        pendingInfo = null;
-
-                    // do not request more than 10 pages at a time
-                    if (runningRequests >= 5) { return; }
-
-                    // find a pending button that still contains its busy node (buttons may have been hidden
-                    // in the meantime), abort the background loop, if no more pages have to be loaded
-                    while ((pendingInfo = pendingInfos.shift()) && !Utils.containsNode(pendingInfo.buttonNode, pendingInfo.busyNode)) {}
-                    if (!pendingInfo) { return Utils.BREAK; }
-
-                    // load the page into the button node
-                    runningRequests += 1;
-                    ViewUtils.loadPageIntoNode(pendingInfo.pageNode, app.getModel(), pendingInfo.page)
-                    .always(function () {
-                        runningRequests -= 1;
-                    })
-                    .done(function (pageSize) {
-                        pendingInfo.busyNode.remove();
-                        pendingInfo.buttonNode.append(pendingInfo.pageNode);
-                        updatePageSize(pendingInfo.buttonNode, pendingInfo.pageNode, pageSize);
-                    })
-                    .fail(function () {
-                        pendingInfo.busyNode.empty().addClass('icon-remove').css({
-                            color: '#f88',
-                            fontSize: '60px',
-                            lineHeight: pendingInfo.busyNode.height() + 'px',
-                            textDecoration: 'none' // otherwise, IE underlines when hovering
-                        });
-                    });
-
-                }, { delay: 25 });
-
-                // forget reference to the timer, when all page requests are running
-                timer.done(function () { timer = null; });
-            }
-
-            // create and return the debounced updateButtonNode() method
-            return app.createDebouncedMethod(registerButtonNode, loadPages);
-
-        }()); // end of local scope of createPageButton()
 
         /**
          * Updates all preview pages currently shown, according to the visible
@@ -231,9 +134,31 @@ define('io.ox/office/preview/pagegroup',
             firstPage = Math.max(1, firstRow * columns + 1);
             lastPage = Math.min(app.getModel().getPageCount(), (lastRow + 1) * columns);
 
-            // create page data for all visible button nodes, remove page data from other button nodes
+            // abort old requests not yet running
+            pageLoader.abortQueuedRequests();
+
+            // load pages for all visible button nodes, clear pages of hidden button nodes
             _(buttonNodes).each(function (buttonNode, page) {
-                updateButtonNode(buttonNode, page, (firstPage <= page) && (page <= lastPage));
+
+                var // whether the button is in the visible range
+                    visible = (firstPage <= page) && (page <= lastPage),
+                    // the page node already contained in the button node
+                    pageNode = buttonNode.children('.page');
+
+                // clear the page node if it is not visible anymore
+                if (!visible) {
+                    pageNode.empty();
+                    return;
+                }
+
+                // do nothing if the page node is already initialized
+                if (pageNode.children().length > 0) { return; }
+
+                // load page and update node size with real page size
+                pageLoader.loadPage(pageNode, page, 'low')
+                .done(function (pageSize) {
+                    updatePageSize(pageNode, pageSize);
+                });
             });
         }
 
@@ -250,15 +175,20 @@ define('io.ox/office/preview/pagegroup',
                 // initialize button nodes on first call
                 initializeButtons = buttonNodes.length === 0;
 
+            // creates and inserts a new button node for the specified page
+            function createButtonNode(page) {
+                var buttonNode = Utils.createButton({ value: page, label: String(page) }),
+                    pageNode = $('<div>').addClass('page');
+                buttonNodes[page] = buttonNode.append(pageNode);
+                self.addFocusableControl(buttonNode);
+            }
+
             // do nothing, if the side pane is not visible, or no pages are available
             if ((pageCount === 0) || !self.isReallyVisible()) { return; }
 
             // create empty button nodes for all pages on first call
             if (initializeButtons) {
-                for (var page = 1; page <= pageCount; page += 1) {
-                    buttonNodes[page] = Utils.createButton({ value: page, label: String(page) });
-                    self.addFocusableControl(buttonNodes[page]);
-                }
+                Utils.iterateRange(1, pageCount + 1, createButtonNode);
             }
 
             // calculate number of pages available per row, and effective button width
@@ -277,6 +207,7 @@ define('io.ox/office/preview/pagegroup',
                     row = Math.floor((page - 1) / columns);
 
                 buttonNode.css({ left: col * buttonWidth, top: row * BUTTON_HEIGHT, width: buttonWidth, height: BUTTON_HEIGHT });
+                updatePageSize(buttonNode.children('.page'));
             });
 
             // select active button on first call (after positioning the buttons)
@@ -297,16 +228,20 @@ define('io.ox/office/preview/pagegroup',
             }
         }
 
+        /**
+         * Handles keyboard events and moves the browser focus to a new button
+         * node.
+         */
         function keyDownHandler(event) {
 
+            // moves the browser focus by the specified amount of pages
             function setButtonFocus(diff) {
-                if (!event.shiftKey && !event.altKey && !event.ctrlKey && !event.metaKey) {
-                    _(buttonNodes).any(function (button, page) {
-                        if (Utils.isControlFocused(button)) {
-                            buttonNodes[Utils.minMax(page + diff, 1, app.getModel().getPageCount())].focus();
-                            return true;
-                        }
-                    });
+
+                var // the page number of the focus button
+                    page = Utils.getControlValue($(document.activeElement));
+
+                if (!event.shiftKey && !event.altKey && !event.ctrlKey && !event.metaKey && _.isNumber(page)) {
+                    buttonNodes[Utils.minMax(page + diff, 1, app.getModel().getPageCount())].focus();
                     return false;
                 }
             }

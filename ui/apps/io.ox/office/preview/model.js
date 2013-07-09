@@ -107,10 +107,7 @@ define('io.ox/office/preview/model',
             imageCache = new Cache(100, createImageNode),
 
             // the page cache containing Deferred objects with SVG mark-up as strings
-            svgCache = new Cache(100, loadSvgMarkup),
-
-            // current timer fetching more pages in the background
-            fetchPagesTimer = null;
+            svgCache = new Cache(100, loadSvgMarkup);
 
         // base constructor ---------------------------------------------------
 
@@ -165,49 +162,6 @@ define('io.ox/office/preview/model',
             .promise();
         }
 
-        /**
-         * Fetches more pages from the server and stores them in the specified
-         * page cache. Fetches the next five pages and the previous five pages
-         * of the specified page, as well as the very last page.
-         *
-         * @param {Cache} cache
-         *  The cache instance to be filled with more pages.
-         *
-         * @param {Number} page
-         *  The one-based index of the page whose siblings will be fetched and
-         *  cached.
-         */
-        function fetchSiblingPages(cache, page) {
-
-            var // all page numbers to be fetched
-                fetchPages = [];
-
-            // stop running timer
-            if (fetchPagesTimer) { fetchPagesTimer.abort(); }
-
-            // build the array of page numbers to be fetched (start with direct
-            // next and previous sibling of the page, then fetch more distant
-            // pages.
-            _(5).times(function (index) {
-                var nextPage = page + index + 1,
-                    prevPage = page - index - 1;
-                if (nextPage <= pageCount) { fetchPages.push(nextPage); }
-                if (prevPage >= 1) { fetchPages.push(prevPage); }
-            });
-
-            // finally fetch the first and last page to always keep them in the cache
-            if (page > 1) { fetchPages.push(1); }
-            if (page < pageCount) { fetchPages.push(pageCount); }
-
-            // start the background task
-            fetchPagesTimer = app.processArrayDelayed(function (pages) {
-                // The method processArrayDelayed() passes a one-element array.
-                // Returning a Deferred object causes processArrayDelayed() to
-                // wait until it is resolved, or to abort if it is rejected.
-                return cache.getElement(pages[0]);
-            }, _.unique(fetchPages), { chunkLength: 1 });
-        }
-
         // methods ------------------------------------------------------------
 
         /**
@@ -218,10 +172,9 @@ define('io.ox/office/preview/model',
          *  The number of pages in the document currently previewed.
          */
         this.setPageCount = function (count) {
-            pageCount = count;
+            pageCount = Math.min(10000, count);
             imageCache.clear();
             svgCache.clear();
-            if (fetchPagesTimer) { fetchPagesTimer.abort(); }
         };
 
         /**
@@ -241,24 +194,13 @@ define('io.ox/office/preview/model',
          * @param {Number} page
          *  The one-based index of the requested page.
          *
-         * @param {Object} [options]
-         *  A map with options to control the behavior of this method. The
-         *  following options are supported:
-         *  @param {Boolean} [options.fetchSiblings=false]
-         *      If set to true, additional sibling pages will be loaded and
-         *      stored in the internal page cache.
-         *
          * @returns {jQuery.Promise}
          *  The Promise of a Deferred object that will be resolved with the
          *  completed <img> element containing the SVG mark-up of the specified
          *  page (as jQuery object), or rejected on error.
          */
-        this.loadPageAsImage = function (page, options) {
+        this.loadPageAsImage = function (page) {
             return imageCache.getElement(page).then(function (imgNode) {
-                // start fetching sibling pages into the cache
-                if (Utils.getBooleanOption(options, 'fetchSiblings', false)) {
-                    fetchSiblingPages(imageCache, page);
-                }
                 // clone the cached image on every access
                 return app.createImageNode(imgNode.attr('src'), 15000);
             });
@@ -271,24 +213,12 @@ define('io.ox/office/preview/model',
          * @param {Number} page
          *  The one-based index of the requested page.
          *
-         * @param {Object} [options]
-         *  A map with options to control the behavior of this method. The
-         *  following options are supported:
-         *  @param {Boolean} [options.fetchSiblings=false]
-         *      If set to true, additional sibling pages will be loaded and
-         *      stored in the internal page cache.
-         *
          * @returns {jQuery.Promise}
          *  The Promise of a Deferred object that will be resolved with the
          *  SVG mark-up of the specified page as string, or rejected on error.
          */
-        this.loadPageAsSvg = function (page, options) {
-            return svgCache.getElement(page).done(function () {
-                // start fetching sibling pages into the cache
-                if (Utils.getBooleanOption(options, 'fetchSiblings', false)) {
-                    fetchSiblingPages(svgCache, page);
-                }
-            });
+        this.loadPageAsSvg = function (page) {
+            return svgCache.getElement(page);
         };
 
     } // class PreviewModel
