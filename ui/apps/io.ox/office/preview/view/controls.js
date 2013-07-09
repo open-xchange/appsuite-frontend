@@ -32,14 +32,14 @@ define('io.ox/office/preview/view/controls',
      *
      * @constant
      */
-    PreviewControls.PREV_OPTIONS = { icon: 'icon-minus', tooltip: gt('Show previous page') };
+    PreviewControls.PREV_OPTIONS = { icon: 'icon-arrow-up', tooltip: gt('Show previous page') };
 
     /**
      * Standard options for the 'Next page' button.
      *
      * @constant
      */
-    PreviewControls.NEXT_OPTIONS = { icon: 'icon-plus', tooltip: gt('Show next page') };
+    PreviewControls.NEXT_OPTIONS = { icon: 'icon-arrow-down', tooltip: gt('Show next page') };
 
     /**
      * Standard options for the 'Zoom out' button.

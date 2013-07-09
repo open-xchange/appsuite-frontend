@@ -160,14 +160,16 @@ define('io.ox/office/preview/view/view',
 
             // create the bottom overlay pane
             self.addPane(new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true })
-                .addViewComponent(new ToolBox(app, { focusable: false })
-                    .addPrivateGroup(statusLabel)
-                )
                 .addViewComponent(bottomToolBox = new ToolBox(app, { hoverEffect: true })
+                    .addRightTab()
+                    .addPrivateGroup(statusLabel)
+                    .newLine()
+                    .addRightTab()
                     .addGroup('pages/previous', new Button(PreviewControls.PREV_OPTIONS))
                     .addGroup('pages/current',  new PreviewControls.PageChooser(app))
                     .addGroup('pages/next',     new Button(PreviewControls.NEXT_OPTIONS))
-                    .addGap()
+                    .newLine()
+                    .addRightTab()
                     .addGroup('zoom/dec',  new Button(PreviewControls.ZOOMOUT_OPTIONS))
                     .addGroup('zoom/type', new PreviewControls.ZoomTypeChooser())
                     .addGroup('zoom/inc',  new Button(PreviewControls.ZOOMIN_OPTIONS))
@@ -181,6 +183,18 @@ define('io.ox/office/preview/view/view',
             app.on('docs:import:after', function () {
                 self.on('refresh:layout', updateZoom);
                 self.grabFocus();
+                app.getController().update();
+            });
+
+            // initialize valid document
+            app.on('docs:import:success', function () {
+                // attach the scroll event handler
+                self.getAppPaneNode().on('scroll', app.createDebouncedMethod($.noop, updateVisiblePages, { delay: 100, maxDelay: 500 }));
+                // initialize zoom and scroll position
+                updateZoom();
+                // update visible pages once manually (no scroll event is triggered,
+                // if the first page is shown which does not cause any scrolling).
+                updateVisiblePages();
             });
         }
 
@@ -217,7 +231,7 @@ define('io.ox/office/preview/view/view',
                 caption:
                     //#. %1$d is the current zoom factor, in percent
                     //#, c-format
-                    gt('Zoom: %1$d%', zoomFactor),
+                    gt('Zoom: %1$d%', Math.round(zoomFactor)),
                 type: 'info'
             });
         }, updatePageStatus, { delay: 1000 });
@@ -234,6 +248,7 @@ define('io.ox/office/preview/view/view',
                 selectedPage = page;
                 pageGroup.selectAndShowPage(page);
                 updatePageStatus();
+                app.getController().update();
             }
         }
 
@@ -345,9 +360,9 @@ define('io.ox/office/preview/view/view',
             if (_.isNumber(zoomType)) {
                 pageZoomFactor = zoomType;
             } else if (zoomType === 'width') {
-                pageZoomFactor = Math.floor(availableSize.width / pageSize.width * 100);
+                pageZoomFactor = availableSize.width / pageSize.width * 100;
             } else if (zoomType === 'page') {
-                pageZoomFactor = Math.min(Math.floor(availableSize.width / pageSize.width * 100), Math.floor(availableSize.height / pageSize.height * 100));
+                pageZoomFactor = Math.min(availableSize.width / pageSize.width * 100, availableSize.height / pageSize.height * 100);
             }
             pageZoomFactor = Utils.minMax(pageZoomFactor, self.getMinZoomFactor(), self.getMaxZoomFactor());
 
@@ -370,6 +385,7 @@ define('io.ox/office/preview/view/view',
             // the available inner size in the application pane
             availableSize.width = appPaneNode[0].clientWidth - contentMargin.left - contentMargin.right;
             availableSize.height = appPaneNode[0].clientHeight - contentMargin.top - contentMargin.bottom;
+            Utils.log('availableSize=' + JSON.stringify(availableSize));
 
             // process all page nodes
             pageNodes.each(function (index) {
@@ -380,22 +396,24 @@ define('io.ox/office/preview/view/view',
                 // set as 'current zoom factor' for the selected page
                 if (index + 1 === selectedPage) {
                     zoomFactor = pageZoomFactor;
+                    Utils.log('zoom factor is ' + zoomFactor);
                 }
             });
 
-            updateVisiblePages();
+            // adjust scroll position after page sizes have been changed
+            scrollToPage(selectedPage);
         }
 
         // methods ------------------------------------------------------------
 
         /**
-         * Initializes the view after the document has been opened.
+         * Initializes the view settings after the document has been opened.
          *
          * @param {Object} point
          *  A save point that may have been created before by the method
          *  PreviewView.getSavePoint().
          */
-        this.initializeAfterImport = function (point) {
+        this.initializeFromSavePoint = function (point) {
 
             var // the number of pages in the document
                 pageCount = model.getPageCount(),
@@ -417,18 +435,8 @@ define('io.ox/office/preview/view/view',
                 zoomType = 100;
             }
 
-            // Scroll to the last visited page before attaching the scroll event handler.
-            // Update visible pages once manually (no scroll event is triggered, if the
-            // first page is shown which does not cause any scrolling).
+            // restore selected page
             selectPage(Utils.getIntegerOption(point, 'page', 1, 1, pageCount));
-            scrollToPage(selectedPage);
-
-            // update zoom factor, which will load the visible pages automatically
-            updateZoom();
-
-            // attach the scroll event handler, and update the view
-            this.getAppPaneNode().on('scroll', app.createDebouncedMethod($.noop, updateVisiblePages, { delay: 100, maxDelay: 500 }));
-            app.getController().update();
         };
 
         /**
