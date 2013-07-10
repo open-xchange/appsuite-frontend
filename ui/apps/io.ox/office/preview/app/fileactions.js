@@ -10,7 +10,7 @@
  * @author Carsten Driesner <carsten.driesner@open-xchange.com>
  */
 
-define('io.ox/office/preview/fileActions',
+define('io.ox/office/preview/app/fileactions',
     ['io.ox/core/extPatterns/links',
      'io.ox/office/framework/app/extensionregistry'
     ], function (links, ExtensionRegistry) {
