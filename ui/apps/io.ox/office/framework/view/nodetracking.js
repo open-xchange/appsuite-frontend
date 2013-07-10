@@ -35,15 +35,15 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
             touchmove: touchMoveHandler,
             touchend: touchEndHandler,
             touchcancel: cancelTracking,
-            keydown: keyDownHandler
+            keydown: keyDownHandler,
+            focusin: focusInHandler,
+            focusout: focusOutHandler
         },
 
         // the map of all events to be bound to the document after tracking has started
         DEFERRED_EVENT_MAP = {
             mousedown: cancelTracking,
-            touchstart: cancelTracking,
-            focusin: focusInHandler,
-            focusout: focusOutHandler
+            touchstart: cancelTracking
         },
 
         // the node that is currently tracked
