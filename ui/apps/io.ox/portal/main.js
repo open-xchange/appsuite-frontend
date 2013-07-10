@@ -253,7 +253,7 @@ define('io.ox/portal/main',
     }
 
     app.drawDefaultSetup = function (baton) {
-        this.getWidgetNode(baton.model)
+        baton.model.node
             .addClass('requires-setup')
             .append(
                 $('<div class="content">').text(gt('Click here to add your account'))
@@ -312,8 +312,10 @@ define('io.ox/portal/main',
     }
 
     app.drawWidget = function (model, index) {
-        var node = model.node;
-        if (!model.drawn && (node.offset().top < scrollPos)) {
+        var node = model.node,
+            load = _.device('small') ? (node.offset().top < scrollPos) : true;
+
+        if (!model.drawn && load) {
 
             model.drawn = true;
             index = index || 0;
@@ -335,7 +337,7 @@ define('io.ox/portal/main',
             // setup?
             if (requiresSetUp) {
                 node.find('.decoration').removeClass('pending');
-                app.drawDefaultSetup(baton, node);
+                app.drawDefaultSetup(baton);
             } else {
                 // add link?
                 if (point.prop('action') !== undefined) {
@@ -364,7 +366,7 @@ define('io.ox/portal/main',
             index = index || 0;
 
             var type = model.get('type'),
-                node = app.getWidgetNode(model),
+                node = model.node,
                 delay = (index / 2 >> 0) * 1000,
                 baton = model.get('baton'),
                 point = ext.point(baton.point);
