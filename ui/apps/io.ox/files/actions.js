@@ -385,53 +385,16 @@ define('io.ox/files/actions',
                  * @return {promise}
                  */
                 function process() {
-                    var def = $.Deferred(),
-                        name = $input.val(),
-                        extOld = _.last((baton.data.filename || baton.data.title).split('.')),
-                        extNew = _.last(name.split('.')),
-                        $hint = $('<div class="row-fluid muted inset">').append(
-                                    '<small style="padding-top: 8px">' +
-                                        gt('Please note, changing/removing will cause problems by viewing and editing.') +
-                                        '</small>'
-                                ),
-                        message;
-
-                    //set message
-                    if (name.split('.').length === 1) {
-                        //file extensionext missing
-                        message = gt('Do you really want to remove the extension ".%1$s" from your filename?', extOld);
-                    } else if (extOld !== extNew) {
-                        //ext changed
-                        message = gt('Do you really want to change the file extension from  ".%1$s" to ".%2$s"?', extOld, extNew);
-                    }
-
-                    //missing extension
-                    if (message) {
-                        new dialogs.ModalDialog()
-                            .header($('<h4>').text(gt('Confirmation')))
-                            .append(message)
-                            .append($hint)
-                            .addPrimaryButton('rename', gt('Yes'))
-                            .addButton('change', gt('Adjust'))
-                            .show()
-                            .done(function (action) {
-                                if (action === 'rename')
-                                    def.resolve();
-                                else
-                                    def.reject();
+                    require(['io.ox/files/util'], function (util) {
+                        util.confirmDialog($input.val(), baton.data.filename || baton.data.title)
+                            .then(function () {
+                                return fnRename();
+                            }, function () {
+                                //store user input and call action again
+                                baton.data.filename_tmp = $input.val();
+                                actionPerformer.invoke('io.ox/files/actions/rename', null, baton);
                             });
-                    } else {
-                        def.resolve();
-                    }
-                    //rename or abort
-                    def.then(function () {
-                        return fnRename();
-                    }, function () {
-                        //store user input and call action again
-                        baton.data.filename_tmp = name;
-                        actionPerformer.invoke('io.ox/files/actions/rename', null, baton);
                     });
-                    return def.promise();
                 }
 
                 $input.val(baton.data.filename_tmp || baton.data.filename || baton.data.title);

@@ -27,8 +27,8 @@ define('io.ox/files/util',
         confirmDialog: function (formvalue, servervalue) {
                     var def = $.Deferred(),
                         name = formvalue,
-                        extOld = _.last(servervalue.split('.')),
-                        extNew = _.last(name.split('.')),
+                        extServer = servervalue.indexOf('.') >= 0 ? _.last(servervalue.split('.')) :  '',
+                        extForm = _.last(name.split('.')),
                         $hint = $('<div class="row-fluid muted inset">').append(
                                     '<small style="padding-top: 8px">' +
                                         gt('Please note, changing/removing will cause problems by viewing and editing.') +
@@ -39,10 +39,10 @@ define('io.ox/files/util',
                     //set message
                     if (name.split('.').length === 1) {
                         //file extensionext missing
-                        message = gt('Do you really want to remove the extension ".%1$s" from your filename?', extOld);
-                    } else if (extOld !== extNew) {
+                        message = gt('Do you really want to remove the extension ".%1$s" from your filename?', extServer);
+                    } else if (extServer !== extForm && extServer !== '') {
                         //ext changed
-                        message = gt('Do you really want to change the file extension from  ".%1$s" to ".%2$s"?', extOld, extNew);
+                        message = gt('Do you really want to change the file extension from  ".%1$s" to ".%2$s" ?', extServer, extForm);
                     }
                     //missing extension
                     if (message) {
