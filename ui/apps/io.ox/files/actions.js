@@ -385,14 +385,34 @@ define('io.ox/files/actions',
                  * @return {promise}
                  */
                 function process() {
-                    var name = $input.val(),
-                        extmissing = !/\.\w{1,4}$/.test(name),
-                        def = $.Deferred();
+                    var def = $.Deferred(),
+                        name = $input.val(),
+                        extOld = _.last((baton.data.filename || baton.data.title).split('.')),
+                        extNew = _.last(name.split('.')),
+                        $hint = $('<div class="row-fluid muted inset">').append(
+                                    '<small style="padding-top: 8px">' +
+                                        gt('Please note, changing/removing will cause problems by viewing and editing.') +
+                                        '</small>'
+                                ),
+                        message;
+
+                    //set message
+                    if (name.split('.').length === 1) {
+                        //file extensionext missing
+                        message = gt('Do you really want to remove the extension ".%1$s" from your filename?', extOld);
+                    } else if (extOld !== extNew) {
+                        //ext changed
+                        message = gt('Do you really want to change the file extension from  ".%1$s" to ".%2$s"?', extOld, extNew);
+                    }
+
                     //missing extension
-                    if (extmissing) {
+                    if (message) {
                         new dialogs.ModalDialog()
+                            .header($('<h4>').text(gt('Confirmation')))
+                            .append(message)
+                            .append($hint)
                             .addPrimaryButton('rename', gt('Yes'))
-                            .addButton('change', gt('Change Name'))
+                            .addButton('change', gt('Adjust'))
                             .show()
                             .done(function (action) {
                                 if (action === 'rename')
