@@ -159,8 +159,19 @@ define('plugins/notifications/calendar/register',
                     // open SidePopup without array
                     new dialogs.SidePopup({ arrow: false, side: 'right' })
                         .setTarget(overlay.empty())
+                        .on('close', function () {
+                            var isSmall = $(window).width() <= 480;
+                            if (isSmall && overlay.children().length > 0) {
+                                overlay.addClass('active');
+                            } else if (isSmall) {
+                                overlay.removeClass('active');
+                            }
+                        })
                         .show(e, function (popup) {
                             popup.append(view.draw(data));
+                            if ($(window).width() <= 480) {
+                                $('#io-ox-notifications').removeClass('active');
+                            }
                         });
                 });
             }

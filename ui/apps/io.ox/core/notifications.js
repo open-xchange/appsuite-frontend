@@ -208,9 +208,6 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             }
         },
         showList: function () {
-            // just for the moment as reminder view blocks whole screen
-            // will reenable the view later with new design
-            if (_.device('small')) return;
 
             $('#io-ox-notifications').addClass('active');
             $('#io-ox-notifications-overlay').addClass('active');
@@ -226,7 +223,9 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                 badgeView.setNotifier(false);
             });
             $('#io-ox-notifications').removeClass('active');
-            $('#io-ox-notifications-overlay').empty().removeClass('active');
+            if ($(window).width() >= 480) {
+                $('#io-ox-notifications-overlay').empty().removeClass('active');
+            }
         },
 
         // type = info | warning | error | success

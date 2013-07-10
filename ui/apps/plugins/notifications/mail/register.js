@@ -39,7 +39,7 @@ define('plugins/notifications/mail/register',
             $('<div class="item">').attr('data-cid', _.cid(data)).append(
                 $('<div class="title">').text(_.noI18n(util.getDisplayName(f[0]))),
                 $('<div class="subject">').text(_.noI18n(data.subject)),
-                $('<div class="content">').html(_.noI18n(api.beautifyMailText(data.attachments[0].content)))
+                (($(window).width() <= 480) ? $() : $('<div class="content">').html(_.noI18n(api.beautifyMailText(data.attachments[0].content))))
             )
         );
     }
@@ -118,12 +118,21 @@ define('plugins/notifications/mail/register',
                         // open SidePopup without array
                         var detailPopup = new dialogs.SidePopup({ arrow: false, side: 'right' })
                             .setTarget(overlay.empty())
-                            .on("close", function () {
-                                overlay.trigger("mail-detail-closed");
+                            .on('close', function () {
+                                overlay.trigger('mail-detail-closed');
                                 api.off('delete', cleanUp);
+                                var isSmall = $(window).width() <= 480;
+                                if (isSmall && overlay.children().length > 0) {
+                                    overlay.addClass('active');
+                                } else if (isSmall) {
+                                    overlay.removeClass('active');
+                                }
                             })
                             .show(e, function (popup) {
                                 popup.append(view.draw(data));
+                                if ($(window).width() <= 480) {
+                                    $('#io-ox-notifications').removeClass('active');
+                                }
                                 api.on('delete', {popup: detailPopup}, cleanUp);//if mail gets deleted we must close the sidepopup or it will show a blank page
                             });
                     });

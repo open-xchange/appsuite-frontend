@@ -117,8 +117,19 @@ define('plugins/notifications/tasks/register',
                         // open SidePopup without arrow
                         new dialogs.SidePopup({ arrow: false, side: 'right' })
                             .setTarget(overlay)
+                            .on('close', function () {
+                                var isSmall = $(window).width() <= 480;
+                                if (isSmall && overlay.children().length > 0) {
+                                    overlay.addClass('active');
+                                } else if (isSmall) {
+                                    overlay.removeClass('active');
+                                }
+                            })
                             .show(e, function (popup) {
                                 popup.append(viewDetail.draw(taskData));
+                                if ($(window).width() <= 480) {
+                                    $('#io-ox-notifications').removeClass('active');
+                                }
                             });
                     });
                 });

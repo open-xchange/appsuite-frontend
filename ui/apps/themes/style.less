@@ -200,8 +200,7 @@
     .launcher {
 
         max-width: 10em;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        .ellipsis;
         cursor: pointer;
 
         &.hover {
@@ -302,8 +301,7 @@
             }
             a {
                 max-width: 10em;
-                overflow:hidden;
-                text-overflow:ellipsis;
+                .ellipsis;
             }
         }
 
@@ -375,125 +373,135 @@
     z-index: 10;
 }
 
+
+#io-ox-windowmanager {
+    overflow: hidden;
+}
+
+/* notifications */
+
 #io-ox-notifications {
     background-color: #222;
     top: 40px;
-    width: 350px;
     position: absolute;
-    right: -350px;
     bottom: 0px;
     border-top: 1px solid #000;
     overflow: hidden;
     z-index: 30;
     display: none;
-    .transition(all 0.1s);
-    .box-shadow(0 10px 20px 1px black);
+    /* .transition(all 0.1s); */
+
+    @media (max-width: 480px), (max-device-width: 480px) {
+        display:block;
+        width: 100%;
+        right: -100%;
+        -webkit-transition-property: -webkit-transform;
+        -webkit-transition-duration: 0.18s;
+        -webkit-animation-timing-function: ease-out;
+
+        &.active {
+            width:100%;
+            right:-100%;
+            -webkit-transform: translateX(-100%);
+        }
+    }
+
+    @media (min-width: 481px) {
+        width: 350px;
+        right: -350px;
+        .box-shadow(0 10px 20px 1px black);
+         &.active { right: 0; }
+    }
+
+    &.active {
+        display: block;
+    }
+
+    #io-ox-notifications-display {
+
+        padding: 0 13px 0 13px;
+
+        .section-title {
+            color: #EEE;
+            border: none;
+            font-family: @lightFontFamily;
+            font-size: 24px;
+            margin: 0 0 4px 13px;
+            line-height: 46px;
+        }
+
+        .notifications { margin-bottom: 13px; }
+
+        .item {
+
+            color: #fff;
+            background-color: #333;
+            padding: 13px;
+            margin-bottom: 1px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #444;
+            }
+
+            .title {
+                pointer-events: none;
+                font-weight: bold;
+                .ellipsis;
+            }
+
+            .subject {
+                .ellipsis;
+                pointer-events: none;
+            }
+
+            .content {
+                color: #aaa;
+                line-height: 16px;
+                max-height: 5 * 16px; /* 5 rows */
+                margin-top: 3px;
+                .ellipsis;
+            }
+
+            .time {
+                float: right;
+                display: inline-block;
+            }
+
+            .location { color: #aaa; }
+
+            .actions {
+                text-align: right;
+                margin: 5px 0 5px 0;
+            }
+
+        }
+
+        .item .blue, a { color: #17B2FF; }
+
+        .open-app {
+            text-align: left;
+            padding: 0 13px 0;
+        }
+    }
 }
 
 #io-ox-notifications-overlay {
+    display: none;
     background-color: transparent;
     background-color: rgba(255, 255, 255, 0.01);
     top: 40px;
     right: 350px;
-    display: none;
     z-index: 20;
-}
 
-#io-ox-notifications-overlay.active {
-    display: block;
-}
-
-.notifications {
-    margin-bottom: 13px;
-}
-
-#io-ox-notifications.active {
-    right: 0px;
-    display: block;
-}
-
-#io-ox-windowmanager {
-    overflow: hidden;
-
-}
-
-#io-ox-notifications-display {
-
-    padding: 0 13px 0 13px;
-
-    .section-title {
-        color: #EEE;
-        border: none;
-        font-family: @lightFontFamily;
-        font-size: 24px;
-        margin: 0 0 4px 13px;
-        line-height: 46px;
+    &.active {
+        display: block;
     }
+}
 
-    .item {
-
-        color: #fff;
-        background-color: #333;
-        padding: 13px;
-        margin-bottom: 1px;
-        cursor: pointer;
-
-        &:hover {
-            background-color: #444;
-        }
-
-        .title {
-            pointer-events: none;
-            font-weight: bold;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-
-        .subject {
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-            pointer-events: none;
-        }
-
-        .content {
-            color: #aaa;
-            line-height: 16px;
-            max-height: 5 * 16px; /* 5 rows */
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin-top: 3px;
-        }
-
-        .time {
-            float: right;
-            display: inline-block;
-        }
-
-        .date {
-        }
-
-        .location {
-            color: #AAA;
-        }
-
-        .actions {
-            text-align: right;
-            margin: 5px 0 5px 0;
-        }
-
-    }
-
-    .item .blue, a {
-        color: #17B2FF;
-    }
-
-    .open-app {
-        text-align: left;
-        padding: 0 13px 0;
-    }
-
+@media (max-width: 480px), (max-device-width: 480px) {
+    #io-ox-core { overflow-x: hidden;}
+    #io-ox-notifications-overlay { right: 0; }
 }
 
 .io-ox-alert {
@@ -824,9 +832,7 @@
     font-size: 22px;
     line-height: 30px;
     text-shadow: 0px 0px 2px #000;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    .ellipsis;
     .box-sizing(border-box);
     /* override h1 */
     display: block;
@@ -1124,9 +1130,7 @@ a.button {
     background-color: @background; /* resolves hw accel anti-aliasing */
 
     * {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        .ellipsis;
     }
 
     &.selectable, &.hover {
@@ -2452,9 +2456,6 @@ input.flat-input {
     }
 
     .input-medium.search-query { width: 80px; }
-
-    #io-ox-notifications { width: 320px; right: -320px; }
-    #io-ox-notifications-overlay { right: 320px; }
 }
 
 // landscape fullscreen on iPhone
