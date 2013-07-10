@@ -2775,13 +2775,21 @@ input.flat-input {
     from { opacity: 1; }
     to { opacity: 0; }
 }
+
 .fadein {
     -webkit-perspective: 1000;
     -webkit-backface-visibility: hidden;
     -webkit-animation: fadein 300ms;
+    &.fast {
+        -webkit-animation: fadein 150ms;
+    }
 }
 .fadeout {
     -webkit-perspective: 1000;
     -webkit-backface-visibility: hidden;
     -webkit-animation: fadeout 300ms;
+    &.fast {
+        -webkit-animation: fadeout 150ms;
+    }
 }
+

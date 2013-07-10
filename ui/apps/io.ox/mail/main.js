@@ -131,15 +131,17 @@ define('io.ox/mail/main',
                     removeButton();
                 }
                 this.append(
-                    $('<div class="btn btn-danger mail swipeDelete fadein">')
+                    $('<div class="mail cell-button swipeDelete fadein fast">')
                         .text(gt('Delete'))
                         .on('mousedown', function (e) {
                             // we have to use mousedown as the selection listens to this, too
                             // otherwise we are to late to get the event
+                            e.stopImmediatePropagation();
+                        }).on('tap', function (e) {
                             e.preventDefault();
-                            actions.invoke('io.ox/mail/actions/delete', null, baton);
                             removeButton();
                             showSwipeButton = false;
+                            actions.invoke('io.ox/mail/actions/delete', null, baton);
                         })
                 );
                 showSwipeButton = true;
