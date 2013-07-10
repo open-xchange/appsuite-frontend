@@ -444,7 +444,7 @@ define('io.ox/portal/main',
                         containment: win.nodes.main,
                         scroll: true,
                         delay: 150,
-                        stop: function (e, ui) {
+                        update: function (e, ui) {
                             widgets.save(appBaton.$.widgets);
                         }
                     });
