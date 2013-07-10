@@ -56,6 +56,9 @@ define('io.ox/office/preview/view/view',
             // the preview model
             model = null,
 
+            // the DOM node of the scrollable application pane
+            appPaneNode = null,
+
             // the main side pane containing the thumbnails
             sidePane = null,
 
@@ -110,9 +113,10 @@ define('io.ox/office/preview/view/view',
         function initHandler() {
 
             model = app.getModel();
+            appPaneNode = self.getAppPaneNode();
 
             // make the application pane focusable for global navigation with F6 key
-            self.getAppPaneNode().addClass('f6-target').attr('tabindex', 1);
+            appPaneNode.addClass('f6-target').attr('tabindex', 1);
 
             // create the side pane
             self.addPane(sidePane = new SidePane(app, {
@@ -188,10 +192,16 @@ define('io.ox/office/preview/view/view',
 
             // initialize valid document
             app.on('docs:import:success', function () {
-                // attach the scroll event handler
-                self.getAppPaneNode().on('scroll', app.createDebouncedMethod($.noop, updateVisiblePages, { delay: 100, maxDelay: 500 }));
+
+                // initialize touch-like tracking with mouse, attach the scroll event handler
+                appPaneNode
+                    .enableTracking({ selector: '.page', sourceEvents: 'mouse' })
+                    .on('tracking:start tracking:move tracking:end tracking:cancel', trackingHandler)
+                    .on('scroll', app.createDebouncedMethod($.noop, updateVisiblePages, { delay: 100, maxDelay: 500 }));
+
                 // initialize zoom and scroll position
                 refreshLayout();
+
                 // update visible pages once manually (no scroll event is triggered,
                 // if the first page is shown which does not cause any scrolling).
                 updateVisiblePages();
@@ -202,7 +212,7 @@ define('io.ox/office/preview/view/view',
          * Moves the browser focus to the application pane.
          */
         function grabFocusHandler() {
-            self.getAppPaneNode().focus();
+            appPaneNode.focus();
             // Bug 25924: sometimes, Firefox selects the entire page
             window.getSelection().removeAllRanges();
         }
@@ -260,9 +270,7 @@ define('io.ox/office/preview/view/view',
          */
         function scrollToPage(page) {
 
-            var // the scrollable application pane node
-                appPaneNode = self.getAppPaneNode(),
-                // the new page node (prevent selecting nodes from end of array for negative values)
+            var // the new page node (prevent selecting nodes from end of array for negative values)
                 pageNode = (page > 0) ? pageNodes.eq(page - 1) : $();
 
             if (pageNode.length > 0) {
@@ -310,9 +318,7 @@ define('io.ox/office/preview/view/view',
                 pageNodes.eq(page - 1).empty();
             }
 
-            var // the (scrollable) root node of the application pane
-                appPaneNode = self.getAppPaneNode(),
-                // find the first page that is visible at the top border of the visible area
+            var // find the first page that is visible at the top border of the visible area
                 beginPage = _(pageNodes).sortedIndex(appPaneNode.scrollTop(), function (value) {
                     if (_.isNumber(value)) { return value; }
                     var pagePosition = Utils.getChildNodePositionInNode(appPaneNode, value);
@@ -378,9 +384,7 @@ define('io.ox/office/preview/view/view',
          */
         function refreshLayout() {
 
-            var // the application pane node
-                appPaneNode = self.getAppPaneNode(),
-                // content margin according to browser window size
+            var // content margin according to browser window size
                 contentMargin = ((window.innerWidth <= 1024) || (window.innerHeight <= 640)) ? 0 : 30;
 
             // set the current content margin between application pane border and page nodes
@@ -405,6 +409,83 @@ define('io.ox/office/preview/view/view',
             // adjust scroll position after page sizes have been changed
             scrollToPage(selectedPage);
         }
+
+        /**
+         * Handles tracking events originating from the mouse and simulates
+         * touch-like scrolling on the page nodes.
+         */
+        var trackingHandler = (function () {
+
+            var // the duration to collect move events, in milliseconds
+                COLLECT_DURATION = 150,
+                // distances of last move events in COLLECT_DURATION
+                lastMoves = null,
+                // the speed of the trailing animation
+                ANIMATION_DELAY = 50,
+                // trailing scroll animation
+                timer = null;
+
+            // scrolls the application pane node by the passed distance
+            function scrollAppPaneNode(moveX, moveY) {
+                var scrollLeft = appPaneNode.scrollLeft() - Math.round(moveX),
+                    scrollTop = appPaneNode.scrollTop() - Math.round(moveY);
+                appPaneNode.scrollLeft(scrollLeft).scrollTop(scrollTop);
+            }
+
+            // removes all outdated entries from the lastMoves array
+            function updateLastMoves(moveX, moveY) {
+
+                var now = _.now();
+
+                while ((lastMoves.length > 0) && (now - lastMoves[0].now > COLLECT_DURATION)) {
+                    lastMoves.shift();
+                }
+                if (_.isNumber(moveX) && _.isNumber(moveY)) {
+                    lastMoves.push({ now: now, x: moveX, y: moveY });
+                }
+                return now;
+            }
+
+            // starts the trailing animation
+            function trailingAnimation() {
+
+                var now = updateLastMoves(),
+                    move = _(lastMoves).reduce(function (memo, entry) {
+                        var factor = (now - entry.now) / COLLECT_DURATION;
+                        memo.x += entry.x * factor;
+                        memo.y += entry.y * factor;
+                        return memo;
+                    }, { x: 0, y: 0 });
+
+                move.x /= (COLLECT_DURATION / ANIMATION_DELAY / 2);
+                move.y /= (COLLECT_DURATION / ANIMATION_DELAY / 2);
+
+                timer = app.repeatDelayed(function () {
+                    scrollAppPaneNode(move.x *= 0.7, move.y *= 0.7);
+                }, { delay: ANIMATION_DELAY, cycles: Math.round(500 / ANIMATION_DELAY) });
+            }
+
+            // return the actual trackingHandler() method
+            return function (event) {
+
+                switch (event.type) {
+                case 'tracking:start':
+                    lastMoves = [];
+                    if (timer) { timer.abort(); timer = null; }
+                    break;
+                case 'tracking:move':
+                    scrollAppPaneNode(event.moveX, event.moveY);
+                    updateLastMoves(event.moveX, event.moveY);
+                    break;
+                case 'tracking:end':
+                    trailingAnimation();
+                    break;
+                case 'tracking:cancel':
+                    break;
+                }
+            };
+
+        }()); // end of trackingHandler() local scope
 
         // methods ------------------------------------------------------------
 

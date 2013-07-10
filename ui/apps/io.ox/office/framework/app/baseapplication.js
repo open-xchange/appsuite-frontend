@@ -888,16 +888,17 @@ define('io.ox/office/framework/app/baseapplication',
          *
          * @param {Function} callback
          *  The callback function that will be invoked repeatedly in a browser
-         *  timeout loop after the initial delay time. Does not receive any
-         *  parameters. The return value of the function will be used to decide
-         *  whether to continue the repeated execution. If the function returns
-         *  Utils.BREAK, execution will be stopped. If the function returns a
-         *  Deferred object, or the Promise of a Deferred object, looping will
-         *  be deferred until the Deferred object is resolved or rejected.
-         *  After resolving the Deferred object, the delay time will start, and
-         *  the callback will be called again. Otherwise, after the Deferred
-         *  object has been rejected, execution will be stopped. All other
-         *  return values will be ignored, and the callback loop will continue.
+         *  timeout loop after the initial delay time. Receives the zero-based
+         *  index of the execution cycle as first parameter. The return value
+         *  of the function will be used to decide whether to continue the
+         *  repeated execution. If the function returns Utils.BREAK, execution
+         *  will be stopped. If the function returns a Deferred object, or the
+         *  Promise of a Deferred object, looping will be deferred until the
+         *  Deferred object is resolved or rejected. After resolving the
+         *  Deferred object, the delay time will start, and the callback will
+         *  be called again. Otherwise, after the Deferred object has been
+         *  rejected, execution will be stopped. All other return values will
+         *  be ignored, and the callback loop will continue.
          *
          * @param {Object} [options]
          *  A map with options controlling the behavior of this method. The
@@ -912,6 +913,8 @@ define('io.ox/office/framework/app/baseapplication',
          *      The time (in milliseconds) the repeated execution of the passed
          *      callback function will be delayed. If omitted, the specified
          *      initial delay time (option 'options.delay') will be used.
+         *  @param {Number} [options.cycles]
+         *      If specified, the maximum number of cycles to be executed.
          *
          * @returns {jQuery.Promise}
          *  The Promise of a Deferred object that will be resolved after the
@@ -930,6 +933,10 @@ define('io.ox/office/framework/app/baseapplication',
                 context = Utils.getOption(options, 'context'),
                 // the delay time for the next execution of the callback
                 delay = Utils.getIntegerOption(options, 'delay', 0, 0),
+                // the number of cycles to be executed
+                cycles = Utils.getIntegerOption(options, 'cycles'),
+                // the index of the next cycle
+                index = 0,
                 // the result Deferred object
                 def = $.Deferred();
 
@@ -940,8 +947,9 @@ define('io.ox/office/framework/app/baseapplication',
                 timer = self.executeDelayed(function () {
 
                     var // the result of the callback
-                        result = callback.call(context);
+                        result = callback.call(context, index);
 
+                    index += 1;
                     if (result === Utils.BREAK) {
                         def.resolve();
                     } else {
@@ -949,7 +957,9 @@ define('io.ox/office/framework/app/baseapplication',
                         .done(function () {
                             // do not create a new timeout if execution has been
                             // aborted while the asynchronous code was running
-                            if (timer) { createTimer(); }
+                            if (timer && (!_.isNumber(cycles) || (index < cycles))) {
+                                createTimer();
+                            }
                         })
                         .fail(function () {
                             def.resolve();

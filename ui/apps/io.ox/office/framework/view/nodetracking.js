@@ -18,9 +18,13 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
     var // shortcut for the KeyCodes object
         KeyCodes = Utils.KeyCodes,
 
-        // the map of all events to be bound to a node to start tracking
-        NODE_EVENT_MAP = {
-            mousedown: mouseDownHandler,
+        // the map of all mouse events to be bound to a node to start tracking
+        MOUSE_START_EVENT_MAP = {
+            mousedown: mouseDownHandler
+        },
+
+        // the map of all touch events to be bound to a node to start tracking
+        TOUCH_START_EVENT_MAP = {
             touchstart: touchStartHandler
         },
 
@@ -471,6 +475,14 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
      * @param {Object} [options]
      *  Additional options controlling the behavior of the tracking nodes. The
      *  following options are supported:
+     *  @param {String} [options.selector]
+     *      If specified, tracking will only be initiated for descendant nodes
+     *      that match this jQuery selector.
+     *  @param {String} [options.sourceEvents='all']
+     *      If set to 'mouse', only mouse events will be processed, and touch
+     *      events will be ignored. If set to 'touch', only touch events will
+     *      be processed, and mouse events will be ignored. If set to 'all' or
+     *      omitted, mouse and touch events will be processed.
      *  @param {Boolean|String} [options.autoScroll=false]
      *      If set to true, auto-scrolling will be activated for horizontal and
      *      vertical direction. If set to either 'horizontal' or 'vertical',
@@ -522,8 +534,23 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
      *  A reference to this collection.
      */
     $.fn.enableTracking = function (options) {
+
+        var // jQuery selector to filter for descendant nodes
+            selector = Utils.getStringOption(options, 'selector'),
+            // which source events are supported
+            sourceEvents = Utils.getStringOption(options, 'sourceEvents', 'all');
+
         // prevent multiple registration of the event handlers
-        return this.off(NODE_EVENT_MAP).on(NODE_EVENT_MAP).data('tracking-options', options);
+        this.off(MOUSE_START_EVENT_MAP).off(TOUCH_START_EVENT_MAP);
+
+        // register supported events
+        if ((sourceEvents === 'mouse') || (sourceEvents === 'all')) {
+            this.on(MOUSE_START_EVENT_MAP, selector);
+        }
+        if ((sourceEvents === 'touch') || (sourceEvents === 'all')) {
+            this.on(TOUCH_START_EVENT_MAP, selector);
+        }
+        return this.data('tracking-options', options);
     };
 
     /**
@@ -539,7 +566,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
         if (trackingNode && (this.filter(trackingNode).length > 0)) {
             cancelTracking();
         }
-        return this.off(NODE_EVENT_MAP);
+        return this.off(MOUSE_START_EVENT_MAP).off(TOUCH_START_EVENT_MAP);
     };
 
     /**
