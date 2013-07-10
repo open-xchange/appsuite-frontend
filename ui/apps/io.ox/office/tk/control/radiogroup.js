@@ -46,7 +46,10 @@ define('io.ox/office/tk/control/radiogroup',
      */
     function RadioGroup(options) {
 
-        var // all existing option buttons (cached for performance)
+        var // self reference
+            self = this,
+
+            // all existing option buttons (cached for performance)
             optionButtons = $(),
 
             // fall-back value for toggle click
@@ -79,6 +82,20 @@ define('io.ox/office/tk/control/radiogroup',
         function clickHandler(button) {
             var toggleClick = Utils.isButtonSelected(button) && !_.isNull(toggleValue) && !_.isUndefined(toggleValue);
             return toggleClick ? toggleValue : Utils.getControlValue(button);
+        }
+
+        /**
+         * Keyboard handler for the entire radio group.
+         */
+        function keyHandler(event) {
+
+            var // distinguish between event types
+                keydown = event.type === 'keydown';
+
+            if (event.keyCode === Utils.KeyCodes.SPACE) {
+                if (keydown) { self.triggerChange(event.target, { preserveFocus: true }); }
+                return false;
+            }
         }
 
         // methods ------------------------------------------------------------
@@ -143,6 +160,9 @@ define('io.ox/office/tk/control/radiogroup',
         // register event handlers
         this.registerUpdateHandler(updateHandler)
             .registerChangeHandler('click', { selector: Utils.BUTTON_SELECTOR, valueResolver: clickHandler });
+        // add event handlers
+        this.getNode()
+            .on('keydown keypress keyup', keyHandler);
 
     } // class RadioGroup
 
