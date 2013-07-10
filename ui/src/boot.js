@@ -81,18 +81,6 @@ $(window).load(function () {
     }
     ox.uploadsEnabled = true;
 
-    // TODO
-    // clean this up and enhance _.device function. 'desktop' or 'tablet' are not reliable
-    // because they only look at the screen size
-    /*if (_.device('ios || android')) {
-        // Disable attachments and uploads for specific clients
-        ox.uploadsEnabled = false;
-        if (_.device('tablet && iOS >= 6')) {
-            // reenable if iPad with iOS 6
-            ox.uploadsEnabled = true;
-        }
-    }*/
-
     // check for supported browser
     function isBrowserSupported() {
         var supp = false;
@@ -886,13 +874,17 @@ $(window).load(function () {
                         return $('<b>').text(gt('Your browser is slow and outdated!'))
                             .add($('<br><a href="http://www.google.com/chrome" target="_blank">Google Chrome</a>.'));
                     });
-                } else if (_.device('android || (ios && small)')) {
-                    // TODO remove after 7.4
-                    // inform about preview mode for 7.2
-                    feedback('info', 'Unsupported Preview - Certain ' +
-                        'functions disabled and stability not assured until ' +
-                        'general release later this year');
-
+                } else if (_.device('android') && !_.browser.chrome) {
+                    // Offer Chrome to all non-chrome users on android
+                    feedback('info', function () {
+                        return $('<b>').text(
+                            //#. "Google Chrome" is a brand and should not be translated
+                            gt('For best results we recommend using Google Chrome for Android.'))
+                            .add($.txt(_.noI18n('\xa0')))
+                            //.# The missing word at the end of the sentence ("Play Store") will be injected later by script
+                            .add($.txt(gt('Get the latest version from the ')))
+                            .add($('<a href="http://play.google.com/store/apps/details?id=com.android.chrome">Play Store</>'));
+                    });
                 }
 
                 // show login dialog
