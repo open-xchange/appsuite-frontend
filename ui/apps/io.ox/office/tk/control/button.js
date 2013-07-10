@@ -42,7 +42,10 @@ define('io.ox/office/tk/control/button',
      */
     function Button(options) {
 
-        var // create the button
+        var // self reference
+            self = this,
+
+            // create the button
             button = Utils.createButton(options),
 
             // toggle button or push button
@@ -87,6 +90,8 @@ define('io.ox/office/tk/control/button',
 
             switch (event.keyCode) {
             case KeyCodes.SPACE:
+                if (keyup) { self.triggerChange(event.target, { preserveFocus: true }); }
+                return false;
             case KeyCodes.ENTER:
                 if (keyup) { button.click(); }
                 return false;
