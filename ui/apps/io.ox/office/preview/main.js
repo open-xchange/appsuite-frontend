@@ -31,7 +31,7 @@ define('io.ox/office/preview/main',
     // class PreviewApplication ===============================================
 
     /**
-     * The Preview application used to view any Office documents.
+     * The OX Preview application used to view a wide range of document types.
      *
      * @constructor
      *
@@ -160,14 +160,27 @@ define('io.ox/office/preview/main',
          */
         this.editDocument = function () {
 
-            var // the configuration of the file extension of the current document
+            var // the file descriptor of the current document
+                file = this.getFileDescriptor(),
+                // the configuration of the file extension of the current document
                 extensionSettings = this.isDocumentEditable() ? ExtensionRegistry.getExtensionSettings(this.getFullFileName()) : null,
                 // the edit application module identifier
                 editModule = Utils.getStringOption(extensionSettings, 'module', '');
 
             // TODO: edit mail attachments and task attachments
             if (editModule.length > 0) {
-                ox.launch(editModule + '/main', { action: 'load', file: this.getFileDescriptor() });
+
+                // launch the correct edit application
+                if (ExtensionRegistry.isNative(this.getFullFileName())) {
+                    ox.launch(editModule + '/main', { action: 'load', file: file });
+                } else if (ExtensionRegistry.isConvertible(this.getFullFileName())) {
+                    ox.launch(editModule + '/main', { action: 'convert', folderId: file.folder_id, templateFile: file, preserveFileName: true });
+                } else {
+                    Utils.error('PreviewApplication.editDocument(): unknown document type');
+                    return;
+                }
+
+                // close this application
                 _.defer(function () { self.quit(); });
             }
         };
