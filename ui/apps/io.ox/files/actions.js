@@ -408,14 +408,14 @@ define('io.ox/files/actions',
                         return fnRename();
                     }, function () {
                         //store user input and call action again
-                        baton.tmp = name;
+                        baton.data.filename_tmp = name;
                         actionPerformer.invoke('io.ox/files/actions/rename', null, baton);
                     });
                     return def.promise();
                 }
 
-                $input.val(baton.tmp || baton.data.filename || baton.data.title);
-                delete baton.tmp;
+                $input.val(baton.data.filename_tmp || baton.data.filename || baton.data.title);
+                delete baton.data.filename_tmp;
                 var $form = $('<form>').append(
                     $('<div class="row-fluid">').append(
                         $('<label for="name">').append($('<b>').text(gt('Name'))),
