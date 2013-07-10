@@ -151,7 +151,7 @@ define('io.ox/office/preview/main',
          */
         this.isDocumentEditable = function () {
             // TODO: edit mail attachments and task attachments
-            return (!('source' in this.getFileDescriptor())) && ExtensionRegistry.isEditable(this.getFullFileName());
+            return _.isNumber(jobId) && (!('source' in this.getFileDescriptor())) && ExtensionRegistry.isEditable(this.getFullFileName());
         };
 
         /**

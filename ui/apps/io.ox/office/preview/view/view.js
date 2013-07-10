@@ -65,11 +65,14 @@ define('io.ox/office/preview/view/view',
             // tool pane floating over the top of the application pane
             topOverlayPane = null,
 
-            // the status label for the page number and zoom factor
-            statusLabel = new BaseControls.StatusLabel(app),
+            // tool pane floating over the bottom of the application pane
+            bottomOverlayPane = null,
 
             // the tool box containing page and zoom control groups
             bottomToolBox = null,
+
+            // the status label for the page number and zoom factor
+            statusLabel = new BaseControls.StatusLabel(app),
 
             // the page preview control
             pageGroup = null,
@@ -78,7 +81,7 @@ define('io.ox/office/preview/view/view',
             pageContainerNode = $('<div>').addClass('page-container'),
 
             // all page nodes as permanent jQuery collection, for performance
-            pageNodes = null,
+            pageNodes = $(),
 
             // the queue for AJAX page requests
             pageLoader = new PageLoader(app),
@@ -99,6 +102,7 @@ define('io.ox/office/preview/view/view',
 
         BaseView.call(this, app, {
             initHandler: initHandler,
+            deferredInitHandler: deferredInitHandler,
             grabFocusHandler: grabFocusHandler,
             scrollable: true,
             contentMargin: 30,
@@ -140,15 +144,6 @@ define('io.ox/office/preview/view/view',
                 )
                 .addViewComponent(new Component(app)
                     .addGroup('pages/current', pageGroup)
-                )
-                .addViewComponent(new ToolBox(app, { fixed: 'bottom' })
-                    .addGroup('pages/previous', new Button(PreviewControls.PREV_OPTIONS))
-                    .addGroup('pages/current',  new PreviewControls.PageChooser(app))
-                    .addGroup('pages/next',     new Button(PreviewControls.NEXT_OPTIONS))
-                    .addRightTab()
-                    .addGroup('zoom/dec',  new Button(PreviewControls.ZOOMOUT_OPTIONS))
-                    .addGroup('zoom/type', new PreviewControls.ZoomTypeChooser())
-                    .addGroup('zoom/inc',  new Button(PreviewControls.ZOOMIN_OPTIONS))
                 );
 
             // create the top overlay pane
@@ -163,49 +158,69 @@ define('io.ox/office/preview/view/view',
             );
 
             // create the bottom overlay pane
-            self.addPane(new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true })
-                .addViewComponent(bottomToolBox = new ToolBox(app, { hoverEffect: true })
-                    .addRightTab()
-                    .addPrivateGroup(statusLabel)
-                    .newLine()
-                    .addRightTab()
-                    .addGroup('pages/previous', new Button(PreviewControls.PREV_OPTIONS))
-                    .addGroup('pages/current',  new PreviewControls.PageChooser(app))
-                    .addGroup('pages/next',     new Button(PreviewControls.NEXT_OPTIONS))
-                    .newLine()
+            self.addPane(bottomOverlayPane = new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
+                .addViewComponent(bottomToolBox = new ToolBox(app))
+            );
+        }
+
+        function deferredInitHandler() {
+
+            var sidePaneToolBox = null;
+
+            if (model.getPageCount() >= 1) {
+
+                // initialize side pane depending on page count
+                sidePane.addViewComponent(sidePaneToolBox = new ToolBox(app, { fixed: 'bottom' }));
+                if (model.getPageCount() > 1) {
+                    sidePaneToolBox
+                        .addGroup('pages/previous', new Button(PreviewControls.PREV_OPTIONS))
+                        .addGroup('pages/current',  new PreviewControls.PageChooser(app))
+                        .addGroup('pages/next',     new Button(PreviewControls.NEXT_OPTIONS));
+                }
+                sidePaneToolBox
                     .addRightTab()
                     .addGroup('zoom/dec',  new Button(PreviewControls.ZOOMOUT_OPTIONS))
                     .addGroup('zoom/type', new PreviewControls.ZoomTypeChooser())
-                    .addGroup('zoom/inc',  new Button(PreviewControls.ZOOMIN_OPTIONS))
-                )
-            );
+                    .addGroup('zoom/inc',  new Button(PreviewControls.ZOOMIN_OPTIONS));
+
+                // create the status overlay pane
+                self.addPane(new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true })
+                    .addViewComponent(new ToolBox(app).addPrivateGroup(statusLabel))
+                );
+
+                // initialize bottom overlay pane depending on page count
+                if (model.getPageCount() > 1) {
+                    bottomToolBox.newLine().addRightTab()
+                        .addGroup('pages/previous', new Button(PreviewControls.PREV_OPTIONS))
+                        .addGroup('pages/current',  new PreviewControls.PageChooser(app))
+                        .addGroup('pages/next',     new Button(PreviewControls.NEXT_OPTIONS));
+                }
+                bottomToolBox.newLine().addRightTab()
+                    .addGroup('zoom/dec',  new Button(PreviewControls.ZOOMOUT_OPTIONS))
+                    .addGroup('zoom/type', new PreviewControls.ZoomTypeChooser())
+                    .addGroup('zoom/inc',  new Button(PreviewControls.ZOOMIN_OPTIONS));
+            }
 
             // initially, hide the side pane, and show the overlay tool bars
             self.toggleSidePane(false);
 
-            // set focus to application pane after import
-            app.on('docs:import:after', function () {
-                self.on('refresh:layout', refreshLayout);
-                self.grabFocus();
-                app.getController().update();
-            });
+            // set focus to application pane, and update the view
+            self.on('refresh:layout', refreshLayout);
+            self.grabFocus();
+            app.getController().update();
 
-            // initialize valid document
-            app.on('docs:import:success', function () {
+            // initialize touch-like tracking with mouse, attach the scroll event handler
+            appPaneNode
+                .enableTracking({ selector: '.page', sourceEvents: 'mouse' })
+                .on('tracking:start tracking:move tracking:end tracking:cancel', trackingHandler)
+                .on('scroll', app.createDebouncedMethod($.noop, updateVisiblePages, { delay: 100, maxDelay: 500 }));
 
-                // initialize touch-like tracking with mouse, attach the scroll event handler
-                appPaneNode
-                    .enableTracking({ selector: '.page', sourceEvents: 'mouse' })
-                    .on('tracking:start tracking:move tracking:end tracking:cancel', trackingHandler)
-                    .on('scroll', app.createDebouncedMethod($.noop, updateVisiblePages, { delay: 100, maxDelay: 500 }));
+            // initialize zoom and scroll position
+            refreshLayout();
 
-                // initialize zoom and scroll position
-                refreshLayout();
-
-                // update visible pages once manually (no scroll event is triggered,
-                // if the first page is shown which does not cause any scrolling).
-                updateVisiblePages();
-            });
+            // update visible pages once manually (no scroll event is triggered,
+            // if the first page is shown which does not cause any scrolling).
+            updateVisiblePages();
         }
 
         /**
@@ -547,7 +562,7 @@ define('io.ox/office/preview/view/view',
             this.lockPaneLayout(function () {
                 sidePane.toggle(state);
                 topOverlayPane.toggle(!state);
-                bottomToolBox.toggle(!state);
+                bottomOverlayPane.toggle(!state);
             });
             return this;
         };
