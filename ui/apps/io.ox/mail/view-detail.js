@@ -455,7 +455,7 @@ define('io.ox/mail/view-detail',
 
                 // process all text nodes unless mail is too large (> 512 KB)
                 if (!isLarge) {
-                    content.contents().add($('*', content).not('style').contents()).each(function () {
+                    var processTextNode = function () {
                         if (this.nodeType === 3) {
                             var node = $(this), text = this.nodeValue, length = text.length, m, n;
                             // split long character sequences for better wrapping
@@ -540,7 +540,9 @@ define('io.ox/mail/view-detail',
                                 }
                             }
                         }
-                    });
+                    };
+                    content.contents().each(processTextNode);
+                    $('*', content).not('style').contents().each(processTextNode);
                 }
 
                 // further fixes
