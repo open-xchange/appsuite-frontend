@@ -16,18 +16,14 @@ define('io.ox/portal/main',
     ['io.ox/core/extensions',
      'io.ox/core/api/user',
      'io.ox/core/date',
-     'io.ox/core/manifests',
      'io.ox/core/tk/dialogs',
      'io.ox/portal/widgets',
      'gettext!io.ox/portal',
      'settings!io.ox/portal',
-     'less!io.ox/portal/style.less',
-     'apps/io.ox/core/tk/jquery-ui.min.js'
-    ], function (ext, userAPI, date, manifests, dialogs, widgets, gt, settings) {
+     'less!io.ox/portal/style.less'
+    ], function (ext, userAPI, date, dialogs, widgets, gt, settings) {
 
     'use strict';
-
-    var READY = $.when();
 
     // time-based greeting phrase
     function getGreetingPhrase(name) {
@@ -102,28 +98,28 @@ define('io.ox/portal/main',
     ext.point('io.ox/portal/widget-scaffold').extend({
         draw: function (baton) {
 
-            var data = baton.model.toJSON(),
-                decoration = this.find('.decoration').length ? this.find('.decoration') : this;
-
-            this.attr({
-                'data-widget-cid': baton.model.cid,
-                'data-widget-id': baton.model.get('id'),
-                'data-widget-type': baton.model.get('type')
-            })
-            .addClass('widget' + (baton.model.get('inverse') ? ' inverse' : ''));
-
-            // border decoration
-            decoration
-                .addClass('pending')
+            this
+                .attr({
+                    'data-widget-cid': baton.model.cid,
+                    'data-widget-id': baton.model.get('id'),
+                    'data-widget-type': baton.model.get('type')
+                })
+                .addClass('widget' + (baton.model.get('inverse') ? ' inverse' : ''))
                 .append(
-                    $('<h2>').append(
-                        // add remove icon
-                        baton.model.get('protectedWidget') ? [] :
-                            $('<a href="#" class="disable-widget"><i class="icon-remove"/></a>')
-                            .attr('title', gt('Disable widget')),
-                        // title span
-                        $('<span class="title">').text('\u00A0')
-                    )
+                    // border decoration
+                    $('<div>')
+                        .addClass('decoration')
+                        .addClass('pending')
+                        .append(
+                            $('<h2>').append(
+                                // add remove icon
+                                baton.model.get('protectedWidget') ? [] :
+                                    $('<a href="#" class="disable-widget"><i class="icon-remove"/></a>')
+                                    .attr('title', gt('Disable widget')),
+                                // title span
+                                $('<span class="title">').text('\u00A0')
+                            )
+                        )
                 );
 
             setColor(this, baton.model);
@@ -133,9 +129,9 @@ define('io.ox/portal/main',
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/portal', title: 'Portal' }),
         win,
+        scrollPos = window.innerHeight,
         appBaton = ext.Baton({ app: app }),
         sidepopup = new dialogs.SidePopup(),
-        availablePlugins = widgets.getAvailablePlugins(),
         collection = widgets.getCollection();
 
     app.settings = settings;
@@ -225,19 +221,24 @@ define('io.ox/portal/main',
     }
 
     app.drawScaffold = function (model) {
-
         var baton = ext.Baton({ model: model, app: app }),
-            decoration = $('<div>').addClass('decoration'),
-            node = $('<li>').append(decoration);
+            node = $('<li>');
+
+        if (_.device('small')) {
+            node.css('minHeight', 300);
+        }
+        model.node = node;
         ext.point('io.ox/portal/widget-scaffold').invoke('draw', node, baton);
 
-        if (model.get('enabled') === true && !widgets.visible(model.get('type'))) {
-            // hide due to missing capabilites
+        if (model.get('enabled') === false) {
             node.hide();
-            return;
+        } else {
+            if (!widgets.visible(model.get('type'))) {
+                // hide due to missing capabilites
+                node.hide();
+                return;
+            }
         }
-
-        if (model.get('enabled') === false) node.hide();
 
         appBaton.$.widgets.append(node);
     };
@@ -261,7 +262,7 @@ define('io.ox/portal/main',
     };
 
     function ensureDeferreds(ret) {
-        return ret && ret.promise ? ret : READY;
+        return ret && ret.promise ? ret : $.when();
     }
 
     function reduceBool(memo, bool) {
@@ -311,32 +312,25 @@ define('io.ox/portal/main',
     }
 
     app.drawWidget = function (model, index) {
-
-        index = index || 0;
-
-        var type = model.get('type'),
-            node = app.getWidgetNode(model),
-            delay = (index / 2 >> 0) * 500,
-            baton = ext.Baton({ model: model, point: 'io.ox/portal/widget/' + type }),
-            point = ext.point(baton.point),
-            requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, true).value(),
-            title;
-
-        if (model.get('enabled') === true && !widgets.visible(model.get('type'))) {
-            // hide due to missing capabilites
-            node.hide();
-            return;
-        }
-
-        // set/update title
-        title = node.find('h2 .title').text(_.noI18n(getTitle(model.toJSON(), point.prop('title'))));
-
-        if (!model.drawn) {
+        var node = model.node;
+        if (!model.drawn && (node.offset().top < scrollPos)) {
 
             model.drawn = true;
+            index = index || 0;
 
+            if (model.get('enabled') === true && !widgets.visible(model.get('type'))) {
+                // hide due to missing capabilites
+                node.hide();
+                return;
+            }
+
+            // set/update title
+            var baton = ext.Baton({ model: model, point: 'io.ox/portal/widget/' + model.get('type') }),
+                point = ext.point(baton.point),
+                title = node.find('h2 .title').text(_.noI18n(getTitle(model.toJSON(), point.prop('title')))),
+                requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, true).value();
             // remember
-            model.set('baton', baton, {validate: true});
+            model.set('baton', baton, { validate: true, silent: true });
 
             // setup?
             if (requiresSetUp) {
@@ -352,8 +346,13 @@ define('io.ox/portal/main',
                     // initialize first
                     point.invoke('initialize', node, baton);
                     // load & preview
-                    loadAndPreview(point, node, baton);
-                }, delay);
+                    node.busy();
+                    loadAndPreview(point, node, baton).done(function () {
+                        node.removeAttr('style');
+                    }).always(function () {
+                        node.idle();
+                    });
+                }, (index / 2 >> 0) * 100);
             }
         }
     };
@@ -413,6 +412,10 @@ define('io.ox/portal/main',
             // draw scaffolds now for responsiveness
             collection.each(app.drawScaffold);
 
+            widgets.loadUsedPlugins().done(function () {
+                collection.each(app.drawWidget);
+            });
+
             // add side popup
             sidepopup.delegate(appBaton.$.widgets, '.item, .content.pointer, .action.pointer', openSidePopup);
 
@@ -431,24 +434,27 @@ define('io.ox/portal/main',
             // (will cause errors on android chrome)
             // TODO: avoid device specific inline css fixes
             if (_.browser.iOS) {
-                $('.io-ox-portal').css('-webkit-overflow-scrolling', 'touch');
+                win.nodes.main.css('-webkit-overflow-scrolling', 'touch');
             }
 
             // make sortable, but not for Touch devices
             if (!Modernizr.touch) {
-                appBaton.$.widgets.sortable({
-                    containment: win.nodes.main,
-                    scroll: true,
-                    delay: 150,
-                    stop: function (e, ui) {
-                        widgets.save(appBaton.$.widgets);
-                    }
+                require(['apps/io.ox/core/tk/jquery-ui.min.js']).done(function () {
+                    appBaton.$.widgets.sortable({
+                        containment: win.nodes.main,
+                        scroll: true,
+                        delay: 150,
+                        stop: function (e, ui) {
+                            widgets.save(appBaton.$.widgets);
+                        }
+                    });
                 });
             }
+        });
 
-            widgets.loadUsedPlugins().done(function () {
-                widgets.getEnabled().each(app.drawWidget);
-            });
+        $(window).on('scrollstop', function (e) {
+            scrollPos = $(this).scrollTop() + this.innerHeight;
+            collection.each(app.drawWidget);
         });
     });
 

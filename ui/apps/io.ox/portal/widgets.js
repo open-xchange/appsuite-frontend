@@ -32,10 +32,6 @@ define('io.ox/portal/widgets',
         return ext.indexSorter({ index: a.get('index') }, { index: b.get('index') });
     };
 
-    function reduceBool(memo, bool) {
-        return memo && bool;
-    }
-
     var api = {
 
         // for demo/debugging
@@ -52,15 +48,13 @@ define('io.ox/portal/widgets',
         },
 
         getEnabled: function () {
-            return collection.chain().filter(function (model) {
+            return _(collection.filter(function (model) {
                 return !model.has('candidate') && (!model.has('enabled') || model.get('enabled') === true);
-            });
+            }));
         },
 
         getSettings: function () {
-
             var prot = {};
-
             _(settings.get('widgets/protected')).each(function (obj, id) {
                 obj.protectedWidget = true;
                 prot[id] = obj;
@@ -93,10 +87,9 @@ define('io.ox/portal/widgets',
         },
 
         loadUsedPlugins: function () {
-            var usedPlugins = collection.pluck('plugin'),
-                dependencies = _(api.getAvailablePlugins()).intersection(usedPlugins);
-            return require(dependencies).done(function () {
-                api.removeDisabled();
+            var dependencies = _.intersection(collection.pluck('plugin'), api.getAvailablePlugins());
+            return require(dependencies).then(function () {
+                return api.removeDisabled();
             });
         },
 
@@ -197,9 +190,14 @@ define('io.ox/portal/widgets',
             collection.remove(
                 collection.filter(function (model) {
                     return ext.point('io.ox/portal/widget/' + model.get('type'))
-                        .invoke('isEnabled').reduce(reduceBool, true).value() === false;
+                        .invoke('isEnabled')
+                        .reduce(function (memo, bool) {
+                            return memo && bool;
+                        }, true)
+                        .value() === false;
                 })
             );
+            return api.getEnabled();
         },
 
         toJSON: function () {
@@ -293,10 +291,16 @@ define('io.ox/portal/widgets',
 
     collection.reset(
         // fix "candidate=true" bug (maybe just a development issue)
-        _(api.getSettings()).map(function (obj) {
-            delete obj.candidate;
-            return obj;
-        })
+        _(api.getSettings())
+            .chain()
+            .map(function (obj) {
+                delete obj.candidate;
+                return obj;
+            })
+            .sortBy(function (obj) {
+                return obj.index;
+            })
+            .value()
     );
 
     collection.on('change', function () {
