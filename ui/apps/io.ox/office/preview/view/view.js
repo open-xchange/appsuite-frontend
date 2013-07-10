@@ -332,17 +332,10 @@ define('io.ox/office/preview/view/view',
         function scrollToPage(page) {
 
             var // the new page node (prevent selecting nodes from end of array for negative values)
-                pageNode = (page > 0) ? pageNodes.eq(page - 1) : $(),
-                // the total scroll distance in vertical direction
-                moveY = 0,
-                // the distances per frame
-                FRAME_FACTORS = [0.06, 0.12, 0.27, 0.55];
+                pageNode = (page > 0) ? pageNodes.eq(page - 1) : $();
 
             if (pageNode.length > 0) {
-                moveY = Utils.getChildNodePositionInNode(appPaneNode, pageNode).top - self.getContentMargin().top - appPaneNode.scrollTop();
-                startScrollAnimation(function (frame) {
-                    return { x: 0, y: moveY * FRAME_FACTORS[frame] };
-                }, FRAME_FACTORS.length);
+                appPaneNode.scrollTop(Utils.getChildNodePositionInNode(appPaneNode, pageNode).top - self.getContentMargin().top);
             }
         }
 
