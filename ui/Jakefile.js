@@ -270,7 +270,7 @@ _.each(_.map(['core', 'signin', 'core.appcache', 'signin.appcache'], utils.dest)
 utils.concat("boot.js",
     [utils.string("// NOJSHINT\ndependencies = "), "tmp/dependencies.json",
      utils.string(';\n'),
-     "lib/jquery.min.js",
+     "lib/jquery.js",
      "lib/jquery.mobile.touch.min.js",
      "lib/underscore.js", // load this before require.js to keep global object
      "lib/require.js",
