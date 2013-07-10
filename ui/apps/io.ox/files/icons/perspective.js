@@ -144,7 +144,7 @@ define('io.ox/files/icons/perspective',
                 mode = previewMode(file),
                 genericIcon = drawGenericIcon(file.filename),
                 wrap = $('<div class="wrap">').append(genericIcon),
-                options = _.extend({ version: false }, baton.options);
+                options = _.extend({ version: true }, baton.options);
 
             if (mode) {
                 img = $('<img>', {
@@ -585,6 +585,7 @@ define('io.ox/files/icons/perspective',
                             var data = hash[cid],
                                 prev = indexPrevPosition(newIds, cid),
                                 next = indexNextPosition(newIds, cid);
+
 
                             iconview.find('.file-icon[data-obj-id="' + cid_find(cid) + '"]').remove();
 
