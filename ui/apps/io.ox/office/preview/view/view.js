@@ -33,7 +33,10 @@ define('io.ox/office/preview/view/view',
         KeyCodes = Utils.KeyCodes,
 
         // predefined zoom factors
-        ZOOM_FACTORS = [25, 35, 50, 75, 100, 150, 200, 300, 400, 600, 800, 1200, 1600];
+        ZOOM_FACTORS = [25, 35, 50, 75, 100, 150, 200, 300, 400, 600, 800, 1200, 1600],
+
+        // the speed of scroll animations
+        ANIMATION_DELAY = 25;
 
     // class PreviewView ======================================================
 
@@ -96,7 +99,10 @@ define('io.ox/office/preview/view/view',
             zoomFactor = 100,
 
             // the size available in the application pane
-            availableSize = { width: 0, height: 0 };
+            availableSize = { width: 0, height: 0 },
+
+            // current scroll animation
+            scrollAnimation = null;
 
         // base constructor ---------------------------------------------------
 
@@ -278,6 +284,46 @@ define('io.ox/office/preview/view/view',
         }
 
         /**
+         * Scrolls the application pane node by the passed distance.
+         */
+        function scrollAppPaneNode(diffX, diffY) {
+            var scrollLeft = appPaneNode.scrollLeft() + Math.round(diffX),
+                scrollTop = appPaneNode.scrollTop() + Math.round(diffY);
+            appPaneNode.scrollLeft(scrollLeft).scrollTop(scrollTop);
+        }
+
+        /**
+         * Aborts the current scroll animation.
+         */
+        function abortScrollAnimation() {
+            if (scrollAnimation) {
+                scrollAnimation.abort();
+                scrollAnimation = null;
+            }
+        }
+
+        /**
+         * Starts a new scroll animation.
+         *
+         * @param {Function} callback
+         *  A callback function that has to return the scroll distance for each
+         *  animation frame, as object in the properties 'x' and 'y'. The
+         *  function receives the zero-based index of the current animation
+         *  frame.
+         *
+         * @param {Numner} frames
+         *  The number of animation frames.
+         */
+        function startScrollAnimation(callback, frames) {
+            abortScrollAnimation();
+            scrollAnimation = app.repeatDelayed(function (index) {
+                var move = callback.call(self, index);
+                scrollAppPaneNode(move.x, move.y);
+            }, { delay: ANIMATION_DELAY, cycles: frames })
+            .done(function () { scrollAnimation = null; });
+        }
+
+        /**
          * Scrolls the view to the specified page.
          *
          * @param {Number} page
@@ -286,10 +332,17 @@ define('io.ox/office/preview/view/view',
         function scrollToPage(page) {
 
             var // the new page node (prevent selecting nodes from end of array for negative values)
-                pageNode = (page > 0) ? pageNodes.eq(page - 1) : $();
+                pageNode = (page > 0) ? pageNodes.eq(page - 1) : $(),
+                // the total scroll distance in vertical direction
+                moveY = 0,
+                // the distances per frame
+                FRAME_FACTORS = [0.06, 0.12, 0.27, 0.55];
 
             if (pageNode.length > 0) {
-                appPaneNode.scrollTop(Utils.getChildNodePositionInNode(appPaneNode, pageNode).top - self.getContentMargin().top);
+                moveY = Utils.getChildNodePositionInNode(appPaneNode, pageNode).top - self.getContentMargin().top - appPaneNode.scrollTop();
+                startScrollAnimation(function (frame) {
+                    return { x: 0, y: moveY * FRAME_FACTORS[frame] };
+                }, FRAME_FACTORS.length);
             }
         }
 
@@ -434,18 +487,7 @@ define('io.ox/office/preview/view/view',
             var // the duration to collect move events, in milliseconds
                 COLLECT_DURATION = 150,
                 // distances of last move events in COLLECT_DURATION
-                lastMoves = null,
-                // the speed of the trailing animation
-                ANIMATION_DELAY = 50,
-                // trailing scroll animation
-                timer = null;
-
-            // scrolls the application pane node by the passed distance
-            function scrollAppPaneNode(moveX, moveY) {
-                var scrollLeft = appPaneNode.scrollLeft() - Math.round(moveX),
-                    scrollTop = appPaneNode.scrollTop() - Math.round(moveY);
-                appPaneNode.scrollLeft(scrollLeft).scrollTop(scrollTop);
-            }
+                lastMoves = null;
 
             // removes all outdated entries from the lastMoves array
             function updateLastMoves(moveX, moveY) {
@@ -467,17 +509,17 @@ define('io.ox/office/preview/view/view',
                 var now = updateLastMoves(),
                     move = _(lastMoves).reduce(function (memo, entry) {
                         var factor = (now - entry.now) / COLLECT_DURATION;
-                        memo.x += entry.x * factor;
-                        memo.y += entry.y * factor;
+                        memo.x -= entry.x * factor;
+                        memo.y -= entry.y * factor;
                         return memo;
                     }, { x: 0, y: 0 });
 
+                // reduce distance for initial animation frame
                 move.x /= (COLLECT_DURATION / ANIMATION_DELAY / 2);
                 move.y /= (COLLECT_DURATION / ANIMATION_DELAY / 2);
 
-                timer = app.repeatDelayed(function () {
-                    scrollAppPaneNode(move.x *= 0.7, move.y *= 0.7);
-                }, { delay: ANIMATION_DELAY, cycles: Math.round(500 / ANIMATION_DELAY) });
+                // run the scroll animation
+                startScrollAnimation(function () { move.x *= 0.85; move.y *= 0.85; return move; }, 20);
             }
 
             // return the actual trackingHandler() method
@@ -486,10 +528,10 @@ define('io.ox/office/preview/view/view',
                 switch (event.type) {
                 case 'tracking:start':
                     lastMoves = [];
-                    if (timer) { timer.abort(); timer = null; }
+                    abortScrollAnimation();
                     break;
                 case 'tracking:move':
-                    scrollAppPaneNode(event.moveX, event.moveY);
+                    scrollAppPaneNode(-event.moveX, -event.moveY);
                     updateLastMoves(event.moveX, event.moveY);
                     break;
                 case 'tracking:end':
