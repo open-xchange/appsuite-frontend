@@ -1380,17 +1380,19 @@ define('io.ox/office/framework/app/baseapplication',
                     module: this.getName(),
                     icon: Utils.getStringOption(appOptions, 'icon'),
                     description: this.getFullFileName(),
-                    point: { file: _.clone(file) }
+                    point: { file: this.getFileDescriptor() }
                 };
 
-            // OX Files inserts reference to application object into file descriptor,
-            // remove it to be able to serialize without cyclic references
-            delete savePoint.point.file.app;
+            if (savePoint.point.file) {
+                // OX Files inserts reference to application object into file descriptor,
+                // remove it to be able to serialize without cyclic references
+                delete savePoint.point.file.app;
 
-            // call all fail-save handlers and add their data to the save point
-            _(failSaveHandlers).each(function (failSaveHandler) {
-                _(savePoint.point).extend(failSaveHandler.call(this));
-            }, this);
+                // call all fail-save handlers and add their data to the save point
+                _(failSaveHandlers).each(function (failSaveHandler) {
+                    _(savePoint.point).extend(failSaveHandler.call(this));
+                }, this);
+            }
 
             return savePoint;
         };
