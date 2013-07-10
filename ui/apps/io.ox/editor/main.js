@@ -64,11 +64,18 @@ define('io.ox/editor/main',
 
             this.app = options.app;
 
+            this.data = {
+                saved: {
+                    filename: null
+                }
+            };
             this.model.on('change:title', this.updateTitle, this);
             this.model.on('change:content', this.updateContent, this);
         },
 
         updateTitle: function () {
+            //old value
+            this.data.saved.filename = this.model.get('title');
             this.$el.find('input.title').val(this.model.get('title'));
         },
 
