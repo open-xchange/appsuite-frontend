@@ -25,12 +25,12 @@ define('io.ox/contacts/edit/view-form', [
     'io.ox/core/capabilities',
     'io.ox/core/extensions',
     'io.ox/core/date',
+    'io.ox/backbone/mini-views',
+    'io.ox/backbone/mini-views/attachments',
     'less!io.ox/contacts/edit/style.less'
-], function (model, views, forms, actions, links, PictureUpload, attachments, api, util, gt, capabilities, ext, date) {
+], function (model, views, forms, actions, links, PictureUpload, attachments, api, util, gt, capabilities, ext, date, mini, EditableAttachmentList) {
 
     "use strict";
-
-    var dateField, city;
 
     var meta = {
         sections: {
@@ -67,7 +67,7 @@ define('io.ox/contacts/edit/view-form', [
                         'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10',
                         'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15',
                         'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20'],
-            attachments: ['attachments_list', 'attachments_buttons']
+            attachments: ['attachments_list']
         },
 
         rare: ['nickname', 'marital_status', 'number_of_children', 'spouse_name', 'anniversary',
@@ -92,7 +92,8 @@ define('io.ox/contacts/edit/view-form', [
             'email1', 'email2', 'instant_messenger1',
             'cellular_telephone1', 'telephone_home1',
             'street_home', 'postal_code_home', 'city_home', 'state_home', 'country_home',
-            'private_flag', 'note'
+            'private_flag', 'note',
+            'attachments_list'
         ],
 
         input_type: {
@@ -113,126 +114,6 @@ define('io.ox/contacts/edit/view-form', [
             userfields: gt('User fields'),
             private_flag: gt('Private'),
             attachments: gt('Attachments')
-        },
-
-        special: {
-            note: function (options) {
-                options.point.extend(new forms.ControlGroup({
-                    id: options.field,
-                    index: options.index,
-                    label: model.fields[options.field],
-                    control: '<textarea rows="12" name="' + options.field + '" tabindex="1" class="input-xlarge">',
-                    rare: options.isRare,
-                    attribute: options.field
-                }), {
-                    isRare: function () {
-                        return options.isRare;
-                    },
-                    hidden: options.isAlwaysVisible ? false : function (model) {
-                        return !model.isSet(options.field);
-                    }
-                });
-            },
-
-            birthday: dateField,
-            anniversary: dateField,
-            private_flag: function (options) {
-                options.point.extend(new forms.CheckBoxField({
-                    id: options.field,
-                    index: options.index,
-                    label: model.fields[options.field],
-                    labelClassName: 'private-flag control-label',
-                    className: 'form-horizontal control-group',
-                    rare: options.isRare,
-                    attribute: options.field
-                }), {
-                    isRare: function () {
-                        return options.isRare;
-                    },
-                    hidden: options.isAlwaysVisible ? false : function (model) {
-                        return (model.attributes.private_flag === undefined || model.attributes.private_flag === false);
-                    }
-                });
-            },
-            attachments_list: function (options) {
-                options.point.extend(new attachments.EditableAttachmentList({
-                    id: options.field,
-                    registerAs: 'attachmentList',
-                    className: 'row-fluid',
-                    index: options.index,
-                    module: 7,
-                    finishedCallback: function (model, id) {
-                        var attr = model.attributes;
-                        api.get({ id: id, folder: attr.folder_id }, false)
-                            .pipe(function (data) {
-                                return $.when(
-                                    api.caches.get.add(data),
-                                    api.caches.all.grepRemove(attr.folder_id + api.DELIM),
-                                    api.caches.list.remove({ id: attr.id, folder: attr.folder_id }),
-                                    api.clearFetchCache()
-                                )
-                                .done(function () {
-                                    api.removeFromUploadList(encodeURIComponent(_.cid(data)));//to make the detailview remove the busy animation
-                                    api.trigger('refresh.list');
-                                });
-                            });
-                    }
-                }), {
-                    isRare: function () {
-                        return options.isRare;
-                    },
-                    hidden: options.isAlwaysVisible ? false : function (model) {
-                        return (model.attributes.number_of_attachments === undefined || model.attributes.number_of_attachments === 0);
-                    }
-                });
-            },
-            attachments_buttons: function (options) {
-                options.point.extend({
-                    id: options.field,
-                    index: options.index,
-                    render: function (baton) {
-                        var baton = this.baton,
-                            $node = $('<form>').appendTo(this.$el).attr('id', 'attachmentsForm'),
-                            $inputWrap = attachments.fileUploadWidget({
-                                displayButton: false,
-                                multi: true,
-                                wrapperClass: 'form-horizontal control-group'
-                            }),
-                            $input = $inputWrap.find('input[type="file"]')
-                                .on('change', function (e) {
-                                    e.preventDefault();
-                                    if (_.browser.IE !== 9) {
-                                        _($input[0].files).each(function (fileData) {
-                                            baton.attachmentList.addFile(fileData);
-                                        });
-                                        $input.trigger('reset.fileupload');
-                                    } else {
-                                        if ($input.val()) {
-                                            var fileData = {
-                                                name: $input.val().match(/[^\/\\]+$/),
-                                                size: 0,
-                                                hiddenField: $input
-                                            };
-                                            baton.attachmentList.addFile(fileData);
-                                            $input.addClass('add-attachment').hide();
-                                            $input = $('<input>', { type: 'file' }).appendTo($input.parent());
-                                        }
-                                    }
-                                }).on('focus', function () {
-                                    $input.attr('tabindex', '1');
-                                });
-
-                        $node.append($('<div>').addClass('contact_attachments_buttons').append($inputWrap));
-                    }
-                }, {
-                    isRare: function () {
-                        return options.isRare;
-                    },
-                    hidden: options.isAlwaysVisible ? false : function (model) {
-                        return (model.attributes.number_of_attachments === undefined || model.attributes.number_of_attachments === 0);
-                    }
-                });
-            }
         }
     };
 
@@ -252,28 +133,102 @@ define('io.ox/contacts/edit/view-form', [
             //#. %4$s is the state
             //#. %5$s is the country
             gt('%1$s\n%2$s %3$s\n%4$s\n%5$s'),
-            function (i) { return fields[i]; }, $.noop));
+            function (i) { return fields[i]; }, $.noop)
+        );
     });
 
-    function dateField(options) {
-        options.point.extend(new forms.DateControlGroup({
-            id: options.field,
-            index: options.index,
-            label: model.fields[options.field],
-            attribute: options.field,
-            rare: options.isRare,
-            className: 'form-horizontal date-field',
-            inputClassName: 'input-small',
-            labelClassName: 'control-label'
-        }), {
-            isRare: function () {
-                return options.isRare;
-            },
-            hidden: options.isAlwaysVisible ? false : function (model) {
-                return !model.isSet(options.field);
-            }
-        });
-    }
+    var AttachmentsList = mini.AbstractView.extend({
+        tagName: 'div',
+        className: 'row-fluid',
+        setup: function (options) {
+        },
+        render: function () {
+            this.$el.text('AttachmentsList');
+            return this;
+        }
+    });
+
+    var murks = {
+        attachments_list: function (options) {
+            options.point.extend(new attachments.EditableAttachmentList({
+                id: options.field,
+                registerAs: 'attachmentList',
+                className: 'row-fluid',
+                index: options.index,
+                module: 7,
+                finishedCallback: function (model, id) {
+                    var attr = model.attributes;
+                    api.get({ id: id, folder: attr.folder_id }, false)
+                        .pipe(function (data) {
+                            return $.when(
+                                api.caches.get.add(data),
+                                api.caches.all.grepRemove(attr.folder_id + api.DELIM),
+                                api.caches.list.remove({ id: attr.id, folder: attr.folder_id }),
+                                api.clearFetchCache()
+                            )
+                            .done(function () {
+                                api.removeFromUploadList(encodeURIComponent(_.cid(data)));//to make the detailview remove the busy animation
+                                api.trigger('refresh.list');
+                            });
+                        });
+                }
+            }), {
+                isRare: function () {
+                    return options.isRare;
+                },
+                hidden: options.isAlwaysVisible ? false : function (model) {
+                    return (model.attributes.number_of_attachments === undefined || model.attributes.number_of_attachments === 0);
+                }
+            });
+        },
+        attachments_buttons: function (options) {
+            options.point.extend({
+                id: options.field,
+                index: options.index,
+                render: function (baton) {
+                    var baton = this.baton,
+                        $node = $('<form>').appendTo(this.$el).attr('id', 'attachmentsForm'),
+                        $inputWrap = attachments.fileUploadWidget({
+                            displayButton: false,
+                            multi: true,
+                            wrapperClass: 'form-horizontal control-group'
+                        }),
+                        $input = $inputWrap.find('input[type="file"]')
+                            .on('change', function (e) {
+                                e.preventDefault();
+                                if (_.browser.IE !== 9) {
+                                    _($input[0].files).each(function (fileData) {
+                                        baton.attachmentList.addFile(fileData);
+                                    });
+                                    $input.trigger('reset.fileupload');
+                                } else {
+                                    if ($input.val()) {
+                                        var fileData = {
+                                            name: $input.val().match(/[^\/\\]+$/),
+                                            size: 0,
+                                            hiddenField: $input
+                                        };
+                                        baton.attachmentList.addFile(fileData);
+                                        $input.addClass('add-attachment').hide();
+                                        $input = $('<input>', { type: 'file' }).appendTo($input.parent());
+                                    }
+                                }
+                            }).on('focus', function () {
+                                $input.attr('tabindex', '1');
+                            });
+
+                    $node.append($('<div>').addClass('contact_attachments_buttons').append($inputWrap));
+                }
+            }, {
+                isRare: function () {
+                    return options.isRare;
+                },
+                hidden: options.isAlwaysVisible ? false : function (model) {
+                    return (model.attributes.number_of_attachments === undefined || model.attributes.number_of_attachments === 0);
+                }
+            });
+        }
+    };
 
     function createContactEdit(ref) {
 
@@ -345,10 +300,10 @@ define('io.ox/contacts/edit/view-form', [
                 .find('a').text(label);
         }
 
-        var FullnameView = Backbone.View.extend({
+        var FullnameView = mini.AbstractView.extend({
             tagName: 'h1',
             className: 'name',
-            initialize: function (options) {
+            setup: function (options) {
                 this.listenTo(this.model, 'change:first_name change:last_name change:title', this.render);
             },
             render: function () {
@@ -357,19 +312,15 @@ define('io.ox/contacts/edit/view-form', [
             }
         });
 
-        var JobView = Backbone.View.extend({
+        var JobView = mini.AbstractView.extend({
             tagName: 'h2',
             className: 'job',
-            initialize: function (options) {
+            setup: function (options) {
                 this.listenTo(this.model, 'change:position change:department change:company', this.render);
-                this.$el.on('dispose', $.proxy(this.remove, this));
             },
             render: function () {
                 this.$el.text(util.getJob(this.model.toJSON()) || '\u00A0');
                 return this;
-            },
-            remove: function () {
-                console.error('AHA!');
             }
         });
 
@@ -431,6 +382,8 @@ define('io.ox/contacts/edit/view-form', [
                 }).fail(function () {
                     options.parentView.trigger('save:fail');
                 });
+
+
             }
         });
 
@@ -455,183 +408,45 @@ define('io.ox/contacts/edit/view-form', [
             }
         });
 
-        var InputView = Backbone.View.extend({
-            tagName: 'input type="text"',
-            className: 'input-xlarge',
-            events: { 'change': 'onChange' },
-            onChange: function () {
-                this.model.set(this.name, this.$el.val());
-            },
-            initialize: function (options) {
-                this.name = options.name;
-                this.listenTo(this.model, 'change:' + this.name, this.update);
-            },
-            update: function () {
-                this.$el.val($.trim(this.model.get(this.name)));
-            },
-            render: function () {
-                this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
-                this.update();
-                return this;
-            }
-        });
-
         function drawDefault(options, model) {
-
             this.append(
                 $('<label class="input">').append(
                     $.txt(options.label), $('<br>'),
-                    new InputView({ name: options.field, model: model }).render().$el
+                    new mini.InputView({ name: options.field, model: model }).render().$el
                 )
             );
         }
-
-        var TextView = Backbone.View.extend({
-            tagName: 'textarea',
-            className: 'input-xlarge',
-            events: { 'change': 'onChange' },
-            onChange: function () {
-                this.model.set(this.name, this.$el.val());
-            },
-            initialize: function (options) {
-                this.name = options.name;
-                this.listenTo(this.model, 'change:' + this.name, this.update);
-            },
-            update: function () {
-                this.$el.val(this.model.get(this.name));
-            },
-            render: function () {
-                this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
-                this.update();
-                return this;
-            }
-        });
 
         function drawTextarea(options, model) {
             this.append(
                 $('<label>').append(
-                    new TextView({ name: options.field, model: model }).render().$el
+                    new mini.TextView({ name: options.field, model: model }).render().$el
                 )
             );
         }
 
-        var DateView = Backbone.View.extend({
-            tagName: 'div',
-            events: { 'change select': 'onChange' },
-            onChange: function () {
-                var year = this.$el.find('.year').val(),
-                    month = this.$el.find('.month').val(),
-                    day = this.$el.find('.date').val();
-                if (year !== '' && month !== '' && day !== '') {
-                    this.model.set(this.name,
-                        date.Local.localTime(new date.Local(year, month, day))
-                    );
-                } else {
-                    this.model.set(this.name, null);
-                }
-            },
-            update: function () {
-                var value = this.model.get(this.name);
-                // change boxes onyl for valid dates
-                if (_.isNumber(value)) {
-                    var d = new date.Local(date.Local.utc(value));
-                    this.$el.find('.year').val(d.getYear());
-                    this.$el.find('.month').val(d.getMonth());
-                    this.$el.find('.date').val(d.getDate());
-                }
-            },
-            initialize: function (options) {
-                this.name = options.name;
-                this.listenTo(this.model, 'change:' + this.name, this.update);
-            },
-            render: function () {
-
-                var self = this;
-
-                function createSelect(name, from, to, setter, format) {
-
-                    var node = $('<select tabindex="1">').attr('name', name),
-                        i = Math.min(from, to),
-                        $i = Math.max(from, to),
-                        d = new date.Local(0),
-                        options = [];
-
-                    for (; i <= $i; i++) {
-                        setter.call(d, i);
-                        options.push($('<option>').val(i).text(d.format(format)));
-                    }
-
-                    // revert?
-                    if (from > to) {
-                        options.reverse();
-                    }
-
-                    // add empty option
-                    options.unshift($('<option>').text(''));
-
-                    // append
-                    return node.append(options);
-                }
-
-                date.getFormat(date.DATE).replace(
-                    /(Y+|y+|u+)|(M+|L+)|(d+)|(?:''|'(?:[^']|'')*'|[^A-Za-z'])+/g,
-                    function (match, y, m, d) {
-                        var proto = date.Local.prototype, node;
-                        if (y) {
-                            var year = (new date.Local()).getYear();
-                            node = createSelect('year', year, year - 150, proto.setYear, y).addClass('year');
-                        } else if (m) {
-                            node = createSelect('month', 0, 11, proto.setMonth, 'MMMM').addClass('month');
-                        } else if (d) {
-                            node = createSelect('day', 1, 31, proto.setDate, match).addClass('date');
-                        }
-                        self.$el.append(node);
-                    }
-                );
-
-                this.update();
-                return this;
-            }
-        });
-
         function drawDate(options, model) {
-
             this.append(
                 $('<label class="input">').append(
                     $.txt(options.label), $('<br>'),
-                    new DateView({ name: options.field, model: model }).render().$el
+                    new mini.DateView({ name: options.field, model: model }).render().$el
                 )
             );
         }
-
-        var CheckboxView = Backbone.View.extend({
-            tagName: 'input type="checkbox"',
-            className: '',
-            events: { 'change': 'onChange' },
-            onChange: function () {
-                this.model.set(this.name, this.$el.prop('checked'));
-            },
-            initialize: function (options) {
-                this.name = options.name;
-                this.listenTo(this.model, 'change:' + this.name, this.update);
-            },
-            update: function () {
-                this.$el.prop('checked', !!this.model.get(this.name));
-            },
-            render: function () {
-                this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
-                this.update();
-                return this;
-            }
-        });
 
         function drawCheckbox(options, model) {
             this.append(
                 $('<label class="checkbox">').append(
-                    new CheckboxView({ name: options.field, model: model }).render().$el,
+                    new mini.CheckboxView({ name: options.field, model: model }).render().$el,
                     $.txt(' '),
                     $.txt(options.label)
                 )
+            );
+        }
+
+        function drawAttachments(options, model) {
+            this.append(
+                new EditableAttachmentList({ model: model, module: 7 /* don't ask */ }).render().$el
             );
         }
 
@@ -640,7 +455,8 @@ define('io.ox/contacts/edit/view-form', [
                 birthday: drawDate,
                 anniversary: drawDate,
                 note: drawTextarea,
-                private_flag: drawCheckbox
+                private_flag: drawCheckbox,
+                attachments_list: drawAttachments
             };
 
         // loop over all sections (personal, messaging, phone etc.)
@@ -660,10 +476,10 @@ define('io.ox/contacts/edit/view-form', [
                             $('<legend>').text(meta.i18n[id])
                         );
 
+                    if (id === 'attachments') block.addClass('double-block');
+
                     // draw fields inside block
                     ext.point(ref + '/edit/view/' + id).invoke('draw', block, baton);
-
-                    window.model = baton.model;
 
                     // only add if block contains at least one paragraph with content
                     if (block.children('p.has-content, p.always').length > 0) {
