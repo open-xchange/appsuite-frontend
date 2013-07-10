@@ -193,7 +193,23 @@
             if (display.medium) return 'medium';
             return 'large';
         },
+        /**used to recheck the device properties
+         *fix for a bug where device was checked too early (desktop was detected as small)
+         *USE WITH CAUTION!
+         *if _.device values are changed it might cause sideEffects
+         */
+        recheckDevice: function () {
+            _(queries).each(function (query, key) {
+                display[key] = Modernizr.mq(query);
+            });
 
+            mobileOS = !!(_.browser.ios || _.browser.android || _.browser.blackberry || _.browser.windowsphone);
+            // define devices as combination of screensize and OS
+            display.smartphone = display.small && mobileOS;
+            display.tablet = display.medium && mobileOS; // maybe to fuzzy...
+            display.desktop = !mobileOS;
+            _.displayInfo = display;
+        },
         // combination of browser & display
         device: function (condition, debug) {
             // add support for language checks

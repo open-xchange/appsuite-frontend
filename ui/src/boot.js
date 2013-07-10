@@ -80,6 +80,17 @@ $(window).load(function () {
         });
     }
     ox.uploadsEnabled = true;
+    
+    //ugly device hack
+    //if device small wait 10ms check again
+    //maybe the check was made too early could be wrong
+    //desktop was recognized as mobile in some cases because of this
+    if(_.device('small')) {
+        setTimeout(function () {
+            _.recheckDevice();
+        }, 10);
+       
+    }
 
     // check for supported browser
     function isBrowserSupported() {
