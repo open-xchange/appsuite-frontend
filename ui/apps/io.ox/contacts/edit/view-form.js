@@ -28,7 +28,7 @@ define('io.ox/contacts/edit/view-form', [
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/attachments',
     'less!io.ox/contacts/edit/style.less'
-], function (model, views, forms, actions, links, PictureUpload, attachments, api, util, gt, capabilities, ext, date, mini, EditableAttachmentList) {
+], function (model, views, forms, actions, links, PictureUpload, attachments, api, util, gt, capabilities, ext, date, mini, attachmentViews) {
 
     "use strict";
 
@@ -136,99 +136,6 @@ define('io.ox/contacts/edit/view-form', [
             function (i) { return fields[i]; }, $.noop)
         );
     });
-
-    var AttachmentsList = mini.AbstractView.extend({
-        tagName: 'div',
-        className: 'row-fluid',
-        setup: function (options) {
-        },
-        render: function () {
-            this.$el.text('AttachmentsList');
-            return this;
-        }
-    });
-
-    var murks = {
-        attachments_list: function (options) {
-            options.point.extend(new attachments.EditableAttachmentList({
-                id: options.field,
-                registerAs: 'attachmentList',
-                className: 'row-fluid',
-                index: options.index,
-                module: 7,
-                finishedCallback: function (model, id) {
-                    var attr = model.attributes;
-                    api.get({ id: id, folder: attr.folder_id }, false)
-                        .pipe(function (data) {
-                            return $.when(
-                                api.caches.get.add(data),
-                                api.caches.all.grepRemove(attr.folder_id + api.DELIM),
-                                api.caches.list.remove({ id: attr.id, folder: attr.folder_id }),
-                                api.clearFetchCache()
-                            )
-                            .done(function () {
-                                api.removeFromUploadList(encodeURIComponent(_.cid(data)));//to make the detailview remove the busy animation
-                                api.trigger('refresh.list');
-                            });
-                        });
-                }
-            }), {
-                isRare: function () {
-                    return options.isRare;
-                },
-                hidden: options.isAlwaysVisible ? false : function (model) {
-                    return (model.attributes.number_of_attachments === undefined || model.attributes.number_of_attachments === 0);
-                }
-            });
-        },
-        attachments_buttons: function (options) {
-            options.point.extend({
-                id: options.field,
-                index: options.index,
-                render: function (baton) {
-                    var baton = this.baton,
-                        $node = $('<form>').appendTo(this.$el).attr('id', 'attachmentsForm'),
-                        $inputWrap = attachments.fileUploadWidget({
-                            displayButton: false,
-                            multi: true,
-                            wrapperClass: 'form-horizontal control-group'
-                        }),
-                        $input = $inputWrap.find('input[type="file"]')
-                            .on('change', function (e) {
-                                e.preventDefault();
-                                if (_.browser.IE !== 9) {
-                                    _($input[0].files).each(function (fileData) {
-                                        baton.attachmentList.addFile(fileData);
-                                    });
-                                    $input.trigger('reset.fileupload');
-                                } else {
-                                    if ($input.val()) {
-                                        var fileData = {
-                                            name: $input.val().match(/[^\/\\]+$/),
-                                            size: 0,
-                                            hiddenField: $input
-                                        };
-                                        baton.attachmentList.addFile(fileData);
-                                        $input.addClass('add-attachment').hide();
-                                        $input = $('<input>', { type: 'file' }).appendTo($input.parent());
-                                    }
-                                }
-                            }).on('focus', function () {
-                                $input.attr('tabindex', '1');
-                            });
-
-                    $node.append($('<div>').addClass('contact_attachments_buttons').append($inputWrap));
-                }
-            }, {
-                isRare: function () {
-                    return options.isRare;
-                },
-                hidden: options.isAlwaysVisible ? false : function (model) {
-                    return (model.attributes.number_of_attachments === undefined || model.attributes.number_of_attachments === 0);
-                }
-            });
-        }
-    };
 
     function createContactEdit(ref) {
 
@@ -446,7 +353,10 @@ define('io.ox/contacts/edit/view-form', [
 
         function drawAttachments(options, model) {
             this.append(
-                new EditableAttachmentList({ model: model, module: 7 /* don't ask */ }).render().$el
+                $('<form>').append(
+                    new attachmentViews.ListView({ model: model, module: 7 /* don't ask */ }).render().$el,
+                    new attachmentViews.UploadView({ model: model }).render().$el
+                )
             );
         }
 

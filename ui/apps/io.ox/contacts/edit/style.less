@@ -11,8 +11,6 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-
-
 .icon-plus-sign, .icon-minus-sign {
     margin-right: 5px;
 }
@@ -89,7 +87,8 @@
     }
 
     .block.double-block {
-        width: @step * 12;
+        width: 100%;
+        max-width: @step * 12;
         margin-right: 0;
         clear: both;
     }
@@ -174,9 +173,93 @@
         margin-left: 15px;
     }
 
+    .attachment-list {
+
+        .attachment {
+
+            position: relative;
+            margin-bottom: 7px;
+            padding: 7px 50px 7px 50px;
+            background-color: #F5F5F5;
+
+            width: 330px;
+            float: left;
+            margin-right: 0px;
+            .box-sizing(border-box);
+
+            &:nth-child(odd) {
+                margin-right: 60px;
+            }
+
+            i.icon-paper-clip {
+                position: absolute;
+                font-size: 24px;
+                color: rgba(0, 0, 0, 0.20);
+                top: 15px;
+                left: 15px;
+            }
+
+            .filesize {
+                font-size: 13px;
+                color: #aaa;
+            }
+
+            .remove {
+                position: absolute;
+                top: 0px;
+                right: 0px;
+                bottom:  0px;
+                width: 2em;
+                font-size: 18px;
+                background-color: #f0f0f0;
+                border-left: 1px solid white;
+                color: #bbb;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: #a00;
+                    color: #fff;
+                    text-decoration: none;
+                }
+
+                i.icon-trash {
+                    position: absolute;
+                    top: 50%;
+                    left: 0;
+                    right: 0;
+                    margin-top: -0.5em;
+                    text-align: center;
+                }
+            }
+
+            .row-1, .row-2 {
+                .ellipsis();
+            }
+        }
+    }
+
+    .contact_attachments_buttons {
+        clear: both;
+    }
+
     @media (max-width: 480px), (max-device-width: 480px) {
-        .title.header-pic {
-            float: none;
+        h1.name {
+            clear: both;
+            margin-top: 28px;
+        }
+        .block {
+            width: @step * 6;
+            margin-right: 0px;
+        }
+        .input-xlarge {
+            width: 380px;
+        }
+        .block.double-block {
+            width: 360px;
+        }
+        .attachment-list .attachment {
+            width: 380px;
+            margin-right: 0px;
         }
     }
 }

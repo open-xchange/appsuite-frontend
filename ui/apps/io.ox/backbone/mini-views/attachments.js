@@ -13,23 +13,33 @@
 define('io.ox/backbone/mini-views/attachments',
     ['io.ox/backbone/mini-views/abstract',
      'io.ox/core/api/attachment',
-     'io.ox/core/strings'
-    ], function (AbstractView, api, strings) {
+     'io.ox/core/tk/attachments',
+     'io.ox/core/strings',
+     'gettext!io.ox/core'
+    ], function (AbstractView, api, attachments, strings, gt) {
 
     'use strict';
 
     var counter = 0;
 
-    return AbstractView.extend({
+    var ListView = AbstractView.extend({
 
         tagName: 'div',
-        className: 'row-fluid',
+        className: 'attachment-list',
+
+        events: {
+            'click .attachment .remove': 'onDeleteAttachment'
+        },
+
+        onDeleteAttachment: function (e) {
+            e.preventDefault();
+            var attachment = $(e.target).data();
+            this.deleteAttachment(attachment);
+        },
 
         setup: function () {
 
             var self = this;
-
-            console.log('setup!');
 
             this.oldMode = _.browser.IE < 10;
             this.attachmentsToAdd = [];
@@ -49,6 +59,8 @@ define('io.ox/backbone/mini-views/attachments',
 
                 if (folder && id) self.save(id, folder);
             });
+
+            this.$el.data('view', this);
         },
 
         finishedCallback: function (model, id) {
@@ -56,47 +68,44 @@ define('io.ox/backbone/mini-views/attachments',
         },
 
         render: function () {
-            var self = this,
-                odd = true,
-                row;
-            _(this.allAttachments).each(function (attachment) {
-                self.$el.addClass('span12 io-ox-core-tk-attachment-list').append(self.renderAttachment(attachment));
-            });
 
-            //trigger refresh of attachmentcounter
-            //this.baton.parentView.trigger('attachmentCounterRefresh', this.allAttachments.length);
+            if (this.allAttachments.length === 0) {
+                this.$el.append(
+                    $('<span>').text(gt('No attachments'))
+                );
+            }
+
+            this.$el.append(
+                _(this.allAttachments).map(this.renderAttachment)
+            );
 
             return this;
         },
 
         renderAttachment: function (attachment) {
-            var self = this;
-            var size, removeFile;
-            var $el = $('<div class="span6">').append(
-                $('<div class="io-ox-core-tk-attachment file">').append(
-                    $('<i class="icon-paper-clip">'),
-                    $('<div class="row-1">').text(attachment.filename),
-                    $('<div class="row-2">').append(
-                        size = $('<span class="filesize">').text(strings.fileSize(attachment.file_size))
-                    ),
-                    removeFile = $('<a href="#" class="remove" tabindex="1" title="Remove attachment">').append($('<i class="icon-trash">'))
+
+            var size = attachment.file_size > 0 ? strings.fileSize(attachment.file_size) : '\u00A0';
+
+            return $('<div class="attachment">').append(
+                $('<i class="icon-paper-clip">'),
+                $('<div class="row-1">').text(attachment.filename),
+                $('<div class="row-2">').append(
+                    $('<span class="filesize">').text(size)
+                ),
+                $('<a href="#" class="remove" tabindex="1" title="Remove attachment">')
+                .data(attachment)
+                .append(
+                    $('<i class="icon-trash">')
                 )
             );
-
-            removeFile.on('click', function () { self.deleteAttachment(attachment); });
-
-            if (size.text() === "0 B") {size.text(" "); }
-
-            return $el;
         },
 
         loadAttachments: function () {
             var self = this;
-            console.log('loadAttachments', this.model.id);
             if (this.model.id) {
-                api.getAll({ module: this.options.module, id: this.model.id, folder: this.model.get('folder') || this.model.get('folder_id')}).done(function (attachments) {
+                api.getAll({ module: this.options.module, id: this.model.id, folder: this.model.get('folder') || this.model.get('folder_id')})
+                .done(function (attachments) {
                     self.attachmentsOnServer = attachments;
-                    console.log('updateState ...');
                     self.updateState();
                 });
             }
@@ -185,7 +194,9 @@ define('io.ox/backbone/mini-views/attachments',
                     });
                 }
             }
+
             if (allDone <= 0) { self.finishedCallback(self.model, id); }
+
             this.attachmentsToAdd = [];
             this.attachmentsToDelete = [];
             this.attachmentsOnServer = [];
@@ -193,4 +204,55 @@ define('io.ox/backbone/mini-views/attachments',
             this.allAttachments = [];
         }
     });
+
+    var UploadView = AbstractView.extend({
+
+        className: 'contact_attachments_buttons',
+
+        render: function () {
+
+            var self = this;
+
+            var uploadWidget = attachments.fileUploadWidget({
+                displayButton: false,
+                multi: true,
+                wrapperClass: 'form-horizontal control-group'
+            });
+
+            var $input = uploadWidget.find('input[type="file"]')
+                .on('change', function (e) {
+                    e.preventDefault();
+                    var list = self.$el.closest('form').find('.attachment-list').data('view');
+                    if (_.browser.IE !== 9) {
+                        _($input[0].files).each(function (fileData) {
+                            // add to attachment list
+                            list.addFile(fileData);
+                        });
+                        $input.trigger('reset.fileupload');
+                    } else {
+                        if ($input.val()) {
+                            var fileData = {
+                                name: $input.val().match(/[^\/\\]+$/),
+                                size: 0,
+                                hiddenField: $input
+                            };
+                            list.addFile(fileData);
+                            $input.addClass('add-attachment').hide();
+                            $input = $('<input>', { type: 'file' }).appendTo($input.parent());
+                        }
+                    }
+                })
+                .on('focus', function () {
+                    $input.attr('tabindex', '1');
+                });
+
+            this.$el.append(uploadWidget);
+            return this;
+        }
+    });
+
+    return {
+        ListView: ListView,
+        UploadView: UploadView
+    };
 });
