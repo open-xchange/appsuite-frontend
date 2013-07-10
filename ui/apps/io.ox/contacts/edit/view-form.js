@@ -345,23 +345,44 @@ define('io.ox/contacts/edit/view-form', [
                 .find('a').text(label);
         }
 
+        var FullnameView = Backbone.View.extend({
+            tagName: 'h1',
+            className: 'name',
+            initialize: function (options) {
+                this.listenTo(this.model, 'change:first_name change:last_name change:title', this.render);
+            },
+            render: function () {
+                this.$el.text(util.getFullName(this.model.toJSON()) || '\u00A0');
+                return this;
+            }
+        });
+
+        var JobView = Backbone.View.extend({
+            tagName: 'h2',
+            className: 'job',
+            initialize: function (options) {
+                this.listenTo(this.model, 'change:position change:department change:company', this.render);
+                this.$el.on('dispose', $.proxy(this.remove, this));
+            },
+            render: function () {
+                this.$el.text(util.getJob(this.model.toJSON()) || '\u00A0');
+                return this;
+            },
+            remove: function () {
+                console.error('AHA!');
+            }
+        });
+
         point.basicExtend({
             id: 'summary',
             index: 150,
             draw: function (baton) {
 
-                var h1 = $('<h1 class="name">'),
-                    h2 = $('<h2 class="job">'),
-                    data = baton.model.toJSON();
-
-                h1.text(util.getFullName(data));
-                h2.text(util.getJob(data));
-
                 this.append(
-                    h1,
-                    h2,
+                    new FullnameView({ model: baton.model }).render().$el,
+                    new JobView({ model: baton.model }).render().$el,
                     $('<nav class="toggle-compact">').append(
-                        $('<a href="#">').click(toggle).text(gt('Extended view')),
+                        $('<a href="#" tabindex="1">').click(toggle).text(gt('Extended view')),
                         $.txt(' '),
                         $('<i class="icon-expand-alt">')
                     )
@@ -376,7 +397,7 @@ define('io.ox/contacts/edit/view-form', [
             draw: function (baton) {
                 this.append(
                     $('<nav class="toggle-compact clear">').append(
-                        $('<a href="#">').click(toggle).text(gt('Extended view')),
+                        $('<a href="#" tabindex="1">').click(toggle).text(gt('Extended view')),
                         $.txt(' '),
                         $('<i class="icon-expand-alt">')
                     )
@@ -434,56 +455,180 @@ define('io.ox/contacts/edit/view-form', [
             }
         });
 
-        function drawDefault(options) {
+        var InputView = Backbone.View.extend({
+            tagName: 'input type="text"',
+            className: 'input-xlarge',
+            events: { 'change': 'onChange' },
+            onChange: function () {
+                this.model.set(this.name, this.$el.val());
+            },
+            initialize: function (options) {
+                this.name = options.name;
+                this.listenTo(this.model, 'change:' + this.name, this.update);
+            },
+            update: function () {
+                this.$el.val($.trim(this.model.get(this.name)));
+            },
+            render: function () {
+                this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
+                this.update();
+                return this;
+            }
+        });
+
+        function drawDefault(options, model) {
 
             this.append(
                 $('<label class="input">').append(
                     $.txt(options.label), $('<br>'),
-                    $('<input type="text" class="input-xlarge" tabindex="1">')
-                        .attr({ name: options.field })
-                        .val(options.value)
+                    new InputView({ name: options.field, model: model }).render().$el
                 )
             );
         }
 
-        function drawTextarea(options) {
+        var TextView = Backbone.View.extend({
+            tagName: 'textarea',
+            className: 'input-xlarge',
+            events: { 'change': 'onChange' },
+            onChange: function () {
+                this.model.set(this.name, this.$el.val());
+            },
+            initialize: function (options) {
+                this.name = options.name;
+                this.listenTo(this.model, 'change:' + this.name, this.update);
+            },
+            update: function () {
+                this.$el.val(this.model.get(this.name));
+            },
+            render: function () {
+                this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
+                this.update();
+                return this;
+            }
+        });
+
+        function drawTextarea(options, model) {
             this.append(
                 $('<label>').append(
-                    $('<textarea class="input-xlarge" tabindex="1">')
-                        .attr({ name: options.field })
-                        .val(options.value)
+                    new TextView({ name: options.field, model: model }).render().$el
                 )
             );
         }
 
-        function drawDate(options) {
+        var DateView = Backbone.View.extend({
+            tagName: 'div',
+            events: { 'change select': 'onChange' },
+            onChange: function () {
+                var year = this.$el.find('.year').val(),
+                    month = this.$el.find('.month').val(),
+                    day = this.$el.find('.date').val();
+                if (year !== '' && month !== '' && day !== '') {
+                    this.model.set(this.name,
+                        date.Local.localTime(new date.Local(year, month, day))
+                    );
+                } else {
+                    this.model.set(this.name, null);
+                }
+            },
+            update: function () {
+                var value = this.model.get(this.name);
+                // change boxes onyl for valid dates
+                if (_.isNumber(value)) {
+                    var d = new date.Local(date.Local.utc(value));
+                    this.$el.find('.year').val(d.getYear());
+                    this.$el.find('.month').val(d.getMonth());
+                    this.$el.find('.date').val(d.getDate());
+                }
+            },
+            initialize: function (options) {
+                this.name = options.name;
+                this.listenTo(this.model, 'change:' + this.name, this.update);
+            },
+            render: function () {
+
+                var self = this;
+
+                function createSelect(name, from, to, setter, format) {
+
+                    var node = $('<select tabindex="1">').attr('name', name),
+                        i = Math.min(from, to),
+                        $i = Math.max(from, to),
+                        d = new date.Local(0),
+                        options = [];
+
+                    for (; i <= $i; i++) {
+                        setter.call(d, i);
+                        options.push($('<option>').val(i).text(d.format(format)));
+                    }
+
+                    // revert?
+                    if (from > to) {
+                        options.reverse();
+                    }
+
+                    // add empty option
+                    options.unshift($('<option>').text(''));
+
+                    // append
+                    return node.append(options);
+                }
+
+                date.getFormat(date.DATE).replace(
+                    /(Y+|y+|u+)|(M+|L+)|(d+)|(?:''|'(?:[^']|'')*'|[^A-Za-z'])+/g,
+                    function (match, y, m, d) {
+                        var proto = date.Local.prototype, node;
+                        if (y) {
+                            var year = (new date.Local()).getYear();
+                            node = createSelect('year', year, year - 150, proto.setYear, y).addClass('year');
+                        } else if (m) {
+                            node = createSelect('month', 0, 11, proto.setMonth, 'MMMM').addClass('month');
+                        } else if (d) {
+                            node = createSelect('day', 1, 31, proto.setDate, match).addClass('date');
+                        }
+                        self.$el.append(node);
+                    }
+                );
+
+                this.update();
+                return this;
+            }
+        });
+
+        function drawDate(options, model) {
 
             this.append(
                 $('<label class="input">').append(
                     $.txt(options.label), $('<br>'),
-                    forms.buildDateControl()
+                    new DateView({ name: options.field, model: model }).render().$el
                 )
             );
-
-            // set initial date
-            if (options.value) {
-                var d = new date.Local(date.Local.utc(options.value));
-                this.find('.year').val(d.getYear());
-                this.find('.month').val(d.getMonth());
-                this.find('.date').val(d.getDate());
-            } else {
-                this.find('.year').val('');
-                this.find('.month').val('');
-                this.find('.date').val('');
-            }
         }
 
-        function drawCheckbox(options) {
+        var CheckboxView = Backbone.View.extend({
+            tagName: 'input type="checkbox"',
+            className: '',
+            events: { 'change': 'onChange' },
+            onChange: function () {
+                this.model.set(this.name, this.$el.prop('checked'));
+            },
+            initialize: function (options) {
+                this.name = options.name;
+                this.listenTo(this.model, 'change:' + this.name, this.update);
+            },
+            update: function () {
+                this.$el.prop('checked', !!this.model.get(this.name));
+            },
+            render: function () {
+                this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
+                this.update();
+                return this;
+            }
+        });
+
+        function drawCheckbox(options, model) {
             this.append(
                 $('<label class="checkbox">').append(
-                    $('<input type="checkbox" tabindex="1">')
-                        .attr({ name: options.field })
-                        .prop('checked', !!options.value),
+                    new CheckboxView({ name: options.field, model: model }).render().$el,
                     $.txt(' '),
                     $.txt(options.label)
                 )
@@ -517,6 +662,8 @@ define('io.ox/contacts/edit/view-form', [
 
                     // draw fields inside block
                     ext.point(ref + '/edit/view/' + id).invoke('draw', block, baton);
+
+                    window.model = baton.model;
 
                     // only add if block contains at least one paragraph with content
                     if (block.children('p.has-content, p.always').length > 0) {
@@ -555,7 +702,7 @@ define('io.ox/contacts/edit/view-form', [
                             );
 
                         // call requires "draw" method
-                        (draw[field] || drawDefault).call(paragraph, options);
+                        (draw[field] || drawDefault).call(paragraph, options, baton.model);
 
                         this.append(paragraph);
                     }
