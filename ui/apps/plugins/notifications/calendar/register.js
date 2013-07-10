@@ -160,16 +160,15 @@ define('plugins/notifications/calendar/register',
                     new dialogs.SidePopup({ arrow: false, side: 'right' })
                         .setTarget(overlay.empty())
                         .on('close', function () {
-                            var isSmall = $(window).width() <= 480;
-                            if (isSmall && overlay.children().length > 0) {
+                            if (_.device('smartphone') && overlay.children().length > 0) {
                                 overlay.addClass('active');
-                            } else if (isSmall) {
+                            } else if (_.device('smartphone')) {
                                 overlay.removeClass('active');
                             }
                         })
                         .show(e, function (popup) {
                             popup.append(view.draw(data));
-                            if ($(window).width() <= 480) {
+                            if (_.device('smartphone')) {
                                 $('#io-ox-notifications').removeClass('active');
                             }
                         });
@@ -196,7 +195,7 @@ define('plugins/notifications/calendar/register',
                         reminder.set('time', util.getTimeInterval(calObj));
                         self.collection.add(reminder);
                     });
-                    
+
                 }, min * 60000);
             }
         },
@@ -370,7 +369,7 @@ define('plugins/notifications/calendar/register',
                                         ReminderNotifications.collection.remove(reminderModel);
                                     }
                                 });
-                                
+
                                 // do not add user suppressed ('remind me later') reminders
                                 if (ReminderNotifications.collection.hidden.length === 0 || _.indexOf(ReminderNotifications.collection.hidden, _.cid(remObj)) === -1) {
                                     ReminderNotifications.collection.add(new Backbone.Model(inObj));

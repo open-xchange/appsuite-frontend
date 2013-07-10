@@ -118,16 +118,15 @@ define('plugins/notifications/tasks/register',
                         new dialogs.SidePopup({ arrow: false, side: 'right' })
                             .setTarget(overlay)
                             .on('close', function () {
-                                var isSmall = $(window).width() <= 480;
-                                if (isSmall && overlay.children().length > 0) {
+                                if (_.device('smartphone') && overlay.children().length > 0) {
                                     overlay.addClass('active');
-                                } else if (isSmall) {
+                                } else if (_.device('smartphone')) {
                                     overlay.removeClass('active');
                                 }
                             })
                             .show(e, function (popup) {
                                 popup.append(viewDetail.draw(taskData));
-                                if ($(window).width() <= 480) {
+                                if (_.device('smartphone')) {
                                     $('#io-ox-notifications').removeClass('active');
                                 }
                             });
@@ -260,7 +259,7 @@ define('plugins/notifications/tasks/register',
             if ($(e.target).is('a') || $(e.target).is('i')) {//ignore chevron and dropdownlinks
                 return;
             }
-            
+
             var overlay = $('#io-ox-notifications-overlay'),
                 obj = {
                     id: this.model.get('id'),

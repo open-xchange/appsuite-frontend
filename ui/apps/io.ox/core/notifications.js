@@ -223,7 +223,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                 badgeView.setNotifier(false);
             });
             $('#io-ox-notifications').removeClass('active');
-            if ($(window).width() >= 480) {
+            if (_.device('!smartphone')) {
                 $('#io-ox-notifications-overlay').empty().removeClass('active');
             }
         },

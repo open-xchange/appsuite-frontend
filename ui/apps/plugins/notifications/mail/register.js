@@ -39,7 +39,7 @@ define('plugins/notifications/mail/register',
             $('<div class="item">').attr('data-cid', _.cid(data)).append(
                 $('<div class="title">').text(_.noI18n(util.getDisplayName(f[0]))),
                 $('<div class="subject">').text(_.noI18n(data.subject)),
-                (($(window).width() <= 480) ? $() : $('<div class="content">').html(_.noI18n(api.beautifyMailText(data.attachments[0].content))))
+                (_.device('smartphone') ? $() : $('<div class="content">').html(_.noI18n(api.beautifyMailText(data.attachments[0].content))))
             )
         );
     }
@@ -121,16 +121,15 @@ define('plugins/notifications/mail/register',
                             .on('close', function () {
                                 overlay.trigger('mail-detail-closed');
                                 api.off('delete', cleanUp);
-                                var isSmall = $(window).width() <= 480;
-                                if (isSmall && overlay.children().length > 0) {
+                                if (_.device('smartphone') && overlay.children().length > 0) {
                                     overlay.addClass('active');
-                                } else if (isSmall) {
+                                } else if (_.device('smartphone')) {
                                     overlay.removeClass('active');
                                 }
                             })
                             .show(e, function (popup) {
                                 popup.append(view.draw(data));
-                                if ($(window).width() <= 480) {
+                                if (_.device('smartphone')) {
                                     $('#io-ox-notifications').removeClass('active');
                                 }
                                 api.on('delete', {popup: detailPopup}, cleanUp);//if mail gets deleted we must close the sidepopup or it will show a blank page
