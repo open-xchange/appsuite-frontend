@@ -358,18 +358,18 @@ define('io.ox/files/actions',
         },
         action: function (baton) {
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                var $input = $('<input type="text" name="name" class="span12">');
-                var dialog = null;
+                var $input = $('<input type="text" name="name" class="span12">'),
+                    dialog = null;
 
                 /**
                  * @return {promise}
                  */
                 function fnRename() {
-                    var name = $input.val();
-                    var update = {
-                        id: baton.data.id,
-                        folder_id: baton.data.folder_id
-                    };
+                    var name = $input.val(),
+                        update = {
+                            id: baton.data.id,
+                            folder_id: baton.data.folder_id
+                        };
                     //'title only' entries
                     if (!baton.data.filename && baton.data.title) {
                         update.title = name;
@@ -416,12 +416,13 @@ define('io.ox/files/actions',
 
                 $input.val(baton.data.filename_tmp || baton.data.filename || baton.data.title);
                 delete baton.data.filename_tmp;
-                var $form = $('<form>').append(
-                    $('<div class="row-fluid">').append(
-                        $('<label for="name">').append($('<b>').text(gt('Name'))),
-                        $input
-                    )
-                );
+                var $form = $('<form>')
+                    .css('margin', '0 0 0 0')
+                    .append(
+                        $('<div class="row-fluid">').append(
+                            $input
+                        )
+                    );
 
                 //'enter'
                 $form.on('submit', function (e) {
@@ -430,11 +431,13 @@ define('io.ox/files/actions',
                     process();
                 });
 
-                dialog = new dialogs.ModalDialog().append(
-                    $form
-                )
-                .addPrimaryButton('rename', gt('Rename'))
-                .addButton('cancel', gt('Cancel'));
+                dialog = new dialogs.ModalDialog()
+                    .header($('<h4>').text(gt('Rename')))
+                    .append(
+                        $form
+                    )
+                    .addPrimaryButton('rename', gt('Rename'))
+                    .addButton('cancel', gt('Cancel'));
 
                 dialog.show(function () {
                     $input.get()[0].setSelectionRange(0, $input.val().lastIndexOf('.'));
@@ -454,15 +457,16 @@ define('io.ox/files/actions',
         },
         action: function (baton) {
             require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/keys'], function (dialogs, KeyListener) {
-                var $input = $('<textarea rows="10"></textarea>').css({width: '507px'});
-                $input.val(baton.data.description);
-                var $form = $('<form>').append(
-                    $('<label for="name">').append($('<b>').text(gt('Description'))),
-                    $input
-                );
-                var dialog = null;
-
-                var keys = new KeyListener($input);
+                var keys = new KeyListener($input),
+                    dialog = new dialogs.ModalDialog(),
+                    $input = $('<textarea rows="10"></textarea>')
+                            .css({width: '507px'})
+                            .val(baton.data.description),
+                    $form = $('<form>')
+                            .css('margin', '0 0 0 0')
+                            .append(
+                                $input
+                            );
 
                 function fnSave() {
 
@@ -483,9 +487,9 @@ define('io.ox/files/actions',
                     });
                 });
 
-                dialog = new dialogs.ModalDialog();
-
-                dialog.append(
+                dialog
+                .header($('<h4>').text(gt('Description')))
+                .append(
                     $form
                 )
                 .addPrimaryButton('save', gt('Save'))
