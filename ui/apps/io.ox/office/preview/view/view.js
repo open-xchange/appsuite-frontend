@@ -434,7 +434,7 @@ define('io.ox/office/preview/view/view',
             if (_.isNumber(zoomType)) {
                 zoomType = Math.round(zoomType);
             } else if (!_.isString(zoomType) || (zoomType.length === 0)) {
-                zoomType = 100;
+                zoomType = 'page';
             }
 
             // restore selected page
