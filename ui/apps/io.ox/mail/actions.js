@@ -25,8 +25,10 @@ define('io.ox/mail/actions',
      'io.ox/contacts/api',
      'io.ox/core/api/account',
      'io.ox/office/framework/app/extensionregistry',
+     'io.ox/core/extPatterns/actions',
      'settings!io.ox/mail'
-    ], function (ext, links, api, util, gt, config, folderAPI, notifications, print, contactAPI, account, ExtensionRegistry, settings) {
+    ], function (ext, links, api, util, gt, config, folderAPI, notifications, print, contactAPI, account, ExtensionRegistry, actions, settings) {
+
 
     'use strict';
 
@@ -1189,6 +1191,79 @@ define('io.ox/mail/actions',
         label: gt('Drop here to import this mail'),
         action: function (file, app) {
             app.queues.importEML.offer(file);
+        }
+    });
+
+
+    // Mobile multi select extension points
+    // action markunread
+    ext.point('io.ox/mail/mobileMultiSelect/toolbar').extend({
+        id: 'unread',
+        index: 10,
+        draw: function (data) {
+            var selection = data.data,
+                allUnread = true;
+            // what do we want to do?
+            // if all selected mails are unread, show "read" action and vice versa
+            for (var i = 0; i < selection.length; i++) {
+                if (!api.tracker.isUnseen(selection[i])) {
+                    allUnread = false;
+                }
+            }
+
+            var baton = new ext.Baton({data: data.data});
+            $(this).append($('<div class="toolbar-button">')
+                .append($('<a href="#">')
+                    .append(
+                        $('<i>')
+                            .addClass((allUnread ? 'icon-envelope' : 'icon-envelope-alt'))
+                            .on('click', function (e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                actions.invoke('io.ox/mail/actions/' + (allUnread ? 'markread' : 'markunread'), null, baton);
+                            })
+                    )
+                )
+            );
+        }
+    });
+
+    // action delete
+    ext.point('io.ox/mail/mobileMultiSelect/toolbar').extend({
+        id: 'delete',
+        index: 20,
+        draw: function (data) {
+            var baton = new ext.Baton({data: data.data});
+            $(this).append($('<div class="toolbar-button">')
+                .append($('<a href="#">')
+                    .append(
+                        $('<i class="icon-trash">').on('tap', function (e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            actions.invoke('io.ox/mail/actions/delete', null, baton);
+                        })
+                    )
+                )
+            );
+        }
+    });
+    // action move
+    ext.point('io.ox/mail/mobileMultiSelect/toolbar').extend({
+        id: 'move',
+        index: 30,
+        draw: function (data) {
+            var baton = new ext.Baton({data: data.data});
+            $(this).append($('<div class="toolbar-button">')
+                .append($('<a href="#">')
+                    .append(
+                        $('<i class="icon-signin">').on('tap', function (e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            actions.invoke('io.ox/mail/actions/move', null, baton);
+                        })
+                    )
+                )
+            );
         }
     });
 

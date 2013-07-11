@@ -184,7 +184,7 @@ i.docs-caret {
             right: 0;
             height: auto;
             overflow: hidden;
-    
+
             &.top { top: 0; }
             &.bottom { bottom: 0; }
         }
@@ -263,6 +263,9 @@ i.docs-caret {
 
 /* glow effect for focused controls, use as argument for shadow mix-in classes */
 @focus-glow-effect: 0 0 8px 2px fade(@selectedBackground, 60%);
+
+/* glow effect for active drop-down buttons, use as argument for shadow mix-in classes */
+@dropdown-glow-effect: 0 0 8px 2px fade(white, 60%);
 
 /* horizontal padding in control elements */
 @control-padding: 8px;
@@ -539,24 +542,28 @@ i.docs-caret {
 
                 .button:not(.disabled) {
                     .box-shadow(@button-shadow-effect);
+                    &.selected { .box-shadow(@selected-button-shadow-effect); }
+                }
 
-                    &:hover { background: fade(white, 5%); }
-                    &:active { background: fade(black, 5%); }
+                &:not(.dropdown-open) .button:not(.disabled) {
 
-                    &:focus:not(:active) {
-                        .box-shadow-2(@button-shadow-effect, @focus-glow-effect);
-                        border-color: @selectedBackground;
+                    &:not(.selected) {
+                        &:hover { background: fade(white, 5%); }
+                        &:active { background: fade(black, 5%); }
+
+                        &:focus:not(:active) {
+                            .box-shadow-2(@button-shadow-effect, @focus-glow-effect);
+                            border-color: @selectedBackground;
+                        }
                     }
 
-                    /* selected toggle/radio buttons */
                     &.selected {
-                        .box-shadow(@selected-button-shadow-effect);
-
                         &:hover { background: fade(@selectedBackground, 60%); }
                         &:active { background: fade(@selectedBackground, 40%); }
 
                         &:focus:not(:active) {
                             .box-shadow-2(@selected-button-shadow-effect, @focus-glow-effect);
+                            border-color: @selectedBackground;
                         }
                     }
                 }
@@ -585,12 +592,12 @@ i.docs-caret {
                 }
 
                 /* effects for all elements in combo fields */
-                &.combo-field.focused {
+                &.combo-field.focused, &.combo-field.dropdown-open {
                     .box-shadow(@focus-glow-effect);
 
                     > input, > .button.dropdown-button {
                         &, &:hover, &:focus, &:active {
-                            background: white;
+                            background-color: white;
                             border-color: @selectedBackground;
                             .box-shadow(none);
                             color: @textColor;
@@ -615,7 +622,27 @@ i.docs-caret {
                         }
                     }
                 }
+
+                &.dropdown-open:not(.combo-field) {
+                    .box-shadow(@dropdown-glow-effect);
+
+                    .button:not(.disabled) {
+                        z-index: 5;
+                        border-color: #e5e5e5;
+
+                        &:not(.selected) {
+                            background-color: fade(white, 40%);
+                            &:hover { background-color: fade(white, 45%); }
+                        }
+
+                        &.selected {
+                            background-color: fade(lighten(@selectedBackground, 20%), 60%);
+                            &:hover { background-color: fade(lighten(@selectedBackground, 20%), 65%); }
+                        }
+                    }
+                }
             }
+
         } /* end of .group */
 
         /* add specific design properties for the heading button */
@@ -707,7 +734,7 @@ i.docs-caret {
         &.toolbox {
             padding: 8px 4px;
         }
-        
+
         > .group {
             display: inline-block;
             white-space: nowrap;

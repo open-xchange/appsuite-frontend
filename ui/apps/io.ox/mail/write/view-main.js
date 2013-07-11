@@ -655,7 +655,7 @@ define("io.ox/mail/write/view-main",
 
         e.preventDefault();
 
-        var file = target.data('file'), message = file.message, preview, reader;
+        var file = target.data('file'), message = file.message, app = target.data('app'), preview, reader;
 
         // nested message?
         if (message) {
@@ -678,7 +678,7 @@ define("io.ox/mail/write/view-main",
         } else if (file.id && file.folder_id) { // infostore
             // if is infostore
             require(['io.ox/files/list/view-detail'], function (view) {
-                popup.append(view.draw(file));
+                popup.append(view.draw(file, app));
             });
         } else if (file.atmsgref) { // forward mail attachment
             require(['io.ox/preview/main'], function (p) {
@@ -728,8 +728,8 @@ define("io.ox/mail/write/view-main",
         }
     };
 
-    createPreview = function (file) {
-        return $('<a href="#" class="attachment-preview">').data('file', file).text(gt('Preview'));
+    createPreview = function (file, app) {
+        return $('<a href="#" class="attachment-preview">').data({file: file, app: app }).text(gt('Preview'));
     };
 
     function round(num, digits) {
@@ -800,7 +800,7 @@ define("io.ox/mail/write/view-main",
                         $('<div class="row-2">').append(
                             info,
                             // preview?
-                            supportsPreview(file) ? createPreview(file) : $(),
+                            supportsPreview(file) ? createPreview(file, view.app) : $(),
                             // nbsp
                             $.txt('\u00A0')
                         ),

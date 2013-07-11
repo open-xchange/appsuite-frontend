@@ -101,7 +101,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             this.notificationsView = new NotificationsView();
 
             $('#io-ox-core').prepend(
-                $('<div id="io-ox-notifications" class="scrollable">'),
+                $('<div id="io-ox-notifications" tabindex="-1">'),
                 $('<div id="io-ox-notifications-overlay" class="abs notifications-overlay">').click(function (e) {
                     if (e.target === this) {
                         self.hideList();
@@ -128,7 +128,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                 }
             }
 
-            changeAutoOpen();
+            if (_.device('!smartphone')) { changeAutoOpen(); }
             settings.on('change:autoOpenNotification', function (e, value) {
                 changeAutoOpen(value);
             });
@@ -148,7 +148,13 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                 ext.point('io.ox/core/notifications/register').invoke('register', self, self);
             });
 
-            return addLauncher('right', $('<a>').append(badgeView.render().$el.show()), $.proxy(this.toggleList, this)).attr('id', 'io-ox-notifications-icon');
+            function focusNotifications(e) {
+                if (e.which === 13) {
+                    _.defer(function () { $('#io-ox-notifications').focus(); });
+                }
+            }
+
+            return addLauncher('right', $('<a href="#" tabindex="1">').on('keydown', focusNotifications).append(badgeView.render().$el.show()), $.proxy(this.toggleList, this)).attr('id', 'io-ox-notifications-icon');
 
         },
         get: function (key, listview) {
@@ -203,15 +209,15 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             //their app
             if ($('#io-ox-notifications').hasClass('active')) {
                 this.hideList();
+                if (_.device('smartphone')) { $('#io-ox-notifications-overlay').empty().removeClass('active'); }
             } else {
                 this.showList();
             }
         },
         showList: function () {
-            // just for the moment as reminder view blocks whole screen
-            // will reenable the view later with new design
-            if (_.device('small')) return;
-
+            if (_.device('smartphone')) {
+                $('[data-app-name="io.ox/portal"]:visible').addClass('notifications-open');
+            }
             $('#io-ox-notifications').addClass('active');
             $('#io-ox-notifications-overlay').addClass('active');
             $(document).on('keydown.notification', $.proxy(function (e) {
@@ -225,8 +231,14 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             _.each(this.badges, function (badgeView) {
                 badgeView.setNotifier(false);
             });
+
             $('#io-ox-notifications').removeClass('active');
-            $('#io-ox-notifications-overlay').empty().removeClass('active');
+            if (_.device('!smartphone')) {
+                $('#io-ox-notifications-overlay').empty().removeClass('active');
+                $('#io-ox-notifications-icon > a').focus();
+            } else {
+                $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
+            }
         },
 
         // type = info | warning | error | success

@@ -145,7 +145,7 @@ define('io.ox/office/tk/control/radiolist',
         }
 
         /**
-         * Handles 'menuopen' events.
+         * Handles 'menu:open' events.
          */
         function menuOpenHandler() {
             scrollToListItem(Utils.getSelectedButtons(self.getItems()));
@@ -163,9 +163,9 @@ define('io.ox/office/tk/control/radiolist',
             var // the target caption button
                 captionButton = self.getCaptionButton(),
                 // activate an option button
-                optionButton = Utils.selectOptionButton(self.getItems(), value, equality),
+                selectedButtons = Utils.selectOptionButton(self.getItems(), value, equality),
                 // the options used to create the list item button
-                buttonOptions = optionButton.data('options') || {},
+                buttonOptions = selectedButtons.data('options') || {},
                 // the options used to set the caption of the drop-down menu button
                 captionOptions = _.clone(options),
                 // whether the drop-down button will be highlighted
@@ -176,7 +176,7 @@ define('io.ox/office/tk/control/radiolist',
                 if (_.isFunction(updateHighlightHandler)) {
                     isHighlighted = updateHighlightHandler.call(self, value);
                 } else {
-                    isHighlighted = highlight && (optionButton.length > 0);
+                    isHighlighted = highlight && (selectedButtons.length > 0);
                 }
             }
             Utils.toggleButtons(self.getMenuButton().add(captionButton), isHighlighted);
@@ -191,9 +191,14 @@ define('io.ox/office/tk/control/radiolist',
                 Utils.setControlCaption(captionButton, captionOptions);
             }
 
+            // update the data-value attribute of the group from all selected items
+            self.getNode().attr('data-value', selectedButtons.map(function () {
+                return $(this).attr('data-value');
+            }).get().join(','));
+
             // call custom update handler
             if (_.isFunction(updateCaptionHandler)) {
-                updateCaptionHandler.call(self, captionButton, value, optionButton);
+                updateCaptionHandler.call(self, captionButton, value, selectedButtons);
             }
         }
 
@@ -272,7 +277,7 @@ define('io.ox/office/tk/control/radiolist',
         }
 
         // register event handlers
-        this.on('menuopen', menuOpenHandler);
+        this.on('menu:open', menuOpenHandler);
         this.getItemGroup().registerUpdateHandler(itemUpdateHandler);
 
     } // class RadioList

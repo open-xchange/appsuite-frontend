@@ -200,8 +200,7 @@
     .launcher {
 
         max-width: 10em;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        .ellipsis;
         cursor: pointer;
 
         &.hover {
@@ -302,8 +301,7 @@
             }
             a {
                 max-width: 10em;
-                overflow:hidden;
-                text-overflow:ellipsis;
+                .ellipsis;
             }
         }
 
@@ -375,125 +373,135 @@
     z-index: 10;
 }
 
-#io-ox-notifications {
-    background-color: #222;
-    top: 40px;
-    width: 350px;
-    position: absolute;
-    right: -350px;
-    bottom: 0px;
-    border-top: 1px solid #000;
+
+#io-ox-windowmanager {
     overflow: hidden;
-    z-index: 30;
+}
+
+/* notifications */
+
+#io-ox-notifications {
     display: none;
-    .transition(all 0.1s);
-    .box-shadow(0 10px 20px 1px black);
+
+    position: absolute;
+    z-index: 30;
+    top: 40px;
+    bottom: 0px;
+
+    background-color: #222;
+    border-top: 1px solid #000;
+
+    .overflow-x(hidden);
+    .overflow-y(auto);
+    .box-sizing(border-box);
+
+     &:focus { outline: 0; }
+
+    @media (max-width: 480px), (max-device-width: 480px) and (orientation: portrait) {
+
+        width: 100%;
+
+        &.active {
+             display:block;
+        }
+    }
+
+    @media (min-width: 481px) {
+        width: 350px;
+        right: -350px;
+        .box-shadow(0 10px 20px 1px black);
+         &.active { right: 0; }
+    }
+
+    &.active {
+        display: block;
+    }
+
+    #io-ox-notifications-display {
+
+        padding: 0 13px 0 13px;
+
+        .section-title {
+            color: #eee;
+            border: none;
+            font-family: @lightFontFamily;
+            font-size: 18px;
+            margin: 0 0 0 13px;
+            line-height: 46px;
+        }
+
+        .notifications { margin-bottom: 13px; }
+
+        .item {
+            color: #fff;
+            background-color: #333;
+            padding: 13px;
+            margin-bottom: 1px;
+            cursor: pointer;
+
+            &:focus { outline: 1px solid rgba(255,255,255,0.3); background-color: #444; }
+
+            &:hover {
+                background-color: #444;
+            }
+
+            .title {
+                pointer-events: none;
+                font-weight: bold;
+                .ellipsis;
+            }
+
+            .subject {
+                .ellipsis;
+                pointer-events: none;
+            }
+
+            .content {
+                color: #aaa;
+                line-height: 16px;
+                max-height: 5 * 16px; /* 5 rows */
+                margin-top: 3px;
+                .ellipsis;
+            }
+
+            .time {
+                float: right;
+                display: inline-block;
+            }
+
+            .location { color: #aaa; }
+
+            .actions {
+                text-align: right;
+                margin: 5px 0 5px 0;
+            }
+        }
+
+        .item .blue, div > a { color: #17B2FF; }
+
+        .open-app {
+            text-align: left;
+            padding: 0 13px 0;
+        }
+    }
 }
 
 #io-ox-notifications-overlay {
+    display: none;
     background-color: transparent;
     background-color: rgba(255, 255, 255, 0.01);
     top: 40px;
     right: 350px;
-    display: none;
     z-index: 20;
-}
 
-#io-ox-notifications-overlay.active {
-    display: block;
-}
-
-.notifications {
-    margin-bottom: 13px;
-}
-
-#io-ox-notifications.active {
-    right: 0px;
-    display: block;
-}
-
-#io-ox-windowmanager {
-    overflow: hidden;
-
-}
-
-#io-ox-notifications-display {
-
-    padding: 0 13px 0 13px;
-
-    .section-title {
-        color: #EEE;
-        border: none;
-        font-family: @lightFontFamily;
-        font-size: 24px;
-        margin: 0 0 4px 13px;
-        line-height: 46px;
+    &.active {
+        display: block;
     }
+}
 
-    .item {
-
-        color: #fff;
-        background-color: #333;
-        padding: 13px;
-        margin-bottom: 1px;
-        cursor: pointer;
-
-        &:hover {
-            background-color: #444;
-        }
-
-        .title {
-            pointer-events: none;
-            font-weight: bold;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-
-        .subject {
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-            pointer-events: none;
-        }
-
-        .content {
-            color: #aaa;
-            line-height: 16px;
-            max-height: 5 * 16px; /* 5 rows */
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin-top: 3px;
-        }
-
-        .time {
-            float: right;
-            display: inline-block;
-        }
-
-        .date {
-        }
-
-        .location {
-            color: #AAA;
-        }
-
-        .actions {
-            text-align: right;
-            margin: 5px 0 5px 0;
-        }
-
-    }
-
-    .item .blue, a {
-        color: #17B2FF;
-    }
-
-    .open-app {
-        text-align: left;
-        padding: 0 13px 0;
-    }
-
+@media (max-width: 480px), (max-device-width: 480px) and (orientation: portrait) {
+    .notifications-open { display:none; } // To hide mobile portal when notifications area is open on mobile devices
+    #io-ox-notifications-overlay { right: 0; }
 }
 
 .io-ox-alert {
@@ -824,9 +832,7 @@
     font-size: 22px;
     line-height: 30px;
     text-shadow: 0px 0px 2px #000;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    .ellipsis;
     .box-sizing(border-box);
     /* override h1 */
     display: block;
@@ -1124,9 +1130,7 @@ a.button {
     background-color: @background; /* resolves hw accel anti-aliasing */
 
     * {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        .ellipsis;
     }
 
     &.selectable, &.hover {
@@ -1346,15 +1350,22 @@ input[type=search] {
 }
 
 /* Dialogs */
+.io-ox-dialog-wrapper {
+    height: 100%;
+    width: 100%;
+}
+
 .io-ox-dialog-underlay {
+
     background-color: black;
     opacity: 0;
     z-index: 65000;
     .transition(opacity 0.15s linear);
-}
 
-.io-ox-dialog-underlay.in {
-    opacity: 0.30;
+    &.in {
+        opacity: 0.30;
+    }
+
 }
 
 .io-ox-dialog-popup {
@@ -1415,6 +1426,10 @@ input[type=search] {
 
     .io-ox-sidepopup.left {
         .border-radius(5px 0 0 5px);
+    }
+
+    &:focus {
+        outline: none;
     }
 }
 
@@ -2448,9 +2463,6 @@ input.flat-input {
     }
 
     .input-medium.search-query { width: 80px; }
-
-    #io-ox-notifications { width: 320px; right: -320px; }
-    #io-ox-notifications-overlay { right: 320px; }
 }
 
 // landscape fullscreen on iPhone
@@ -2671,11 +2683,43 @@ input.flat-input {
         .io-ox-action-link:last-child {
             margin: 0;
         };
+
+        .dropdown-menu li>a:focus {
+            background-color: initial;
+            background-image: none;
+            color: initial;
+        }
+         /* fixes for mail flags */
+        .flag-example, .color-example {
+            display: inline-block;
+            left: 10px;
+            width: 10px;
+            height: 30px;
+            position: absolute;
+        }
+        .color-black { background-color: #333; }
+        .color-red { background-color: @red; }
+        .color-orange { background-color: @orange; }
+        .color-lightgreen { background-color: darken(@greenLight, 10%); }
+        .color-green { background-color: @green; }
+        .color-lightblue { background-color: darken(@blueLight, 20%); }
+        .color-blue { background-color: @blue; }
+        .color-purple { background-color: @purple; }
+        .color-pink { background-color: darken(@pink, 10%); }
+        .color-gray { background-color: darken(@grayLight, 20%); }
     }
 
     #background_loader.secure.block {
         background-color: rgba(0,0,0,.6);
         height: 150% !important;
+    }
+
+    #multi-select-toolbar {
+        .select-counter {
+            margin-left: 15px;
+            font-weight: bold;
+            color: #aaa;
+        }
     }
 
 }

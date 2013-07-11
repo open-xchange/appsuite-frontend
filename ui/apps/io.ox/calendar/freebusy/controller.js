@@ -48,9 +48,15 @@ define('io.ox/calendar/freebusy/controller',
                 // folder data
                 folderData = {},
                 // shared navigation date
-                refDate = new date.Local(options.start_date) || new date.Local();
+                refDate;
 
             this.promise = state.promise();
+
+            if (options.baton && options.baton.app) {
+                refDate = options.baton.app.refDate;
+            } else {
+                refDate = new date.Local(options.start_date || _.now());
+            }
 
             // create container node
             this.$el = templates.getMainContainer().on('dispose', function () {
@@ -91,7 +97,7 @@ define('io.ox/calendar/freebusy/controller',
                 } else {
                     this.updateAppointment(data);
                 }
-                
+
             };
 
             this.postprocess = function () {

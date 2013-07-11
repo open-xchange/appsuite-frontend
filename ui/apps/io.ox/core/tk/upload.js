@@ -21,7 +21,10 @@ define('io.ox/core/tk/upload',
 
     function hasLeftViewport(e) {
         e = e.originalEvent || e;
-        if (_.browser.Firefox || _.browser.Safari || _.browser.IE) return true;
+        if (_.browser.Safari || _.browser.IE) return true;
+        if (_.browser.Firefox && (window.innerWidth < e.clientX || window.innerHeight < e.clientY) || e.clientX > 0 || e.clientY > 0) {
+            return true;
+        }
         return (e.clientX === 0 && e.clientY === 0);
     }
 
@@ -78,7 +81,7 @@ define('io.ox/core/tk/upload',
         };
 
         removeOverlay = function (e) {
-            if (!isFileDND(e) || ignored(e)) {
+            if ((!hasLeftViewport || _.browser.Chrome) && (!isFileDND(e) || ignored(e))) {
                 return;
             }
             $overlay.detach();

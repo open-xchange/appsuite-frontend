@@ -36,15 +36,54 @@
 /* glow effect for focused controls, use as argument for shadow mix-in classes */
 @focus-glow-effect: 0 0 8px 2px fade(@selectedBackground, 60%);
 
-/* thumbnail preview in the side pane */
+/* generic settings for page nodes */
+.page {
+    /* fix for IE10, which does not render SVG text elements when line height is 0 */
+    line-height: normal;
+    overflow: hidden;
+    background: white;
+
+    &, &:focus, &:active {
+        outline: none;
+    }
+
+    /* remove max-width property set by Bootstrap */
+    > img {
+        max-width: none;
+    }
+}
+
+/* pages in the application pane =========================================== */
+
+.view-pane.app-pane {
+
+    .page {
+        position: relative;
+        width: 210mm;
+        height: 297mm;
+        .box-shadow(0 0 8px fade(black, 20%));
+        cursor: move;
+
+        + .page {
+            margin-top: 30px;
+        }
+    }
+}
+
+/* thumbnail preview in the side pane ====================================== */
+
 .view-pane.side-pane .group.page-preview {
+
+    /* padding inside the button node */
+    @button-padding: 3px;
+
     margin: 8px auto;
 
     a.button {
         position: absolute;
         overflow: visible;
         .box-sizing(border-box);
-        padding: 3px;
+        padding: @button-padding;
         border: 3px solid transparent;
         .border-radius(5px);
         color: white;
@@ -72,35 +111,24 @@
             position: relative;
             margin-left: auto;
             margin-right: auto;
-            padding: 1px;
             background-color: white;
-            width: 70px;
-            height: 90px;
         }
 
         > .caption {
             position: absolute;
             left: 0;
             right: 0;
-            bottom: 3px;
+            bottom: @button-padding;
+        }
+
+        /* prevent underlined text when hovering the SVG node */
+        &:hover {
+            text-decoration: none;
         }
     }
 }
 
-.page {
-    /* fix for IE10, which does not render SVG text elements when line height is 0 */
-    line-height: normal;
-    overflow: hidden;
-
-    &, &:focus, &:active {
-        outline: none;
-    }
-
-    &.busy {
-        .opacity(0);
-        .transition(opacity 0.5s linear 0.5s);
-    }
-}
+/* ========================================================================= */
 
 } /* end of .io-ox-office-preview-main */
 

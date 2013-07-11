@@ -105,7 +105,7 @@ define('io.ox/files/actions',
 
         new Action('io.ox/files/actions/editor', {
             requires: function (e) {
-                return e.collection.has('one') && (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename);
+                return e.collection.has('one') && (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename) && (e.baton.openedBy !== 'io.ox/mail/write');
             },
             action: function (baton) {
                 ox.launch('io.ox/editor/main', { folder: baton.data.folder_id, id: baton.data.id });
@@ -113,6 +113,9 @@ define('io.ox/files/actions',
         });
 
         new Action('io.ox/files/actions/editor-new', {
+            requires: function (e) {
+                return e.baton.openedBy !== 'io.ox/mail/write';
+            },
             action: function (baton) {
                 ox.launch('io.ox/editor/main').done(function () {
                     this.create({ folder: baton.app.folder.get() });
@@ -139,31 +142,9 @@ define('io.ox/files/actions',
         }
     });
 
-/*
-    new Action('io.ox/files/actions/open', {
-        id: 'office',
-        // we just need to be called before 'default'
-        before: 'default',
-        // pick items you want to take care of (actually this function is called by underscore's "filter")
-        filter: function (obj) {
-            return (/\.docx$/i).test(obj.filename);
-        },
-        action: function (baton) {
-            // baton.tracker shows items that are not yet picked
-            // if this list is empty, no more actions are called
-            console.log('Do something!', baton);
-            // this is also possible to avoid the 'default' action:
-            // baton.preventDefault();
-            // however, that does not help us because all other files
-            // should still be opened by the default handler
-        }
-    });
-*/
-
     new Action('io.ox/files/actions/open', {
         requires: 'some',
         multiple: function (list) {
-            console.log('OX Files: actions/open called for ' + _.size(list) + ' items');
             // loop over list, get full file object and open new window
             _(list).each(function (o) {
                 api.get(o).done(function (file) {
@@ -178,7 +159,9 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/sendlink', {
         capabilities: 'webmail !alone',
-        requires: 'some',
+        requires: function (e) {
+            return e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
+        },
         multiple: function (list) {
             require(['io.ox/mail/write/main'], function (m) {
                 api.getList(list).done(function (list) {
@@ -202,9 +185,10 @@ define('io.ox/files/actions',
         capabilities: 'webmail',
         requires: function (e) {
             var list = _.getArray(e.context);
-            return e.collection.has('some') && ox.uploadsEnabled && _(list).reduce(function (memo, obj) {
-                return memo || obj.file_size > 0;
-            }, false);
+            return e.collection.has('some') && ox.uploadsEnabled && (e.baton.openedBy !== 'io.ox/mail/write') &&//hide in mail write preview
+                _(list).reduce(function (memo, obj) {
+                    return memo || obj.file_size > 0;
+                }, false);
         },
         multiple: function (list) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -241,7 +225,7 @@ define('io.ox/files/actions',
 
                                 _(list).map(function (file) {
                                     var url = ox.abs + ox.root +
-                                        '/#app=io.ox/files&perspective=list' +
+                                        '/#!&app=io.ox/files&perspective=list' +
                                         '&folder=' + encodeURIComponent(file.folder_id) +
                                         '&id=' + encodeURIComponent(file.folder_id) + '.' + encodeURIComponent(file.id);
 
@@ -264,7 +248,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/delete', {
         requires: function (e) {
-            return e.collection.has('some') && isUnLocked(e);
+            return e.collection.has('some') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
         },
         multiple: function (list) {
             var question = gt.ngettext(
@@ -322,9 +306,10 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/lock', {
         requires: function (e) {
             var list = _.getArray(e.context);
-            return e.collection.has('some') && _(list).reduce(function (memo, obj) {
-                return memo || !api.tracker.isLocked(obj);
-            }, false);
+            return e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/write') &&//hide in mail write preview
+                _(list).reduce(function (memo, obj) {
+                    return memo || !api.tracker.isLocked(obj);
+                }, false);
         },
         multiple: function (list) {
             var responseSuccess = gt.ngettext(
@@ -349,9 +334,10 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/unlock', {
         requires: function (e) {
             var list = _.getArray(e.context);
-            return e.collection.has('some') && _(list).reduce(function (memo, obj) {
-                return memo || api.tracker.isLockedByMe(obj);
-            }, false);
+            return e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/write') &&//hide in mail write preview
+                _(list).reduce(function (memo, obj) {
+                    return memo || api.tracker.isLockedByMe(obj);
+                }, false);
         },
         multiple: function (list) {
             var responseSuccess = gt.ngettext(
@@ -376,22 +362,22 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/rename', {
         requires: function (e) {
-            return e.collection.has('one') && isUnLocked(e);
+            return e.collection.has('one') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
         },
         action: function (baton) {
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                var $input = $('<input type="text" name="name" class="span12">');
-                var dialog = null;
+                var $input = $('<input type="text" name="name" class="span12">'),
+                    dialog = null;
 
                 /**
                  * @return {promise}
                  */
                 function fnRename() {
-                    var name = $input.val();
-                    var update = {
-                        id: baton.data.id,
-                        folder_id: baton.data.folder_id
-                    };
+                    var name = $input.val(),
+                        update = {
+                            id: baton.data.id,
+                            folder_id: baton.data.folder_id
+                        };
                     //'title only' entries
                     if (!baton.data.filename && baton.data.title) {
                         update.title = name;
@@ -407,43 +393,27 @@ define('io.ox/files/actions',
                  * @return {promise}
                  */
                 function process() {
-                    var name = $input.val(),
-                        extmissing = !/\.\w{1,4}$/.test(name),
-                        def = $.Deferred();
-                    //missing extension
-                    if (extmissing) {
-                        new dialogs.ModalDialog()
-                            .addPrimaryButton('rename', gt('Yes'))
-                            .addButton('change', gt('Change Name'))
-                            .show()
-                            .done(function (action) {
-                                if (action === 'rename')
-                                    def.resolve();
-                                else
-                                    def.reject();
+                    require(['io.ox/files/util'], function (util) {
+                        util.confirmDialog($input.val(), baton.data.filename || baton.data.title)
+                            .then(function () {
+                                return fnRename();
+                            }, function () {
+                                //store user input and call action again
+                                baton.data.filename_tmp = $input.val();
+                                actionPerformer.invoke('io.ox/files/actions/rename', null, baton);
                             });
-                    } else {
-                        def.resolve();
-                    }
-                    //rename or abort
-                    def.then(function () {
-                        return fnRename();
-                    }, function () {
-                        //store user input and call action again
-                        baton.tmp = name;
-                        actionPerformer.invoke('io.ox/files/actions/rename', null, baton);
                     });
-                    return def.promise();
                 }
 
-                $input.val(baton.tmp || baton.data.filename || baton.data.title);
-                delete baton.tmp;
-                var $form = $('<form>').append(
-                    $('<div class="row-fluid">').append(
-                        $('<label for="name">').append($('<b>').text(gt('Name'))),
-                        $input
-                    )
-                );
+                $input.val(baton.data.filename_tmp || baton.data.filename || baton.data.title);
+                delete baton.data.filename_tmp;
+                var $form = $('<form>')
+                    .css('margin', '0 0 0 0')
+                    .append(
+                        $('<div class="row-fluid">').append(
+                            $input
+                        )
+                    );
 
                 //'enter'
                 $form.on('submit', function (e) {
@@ -452,11 +422,13 @@ define('io.ox/files/actions',
                     process();
                 });
 
-                dialog = new dialogs.ModalDialog().append(
-                    $form
-                )
-                .addPrimaryButton('rename', gt('Rename'))
-                .addButton('cancel', gt('Cancel'));
+                dialog = new dialogs.ModalDialog()
+                    .header($('<h4>').text(gt('Rename')))
+                    .append(
+                        $form
+                    )
+                    .addPrimaryButton('rename', gt('Rename'))
+                    .addButton('cancel', gt('Cancel'));
 
                 dialog.show(function () {
                     $input.get()[0].setSelectionRange(0, $input.val().lastIndexOf('.'));
@@ -472,19 +444,20 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/edit-description', {
         requires: function (e) {
-            return e.collection.has('one') && isUnLocked(e);
+            return e.collection.has('one') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
         },
         action: function (baton) {
             require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/keys'], function (dialogs, KeyListener) {
-                var $input = $('<textarea rows="10"></textarea>').css({width: '507px'});
-                $input.val(baton.data.description);
-                var $form = $('<form>').append(
-                    $('<label for="name">').append($('<b>').text(gt('Description'))),
-                    $input
-                );
-                var dialog = null;
-
-                var keys = new KeyListener($input);
+                var keys = new KeyListener($input),
+                    dialog = new dialogs.ModalDialog(),
+                    $input = $('<textarea rows="10"></textarea>')
+                            .css({width: '507px'})
+                            .val(baton.data.description),
+                    $form = $('<form>')
+                            .css('margin', '0 0 0 0')
+                            .append(
+                                $input
+                            );
 
                 function fnSave() {
 
@@ -505,9 +478,9 @@ define('io.ox/files/actions',
                     });
                 });
 
-                dialog = new dialogs.ModalDialog();
-
-                dialog.append(
+                dialog
+                .header($('<h4>').text(gt('Description')))
+                .append(
                     $form
                 )
                 .addPrimaryButton('save', gt('Save'))
@@ -530,7 +503,7 @@ define('io.ox/files/actions',
         new Action('io.ox/files/actions/' + type, {
             id: type,
             requires:  function (e) {
-                return e.collection.has('some') && (type === 'move' ? e.collection.has('delete') && isUnLocked(e) : e.collection.has('read'));
+                return e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/write') && (type === 'move' ? e.collection.has('delete') && isUnLocked(e) : e.collection.has('read'));
             },
             multiple: function (list, baton) {
 
@@ -624,7 +597,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/versions/actions/makeCurrent', {
         requires: function (e) {
-            return !e.context.current_version;
+            return !e.context.current_version && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
         },
         action: function (baton) {
             var data = baton.data;
@@ -637,6 +610,9 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/versions/actions/delete', {
+        requires: function (e) {
+            return e.baton.openedBy !== 'io.ox/mail/write';//hide in mail write preview
+        },
         action: function (baton) {
             var data = baton.data;
             require(['io.ox/core/tk/dialogs'], function (dialogs) {

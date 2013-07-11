@@ -189,7 +189,7 @@ define('io.ox/core/settings/errorlog/settings/pane',
             };
 
             this.$el.find('.chart').empty().append(
-                canvas = $('<canvas width="600" height="200">')
+                canvas = _.device('smartphone') ? $('<canvas width="300" height="100">') : $('<canvas width="600" height="200">')
             );
 
             ctx = canvas.get(0).getContext('2d');

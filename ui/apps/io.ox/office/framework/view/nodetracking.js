@@ -18,9 +18,13 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
     var // shortcut for the KeyCodes object
         KeyCodes = Utils.KeyCodes,
 
-        // the map of all events to be bound to a node to start tracking
-        NODE_EVENT_MAP = {
-            mousedown: mouseDownHandler,
+        // the map of all mouse events to be bound to a node to start tracking
+        MOUSE_START_EVENT_MAP = {
+            mousedown: mouseDownHandler
+        },
+
+        // the map of all touch events to be bound to a node to start tracking
+        TOUCH_START_EVENT_MAP = {
             touchstart: touchStartHandler
         },
 
@@ -31,14 +35,15 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
             touchmove: touchMoveHandler,
             touchend: touchEndHandler,
             touchcancel: cancelTracking,
-            keydown: keyDownHandler
+            keydown: keyDownHandler,
+            focusin: focusInHandler,
+            focusout: focusOutHandler
         },
 
         // the map of all events to be bound to the document after tracking has started
         DEFERRED_EVENT_MAP = {
             mousedown: cancelTracking,
-            touchstart: cancelTracking,
-            focusout: cancelTracking
+            touchstart: cancelTracking
         },
 
         // the node that is currently tracked
@@ -55,6 +60,9 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
 
         // whether the mouse or touch point has been moved after tracking has started
         moved = false,
+
+        // whether the focus is inside the page
+        hasFocus = false,
 
         // the browser timer used for auto-scrolling
         scrollTimer = null;
@@ -99,10 +107,10 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
     /**
      * Initializes auto-scrolling mode after tracking has been started.
      */
-    function initAutoScrolling(sourceNode, pageX, pageY) {
+    function initAutoScrolling() {
 
         var // additional options for auto-scrolling
-            trackingOptions = $(sourceNode).data('tracking-options') || {},
+            trackingOptions = trackingNode.data('tracking-options') || {},
             // whether horizontal auto-scrolling is enabled
             horizontal = Utils.getBooleanOption(trackingOptions, 'autoScroll', false) || (Utils.getStringOption(trackingOptions, 'autoScroll') === 'horizontal'),
             // whether vertical auto-scrolling is enabled
@@ -110,7 +118,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
             // the time in milliseconds between auto-scrolling events
             scrollInterval = Utils.getIntegerOption(trackingOptions, 'scrollInterval', 100, 100),
             // the border node for auto-scrolling
-            borderNode = ('borderNode' in trackingOptions) ? $(trackingOptions.borderNode).first() : $(sourceNode),
+            borderNode = ('borderNode' in trackingOptions) ? $(trackingOptions.borderNode).first() : trackingNode,
             // the margin around the border box where auto-scrolling becomes active
             borderMargin = Utils.getIntegerOption(trackingOptions, 'borderMargin', 0),
             // the size of the border around the scrolling border box for acceleration
@@ -129,46 +137,45 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
             return (borderSize === 0) ? maxSpeed : (Math.min(1, (distance - 1) / borderSize) * (maxSpeed - minSpeed) + minSpeed);
         }
 
-        if (horizontal || vertical) {
+        if (!horizontal && !vertical) { return; }
 
-            scrollTimer = window.setInterval(function () {
+        scrollTimer = window.setInterval(function () {
 
-                var // the current screen position of the scroll node
-                    borderBox = Utils.getNodePositionInWindow(borderNode),
-                    // the distances from border box to tracking position
-                    leftDist = horizontal ? (borderBox.left - borderMargin - lastX) : 0,
-                    rightDist = horizontal ? (lastX - (borderBox.left + borderBox.width + borderMargin)) : 0,
-                    topDist = vertical ? (borderBox.top - borderMargin - lastY) : 0,
-                    bottomDist = vertical ? (lastY - (borderBox.top + borderBox.height + borderMargin)) : 0;
+            var // the current screen position of the scroll node
+                borderBox = Utils.getNodePositionInWindow(borderNode),
+                // the distances from border box to tracking position
+                leftDist = horizontal ? (borderBox.left - borderMargin - lastX) : 0,
+                rightDist = horizontal ? (lastX - (borderBox.left + borderBox.width + borderMargin)) : 0,
+                topDist = vertical ? (borderBox.top - borderMargin - lastY) : 0,
+                bottomDist = vertical ? (lastY - (borderBox.top + borderBox.height + borderMargin)) : 0;
 
-                // start auto-scrolling after the first 'tracking:move' event
-                if (!moved) { return; }
+            // start auto-scrolling after the first 'tracking:move' event
+            if (!moved) { return; }
 
-                // calculate new horizontal increment
-                if (leftDist > 0) {
-                    scrollX = (scrollX > -minSpeed) ? -minSpeed : Math.max(scrollX * acceleration, -getMaxSpeed(leftDist));
-                } else if (rightDist > 0) {
-                    scrollX = (scrollX < minSpeed) ? minSpeed : Math.min(scrollX * acceleration, getMaxSpeed(rightDist));
-                } else {
-                    scrollX = 0;
-                }
+            // calculate new horizontal increment
+            if (leftDist > 0) {
+                scrollX = (scrollX > -minSpeed) ? -minSpeed : Math.max(scrollX * acceleration, -getMaxSpeed(leftDist));
+            } else if (rightDist > 0) {
+                scrollX = (scrollX < minSpeed) ? minSpeed : Math.min(scrollX * acceleration, getMaxSpeed(rightDist));
+            } else {
+                scrollX = 0;
+            }
 
-                // calculate new vertical increment
-                if (topDist > 0) {
-                    scrollY = (scrollY > -minSpeed) ? -minSpeed : Math.max(scrollY * acceleration, -getMaxSpeed(topDist));
-                } else if (bottomDist > 0) {
-                    scrollY = (scrollY < minSpeed) ? minSpeed : Math.min(scrollY * acceleration, getMaxSpeed(bottomDist));
-                } else {
-                    scrollY = 0;
-                }
+            // calculate new vertical increment
+            if (topDist > 0) {
+                scrollY = (scrollY > -minSpeed) ? -minSpeed : Math.max(scrollY * acceleration, -getMaxSpeed(topDist));
+            } else if (bottomDist > 0) {
+                scrollY = (scrollY < minSpeed) ? minSpeed : Math.min(scrollY * acceleration, getMaxSpeed(bottomDist));
+            } else {
+                scrollY = 0;
+            }
 
-                // notify listeners
-                if ((Math.round(scrollX) !== 0) || (Math.round(scrollY) !== 0)) {
-                    triggerEvent('tracking:scroll', undefined, { pageX: lastX, pageY: lastY, scrollX: Math.round(scrollX), scrollY: Math.round(scrollY) });
-                }
+            // notify listeners
+            if ((Math.round(scrollX) !== 0) || (Math.round(scrollY) !== 0)) {
+                triggerEvent('tracking:scroll', undefined, { pageX: lastX, pageY: lastY, scrollX: Math.round(scrollX), scrollY: Math.round(scrollY) });
+            }
 
-            }, scrollInterval);
-        }
+        }, scrollInterval);
     }
 
     /**
@@ -183,16 +190,17 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
     /**
      * Initializes tracking mode after tracking has been started.
      */
-    function initTracking(sourceNode, targetNode, pageX, pageY) {
+    function initTracking(event, pageX, pageY) {
 
-        // store the current tracing node
-        trackingNode = $(sourceNode);
+        // store the current tracking node
+        trackingNode = $(event.delegateTarget);
         startX = lastX = pageX;
         startY = lastY = pageY;
         moved = false;
+        hasFocus = true;
 
         // set the mouse pointer of the target node at the overlay node
-        overlayNode.css('cursor', $(targetNode).css('cursor'));
+        overlayNode.css('cursor', $(event.target).css('cursor'));
 
         // register event listeners
         $(document).on(DOCUMENT_EVENT_MAP);
@@ -209,7 +217,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
         });
 
         // initialize auto scrolling
-        initAutoScrolling(sourceNode, pageX, pageY);
+        initAutoScrolling();
     }
 
     /**
@@ -237,9 +245,9 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
      * Starts tracking the passed source node. Triggers a 'tracking:start'
      * event at the current tracking node.
      */
-    function trackingStart(event, sourceNode, pageX, pageY) {
+    function trackingStart(event, pageX, pageY) {
         cancelTracking();
-        initTracking(sourceNode, event.target, pageX, pageY);
+        initTracking(event, pageX, pageY);
         triggerEvent('tracking:start', event, { target: event.target, pageX: pageX, pageY: pageY });
     }
 
@@ -276,7 +284,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
      */
     function mouseDownHandler(event) {
         if (event.button === 0) {
-            trackingStart(event, this, event.pageX, event.pageY);
+            trackingStart(event, event.pageX, event.pageY);
         } else {
             cancelTracking();
         }
@@ -303,7 +311,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
         var touches = event.originalEvent.touches,
             changed = event.originalEvent.changedTouches;
         if ((touches.length === 1) && (changed.length === 1)) {
-            trackingStart(event, this, changed[0].pageX, changed[0].pageY);
+            trackingStart(event, changed[0].pageX, changed[0].pageY);
         } else {
             cancelTracking();
         }
@@ -342,6 +350,26 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
         if (event.keyCode === KeyCodes.ESCAPE) {
             cancelTracking();
         }
+    }
+
+    /**
+     * Event handler for 'focusin' browser events.
+     */
+    function focusInHandler(event) {
+        hasFocus = true;
+    }
+
+    /**
+     * Event handler for 'focusout' browser events.
+     */
+    function focusOutHandler(event) {
+        hasFocus = false;
+        _.delay(function () {
+            // Cancel tracking if focus has been lost (browser or page inactive).
+            // If focus remains in the page, a 'focusin' event will follow immediately
+            // after the 'focusout' event and has set hasFocus back to true.
+            if (!hasFocus) { cancelTracking(); }
+        }, 50);
     }
 
     // static initialization ==================================================
@@ -446,6 +474,14 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
      * @param {Object} [options]
      *  Additional options controlling the behavior of the tracking nodes. The
      *  following options are supported:
+     *  @param {String} [options.selector]
+     *      If specified, tracking will only be initiated for descendant nodes
+     *      that match this jQuery selector.
+     *  @param {String} [options.sourceEvents='all']
+     *      If set to 'mouse', only mouse events will be processed, and touch
+     *      events will be ignored. If set to 'touch', only touch events will
+     *      be processed, and mouse events will be ignored. If set to 'all' or
+     *      omitted, mouse and touch events will be processed.
      *  @param {Boolean|String} [options.autoScroll=false]
      *      If set to true, auto-scrolling will be activated for horizontal and
      *      vertical direction. If set to either 'horizontal' or 'vertical',
@@ -497,8 +533,23 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
      *  A reference to this collection.
      */
     $.fn.enableTracking = function (options) {
+
+        var // jQuery selector to filter for descendant nodes
+            selector = Utils.getStringOption(options, 'selector'),
+            // which source events are supported
+            sourceEvents = Utils.getStringOption(options, 'sourceEvents', 'all');
+
         // prevent multiple registration of the event handlers
-        return this.off(NODE_EVENT_MAP).on(NODE_EVENT_MAP).data('tracking-options', options);
+        this.off(MOUSE_START_EVENT_MAP).off(TOUCH_START_EVENT_MAP);
+
+        // register supported events
+        if ((sourceEvents === 'mouse') || (sourceEvents === 'all')) {
+            this.on(MOUSE_START_EVENT_MAP, selector);
+        }
+        if ((sourceEvents === 'touch') || (sourceEvents === 'all')) {
+            this.on(TOUCH_START_EVENT_MAP, selector);
+        }
+        return this.data('tracking-options', options);
     };
 
     /**
@@ -514,7 +565,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
         if (trackingNode && (this.filter(trackingNode).length > 0)) {
             cancelTracking();
         }
-        return this.off(NODE_EVENT_MAP);
+        return this.off(MOUSE_START_EVENT_MAP).off(TOUCH_START_EVENT_MAP);
     };
 
     /**

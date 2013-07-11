@@ -68,6 +68,8 @@ define('plugins/mobile/addToHomescreen/register',
                 //#. %1$s is the name of the platform
                 //#. %2$s is an the "add to home" icon
                 //#. %3$s and %4$s are markers for bold text.
+                //#. The words "Home Screen" may not be translated or should match the
+                //#. string used on an iPhone using the "add to homescreen" function for weblinks
                 gt('Install this web app on your %1$s: Tap %2$s and then %3$s\'Add to Home Screen\'%4$s',
                     getPlatform(), '<span class="addToHomeShare"></span>', '<strong>', '</strong>'));
         };

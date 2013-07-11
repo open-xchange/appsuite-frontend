@@ -391,6 +391,7 @@ define('io.ox/calendar/actions',
         },
         action: function (baton, obj) {
             ox.launch('io.ox/calendar/freebusy/main', {
+                baton: baton,
                 folder: baton.app.folder.get(),
                 participants: [{ id: ox.user_id, type: 1 }]
             });

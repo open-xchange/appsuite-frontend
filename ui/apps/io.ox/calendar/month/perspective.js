@@ -33,7 +33,7 @@ define('io.ox/calendar/month/perspective',
         showAll: $(),       // show all folders check-box
         showAllCon: $(),    // container
         tops: {},           // scrollTop positions of the shown weeks
-        fisrtWeek: 0,       // timestamp of the first week
+        firstWeek: 0,       // timestamp of the first week
         lastWeek: 0,        // timestamp of the last week
         updateLoad: 8,      // amount of weeks to be loaded on scroll events
         initLoad: 2,        // amount of initial called updates
@@ -101,7 +101,11 @@ define('io.ox/calendar/month/perspective',
             var apiUpdate = function (obj) {
                 api.update(obj).fail(function (con) {
                     if (con.conflicts) {
-                        new dialogs.ModalDialog()
+                        new dialogs.ModalDialog({
+                                top: "20%",
+                                center: false,
+                                container: self.main
+                            })
                             .append(conflictView.drawList(con.conflicts))
                             .addDangerButton('ignore', gt('Ignore conflicts'))
                             .addButton('cancel', gt('Cancel'))
@@ -323,7 +327,9 @@ define('io.ox/calendar/month/perspective',
          */
         restore: function () {
             // goto current date position
-            this.gotoMonth();
+            if (this.folder) {
+                this.gotoMonth();
+            }
         },
 
         /**
@@ -427,12 +433,14 @@ define('io.ox/calendar/month/perspective',
             );
 
             this.pane
-            .on('scroll', $.proxy(function (e) {
-                    if (e.target.offsetHeight + e.target.scrollTop >= e.target.scrollHeight - this.scrollOffset) {
-                        this.drawWeeks();
-                    }
-                    if (this.scrollTop() <= this.scrollOffset) {
-                        this.drawWeeks({up: true});
+                .on('scroll', $.proxy(function (e) {
+                    if (!this.isScrolling) {
+                        if (e.target.offsetHeight + e.target.scrollTop >= e.target.scrollHeight - this.scrollOffset) {
+                            this.drawWeeks();
+                        }
+                        if (this.scrollTop() <= this.scrollOffset) {
+                            this.drawWeeks({up: true});
+                        }
                     }
                 }, this))
                 .on('scrollstop', $.proxy(function (e) {

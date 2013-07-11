@@ -1086,9 +1086,10 @@ define('io.ox/mail/write/main',
                 });
             }
 
-            // ask for empty to and/or empty subject
-            if ($.trim(mail.data.subject) === '' || _.isEmpty(mail.data.to)) {
-                if (_.isEmpty(mail.data.to)) {
+            // ask for empty to,cc,bcc and/or empty subject
+            var noRecipient = _.isEmpty(mail.data.to) && _.isEmpty(mail.data.cc) && _.isEmpty(mail.data.bcc);
+            if ($.trim(mail.data.subject) === '' || noRecipient) {
+                if (noRecipient) {
                     notifications.yell('error', gt('Mail has no recipient.'));
                     focus('to');
                     def.reject();

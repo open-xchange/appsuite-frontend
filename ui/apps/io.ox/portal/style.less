@@ -476,15 +476,35 @@
 /* Settings */
 .io-ox-portal-settings {
 
-    min-height: 100%;
-    max-width: 700px;
-    .user-select(none);
-
     .controls {
         padding: 13px;
         height: 30px;
         margin-bottom: 13px;
     }
+
+     @media (max-width: 480px), (max-device-width: 480px) {
+        
+        .controls {
+            padding-left: 0px;
+        }
+        
+        .controls .btn-group.pull-right {
+            float: none;
+        }
+        
+        li.widget-settings-view .drag-handle {
+            width: 40px;
+        }
+        
+        li.widget-settings-view.draggable {
+            padding-left: 40px;
+        }
+        
+     }
+
+    min-height: 100%;
+    max-width: 700px;
+    .user-select(none);
 
     .widget-list {
         margin: 0;
@@ -529,6 +549,34 @@
         .widget-title {
             font-weight: bold;
             margin-right: 2em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 60%;
+            white-space: nowrap;
+            text-align: left;
+            
+        }
+        
+        @media (max-width: 480px), (max-device-width: 480px) {
+            .widget-title {
+                max-width: 40%;
+            }
+            
+            a[data-action="toggle"] {
+                color: #000000;
+                text-shadow: 0 1px 0 #ffffff;
+                opacity: 0.2;
+            }
+            
+            a[data-action="toggle"]:hover {
+                opacity: 0.4;
+                text-decoration: none;
+            }
+            
+            a[data-toggle="dropdown"]:hover {
+                text-decoration: none;
+            }
+             
         }
 
         .close {

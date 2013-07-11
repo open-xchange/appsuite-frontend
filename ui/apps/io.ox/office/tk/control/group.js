@@ -28,7 +28,10 @@ define('io.ox/office/tk/control/group',
         DISABLED_CLASS = 'disabled',
 
         // CSS class for the group node while any embedded control is focused
-        FOCUSED_CLASS = 'focused';
+        FOCUSED_CLASS = 'focused',
+
+        // DOM event that will cause a 'change' event from a group
+        INTERNAL_TRIGGER_EVENT = 'private:trigger';
 
     // class Group ============================================================
 
@@ -95,10 +98,10 @@ define('io.ox/office/tk/control/group',
         function keyHandler(event) {
 
             var // distinguish between event types
-                keyup = event.type === 'keyup';
+                keydown = event.type === 'keydown';
 
             if (event.keyCode === KeyCodes.ESCAPE) {
-                if (keyup) { self.trigger('cancel'); }
+                if (keydown) { self.trigger('cancel'); }
                 return false;
             }
         }
@@ -199,22 +202,22 @@ define('io.ox/office/tk/control/group',
                 // the resolver function for the control value
                 valueResolver = Utils.getFunctionOption(options, 'valueResolver', Utils.getControlValue);
 
-            function eventHandler(event) {
-                var value =  self.isEnabled() ? valueResolver.call(self, $(this)) : null;
+            function eventHandler(event, options) {
+                var value = self.isEnabled() ? valueResolver.call(self, $(this)) : null;
                 if (_.isNull(value)) {
-                    self.trigger('cancel');
+                    self.trigger('cancel', options);
                 } else {
                     self.update(value);
-                    self.trigger('change', value);
+                    self.trigger('change', value, options);
                 }
                 return false;
             }
 
             // attach event handler to the node
             if (selector) {
-                node.on(type, selector, eventHandler);
+                node.on(type + ' ' + INTERNAL_TRIGGER_EVENT, selector, eventHandler);
             } else {
-                node.on(type, eventHandler);
+                node.on(type + ' ' + INTERNAL_TRIGGER_EVENT, eventHandler);
             }
 
             return this;
@@ -230,20 +233,41 @@ define('io.ox/office/tk/control/group',
          * @param {Group} group
          *  The group instance to be be registered.
          *
+         * @param {Object} [options]
+         *  A map with options controlling the behavior of this method. The
+         *  following options are supported:
+         *  @param {Boolean} [options.ignoreValue=false]
+         *      If set to true, 'change' events triggered by the specified
+         *      group instance will not be forwarded to listeners of this
+         *      group, and calls to the own 'Group.update()' method will not be
+         *      forwarded to the specified group instance.
+         *  @param {Boolean} [options.ignoreCancel=false]
+         *      If set to true, 'cancel' events triggered by the specified
+         *      group instance will not be forwarded to listeners of this
+         *      group.
+         *
          * @returns {Group}
          *  A reference to this instance.
          */
-        this.registerPrivateGroup = function (group) {
+        this.registerPrivateGroup = function (group, options) {
 
-            // forward events of the group to listeners of this drop-down group
-            group.on('change cancel', function (event, value) {
-                self.trigger(event.type, value);
-            });
+            // forward 'change' events of the private group to listeners of this group,
+            // and updates of this drop-down group to the inserted group
+            if (!Utils.getBooleanOption(options, 'ignoreValue', false)) {
+                group.on('change', function (event, value, options) {
+                    self.trigger('change', value, options);
+                });
+                this.registerUpdateHandler(function (value) {
+                    group.update(value);
+                });
+            }
 
-            // forward updates of this drop-down group to the inserted group
-            this.registerUpdateHandler(function (value) {
-                group.update(value);
-            });
+            // forward cancel events of the private group to listeners of this group
+            if (!Utils.getBooleanOption(options, 'ignoreCancel', false)) {
+                group.on('cancel', function (options) {
+                    self.trigger('cancel', options);
+                });
+            }
 
             return this;
         };
@@ -394,6 +418,7 @@ define('io.ox/office/tk/control/group',
 
             var // enable/disable the entire group node with all its descendants
                 enabled = Utils.enableControls(groupNode, state),
+                // set tabindex dependent on state to make it (in)accessible for F6 traveling
                 selector = '[tabindex="';
 
             // Set tabindex dependent on state to make it (in)accessible for
@@ -444,6 +469,30 @@ define('io.ox/office/tk/control/group',
         this.refresh = _.debounce(function () {
             self.update(groupValue);
         });
+
+        /**
+         * Triggers a special event at the passed DOM control node contained in
+         * this Group instance. The group will catch the event, and will
+         * trigger a 'change' event by itself with the value associated to the
+         * DOM control node.
+         *
+         * @param {HTMLElement|jQuery}
+         *  A DOM control node of this group that must have been configured as
+         *  source of change events with the Group.registerChangeHandler()
+         *  method. If this object is a jQuery collection, uses the first DOM
+         *  node it contains.
+         *
+         * @param {Object} [options]
+         *  A map with additional options that will be passed to the 'change'
+         *  event listeners of this class.
+         *
+         * @returns {Group}
+         *  A reference to this group.
+         */
+        this.triggerChange = function (control, options) {
+            $(control).first().trigger(INTERNAL_TRIGGER_EVENT, options);
+            return this;
+        };
 
         this.destroy = function () {
             this.events.destroy();

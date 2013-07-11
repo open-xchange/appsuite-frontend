@@ -32,7 +32,11 @@ define('io.ox/files/list/perspective',
         vsplit = commons.vsplit(this.main, app),
         left = vsplit.left.addClass('border-right'),
         right = vsplit.right.addClass('default-content-padding f6-target').attr('tabindex', 1).scrollable(),
-        grid = new VGrid(left, {settings: app.settings}),
+        gridOptions = {
+            settings: app.settings,
+            showToggle: _.device('smartphone') ? false: true
+        },
+        grid = new VGrid(left, gridOptions),
         dropZone;
 
         grid.addTemplate({

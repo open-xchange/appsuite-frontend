@@ -53,7 +53,7 @@ define('io.ox/office/tk/dropdown/list',
         // private methods ----------------------------------------------------
 
         /**
-         * Handles 'menuopen' events.
+         * Handles 'menu:open' events.
          */
         function menuOpenHandler() {
             this.getMenuNode().css('min-width', this.getNode().outerWidth() + 'px');
@@ -105,7 +105,7 @@ define('io.ox/office/tk/dropdown/list',
         this.getItemGroup().getNode().addClass('list');
 
         // register event handlers
-        this.on('menuopen', menuOpenHandler);
+        this.on('menu:open', menuOpenHandler);
         this.getItemGroup().getNode().on('keydown keypress keyup', listKeyHandler);
 
     } // class List

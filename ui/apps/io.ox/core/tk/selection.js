@@ -63,10 +63,12 @@ define('io.ox/core/tk/selection',
             clickHandler,
             mouseupHandler,
             mousedownHandler,
+            touchstartHandler,
             update,
             clear,
             isSelected,
             select,
+            selectOnly,
             deselect,
             toggle,
             isCheckbox,
@@ -82,7 +84,8 @@ define('io.ox/core/tk/selection',
             lastIndex = -1, // trick for smooth updates
             lastValidIndex = 0,
             fnKey,
-            hasMultiple;
+            hasMultiple,
+            mobileSelectMode;
 
         isCheckbox = function (e) {
             var closest = $(e.target).closest(editableSelector),
@@ -120,9 +123,16 @@ define('io.ox/core/tk/selection',
                 self.trigger('empty');
             }
         };
-
+        // mobile action, used on smartphone instead of "changed"
+        selectOnly = function () {
+            var list = self.get();
+            self.trigger('_m_change', list);
+            if (list.length === 0) {
+                self.trigger('empty');
+            }
+        };
         // apply selection
-        apply = function (id, e) {
+        apply = function (id, e, touchstart) {
             // range?
             if (isRange(e)) {
                 // range selection
@@ -136,8 +146,21 @@ define('io.ox/core/tk/selection',
                 last = prev = id;
                 lastValidIndex = getIndex(id);
             }
-            // event
-            changed();
+            if (!touchstart) {
+                // event
+                changed();
+            } else {
+                // check if select mode
+                // check if checkbox tap
+                // else call apply again without touchstart
+                if (isCheckbox(e) || mobileSelectMode) {
+                    e.preventDefault();
+                    selectOnly();
+                } else {
+                    apply(id, e);
+                }
+
+            }
         };
 
         selectFirst = function (e) {
@@ -266,6 +289,19 @@ define('io.ox/core/tk/selection',
             }
             // remove helper classes
             container.find('.pending-select').removeClass('pending-select');
+        };
+
+        touchstartHandler = function (e) {
+            var node, key, id;
+            if (!e.isDefaultPrevented()) {
+                node = $(this);
+                key = node.attr('data-obj-id');
+                id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
+                //if (isCheckbox(e)) {
+                //e.preventDefault();
+                apply(id, e, true);
+                //}
+            }
         };
 
         getIndex = function (id) {
@@ -680,7 +716,11 @@ define('io.ox/core/tk/selection',
                     }
                 }
                 this.update();
-                changed();
+                if (mobileSelectMode) {
+                    selectOnly();
+                } else {
+                    changed();
+                }
             }
         };
 
@@ -758,7 +798,11 @@ define('io.ox/core/tk/selection',
                 this.clear();
                 this.set(tmp);
             } else {
-                changed();
+                if (mobileSelectMode) {
+                    selectOnly();
+                } else {
+                    changed();
+                }
             }
         };
 
@@ -775,12 +819,18 @@ define('io.ox/core/tk/selection',
             container.off('mousedown mouseup contextmenu');
             selectedItems = observedItems = observedItemsIndex = last = null;
         };
-
+        this.setMobileSelectMode = function (state) {
+            mobileSelectMode = state;
+        };
+        this.getMobileSelectMode = function () {
+            return mobileSelectMode;
+        };
         // bind general click handler
         container.on('contextmenu', function (e) { e.preventDefault(); })
             .on('mousedown', '.selectable', mousedownHandler)
             .on('mouseup', '.selectable', mouseupHandler)
-            .on('click', '.selectable', clickHandler);
+            .on('click', '.selectable', clickHandler)
+            .on('touchstart', '.selectable', touchstartHandler);
 
         /*
         * DND

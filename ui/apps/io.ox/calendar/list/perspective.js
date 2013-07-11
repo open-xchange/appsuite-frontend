@@ -34,7 +34,11 @@ define('io.ox/calendar/list/perspective',
             vsplit = commons.vsplit(this.main, app),
             left = vsplit.left.addClass('border-right'),
             right = vsplit.right.addClass('default-content-padding calendar-detail-pane').attr('tabindex', 1).scrollable(),
-            grid = new VGrid(left, {settings: settings}),
+            gridOptions = {
+                settings: settings,
+                showToggle: _.device('smartphone') ? false: true
+            },
+            grid = new VGrid(left, gridOptions),
             findRecurrence = false,
             optDropdown = null;
 

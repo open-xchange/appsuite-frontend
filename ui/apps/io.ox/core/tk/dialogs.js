@@ -29,10 +29,23 @@ define("io.ox/core/tk/dialogs",
 
     var Dialog = function (options) {
 
-        var nodes = {
+        var o = _.extend({
+                underlayAction: null,
+                defaultAction: null,
+                easyOut: true,
+                center: true,
+                async: false,
+                top: "50%",
+                container: $('body')
+                // width (px), height (px),
+                // maxWidth (px), maxHeight (px)
+            }, options),
+
+            nodes = {
                 buttons: [],
-                underlay: underlay.clone().appendTo('body'),
-                popup: popup.clone().appendTo('body')
+                underlay: underlay.clone(),
+                popup: popup.clone(),
+                wrapper: $('<div>').addClass('abs io-ox-dialog-wrapper')
             },
 
             lastFocus = $(),
@@ -41,17 +54,6 @@ define("io.ox/core/tk/dialogs",
             isBusy = false,
             self = this,
             data = {},
-
-            o = _.extend({
-                underlayAction: null,
-                defaultAction: null,
-                easyOut: true,
-                center: true,
-                async: false,
-                top: "50%"
-                // width (px), height (px),
-                // maxWidth (px), maxHeight (px)
-            }, options),
 
             keepFocus = function (e) {
                 // we have to consider that two popups might be open
@@ -68,6 +70,7 @@ define("io.ox/core/tk/dialogs",
                 document.removeEventListener('focus', keepFocus, true); // not via jQuery!
                 nodes.popup.empty().remove();
                 nodes.underlay.remove();
+                nodes.wrapper.remove();
 
                 // restore focus
                 lastFocus = lastFocus.closest(':visible');
@@ -129,23 +132,48 @@ define("io.ox/core/tk/dialogs",
             },
 
             fnKey = function (e) {
-                if (!isBusy) {
-                    switch (e.which) {
-                    case 27: // ESC
+                var items, focus, index;
+
+                switch (e.which) {
+                case 27: // ESC
+                    if (!isBusy) {
                         // prevent other elements to trigger close
                         e.stopPropagation();
                         if (o.easyOut) {
                             invoke('cancel');
                         }
-                        break;
-                    case 13: // Enter
-                        break;
-                    default:
-                        break;
                     }
+                    break;
+                case 13: // Enter
+                    break;
+
+                case 9:
+                    e.preventDefault();
+
+                    items = $(this).find('[tabindex="1"][disabled!="disabled"]:visible');
+                    focus = $(document.activeElement);
+
+                    index = (items.index(focus) >= 0) ? items.index(focus) : 0;
+                    index += (e.shiftKey) ? -1 : 1;
+
+                    if (index >= items.length) {
+                        index = 0;
+                    } else if (index < 0) {
+                        index = items.length - 1;
+                    }
+                    items[index].focus();
+                    return false;
+
+                default:
+                    break;
                 }
             };
 
+        // append all elements
+        o.container.append(
+            nodes.wrapper
+                .append(nodes.underlay, nodes.popup)
+        );
 
         _(['header', 'body', 'footer']).each(function (part) {
             nodes[part] = nodes.popup.find('.modal-' + part);
@@ -218,7 +246,8 @@ define("io.ox/core/tk/dialogs",
                 click: options.click || invoke,
                 dataaction: dataaction,
                 purelink: options.purelink,
-                inverse: options.inverse
+                inverse: options.inverse,
+                tabIndex: options.tabIndex
             };
 
             if (options.type) {
@@ -559,7 +588,7 @@ define("io.ox/core/tk/dialogs",
             self.nodes = {
                 closest: target || my.parents(".io-ox-sidepopup-pane, .window-content, .window-panel, .io-ox-dialog-popup, .notifications-overlay").first(),
                 click: my.parents(".io-ox-sidepopup-pane, .window-body, .window-panel, .io-ox-dialog-popup, .notifications-overlay").first(),
-                target: target || my.parents(".window-body, .simple-window, .window-panel, .io-ox-dialog-popup, .notifications-overlay").first(),
+                target: target || my.parents(".window-body, .simple-window, .window-panel, .notifications-overlay").first(),
                 simple: my.closest('.simple-window')
             };
 

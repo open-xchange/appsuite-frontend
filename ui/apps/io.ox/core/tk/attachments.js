@@ -295,7 +295,7 @@ define('io.ox/core/tk/attachments',
                                     tabindex: options.tabindex
                                 })
                         ),
-                        $('<a>', {'data-dismiss': 'fileupload', tabindex: 1}).addClass('btn fileupload-exists').text(gt('Cancel')),
+                        $('<a>', {'data-dismiss': 'fileupload', tabindex: 1, href: '#'}).addClass('btn fileupload-exists').text(gt('Cancel')),
                         (options.displayButton ? $('<button>', { 'data-action': 'upload', tabindex: 1 }).addClass('btn btn-primary').text(gt('Upload file')).hide() : '')
                     )
                 )

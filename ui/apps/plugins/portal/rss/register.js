@@ -59,10 +59,17 @@ define('plugins/portal/rss/register',
                 return rss.getMany(urls).done(function (data) {
                     //limit data manually till api call can be limited
                     data = data.slice(0, 100);
-                    baton.data = { items: data, title: '', link: '' };
+                    baton.data = {
+                        items: data,
+                        title: '',
+                        link: '',
+                        urls: urls
+                    };
                     // get title & link of the first found feed
                     _(data).find(function (item) {
-                        baton.data.title = item.feedTitle || '';
+                        if (urls.length > 1) {
+                            baton.data.title = item.feedTitle || '';
+                        }
                         baton.data.link = item.feedLink || '';
                     });
                 });
@@ -72,19 +79,26 @@ define('plugins/portal/rss/register',
         preview: function (baton) {
 
             var data = baton.data,
+                count = _.device('small') ? 5 : 10,
                 $content = $('<div class="content pointer">');
-
-            _(data.items).each(function (entry) {
-                $content.append(
-                    $('<div class="paragraph">').append(
-                        $('<span class="gray">').text(_.noI18n(entry.feedTitle + ' ')),
-                        $('<span class="bold">').text(_.noI18n(entry.subject)), $.txt('')
-                    )
-                );
-            });
 
             if (data.items.length === 0) {
                 $('<div class="item">').text(gt('No RSS feeds found.')).appendTo($content);
+            } else {
+                $(data.items).slice(0, count).each(function (index, entry) {
+                    $content.append(
+                        $('<div class="paragraph">').append(
+                            function () {
+                                if (data.urls.length > 1) {
+                                    return $('<span class="gray">').text(_.noI18n(entry.feedTitle + ' '));
+                                } else {
+                                    return '';
+                                }
+                            },
+                            $('<span class="bold">').text(_.noI18n(entry.subject)), $.txt('')
+                        )
+                    );
+                });
             }
 
             this.append($content);

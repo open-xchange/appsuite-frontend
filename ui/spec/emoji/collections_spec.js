@@ -56,23 +56,17 @@ define([
 
             it('should parse the availableCollections setting', function () {
 
-                function fakeInstance() {
-                    var i = emoji.getInstance();
-                    i.collections = parseCollections();
-                    return i;
-                }
-
                 settings.set({availableCollections: ''});
 
-                expect(fakeInstance().collections).toEqual([]);
+                expect(emoji.getInstance().collections).toEqual([]);
 
                 settings.set({availableCollections: 'unified'});
 
-                expect(fakeInstance().collections).toEqual(['unified']);
+                expect(emoji.getInstance().collections).toEqual(['unified']);
 
                 settings.set({availableCollections: 'unified,bar'});
 
-                expect(fakeInstance().collections).toEqual(['unified', 'bar']);
+                expect(emoji.getInstance().collections).toEqual(['unified', 'bar']);
             });
 
             it('should be possible to get a custom emoji collection', function () {
@@ -109,6 +103,59 @@ define([
                 expect(collection.getCollection()).toBe('unified');
                 collection.setCollection('softbank');
                 expect(collection.getCollection()).toBe('unified');
+            });
+
+            describe('configuring collection precedence', function () {
+                beforeEach(function () {
+                    this.testIcons = {
+                        japan_carrier: '\ud83d\ude09', // winking face - available in all collections
+                        softbank: '\ud83d\ude37', // face with medical mask - only available in unified and softbank
+                        unified: '\ud83d\udcb3' // 'credit card - only available in unified
+                    };
+                });
+
+                it('should provide a fallback icon for icons not availabe', function () {
+                    var result = {};
+                    settings.set({});
+                    settings.set('userCollection', 'japan_carrier');
+                    settings.set('availableCollections', 'japan_carrier,softbank,unified');
+
+                    result.japan_carrier = emoji.unifiedToImageTag(this.testIcons.japan_carrier);
+                    result.softbank = emoji.unifiedToImageTag(this.testIcons.softbank);
+                    result.unified = emoji.unifiedToImageTag(this.testIcons.unified);
+                    expect(result.japan_carrier).toContain('emoji-japan_carrier');
+                    expect(result.softbank).toContain('emoji-softbank');
+                    expect(result.unified).toContain('emoji-unified');
+                });
+
+                it('should prefer user collection when searching icons', function () {
+                    var result = {};
+                    settings.set({});
+                    settings.set('userCollection', 'unified');
+                    settings.set('availableCollections', 'japan_carrier,softbank,unified');
+
+                    result.japan_carrier = emoji.unifiedToImageTag(this.testIcons.japan_carrier);
+                    result.softbank = emoji.unifiedToImageTag(this.testIcons.softbank);
+                    result.unified = emoji.unifiedToImageTag(this.testIcons.unified);
+                    expect(result.japan_carrier).toContain('emoji-unified');
+                    expect(result.softbank).toContain('emoji-unified');
+                    expect(result.unified).toContain('emoji-unified');
+                });
+
+                it('should not prefer user collections when turned of by setting', function () {
+                    var result = {};
+                    settings.set({});
+                    settings.set('userCollection', 'unified');
+                    settings.set('availableCollections', 'japan_carrier,softbank,unified');
+                    settings.set('overrideUserCollection', true);
+
+                    result.japan_carrier = emoji.unifiedToImageTag(this.testIcons.japan_carrier);
+                    result.softbank = emoji.unifiedToImageTag(this.testIcons.softbank);
+                    result.unified = emoji.unifiedToImageTag(this.testIcons.unified);
+                    expect(result.japan_carrier).toContain('emoji-japan_carrier');
+                    expect(result.softbank).toContain('emoji-softbank');
+                    expect(result.unified).toContain('emoji-unified');
+                });
             });
         });
     });

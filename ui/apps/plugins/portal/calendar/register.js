@@ -76,7 +76,7 @@ define("plugins/portal/calendar/register",
 
         load: function (baton) {
 
-            var numOfItems = _.device('small') ? 5 : 14;
+            var numOfItems = _.device('small') ? 5 : 10;
 
             return api.getAll().pipe(function (ids) {
                 return api.getList(ids.slice(0, numOfItems)).done(function (data) {

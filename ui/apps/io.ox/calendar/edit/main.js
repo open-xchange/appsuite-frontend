@@ -142,7 +142,11 @@ define('io.ox/calendar/edit/main',
                                 });
 
                                 ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/conflicts/conflictList']).done(function (dialogs, conflictView) {
-                                    var dialog = new dialogs.ModalDialog({ top: "20%", center: false })
+                                    var dialog = new dialogs.ModalDialog({
+                                            top: "20%",
+                                            center: false,
+                                            container: self.getWindowNode()
+                                        })
                                         .append(conflictView.drawList(con).addClass('additional-info'));
                                     if (hardConflict) {
                                         dialog.prepend(

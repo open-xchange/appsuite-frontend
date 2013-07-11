@@ -17,6 +17,8 @@ define('io.ox/core/settings/downloads/pane',
      'less!io.ox/core/settings/downloads/style.less'], function (ext, capabilities, gt) {
 
     'use strict';
+    // please no download on mobile devices
+    if (_.device('!desktop')) return;
 
     ext.point('io.ox/settings/pane').extend({
         id: 'io.ox/core/downloads',

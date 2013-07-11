@@ -21,33 +21,6 @@ define('io.ox/mail/settings/signatures/register',
 
     'use strict';
 
-    function fnMigrateClassicSignatures() {
-        var def = $.Deferred();
-        require(['io.ox/core/config'], function (config) {
-            var classicSignatures = config.get('gui.mail.signatures');
-
-            var deferreds = _(classicSignatures).map(function (classicSignature) {
-                // console.log("Importing signature " + classicSignature.signature_name);
-                return snippets.create({
-
-                    type: 'signature',
-                    module: 'io.ox/mail',
-                    displayname: classicSignature.signature_name,
-                    content: classicSignature.signature_text,
-                    meta: {
-                        imported: classicSignature
-                    }
-                });
-
-            });
-
-            $.when.apply($, deferreds).done(def.resolve).fail(def.reject);
-
-        }).fail(def.reject);
-
-        return def;
-    }
-
     function fnEditSignature(evt, signature) {
         if (!signature) {
             signature = {
@@ -363,10 +336,4 @@ define('io.ox/mail/settings/signatures/register',
         }
     });
 
-    ext.point('io.ox/core/updates').extend({
-        id: 'migrate-signatures',
-        run: function () {
-            return fnMigrateClassicSignatures();
-        }
-    });
 });

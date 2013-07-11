@@ -1,7 +1,7 @@
 [
     {
         "requires": "document_preview",
-        "path": "io.ox/office/preview/fileActions",
+        "path": "io.ox/office/preview/app/fileactions",
         "namespace": "io.ox/files/actions"
     },
 ]

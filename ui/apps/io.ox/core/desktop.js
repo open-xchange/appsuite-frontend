@@ -80,7 +80,11 @@ define("io.ox/core/desktop",
         launch: function () {
             var self = this, id = (this.get('name') || this.id) + '/main', requires = this.get('requires');
             if (upsell.has(requires)) {
-                return ox.launch(id).done(function () { self.quit(); });
+                //resolve/reject clears busy animation
+                var def = $.Deferred();
+                return ox.launch(id, { launched: def.promise() })
+                         .then(function () { self.quit(); })
+                         .always(def.resolve);
             } else {
                 upsell.trigger({ type: 'app', id: id, missing: upsell.missing(requires) });
             }
@@ -915,6 +919,10 @@ define("io.ox/core/desktop",
                         ox.ui.windowManager.trigger("window.beforeshow", self);
                         this.trigger("beforeshow");
                         this.updateToolbar();
+                        //set current appname in url, was lost on returning from edit app
+                        if (self.app.getName() !== _.url.hash('app')) {
+                            _.url.hash('app', self.app.getName());
+                        }
                         node.show();
                         scrollTo(node, function () {
                             if (self === null) return;
@@ -1513,7 +1521,8 @@ define("io.ox/core/desktop",
 
         var def,
             $blocker = $('#background_loader'),
-            buttonTimer;
+            buttonTimer,
+            launched;
 
         function startTimer() {
             var blockerTimer = setTimeout(function () {
@@ -1536,21 +1545,25 @@ define("io.ox/core/desktop",
         }
 
         function clear(blockerTimer) {
-            clearTimeout(blockerTimer);
-            clearTimeout(buttonTimer);
-            blockerTimer = null;
-            buttonTimer = null;
-            setTimeout(function () {
-                if (blockerTimer === null) {
-                    ox.idle();
-                }
-            }, 0);
+            //launched is a deferred used for a delayed clear
+            launched.always(function () {
+                clearTimeout(blockerTimer);
+                clearTimeout(buttonTimer);
+                blockerTimer = null;
+                buttonTimer = null;
+                setTimeout(function () {
+                    if (blockerTimer === null) {
+                        ox.idle();
+                    }
+                }, 0);
+            });
         }
 
-        return function (req) {
-            assert(arguments.length <= 1, 'ox.load does not support more than one param.');
+        return function (req, data) {
+            assert(arguments.length <= 1 || arguments.length === 2 && !_.isFunction(data), 'ox.load does not support callback params.');
 
             def = $.Deferred();
+            launched = data && data.launched ? data.launched : $.Deferred().resolve();
 
             // block UI
             if (!$blocker.hasClass('secure')) {
@@ -1605,7 +1618,7 @@ define("io.ox/core/desktop",
         if (_.isString(id)) {
             adaptiveLoader.stop();
             var requirements = adaptiveLoader.startAndEnhance(id.replace(/\/main$/, ''), [id]);
-            require(requirements).then(
+            ox.load(requirements, data).then(
                 function (m) {
                     m.getApp(data).launch(data).done(function () {
                         def.resolveWith(this, arguments);

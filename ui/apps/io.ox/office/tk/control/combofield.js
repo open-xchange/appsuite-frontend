@@ -76,7 +76,7 @@ define('io.ox/office/tk/control/combofield',
         }
 
         /**
-         * Handles 'menuopen' events and moves the focus to the text field.
+         * Handles 'menu:open' events and moves the focus to the text field.
          */
         function menuOpenHandler() {
             if (!self.isReadOnly()) {
@@ -139,6 +139,15 @@ define('io.ox/office/tk/control/combofield',
             case KeyCodes.PAGE_DOWN:
                 if (keydown) { moveListItem(List.PAGE_SIZE); }
                 return false;
+            case KeyCodes.ESCAPE:
+                if (keydown) {
+                    if (self.isMenuVisible()) {
+                        self.hideMenu();
+                    } else {
+                        self.trigger('cancel');
+                    }
+                }
+                return false;
             }
         }
 
@@ -179,11 +188,6 @@ define('io.ox/office/tk/control/combofield',
                 buttonValue = null,
                 // the textual representation of the button value
                 buttonValueText = null;
-
-            // show the drop-down menu when the text has been changed
-            if (typeAhead && (fieldText !== oldFieldState.value)) {
-                self.showMenu();
-            }
 
             // find the first button whose text representation starts with the entered text
             button = self.getItems().filter(function () {
@@ -244,7 +248,7 @@ define('io.ox/office/tk/control/combofield',
         this.getNode().addClass('combo-field');
 
         // prepare group and register event handlers
-        this.on('menuopen', menuOpenHandler)
+        this.on('menu:open', menuOpenHandler)
             .on('validated', textFieldValidationHandler)
             .on('readonly', textFieldReadOnlyHandler)
             .registerUpdateHandler(itemUpdateHandler);
