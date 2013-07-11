@@ -40,7 +40,7 @@ define('plugins/notifications/tasks/register',
 
     function drawItem(node, model) {
         node.append(
-            $('<div class="taskNotification item">')
+            $('<div class="taskNotification item" tabindex="1">')
             .attr('data-cid', model.get('cid'))
             .attr('model-cid', model.cid)
             .append(
@@ -48,7 +48,7 @@ define('plugins/notifications/tasks/register',
                 $('<span class="end_date">').text(_.noI18n(model.get('end_date'))),
                 $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge')),
                 $('<div class="actions">').append(
-                    $('<button class="btn btn-inverse" data-action="done">').text(gt('Done'))
+                    $('<button tabindex="1" class="btn btn-inverse" data-action="done">').text(gt('Done'))
                 )
             )
         );
@@ -67,7 +67,8 @@ define('plugins/notifications/tasks/register',
 
         events: {
             'click [data-action="done"]': 'setStatus',
-            'click .item': 'openTask'
+            'click .item': 'openTask',
+            'keydown .item': 'openTask'
         },
 
         render: function () {
@@ -102,7 +103,11 @@ define('plugins/notifications/tasks/register',
         },
 
         openTask: function (e) {
-
+            if ($(e.target).is('a') || $(e.target).is('i') || $(e.target).is('button')) {
+                //ignore chevron and dropdownlinks
+                return;
+            }
+            if ((e.type !== 'click') && (e.which !== 13)) { return; }
             var cid = $(e.currentTarget).attr('data-cid'),
                 overlay = $('#io-ox-notifications-overlay'),
                 sidepopup = overlay.prop('sidepopup');
@@ -134,6 +139,7 @@ define('plugins/notifications/tasks/register',
                     });
                 });
             }
+
         }
     });
 
@@ -220,7 +226,8 @@ define('plugins/notifications/tasks/register',
             'click [data-action="ok"]': 'deleteReminder',
             'change [data-action="selector"]': 'remindAgain',
             'click [data-action="selector"]': 'remindAgain',
-            'click': 'onClickItem'
+            'click': 'onClickItem',
+            'keydown': 'onClickItem'
         },
 
         render: function () {
@@ -257,9 +264,11 @@ define('plugins/notifications/tasks/register',
         },
 
         onClickItem: function (e) {
-            if ($(e.target).is('a') || $(e.target).is('i')) {//ignore chevron and dropdownlinks
+            if ($(e.target).is('a') || $(e.target).is('i') || $(e.target).is('button')) {
+                //ignore chevron and dropdownlinks
                 return;
             }
+            if ((e.type !== 'click') && (e.which !== 13)) { return; }
 
             var overlay = $('#io-ox-notifications-overlay'),
                 obj = {
@@ -394,6 +403,7 @@ define('plugins/notifications/tasks/register',
 
         events: {
             'click': 'onClickItem',
+            'keydown': 'onClickItem',
             'click [data-action="change_state"]': 'onChangeState'
             //'dispose': 'close'
         },
@@ -405,6 +415,11 @@ define('plugins/notifications/tasks/register',
         },
 
         onClickItem: function (e) {
+            if ($(e.target).is('a') || $(e.target).is('i') || $(e.target).is('button')) {
+                //ignore chevron and dropdownlinks
+                return;
+            }
+            if ((e.type !== 'click') && (e.which !== 13)) { return; }
 
             var overlay = $('#io-ox-notifications-overlay'),
                 obj = {

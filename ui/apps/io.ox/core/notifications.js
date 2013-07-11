@@ -101,7 +101,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             this.notificationsView = new NotificationsView();
 
             $('#io-ox-core').prepend(
-                $('<div id="io-ox-notifications">'),
+                $('<div id="io-ox-notifications" tabindex="-1">'),
                 $('<div id="io-ox-notifications-overlay" class="abs notifications-overlay">').click(function (e) {
                     if (e.target === this) {
                         self.hideList();
@@ -148,7 +148,13 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                 ext.point('io.ox/core/notifications/register').invoke('register', self, self);
             });
 
-            return addLauncher('right', $('<a>').append(badgeView.render().$el.show()), $.proxy(this.toggleList, this)).attr('id', 'io-ox-notifications-icon');
+            function focusNotifications(e) {
+                if (e.which === 13) {
+                    _.defer(function () { $('#io-ox-notifications').focus(); });
+                }
+            }
+
+            return addLauncher('right', $('<a href="#" tabindex="1">').on('keydown', focusNotifications).append(badgeView.render().$el.show()), $.proxy(this.toggleList, this)).attr('id', 'io-ox-notifications-icon');
 
         },
         get: function (key, listview) {

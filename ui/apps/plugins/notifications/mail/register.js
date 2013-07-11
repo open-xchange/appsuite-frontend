@@ -27,7 +27,7 @@ define('plugins/notifications/mail/register',
                 $('<legend class="section-title">').text(gt('New Mails')),
                 $('<div class="notifications">'),
                 $('<div class="open-app">').append(
-                    $('<a href="#" data-action="open-app">').text(gt('Show Inbox'))
+                    $('<a href="#" data-action="open-app" tabindex="1">').text(gt('Show Inbox'))
                 )
             );
         }
@@ -36,7 +36,7 @@ define('plugins/notifications/mail/register',
     function drawItem(node, data) {
         var f = data.from || [['', '']];
         node.append(
-            $('<div class="item">').attr('data-cid', _.cid(data)).append(
+            $('<div class="item" tabindex="1">').attr('data-cid', _.cid(data)).append(
                 $('<div class="title">').text(_.noI18n(util.getDisplayName(f[0]))),
                 $('<div class="subject">').text(_.noI18n(data.subject)),
                 (_.device('smartphone') ? $() : $('<div class="content">').html(_.noI18n(api.beautifyMailText(data.attachments[0].content))))
@@ -80,6 +80,7 @@ define('plugins/notifications/mail/register',
         events: {
             'click [data-action="open-app"]': 'openApp',
             'click .item': 'openMail',
+            'keydown .item': 'openMail',
             'dispose .item': 'removeNotification' //seems to be unused
         },
 
@@ -97,6 +98,7 @@ define('plugins/notifications/mail/register',
         },
 
         openMail: function (e) {
+            if ((e.type !== 'click') && (e.which !== 13)) { return; }
             var cid = $(e.currentTarget).data('cid'),
                 overlay = $('#io-ox-notifications-overlay'),
                 sidepopup = overlay.prop('sidepopup'),

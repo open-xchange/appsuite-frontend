@@ -45,14 +45,17 @@ define('plugins/notifications/calendar/register',
     ext.point('io.ox/core/notifications/invites/item').extend({
         draw: function (baton) {
             var model = baton.model;
-            this.attr('data-cid', model.get('cid')).append(
+            this.attr({
+                'data-cid': model.get('cid'),
+                'tabindex': 1
+            }).append(
                 $('<div class="time">').text(model.get('time')),
                 $('<div class="date">').text(model.get('date')),
                 $('<div class="title">').text(model.get('title')),
                 $('<div class="location">').text(model.get('location')),
                 $('<div class="organizer">').text(model.get('blue')),
                 $('<div class="actions">').append(
-                    $('<button class="btn btn-inverse" data-action="accept_decline">').text(gt('Accept / Decline'))
+                    $('<button tabindex="1" class="btn btn-inverse" data-action="accept_decline">').text(gt('Accept / Decline'))
                 )
             );
         }
@@ -76,6 +79,7 @@ define('plugins/notifications/calendar/register',
 
         events: {
             'click': 'onClickItem',
+            'keydown': 'onClickItem',
             'click [data-action="accept_decline"]': 'onClickChangeStatus'
         },
 
@@ -86,7 +90,11 @@ define('plugins/notifications/calendar/register',
         },
 
         onClickItem: function (e) {
-
+            if ($(e.target).is('a') || $(e.target).is('i') || $(e.target).is('button')) {
+                //ignore chevron and dropdownlinks
+                return;
+            }
+            if ((e.type !== 'click') && (e.which !== 13)) { return; }
             var obj = this.model.get('data'),
                 overlay = $('#io-ox-notifications-overlay'),
                 sidepopup = overlay.prop('sidepopup'),
@@ -101,8 +109,19 @@ define('plugins/notifications/calendar/register',
                         // open SidePopup without array
                         new dialogs.SidePopup({ arrow: false, side: 'right' })
                             .setTarget(overlay.empty())
+                            .on('close', function () {
+                                if (_.device('smartphone') && overlay.children().length > 0) {
+                                    overlay.addClass('active');
+                                } else if (_.device('smartphone')) {
+                                    overlay.removeClass('active');
+                                    $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
+                                }
+                            })
                             .show(e, function (popup) {
                                 popup.append(view.draw(data));
+                                if (_.device('smartphone')) {
+                                    $('#io-ox-notifications').removeClass('active');
+                                }
                             });
                     });
                 });
@@ -129,6 +148,7 @@ define('plugins/notifications/calendar/register',
 
         events: {
             'click': 'onClickItem',
+            'keydown': 'onClickItem',
             'change [data-action="selector"]': 'onClickReminder',
             'click [data-action="selector"]': 'onClickReminder',
             'click [data-action="ok"]': 'onClickOk'
@@ -142,9 +162,11 @@ define('plugins/notifications/calendar/register',
         },
 
         onClickItem: function (e) {
-            if ($(e.target).is('a') || $(e.target).is('i')) {//ignore chevron and dropdownlinks
+            if ($(e.target).is('a') || $(e.target).is('i') || $(e.target).is('button')) {
+                //ignore chevron and dropdownlinks
                 return;
             }
+            if ((e.type !== 'click') && (e.which !== 13)) { return; }
             var obj = this.model.get('remdata'),
                 overlay = $('#io-ox-notifications-overlay'),
                 sidepopup = overlay.prop('sidepopup'),
