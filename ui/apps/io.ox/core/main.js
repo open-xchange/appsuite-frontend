@@ -837,7 +837,9 @@ define("io.ox/core/main",
                             if (!analysis.secretWorks) {
                                 // Show dialog
                                 require(["io.ox/keychain/secretRecoveryDialog"], function (d) { d.show(); });
-                                console.error("Couldn't decrypt accounts: ", analysis.diagnosis);
+                                if (ox.debug) {
+                                    console.error("Couldn't decrypt accounts: ", analysis.diagnosis);
+                                }
                             }
                         });
                     });
