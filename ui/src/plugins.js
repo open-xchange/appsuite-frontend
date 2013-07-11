@@ -17,6 +17,125 @@
 
 (function() {
 
+    // File Caching
+    var fileCache = {
+        retrieve: function (name) {
+            return $.when();
+        },
+        cache: function (name, content) {
+            return;
+        }
+    };
+
+    if (window.IDBVersionChangeEvent !== undefined && Modernizr.indexeddb && window.indexedDB) {
+        // IndexedDB
+        (function () {
+            var initialization = $.Deferred();
+
+            var request = window.indexedDB.open('appsuite.filecache', 1);
+            var db = null;
+            request.onupgradeneeded = function () {
+                db = this.result;
+                db.createObjectStore('filecache', {keyPath: 'name'});
+                db.createObjectStore('version', {keyPath: 'name'});
+            };
+
+            request.onsuccess = function () {
+                db = this.result;
+                var tx = db.transaction(['filecache', 'version'], 'readwrite');
+                var request = tx.objectStore('version').get('version');
+                request.onsuccess = function (e) {
+                    if (!e.target.result || e.target.result.version !== ox.version) {
+                        // Clear the filecache
+                        tx.objectStore('filecache').clear().onsuccess = initialization.resolve;
+                        // Save the new version number
+                        tx.objectStore('version').add({name: 'version', version: ox.version});
+                        if (request.transaction) {
+                            request.transaction.oncomplete = initialization.resolve;
+                        }
+                    } else {
+                        initialization.resolve();
+                    }
+                };
+            };
+
+            fileCache.retrieve = function (name) {
+                var def = $.Deferred();
+                initialization.done(function () {
+                    var tx = db.transaction(['filecache'], 'readonly');
+                    var request = tx.objectStore('filecache').get(name);
+                    request.onsuccess = function (e) {
+                        if (!e.target.result) {
+                            def.reject();
+                            return;
+                        }
+                        if (e.target.result.version !== ox.version) {
+                            def.reject();
+                            return;
+                        }
+                        def.resolve(e.target.result.contents);
+                    };
+                });
+                return def;
+            };
+
+            fileCache.cache = function (name, contents) {
+                initialization.done(function () {
+                    var tx = db.transaction(['filecache'], 'readwrite');
+                    tx.objectStore('filecache').put({name: name, contents: contents, version: ox.version});
+                });
+            };
+
+
+        })();
+
+    } else if (Modernizr.websqldatabase)  {
+        // Web SQL
+        (function () {
+            var initialization = $.Deferred();
+            var db = openDatabase("filecache", "1.0", "caches files for OX", 5 * 1024 * 1024);
+            db.transaction(function (tx) {
+                tx.executeSql("CREATE TABLE IF NOT EXISTS version (version TEXT)");
+                tx.executeSql("CREATE TABLE IF NOT EXISTS files (name TEXT unique, contents TEXT)");
+                tx.executeSql("SELECT 1 FROM version WHERE version = ?", [ox.version], function (tx, result) {
+                    if (result.rows.length === 0) {
+                        tx.executeSql("DELETE FROM files", initialization.resolve);
+                        tx.executeSql("DELETE FROM version");
+                        tx.executeSql("INSERT INTO version VALUES (?)", [ox.version]);
+                    } else {
+                        initialization.resolve();
+                    }
+
+                });
+            });
+            fileCache.retrieve = function (name) {
+                var def = $.Deferred();
+                initialization.done(function () {
+                    db.transaction(function (tx) {
+                        tx.executeSql("SELECT contents FROM files WHERE name = ?", [name], function (tx, result) {
+                            if (result.rows.length === 0) {
+                                def.reject();
+                            } else {
+                                def.resolve(result.rows.item(0).contents);
+                            }
+                        });
+                    });
+                });
+                return def;
+            };
+
+            fileCache.cache = function (name, contents) {
+                initialization.done(function () {
+                    db.transaction(function (tx) {
+                        tx.executeSql("INSERT OR REPLACE INTO files (name, contents) VALUES (?,?) ", [name, contents]);
+                    });                    
+                });
+            };
+        })();
+    }
+
+
+
     function dirname(filename) {
         return filename.replace(/(?:^|(\/))[^\/]+$/, "$1");
     }
@@ -54,19 +173,11 @@
             } else if (modulename.indexOf('/base/spec/') === 0) {
                 return oldload.apply(this, arguments);
             }
-            req.nextTick(null, loaded);
-            var next = deps[modulename];
-            if (next && next.length) context.require(next);
-            queue.push(url);
 
             function loaded() {
                 var q = queue;
                 queue = [];
-                if (_.url.hash('debug-js')) {
-                    _.each(q, load);
-                } else {
-                    load(q.join(), modulename);
-                }
+                load(q.join(), modulename);
                 _.each(q, function (module) {
                     $(window).trigger("require:load", module);
                 });
@@ -74,9 +185,57 @@
                 if (queue.length) console.error('recursive require', queue);
             }
 
+            // Try file cache
+            fileCache.retrieve(modulename).done(function (contents) {
+                eval(contents);
+                context.completeLoad(modulename);
+                if (_.url.hash('debug-filecache')) {
+                    console.log("CACHE HIT!", modulename);
+                }
+            }).fail(function () {
+                if (_.url.hash('debug-filecache')) {
+                    console.log("CACHE MISS!", modulename);
+                }
+                // Append and load in bulk
+                req.nextTick(null, loaded);
+                var next = deps[modulename];
+                if (next && next.length) context.require(next);
+                queue.push(url);
+            });
+
             function load(module, modulename) {
-                oldload(context, modulename || module,
-                    [ox.apiRoot, '/apps/load/', ox.base, ',', module].join(''));
+                 $.ajax({ url: [ox.apiRoot, '/apps/load/', ox.base, ',', module].join(''), dataType: "text" })
+                 .done(function (concatenatedText) {
+                        eval(concatenatedText);
+                        context.completeLoad(modulename);
+                        // Chop up the concatenated modules and put them into file cache
+                        _(concatenatedText.split("/*:oxsep:*/")).each(function (moduleText) {
+                            (function () {
+                                var name = null;
+                                var error = false;
+                                function define(moduleName) {
+                                    if (name) {
+                                        error = true;
+                                    }
+                                    name = moduleName;
+                                }
+                                define.async = define;
+                                try {
+                                    eval(moduleText);
+                                } catch (e) {
+                                    console.log(e);
+                                    console.log(moduleText);
+                                    console.log("========");
+                                    console.log(concatenatedText);
+                                }
+                                if (!error && name && moduleText) {
+                                    fileCache.cache(name, moduleText);
+                                }
+                            })();
+                        });
+                 });
+
+                
             }
         };
 

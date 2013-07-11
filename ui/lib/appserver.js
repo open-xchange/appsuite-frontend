@@ -247,7 +247,7 @@ function load(request, response) {
     function module(filename, fullName) {
         return function () {
             if (verbose.local) console.log(filename);
-            response.write(fs.readFileSync(filename));
+            response.write(fs.readFileSync(filename) + "\n/*:oxsep:*/\n");
         };
     }
     
@@ -259,7 +259,7 @@ function load(request, response) {
             for (var j = 0; j < data.length; j++) s.push(data[j]);
             s = String.fromCharCode.apply(String, s);
             response.write("define('" + escape(fullName) + "','" + escape(s) +
-                "');\n");
+                "');\n/*:oxsep:*/\n");
         };
     }
     
@@ -269,7 +269,7 @@ function load(request, response) {
             if (verbose.local) console.log(filename);
             var s = fs.readFileSync(filename, 'utf8');
             response.write("define('" + escape(fullName) + "','" + escape(s) +
-                "');\n");
+                "');\n/*:oxsep:*/\n");
         };
     }
     
@@ -384,7 +384,7 @@ function loadLocal(request, response) {
     if (verbose.local) console.log(filename);
     response.setHeader('Content-Type', 'text/javascript;charset=UTF-8');
     response.setHeader('Expires', '0');
-    response.write(fs.readFileSync(filename));
+    response.write(fs.readFileSync(filename) + "\n/*:oxsep:*/\n");
     response.end();
     return true;
 }
