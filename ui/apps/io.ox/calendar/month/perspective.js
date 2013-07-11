@@ -101,7 +101,11 @@ define('io.ox/calendar/month/perspective',
             var apiUpdate = function (obj) {
                 api.update(obj).fail(function (con) {
                     if (con.conflicts) {
-                        new dialogs.ModalDialog()
+                        new dialogs.ModalDialog({
+                                top: "20%",
+                                center: false,
+                                container: self.main
+                            })
                             .append(conflictView.drawList(con.conflicts))
                             .addDangerButton('ignore', gt('Ignore conflicts'))
                             .addButton('cancel', gt('Cancel'))
