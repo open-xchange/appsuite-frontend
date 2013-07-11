@@ -203,6 +203,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             //their app
             if ($('#io-ox-notifications').hasClass('active')) {
                 this.hideList();
+                if (_.device('smartphone')) { $('#io-ox-notifications-overlay').empty().removeClass('active'); }
             } else {
                 this.showList();
             }
