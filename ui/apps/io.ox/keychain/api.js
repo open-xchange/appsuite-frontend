@@ -43,10 +43,10 @@
     }
  })
 
- also add your plugin to serverConfig.plugins.keychain
+ 
  **/
 
-define("io.ox/keychain/api", ["io.ox/core/extensions", "io.ox/core/event"], function (ext, Events) {
+define("io.ox/keychain/api", ["io.ox/core/extensions", "io.ox/core/event", 'io.ox/core/http'], function (ext, Events, http) {
     "use strict";
 
     var api = {};
@@ -135,6 +135,34 @@ define("io.ox/keychain/api", ["io.ox/core/extensions", "io.ox/core/event"], func
 
     api.accountType = function (accountType) {
         return api.submodules[accountType];
+    };
+
+    api.checkSecrets = function () {
+        return http.GET({
+            module: 'recovery/secret',
+            params: {
+                action: 'check'
+            }
+        });
+    };
+
+    api.migrateFromOldSecret = function (oldPassword) {
+        return http.GET({
+            module: 'recovery/secret',
+            params: {
+                action: 'migrate',
+                password: oldPassword
+            }
+        });
+    };
+
+    api.cleanUpIrrecoverableItems = function () {
+        return http.GET({
+            module: 'recovery/secret',
+            params: {
+                action: 'clean_up'
+            }
+        });
     };
 
     return api;

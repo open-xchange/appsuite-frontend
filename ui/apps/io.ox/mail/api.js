@@ -237,7 +237,7 @@ define('io.ox/mail/api',
         requests: {
             all: {
                 folder: 'default0/INBOX',
-                columns: '601,600,611', // + flags
+                columns: '601,600,611,102', // + flags & color_label
                 extendColumns: 'io.ox/mail/api/all',
                 sort: '610', // received_date
                 order: 'desc',
@@ -574,7 +574,6 @@ define('io.ox/mail/api',
     var resetTrashFolders = function () {
         return $.when.apply($,
             _(accountAPI.getFoldersByType('trash')).map(function (folder) {
-                console.log('Remove trash folder', folder);
                 return api.caches.all.grepRemove(folder + DELIM);
             })
         );
