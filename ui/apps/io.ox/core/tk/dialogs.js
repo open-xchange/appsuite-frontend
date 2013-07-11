@@ -129,20 +129,40 @@ define("io.ox/core/tk/dialogs",
             },
 
             fnKey = function (e) {
-                if (!isBusy) {
-                    switch (e.which) {
-                    case 27: // ESC
+                var items, focus, index;
+
+                switch (e.which) {
+                case 27: // ESC
+                    if (!isBusy) {
                         // prevent other elements to trigger close
                         e.stopPropagation();
                         if (o.easyOut) {
                             invoke('cancel');
                         }
-                        break;
-                    case 13: // Enter
-                        break;
-                    default:
-                        break;
                     }
+                    break;
+                case 13: // Enter
+                    break;
+
+                case 9:
+                    e.preventDefault();
+
+                    items = $(this).find('[tabindex="1"][disabled!="disabled"]:visible');
+                    focus = $(document.activeElement);
+
+                    index = (items.index(focus) >= 0) ? items.index(focus) : 0;
+                    index += (e.shiftKey) ? -1 : 1;
+
+                    if (index >= items.length) {
+                        index = 0;
+                    } else if (index < 0) {
+                        index = items.length - 1;
+                    }
+                    items[index].focus();
+                    return false;
+
+                default:
+                    break;
                 }
             };
 
