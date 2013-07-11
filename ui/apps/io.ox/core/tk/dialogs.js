@@ -44,7 +44,8 @@ define("io.ox/core/tk/dialogs",
             nodes = {
                 buttons: [],
                 underlay: underlay.clone(),
-                popup: popup.clone()
+                popup: popup.clone(),
+                wrapper: $('<div>').addClass('abs io-ox-dialog-wrapper')
             },
 
             lastFocus = $(),
@@ -69,6 +70,7 @@ define("io.ox/core/tk/dialogs",
                 document.removeEventListener('focus', keepFocus, true); // not via jQuery!
                 nodes.popup.empty().remove();
                 nodes.underlay.remove();
+                nodes.wrapper.remove();
 
                 // restore focus
                 lastFocus = lastFocus.closest(':visible');
@@ -169,8 +171,7 @@ define("io.ox/core/tk/dialogs",
 
         // append all elements
         o.container.append(
-            $('<div>')
-                .addClass('abs io-ox-dialog-wrapper')
+            nodes.wrapper
                 .append(nodes.underlay, nodes.popup)
         );
 
@@ -587,7 +588,7 @@ define("io.ox/core/tk/dialogs",
             self.nodes = {
                 closest: target || my.parents(".io-ox-sidepopup-pane, .window-content, .window-panel, .io-ox-dialog-popup, .notifications-overlay").first(),
                 click: my.parents(".io-ox-sidepopup-pane, .window-body, .window-panel, .io-ox-dialog-popup, .notifications-overlay").first(),
-                target: target || my.parents(".window-body, .simple-window, .window-panel, .io-ox-dialog-popup, .notifications-overlay").first(),
+                target: target || my.parents(".window-body, .simple-window, .window-panel, .notifications-overlay").first(),
                 simple: my.closest('.simple-window')
             };
 
