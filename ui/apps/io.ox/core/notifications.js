@@ -128,7 +128,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                 }
             }
 
-            changeAutoOpen();
+            if (_.device('!smartphone')) { changeAutoOpen(); }
             settings.on('change:autoOpenNotification', function (e, value) {
                 changeAutoOpen(value);
             });
