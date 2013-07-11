@@ -13,9 +13,9 @@
 
 define.async('io.ox/core/date',
     ['io.ox/core/gettext',
-     'io.ox/core/config',
+     'settings!io.ox/core/settingOptions',
      'settings!io.ox/core',
-     'gettext!io.ox/core'], function (gettext, config, settings, gt) {
+     'gettext!io.ox/core'], function (gettext, settingOptions, settings, gt) {
 
     /*jshint white:false */
 
@@ -954,7 +954,7 @@ define.async('io.ox/core/date',
             .pipe(parseTZInfo)
             .pipe(function (D) {
                 D.id = name;
-                D.displayName = config.get(['availableTimeZones', name], name);
+                D.displayName = settingOptions.get(['availableTimeZones', name], name);
                 return D;
             });
     });

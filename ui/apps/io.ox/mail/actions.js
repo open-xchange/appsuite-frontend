@@ -18,7 +18,7 @@ define('io.ox/mail/actions',
      'io.ox/mail/api',
      'io.ox/mail/util',
      'gettext!io.ox/mail',
-     'io.ox/core/config',
+     'settings!io.ox/core',
      'io.ox/core/api/folder',
      'io.ox/core/notifications',
      'io.ox/core/print',
@@ -27,7 +27,7 @@ define('io.ox/mail/actions',
      'io.ox/office/framework/app/extensionregistry',
      'io.ox/core/extPatterns/actions',
      'settings!io.ox/mail'
-    ], function (ext, links, api, util, gt, config, folderAPI, notifications, print, contactAPI, account, ExtensionRegistry, actions, settings) {
+    ], function (ext, links, api, util, gt, coreConfig, folderAPI, notifications, print, contactAPI, account, ExtensionRegistry, actions, settings) {
 
 
     'use strict';
@@ -600,7 +600,7 @@ define('io.ox/mail/actions',
                     function success(data) {
                         //TODO: Handle data not being an array or containing more than one contact
                         var contact = data[0];
-                        contact.folder_id = config.get('folder.contacts');
+                        contact.folder_id = coreConfig.get('folder/contacts');
                         require(['io.ox/contacts/edit/main'], function (m) {
                             if (m.reuse('edit', contact)) {
                                 return;
@@ -640,8 +640,8 @@ define('io.ox/mail/actions',
                 {
                     identifier: 'com.openexchange.ical',
                     args: [
-                        {'com.openexchange.groupware.calendar.folder': config.get('folder.calendar')},
-                        {'com.openexchange.groupware.task.folder': config.get('folder.tasks')}
+                        {'com.openexchange.groupware.calendar.folder': coreConfig.get('folder/calendar')},
+                        {'com.openexchange.groupware.task.folder': coreConfig.get('folder/tasks')}
                     ]
                 })
                 .done(function (data) {
@@ -719,7 +719,7 @@ define('io.ox/mail/actions',
                 arrayOfMembers = [],
                 currentId = ox.user_id,
                 lengthValue,
-                contactsFolder = config.get('folder.contacts'),
+                contactsFolder = coreConfig.get('folder/contacts'),
 
                 createDistlist = function (members) {
                     require(['io.ox/contacts/distrib/main'], function (m) {
@@ -790,7 +790,7 @@ define('io.ox/mail/actions',
                 collectedRecipients = [],
                 participantsArray = [],
                 currentId = ox.user_id,
-                currentFolder = config.get('folder.calendar'),
+                currentFolder = coreConfig.get('folder/calendar'),
                 collectedRecipientsArray = data.to.concat(data.cc).concat(data.from),
                 dev = $.Deferred(),
                 lengthValue,
@@ -898,7 +898,7 @@ define('io.ox/mail/actions',
                         var dates = tasksUtil.computePopupTime(endDate, dateSelector.val());
 
                         taskApi.create({title: titleInput.val(),
-                            folder_id: config.get('folder.tasks'),
+                            folder_id: coreConfig.get('folder/tasks'),
                             end_date: dates.endDate.getTime(),
                             start_date: dates.endDate.getTime(),
                             alarm: dates.alarmDate.getTime(),

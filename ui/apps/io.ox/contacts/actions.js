@@ -15,12 +15,12 @@ define('io.ox/contacts/actions',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'io.ox/contacts/api',
-     'io.ox/core/config',
+     'settings!io.ox/core',
      'io.ox/core/notifications',
      'io.ox/core/print',
      'io.ox/portal/util',
      'gettext!io.ox/contacts',
-     'settings!io.ox/contacts'], function (ext, links, api, config, notifications, print, portalUtil, gt, settings) {
+     'settings!io.ox/contacts'], function (ext, links, api, coreConfig, notifications, print, portalUtil, gt, settings) {
 
     'use strict';
 
@@ -420,7 +420,7 @@ define('io.ox/contacts/actions',
 
                     require(['io.ox/calendar/edit/main'], function (m) {
                         m.getApp().launch().done(function () {
-                            this.create({ participants: participants, folder_id: config.get('folder.calendar') });
+                            this.create({ participants: participants, folder_id: coreConfig.get('folder/calendar') });
                         });
                     });
                 });
@@ -466,7 +466,7 @@ define('io.ox/contacts/actions',
             require(['io.ox/contacts/edit/main'], function (m) {
                 var def = $.Deferred(),
                     contact = baton.data;
-                contact.folder_id = config.get('folder.contacts') + '';
+                contact.folder_id = coreConfig.get('folder/contacts') + '';
                 _.map(contact, function (value, key, contact) {
                     if (!!!value) {
                         delete contact[key];

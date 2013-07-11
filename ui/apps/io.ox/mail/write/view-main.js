@@ -31,12 +31,11 @@ define("io.ox/mail/write/view-main",
      'io.ox/core/api/account',
      'io.ox/core/api/snippets',
      'io.ox/core/strings',
-     'io.ox/core/config',
      'io.ox/core/util',
      'io.ox/mail/sender',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, mailAPI, ViewClass, Model, contactsAPI, contactsUtil, mailUtil, pre, userAPI, capabilities, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, config, util, sender, settings, gt) {
+    ], function (ext, links, actions, mailAPI, ViewClass, Model, contactsAPI, contactsUtil, mailUtil, pre, userAPI, capabilities, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, util, sender, settings, gt) {
 
     'use strict';
 
@@ -288,7 +287,7 @@ define("io.ox/mail/write/view-main",
 
         createReplyToField: function () {
             //TODO: once this is mapped to jslob, use settings here (key should be showReplyTo)
-            if (config.get('ui.mail.replyTo.configurable', true) !== true) {
+            if (settings.get('showReplyTo/configurable', true) !== true) {
                 return;
             }
             return $('<div>').addClass('fieldset').append(

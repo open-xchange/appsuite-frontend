@@ -17,10 +17,9 @@ define('io.ox/core/export/export',
     'io.ox/core/api/export',
     'io.ox/core/api/folder',
     'io.ox/core/notifications',
-    'io.ox/core/config',
     'io.ox/formats/vcard',
     'gettext!io.ox/core',
-    'less!io.ox/core/export/style.less'], function (ext, dialogs, api, folderApi, notifications, config, vcard, gt) {
+    'less!io.ox/core/export/style.less'], function (ext, dialogs, api, folderApi, notifications, vcard, gt) {
 
     'use strict';
 

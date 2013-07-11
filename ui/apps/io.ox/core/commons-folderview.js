@@ -15,9 +15,10 @@ define('io.ox/core/commons-folderview',
      'io.ox/core/extPatterns/links',
      'io.ox/core/notifications',
      'io.ox/core/api/folder',
-     'io.ox/core/config',
+     'settings!io.ox/core',
+     'settings!io.ox/caldav',
      'io.ox/core/capabilities',
-     'gettext!io.ox/core'], function (ext, links, notifications, api, config, capabilities, gt) {
+     'gettext!io.ox/core'], function (ext, links, notifications, api, coreConfig, caldavConfig, capabilities, gt) {
 
     'use strict';
 
@@ -388,7 +389,7 @@ define('io.ox/core/commons-folderview',
                                         .addClass('span9')
                                         .attr('readonly', 'readonly')
                                         .val(
-                                            _.noI18n(config.get('modules.caldav.url')
+                                            _.noI18n(caldavConfig.get('url')
                                                 .replace("[hostname]", location.host)
                                                 .replace("[folderId]", id)
                                         )
@@ -728,7 +729,7 @@ define('io.ox/core/commons-folderview',
                             });
                         } else {
                             if (!id && !newId && sel.length === 0) {
-                                tree.select(config.get('folder.' + options.type) + '');
+                                tree.select(coreConfig.get('folder/' + options.type) + '');
                             }
                             tree.repaint();
                         }

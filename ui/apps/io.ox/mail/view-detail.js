@@ -17,7 +17,6 @@ define('io.ox/mail/view-detail',
      'io.ox/core/extPatterns/links',
      'io.ox/mail/util',
      'io.ox/mail/api',
-     'io.ox/core/config',
      'io.ox/core/http',
      'io.ox/core/api/account',
      'settings!io.ox/mail',
@@ -26,7 +25,7 @@ define('io.ox/mail/view-detail',
      'moxiecode/tiny_mce/plugins/emoji/main',
      'io.ox/mail/actions',
      'less!io.ox/mail/style.less'
-    ], function (ext, links, util, api, config, http, account, settings, gt, folder, emoji) {
+    ], function (ext, links, util, api, http, account, settings, gt, folder, emoji) {
 
     'use strict';
 
@@ -721,7 +720,7 @@ define('io.ox/mail/view-detail',
                     console.error('No baton found. Not supposed to happen.');
                     return;
                 }
-                sentFolder = config.get('mail.folder.sent');
+                sentFolder = settings.get('folder.sent');
                 inboxMails = _(modifiedBaton.data).filter(function (elem) {
                     return elem.folder_id !== sentFolder;
                 });
@@ -1203,7 +1202,7 @@ define('io.ox/mail/view-detail',
                 pub.module  = pubtype[1];
                 pub.type  = pubtype[2];
                 pub.name = _.first(_.last(pub.url.split('/')).split('?'));
-                pub.parent = require('io.ox/core/config').get('folder.' + pub.module);
+                pub.parent = require('settings!io.ox/core').get('folder/' + pub.module);
                 pub.folder = '';
                 label = pub.module === 'infostore' ? gt('files') : gt(pub.module);
 

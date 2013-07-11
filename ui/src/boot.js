@@ -213,7 +213,7 @@ $(window).load(function () {
     };
     _.extend(require, req);
 
-    function loadSuccess(http, session, cache, extensions, gettext, manifests, capabilities, config, themes) {
+    function loadSuccess(http, session, cache, extensions, gettext, manifests, capabilities, themes) {
 
         var gt; // set by initialize()
 
@@ -291,43 +291,41 @@ $(window).load(function () {
             require(['settings!io.ox/core'], function (settings) {
                 var theme = _.url.hash('theme') || settings.get('theme') || 'default';
                 debug('boot.js: loadCore > load config ...');
-                config.load().done(function () {
+  
+                debug('boot.js: loadCore > require "main" & set theme', theme);
 
-                    debug('boot.js: loadCore > require "main" & set theme', theme);
+                var def1 = require(['io.ox/core/main']),
+                    def2 = themes.set(theme);
 
-                    var def1 = require(['io.ox/core/main']),
-                        def2 = themes.set(theme);
-
-                    function cont() {
-                        def1.then(
-                            function success(core) {
-                                // go!
-                                debug('boot.js: core.launch()');
-                                core.launch();
-                            },
-                            function fail(e) {
-                                console.error('Cannot launch core!', e);
-                            }
-                        );
-                    }
-
-                    function fail() {
-                        console.error('Could not load theme: ' + theme);
-                        gotoSignin('autologin=false');
-                    }
-
-                    $.when(def1, def2).always(function () {
-                        // failed to load theme?
-                        if (def2.state() === 'rejected') {
-                            // give up if it was the default theme
-                            if (theme === 'default') return fail();
-                            // otherwise try to load default theme now
-                            console.error('Could not load custom theme: ' + theme);
-                            themes.set('default').then(cont, fail);
-                        } else {
-                            cont();
+                function cont() {
+                    def1.then(
+                        function success(core) {
+                            // go!
+                            debug('boot.js: core.launch()');
+                            core.launch();
+                        },
+                        function fail(e) {
+                            console.error('Cannot launch core!', e);
                         }
-                    });
+                    );
+                }
+
+                function fail() {
+                    console.error('Could not load theme: ' + theme);
+                    gotoSignin('autologin=false');
+                }
+
+                $.when(def1, def2).always(function () {
+                    // failed to load theme?
+                    if (def2.state() === 'rejected') {
+                        // give up if it was the default theme
+                        if (theme === 'default') return fail();
+                        // otherwise try to load default theme now
+                        console.error('Could not load custom theme: ' + theme);
+                        themes.set('default').then(cont, fail);
+                    } else {
+                        cont();
+                    }
                 });
             });
         };
@@ -924,7 +922,7 @@ $(window).load(function () {
 
     require([
         'io.ox/core/http', 'io.ox/core/session', 'io.ox/core/cache', 'io.ox/core/extensions',
-        'gettext', 'io.ox/core/manifests', 'io.ox/core/capabilities', 'io.ox/core/config',
+        'gettext', 'io.ox/core/manifests', 'io.ox/core/capabilities',
         'themes', 'io.ox/core/settings'],
         loadSuccess, loadFail
     );

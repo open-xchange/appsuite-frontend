@@ -19,7 +19,6 @@ define("io.ox/contacts/main",
      "io.ox/core/tk/vgrid",
      "io.ox/help/hints",
      "io.ox/contacts/view-detail",
-     "io.ox/core/config",
      "io.ox/core/extensions",
      "io.ox/core/extPatterns/actions",
      "io.ox/core/commons",
@@ -27,7 +26,7 @@ define("io.ox/contacts/main",
      "settings!io.ox/contacts",
      "io.ox/core/api/folder",
      "less!io.ox/contacts/style.less"
-    ], function (util, api, VGrid, hints, viewDetail, config, ext, actions, commons, gt, settings, folderAPI) {
+    ], function (util, api, VGrid, hints, viewDetail, ext, actions, commons, gt, settings, folderAPI) {
 
     "use strict";
 

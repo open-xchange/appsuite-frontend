@@ -14,14 +14,14 @@
 define('io.ox/mail/api',
     ['io.ox/core/http',
      'io.ox/core/cache',
-     'io.ox/core/config',
+     'settings!io.ox/core',
      'io.ox/core/api/factory',
      'io.ox/core/api/folder',
      'io.ox/core/api/account',
      'io.ox/core/notifications',
      'io.ox/mail/util',
      'settings!io.ox/mail',
-     'gettext!io.ox/mail'], function (http, cache, config, apiFactory, folderAPI, accountAPI, notifications, util, settings, gt) {
+     'gettext!io.ox/mail'], function (http, cache, coreConfig, apiFactory, folderAPI, accountAPI, notifications, util, settings, gt) {
 
     // SHOULD NOT USE notifications inside API!
 
@@ -1276,7 +1276,7 @@ define('io.ox/mail/api',
      */
     api.saveAttachments = function (list, target) {
         // be robust
-        target = target || config.get('folder.infostore');
+        target = target || coreConfig.get('folder/infostore');
         // support for multiple attachments
         list = _.isArray(list) ? list : [list];
         http.pause();
