@@ -177,7 +177,7 @@ define('io.ox/backbone/mini-views/attachments',
                         if (allDone <= 0) done();
                     },
                     function fail(e) {
-                        self.model.trigger('backendError', e);
+                        self.model.trigger('server:error', e);
                     }
                 );
             }
@@ -190,7 +190,7 @@ define('io.ox/backbone/mini-views/attachments',
                             if (allDone <= 0) done();
                         },
                         function fail(e) {
-                            self.model.trigger('backendError', e);
+                            self.model.trigger('server:error', e);
                         }
                     );
                 } else {
@@ -200,7 +200,7 @@ define('io.ox/backbone/mini-views/attachments',
                             if (allDone <= 0) done();
                         },
                         function fail(e) {
-                            self.model.trigger('backendError', e);
+                            self.model.trigger('server:error', e);
                         }
                     );
                 }

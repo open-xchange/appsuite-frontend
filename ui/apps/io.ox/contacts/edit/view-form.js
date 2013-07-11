@@ -295,8 +295,8 @@ define('io.ox/contacts/edit/view-form', [
                     function success() {
                         baton.parentView.trigger('save:success');
                     },
-                    function fail() {
-                        baton.parentView.trigger('save:fail');
+                    function fail(e) {
+                        baton.parentView.trigger('save:fail', e);
                     }
                 );
             }

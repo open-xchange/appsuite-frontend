@@ -19,8 +19,9 @@ define('io.ox/contacts/edit/main',
      'io.ox/contacts/util',
      'io.ox/core/extPatterns/dnd',
      'io.ox/core/capabilities',
+     'io.ox/core/notifications',
      'less!io.ox/contacts/edit/style.less'
-     ], function (view, model, gt, ext, util, dnd, capabilities) {
+     ], function (view, model, gt, ext, util, dnd, capabilities, notifications) {
 
     'use strict';
 
@@ -67,8 +68,13 @@ define('io.ox/contacts/edit/main',
                             win.busy();
                         });
 
-                        editView.on('save:fail', function () {
+                        editView.on('save:fail', function (e, error) {
+                            notifications.yell(error);
                             win.idle();
+                        });
+
+                        editView.listenTo(contact, 'server:error', function (error) {
+                            notifications.yell(error);
                         });
 
                         editView.on('save:success', function (e, data) {
@@ -77,7 +83,7 @@ define('io.ox/contacts/edit/main',
                             }
                             considerSaved = true;
                             win.idle();
-                            if (app.dropZone) {app.dropZone.remove(); }
+                            if (app.dropZone) app.dropZone.remove();
                             app.quit();
                         });
 
