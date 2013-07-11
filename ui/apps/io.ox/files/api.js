@@ -168,7 +168,7 @@ define('io.ox/files/api',
         return data;
     };
 
-    var allColumns = '20,1,5,700,702,703,705,707,3';
+    var allColumns = '20,23,1,5,700,702,703,705,707,3';
 
     // generate basic API
     var api = apiFactory({
@@ -184,7 +184,7 @@ define('io.ox/files/api',
             },
             list: {
                 action: 'list',
-                columns: '20,1,5,700,702,703,704,707,3',
+                columns: '20,23,1,5,700,702,703,704,707,3',
                 extendColumns: 'io.ox/files/api/list'
             },
             get: {
@@ -258,7 +258,7 @@ define('io.ox/files/api',
 
         var params = {
             action: 'updates',
-            columns: '20,1,700,702,703,706',
+            columns: '20,23,1,700,702,703,706',
             folder: options.folder,
             timestamp: options.timestamp,
             ignore: 'deleted'

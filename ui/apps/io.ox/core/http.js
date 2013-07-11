@@ -195,6 +195,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
             "410" : "recurrence_start"
         },
         "files" : {
+            "23" : "meta",
             "700" : "title",
             "701" : "url",
             "702" : "filename",
@@ -243,6 +244,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
             "5" : "last_modified",
             "6" : "last_modified_utc",
             "20" : "folder_id",
+            "23" : "meta",
             "300" : "title",
             "301" : "module",
             "302" : "type",
