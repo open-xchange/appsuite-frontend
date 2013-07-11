@@ -37,7 +37,7 @@ define('io.ox/backbone/mini-views/attachments',
             this.deleteAttachment(attachment);
         },
 
-        setup: function () {
+        setup: function (options) {
 
             var self = this;
 
@@ -61,6 +61,10 @@ define('io.ox/backbone/mini-views/attachments',
             });
 
             this.$el.data('view', this);
+        },
+
+        dispose: function () {
+            this.stopListening();
         },
 
         finishedCallback: function (model, id) {
@@ -157,7 +161,7 @@ define('io.ox/backbone/mini-views/attachments',
             var self = this,
                 allDone = 0;//0 ready 1 delete 2 add 3 delete and add
             var apiOptions = {
-                module: this.module,
+                module: this.options.module,
                 id: id || this.model.id,
                 folder: folderId || this.model.get('folder') || this.model.get('folder_id')
             };
