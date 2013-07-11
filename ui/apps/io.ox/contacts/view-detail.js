@@ -74,22 +74,7 @@ define("io.ox/contacts/view-detail",
         return (/<\w/).test(str);
     }
 
-    function drawBusyAttachments(node) {
-        node.append(
-            $('<section class="attachments-container">').append(
-                $('<span class="field-label attachments">').text(gt('Attachments')),
-                $.txt(' '),
-                $('<span class="attachments-value">').css({ width: '70px', height: '12px', display: 'inline-block' }).busy()
-            )
-        );
-    }
-
     function attachmentFail(container, contact) {
-        container.empty().append(
-            $.fail(gt('Could not load attachments for this contact.'), function () {
-                ext.point('io.ox/contacts/detail/attachments').invoke('draw', container, contact);
-            })
-        );
     }
 
     function buildDropdown(container, label, data) {
@@ -158,25 +143,22 @@ define("io.ox/contacts/view-detail",
                     // right side
                     $('<i class="icon-lock private-flag">').attr('title', gt('Private')).hide(),
                     $('<h1>').append(name),
-                    $('<h2>').append(job)
+                    $('<h2>').append(job),
+                    $('<section class="attachments-container">')
+                        .append($('<span class="attachments-in-progress">').busy())
+                        .hide()
                 )
             );
 
             if (baton.data.private_flag) {
                 this.find('.private-flag').show();
             }
-        }
-    });
 
-    ext.point("io.ox/contacts/detail").extend({
-        index: (INDEX += 100),
-        id: "attachments",
-        draw: function (baton) {
             if (api.uploadInProgress(encodeURIComponent(_.cid(baton.data)))) {
-                drawBusyAttachments(this);
+                this.find('.attachments-container').show();
             }
             else if (baton.data.number_of_attachments > 0) {
-                ext.point('io.ox/contacts/detail/attachments').invoke('draw', this, baton.data);
+                ext.point('io.ox/contacts/detail/attachments').invoke('draw', this.find('.attachments-container'), baton.data);
             }
         }
     });
@@ -185,30 +167,31 @@ define("io.ox/contacts/view-detail",
 
     ext.point('io.ox/contacts/detail/attachments').extend({
         draw: function (contact) {
-            var attachmentNode, linkContainer;
-            if (this.hasClass('attachments-container')) { // if attachmentrequest fails the container is allready there
-                attachmentNode = this;
-            } else {
-                attachmentNode = $('<section>').addClass('attachments-container').appendTo(this); //else build new
-            }
-            attachmentNode.append(
-                $('<span class="field-label attachments">').text(gt('Attachments')),
-                $.txt(' '),
-                linkContainer = $('<span class="attachments-value">')
-            );
+
+            var section = this.show();
+
             require(['io.ox/core/api/attachment'], function (api) {
-                api.getAll({folder_id: contact.folder_id, id: contact.id, module: 7}).done(function (data) {
-                    _(data).each(function (a, index) {
-                        // draw
-                        buildDropdown(linkContainer, _.noI18n(a.filename), a);
-                    });
-                    if (data.length > 1) {
-                        buildDropdown(linkContainer, gt('All attachments'), data);
+                // this request might take a while; not cached
+                api.getAll({ folder_id: contact.folder_id, id: contact.id, module: 7 }).then(
+                    function success(data) {
+                        section.empty();
+                        _(data).each(function (a, index) {
+                            // draw
+                            buildDropdown(section, _.noI18n(a.filename), a);
+                        });
+                        if (data.length > 1) {
+                            buildDropdown(section, gt('All attachments'), data);
+                        }
+                        section.on('a', 'click', function (e) { e.preventDefault(); });
+                    },
+                    function fail() {
+                        section.empty().append(
+                            $.fail(gt('Could not load attachments for this contact.'), function retry() {
+                                ext.point('io.ox/contacts/detail/attachments').invoke('draw', section, contact);
+                            })
+                        );
                     }
-                    attachmentNode.delegate('a', 'click', function (e) { e.preventDefault(); });
-                }).fail(function () {
-                    attachmentFail(attachmentNode, contact);
-                });
+                );
             });
         }
     });

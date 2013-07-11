@@ -33,7 +33,7 @@ define('io.ox/backbone/mini-views/attachments',
 
         onDeleteAttachment: function (e) {
             e.preventDefault();
-            var attachment = $(e.target).data();
+            var attachment = $(e.currentTarget).data();
             this.deleteAttachment(attachment);
         },
 
@@ -46,9 +46,6 @@ define('io.ox/backbone/mini-views/attachments',
             this.attachmentsToDelete = [];
             this.attachmentsOnServer = [];
             this.allAttachments = [];
-            this.form = $();
-
-            this.loadAttachments();
 
             this.listenToOnce(this.model, 'create update', function (response) {
 
@@ -60,15 +57,11 @@ define('io.ox/backbone/mini-views/attachments',
                 if (folder && id) self.save(id, folder);
             });
 
-            this.$el.data('view', this);
+            this.loadAttachments();
         },
 
         dispose: function () {
             this.stopListening();
-        },
-
-        finishedCallback: function (model, id) {
-            model.trigger("finishedAttachmentHandling");
         },
 
         render: function () {
@@ -158,54 +151,71 @@ define('io.ox/backbone/mini-views/attachments',
         },
 
         save: function (id, folderId) {
+
             var self = this,
-                allDone = 0;//0 ready 1 delete 2 add 3 delete and add
-            var apiOptions = {
+                allDone = 0, // 0 ready 1 delete 2 add 3 delete and add
+                apiOptions = {
                 module: this.options.module,
                 id: id || this.model.id,
                 folder: folderId || this.model.get('folder') || this.model.get('folder_id')
             };
-            if (this.attachmentsToDelete.length) {
-                allDone++;
+
+            function done() {
+                if (self.options.changeCallback) {
+                    self.options.changeCallback(self.model);
+                }
             }
-            if (this.attachmentsToAdd.length) {
-                allDone += 2;
-            }
+
+            if (this.attachmentsToDelete.length) allDone++;
+
+            if (this.attachmentsToAdd.length) allDone += 2;
+
             if (this.attachmentsToDelete.length) {
-                api.remove(apiOptions, _(this.attachmentsToDelete).pluck('id')).fail(function (resp) {
-                    self.model.trigger('backendError', resp);
-                }).done(function () {
-                    allDone--;
-                    if (allDone <= 0) { self.finishedCallback(self.model, id); }
-                });
+                api.remove(apiOptions, _(this.attachmentsToDelete).pluck('id')).then(
+                    function success() {
+                        allDone--;
+                        if (allDone <= 0) done();
+                    },
+                    function fail(e) {
+                        self.model.trigger('backendError', e);
+                    }
+                );
             }
 
             if (this.attachmentsToAdd.length) {
                 if (this.oldMode) {
-                    // TODO: fix form
-                    api.createOldWay(apiOptions, self.form).fail(function (resp) {
-                        self.model.trigger('backendError', resp);
-                    }).done(function () {
-                        allDone -= 2;
-                        if (allDone <= 0) { self.finishedCallback(self.model, id); }
-                    });
+                    api.createOldWay(apiOptions, this.$el.closest('form')).then(
+                        function success() {
+                            allDone -= 2;
+                            if (allDone <= 0) done();
+                        },
+                        function fail(e) {
+                            self.model.trigger('backendError', e);
+                        }
+                    );
                 } else {
-                    api.create(apiOptions, _(this.attachmentsToAdd).pluck('file')).fail(function (resp) {
-                        self.model.trigger('backendError', resp);
-                    }).done(function () {
-                        allDone -= 2;
-                        if (allDone <= 0) { self.finishedCallback(self.model, id); }
-                    });
+                    api.create(apiOptions, _(this.attachmentsToAdd).pluck('file')).then(
+                        function success() {
+                            allDone -= 2;
+                            if (allDone <= 0) done();
+                        },
+                        function fail(e) {
+                            self.model.trigger('backendError', e);
+                        }
+                    );
                 }
             }
 
-            if (allDone <= 0) { self.finishedCallback(self.model, id); }
+            if (allDone <= 0) done();
 
             this.attachmentsToAdd = [];
             this.attachmentsToDelete = [];
             this.attachmentsOnServer = [];
-
             this.allAttachments = [];
+        },
+
+        isDirty: function () {
+            return this.attachmentsToDelete.length > 0 || this.attachmentsToAdd.length > 0;
         }
     });
 
@@ -242,7 +252,9 @@ define('io.ox/backbone/mini-views/attachments',
                             };
                             list.addFile(fileData);
                             $input.addClass('add-attachment').hide();
-                            $input = $('<input>', { type: 'file' }).appendTo($input.parent());
+                            $input.parent().append(
+                                $input = $('<input type="file">')
+                            );
                         }
                     }
                 })

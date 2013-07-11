@@ -269,8 +269,10 @@ define('io.ox/contacts/edit/view-form', [
             index: 100,
             label: gt('Drop here to upload a <b class="dndignore">new attachment</b>'),
             multiple: function (files, view) {
+                // get attachmentList view
+                var attachmentList = view.baton.parentView.$el.find('.attachment-list').data('view');
                 _(files).each(function (fileData) {
-                    view.baton.attachmentList.addFile(fileData);
+                    attachmentList.addFile(fileData);
                 });
             }
         });
@@ -278,19 +280,25 @@ define('io.ox/contacts/edit/view-form', [
         // Edit Actions
         new actions.Action(ref + '/actions/edit/save', {
             id: 'save',
-            action: function (options, baton) {
-                //check if attachments are changed
-                if (options.attachmentList && (options.attachmentList.attachmentsToDelete.length > 0 || options.attachmentList.attachmentsToAdd.length > 0)) {
-                    options.model.attributes.tempAttachmentIndicator = true;//temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
+            action: function (baton) {
+
+                // check if attachments are changed
+                var view = baton.parentView.$el.find('.attachment-list').data('view');
+                if (view && view.isDirty()) {
+                    // set temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
+                    view.model.set('tempAttachmentIndicator', true);
                 }
-                options.parentView.trigger('save:start');
-                options.model.save().done(function () {
-                    options.parentView.trigger('save:success');
-                }).fail(function () {
-                    options.parentView.trigger('save:fail');
-                });
 
+                baton.parentView.trigger('save:start');
 
+                baton.model.save().then(
+                    function success() {
+                        baton.parentView.trigger('save:success');
+                    },
+                    function fail() {
+                        baton.parentView.trigger('save:fail');
+                    }
+                );
             }
         });
 
@@ -309,7 +317,7 @@ define('io.ox/contacts/edit/view-form', [
         new actions.Action(ref + '/actions/edit/reset-image', {
             id: 'imagereset',
             action: function (baton) {
-                baton.model.set("image1", '', {validate: true});
+                baton.model.set("image1", '', { validate: true });
                 var imageUrl =  ox.base + '/apps/themes/default/dummypicture.png';
                 baton.parentView.$el.find('.picture-uploader').css('background-image', 'url(' + imageUrl + ')');
             }
@@ -351,10 +359,32 @@ define('io.ox/contacts/edit/view-form', [
             );
         }
 
-        function drawAttachments(options, model) {
+        function propagateAttachmentChange(model) {
+            var folder_id = model.get('folder_id'), id = model.get('id');
+            return api.get({ id: id, folder: folder_id }, false)
+                .then(function (data) {
+                    return $.when(
+                        api.caches.get.add(data),
+                        api.caches.all.grepRemove(folder_id + api.DELIM),
+                        api.caches.list.remove({ id: id, folder: folder_id }),
+                        api.clearFetchCache()
+                    )
+                    .done(function () {
+                        // to make the detailview remove the busy animation:
+                        api.removeFromUploadList(encodeURIComponent(_.cid(data)));
+                        api.trigger('refresh.list');
+                    });
+                });
+        }
+
+        function drawAttachments(options, model, baton) {
             this.append(
-                $('<form>').append(
-                    new attachmentViews.ListView({ model: model, module: 7 /* don't ask */ }).render().$el,
+                baton.$.form = $('<form>').append(
+                    new attachmentViews.ListView({
+                        model: model,
+                        module: 7,
+                        changeCallback: propagateAttachmentChange
+                    }).render().$el,
                     new attachmentViews.UploadView({ model: model }).render().$el
                 )
             );
@@ -382,9 +412,7 @@ define('io.ox/contacts/edit/view-form', [
                     // a block has a fixed width and floats left
                     var block = $('<div class="block">')
                         .attr('data-id', id)
-                        .append(
-                            $('<legend>').text(meta.i18n[id])
-                        );
+                        .append($('<legend>').text(meta.i18n[id]));
 
                     if (id === 'attachments') block.addClass('double-block');
 
@@ -428,7 +456,7 @@ define('io.ox/contacts/edit/view-form', [
                             );
 
                         // call requires "draw" method
-                        (draw[field] || drawDefault).call(paragraph, options, baton.model);
+                        (draw[field] || drawDefault).call(paragraph, options, baton.model, baton);
 
                         this.append(paragraph);
                     }

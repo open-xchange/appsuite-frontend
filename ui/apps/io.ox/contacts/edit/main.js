@@ -52,67 +52,73 @@ define('io.ox/contacts/edit/main',
                 app.cid = 'io.ox/contacts/contact:edit.' + _.cid(data);
 
                 win.show(function () {
-                    var considerSaved = false,
-                        handelContact = function (contact) {
-                            var appTitle = (contact.get('display_name')) ? contact.get('display_name') : util.getFullName(contact.toJSON());
-                            app.setTitle(appTitle || gt('Create contact'));
-                            app.contact = contact;
-                            var editView = new view.ContactEditView({ model: contact });
-                            container.append(editView.render().$el);
-                            container.find('input[type=text]:visible').eq(0).focus();
 
-                            editView.on('save:start', function () {
-                                win.busy();
-                            });
+                    var considerSaved = false;
 
-                            editView.on('save:fail', function () {
-                                win.idle();
-                            });
+                    function cont(contact) {
+                        var appTitle = (contact.get('display_name')) ? contact.get('display_name') : util.getFullName(contact.toJSON());
+                        app.setTitle(appTitle || gt('Create contact'));
+                        app.contact = contact;
+                        var editView = new view.ContactEditView({ model: contact });
+                        container.append(editView.render().$el);
+                        container.find('input[type=text]:visible').eq(0).focus();
 
-                            editView.on('save:success', function (e, data) {
-                                if (def.resolve) {
-                                    def.resolve(data);
-                                }
-                                considerSaved = true;
-                                win.idle();
-                                if (app.dropZone) {app.dropZone.remove(); }
-                                app.quit();
-                            });
+                        editView.on('save:start', function () {
+                            win.busy();
+                        });
 
-                            if ((_.browser.IE === undefined || _.browser.IE > 9) && capabilities.has('infostore')) {
-                                app.dropZone = new dnd.UploadZone({
-                                    ref: 'io.ox/contacts/edit/dnd/actions'
-                                }, editView);
+                        editView.on('save:fail', function () {
+                            win.idle();
+                        });
 
-                                win.on('show', function () {
-                                    if (app.dropZone) {app.dropZone.include(); }
-                                });
-
-                                win.on('hide', function () {
-                                    if (app && app.dropZone) {
-                                        app.dropZone.remove();
-                                    }
-                                });
+                        editView.on('save:success', function (e, data) {
+                            if (def.resolve) {
+                                def.resolve(data);
                             }
+                            considerSaved = true;
+                            win.idle();
+                            if (app.dropZone) {app.dropZone.remove(); }
+                            app.quit();
+                        });
 
-                            ext.point('io.ox/contacts/edit/main/model').invoke('customizeModel', contact, contact);
+                        if ((_.browser.IE === undefined || _.browser.IE > 9) && capabilities.has('infostore')) {
 
-                            contact.on('change:display_name', function () {
-                                app.setTitle(contact.get('display_name'));
+                            app.dropZone = new dnd.UploadZone({
+                                ref: 'io.ox/contacts/edit/dnd/actions'
+                            }, editView);
+
+                            app.dropZone.include();
+
+                            win.on('show', function () {
+                                if (app.dropZone) { app.dropZone.include(); }
                             });
-                        };
+
+                            win.on('hide', function () {
+                                if (app && app.dropZone) {
+                                    app.dropZone.remove();
+                                }
+                            });
+                        }
+
+                        ext.point('io.ox/contacts/edit/main/model').invoke('customizeModel', contact, contact);
+
+                        contact.on('change:display_name', function () {
+                            app.setTitle(contact.get('display_name'));
+                        });
+                    }
 
                     // create model & view
                     if (data.id) {
                         model.factory.realm('edit').retain().get({
                             id: data.id,
                             folder: data.folder_id
-                        }).done(function (contact) {
-                            handelContact(contact);
+                        })
+                        .done(function (contact) {
+                            cont(contact);
                         });
                     } else {
-                        handelContact(model.factory.create(data));
-                        container.find('[data-extension-id="io.ox/contacts/edit/view/display_name_header"]').text(gt('New contact'));
+                        cont(model.factory.create(data));
+                        cont.find('[data-extension-id="io.ox/contacts/edit/view/display_name_header"]').text(gt('New contact'));
                     }
 
                     getDirtyStatus = function () {

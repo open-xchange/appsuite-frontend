@@ -277,14 +277,16 @@ define('io.ox/contacts/api',
      * @return {deferred} returns
      */
     api.update =  function (o) {
+
         var attachmentHandlingNeeded = o.data.tempAttachmentIndicator;
         delete o.data.tempAttachmentIndicator;
+
         if (_.isEmpty(o.data)) {
             if (attachmentHandlingNeeded) {
                 return $.when().pipe(function () {
                     api.addToUploadList(o.folder + '.' + o.id);//to make the detailview show the busy animation
                     api.trigger('update:' + o.folder + '.' + o.id);
-                    return {folder_id: o.folder, id: o.id};
+                    return { folder_id: o.folder, id: o.id };
                 });
             } else {
                 return $.when();
