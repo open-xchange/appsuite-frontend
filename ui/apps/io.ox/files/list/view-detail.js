@@ -179,7 +179,7 @@ define('io.ox/files/list/view-detail',
         id: 'upload',
         index: 600,
         draw: function (baton) {
-            if (!ox.uploadsEnabled) return;
+            if (!ox.uploadsEnabled || baton.openedBy === 'io.ox/mail/write') return;//no uploads in mail preview
             var self = this, file = baton.data;
 
             var $node,
@@ -288,7 +288,7 @@ define('io.ox/files/list/view-detail',
         index: 700,
         draw: function (baton, detailView, allVersions) {
 
-            var $content;
+            var $content, openedBy = baton.openedBy;
 
             function drawAllVersions(allVersions) {
                 _.chain(allVersions)
@@ -304,7 +304,7 @@ define('io.ox/files/list/view-detail',
                             );
 
 
-                    var baton = ext.Baton({ data: version });
+                    var baton = ext.Baton({ data: version, openedBy: openedBy});
                     baton.isCurrent = version.id === baton.data.current_version;
                     ext.point(POINT + '/version').invoke('draw', $entryRow, baton);
                     $content.append($entryRow);
@@ -421,10 +421,13 @@ define('io.ox/files/list/view-detail',
     var draw = function (baton, app) {
         if (!baton) return $('<div>');
         baton = ext.Baton.ensure(baton);
-
+        if (app) {//save the appname so the extensions know what opened them (to disable some options for example)
+            baton.openedBy = app.getName();
+        }
         var node = $.createViewContainer(baton.data, filesAPI);
-
+        
         node.on('redraw', createRedraw(node)).addClass('file-details view');
+
         ext.point(POINT).invoke('draw', node, baton, app);
 
         return node;

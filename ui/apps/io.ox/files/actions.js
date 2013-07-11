@@ -105,7 +105,7 @@ define('io.ox/files/actions',
 
         new Action('io.ox/files/actions/editor', {
             requires: function (e) {
-                return e.collection.has('one') && (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename);
+                return e.collection.has('one') && (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename) && (e.baton.openedBy !== 'io.ox/mail/write');
             },
             action: function (baton) {
                 ox.launch('io.ox/editor/main', { folder: baton.data.folder_id, id: baton.data.id });
@@ -113,6 +113,9 @@ define('io.ox/files/actions',
         });
 
         new Action('io.ox/files/actions/editor-new', {
+            requires: function (e) {
+                return e.baton.openedBy !== 'io.ox/mail/write';
+            },
             action: function (baton) {
                 ox.launch('io.ox/editor/main').done(function () {
                     this.create({ folder: baton.app.folder.get() });
@@ -156,7 +159,9 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/sendlink', {
         capabilities: 'webmail !alone',
-        requires: 'some',
+        requires: function (e) {
+            return e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
+        },
         multiple: function (list) {
             require(['io.ox/mail/write/main'], function (m) {
                 api.getList(list).done(function (list) {
@@ -180,9 +185,10 @@ define('io.ox/files/actions',
         capabilities: 'webmail',
         requires: function (e) {
             var list = _.getArray(e.context);
-            return e.collection.has('some') && ox.uploadsEnabled && _(list).reduce(function (memo, obj) {
-                return memo || obj.file_size > 0;
-            }, false);
+            return e.collection.has('some') && ox.uploadsEnabled && (e.baton.openedBy !== 'io.ox/mail/write') &&//hide in mail write preview
+                _(list).reduce(function (memo, obj) {
+                    return memo || obj.file_size > 0;
+                }, false);
         },
         multiple: function (list) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -242,7 +248,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/delete', {
         requires: function (e) {
-            return e.collection.has('some') && isUnLocked(e);
+            return e.collection.has('some') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
         },
         multiple: function (list) {
             var question = gt.ngettext(
@@ -300,9 +306,10 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/lock', {
         requires: function (e) {
             var list = _.getArray(e.context);
-            return e.collection.has('some') && _(list).reduce(function (memo, obj) {
-                return memo || !api.tracker.isLocked(obj);
-            }, false);
+            return e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/write') &&//hide in mail write preview
+                _(list).reduce(function (memo, obj) {
+                    return memo || !api.tracker.isLocked(obj);
+                }, false);
         },
         multiple: function (list) {
             var responseSuccess = gt.ngettext(
@@ -327,9 +334,10 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/unlock', {
         requires: function (e) {
             var list = _.getArray(e.context);
-            return e.collection.has('some') && _(list).reduce(function (memo, obj) {
-                return memo || api.tracker.isLockedByMe(obj);
-            }, false);
+            return e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/write') &&//hide in mail write preview
+                _(list).reduce(function (memo, obj) {
+                    return memo || api.tracker.isLockedByMe(obj);
+                }, false);
         },
         multiple: function (list) {
             var responseSuccess = gt.ngettext(
@@ -354,7 +362,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/rename', {
         requires: function (e) {
-            return e.collection.has('one') && isUnLocked(e);
+            return e.collection.has('one') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
         },
         action: function (baton) {
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
@@ -436,7 +444,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/edit-description', {
         requires: function (e) {
-            return e.collection.has('one') && isUnLocked(e);
+            return e.collection.has('one') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
         },
         action: function (baton) {
             require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/keys'], function (dialogs, KeyListener) {
@@ -495,7 +503,7 @@ define('io.ox/files/actions',
         new Action('io.ox/files/actions/' + type, {
             id: type,
             requires:  function (e) {
-                return e.collection.has('some') && (type === 'move' ? e.collection.has('delete') && isUnLocked(e) : e.collection.has('read'));
+                return e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/write') && (type === 'move' ? e.collection.has('delete') && isUnLocked(e) : e.collection.has('read'));
             },
             multiple: function (list, baton) {
 
@@ -589,7 +597,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/versions/actions/makeCurrent', {
         requires: function (e) {
-            return !e.context.current_version;
+            return !e.context.current_version && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
         },
         action: function (baton) {
             var data = baton.data;
@@ -602,6 +610,9 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/versions/actions/delete', {
+        requires: function (e) {
+            return e.baton.openedBy !== 'io.ox/mail/write';//hide in mail write preview
+        },
         action: function (baton) {
             var data = baton.data;
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
