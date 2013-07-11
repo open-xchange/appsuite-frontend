@@ -164,6 +164,7 @@ define('plugins/notifications/calendar/register',
                                 overlay.addClass('active');
                             } else if (_.device('smartphone')) {
                                 overlay.removeClass('active');
+                                $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
                             }
                         })
                         .show(e, function (popup) {

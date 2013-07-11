@@ -122,6 +122,7 @@ define('plugins/notifications/tasks/register',
                                     overlay.addClass('active');
                                 } else if (_.device('smartphone')) {
                                     overlay.removeClass('active');
+                                    $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
                                 }
                             })
                             .show(e, function (popup) {
@@ -278,8 +279,19 @@ define('plugins/notifications/tasks/register',
                         // open SidePopup without arrow
                         new dialogs.SidePopup({ arrow: false, side: 'right' })
                             .setTarget(overlay)
+                            .on('close', function () {
+                                if (_.device('smartphone') && overlay.children().length > 0) {
+                                    overlay.addClass('active');
+                                } else if (_.device('smartphone')) {
+                                    overlay.removeClass('active');
+                                    $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
+                                }
+                            })
                             .show(e, function (popup) {
                                 popup.append(viewDetail.draw(taskData));
+                                if (_.device('smartphone')) {
+                                    $('#io-ox-notifications').removeClass('active');
+                                }
                             });
                     });
                 });
@@ -412,8 +424,19 @@ define('plugins/notifications/tasks/register',
                         // open SidePopup without arrow
                         new dialogs.SidePopup({ arrow: false, side: 'right' })
                             .setTarget(overlay)
+                            .on('close', function () {
+                                if (_.device('smartphone') && overlay.children().length > 0) {
+                                    overlay.addClass('active');
+                                } else if (_.device('smartphone')) {
+                                    overlay.removeClass('active');
+                                    $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
+                                }
+                            })
                             .show(e, function (popup) {
                                 popup.append(viewDetail.draw(taskData));
+                                if (_.device('smartphone')) {
+                                    $('#io-ox-notifications').removeClass('active');
+                                }
                             });
                     });
                 });
