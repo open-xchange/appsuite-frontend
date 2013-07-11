@@ -949,22 +949,30 @@ define('io.ox/office/framework/app/baseapplication',
                     var // the result of the callback
                         result = callback.call(context, index);
 
-                    index += 1;
+                    // immediately break the loop if callback returns Utils.BREAK
                     if (result === Utils.BREAK) {
                         def.resolve();
-                    } else {
-                        $.when(result)
-                        .done(function () {
-                            // do not create a new timeout if execution has been
-                            // aborted while the asynchronous code was running
-                            if (timer && (!_.isNumber(cycles) || (index < cycles))) {
-                                createTimer();
-                            }
-                        })
-                        .fail(function () {
-                            def.resolve();
-                        });
+                        return;
                     }
+
+                    // wait for the result (may be a Deferred object)
+                    $.when(result)
+                    .done(function () {
+                        // do not create a new timeout or resolve the Deferred
+                        // object if execution has been aborted while the
+                        // asynchronous code was running
+                        if (timer) {
+                            index += 1;
+                            if (!_.isNumber(cycles) || (index < cycles)) {
+                                createTimer();
+                            } else {
+                                def.resolve();
+                            }
+                        }
+                    })
+                    .fail(function () {
+                        def.resolve();
+                    });
 
                 }, Utils.extendOptions(options, { delay: delay }));
             }
