@@ -66,12 +66,6 @@ define('io.ox/backbone/mini-views/attachments',
 
         render: function () {
 
-            if (this.allAttachments.length === 0) {
-                this.$el.append(
-                    $('<span>').text(gt('No attachments'))
-                );
-            }
-
             this.$el.append(
                 _(this.allAttachments).map(this.renderAttachment)
             );

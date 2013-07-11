@@ -11,16 +11,17 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
-define('l10n/ja_JP/io.ox/register', [
-    'io.ox/core/extensions',
-    'io.ox/backbone/views',
-    'io.ox/backbone/forms',
-    'css!l10n/ja_JP/io.ox/style.css'
-], function (ext, views, forms) {
+define('l10n/ja_JP/io.ox/register',
+    ['io.ox/core/extensions',
+     'io.ox/backbone/views',
+     'io.ox/backbone/forms',
+     'css!l10n/ja_JP/io.ox/style.css'
+    ], function (ext, views, forms) {
+
     'use strict';
-    
+
     // Detail view
-    
+
     ext.point('io.ox/contacts/detail/head').extend({
         index: 'last',
         id: 'furigana',
@@ -37,37 +38,31 @@ define('l10n/ja_JP/io.ox/register', [
             }
         }
     });
-    
+
     // Edit view
-    
+
     ext.point('io.ox/contacts/edit/personal')
         .replace({ id: 'last_name', index: 200 })
         .replace({ id: 'first_name', index: 300 });
-    
+
     yomiField('personal', 'last_name', 'yomiLastName');
     yomiField('personal', 'first_name', 'yomiFirstName');
     yomiField('job', 'company', 'yomiCompany');
-    
+
     function yomiField(point, id, yomiID) {
-        var control = $('<input type="text" class="input-xlarge furigana">')
-            .attr('name', yomiID);
-        views.point('io.ox/contacts/edit/' + point).extend(
-            new forms.ControlGroup({
-                id: yomiID,
-                attribute: yomiID,
-                control: control
-            }), {
-                before: id,
-                hidden: true,
-                show: function () {
-                    control.removeClass('readonly').prop('disabled', '');
-                },
-                hide: function () {
-                    control.addClass('readonly').prop('disabled', 'disabled');
-                }
-            });
+
+        ext.point('io.ox/contacts/edit/' + point).extend({
+            id: yomiID,
+            index: 'last',
+            draw: function () {
+                this.find('input[name="' + id + '"]').after(
+                    $('<input type="text" class="input-xlarge furigana readonly">')
+                    .attr({ name: yomiID, disabled: 'disabled' })
+                );
+            }
+        });
     }
-    
+
     ext.point('io.ox/contacts/edit/view').extend({
         index: 'last',
         draw: function (baton) {
@@ -79,11 +74,14 @@ define('l10n/ja_JP/io.ox/register', [
                       this.find('input[name="yomiCompany"]'));
         }
     });
-    
+
     function watchKana($field, $yomiField) {
+
         // Because of the high interval frequency, use DOM nodes directly.
         var field = $field.get(0), yomiField = $yomiField.get(0);
-        
+
+        if (!field || !yomiField) return;
+
         // Catch kana when it is entered, before the IME converts it to kanji.
         var interval;
         $field.focus(function () {
@@ -95,7 +93,7 @@ define('l10n/ja_JP/io.ox/register', [
             }
             $yomiField.trigger('change');
         });
-        
+
         var lv = field.value; // last updated value
                               // lv is not updated when inserting non-kana
                               // characters, e. g. when typing the first
@@ -104,7 +102,7 @@ define('l10n/ja_JP/io.ox/register', [
                             // (boundaries of the current word in lv)
         var v0 = lv; // previous value (always updated, used to wait for changes)
         var yl = 0; // length of the current word in yomiField
-        
+
         function intervalHandler() {
             var v = field.value;
             if (v === v0) return;
@@ -118,15 +116,15 @@ define('l10n/ja_JP/io.ox/register', [
                 ls = 0;
                 return;
             }
-            
+
             // compute length of unchanged prefix in p
             var p = 0, l = v.length, ll = lv.length;
             for (; p < l && p < ll && v.charAt(p) === lv.charAt(p); p++) ;
-            
+
             // compute length of unchanged suffix in s
             var s = 0, a = l, b = ll;
             for (; a > p && b > p && v.charAt(--a) === lv.charAt(--b); s++) ;
-            
+
             if (p + s === ll) { // if inserting (i. e. typing)
                 if (p < lp || s < ls) { // if outside of the previous word
                     // set new word
@@ -149,17 +147,17 @@ define('l10n/ja_JP/io.ox/register', [
                 ls = 0;
                 yl = 0;
             }
-            
+
         }
-        
+
         function getKana(value) {
             var kana = [];
             for (var i = 0; i < value.length; i++) {
                 var c = value.charCodeAt(i);
-                
+
                 // convert hiragana to katakana
                 if (c >= 0x3041 && c <= 0x309e) c += 0x60;
-                
+
                 // copy only katakana (and hiragana "yori")
                 if (c >= 0x309f && c <= 0x30ff || // katakana
                     c >= 0x31f0 && c <= 0x31ff || // katakana phonetic extensions
@@ -171,9 +169,9 @@ define('l10n/ja_JP/io.ox/register', [
             return String.fromCharCode.apply(String, kana);
         }
     }
-    
+
     // Search
-    
+
     ext.point('io.ox/contacts/api/search').extend({
         id: 'furigana',
         getData: function (query, options) {
@@ -182,9 +180,9 @@ define('l10n/ja_JP/io.ox/register', [
             if (this.company) this.yomiCompany = this.company;
         }
     });
-    
+
     // VGrid
-    
+
     var exceptions = { 0x3094: 0x3046, 0x3095: 0x304b, 0x3096: 0x3051,
             0x309f: 0x3088, 0x30f4: 0x30a6, 0x30f5: 0x30ab, 0x30f6: 0x30b1,
             0x30ff: 0x30b3, 0x31f0: 0x30af, 0x31f1: 0x30b7, 0x31f2: 0x30b9,
@@ -197,7 +195,7 @@ define('l10n/ja_JP/io.ox/register', [
         letters = [0x3042, 0x304b, 0x3055, 0x305f, 0x306a,
                    0x306f, 0x307e, 0x3084, 0x3089, 0x308f],
         kana = _.map(letters, function (c) { return String.fromCharCode(c); });
-    
+
     ext.point('io.ox/contacts/getLabel').extend({
         id: 'furigana',
         getLabel: function (data) {
@@ -206,21 +204,21 @@ define('l10n/ja_JP/io.ox/register', [
             // special handling of kana characters
             if (c >= 0x3040 && c < 0x3100) {
                 c = exceptions[c] || c;
-                
+
                 // convert katakana to hiragana
                 if (c >= 0x30a1 && c <= 0x30fe) c -= 0x60;
-                
+
                 // find the hiragana which represents the entire range
                 c = letters[_.sortedIndex(ranges, c)];
             }
             return String.fromCharCode(c);
         }
     });
-    
+
     function isCollapsed(node) {
         return node.children().last().outerHeight() * 36 > node.height();
     }
-    
+
     ext.point('io.ox/contacts/thumbIndex').extend({
         index: 200,
         id: 'furigana',
@@ -252,8 +250,10 @@ define('l10n/ja_JP/io.ox/register', [
             }
         }
     });
-    $(window).resize(_.debounce(function () {
-        
-    }, 300));
-    
+
+    // is code missing here?
+    // $(window).resize(_.debounce(function () {
+
+    // }, 300));
+
 });

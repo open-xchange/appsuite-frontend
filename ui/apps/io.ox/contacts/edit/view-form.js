@@ -144,7 +144,7 @@ define('io.ox/contacts/edit/view-form', [
             delete meta.i18n.attachments;
         }
 
-        var point = views.point(ref + '/edit/view'),
+        var point = views.point(ref + '/edit'),
 
             ContactEditView = point.createView({
                 tagName: 'div',
@@ -173,7 +173,7 @@ define('io.ox/contacts/edit/view-form', [
         }));
 
         point.extend(new PictureUpload({
-            id: ref + '/edit/view/picture',
+            id: ref + '/edit/picture',
             index: 120,
             customizeNode: function () {
                 this.$el
@@ -404,7 +404,7 @@ define('io.ox/contacts/edit/view-form', [
         _(meta.sections).each(function (fields, id) {
 
             // create new "block" extension
-            ext.point(ref + '/edit/view').extend({
+            ext.point(ref + '/edit').extend({
                 id: id,
                 index: index += 100,
                 draw: function (baton) {
@@ -417,7 +417,7 @@ define('io.ox/contacts/edit/view-form', [
                     if (id === 'attachments') block.addClass('double-block');
 
                     // draw fields inside block
-                    ext.point(ref + '/edit/view/' + id).invoke('draw', block, baton);
+                    ext.point(ref + '/edit/' + id).invoke('draw', block, baton);
 
                     // only add if block contains at least one paragraph with content
                     if (block.children('p.has-content, p.always').length > 0) {
@@ -429,7 +429,7 @@ define('io.ox/contacts/edit/view-form', [
             // create extensions for each field
             _(fields).each(function (field, index) {
 
-                ext.point(ref + '/edit/view/' + id).extend({
+                ext.point(ref + '/edit/' + id).extend({
                     id: field,
                     index: 100 + index * 100,
                     draw: function (baton) {

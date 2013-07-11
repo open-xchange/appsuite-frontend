@@ -17,8 +17,5 @@
 }
 
 .edit-contact .furigana.readonly {
-	border: none;
-	background: none;
-	margin: 0;
-	padding: 0;
+	background: #f5f5f5;
 }

@@ -297,7 +297,7 @@ define('io.ox/contacts/api',
                     module: 'contacts',
                     params: {
                         action: 'update',
-                        id: o.id + '-jibbet-net',
+                        id: o.id,
                         folder: o.folder,
                         timestamp: o.timestamp || _.then(),
                         timezone: 'UTC'
