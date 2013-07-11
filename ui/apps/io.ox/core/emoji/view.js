@@ -11,15 +11,21 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-(function () {
+define('io.ox/core/emoji/view', ['moxiecode/tiny_mce/plugins/emoji/main'], function (emoji) {
 
     'use strict';
 
+    // helper
+
+    function closeView(ed, e) {
+        if (e.which === 9) return;
+        if (this.isOpen) this.toggle();
+    }
+
     //
-    // Plugin functions
+    // View. One per editor instance.
     //
 
-<<<<<<< HEAD
     var EmojiView = Backbone.View.extend({
 
         tagName: 'td',
@@ -34,32 +40,21 @@
 
         // when user clicks on emoji. inserts emoji into editor
         onInsertEmoji: function (e) {
-
-            e.preventDefault();
-
-            var recently = {},
-                icon = $(e.target).data('icon'),
-                html = '<img src="apps/themes/login/1x1.gif" rel="0" ' +
-                    'class="emoji ' + icon.css + '" data-emoji-unicode="' + icon.unicode + '">';
-
-            this.emoji.recent(icon.unicode);
-            this.editor.execCommand('mceInsertContent', false, html);
+            console.warn('Overwrite onInsertEmoji!');
         },
 
         // when user clicks on emoji category
         onSelectCategory: function (e) {
             e.preventDefault();
-            var node = $(e.target),
-                category = node.attr('data-category');
-            this.setCategory(category);
+            var node = $(e.target);
+            this.setCategory(node.attr('data-category'));
         },
 
         // when user select emoji set in drop-down
         onSelectEmojiCollection: function (e) {
             e.preventDefault();
-            var node = $(e.target),
-                collection = node.attr('data-collection');
-            this.setCollection(collection);
+            var node = $(e.target);
+            this.setCollection(node.attr('data-collection'));
         },
 
         // when user clicks on "Reset" in "Recently used" list
@@ -71,11 +66,14 @@
 
         initialize: function (options) {
 
+            this.emoji = emoji.getInstance();
             this.editor = options.editor;
             this.isRendered = false;
             this.isOpen = false;
             this.currentCategory = '';
             this.currentCollection = '';
+
+            if (options.onInsertEmoji) this.onInsertEmoji = options.onInsertEmoji;
 
             // for optional run-time access
             this.$el.data('view', this);
@@ -257,76 +255,22 @@
                     options.find('[data-collection="' + collection + '"]')
                         .find('i').attr('class', 'icon-ok');
                 }
-=======
-    function onInsertEmoji(e) {
->>>>>>> enabled text-only emoji mode for mobile devices
 
-        e.preventDefault();
+                this.drawCategoryIcons();
+                this.setCategory();
+            }
+        },
 
-        var recently = {},
-            icon = $(e.target).data('icon'),
-            html = '<img src="apps/themes/login/1x1.gif" rel="0" ' +
-                'class="emoji ' + icon.css + '" data-emoji-unicode="' + icon.unicode + '">';
-
-        this.emoji.recent(icon.unicode);
-        this.editor.execCommand('mceInsertContent', false, html);
-    }
-
-    // this is called for each editor instance
-    function init(ed, url) {
-
-        var view = null;
-
-        ed.addCommand('mceInsertEmoji', function (ui) {
-
-            if (view === null) {
-                // load required code now
-                require(['io.ox/core/emoji/view'], function (EmojiView) {
-                    // create instance only once per editor
-                    view = new EmojiView({ editor: ed, onInsertEmoji: onInsertEmoji });
-                    // hook into tinyMCE's DOM
-                    var container = $(ed.getContainer());
-                    container.find('.mceIframeContainer').parent().append(
-                        view.$el
-                    );
-                    container.find('td.mceToolbar').attr('colspan', 2);
-                    view.toggle();
-                });
+        // hide/show view
+        toggle: function () {
+            if (!this.isRendered) {
+                this.render();
             } else {
-                view.toggle();
+                this.$el.toggle();
+                this.isOpen = !this.isOpen;
             }
-        });
-
-        // TODO: translate title
-        ed.addButton('emoji', {
-            title: 'Insert Emoji',
-            onclick: function (e) {
-                ed.execCommand('mceInsertEmoji', true, { event: e, editor: ed });
-            }
-        });
-
-        ed.contentCSS.push(url + '/emoji.less');
-    }
-
-    function getInfo() {
-        return {
-            longname: 'Emoji plugin',
-            author: 'Julian Bäume',
-            authorurl: 'http://open-xchange.com',
-            infourl: 'http://oxpedia.org/wiki/AppSuite:Emoji',
-            version: '0.1'
-        };
-    }
-
-    //
-    // Register plugin
-    //
-
-    window.tinymce.create('tinymce.plugins.EmojiPlugin', {
-        init: init,
-        getInfo: getInfo
+        }
     });
 
-    window.tinymce.PluginManager.add('emoji', window.tinymce.plugins.EmojiPlugin);
-
-}());
+    return EmojiView;
+});

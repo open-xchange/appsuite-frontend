@@ -287,7 +287,6 @@ define('io.ox/mail/write/main',
                     view.showSection('attachments');
                 });
             }
-
             win.on('show', function () {
                 if (app.getEditor()) {
                     app.getEditor().handleShow();
@@ -772,6 +771,10 @@ define('io.ox/mail/write/main',
                                 ed.focus();
                                 view.scrollpane.scrollTop(0);
                                 def.resolve({app: app});
+                                if (_.device('smartphone')) {
+                                    // trigger keyup to resize the textarea
+                                    view.textarea.trigger('keyup');
+                                }
                             });
                         })
                         .fail(function (e) {
@@ -816,6 +819,10 @@ define('io.ox/mail/write/main',
                         win.idle();
                         focus('to');
                         def.resolve();
+                        if (_.device('smartphone')) {
+                            // trigger keyup to resize the textarea
+                            view.textarea.trigger('keyup');
+                        }
                     });
                 })
                 .fail(function (e) {

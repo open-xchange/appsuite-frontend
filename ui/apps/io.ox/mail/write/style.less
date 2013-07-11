@@ -385,6 +385,196 @@
     font-weight: 500;
 }
 
+.io-ox-mail-write-window {
+    .emoji-icon {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        background: url('img/emoji.png');
+        width: 20px;
+        height: 20px;
+    }
+
+    @font-face {
+        font-family: 'AndroidEmojiRegular';
+        src: url('font/androidemoji.eot');
+        src: url('font/androidemoji.eot') format('embedded-opentype'),
+             url('font/androidemoji.woff') format('woff'),
+             url('font/androidemoji.ttf') format('truetype');
+    }
+
+    .emojifont {
+        font-family: 'AndroidEmojiRegular';
+    }
+
+    img.emoji {
+        border: 0;
+    }
+
+    .table-cell-fix {
+        position: relative;
+        height: 100%;
+        width: 100%;
+        .box-sizing(border-box);
+    }
+
+    .mceEmojiPane {
+
+        height: 100%;
+        width: 255px;
+        vertical-align: top;
+
+        border: 1px solid #ccc;
+        border-width: 1px 1px 1px 0;
+
+        @background: #f5f5f5;
+        @emojiTabHeight: 34px;
+
+        .emoji-tabs {
+            height: @emojiTabHeight;
+            bottom: auto;
+        }
+
+        .emoji-tab {
+            font-size: 12px;
+            line-height: 20px;
+            color: white;
+            padding: 7px 14px;
+            background-color: #ccc;
+            border: 1px solid white;
+            cursor: pointer;
+            .box-sizing(border-box);
+        }
+
+        .emoji-tab.left {
+            right: 50%;
+            border-right: 0px none;
+        }
+
+        .emoji-tab.right {
+            left: 50%;
+        }
+
+        .emoji-tab.active {
+            background-color: #333;
+        }
+
+        .emoji-tab:focus, .emoji-tab:active {
+            outline: 0;
+            background-color: #555;
+        }
+
+        .emoji-header {
+
+            line-height: 20px;
+            height: 25px;
+            bottom: auto;
+
+            padding: 0 0 0 14px;
+            background-color: @background;
+
+            .emoji-category {
+                line-height: 25px;
+                font-weight: bold;
+                color: #333;
+                display: inline-block;
+                width: 100%;
+                padding-right: 30px;
+                .ellipsis();
+                .box-sizing(border-box);
+            }
+
+            i {
+                line-height: 20px;
+            }
+        }
+
+        .emoji-use-tabs .emoji-header {
+            top: @emojiTabHeight;
+        }
+
+        .emoji-options {
+            .dropdown-toggle {
+                width: 34px;
+                height: 20px;
+                padding: 7px 0;
+                display: inline-block;
+                text-align: center;
+            }
+            .dropdown-toggle:focus {
+                outline: 0;
+                background-color: #08c;
+                i { color: white; }
+            }
+        }
+
+        .emoji-icons {
+
+            top: 25px;
+            bottom: 50px;
+            padding: 5px;
+            white-space: normal;
+
+            overflow: auto;
+            background-color: white;
+        }
+
+        .emoji-use-tabs .emoji-icons {
+            top: 34px + @emojiTabHeight;
+        }
+
+        .reset-recents {
+            color: @linkColor;
+            cursor: pointer;
+            display: block;
+            margin: 7px 0;
+            text-align: right;
+            &:hover { text-decoration: underline; }
+        }
+
+        .emoji {
+
+            width: 20px;
+            margin: 12px;
+            cursor: pointer;
+
+            &:focus {
+                outline: 5px solid #ccc;
+                background-color: #ccc;
+            }
+        }
+
+        .emoji-footer {
+
+            top: auto;
+            height: 35px;
+            padding: 7px 0 7px 14px;
+            white-space: normal;
+            border-top: 1px solid #fff;
+
+            overflow: hidden;
+            background-color: @background;
+            .vertical-gradient(@background, darken(@background, 10%));
+
+            .emoji {
+                margin: 0 27px 3px 0;
+            }
+        }
+
+        /* bootstrap re-resets */
+
+        .dropdown-toggle, .dropdown-toggle * { cursor: pointer; }
+
+        .dropdown-menu {
+            padding: 5px 0;
+            margin: 2px 0 0;
+            background-color: #FFF;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            a { cursor: pointer; }
+        }
+    }
+}
+
 /* Proofread */
 
 .io-ox-mail-proofread {
@@ -469,8 +659,26 @@
 @media (max-width: 480px), (max-device-width: 480px)  {
     .io-ox-mail-write {
 
-
+        .io-ox-mail-write input[type=text].subject {
+            font-weight: bold;
+            font-size: 14px;
+            padding: 5px 80px 4px 10px;
+            text-overflow: ellipsis;
+        }
+        .text-editor {
+            position: relative;
+            bottom: 50px;
+            top: 1px;
+            padding: 5px;
+            &:focus {
+                box-shadow: none;
+                -webkit-box-shadow: none;
+                border-color: #ccc;
+            }
+        }
         input[type=text], textarea, .text-editor {
+            height: 200px;
+
             border-top: none;
             border-left: none;
             border-right: none;
@@ -488,6 +696,7 @@
         }
         input[type=text].subject {
             padding-left: 5px;
+            padding-right: 30px;
         }
         .leftside {
             background: #fff; /* let's make it flat */
@@ -499,6 +708,12 @@
         .rightside {
             background: #fff; /* let's make it flat */
             padding: 5px;
+            height: auto;
+
+            .subject-wrapper {
+                position: static;
+
+            }
             .editor-outer-container {
                 border-top-width: 0;
                 left: 1px;
@@ -510,12 +725,9 @@
                     border-top: none;
                     padding: 5px;
                 }
-                .text-editor:focus {
-                    box-shadow: none;
-                    -webkit-box-shadow: none;
-                    border-color: #ccc;
-                }
+
             }
+
             .editor-print-margin {
                 display: none !important;
             }
