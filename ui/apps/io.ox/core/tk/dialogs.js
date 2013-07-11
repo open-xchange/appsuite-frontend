@@ -29,10 +29,22 @@ define("io.ox/core/tk/dialogs",
 
     var Dialog = function (options) {
 
-        var nodes = {
+        var o = _.extend({
+                underlayAction: null,
+                defaultAction: null,
+                easyOut: true,
+                center: true,
+                async: false,
+                top: "50%",
+                container: $('body')
+                // width (px), height (px),
+                // maxWidth (px), maxHeight (px)
+            }, options),
+
+            nodes = {
                 buttons: [],
-                underlay: underlay.clone().appendTo('body'),
-                popup: popup.clone().appendTo('body')
+                underlay: underlay.clone(),
+                popup: popup.clone()
             },
 
             lastFocus = $(),
@@ -41,17 +53,6 @@ define("io.ox/core/tk/dialogs",
             isBusy = false,
             self = this,
             data = {},
-
-            o = _.extend({
-                underlayAction: null,
-                defaultAction: null,
-                easyOut: true,
-                center: true,
-                async: false,
-                top: "50%"
-                // width (px), height (px),
-                // maxWidth (px), maxHeight (px)
-            }, options),
 
             keepFocus = function (e) {
                 // we have to consider that two popups might be open
@@ -166,6 +167,12 @@ define("io.ox/core/tk/dialogs",
                 }
             };
 
+        // append all elements
+        o.container.append(
+            $('<div>')
+                .addClass('abs io-ox-dialog-wrapper')
+                .append(nodes.underlay, nodes.popup)
+        );
 
         _(['header', 'body', 'footer']).each(function (part) {
             nodes[part] = nodes.popup.find('.modal-' + part);

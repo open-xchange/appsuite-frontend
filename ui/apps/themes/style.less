@@ -1347,15 +1347,22 @@ input[type=search] {
 }
 
 /* Dialogs */
+.io-ox-dialog-wrapper {
+    height: 100%;
+    width: 100%;
+}
+
 .io-ox-dialog-underlay {
+
     background-color: black;
     opacity: 0;
     z-index: 65000;
     .transition(opacity 0.15s linear);
-}
 
-.io-ox-dialog-underlay.in {
-    opacity: 0.30;
+    &.in {
+        opacity: 0.30;
+    }
+
 }
 
 .io-ox-dialog-popup {
