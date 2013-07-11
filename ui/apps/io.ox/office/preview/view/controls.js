@@ -126,7 +126,7 @@ define('io.ox/office/preview/view/controls',
 
             pageInput.getTextFieldNode().css({ textAlign: 'right' });
             // register the text field to establish automatic event forwarding
-            self.registerPrivateGroup(pageInput);
+            self.registerMenuGroup(pageInput);
             // insert the text field node into the prepared section
             self.getSectionNode('pages').append(pageInput.getNode());
         });

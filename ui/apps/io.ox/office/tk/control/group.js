@@ -233,26 +233,41 @@ define('io.ox/office/tk/control/group',
          * @param {Group} group
          *  The group instance to be be registered.
          *
+         * @param {Object} [options]
+         *  A map with options controlling the behavior of this method. The
+         *  following options are supported:
+         *  @param {Boolean} [options.ignoreValue=false]
+         *      If set to true, 'change' events triggered by the specified
+         *      group instance will not be forwarded to listeners of this
+         *      group, and calls to the own 'Group.update()' method will not be
+         *      forwarded to the specified group instance.
+         *  @param {Boolean} [options.ignoreCancel=false]
+         *      If set to true, 'cancel' events triggered by the specified
+         *      group instance will not be forwarded to listeners of this
+         *      group.
+         *
          * @returns {Group}
          *  A reference to this instance.
          */
-        this.registerPrivateGroup = function (group) {
+        this.registerPrivateGroup = function (group, options) {
 
-            // forward change events of the group to listeners of this drop-down group
-            group.on('change', function (event, value, options) {
-                self.trigger('change', value, options);
-            });
+            // forward 'change' events of the private group to listeners of this group,
+            // and updates of this drop-down group to the inserted group
+            if (!Utils.getBooleanOption(options, 'ignoreValue', false)) {
+                group.on('change', function (event, value, options) {
+                    self.trigger('change', value, options);
+                });
+                this.registerUpdateHandler(function (value) {
+                    group.update(value);
+                });
+            }
 
-            // do not forward cancel events directly, but generate a new event
-            // that can be handled separately
-            group.on('cancel', function (options) {
-                self.trigger('private:cancel', options);
-            });
-
-            // forward updates of this drop-down group to the inserted group
-            this.registerUpdateHandler(function (value) {
-                group.update(value);
-            });
+            // forward cancel events of the private group to listeners of this group
+            if (!Utils.getBooleanOption(options, 'ignoreCancel', false)) {
+                group.on('cancel', function (options) {
+                    self.trigger('cancel', options);
+                });
+            }
 
             return this;
         };

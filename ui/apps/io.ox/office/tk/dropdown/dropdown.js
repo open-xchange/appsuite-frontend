@@ -569,6 +569,28 @@ define('io.ox/office/tk/dropdown/dropdown',
             return this;
         };
 
+        /**
+         * Registers a private group instance that will be inserted into the
+         * menu node. The 'change' events triggered by that group will be
+         * forwarded to the listeners of this group instance, and updates of
+         * this group instance (calls to the own 'Group.update()' method) will
+         * be forwarded to the specified private group. The 'cancel' events of
+         * the private group will be caught and used to hide the drop-down
+         * menu, but will NOT be forwarded to listeners of this group. The DOM
+         * root node of the group will not be inserted anywhere!
+         *
+         * @param {Group} group
+         *  The group instance to be be registered.
+         *
+         * @returns {DropDown}
+         *  A reference to this instance.
+         */
+        this.registerMenuGroup = function (group) {
+            this.registerPrivateGroup(group, { ignoreCancel: true });
+            group.on('cancel', hideMenu);
+            return this;
+        };
+
         // initialization -----------------------------------------------------
 
         // initialize the caret icon
@@ -580,7 +602,7 @@ define('io.ox/office/tk/dropdown/dropdown',
         this.addFocusableControl(menuButton);
 
         // register event handlers
-        this.on('change cancel private:cancel', hideMenu)
+        this.on('change cancel', hideMenu)
             .on('show enable', function (event, state) { if (!state) { hideMenu(); } });
         groupNode
             .on('keydown keypress keyup', groupKeyHandler)
