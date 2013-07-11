@@ -20,14 +20,14 @@ define('io.ox/files/util',
     return {
         /**
          * shows confirm dialog in case user changes file extension
-         * @param  {string} formvalue    filename
-         * @param  {string} servervalue  filename
+         * @param  {string} formFilename    filename
+         * @param  {string} serverFilename  filename
          * @return {promise} resolves if user confirms or dialogie needen
          */
-        confirmDialog: function (formvalue, servervalue) {
+        confirmDialog: function (formFilename, serverFilename) {
                     var def = $.Deferred(),
-                        name = formvalue,
-                        extServer = servervalue.indexOf('.') >= 0 ? _.last(servervalue.split('.')) :  '',
+                        name = formFilename,
+                        extServer = serverFilename.indexOf('.') >= 0 ? _.last(serverFilename.split('.')) :  '',
                         extForm = _.last(name.split('.')),
                         $hint = $('<div class="row-fluid muted inset">').append(
                                     '<small style="padding-top: 8px">' +
