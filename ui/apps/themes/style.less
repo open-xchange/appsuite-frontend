@@ -394,18 +394,13 @@
     .overflow-x(hidden);
     .overflow-y(auto);
     .box-sizing(border-box);
-    .backface-visibility(hidden);
 
     @media (max-width: 480px), (max-device-width: 480px) and (orientation: portrait) {
-        display:block;
+
         width: 100%;
-        right: -100%;
-        -webkit-transition-property: -webkit-transform;
-        -webkit-transition-duration: 0.10s;
-        -webkit-animation-timing-function: ease-out;
 
         &.active {
-            -webkit-transform: translateX(-100%);
+             display:block;
         }
     }
 
