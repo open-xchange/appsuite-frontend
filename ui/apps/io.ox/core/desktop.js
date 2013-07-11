@@ -919,6 +919,10 @@ define("io.ox/core/desktop",
                         ox.ui.windowManager.trigger("window.beforeshow", self);
                         this.trigger("beforeshow");
                         this.updateToolbar();
+                        //set current appname in url, was lost on returning from edit app
+                        if (self.app.getName() !== _.url.hash('app')) {
+                            _.url.hash('app', self.app.getName());
+                        }
                         node.show();
                         scrollTo(node, function () {
                             if (self === null) return;
