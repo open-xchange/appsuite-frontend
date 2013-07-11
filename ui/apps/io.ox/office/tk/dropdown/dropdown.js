@@ -93,14 +93,20 @@ define('io.ox/office/tk/dropdown/dropdown',
             menuToggleControls = $(),
 
             // current size of the drop-down menu (calculated when opening the menu)
-            menuNodeSize = null;
+            menuNodeSize = null,
+
+            // an interval timer to refresh the the menu node while it is open
+            refreshTimer = null,
+
+            // last position and size of the group node
+            lastGroupPosition = null;
 
         // private methods ----------------------------------------------------
 
         /**
          * Initializes the size and position of the drop-down menu.
          */
-        function windowResizeHandler() {
+        function refreshMenuNodePosition() {
 
             var // position and size of the parent group node
                 groupPosition = self.getNodePosition(),
@@ -174,15 +180,10 @@ define('io.ox/office/tk/dropdown/dropdown',
             menuNodeProps.height = Math.min(availableHeight, menuNodeSize.height + ((menuNodeSize.width > availableWidth) ? Utils.SCROLLBAR_HEIGHT : 0));
 
             // second part of the position of the drop-down menu (do not exceed bottom or right border of browser window)
-            switch (preferredSide) {
-            case 'top':
-            case 'bottom':
+            if (Utils.isVerticalPosition(preferredSide)) {
                 menuNodeProps.left = getLeftOffset(menuNodeProps.width);
-                break;
-            case 'left':
-            case 'right':
+            } else {
                 menuNodeProps.top = Math.min(groupPosition.top, window.innerHeight - DropDown.WINDOW_BORDER_PADDING - menuNodeProps.height);
-                break;
             }
 
             // apply final CSS formatting
@@ -190,8 +191,32 @@ define('io.ox/office/tk/dropdown/dropdown',
         }
 
         /**
+         * Checks and updates the position of the menu node, according to the
+         * current position of the menu button (a scrollable parent node may
+         * have been scrolled). Additionally, hides the menu automatically when
+         * the drop-down button becomes inaccessible (also indirectly, e.g.
+         * when hiding any parent nodes).
+         */
+        function refreshMenuNode() {
+
+            var groupPosition = null;
+
+            if (self.isReallyVisible()) {
+                groupPosition = self.getNodePosition();
+                if (!_.isEqual(lastGroupPosition, groupPosition)) {
+                    lastGroupPosition = groupPosition;
+                    if (autoLayout) { refreshMenuNodePosition(); }
+                    self.trigger('menu:refresh');
+                }
+            } else {
+                // group is not visible anymore: hide the menu
+                hideMenu();
+            }
+        }
+
+        /**
          * Shows the drop-down menu, if it is not visible yet. Triggers a
-         * 'menuopen' event at the group.
+         * 'menu:open' event at the group.
          */
         function showMenu() {
 
@@ -228,12 +253,17 @@ define('io.ox/office/tk/dropdown/dropdown',
                 menuNode.css(menuMinSize);
 
                 // enable window resize handler which recalculates position and size of the menu node
-                $(window).on('resize', windowResizeHandler);
-                windowResizeHandler();
+                $(window).on('resize', refreshMenuNodePosition);
+                refreshMenuNodePosition();
             }
 
             // notify all listeners
-            self.trigger('menuopen');
+            self.trigger('menu:open');
+
+            // start a timer that regularly checks the position of the menu node, and
+            // hide the menu automatically when the drop-down button becomes inaccessible
+            lastGroupPosition = self.getNodePosition();
+            refreshTimer = window.setInterval(refreshMenuNode, 50);
 
             // Add a global click handler to close the menu automatically when
             // clicking somewhere in the page. Listening to the 'mousedown'
@@ -253,12 +283,15 @@ define('io.ox/office/tk/dropdown/dropdown',
 
         /**
          * Hides the drop-down menu, if it is currently open. Triggers a
-         * 'menuclose' event at the group.
+         * 'menu:close' event at the group.
          */
         function hideMenu() {
 
             // do nothing if the menu is not visible
             if (!self.isMenuVisible()) { return; }
+
+            // stop the automatic refresh timer
+            window.clearInterval(refreshTimer);
 
             // move focus to drop-down button, if drop-down menu is focused
             if (Utils.containsFocusedControl(menuNode)) {
@@ -266,25 +299,13 @@ define('io.ox/office/tk/dropdown/dropdown',
             }
 
             // notify all listeners
-            self.trigger('menuclose');
+            self.trigger('menu:close');
 
             // initialize DOM
             $(document).off('mousedown click', globalClickHandler);
             groupNode.removeClass(OPEN_CLASS);
             menuNode.detach();
-            $(window).off('resize', windowResizeHandler);
-        }
-
-        /**
-         * Changes the visibility of the drop-down menu. Triggers a 'menuopen'
-         * or 'menuclose' event at the group.
-         */
-        function toggleMenu() {
-            if (self.isMenuVisible()) {
-                hideMenu();
-            } else {
-                showMenu();
-            }
+            $(window).off('resize', refreshMenuNodePosition);
         }
 
         /**
@@ -302,8 +323,12 @@ define('io.ox/office/tk/dropdown/dropdown',
                     menuButton.focus();
                 }
 
-                // toggle the menu, this triggers the 'menuopen'/'menuclose' listeners
-                toggleMenu(null);
+                // toggle the menu, this triggers the 'menu:open'/'menu:close' listeners
+                if (self.isMenuVisible()) {
+                    hideMenu();
+                } else {
+                    showMenu();
+                }
             }
 
             // trigger 'cancel' event, if menu has been closed with mouse click

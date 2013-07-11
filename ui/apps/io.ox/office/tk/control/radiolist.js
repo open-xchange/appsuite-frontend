@@ -145,7 +145,7 @@ define('io.ox/office/tk/control/radiolist',
         }
 
         /**
-         * Handles 'menuopen' events.
+         * Handles 'menu:open' events.
          */
         function menuOpenHandler() {
             scrollToListItem(Utils.getSelectedButtons(self.getItems()));
@@ -277,7 +277,7 @@ define('io.ox/office/tk/control/radiolist',
         }
 
         // register event handlers
-        this.on('menuopen', menuOpenHandler);
+        this.on('menu:open', menuOpenHandler);
         this.getItemGroup().registerUpdateHandler(itemUpdateHandler);
 
     } // class RadioList

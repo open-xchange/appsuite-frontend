@@ -76,7 +76,7 @@ define('io.ox/office/tk/control/combofield',
         }
 
         /**
-         * Handles 'menuopen' events and moves the focus to the text field.
+         * Handles 'menu:open' events and moves the focus to the text field.
          */
         function menuOpenHandler() {
             if (!self.isReadOnly()) {
@@ -248,7 +248,7 @@ define('io.ox/office/tk/control/combofield',
         this.getNode().addClass('combo-field');
 
         // prepare group and register event handlers
-        this.on('menuopen', menuOpenHandler)
+        this.on('menu:open', menuOpenHandler)
             .on('validated', textFieldValidationHandler)
             .on('readonly', textFieldReadOnlyHandler)
             .registerUpdateHandler(itemUpdateHandler);
