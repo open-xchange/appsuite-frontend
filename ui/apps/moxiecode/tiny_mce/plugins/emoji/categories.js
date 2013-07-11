@@ -31,35 +31,84 @@ define('moxiecode/tiny_mce/plugins/emoji/categories',
         },
 
         translations: {
+
             // collections
             unified: gt('Unified'),
             softbank: gt('SoftBank'),
             japan_carrier: gt('Japanese Carrier'),
-            // category names
+
             // recently used
             recently: gt('Recently used'),
-            // softbank
-            Face: gt('Face'),
-            Feeling_Decoration: gt('Feeling + Decoration'),
-            Weather_Season: gt('Weather + Season'),
-            Character: gt('Character'),
-            Food: gt('Food'),
-            Life: gt('Life'),
-            Tool: gt('Tool'),
-            Hobby: gt('Hobby'),
-            Letters_Symbols: gt('Letters + Symbols'),
+
+            // softbank category names
+            Face:
+                //#. Emoji category
+                //#. Japanese: 顔
+                gt('Face'),
+            Feeling_Decoration:
+                //#. Emoji category
+                //#. Japanese should include "Katakana Middle Dot". Unicode: 30FB
+                //#. Japanese: 気持ち・装飾
+                //#. Other languages can use simple bullet. Unicode: 2022
+                gt('Feeling • Decoration'),
+            Weather_Season:
+                //#. Emoji category
+                //#. Japanese should include "Katakana Middle Dot". Unicode: 30FB
+                //#. Japanese: 天気・季節
+                //#. Other languages can use simple bullet. Unicode: 2022
+                gt('Weather • Season'),
+            Character:
+                //#. Emoji category
+                //#. Japanese: キャラクター
+                gt('Character'),
+            Food:
+                //#. Emoji category
+                //#. Japanese: 食べ物
+                gt('Food'),
+            Life:
+                //#. Emoji category
+                //#. Japanese: 日常
+                gt('Life'),
+            Tool:
+                //#. Emoji category
+                //#. Japanese: ツール
+                gt('Tool'),
+            Hobby:
+                //#. Emoji category
+                //#. Japanese: 趣味
+                gt('Hobby'),
+            Letters_Symbols:
+                //#. Emoji category
+                //#. Japanese should include "Katakana Middle Dot". Unicode: 30FB
+                //#. Japanese: 文字・記号
+                //#. Other languages can use simple bullet. Unicode: 2022
+                gt('Letters • Symbols'),
+
             // unified
-            People: gt('People'),
-            Symbols: gt('Symbols'),
-            Nature: gt('Nature'),
-            Objects: gt('Objects'),
-            Places: gt('Places'),
+            People:
+                //#. Emoji category
+                gt('People'),
+            Symbols:
+                //#. Emoji category
+                gt('Symbols'),
+            Nature:
+                //#. Emoji category
+                gt('Nature'),
+            Objects:
+                //#. Emoji category
+                gt('Objects'),
+            Places:
+                //#. Emoji category
+                gt('Places'),
+
             // tabs
             commonEmoji:
-                //#. Emojis that work across all Japanese carriers. In Japanese: 他社共通絵文字
+                //#. Emojis that work across all Japanese carriers.
+                //#. Japanese: 他社共通絵文字
                 gt('Common Emoji'),
             allEmoji:
-                //#. Emojis of SoftBank set. In Japanese: 全絵文字
+                //#. Emojis of SoftBank set.
+                //#. Japanese: 全絵文字
                 gt('All Emoji')
         }
     };
