@@ -235,6 +235,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             $('#io-ox-notifications').removeClass('active');
             if (_.device('!smartphone')) {
                 $('#io-ox-notifications-overlay').empty().removeClass('active');
+                $('#io-ox-notifications-icon > a').focus();
             } else {
                 $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
             }

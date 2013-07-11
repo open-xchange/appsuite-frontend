@@ -395,6 +395,8 @@
     .overflow-y(auto);
     .box-sizing(border-box);
 
+     &:focus { outline: 0; }
+
     @media (max-width: 480px), (max-device-width: 480px) and (orientation: portrait) {
 
         width: 100%;
@@ -436,6 +438,8 @@
             padding: 13px;
             margin-bottom: 1px;
             cursor: pointer;
+
+            &:focus { outline: 1px solid rgba(255,255,255,0.3); background-color: #444; }
 
             &:hover {
                 background-color: #444;
