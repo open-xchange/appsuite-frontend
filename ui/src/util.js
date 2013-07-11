@@ -129,7 +129,7 @@
         Chrome: webkit && chrome ?
             ua.split('Chrome/')[1].split(' ')[0].split('.')[0] : undefined,
         /** is Firefox? */
-        Firefox: (ua.indexOf('Gecko') > -1 && ua.indexOf('KHTML') === -1) ?
+        Firefox: (ua.indexOf('Gecko') > -1 && ua.indexOf('Firefox') > -1 && ua.indexOf('KHTML') === -1) ?
             ua.split('Firefox/')[1].split('.')[0] : undefined,
         /** OS **/
         Blackberry: Blackberry,
