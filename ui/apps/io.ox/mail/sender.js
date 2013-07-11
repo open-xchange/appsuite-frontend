@@ -15,7 +15,8 @@ define('io.ox/mail/sender',
      'io.ox/core/api/account',
      'io.ox/core/api/user',
      'io.ox/contacts/api',
-     'io.ox/core/capabilities'], function (util, api, userAPI, contactsAPI, capabilities) {
+     'io.ox/core/capabilities',
+     'settings!io.ox/mail'], function (util, api, userAPI, contactsAPI, capabilities, settings) {
 
     'use strict';
 
@@ -27,8 +28,8 @@ define('io.ox/mail/sender',
     }
 
     function drawOption(value, text, display_name, address) {
-        return $('<option>', { value: value }).text(_.noI18n(text))
-            .attr({ 'data-display-name': display_name, 'data-address': address });
+        return $('<option>', { value: value }).text(_.noI18n(text || value))
+            .attr({ 'data-display-name': (display_name || ''), 'data-address': (address || value) });
     }
 
     var that = {
@@ -38,7 +39,7 @@ define('io.ox/mail/sender',
             var option = select.children('option:selected'),
                 display_name = option.attr('data-display-name'),
                 address = option.attr('data-address');
-            return [display_name, address];
+            return option.length ? [display_name, address] : ['', select.attr('data-default-send-address')];
         },
 
         // set sender. Use default as fallback
@@ -46,13 +47,14 @@ define('io.ox/mail/sender',
 
             if (!select || !_.isArray(from)) return;
 
-            var address = $.trim(from[1]).toLowerCase(),
+            var address = api.trimAddress(from[1]),
                 option = select.find('[data-address="' + address + '"]'),
                 children = select.children(),
                 index;
 
             // still empty?
             if (children.length === 0) {
+                console.log('set data-default', address, from[1]);
                 select.attr('data-default', address);
                 return;
             }
@@ -77,10 +79,20 @@ define('io.ox/mail/sender',
             return capabilities.has('msisdn') ? contactsAPI.getMapping('msisdn', 'names') : [];
         },
 
+        getDefaultSendAddress: function () {
+            return $.trim(settings.get('defaultSendAddress', ''));
+        },
+
         // add all senders to <select> box
         drawOptions: function (select) {
 
             if (!select) return;
+
+            // fallback address - if any other request fails we have the detault send address
+            var defaultAddress = this.getDefaultSendAddress();
+            select.empty()
+                .attr('data-default-send-address', defaultAddress)
+                .append(drawOption(defaultAddress));
 
             // get accounts
             var accounts = api.getAllSenderAddresses();
@@ -147,7 +159,7 @@ define('io.ox/mail/sender',
                 });
 
                 // concat, sort, then add to drop-down
-                select.append(
+                select.empty().append(
                     _(addresses.concat(numbers).sort(sorter)).pluck('option')
                 );
 

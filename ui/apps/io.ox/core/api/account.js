@@ -298,9 +298,9 @@ define('io.ox/core/api/account',
     };
 
     api.getDefaultDisplayName = function () {
-        return require(['io.ox/contacts/util', 'io.ox/core/api/user']).then(function (contactsUtil, userAPI) {
-            return userAPI.getCurrentUser().then(function (user) {
-                return contactsUtil.getMailFullName(user.toJSON());
+        return require(['io.ox/contacts/util', 'io.ox/core/api/user']).then(function (util, api) {
+            return api.get({ id: ox.user_id }).then(function (data) {
+                return util.getMailFullName(data);
             });
         });
     };
@@ -330,9 +330,15 @@ define('io.ox/core/api/account',
 
     }());
 
+    api.trimAddress = function (address) {
+        address = $.trim(address);
+        // apply toLowerCase only for mail addresses, don't change phone numbers
+        return address.indexOf('@') > -1 ? address.toLowerCase() : address;
+    };
+
     function getAddressArray(name, address) {
         name = $.trim(name || '');
-        address = $.trim(address).toLowerCase();
+        address = api.trimAddress(address);
         return [name !== address ? name : '', address];
     }
 
