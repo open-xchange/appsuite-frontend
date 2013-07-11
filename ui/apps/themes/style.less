@@ -381,27 +381,30 @@
 /* notifications */
 
 #io-ox-notifications {
-    background-color: #222;
-    top: 40px;
-    position: absolute;
-    bottom: 0px;
-    border-top: 1px solid #000;
-    overflow: hidden;
-    z-index: 30;
     display: none;
-    /* .transition(all 0.1s); */
 
-    @media (max-width: 480px), (max-device-width: 480px) {
+    position: absolute;
+    z-index: 30;
+    top: 40px;
+    bottom: 0px;
+
+    background-color: #222;
+    border-top: 1px solid #000;
+
+    .overflow-x(hidden);
+    .overflow-y(auto);
+    .box-sizing(border-box);
+    .backface-visibility(hidden);
+
+    @media (max-width: 480px), (max-device-width: 480px) and (orientation: portrait) {
         display:block;
         width: 100%;
         right: -100%;
         -webkit-transition-property: -webkit-transform;
-        -webkit-transition-duration: 0.18s;
+        -webkit-transition-duration: 0.10s;
         -webkit-animation-timing-function: ease-out;
 
         &.active {
-            width:100%;
-            right:-100%;
             -webkit-transform: translateX(-100%);
         }
     }
@@ -499,8 +502,8 @@
     }
 }
 
-@media (max-width: 480px), (max-device-width: 480px) {
-    #io-ox-core { overflow-x: hidden;}
+@media (max-width: 480px), (max-device-width: 480px) and (orientation: portrait) {
+
     #io-ox-notifications-overlay { right: 0; }
 }
 
