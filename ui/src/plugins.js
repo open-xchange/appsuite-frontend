@@ -96,15 +96,14 @@
             var db = openDatabase("filecache", "1.0", "caches files for OX", 5 * 1024 * 1024);
             db.transaction(function (tx) {
                 tx.executeSql("CREATE TABLE IF NOT EXISTS version (version TEXT)");
-                tx.executeSql("CREATE TABLE IF NOT EXISTS files (name TEXT unique, contents TEXT)");
                 tx.executeSql("SELECT 1 FROM version WHERE version = ?", [ox.version], function (tx, result) {
                     if (result.rows.length === 0) {
-                        tx.executeSql("DELETE FROM files", initialization.resolve);
+                        tx.executeSql("DROP TABLE files");
+                        tx.executeSql("CREATE TABLE files (name TEXT unique, contents TEXT, version TEXT)");
                         tx.executeSql("DELETE FROM version");
                         tx.executeSql("INSERT INTO version VALUES (?)", [ox.version]);
-                    } else {
-                        initialization.resolve();
                     }
+                    initialization.resolve();
 
                 });
             });
@@ -112,12 +111,15 @@
                 var def = $.Deferred();
                 initialization.done(function () {
                     db.transaction(function (tx) {
-                        tx.executeSql("SELECT contents FROM files WHERE name = ?", [name], function (tx, result) {
+                        tx.executeSql("SELECT contents FROM files WHERE name = ? and version = ?", [name, ox.version], function (tx, result) {
                             if (result.rows.length === 0) {
                                 def.reject();
                             } else {
                                 def.resolve(result.rows.item(0).contents);
                             }
+                        }, function () {
+                            console.error(arguments);
+                            def.reject();
                         });
                     });
                 });
@@ -127,8 +129,8 @@
             fileCache.cache = function (name, contents) {
                 initialization.done(function () {
                     db.transaction(function (tx) {
-                        tx.executeSql("INSERT OR REPLACE INTO files (name, contents) VALUES (?,?) ", [name, contents]);
-                    });                    
+                        tx.executeSql("INSERT OR REPLACE INTO files (name, contents, version) VALUES (?,?,?) ", [name, contents, ox.version]);
+                    });
                 });
             };
         })();
