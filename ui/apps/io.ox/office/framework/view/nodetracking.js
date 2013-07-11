@@ -107,10 +107,10 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
     /**
      * Initializes auto-scrolling mode after tracking has been started.
      */
-    function initAutoScrolling(sourceNode, pageX, pageY) {
+    function initAutoScrolling() {
 
         var // additional options for auto-scrolling
-            trackingOptions = $(sourceNode).data('tracking-options') || {},
+            trackingOptions = trackingNode.data('tracking-options') || {},
             // whether horizontal auto-scrolling is enabled
             horizontal = Utils.getBooleanOption(trackingOptions, 'autoScroll', false) || (Utils.getStringOption(trackingOptions, 'autoScroll') === 'horizontal'),
             // whether vertical auto-scrolling is enabled
@@ -118,7 +118,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
             // the time in milliseconds between auto-scrolling events
             scrollInterval = Utils.getIntegerOption(trackingOptions, 'scrollInterval', 100, 100),
             // the border node for auto-scrolling
-            borderNode = ('borderNode' in trackingOptions) ? $(trackingOptions.borderNode).first() : $(sourceNode),
+            borderNode = ('borderNode' in trackingOptions) ? $(trackingOptions.borderNode).first() : trackingNode,
             // the margin around the border box where auto-scrolling becomes active
             borderMargin = Utils.getIntegerOption(trackingOptions, 'borderMargin', 0),
             // the size of the border around the scrolling border box for acceleration
@@ -137,46 +137,45 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
             return (borderSize === 0) ? maxSpeed : (Math.min(1, (distance - 1) / borderSize) * (maxSpeed - minSpeed) + minSpeed);
         }
 
-        if (horizontal || vertical) {
+        if (!horizontal && !vertical) { return; }
 
-            scrollTimer = window.setInterval(function () {
+        scrollTimer = window.setInterval(function () {
 
-                var // the current screen position of the scroll node
-                    borderBox = Utils.getNodePositionInWindow(borderNode),
-                    // the distances from border box to tracking position
-                    leftDist = horizontal ? (borderBox.left - borderMargin - lastX) : 0,
-                    rightDist = horizontal ? (lastX - (borderBox.left + borderBox.width + borderMargin)) : 0,
-                    topDist = vertical ? (borderBox.top - borderMargin - lastY) : 0,
-                    bottomDist = vertical ? (lastY - (borderBox.top + borderBox.height + borderMargin)) : 0;
+            var // the current screen position of the scroll node
+                borderBox = Utils.getNodePositionInWindow(borderNode),
+                // the distances from border box to tracking position
+                leftDist = horizontal ? (borderBox.left - borderMargin - lastX) : 0,
+                rightDist = horizontal ? (lastX - (borderBox.left + borderBox.width + borderMargin)) : 0,
+                topDist = vertical ? (borderBox.top - borderMargin - lastY) : 0,
+                bottomDist = vertical ? (lastY - (borderBox.top + borderBox.height + borderMargin)) : 0;
 
-                // start auto-scrolling after the first 'tracking:move' event
-                if (!moved) { return; }
+            // start auto-scrolling after the first 'tracking:move' event
+            if (!moved) { return; }
 
-                // calculate new horizontal increment
-                if (leftDist > 0) {
-                    scrollX = (scrollX > -minSpeed) ? -minSpeed : Math.max(scrollX * acceleration, -getMaxSpeed(leftDist));
-                } else if (rightDist > 0) {
-                    scrollX = (scrollX < minSpeed) ? minSpeed : Math.min(scrollX * acceleration, getMaxSpeed(rightDist));
-                } else {
-                    scrollX = 0;
-                }
+            // calculate new horizontal increment
+            if (leftDist > 0) {
+                scrollX = (scrollX > -minSpeed) ? -minSpeed : Math.max(scrollX * acceleration, -getMaxSpeed(leftDist));
+            } else if (rightDist > 0) {
+                scrollX = (scrollX < minSpeed) ? minSpeed : Math.min(scrollX * acceleration, getMaxSpeed(rightDist));
+            } else {
+                scrollX = 0;
+            }
 
-                // calculate new vertical increment
-                if (topDist > 0) {
-                    scrollY = (scrollY > -minSpeed) ? -minSpeed : Math.max(scrollY * acceleration, -getMaxSpeed(topDist));
-                } else if (bottomDist > 0) {
-                    scrollY = (scrollY < minSpeed) ? minSpeed : Math.min(scrollY * acceleration, getMaxSpeed(bottomDist));
-                } else {
-                    scrollY = 0;
-                }
+            // calculate new vertical increment
+            if (topDist > 0) {
+                scrollY = (scrollY > -minSpeed) ? -minSpeed : Math.max(scrollY * acceleration, -getMaxSpeed(topDist));
+            } else if (bottomDist > 0) {
+                scrollY = (scrollY < minSpeed) ? minSpeed : Math.min(scrollY * acceleration, getMaxSpeed(bottomDist));
+            } else {
+                scrollY = 0;
+            }
 
-                // notify listeners
-                if ((Math.round(scrollX) !== 0) || (Math.round(scrollY) !== 0)) {
-                    triggerEvent('tracking:scroll', undefined, { pageX: lastX, pageY: lastY, scrollX: Math.round(scrollX), scrollY: Math.round(scrollY) });
-                }
+            // notify listeners
+            if ((Math.round(scrollX) !== 0) || (Math.round(scrollY) !== 0)) {
+                triggerEvent('tracking:scroll', undefined, { pageX: lastX, pageY: lastY, scrollX: Math.round(scrollX), scrollY: Math.round(scrollY) });
+            }
 
-            }, scrollInterval);
-        }
+        }, scrollInterval);
     }
 
     /**
@@ -191,17 +190,17 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
     /**
      * Initializes tracking mode after tracking has been started.
      */
-    function initTracking(sourceNode, targetNode, pageX, pageY) {
+    function initTracking(event, pageX, pageY) {
 
-        // store the current tracing node
-        trackingNode = $(sourceNode);
+        // store the current tracking node
+        trackingNode = $(event.delegateTarget);
         startX = lastX = pageX;
         startY = lastY = pageY;
         moved = false;
         hasFocus = true;
 
         // set the mouse pointer of the target node at the overlay node
-        overlayNode.css('cursor', $(targetNode).css('cursor'));
+        overlayNode.css('cursor', $(event.target).css('cursor'));
 
         // register event listeners
         $(document).on(DOCUMENT_EVENT_MAP);
@@ -218,7 +217,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
         });
 
         // initialize auto scrolling
-        initAutoScrolling(sourceNode, pageX, pageY);
+        initAutoScrolling();
     }
 
     /**
@@ -246,9 +245,9 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
      * Starts tracking the passed source node. Triggers a 'tracking:start'
      * event at the current tracking node.
      */
-    function trackingStart(event, sourceNode, pageX, pageY) {
+    function trackingStart(event, pageX, pageY) {
         cancelTracking();
-        initTracking(sourceNode, event.target, pageX, pageY);
+        initTracking(event, pageX, pageY);
         triggerEvent('tracking:start', event, { target: event.target, pageX: pageX, pageY: pageY });
     }
 
@@ -285,7 +284,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
      */
     function mouseDownHandler(event) {
         if (event.button === 0) {
-            trackingStart(event, this, event.pageX, event.pageY);
+            trackingStart(event, event.pageX, event.pageY);
         } else {
             cancelTracking();
         }
@@ -312,7 +311,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
         var touches = event.originalEvent.touches,
             changed = event.originalEvent.changedTouches;
         if ((touches.length === 1) && (changed.length === 1)) {
-            trackingStart(event, this, changed[0].pageX, changed[0].pageY);
+            trackingStart(event, changed[0].pageX, changed[0].pageY);
         } else {
             cancelTracking();
         }
