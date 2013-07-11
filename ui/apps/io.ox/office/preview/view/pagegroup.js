@@ -213,7 +213,7 @@ define('io.ox/office/preview/view/pagegroup',
          */
         function scrollToButton(buttonNode) {
             if (self.isReallyVisible()) {
-                Utils.scrollToChildNode(scrollableNode, buttonNode, { padding: 13 });
+                Utils.scrollToChildNode(scrollableNode, buttonNode, { padding: 3 });
             }
         }
 
