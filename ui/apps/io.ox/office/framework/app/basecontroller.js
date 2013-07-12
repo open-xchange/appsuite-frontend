@@ -63,7 +63,7 @@ define('io.ox/office/framework/app/basecontroller',
                 'document/print': {
                     // enabled in read-only mode
                     set: function () { app.print(); },
-                    shortcut: { keyCode: 'P', ctrlOrMetaKey: true }
+                    shortcut: { keyCode: 'P', ctrlOrMeta: true }
                 }
             },
 
@@ -311,8 +311,8 @@ define('io.ox/office/framework/app/basecontroller',
                 // process all shortcut definitions for the key code in the passed event
                 if (event.keyCode in keyShortcuts) {
                     _(keyShortcuts[event.keyCode]).each(function (shortcut) {
-                        // check if the additional control keys match the shortcut definition
-                        if (KeyCodes.matchEventControlKeys(event, shortcut.definition)) {
+                        // check if the additional modifier keys match the shortcut definition
+                        if (KeyCodes.matchModifierKeys(event, shortcut.definition)) {
                             callSetHandlerForShortcut(shortcut);
                         }
                     });
@@ -377,8 +377,7 @@ define('io.ox/office/framework/app/basecontroller',
          *      One or multiple keyboard shortcut definitions. If the window
          *      root node of the application receives a 'keydown' or 'keypress'
          *      event that matches a shortcut definition, the setter function
-         *      of this item will be executed, and will receive the event
-         *      object in its second parameter. Can be as single shortcut
+         *      of this item will be executed. Can be as single shortcut
          *      definition, or an array of shortcut definitions. Each
          *      definition object supports the following attributes:
          *      - {Number|String} [shortcut.charCode]
@@ -394,46 +393,46 @@ define('io.ox/office/framework/app/basecontroller',
          *          keys, for example, the number 9 matches the TAB key
          *          (KeyCodes.TAB), but the string '9' matches the digit '9'
          *          key (KeyCodes['9'] with the key code 57).
-         *      - {Boolean|Null} [shortcut.shiftKey=false]
+         *      - {Boolean|Null} [shortcut.shift=false]
          *          If set to true, the SHIFT key must be pressed when the
          *          'keydown' events is received. If set to false (or omitted),
          *          the SHIFT key must not be pressed. If set to null, the
          *          current state of the SHIFT key will be ignored. Has no
          *          effect when evaluating 'keypress' events.
-         *      - {Boolean|Null} [shortcut.altKey=false]
+         *      - {Boolean|Null} [shortcut.alt=false]
          *          If set to true, the ALT key must be pressed when the
          *          'keydown' events is received. If set to false (or omitted),
          *          the ALT key must not be pressed. If set to null, the
          *          current state of the ALT key will be ignored. Has no effect
          *          when evaluating 'keypress' events.
-         *      - {Boolean|Null} [shortcut.ctrlKey=false]
+         *      - {Boolean|Null} [shortcut.ctrl=false]
          *          If set to true, the CTRL key must be pressed when the
          *          'keydown' events is received. If set to false (or omitted),
          *          the CTRL key must not be pressed. If set to null, the
          *          current state of the CTRL key will be ignored. Has no
          *          effect when evaluating 'keypress' events.
-         *      - {Boolean|Null} [shortcut.metaKey=false]
+         *      - {Boolean|Null} [shortcut.meta=false]
          *          If set to true, the META key must be pressed when the
          *          'keydown' events is received. If set to false (or omitted),
          *          the META key must not be pressed. If set to null, the
          *          current state of the META key will be ignored. Has no
          *          effect when evaluating 'keypress' events.
-         *      - {Boolean} [shortcut.altOrMetaKey=false]
+         *      - {Boolean} [shortcut.altOrMeta=false]
          *          Convenience option that if set to true, matches if either
          *          the ALT key, or the META key are pressed. Has the same
          *          effect as defining two separate shortcuts, one with the
-         *          'altKey' option set to true, and one with the 'metaKey'
-         *          option set to true, while keeping the other option false.
-         *          Must not be used in a shortcut definition where these
-         *          options are set explicitly.
-         *      - {Boolean} [shortcut.ctrlOrMetaKey=false]
+         *          'shortcut.alt' option set to true, and one with the
+         *          'shortcut.meta' option set to true, while keeping the other
+         *          option false. Must not be used in a shortcut definition
+         *          where these options are set explicitly.
+         *      - {Boolean} [shortcut.ctrlOrMeta=false]
          *          Convenience option that if set to true, matches if either
          *          the CTRL key, or the META key are pressed. Has the same
          *          effect as defining two separate shortcuts, one with the
-         *          'ctrlKey' option set to true, and one with the 'metaKey'
-         *          option set to true, while keeping the other option false.
-         *          Must not be used in a shortcut definition where these
-         *          options are set explicitly.
+         *          'shortcut.ctrl' option set to true, and one with the
+         *          'shortcut.meta' option set to true, while keeping the other
+         *          option false. Must not be used in a shortcut definition
+         *          where these options are set explicitly.
          *      - {Any|Function} [shortcut.value]
          *          The value that will be passed to the setter function of
          *          this item. If multiple shortcuts are defined for an item,

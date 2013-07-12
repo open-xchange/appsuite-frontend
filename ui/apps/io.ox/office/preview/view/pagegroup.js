@@ -227,8 +227,8 @@ define('io.ox/office/preview/view/pagegroup',
                 var // the page number of the focus button
                     page = Utils.getControlValue($(document.activeElement));
 
-                // no extra control keys (SHIFT, ALT, etc.) must be pressed
-                if (KeyCodes.matchEventControlKeys(event) && _.isNumber(page)) {
+                // no extra modifier keys must be pressed
+                if (KeyCodes.matchModifierKeys(event) && _.isNumber(page)) {
                     buttonNodes[Utils.minMax(page + diff, 1, app.getModel().getPageCount())].focus();
                     return false;
                 }

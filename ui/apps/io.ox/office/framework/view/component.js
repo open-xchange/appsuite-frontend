@@ -57,7 +57,7 @@ define('io.ox/office/framework/view/component',
      *      If set to true or omitted, the view component will be inserted into
      *      the chain of focusable nodes reachable with specific global
      *      keyboard shortcuts (usually the F6 key with platform dependent
-     *      control keys).
+     *      modifier keys).
      *  @param {Boolean} [options.hoverEffect=false]
      *      If set to true, all control groups in this view component will be
      *      displayed half-transparent as long as the mouse does not hover the
@@ -198,7 +198,7 @@ define('io.ox/office/framework/view/component',
          *  True, if the event has been handled and needs to stop propagating.
          */
         function keyHandler(event) {
-            if (KeyCodes.matchKeyboardEvent(event, 'TAB', { shiftKey: null })) {
+            if (KeyCodes.matchKeyCode(event, 'TAB', { shift: null })) {
                 if (event.type === 'keydown') {
                     moveFocus(!event.shiftKey);
                 }

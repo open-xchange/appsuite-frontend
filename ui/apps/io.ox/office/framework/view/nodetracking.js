@@ -78,7 +78,7 @@ define('io.ox/office/framework/view/nodetracking',
      *
      * @param {jQuery.Event} [sourceEvent]
      *  The original event object that caused the tracking event. Will be used
-     *  to pass the state of additional control keys (SHIFT, ALT, CTRL, META)
+     *  to pass the state of additional modifier keys (SHIFT, ALT, CTRL, META)
      *  to the event listeners.
      *
      * @param {Object} [data]
@@ -90,7 +90,7 @@ define('io.ox/office/framework/view/nodetracking',
         var // the event object passed to all listeners
             event = _.extend({ type: type, startX: startX, startY: startY }, data);
 
-        // extend with states of all control keys
+        // extend with states of all modifier keys
         if (_.isObject(sourceEvent)) {
             _(event).extend({
                 shiftKey: sourceEvent.shiftKey,

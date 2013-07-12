@@ -148,83 +148,83 @@ define('io.ox/office/tk/keycodes', ['io.ox/office/tk/utils'], function (Utils) {
     // methods ----------------------------------------------------------------
 
     /**
-     * Returns whether the states of the control keys in the passed event
+     * Returns whether the states of the modifier keys in the passed event
      * object matches the specified definition.
      *
-     * @param {Event|jQuery.Event}
-     *  An event object containing control key states (properties 'shiftKey',
+     * @param {Event|jQuery.Event} event
+     *  An event object containing modifier key states (properties 'shiftKey',
      *  'altKey', 'ctrlKey', and 'metaKey'), either as instance of DOM Event,
      *  or as jQuery event object.
      *
      * @param {Object} [options]
-     *  The expected settings of the control keys to match the passed event
+     *  The expected settings of the modifier keys to match the passed event
      *  against. The following options are supported:
-     *  @param {Boolean|Null} [options.shiftKey=false]
+     *  @param {Boolean|Null} [options.shift=false]
      *      If set to true, the 'shiftKey' property must be set in the event.
      *      If set to false (or omitted), the 'shiftKey' property must not be
      *      set. If set to null, the current state of the 'shiftKey' property
      *      will be ignored.
-     *  @param {Boolean|Null} [options.altKey=false]
+     *  @param {Boolean|Null} [options.alt=false]
      *      If set to true, the 'altKey' property must be set in the event. If
      *      set to false (or omitted), the 'altKey' property must not be set.
      *      If set to null, the current state of the 'altKey' property will be
      *      ignored.
-     *  @param {Boolean|Null} [options.ctrlKey=false]
+     *  @param {Boolean|Null} [options.ctrl=false]
      *      If set to true, the 'ctrlKey' property must be set in the event. If
      *      set to false (or omitted), the 'ctrlKey' property must not be set.
      *      If set to null, the current state of the 'ctrlKey' property will be
      *      ignored.
-     *  @param {Boolean|Null} [options.metaKey=false]
+     *  @param {Boolean|Null} [options.meta=false]
      *      If set to true, the 'metaKey' property must be set in the event. If
      *      set to false (or omitted), the 'metaKey' property must not be set.
      *      If set to null, the current state of the 'metaKey' property will be
      *      ignored.
-     *  @param {Boolean} [options.altOrMetaKey=false]
+     *  @param {Boolean} [options.altOrMeta=false]
      *      Convenience option. If set to true, the passed event matches, if
      *      either the 'altKey' or the 'metaKey' property is set (the options
-     *      'options.altKey' and 'options.metaKey' will be ignored).
-     *  @param {Boolean} [options.ctrlOrMetaKey=false]
+     *      'options.alt' and 'options.meta' will be ignored).
+     *  @param {Boolean} [options.ctrlOrMeta=false]
      *      Convenience option. If set to true, the passed event matches, if
      *      either the 'ctrlKey' or the 'metaKey' property is set (the options
-     *      'options.ctrlKey' and 'options.metaKey' will be ignored).
+     *      'options.ctrl' and 'options.meta' will be ignored).
      *
      * @returns {Boolean}
-     *  Whether the passed event object matches the control key settings
+     *  Whether the passed event object matches the modifier key settings
      *  specified in the options.
      */
-    KeyCodes.matchEventControlKeys = function (event, options) {
+    KeyCodes.matchModifierKeys = function (event, options) {
 
-        function isMatchingControlKey(currentState, expectedState) {
+        function isMatching(currentState, expectedState) {
             return _.isNull(expectedState) || (currentState === (_.isBoolean(expectedState) && expectedState));
         }
 
-        // 'shiftKey' option must always match
-        if (!isMatchingControlKey(event.shiftKey, Utils.getOption(options, 'shiftKey'))) {
+        // SHIFT key must always match
+        if (!isMatching(event.shiftKey, Utils.getOption(options, 'shift'))) {
             return false;
         }
 
-        // when 'altOrMetaKey' is set, ignore 'altKey' and 'metaKey' options
-        if (Utils.getBooleanOption(options, 'altOrMetaKey', false)) {
-            return (event.altKey !== event.metaKey) && isMatchingControlKey(event.ctrlKey, Utils.getOption(options, 'ctrlKey'));
+        // when 'altOrMeta' is set, ignore 'alt' and 'meta' options
+        if (Utils.getBooleanOption(options, 'altOrMeta', false)) {
+            return (event.altKey !== event.metaKey) && isMatching(event.ctrlKey, Utils.getOption(options, 'ctrl'));
         }
 
-        // when 'ctrlOrMetaKey' is set, ignore 'ctrlKey' and 'metaKey' options
-        if (Utils.getBooleanOption(options, 'ctrlOrMetaKey', false)) {
-            return (event.ctrlKey !== event.metaKey) && isMatchingControlKey(event.altKey, Utils.getOption(options, 'altKey'));
+        // when 'ctrlOrMeta' is set, ignore 'ctrl' and 'meta' options
+        if (Utils.getBooleanOption(options, 'ctrlOrMeta', false)) {
+            return (event.ctrlKey !== event.metaKey) && isMatching(event.altKey, Utils.getOption(options, 'alt'));
         }
 
-        // otherwise, options 'altKey', 'ctlKey' and 'metaKey' options must match
-        return isMatchingControlKey(event.altKey, Utils.getOption(options, 'altKey')) &&
-            isMatchingControlKey(event.ctrlKey, Utils.getOption(options, 'ctrlKey')) &&
-            isMatchingControlKey(event.metaKey, Utils.getOption(options, 'metaKey'));
+        // otherwise, ALT, CTRL, and META keys must match
+        return isMatching(event.altKey, Utils.getOption(options, 'alt')) &&
+            isMatching(event.ctrlKey, Utils.getOption(options, 'ctrl')) &&
+            isMatching(event.metaKey, Utils.getOption(options, 'meta'));
     };
 
     /**
-     * Returns whether the key code and the states of the control keys in the
+     * Returns whether the key code and the states of the modifier keys in the
      * passed keyboard event object matches the specified definition.
      *
-     * @param {KeyboardEvent|jQuery.Event}
-     *  A keyboard event object containing control key states (properties
+     * @param {KeyboardEvent|jQuery.Event} event
+     *  A keyboard event object containing modifier key states (properties
      *  'shiftKey', 'altKey', 'ctrlKey', and 'metaKey'), either as instance of
      *  DOM KeyboardEvent, or as jQuery event object, received from a 'keydown'
      *  or 'keyup' browser event.
@@ -236,15 +236,15 @@ define('io.ox/office/tk/keycodes', ['io.ox/office/tk/utils'], function (Utils) {
      *  the digit '9' key (KeyCodes['9'] with the key code 57).
      *
      * @param {Object} [options]
-     *  The expected settings of the control keys to match the passed event
-     *  against. See method KeyCodes.matchEventControlKeys() for details.
+     *  The expected settings of the modifier keys to match the passed event
+     *  against. See method KeyCodes.matchModifierKeys() for details.
      *
      * @returns {Boolean}
-     *  Whether the passed event object matches the key code and the control
+     *  Whether the passed event object matches the key code and the modifier
      *  key settings specified in the options.
      */
-    KeyCodes.matchKeyboardEvent = function (event, keyCode, options) {
-        return (event.keyCode === (_.isString(keyCode) ? KeyCodes[keyCode] : keyCode)) && KeyCodes.matchEventControlKeys(event, options);
+    KeyCodes.matchKeyCode = function (event, keyCode, options) {
+        return (event.keyCode === (_.isString(keyCode) ? KeyCodes[keyCode] : keyCode)) && KeyCodes.matchModifierKeys(event, options);
     };
 
     // exports ================================================================
