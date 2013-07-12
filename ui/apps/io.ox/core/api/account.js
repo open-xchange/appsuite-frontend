@@ -12,11 +12,11 @@
  */
 
 define('io.ox/core/api/account',
-    ['io.ox/core/config',
+    ['settings!io.ox/mail',
      'io.ox/core/http',
      'io.ox/core/cache',
      'io.ox/core/event'
-    ], function (config, http, Cache, Events) {
+    ], function (settings, http, Cache, Events) {
 
     'use strict';
 
@@ -24,7 +24,7 @@ define('io.ox/core/api/account',
     var idHash = {},
         typeHash = {},
         // default separator
-        separator = config.get('modules.mail.defaultseparator', '/');
+        separator = settings.get('defaultseparator', '/');
 
     var process = function (data) {
 
@@ -37,11 +37,11 @@ define('io.ox/core/api/account',
                 var prefix = 'default' + account.id + separator,
                     field = id + '_fullname';
                 if (account.id === 0 && !account[field]) {
-                    var folder = config.get('mail.folder.' + id);
+                    var folder = settings.get(['folder', id]);
                     // folder isn't available in config
                     if (!folder) {
                         // educated guess
-                        folder = config.get('mail.folder.inbox') + separator +  (account[id] || title);
+                        folder = settings.get('folder/inbox') + separator +  (account[id] || title);
                     }
                     account[field] = folder;
                 } else if (!account[field]) {
@@ -298,9 +298,9 @@ define('io.ox/core/api/account',
     };
 
     api.getDefaultDisplayName = function () {
-        return require(['io.ox/contacts/util', 'io.ox/core/api/user']).then(function (contactsUtil, userAPI) {
-            return userAPI.getCurrentUser().then(function (user) {
-                return contactsUtil.getMailFullName(user.toJSON());
+        return require(['io.ox/contacts/util', 'io.ox/core/api/user']).then(function (util, api) {
+            return api.get({ id: ox.user_id }).then(function (data) {
+                return util.getMailFullName(data);
             });
         });
     };
@@ -330,9 +330,15 @@ define('io.ox/core/api/account',
 
     }());
 
+    api.trimAddress = function (address) {
+        address = $.trim(address);
+        // apply toLowerCase only for mail addresses, don't change phone numbers
+        return address.indexOf('@') > -1 ? address.toLowerCase() : address;
+    };
+
     function getAddressArray(name, address) {
         name = $.trim(name || '');
-        address = $.trim(address).toLowerCase();
+        address = api.trimAddress(address);
         return [name !== address ? name : '', address];
     }
 

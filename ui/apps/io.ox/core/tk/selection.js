@@ -292,15 +292,15 @@ define('io.ox/core/tk/selection',
         };
 
         touchstartHandler = function (e) {
-            var node, key, id;
-            if (!e.isDefaultPrevented()) {
+            var node, key, id,
+                cancelAction = $(e.target).hasClass('cell-button') || $(e.target).hasClass('folder-label');
+
+            // check if the touchstart was triggerd from a inline button or folder tree
+            if (/*!e.isDefaultPrevented() && !cancelAction*/ mobileSelectMode) {
                 node = $(this);
                 key = node.attr('data-obj-id');
                 id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
-                //if (isCheckbox(e)) {
-                //e.preventDefault();
                 apply(id, e, true);
-                //}
             }
         };
 

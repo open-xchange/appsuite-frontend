@@ -17,10 +17,10 @@
 define('io.ox/files/api',
     ['io.ox/core/http',
      'io.ox/core/api/factory',
-     'io.ox/core/config',
+     'settings!io.ox/core',
      'io.ox/core/cache',
      'io.ox/core/date'
-    ], function (http, apiFactory, config, cache, date) {
+    ], function (http, apiFactory, coreConfig, cache, date) {
 
     'use strict';
 
@@ -168,7 +168,9 @@ define('io.ox/files/api',
         return data;
     };
 
-    var allColumns = '20,23,1,5,700,702,703,705,707,3';
+    //TODO: enable if server part for all request can handle column 23
+    //var allColumns = '20,23,1,5,700,702,703,705,707,3';
+    var allColumns = '20,1,5,700,702,703,705,707,3';
 
     // generate basic API
     var api = apiFactory({
@@ -176,7 +178,7 @@ define('io.ox/files/api',
         requests: {
             all: {
                 action: 'all',
-                folder: config.get('folder.infostore'),
+                folder: coreConfig.get('folder/infostore'),
                 columns: allColumns,
                 extendColumns: 'io.ox/files/api/all',
                 sort: '700',
@@ -287,7 +289,7 @@ define('io.ox/files/api',
 
         // alright, let's simulate a multipart formdata form
         options = $.extend({
-            folder: config.get('folder.infostore')
+            folder: coreConfig.get('folder/infostore')
         }, options || {});
 
         function fixOptions() {
@@ -355,7 +357,7 @@ define('io.ox/files/api',
     api.uploadNewVersion = function (options) {
         // Alright, let's simulate a multipart formdata form
         options = $.extend({
-            folder: config.get('folder.infostore')
+            folder: coreConfig.get('folder/infostore')
         }, options || {});
 
         var formData = new FormData();
@@ -400,7 +402,7 @@ define('io.ox/files/api',
     api.uploadNewVersionOldSchool = function (options) {
         // Alright, let's simulate a multipart formdata form
         options = $.extend({
-            folder: config.get('folder.infostore')
+            folder: coreConfig.get('folder/infostore')
         }, options || {});
 
         var formData = options.form,
@@ -487,7 +489,7 @@ define('io.ox/files/api',
     api.create = function (options) {
 
         options = $.extend({
-            folder: config.get('folder.infostore')
+            folder: coreConfig.get('folder/infostore')
         }, options || {});
 
         if (!options.json.folder_id) {

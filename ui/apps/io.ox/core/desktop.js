@@ -145,33 +145,37 @@ define("io.ox/core/desktop",
                     set: function (id) {
                         var def = $.Deferred();
                         if (id !== undefined && id !== null && String(id) !== folder) {
+                            var activeApp = _.url.hash('app');
                             require(['io.ox/core/api/folder'], function (api) {
                                 api.get({ folder: id })
                                 .done(function (data) {
                                     // off
                                     api.off('change:' + folder);
+                                    var appchange = _.url.hash('app') !== activeApp; //app has changed while folder was requested
                                     // remember
                                     folder = String(id);
-                                    // update window title & toolbar?
-                                    if (win) {
-                                        win.setTitle(_.noI18n(data.title));
-                                        win.updateToolbar();
-                                    }
-                                    // update grid?
-                                    if (grid && grid.prop('folder') !== folder) {
-                                        grid.busy().prop('folder', folder);
-                                        if (win && win.search.active) {
-                                            win.search.close();
-                                        } else {
-                                            grid.refresh();
+                                    if (!appchange) {//only change if the app did not change
+                                        // update window title & toolbar?
+                                        if (win) {
+                                            win.setTitle(_.noI18n(data.title));
+                                            win.updateToolbar();
                                         }
-                                        // load fresh folder & trigger update event
-                                        api.reload(id);
+                                        // update grid?
+                                        if (grid && grid.prop('folder') !== folder) {
+                                            grid.busy().prop('folder', folder);
+                                            if (win && win.search.active) {
+                                                win.search.close();
+                                            } else {
+                                                grid.refresh();
+                                            }
+                                            // load fresh folder & trigger update event
+                                            api.reload(id);
+                                        }
+                                        // update hash
+                                        _.url.hash('folder', folder);
+                                        self.trigger('folder:change', folder, data);
                                     }
-                                    // update hash
-                                    _.url.hash('folder', folder);
-                                    self.trigger('folder:change', folder, data);
-                                    def.resolve(data);
+                                    def.resolve(data, appchange);
                                 })
                                 .fail(def.reject);
                             });
@@ -188,10 +192,10 @@ define("io.ox/core/desktop",
 
                     setDefault: function () {
                         var def = new $.Deferred();
-                        require(['io.ox/core/config'], function (config) {
+                        require(['settings!io.ox/core', 'settings!io.ox/mail'], function (coreConfig, mailConfig) {
                             var defaultFolder = type === 'mail' ?
-                                    config.get('mail.folder.inbox') :
-                                    config.get('folder.' + type);
+                                    mailConfig.get('folder/inbox') :
+                                    coreConfig.get('folder/' + type);
                             if (defaultFolder) {
                                 that.set(defaultFolder)
                                     .done(def.resolve)
@@ -370,8 +374,11 @@ define("io.ox/core/desktop",
                 if (force && self.destroy) {
                     self.destroy();
                 }
-                // update hash
-                _.url.hash({ app: null, folder: null, perspective: null, id: null });
+                // update hash but don't delete information of other apps that might already be open at this point (async close when sending a mail for exsample);
+                if (!_.url.hash('app') || self.getName() === _.url.hash('app').split(':', 1)[0]) {
+                    //we are still in the app to close so we can clear the URL
+                    _.url.hash({ app: null, folder: null, perspective: null, id: null });
+                }
                 // don't save
                 clearInterval(self.get('saveRestorePointTimer'));
                 self.removeRestorePoint();
@@ -900,10 +907,15 @@ define("io.ox/core/desktop",
                 });
 
                 this.show = function (cont) {
+                    var appchange = false;
+                    //use the url app string before the first ':' to exclude parameter additions (see how mail write adds the current mode here)
+                    if (currentWindow && _.url.hash('app') && self.name !== _.url.hash('app').split(':', 1)[0]) {
+                        appchange = true;
+                    }
                     // get node and its parent node
                     var node = this.nodes.outer, parent = node.parent();
                     // if not current window or if detached (via funny race conditions)
-                    if (self && (currentWindow !== this || parent.length === 0)) {
+                    if (!appchange && self && (currentWindow !== this || parent.length === 0)) {
                         // show
                         if (firstShow) {
                             node.data("index", guid - 1).css("left", ((guid - 1) * 101) + "%");
@@ -920,7 +932,7 @@ define("io.ox/core/desktop",
                         this.trigger("beforeshow");
                         this.updateToolbar();
                         //set current appname in url, was lost on returning from edit app
-                        if (self.app.getName() !== _.url.hash('app')) {
+                        if (!_.url.hash('app') || self.app.getName() !== _.url.hash('app').split(':', 1)[0]) {//just get everything before the first ':' to exclude parameter additions
                             _.url.hash('app', self.app.getName());
                         }
                         node.show();

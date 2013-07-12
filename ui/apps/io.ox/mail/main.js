@@ -16,7 +16,6 @@ define('io.ox/mail/main',
      'io.ox/mail/api',
      'io.ox/core/extensions',
      'io.ox/core/commons',
-     'io.ox/core/config',
      'io.ox/core/tk/vgrid',
      'io.ox/mail/view-detail',
      'io.ox/mail/view-grid-template',
@@ -31,11 +30,11 @@ define('io.ox/mail/main',
      'io.ox/mail/actions',
      'less!io.ox/mail/style.less',
      'io.ox/mail/folderview-extensions'
-    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt, upload, dnd, actions, notifications, folderAPI, account, settings) {
+    ], function (util, api, ext, commons, VGrid, viewDetail, tmpl, gt, upload, dnd, actions, notifications, folderAPI, account, settings) {
 
     'use strict';
 
-    var draftFolderId = config.get('modules.mail.defaultFolder.drafts'),
+    var draftFolderId = settings.get('defaultFolder/drafts'),
 
         hToolbarOptions = function (e) {
             e.preventDefault();
@@ -132,15 +131,17 @@ define('io.ox/mail/main',
                     removeButton();
                 }
                 this.append(
-                    $('<div class="btn btn-danger mail swipeDelete fadein">')
+                    $('<div class="mail cell-button swipeDelete fadein fast">')
                         .text(gt('Delete'))
                         .on('mousedown', function (e) {
                             // we have to use mousedown as the selection listens to this, too
                             // otherwise we are to late to get the event
+                            e.stopImmediatePropagation();
+                        }).on('tap', function (e) {
                             e.preventDefault();
-                            actions.invoke('io.ox/mail/actions/delete', null, baton);
                             removeButton();
                             showSwipeButton = false;
+                            actions.invoke('io.ox/mail/actions/delete', null, baton);
                         })
                 );
                 showSwipeButton = true;

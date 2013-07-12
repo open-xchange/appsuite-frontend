@@ -16,9 +16,9 @@
 define('io.ox/calendar/api',
     ['io.ox/core/http',
      'io.ox/core/event',
-     'io.ox/core/config',
+     'settings!io.ox/core',
      'io.ox/core/notifications',
-     'io.ox/core/api/factory'], function (http, Events, config, notifications, factory) {
+     'io.ox/core/api/factory'], function (http, Events, coreConfig, notifications, factory) {
 
     'use strict';
 
@@ -72,7 +72,7 @@ define('io.ox/calendar/api',
                 };
 
             if (o.folder !== 'all') {
-                params.folder = o.folder || config.get('folder.calendar');
+                params.folder = o.folder || coreConfig.get('folder/calendar');
             }
 
             // do not know if cache is a good idea

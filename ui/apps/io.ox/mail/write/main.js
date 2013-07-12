@@ -16,7 +16,6 @@ define('io.ox/mail/write/main',
     ['io.ox/mail/api',
      'io.ox/mail/util',
      'io.ox/core/extensions',
-     'io.ox/core/config',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
      'io.ox/core/api/user',
@@ -30,7 +29,7 @@ define('io.ox/mail/write/main',
      'settings!io.ox/mail',
      'gettext!io.ox/mail',
      'less!io.ox/mail/style.less',
-     'less!io.ox/mail/write/style.less'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, emoji, notifications, sender, settings, gt) {
+     'less!io.ox/mail/write/style.less'], function (mailAPI, mailUtil, ext, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, emoji, notifications, sender, settings, gt) {
 
     'use strict';
 
@@ -183,11 +182,7 @@ define('io.ox/mail/write/main',
         window.newmailapp = function () { return app; };
 
         view.signatures = _.device('smartphone') ?
-            [{ id: 0, content: settings.get('mobileSignature') }] :
-            _(config.get('gui.mail.signatures') || []).map(function (obj) {
-                obj.signature_name = _.noI18n(obj.signature_name);
-                return obj;
-            });
+            [{ id: 0, content: settings.get('mobileSignature') }] : [];
 
         function trimSignature(text) {
             // remove white-space and evil \r
@@ -292,7 +287,6 @@ define('io.ox/mail/write/main',
                     view.showSection('attachments');
                 });
             }
-
             win.on('show', function () {
                 if (app.getEditor()) {
                     app.getEditor().handleShow();
@@ -476,7 +470,7 @@ define('io.ox/mail/write/main',
         };
 
         app.setReplyTo = function (value) {
-            if (config.get('ui.mail.replyTo.configurable', false) === false) return;
+            if (settings.get('showReplyTo/configurable', false) === false) return;
             view.form.find('input#writer_field_replyTo').val(value);
         };
 
@@ -627,7 +621,7 @@ define('io.ox/mail/write/main',
             this.setAttachments(data);
             this.setNestedMessages(data.nested_msgs);
             this.setPriority(data.priority || 3);
-            this.setAttachVCard(data.vcard !== undefined ? data.vcard : config.get('mail.vcard', false));
+            this.setAttachVCard(data.vcard !== undefined ? data.vcard : settings.get('vcard', false));
             this.setMsgRef(data.msgref);
             this.setSendType(data.sendtype);
             this.setHeaders(data.headers);
@@ -777,6 +771,10 @@ define('io.ox/mail/write/main',
                                 ed.focus();
                                 view.scrollpane.scrollTop(0);
                                 def.resolve({app: app});
+                                if (_.device('smartphone')) {
+                                    // trigger keyup to resize the textarea
+                                    view.textarea.trigger('keyup');
+                                }
                             });
                         })
                         .fail(function (e) {
@@ -821,6 +819,10 @@ define('io.ox/mail/write/main',
                         win.idle();
                         focus('to');
                         def.resolve();
+                        if (_.device('smartphone')) {
+                            // trigger keyup to resize the textarea
+                            view.textarea.trigger('keyup');
+                        }
                     });
                 })
                 .fail(function (e) {

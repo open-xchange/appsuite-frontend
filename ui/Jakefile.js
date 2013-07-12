@@ -285,10 +285,10 @@ utils.concat("boot.js",
      "lib/backbone.validation.js",
      "lib/backbone.custom.js",
      "lib/doT.js",
+     "src/util.js",
      "src/plugins.js",
      "src/jquery.plugins.js",
      "apps/io.ox/core/gettext.js",
-     "src/util.js",
      "src/boot.js"],
     { type: "source" });
 

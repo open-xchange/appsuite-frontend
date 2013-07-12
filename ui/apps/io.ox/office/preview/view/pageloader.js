@@ -105,14 +105,14 @@ define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], functi
 
             if (_.browser.Chrome) {
                 // as SVG mark-up (Chrome does not show embedded images in <img> elements linked to an SVG file)
-                def = app.getModel().loadPageAsSvg(page).then(function (svgMarkup) {
+                def = app.getModel().loadPageAsSvg(page, priority).then(function (svgMarkup) {
                     pageNode[0].innerHTML = svgMarkup;
                     // resolve with original image size
                     return resolveSize();
                 });
             } else {
                 // preferred: as an image element linking to the SVG file (Safari cannot parse SVG mark-up)
-                def = app.getModel().loadPageAsImage(page).then(function (imgNode) {
+                def = app.getModel().loadPageAsImage(page, priority).then(function (imgNode) {
                     pageNode.empty().append(imgNode);
                     // resolve with original image size (naturalWidth/naturalHeight with SVG does not work in IE10)
                     return resolveSize();

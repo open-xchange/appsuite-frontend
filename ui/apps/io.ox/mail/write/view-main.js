@@ -31,12 +31,11 @@ define("io.ox/mail/write/view-main",
      'io.ox/core/api/account',
      'io.ox/core/api/snippets',
      'io.ox/core/strings',
-     'io.ox/core/config',
      'io.ox/core/util',
      'io.ox/mail/sender',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, mailAPI, ViewClass, Model, contactsAPI, contactsUtil, mailUtil, pre, userAPI, capabilities, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, config, util, sender, settings, gt) {
+    ], function (ext, links, actions, mailAPI, ViewClass, Model, contactsAPI, contactsUtil, mailUtil, pre, userAPI, capabilities, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, util, sender, settings, gt) {
 
     'use strict';
 
@@ -288,7 +287,7 @@ define("io.ox/mail/write/view-main",
 
         createReplyToField: function () {
             //TODO: once this is mapped to jslob, use settings here (key should be showReplyTo)
-            if (config.get('ui.mail.replyTo.configurable', true) !== true) {
+            if (settings.get('showReplyTo/configurable', true) !== true) {
                 return;
             }
             return $('<div>').addClass('fieldset').append(
@@ -367,9 +366,95 @@ define("io.ox/mail/write/view-main",
             }
         },
 
+        /**
+         * inserts an UNICODE to the textarea which will be replaced by a nice native
+         * icon on mobile devices.
+         * @param  {[type]} e [description]
+         * @return {[type]}   [description]
+         */
+        onInsertEmoji: function (e) {
+
+            e.preventDefault();
+
+            var recently = {},
+                icon = $(e.target).data('icon'),
+                content = this.editor.val(),
+                caret = parseInt($(this.editor).attr('caretPosition'), 10);
+
+            this.emoji.recent(icon.unicode);
+
+            // string insert
+            function insert(index, text, emoji) {
+                if (index > 0) {
+                    return text.substring(0, index) + emoji + text.substring(index, text.length);
+                } else {
+                    return emoji + text;
+                }
+            }
+            // insert unicode and increse caret position manually
+            this.editor
+                .val(insert(caret, content, icon.unicode))
+                .attr('caretPosition', caret + 2);
+        },
+        /**
+         * needs to be fixed, does not work properly
+         * @return {[type]} [description]
+         */
+        scrollEmoji: function () {
+            var self = this,
+                top = self.textarea.attr('offsettop') || 0;
+            setTimeout(function () {
+                self.app.attributes.window.nodes.main.scrollTop(parseFloat(top));
+            }, 350);
+        },
+        /**
+         * shows a emoji palette for mobile devices to use
+         * with plain text editor
+         * @return {[type]} [description]
+         */
+        showEmojiPalette: function () {
+            var self = this;
+            return function () {
+                if (self.emojiview === undefined) {
+                    ox.load(['io.ox/core/emoji/view']).done(function (EmojiView) {
+                        self.emojiview = new EmojiView({ editor: self.textarea, onInsertEmoji: self.onInsertEmoji });
+                        var emo = $('<div class="mceEmojiPane">').css({
+                            position: "fixed",
+                            bottom: "0px", // will hide the bottom toolbar
+                            left: "0px",
+                            height: "200px",
+                            width: "100%",
+                            "z-index": 1000 // bottom toolbar is 666
+                        });
+                        self.emojiview.setElement(emo);
+                        // nasty, but position:fixed elements must be in a non-scrollable container to work
+                        // properly on iOS
+                        $(self.app.attributes.window.nodes.body).append(self.emojiview.$el);
+                        self.emojiview.toggle();
+                        self.spacer.show();
+                        self.scrollEmoji();
+
+                    });
+                } else {
+                    self.emojiview.toggle();
+                    if (self.emojiview.isOpen) {
+                        self.spacer.show();
+                        self.scrollEmoji();
+                    } else {
+                        self.spacer.hide();
+                    }
+                }
+
+            };
+        },
+
         render: function () {
 
-            var self = this, app = self.app, buttons = {};
+            var self = this, app = self.app, buttons = {}, emojiMobileSupport = false;
+
+            if (capabilities.has('emoji') && _.device('!desktop')) {
+                emojiMobileSupport = true;
+            }
 
             /*
              * LEFTSIDE
@@ -542,6 +627,18 @@ define("io.ox/mail/write/view-main",
             }
 
             /*
+             * EMOJI FOR MOBILE
+             */
+
+            this.emojiToggle = function () {
+                if (emojiMobileSupport) {
+                    self.subject.closest('.subject-wrapper').css('width', '85%');
+                    return $('<div>').addClass('emoji-icon')
+                        .on('click', this.showEmojiPalette());
+                } else return $();
+            };
+
+            /*
              * RIGHTSIDE
              */
 
@@ -555,6 +652,77 @@ define("io.ox/mail/write/view-main",
                     'draw', buttons.buttons = $('<div class="inline-buttons top">'), ext.Baton({ app: app })
                 );
             }
+
+            /*
+             * Editor
+             */
+            function createEditor() {
+                // autogrow function which expands a textarea while typing
+                // to prevent overflowing on mobile devices
+                var autogrow = function (e) {
+                    var input = $(this),
+                        scrollHeight = input[0].scrollHeight,
+                        clientHeight = input[0].clientHeight,
+                        paddingTop, paddingBottom, paddingHeight;
+
+
+                    if (clientHeight < scrollHeight) {
+                        paddingTop = parseFloat(input.css("padding-top"));
+                        paddingBottom = parseFloat(input.css("padding-bottom"));
+                        paddingHeight = paddingTop + paddingBottom;
+
+                        input.height(scrollHeight - paddingHeight + 15);
+                    }
+                };
+
+                self.textarea = $('<textarea>')
+                    .attr({ name: 'content', tabindex: '4', disabled: 'disabled', caretPosition: '0' })
+                    .addClass('text-editor')
+                    .addClass(settings.get('useFixedWidthFont') ? 'monospace' : '')
+                    .on('keyup', function (e) {
+                        if (this.selectionStart === undefined) return;
+                        $(this).attr({
+                            'caretPosition': this.selectionStart,
+                            'offsetTop': $(this).offset().top
+                        });
+                    });
+
+                if (_.device('!smartphone')) {
+                    // standard textarea for desktops
+                    return $('<div class="abs editor-outer-container">').append(
+                        // white background
+                        $('<div>').addClass('abs editor-background'),
+                        // editor's print margin
+                        $('<div>').addClass('abs editor-print-margin'),
+                        // inner div
+                        $('<div>').addClass('abs editor-inner-container')
+                        .css('overflow', 'hidden')
+                        .append(self.textarea)
+                    );
+                } else {
+                    // on mobile devices we do not need all the containers and
+                    // stuff, just a plain textarea which supports auto-growing on input
+                    self.textarea
+                        .on('keyup change input paste', autogrow)
+                        .on('focus', function () {
+                            // do we have emoji support
+                            if (emojiMobileSupport && self.emojiview && self.emojiview.isOpen) {
+
+                                if (self.emojiview.isOpen) {
+                                    self.emojiview.toggle();
+                                    self.spacer.hide();
+                                } else {
+                                    self.emojiview.toggle();
+                                    self.spacer.show();
+                                    self.scrollEmoji();
+                                }
+                            }
+                        });
+                    // textarea only, no container overkill
+                    return self.textarea;
+                }
+            }
+
 
             this.rightside.append(
                 // buttons
@@ -601,6 +769,8 @@ define("io.ox/mail/write/view-main",
                             'mail_subject'
                         )
                     ),
+                    // append emojitoggle
+                    this.emojiToggle(),
                     // priority
                     this.priorityOverlay = $('<div>').addClass('priority-overlay')
                         .attr('title', 'Priority')
@@ -612,23 +782,8 @@ define("io.ox/mail/write/view-main",
                         .on('click', $.proxy(togglePriority, this))
                 ),
                 // editor container
-                $('<div class="abs editor-outer-container">').append(
-                    // white background
-                    $('<div>').addClass('abs editor-background'),
-                    // editor's print margin
-                    $('<div>').addClass('abs editor-print-margin'),
-                    // inner div
-                    $('<div>').addClass('abs editor-inner-container')
-                    .css('overflow', 'hidden')
-                    .append(
-                        // text editor
-                        // FIXME: Labelize Call?
-                        this.textarea = $('<textarea>')
-                        .attr({ name: 'content', tabindex: '4', disabled: 'disabled' })
-                        .addClass('text-editor')
-                        .addClass(settings.get('useFixedWidthFont') ? 'monospace' : '')
-                    )
-                )
+                createEditor(),
+                this.spacer = $('<div class="spacer">').css('height', '205px')
             );
         }
     });

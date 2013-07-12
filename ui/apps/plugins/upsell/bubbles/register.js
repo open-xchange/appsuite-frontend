@@ -13,9 +13,8 @@
 define('plugins/upsell/bubbles/register',
     ['io.ox/core/extensions',
      'io.ox/core/upsell',
-     'io.ox/core/config',
      'settings!plugins/upsell/simple-wizard',
-     'gettext!plugins/upsell/simple-wizard'], function (ext, upsell, config, settings, gt) {
+     'gettext!plugins/upsell/simple-wizard'], function (ext, upsell, settings, gt) {
 
     'use strict';
 

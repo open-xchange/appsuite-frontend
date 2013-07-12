@@ -19,9 +19,8 @@ define('io.ox/core/import/import',
     'io.ox/core/api/folder',
     'io.ox/core/api/import',
     'io.ox/core/notifications',
-    'io.ox/core/config',
     'gettext!io.ox/core',
-    'less!io.ox/core/import/style.less'], function (ext, dialogs, attachments, folderApi, api, notifications, config, gt) {
+    'less!io.ox/core/import/style.less'], function (ext, dialogs, attachments, folderApi, api, notifications, gt) {
 
     'use strict';
 

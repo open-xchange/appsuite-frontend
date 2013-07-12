@@ -27,7 +27,7 @@
         }
     };
 
-    if (window.IDBVersionChangeEvent !== undefined && Modernizr.indexeddb && window.indexedDB) {
+    if (_.device('desktop') && window.IDBVersionChangeEvent !== undefined && Modernizr.indexeddb && window.indexedDB) {
         // IndexedDB
         (function () {
             var initialization = $.Deferred();
@@ -98,7 +98,7 @@
                 tx.executeSql("CREATE TABLE IF NOT EXISTS version (version TEXT)");
                 tx.executeSql("SELECT 1 FROM version WHERE version = ?", [ox.version], function (tx, result) {
                     if (result.rows.length === 0) {
-                        tx.executeSql("DROP TABLE files");
+                        tx.executeSql("DROP TABLE IF EXISTS files");
                         tx.executeSql("CREATE TABLE files (name TEXT unique, contents TEXT, version TEXT)");
                         tx.executeSql("DELETE FROM version");
                         tx.executeSql("INSERT INTO version VALUES (?)", [ox.version]);
@@ -214,30 +214,25 @@
                         _(concatenatedText.split("/*:oxsep:*/")).each(function (moduleText) {
                             (function () {
                                 var name = null;
-                                var error = false;
-                                function define(moduleName) {
-                                    if (name) {
-                                        error = true;
+                                var match = moduleText.match(/define(\.async)?\(([^,]+),/);
+                                if (match) {
+                                    name = match[2].substr(1, match[2].length -2);
+                                }    
+                                if (name) {
+                                    if (_.url.hash('debug-filecache')) {
+                                        console.log("Caching " + name);
                                     }
-                                    name = moduleName;
-                                }
-                                define.async = define;
-                                try {
-                                    eval(moduleText);
-                                } catch (e) {
-                                    console.log(e);
-                                    console.log(moduleText);
-                                    console.log("========");
-                                    console.log(concatenatedText);
-                                }
-                                if (!error && name && moduleText) {
                                     fileCache.cache(name, moduleText);
+                                } else {
+                                    if (_.url.hash('debug-filecache')) {
+                                        console.log("Couldn't determine name for " + moduleText);
+                                    }
                                 }
                             })();
                         });
                  });
 
-                
+
             }
         };
 
@@ -253,7 +248,7 @@
     define("css", {
         load: function (name, parentRequire, load, config) {
             require(["text!" + name]).done(function (css) {
-                var path = config.baseUrl + name; 
+                var path = config.baseUrl + name;
                 load(insert(path, relativeCSS(dirname(path), css), "#css"));
             });
         }

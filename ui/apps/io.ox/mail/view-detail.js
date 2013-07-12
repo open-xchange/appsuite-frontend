@@ -17,7 +17,6 @@ define('io.ox/mail/view-detail',
      'io.ox/core/extPatterns/links',
      'io.ox/mail/util',
      'io.ox/mail/api',
-     'io.ox/core/config',
      'io.ox/core/http',
      'io.ox/core/api/account',
      'settings!io.ox/mail',
@@ -26,7 +25,7 @@ define('io.ox/mail/view-detail',
      'moxiecode/tiny_mce/plugins/emoji/main',
      'io.ox/mail/actions',
      'less!io.ox/mail/style.less'
-    ], function (ext, links, util, api, config, http, account, settings, gt, folder, emoji) {
+    ], function (ext, links, util, api, http, account, settings, gt, folder, emoji) {
 
     'use strict';
 
@@ -721,7 +720,7 @@ define('io.ox/mail/view-detail',
                     console.error('No baton found. Not supposed to happen.');
                     return;
                 }
-                sentFolder = config.get('mail.folder.sent');
+                sentFolder = settings.get('folder.sent');
                 inboxMails = _(modifiedBaton.data).filter(function (elem) {
                     return elem.folder_id !== sentFolder;
                 });
@@ -742,7 +741,12 @@ define('io.ox/mail/view-detail',
                         inline = $('<div class="thread-inline-actions">');
                         ext.point('io.ox/mail/thread').invoke('draw', inline, baton);
                         inline.find('.dropdown > a').addClass('btn'); // was: btn-primary
-                        frag.appendChild(inline.get(0));
+                        if (_.device('!smartphone')) {
+                            frag.appendChild(inline.get(0));
+                        } else {
+                            node.parent().parent().find('.rightside-inline-actions').empty().append(inline);
+                        }
+
 
                         // replace delete action with one excluding the sent folder
                         scrubThreadDelete(inline.find('[data-action=delete]'));
@@ -767,7 +771,9 @@ define('io.ox/mail/view-detail',
                     // get nodes
                     nodes = node.find('.mail-detail').not('.thread-inline-actions');
                     // set initial scroll position (37px not to see thread's inline links)
-                    top = nodes.eq(pos).position().top - 20;
+                    if (_.device('!smartphone')) {
+                        top = nodes.eq(pos).position().top - 20;
+                    }
                     scrollpane.scrollTop(list.length === 1 ? 0 : top);
                     scrollpane.on('scroll', { nodes: nodes, node: node }, _.debounce(autoResolve, 100));
                     scrollpane.one('scroll.now', { nodes: nodes, node: node }, autoResolve);
@@ -1203,7 +1209,7 @@ define('io.ox/mail/view-detail',
                 pub.module  = pubtype[1];
                 pub.type  = pubtype[2];
                 pub.name = _.first(_.last(pub.url.split('/')).split('?'));
-                pub.parent = require('io.ox/core/config').get('folder.' + pub.module);
+                pub.parent = require('settings!io.ox/core').get('folder/' + pub.module);
                 pub.folder = '';
                 label = pub.module === 'infostore' ? gt('files') : gt(pub.module);
 

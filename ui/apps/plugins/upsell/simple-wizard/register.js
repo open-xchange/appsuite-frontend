@@ -13,9 +13,9 @@
 define('plugins/upsell/simple-wizard/register',
     ['io.ox/core/extensions',
      'io.ox/core/upsell',
-     'io.ox/core/config',
+     'settings!io.ox/mail',
      'settings!plugins/upsell/simple-wizard',
-     'gettext!plugins/upsell/simple-wizard'], function (ext, upsell, config, settings, gt) {
+     'gettext!plugins/upsell/simple-wizard'], function (ext, upsell, mailSettings, settings, gt) {
 
     'use strict';
 
@@ -50,7 +50,7 @@ define('plugins/upsell/simple-wizard/register',
                 id: options.id || '',
                 imap_login: '', // missing
                 language: ox.language,
-                mail: config.get('modules.mail.defaultaddress', ''),
+                mail: mailSettings.get('defaultaddress', ''),
                 missing: options.missing || '',
                 session: ox.session,
                 type: options.type || '',

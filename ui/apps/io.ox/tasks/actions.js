@@ -18,8 +18,7 @@ define('io.ox/tasks/actions',
      'gettext!io.ox/tasks',
      'io.ox/core/notifications',
      'io.ox/core/print',
-     'io.ox/core/config',
-     'io.ox/office/framework/app/extensionregistry'], function (ext, util, links, gt, notifications, print, configApi, ExtensionRegistry) {
+     'io.ox/office/framework/app/extensionregistry'], function (ext, util, links, gt, notifications, print, ExtensionRegistry) {
 
     'use strict';
 
@@ -250,7 +249,7 @@ define('io.ox/tasks/actions',
         requires: function (args) {
             var result = false;
             if (args.baton.data.participants) {
-                var userId = configApi.get('identifier');
+                var userId = ox.user_id;
                 _(args.baton.data.participants).each(function (participant) {
                     if (participant.id === userId) {
                         result = true;
