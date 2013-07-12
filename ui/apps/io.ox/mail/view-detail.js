@@ -741,7 +741,12 @@ define('io.ox/mail/view-detail',
                         inline = $('<div class="thread-inline-actions">');
                         ext.point('io.ox/mail/thread').invoke('draw', inline, baton);
                         inline.find('.dropdown > a').addClass('btn'); // was: btn-primary
-                        frag.appendChild(inline.get(0));
+                        if (_.device('!smartphone')) {
+                            frag.appendChild(inline.get(0));
+                        } else {
+                            node.parent().parent().find('.rightside-inline-actions').empty().append(inline);
+                        }
+
 
                         // replace delete action with one excluding the sent folder
                         scrubThreadDelete(inline.find('[data-action=delete]'));
@@ -766,7 +771,9 @@ define('io.ox/mail/view-detail',
                     // get nodes
                     nodes = node.find('.mail-detail').not('.thread-inline-actions');
                     // set initial scroll position (37px not to see thread's inline links)
-                    top = nodes.eq(pos).position().top - 20;
+                    if (_.device('!smartphone')) {
+                        top = nodes.eq(pos).position().top - 20;
+                    }
                     scrollpane.scrollTop(list.length === 1 ? 0 : top);
                     scrollpane.on('scroll', { nodes: nodes, node: node }, _.debounce(autoResolve, 100));
                     scrollpane.one('scroll.now', { nodes: nodes, node: node }, autoResolve);

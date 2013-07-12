@@ -449,6 +449,7 @@ define('io.ox/core/commons',
 
             var click = function (e) {
                 e.preventDefault();
+                $(this).parent().find('.rightside-inline-actions').empty();
                 $(this).closest('.vsplit').addClass('vsplit-reverse').removeClass('vsplit-slide');
                 if (e.data.app) {
                     e.data.app.getGrid().selection.clear();
@@ -470,6 +471,7 @@ define('io.ox/core/commons',
                     sides.left = $('<div class="leftside">').on('select', select),
                     // navigation
                     $('<div class="rightside-navbar">').append(
+                        $('<div class="rightside-inline-actions">'),
                         $('<a href="#" class="btn" tabindex="-1">').append(
                             $('<i class="icon-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
                         ).on('click', { app: app }, click)
