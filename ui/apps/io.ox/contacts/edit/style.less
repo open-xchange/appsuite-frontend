@@ -243,23 +243,29 @@
     }
 
     @media (max-width: 480px), (max-device-width: 480px) {
+        .btn-primary {
+            margin-bottom: 7px;
+        }
         h1.name {
             clear: both;
             margin-top: 28px;
         }
-        .block {
-            width: @step * 6;
+        .block, .block:nth-child(even), .block:nth-child(odd) {
+            width: 300px;
             margin-right: 0px;
         }
         .input-xlarge {
-            width: 380px;
+            width: 300px;
         }
         .block.double-block {
-            width: 360px;
+            width: 300px;
         }
         .attachment-list .attachment {
-            width: 380px;
+            width: 300px;
             margin-right: 0px;
         }
+        select.date { width: 60px; }
+        select.month { width: 130px; }
+        select.year { width: 90px; }
     }
 }

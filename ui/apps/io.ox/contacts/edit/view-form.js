@@ -151,10 +151,20 @@ define('io.ox/contacts/edit/view-form', [
                 className: 'edit-contact compact container-fluid default-content-padding'
             });
 
+        point.extend(new PictureUpload({
+            id: ref + '/edit/picture',
+            index: 100,
+            customizeNode: function () {
+                this.$el
+                    .css({ display: 'inline-block' })
+                    .addClass("contact-picture-upload f6-target");
+            }
+        }));
+
         // Save
         point.basicExtend(new links.Button({
             id: "save",
-            index: 100,
+            index: 110,
             label: gt("Save"),
             ref: ref + "/actions/edit/save",
             cssClasses: "btn btn-primary control f6-target",
@@ -162,24 +172,24 @@ define('io.ox/contacts/edit/view-form', [
             tagtype: "button"
         }));
 
+        if (_.device('small')) {
+            point.basicExtend({
+                id: "break",
+                after: 'save',
+                draw: function () {
+                    this.append($('<br>'));
+                }
+            });
+        }
+
         point.basicExtend(new links.Button({
             id: "discard",
-            index: 110,
+            index: 120,
             label: gt("Discard"),
             ref: ref + "/actions/edit/discard",
             cssClasses: "btn control",
             tabIndex: 3,
             tagtype: "button"
-        }));
-
-        point.extend(new PictureUpload({
-            id: ref + '/edit/picture',
-            index: 120,
-            customizeNode: function () {
-                this.$el
-                    .css({ display: 'inline-block' })
-                    .addClass("contact-picture-upload f6-target");
-            }
         }));
 
         function toggle(e) {
