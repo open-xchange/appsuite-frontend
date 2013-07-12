@@ -396,11 +396,15 @@ define("io.ox/mail/write/view-main",
                 .val(insert(caret, content, icon.unicode))
                 .attr('caretPosition', caret + 2);
         },
+        /**
+         * needs to be fixed, does not work properly
+         * @return {[type]} [description]
+         */
         scrollEmoji: function () {
             var self = this,
                 top = self.textarea.attr('offsettop') || 0;
             setTimeout(function () {
-                self.app.attributes.window.nodes.main.scrollTop(parseFloat(top) + 205);
+                self.app.attributes.window.nodes.main.scrollTop(parseFloat(top));
             }, 350);
         },
         /**
