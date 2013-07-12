@@ -452,7 +452,7 @@ define("io.ox/mail/write/view-main",
 
             var self = this, app = self.app, buttons = {}, emojiMobileSupport = false;
 
-            if (true /*capabilities.has('emoji') && _.device('!desktop')*/) {
+            if (capabilities.has('emoji') && _.device('!desktop')) {
                 emojiMobileSupport = true;
             }
 
