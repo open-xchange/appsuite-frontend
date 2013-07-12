@@ -214,24 +214,19 @@
                         _(concatenatedText.split("/*:oxsep:*/")).each(function (moduleText) {
                             (function () {
                                 var name = null;
-                                var error = false;
-                                function define(moduleName) {
-                                    if (name) {
-                                        error = true;
+                                var match = moduleText.match(/define(\.async)?\(([^,]+),/);
+                                if (match) {
+                                    name = match[2].substr(1, match[2].length -2);
+                                }    
+                                if (name) {
+                                    if (_.url.hash('debug-filecache')) {
+                                        console.log("Caching " + name);
                                     }
-                                    name = moduleName;
-                                }
-                                define.async = define;
-                                try {
-                                    eval(moduleText);
-                                } catch (e) {
-                                    console.log(e);
-                                    console.log(moduleText);
-                                    console.log("========");
-                                    console.log(concatenatedText);
-                                }
-                                if (!error && name && moduleText) {
                                     fileCache.cache(name, moduleText);
+                                } else {
+                                    if (_.url.hash('debug-filecache')) {
+                                        console.log("Couldn't determine name for " + moduleText);
+                                    }
                                 }
                             })();
                         });
