@@ -69,11 +69,11 @@ define('io.ox/office/preview/model/model',
          *  The element that has been already cached, or that has been created
          *  by the callback function passed to the constructor.
          */
-        this.getElement = function (key) {
+        this.getElement = function (key, priority) {
 
             // execute callback handler for missing elements
             if (!(key in elements)) {
-                elements[key] = createElementHandler.call(context, key);
+                elements[key] = createElementHandler.call(context, key, priority);
             }
 
             // update array of last used keys
@@ -126,10 +126,11 @@ define('io.ox/office/preview/model/model',
          *  The Promise of a Deferred object that will be resolved with the
          *  <img> element as jQuery object.
          */
-        function createImageNode(page) {
+        function createImageNode(page, priority) {
             return app.createImageNode(app.getPreviewModuleUrl({
                 convert_format: 'html',
                 convert_action: 'getpage',
+                convert_priority: priority,
                 page_number: page,
                 returntype: 'file'
             }), 60000);
@@ -146,12 +147,13 @@ define('io.ox/office/preview/model/model',
          *  The Promise of a Deferred object that will be resolved with the SVG
          *  mark-up.
          */
-        function loadSvgMarkup(page) {
+        function loadSvgMarkup(page, priority) {
 
             return app.sendPreviewRequest({
                 params: {
                     convert_format: 'html',
                     convert_action: 'getpage',
+                    convert_priority: priority,
                     page_number: page
                 },
                 resultFilter: function (data) {
@@ -199,8 +201,8 @@ define('io.ox/office/preview/model/model',
          *  completed <img> element containing the SVG mark-up of the specified
          *  page (as jQuery object), or rejected on error.
          */
-        this.loadPageAsImage = function (page) {
-            return imageCache.getElement(page).then(function (imgNode) {
+        this.loadPageAsImage = function (page, priority) {
+            return imageCache.getElement(page, priority).then(function (imgNode) {
                 // clone the cached image on every access
                 return app.createImageNode(imgNode.attr('src'), 15000);
             });
@@ -217,8 +219,8 @@ define('io.ox/office/preview/model/model',
          *  The Promise of a Deferred object that will be resolved with the
          *  SVG mark-up of the specified page as string, or rejected on error.
          */
-        this.loadPageAsSvg = function (page) {
-            return svgCache.getElement(page);
+        this.loadPageAsSvg = function (page, priority) {
+            return svgCache.getElement(page, priority);
         };
 
     } // class PreviewModel
