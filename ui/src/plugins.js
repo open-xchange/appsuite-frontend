@@ -27,7 +27,7 @@
         }
     };
 
-    if (window.IDBVersionChangeEvent !== undefined && Modernizr.indexeddb && window.indexedDB) {
+    if (_.device('desktop') && window.IDBVersionChangeEvent !== undefined && Modernizr.indexeddb && window.indexedDB) {
         // IndexedDB
         (function () {
             var initialization = $.Deferred();
