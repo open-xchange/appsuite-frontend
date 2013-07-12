@@ -55,15 +55,19 @@ define('l10n/ja_JP/io.ox/register',
             id: yomiID,
             index: 'last',
             draw: function () {
-                this.find('input[name="' + id + '"]').after(
-                    $('<input type="text" class="input-xlarge furigana readonly">')
-                    .attr({ name: yomiID, disabled: 'disabled' })
+                var input = this.find('input[name="' + id + '"]');
+                // insert furigana field before orginal field
+                input.before(
+                    $('<input type="text" class="input-xlarge furigana" tabindex="1">')
+                    .attr({ name: yomiID, placeholder: '振り仮名 \u2026' /* Furigana + ellipsis */ })
                 );
+                // now move original input field after its label
+                input.closest('label').after(input);
             }
         });
     }
 
-    ext.point('io.ox/contacts/edit/view').extend({
+    ext.point('io.ox/contacts/edit').extend({
         index: 'last',
         draw: function (baton) {
             watchKana(this.find('input[name="last_name"]'),
@@ -84,14 +88,17 @@ define('l10n/ja_JP/io.ox/register',
 
         // Catch kana when it is entered, before the IME converts it to kanji.
         var interval;
-        $field.focus(function () {
-            interval = setInterval(intervalHandler, 10);
-        }).blur(function () {
-            if (interval !== undefined) {
-                clearInterval(interval);
-                interval = undefined;
+        $field.on({
+            focus: function () {
+                interval = setInterval(intervalHandler, 200);
+            },
+            blur: function () {
+                if (interval !== undefined) {
+                    clearInterval(interval);
+                    interval = undefined;
+                }
+                $yomiField.trigger('change');
             }
-            $yomiField.trigger('change');
         });
 
         var lv = field.value; // last updated value
