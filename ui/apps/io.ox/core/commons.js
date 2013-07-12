@@ -530,12 +530,17 @@ define('io.ox/core/commons',
             cid, ecid,
             node = $('<div>').attr('data-cid', _([].concat(data)).map(_.cid).join(',')),
 
-            update = function () {
+            update = function (e, changed) {
+
+                // id change?
+                if (changed && changed.former_id) data = changed;
+
                 if ((getter = getter || (api ? api.get : null))) {
                     // fallback for create trigger
                     if (!data.id) {
                         data.id = arguments[1].id;
                     }
+                    // get fresh object
                     getter(api.reduce(data)).done(function (data) {
                         if (baton instanceof ext.Baton) {
                             baton.data = data;

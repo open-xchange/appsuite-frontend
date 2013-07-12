@@ -501,26 +501,37 @@ define('io.ox/files/api',
      * @return {deferred}
      */
     api.update = function (file, makeCurrent) {
-        var obj = { id: file.id, folder: file.folder_id },
-            updateData = file;
+
+        var updateData = file;
 
         if (makeCurrent) {
             //if there is only version, the request works.
             //if the other fields are present theres a backend error
             updateData = { version: file.version };
         }
+
         return http.PUT({
                 module: 'files',
                 params: {
                     action: 'update',
+                    extendedResponse: true,
                     id: file.id,
                     timestamp: _.then()
                 },
                 data: updateData,
                 appendColumns: false
             })
-            .pipe(function () {
-                return api.propagate('change', obj);
+            .then(function (data) {
+                // missing extendedResponse support?
+                data = data || file;
+                // id has changed?
+                if (data.id !== file.id) {
+                    data.former_id = file.id;
+                    //data.id = '58728';
+                    return api.propagate('rename', data);
+                }  else {
+                    return api.propagate('change', data);
+                }
             });
     };
 
@@ -567,22 +578,23 @@ define('io.ox/files/api',
      */
     api.propagate = function (type, obj, silent, noRefreshAll) {
 
-        var id, fid, all, list, get, versions, caches = api.caches, ready = $.when();
+        var id, former_id, fid, all, list, get, versions, caches = api.caches, ready = $.when();
 
         if (type && _.isObject(obj)) {
 
             fid = String(obj.folder_id || obj.folder);
             id = String(obj.id);
+            former_id = String(obj.former_id);
             obj = { folder_id: fid, id: id };
 
-            if (/^(new|change|delete)$/.test(type) && fid) {
+            if (/^(new|change|rename|delete)$/.test(type) && fid) {
                 // if we have a new file or an existing file was deleted, we have to clear the proper folder cache.
                 all = caches.all.grepRemove(fid + api.DELIM);
             } else {
                 all = ready;
             }
 
-            if (/^(change|delete)$/.test(type) && fid && id) {
+            if (/^(change|rename|delete)$/.test(type) && fid && id) {
                 // just changing a file does not affect the file list.
                 // However, in case of a change or delete, we have to remove the file from item caches
                 list = caches.list.remove(obj);
@@ -599,7 +611,16 @@ define('io.ox/files/api',
                             api.trigger('update update:' + _.ecid(data), data);
                             if (!noRefreshAll) api.trigger('refresh.all');
                         });
-                    } else {
+                    }
+                    else if (type === 'rename') {
+                        return api.get(obj).done(function (data) {
+                            var cid = encodeURIComponent(_.cid({ folder_id: data.folder_id, id: former_id }));
+                            data.former_id = former_id;
+                            api.trigger('update:' + cid, data);
+                            if (!noRefreshAll) api.trigger('refresh.all');
+                        });
+                    }
+                    else {
                         if (!noRefreshAll) api.trigger('refresh.all');
                     }
                 }
