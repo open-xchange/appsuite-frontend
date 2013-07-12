@@ -168,7 +168,9 @@ define('io.ox/files/api',
         return data;
     };
 
-    var allColumns = '20,23,1,5,700,702,703,705,707,3';
+    //TODO: enable if server part for all request can handle column 23
+    //var allColumns = '20,23,1,5,700,702,703,705,707,3';
+    var allColumns = '20,1,5,700,702,703,705,707,3';
 
     // generate basic API
     var api = apiFactory({
