@@ -98,7 +98,7 @@
                 tx.executeSql("CREATE TABLE IF NOT EXISTS version (version TEXT)");
                 tx.executeSql("SELECT 1 FROM version WHERE version = ?", [ox.version], function (tx, result) {
                     if (result.rows.length === 0) {
-                        tx.executeSql("DROP TABLE files");
+                        tx.executeSql("DROP TABLE IF EXISTS files");
                         tx.executeSql("CREATE TABLE files (name TEXT unique, contents TEXT, version TEXT)");
                         tx.executeSql("DELETE FROM version");
                         tx.executeSql("INSERT INTO version VALUES (?)", [ox.version]);
@@ -237,7 +237,7 @@
                         });
                  });
 
-                
+
             }
         };
 
@@ -253,7 +253,7 @@
     define("css", {
         load: function (name, parentRequire, load, config) {
             require(["text!" + name]).done(function (css) {
-                var path = config.baseUrl + name; 
+                var path = config.baseUrl + name;
                 load(insert(path, relativeCSS(dirname(path), css), "#css"));
             });
         }
