@@ -13,9 +13,8 @@
 
 define('io.ox/office/preview/app/controller',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/keycodes',
      'io.ox/office/framework/app/basecontroller'
-    ], function (Utils, KeyCodes, BaseController) {
+    ], function (Utils, BaseController) {
 
     'use strict';
 
@@ -66,28 +65,28 @@ define('io.ox/office/preview/app/controller',
                     parent: 'document/valid',
                     enable: function () { return view.getPage() > 1; },
                     set: function () { view.showPage('first'); },
-                    shortcut: { keyCode: KeyCodes.HOME, altKey: null, ctrlKey: null, metaKey: null }
+                    shortcut: { keyCode: 'HOME', altKey: null, ctrlKey: null, metaKey: null }
                 },
 
                 'pages/previous': {
                     parent: 'document/valid',
                     enable: function () { return view.getPage() > 1; },
                     set: function () { view.showPage('previous'); },
-                    shortcut: { keyCode: KeyCodes.PAGE_UP, altOrMetaKey: true }
+                    shortcut: { keyCode: 'PAGE_UP', altOrMetaKey: true }
                 },
 
                 'pages/next': {
                     parent: 'document/valid',
                     enable: function () { return view.getPage() < model.getPageCount(); },
                     set: function () { view.showPage('next'); },
-                    shortcut: { keyCode: KeyCodes.PAGE_DOWN, altOrMetaKey: true }
+                    shortcut: { keyCode: 'PAGE_DOWN', altOrMetaKey: true }
                 },
 
                 'pages/last': {
                     parent: 'document/valid',
                     enable: function () { return view.getPage() < model.getPageCount(); },
                     set: function () { view.showPage('last'); },
-                    shortcut: { keyCode: KeyCodes.END, altKey: null, ctrlKey: null, metaKey: null }
+                    shortcut: { keyCode: 'END', altKey: null, ctrlKey: null, metaKey: null }
                 },
 
                 'pages/current': {

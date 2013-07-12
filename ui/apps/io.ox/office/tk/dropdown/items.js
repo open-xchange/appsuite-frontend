@@ -135,7 +135,7 @@ define('io.ox/office/tk/dropdown/items',
          */
         function itemKeyDownHandler(event) {
             // TAB key executes the item currently selected, but keeps the focus on the menu button
-            if ((event.keyCode === KeyCodes.TAB) && !event.altKey && !event.ctrlKey && !event.metaKey) {
+            if (KeyCodes.matchKeyboardEvent(event, 'TAB', { shiftKey: null })) {
                 itemGroup.triggerChange(event.target, { preserveFocus: true });
             }
         }

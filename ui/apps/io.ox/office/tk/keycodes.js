@@ -15,29 +15,6 @@ define('io.ox/office/tk/keycodes', ['io.ox/office/tk/utils'], function (Utils) {
 
     'use strict';
 
-    // private global functions ===============================================
-
-    /**
-     * Returns whether the passed state of a control key (SHIFT, ALT, CTRL,
-     * etc.) matches a specific expected state of that key.
-     *
-     * @param {Boolean} currentState
-     *  The current state of a control key, for example, extracted from a
-     *  keyboard event.
-     *
-     * @param {Boolean|Null} [expectedState=false]
-     *  The expected state of the control key to test against. If null, this
-     *  function returns always true (ignore the state of the control key). If
-     *  omitted, the passed current state must be false. Otherwise, the current
-     *  state must be equal to the expected state.
-     *
-     * @returns {Boolean}
-     *  Whether the current state of a control key matches the expected state.
-     */
-    function isMatchingControlKey(currentState, expectedState) {
-        return _.isNull(expectedState) || (currentState === (_.isBoolean(expectedState) && expectedState));
-    }
-
     // static class KeyCodes ==================================================
 
     /**
@@ -217,6 +194,10 @@ define('io.ox/office/tk/keycodes', ['io.ox/office/tk/utils'], function (Utils) {
      */
     KeyCodes.matchEventControlKeys = function (event, options) {
 
+        function isMatchingControlKey(currentState, expectedState) {
+            return _.isNull(expectedState) || (currentState === (_.isBoolean(expectedState) && expectedState));
+        }
+
         // 'shiftKey' option must always match
         if (!isMatchingControlKey(event.shiftKey, Utils.getOption(options, 'shiftKey'))) {
             return false;
@@ -248,8 +229,11 @@ define('io.ox/office/tk/keycodes', ['io.ox/office/tk/utils'], function (Utils) {
      *  DOM KeyboardEvent, or as jQuery event object, received from a 'keydown'
      *  or 'keyup' browser event.
      *
-     * @param {Number} keyCode
-     *  The key code, as defined in the static KeyCodes class.
+     * @param {Number|String} keyCode
+     *  The numeric key code, or the upper-case name of a key code, as defined
+     *  in this KeyCodes class. Be careful with digit keys, for example, the
+     *  number 9 matches the TAB key (KeyCodes.TAB), but the string '9' matches
+     *  the digit '9' key (KeyCodes['9'] with the key code 57).
      *
      * @param {Object} [options]
      *  The expected settings of the control keys to match the passed event
@@ -260,7 +244,7 @@ define('io.ox/office/tk/keycodes', ['io.ox/office/tk/utils'], function (Utils) {
      *  key settings specified in the options.
      */
     KeyCodes.matchKeyboardEvent = function (event, keyCode, options) {
-        return (event.keyCode === keyCode) && KeyCodes.matchEventControlKeys(event, options);
+        return (event.keyCode === (_.isString(keyCode) ? KeyCodes[keyCode] : keyCode)) && KeyCodes.matchEventControlKeys(event, options);
     };
 
     // exports ================================================================

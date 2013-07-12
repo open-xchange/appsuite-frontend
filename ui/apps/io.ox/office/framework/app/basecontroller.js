@@ -63,7 +63,7 @@ define('io.ox/office/framework/app/basecontroller',
                 'document/print': {
                     // enabled in read-only mode
                     set: function () { app.print(); },
-                    shortcut: { keyCode: KeyCodes.P, ctrlOrMetaKey: true }
+                    shortcut: { keyCode: 'P', ctrlOrMetaKey: true }
                 }
             },
 
@@ -386,10 +386,14 @@ define('io.ox/office/framework/app/basecontroller',
          *          against 'keypress' events, and the value represents the
          *          numeric code point of a Unicode character, or the Unicode
          *          character as a string.
-         *      - {Number} [shortcut.keyCode]
+         *      - {Number|String} [shortcut.keyCode]
          *          If specified, the shortcut definition will be matched
-         *          against 'keydown' events, and the value represents the raw
-         *          key code as defined in the static KeyCodes class.
+         *          against 'keydown' events, and the value represents the
+         *          numeric key code, or the upper-case name of a key code, as
+         *          defined in the static class KeyCodes. Be careful with digit
+         *          keys, for example, the number 9 matches the TAB key
+         *          (KeyCodes.TAB), but the string '9' matches the digit '9'
+         *          key (KeyCodes['9'] with the key code 57).
          *      - {Boolean|Null} [shortcut.shiftKey=false]
          *          If set to true, the SHIFT key must be pressed when the
          *          'keydown' events is received. If set to false (or omitted),
@@ -470,12 +474,18 @@ define('io.ox/office/framework/app/basecontroller',
                 items[key] = new Item(key, definition);
                 if (_.isObject(definition.shortcut)) {
                     _.chain(definition.shortcut).getArray().each(function (shortcut) {
-                        var keyCode = Utils.getIntegerOption(shortcut, 'keyCode', -1),
-                            charCode = Utils.getIntegerOption(shortcut, 'charCode') || Utils.getStringOption(shortcut, 'charCode', '').charCodeAt(0);
-                        if (keyCode > 0) {
+                        var keyCode = Utils.getOption(shortcut, 'keyCode'),
+                            charCode = Utils.getOption(shortcut, 'charCode');
+                        if (_.isString(keyCode)) {
+                            keyCode = KeyCodes[keyCode] || 0;
+                        }
+                        if (_.isNumber(keyCode) && (keyCode > 0)) {
                             (keyShortcuts[keyCode] || (keyShortcuts[keyCode] = [])).push({ key: key, definition: shortcut });
                         }
-                        if (charCode > 0) {
+                        if (_.isString(charCode)) {
+                            charCode = charCode.charCodeAt(0);
+                        }
+                        if (_.isNumber(charCode) && (charCode > 0)) {
                             (charShortcuts[charCode] || (charShortcuts[charCode] = [])).push({ key: key, definition: shortcut });
                         }
                     });

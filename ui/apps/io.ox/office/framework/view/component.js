@@ -198,12 +198,10 @@ define('io.ox/office/framework/view/component',
          *  True, if the event has been handled and needs to stop propagating.
          */
         function keyHandler(event) {
-
-            var // distinguish between event types (ignore keypress events)
-                keydown = event.type === 'keydown';
-
-            if (event.keyCode === KeyCodes.TAB && !event.ctrlKey && !event.altKey && !event.metaKey) {
-                if (keydown) { moveFocus(!event.shiftKey); }
+            if (KeyCodes.matchKeyboardEvent(event, 'TAB', { shiftKey: null })) {
+                if (event.type === 'keydown') {
+                    moveFocus(!event.shiftKey);
+                }
                 return false;
             }
         }
