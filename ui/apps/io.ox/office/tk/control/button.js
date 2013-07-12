@@ -13,13 +13,11 @@
 
 define('io.ox/office/tk/control/button',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/keycodes',
      'io.ox/office/tk/control/group'
-    ], function (Utils, Group) {
+    ], function (Utils, KeyCodes, Group) {
 
     'use strict';
-
-    var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes;
 
     // class Button ===========================================================
 

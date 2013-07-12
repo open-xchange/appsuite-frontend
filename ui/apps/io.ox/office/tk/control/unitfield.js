@@ -18,10 +18,7 @@ define('io.ox/office/tk/control/unitfield',
 
     'use strict';
 
-    var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes,
-
-        // default validator without any restrictions on the field text
+    var // default validator without any restrictions on the field text
         defaultValidator = null;
 
     // class UnitField ========================================================

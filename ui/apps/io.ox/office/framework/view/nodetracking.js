@@ -11,14 +11,14 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], function (Utils) {
+define('io.ox/office/framework/view/nodetracking',
+    ['io.ox/office/tk/utils',
+     'io.ox/office/tk/keycodes'
+    ], function (Utils, KeyCodes) {
 
     'use strict';
 
-    var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes,
-
-        // the map of all mouse events to be bound to a node to start tracking
+    var // the map of all mouse events to be bound to a node to start tracking
         MOUSE_START_EVENT_MAP = {
             mousedown: mouseDownHandler
         },

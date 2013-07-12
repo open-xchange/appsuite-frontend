@@ -29,10 +29,7 @@ define('io.ox/office/preview/view/view',
 
     'use strict';
 
-    var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes,
-
-        // predefined zoom factors
+    var // predefined zoom factors
         ZOOM_FACTORS = [25, 35, 50, 75, 100, 150, 200, 300, 400, 600, 800, 1200, 1600],
 
         // the speed of scroll animations

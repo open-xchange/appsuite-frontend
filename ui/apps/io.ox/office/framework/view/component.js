@@ -13,15 +13,14 @@
 
 define('io.ox/office/framework/view/component',
     ['io.ox/core/event',
-     'io.ox/office/tk/utils'
-    ], function (Events, Utils) {
+     'io.ox/office/tk/utils',
+     'io.ox/office/tk/keycodes',
+     'io.ox/office/tk/dropdown/dropdown'
+    ], function (Events, Utils, KeyCodes, DropDown) {
 
     'use strict';
 
-    var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes,
-
-        // CSS class for hidden components
+    var // CSS class for hidden components
         HIDDEN_CLASS = 'hidden';
 
     // class Component ========================================================
@@ -99,6 +98,16 @@ define('io.ox/office/framework/view/component',
         // private methods ----------------------------------------------------
 
         /**
+         * Handles 'menu:open' and 'menu:close' events from all registered
+         * group instances. Updates the CSS marker class at the root node of
+         * this view component, and forwards the event to all listeners.
+         */
+        function dropDownMenuHandler(event) {
+            self.getNode().toggleClass(DropDown.OPEN_CLASS, event.type === 'menu:open');
+            self.trigger(event.type);
+        }
+
+        /**
          * Inserts the passed control group into this view component, either by
          * calling the handler function passed to the constructor, or by
          * appending the root node of the group to the children of the own root
@@ -119,10 +128,11 @@ define('io.ox/office/framework/view/component',
                 node.append(group.getNode());
             }
 
-            // always forward 'cancel' events (e.g. closed drop-down menu),
-            // update focusability depending on the group's enabled state
+            // forward 'cancel' events, update focusability depending on the
+            // group's enabled state, forward other layout events
             group.on({
                 cancel: function (event, options) { self.trigger('cancel', options); },
+                'menu:open menu:close': dropDownMenuHandler,
                 'show enable layout': updateFocusable
             });
 

@@ -13,14 +13,12 @@
 
 define('io.ox/office/tk/dropdown/list',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/keycodes',
      'io.ox/office/tk/control/group',
      'io.ox/office/tk/dropdown/items'
-    ], function (Utils, Group, Items) {
+    ], function (Utils, KeyCodes, Group, Items) {
 
     'use strict';
-
-    var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes;
 
     // class List =============================================================
 

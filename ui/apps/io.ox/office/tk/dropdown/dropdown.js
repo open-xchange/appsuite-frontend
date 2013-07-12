@@ -13,16 +13,10 @@
 
 define('io.ox/office/tk/dropdown/dropdown',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/control/group'
-    ], function (Utils, Group) {
+     'io.ox/office/tk/keycodes'
+    ], function (Utils, KeyCodes) {
 
     'use strict';
-
-    var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes,
-
-        // marker CSS class for groups with opened drop-down menu
-        OPEN_CLASS = 'dropdown-open';
 
     // class DropDown =========================================================
 
@@ -231,7 +225,7 @@ define('io.ox/office/tk/dropdown/dropdown',
 
             // initialize DOM
             $('body').append(menuNode);
-            groupNode.addClass(OPEN_CLASS);
+            groupNode.addClass(DropDown.OPEN_CLASS);
             menuNode.css({
                 top: groupPosition.top + groupPosition.height + DropDown.GROUP_BORDER_PADDING,
                 left: groupPosition.left
@@ -303,7 +297,7 @@ define('io.ox/office/tk/dropdown/dropdown',
 
             // initialize DOM
             $(document).off('mousedown click', globalClickHandler);
-            groupNode.removeClass(OPEN_CLASS);
+            groupNode.removeClass(DropDown.OPEN_CLASS);
             menuNode.detach();
             $(window).off('resize', refreshMenuNodePosition);
         }
@@ -517,7 +511,7 @@ define('io.ox/office/tk/dropdown/dropdown',
          *  A collection with all focusable (visible and enabled) controls.
          */
         this.getFocusableMenuControls = function () {
-            return menuNode.find(Utils.ENABLED_SELECTOR + Utils.VISIBLE_SELECTOR + Group.FOCUSABLE_SELECTOR);
+            return menuNode.find(Utils.ENABLED_SELECTOR + Utils.VISIBLE_SELECTOR + Utils.FOCUSABLE_SELECTOR);
         };
 
         /**
@@ -606,7 +600,7 @@ define('io.ox/office/tk/dropdown/dropdown',
             .on('show enable', function (event, state) { if (!state) { hideMenu(); } });
         groupNode
             .on('keydown keypress keyup', groupKeyHandler)
-            .on('blur:key', Group.FOCUSABLE_SELECTOR, hideMenu);
+            .on('blur:key', Utils.FOCUSABLE_SELECTOR, hideMenu);
         menuButton
             .on('click', menuButtonClickHandler)
             .on('keydown keypress keyup', menuButtonKeyHandler);
@@ -622,12 +616,23 @@ define('io.ox/office/tk/dropdown/dropdown',
     // static fields ----------------------------------------------------------
 
     /**
+     * Marker CSS class for elements containing an opened drop-down menu.
+     *
+     * @constant
+     */
+    DropDown.OPEN_CLASS = 'dropdown-open';
+
+    /**
      * Padding of drop-down menu to browser window borders, in pixels.
+     *
+     * @constant
      */
     DropDown.WINDOW_BORDER_PADDING = 6;
 
     /**
      * Padding of drop-down menu to parent group node, in pixels.
+     *
+     * @constant
      */
     DropDown.GROUP_BORDER_PADDING = 1;
 

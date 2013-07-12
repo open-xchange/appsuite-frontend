@@ -13,14 +13,12 @@
 
 define('io.ox/office/tk/dropdown/items',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/keycodes',
      'io.ox/office/tk/control/group',
      'io.ox/office/tk/dropdown/dropdown'
-    ], function (Utils, Group, DropDown) {
+    ], function (Utils, KeyCodes, Group, DropDown) {
 
     'use strict';
-
-    var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes;
 
     // class Items ============================================================
 
@@ -237,7 +235,7 @@ define('io.ox/office/tk/dropdown/items',
                 // all existing items in the current section
                 sectionButtons = sectionNode.find(Utils.BUTTON_SELECTOR),
                 // create the button element representing the item
-                button = Utils.createButton(options).addClass(Group.FOCUSABLE_CLASS),
+                button = Utils.createButton(options).addClass(Utils.FOCUSABLE_CLASS),
                 // insertion index for sorted items
                 index = -1;
 

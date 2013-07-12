@@ -13,8 +13,9 @@
 
 define('io.ox/office/framework/view/pane',
     ['io.ox/core/event',
-     'io.ox/office/tk/utils'
-    ], function (Events, Utils) {
+     'io.ox/office/tk/utils',
+     'io.ox/office/tk/dropdown/dropdown'
+    ], function (Events, Utils, DropDown) {
 
     'use strict';
 
@@ -264,12 +265,23 @@ define('io.ox/office/framework/view/pane',
          *  A reference to this instance.
          */
         this.addViewComponent = function (component) {
+
+            // store component
             components.push(component);
+
+            // insert the root node of the component into this view pane
             if (_.isFunction(componentInserter)) {
                 componentInserter.call(this, component);
             } else {
                 node.append(component.getNode());
             }
+
+            // update the CSS marker class for an opened drop-down menu
+            component.on({
+                'menu:open': function () { self.getNode().addClass(DropDown.OPEN_CLASS); },
+                'menu:close': function () { self.getNode().removeClass(DropDown.OPEN_CLASS); }
+            });
+
             return this;
         };
 

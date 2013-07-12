@@ -13,16 +13,14 @@
 
 define('io.ox/office/preview/view/pagegroup',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/keycodes',
      'io.ox/office/tk/control/group',
      'io.ox/office/preview/view/pageloader'
-    ], function (Utils, Group, PageLoader) {
+    ], function (Utils, KeyCodes, Group, PageLoader) {
 
     'use strict';
 
-    var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes,
-
-        // horizontal margin between group and scroll pane
+    var // horizontal margin between group and scroll pane
         HOR_MARGIN = 13,
 
         // fixed total width of a page button (two buttons in default side pane width)

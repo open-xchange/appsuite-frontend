@@ -13,14 +13,12 @@
 
 define('io.ox/office/tk/control/combofield',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/keycodes',
      'io.ox/office/tk/control/textfield',
      'io.ox/office/tk/dropdown/list'
-    ], function (Utils, TextField, List) {
+    ], function (Utils, KeyCodes, TextField, List) {
 
     'use strict';
-
-    var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes;
 
     // class ComboField =======================================================
 

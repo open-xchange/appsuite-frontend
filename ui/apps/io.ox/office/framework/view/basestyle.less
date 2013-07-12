@@ -756,7 +756,7 @@ i.docs-caret {
 }
 
 /* half-transparent hover effect for entire view panes and single view components */
-.view-pane.hover-effect, .view-pane:not(.hover-effect) > .view-component.hover-effect {
+.view-pane.hover-effect:not(.dropdown-open), .view-pane:not(.hover-effect) > .view-component.hover-effect:not(.dropdown-open) {
     .transition(opacity 0.2s linear);
     &:not(:hover) { .opacity(70); }
 }

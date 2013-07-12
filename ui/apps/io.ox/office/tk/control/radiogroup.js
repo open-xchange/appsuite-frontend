@@ -13,8 +13,9 @@
 
 define('io.ox/office/tk/control/radiogroup',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/keycodes',
      'io.ox/office/tk/control/group'
-    ], function (Utils, Group) {
+    ], function (Utils, KeyCodes, Group) {
 
     'use strict';
 
@@ -92,7 +93,7 @@ define('io.ox/office/tk/control/radiogroup',
             var // distinguish between event types
                 keydown = event.type === 'keydown';
 
-            if (event.keyCode === Utils.KeyCodes.SPACE) {
+            if (event.keyCode === KeyCodes.SPACE) {
                 if (keydown) { self.triggerChange(event.target, { preserveFocus: true }); }
                 return false;
             }

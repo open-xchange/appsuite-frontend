@@ -13,59 +13,11 @@
 
 define('io.ox/office/framework/app/basecontroller',
     ['io.ox/core/event',
-     'io.ox/office/tk/utils'
-    ], function (Events, Utils) {
+     'io.ox/office/tk/utils',
+     'io.ox/office/tk/keycodes'
+    ], function (Events, Utils, KeyCodes) {
 
     'use strict';
-
-    // private global functions ===============================================
-
-    /**
-     * Returns whether the passed state of a control key (SHIFT, ALT, CTRL,
-     * etc.) matches the state contained in a keyboard shortcut definition.
-     *
-     * @param {Boolean} currentState
-     *  The current state of a control key, extracted from a keyboard event.
-     *
-     * @param {Boolean|Null} [expectedState]
-     *  The expected state of the control key to test against. If null, this
-     *  function returns always true. If omitted, the passed current state must
-     *  be false. Otherwise, the current state must be equal to the expected
-     *  state.
-     *
-     * @returns {Boolean}
-     *  Whether the current state of a control key matches the expected state.
-     */
-    function isMatchingControlKey(currentState, expectedState) {
-        return _.isNull(expectedState) || (currentState === (_.isBoolean(expectedState) && expectedState));
-    }
-
-    /**
-     * Returns whether the passed jQuery 'keydown' event matches the specified
-     * keyboard shortcut definition.
-     */
-    function isMatchingShortcut(event, definition) {
-
-        // 'shiftKey' option must always match
-        if ((event.keyCode !== definition.keyCode) || !isMatchingControlKey(event.shiftKey, definition.shiftKey)) {
-            return false;
-        }
-
-        // when 'altOrMetaKey' is set, ignore 'altKey' and 'metaKey' options
-        if (definition.altOrMetaKey === true) {
-            return (event.altKey !== event.metaKey) && isMatchingControlKey(event.ctrlKey, definition.ctrlKey);
-        }
-
-        // when 'ctrlOrMetaKey' is set, ignore 'ctrlKey' and 'metaKey' options
-        if (definition.ctrlOrMetaKey === true) {
-            return (event.ctrlKey !== event.metaKey) && isMatchingControlKey(event.altKey, definition.altKey);
-        }
-
-        // otherwise, options 'altKey', 'ctlKey' and 'metaKey' options must match
-        return isMatchingControlKey(event.altKey, definition.altKey) &&
-            isMatchingControlKey(event.ctrlKey, definition.ctrlKey) &&
-            isMatchingControlKey(event.metaKey, definition.metaKey);
-    }
 
     // class BaseController ===================================================
 
@@ -111,7 +63,7 @@ define('io.ox/office/framework/app/basecontroller',
                 'document/print': {
                     // enabled in read-only mode
                     set: function () { app.print(); },
-                    shortcut: { keyCode: Utils.KeyCodes.P, ctrlOrMetaKey: true }
+                    shortcut: { keyCode: KeyCodes.P, ctrlOrMetaKey: true }
                 }
             },
 
@@ -360,7 +312,7 @@ define('io.ox/office/framework/app/basecontroller',
                 if (event.keyCode in keyShortcuts) {
                     _(keyShortcuts[event.keyCode]).each(function (shortcut) {
                         // check if the additional control keys match the shortcut definition
-                        if (isMatchingShortcut(event, shortcut.definition)) {
+                        if (KeyCodes.matchEventControlKeys(event, shortcut.definition)) {
                             callSetHandlerForShortcut(shortcut);
                         }
                     });
@@ -437,7 +389,7 @@ define('io.ox/office/framework/app/basecontroller',
          *      - {Number} [shortcut.keyCode]
          *          If specified, the shortcut definition will be matched
          *          against 'keydown' events, and the value represents the raw
-         *          key code as defined in Utils.KeyCodes.
+         *          key code as defined in the static KeyCodes class.
          *      - {Boolean|Null} [shortcut.shiftKey=false]
          *          If set to true, the SHIFT key must be pressed when the
          *          'keydown' events is received. If set to false (or omitted),

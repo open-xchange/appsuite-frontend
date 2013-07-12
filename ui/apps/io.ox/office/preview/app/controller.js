@@ -13,13 +13,11 @@
 
 define('io.ox/office/preview/app/controller',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/keycodes',
      'io.ox/office/framework/app/basecontroller'
-    ], function (Utils, BaseController) {
+    ], function (Utils, KeyCodes, BaseController) {
 
     'use strict';
-
-    var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes;
 
     // class PreviewController ================================================
 

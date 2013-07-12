@@ -13,15 +13,13 @@
 
 define('io.ox/office/tk/control/group',
     ['io.ox/core/event',
-     'io.ox/office/tk/utils'
-    ], function (Events, Utils) {
+     'io.ox/office/tk/utils',
+     'io.ox/office/tk/keycodes'
+    ], function (Events, Utils, KeyCodes) {
 
     'use strict';
 
-    var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes,
-
-        // CSS class for hidden groups
+    var // CSS class for hidden groups
         HIDDEN_CLASS = 'hidden',
 
         // CSS class for disabled groups
@@ -299,14 +297,14 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.addFocusableControl = function (control) {
-            return this.addChildNodes(control.addClass(Group.FOCUSABLE_CLASS));
+            return this.addChildNodes(control.addClass(Utils.FOCUSABLE_CLASS));
         };
 
         /**
          * Returns whether this group contains any focusable controls.
          */
         this.hasFocusableControls = function () {
-            return groupNode.find(Group.FOCUSABLE_SELECTOR).length > 0;
+            return groupNode.find(Utils.FOCUSABLE_SELECTOR).length > 0;
         };
 
         /**
@@ -314,7 +312,7 @@ define('io.ox/office/tk/control/group',
          * keyboard focus navigation.
          */
         this.getFocusableControls = function () {
-            return groupNode.find(Group.FOCUSABLE_SELECTOR);
+            return groupNode.find(Utils.FOCUSABLE_SELECTOR);
         };
 
         /**
@@ -527,22 +525,6 @@ define('io.ox/office/tk/control/group',
         }
 
     } // class Group
-
-    // constants --------------------------------------------------------------
-
-    /**
-     * CSS class for focusable control elements in this group.
-     *
-     * @constant
-     */
-    Group.FOCUSABLE_CLASS = 'focusable';
-
-    /**
-     * CSS selector for focusable control elements in this group.
-     *
-     * @constant
-     */
-    Group.FOCUSABLE_SELECTOR = '.' + Group.FOCUSABLE_CLASS;
 
     // exports ================================================================
 
