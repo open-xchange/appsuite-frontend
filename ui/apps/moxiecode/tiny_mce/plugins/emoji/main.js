@@ -9,7 +9,6 @@
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
-
 define('moxiecode/tiny_mce/plugins/emoji/main',
        ['3rd.party/emoji/emoji',
        'moxiecode/tiny_mce/plugins/emoji/categories',
@@ -84,15 +83,19 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
     _.extend(Emoji.prototype, {
 
-        iconInfo: function (unicode, mapping) {
+        iconInfo: function (icon) {
 
-            if (!unicode || !mapping || !mapping[1][1] || !mapping[1][2]) return undefined;
+            if (_.isString(icon))
+                return this.iconInfo([icon, emoji.EMOJI_MAP[icon]]);
+
+            if (!icon || !icon[0] || !icon[1] || !icon[1][1] || !icon[1][2])
+                return undefined;
 
             return {
-                css: this.cssFor(unicode),
-                unicode: unicode,
-                desc: mapping[1][1],
-                category: this.category_map[unicode]
+                css: this.cssFor(icon[0]),
+                unicode: icon[0],
+                desc: icon[1][1],
+                category: this.category_map[icon[0]]
             };
         },
 
@@ -209,11 +212,11 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             return this.currentCollection;
         },
 
+        // "invert" the categories object
         createCategoryMap: function () {
 
             var cat = categories[this.currentCollection];
 
-            // "invert" the categories object
             this.category_map = _.object(
                 _(cat).chain().values().flatten(true).value(),
                 _(cat)
@@ -229,15 +232,10 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                     .value()
             );
 
-            // get icons based on emoji map
-            // while keeping proper icon order
-            this.icons = _(cat)
+            this.icons = _(emoji.EMOJI_MAP)
                 .chain()
-                .values()
-                .flatten(true)
-                .map(function (unicode) {
-                    return this.iconInfo(unicode, emoji.EMOJI_MAP[unicode]);
-                }, this)
+                .pairs()
+                .map(this.iconInfo, this)
                 .value();
         }
     });
