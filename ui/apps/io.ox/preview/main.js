@@ -16,9 +16,10 @@
 define('io.ox/preview/main',
     ['io.ox/core/extensions',
      'io.ox/core/capabilities',
+     'io.ox/files/mediasupport',
      'io.ox/office/framework/app/extensionregistry',
      'gettext!io.ox/preview'
-    ], function (ext, capabilities, ExtensionRegistry, gt) {
+    ], function (ext, capabilities, mediasupport, ExtensionRegistry, gt) {
 
     'use strict';
 
@@ -112,21 +113,18 @@ define('io.ox/preview/main',
         }
     }));
 
+
     // register audio typed renderer
-    if (Modernizr.audio && _.device('!android')) {
+    if (mediasupport.hasSupport('audio')) {
         Renderer.point.extend(new Engine({
             id: 'audio',
             index: 10,
             supports: (function () {
-                var tmp = [];
-                $.each(Modernizr.audio, function (id, elem) {
-                    tmp.push(id);
-                });
-                return tmp;
+                return mediasupport.supportedExtensions('audio').split('|');
             }()),
             draw: function (file) {
                 var audiofile = $('<audio>').attr({
-                    src: file.dataURL,
+                    src: file.dataURL + '&delivery=view&content_type=' + file.mimetype,
                     type: file.mimetype,
                     preload: 'metadata',
                     controls: 'control',
@@ -138,7 +136,7 @@ define('io.ox/preview/main',
 
                     var pw = self.closest('.file-details').width();
 
-                    self.find('video, audio').mediaelementplayer({
+                    self.find('audio').mediaelementplayer({
                         audioWidth: pw,
                         videoWidth: pw,
                         plugins: ['flash', 'silverlight'],

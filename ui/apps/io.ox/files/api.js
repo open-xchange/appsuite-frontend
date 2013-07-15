@@ -19,8 +19,9 @@ define('io.ox/files/api',
      'io.ox/core/api/factory',
      'settings!io.ox/core',
      'io.ox/core/cache',
-     'io.ox/core/date'
-    ], function (http, apiFactory, coreConfig, cache, date) {
+     'io.ox/core/date',
+     'io.ox/files/mediasupport'
+    ], function (http, apiFactory, coreConfig, cache, date, mediasupport) {
 
     'use strict';
 
@@ -733,27 +734,7 @@ define('io.ox/files/api',
      * @return {boolean}
      */
     api.checkMediaFile = function (type, filename) {
-
-        /*  NOTE: See comments in mediaplayer.js */
-
-        var pattern;
-        if (type === 'video') {
-            if (!Modernizr.video) { return false; }
-            if (_.browser.Chrome) {          pattern = '\\.(m4v|ogv|webm)'; }
-            else if (_.browser.IE || _.browser.Safari) {
-                pattern = '\\.(m4v)';
-            }
-            else if (_.browser.Firefox) {    pattern = '\\.(ogv|webm)'; }
-            else { return false; }
-        } else {
-            if (!Modernizr.audio) { return false; }
-            if (_.browser.Chrome) {          pattern = '\\.(mp3|wav|m4a|m4b|ogg)'; }
-            else if (_.browser.Safari) {     pattern = '\\.(mp3|wav|m4a|m4b|aac)'; }
-            else if (_.browser.IE) {         pattern = '\\.(mp3|wav|m4a|m4b)'; }
-            else if (_.browser.Firefox) {    pattern = '\\.(mp3|wav|ogg|opus)'; }
-            else { return false; }
-        }
-        return (new RegExp(pattern, 'i')).test(filename);
+        return mediasupport.checkFile(type, filename);
     };
 
     var lockToggle = function (list, action) {
