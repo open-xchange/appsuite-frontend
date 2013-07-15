@@ -170,7 +170,9 @@ define(['shared/examples/for/api',
                         [
                            {
                               "type":"contact",
-                              "display_name":"Hawthorne, Pierce",
+                              "first_name":"Pierce",
+                              "last_name":"Hawthorne",
+                              "display_name":"Pierce Hawthorne",
                               "data":{
                                  "id":486089,
                                  "folder_id":14830,
@@ -233,7 +235,9 @@ define(['shared/examples/for/api',
                     //expected result
                     result = [{
                       "type": "contact",
-                      "display_name": "Hawthorne, Pierce",
+                      "first_name": "Pierce",
+                      "last_name": "Hawthorne",
+                      "display_name": "Pierce Hawthorne",
                       "data": {
                         "id": 486089,
                         "folder_id": 14830,
