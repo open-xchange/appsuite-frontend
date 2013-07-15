@@ -40,7 +40,7 @@ define('io.ox/core/settings/user', [
                 require(['io.ox/core/api/folder'], function (folderAPI) {
                     /* I would have preferred to use folderAPI.can('read', 6)... */
                     folderAPI.get({ folder: 6, cache: false }).fail(function (data) {
-                        $userEditView.find('div.header-pic').remove();
+                        $userEditView.find('div.contact-picture-upload').remove();
                     });
                 });
 
