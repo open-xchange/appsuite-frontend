@@ -443,19 +443,28 @@ i[class^="icon-"], i[class^=" icon-"] {
 
         > .group-line {
             display: block;
+            white-space: nowrap;
             .clearfix();
 
             &:not(:last-child) {
                 margin-bottom: @control-spacing;
             }
 
-            > .tab-left { float: left; }
-            > .tab-right { float: right; }
+            > .tab-left {
+                float: left;
+                white-space: nowrap;
+            }
+
+            > .tab-right {
+                float: right;
+                white-space: nowrap;
+            }
 
             .group-container {
                 display: inline-block;
                 .border-radius(@border-radius);
                 vertical-align: top;
+                white-space: nowrap;
             }
         }
 
