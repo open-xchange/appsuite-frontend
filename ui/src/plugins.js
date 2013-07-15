@@ -27,6 +27,11 @@
         }
     };
 
+    function runCode(name, code) {
+        eval("//@ sourceURL=" + name + ".js\n" + code);
+
+    }
+
     if (_.device('desktop') && window.IDBVersionChangeEvent !== undefined && Modernizr.indexeddb && window.indexedDB) {
         // IndexedDB
         (function () {
@@ -189,7 +194,7 @@
 
             // Try file cache
             fileCache.retrieve(modulename).done(function (contents) {
-                eval(contents);
+                runCode(modulename, contents);
                 context.completeLoad(modulename);
                 if (_.url.hash('debug-filecache')) {
                     console.log("CACHE HIT!", modulename);
@@ -208,7 +213,7 @@
             function load(module, modulename) {
                  $.ajax({ url: [ox.apiRoot, '/apps/load/', ox.base, ',', module].join(''), dataType: "text" })
                  .done(function (concatenatedText) {
-                        eval(concatenatedText);
+                        runCode([ox.apiRoot, '/apps/load/', ox.base, ',', module].join(''), concatenatedText);
                         context.completeLoad(modulename);
                         // Chop up the concatenated modules and put them into file cache
                         _(concatenatedText.split("/*:oxsep:*/")).each(function (moduleText) {
