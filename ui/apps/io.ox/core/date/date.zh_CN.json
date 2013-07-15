@@ -1,5 +1,6 @@
 {
-    "daysInFirstWeek": null,
+    "daysInFirstWeek": 1,
+    "weekStart": 0,
     "days": [
         "星期日",
         "星期一",
