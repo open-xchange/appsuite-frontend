@@ -32,6 +32,23 @@ define('io.ox/mail/sender',
             .attr({ 'data-display-name': (display_name || ''), 'data-address': (address || value) });
     }
 
+    /**
+     * returns sender object
+     * considers potential existing telephone numbers
+     * @param  {array} data
+     * @return {object} value, text, display_name, address
+     */
+    function getSender(data) {
+        var sender = {
+                display_name: data[0],
+                address: util.getChannel(data[1]) === 'email' ? data[1] : util.cleanupPhone(data[1]) + util.getChannelSuffixes().msisdn
+            };
+        //hide may existing type suffix for text
+        sender.text = util.formatSender(sender.display_name, data[1], false);
+        sender.value = util.formatSender(sender.display_name, sender.address);
+        return sender;
+    }
+
     var that = {
 
         // get current sender
@@ -109,14 +126,11 @@ define('io.ox/mail/sender',
                 return _(that.getMapping())
                     .chain()
                     .map(function (field) {
-                        var number = $.trim(data[field]), address;
+                        var number = $.trim(data[field]);
                         if (number) {
-                            address = util.cleanupPhone(number) + util.getChannelSuffixes().msisdn;
                             return [
                                 display_name,
-                                address,
-                                '"' + display_name + '" <' + address + '>',
-                                display_name + ' <' + number + '>'
+                                number
                             ];
                         }
                     })
@@ -131,36 +145,25 @@ define('io.ox/mail/sender',
                 api.getPrimaryAddress()
             )
             .then(function (addresses, numbers, primary) {
-
                 var defaultAddress = select.attr('data-default') || primary[1],
-                    defaultValue;
+                    defaultValue,
+                    list = [].concat(addresses, numbers);
 
-                // get all mail addresses
-                addresses = _(addresses).map(function (address) {
-                    var text = util.formatSender(address, false),
-                        value = util.formatSender(address),
-                        option = drawOption(value, text, address[0], address[1]);
-                    if (address[1] === defaultAddress) {
+                // process with mail addresses and phone numbers
+                list = _(list).map(function (address) {
+                    var sender = getSender(address),
+                        option = drawOption(sender.value, sender.text, sender.display_name, sender.address);
+                    //support typed or typeless defaultAddress
+                    if (address[1] === defaultAddress || sender.address === defaultAddress) {
                         option.attr('default', 'default');
-                        defaultValue = value;
+                        defaultValue = sender.value;
                     }
-                    return { value: value, option: option };
-                });
-
-                // get all phone numbers
-                numbers = _(numbers).map(function (number) {
-                    var value = number[2],
-                        option = drawOption(value, number[3], number[0], number[1]);
-                    if (number[0] === defaultAddress) {
-                        option.attr('default', 'default');
-                        defaultValue = value;
-                    }
-                    return { value: value, option: option };
+                    return { value: sender.value, option: option };
                 });
 
                 // concat, sort, then add to drop-down
                 select.empty().append(
-                    _(addresses.concat(numbers).sort(sorter)).pluck('option')
+                    _(list.sort(sorter)).pluck('option')
                 );
 
                 select.attr('data-default', defaultAddress);
