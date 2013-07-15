@@ -71,7 +71,7 @@ define('io.ox/mail/sender',
 
             // still empty?
             if (children.length === 0) {
-                console.log('set data-default', address, from[1]);
+                //console.log('set data-default', address, from[1]);
                 select.attr('data-default', address);
                 return;
             }
