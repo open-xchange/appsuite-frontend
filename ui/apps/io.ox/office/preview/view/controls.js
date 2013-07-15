@@ -110,8 +110,8 @@ define('io.ox/office/preview/view/controls',
         // enable/disable the list entries dynamically
         this.getItemGroup().registerUpdateHandler(function (page) {
             var items = self.getItems();
-            Utils.enableControls(items.filter('[data-value="first"]'), page > 1);
-            Utils.enableControls(items.filter('[data-value="last"]'), page < app.getModel().getPageCount());
+            items.filter('[data-value="first"]').toggleClass(Utils.DISABLED_CLASS, page <= 1);
+            items.filter('[data-value="last"]').toggleClass(Utils.DISABLED_CLASS, page >= app.getModel().getPageCount());
         });
 
         // create the text input field for the page number, when page count is known

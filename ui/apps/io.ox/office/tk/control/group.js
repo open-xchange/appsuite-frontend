@@ -222,55 +222,6 @@ define('io.ox/office/tk/control/group',
         };
 
         /**
-         * Registers a private group instance. The events triggered by that
-         * group will be forwarded to the listeners of this group instance.
-         * Updates of this group instance (calls to the own 'Group.update()'
-         * method) will be forwarded to the specified private group. The DOM
-         * root node of the group will not be inserted anywhere!
-         *
-         * @param {Group} group
-         *  The group instance to be be registered.
-         *
-         * @param {Object} [options]
-         *  A map with options controlling the behavior of this method. The
-         *  following options are supported:
-         *  @param {Boolean} [options.ignoreValue=false]
-         *      If set to true, 'change' events triggered by the specified
-         *      group instance will not be forwarded to listeners of this
-         *      group, and calls to the own 'Group.update()' method will not be
-         *      forwarded to the specified group instance.
-         *  @param {Boolean} [options.ignoreCancel=false]
-         *      If set to true, 'cancel' events triggered by the specified
-         *      group instance will not be forwarded to listeners of this
-         *      group.
-         *
-         * @returns {Group}
-         *  A reference to this instance.
-         */
-        this.registerPrivateGroup = function (group, options) {
-
-            // forward 'change' events of the private group to listeners of this group,
-            // and updates of this drop-down group to the inserted group
-            if (!Utils.getBooleanOption(options, 'ignoreValue', false)) {
-                group.on('change', function (event, value, options) {
-                    self.trigger('change', value, options);
-                });
-                this.registerUpdateHandler(function (value) {
-                    group.update(value);
-                });
-            }
-
-            // forward cancel events of the private group to listeners of this group
-            if (!Utils.getBooleanOption(options, 'ignoreCancel', false)) {
-                group.on('cancel', function (options) {
-                    self.trigger('cancel', options);
-                });
-            }
-
-            return this;
-        };
-
-        /**
          * Inserts the passed DOM elements into this group, and triggers a
          * 'layout' event notifying all listeners about the changed layout of
          * this group.

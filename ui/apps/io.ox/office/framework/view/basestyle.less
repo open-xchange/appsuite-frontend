@@ -289,9 +289,8 @@ i[class^="icon-"], i[class^=" icon-"] {
     }
 
     /* disabled groups ('important' to overrule display modes from other rules) */
-    &.disabled {
-        /* override mouse pointer for any embedded elements */
-        &, * { cursor: default !important; }
+    &.disabled, &.disabled *, & .disabled {
+        cursor: default !important;
     }
 
     /* common control settings --------------------------------------------- */

@@ -580,8 +580,20 @@ define('io.ox/office/tk/dropdown/dropdown',
          *  A reference to this instance.
          */
         this.registerMenuGroup = function (group) {
-            this.registerPrivateGroup(group, { ignoreCancel: true });
+
+            // forward 'change' events of the group to listeners of this group,
+            // and updates of this drop-down group to the inserted group
+            group.on('change', function (event, value, options) {
+                self.trigger('change', value, options);
+            });
+            this.registerUpdateHandler(function (value) {
+                group.update(value);
+            });
+
+            // do not forward cancel events of the private group to listeners of
+            // this group, but simply hide the drop-down menu
             group.on('cancel', hideMenu);
+
             return this;
         };
 
