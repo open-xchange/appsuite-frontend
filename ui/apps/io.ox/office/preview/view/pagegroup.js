@@ -36,6 +36,9 @@ define('io.ox/office/preview/view/pagegroup',
         var // self reference
             self = this,
 
+            // the view instance containing this page group
+            view = app.getView(),
+
             // the scrollable area in the side pane
             scrollableNode = sidePane.getScrollableNode(),
 
@@ -61,7 +64,7 @@ define('io.ox/office/preview/view/pagegroup',
          * Highlights the button representing the page with the passed index.
          */
         function updateHandler(page) {
-            var buttonNodes = self.getNode().find(Utils.BUTTON_SELECTOR).attr('tabindex', 0);
+            var buttonNodes = self.getNode().find(Utils.BUTTON_SELECTOR).removeAttr('tabindex');
             Utils.selectOptionButton(buttonNodes, page).attr('tabindex', 1);
         }
 
@@ -199,7 +202,7 @@ define('io.ox/office/preview/view/pagegroup',
 
             // select active button on first call (after positioning the buttons)
             if (initializeButtons) {
-                self.selectAndShowPage(app.getView().getPage());
+                self.selectAndShowPage(view.getPage());
             }
 
             // update page data for all visible button nodes
@@ -221,28 +224,37 @@ define('io.ox/office/preview/view/pagegroup',
          */
         function keyDownHandler(event) {
 
-            // moves the browser focus by the specified amount of pages
-            function setButtonFocus(diff) {
+            function showPage(diff) {
 
-                var // the page number of the focus button
+                var // the page number of the button currently focused
                     page = Utils.getControlValue($(document.activeElement));
 
-                // no extra modifier keys must be pressed
-                if (KeyCodes.matchModifierKeys(event) && _.isNumber(page)) {
-                    buttonNodes[Utils.minMax(page + diff, 1, app.getModel().getPageCount())].focus();
-                    return false;
+                page = Utils.minMax(page + diff, 1, app.getModel().getPageCount());
+                if (page in buttonNodes) {
+                    self.triggerChange(buttonNodes[page], { preserveFocus: true });
+                    buttonNodes[page].focus();
                 }
             }
 
+            // no extra modifier keys must be pressed
+            if (!KeyCodes.matchModifierKeys(event)) { return; }
+
             switch (event.keyCode) {
+            case KeyCodes.SPACE:
+                showPage(0);
+                return false;
             case KeyCodes.LEFT_ARROW:
-                return setButtonFocus(-1);
+                showPage(-1);
+                return false;
             case KeyCodes.RIGHT_ARROW:
-                return setButtonFocus(1);
+                showPage(1);
+                return false;
             case KeyCodes.UP_ARROW:
-                return setButtonFocus(-columns);
+                showPage(-columns);
+                return false;
             case KeyCodes.DOWN_ARROW:
-                return setButtonFocus(columns);
+                showPage(columns);
+                return false;
             }
         }
 
@@ -277,7 +289,7 @@ define('io.ox/office/preview/view/pagegroup',
 
         // when showing or resizing the side pane, scroll to current page
         sidePane.on('show resize', function () {
-            self.selectAndShowPage(app.getView().getPage());
+            self.selectAndShowPage(view.getPage());
         });
 
         // update pages while scrolling (debounced to skip a few scroll events)

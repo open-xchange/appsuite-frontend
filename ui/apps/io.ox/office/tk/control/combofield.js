@@ -68,7 +68,7 @@ define('io.ox/office/tk/control/combofield',
          * Scrolls the drop-down menu to make the specified list item visible.
          */
         function scrollToListItem(button) {
-            if (button.length && self.isMenuVisible()) {
+            if ((button.length > 0) && self.isMenuVisible()) {
                 Utils.scrollToChildNode(self.getMenuNode(), button);
             }
         }
@@ -255,7 +255,7 @@ define('io.ox/office/tk/control/combofield',
             .on('keydown keypress keyup', textFieldKeyHandler);
 
         // drop-down button is not focusable in combo fields
-        this.getMenuButton().removeClass(TextField.FOCUSABLE_CLASS);
+        this.getMenuButton().removeClass(Utils.FOCUSABLE_CLASS);
 
         // initialize read-only mode
         textFieldReadOnlyHandler();

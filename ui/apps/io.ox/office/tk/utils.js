@@ -136,6 +136,13 @@ define.async('io.ox/office/tk/utils',
     Utils.SELECTED_CLASS = 'selected';
 
     /**
+     * CSS selector for selected (active) buttons or tabs.
+     *
+     * @constant
+     */
+    Utils.SELECTED_SELECTOR = '.' + Utils.SELECTED_CLASS;
+
+    /**
      * CSS class for focusable control elements.
      *
      * @constant
@@ -2103,39 +2110,6 @@ define.async('io.ox/office/tk/utils',
 
     /**
      * Returns whether the first form control in the passed jQuery collection
-     * is enabled.
-     *
-     * @param {jQuery} control
-     *  A jQuery collection containing a form control.
-     *
-     * @returns {Boolean}
-     *  True, if the form control is enabled.
-     */
-    Utils.isControlEnabled = function (control) {
-        return control.first().is(Utils.ENABLED_SELECTOR);
-    };
-
-    /**
-     * Enables or disables all form controls in the passed jQuery collection.
-     *
-     * @param {jQuery} controls
-     *  A jQuery collection containing one or more form controls.
-     *
-     * @param {Boolean} [state=true]
-     *  If omitted or set to true, all form controls in the passed collection
-     *  will be enabled. Otherwise, all controls will be disabled.
-     *
-     * @returns {Boolean}
-     *  The effective state (whether the controls are enabled or disabled now).
-     */
-    Utils.enableControls = function (controls, state) {
-        var enabled = _.isUndefined(state) || (state === true);
-        controls.toggleClass(Utils.DISABLED_CLASS, !enabled);
-        return enabled;
-    };
-
-    /**
-     * Returns whether the first form control in the passed jQuery collection
      * is currently focused.
      *
      * @param {jQuery} control
@@ -2393,7 +2367,7 @@ define.async('io.ox/office/tk/utils',
      *  A jQuery collection with all selected buttons.
      */
     Utils.getSelectedButtons = function (buttons) {
-        return buttons.filter('.' + Utils.SELECTED_CLASS);
+        return buttons.filter(Utils.SELECTED_SELECTOR);
     };
 
     /**

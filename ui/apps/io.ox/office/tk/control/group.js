@@ -399,7 +399,7 @@ define('io.ox/office/tk/control/group',
          * Returns whether this control group is enabled.
          */
         this.isEnabled = function () {
-            return Utils.isControlEnabled(groupNode);
+            return groupNode.is(Utils.ENABLED_SELECTOR);
         };
 
         /**
@@ -414,15 +414,19 @@ define('io.ox/office/tk/control/group',
          */
         this.enable = function (state) {
 
-            var // enable/disable the entire group node with all its descendants
-                enabled = Utils.enableControls(groupNode, state),
-                // set tabindex dependent on state to make it (in)accessible for F6 traveling
-                selector = '[tabindex="';
+            var // whether to enable the group instance
+                enabled = _.isUndefined(state) || (state === true);
 
-            // Set tabindex dependent on state to make it (in)accessible for
-            // the F6 travel function.
-            selector += state ? '0"]' : '1"]';
-            groupNode.find(selector).attr({tabindex: state ? 1: 0});
+            // enable/disable the entire group node with all its descendants
+            groupNode.toggleClass(Utils.DISABLED_CLASS, !enabled);
+
+            // set or remove 'tabindex' attribute to make it (in)accessible for
+            // global F6 focus traveling
+            if (enabled) {
+                groupNode.find(Utils.FOCUSABLE_SELECTOR).attr('tabindex', 1);
+            } else {
+                groupNode.find(Utils.FOCUSABLE_SELECTOR).removeAttr('tabindex');
+            }
 
             // trigger an 'enable' event so that derived classes can react
             return this.trigger('enable', enabled);
