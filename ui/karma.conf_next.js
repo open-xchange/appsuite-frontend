@@ -17,7 +17,7 @@ module.exports = function(config) {
         'lib/underscore.js',
         'lib/require.js',
         'spec/main-test.js',
-        'lib/jquery.min.js',
+        'lib/jquery.js',
         'lib/require-fix.js',
         {pattern: 'spec/**/*_spec.js', included: false},
         {pattern: 'spec/shared/**/*.js'},
