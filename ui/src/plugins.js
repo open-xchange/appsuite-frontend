@@ -20,7 +20,7 @@
     // File Caching
     var fileCache = {
         retrieve: function (name) {
-            return $.when();
+            return $.Deferred().reject();
         },
         cache: function (name, content) {
             return;
