@@ -156,7 +156,10 @@ http.createServer(function (request, response) {
             return injectManifests(request, response);
         }
     }
-    return loadLocal(request, response) || proxy(request, response);
+    if (request.url.slice(-3) === '.js') {
+        return loadLocal(request, response) || proxy(request, response);
+    }
+    return proxy(request, response);
 }).listen(options.port || 8337);
 
 function load(request, response) {
