@@ -273,6 +273,7 @@ define('io.ox/core/tk/folderviews',
                 // get sub folders
                 return api.getSubFolders({ folder: id, all: all, storage: storage }).then(function (data) {
                     // create new children array
+                    http.pause();
                     children = _.chain(data)
                         .filter(function (folder) {
                             // ignore system folders without sub folders, e.g. 'Shared folders'
@@ -286,10 +287,13 @@ define('io.ox/core/tk/folderviews',
                                 return node;
                             } else {
                                 // new node
+
                                 return new TreeNode(tree, folder.id, nodes.sub, skip() ? level : level + 1, checkbox, all, storage);
                             }
                         })
                         .value();
+                    http.resume();
+
                     // destroy remaining and thus deprecated tree nodes
                     _(hash).each(function (child) {
                         child.destroy();
