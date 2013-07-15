@@ -17,8 +17,8 @@ utils.topLevelTask("update-i18n", ["lib/build/cldr.js"], function () {
         fs.writeFileSync('apps/io.ox/core/date/date.' + to + '.json',
             fs.readFileSync('apps/io.ox/core/date/date.' + from + '.json'));
     }
-    alias('zh_Hans', 'zh_CN');
-    alias('zh_Hant', 'zh_TW');
+    alias('zh_Hans_CN', 'zh_CN');
+    alias('zh_Hant_TW', 'zh_TW');
     fs.writeFileSync('i18n/languagenames.json',
                      JSON.stringify(languageNames, null, 4));
 });
