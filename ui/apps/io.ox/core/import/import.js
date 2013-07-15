@@ -124,7 +124,7 @@ define('io.ox/core/import/import',
                 form;
 
             //get folder and process
-            folderApi.get({ folder: id}).done(function (folder) {
+            folderApi.get({ folder: id }).done(function (folder) {
                 dialog.build(function () {
                     form = $('<form>', { 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' });
                     this.getContentNode().append(form);
@@ -144,9 +144,8 @@ define('io.ox/core/import/import',
                 .show(function () {
                     //focus
                     this.find('select').focus();
-                })
-                .on('import', function () {
-
+                });
+                dialog.on('import', function () {
                     var type = baton.nodes.select.val() || '',
                         file = baton.nodes.file_upload.find('input[type=file]'),
                         popup = this,
