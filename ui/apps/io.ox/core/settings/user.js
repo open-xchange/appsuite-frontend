@@ -37,8 +37,9 @@ define('io.ox/core/settings/user', [
                 var $userEditView = new UserEdit({model: user}).render().$el;
 
                 /* remove image edit dialog for PIM users, because they cannot access the place where the image is stored */
-                require(['io.ox/core/api/account'], function (accountAPI) {
-                    accountAPI.isPIM().done(function (data) {
+                require(['io.ox/core/api/folder'], function (folderAPI) {
+                    /* I would have preferred to use folderAPI.can('read', 6)... */
+                    folderAPI.get({ folder: 6, cache: false }).fail(function (data) {
                         $userEditView.find('div.header-pic').remove();
                     });
                 });

@@ -85,21 +85,6 @@ define('io.ox/core/api/account',
     Events.extend(api);
 
     /**
-     * is PIM User
-     * @return {deferred} resolves if it's a pim
-     */
-    api.isPIM = function () {
-        var def = $.Deferred();
-        require(['io.ox/core/api/folder'], function (folderAPI) {
-            //PIM uses don't have access to the global address book
-            //TODO: I would have preferred to use folderAPI.can('read', 6)
-            folderAPI.get({ folder: 6, cache: false, suppressYell: true})
-            .then(def.reject, def.resolve);
-        });
-        return def;
-    };
-
-    /**
      * is unified
      * @param  {string}  id (folder_id)
      * @return {boolean}
