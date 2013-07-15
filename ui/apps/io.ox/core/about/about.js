@@ -10,7 +10,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/about/about', ['io.ox/core/extensions', 'io.ox/core/tk/dialogs', 'gettext!io.ox/core'], function (ext, dialogs, gt) {
+define('io.ox/core/about/about', ['io.ox/core/extensions', 'io.ox/core/tk/dialogs', 'io.ox/core/capabilities', 'gettext!io.ox/core'], function (ext, dialogs, cap, gt) {
 
     'use strict';
 
@@ -43,7 +43,7 @@ define('io.ox/core/about/about', ['io.ox/core/extensions', 'io.ox/core/tk/dialog
                 .build(function () {
                     this.getHeader().append(
                         $('<h4>').append(
-                            _.device('!touch') ?
+                            _.device('!touch') && !cap.has("boring") ?
                                 $('<span class="pull-right" style="color: rgba(0, 0, 0, 0.3); cursor: pointer;">').html('&pi;')
                                 .on('click', { popup: this }, click) : [],
                             $.txt(gt('About'))
