@@ -60,8 +60,8 @@ define('io.ox/office/tk/control/textfield',
             // create the label node for the caption
             captionLabel = Utils.createLabel(),
 
-            // create the text field
-            textField = Utils.createTextField(options),
+            // create the input field control
+            fieldNode = Utils.createTextField(options),
 
             // read-only mode
             readOnly = null,
@@ -88,8 +88,8 @@ define('io.ox/office/tk/control/textfield',
          * Returns the current value and selection of the text field.
          */
         function getFieldState() {
-            var state = Utils.getTextFieldSelection(textField);
-            state.value = textField.val();
+            var state = Utils.getTextFieldSelection(fieldNode);
+            state.value = fieldNode.val();
             return state;
         }
 
@@ -97,22 +97,22 @@ define('io.ox/office/tk/control/textfield',
          * Restores the current value and selection of the text field.
          */
         function restoreFieldState(state) {
-            textField.val(state.value);
-            Utils.setTextFieldSelection(textField, state.start, state.end);
+            fieldNode.val(state.value);
+            Utils.setTextFieldSelection(fieldNode, state.start, state.end);
         }
 
         /**
          * The update handler for this text field.
          */
         function updateHandler(value) {
-            textField.val((_.isUndefined(value) || _.isNull(value)) ? '' : validator.valueToText(value));
+            fieldNode.val((_.isUndefined(value) || _.isNull(value)) ? '' : validator.valueToText(value));
             validationFieldState = getFieldState();
         }
 
         /**
          * Returns the current value associated to the text field.
          */
-        function commitHandler() {
+        function resolveValueHandler() {
             var value = readOnly ? null : self.getFieldValue();
             if (!_.isUndefined(value) && !_.isNull(value)) {
                 initialText = null;
@@ -128,28 +128,27 @@ define('io.ox/office/tk/control/textfield',
             case 'focus':
                 // save current value
                 if (!_.isString(initialText)) {
-                    initialText = textField.val();
+                    initialText = fieldNode.val();
                 }
                 // select entire text on mouse click when specified via option
-                if (select) { textField.select().one('mouseup', false); }
+                if (select) { fieldNode.select().one('mouseup', false); }
                 validationFieldState = getFieldState();
                 break;
             case 'focus:key':
                 // always select entire text when reaching the field with keyboard
-                textField.select().off('mouseup');
+                fieldNode.select().off('mouseup');
                 validationFieldState = getFieldState();
                 break;
-            case 'blur:key':
-                // commit changed value when losing focus via keyboard
-                if (initialText !== textField.val()) {
-                    textField.trigger('commit');
-                }
-                break;
             case 'blur':
-                textField.off('mouseup');
+                fieldNode.off('mouseup');
+                Utils.setTextFieldSelection(fieldNode, 0);
+                // Bug 27175: always commit value when losing focus
+                if (initialText !== fieldNode.val()) {
+                    self.triggerChange(fieldNode, { preserveFocus: true });
+                }
                 // restore saved value
                 if (_.isString(initialText)) {
-                    textField.val(initialText);
+                    fieldNode.val(initialText);
                     initialText = null;
                 }
                 break;
@@ -160,19 +159,8 @@ define('io.ox/office/tk/control/textfield',
          * Handles keyboard events, especially the cursor keys.
          */
         function fieldKeyHandler(event) {
-
-            var // distinguish between event types (ignore keypress events)
-                keyup = event.type === 'keyup';
-
-            switch (event.keyCode) {
-            case KeyCodes.LEFT_ARROW:
-            case KeyCodes.RIGHT_ARROW:
-                // do not bubble to view component (suppress focus navigation)
-                event.stopPropagation();
-                // ... but let the browser perform cursor movement
-                break;
-            case KeyCodes.ENTER:
-                if (keyup) { textField.trigger('commit'); }
+            if (event.keyCode === KeyCodes.ENTER) {
+                if (event.type === 'keyup') { self.triggerChange(fieldNode); }
                 return false;
             }
         }
@@ -190,13 +178,13 @@ define('io.ox/office/tk/control/textfield',
             if (!_.isEqual(validationFieldState, getFieldState())) {
 
                 // validate the current field text
-                result = validator.validate(textField.val());
+                result = validator.validate(fieldNode.val());
 
                 // update the text field according to the validation result
                 if (result === false) {
                     // false: restore the old field state stored in validationFieldState
                     restoreFieldState(validationFieldState);
-                } else if (_.isString(result) && (result !== textField.val())) {
+                } else if (_.isString(result) && (result !== fieldNode.val())) {
                     // insert the validation result and restore the old selection
                     restoreFieldState(Utils.extendOptions(validationFieldState, { value: result }));
                 }
@@ -215,14 +203,14 @@ define('io.ox/office/tk/control/textfield',
          * Returns the text control element, as jQuery object.
          */
         this.getTextFieldNode = function () {
-            return textField;
+            return fieldNode;
         };
 
         /**
          * Returns the value represented by the text in the text control.
          */
         this.getFieldValue = function () {
-            return validator.textToValue(textField.val());
+            return validator.textToValue(fieldNode.val());
         };
 
         /**
@@ -250,7 +238,7 @@ define('io.ox/office/tk/control/textfield',
             if (readOnly !== state) {
                 // initialize the text field
                 if ((readOnly = state)) {
-                    textField
+                    fieldNode
                         .addClass('readonly')
                         .removeClass(Utils.FOCUSABLE_CLASS)
                         .on('mousedown dragover drop contextmenu', function (event) {
@@ -258,7 +246,7 @@ define('io.ox/office/tk/control/textfield',
                             self.trigger('cancel');
                         });
                 } else {
-                    textField
+                    fieldNode
                         .removeClass('readonly')
                         .addClass(Utils.FOCUSABLE_CLASS)
                         .off('mousedown dragover drop contextmenu');
@@ -295,11 +283,11 @@ define('io.ox/office/tk/control/textfield',
         }
 
         // insert the text field into this group, and register event handlers
-        this.addFocusableControl(textField)
+        this.addFocusableControl(fieldNode)
             .registerUpdateHandler(updateHandler)
-            .registerChangeHandler('commit', { node: textField, valueResolver: commitHandler });
+            .registerChangeHandler(null, { node: fieldNode, valueResolver: resolveValueHandler });
 
-        textField
+        fieldNode
             .on('focus focus:key blur:key blur', fieldFocusHandler)
             .on('keydown keypress keyup', fieldKeyHandler)
             // Validation while typing. IE9 does not trigger 'input' when deleting

@@ -159,9 +159,11 @@ define('io.ox/office/tk/control/group',
          * 'change' event will be determined by the passed value resolver
          * function.
          *
-         * @param {String} type
+         * @param {String} [type]
          *  The type of the event handler that will be bound to the selected
-         *  DOM node(s), e.g. 'click' or 'change'.
+         *  DOM node(s), e.g. 'click' or 'change'. If omitted, the 'change'
+         *  event can only be triggered manually via the method
+         *  'Group.triggerChange()'.
          *
          * @param {Object} [options]
          *  A map of options to control the behavior of this method. The
@@ -211,11 +213,14 @@ define('io.ox/office/tk/control/group',
                 return false;
             }
 
+            // the resulting event type names
+            type = _.isString(type) ? (type + ' ' + INTERNAL_TRIGGER_EVENT) : INTERNAL_TRIGGER_EVENT;
+
             // attach event handler to the node
             if (selector) {
-                node.on(type + ' ' + INTERNAL_TRIGGER_EVENT, selector, eventHandler);
+                node.on(type, selector, eventHandler);
             } else {
-                node.on(type + ' ' + INTERNAL_TRIGGER_EVENT, eventHandler);
+                node.on(type, eventHandler);
             }
 
             return this;
