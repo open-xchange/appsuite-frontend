@@ -34,10 +34,8 @@ define('io.ox/office/framework/app/basecontroller',
      * @param {Object} [options]
      *  A map with options controlling the behavior of this controller. The
      *  following options are supported:
-     *  @param {Number} [options.updateDelay=100]
+     *  @param {Number} [options.updateDelay=0]
      *      The delay for the debounced Controller.update() method.
-     *  @param {Number} [options.updateMaxDelay=1000]
-     *      The maximum delay for the debounced Controller.update() method.
      */
     function BaseController(app, options) {
 
@@ -290,7 +288,10 @@ define('io.ox/office/framework/app/basecontroller',
          *  found, propagation of the event will be stopped, and the browser
          *  default action will be suppressed.
          */
-        function keyHandler(event) {
+        function keyHandler(event, options) {
+
+            var // whether to stop propagation and prevent the default action
+                stopPropagation = false;
 
             // executes the item setter defined in the passed shortcut
             function callSetHandlerForShortcut(shortcut) {
@@ -301,8 +302,7 @@ define('io.ox/office/framework/app/basecontroller',
 
                 callSetHandler(shortcut.key, value);
                 if (!Utils.getBooleanOption(shortcut.definition, 'propagate', false)) {
-                    event.stopPropagation();
-                    event.preventDefault();
+                    stopPropagation = true;
                 }
             }
 
@@ -324,6 +324,41 @@ define('io.ox/office/framework/app/basecontroller',
                     _(charShortcuts[event.charCode]).each(callSetHandlerForShortcut);
                 }
                 break;
+            }
+
+            return stopPropagation ? false : undefined;
+        }
+
+        /**
+         * Initializes the key handlers for all registered keyboard shortcuts.
+         */
+        function initializeKeyHandler() {
+
+            var // the root node of the application pane
+                node = app.getView().getAppPaneNode();
+
+            // register regular keyboard event listener for shortcuts
+            node.on('keydown keypress', keyHandler);
+
+            // Bug 27528: IE does not allow to prevent default actions of some
+            // special key events (especially CTRL+P which always opens the Print
+            // dialog, regardless whether the keydown event has been canceled in
+            // the bubbling phase). The 'official' hack is to bind a keydown event
+            // handler with IE's ancient 'attachEvent()' method, and to suppress
+            // the default action by changing the key code in the event object.
+            // (add smiley-with-big-eyes here). Note that the 'addEventListener()'
+            // method does NOT work for this hack.
+            if (_.browser.IE) {
+                if (_.isFunction(node[0].attachEvent)) {
+                    node[0].attachEvent('onkeydown', function (event) {
+                        var result = keyHandler(event);
+                        // modify the key code to prevent the browser default action
+                        if (result === false) { event.keyCode = 0; }
+                        return result;
+                    });
+                } else {
+                    Utils.error('BaseController.initializeKeyHandler(): missing "attachEvent()" method for IE keydown hack (bug 27528)');
+                }
             }
         }
 
@@ -442,9 +477,7 @@ define('io.ox/office/framework/app/basecontroller',
          *          return value will be passed to the setter function.
          *      - {Boolean} [shortcut.propagate=false]
          *          If set to true, the event will propagate up to the DOM root
-         *          element, and the browser will execute its default action
-         *          (but the setter function called by this shortcut receives
-         *          the event and may decide to cancel propagation manually).
+         *          element, and the browser will execute its default action.
          *          If omitted or set to false, the event will be cancelled
          *          immediately after calling the setter function.
          *  @param {String} [definition.focus='direct']
@@ -542,7 +575,9 @@ define('io.ox/office/framework/app/basecontroller',
          */
         this.update = (function () {
 
-            var // pending controller items to be updated
+            var // the update delay time
+                updateDelay = Utils.getIntegerOption(options, 'updateDelay', 0, 0),
+                // pending controller items to be updated
                 pendingItems = {};
 
             // direct callback: called every time when BaseController.update() has been called
@@ -571,10 +606,7 @@ define('io.ox/office/framework/app/basecontroller',
             }
 
             // create and return the debounced BaseController.update() method
-            return app.createDebouncedMethod(registerKey, triggerUpdate, {
-                delay: Utils.getIntegerOption(options, 'updateDelay', 100, 0),
-                maxDelay: Utils.getIntegerOption(options, 'updateMaxDelay', 1000, 0)
-            });
+            return app.createDebouncedMethod(registerKey, triggerUpdate, { delay: updateDelay, maxDelay: updateDelay * 5 });
 
         }()); // BaseController.update()
 
@@ -631,7 +663,7 @@ define('io.ox/office/framework/app/basecontroller',
         this.registerDefinitions(items);
 
         // register keyboard event listener for shortcuts
-        app.getView().getAppPaneNode().on('keydown keypress', keyHandler);
+        app.on('docs:init', initializeKeyHandler);
 
         // update once after import (successful and failed)
         app.on('docs:import:after', function () { self.update(); });
