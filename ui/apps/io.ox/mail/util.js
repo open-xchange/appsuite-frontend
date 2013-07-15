@@ -324,7 +324,7 @@ define('io.ox/mail/util',
             }
 
             name = util.unescapeDisplayName(name);
-            address = $.trim(address || '').toLowerCase();
+            address = trimAddress(address);
 
             // short version; just mail address
             if (name === '') return address;
