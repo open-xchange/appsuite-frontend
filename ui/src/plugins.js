@@ -49,7 +49,7 @@
                         // Clear the filecache
                         tx.objectStore('filecache').clear().onsuccess = initialization.resolve;
                         // Save the new version number
-                        tx.objectStore('version').add({name: 'version', version: ox.version});
+                        tx.objectStore('version').put({name: 'version', version: ox.version});
                         if (request.transaction) {
                             request.transaction.oncomplete = initialization.resolve;
                         }
