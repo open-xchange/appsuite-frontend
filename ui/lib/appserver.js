@@ -164,6 +164,7 @@ function load(request, response) {
     // parse request URL
     var list = url.parse(request.url).pathname.split(',');
     var version = list.shift();
+    version = version.slice(version.lastIndexOf('v='));
     
     // find local files, request unknown files from server
     var files = [], remoteCounter = 0;
@@ -218,7 +219,8 @@ function load(request, response) {
         }
         remoteCounter++;
         var chunks = [];
-        var URL = url.resolve(options.server, version + ',' + fullName);
+        var URL = url.resolve(options.server,
+                              'api/apps/load/' + version + ',' + fullName);
         protocol.get(url.parse(URL), ok).on('error', error);
         return function () {
             if (verbose.remote) console.log(URL);
