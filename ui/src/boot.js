@@ -80,7 +80,7 @@ $(window).load(function () {
         });
     }
     ox.uploadsEnabled = true;
-    
+
     //ugly device hack
     //if device small wait 10ms check again
     //maybe the check was made too early could be wrong
@@ -89,7 +89,7 @@ $(window).load(function () {
         setTimeout(function () {
             _.recheckDevice();
         }, 10);
-       
+
     }
 
     // check for supported browser
@@ -291,7 +291,7 @@ $(window).load(function () {
             require(['settings!io.ox/core'], function (settings) {
                 var theme = _.url.hash('theme') || settings.get('theme') || 'default';
                 debug('boot.js: loadCore > load config ...');
-  
+
                 debug('boot.js: loadCore > require "main" & set theme', theme);
 
                 var def1 = require(['io.ox/core/main']),
@@ -710,7 +710,7 @@ $(window).load(function () {
                         debug('boot.js: autoLogin > loginFailed', data);
                         // special autologin error handling. redirect user to an
                         // external page defined in the error params
-                        if (data.code === 'LGI-0016' && (data.error_params || []).length === 1) {
+                        if (data && data.code === 'LGI-0016' && (data.error_params || []).length === 1) {
                             window.location.href = data.error_params[0];
                         } else {
                             continueWithoutAutoLogin();
