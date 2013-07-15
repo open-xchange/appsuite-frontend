@@ -764,6 +764,9 @@ define('io.ox/office/framework/view/baseview',
 
         // initialization -----------------------------------------------------
 
+        // suppress context menu on every view component
+        app.getWindowNode().on('contextmenu', false);
+
         // create the application pane, and insert the container node
         appPane = new Pane(app, { classes: 'app-pane unselectable' });
         appPane.getNode()
