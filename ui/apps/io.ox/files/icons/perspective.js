@@ -81,7 +81,7 @@ define('io.ox/files/icons/perspective',
         if (/docx?$/i.test(name)) { node.addClass('icon-align-left file-type-doc'); }
         else if (/xlsx?$/i.test(name)) { node.addClass('icon-table file-type-xls'); }
         else if (/pptx?$/i.test(name)) { node.addClass('icon-picture file-type-ppt'); }
-        else if ((/(mp3|m4a)$/i).test(name)) { node.addClass('icon-music'); }
+        else if ((/(aac|mp3|m4a|m4b|ogg|opus|wav)$/i).test(name)) { node.addClass('icon-music'); }
         else if ((/(mp4|ogv|webm)$/i).test(name)) { node.addClass('icon-film'); }
         else { node.addClass('icon-file'); }
         return node;
@@ -123,7 +123,7 @@ define('io.ox/files/icons/perspective',
     function previewMode(file) {
         if ((/^(image\/(gif|png|jpe?g|bmp|tiff))$/i).test(file.file_mimetype)) {
             return 'thumbnail';
-        } else if ((/^audio\/(mpeg|m4a|mp3|ogg|oga|x-m4a)$/i).test(file.file_mimetype)) {
+        } else if ((/^audio\/(mpeg|m4a|m4b|mp3|ogg|oga|opus|x-m4a)$/i).test(file.file_mimetype)) {
             return 'cover';
         } else if (Caps.has('document_preview') &&
                 (/^application\/.*(ms-word|ms-excel|ms-powerpoint|msword|msexcel|mspowerpoint|openxmlformats|opendocument|pdf|rtf).*$/i).test(file.file_mimetype) ||

@@ -109,6 +109,7 @@ define('io.ox/files/api',
         // audio
         'mp3' : 'audio/mpeg',
         'ogg' : 'audio/ogg',
+        'opus': 'audio/ogg',
         'aac' : 'audio/aac',
         'm4a' : 'audio/mp4',
         'm4b' : 'audio/mp4',
@@ -749,7 +750,7 @@ define('io.ox/files/api',
             if (_.browser.Chrome) {          pattern = '\\.(mp3|wav|m4a|m4b|ogg)'; }
             else if (_.browser.Safari) {     pattern = '\\.(mp3|wav|m4a|m4b|aac)'; }
             else if (_.browser.IE) {         pattern = '\\.(mp3|wav|m4a|m4b)'; }
-            else if (_.browser.Firefox) {    pattern = '\\.(mp3|wav|ogg)'; }
+            else if (_.browser.Firefox) {    pattern = '\\.(mp3|wav|ogg|opus)'; }
             else { return false; }
         }
         return (new RegExp(pattern, 'i')).test(filename);
