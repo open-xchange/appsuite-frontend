@@ -253,6 +253,8 @@ function htmlFilter (data) {
 
 utils.copy(utils.list('html', 'core_head.html'),
     { to: 'tmp', filter: htmlFilter });
+utils.copy(utils.list('html', 'font-awesome.html'),
+    { to: 'tmp', filter: htmlFilter });
 utils.copy(utils.list('html', 'core_body.html'),
     { to: 'tmp', filter: htmlFilter });
 utils.concat('core', ['html/index.html'], { filter: utils.includeFilter });
