@@ -39,14 +39,14 @@
 
             var request = window.indexedDB.open('appsuite.filecache', 1);
             var db = null;
-            request.onupgradeneeded = function () {
-                db = this.result;
+            request.onupgradeneeded = function (e) {
+                db = e.target.result;
                 db.createObjectStore('filecache', {keyPath: 'name'});
                 db.createObjectStore('version', {keyPath: 'name'});
             };
 
-            request.onsuccess = function () {
-                db = this.result;
+            request.onsuccess = function (e) {
+                db = e.target.result;
                 var tx = db.transaction(['filecache', 'version'], 'readwrite');
                 var request = tx.objectStore('version').get('version');
                 request.onsuccess = function (e) {
