@@ -45,8 +45,9 @@ define('io.ox/office/preview/app/controller',
 
                 // toggle the main side pane
                 'app/view/sidepane': {
-                    get: function () { app.getView().isSidePaneVisible(); },
-                    set: function (state) { app.getView().toggleSidePane(state); }
+                    get: function () { return app.getView().isSidePaneVisible(); },
+                    set: function (state) { app.getView().toggleSidePane(state); },
+                    shortcut: { keyCode: 'F3', ctrlOrMeta: true, value: function (state) { return !state; } }
                 },
 
                 // start editing the document
