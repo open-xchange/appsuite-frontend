@@ -38,7 +38,6 @@ define('io.ox/tasks/edit/view',
             this.rows = [];
             this.collapsed = true;
             this.on('dispose', this.close);
-            this.isPIM = account.isPIM(); //pending
 
             //if recurrence is set make sure we have start and end date
             //this prevents errors on saving because recurrence needs both fields filled
@@ -169,7 +168,7 @@ define('io.ox/tasks/edit/view',
             temp = tabs = null;
 
             //hide participants tab for PIM user
-            this.isPIM.done(function () {
+            if (!capabilities.has('delegate_tasks')) {
                 var node = self.$el;
 
                 //hide participant tab and tabcontent
@@ -187,7 +186,7 @@ define('io.ox/tasks/edit/view',
                     node.find('.tab-link:eq(1)')
                         .tab('show');
                 }
-            });
+            }
 
             //detailstab
             util.buildExtensionRow(detailsTab, this.getRow(0, app, 'details'), self.baton);
