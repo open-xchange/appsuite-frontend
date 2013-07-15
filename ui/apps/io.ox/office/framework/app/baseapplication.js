@@ -170,6 +170,9 @@ define('io.ox/office/framework/app/baseapplication',
             // the controller instance as single connection point between model and view
             controller = null,
 
+            // all AJAX requests currently running
+            runningRequests = [],
+
             // browser timeouts for delayed callbacks
             delayTimeouts = [],
 
@@ -505,6 +508,9 @@ define('io.ox/office/framework/app/baseapplication',
          */
         this.sendRequest = function (options) {
 
+            var // the AJAX request, as jQuery Deferred object
+                request = null;
+
             // build a default map with the application UID, and add the passed options
             options = Utils.extendOptions({
                 params: {
@@ -513,7 +519,15 @@ define('io.ox/office/framework/app/baseapplication',
             }, options);
 
             // send the request
-            return IO.sendRequest(options);
+            request = IO.sendRequest(options);
+
+            // store the request in the internal buffer, remove it when it resolves
+            runningRequests.push(request);
+            request.always(function () {
+                runningRequests = _(runningRequests).without(request);
+            });
+
+            return request;
         };
 
         /**
@@ -1527,6 +1541,9 @@ define('io.ox/office/framework/app/baseapplication',
                 // execute quit handlers, simply defer without caring about the result
                 callHandlers(quitHandlers)
                 .always(function () {
+
+                    // cancel all AJAX requests still running (prevent JS errors from done/fail callbacks)
+                    _(runningRequests).invoke('abort');
 
                     // cancel all running timeouts
                     _(delayTimeouts).each(function (timeout) {
