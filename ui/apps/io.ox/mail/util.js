@@ -58,6 +58,11 @@ define('io.ox/mail/util',
             return isSameDay() && opt.filtertoday ? timestr() : datestr();
         },
 
+        trimAddress = function (address) {
+            address = $.trim(address || '');
+            // apply toLowerCase only for mail addresses, don't change phone numbers
+            return address.indexOf('@') > -1 ? address.toLowerCase() : address;
+        },
 
         // regex: split list at non-quoted ',' or ';'
         rRecipientList = /([^,;"]+|"(\\.|[^"])+")+/,
