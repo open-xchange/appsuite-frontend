@@ -585,6 +585,10 @@
             }
         }
 
+        &.fixed-width-font, &.fixed-width-font.plain-text {
+            font-family: monospace;
+        }
+
         // fix long links
         a {
             word-break: break-word;
@@ -683,10 +687,6 @@ h4.mail-attachment-preview {
 
 .touch .mail-detail .content.plain-text {
     font-size: @touchFontSize;
-}
-
-.content.fixed-width-font {
-    font-family: monospace;
 }
 
 .rightside-navbar {
