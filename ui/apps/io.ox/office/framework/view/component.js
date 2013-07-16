@@ -128,12 +128,12 @@ define('io.ox/office/framework/view/component',
                 node.append(group.getNode());
             }
 
-            // forward 'cancel' events, update focusability depending on the
-            // group's enabled state, forward other layout events
+            // forward 'group:cancel' events, update focusability depending on
+            // the group's enabled state, forward other layout events
             group.on({
-                cancel: function (event, options) { self.trigger('cancel', options); },
+                'group:cancel': function (event, options) { self.trigger('cancel', options); },
                 'menu:open menu:close': dropDownMenuHandler,
-                'show enable layout': updateFocusable
+                'group:show group:enable group:layout': updateFocusable
             });
 
             // make this view component focusable, if it contains any groups
@@ -238,9 +238,9 @@ define('io.ox/office/framework/view/component',
 
         /**
          * Adds the passed control group as a 'private group' to this view
-         * component. Change events of the group will not be forwarded to the
-         * listeners of this view component. Instead, the caller has to
-         * register a change listener at the group by itself.
+         * component. The 'group:change' events triggered by the group will not
+         * be forwarded to the listeners of this view component. Instead, the
+         * caller has to register a change listener at the group by itself.
          *
          * @param {Group} group
          *  The control group object to be inserted.
@@ -272,9 +272,9 @@ define('io.ox/office/framework/view/component',
             // insert the group object into this view component
             insertGroup(group);
 
-            // forward 'change' events to listeners of this view component
+            // forward 'group:change' events to listeners of this view component
             (groupsByKey[key] || (groupsByKey[key] = [])).push(group);
-            group.on('change', function (event, value, options) {
+            group.on('group:change', function (event, value, options) {
                 self.trigger('change', key, value, options);
             });
 

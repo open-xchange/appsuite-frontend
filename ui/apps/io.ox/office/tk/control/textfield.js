@@ -141,15 +141,9 @@ define('io.ox/office/tk/control/textfield',
                 break;
             case 'blur':
                 fieldNode.off('mouseup');
-                Utils.setTextFieldSelection(fieldNode, 0);
                 // Bug 27175: always commit value when losing focus
-                if (initialText !== fieldNode.val()) {
+                if (_.isString(initialText) && (initialText !== fieldNode.val())) {
                     self.triggerChange(fieldNode, { preserveFocus: true });
-                }
-                // restore saved value
-                if (_.isString(initialText)) {
-                    fieldNode.val(initialText);
-                    initialText = null;
                 }
                 break;
             }
@@ -159,9 +153,18 @@ define('io.ox/office/tk/control/textfield',
          * Handles keyboard events, especially the cursor keys.
          */
         function fieldKeyHandler(event) {
-            if (event.keyCode === KeyCodes.ENTER) {
-                if (event.type === 'keyup') { self.triggerChange(fieldNode); }
+            switch (event.keyCode) {
+            case KeyCodes.ENTER:
+                if (event.type === 'keyup') {
+                    self.triggerChange(fieldNode);
+                }
                 return false;
+            case KeyCodes.ESCAPE:
+                if (event.type === 'keydown') {
+                    fieldNode.val(initialText);
+                    initialText = null;
+                }
+                break;
             }
         }
 
@@ -241,9 +244,9 @@ define('io.ox/office/tk/control/textfield',
                     fieldNode
                         .addClass('readonly')
                         .removeClass(Utils.FOCUSABLE_CLASS)
-                        .on('mousedown dragover drop contextmenu', function (event) {
+                        .on('mousedown touchstart dragover drop contextmenu', function (event) {
                             event.preventDefault();
-                            self.trigger('cancel');
+                            self.trigger('group:cancel');
                         });
                 } else {
                     fieldNode
