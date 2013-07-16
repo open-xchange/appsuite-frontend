@@ -191,6 +191,11 @@
 
                 if (queue.length) console.error('recursive require', queue);
             }
+            if (_.url.hash('debug-js')) {
+                oldload(context, modulename,
+                    [ox.apiRoot, '/apps/load/', ox.base, ',', url].join(''));
+                return;
+            }
 
             // Try file cache
             fileCache.retrieve(modulename).done(function (contents) {
