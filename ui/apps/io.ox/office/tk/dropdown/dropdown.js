@@ -325,7 +325,7 @@ define('io.ox/office/tk/dropdown/dropdown',
 
             // trigger 'group:cancel' event, if menu has been closed with mouse click
             if (!self.isMenuVisible()) {
-                self.trigger('group:cancel');
+                self.triggerCancel();
             }
         }
 
@@ -372,6 +372,7 @@ define('io.ox/office/tk/dropdown/dropdown',
         function menuButtonKeyHandler(event) {
 
             var // distinguish between event types (ignore keypress events)
+                keydown = event.type === 'keydown',
                 keyup = event.type === 'keyup';
 
             switch (event.keyCode) {
@@ -382,6 +383,13 @@ define('io.ox/office/tk/dropdown/dropdown',
                     self.grabMenuFocus();
                 }
                 return false;
+            case KeyCodes.ESCAPE:
+                if (keydown && self.isMenuVisible()) {
+                    hideMenu();
+                    // let the Group base class not trigger the 'group:cancel' event
+                    event.preventDefault();
+                }
+                break;
             }
         }
 

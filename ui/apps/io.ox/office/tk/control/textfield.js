@@ -37,8 +37,6 @@ define('io.ox/office/tk/control/textfield',
      *  Utils.setControlCaption() for details), and all generic formatting
      *  options of input fields (see method Utils.createTextField() for
      *  details). Additionally, the following options are supported:
-     *  @param {Boolean} [options.readOnly=false]
-     *      If set to true, the text in the text field cannot be edited.
      *  @param {Boolean} [options.select=false]
      *      If set to true, the entire text will be selected after the text
      *      field has been clicked. Note that the text will always be selected
@@ -62,9 +60,6 @@ define('io.ox/office/tk/control/textfield',
 
             // create the input field control
             fieldNode = Utils.createTextField(options),
-
-            // read-only mode
-            readOnly = null,
 
             // whether to select the entire text on click
             select = Utils.getBooleanOption(options, 'select', false),
@@ -113,11 +108,7 @@ define('io.ox/office/tk/control/textfield',
          * Returns the current value associated to the text field.
          */
         function resolveValueHandler() {
-            var value = readOnly ? null : self.getFieldValue();
-            if (!_.isUndefined(value) && !_.isNull(value)) {
-                initialText = null;
-            }
-            return value;
+            return self.getFieldValue();
         }
 
         /**
@@ -183,11 +174,8 @@ define('io.ox/office/tk/control/textfield',
                 return false;
             case KeyCodes.ESCAPE:
                 if (event.type === 'keydown') {
-                    Utils.log('TextField.ESC');
                     fieldNode.val(initialText);
-                    self.trigger('group:cancel');
                 }
-                return false;
             }
         }
 
@@ -240,50 +228,6 @@ define('io.ox/office/tk/control/textfield',
         };
 
         /**
-         * Returns whether the text field is in read-only mode.
-         */
-        this.isReadOnly = function () {
-            return readOnly;
-        };
-
-        /**
-         * Enters or leaves the read-only mode.
-         *
-         * @param {Boolean} [state]
-         *  If omitted or set to true, the text field will be set to read-only
-         *  mode. Otherwise, the text field will be made editable.
-         *
-         * @returns {TextField}
-         *  A reference to this instance.
-         */
-        this.setReadOnly = function (state) {
-
-            // validate the new read-only state
-            state = _.isUndefined(state) || (state === true);
-
-            if (readOnly !== state) {
-                // initialize the text field
-                if ((readOnly = state)) {
-                    fieldNode
-                        .addClass('readonly')
-                        .removeClass(Utils.FOCUSABLE_CLASS)
-                        .on('mousedown touchstart dragover drop contextmenu', function (event) {
-                            event.preventDefault();
-                            self.trigger('group:cancel');
-                        });
-                } else {
-                    fieldNode
-                        .removeClass('readonly')
-                        .addClass(Utils.FOCUSABLE_CLASS)
-                        .off('mousedown dragover drop contextmenu');
-                }
-                // trigger listeners
-                this.trigger('readonly', readOnly);
-            }
-            return this;
-        };
-
-        /**
          * Converts the passed value to a text using the current validator.
          */
         this.valueToText = function (value) {
@@ -319,9 +263,6 @@ define('io.ox/office/tk/control/textfield',
             'keydown keypress keyup': fieldKeyHandler,
             'input': fieldInputHandler
         });
-
-        // initialize read-only mode
-        this.setReadOnly(Utils.getBooleanOption(options, 'readOnly', false));
 
     } // class TextField
 
