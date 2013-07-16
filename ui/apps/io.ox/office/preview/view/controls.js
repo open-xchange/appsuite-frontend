@@ -76,7 +76,7 @@ define('io.ox/office/preview/view/controls',
         // initialization -----------------------------------------------------
 
         // hide the button completely, if it is disabled
-        this.on('enable', function (event, state) { self.toggle(state); });
+        this.on('group:enable', function (event, state) { self.toggle(state); });
 
     }}); // class EditDocumentButton
 

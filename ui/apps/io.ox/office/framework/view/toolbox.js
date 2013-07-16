@@ -180,7 +180,7 @@ define('io.ox/office/framework/view/toolbox',
             this.addPrivateGroup(headingButton);
 
             // collapse/expand the tool box when clicking the button
-            headingButton.on('change', function (event, value, options) {
+            headingButton.on('group:change', function (event, value, options) {
                 self.getNode().toggleClass(COLLAPSED_CLASS);
                 self.trigger('expand', !self.getNode().hasClass(COLLAPSED_CLASS));
                 if (!options || !options.preserveFocus) {

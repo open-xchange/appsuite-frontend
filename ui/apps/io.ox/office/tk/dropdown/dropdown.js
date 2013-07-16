@@ -308,14 +308,12 @@ define('io.ox/office/tk/dropdown/dropdown',
          */
         function menuButtonClickHandler() {
 
-            // do nothing (but the 'cancel' event) if the group is disabled
+            // do nothing (but trigger the 'group:cancel' event) if the group is disabled
             if (self.isEnabled()) {
 
                 // WebKit does not focus the clicked button, which is needed to
                 // get keyboard control in the drop-down menu
-                if (!Utils.isControlFocused(menuButton)) {
-                    menuButton.focus();
-                }
+                menuButton.focus();
 
                 // toggle the menu, this triggers the 'menu:open'/'menu:close' listeners
                 if (self.isMenuVisible()) {
@@ -325,9 +323,9 @@ define('io.ox/office/tk/dropdown/dropdown',
                 }
             }
 
-            // trigger 'cancel' event, if menu has been closed with mouse click
+            // trigger 'group:cancel' event, if menu has been closed with mouse click
             if (!self.isMenuVisible()) {
-                self.trigger('cancel');
+                self.trigger('group:cancel');
             }
         }
 
@@ -565,13 +563,13 @@ define('io.ox/office/tk/dropdown/dropdown',
 
         /**
          * Registers a private group instance that will be inserted into the
-         * menu node. The 'change' events triggered by that group will be
+         * menu node. The 'group:change' events triggered by that group will be
          * forwarded to the listeners of this group instance, and updates of
          * this group instance (calls to the own 'Group.update()' method) will
-         * be forwarded to the specified private group. The 'cancel' events of
-         * the private group will be caught and used to hide the drop-down
-         * menu, but will NOT be forwarded to listeners of this group. The DOM
-         * root node of the group will not be inserted anywhere!
+         * be forwarded to the specified private group. The 'group:cancel'
+         * events of the private group will be caught and used to hide the
+         * drop-down menu, but will NOT be forwarded to listeners of this
+         * group. The DOM root node of the group will not be inserted anywhere!
          *
          * @param {Group} group
          *  The group instance to be be registered.
@@ -581,18 +579,18 @@ define('io.ox/office/tk/dropdown/dropdown',
          */
         this.registerMenuGroup = function (group) {
 
-            // forward 'change' events of the group to listeners of this group,
-            // and updates of this drop-down group to the inserted group
-            group.on('change', function (event, value, options) {
-                self.trigger('change', value, options);
+            // forward 'group:change' events of the group to listeners of this
+            // group, and updates of this drop-down group to the inserted group
+            group.on('group:change', function (event, value, options) {
+                self.trigger('group:change', value, options);
             });
             this.registerUpdateHandler(function (value) {
                 group.update(value);
             });
 
-            // do not forward cancel events of the private group to listeners of
-            // this group, but simply hide the drop-down menu
-            group.on('cancel', hideMenu);
+            // do not forward 'group:cancel' events of the private group to
+            // listeners of this group, but simply hide the drop-down menu
+            group.on('group:cancel', hideMenu);
 
             return this;
         };
@@ -604,20 +602,21 @@ define('io.ox/office/tk/dropdown/dropdown',
             menuButton.addClass('caret-visible').append($('<span>').addClass('dropdown-caret').append(Utils.createIcon('docs-caret down')));
         }
 
-        // append menu button and menu to the group container
+        // append menu button to the group container, register menu node for focus handling
         this.addFocusableControl(menuButton);
+        this.registerFocusableContainerNode(menuNode);
 
         // register event handlers
-        this.on('change cancel', hideMenu)
-            .on('show enable', function (event, state) { if (!state) { hideMenu(); } });
-        groupNode
-            .on('keydown keypress keyup', groupKeyHandler)
-            .on('blur:key', Utils.FOCUSABLE_SELECTOR, hideMenu);
-        menuButton
-            .on('click', menuButtonClickHandler)
-            .on('keydown keypress keyup', menuButtonKeyHandler);
-        menuNode
-            .on('keydown keypress keyup', menuKeyHandler);
+        this.on({
+            'group:change group:cancel group:blur': hideMenu,
+            'group:show group:enable': function (event, state) { if (!state) { hideMenu(); } }
+        });
+        groupNode.on('keydown keypress keyup', groupKeyHandler);
+        menuButton.on({
+            click: menuButtonClickHandler,
+            'keydown keypress keyup': menuButtonKeyHandler
+        });
+        menuNode.on('keydown keypress keyup', menuKeyHandler);
 
         if (autoLayout) {
             menuNode.css('overflow', 'auto');
