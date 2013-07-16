@@ -337,9 +337,6 @@ define('io.ox/office/framework/app/basecontroller',
             var // the root node of the application pane
                 node = app.getView().getAppPaneNode();
 
-            // register regular keyboard event listener for shortcuts
-            node.on('keydown keypress', keyHandler);
-
             // Bug 27528: IE does not allow to prevent default actions of some
             // special key events (especially CTRL+P which always opens the Print
             // dialog, regardless whether the keydown event has been canceled in
@@ -358,8 +355,14 @@ define('io.ox/office/framework/app/basecontroller',
                     });
                 } else {
                     Utils.error('BaseController.initializeKeyHandler(): missing "attachEvent()" method for IE keydown hack (bug 27528)');
+                    node.on('keydown', keyHandler);
                 }
+            } else {
+                node.on('keydown', keyHandler);
             }
+
+            // register 'keypress' event listener for shortcuts
+            node.on('keypress', keyHandler);
         }
 
         // methods ------------------------------------------------------------
