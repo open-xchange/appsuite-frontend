@@ -571,7 +571,8 @@ define.async('io.ox/core/tk/html-editor',
                 // transform the emoji img tags to unicode before getContent call
                 ed.selection.select(this, true);
                 content = emoji.imageTagsToUnified(ed.selection.getContent());
-                text = $('<div>').html(content).text();
+                // preserve simple line breaks and get text content
+                text = $('<div>').html(content.replace(/<br>/g, '\n')).text();
                 switch (this.tagName) {
                 case 'BLOCKQUOTE':
                     tmp += quote(text) + '\n\n';
