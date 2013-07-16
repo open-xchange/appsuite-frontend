@@ -70,7 +70,9 @@ define("io.ox/calendar/main",
             }
         });
 
-        win.on('change:perspective', function (e, name) {
+        win.on('change:perspective', function (e, name, long) {
+            // save current perspective to settings
+            settings.set('viewView', long).save();
             if (name !== 'list') {
                 lastPerspective = null;
                 win.search.close();

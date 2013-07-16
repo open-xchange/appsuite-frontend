@@ -614,14 +614,13 @@ define("io.ox/core/desktop",
             this.show = function (app, opt) {
 
                 var win = app.getWindow();
-
                 if (opt.perspective === win.currentPerspective) return;
 
                 this.main = win.addPerspective(this);
 
                 // trigger change event
                 if (win.currentPerspective !== 'main') {
-                    win.trigger('change:perspective', name);
+                    win.trigger('change:perspective', name, opt.perspective);
                 } else {
                     win.trigger('change:initialPerspective', name);
                 }
