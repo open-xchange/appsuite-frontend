@@ -123,16 +123,28 @@ define('io.ox/office/tk/control/textfield',
         /**
          * Handles all focus events of the text field.
          */
-        function fieldFocusHandler(event) {
+        function focusHandler(event) {
             switch (event.type) {
+            case 'group:focus':
+                // save current value, if this group receives initial focus
+                initialText = fieldNode.val();
+                break;
             case 'focus':
-                // save current value
-                if (!_.isString(initialText)) {
-                    initialText = fieldNode.val();
-                }
                 // select entire text on mouse click when specified via option
                 if (select) { fieldNode.select().one('mouseup', false); }
                 validationFieldState = getFieldState();
+                // IE9 does not trigger 'input' events when deleting characters or
+                // pasting text, use a timer interval as a workaround
+                if (Utils.IE9) {
+                    fieldNode.data('lastValue', fieldNode.val());
+                    fieldNode.data('updateTimer', window.setInterval(function () {
+                        var value = fieldNode.val();
+                        if (value !== fieldNode.data('lastValue')) {
+                            fieldNode.data('lastValue', value);
+                            fieldInputHandler();
+                        }
+                    }, 250));
+                }
                 break;
             case 'focus:key':
                 // always select entire text when reaching the field with keyboard
@@ -141,16 +153,26 @@ define('io.ox/office/tk/control/textfield',
                 break;
             case 'blur':
                 fieldNode.off('mouseup');
+                // IE9 does not trigger 'input' events when deleting characters or pasting
+                // text, remove the timer interval that has been started as a workaround
+                if (Utils.IE9) {
+                    window.clearInterval(fieldNode.data('updateTimer'));
+                    fieldNode.data('updateTimer', null);
+                }
+                break;
+            case 'group:blur':
                 // Bug 27175: always commit value when losing focus
                 if (_.isString(initialText) && (initialText !== fieldNode.val())) {
+                    // pass preserveFocus option to not interfere with current focus handling
                     self.triggerChange(fieldNode, { preserveFocus: true });
                 }
+                initialText = null;
                 break;
             }
         }
 
         /**
-         * Handles keyboard events, especially the cursor keys.
+         * Handles keyboard events.
          */
         function fieldKeyHandler(event) {
             switch (event.keyCode) {
@@ -161,10 +183,11 @@ define('io.ox/office/tk/control/textfield',
                 return false;
             case KeyCodes.ESCAPE:
                 if (event.type === 'keydown') {
+                    Utils.log('TextField.ESC');
                     fieldNode.val(initialText);
-                    initialText = null;
+                    self.trigger('group:cancel');
                 }
-                break;
+                return false;
             }
         }
 
@@ -288,15 +311,14 @@ define('io.ox/office/tk/control/textfield',
         // insert the text field into this group, and register event handlers
         this.addFocusableControl(fieldNode)
             .registerUpdateHandler(updateHandler)
-            .registerChangeHandler(null, { node: fieldNode, valueResolver: resolveValueHandler });
+            .registerChangeHandler(null, { node: fieldNode, valueResolver: resolveValueHandler })
+            .on('group:focus group:blur', focusHandler);
 
-        fieldNode
-            .on('focus focus:key blur:key blur', fieldFocusHandler)
-            .on('keydown keypress keyup', fieldKeyHandler)
-            // Validation while typing. IE9 does not trigger 'input' when deleting
-            // characters, use key events as a workaround. This is still not perfect,
-            // as it misses cut/delete from context menu, drag&drop, etc.
-            .on('input keydown keyup', fieldInputHandler);
+        fieldNode.on({
+            'focus focus:key blur:key blur': focusHandler,
+            'keydown keypress keyup': fieldKeyHandler,
+            'input': fieldInputHandler
+        });
 
         // initialize read-only mode
         this.setReadOnly(Utils.getBooleanOption(options, 'readOnly', false));

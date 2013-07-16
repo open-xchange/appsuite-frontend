@@ -315,7 +315,7 @@ define('io.ox/office/tk/dropdown/dropdown',
                 // get keyboard control in the drop-down menu
                 menuButton.focus();
 
-                // toggle the menu, this triggers the 'menu:open'/'menu:close' listeners
+                // toggle the menu, this triggers the 'menu:open'/'menu:close' event
                 if (self.isMenuVisible()) {
                     hideMenu();
                 } else {
