@@ -21,8 +21,9 @@ define('io.ox/core/settings/pane',
          'io.ox/core/capabilities',
          'plugins/portal/userSettings/register',
          'settings!io.ox/core',
+         'settings!io.ox/core/settingOptions',
          'gettext!io.ox/core'],
-         function (ext, BasicModel, views, forms, http, appAPI, capabilities, userSettings, settings, gt) {
+         function (ext, BasicModel, views, forms, http, appAPI, capabilities, userSettings, settings, settingOptions, gt) {
 
     'use strict';
 
@@ -84,15 +85,9 @@ define('io.ox/core/settings/pane',
         }
     }));
 
-    http.GET({
-        module: 'jslob',
-        params: {
-            action: 'get',
-            id: 'io.ox/core/settingOptions'
-        }
-    }).done(function (settingOptions) {
+    (function () {
         // Timezones
-        var available = settingOptions.tree.availableTimeZones,
+        var available = settingOptions.get("availableTimeZones"),
             technicalNames = _(available).keys(),
             userTZ = settings.get('timezone', 'UTC'),
             sorted = {};
@@ -134,11 +129,11 @@ define('io.ox/core/settings/pane',
         }));
 
         // Themes
-        var availableThemes = settingOptions.tree.themes;
+        var availableThemes = settingOptions.get("themes");
 
         //  until we get translated themes from backend
-        if (settingOptions.tree.themes['default']) {
-            settingOptions.tree.themes['default'] = gt('Default Theme');
+        if (availableThemes['default']) {
+            availableThemes['default'] = gt('Default Theme');
         }
 
 
@@ -152,7 +147,7 @@ define('io.ox/core/settings/pane',
             }));
         }
 
-    });
+    }());
 
     (function () {
         if (settings.isConfigurable('refreshInterval')) {
