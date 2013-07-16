@@ -100,8 +100,8 @@ define('io.ox/office/tk/dropdown/grid',
                 buttons = self.getItems(),
                 // index of the focused list item
                 index = buttons.index(event.target),
-                // relative index change
-                relIndex = 0;
+                // new index
+                newIndex = index;
 
             switch (event.keyCode) {
             case KeyCodes.LEFT_ARROW:
@@ -118,16 +118,18 @@ define('io.ox/office/tk/dropdown/grid',
                     if (index <= 0) {
                         self.hideMenu();
                     } else {
-                        relIndex = calcRelativeIndex(true);
-                        index = ((index + relIndex) < 0) ? index : (index + relIndex);
-                        buttons.eq(index).focus();
+                        newIndex = calcNewIndex(index, true);
+                        if (newIndex === index) {
+                            self.hideMenu();
+                        } else {
+                            buttons.eq(newIndex).focus();
+                        }
                     }
                 }
                 return false;
             case KeyCodes.DOWN_ARROW:
                 if (keydown) {
-                    relIndex = calcRelativeIndex(false);
-                    index = ((index + relIndex) >= buttons.length) ? index : (index + relIndex);
+                    index = calcNewIndex(index, false);
                     buttons.eq(index).focus();
                 }
                 return false;
@@ -140,13 +142,109 @@ define('io.ox/office/tk/dropdown/grid',
             }
         }
 
-        function calcRelativeIndex(up) {
-            var row = $(document.activeElement).parents('tr'), index = 0, cells = 0;
+        /**
+         * Calculates the previous/next button index dependent
+         * on the direction of movement.
+         *
+         * @param {Number} currIndex
+         *  The index of the current button.
+         *
+         * @param {Boolean} up
+         *  The movement direction. TRUE means up otherwise
+         *  down.
+         *
+         * @returns {Number}
+         *  The index of the button which should get the focus.
+         *  If no previous/next button could be found currIndex
+         *  is returned.
+         *  The algorithm tries to find the nearest button in
+         *  the previous/next row. Nearest means the minimal
+         *  distance graphic wise.
+         */
+        function calcNewIndex(currIndex, up) {
+            var // index
+                i,
+                // current td element
+                currTD = $(document.activeElement).closest('td'),
+                // position of current td element
+                pos = currTD.position(),
+                // next position
+                nextPos,
+                // the current index/resulting index
+                index = currIndex,
+                // all list items (button elements)
+                buttons = self.getItems(),
+                // table of the current element
+                table,
+                // tables inside the grid
+                tables,
+                // table index of the current element
+                tableIndex,
+                // check previous/next table for next element
+                findNextTable = false,
+                // row index of the current element
+                rowIndex,
+                // rows inside the current table
+                rows,
+                // all td elements inside the row
+                rowElements,
+                // distance between two td elements
+                distance = 1000000.0,
+                // current distance between two td elements
+                currDistance = distance;
 
-            if (row.length) {
-                cells = row[0].cells.length;
-                index = up ? -cells : cells;
+            // find out current table, row & rowIndex
+            table = currTD.closest('table');
+            rows = table.find('tbody > tr');
+            rowIndex = rows.index(currTD.closest('tr'));
+
+            // try to find previous/next button in current table
+            if (up) {
+                if (rowIndex > 0) {
+                    rowIndex--;
+                } else {
+                    findNextTable = true;
+                }
+            } else {
+                if (rowIndex < rows.length - 1) {
+                    rowIndex++;
+                } else {
+                    findNextTable = true;
+                }
             }
+
+            if (findNextTable) {
+                // try find previous/next table in the grid
+                tables = self.getItemGroup().getNode().find('table');
+                tableIndex = tables.index(table);
+                if (up && (tableIndex > 0)) {
+                    table = tables.eq(tableIndex - 1);
+                    rows = table.find('> tbody > tr');
+                    rowIndex = rows.length - 1;
+                } else if (!up && (tableIndex < tables.length - 1)) {
+                    table = tables.eq(tableIndex + 1);
+                    rows = table.find('> tbody > tr');
+                    rowIndex = 0;
+                } else {
+                    // NO next/previous table
+                    return index;
+                }
+            }
+
+            // calculate the best button index in the previous/next row
+            rowElements = rows.eq(rowIndex).find('td');
+            for (i = 0; i < rowElements.length; i++) {
+                nextPos = rowElements.eq(i).position();
+                currDistance = Math.sqrt(Math.pow(nextPos.top - pos.top, 2) +
+                                         Math.pow(nextPos.left - pos.left, 2));
+                if (currDistance < distance) {
+                    distance = currDistance;
+                    index = i;
+                }
+            }
+
+            // find out index of the new button element
+            index = buttons.index(rowElements.eq(index).find(Utils.BUTTON_SELECTOR));
 
             return index;
         }
