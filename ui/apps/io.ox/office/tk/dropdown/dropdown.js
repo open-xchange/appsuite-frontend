@@ -83,9 +83,6 @@ define('io.ox/office/tk/dropdown/dropdown',
             // the drop-down menu element containing the menu view component
             menuNode = $('<div>').addClass('io-ox-office-main dropdown-container'),
 
-            // additional controls that toggle the drop-down menu
-            menuToggleControls = $(),
-
             // current size of the drop-down menu (calculated when opening the menu)
             menuNodeSize = null,
 
@@ -343,7 +340,7 @@ define('io.ox/office/tk/dropdown/dropdown',
 
             // close the menu unless a 'mousedown' event occurred on the drop-down button
             // (this would lead to reopening the menu immediately with the following click)
-            if (!isTargetIn(menuNode) && !((event.type === 'mousedown') && isTargetIn(menuButton.add(menuToggleControls)))) {
+            if (!isTargetIn(menuNode) && !((event.type === 'mousedown') && isTargetIn(menuButton))) {
                 hideMenu();
             }
         }
@@ -530,42 +527,6 @@ define('io.ox/office/tk/dropdown/dropdown',
          */
         this.grabMenuFocus = function () {
             this.getFocusableMenuControls().first().focus();
-            return this;
-        };
-
-        /**
-         * Registers additional controls that will toggle the drop-down menu on
-         * 'click' events.
-         *
-         * @param {jQuery} controls
-         *  The controls to be registered as menu toggle controls.
-         *
-         * @returns {DropDown}
-         *  A reference to this instance.
-         */
-        this.addMenuToggleControls = function (controls) {
-            controls
-                .on('click', menuButtonClickHandler)
-                .on('keydown keypress keyup', menuButtonKeyHandler);
-            menuToggleControls = menuToggleControls.add(controls);
-            return this;
-        };
-
-        /**
-         * Unregisters additional controls that have been registered to toggle
-         * the drop-down menu on 'click' events.
-         *
-         * @param {jQuery} controls
-         *  The controls to be unregistered as menu toggle controls.
-         *
-         * @returns {DropDown}
-         *  A reference to this instance.
-         */
-        this.removeMenuToggleControls = function (controls) {
-            controls
-                .off('click', menuButtonClickHandler)
-                .off('keydown keypress keyup', menuButtonKeyHandler);
-            menuToggleControls = menuToggleControls.not(controls);
             return this;
         };
 
