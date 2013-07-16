@@ -194,8 +194,13 @@ define('io.ox/office/tk/keycodes', ['io.ox/office/tk/utils'], function (Utils) {
      */
     KeyCodes.matchModifierKeys = function (event, options) {
 
+        // compare passed values, treats false/undefined equally
+        function isEqualBoolean(state1, state2) {
+            return (state1 === true) === (state2 === true);
+        }
+
         function isMatching(currentState, expectedState) {
-            return _.isNull(expectedState) || (currentState === (_.isBoolean(expectedState) && expectedState));
+            return _.isNull(expectedState) || isEqualBoolean(currentState, expectedState);
         }
 
         // SHIFT key must always match
@@ -205,12 +210,12 @@ define('io.ox/office/tk/keycodes', ['io.ox/office/tk/utils'], function (Utils) {
 
         // when 'altOrMeta' is set, ignore 'alt' and 'meta' options
         if (Utils.getBooleanOption(options, 'altOrMeta', false)) {
-            return (event.altKey !== event.metaKey) && isMatching(event.ctrlKey, Utils.getOption(options, 'ctrl'));
+            return !isEqualBoolean(event.altKey, event.metaKey) && isMatching(event.ctrlKey, Utils.getOption(options, 'ctrl'));
         }
 
         // when 'ctrlOrMeta' is set, ignore 'ctrl' and 'meta' options
         if (Utils.getBooleanOption(options, 'ctrlOrMeta', false)) {
-            return (event.ctrlKey !== event.metaKey) && isMatching(event.altKey, Utils.getOption(options, 'alt'));
+            return !isEqualBoolean(event.ctrlKey, event.metaKey) && isMatching(event.altKey, Utils.getOption(options, 'alt'));
         }
 
         // otherwise, ALT, CTRL, and META keys must match
