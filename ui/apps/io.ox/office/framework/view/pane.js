@@ -278,6 +278,8 @@ define('io.ox/office/framework/view/pane',
 
             // update the CSS marker class for an opened drop-down menu
             component.on({
+                'group:focus': function () { self.getNode().addClass(Utils.FOCUSED_CLASS); },
+                'group:blur': function () { self.getNode().removeClass(Utils.FOCUSED_CLASS); },
                 'menu:open': function () { self.getNode().addClass(DropDown.OPEN_CLASS); },
                 'menu:close': function () { self.getNode().removeClass(DropDown.OPEN_CLASS); }
             });
@@ -317,6 +319,9 @@ define('io.ox/office/framework/view/pane',
 
         // initialization -----------------------------------------------------
 
+        // marker for touch devices
+        node.toggleClass('touch', Modernizr.touch);
+
         // no size tracking for transparent view panes
         if (!transparent && Utils.getBooleanOption(options, 'resizeable', false)) {
             $('<div>').addClass('resizer ' + position)
@@ -330,10 +335,8 @@ define('io.ox/office/framework/view/pane',
         node.toggleClass('overlay', overlay);
         if (transparent) {
             node[Utils.isVerticalPosition(position) ? 'height' : 'width'](0);
-            // hover effect for view components embedded in the pane (not for touch devices)
-            if (!Modernizr.touch && Utils.getBooleanOption(options, 'hoverEffect', false)) {
-                node.addClass('hover-effect');
-            }
+            // hover effect for view components embedded in the pane
+            node.toggleClass('hover-effect', Utils.getBooleanOption(options, 'hoverEffect', false));
         }
 
     } // class Pane

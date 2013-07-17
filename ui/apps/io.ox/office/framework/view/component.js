@@ -98,6 +98,16 @@ define('io.ox/office/framework/view/component',
         // private methods ----------------------------------------------------
 
         /**
+         * Handles 'group:focus' and 'group:blur' events from all registered
+         * group instances. Updates the CSS marker class at the root node of
+         * this view component, and forwards the event to all listeners.
+         */
+        function groupFocusHandler(event) {
+            self.getNode().toggleClass(Utils.FOCUSED_CLASS, event.type === 'group:focus');
+            self.trigger(event.type);
+        }
+
+        /**
          * Handles 'menu:open' and 'menu:close' events from all registered
          * group instances. Updates the CSS marker class at the root node of
          * this view component, and forwards the event to all listeners.
@@ -129,11 +139,12 @@ define('io.ox/office/framework/view/component',
             }
 
             // forward 'group:cancel' events, update focusability depending on
-            // the group's enabled state, forward other layout events
+            // the group's state, forward other layout events
             group.on({
                 'group:cancel': function (event, options) { self.trigger('cancel', options); },
+                'group:focus group:blur': groupFocusHandler,
                 'menu:open menu:close': dropDownMenuHandler,
-                'group:show group:enable group:layout': updateFocusable
+                'group:show group:layout': updateFocusable
             });
 
             // make this view component focusable, if it contains any groups
@@ -141,11 +152,12 @@ define('io.ox/office/framework/view/component',
         }
 
         /**
-         * Returns all visible and enabled group objects as array.
+         * Returns all visible group objects that contain focusable controls as
+         * array.
          */
-        function getEnabledGroups() {
+        function getFocusableGroups() {
             return _(groups).filter(function (group) {
-                return group.isVisible() && group.isEnabled() && group.hasFocusableControls();
+                return group.isVisible() && group.hasFocusableControls();
             });
         }
 
@@ -154,7 +166,7 @@ define('io.ox/office/framework/view/component',
          * is focusable with special keyboard shortcuts.
          */
         function updateFocusable() {
-            node.toggleClass('f6-target', focusable && (getEnabledGroups().length > 0));
+            node.toggleClass('f6-target', focusable && (getFocusableGroups().length > 0));
         }
 
         /**
@@ -167,10 +179,10 @@ define('io.ox/office/framework/view/component',
          */
         function moveFocus(forward) {
 
-            var // all visible and enabled group objects
-                enabledGroups = getEnabledGroups(),
-                // extract all focusable controls from all visible and enabled groups
-                controls = _(enabledGroups).reduce(function (controls, group) { return controls.add(group.getFocusableControls()); }, $()),
+            var // all visible group objects with focusable controls
+                focusableGroups = getFocusableGroups(),
+                // extract all focusable controls from the groups
+                controls = _(focusableGroups).reduce(function (controls, group) { return controls.add(group.getFocusableControls()); }, $()),
                 // focused control
                 control = Utils.getFocusedControl(controls),
                 // index of focused control in all enabled controls
@@ -347,15 +359,12 @@ define('io.ox/office/framework/view/component',
          */
         this.grabFocus = function () {
 
-            var // all visible and enabled group objects
-                enabledGroups = null;
+            var // all visible group objects with focusable controls
+                focusableGroups = this.hasFocus() ? [] : getFocusableGroups();
 
-            // set focus to first enabled group, if no group is focused
-            if (!this.hasFocus()) {
-                enabledGroups = getEnabledGroups();
-                if (enabledGroups.length) {
-                    enabledGroups[0].grabFocus();
-                }
+            // set focus to first focusable group
+            if (focusableGroups.length > 0) {
+                focusableGroups[0].grabFocus();
             }
 
             return this;
@@ -374,10 +383,11 @@ define('io.ox/office/framework/view/component',
 
         // initialization -----------------------------------------------------
 
-        // hover effect for view components embedded in the pane (not for touch devices)
-        if (!Modernizr.touch && Utils.getBooleanOption(options, 'hoverEffect', false)) {
-            node.addClass('hover-effect');
-        }
+        // marker for touch devices
+        node.toggleClass('touch', Modernizr.touch);
+
+        // hover effect for groups embedded in the view component
+        node.toggleClass('hover-effect', Utils.getBooleanOption(options, 'hoverEffect', false));
 
         // listen to key events for keyboard focus navigation
         node.on('keydown keypress keyup', keyHandler);

@@ -216,7 +216,6 @@ define('io.ox/office/tk/dropdown/dropdown',
                 // original min-width and min-height attributes of the menu node
                 menuMinSize = null;
 
-
             // do nothing if the menu is already open
             if (self.isMenuVisible()) { return; }
 
@@ -355,10 +354,15 @@ define('io.ox/office/tk/dropdown/dropdown',
 
             switch (event.keyCode) {
             case KeyCodes.DOWN_ARROW:
-                if (keydown) { showMenu(); self.grabMenuFocus(); }
+                if (keydown && self.isEnabled()) {
+                    showMenu();
+                    self.grabMenuFocus();
+                }
                 return false;
             case KeyCodes.UP_ARROW:
-                if (keydown) { hideMenu(); }
+                if (keydown) {
+                    hideMenu();
+                }
                 return false;
             }
         }
@@ -376,8 +380,12 @@ define('io.ox/office/tk/dropdown/dropdown',
             case KeyCodes.SPACE:
             case KeyCodes.ENTER:
                 if (keyup) {
-                    showMenu();
-                    self.grabMenuFocus();
+                    if (self.isEnabled()) {
+                        showMenu();
+                        self.grabMenuFocus();
+                    } else if (event.keyCode === KeyCodes.ENTER) {
+                        self.triggerCancel();
+                    }
                 }
                 return false;
             case KeyCodes.ESCAPE:
@@ -511,10 +519,10 @@ define('io.ox/office/tk/dropdown/dropdown',
          * that are focusable.
          *
          * @returns {jQuery}
-         *  A collection with all focusable (visible and enabled) controls.
+         *  A collection with all focusable controls.
          */
         this.getFocusableMenuControls = function () {
-            return menuNode.find(Utils.ENABLED_SELECTOR + Utils.VISIBLE_SELECTOR + Utils.FOCUSABLE_SELECTOR);
+            return menuNode.find(Utils.VISIBLE_SELECTOR + Utils.FOCUSABLE_SELECTOR);
         };
 
         /**

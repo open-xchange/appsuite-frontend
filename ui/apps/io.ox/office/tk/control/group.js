@@ -25,9 +25,6 @@ define('io.ox/office/tk/control/group',
         // CSS class for disabled groups
         DISABLED_CLASS = 'disabled',
 
-        // CSS class for the group node while any embedded control is focused
-        FOCUSED_CLASS = 'focused',
-
         // DOM event that will cause a 'change' event from a group
         INTERNAL_TRIGGER_EVENT = 'private:trigger',
 
@@ -134,7 +131,7 @@ define('io.ox/office/tk/control/group',
             // update CSS focus class, trigger event (check that group is not destroyed yet)
             function changeFocusState(group, focused) {
                 if (_.isFunction(group.trigger)) {
-                    group.getNode().toggleClass(FOCUSED_CLASS, focused);
+                    group.getNode().toggleClass(Utils.FOCUSED_CLASS, focused);
                     group.trigger(focused ? 'group:focus' : 'group:blur');
                 }
             }
@@ -152,7 +149,7 @@ define('io.ox/office/tk/control/group',
                 }
 
                 // trigger a 'group:focus' event at this group, if it is not already focused
-                if (!groupNode.hasClass(FOCUSED_CLASS) && (focusableNodes.find(focusNode).length > 0)) {
+                if (!groupNode.hasClass(Utils.FOCUSED_CLASS) && (focusableNodes.find(focusNode).length > 0)) {
                     focusStack.push({ group: self, nodes: focusableNodes });
                     changeFocusState(self, true);
                 }
@@ -466,14 +463,6 @@ define('io.ox/office/tk/control/group',
 
             // enable/disable the entire group node with all its descendants
             groupNode.toggleClass(Utils.DISABLED_CLASS, !enabled);
-
-            // set or remove 'tabindex' attribute to make it (in)accessible for
-            // global F6 focus traveling
-            if (enabled) {
-                groupNode.find(Utils.FOCUSABLE_SELECTOR).attr('tabindex', 1);
-            } else {
-                groupNode.find(Utils.FOCUSABLE_SELECTOR).removeAttr('tabindex');
-            }
 
             // trigger an 'group:enable' event so that derived classes can react
             return this.trigger('group:enable', enabled);

@@ -259,6 +259,9 @@ i[class^="icon-"], i[class^=" icon-"] {
 /* control groups                                                            */
 /* ========================================================================= */
 
+/* border color for focused controls */
+@focus-border-color: @selectedBackground;
+
 /* glow effect for focused controls, use as argument for shadow mix-in classes */
 @focus-glow-effect: 0 0 8px 2px fade(@selectedBackground, 60%);
 
@@ -431,6 +434,9 @@ i[class^="icon-"], i[class^=" icon-"] {
         /* default 3D effect for text fields */
         @textfield-shadow-effect: -10px -20px 20px -20px fade(white, 10%) inset;
 
+        /* border color for disabled focused controls */
+        @disabled-focus-border-color: darken(@selectedBackground, 15%);
+
         display: block;
         .box-sizing(content-box);
         padding: @control-spacing @toolbox-padding;
@@ -473,6 +479,7 @@ i[class^="icon-"], i[class^=" icon-"] {
                 margin-left: -1px;
             }
 
+            /* round corners for first control in a group container */
             &:first-child {
                 &, > *:first-child {
                     .border-top-left-radius(@border-radius);
@@ -480,6 +487,7 @@ i[class^="icon-"], i[class^=" icon-"] {
                 }
             }
 
+            /* round corners for last control in a group container */
             &:last-child {
                 &, > *:last-child {
                     .border-top-right-radius(@border-radius);
@@ -512,8 +520,13 @@ i[class^="icon-"], i[class^=" icon-"] {
                 }
             }
 
-            /* selected toggle/radio buttons */
+            /* default background for selected toggle/radio buttons */
             .button.selected {
+                background: fade(@selectedBackground, 30%);
+            }
+
+            /* background for enabled toggle/radio buttons */
+            &:not(.disabled) .button:not(.disabled).selected {
                 background: fade(@selectedBackground, 50%);
             }
 
@@ -531,116 +544,117 @@ i[class^="icon-"], i[class^=" icon-"] {
                 color: fade(white, 50%);
             }
 
-            /* keyboard/mouse effects (not for disabled buttons/text fields or groups) */
-            &:not(.disabled) {
+            /* tiny 3D shadow effect for enabled buttons */
+            &:not(.disabled) .button:not(.disabled) {
+                &:not(.selected) { .box-shadow(@button-shadow-effect); }
+                &.selected { .box-shadow(@selected-button-shadow-effect); }
+            }
 
-                /* raise hovered/focused control to make all borders visible */
-                .button, input {
-                    &:not(.disabled) {
-                        &:hover:not(:focus), &:active:not(:focus) { z-index: 2; }
-                        &:focus { z-index: 4; }
+            /* raise focused control to make all borders visible */
+            .button, input {
+                &:focus { z-index: 1; }
+            }
+
+            /* hover/active highlighting for enabled buttons (not for opened drop-down menu) */
+            &:not(.disabled):not(.dropdown-open) .button:not(.disabled) {
+                &:not(.selected) {
+                    &:hover { background: fade(white, 5%); }
+                    &:active { background: fade(black, 5%); }
+                }
+                &.selected {
+                    &:hover { background: fade(@selectedBackground, 60%); }
+                    &:active { background: fade(@selectedBackground, 40%); }
+                }
+            }
+
+            /* focus border for focused buttons (not for opened drop-down menu) */
+            &:not(.dropdown-open) .button:focus:not(:active) {
+                border-color: @disabled-focus-border-color;
+            }
+
+            /* focus border for enabled focused buttons (not for opened drop-down menu) */
+            &:not(.dropdown-open):not(.disabled) .button:not(.disabled):focus:not(:active) {
+                border-color: @focus-border-color;
+
+                &:not(.selected) { .box-shadow-2(@button-shadow-effect, @focus-glow-effect); }
+                &.selected { .box-shadow-2(@selected-button-shadow-effect, @focus-glow-effect); }
+            }
+
+            /* tiny 3D shadow effect and hover highlighting for enabled input fields */
+            &:not(.disabled) input:not(.disabled):not(:focus) {
+                .box-shadow(@textfield-shadow-effect);
+                &:hover { background: fade(white, 5%); }
+            }
+
+            /* default focus border for focused input fields */
+            input:focus {
+                border-color: @disabled-focus-border-color;
+            }
+
+            /* input fields with white background and focus border when focused */
+            &:not(.disabled) input:not(.disabled):focus, &.combo-field:not(.disabled).focused > input {
+                background: white;
+                border-color: @focus-border-color;
+                color: @textColor;
+
+                /* color of place holder in text fields */
+                .placeholder-color() { color: #ccc; }
+                &::-webkit-input-placeholder { .placeholder-color(); }
+                &:-moz-placeholder { .placeholder-color(); }
+                &::-moz-placeholder { .placeholder-color(); }
+                &:-ms-input-placeholder { .placeholder-color(); }
+            }
+
+            /* focus glow effect for focused input (but not in combo field) */
+            &:not(.combo-field):not(.disabled) input:not(.disabled):focus {
+                .box-shadow(@focus-glow-effect);
+            }
+
+            /* additions for enabled and focused combo fields */
+            &.combo-field:not(.disabled).focused {
+                .box-shadow(@focus-glow-effect);
+
+                /* hide inner border of the input field */
+                > input {
+                    border-right-color: transparent;
+                }
+
+                /* white background for drop-down button */
+                > .button.dropdown-button {
+                    background-color: white;
+                    border-color: @focus-border-color;
+                    border-left-color: transparent;
+                    color: @textColor;
+
+                    /* black drop-down caret */
+                    i[class^="docs-"] {
+                        background-image: url(docs-icons-desktop-black.png);
+                        &.retina { background-image: url(docs-icons-retina-black.png); }
                     }
                 }
+            }
 
-                .button:not(.disabled) {
-                    .box-shadow(@button-shadow-effect);
-                    &.selected { .box-shadow(@selected-button-shadow-effect); }
-                }
+            /* additions for disabled and focused combo fields */
+            &.combo-field.disabled.focused > .button.dropdown-button {
+                border-color: @disabled-focus-border-color;
+            }
 
-                &:not(.dropdown-open) .button:not(.disabled) {
+            /* border and glow effect for drops with open drop-down menus (but not combo fields) */
+            &.dropdown-open:not(.combo-field) {
+                z-index: 5;
+                .box-shadow(@dropdown-glow-effect);
+
+                .button {
+                    border-color: #e5e5e5;
 
                     &:not(.selected) {
-                        &:hover { background: fade(white, 5%); }
-                        &:active { background: fade(black, 5%); }
-
-                        &:focus:not(:active) {
-                            .box-shadow-2(@button-shadow-effect, @focus-glow-effect);
-                            border-color: @selectedBackground;
-                        }
+                        background-color: fade(white, 40%);
+                        &:hover { background-color: fade(white, 45%); }
                     }
 
                     &.selected {
-                        &:hover { background: fade(@selectedBackground, 60%); }
-                        &:active { background: fade(@selectedBackground, 40%); }
-
-                        &:focus:not(:active) {
-                            .box-shadow-2(@selected-button-shadow-effect, @focus-glow-effect);
-                            border-color: @selectedBackground;
-                        }
-                    }
-                }
-
-                /* text fields without white background as long as not focused */
-                input:not(.disabled) {
-
-                    &:not(:focus) {
-                        .box-shadow(@textfield-shadow-effect);
-                        &:hover { background: fade(white, 5%); }
-                    }
-
-                    &:focus, &:active {
-                        background: white;
-                        .box-shadow(@focus-glow-effect);
-                        border-color: @selectedBackground;
-                        color: @textColor;
-
-                        /* color of place holder in text fields */
-                        .placeholder-color() { color: #ccc; }
-                        &::-webkit-input-placeholder { .placeholder-color(); }
-                        &:-moz-placeholder { .placeholder-color(); }
-                        &::-moz-placeholder { .placeholder-color(); }
-                        &:-ms-input-placeholder { .placeholder-color(); }
-                    }
-                }
-
-                /* effects for all elements in combo fields */
-                &.combo-field.focused, &.combo-field.dropdown-open {
-                    .box-shadow(@focus-glow-effect);
-
-                    > input, > .button.dropdown-button {
-                        &, &:hover, &:focus, &:active {
-                            background-color: white;
-                            border-color: @selectedBackground;
-                            .box-shadow(none);
-                            color: @textColor;
-
-                            /* black drop-down caret */
-                            i[class^="docs-"] {
-                                background-image: url(docs-icons-desktop-black.png);
-                                &.retina { background-image: url(docs-icons-retina-black.png); }
-                            }
-                        }
-                    }
-
-                    > input {
-                        &, &:hover, &:focus, &:active {
-                            border-right-color: transparent;
-                        }
-                    }
-
-                    > .button.dropdown-button {
-                        &, &:hover, &:focus, &:active {
-                            border-left-color: transparent;
-                        }
-                    }
-                }
-
-                &.dropdown-open:not(.combo-field) {
-                    .box-shadow(@dropdown-glow-effect);
-
-                    .button:not(.disabled) {
-                        z-index: 5;
-                        border-color: #e5e5e5;
-
-                        &:not(.selected) {
-                            background-color: fade(white, 40%);
-                            &:hover { background-color: fade(white, 45%); }
-                        }
-
-                        &.selected {
-                            background-color: fade(lighten(@selectedBackground, 20%), 60%);
-                            &:hover { background-color: fade(lighten(@selectedBackground, 20%), 65%); }
-                        }
+                        background-color: fade(lighten(@selectedBackground, 20%), 60%);
+                        &:hover { background-color: fade(lighten(@selectedBackground, 20%), 65%); }
                     }
                 }
             }
@@ -751,16 +765,22 @@ i[class^="icon-"], i[class^=" icon-"] {
     > .view-component.toolbox {
         overflow: visible;
 
-        .group {
+        .group-container {
             .drop-shadow();
         }
     }
 }
 
 /* half-transparent hover effect for entire view panes and single view components */
-.view-pane.hover-effect:not(.dropdown-open), .view-pane:not(.hover-effect) > .view-component.hover-effect:not(.dropdown-open) {
-    .transition(opacity 0.2s linear);
-    &:not(:hover) { .opacity(70); }
+.view-pane:not(.touch) {
+    &.hover-effect, &:not(.hover-effect) > .view-component.hover-effect {
+        .transition(opacity 0.2s linear);
+        .opacity(70);
+
+        &.focused, &:hover {
+            .opacity(100);
+        }
+    }
 }
 
 /* ========================================================================= */
@@ -782,6 +802,9 @@ i[class^="icon-"], i[class^=" icon-"] {
     line-height: 0;
 
     > .group.item-buttons {
+
+        /* border color for disabled focused controls */
+        @disabled-focus-border-color: lighten(@selectedBackground, 15%);
 
         > label {
             display: block;
@@ -845,16 +868,14 @@ i[class^="icon-"], i[class^=" icon-"] {
             /* standard height of controls */
             @item-height: 30px;
 
+            /* embedded labels and buttons (list items) */
             label, .button {
                 height: @item-height;
                 border: 1px solid transparent;
                 line-height: (@item-height - 2px);
-
-                &.selected {
-                    background: fade(@selectedBackground, 60%);
-                }
             }
 
+            /* embedded input fields */
             input {
                 height: @item-height;
                 margin: 0 (@control-padding - @input-padding);
@@ -862,34 +883,44 @@ i[class^="icon-"], i[class^=" icon-"] {
                 .border-radius(5px);
             }
 
-            &:not(.disabled) {
+            /* default background for selected items */
+            .button.selected {
+                background: fade(@selectedBackground, 40%);
+            }
 
-                .button:not(.disabled) {
+            /* background for enabled selected items */
+            &:not(.disabled) .button:not(.disabled).selected {
+                background: fade(@selectedBackground, 60%);
+            }
 
+            /* hover/active highlighting for enabled buttons */
+            &:not(.disabled) .button:not(.disabled) {
+                &:not(.selected) {
                     &:hover { background: fade(black, 5%); }
                     &:active { background: fade(black, 10%); }
-
-                    &:focus:not(:active) {
-                        border-color: @selectedBackground;
-                        .box-shadow(@focus-glow-effect);
-                    }
-
-                    &.selected {
-                        &:hover { background: fade(@selectedBackground, 70%); }
-                        &:active { background: fade(@selectedBackground, 80%); }
-                    }
                 }
+                &.selected {
+                    &:hover { background: fade(@selectedBackground, 70%); }
+                    &:active { background: fade(@selectedBackground, 80%); }
+                }
+            }
 
-                input:not(.disabled) {
+            /* hover highlighting for enabled input fields */
+            &:not(.disabled) input:not(.disabled):hover:not(:focus) {
+                background: fade(black, 2%);
+                border-color: darken(@app-pane-fill-color, 5%);
+            }
 
-                    &:hover:not(:focus) {
-                        border-color: darken(@app-pane-fill-color, 5%);
-                    }
+            /* default border for focused buttons and input fields */
+            .button:focus:not(:active), input:focus {
+                border-color: @disabled-focus-border-color;
+            }
 
-                    &:focus {
-                        border-color: @selectedBackground;
-                        .box-shadow(@focus-glow-effect);
-                    }
+            /* focus border and glow effect for enabled focused buttons and input fields */
+            &:not(.disabled) {
+                .button:not(.disabled):focus:not(:active), input:not(.disabled):focus {
+                    border-color: @focus-border-color;
+                    .box-shadow(@focus-glow-effect);
                 }
             }
         }
@@ -904,7 +935,12 @@ i[class^="icon-"], i[class^=" icon-"] {
             /* shadow effects for selected buttons */
             @shadow-effect-1: 0 5px 10px fade(black, 20%);
             @shadow-effect-2: 0 2px 4px fade(black, 20%) inset;
+            /* focus border, as shadow effect resulting in a single line */
+            @focus-border-effect: 0 0 0 1px @focus-border-color;
+            /* focus border for disabled buttons, as shadow effect resulting in a single line */
+            @disabled-focus-border-effect: 0 0 0 1px @disabled-focus-border-color;
 
+            /* embedded buttons (list items) */
             .button {
                 height: @item-height;
                 padding-left: 12px;
@@ -920,27 +956,31 @@ i[class^="icon-"], i[class^=" icon-"] {
                 }
             }
 
+            /* hover/active highlighting for enabled buttons */
             &:not(.disabled) .button:not(.disabled) {
-
                 &:not(.selected) {
                     &:hover { border-color: fade(black, 10%); }
                     &:active { border-color: fade(black, 15%); }
-
-                    /* focused but not selected: add focus glow effect outside of button */
-                    &:focus:not(:active) {
-                        .box-shadow-2(0 0 0 1px @selectedBackground, @focus-glow-effect);
-                    }
                 }
-
                 &.selected {
                     &:hover { border-color: darken(@selectedBackground, 5%); }
                     &:active { border-color: darken(@selectedBackground, 10%); }
+                }
+            }
 
-                    /* selected and focused: extend shadow effect with focus glow effect outside of button */
-                    &:focus:not(:active) {
-                        border-color: lighten(@selectedBackground, 10%);
-                        .box-shadow-4(@shadow-effect-1, @shadow-effect-2, 0 0 0 1px @selectedBackground, @focus-glow-effect);
-                    }
+            /* default border for focused buttons */
+            .button:focus:not(:active) {
+                .box-shadow(@disabled-focus-border-effect);
+            }
+
+            /* focus border and glow effect for enabled focused buttons */
+            &:not(.disabled) .button:not(.disabled):focus:not(:active) {
+                &:not(.selected) {
+                    .box-shadow-2(@focus-border-effect, @focus-glow-effect);
+                }
+                &.selected {
+                    border-color: lighten(@selectedBackground, 10%);
+                    .box-shadow-4(@shadow-effect-1, @shadow-effect-2, @focus-border-effect, @focus-glow-effect);
                 }
             }
         }

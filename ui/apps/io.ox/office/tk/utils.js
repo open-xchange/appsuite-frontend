@@ -122,6 +122,13 @@ define.async('io.ox/office/tk/utils',
     Utils.VISIBLE_SELECTOR = ':visible';
 
     /**
+     * CSS class for elements the contain the focused node.
+     *
+     * @constant
+     */
+    Utils.FOCUSED_CLASS = 'focused';
+
+    /**
      * CSS selector for focused controls.
      *
      * @constant

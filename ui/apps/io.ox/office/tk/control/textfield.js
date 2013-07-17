@@ -163,6 +163,17 @@ define('io.ox/office/tk/control/textfield',
         }
 
         /**
+         * Handles enable/disable events of the group.
+         */
+        function enableHandler(event, state) {
+            if (state) {
+                fieldNode.removeAttr('readonly');
+            } else {
+                fieldNode.attr('readonly', 'readonly');
+            }
+        }
+
+        /**
          * Handles keyboard events.
          */
         function fieldKeyHandler(event) {
@@ -256,7 +267,10 @@ define('io.ox/office/tk/control/textfield',
         this.addFocusableControl(fieldNode)
             .registerUpdateHandler(updateHandler)
             .registerChangeHandler(null, { node: fieldNode, valueResolver: resolveValueHandler })
-            .on('group:focus group:blur', focusHandler);
+            .on({
+                'group:focus group:blur': focusHandler,
+                'group:enable': enableHandler
+            });
 
         fieldNode.on({
             'focus focus:key blur:key blur': focusHandler,
