@@ -341,7 +341,7 @@ define('io.ox/portal/main',
             } else {
                 // add link?
                 if (point.prop('action') !== undefined) {
-                    title.addClass('action-link').on('click', { baton: baton }, runAction);
+                    title.addClass('action-link').css('cursor', 'pointer').on('click', { baton: baton }, runAction);
                 }
                 // simple delay approach
                 _.delay(function () {
