@@ -208,6 +208,9 @@ define("io.ox/contacts/main",
         grid.requiresLabel = function (i, data, current) {
             if (!data) { return false; }
             var prefix = getLabel(data);
+            prefix = prefix.replace(/[ÄÀÁÂÃÄÅ]/g, 'A')
+                .replace(/[ÖÒÓÔÕÖ]/g, 'O')
+                .replace(/[ÜÙÚÛÜ]/g, 'U');
             return (i === 0 || prefix !== current) ? prefix : false;
         };
 
