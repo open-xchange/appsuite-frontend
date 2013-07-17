@@ -36,8 +36,6 @@ define('io.ox/office/framework/view/nodetracking',
             touchend: touchEndHandler,
             touchcancel: cancelTracking,
             keydown: keyDownHandler
-            // focusin: focusInHandler
-            // focusout: focusOutHandler
         },
 
         // the map of all events to be bound to the document after tracking has started
@@ -60,9 +58,6 @@ define('io.ox/office/framework/view/nodetracking',
 
         // whether the mouse or touch point has been moved after tracking has started
         moved = false,
-
-        // whether the focus is inside the page
-        hasFocus = false,
 
         // the browser timer used for auto-scrolling
         scrollTimer = null;
@@ -197,7 +192,6 @@ define('io.ox/office/framework/view/nodetracking',
         startX = lastX = pageX;
         startY = lastY = pageY;
         moved = false;
-        hasFocus = true;
 
         // set the mouse pointer of the target node at the overlay node
         overlayNode.css('cursor', $(event.target).css('cursor'));
@@ -352,27 +346,7 @@ define('io.ox/office/framework/view/nodetracking',
         }
     }
 
-    /**
-     * Event handler for 'focusin' browser events.
-     */
-    function focusInHandler(event) {
-        hasFocus = true;
-    }
-
-    /**
-     * Event handler for 'focusout' browser events.
-     */
-    function focusOutHandler(event) {
-        hasFocus = false;
-        _.delay(function () {
-            // Cancel tracking if focus has been lost (browser or page inactive).
-            // If focus remains in the page, a 'focusin' event will follow immediately
-            // after the 'focusout' event and has set hasFocus back to true.
-            if (!hasFocus) { cancelTracking(); }
-        }, 50);
-    }
-
-    // static initialization ==================================================
+    // methods ================================================================
 
     /**
      * Enables tracking events for all nodes contained in the current
@@ -573,5 +547,37 @@ define('io.ox/office/framework/view/nodetracking',
      * trigger a 'tracking:cancel' event.
      */
     $.cancelTracking = cancelTracking;
+
+    // static initialization ==================================================
+
+    // add global focus handler that cancels tracking when focus leaves the page
+    (function () {
+
+        var // the DOM node currently focused
+            focusNode = null,
+            // the last received 'focusout' event
+            lastEvent = null;
+
+        function focusInHandler(event) {
+            if ($.contains(document.body, event.target)) {
+                focusNode = event.target;
+            }
+        }
+
+        function focusOutHandler(event) {
+            // always process last 'focusout' event only, defer execution, to
+            // process one or more 'focusin' events directly following before
+            lastEvent = event;
+            _.defer(function () {
+                if (lastEvent && (focusNode === lastEvent.target)) {
+                    focusNode = null;
+                    cancelTracking();
+                }
+                focusNode = lastEvent = null;
+            });
+        }
+
+        $(document).on({ focusin: focusInHandler, focusout: focusOutHandler });
+    }());
 
 });
