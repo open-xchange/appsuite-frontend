@@ -37,7 +37,7 @@ define('io.ox/office/preview/app/fileactions',
         prio: 'hi',
         ref: 'io.ox/files/actions/open',
         draw: function (baton) {
-            if (ExtensionRegistry.isViewable(baton.data.filename)) {
+            if (!_.isArray(baton.data) && ExtensionRegistry.isViewable(baton.data.filename)) {
                 baton.disable('io.ox/files/links/inline', 'open');
             }
         }
