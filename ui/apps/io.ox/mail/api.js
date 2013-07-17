@@ -1183,7 +1183,7 @@ define('io.ox/mail/api',
             data.datasources = _.chain(data.contacts_ids).map(mapArgs).value();
         }
 
-        if (Modernizr.file && 'FormData' in window) {
+        if (Modernizr.filereader && 'FormData' in window) {
             deferred = handleSendXHR2(data, files, deferred);
         } else {
             deferred = handleSendTheGoodOldWay(data, form);

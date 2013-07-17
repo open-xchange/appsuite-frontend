@@ -191,7 +191,7 @@ define("io.ox/mail/write/view-main",
 
             return function () {
 
-                var inputOptions = Modernizr.file && 'FormData' in window ?
+                var inputOptions = Modernizr.filereader && 'FormData' in window ?
                     { type: 'file', name: 'file_' + (this.fileCount++), multiple: 'multiple', tabindex: '7' } :
                     { type: 'file', name: 'file_' + (this.fileCount++), tabindex: '7' };
 
