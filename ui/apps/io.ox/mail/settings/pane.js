@@ -66,7 +66,8 @@ define('io.ox/mail/settings/pane',
                            {label: gt('3 minutes'), value: '3_minutes'},
                            {label: gt('5 minutes'), value: '5_minutes'},
                            {label: gt('10 minutes'), value: '10_minutes'}],
-        mailViewSettings;
+        mailViewSettings,
+        reloadMe = ['contactCollectOnMailTransport', 'contactCollectOnMailAccess'];
 
     var MailSettingsView = Backbone.View.extend({
         tagName: "div",
@@ -141,6 +142,20 @@ define('io.ox/mail/settings/pane',
         draw: function (data) {
 
             mailViewSettings = new MailSettingsView({model: mailSettings});
+
+            mailViewSettings.model.on('change', function (model, e) {
+
+                var showNotice = _(reloadMe).any(function (attr) {
+                    if (_.isBoolean(mailViewSettings.model.changed[attr])) {
+                        return true;
+                    }
+                });
+
+                if (showNotice) {
+                    require("io.ox/core/notifications").yell("success", gt("The setting has been saved and will become active when you enter the application the next time."));
+                }
+            });
+
             var holder = $('<div>').css('max-width', '800px');
             this.append(holder.append(
                 mailViewSettings.render().el)
