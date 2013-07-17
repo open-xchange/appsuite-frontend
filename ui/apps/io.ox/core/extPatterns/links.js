@@ -245,7 +245,13 @@ define("io.ox/core/extPatterns/links",
                 .appendTo($parent);
 
         $toggle.addClass(options.classes);
-        $parent.append($.txt(_.noI18n('\u00A0\u00A0 '))); // a bit more space
+
+        // TODO remove this whole "inline-js-spacing" solution
+        // better use CSS :after to insert spaces
+        // dont' do this crap on mobile, textnode can not be styled or overwritten later...
+        if (_.device('!smartphone')) {
+            $parent.append($.txt(_.noI18n('\u00A0\u00A0 '))); // a bit more space
+        }
 
         // create & add node first, since the rest is async
         var node = $('<ul role="menu">').addClass('dropdown-menu').appendTo($parent);
