@@ -131,6 +131,14 @@ define('io.ox/office/tk/control/group',
          */
         function focusHandler(event) {
 
+            // update CSS focus class, trigger event (check that group is not destroyed yet)
+            function changeFocusState(group, focused) {
+                if (_.isFunction(group.trigger)) {
+                    group.getNode().toggleClass(FOCUSED_CLASS, focused);
+                    group.trigger(focused ? 'group:focus' : 'group:blur');
+                }
+            }
+
             function processEvent(focusNode) {
 
                 var // the top entry of the focus stack
@@ -140,15 +148,13 @@ define('io.ox/office/tk/control/group',
                 // do not contain the passed focus node anymore
                 while ((focusStack.length > 0) && (_.last(focusStack).nodes.find(focusNode).length === 0)) {
                     stackEntry = focusStack.pop();
-                    stackEntry.group.getNode().removeClass(FOCUSED_CLASS);
-                    stackEntry.group.trigger('group:blur');
+                    changeFocusState(stackEntry.group, true);
                 }
 
                 // trigger a 'group:focus' event at this group, if it is not already focused
                 if (!groupNode.hasClass(FOCUSED_CLASS) && (focusableNodes.find(focusNode).length > 0)) {
                     focusStack.push({ group: self, nodes: focusableNodes });
-                    groupNode.addClass(FOCUSED_CLASS);
-                    self.trigger('group:focus');
+                    changeFocusState(self, false);
                 }
             }
 
