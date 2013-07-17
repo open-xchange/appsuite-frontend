@@ -235,7 +235,7 @@ define('io.ox/core/commons',
                 searchAcrossFolders = name !== 'io.ox/mail';
 
             function getInfoNode() {
-                return grid.getToolbar().find('.grid-info');
+                return grid.getToolbar().find('.grid-info:visible');
             }
 
             function drawFolderInfo(folder_id) {
