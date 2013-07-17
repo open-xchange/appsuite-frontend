@@ -31,8 +31,8 @@
         eval("//@ sourceURL=" + name + ".js\n" + code);
 
     }
-
-    if (_.device('desktop') && !_.device("safari") && window.IDBVersionChangeEvent !== undefined && Modernizr.indexeddb && window.indexedDB) {
+    debugger;
+    if (_.device('desktop') && !_.device("Safari") && window.IDBVersionChangeEvent !== undefined && Modernizr.indexeddb && window.indexedDB) {
         // IndexedDB
         (function () {
             var initialization = $.Deferred();
@@ -94,7 +94,7 @@
 
         })();
 
-    } else if (Modernizr.websqldatabase && ! _.device("safari & desktop"))  {
+    } else if (Modernizr.websqldatabase && ! _.device("Safari && desktop"))  {
         // Web SQL
         (function () {
             var initialization = $.Deferred();
