@@ -53,12 +53,14 @@ define('io.ox/calendar/month/perspective',
         showAppointment: function (e, obj) {
             // open appointment details
             var self = this;
-            api.get(obj).done(function (data) {
-                self.dialog
-                    .show(e, function (popup) {
-                        popup.append(detailView.draw(data));
-                    });
-            });
+            if ($.isNumeric(obj.folder_id)) {
+                api.get(obj).done(function (data) {
+                    self.dialog
+                        .show(e, function (popup) {
+                            popup.append(detailView.draw(data));
+                        });
+                });
+            }
         },
 
         /**
