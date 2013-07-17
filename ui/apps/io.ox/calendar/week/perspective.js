@@ -266,11 +266,8 @@ define('io.ox/calendar/week/perspective',
         followDeepLink: function () {
             var cid = _.url.hash('id'), e;
             if (cid) {
-                cid = _.cid(cid);
-                if ($.isNumeric(cid.folder_id)) {
-                    e = $.Event('click', { target: this.main });
-                    this.showAppointment(e, cid, { arrow: false });
-                }
+                e = $.Event('click', { target: this.main });
+                this.showAppointment(e, _.cid(cid), { arrow: false });
             }
         },
 
