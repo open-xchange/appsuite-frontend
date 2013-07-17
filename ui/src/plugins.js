@@ -31,7 +31,6 @@
         eval("//@ sourceURL=" + name + ".js\n" + code);
 
     }
-    debugger;
     if (_.device('desktop') && !_.device("Safari") && window.IDBVersionChangeEvent !== undefined && Modernizr.indexeddb && window.indexedDB) {
         // IndexedDB
         (function () {
