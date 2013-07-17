@@ -105,25 +105,27 @@ define('io.ox/calendar/list/perspective',
             right.busy(true);
 
             //direct links are preferred
-            if (directlink) {
-                grid.prop('directlink', true);
-                directAppointment = obj;
-                grid.selection.on('change', checkDirectlink);
-                // get appointment
-                api.get(obj)
-                    .done(drawAppointment)
-                    .fail(drawFail, obj);
-            } else if (grid.prop('directlink') && directAppointment) {
-                api.get(directAppointment)
-                .done(drawAppointment)
-                .fail(drawFail, directAppointment);
-            } else {
-                directAppointment = undefined;
-                // get appointment
-                if (!(grid.prop('directlink'))) {
+            if ($.isNumeric(obj.folder_id)) {
+                if (directlink) {
+                    grid.prop('directlink', true);
+                    directAppointment = obj;
+                    grid.selection.on('change', checkDirectlink);
+                    // get appointment
                     api.get(obj)
-                        .done(_.lfo(drawAppointment))
-                        .fail(_.lfo(drawFail, obj));
+                        .done(drawAppointment)
+                        .fail(drawFail, obj);
+                } else if (grid.prop('directlink') && directAppointment) {
+                    api.get(directAppointment)
+                    .done(drawAppointment)
+                    .fail(drawFail, directAppointment);
+                } else {
+                    directAppointment = undefined;
+                    // get appointment
+                    if (!(grid.prop('directlink'))) {
+                        api.get(obj)
+                            .done(_.lfo(drawAppointment))
+                            .fail(_.lfo(drawFail, obj));
+                    }
                 }
             }
         }
