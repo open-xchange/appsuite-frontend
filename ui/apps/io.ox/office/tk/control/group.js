@@ -148,13 +148,13 @@ define('io.ox/office/tk/control/group',
                 // do not contain the passed focus node anymore
                 while ((focusStack.length > 0) && (_.last(focusStack).nodes.find(focusNode).length === 0)) {
                     stackEntry = focusStack.pop();
-                    changeFocusState(stackEntry.group, true);
+                    changeFocusState(stackEntry.group, false);
                 }
 
                 // trigger a 'group:focus' event at this group, if it is not already focused
                 if (!groupNode.hasClass(FOCUSED_CLASS) && (focusableNodes.find(focusNode).length > 0)) {
                     focusStack.push({ group: self, nodes: focusableNodes });
-                    changeFocusState(self, false);
+                    changeFocusState(self, true);
                 }
             }
 
