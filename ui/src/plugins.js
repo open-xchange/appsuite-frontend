@@ -92,12 +92,36 @@
 
 
         })();
-
-    } else if (Modernizr.websqldatabase && ! _.device("Safari && desktop"))  {
+    } /*else if (Modernizr.localstorage && !_.device("desktop")) {
+        (function () {
+            var queue = null;
+            fileCache.retrieve = function (name) {
+                var found = localStorage.getItem(name);
+                if (found && found.version === ox.version) {
+                    return $.Deferred().resolve(found.text);
+                }
+            };
+            fileCache.cache = function (name, contents) {
+                if (queue) {
+                    queue.items.push({k: name, c: {text: contents, version: ox.version}});
+                } else {
+                    queue = {
+                        items: []
+                    };
+                    setTimeout(function () {
+                        _(queue.items).each(function (e) {
+                            localStorage.setItem(e.k, e.c);
+                        });
+                        queue = null;
+                    }, 5000);
+                }
+            };
+        }());
+    }*/ else if (Modernizr.websqldatabase && ! _.device("Safari && desktop")) {
         // Web SQL
         (function () {
             var initialization = $.Deferred();
-            var db = openDatabase("filecache", "1.0", "caches files for OX", 5 * 1024 * 1024);
+            var db = openDatabase("filecache", "1.0", "caches files for OX", 12 * 1024 * 1024);
             db.transaction(function (tx) {
                 tx.executeSql("CREATE TABLE IF NOT EXISTS version (version TEXT)");
                 tx.executeSql("SELECT 1 FROM version WHERE version = ?", [ox.version], function (tx, result) {
