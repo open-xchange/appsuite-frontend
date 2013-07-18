@@ -177,16 +177,6 @@ define('io.ox/contacts/edit/view-form', [
             tagtype: "button"
         }));
 
-        if (_.device('small')) {
-            point.basicExtend({
-                id: "break",
-                after: 'save',
-                draw: function () {
-                    this.append($('<br>'));
-                }
-            });
-        }
-
         point.basicExtend(new links.Button({
             id: "discard",
             index: 120,
@@ -196,6 +186,22 @@ define('io.ox/contacts/edit/view-form', [
             tabIndex: 3,
             tagtype: "button"
         }));
+        /*
+         * extension point for mobile toolbar on the bottom of the page
+         */
+        ext.point('io.ox/contacts/edit/bottomToolbar').extend({
+            id: 'toolbar',
+            index: 100,
+            draw: function (baton) {
+                var node = $(this.attributes.window.nodes.body),
+                    toolbar = $('<div class="app-bottom-toolbar">');
+                // due to the very strange usage of extension points in contacts module
+                // we have to do move the buttons the old-school way
+                toolbar.append(node.find('[data-action="save"], [data-action="discard"]'));
+                node.append(toolbar);
+            }
+
+        });
 
         function toggle(e) {
 
@@ -341,8 +347,16 @@ define('io.ox/contacts/edit/view-form', [
                     //invoked by sidepopup (portal); uses event of hidden sidebar-close button
                     $('.io-ox-sidepopup').find('[data-action="close"]').trigger('click');
                 }
-                else
-                    options.parentView.$el.find('[data-action="discard"]').trigger('controller:quit');
+                else {
+                    var button;
+                    if (_.device('small')) {
+                        // really not so nice...
+                        button = options.parentView.$el.parent().parent().parent().find('[data-action="discard"]');
+                    } else {
+                        button = options.parentView.$el.find('[data-action="discard"]');
+                    }
+                    button.trigger('controller:quit');
+                }
             }
         });
 
@@ -450,7 +464,6 @@ define('io.ox/contacts/edit/view-form', [
         // loop over all sections (personal, messaging, phone etc.)
         // to get list of relevant fields per section
         _(meta.sections).each(function (fields, id) {
-
             // create new "block" extension
             ext.point(ref + '/edit').extend({
                 id: id,
