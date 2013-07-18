@@ -117,7 +117,7 @@
                 }
             };
         }());
-    }*/ else if (Modernizr.websqldatabase && ! _.device("Safari && desktop")) {
+    }*/ else if (Modernizr.websqldatabase && ! _.device("Safari && desktop") && (_.browser.ios < 7)) {
         // Web SQL
         (function () {
             var initialization = $.Deferred();
@@ -250,7 +250,7 @@
                                 var match = moduleText.match(/define(\.async)?\(([^,]+),/);
                                 if (match) {
                                     name = match[2].substr(1, match[2].length -2);
-                                }    
+                                }
                                 if (name) {
                                     if (_.url.hash('debug-filecache')) {
                                         console.log("Caching " + name);
