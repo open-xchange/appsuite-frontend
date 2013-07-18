@@ -157,9 +157,6 @@ define('io.ox/tasks/edit/view',
             this.getRow(0, app, 'attachments').invoke('draw', attachmentsTab, self.baton);
             util.buildExtensionRow(attachmentsTab, [this.getRow(1, app, 'attachments')], self.baton);
 
-            // Hide attachments on specific devices (boot.js)
-            if (!ox.uploadsEnabled) attachmentTabheader.hide();
-
             if (!capabilities.has('infostore')) {
                 attachmentTabheader.hide();
                 attachmentsTab.hide();
@@ -176,7 +173,7 @@ define('io.ox/tasks/edit/view',
                 participantsTab.hide();
 
                 //only details tab left?
-                if (!ox.uploadsEnabled || !capabilities.has('infostore')) {
+                if (!capabilities.has('infostore')) {
                     //use display content and add sectiontitle
                     detailsTab.addClass('collapsed');
                     node.find('.nav-tabs')

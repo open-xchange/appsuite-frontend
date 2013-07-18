@@ -13,7 +13,8 @@
 define('plugins/portal/contacts/register',
     ['io.ox/core/extensions',
      'io.ox/contacts/api',
-     'gettext!plugins/portal'], function (ext, api, gt) {
+     'io.ox/portal/widgets',
+     'gettext!plugins/portal'], function (ext, api, portalWidgets, gt) {
 
     'use strict';
 
@@ -24,12 +25,20 @@ define('plugins/portal/contacts/register',
 
         load: function (baton) {
             var props = baton.model.get('props') || {};
-            return api.get({ folder: props.folder_id, id: props.id }).done(function (data) {
+            return api.get({ folder: props.folder_id, id: props.id }).then(function (data) {
                 baton.data = data;
+            }, function (e) {
+                return e.code === 'CON-0125' ? 'remove' : e;
             });
         },
 
         preview: function (baton) {
+            api.on('delete', function (event, element) {
+                if (element.id === baton.data.id && element.folder_id === baton.data.folder_id) {
+                    var widgetCol = portalWidgets.getCollection();
+                    widgetCol.remove(baton.model);
+                }
+            });
 
             var list = baton.data.distribution_list || [], content = $('<div class="content pointer">');
 

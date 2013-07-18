@@ -264,16 +264,16 @@ define('io.ox/office/framework/app/basecontroller',
         }
 
         /**
-         * The event handler function that will listen to 'change' events in
-         * all registered view components.
+         * The event handler function that will listen to 'group:change' events
+         * in all registered view components.
          */
         function componentChangeHandler(event, key, value, options) {
             callSetHandler(key, value, options);
         }
 
         /**
-         * The event handler function that will listen to 'cancel' events in
-         * all registered view components.
+         * The event handler function that will listen to 'group:cancel' events
+         * in all registered view components.
          */
         function componentCancelHandler(event, options) {
             grabApplicationFocus(options);
@@ -552,16 +552,19 @@ define('io.ox/office/framework/app/basecontroller',
          * form controls used to display item values and trigger item actions.
          *
          * @param {Component} component
-         *  The view component to be registered. Must trigger 'change' events
-         *  passing the item key and value as parameters, if a control has been
-         *  activated in the user interface; or 'cancel' events to return to
-         *  the application without doing anything.
+         *  The view component to be registered. Must trigger 'group:change'
+         *  events passing the item key and value as parameters, if a control
+         *  has been activated in the user interface; or 'group:cancel' events
+         *  to return to the application without doing anything.
          *
          * @returns {BaseController}
          *  A reference to this controller instance.
          */
         this.registerViewComponent = function (component) {
-            component.on({ change: componentChangeHandler, cancel: componentCancelHandler });
+            component.on({
+                'group:change': componentChangeHandler,
+                'group:cancel': componentCancelHandler
+            });
             return this;
         };
 

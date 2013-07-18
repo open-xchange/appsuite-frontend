@@ -30,12 +30,20 @@ define('io.ox/office/framework/view/component',
      * (controls or groups of controls).
      *
      * Instances of this class trigger the following events:
-     * - 'change': If a control has been activated. The event handler receives
-     *  the key and value of the activated control. The value depends on the
-     *  type of the activated control.
-     * - 'cancel': When the focus needs to be returned to the application (e.g.
-     *  when the Escape key is pressed, or when a click on a drop-down button
-     *  closes the opened drop-down menu).
+     * - 'group:change': If a control group has been activated. The event
+     *      handler receives the key and value of the activated control group.
+     *      The value depends on the type of the activated control.
+     * - 'group:cancel': When the focus needs to be returned to the application
+     *      (e.g. when the Escape key is pressed, or when a click on a
+     *      drop-down button closes the opened drop-down menu).
+     * - 'group:focus': After a control group has been focused, by initially
+     *      focusing any of its focusable child nodes.
+     * - 'group:blur': After the control group has lost the browser focus,
+     *      after focusing any other DOM node outside the group.
+     * - 'menu:open': After the drop-down menu of a control group has been
+     *      opened.
+     * - 'menu:close': After the drop-down menu of a control group has been
+     *      closed.
      *
      * @constructor
      *
@@ -141,7 +149,7 @@ define('io.ox/office/framework/view/component',
             // forward 'group:cancel' events, update focusability depending on
             // the group's state, forward other layout events
             group.on({
-                'group:cancel': function (event, options) { self.trigger('cancel', options); },
+                'group:cancel': function (event, options) { self.trigger('group:cancel', options); },
                 'group:focus group:blur': groupFocusHandler,
                 'menu:open menu:close': dropDownMenuHandler,
                 'group:show group:layout': updateFocusable
@@ -287,7 +295,7 @@ define('io.ox/office/framework/view/component',
             // forward 'group:change' events to listeners of this view component
             (groupsByKey[key] || (groupsByKey[key] = [])).push(group);
             group.on('group:change', function (event, value, options) {
-                self.trigger('change', key, value, options);
+                self.trigger('group:change', key, value, options);
             });
 
             // set the key as data attribute

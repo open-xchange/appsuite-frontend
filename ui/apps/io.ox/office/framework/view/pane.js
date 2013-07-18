@@ -61,6 +61,10 @@ define('io.ox/office/framework/view/pane',
      *      If set to true, all control groups in all view components will be
      *      displayed half-transparent as long as the mouse does not hover the
      *      view pane. Has no effect, if the current device is a touch device.
+     *  @param {Boolean} [options.enableContextMenu=false]
+     *      If set to true, the view pane will enable the browser context menu.
+     *      Otherwise, the context menu will be disabled for all DOM nodes but
+     *      for text input fields and text areas.
      *  @param {Function} [options.componentInserter]
      *      A function that will implement inserting the root DOM node of a new
      *      view component into this view pane. The function receives the
@@ -337,6 +341,13 @@ define('io.ox/office/framework/view/pane',
             node[Utils.isVerticalPosition(position) ? 'height' : 'width'](0);
             // hover effect for view components embedded in the pane
             node.toggleClass('hover-effect', Utils.getBooleanOption(options, 'hoverEffect', false));
+        }
+
+        // context menu support
+        if (!Utils.getBooleanOption(options, 'enableContextMenu', false)) {
+            node.on('contextmenu', function (event) {
+                if (!$(event.target).is('input, textarea')) { return false; }
+            });
         }
 
     } // class Pane
