@@ -185,7 +185,7 @@ define('io.ox/files/actions',
         capabilities: 'webmail',
         requires: function (e) {
             var list = _.getArray(e.context);
-            return e.collection.has('some') && ox.uploadsEnabled && (e.baton.openedBy !== 'io.ox/mail/write') &&//hide in mail write preview
+            return e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/write') &&//hide in mail write preview
                 _(list).reduce(function (memo, obj) {
                     return memo || obj.file_size > 0;
                 }, false);
