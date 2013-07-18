@@ -63,7 +63,33 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
         });
 
         describe('showing a folder with one file', function () {
-            //TODO: implement me
+            it('should display a template for it', function () {
+                this.testData = [
+                    {
+                        id: 'lonely',
+                        name: 'lonely item'
+                    }
+                ];
+                wireGridAndApiFor(this);
+                this.vgrid.addTemplate({
+                    build: function () {
+                        var name;
+                        this.addClass('testData').append(
+                            name = $('<div>')
+                        );
+                        return { name: name };
+                    },
+                    set: function (data, fields, index) {
+                        fields.name.text(data.name);
+                    }
+                });
+
+                this.vgrid.paint();
+
+                waitsFor(function () {
+                    return this.node.text().indexOf('lonely item') >= 0;
+                }, 'test data was not painted in time', 1000);
+            });
         });
 
         describe('showing a folder with some files', function () {
