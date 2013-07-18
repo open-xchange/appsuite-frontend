@@ -249,10 +249,11 @@ define('l10n/ja_JP/io.ox/register',
                         text: firstLetter,
                         enabled: function (baton) { return firstLetter <= 'z'; }
                     });
-                baton.data = [abc].concat(_.map(kana, baton.Thumb));
+                baton.data = _.map(kana, baton.Thumb);
+                baton.data.push(abc);
             } else {
                 baton.data = _.map(
-                    'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').concat(kana),
+                    kana.concat('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')),
                     baton.Thumb);
             }
         }
