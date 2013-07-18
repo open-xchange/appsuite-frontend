@@ -2840,7 +2840,7 @@ msgid ""
 "span></a> of <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
 "\">october</a>. "
 msgstr ""
-"Der Termin findet jedes Jahr am <a href=\"#\"  data-widget=\"custom\" data-"
+"Der Termin findet jedes Jahr am <a href=\"#\"  data-widget=\"number\" data-"
 "attribute=\"dayInMonth\">10.</a> <a href=\"#\" data-widget=\"options\" data-"
 "attribute=\"month\">Oktober</a> statt. "
 
