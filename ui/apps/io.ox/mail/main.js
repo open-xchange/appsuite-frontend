@@ -283,10 +283,15 @@ define('io.ox/mail/main',
 
         function updateGridOptions() {
             var dropdown = grid.getToolbar().find('.grid-options'),
+                dataMenu = dropdown.data('menu'),
                 list = dropdown.find('ul'),
                 props = grid.prop();
-            // uncheck all
-            list.find('i').attr('class', 'icon-none');
+            // mobile menu fix, check if smartphone and menu was opened at least once
+            if (_.device('smartphone') && dataMenu) {
+                list = dataMenu;
+            }
+            // uncheck all, except the mobile-menu close row
+            list.find('i:not(.icon-chevron-down)').attr('class', 'icon-none');
             // sort
             list.find(
                     '[data-option="' + props.sort + '"], ' +
