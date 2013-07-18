@@ -235,7 +235,7 @@ define('io.ox/core/tk/vgrid',
             },
 
             uncheckSelectAll = function (list) {
-                if (list.length <= 1) {
+                if (list.length < 1) {
                     ignoreCheckbox = true;
                     node.find('.select-all input').prop('checked', false);
                     ignoreCheckbox = false;
