@@ -602,7 +602,7 @@ define('io.ox/office/framework/view/baseview',
          * @param {Object} [options]
          *  A map with additional options controlling the appearance and
          *  behavior of the alert banner. The following options are supported:
-         *  @param {Boolean} [options.closeable]
+         *  @param {Boolean} [options.closeable=false]
          *      If set to true, the alert banner can be closed with a close
          *      button shown in the top-right corner of the banner.
          *  @param {Number} [options.timeout=5000]
@@ -625,7 +625,11 @@ define('io.ox/office/framework/view/baseview',
          */
         this.showAlert = function (title, message, type, options) {
 
-            var // the label of the push button to be shown in the alert banner
+            var // whether the alert is closeable manually
+                closeable = Utils.getBooleanOption(options, 'closeable', false),
+                // auto-close timeout delay
+                delay = Utils.getIntegerOption(options, 'timeout', 5000, 0),
+                // the label of the push button to be shown in the alert banner
                 buttonLabel = Utils.getStringOption(options, 'buttonLabel'),
                 // the callback action for the push button
                 buttonAction = Utils.getFunctionOption(options, 'buttonAction'),
@@ -635,9 +639,7 @@ define('io.ox/office/framework/view/baseview',
                 alert = $('<div>')
                     .addClass('alert alert-' + type)
                     .append($('<h4>').text(title), $('<p>').text(message))
-                    .data('pane-pos', 'top'),
-                // auto-close timeout delay
-                delay = Utils.getIntegerOption(options, 'timeout', 5000);
+                    .data('pane-pos', 'top');
 
             // Hides the alert with a specific animation.
             function closeAlert() {
@@ -650,18 +652,19 @@ define('io.ox/office/framework/view/baseview',
             currentAlert = alert;
 
             // make the alert banner closeable
-            if (Utils.getBooleanOption(options, 'closeable', false)) {
+            if (closeable) {
                 // add closer symbol
-                alert.prepend($('<a>', { href: '#' }).text('\xd7').addClass('close'))
+                alert.prepend($('<a>', { href: '#' }).text('\xd7').addClass('close').attr('tabindex', 1))
                     .css('cursor', 'pointer')
                     // alert can be closed by clicking anywhere in the banner
-                    .on('click', closeAlert)
-                    // initialize auto-close
-                    .delay(delay)
-                    .fadeOut(function () {
+                    .on('click', closeAlert);
+                // initialize auto-close
+                if (delay > 0) {
+                    alert.delay(delay).fadeOut(function () {
                         currentAlert = null;
                         alert.remove();
                     });
+                }
             }
 
             // return focus to application pane when alert has been clicked (also if not closeable)
@@ -677,11 +680,18 @@ define('io.ox/office/framework/view/baseview',
                 alert.prepend(
                     $.button({ label: buttonLabel })
                         .addClass('btn-' + ((type === 'error') ? 'danger' : type) + ' btn-mini')
+                        .attr('tabindex', 1)
                         .on('click', function () {
                             closeAlert();
                             buttonAction.call(self);
                         })
                 );
+            }
+
+            // if the alert is closeable without timeout, or contains a button,
+            // add it to the global F6 focus traveling chain
+            if ((closeable && (delay === 0)) || (_.isString(buttonLabel) && _.isFunction(buttonAction))) {
+                alert.addClass('f6-target');
             }
 
             // insert and show the new alert banner
