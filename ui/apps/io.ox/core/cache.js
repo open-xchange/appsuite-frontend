@@ -42,6 +42,13 @@ define('io.ox/core/cache',
         }
     };
 
+    // listen for logout event
+    ext.point('io.ox/core/logout').extend({
+        logout: function () {
+            ox.cache.clear();
+        }
+    });
+
     ext.point("io.ox/core/cache/storage").each(function (storage) {
         if (storage.isUsable() && _.isNull(preferredPersistentCache)) {
             preferredPersistentCache = storage.id;
@@ -73,7 +80,7 @@ define('io.ox/core/cache',
                 persistentCache = storages[opt.persistent],
                 fluentCache = storages[opt.fluent],
                 // use persistent storage?
-                persist = (persistentCache.isUsable() && _.url.hash('persistence') !== 'false' && persistent === true ?
+                persist = (ox.secretCookie === true && persistentCache.isUsable() && _.url.hash('persistence') !== 'false' && persistent === true ?
                         function () {
                             return ox.user !== '';
                         } :
