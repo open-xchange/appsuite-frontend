@@ -764,11 +764,8 @@ define('io.ox/office/framework/view/baseview',
 
         // initialization -----------------------------------------------------
 
-        // suppress context menu on every view component
-        app.getWindowNode().on('contextmenu', false);
-
         // create the application pane, and insert the container node
-        appPane = new Pane(app, { classes: 'app-pane unselectable' });
+        appPane = new Pane(app, { classes: 'app-pane', enableContextMenu: true });
         appPane.getNode()
             .toggleClass('scrolling', Utils.getBooleanOption(options, 'scrollable', false))
             .append(appContainerNode, appBusyNode.hide());
