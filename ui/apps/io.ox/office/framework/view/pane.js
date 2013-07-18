@@ -26,8 +26,13 @@ define('io.ox/office/framework/view/pane',
      * application window.
      *
      * Instances of this class trigger the following events:
-     * - 'show': After the view pane has been shown or hidden. The event
+     * - 'pane:show': After the view pane has been shown or hidden. The event
      *      handler receives the new visibility state.
+     * - 'pane:resize': After the view pane has been resized. The event handler
+     *      receives the new size of the resizeable dimension, in pixels.
+     * - 'group:layout': After a control group in any view component has been
+     *      shown, hidden, enabled, disabled, or after child nodes have been
+     *      inserted into the group using the method Group.addChildNodes().
      *
      * @constructor
      *
@@ -136,8 +141,7 @@ define('io.ox/office/framework/view/pane',
         function setPaneSize(size) {
             if (getPaneSize() !== size) {
                 paneSizeFunc(size);
-                app.getView().refreshPaneLayout();
-                self.trigger('resize', size);
+                self.trigger('pane:resize', size);
             }
         }
 
@@ -222,8 +226,7 @@ define('io.ox/office/framework/view/pane',
             $.cancelTracking();
             if (this.isVisible() !== visible) {
                 node.toggle(state);
-                app.getView().refreshPaneLayout();
-                this.trigger('show', visible);
+                this.trigger('pane:show', visible);
             }
             return this;
         };
@@ -282,6 +285,7 @@ define('io.ox/office/framework/view/pane',
 
             // update the CSS marker class for an opened drop-down menu
             component.on({
+                'group:layout': function () { self.trigger('group:layout'); },
                 'group:focus': function () { self.getNode().addClass(Utils.FOCUSED_CLASS); },
                 'group:blur': function () { self.getNode().removeClass(Utils.FOCUSED_CLASS); },
                 'menu:open': function () { self.getNode().addClass(DropDown.OPEN_CLASS); },

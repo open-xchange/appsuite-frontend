@@ -478,8 +478,11 @@ define('io.ox/office/framework/view/baseview',
             (pane.isOverlay() ? overlayPanes : fixedPanes).push(pane);
             app.getWindowNode().append(pane.getNode());
 
-            // refresh overall layout
-            return this.refreshPaneLayout();
+            // refresh pane layout when the pane or its contents are changed
+            pane.on('pane:show pane:resize group:layout', refreshPaneLayout);
+            refreshPaneLayout();
+
+            return this;
         };
 
         /**

@@ -79,6 +79,13 @@
     }
 }
 
+/* Safari on iPad does not clip rounded borders in absolutely positioned elements, e.g. the color box in color buttons */
+/* http://stackoverflow.com/questions/5736503/how-to-make-css3-rounded-corners-hide-overflow-in-chrome-opera */
+/* but using a 35-bytes GIF instead of a 108-bytes PNG as the image */
+.safari-overflow-fix() {
+    -webkit-mask-image: url(data:image/gif;base64,R0lGODdhAgACAIAAAAAAAP///ywAAAAAAgACAAACAoRRADs=);
+}
+
 /* restrict all definitions to office applications */
 .io-ox-office-main {
 
@@ -474,6 +481,7 @@ i[class^="icon-"], i[class^=" icon-"] {
             display: inline-block;
             background: @pane-fill-color;
             .box-shadow(2px 2px 6px fade(white, 10%));
+            .safari-overflow-fix();
 
             + .group {
                 margin-left: -1px;
@@ -625,6 +633,11 @@ i[class^="icon-"], i[class^=" icon-"] {
                     border-color: @focus-border-color;
                     border-left-color: transparent;
                     color: @textColor;
+
+                    /* remove hover/active effects */
+                    &:hover, &:active {
+                        background-color: white;
+                    }
 
                     /* black drop-down caret */
                     i[class^="docs-"] {

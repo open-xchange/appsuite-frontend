@@ -36,6 +36,9 @@ define('io.ox/office/framework/view/component',
      * - 'group:cancel': When the focus needs to be returned to the application
      *      (e.g. when the Escape key is pressed, or when a click on a
      *      drop-down button closes the opened drop-down menu).
+     * - 'group:layout': After a control group has been shown, hidden, enabled,
+     *      disabled, or after child nodes have been inserted into the group
+     *      using the method Group.addChildNodes().
      * - 'group:focus': After a control group has been focused, by initially
      *      focusing any of its focusable child nodes.
      * - 'group:blur': After the control group has lost the browser focus,
@@ -106,12 +109,23 @@ define('io.ox/office/framework/view/component',
         // private methods ----------------------------------------------------
 
         /**
+         * Handles 'group:show', 'group:enable', and 'group:layout' events.
+         * Updates the CSS marker class controlling whether this view component
+         * is focusable with special keyboard shortcuts, and forwards the event
+         * to all listeners.
+         */
+        function groupLayoutHandler() {
+            updateFocusable();
+            self.trigger('group:layout');
+        }
+
+        /**
          * Handles 'group:focus' and 'group:blur' events from all registered
          * group instances. Updates the CSS marker class at the root node of
          * this view component, and forwards the event to all listeners.
          */
         function groupFocusHandler(event) {
-            self.getNode().toggleClass(Utils.FOCUSED_CLASS, event.type === 'group:focus');
+            node.toggleClass(Utils.FOCUSED_CLASS, event.type === 'group:focus');
             self.trigger(event.type);
         }
 
@@ -121,7 +135,7 @@ define('io.ox/office/framework/view/component',
          * this view component, and forwards the event to all listeners.
          */
         function dropDownMenuHandler(event) {
-            self.getNode().toggleClass(DropDown.OPEN_CLASS, event.type === 'menu:open');
+            node.toggleClass(DropDown.OPEN_CLASS, event.type === 'menu:open');
             self.trigger(event.type);
         }
 
@@ -146,13 +160,13 @@ define('io.ox/office/framework/view/component',
                 node.append(group.getNode());
             }
 
-            // forward 'group:cancel' events, update focusability depending on
+            // forward various group events, update focusability depending on
             // the group's state, forward other layout events
             group.on({
                 'group:cancel': function (event, options) { self.trigger('group:cancel', options); },
+                'group:show group:enable group:layout': groupLayoutHandler,
                 'group:focus group:blur': groupFocusHandler,
-                'menu:open menu:close': dropDownMenuHandler,
-                'group:show group:layout': updateFocusable
+                'menu:open menu:close': dropDownMenuHandler
             });
 
             // make this view component focusable, if it contains any groups
