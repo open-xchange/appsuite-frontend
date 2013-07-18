@@ -863,6 +863,9 @@ define('io.ox/mail/view-detail',
         id: 'header',
         draw: function (baton) {
             var header = $('<header>');
+            if (_.device('smartphone')) {
+                header.addClass('details-collapsed');
+            }
             ext.point('io.ox/mail/detail/header').invoke('draw', header, baton);
             this.append(header);
         }
@@ -927,21 +930,6 @@ define('io.ox/mail/view-detail',
                 );
             }
             list = node = null;
-        }
-    });
-
-    ext.point('io.ox/mail/detail/header').extend({
-        index: 124,
-        id: 'thread-position',
-        draw: function (baton) {
-            var data = baton.data;
-            if (data.threadSize > 1) {
-                this.append(
-                    $('<div>')
-                    .addClass('thread-size clear-title')
-                    .text(_.noI18n(data.threadPosition + ' / ' + data.threadSize))
-                );
-            }
         }
     });
 
@@ -1018,7 +1006,7 @@ define('io.ox/mail/view-detail',
             this.append(
                 $('<div class="mail-detail-clear-left">'),
                 $('<div>')
-                .addClass('subject clear-title' + (subject === '' ? ' empty' : ''))
+                .addClass('subject' + (_.device('!smartphone') ? ' clear-title' : '') + (subject === '' ? ' empty' : ''))
                 .append(
                     $('<i class="icon-unread icon-circle">'),
                     // inject some zero width spaces for better word-break
@@ -1051,34 +1039,53 @@ define('io.ox/mail/view-detail',
                 show = showTO || showCC,
                 container = $('<div>').addClass('to-cc list');
 
+            if (showTO) {
+                container.append(
+                    // TO
+                    $('<span>').addClass('io-ox-label').append(
+                        $.txt(gt('To')),
+                        $.txt(_.noI18n('\u00A0\u00A0'))
+                    ),
+                    util.serializeList(data, 'to'),
+                    $.txt(_.noI18n(' \u00A0 '))
+                );
+            }
+            if (showCC) {
+                container.append(
+                    //#. CC list - use npgettext cause pgettext is broken
+                    $('<span>').addClass('io-ox-label').append(
+                        $.txt(gt.npgettext('CC', 'Copy', 'Copy', 1)),
+                        _.noI18n('\u00A0\u00A0')
+                    ),
+                    util.serializeList(data, 'cc'),
+                    $.txt(_.noI18n(' \u00A0 '))
+                );
+            }
             if (show) {
+                if (_.device('smartphone')) {
+                    container.find('.io-ox-label').prepend(
+                        $('<div>').addClass('mail-detail-clear-left')
+                    );
+                }
                 this.append(
                     $('<div>').addClass('mail-detail-clear-left'),
-                    container.append(
-                        // TO
-                        $('<span>').addClass('io-ox-label').append(
-                            $.txt(gt('To')),
-                            $.txt(_.noI18n('\u00A0\u00A0'))
-                        ),
-                        util.serializeList(data, 'to'),
-                        $.txt(_.noI18n(' \u00A0 ')),
-                        //#. CC list - use npgettext cause pgettext is broken
-                        showCC ? $('<span>').addClass('io-ox-label').append(
-                            $.txt(gt.npgettext('CC', 'Copy', 'Copy', 1)),
-                            _.noI18n('\u00A0\u00A0')
-                        ) : [],
-                        util.serializeList(data, 'cc'),
-                        $.txt(_.noI18n(' \u00A0 '))
-                    )
+                    container
                 );
-                drawAllDropDown(container, gt('All recipients'), data);
+                if (_.device('!smartphone')) {
+                    if (!(!showCC && showTO && data.to[0][1] === 'undisclosed-recipients:;')) {
+                        var dd = $('<div class="recipient-actions">');
+                        drawAllDropDown(dd, gt('All recipients'), data);
+                        dd.appendTo(container);
+                    }
+                }
+
             }
         }
     });
 
     ext.point('io.ox/mail/detail/header').extend({
-        after: 'tocopy',
         id: 'account',
+        index: 152,
         draw: function (baton) {
 
             if (!folder.is('unifiedfolder', baton.data.folder_id)) return;
@@ -1150,16 +1157,34 @@ define('io.ox/mail/view-detail',
         id: 'attachments',
         draw: function (baton) {
 
-            var data = baton.data;
-            var attachments = util.getAttachments(data), length = attachments.length;
+            var data = baton.data,
+                attachments = util.getAttachments(data), length = attachments.length,
+                aLabel;
 
             if (length > 0) {
-                var outer = $('<div>').addClass('list attachment-list').append(
-                    $('<span>').addClass('io-ox-label').append(
+                var outer = $('<div>').addClass('list attachment-list'),
+                    aLabel;
+                if (_.device('!smartphone')) {
+                    aLabel = $('<span>').addClass('io-ox-label').append(
                         $.txt(gt.npgettext('plural', 'Attachment', 'Attachments', length)),
                         $.txt('\u00A0\u00A0')
-                    )
-                );
+                    );
+                } else {
+                    aLabel = $('<a>', { href: '#'})
+                        .text(gt.npgettext('plural', 'Show attachment', 'Show attachments', length))
+                        .on('click', function (e) {
+                        e.preventDefault();
+                        outer.toggleClass('attachments-collapsed');
+                        if (outer.hasClass('attachments-collapsed')) {
+                            outer.find('.dropdown').hide();
+                            $(this).text(gt.npgettext('plural', 'Show attachment', 'Show attachments', length));
+                        } else {
+                            outer.find('.dropdown').css('display', 'block');
+                            $(this).text(gt.npgettext('plural', 'Hide attachment', 'Hide attachments', length));
+                        }
+                    });
+                }
+                outer.append(aLabel);
                 _(attachments).each(function (a, i) {
                     try {
                         var label = (a.filename || ('Attachment #' + i))
@@ -1169,6 +1194,9 @@ define('io.ox/mail/view-detail',
                             });
                         // draw
                         var dd = drawAttachmentDropDown(outer, _.noI18n(label), a);
+                        if (_.device('smartphone')) {
+                            dd.hide();
+                        }
                         // cut off long lists?
                         if (i > 3 && length > 5) {
                             dd.hide();
@@ -1178,7 +1206,7 @@ define('io.ox/mail/view-detail',
                     }
                 });
                 // add "[n] more ..."
-                if (length > 5) {
+                if (_.device('!smartphone') && length > 5) {
                     outer.append(
                         //#. 'more' like in 'x more attachments' / 'weitere' in German
                         $('<a href="#" class="n-more">').text((length - 4) + ' ' + gt('more') + ' ...').click(showAllAttachments)
@@ -1188,6 +1216,9 @@ define('io.ox/mail/view-detail',
                 if (length > 1) {
                     attachments.subject = data.subject;
                     drawAttachmentDropDown(outer, gt('All attachments'), attachments).find('a').removeClass('attachment-link');
+                }
+                if (_.device('smartphone')) {
+                    outer.addClass('attachments-collapsed').find('.dropdown').hide();
                 }
                 this.append(outer);
             }
@@ -1343,6 +1374,96 @@ define('io.ox/mail/view-detail',
             }
         }
     });
+
+    if (_.device('smartphone')) {
+        ext.point('io.ox/mail/detail');
+        ext.point('io.ox/mail/detail').disable('inline-links');
+        ext.point('io.ox/mail/detail/header')
+            .replace({
+                id: 'fromlist',
+                index: 120
+            })
+            .replace({
+                id: 'tocopy',
+                index: 130
+            })
+            .replace({
+                id: 'account',
+                index: 140
+            })
+            .replace({
+                id: 'externalresources-warning',
+                index: 160
+            })
+            .replace({
+                id: 'subscribe',
+                index: 170
+            })
+            .extend(new links.InlineLinks({
+                id: 'inline-links',
+                index: 175,
+                ref: 'io.ox/mail/links/inline'
+            }))
+            .extend({
+                id: 'recipient-actions',
+                index: 176,
+                draw: function (baton) {
+                    var data = baton.data,
+                        showCC = data.cc && data.cc.length > 0,
+                        showTO = data.to && data.to.length > 0,
+                        show = showTO || showCC;
+
+                    if (!(!showCC && showTO && data.to[0][1] === 'undisclosed-recipients:;')) {
+                        var dd = $('<div class="recipient-actions">');
+                        drawAllDropDown(dd, gt('All recipients'), data);
+                        if ((data.to.length === 1 && data.cc.length < 1) ||
+                            (data.cc.length === 1 && data.to.length < 1)) {
+                            dd.show().find('a').show();
+                        }
+                        this.append(dd);
+                    }
+                }
+            })
+            .extend({
+                id: 'details-toggle',
+                index: 177,
+                draw: function (baton) {
+                    if ((baton.data.to.length === 1 && baton.data.cc.length < 1) ||
+                        (baton.data.cc.length === 1 && baton.data.to.length < 1))
+                         {
+                        return;
+                    }
+                    var self = this;
+                    this.append(
+                        $('<a>', { href: '#'}).text(gt('Show details')).on('click', function (e) {
+                            e.preventDefault();
+                            self.toggleClass('details-collapsed');
+                            if (self.hasClass('details-collapsed')) {
+                                $(this).text(gt('Show details'));
+                            } else {
+                                $(this).text(gt('Hide details'));
+                            }
+                        })
+                    );
+                }
+            })
+            .replace({
+                id: 'attachments',
+                index: 178
+            })
+            .replace({
+                id: 'subject',
+                index: 180
+            })
+            .replace({
+                id: 'flag',
+                index: 190
+            })
+            .replace({
+                id: 'receiveddate',
+                index: 200
+            });
+    }
 
     function findFarthestElement(memo, node) {
         var pos;
