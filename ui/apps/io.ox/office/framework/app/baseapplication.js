@@ -1186,8 +1186,7 @@ define('io.ox/office/framework/app/baseapplication',
 
             // callback for a delay timer, executing the deferred callback
             function timerCallback() {
-                // execute the callback and return its result (for repeated execution)
-                return deferredCallback.call(context);
+                deferredCallback.call(context);
             }
 
             // aborts and clears all timers

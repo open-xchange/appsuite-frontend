@@ -288,7 +288,7 @@ define('io.ox/office/preview/view/pagegroup',
         sidePane.on('refresh:layout', updateButtonNodes);
 
         // when showing or resizing the side pane, scroll to current page
-        sidePane.on('show resize', function () {
+        sidePane.on('pane:show pane:resize', function () {
             self.selectAndShowPage(view.getPage());
         });
 

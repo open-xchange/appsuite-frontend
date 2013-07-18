@@ -25,10 +25,7 @@ define('io.ox/office/tk/control/group',
         // CSS class for disabled groups
         DISABLED_CLASS = 'disabled',
 
-        // CSS class for the group node while any embedded control is focused
-        FOCUSED_CLASS = 'focused',
-
-        // DOM event that will cause a 'change' event from a group
+        // DOM event that will cause a 'group:change' event from a group
         INTERNAL_TRIGGER_EVENT = 'private:trigger',
 
         // the group instances currently focused (as array, groups may be embedded)
@@ -105,8 +102,8 @@ define('io.ox/office/tk/control/group',
          */
         function keyHandler(event) {
             if (event.keyCode === KeyCodes.ESCAPE) {
-                if (event.type === 'keydown') {
-                    self.trigger('group:cancel');
+                if ((event.type === 'keydown') && !event.isDefaultPrevented()) {
+                    self.triggerCancel();
                 }
                 return false;
             }
@@ -119,7 +116,7 @@ define('io.ox/office/tk/control/group',
         function disabledHandler(event) {
             if (!self.isEnabled()) {
                 event.preventDefault();
-                self.trigger('group:cancel');
+                self.triggerCancel();
             }
         }
 
@@ -131,6 +128,14 @@ define('io.ox/office/tk/control/group',
          */
         function focusHandler(event) {
 
+            // update CSS focus class, trigger event (check that group is not destroyed yet)
+            function changeFocusState(group, focused) {
+                if (_.isFunction(group.trigger)) {
+                    group.getNode().toggleClass(Utils.FOCUSED_CLASS, focused);
+                    group.trigger(focused ? 'group:focus' : 'group:blur');
+                }
+            }
+
             function processEvent(focusNode) {
 
                 var // the top entry of the focus stack
@@ -140,17 +145,13 @@ define('io.ox/office/tk/control/group',
                 // do not contain the passed focus node anymore
                 while ((focusStack.length > 0) && (_.last(focusStack).nodes.find(focusNode).length === 0)) {
                     stackEntry = focusStack.pop();
-                    Utils.log('<== group:blur in group ' + stackEntry.group.getNode().attr('data-key'));
-                    stackEntry.group.getNode().removeClass(FOCUSED_CLASS);
-                    stackEntry.group.trigger('group:blur');
+                    changeFocusState(stackEntry.group, false);
                 }
 
                 // trigger a 'group:focus' event at this group, if it is not already focused
-                if (!groupNode.hasClass(FOCUSED_CLASS) && (focusableNodes.find(focusNode).length > 0)) {
-                    Utils.log('==> group:focus in group ' + groupNode.attr('data-key'));
+                if (!groupNode.hasClass(Utils.FOCUSED_CLASS) && (focusableNodes.find(focusNode).length > 0)) {
                     focusStack.push({ group: self, nodes: focusableNodes });
-                    groupNode.addClass(FOCUSED_CLASS);
-                    self.trigger('group:focus');
+                    changeFocusState(self, true);
                 }
             }
 
@@ -273,7 +274,7 @@ define('io.ox/office/tk/control/group',
             function eventHandler(event, options) {
                 var value = self.isEnabled() ? valueResolver.call(self, $(this)) : null;
                 if (_.isNull(value)) {
-                    self.trigger('group:cancel', options);
+                    self.triggerCancel(options);
                 } else {
                     self.update(value);
                     self.trigger('group:change', value, options);
@@ -294,6 +295,23 @@ define('io.ox/office/tk/control/group',
             return this;
         };
 
+        this.registerFocusableContainerNode = function (node) {
+            focusableNodes = focusableNodes.add(node);
+            return this;
+        };
+
+        /**
+         * Registers a container DOM node located outside the root node of this
+         * group instance, that contains control nodes that will be included
+         * into the focus handling and generation of 'group:focus' and
+         * 'group:blur' events.
+         *
+         * @param {HTMLElement|jQuery} node
+         *  The DOM node(s) to be added to the internal focus handling.
+         *
+         * @returns {Group}
+         *  A reference to this instance.
+         */
         this.registerFocusableContainerNode = function (node) {
             focusableNodes = focusableNodes.add(node);
             return this;
@@ -451,14 +469,6 @@ define('io.ox/office/tk/control/group',
             // enable/disable the entire group node with all its descendants
             groupNode.toggleClass(Utils.DISABLED_CLASS, !enabled);
 
-            // set or remove 'tabindex' attribute to make it (in)accessible for
-            // global F6 focus traveling
-            if (enabled) {
-                groupNode.find(Utils.FOCUSABLE_SELECTOR).attr('tabindex', 1);
-            } else {
-                groupNode.find(Utils.FOCUSABLE_SELECTOR).removeAttr('tabindex');
-            }
-
             // trigger an 'group:enable' event so that derived classes can react
             return this.trigger('group:enable', enabled);
         };
@@ -525,6 +535,20 @@ define('io.ox/office/tk/control/group',
         this.triggerChange = function (control, options) {
             $(control).first().trigger(INTERNAL_TRIGGER_EVENT, options);
             return this;
+        };
+
+        /**
+         * Triggers a 'group:cancel' event at this Group instance.
+         *
+         * @param {Object} [options]
+         *  A map with additional options that will be passed to the
+         *  'group:cancel' event listeners of this class.
+         *
+         * @returns {Group}
+         *  A reference to this group.
+         */
+        this.triggerCancel = function (options) {
+            return this.trigger('group:cancel', options);
         };
 
         this.destroy = function () {

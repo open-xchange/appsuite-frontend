@@ -26,8 +26,13 @@ define('io.ox/office/framework/view/pane',
      * application window.
      *
      * Instances of this class trigger the following events:
-     * - 'show': After the view pane has been shown or hidden. The event
+     * - 'pane:show': After the view pane has been shown or hidden. The event
      *      handler receives the new visibility state.
+     * - 'pane:resize': After the view pane has been resized. The event handler
+     *      receives the new size of the resizeable dimension, in pixels.
+     * - 'group:layout': After a control group in any view component has been
+     *      shown, hidden, enabled, disabled, or after child nodes have been
+     *      inserted into the group using the method Group.addChildNodes().
      *
      * @constructor
      *
@@ -61,6 +66,10 @@ define('io.ox/office/framework/view/pane',
      *      If set to true, all control groups in all view components will be
      *      displayed half-transparent as long as the mouse does not hover the
      *      view pane. Has no effect, if the current device is a touch device.
+     *  @param {Boolean} [options.enableContextMenu=false]
+     *      If set to true, the view pane will enable the browser context menu.
+     *      Otherwise, the context menu will be disabled for all DOM nodes but
+     *      for text input fields and text areas.
      *  @param {Function} [options.componentInserter]
      *      A function that will implement inserting the root DOM node of a new
      *      view component into this view pane. The function receives the
@@ -132,8 +141,7 @@ define('io.ox/office/framework/view/pane',
         function setPaneSize(size) {
             if (getPaneSize() !== size) {
                 paneSizeFunc(size);
-                app.getView().refreshPaneLayout();
-                self.trigger('resize', size);
+                self.trigger('pane:resize', size);
             }
         }
 
@@ -218,8 +226,7 @@ define('io.ox/office/framework/view/pane',
             $.cancelTracking();
             if (this.isVisible() !== visible) {
                 node.toggle(state);
-                app.getView().refreshPaneLayout();
-                this.trigger('show', visible);
+                this.trigger('pane:show', visible);
             }
             return this;
         };
@@ -278,6 +285,9 @@ define('io.ox/office/framework/view/pane',
 
             // update the CSS marker class for an opened drop-down menu
             component.on({
+                'group:layout': function () { self.trigger('group:layout'); },
+                'group:focus': function () { self.getNode().addClass(Utils.FOCUSED_CLASS); },
+                'group:blur': function () { self.getNode().removeClass(Utils.FOCUSED_CLASS); },
                 'menu:open': function () { self.getNode().addClass(DropDown.OPEN_CLASS); },
                 'menu:close': function () { self.getNode().removeClass(DropDown.OPEN_CLASS); }
             });
@@ -317,6 +327,9 @@ define('io.ox/office/framework/view/pane',
 
         // initialization -----------------------------------------------------
 
+        // marker for touch devices
+        node.toggleClass('touch', Modernizr.touch);
+
         // no size tracking for transparent view panes
         if (!transparent && Utils.getBooleanOption(options, 'resizeable', false)) {
             $('<div>').addClass('resizer ' + position)
@@ -330,10 +343,15 @@ define('io.ox/office/framework/view/pane',
         node.toggleClass('overlay', overlay);
         if (transparent) {
             node[Utils.isVerticalPosition(position) ? 'height' : 'width'](0);
-            // hover effect for view components embedded in the pane (not for touch devices)
-            if (!Modernizr.touch && Utils.getBooleanOption(options, 'hoverEffect', false)) {
-                node.addClass('hover-effect');
-            }
+            // hover effect for view components embedded in the pane
+            node.toggleClass('hover-effect', Utils.getBooleanOption(options, 'hoverEffect', false));
+        }
+
+        // context menu support
+        if (!Utils.getBooleanOption(options, 'enableContextMenu', false)) {
+            node.on('contextmenu', function (event) {
+                if (!$(event.target).is('input, textarea')) { return false; }
+            });
         }
 
     } // class Pane

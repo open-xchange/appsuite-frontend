@@ -31,6 +31,13 @@ define('io.ox/office/tk/dropdown/dropdown',
      * the class Group or one of its derived classes. Expects the symbol 'this'
      * to be bound to an instance of Group.
      *
+     * Instances of this class trigger the following events:
+     * - 'menu:open': After the drop-down menu has been opened.
+     * - 'menu:close': After the drop-down menu has been closed.
+     * - 'menu:layout': If the absolute position of the group or the browser
+     *      window size has changed, and the position and size of the drop-down
+     *      menu node needs to be adjusted.
+     *
      * @constructor
      *
      * @param {Object} [options]
@@ -82,9 +89,6 @@ define('io.ox/office/tk/dropdown/dropdown',
 
             // the drop-down menu element containing the menu view component
             menuNode = $('<div>').addClass('io-ox-office-main dropdown-container'),
-
-            // additional controls that toggle the drop-down menu
-            menuToggleControls = $(),
 
             // current size of the drop-down menu (calculated when opening the menu)
             menuNodeSize = null,
@@ -219,7 +223,6 @@ define('io.ox/office/tk/dropdown/dropdown',
                 // original min-width and min-height attributes of the menu node
                 menuMinSize = null;
 
-
             // do nothing if the menu is already open
             if (self.isMenuVisible()) { return; }
 
@@ -315,7 +318,7 @@ define('io.ox/office/tk/dropdown/dropdown',
                 // get keyboard control in the drop-down menu
                 menuButton.focus();
 
-                // toggle the menu, this triggers the 'menu:open'/'menu:close' listeners
+                // toggle the menu, this triggers the 'menu:open'/'menu:close' event
                 if (self.isMenuVisible()) {
                     hideMenu();
                 } else {
@@ -325,7 +328,7 @@ define('io.ox/office/tk/dropdown/dropdown',
 
             // trigger 'group:cancel' event, if menu has been closed with mouse click
             if (!self.isMenuVisible()) {
-                self.trigger('group:cancel');
+                self.triggerCancel();
             }
         }
 
@@ -343,7 +346,7 @@ define('io.ox/office/tk/dropdown/dropdown',
 
             // close the menu unless a 'mousedown' event occurred on the drop-down button
             // (this would lead to reopening the menu immediately with the following click)
-            if (!isTargetIn(menuNode) && !((event.type === 'mousedown') && isTargetIn(menuButton.add(menuToggleControls)))) {
+            if (!isTargetIn(menuNode) && !((event.type === 'mousedown') && isTargetIn(menuButton))) {
                 hideMenu();
             }
         }
@@ -358,10 +361,15 @@ define('io.ox/office/tk/dropdown/dropdown',
 
             switch (event.keyCode) {
             case KeyCodes.DOWN_ARROW:
-                if (keydown) { showMenu(); self.grabMenuFocus(); }
+                if (keydown && self.isEnabled()) {
+                    showMenu();
+                    self.grabMenuFocus();
+                }
                 return false;
             case KeyCodes.UP_ARROW:
-                if (keydown) { hideMenu(); }
+                if (keydown) {
+                    hideMenu();
+                }
                 return false;
             }
         }
@@ -372,16 +380,28 @@ define('io.ox/office/tk/dropdown/dropdown',
         function menuButtonKeyHandler(event) {
 
             var // distinguish between event types (ignore keypress events)
+                keydown = event.type === 'keydown',
                 keyup = event.type === 'keyup';
 
             switch (event.keyCode) {
             case KeyCodes.SPACE:
             case KeyCodes.ENTER:
                 if (keyup) {
-                    showMenu();
-                    self.grabMenuFocus();
+                    if (self.isEnabled()) {
+                        showMenu();
+                        self.grabMenuFocus();
+                    } else if (event.keyCode === KeyCodes.ENTER) {
+                        self.triggerCancel();
+                    }
                 }
                 return false;
+            case KeyCodes.ESCAPE:
+                if (keydown && self.isMenuVisible()) {
+                    hideMenu();
+                    // let the Group base class not trigger the 'group:cancel' event
+                    event.preventDefault();
+                }
+                break;
             }
         }
 
@@ -506,10 +526,10 @@ define('io.ox/office/tk/dropdown/dropdown',
          * that are focusable.
          *
          * @returns {jQuery}
-         *  A collection with all focusable (visible and enabled) controls.
+         *  A collection with all focusable controls.
          */
         this.getFocusableMenuControls = function () {
-            return menuNode.find(Utils.ENABLED_SELECTOR + Utils.VISIBLE_SELECTOR + Utils.FOCUSABLE_SELECTOR);
+            return menuNode.find(Utils.VISIBLE_SELECTOR + Utils.FOCUSABLE_SELECTOR);
         };
 
         /**
@@ -522,42 +542,6 @@ define('io.ox/office/tk/dropdown/dropdown',
          */
         this.grabMenuFocus = function () {
             this.getFocusableMenuControls().first().focus();
-            return this;
-        };
-
-        /**
-         * Registers additional controls that will toggle the drop-down menu on
-         * 'click' events.
-         *
-         * @param {jQuery} controls
-         *  The controls to be registered as menu toggle controls.
-         *
-         * @returns {DropDown}
-         *  A reference to this instance.
-         */
-        this.addMenuToggleControls = function (controls) {
-            controls
-                .on('click', menuButtonClickHandler)
-                .on('keydown keypress keyup', menuButtonKeyHandler);
-            menuToggleControls = menuToggleControls.add(controls);
-            return this;
-        };
-
-        /**
-         * Unregisters additional controls that have been registered to toggle
-         * the drop-down menu on 'click' events.
-         *
-         * @param {jQuery} controls
-         *  The controls to be unregistered as menu toggle controls.
-         *
-         * @returns {DropDown}
-         *  A reference to this instance.
-         */
-        this.removeMenuToggleControls = function (controls) {
-            controls
-                .off('click', menuButtonClickHandler)
-                .off('keydown keypress keyup', menuButtonKeyHandler);
-            menuToggleControls = menuToggleControls.not(controls);
             return this;
         };
 

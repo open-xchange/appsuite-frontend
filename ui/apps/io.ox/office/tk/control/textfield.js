@@ -37,8 +37,6 @@ define('io.ox/office/tk/control/textfield',
      *  Utils.setControlCaption() for details), and all generic formatting
      *  options of input fields (see method Utils.createTextField() for
      *  details). Additionally, the following options are supported:
-     *  @param {Boolean} [options.readOnly=false]
-     *      If set to true, the text in the text field cannot be edited.
      *  @param {Boolean} [options.select=false]
      *      If set to true, the entire text will be selected after the text
      *      field has been clicked. Note that the text will always be selected
@@ -62,9 +60,6 @@ define('io.ox/office/tk/control/textfield',
 
             // create the input field control
             fieldNode = Utils.createTextField(options),
-
-            // read-only mode
-            readOnly = null,
 
             // whether to select the entire text on click
             select = Utils.getBooleanOption(options, 'select', false),
@@ -113,26 +108,34 @@ define('io.ox/office/tk/control/textfield',
          * Returns the current value associated to the text field.
          */
         function resolveValueHandler() {
-            var value = readOnly ? null : self.getFieldValue();
-            if (!_.isUndefined(value) && !_.isNull(value)) {
-                initialText = null;
-            }
-            return value;
+            return self.getFieldValue();
         }
 
         /**
          * Handles all focus events of the text field.
          */
-        function fieldFocusHandler(event) {
+        function focusHandler(event) {
             switch (event.type) {
+            case 'group:focus':
+                // save current value, if this group receives initial focus
+                initialText = fieldNode.val();
+                break;
             case 'focus':
-                // save current value
-                if (!_.isString(initialText)) {
-                    initialText = fieldNode.val();
-                }
                 // select entire text on mouse click when specified via option
                 if (select) { fieldNode.select().one('mouseup', false); }
                 validationFieldState = getFieldState();
+                // IE9 does not trigger 'input' events when deleting characters or
+                // pasting text, use a timer interval as a workaround
+                if (Utils.IE9) {
+                    fieldNode.data('lastValue', fieldNode.val());
+                    fieldNode.data('updateTimer', window.setInterval(function () {
+                        var value = fieldNode.val();
+                        if (value !== fieldNode.data('lastValue')) {
+                            fieldNode.data('lastValue', value);
+                            fieldInputHandler();
+                        }
+                    }, 250));
+                }
                 break;
             case 'focus:key':
                 // always select entire text when reaching the field with keyboard
@@ -141,16 +144,37 @@ define('io.ox/office/tk/control/textfield',
                 break;
             case 'blur':
                 fieldNode.off('mouseup');
+                // IE9 does not trigger 'input' events when deleting characters or pasting
+                // text, remove the timer interval that has been started as a workaround
+                if (Utils.IE9) {
+                    window.clearInterval(fieldNode.data('updateTimer'));
+                    fieldNode.data('updateTimer', null);
+                }
+                break;
+            case 'group:blur':
                 // Bug 27175: always commit value when losing focus
                 if (_.isString(initialText) && (initialText !== fieldNode.val())) {
+                    // pass preserveFocus option to not interfere with current focus handling
                     self.triggerChange(fieldNode, { preserveFocus: true });
                 }
+                initialText = null;
                 break;
             }
         }
 
         /**
-         * Handles keyboard events, especially the cursor keys.
+         * Handles enable/disable events of the group.
+         */
+        function enableHandler(event, state) {
+            if (state) {
+                fieldNode.removeAttr('readonly');
+            } else {
+                fieldNode.attr('readonly', 'readonly');
+            }
+        }
+
+        /**
+         * Handles keyboard events.
          */
         function fieldKeyHandler(event) {
             switch (event.keyCode) {
@@ -162,9 +186,7 @@ define('io.ox/office/tk/control/textfield',
             case KeyCodes.ESCAPE:
                 if (event.type === 'keydown') {
                     fieldNode.val(initialText);
-                    initialText = null;
                 }
-                break;
             }
         }
 
@@ -217,50 +239,6 @@ define('io.ox/office/tk/control/textfield',
         };
 
         /**
-         * Returns whether the text field is in read-only mode.
-         */
-        this.isReadOnly = function () {
-            return readOnly;
-        };
-
-        /**
-         * Enters or leaves the read-only mode.
-         *
-         * @param {Boolean} [state]
-         *  If omitted or set to true, the text field will be set to read-only
-         *  mode. Otherwise, the text field will be made editable.
-         *
-         * @returns {TextField}
-         *  A reference to this instance.
-         */
-        this.setReadOnly = function (state) {
-
-            // validate the new read-only state
-            state = _.isUndefined(state) || (state === true);
-
-            if (readOnly !== state) {
-                // initialize the text field
-                if ((readOnly = state)) {
-                    fieldNode
-                        .addClass('readonly')
-                        .removeClass(Utils.FOCUSABLE_CLASS)
-                        .on('mousedown touchstart dragover drop contextmenu', function (event) {
-                            event.preventDefault();
-                            self.trigger('group:cancel');
-                        });
-                } else {
-                    fieldNode
-                        .removeClass('readonly')
-                        .addClass(Utils.FOCUSABLE_CLASS)
-                        .off('mousedown dragover drop contextmenu');
-                }
-                // trigger listeners
-                this.trigger('readonly', readOnly);
-            }
-            return this;
-        };
-
-        /**
          * Converts the passed value to a text using the current validator.
          */
         this.valueToText = function (value) {
@@ -288,18 +266,17 @@ define('io.ox/office/tk/control/textfield',
         // insert the text field into this group, and register event handlers
         this.addFocusableControl(fieldNode)
             .registerUpdateHandler(updateHandler)
-            .registerChangeHandler(null, { node: fieldNode, valueResolver: resolveValueHandler });
+            .registerChangeHandler(null, { node: fieldNode, valueResolver: resolveValueHandler })
+            .on({
+                'group:focus group:blur': focusHandler,
+                'group:enable': enableHandler
+            });
 
-        fieldNode
-            .on('focus focus:key blur:key blur', fieldFocusHandler)
-            .on('keydown keypress keyup', fieldKeyHandler)
-            // Validation while typing. IE9 does not trigger 'input' when deleting
-            // characters, use key events as a workaround. This is still not perfect,
-            // as it misses cut/delete from context menu, drag&drop, etc.
-            .on('input keydown keyup', fieldInputHandler);
-
-        // initialize read-only mode
-        this.setReadOnly(Utils.getBooleanOption(options, 'readOnly', false));
+        fieldNode.on({
+            'focus focus:key blur:key blur': focusHandler,
+            'keydown keypress keyup': fieldKeyHandler,
+            'input': fieldInputHandler
+        });
 
     } // class TextField
 

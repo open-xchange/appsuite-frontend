@@ -122,11 +122,11 @@ define.async('io.ox/office/tk/utils',
     Utils.VISIBLE_SELECTOR = ':visible';
 
     /**
-     * CSS selector for focused controls.
+     * CSS class for elements that contain the focused node.
      *
      * @constant
      */
-    Utils.FOCUSED_SELECTOR = ':focus';
+    Utils.FOCUSED_CLASS = 'focused';
 
     /**
      * CSS class for selected (active) buttons or tabs.
@@ -2119,7 +2119,7 @@ define.async('io.ox/office/tk/utils',
      *  True, if the form control is focused.
      */
     Utils.isControlFocused = function (control) {
-        return control.first().is(Utils.FOCUSED_SELECTOR);
+        return control.first().is(':focus');
     };
 
     /**
@@ -2134,7 +2134,7 @@ define.async('io.ox/office/tk/utils',
      *  passed collection does not contain a focused control.
      */
     Utils.getFocusedControl = function (controls) {
-        return controls.filter(Utils.FOCUSED_SELECTOR);
+        return controls.filter(':focus');
     };
 
     /**
@@ -2163,7 +2163,7 @@ define.async('io.ox/office/tk/utils',
      *  True, if one of the container elements contains a focused form control.
      */
     Utils.containsFocusedControl = function (node) {
-        return node.find(Utils.FOCUSED_SELECTOR).length !== 0;
+        return node.find(':focus').length !== 0;
     };
 
     // control captions -------------------------------------------------------
