@@ -243,12 +243,18 @@
     }
 
     @media (max-width: 480px), (max-device-width: 480px) {
+
+        margin-top: 5px;
+
+        nav {
+            margin: 10px 0;
+        }
         .btn-primary {
             margin-bottom: 7px;
         }
-        h1.name {
+        .toggle-compact {
             clear: both;
-            margin-top: 28px;
+            text-align: left;
         }
         .block, .block:nth-child(even), .block:nth-child(odd) {
             width: 300px;
@@ -266,6 +272,9 @@
         }
         select.date { width: 60px; }
         select.month { width: 130px; }
-        select.year { width: 90px; }
+        select.year {
+            width: 90px;
+            margin-right: 0;
+        }
     }
 }

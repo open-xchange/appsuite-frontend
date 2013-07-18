@@ -105,6 +105,9 @@ define('io.ox/contacts/edit/main',
                                 }
                             });
                         }
+                        if (_.device('small')) {
+                            ext.point('io.ox/contacts/edit/bottomToolbar').invoke('draw', app, new ext.Baton(contact));
+                        }
 
                         ext.point('io.ox/contacts/edit/main/model').invoke('customizeModel', contact, contact);
 
