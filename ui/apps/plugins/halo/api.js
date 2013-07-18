@@ -53,7 +53,8 @@ define.async('plugins/halo/api',
                     module: 'halo/contact',
                     params: {
                         action: 'investigate',
-                        provider: name
+                        provider: name,
+                        timezone: 'utc'
                     },
                     appendColumns: false,
                     contact: contact
