@@ -84,6 +84,9 @@ define('io.ox/office/tk/control/group',
             // the current value of this control group
             groupValue = null,
 
+            // the current value options of this control group
+            groupOptions = null,
+
             // update handler functions
             updateHandlers = [],
 
@@ -206,13 +209,13 @@ define('io.ox/office/tk/control/group',
 
         /**
          * Registers the passed update handler function. These handlers will be
-         * called from the method Group.update() in order of their
+         * called from the method Group.setValue() in order of their
          * registration.
          *
          * @param {Function} updateHandler
          *  The update handler function. Will be called in the context of this
-         *  group. Receives the value passed to the method Group.update(),
-         *  followed by the old value of the group.
+         *  group. Receives the value and the options map passed to the method
+         *  Group.setValue(), followed by the old value of the group.
          *
          * @returns {Group}
          *  A reference to this group.
@@ -276,7 +279,7 @@ define('io.ox/office/tk/control/group',
                 if (_.isNull(value)) {
                     self.triggerCancel(options);
                 } else {
-                    self.update(value);
+                    self.setValue(value, options);
                     self.trigger('group:change', value, options);
                 }
                 return false;
@@ -489,27 +492,32 @@ define('io.ox/office/tk/control/group',
          * @param {Any} value
          *  The new value to be displayed in the controls of this group.
          *
+         * @param {Object} [options]
+         *  A map with options that will be passed as second parameter to all
+         *  registered update handlers.
+         *
          * @returns {Group}
          *  A reference to this group.
          */
-        this.update = function (value) {
+        this.setValue = function (value, options) {
             var oldValue = groupValue;
             if (!_.isUndefined(value)) {
                 groupValue = value;
+                groupOptions = options;
                 _(updateHandlers).each(function (updateHandler) {
-                    updateHandler.call(this, value, oldValue);
+                    updateHandler.call(this, value, options, oldValue);
                 }, this);
             }
             return this;
         };
 
         /**
-         * Debounced call of the Group.update() method with the current value
+         * Debounced call of the Group.setValue() method with the current value
          * of this group. Can be used to refresh the appearance of the group
          * after changing its content.
          */
         this.refresh = _.debounce(function () {
-            self.update(groupValue);
+            self.setValue(groupValue, groupOptions);
         });
 
         /**

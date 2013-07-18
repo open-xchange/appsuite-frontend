@@ -117,7 +117,7 @@ define('io.ox/office/tk/control/combofield',
                 }
                 index = Utils.minMax(index, 0, buttons.length - 1);
                 // call the update handler to update the text field and list selection
-                self.update(Utils.getControlValue(buttons.eq(index)));
+                self.setValue(Utils.getControlValue(buttons.eq(index)));
                 // select entire text field
                 self.getTextFieldNode().select();
             }

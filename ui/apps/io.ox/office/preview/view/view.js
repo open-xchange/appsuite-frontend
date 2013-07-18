@@ -239,15 +239,13 @@ define('io.ox/office/preview/view/view',
          * Updates the status label with the current page number.
          */
         function updatePageStatus() {
-            statusLabel.update({
-                caption:
-                    //#. A label showing the current page index in the OX Documents preview application
-                    //#. %1$d is the current page index
-                    //#. %2$d is the total number of pages
-                    //#, c-format
-                    gt('Page %1$d of %2$d', selectedPage, model.getPageCount()),
-                type: 'info'
-            });
+            statusLabel.setValue(
+                //#. A label showing the current page index in the OX Documents preview application
+                //#. %1$d is the current page index
+                //#. %2$d is the total number of pages
+                //#, c-format
+                gt('Page %1$d of %2$d', selectedPage, model.getPageCount()),
+                { type: 'info' });
         }
 
         /**
@@ -255,13 +253,11 @@ define('io.ox/office/preview/view/view',
          * then switches back to the display of the current page number.
          */
         var updateZoomStatus = app.createDebouncedMethod(function () {
-            statusLabel.update({
-                caption:
-                    //#. %1$d is the current zoom factor, in percent
-                    //#, c-format
-                    gt('Zoom: %1$d%', Math.round(zoomFactor)),
-                type: 'info'
-            });
+            statusLabel.setValue(
+                //#. %1$d is the current zoom factor, in percent
+                //#, c-format
+                gt('Zoom: %1$d%', Math.round(zoomFactor)),
+                { type: 'info' });
         }, updatePageStatus, { delay: 1000 });
 
         /**

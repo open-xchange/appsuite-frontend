@@ -81,9 +81,12 @@ define('io.ox/office/tk/control/radiolist',
      *          The caption button (the split button in split mode, otherwise
      *          the drop-down button) to be updated,
      *      (2) {Any} value
-     *          The value of the selected/activated list item, or passed to the
-     *          Group.update() method,
-     *      (3) {jQuery} [optionButton]
+     *          The value of the selected/activated list item, as passed to the
+     *          Group.setValue() method,
+     *      (3) {Object|Undefined} options
+     *          The value options of the selected/activated list item, as
+     *          passed to the Group.setValue() method,
+     *      (4) {jQuery} [optionButton]
      *          The button element of the activated list item (may be empty, if
      *          no list item is active).
      *      Will be called in the context of this radio group instance.
@@ -154,11 +157,11 @@ define('io.ox/office/tk/control/radiolist',
         /**
          * Activates an option button in this radio group.
          *
-         * @param value
+         * @param {Any} value
          *  The value associated to the button to be activated. If set to null,
          *  does not activate any button (ambiguous state).
          */
-        function itemUpdateHandler(value) {
+        function itemUpdateHandler(value, valueOptions) {
 
             var // the target caption button
                 captionButton = self.getCaptionButton(),
@@ -198,7 +201,7 @@ define('io.ox/office/tk/control/radiolist',
 
             // call custom update handler
             if (_.isFunction(updateCaptionHandler)) {
-                updateCaptionHandler.call(self, captionButton, value, selectedButtons);
+                updateCaptionHandler.call(self, captionButton, value, valueOptions, selectedButtons);
             }
         }
 

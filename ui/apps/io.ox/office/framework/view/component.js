@@ -248,7 +248,7 @@ define('io.ox/office/framework/view/component',
                 if (key in groupsByKey) {
                     _.chain(groupsByKey[key])
                         .invoke('enable', itemState.enable)
-                        .invoke('update', itemState.value);
+                        .invoke('setValue', itemState.value, itemState.options);
                 }
             });
         }

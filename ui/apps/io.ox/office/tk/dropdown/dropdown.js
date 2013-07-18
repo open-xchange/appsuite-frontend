@@ -549,8 +549,8 @@ define('io.ox/office/tk/dropdown/dropdown',
          * Registers a private group instance that will be inserted into the
          * menu node. The 'group:change' events triggered by that group will be
          * forwarded to the listeners of this group instance, and updates of
-         * this group instance (calls to the own 'Group.update()' method) will
-         * be forwarded to the specified private group. The 'group:cancel'
+         * this group instance (calls to the own 'Group.setValue()' method)
+         * will be forwarded to the specified private group. The 'group:cancel'
          * events of the private group will be caught and used to hide the
          * drop-down menu, but will NOT be forwarded to listeners of this
          * group. The DOM root node of the group will not be inserted anywhere!
@@ -568,8 +568,8 @@ define('io.ox/office/tk/dropdown/dropdown',
             group.on('group:change', function (event, value, options) {
                 self.trigger('group:change', value, options);
             });
-            this.registerUpdateHandler(function (value) {
-                group.update(value);
+            this.registerUpdateHandler(function (value, options) {
+                group.setValue(value, options);
             });
 
             // do not forward 'group:cancel' events of the private group to
