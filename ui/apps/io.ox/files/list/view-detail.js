@@ -179,7 +179,7 @@ define('io.ox/files/list/view-detail',
         id: 'upload',
         index: 600,
         draw: function (baton) {
-            if (!ox.uploadsEnabled || baton.openedBy === 'io.ox/mail/write') return;//no uploads in mail preview
+            if (baton.openedBy === 'io.ox/mail/write') return;//no uploads in mail preview
             var self = this, file = baton.data;
 
             var $node,
@@ -425,7 +425,7 @@ define('io.ox/files/list/view-detail',
             baton.openedBy = app.getName();
         }
         var node = $.createViewContainer(baton.data, filesAPI);
-        
+
         node.on('redraw', createRedraw(node)).addClass('file-details view');
 
         ext.point(POINT).invoke('draw', node, baton, app);

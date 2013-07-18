@@ -495,21 +495,20 @@ define("io.ox/mail/write/view-main",
 
 
             // Attachments
-            if (ox.uploadsEnabled) {
-                this.fileCount = 0;
-                var uploadSection = this.createSection('attachments', gt('Attachments'), false, true);
-                this.scrollpane.append(
-                    $('<form class="oldschool">').append(
-                        this.createLink('attachments', gt('Attachments')),
-                        uploadSection.label,
-                        uploadSection.section.append(
-                            this.createUpload()
-                        )
+            this.fileCount = 0;
+            var uploadSection = this.createSection('attachments', gt('Attachments'), false, true);
+            this.scrollpane.append(
+                $('<form class="oldschool">').append(
+                    this.createLink('attachments', gt('Attachments')),
+                    uploadSection.label,
+                    uploadSection.section.append(
+                        this.createUpload()
                     )
-                );
-                // add preview side-popup
-                new dialogs.SidePopup().delegate(this.sections.attachments, '.attachment-preview', previewAttachment);
-            }
+                )
+            );
+            // add preview side-popup
+            new dialogs.SidePopup().delegate(this.sections.attachments, '.attachment-preview', previewAttachment);
+
 
             // Signatures
             (function () {

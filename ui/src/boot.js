@@ -79,7 +79,6 @@ $(window).load(function () {
             e.preventDefault();
         });
     }
-    ox.uploadsEnabled = true;
 
     //ugly device hack
     //if device small wait 10ms check again

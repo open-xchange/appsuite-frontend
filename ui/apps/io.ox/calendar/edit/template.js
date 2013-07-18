@@ -549,9 +549,7 @@ define('io.ox/calendar/edit/template',
         }
     });
 
-
-    // Disable attachments for specific devices (see boot.js)
-    if (!ox.uploadsEnabled || !capabilities.has('infostore')) {
+    if (!capabilities.has('infostore')) {
         ext.point("io.ox/calendar/edit/section").disable("attachments_legend");
         ext.point("io.ox/calendar/edit/section").disable("attachments_upload");
     }
