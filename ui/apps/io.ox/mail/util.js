@@ -224,13 +224,16 @@ define('io.ox/mail/util',
                     display_name: this.getDisplayName(list[i]),
                     email1: String(list[i][1] || '').toLowerCase()
                 };
-                $('<a>', { href: '#', title: obj.email1, tabindex: 1 })
-                    .addClass('person-link person-' + field)
-                    .css('whiteSpace', 'nowrap')
-                    .text(_.noI18n(obj.display_name))
-                    .data('person', obj)
-                    .on('click', obj, fnClickPerson).css('cursor', 'pointer')
-                    .appendTo(tmp);
+                if (obj.email1 !== 'undisclosed-recipients:;') {
+                    $('<a>', { href: '#', title: obj.email1, tabindex: 1 })
+                        .addClass('person-link person-' + field)
+                        .text(_.noI18n(obj.display_name))
+                        .data('person', obj)
+                        .on('click', obj, fnClickPerson)
+                        .appendTo(tmp);
+                } else {
+                    $('<span>').text(_.noI18n(obj.display_name)).appendTo(tmp);
+                }
 
                 // add 'on behalf of'?
                 if (field === 'from' && 'headers' in data && 'Sender' in data.headers) {
