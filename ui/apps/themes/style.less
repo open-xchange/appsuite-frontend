@@ -27,8 +27,15 @@
     }
 }
 
-#io-ox-core.wallpaper {
-    .radial-gradient(@wallpaperColor1, @wallpaperColor2, @wallpaperColor3);
+#io-ox-core {
+
+    // Bug 27436
+    -webkit-backface-visibility: hidden;
+
+    &.wallpaper {
+        .radial-gradient(@wallpaperColor1, @wallpaperColor2, @wallpaperColor3);
+    }
+
 }
 
 /* scrollable for touch devices, esp. iOS */
