@@ -431,7 +431,10 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.toggle = function (state) {
-            var visible = (state === true) || ((state !== false) && this.isVisible());
+
+            var // whether to show the group instance
+                visible = (state === true) || ((state !== false) && this.isVisible());
+
             if (this.isVisible() !== visible) {
                 groupNode.toggleClass(HIDDEN_CLASS, !visible);
                 this.trigger('group:show', visible);
@@ -462,10 +465,11 @@ define('io.ox/office/tk/control/group',
                 enabled = _.isUndefined(state) || (state === true);
 
             // enable/disable the entire group node with all its descendants
-            groupNode.toggleClass(Utils.DISABLED_CLASS, !enabled);
-
-            // trigger an 'group:enable' event so that derived classes can react
-            return this.trigger('group:enable', enabled);
+            if (this.isEnabled() !== enabled) {
+                groupNode.toggleClass(Utils.DISABLED_CLASS, !enabled);
+                this.trigger('group:enable', enabled);
+            }
+            return this;
         };
 
         /**

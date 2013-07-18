@@ -442,8 +442,23 @@ define('io.ox/office/preview/view/view',
          */
         function refreshLayout() {
 
-            var // content margin according to browser window size
+            var // find the page that is visible at the vertical center of the visible area
+                centerPage = _(pageNodes).sortedIndex(appPaneNode.scrollTop(), function (value) {
+                    if (_.isNumber(value)) { return value; }
+                    var pagePosition = Utils.getChildNodePositionInNode(appPaneNode, value);
+                    return pagePosition.top + pagePosition.height - 1;
+                }) + 1,
+                // the position of the center page in the visible area of the application pane
+                centerPagePosition = null,
+                // the ratio of the center page that is located exactly at the screen center
+                centerPageRatio = 0,
+                // current content margin according to browser window size
                 contentMargin = ((window.innerWidth <= 1024) || (window.innerHeight <= 640)) ? 0 : 30;
+
+            // restrict center page to valid page numbers, calculate page ration
+            centerPage = Utils.minMax(centerPage, 1, model.getPageCount());
+            centerPagePosition = Utils.getChildNodePositionInNode(appPaneNode, pageNodes[centerPage - 1], { visibleArea: true });
+            centerPageRatio = (centerPagePosition.height > 0) ? (-centerPagePosition.top / centerPagePosition.height) : 0;
 
             // set the current content margin between application pane border and page nodes
             self.setContentMargin(contentMargin);
@@ -464,8 +479,9 @@ define('io.ox/office/preview/view/view',
                 }
             });
 
-            // adjust scroll position after page sizes have been changed
-            scrollToPage(selectedPage);
+            // restore the correct scroll position with the new page sizes
+            centerPagePosition = Utils.getChildNodePositionInNode(appPaneNode, pageNodes[centerPage - 1]);
+            appPaneNode.scrollTop(centerPagePosition.top + Math.round(centerPagePosition.height * centerPageRatio));
         }
 
         /**

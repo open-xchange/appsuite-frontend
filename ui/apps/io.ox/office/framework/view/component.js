@@ -36,9 +36,9 @@ define('io.ox/office/framework/view/component',
      * - 'group:cancel': When the focus needs to be returned to the application
      *      (e.g. when the Escape key is pressed, or when a click on a
      *      drop-down button closes the opened drop-down menu).
-     * - 'group:layout': After a control group has been shown, hidden, enabled,
-     *      disabled, or after child nodes have been inserted into the group
-     *      using the method Group.addChildNodes().
+     * - 'group:layout': After a control group has been shown or hidden, or
+     *      after child nodes have been inserted into the group using the
+     *      method Group.addChildNodes().
      * - 'group:focus': After a control group has been focused, by initially
      *      focusing any of its focusable child nodes.
      * - 'group:blur': After the control group has lost the browser focus,
@@ -109,10 +109,10 @@ define('io.ox/office/framework/view/component',
         // private methods ----------------------------------------------------
 
         /**
-         * Handles 'group:show', 'group:enable', and 'group:layout' events.
-         * Updates the CSS marker class controlling whether this view component
-         * is focusable with special keyboard shortcuts, and forwards the event
-         * to all listeners.
+         * Handles 'group:show' and 'group:layout' events. Updates the CSS
+         * marker class controlling whether this view component is focusable
+         * with special keyboard shortcuts, and forwards the event to all
+         * listeners.
          */
         function groupLayoutHandler() {
             updateFocusable();
@@ -164,7 +164,7 @@ define('io.ox/office/framework/view/component',
             // the group's state, forward other layout events
             group.on({
                 'group:cancel': function (event, options) { self.trigger('group:cancel', options); },
-                'group:show group:enable group:layout': groupLayoutHandler,
+                'group:show group:layout': groupLayoutHandler,
                 'group:focus group:blur': groupFocusHandler,
                 'menu:open menu:close': dropDownMenuHandler
             });
