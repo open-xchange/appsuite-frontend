@@ -219,10 +219,19 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 ackBuffer[Number(stanza.seq)] = 1;
             }
             if (stanza.seq === -1 || stanza.seq > serverSequenceThreshhold || stanza.seq === 0) {
-                api.trigger("receive", stanza);
-                api.trigger("receive:" + stanza.selector, stanza);
-                if (stanza.seq !== -1) {
-                    serverSequenceThreshhold = stanza.seq;
+                var outOfOrder = false;
+                if (stanza.seq > 0 && stanza.seq - serverSequenceThreshhold > 1) {
+                    console.error("Received a sequence number that is too far out of order: Expected: " + serverSequenceThreshhold + 1 + ", but got: " + stanza.seq);
+                    outOfOrder = true;
+                }
+                if (!outOfOrder) {
+                    api.trigger("receive", stanza);
+                    api.trigger("receive:" + stanza.selector, stanza);
+                    if (stanza.seq !== -1) {
+                        serverSequenceThreshhold = stanza.seq;
+                    }
+                } else {
+                    resetSequence(0);
                 }
             }
         }
