@@ -25,7 +25,7 @@ define('io.ox/office/tk/control/group',
         // CSS class for disabled groups
         DISABLED_CLASS = 'disabled',
 
-        // DOM event that will cause a 'change' event from a group
+        // DOM event that will cause a 'group:change' event from a group
         INTERNAL_TRIGGER_EVENT = 'private:trigger',
 
         // the group instances currently focused (as array, groups may be embedded)

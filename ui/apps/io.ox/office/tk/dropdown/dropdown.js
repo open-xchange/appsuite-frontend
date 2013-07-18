@@ -31,6 +31,13 @@ define('io.ox/office/tk/dropdown/dropdown',
      * the class Group or one of its derived classes. Expects the symbol 'this'
      * to be bound to an instance of Group.
      *
+     * Instances of this class trigger the following events:
+     * - 'menu:open': After the drop-down menu has been opened.
+     * - 'menu:close': After the drop-down menu has been closed.
+     * - 'menu:layout': If the absolute position of the group or the browser
+     *      window size has changed, and the position and size of the drop-down
+     *      menu node needs to be adjusted.
+     *
      * @constructor
      *
      * @param {Object} [options]
