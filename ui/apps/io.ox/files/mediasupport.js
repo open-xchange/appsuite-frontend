@@ -35,8 +35,18 @@ define('io.ox/files/mediasupport',
     var browserSupportsMedia = {
         hasSupport: function (mediatype) {
             // Early exit if mediatype is not supported
-            if (!Modernizr[mediatype] || _.device('android')) return false;
+            if (!Modernizr[mediatype]) return false;
             return true;
+        },
+        supportedExtensionsArray: function (mediatype) {
+            if (!mediatype) return false;
+            var str = this.supportedExtensions(mediatype);
+            if (!str) return false;
+            if (str.indexOf("|") >= 0) {
+                return str.split('|');
+            } else if (str) {
+                return [str];
+            }
         },
         supportedExtensions: function (mediatype) {
 

@@ -120,7 +120,7 @@ define('io.ox/preview/main',
             id: 'audio',
             index: 10,
             supports: (function () {
-                return mediasupport.supportedExtensions('audio').split('|');
+                return mediasupport.supportedExtensionsArray('audio');
             }()),
             draw: function (file) {
                 var audiofile = $('<audio>').attr({
