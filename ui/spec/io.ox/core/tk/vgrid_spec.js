@@ -14,38 +14,50 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
     'use strict';
 
     describe('The VGrid', function () {
+        beforeEach(function () {
+            this.node = $('<div>');
+            this.vgrid = new VGrid(this.node);
+            this.api = {};
+            this.api.getList = function (ids) {
+                var def = $.Deferred();
+                _.defer(function () {
+                    def.resolve(ids);
+                });
+                return def;
+            };
+        });
+
+        function wireGridAndApiFor(test) {
+            var testData = test.testData;
+
+            test.api.getAll = function () {
+                var def = $.Deferred();
+                _.defer(function () {
+                    def.resolve(testData);
+                });
+                return def;
+            };
+            test.vgrid.setAllRequest(test.api.getAll);
+            test.vgrid.setListRequest(test.api.getList);
+        }
+
         describe('showing an empty folder', function () {
             it('should display a hint about empty folder', function () {
-                var node = $('<div>'),
-                    vgrid = new VGrid(node),
-                    getAll = function () {
-                        var def = $.Deferred();
-                        _.defer(function () {
-                            def.resolve([]);
-                        });
-                        return def;
-                    },
-                    getList = function (ids) {
-                        var def = $.Deferred();
-                        _.defer(function () {
-                            def.resolve(ids);
-                        });
-                        return def;
-                    };
+                this.testData = [];
+                wireGridAndApiFor(this);
 
-                vgrid.setAllRequest(getAll);
-                vgrid.setListRequest(getList);
-                vgrid.setEmptyMessage(function () {
+                //add custom empty message for higher reproducability
+                this.vgrid.setEmptyMessage(function () {
                     return 'Non-empty Testmessage';
                 });
-                vgrid.paint();
+                this.vgrid.paint();
 
                 waitsFor(function () {
                     //vgrid.paint() returns a deferred object, but it doesn’t resolve
                     //when painting is done, but more early. So we need to wait for
                     //the test message to appear
                     //TODO: is this a bug or a feature?
-                    return node.text().indexOf('Non-empty Testmessage') >= 0;
+                    return this.node.text().indexOf('Non-empty Testmessage') >= 0;
                 }, 'no test message was added', 1000);
             });
         });
