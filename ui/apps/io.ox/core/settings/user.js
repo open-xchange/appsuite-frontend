@@ -44,6 +44,8 @@ define('io.ox/core/settings/user', [
                     });
                 });
 
+                $userEditView.find('[data-id="private_flag"]').remove();
+
                 $node.append($userEditView);
                 $($node.find('.edit-contact')[0]).on('dispose', function () {
                     $(document.activeElement).blur();//make the active element lose focus to get the changes of the field a user was editing
