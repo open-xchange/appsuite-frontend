@@ -784,18 +784,19 @@
                 }
             }
         }
-
-        &:focus {
-            color: darken(@toolbarButtonColor, 20%);
-            text-decoration: none;
-            background-color: @toolbarFocusColor;
-
-            i {
-                color: white;
+        @media (min-width: 481px), (min-device-width: 481px) {
+            &:focus {
+                color: darken(@toolbarButtonColor, 20%);
                 text-decoration: none;
-                &.accent-color {
-                    background-color: @toolbarFocusColor;
-                    border-color: @toolbarFocusColor;
+                background-color: @toolbarFocusColor;
+
+                i {
+                    color: white;
+                    text-decoration: none;
+                    &.accent-color {
+                        background-color: @toolbarFocusColor;
+                        border-color: @toolbarFocusColor;
+                    }
                 }
             }
         }

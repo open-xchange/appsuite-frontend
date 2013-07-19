@@ -1428,7 +1428,7 @@ define("io.ox/core/desktop",
                     $('<div class="input-append">').append(
                         $('<label>', { 'for': searchId }).addClass('search-query-container').append(
                             // search field
-                            win.nodes.searchField = $('<input type="text" class="search-query">')
+                            win.nodes.searchField = $('<input type="text" class="span6 search-query">')
                             .attr({
                                 name: 'query',
                                 autocomplete: 'off',
