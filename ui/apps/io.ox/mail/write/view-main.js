@@ -844,6 +844,10 @@ define("io.ox/mail/write/view-main",
                 var pre = new p.Preview({
                     data: file,
                     filename: file.filename,
+                    source: 'mail',
+                    folder_id: file.parent.folder_id,
+                    id: file.parent.id,
+                    attached: file.id,
                     parent: file.parent,
                     mimetype: file.content_type,
                     dataURL: mailAPI.getUrl(file, 'view')
