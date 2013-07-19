@@ -522,8 +522,9 @@ define('io.ox/mail/actions',
         id: 'slideshow',
         requires: function (e) {
             return e.collection.has('multiple') && _(e.context).reduce(function (memo, obj) {
-                return memo && (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
-            }, true);
+                console.log((/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename));
+                return (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
+            }, false);
         },
         multiple: function (list) {
             require(['io.ox/files/carousel'], function (slideshow) {
