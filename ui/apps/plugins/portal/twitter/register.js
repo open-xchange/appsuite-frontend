@@ -25,7 +25,7 @@ define('plugins/portal/twitter/register',
     'use strict';
 
     var extensionId = 'twitter';
-    var loadEntriesPerPage = 20;
+    var loadEntriesPerPage = 10;
     var offset = 0;
     var $tweets = $('<div>').addClass('twitter');
     var $busyIndicator = $('<div>').html('&nbsp;');
