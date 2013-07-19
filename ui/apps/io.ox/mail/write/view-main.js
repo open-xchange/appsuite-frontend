@@ -575,7 +575,7 @@ define("io.ox/mail/write/view-main",
 
             accountAPI.getAllSenderAddresses().done(function (addresses) {
                 if (addresses.length <= 1) {
-                    self.scrollpane.find('div.fromselect-wrapper').hide();
+                    self.hideSection('sender');
                 } else {
                     // show section
                     self.showSection('sender');
