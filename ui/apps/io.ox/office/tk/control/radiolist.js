@@ -209,7 +209,7 @@ define('io.ox/office/tk/control/radiolist',
          *  A reference to this instance.
          */
         this.clearOptionButtons = function () {
-            this.clearItemGroup();
+            this.clearMenuSections();
             return this;
         };
 
