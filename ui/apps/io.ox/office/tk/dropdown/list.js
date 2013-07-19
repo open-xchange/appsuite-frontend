@@ -90,16 +90,6 @@ define('io.ox/office/tk/dropdown/list',
                     controls.eq(Math.min(controls.length - 1, index + List.PAGE_SIZE)).focus();
                 }
                 return false;
-            case KeyCodes.HOME:
-                if (keydown) {
-                    controls.first().focus();
-                }
-                return false;
-            case KeyCodes.END:
-                if (keydown) {
-                    controls.last().focus();
-                }
-                return false;
             }
         }
 

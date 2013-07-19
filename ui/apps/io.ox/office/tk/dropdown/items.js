@@ -134,11 +134,36 @@ define('io.ox/office/tk/dropdown/items',
          * Handles key events in the embedded item list group.
          */
         function itemKeyHandler(event) {
-            // TAB key executes the item currently selected, but keeps the focus on the menu button
-            if ((event.type === 'keydown') && KeyCodes.matchKeyCode(event, 'TAB', { shift: null })) {
+
+            var // distinguish between event types (ignore keypress events)
+                keydown = event.type === 'keydown',
+                keyup = event.type === 'keyup';
+
+            if (keydown && KeyCodes.matchKeyCode(event, 'TAB', { shift: null })) {
                 itemGroup.triggerChange(event.target, { preserveFocus: true });
-            } else if ((event.type === 'keyup') && (event.keyCode === KeyCodes.SPACE)) {
-                itemGroup.triggerChange(event.target, { preserveFocus: true });
+                return; // let TAB key bubble up
+            }
+
+            // ignore all other key events in input fields
+            if ($(event.target).is('input, textarea')) { return; }
+
+            // handle generic keys
+            switch (event.keyCode) {
+            case KeyCodes.SPACE:
+                if (keyup) {
+                    itemGroup.triggerChange(event.target, { preserveFocus: true });
+                }
+                return false;
+            case KeyCodes.HOME:
+                if (keydown) {
+                    self.getFocusableMenuControls().first().focus();
+                }
+                return false;
+            case KeyCodes.END:
+                if (keydown) {
+                    self.getFocusableMenuControls().last().focus();
+                }
+                return false;
             }
         }
 
@@ -293,7 +318,7 @@ define('io.ox/office/tk/dropdown/items',
             selector: Utils.BUTTON_SELECTOR,
             valueResolver: Utils.getFunctionOption(options, 'itemValueResolver')
         });
-        itemGroup.getNode().on('keydown keyup', itemKeyHandler);
+        itemGroup.getNode().on('keydown keypress keyup', itemKeyHandler);
 
         // default sort functor: sort by button label text, case insensitive
         sortFunctor = _.isFunction(sortFunctor) ? sortFunctor : function (button) {

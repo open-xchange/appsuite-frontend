@@ -435,7 +435,7 @@ define('io.ox/office/tk/dropdown/dropdown',
 
             switch (event.keyCode) {
             case KeyCodes.TAB:
-                if (keydown && !event.ctrlKey && !event.altKey && !event.metaKey) {
+                if (keydown && KeyCodes.matchModifierKeys(event, { shift: null })) {
                     hideMenu();
                     // To prevent problems with event bubbling (Firefox continues
                     // to bubble to the parent of the menu node, while Chrome

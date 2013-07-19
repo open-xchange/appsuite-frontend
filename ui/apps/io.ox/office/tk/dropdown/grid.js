@@ -122,16 +122,6 @@ define('io.ox/office/tk/dropdown/grid',
                     buttons.eq(calcNewIndex(buttons, event.target, index, false)).focus();
                 }
                 return false;
-            case KeyCodes.HOME:
-                if (keydown) {
-                    buttons.first().focus();
-                }
-                return false;
-            case KeyCodes.END:
-                if (keydown) {
-                    buttons.last().focus();
-                }
-                return false;
             }
         }
 
