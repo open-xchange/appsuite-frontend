@@ -148,21 +148,23 @@ define("io.ox/core/tk/dialogs",
                     break;
 
                 case 9:
-                    e.preventDefault();
-
                     items = $(this).find('[tabindex="1"][disabled!="disabled"]:visible');
-                    focus = $(document.activeElement);
+                    if (items.length > 0) {
+                        e.preventDefault();
+                        focus = $(document.activeElement);
 
-                    index = (items.index(focus) >= 0) ? items.index(focus) : 0;
-                    index += (e.shiftKey) ? -1 : 1;
+                        index = (items.index(focus) >= 0) ? items.index(focus) : 0;
+                        index += (e.shiftKey) ? -1 : 1;
 
-                    if (index >= items.length) {
-                        index = 0;
-                    } else if (index < 0) {
-                        index = items.length - 1;
+                        if (index >= items.length) {
+                            index = 0;
+                        } else if (index < 0) {
+                            index = items.length - 1;
+                        }
+                        items[index].focus();
+                        return false;
                     }
-                    items[index].focus();
-                    return false;
+                    break;
 
                 default:
                     break;
