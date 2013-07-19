@@ -479,7 +479,7 @@ define('io.ox/office/framework/view/baseview',
             app.getWindowNode().append(pane.getNode());
 
             // refresh pane layout when the pane or its contents are changed
-            pane.on('pane:show pane:resize group:layout', refreshPaneLayout);
+            pane.on('pane:show pane:resize pane:layout', refreshPaneLayout);
             refreshPaneLayout();
 
             return this;

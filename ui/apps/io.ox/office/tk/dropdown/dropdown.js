@@ -18,6 +18,9 @@ define('io.ox/office/tk/dropdown/dropdown',
 
     'use strict';
 
+    var // marker CSS class for elements containing an opened drop-down menu
+        OPEN_CLASS = 'dropdown-open';
+
     // class DropDown =========================================================
 
     /**
@@ -228,7 +231,7 @@ define('io.ox/office/tk/dropdown/dropdown',
 
             // initialize DOM
             $('body').append(menuNode);
-            groupNode.addClass(DropDown.OPEN_CLASS);
+            groupNode.addClass(OPEN_CLASS);
             menuNode.css({
                 top: groupPosition.top + groupPosition.height + DropDown.GROUP_BORDER_PADDING,
                 left: groupPosition.left
@@ -300,7 +303,7 @@ define('io.ox/office/tk/dropdown/dropdown',
 
             // initialize DOM
             $(document).off('mousedown click', globalClickHandler);
-            groupNode.removeClass(DropDown.OPEN_CLASS);
+            groupNode.removeClass(OPEN_CLASS);
             menuNode.detach();
             $(window).off('resize', refreshMenuNodePosition);
         }
@@ -609,13 +612,6 @@ define('io.ox/office/tk/dropdown/dropdown',
     } // class DropDown
 
     // static fields ----------------------------------------------------------
-
-    /**
-     * Marker CSS class for elements containing an opened drop-down menu.
-     *
-     * @constant
-     */
-    DropDown.OPEN_CLASS = 'dropdown-open';
 
     /**
      * Padding of drop-down menu to browser window borders, in pixels.

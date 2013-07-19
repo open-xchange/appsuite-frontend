@@ -14,9 +14,8 @@
 define('io.ox/office/framework/view/component',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
-     'io.ox/office/tk/keycodes',
-     'io.ox/office/tk/dropdown/dropdown'
-    ], function (Events, Utils, KeyCodes, DropDown) {
+     'io.ox/office/tk/keycodes'
+    ], function (Events, Utils, KeyCodes) {
 
     'use strict';
 
@@ -30,23 +29,21 @@ define('io.ox/office/framework/view/component',
      * (controls or groups of controls).
      *
      * Instances of this class trigger the following events:
+     * - 'component:show': After the view component has been shown or hidden.
+     *      The event handler receives the new visibility state.
+     * - 'component:layout': After the size of the view component has been
+     *      changed, by manipulating (showing, hiding, changing) the control
+     *      groups it contains.
      * - 'group:change': If a control group has been activated. The event
      *      handler receives the key and value of the activated control group.
      *      The value depends on the type of the activated control.
      * - 'group:cancel': When the focus needs to be returned to the application
      *      (e.g. when the Escape key is pressed, or when a click on a
      *      drop-down button closes the opened drop-down menu).
-     * - 'group:layout': After a control group has been shown or hidden, or
-     *      after child nodes have been inserted into the group using the
-     *      method Group.addChildNodes().
      * - 'group:focus': After a control group has been focused, by initially
      *      focusing any of its focusable child nodes.
      * - 'group:blur': After the control group has lost the browser focus,
      *      after focusing any other DOM node outside the group.
-     * - 'menu:open': After the drop-down menu of a control group has been
-     *      opened.
-     * - 'menu:close': After the drop-down menu of a control group has been
-     *      closed.
      *
      * @constructor
      *
@@ -89,6 +86,9 @@ define('io.ox/office/framework/view/component',
             // create the DOM root element representing the view component
             node = Utils.createContainerNode('view-component', options),
 
+            // the last cached size of the root node, used to detect layout changes
+            nodeSize = null,
+
             // all control groups, as plain array
             groups = [],
 
@@ -109,14 +109,28 @@ define('io.ox/office/framework/view/component',
         // private methods ----------------------------------------------------
 
         /**
-         * Handles 'group:show' and 'group:layout' events. Updates the CSS
-         * marker class controlling whether this view component is focusable
-         * with special keyboard shortcuts, and forwards the event to all
-         * listeners.
+         * Returns the current outer size of the root node of this view
+         * component. If the node is currently invisible, returns the last
+         * cached size.
+         */
+        function getNodeSize() {
+            return self.isReallyVisible() ? { width: node.outerWidth(), height: node.outerHeight() } : nodeSize;
+        }
+
+        /**
+         * Handles 'group:show', 'group:enable', and 'group:layout' events.
+         * Updates the CSS marker class controlling whether this view component
+         * is focusable with special keyboard shortcuts, and triggers a
+         * 'component:layout' event to all listeners, if the size of this view
+         * component has been changed due to the changed control group.
          */
         function groupLayoutHandler() {
+            var newNodeSize = getNodeSize();
             updateFocusable();
-            self.trigger('group:layout');
+            if (!_.isEqual(nodeSize, newNodeSize)) {
+                nodeSize = newNodeSize;
+                self.trigger('component:layout');
+            }
         }
 
         /**
@@ -126,16 +140,6 @@ define('io.ox/office/framework/view/component',
          */
         function groupFocusHandler(event) {
             node.toggleClass(Utils.FOCUSED_CLASS, event.type === 'group:focus');
-            self.trigger(event.type);
-        }
-
-        /**
-         * Handles 'menu:open' and 'menu:close' events from all registered
-         * group instances. Updates the CSS marker class at the root node of
-         * this view component, and forwards the event to all listeners.
-         */
-        function dropDownMenuHandler(event) {
-            node.toggleClass(DropDown.OPEN_CLASS, event.type === 'menu:open');
             self.trigger(event.type);
         }
 
@@ -164,13 +168,12 @@ define('io.ox/office/framework/view/component',
             // the group's state, forward other layout events
             group.on({
                 'group:cancel': function (event, options) { self.trigger('group:cancel', options); },
-                'group:show group:layout': groupLayoutHandler,
-                'group:focus group:blur': groupFocusHandler,
-                'menu:open menu:close': dropDownMenuHandler
+                'group:show group:enable group:layout': groupLayoutHandler,
+                'group:focus group:blur': groupFocusHandler
             });
 
             // make this view component focusable, if it contains any groups
-            updateFocusable();
+            groupLayoutHandler();
         }
 
         /**
@@ -326,6 +329,15 @@ define('io.ox/office/framework/view/component',
         };
 
         /**
+         * Returns whether this view component is effectively visible (it must
+         * not be hidden by itself, it must be inside the DOM tree, and all its
+         * parent nodes must be visible too).
+         */
+        this.isReallyVisible = function () {
+            return node.is(Utils.VISIBLE_SELECTOR);
+        };
+
+        /**
          * Displays this view component, if it is currently hidden.
          *
          * @returns {Component}
@@ -357,9 +369,11 @@ define('io.ox/office/framework/view/component',
          *  A reference to this view component.
          */
         this.toggle = function (state) {
-            var visible = (state === true) || ((state !== false) && node.hasClass(HIDDEN_CLASS));
+            var visible = (state === true) || ((state !== false) && !this.isVisible());
             if (this.isVisible() !== visible) {
                 node.toggleClass(HIDDEN_CLASS, !visible);
+                this.trigger('component:show', visible);
+                nodeSize = getNodeSize();
             }
             return this;
         };

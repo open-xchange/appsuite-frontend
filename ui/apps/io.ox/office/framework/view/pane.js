@@ -13,9 +13,8 @@
 
 define('io.ox/office/framework/view/pane',
     ['io.ox/core/event',
-     'io.ox/office/tk/utils',
-     'io.ox/office/tk/dropdown/dropdown'
-    ], function (Events, Utils, DropDown) {
+     'io.ox/office/tk/utils'
+    ], function (Events, Utils) {
 
     'use strict';
 
@@ -30,9 +29,9 @@ define('io.ox/office/framework/view/pane',
      *      handler receives the new visibility state.
      * - 'pane:resize': After the view pane has been resized. The event handler
      *      receives the new size of the resizeable dimension, in pixels.
-     * - 'group:layout': After a control group in any view component has been
-     *      shown, hidden, enabled, disabled, or after child nodes have been
-     *      inserted into the group using the method Group.addChildNodes().
+     * - 'pane:layout': After the size of the view pane has been changed, by
+     *      manipulating (showing, hiding, changing) the view components or
+     *      control groups it contains.
      *
      * @constructor
      *
@@ -86,6 +85,9 @@ define('io.ox/office/framework/view/pane',
             // the container element representing the pane
             node = Utils.createContainerNode('view-pane unselectable', options),
 
+            // the last cached size of the root node, used to detect layout changes
+            nodeSize = null,
+
             // position of the pane in the application window
             position = Utils.getStringOption(options, 'position', 'top'),
 
@@ -114,10 +116,7 @@ define('io.ox/office/framework/view/pane',
             paneSizeFunc = _.bind(node[vertical ? 'height' : 'width'], node),
 
             // correction factor for trailing view panes (enlarge when position becomes smaller)
-            resizeFactor = Utils.isLeadingPosition(position) ? 1 : -1,
-
-            // the original size of the view pane when tracking has been started
-            originalSize = 0;
+            resizeFactor = Utils.isLeadingPosition(position) ? 1 : -1;
 
         // base constructor ---------------------------------------------------
 
@@ -127,42 +126,60 @@ define('io.ox/office/framework/view/pane',
         // private methods ----------------------------------------------------
 
         /**
-         * Returns the current size of the pane (width for left/right panes, or
-         * height for top/bottom panes).
+         * Returns the current outer size of the root node of this view
+         * component. If the node is currently invisible, returns the last
+         * cached size.
          */
-        function getPaneSize() {
-            return paneSizeFunc();
+        function getNodeSize() {
+            return self.isReallyVisible() ? { width: node.outerWidth(), height: node.outerHeight() } : nodeSize;
         }
 
         /**
-         * Changes the size of the pane (width for left/right panes, or height
-         * for top/bottom panes), and updates the entire view.
+         * Handles 'component:show' and 'component:layout' events. Triggers a
+         * 'pane:layout' event to all listeners, if the size of this view pane
+         * has been changed due to the changed component.
          */
-        function setPaneSize(size) {
-            if (getPaneSize() !== size) {
-                paneSizeFunc(size);
-                self.trigger('pane:resize', size);
+        function componentLayoutHandler() {
+            var newNodeSize = getNodeSize();
+            if (!_.isEqual(nodeSize, newNodeSize)) {
+                nodeSize = newNodeSize;
+                self.trigger('pane:layout');
             }
         }
 
         /**
          * Handles all tracking events to resize this view pane.
          */
-        function trackingHandler(event) {
-            switch (event.type) {
-            case 'tracking:start':
-                originalSize = getPaneSize();
-                break;
-            case 'tracking:move':
-            case 'tracking:end':
-                var size = originalSize + resizeFactor * (vertical ? event.offsetY : event.offsetX);
-                setPaneSize(Utils.minMax(size, minSize, maxSize));
-                break;
-            case 'tracking:cancel':
-                setPaneSize(originalSize);
-                break;
+        var trackingHandler = (function () {
+
+            var // the original size of the view pane when tracking has been started
+                originalSize = 0;
+
+            function setPaneSize(size) {
+                if (paneSizeFunc() !== size) {
+                    paneSizeFunc(size);
+                    nodeSize = getNodeSize();
+                    self.trigger('pane:resize', size);
+                }
             }
-        }
+
+            return function (event) {
+                switch (event.type) {
+                case 'tracking:start':
+                    originalSize = paneSizeFunc();
+                    break;
+                case 'tracking:move':
+                case 'tracking:end':
+                    var size = originalSize + resizeFactor * (vertical ? event.offsetY : event.offsetX);
+                    setPaneSize(Utils.minMax(size, minSize, maxSize));
+                    break;
+                case 'tracking:cancel':
+                    setPaneSize(originalSize);
+                    break;
+                }
+            };
+
+        }()); // end of local scope of method trackingHandler()
 
         // methods ------------------------------------------------------------
 
@@ -188,6 +205,15 @@ define('io.ox/office/framework/view/pane',
          */
         this.isVisible = function () {
             return node.css('display') !== 'none';
+        };
+
+        /**
+         * Returns whether this view pane is effectively visible (it must not
+         * be hidden by itself, it must be inside the DOM tree, and all its
+         * parent nodes must be visible too).
+         */
+        this.isReallyVisible = function () {
+            return node.is(Utils.VISIBLE_SELECTOR);
         };
 
         /**
@@ -227,6 +253,7 @@ define('io.ox/office/framework/view/pane',
             if (this.isVisible() !== visible) {
                 node.toggle(state);
                 this.trigger('pane:show', visible);
+                nodeSize = getNodeSize();
             }
             return this;
         };
@@ -285,11 +312,9 @@ define('io.ox/office/framework/view/pane',
 
             // update the CSS marker class for an opened drop-down menu
             component.on({
-                'group:layout': function () { self.trigger('group:layout'); },
+                'component:show component:layout': componentLayoutHandler,
                 'group:focus': function () { self.getNode().addClass(Utils.FOCUSED_CLASS); },
-                'group:blur': function () { self.getNode().removeClass(Utils.FOCUSED_CLASS); },
-                'menu:open': function () { self.getNode().addClass(DropDown.OPEN_CLASS); },
-                'menu:close': function () { self.getNode().removeClass(DropDown.OPEN_CLASS); }
+                'group:blur': function () { self.getNode().removeClass(Utils.FOCUSED_CLASS); }
             });
 
             return this;
