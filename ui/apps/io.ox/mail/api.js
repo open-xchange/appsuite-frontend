@@ -392,6 +392,7 @@ define('io.ox/mail/api',
         getAll = api.getAll,
         getList = api.getList,
         get = api.get,
+        remove = api.remove,
         search = api.search;
 
     api.getAll = function (options, useCache) {
@@ -447,6 +448,20 @@ define('io.ox/mail/api',
             options.sort = accountAPI.is('sent|drafts', options.folder) ? 604 : 603;
         }
         return search.call(this, query, options);
+    };
+
+    /**
+     * wrapper for factories remove to update counters
+     * @param  {array} ids
+     * @param  {} local [description]
+     * @return {deferred} resolves as array
+     */
+    api.remove = function (ids, local) {
+        return remove(ids, local).then(function (list) {
+            //update unread counter and folder item counter
+            folderAPI.reload(ids);
+            return list;
+        });
     };
 
     /**
