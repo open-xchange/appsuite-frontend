@@ -814,57 +814,62 @@ i[class^="icon-"], i[class^=" icon-"] {
     font-size: 0;
     line-height: 0;
 
-    > .group.item-buttons {
+    /* drop-down menus with list items divided in sections ================= */
+
+    &.section-list {
 
         /* border color for disabled focused controls */
         @disabled-focus-border-color: lighten(@selectedBackground, 15%);
 
-        > label {
-            display: block;
-            width: 100%;
-            height: auto;
-            padding-top: 7px;
-            padding-bottom: 7px;
-            font-size: 10px;
-            line-height: normal;
-            font-weight: bold;
-        }
+        > .group.item-buttons {
 
-        > .item-section {
-            display: block;
-            width: 100%;
-            .box-sizing(border-box);
-
-            &:first-child { margin-top: 5px; }
-            &:last-child { margin-bottom: 5px; }
-        }
-
-        > .separator {
-            display: block;
-            width: 100%;
-            height: 1px;
-            margin: 5px 0;
-            background: @app-pane-fill-color;
-        }
-
-        .button {
-            display: block;
-            width: 100%;
-            text-align: left;
+            > label {
+                display: block;
+                width: 100%;
+                height: auto;
+                padding-top: 7px;
+                padding-bottom: 7px;
+                font-size: 10px;
+                line-height: normal;
+                font-weight: bold;
+            }
+    
+            > .item-section {
+                display: block;
+                width: 100%;
+                .box-sizing(border-box);
+    
+                &:first-child { margin-top: 5px; }
+                &:last-child { margin-bottom: 5px; }
+            }
+    
+            > .separator {
+                display: block;
+                width: 100%;
+                height: 1px;
+                margin: 5px 0;
+                background: @app-pane-fill-color;
+            }
+    
+            .button {
+                display: block;
+                width: 100%;
+                text-align: left;
+            }
         }
 
         /* list drop-downs */
-        &.list {
+        &.list-items > .group.item-buttons {
         }
 
         /* grid drop-downs */
-        &.grid {
+        &.grid-items > .group.item-buttons {
             > .item-section {
                 padding: 0 5px;
-
+    
                 > table {
                     width: 100%;
-
+    
                     > tbody > tr > td {
                         padding: 0;
                         /* Hack for IE9: without this attribute, IE9 will clip all
@@ -876,128 +881,132 @@ i[class^="icon-"], i[class^=" icon-"] {
         }
 
         /* default design: selected, hover, focus with background color */
-        &.design-default {
-
-            /* standard height of controls */
-            @item-height: 30px;
-
-            /* embedded labels and buttons (list items) */
-            label, .button {
-                height: @item-height;
-                border: 1px solid transparent;
-                line-height: (@item-height - 2px);
-            }
-
-            /* embedded input fields */
-            input {
-                height: @item-height;
-                margin: 0 (@control-padding - @input-padding);
-                border: 1px solid @app-pane-fill-color;
-                .border-radius(5px);
-            }
-
-            /* default background for selected items */
-            .button.selected {
-                background: fade(@selectedBackground, 40%);
-            }
-
-            /* background for enabled selected items */
-            &:not(.disabled) .button:not(.disabled).selected {
-                background: fade(@selectedBackground, 60%);
-            }
-
-            /* hover/active highlighting for enabled buttons */
-            &:not(.disabled) .button:not(.disabled) {
-                &:not(.selected) {
-                    &:hover { background: fade(black, 5%); }
-                    &:active { background: fade(black, 10%); }
+        > .group.item-buttons {
+    
+            &.design-default {
+    
+                /* standard height of controls */
+                @item-height: 30px;
+    
+                /* embedded labels and buttons (list items) */
+                label, .button {
+                    height: @item-height;
+                    border: 1px solid transparent;
+                    line-height: (@item-height - 2px);
                 }
-                &.selected {
-                    &:hover { background: fade(@selectedBackground, 70%); }
-                    &:active { background: fade(@selectedBackground, 80%); }
+    
+                /* embedded input fields */
+                input {
+                    height: @item-height;
+                    margin: 0 (@control-padding - @input-padding);
+                    border: 1px solid @app-pane-fill-color;
+                    .border-radius(5px);
+                }
+    
+                /* default background for selected items */
+                .button.selected {
+                    background: fade(@selectedBackground, 40%);
+                }
+    
+                /* background for enabled selected items */
+                &:not(.disabled) .button:not(.disabled).selected {
+                    background: fade(@selectedBackground, 60%);
+                }
+    
+                /* hover/active highlighting for enabled buttons */
+                &:not(.disabled) .button:not(.disabled) {
+                    &:not(.selected) {
+                        &:hover { background: fade(black, 5%); }
+                        &:active { background: fade(black, 10%); }
+                    }
+                    &.selected {
+                        &:hover { background: fade(@selectedBackground, 70%); }
+                        &:active { background: fade(@selectedBackground, 80%); }
+                    }
+                }
+    
+                /* hover highlighting for enabled input fields */
+                &:not(.disabled) input:not(.disabled):hover:not(:focus) {
+                    background: fade(black, 2%);
+                    border-color: darken(@app-pane-fill-color, 5%);
+                }
+    
+                /* default border for focused buttons and input fields */
+                .button:focus:not(:active), input:focus {
+                    border-color: @disabled-focus-border-color;
+                }
+    
+                /* focus border and glow effect for enabled focused buttons and input fields */
+                &:not(.disabled) {
+                    .button:not(.disabled):focus:not(:active), input:not(.disabled):focus {
+                        border-color: @focus-border-color;
+                        .box-shadow(@focus-glow-effect);
+                    }
                 }
             }
-
-            /* hover highlighting for enabled input fields */
-            &:not(.disabled) input:not(.disabled):hover:not(:focus) {
-                background: fade(black, 2%);
-                border-color: darken(@app-pane-fill-color, 5%);
-            }
-
-            /* default border for focused buttons and input fields */
-            .button:focus:not(:active), input:focus {
-                border-color: @disabled-focus-border-color;
-            }
-
-            /* focus border and glow effect for enabled focused buttons and input fields */
-            &:not(.disabled) {
-                .button:not(.disabled):focus:not(:active), input:not(.disabled):focus {
-                    border-color: @focus-border-color;
-                    .box-shadow(@focus-glow-effect);
+    
+            /* framed design: selected, hover, focus with borders (preserve contents) */
+            &.design-framed {
+    
+                /* standard height of controls in drop-down lists, framed design */
+                @item-height: 42px;
+                /* border width of buttons in framed design mode */
+                @item-border-width: 3px;
+                /* shadow effects for selected buttons */
+                @shadow-effect-1: 0 5px 10px fade(black, 20%);
+                @shadow-effect-2: 0 2px 4px fade(black, 20%) inset;
+                /* focus border, as shadow effect resulting in a single line */
+                @focus-border-effect: 0 0 0 1px @focus-border-color;
+                /* focus border for disabled buttons, as shadow effect resulting in a single line */
+                @disabled-focus-border-effect: 0 0 0 1px @disabled-focus-border-color;
+    
+                /* embedded buttons (list items) */
+                .button {
+                    height: @item-height;
+                    padding-left: 12px;
+                    padding-right: 12px;
+                    border: @item-border-width solid transparent;
+                    .border-radius(5px);
+                    line-height: (@item-height - 2 * @item-border-width);
+    
+                    &.selected {
+                        border-color: @selectedBackground;
+                        .box-shadow-2(@shadow-effect-1, @shadow-effect-2);
+                        background-color: fade(@selectedBackground, 15%);
+                    }
+                }
+    
+                /* hover/active highlighting for enabled buttons */
+                &:not(.disabled) .button:not(.disabled) {
+                    &:not(.selected) {
+                        &:hover { border-color: fade(black, 10%); }
+                        &:active { border-color: fade(black, 15%); }
+                    }
+                    &.selected {
+                        &:hover { border-color: darken(@selectedBackground, 5%); }
+                        &:active { border-color: darken(@selectedBackground, 10%); }
+                    }
+                }
+    
+                /* default border for focused buttons */
+                .button:focus:not(:active) {
+                    .box-shadow(@disabled-focus-border-effect);
+                }
+    
+                /* focus border and glow effect for enabled focused buttons */
+                &:not(.disabled) .button:not(.disabled):focus:not(:active) {
+                    &:not(.selected) {
+                        .box-shadow-2(@focus-border-effect, @focus-glow-effect);
+                    }
+                    &.selected {
+                        border-color: lighten(@selectedBackground, 10%);
+                        .box-shadow-4(@shadow-effect-1, @shadow-effect-2, @focus-border-effect, @focus-glow-effect);
+                    }
                 }
             }
         }
 
-        /* framed design: selected, hover, focus with borders (preserve contents) */
-        &.design-framed {
-
-            /* standard height of controls in drop-down lists, framed design */
-            @item-height: 42px;
-            /* border width of buttons in framed design mode */
-            @item-border-width: 3px;
-            /* shadow effects for selected buttons */
-            @shadow-effect-1: 0 5px 10px fade(black, 20%);
-            @shadow-effect-2: 0 2px 4px fade(black, 20%) inset;
-            /* focus border, as shadow effect resulting in a single line */
-            @focus-border-effect: 0 0 0 1px @focus-border-color;
-            /* focus border for disabled buttons, as shadow effect resulting in a single line */
-            @disabled-focus-border-effect: 0 0 0 1px @disabled-focus-border-color;
-
-            /* embedded buttons (list items) */
-            .button {
-                height: @item-height;
-                padding-left: 12px;
-                padding-right: 12px;
-                border: @item-border-width solid transparent;
-                .border-radius(5px);
-                line-height: (@item-height - 2 * @item-border-width);
-
-                &.selected {
-                    border-color: @selectedBackground;
-                    .box-shadow-2(@shadow-effect-1, @shadow-effect-2);
-                    background-color: fade(@selectedBackground, 15%);
-                }
-            }
-
-            /* hover/active highlighting for enabled buttons */
-            &:not(.disabled) .button:not(.disabled) {
-                &:not(.selected) {
-                    &:hover { border-color: fade(black, 10%); }
-                    &:active { border-color: fade(black, 15%); }
-                }
-                &.selected {
-                    &:hover { border-color: darken(@selectedBackground, 5%); }
-                    &:active { border-color: darken(@selectedBackground, 10%); }
-                }
-            }
-
-            /* default border for focused buttons */
-            .button:focus:not(:active) {
-                .box-shadow(@disabled-focus-border-effect);
-            }
-
-            /* focus border and glow effect for enabled focused buttons */
-            &:not(.disabled) .button:not(.disabled):focus:not(:active) {
-                &:not(.selected) {
-                    .box-shadow-2(@focus-border-effect, @focus-glow-effect);
-                }
-                &.selected {
-                    border-color: lighten(@selectedBackground, 10%);
-                    .box-shadow-4(@shadow-effect-1, @shadow-effect-2, @focus-border-effect, @focus-glow-effect);
-                }
-            }
-        }
-    }
+    } /* end of &.section-list */
 
 } /* end of &.dropdown-container */
 

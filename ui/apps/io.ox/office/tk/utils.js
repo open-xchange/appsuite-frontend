@@ -1007,11 +1007,15 @@ define.async('io.ox/office/tk/utils',
      */
     Utils.extendOptions = function (options) {
 
+        function isPlainObject(value) {
+            return _.isObject(value) && (value.constructor === Object);
+        }
+
         function extend(options, extensions) {
             _(extensions).each(function (value, name) {
-                if (_.isObject(value) && !_.isArray(value) && !_.isFunction(value) && !(value instanceof $)) {
-                    // extension value is an object: ensure that the options map contains an embedded object
-                    if (!_.isObject(options[name])) {
+                if (isPlainObject(value)) {
+                    // extension value is a plain object: ensure that the options map contains an embedded object
+                    if (!isPlainObject(options[name])) {
                         options[name] = {};
                     }
                     extend(options[name], value);

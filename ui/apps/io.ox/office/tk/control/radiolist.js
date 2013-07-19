@@ -255,7 +255,7 @@ define('io.ox/office/tk/control/radiolist',
 
         // register event handlers
         this.on('menu:open', menuOpenHandler);
-        this.getItemGroup().registerUpdateHandler(itemUpdateHandler);
+        this.registerUpdateHandler(itemUpdateHandler);
 
     } // class RadioList
 

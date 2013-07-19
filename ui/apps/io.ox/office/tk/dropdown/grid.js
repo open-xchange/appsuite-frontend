@@ -92,7 +92,7 @@ define('io.ox/office/tk/dropdown/grid',
         /**
          * Handles key events in the open drop-down grid menu element.
          */
-        function gridKeyHandler(event) {
+        function menuKeyHandler(event) {
 
             var // distinguish between event types (ignore keypress events)
                 keydown = event.type === 'keydown',
@@ -193,7 +193,7 @@ define('io.ox/office/tk/dropdown/grid',
 
             if (findNextTable) {
                 // try find previous/next table in the grid
-                tables = self.getItemGroup().getNode().find('table');
+                tables = self.getMenuNode().find('table');
                 tableIndex = tables.index(table);
                 if (up && (tableIndex > 0)) {
                     table = tables.eq(tableIndex - 1);
@@ -229,8 +229,11 @@ define('io.ox/office/tk/dropdown/grid',
 
         // initialization -----------------------------------------------------
 
-        // additional formatting for grid layout, register event handlers
-        this.getItemGroup().getNode().addClass('grid').on('keydown keypress keyup', gridKeyHandler);
+        // additional formatting for grid layout
+        this.getMenuNode().addClass('grid-items');
+
+        // register event handlers
+        this.getMenuNode().on('keydown keypress keyup', menuKeyHandler);
 
     } // class Grid
 

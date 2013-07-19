@@ -311,7 +311,7 @@ define('io.ox/office/tk/dropdown/items',
 
         // add the button group control to the drop-down view component
         this.registerMenuGroup(itemGroup);
-        this.getMenuNode().append(itemGroup.getNode());
+        this.getMenuNode().addClass('section-list').append(itemGroup.getNode());
 
         // register event handlers
         itemGroup.registerChangeHandler('click', {

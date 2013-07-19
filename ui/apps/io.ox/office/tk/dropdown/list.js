@@ -60,7 +60,7 @@ define('io.ox/office/tk/dropdown/list',
         /**
          * Handles key events in the open drop-down list menu element.
          */
-        function listKeyHandler(event) {
+        function menuKeyHandler(event) {
 
             var // distinguish between event types (ignore keypress events)
                 keydown = event.type === 'keydown',
@@ -96,11 +96,11 @@ define('io.ox/office/tk/dropdown/list',
         // initialization -----------------------------------------------------
 
         // additional formatting for vertical list items
-        this.getItemGroup().getNode().addClass('list');
+        this.getMenuNode().addClass('list-items');
 
         // register event handlers
         this.on('menu:open', menuOpenHandler);
-        this.getItemGroup().getNode().on('keydown keypress keyup', listKeyHandler);
+        this.getMenuNode().on('keydown keypress keyup', menuKeyHandler);
 
     } // class List
 

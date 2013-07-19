@@ -14,10 +14,10 @@
 define('io.ox/office/preview/view/controls',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/control/button',
-     'io.ox/office/tk/control/textfield',
+     'io.ox/office/tk/control/spinfield',
      'io.ox/office/tk/control/radiolist',
      'gettext!io.ox/office/main'
-    ], function (Utils, Button, TextField, RadioList, gt) {
+    ], function (Utils, Button, SpinField, RadioList, gt) {
 
     'use strict';
 
@@ -108,7 +108,7 @@ define('io.ox/office/preview/view/controls',
             .createSection('pages', { separator: true });
 
         // enable/disable the list entries dynamically
-        this.getItemGroup().registerUpdateHandler(function (page) {
+        this.registerUpdateHandler(function (page) {
             var items = self.getItems();
             items.filter('[data-value="first"]').toggleClass(Utils.DISABLED_CLASS, page <= 1);
             items.filter('[data-value="last"]').toggleClass(Utils.DISABLED_CLASS, page >= app.getModel().getPageCount());
@@ -117,11 +117,13 @@ define('io.ox/office/preview/view/controls',
         // create the text input field for the page number, when page count is known
         app.on('docs:import:success', function () {
 
-            var pageInput = new TextField({
+            var pageInput = new SpinField({
                     label: gt('Go to page'),
+                    tooltip: gt('Page number'),
                     width: 50,
-                    validator: new TextField.NumberValidator({ min: 1, max: app.getModel().getPageCount(), digits: 0 }),
-                    tooltip: gt('Page number')
+                    min: 1,
+                    max: app.getModel().getPageCount(),
+                    digits: 0
                 });
 
             pageInput.getTextFieldNode().css({ textAlign: 'right' });
