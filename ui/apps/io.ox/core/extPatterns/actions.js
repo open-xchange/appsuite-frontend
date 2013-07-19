@@ -107,10 +107,13 @@ define("io.ox/core/extPatterns/actions",
 
         // combine actions
         var defs = ext.point(ref).map(function (action) {
-                var ret;
+
+                var ret = true;
+
                 if (stopped) {
                     return $.Deferred().resolve(false);
                 }
+
                 if (_.isFunction(action.requires)) {
                     ret = action.requires({
                         baton: baton,
@@ -121,10 +124,12 @@ define("io.ox/core/extPatterns/actions",
                         stopPropagation: stopPropagation
                     });
                 }
+
                 // is not deferred?
                 if (ret !== undefined && !ret.promise) {
                     ret = $.Deferred().resolve(ret);
                 }
+
                 return ret;
             })
             .value();
