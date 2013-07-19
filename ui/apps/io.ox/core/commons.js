@@ -452,6 +452,9 @@ define('io.ox/core/commons',
                 $(this).parent().find('.rightside-inline-actions').empty();
                 $(this).closest('.vsplit').addClass('vsplit-reverse').removeClass('vsplit-slide');
                 if (e.data.app) {
+                    if (_.device('small')) {
+                        e.data.app.getGrid().selection.trigger('changeMobile');
+                    }
                     e.data.app.getGrid().selection.clear();
                 }
             };
