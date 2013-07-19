@@ -547,7 +547,7 @@ define('io.ox/office/tk/dropdown/dropdown',
          *  A collection with all focusable controls.
          */
         this.getFocusableMenuControls = function () {
-            return menuNode.find(Utils.VISIBLE_SELECTOR + Utils.FOCUSABLE_SELECTOR);
+            return menuNode.find(Utils.REALLY_VISIBLE_SELECTOR + Utils.FOCUSABLE_SELECTOR);
         };
 
         /**

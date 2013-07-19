@@ -19,13 +19,7 @@ define('io.ox/office/tk/control/group',
 
     'use strict';
 
-    var // CSS class for hidden groups
-        HIDDEN_CLASS = 'hidden',
-
-        // CSS class for disabled groups
-        DISABLED_CLASS = 'disabled',
-
-        // DOM event that will cause a 'group:change' event from a group
+    var // DOM event that will cause a 'group:change' event from a group
         INTERNAL_TRIGGER_EVENT = 'private:trigger',
 
         // the group instances currently focused (as array, groups may be embedded)
@@ -396,7 +390,7 @@ define('io.ox/office/tk/control/group',
          * parent DOM nodes (see method Group.isReallyVisible() to do that).
          */
         this.isVisible = function () {
-            return !groupNode.hasClass(HIDDEN_CLASS);
+            return !groupNode.hasClass(Utils.HIDDEN_CLASS);
         };
 
         /**
@@ -405,7 +399,7 @@ define('io.ox/office/tk/control/group',
          * parent nodes must be visible too).
          */
         this.isReallyVisible = function () {
-            return groupNode.is(Utils.VISIBLE_SELECTOR);
+            return groupNode.is(Utils.REALLY_VISIBLE_SELECTOR);
         };
 
         /**
@@ -444,7 +438,7 @@ define('io.ox/office/tk/control/group',
                 visible = (state === true) || ((state !== false) && this.isVisible());
 
             if (this.isVisible() !== visible) {
-                groupNode.toggleClass(HIDDEN_CLASS, !visible);
+                groupNode.toggleClass(Utils.HIDDEN_CLASS, !visible);
                 this.trigger('group:show', visible);
             }
             return this;

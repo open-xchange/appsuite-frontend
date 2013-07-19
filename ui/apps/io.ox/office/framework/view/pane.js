@@ -213,7 +213,7 @@ define('io.ox/office/framework/view/pane',
          * parent nodes must be visible too).
          */
         this.isReallyVisible = function () {
-            return node.is(Utils.VISIBLE_SELECTOR);
+            return node.is(Utils.REALLY_VISIBLE_SELECTOR);
         };
 
         /**

@@ -19,9 +19,6 @@ define('io.ox/office/framework/view/component',
 
     'use strict';
 
-    var // CSS class for hidden components
-        HIDDEN_CLASS = 'hidden';
-
     // class Component ========================================================
 
     /**
@@ -325,7 +322,7 @@ define('io.ox/office/framework/view/component',
          * Returns whether this view component is visible.
          */
         this.isVisible = function () {
-            return !node.hasClass(HIDDEN_CLASS);
+            return !node.hasClass(Utils.HIDDEN_CLASS);
         };
 
         /**
@@ -334,7 +331,7 @@ define('io.ox/office/framework/view/component',
          * parent nodes must be visible too).
          */
         this.isReallyVisible = function () {
-            return node.is(Utils.VISIBLE_SELECTOR);
+            return node.is(Utils.REALLY_VISIBLE_SELECTOR);
         };
 
         /**
@@ -371,7 +368,7 @@ define('io.ox/office/framework/view/component',
         this.toggle = function (state) {
             var visible = (state === true) || ((state !== false) && !this.isVisible());
             if (this.isVisible() !== visible) {
-                node.toggleClass(HIDDEN_CLASS, !visible);
+                node.toggleClass(Utils.HIDDEN_CLASS, !visible);
                 this.trigger('component:show', visible);
                 nodeSize = getNodeSize();
             }

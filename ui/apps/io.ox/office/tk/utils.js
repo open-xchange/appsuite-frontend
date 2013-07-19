@@ -101,6 +101,23 @@ define.async('io.ox/office/tk/utils',
     Utils.BUTTON_SELECTOR = '.button';
 
     /**
+     * CSS class for hidden elements.
+     */
+    Utils.HIDDEN_CLASS = 'hidden';
+
+    /**
+     * CSS selector for visible elements.
+     */
+    Utils.VISIBLE_SELECTOR = ':not(.' + Utils.HIDDEN_CLASS + ')';
+
+    /**
+     * CSS selector for elements that are effectively visible.
+     *
+     * @constant
+     */
+    Utils.REALLY_VISIBLE_SELECTOR = ':visible';
+
+    /**
      * CSS class for disabled controls.
      *
      * @constant
@@ -115,20 +132,6 @@ define.async('io.ox/office/tk/utils',
     Utils.ENABLED_SELECTOR = ':not(.' + Utils.DISABLED_CLASS + ')';
 
     /**
-     * CSS selector for elements that are effectively visible.
-     *
-     * @constant
-     */
-    Utils.VISIBLE_SELECTOR = ':visible';
-
-    /**
-     * CSS class for elements that contain the focused node.
-     *
-     * @constant
-     */
-    Utils.FOCUSED_CLASS = 'focused';
-
-    /**
      * CSS class for selected (active) buttons or tabs.
      *
      * @constant
@@ -141,6 +144,13 @@ define.async('io.ox/office/tk/utils',
      * @constant
      */
     Utils.SELECTED_SELECTOR = '.' + Utils.SELECTED_CLASS;
+
+    /**
+     * CSS class for elements that contain the focused node.
+     *
+     * @constant
+     */
+    Utils.FOCUSED_CLASS = 'focused';
 
     /**
      * CSS class for focusable control elements.
