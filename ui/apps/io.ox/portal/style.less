@@ -644,3 +644,47 @@
         }
     }
 }
+
+.ios .io-ox-portal-settings {
+
+    .btn-group.pull-right {
+        z-index: 1001;
+    }
+
+    .widget-settings-view.draggable {
+        padding-left: 0px;
+        position: static;
+    }
+    
+    .widget-settings-view .drag-handle {
+        position: relative;
+        top: -13px;
+        bottom: 13px;
+        width: 50px;
+        cursor: pointer;
+        float: left;
+        height: 46px;
+        right: 60px;
+    }
+    
+    .widget-settings-view .drag-handle i {
+        position: absolute;
+        left: 57%;
+    }
+    
+    .dropdown.colors {
+        position: static;
+    }
+    
+    .dropdown.colors.open {
+        position: relative;
+    }
+    
+}
+
+@media (max-width: 480px), (max-device-width: 480px) {
+    .ios .io-ox-portal-settings li.widget-settings-view .drag-handle {
+        width: 40px;
+    }
+}
+
