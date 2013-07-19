@@ -773,8 +773,8 @@ define('io.ox/backbone/forms',
                 if (isNaN(myValue)) {
                     return value;
                 }
-                var mydate = new date.Local(myValue);
-                var parsedDate;
+                var mydate = new date.Local(myValue),
+                    parsedDate;
                 if (options.display === "DATETIME" && _.device('small') && !model.get('full_time')) {
                     parsedDate = date.Local.parse(value, date.getFormat(date.DATE) + ' ' + date.getFormat(date.TIME));
                 } else {
@@ -784,6 +784,12 @@ define('io.ox/backbone/forms',
                 if (_.isNull(parsedDate)) {
                     return value;
                 }
+
+                // fulltime utc workaround
+                if (model.get('full_time')) {
+                    return parsedDate.local;
+                }
+
                 if (options.display === "DATETIME" && _.device('small') && !model.get('full_time')) {
                     return parsedDate.getTime();
                 } else {
@@ -857,11 +863,11 @@ define('io.ox/backbone/forms',
                                         self.nodes.timezoneField.text(gt.noI18n(date.Local.getTTInfoLocal(_.now()).abbr));
                                     }
                                 }
+
                                 if (mobileMode) {
                                     self.nodes.dayField.toggleClass('input-medium', 'input-small');
                                     return [self.nodes.dayField];
                                 } else {
-
                                     if (options.display === "DATE") {
                                         return [self.nodes.dayField, '&nbsp;', self.nodes.timezoneField];
                                     } else if (options.display === "DATETIME") {
@@ -878,8 +884,8 @@ define('io.ox/backbone/forms',
                         )
                     )
                 );
-                this.setValueInField();
 
+                this.setValueInField();
 
                 if (!mobileMode) {
                     // get the right date format
@@ -930,22 +936,24 @@ define('io.ox/backbone/forms',
                     left: $(element)[0].offsetLeft
                 });
             },
+
             setValueInField: function () {
                 var value = this.model.get(this.attribute);
-                if (value && options.display === "DATETIME") {
-                    this.nodes.timezoneField.text(gt.noI18n(date.Local.getTTInfoLocal(value).abbr));
-                } else if (options.display === "DATETIME") {
-                    this.nodes.timezoneField.text(gt.noI18n(date.Local.getTTInfoLocal(_.now()).abbr));
+                if (options.display === "DATETIME") {
+                    this.nodes.timezoneField.text(gt.noI18n(date.Local.getTTInfoLocal(value || _.now()).abbr));
                 }
+
                 this.nodes.dayField.val(BinderUtils.convertDate('ModelToView', value, this.attribute, this.model));
 
                 if (!mobileMode && options.display === "DATETIME") {
                     this.nodes.timeField.val(BinderUtils.convertTime('ModelToView', value, this.attribute, this.model));
                 }
             },
+
             updateModelDate: function () {
-                this.model.set(this.attribute, BinderUtils.convertDate('ViewToModel', this.nodes.dayField.val(), this.attribute, this.model), {validate: true});
+                this.model.set(this.attribute, BinderUtils.convertDate('ViewToModel', this.nodes.dayField.val(), this.attribute, this.model), { validate: true });
             },
+
             updateModelTime: function () {
                 var time = BinderUtils.convertTime('ViewToModel', this.nodes.timeField.val(), this.attribute, this.model);
                 if (time && _.isNumber(time)) {
@@ -955,6 +963,7 @@ define('io.ox/backbone/forms',
                     this.model.trigger("invalid:" + this.attribute, [gt('Please enter a valid date')]);
                 }
             },
+
             showError: function (messages) {
                 this.removeError();
                 this.nodes.controlGroup.addClass("error");
@@ -964,6 +973,7 @@ define('io.ox/backbone/forms',
                 });
                 this.$el.append(helpBlock);
             },
+
             removeError: function () {
                 if (this.nodes.helpBlock) {
                     this.nodes.helpBlock.remove();
@@ -971,6 +981,7 @@ define('io.ox/backbone/forms',
                     this.nodes.controlGroup.removeClass("error");
                 }
             },
+
             onFullTimeChange: function () {
                 if (_.device('small')) {//
                     if (this.model.get('full_time')) {
@@ -992,7 +1003,9 @@ define('io.ox/backbone/forms',
                     }
                 }
             },
+
             modelEvents: modelEvents
+
         }, options);
     }
 
