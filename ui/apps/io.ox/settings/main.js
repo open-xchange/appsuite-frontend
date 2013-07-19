@@ -112,6 +112,13 @@ define('io.ox/settings/main',
                     changeStatus = false;
                 }
                 break;
+            case 'changeGridMobile':
+                if (currentSelection.lazySaveSettings === true && changeStatus === true) {
+                    var settingsID = currentSelection.id + '/settings';
+                    ext.point(settingsID + '/detail').invoke('save');
+                    changeStatus = false;
+                }
+                break;
             case 'hide':
             case 'logout':
                 if (currentSelection !== null && currentSelection.lazySaveSettings === true && changeStatus === true) {
@@ -291,6 +298,12 @@ define('io.ox/settings/main',
         grid.selection.on('change', function () {
             saveSettings('changeGrid');
         });
+
+        if (_.device('small')) {
+            grid.selection.on('changeMobile', function () {
+                saveSettings('changeGridMobile');
+            });
+        }
 
         // trigger auto save on any change
 
