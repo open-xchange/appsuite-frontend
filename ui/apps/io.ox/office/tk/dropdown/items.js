@@ -133,9 +133,11 @@ define('io.ox/office/tk/dropdown/items',
         /**
          * Handles key events in the embedded item list group.
          */
-        function itemKeyDownHandler(event) {
+        function itemKeyHandler(event) {
             // TAB key executes the item currently selected, but keeps the focus on the menu button
-            if (KeyCodes.matchKeyCode(event, 'TAB', { shift: null })) {
+            if ((event.type === 'keydown') && KeyCodes.matchKeyCode(event, 'TAB', { shift: null })) {
+                itemGroup.triggerChange(event.target, { preserveFocus: true });
+            } else if ((event.type === 'keyup') && (event.keyCode === KeyCodes.SPACE)) {
                 itemGroup.triggerChange(event.target, { preserveFocus: true });
             }
         }
@@ -291,7 +293,7 @@ define('io.ox/office/tk/dropdown/items',
             selector: Utils.BUTTON_SELECTOR,
             valueResolver: Utils.getFunctionOption(options, 'itemValueResolver')
         });
-        itemGroup.getNode().on('keydown', itemKeyDownHandler);
+        itemGroup.getNode().on('keydown keyup', itemKeyHandler);
 
         // default sort functor: sort by button label text, case insensitive
         sortFunctor = _.isFunction(sortFunctor) ? sortFunctor : function (button) {

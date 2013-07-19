@@ -377,14 +377,14 @@ define('io.ox/office/tk/dropdown/dropdown',
             switch (event.keyCode) {
             case KeyCodes.DOWN_ARROW:
             case KeyCodes.PAGE_DOWN:
-                if (keydown && self.isEnabled() && !self.isMenuVisible()) {
+                if (keydown && self.isEnabled()) {
                     showMenu();
                     self.grabMenuFocus();
                 }
                 return false;
             case KeyCodes.UP_ARROW:
             case KeyCodes.PAGE_UP:
-                if (keydown && self.isEnabled() && !self.isMenuVisible()) {
+                if (keydown && self.isEnabled()) {
                     showMenu();
                     self.grabMenuFocus({ bottom: true });
                 }
@@ -627,7 +627,7 @@ define('io.ox/office/tk/dropdown/dropdown',
 
         // register event handlers
         this.on({
-            'group:change group:cancel group:blur': hideMenu,
+            'group:blur': hideMenu,
             'group:show group:enable': function (event, state) { if (!state) { hideMenu(); } }
         });
         groupNode.on('keydown keypress keyup', groupKeyHandler);
