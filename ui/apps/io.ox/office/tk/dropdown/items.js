@@ -102,7 +102,7 @@ define('io.ox/office/tk/dropdown/items',
 
         // base constructor ---------------------------------------------------
 
-        DropDown.call(this, Utils.extendOptions(options, { autoLayout: true }));
+        DropDown.call(this, Utils.extendOptions(options, { autoLayout: true, getFocusableHandler: getFocusableHandler }));
 
         // private methods ----------------------------------------------------
 
@@ -138,6 +138,14 @@ define('io.ox/office/tk/dropdown/items',
             if (KeyCodes.matchKeyCode(event, 'TAB', { shift: null })) {
                 itemGroup.triggerChange(event.target, { preserveFocus: true });
             }
+        }
+
+        /**
+         * Filters the passed collection of focusable drop-down menu controls
+         * to the controls currently selected.
+         */
+        function getFocusableHandler(focusableNodes) {
+            return Utils.getSelectedButtons(focusableNodes);
         }
 
         // methods ------------------------------------------------------------
@@ -270,28 +278,6 @@ define('io.ox/office/tk/dropdown/items',
 
             this.refresh();
             return button;
-        };
-
-        /**
-         * Sets the focus into the first control element of the grid
-         * element.
-         *
-         * @returns {Items}
-         *  A reference to this instance.
-         */
-        this.grabMenuFocus = function () {
-
-            var // all focusable list items
-                items = self.getFocusableMenuControls(),
-                selectedButtons = Utils.getSelectedButtons(items);
-
-            if (selectedButtons.length) {
-                selectedButtons.first().focus();
-            } else {
-                items.first().focus();
-            }
-
-            return this;
         };
 
         // initialization -----------------------------------------------------

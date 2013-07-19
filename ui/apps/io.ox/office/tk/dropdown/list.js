@@ -71,28 +71,34 @@ define('io.ox/office/tk/dropdown/list',
 
             switch (event.keyCode) {
             case KeyCodes.UP_ARROW:
-                if (keydown) {
-                    if (index <= 0) {
-                        self.hideMenu();
-                    } else {
-                        controls.eq(index - 1).focus();
-                    }
+                if (keydown && (index > 0)) {
+                    controls.eq(index - 1).focus();
                 }
                 return false;
             case KeyCodes.DOWN_ARROW:
-                if (keydown && (index >= 0) && (index + 1 < controls.length)) { controls.eq(index + 1).focus(); }
+                if (keydown && (index >= 0) && (index + 1 < controls.length)) {
+                    controls.eq(index + 1).focus();
+                }
                 return false;
             case KeyCodes.PAGE_UP:
-                if (keydown) { controls.eq(Math.max(0, index - List.PAGE_SIZE)).focus(); }
+                if (keydown && (index >= 0) && (controls.length > 0)) {
+                    controls.eq(Math.max(0, index - List.PAGE_SIZE)).focus();
+                }
                 return false;
             case KeyCodes.PAGE_DOWN:
-                if (keydown) { controls.eq(Math.min(controls.length - 1, index + List.PAGE_SIZE)).focus(); }
+                if (keydown && (index >= 0) && (controls.length > 0)) {
+                    controls.eq(Math.min(controls.length - 1, index + List.PAGE_SIZE)).focus();
+                }
                 return false;
             case KeyCodes.HOME:
-                if (keydown) { controls.first().focus(); }
+                if (keydown) {
+                    controls.first().focus();
+                }
                 return false;
             case KeyCodes.END:
-                if (keydown) { controls.last().focus(); }
+                if (keydown) {
+                    controls.last().focus();
+                }
                 return false;
             }
         }

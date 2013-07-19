@@ -69,6 +69,15 @@ define('io.ox/office/tk/dropdown/dropdown',
      *      menu and the group node, the value 'right' tries to align the right
      *      borders, and the value 'center' tries to place the drop-down menu
      *      centered to the group node.
+     *  @param {Function} [options.getFocusableHandler]
+     *      A function that returns all controls contained in the drop-down
+     *      menu that are currently focusable, as jQuery collection. Used by
+     *      the method 'DropDown.grabMenuFocus()' to decide which embedded
+     *      control to focus. Receives the jQuery collection of all focusable
+     *      controls currently available in the first parameter. If omitted,
+     *      or if the function returns an empty jQuery collection, uses all
+     *      available focusable form controls.
+     *
      */
     function DropDown(options) {
 
@@ -86,6 +95,9 @@ define('io.ox/office/tk/dropdown/dropdown',
 
             // horizontal alignment of the drop-down menu
             menuAlign = Utils.getStringOption(options, 'menuAlign', 'left'),
+
+            // callback function to filter the focusable controls in the drop-down menu
+            getFocusableHandler = Utils.getFunctionOption(options, 'getFocusableHandler', _.identity),
 
             // the drop-down button
             menuButton = Utils.createButton((caretMode === 'only') ? {} : options).addClass('dropdown-button'),
@@ -364,14 +376,17 @@ define('io.ox/office/tk/dropdown/dropdown',
 
             switch (event.keyCode) {
             case KeyCodes.DOWN_ARROW:
-                if (keydown && self.isEnabled()) {
+            case KeyCodes.PAGE_DOWN:
+                if (keydown && self.isEnabled() && !self.isMenuVisible()) {
                     showMenu();
                     self.grabMenuFocus();
                 }
                 return false;
             case KeyCodes.UP_ARROW:
-                if (keydown) {
-                    hideMenu();
+            case KeyCodes.PAGE_UP:
+                if (keydown && self.isEnabled() && !self.isMenuVisible()) {
+                    showMenu();
+                    self.grabMenuFocus({ bottom: true });
                 }
                 return false;
             }
@@ -537,14 +552,31 @@ define('io.ox/office/tk/dropdown/dropdown',
 
         /**
          * Sets the focus into the first focusable control element of the
-         * drop-down menu element. May be overwritten by derived classes to add
-         * more sophisticated focus behavior.
+         * drop-down menu element.
+         *
+         * @param {Object} [options]
+         *  A map with options controlling the behavior of this method. The
+         *  following options are supported:
+         *  @param {Boolean} [options.bottom=false]
+         *      If set to true, the bottom entry of the drop-down menu should
+         *      be focused instead of the first.
          *
          * @returns {DropDown}
          *  A reference to this instance.
          */
-        this.grabMenuFocus = function () {
-            this.getFocusableMenuControls().first().focus();
+        this.grabMenuFocus = function (options) {
+
+            var // all focusable controls
+                focusableNodes = this.getFocusableMenuControls(),
+                // the preferred controls returned by the callback function
+                preferredNodes = getFocusableHandler.call(this, focusableNodes),
+                // whether to select the last control
+                bottom = Utils.getBooleanOption(options, 'bottom', false);
+
+            // fall back to all focusable controls if no preferred controls are available
+            if (preferredNodes.length === 0) { preferredNodes = focusableNodes; }
+            preferredNodes[bottom ? 'last' : 'first']().focus();
+
             return this;
         };
 
