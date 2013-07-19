@@ -413,8 +413,9 @@ define('io.ox/core/api/account',
             } else if (ox.online) {
                 return getter().pipe(function (data) {
                     data = process(data);
-                    accountsAllCache.add(data);
-                    return data;
+                    return accountsAllCache.add(data).then(function () {
+                        return data;
+                    });
                 });
             } else {
                 return [];
