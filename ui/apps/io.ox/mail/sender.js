@@ -86,65 +86,123 @@ define('io.ox/mail/sender',
             select.prop('selectedIndex', index);
         },
 
-        // accessible for testing purposes
-        getNumbers: function () {
+        /**
+         * user data
+         * accessible for testing purposes
+         * @return {deferred} resolves as user object
+         */
+        getUser: function () {
             return userAPI.get({ id: ox.user_id });
         },
 
-        // accessible for testing purposes
+        /**
+         * get mapped fields
+         * accessible for testing purposes
+         * @return {array}
+         */
         getMapping: function () {
             return capabilities.has('msisdn') ? contactsAPI.getMapping('msisdn', 'names') : [];
         },
 
+        /**
+         * default send adresse from settigns
+         * @return {string}
+         */
         getDefaultSendAddress: function () {
             return $.trim(settings.get('defaultSendAddress', ''));
         },
 
-        // add all senders to <select> box
-        drawOptions: function (select) {
+        /**
+         * primary address
+         * accessible for testing purposes
+         * @return {deferred} resolves as array
+         */
+        getPrimaryAddress: function () {
+            return api.getPrimaryAddress();
+        },
 
+        /**
+         * internal and external accounts
+         * accessible for testing purposes
+         * @return {deferred} resolves as array of arrays
+         */
+        getAccounts: function () {
+            return api.getAllSenderAddresses();
+        },
+
+
+        /**
+         * display name
+         * accessible for testing purposes
+         * @return {deferred} resolves as string
+         */
+        getDisplayName: function () {
+            return api.getDefaultDisplayName();
+        },
+
+        /**
+         * get normalized sender array(s) from mapped phone numbers
+         * @example
+         *     └─ 0
+         *        ├─ 0: Pierce Hawthorne
+         *        └─ 1: +4915656181546
+         *     └─ 1
+         *        ├─ 0: Pierce Hawthorne
+         *        └─ 1: +49195841148248
+         * @return {deferred} resolves as array of arrays
+         */
+        getNumbers: function () {
+            return $.when(
+                        that.getUser(),
+                        that.getDisplayName()
+                    )
+                    .then(function (data, display_name) {
+                        display_name = display_name || data.display_name || '';
+                        return _(that.getMapping())
+                                    .chain()
+                                    .map(function (field) {
+                                        var number = $.trim(data[field]);
+                                        if (number) {
+                                            return [
+                                                display_name,
+                                                number
+                                            ];
+                                        }
+                                    })
+                                    .compact()
+                                    .value();
+                    });
+        },
+
+        /**
+         * list of normalised arrays (display_name, value)
+         * accessible for testing purposes
+         * @return {deferred} resolves as array
+         */
+        getAddresses: function () {
+            return $.when(
+                    that.getAccounts(),
+                    that.getNumbers(),
+                    that.getPrimaryAddress()
+                );
+        },
+
+        /**
+         * add all senders to <select> box
+         * @param  {jquery} select node
+         * @return {undefined}
+         */
+        drawOptions: function (select) {
             if (!select) return;
 
-            // fallback address - if any other request fails we have the detault send address
+            // fallback address - if any other request fails we have the default send address
             var defaultAddress = this.getDefaultSendAddress();
             select.empty()
                 .attr('data-default-send-address', defaultAddress)
                 .append(drawOption(defaultAddress));
 
-            // get accounts
-            var accounts = api.getAllSenderAddresses();
-
-            // get MSISDN numbers
-            var numbers = $.when(
-                that.getNumbers(),
-                api.getDefaultDisplayName()
-            )
-            .then(function (data, display_name) {
-
-                display_name = display_name || data.display_name || '';
-
-                return _(that.getMapping())
-                    .chain()
-                    .map(function (field) {
-                        var number = $.trim(data[field]);
-                        if (number) {
-                            return [
-                                display_name,
-                                number
-                            ];
-                        }
-                    })
-                    .compact()
-                    .value();
-            });
-
-            // append to select-box
-            return $.when(
-                accounts,
-                numbers,
-                api.getPrimaryAddress()
-            )
-            .then(function (addresses, numbers, primary) {
+            // append options to select-box
+            return that.getAddresses().then(function (addresses, numbers, primary) {
                 var defaultAddress = select.attr('data-default') || primary[1],
                     defaultValue,
                     list = [].concat(addresses, numbers);
