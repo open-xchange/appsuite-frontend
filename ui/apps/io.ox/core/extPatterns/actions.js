@@ -99,20 +99,37 @@ define("io.ox/core/extPatterns/actions",
     };
 
     var processActions = function (ref, collection, baton) {
+
+        // allow extensions to cancel actions
+        var stopped = false, stopPropagation = function () {
+            stopped = true;
+        };
+
         // combine actions
-        return $.when.apply($,
-            ext.point(ref).map(function (action) {
-                // get return value
-                var ret = _.isFunction(action.requires) ?
-                        action.requires({ collection: collection, context: baton.data, baton: baton }) : true;
+        var defs = ext.point(ref).map(function (action) {
+                var ret;
+                if (stopped) {
+                    return $.Deferred().resolve(false);
+                }
+                if (_.isFunction(action.requires)) {
+                    ret = action.requires({
+                        baton: baton,
+                        collection: collection,
+                        context: baton.data,
+                        extension: action,
+                        point: ref,
+                        stopPropagation: stopPropagation
+                    });
+                }
                 // is not deferred?
                 if (ret !== undefined && !ret.promise) {
                     ret = $.Deferred().resolve(ret);
                 }
                 return ret;
             })
-            .value()
-        );
+            .value();
+
+        return $.when.apply($, defs);
     };
 
     var customClick = function (e) {
