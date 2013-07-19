@@ -80,7 +80,7 @@ define('io.ox/mail/accounts/settings',
         draw: function (baton) {
             this.append(
                 $('<label>').text(gt('Your mail address')).append(
-                    $('<input type="text" class="input-large add-mail-account-address">')
+                    $('<input type="text" class="span6 add-mail-account-address">')
                 )
             );
         }
@@ -92,7 +92,7 @@ define('io.ox/mail/accounts/settings',
         draw: function (baton) {
             this.append(
                 $('<label>').text(gt('Your password')).append(
-                    $('<input type="password" class="input-large add-mail-account-password">')
+                    $('<input type="password" class="span6 add-mail-account-password">')
                     .on('keyup', function (e) {
                         if (e.which === 13) {
                             $(this).closest('.io-ox-dialog-popup').find('.modal-footer .btn-primary').trigger('click');
