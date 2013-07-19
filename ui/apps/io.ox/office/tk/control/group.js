@@ -214,8 +214,13 @@ define('io.ox/office/tk/control/group',
          *
          * @param {Function} updateHandler
          *  The update handler function. Will be called in the context of this
-         *  group. Receives the value and the options map passed to the method
-         *  Group.setValue(), followed by the old value of the group.
+         *  group. Receives the following parameters:
+         *  (1) {Any} value
+         *      The value passed to the method Group.setValue().
+         *  (2) {Object|Undefined} options
+         *      The options map passed to the method Group.setValue().
+         *  (3) {Any} oldValue
+         *      The old value of the group.
          *
          * @returns {Group}
          *  A reference to this group.
