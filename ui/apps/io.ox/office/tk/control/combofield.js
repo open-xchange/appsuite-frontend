@@ -225,7 +225,7 @@ define('io.ox/office/tk/control/combofield',
 
         // prepare group and register event handlers
         this.on('menu:open', menuOpenHandler)
-            .on('validated', textFieldValidationHandler)
+            .on('textfield:validated', textFieldValidationHandler)
             .registerUpdateHandler(itemUpdateHandler);
         this.getTextFieldNode()
             .on('keydown keypress keyup', textFieldKeyHandler);

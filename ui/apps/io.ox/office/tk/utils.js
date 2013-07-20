@@ -322,18 +322,57 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
-     * Rounds the passed floating-point number to the specified number of
-     * digits after the decimal point.
+     * Rounds the passed floating-point number to the nearest multiple of the
+     * specified precision.
      *
      * @param {Number} value
-     *  The value to be rounded.
+     *  The floating-point number to be rounded.
      *
-     * @param {Number} digits
-     *  The number of digits after the decimal point.
+     * @param {Number} precision
+     *  The precision used to round the number. The value 1 will round to
+     *  integers (exactly like the Math.round() method). Must be positive.
+     *
+     * @returns {Number}
+     *  The rounded number.
      */
-    Utils.roundDigits = function (value, digits) {
-        var pow10 = Math.pow(10, digits);
-        return _.isFinite(value) ? (Math.round(value * pow10) / pow10) : value;
+    Utils.round = function (value, precision) {
+        return _.isFinite(value) ? (Math.round(value / precision) * precision) : value;
+    };
+
+    /**
+     * Rounds the passed floating-point number down to the nearest multiple of
+     * the specified precision.
+     *
+     * @param {Number} value
+     *  The floating-point number to be rounded.
+     *
+     * @param {Number} precision
+     *  The precision used to round the number. The value 1 will round down to
+     *  integers (exactly like the Math.floor() method). Must be positive.
+     *
+     * @returns {Number}
+     *  The rounded number.
+     */
+    Utils.roundDown = function (value, precision) {
+        return _.isFinite(value) ? (Math.floor(value / precision) * precision) : value;
+    };
+
+    /**
+     * Rounds the passed floating-point number up to the nearest multiple of
+     * the specified precision.
+     *
+     * @param {Number} value
+     *  The floating-point number to be rounded.
+     *
+     * @param {Number} precision
+     *  The precision used to round the number. The value 1 will round up to
+     *  integers (exactly like the Math.ceil() method). Must be positive.
+     *
+     * @returns {Number}
+     *  The rounded number.
+     */
+    Utils.roundUp = function (value, precision) {
+        return _.isFinite(value) ? (Math.ceil(value / precision) * precision) : value;
     };
 
     /**
@@ -349,7 +388,7 @@ define.async('io.ox/office/tk/utils',
      */
     Utils.roundSignificantDigits = function (value, digits) {
         var pow10 = Math.pow(10, Math.floor(Math.log(value) / Math.log(10)));
-        return Utils.roundDigits(value / pow10, digits - 1) * pow10;
+        return Utils.round(value / pow10, Math.pow(10, digits - 1)) * pow10;
     };
 
     /**
@@ -412,9 +451,9 @@ define.async('io.ox/office/tk/utils',
      * @param {String} toUnit
      *  The target measurement unit.
      *
-     * @param {Number} [digits]
-     *  If specified, the number of digits after the decimal point to round the
-     *  result to.
+     * @param {Number} [precision]
+     *  If specified, the resulting length will be rounded to the nearest
+     *  multiple of this value. Must be positive.
      *
      * @returns {Number}
      *  The length value converted to the target measurement unit, as
@@ -432,9 +471,9 @@ define.async('io.ox/office/tk/utils',
                 'mm': 96 / 25.4
             };
 
-        return function (value, fromUnit, toUnit, digits) {
+        return function (value, fromUnit, toUnit, precision) {
             value *= (FACTORS[fromUnit] || 1) / (FACTORS[toUnit] || 1);
-            return _.isFinite(digits) ? Utils.roundDigits(value, digits) : value;
+            return _.isFinite(precision) ? Utils.round(value, precision) : value;
         };
     }());
 
@@ -467,16 +506,16 @@ define.async('io.ox/office/tk/utils',
      *  The target measurement unit. See method Utils.convertLength() for a
      *  list of supported units.
      *
-     * @param {Number} [digits]
-     *  If specified, the number of digits after the decimal point to round the
-     *  result to.
+     * @param {Number} [precision]
+     *  If specified, the resulting length will be rounded to the nearest
+     *  multiple of this value. Must be positive.
      *
      * @returns {Number}
      *  The length value converted to the target measurement unit, as
      *  floating-point number.
      */
-    Utils.convertHmmToLength = function (value, toUnit, digits) {
-        return Utils.convertLength(value / 100, 'mm', toUnit, digits);
+    Utils.convertHmmToLength = function (value, toUnit, precision) {
+        return Utils.convertLength(value / 100, 'mm', toUnit, precision);
     };
 
     /**
@@ -490,21 +529,21 @@ define.async('io.ox/office/tk/utils',
      *  The target CSS measurement unit. See method Utils.convertLength() for
      *  a list of supported units.
      *
-     * @param {Number} [digits]
-     *  If specified, the number of digits after the decimal point to round the
-     *  result to.
+     * @param {Number} [precision]
+     *  If specified, the resulting length will be rounded to the nearest
+     *  multiple of this value. Must be positive.
      *
      * @returns {Number}
      *  The length value converted to the target measurement unit, as
      *  floating-point number.
      */
-    Utils.convertCssLength = function (valueAndUnit, toUnit, digits) {
+    Utils.convertCssLength = function (valueAndUnit, toUnit, precision) {
         var value = parseFloat(valueAndUnit);
         if (!_.isFinite(value)) {
             value = 0;
         }
         if (value && (valueAndUnit.length > 2)) {
-            value = Utils.convertLength(value, valueAndUnit.substr(-2), toUnit, digits);
+            value = Utils.convertLength(value, valueAndUnit.substr(-2), toUnit, precision);
         }
         return value;
     };
@@ -534,16 +573,16 @@ define.async('io.ox/office/tk/utils',
      *  The target measurement unit. See method Utils.convertLength() for a
      *  list of supported units.
      *
-     * @param {Number} [digits]
-     *  If specified, the number of digits after the decimal point to round the
-     *  result to.
+     * @param {Number} [precision]
+     *  If specified, the resulting length will be rounded to the nearest
+     *  multiple of this value. Must be positive.
      *
      * @returns {String}
      *  The length value converted to the target measurement unit, followed by
      *  the unit name.
      */
-    Utils.convertHmmToCssLength = function (value, toUnit, digits) {
-        return Utils.convertHmmToLength(value, toUnit, digits) + toUnit;
+    Utils.convertHmmToCssLength = function (value, toUnit, precision) {
+        return Utils.convertHmmToLength(value, toUnit, precision) + toUnit;
     };
 
     /**
@@ -863,21 +902,21 @@ define.async('io.ox/office/tk/utils',
      *  Is not used, if neither the attribute nor the passed default are
      *  numbers.
      *
-     * @param [digits]
-     *  If specified, the number of digits after the decimal point to round the
-     *  attribute value to.
+     * @param [precision]
+     *  If specified, the resulting number will be rounded to the nearest
+     *  multiple of this value. Must be positive.
      *
      * @returns
      *  The value of the specified attribute, or the default value, rounded
      *  down to an integer.
      */
-    Utils.getNumberOption = function (options, name, def, min, max, digits) {
+    Utils.getNumberOption = function (options, name, def, min, max, precision) {
         var value = Utils.getOption(options, name);
         value = _.isFinite(value) ? value : def;
         if (_.isFinite(value)) {
             if (_.isFinite(min) && (value < min)) { value = min; }
             if (_.isFinite(max) && (value > max)) { value = max; }
-            return _.isFinite(digits) ? Utils.roundDigits(value, digits) : value;
+            return _.isFinite(precision) ? Utils.round(value, precision) : value;
         }
         return value;
     };
@@ -911,7 +950,7 @@ define.async('io.ox/office/tk/utils',
      *  down to an integer.
      */
     Utils.getIntegerOption = function (options, name, def, min, max) {
-        return Utils.getNumberOption(options, name, def, min, max, 0);
+        return Utils.getNumberOption(options, name, def, min, max, 1);
     };
 
     /**

@@ -90,19 +90,19 @@ define('io.ox/office/tk/control/unitfield',
      *  @param {Number} [options.max]
      *      The maximum value allowed to enter. If omitted, defaults to
      *      Number.MAX_VALUE.
-     *  @param {Number} [options.digits=2]
-     *      The number of digits after the decimal point. If omitted, defaults
-     *      to 2.
+     *  @param {Number} [options.precision=1]
+     *      The precision used to round the current length. The length will be
+     *      rounded to multiples of this value. If omitted, the default
+     *      precision 1 will round to integers. Must be positive.
      */
     UnitField.LengthUnitValidator = TextField.Validator.extend({ constructor: function (options) {
 
-        var // minimum and maximum
+        var // minimum, maximum, and precision
             min = Utils.getNumberOption(options, 'min', -Number.MAX_VALUE, -Number.MAX_VALUE, Number.MAX_VALUE),
             max = Utils.getNumberOption(options, 'max', Number.MAX_VALUE, min, Number.MAX_VALUE),
-            // the number of digits after the decimal point.
-            digits = Utils.getIntegerOption(options, 'digits', 2, 0, 10),
+            precision = Utils.getNumberOption(options, 'precision', 1, 0),
             // the regular expression for the unit field
-            regex = new RegExp('^' + ((min < 0) ? '(-?' : '(') + '[0-9]*' + ((digits > 0) ? '[.|,]?' : '') + '[0-9]*)\\s*([a-zA-Z]*)?' + '$'),
+            regex = new RegExp('^' + ((min < 0) ? '(-?' : '(') + '[0-9]*' + ((precision !== Math.round(precision)) ? '[.,]?' : '') + '[0-9]*)\\s*([a-zA-Z]*)?' + '$'),
             // the supported units
             supportedUnits = ['px', 'pc', 'pt', 'in', 'cm', 'mm'];
 
@@ -125,7 +125,7 @@ define('io.ox/office/tk/control/unitfield',
          *  the value is invalid, an empty string is returned.
          */
         this.valueToText = function (value) {
-            return _.isFinite(value) ? String(Utils.roundDigits(value / 100, digits)) + ' mm' : '';
+            return _.isFinite(value) ? String(Utils.round(value / 100, precision)) + ' mm' : '';
         };
 
         /**
@@ -147,7 +147,7 @@ define('io.ox/office/tk/control/unitfield',
                 value = a[1],
                 unit = a[2];
 
-            value = (_.isFinite(value) && (min <= value) && (value <= max)) ? Utils.roundDigits(value, digits) : null;
+            value = (_.isFinite(value) && (min <= value) && (value <= max)) ? Utils.round(value, precision) : null;
 
             if (value !== null) {
                 unit = (_.contains(supportedUnits, unit)) ? unit : 'mm';
@@ -172,10 +172,9 @@ define('io.ox/office/tk/control/unitfield',
 
     }}); // class UnitField.LengthUnitValidator
 
-    // global instance of the default validator for unit fields
-    // that supports only positive lengths with two digits after
-    // the decimal point
-    defaultValidator = new UnitField.LengthUnitValidator({min: 0});
+    // global instance of the default validator for unit fields that supports
+    // only positive lengths with two digits after the decimal point
+    defaultValidator = new UnitField.LengthUnitValidator({ min: 0, precision: 0.01 });
 
     // exports ================================================================
 

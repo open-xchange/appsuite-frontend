@@ -403,7 +403,24 @@ i[class^="icon-"], i[class^=" icon-"] {
     &.text-field {
         white-space: nowrap;
     }
+/*
+    &.spin-field {
 
+        @spin-field-button-width: 25px;
+        
+        > input {
+            padding-right: (@input-padding + @spin-field-button-width);
+        }
+    
+        > .button.spin-button {
+            position: absolute;
+            right: 0;
+            width: @spin-field-button-width;
+            &.up { top: 0; }
+            &.down { bottom: 0; }
+        }
+    }
+*/
 } /* end of .group */
 
 /* ========================================================================= */

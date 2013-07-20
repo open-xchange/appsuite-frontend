@@ -388,10 +388,10 @@ define('io.ox/office/framework/view/baseview',
          */
         this.getContentMargin = function () {
             return {
-                left: Utils.convertCssLength(appContainerNode.css('margin-left'), 'px', 0),
-                right: Utils.convertCssLength(appContainerNode.css('margin-right'), 'px', 0),
-                top: Utils.convertCssLength(appContainerNode.css('margin-top'), 'px', 0),
-                bottom: Utils.convertCssLength(appContainerNode.css('margin-bottom'), 'px', 0)
+                left: Utils.convertCssLength(appContainerNode.css('margin-left'), 'px', 1),
+                right: Utils.convertCssLength(appContainerNode.css('margin-right'), 'px', 1),
+                top: Utils.convertCssLength(appContainerNode.css('margin-top'), 'px', 1),
+                bottom: Utils.convertCssLength(appContainerNode.css('margin-bottom'), 'px', 1)
             };
         };
 

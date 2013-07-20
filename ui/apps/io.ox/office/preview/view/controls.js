@@ -121,8 +121,7 @@ define('io.ox/office/preview/view/controls',
                     tooltip: gt('Page number'),
                     width: 50,
                     min: 1,
-                    max: app.getModel().getPageCount(),
-                    digits: 0
+                    max: app.getModel().getPageCount()
                 });
 
             pageInput.getTextFieldNode().css({ textAlign: 'right' });

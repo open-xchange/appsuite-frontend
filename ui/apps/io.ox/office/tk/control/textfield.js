@@ -127,14 +127,16 @@ define('io.ox/office/tk/control/textfield',
                 // IE9 does not trigger 'input' events when deleting characters or
                 // pasting text, use a timer interval as a workaround
                 if (Utils.IE9) {
-                    fieldNode.data('lastValue', fieldNode.val());
-                    fieldNode.data('updateTimer', window.setInterval(function () {
-                        var value = fieldNode.val();
-                        if (value !== fieldNode.data('lastValue')) {
-                            fieldNode.data('lastValue', value);
-                            fieldInputHandler();
-                        }
-                    }, 250));
+                    fieldNode.data({
+                        lastValue: fieldNode.val(),
+                        updateTimer: window.setInterval(function () {
+                            var value = fieldNode.val();
+                            if (value !== fieldNode.data('lastValue')) {
+                                fieldNode.data('lastValue', value);
+                                fieldInputHandler();
+                            }
+                        }, 250)
+                    });
                 }
                 break;
             case 'focus:key':
@@ -152,7 +154,7 @@ define('io.ox/office/tk/control/textfield',
                 }
                 break;
             case 'group:blur':
-                // Bug 27175: always commit value when losing focus
+                // Bug 27175: always commit value when losing focus (ESCAPE key has cleared 'initialText')
                 if (_.isString(initialText) && (initialText !== fieldNode.val())) {
                     // pass preserveFocus option to not interfere with current focus handling
                     self.triggerChange(fieldNode, { preserveFocus: true });
@@ -186,6 +188,7 @@ define('io.ox/office/tk/control/textfield',
             case KeyCodes.ESCAPE:
                 if (event.type === 'keydown') {
                     fieldNode.val(initialText);
+                    initialText = null;
                 }
             }
         }
@@ -214,8 +217,8 @@ define('io.ox/office/tk/control/textfield',
                     restoreFieldState(Utils.extendOptions(validationFieldState, { value: result }));
                 }
 
-                // trigger 'validated' event to all listeners, pass old field state
-                self.trigger('validated', validationFieldState);
+                // trigger 'textfield:validated' event to all listeners, pass old field state
+                self.trigger('textfield:validated', validationFieldState);
 
                 // save current state of the text field
                 validationFieldState = getFieldState();
@@ -412,17 +415,18 @@ define('io.ox/office/tk/control/textfield',
      *  @param {Number} [options.max]
      *      The maximum value allowed to enter. If omitted, defaults to
      *      Number.MAX_VALUE.
-     *  @param {Number} [options.digits=2]
-     *      The number of digits after the decimal point. If omitted, defaults
-     *      to 2.
+     *  @param {Number} [options.precision=1]
+     *      The precision used to round the current number. The number will be
+     *      rounded to multiples of this value. If omitted, the default
+     *      precision 1 will round to integers. Must be positive.
      */
     TextField.NumberValidator = TextField.Validator.extend({ constructor: function (options) {
 
-        var // minimum and maximum
+        var // minimum, maximum, and precision
             min = Utils.getNumberOption(options, 'min', -Number.MAX_VALUE, -Number.MAX_VALUE, Number.MAX_VALUE),
             max = Utils.getNumberOption(options, 'max', Number.MAX_VALUE, min, Number.MAX_VALUE),
-            digits = Utils.getIntegerOption(options, 'digits', 2, 0, 10),
-            regex = new RegExp('^' + ((min < 0) ? '-?' : '') + '[0-9]*' + ((digits > 0) ? '([.,][0-9]*)?' : '') + '$');
+            precision = Utils.getNumberOption(options, 'precision', 1, 0),
+            regex = new RegExp('^' + ((min < 0) ? '-?' : '') + '[0-9]*' + ((precision !== Math.round(precision)) ? '([.,][0-9]*)?' : '') + '$');
 
         // base constructor ---------------------------------------------------
 
@@ -432,16 +436,20 @@ define('io.ox/office/tk/control/textfield',
 
         this.valueToText = function (value) {
             // TODO L10N of decimal separator
-            return _.isFinite(value) ? String(Utils.roundDigits(value, digits)) : '';
+            return _.isFinite(value) ? String(Utils.round(value, precision)) : '';
         };
 
         this.textToValue = function (text) {
             var value = parseFloat(text.replace(/,/g, '.'));
-            return (_.isFinite(value) && (min <= value) && (value <= max)) ? Utils.roundDigits(value, digits) : null;
+            return (_.isFinite(value) && (min <= value) && (value <= max)) ? Utils.round(value, precision) : null;
         };
 
         this.validate = function (text) {
             return regex.test(text);
+        };
+
+        this.restrictValue = function (value) {
+            return _.isFinite(value) ? Utils.minMax(value, min, max) : value;
         };
 
     }}); // class TextField.NumberValidator
