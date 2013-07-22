@@ -23,10 +23,11 @@ define('io.ox/core/main',
      'io.ox/core/commons', // defines jQuery plugin
      'io.ox/core/upsell',
      'io.ox/core/capabilities',
+     'io.ox/core/ping',
      'settings!io.ox/core',
      'gettext!io.ox/core',
      'io.ox/core/relogin',
-     'io.ox/core/bootstrap/basics'], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, settings, gt) {
+     'io.ox/core/bootstrap/basics'], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, ping, settings, gt) {
 
     "use strict";
 
@@ -379,6 +380,11 @@ define('io.ox/core/main',
 
     }());
 
+    //
+    // Connection metrics
+    //
+
+
     function launch() {
 
         debug('core: launch()');
@@ -558,7 +564,6 @@ define('io.ox/core/main',
                 );
             }
         });
-
 
         ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'fullscreen',
