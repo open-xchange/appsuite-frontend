@@ -28,7 +28,8 @@ define('io.ox/files/icons/perspective',
 
     'use strict';
 
-    var dropZone;
+    var dropZone,
+    loadFilesDef = $.Deferred();
 
     ext.point('io.ox/files/icons/options').extend({
         thumbnailWidth: 128,
@@ -173,11 +174,13 @@ define('io.ox/files/icons/perspective',
     });
 
     function loadFiles(app) {
+        var def = $.Deferred();
         if (!app.getWindow().search.active) {
-            return api.getAll({ folder: app.folder.get() }, false);
+            api.getAll({ folder: app.folder.get() }, false).done(def.resolve).fail(def.reject);
         } else {
-            return api.search(app.getWindow().search.query);
+            api.search(app.getWindow().search.query).done(def.resolve).fail(def.reject);
         }
+        return def;
     }
 
     function calculateLayout(el, options) {
@@ -366,29 +369,27 @@ define('io.ox/files/icons/perspective',
             };
 
             drawFirst = function () {
-
                 iconview.empty().busy();
 
-                // call extensions
+                loadFilesDef.reject();
 
-                ext.point('io.ox/files/icons').invoke('draw', iconview, baton);
-                iconContainer = baton.$.iconContainer;
-
-                // add inline link
-                if ($('.inline-actions', iconview).length === 0) {
-                    iconview.find('.breadcrumb').after(
-                        inline = $('<div class="inline-actions">')
-                    );
-                }
-
-                // add element to provoke scrolling
-                iconContainer.append(
-                    $('<div class="scroll-spacer">').css({ height: '20px', clear: 'both' })
-                );
-
-                loadFiles(app)
+                loadFilesDef = loadFiles(app)
                     .done(function (ids) {
-                        iconview.idle();
+                        iconview.empty().idle();
+                        ext.point('io.ox/files/icons').invoke('draw', iconview, baton);
+                        iconContainer = baton.$.iconContainer;
+
+                         // add inline link
+                        if ($('.inline-actions', iconview).length === 0) {
+                            iconview.find('.breadcrumb').after(
+                                inline = $('<div class="inline-actions">')
+                            );
+                        }
+
+                        // add element to provoke scrolling
+                        iconContainer.append(
+                            $('<div class="scroll-spacer">').css({ height: '20px', clear: 'both' })
+                        );
                         displayedRows = layout.iconRows;
                         start = 0;
                         end = displayedRows * layout.iconCols;
@@ -401,10 +402,12 @@ define('io.ox/files/icons/perspective',
                         ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), baton);
                     })
                     .fail(function (response) {
-                        iconview.idle();
-                        iconContainer.prepend(
-                            $('<div class="alert alert-info">').text(response.error)
-                        );
+                        if (response) {
+                            iconview.idle();
+                            iconContainer.prepend(
+                                $('<div class="alert alert-info">').text(response.error)
+                            );
+                        }
                     });
             };
 
