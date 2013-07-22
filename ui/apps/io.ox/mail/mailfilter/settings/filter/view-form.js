@@ -391,7 +391,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                 actionArray[actionID].flags[0] = '$cl_' + colorValue;
                 this.model.set('actioncmds', actionArray);
-
+                this.render();
             }
 
 
