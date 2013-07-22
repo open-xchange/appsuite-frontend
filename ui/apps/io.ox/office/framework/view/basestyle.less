@@ -79,6 +79,13 @@
     }
 }
 
+/* color of place holder in text fields */
+.input-placeholder-color(@color) {
+    &::-webkit-input-placeholder, &:-moz-placeholder, &::-moz-placeholder, &:-ms-input-placeholder {
+        color: @color;
+    }
+}
+
 /* Safari on iPad does not clip rounded borders in absolutely positioned elements, e.g. the color box in color buttons */
 /* http://stackoverflow.com/questions/5736503/how-to-make-css3-rounded-corners-hide-overflow-in-chrome-opera */
 /* but using a 35-bytes GIF instead of a 108-bytes PNG as the image */
@@ -228,8 +235,10 @@ i[class^="icon-"], i[class^=" icon-"] {
         > .app-container {
             position: absolute;
             display: block;
-            top: 0; bottom: 0;
-            left: 0; right: 0;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
         }
 
         /* scrollable application pane, center container node horizontally into application pane */
@@ -287,6 +296,22 @@ i[class^="icon-"], i[class^=" icon-"] {
 /* prevent system pop-up when tapping and holding button on iPad/iPhone (also for buttons outside .group elements) */
 .button {
     -webkit-touch-callout: none;
+}
+
+.spin-field-settings(@height) {
+    > div {
+        display: inline-block;
+        height: @height;
+
+        .spin-button {
+            display: block;
+            margin-left: 0;
+            height: (@height / 2 + 0.5px);
+            line-height: (@height / 2 - 1.5px);
+            i[class^="docs-"] { position: relative; top: (@height / 4 - 10px); }
+            &.down { margin-top: -1px; }
+        }
+    }
 }
 
 .group {
@@ -398,29 +423,13 @@ i[class^="icon-"], i[class^=" icon-"] {
         padding-right: @input-padding;
         line-height: normal;
         cursor: text;
+        .input-placeholder-color(#ccc);
     }
 
     &.text-field {
         white-space: nowrap;
     }
-/*
-    &.spin-field {
 
-        @spin-field-button-width: 25px;
-        
-        > input {
-            padding-right: (@input-padding + @spin-field-button-width);
-        }
-    
-        > .button.spin-button {
-            position: absolute;
-            right: 0;
-            width: @spin-field-button-width;
-            &.up { top: 0; }
-            &.down { bottom: 0; }
-        }
-    }
-*/
 } /* end of .group */
 
 /* ========================================================================= */
@@ -445,7 +454,7 @@ i[class^="icon-"], i[class^=" icon-"] {
         /* default spacing between controls */
         @control-spacing: 9px;
         /* standard height of controls */
-        @control-height: 36px;
+        @control-height: 37px;
         /* border radius for controls */
         @border-radius: 5px;
         /* height of the heading label */
@@ -499,6 +508,7 @@ i[class^="icon-"], i[class^=" icon-"] {
             background: @pane-fill-color;
             .box-shadow(2px 2px 6px fade(white, 10%));
             .safari-overflow-fix();
+            vertical-align: top;
 
             + .group {
                 margin-left: -1px;
@@ -517,6 +527,10 @@ i[class^="icon-"], i[class^=" icon-"] {
                 &, > *:last-child {
                     .border-top-right-radius(@border-radius);
                     .border-bottom-right-radius(@border-radius);
+                }
+                &.spin-field .spin-button {
+                    &.up { .border-top-right-radius(@border-radius); }
+                    &.down { .border-bottom-right-radius(@border-radius); }
                 }
             }
 
@@ -557,11 +571,7 @@ i[class^="icon-"], i[class^=" icon-"] {
 
             /* color of place holder in text fields */
             input {
-                .placeholder-color() { color: lighten(@pane-fill-color, 15%); }
-                &::-webkit-input-placeholder { .placeholder-color(); }
-                &:-moz-placeholder { .placeholder-color(); }
-                &::-moz-placeholder { .placeholder-color(); }
-                &:-ms-input-placeholder { .placeholder-color(); }
+                .input-placeholder-color(lighten(@pane-fill-color, 15%));
             }
 
             /* fade out text fields in disabled groups */
@@ -611,62 +621,44 @@ i[class^="icon-"], i[class^=" icon-"] {
                 &:hover { background: fade(white, 5%); }
             }
 
-            /* default focus border for focused input fields */
-            input:focus {
-                border-color: @disabled-focus-border-color;
-            }
-
-            /* input fields with white background and focus border when focused */
-            &:not(.disabled) input:not(.disabled):focus, &.combo-field:not(.disabled).focused > input {
-                background: white;
-                border-color: @focus-border-color;
-                color: @textColor;
-
-                /* color of place holder in text fields */
-                .placeholder-color() { color: #ccc; }
-                &::-webkit-input-placeholder { .placeholder-color(); }
-                &:-moz-placeholder { .placeholder-color(); }
-                &::-moz-placeholder { .placeholder-color(); }
-                &:-ms-input-placeholder { .placeholder-color(); }
-            }
-
-            /* focus glow effect for focused input (but not in combo field) */
-            &:not(.combo-field):not(.disabled) input:not(.disabled):focus {
-                .box-shadow(@focus-glow-effect);
-            }
-
-            /* additions for enabled and focused combo fields */
-            &.combo-field:not(.disabled).focused {
-                .box-shadow(@focus-glow-effect);
-
-                /* hide inner border of the input field */
-                > input {
-                    border-right-color: transparent;
+            /* default focus border for all controls in focused text fields */
+            &.text-field.focused {
+                .button, input {
+                    border-color: @disabled-focus-border-color;
                 }
+            }
 
-                /* white background for drop-down button */
-                > .button.dropdown-button {
-                    background-color: white;
+            /* additions for focused text fields */
+            &.text-field:not(.disabled).focused {
+                .box-shadow(@focus-glow-effect);
+
+                /* white background and focus border when focused */
+                .button, input {
+                    background: white !important;
                     border-color: @focus-border-color;
-                    border-left-color: transparent;
                     color: @textColor;
+                }
 
-                    /* remove hover/active effects */
-                    &:hover, &:active {
-                        background-color: white;
-                    }
+                /* remove hover/active effects of standard buttons */
+                .button:hover, .button:active {
+                    background-color: white !important;
+                }
 
-                    /* black drop-down caret */
-                    i[class^="docs-"] {
-                        background-image: url(docs-icons-desktop-black.png);
-                        &.retina { background-image: url(docs-icons-retina-black.png); }
-                    }
+                /* black icons */
+                .button i[class^="docs-"] {
+                    background-image: url(docs-icons-desktop-black.png);
+                    &.retina { background-image: url(docs-icons-retina-black.png); }
+                }
+
+                input {
+                    .input-placeholder-color(#ccc);
                 }
             }
 
-            /* additions for disabled and focused combo fields */
-            &.combo-field.disabled.focused > .button.dropdown-button {
-                border-color: @disabled-focus-border-color;
+            /* additional settings for spin fields */
+            &.spin-field {
+                .spin-field-settings(@control-height);
+                > div { margin-left: -1px; }
             }
 
             /* border and glow effect for drops with open drop-down menus (but not combo fields) */
@@ -897,21 +889,15 @@ i[class^="icon-"], i[class^=" icon-"] {
     &.design-default > .section-container > .group {
 
         /* standard height of controls */
-        @item-height: 30px;
+        @item-height: 31px;
+        /* border color for input fields and elements in text fields */
+        @input-border-color: @app-pane-fill-color;
 
         /* embedded labels and buttons (list items) */
         label, .button {
             height: @item-height;
             border: 1px solid transparent;
             line-height: (@item-height - 2px);
-        }
-
-        /* embedded input fields */
-        input {
-            height: @item-height;
-            margin: 0 (@control-padding - @input-padding);
-            border: 1px solid @app-pane-fill-color;
-            .border-radius(5px);
         }
 
         /* default background for selected items */
@@ -936,22 +922,69 @@ i[class^="icon-"], i[class^=" icon-"] {
             }
         }
 
-        /* hover highlighting for enabled input fields */
-        &:not(.disabled) input:not(.disabled):hover:not(:focus) {
-            background: fade(black, 2%);
-            border-color: darken(@app-pane-fill-color, 5%);
-        }
-
-        /* default border for focused buttons and input fields */
-        .button:focus:not(:active), input:focus {
+        /* default border for focused buttons */
+        .button:focus:not(:active) {
             border-color: @disabled-focus-border-color;
         }
 
-        /* focus border and glow effect for enabled focused buttons and input fields */
-        &:not(.disabled) {
-            .button:not(.disabled):focus:not(:active), input:not(.disabled):focus {
+        /* focus border and glow effect for enabled focused buttons */
+        &:not(.disabled) .button:not(.disabled):focus:not(:active) {
+            border-color: @focus-border-color;
+            .box-shadow(@focus-glow-effect);
+        }
+
+        /* permanent borders for text fields */
+        &.text-field {
+            .button, input {
+                border: 1px solid @input-border-color;
+            }
+            input {
+                height: @item-height;
+                .border-radius(5px);
+            }
+        }
+
+        /* additional hover highlighting for text fields */
+        &.text-field:not(.disabled):not(.focused):hover {
+            .button, input {
+                border-color: darken(@input-border-color, 5%);
+            }
+        }
+
+        /* focus border for all controls in disabled text fields */
+        &.text-field.disabled.focused {
+            .button, input {
+                border-color: @disabled-focus-border-color;
+            }
+        }
+
+        /* focus border for all controls in enabled text fields */
+        &.text-field:not(.disabled).focused {
+            .box-shadow(@focus-glow-effect);
+
+            .button, input {
                 border-color: @focus-border-color;
-                .box-shadow(@focus-glow-effect);
+            }
+        }
+
+        /* additional settings for spin fields */
+        &.spin-field {
+            margin-left: @control-padding;
+            margin-right: @control-padding;
+            .border-radius(5px);
+            .spin-field-settings(@item-height);
+
+            > input {
+                .border-top-right-radius(0);
+                .border-bottom-right-radius(0);
+            }
+
+            > div {
+                margin-left: -1px;
+                .spin-button {
+                    &.up { .border-top-right-radius(5px); }
+                    &.down { .border-bottom-right-radius(5px); }
+                }
             }
         }
     }
@@ -960,7 +993,7 @@ i[class^="icon-"], i[class^=" icon-"] {
     &.design-framed > .section-container > .group {
 
         /* standard height of controls in drop-down lists, framed design */
-        @item-height: 42px;
+        @item-height: 43px;
         /* border width of buttons in framed design mode */
         @item-border-width: 3px;
         /* shadow effects for selected buttons */

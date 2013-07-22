@@ -33,10 +33,9 @@ define('io.ox/office/tk/control/textfield',
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the text field. Supports
-     *  all options of the Group base class, generic caption options (see
-     *  Utils.setControlCaption() for details), and all generic formatting
-     *  options of input fields (see method Utils.createTextField() for
-     *  details). Additionally, the following options are supported:
+     *  all options of the Group base class, and all generic formatting options
+     *  of input fields (see method Utils.createTextField() for details).
+     *  Additionally, the following options are supported:
      *  @param {Boolean} [options.select=false]
      *      If set to true, the entire text will be selected after the text
      *      field has been clicked. Note that the text will always be selected
@@ -54,9 +53,6 @@ define('io.ox/office/tk/control/textfield',
 
         var // self reference
             self = this,
-
-            // create the label node for the caption
-            captionLabel = Utils.createLabel(),
 
             // create the input field control
             fieldNode = Utils.createTextField(options),
@@ -260,12 +256,6 @@ define('io.ox/office/tk/control/textfield',
         // add special marker class used to adjust formatting
         this.getNode().addClass('text-field');
 
-        // first, insert the caption nodes
-        Utils.setControlCaption(captionLabel, options);
-        if (captionLabel.children().length > 0) {
-            this.addChildNodes(captionLabel);
-        }
-
         // insert the text field into this group, and register event handlers
         this.addFocusableControl(fieldNode)
             .registerUpdateHandler(updateHandler)
@@ -446,6 +436,18 @@ define('io.ox/office/tk/control/textfield',
 
         this.validate = function (text) {
             return regex.test(text);
+        };
+
+        this.getMin = function () {
+            return min;
+        };
+
+        this.getMax = function () {
+            return max;
+        };
+
+        this.getPrecision = function () {
+            return precision;
         };
 
         this.restrictValue = function (value) {

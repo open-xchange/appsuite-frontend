@@ -336,7 +336,11 @@ define.async('io.ox/office/tk/utils',
      *  The rounded number.
      */
     Utils.round = function (value, precision) {
-        return _.isFinite(value) ? (Math.round(value / precision) * precision) : value;
+        value = Math.round(value / precision);
+        // Multiplication with small value may result in rounding errors (e.g.,
+        // 227*0.1 results in 22.700000000000003), division by inverse value
+        // works as expected (e.g. 227/(1/0.1) results in 22.7).
+        return (precision < 1) ? (value / (1 / precision)) : (value * precision);
     };
 
     /**
@@ -354,7 +358,9 @@ define.async('io.ox/office/tk/utils',
      *  The rounded number.
      */
     Utils.roundDown = function (value, precision) {
-        return _.isFinite(value) ? (Math.floor(value / precision) * precision) : value;
+        value = Math.floor(value / precision);
+        // see comment in Utils.round()
+        return (precision < 1) ? (value / (1 / precision)) : (value * precision);
     };
 
     /**
@@ -372,7 +378,9 @@ define.async('io.ox/office/tk/utils',
      *  The rounded number.
      */
     Utils.roundUp = function (value, precision) {
-        return _.isFinite(value) ? (Math.ceil(value / precision) * precision) : value;
+        value = Math.ceil(value / precision);
+        // see comment in Utils.round()
+        return (precision < 1) ? (value / (1 / precision)) : (value * precision);
     };
 
     /**

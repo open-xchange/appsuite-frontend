@@ -119,12 +119,11 @@ define('io.ox/office/preview/view/controls',
             var pageInput = new SpinField({
                     label: gt('Go to page'),
                     tooltip: gt('Page number'),
-                    width: 50,
+                    width: 45,
+                    css: { textAlign: 'right' },
                     min: 1,
                     max: app.getModel().getPageCount()
                 });
-
-            pageInput.getTextFieldNode().css({ textAlign: 'right' });
 
             // insert the text field node into its own section
             self.createMenuSection('pages', { separator: true })

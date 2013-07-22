@@ -31,19 +31,21 @@ define('io.ox/office/tk/control/spinfield',
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the control. Supports all
-     *  options of the TextField base class (except the 'options.validator'
-     *  option that will be set to an instance of TextField.NumberValidator),
-     *  and the options of the TextField.NumberValidator class that will be
-     *  passed to the internal number validator. Additionally, the following
-     *  options are supported:
+     *  options of the TextField base class. If the option 'options.validator'
+     *  exists, it MUST be an instance of TextField.NumberValidator (or a sub
+     *  class). Alternatively, the options supported by the constructor of the
+     *  class TextField.NumberValidator can be passed. In this case, a new
+     *  instance of TextField.NumberValidator will be created automatically
+     *  based on these options. Additionally, the following options are
+     *  supported:
      *  @param {Number} [smallStep=1]
      *      The distance of small steps that will be used to increase or
      *      decrease the current value of the spin field when using the cursor
      *      keys.
      *  @param {Number} [largeStep=10]
      *      The distance of large steps that will be used to increase or
-     *      decrease the current value of the spin field when using the PAGE_UP
-     *      or PAGE_POWN key.
+     *      decrease the current value of the spin field when using the PAGEUP
+     *      or PAGEPOWN key.
      *  @param {Boolean} [roundStep=false]
      *      If set to true, and the current value of the spin field is
      *      increased or decreased using the keyboard, the value will be
@@ -56,7 +58,7 @@ define('io.ox/office/tk/control/spinfield',
             self = this,
 
             // the number validator of this spin field
-            validator = new TextField.NumberValidator(options),
+            validator = Utils.getObjectOption(options, 'validator') || new TextField.NumberValidator(options),
 
             // the distance for small steps
             smallStep = Utils.getNumberOption(options, 'smallStep', 1, 0),
@@ -83,7 +85,7 @@ define('io.ox/office/tk/control/spinfield',
                 if ((event.type === 'keydown') && KeyCodes.matchModifierKeys(event)) {
                     oldValue = self.getFieldValue();
                     newValue = (step < 0) ? Utils.roundDown(oldValue, -step) : Utils.roundUp(oldValue, step);
-                    newValue = (!roundStep || (oldValue === newValue)) ? (oldValue + step) : oldValue;
+                    newValue = (!roundStep || (oldValue === newValue)) ? (oldValue + step) : newValue;
                     self.setValue(validator.restrictValue(newValue));
                     return false;
                 }
@@ -105,8 +107,10 @@ define('io.ox/office/tk/control/spinfield',
 
         // add special marker class used to adjust formatting
         this.getNode().addClass('spin-field').append(
-//            Utils.createButton({ icon: 'docs-caret up' }).addClass('spin-button up'),
-//            Utils.createButton({ icon: 'docs-caret down' }).addClass('spin-button down')
+            $('<div>').append(
+                Utils.createButton({ icon: 'docs-caret up' }).addClass('spin-button up'),
+                Utils.createButton({ icon: 'docs-caret down' }).addClass('spin-button down')
+            )
         );
 
         // register event handlers

@@ -14,6 +14,7 @@
 define('io.ox/office/preview/view/view',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/control/button',
+     'io.ox/office/tk/control/spinfield',
      'io.ox/office/framework/view/baseview',
      'io.ox/office/framework/view/basecontrols',
      'io.ox/office/framework/view/pane',
@@ -25,7 +26,7 @@ define('io.ox/office/preview/view/view',
      'io.ox/office/preview/view/pageloader',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/view/style.less'
-    ], function (Utils, Button, BaseView, BaseControls, Pane, SidePane, Component, ToolBox, PreviewControls, PageGroup, PageLoader, gt) {
+    ], function (Utils, Button, SpinField, BaseView, BaseControls, Pane, SidePane, Component, ToolBox, PreviewControls, PageGroup, PageLoader, gt) {
 
     'use strict';
 
