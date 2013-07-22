@@ -326,7 +326,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     actionID = list.attr('data-action-id'),
                     actionArray =  this.model.get('actioncmds');
 
-                actionArray[actionID][type] = type === 'to' || 'text' ? value : [value];
+                if (type === 'flags') {
+                    actionArray[actionID][type] = ['$' + value.toString()];
+                } else {
+                    actionArray[actionID][type] = type === 'to' || 'text' ? value : [value];
+                }
+
                 this.model.set('actioncmds', actionArray);
 
             },
@@ -537,9 +542,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                                     )
                             ));
                         } else {
-                            listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'text'}).text(actionsTranslations.tag).append(
+                            listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'flags'}).text(actionsTranslations.tag).append(
                                     $('<div>').addClass('pull-right').append(
-                                        elements.drawInputfieldAction(action.text),
+                                        elements.drawInputfieldAction(action.flags[0].replace(/^\$+/, "")),
                                         elements.drawDeleteButton('action')
                                     )
                           ));
