@@ -102,8 +102,6 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
                 runs(function () {
                     var checkbox = this.vgrid.getToolbar().find('input', 'label.select-all');
 
-                    expect(this.vgrid.selection.get()).toEqual([]);
-
                     //"click" checkbox
                     checkbox.prop('checked', !checkbox.prop('checked'));
                     checkbox.change();
