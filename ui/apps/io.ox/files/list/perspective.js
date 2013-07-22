@@ -18,9 +18,10 @@ define('io.ox/files/list/perspective',
      'io.ox/core/extPatterns/dnd',
      'io.ox/core/extPatterns/shortcuts',
      'io.ox/core/commons',
+     'io.ox/core/extensions',
      'gettext!io.ox/files',
      'io.ox/core/bootstrap/basics'
-     ], function (viewDetail, api, VGrid, upload, dnd, shortcuts, commons, gt) {
+     ], function (viewDetail, api, VGrid, upload, dnd, shortcuts, commons, ext, gt) {
 
     'use strict';
 
@@ -37,7 +38,12 @@ define('io.ox/files/list/perspective',
             showToggle: _.device('smartphone') ? false: true
         },
         grid = new VGrid(left, gridOptions),
+        optDropdown = null,
         dropZone;
+
+        grid.prop('order', 'asc')
+            .prop('sort', 702)
+            .prop('folder', app.folder.get());
 
         grid.addTemplate({
             build: function () {
@@ -252,6 +258,92 @@ define('io.ox/files/list/perspective',
 
         }
 
+
+        function buildOption(value, text) {
+            return $('<li>').append($('<a href="#"><i/></a>').attr('data-option', value).append($.txt(text)));
+        }
+
+        function updateGridOptions() {
+            var dropdown = grid.getToolbar().find('.grid-options'),
+                list = dropdown.find('ul'),
+                props = grid.prop();
+            // uncheck all
+            list.find('i').attr('class', 'icon-none');
+            // sort
+            list.find('[data-option="' + props.order + '"], [data-option="' + props.sort + '"]')
+                .find('i').attr('class', 'icon-ok');
+            // order
+            var opacity = [1, 0.4][props.order === 'asc' ? 'slice' : 'reverse']();
+            dropdown.find('.icon-arrow-down').css('opacity', opacity[0]).end()
+                .find('.icon-arrow-up').css('opacity', opacity[1]).end();
+        }
+
+        ext.point('io.ox/files/vgrid/toolbar').extend({
+            id: 'dropdown',
+            index: 100,
+            draw: function () {
+                this.prepend(
+                    optDropdown = $('<div>').addClass('grid-options dropdown').css({ display: 'inline-block', 'float': 'right' })
+                        .append(
+                            $('<a>', {
+                                    href: '#',
+                                    tabindex: 1,
+                                    'data-toggle': 'dropdown',
+                                    role: 'menuitem',
+                                    'aria-haspopup': true,
+                                    'aria-label': gt('Sort options')
+                                })
+                                .attr('data-toggle', 'dropdown')
+                                .append(
+                                    $('<i class="icon-arrow-down">'),
+                                    $('<i class="icon-arrow-up">')
+                                )
+                                .dropdown(),
+                            $('<ul>').addClass("dropdown-menu").attr({
+                                    role: 'menu'
+                                })
+                                .append(
+                                    buildOption(702, gt('Filename')),
+                                    buildOption(704, gt('Filesize')),
+                                    buildOption(5, gt('Last modified')),
+                                    $('<li class="divider">'),
+                                    buildOption('asc', gt('Ascending')),
+                                    buildOption('desc', gt('Descending'))
+                                )
+                                .on('click', 'a', { grid: grid }, function () {
+                                    var option = $(this).attr('data-option');
+                                    switch (option) {
+                                    case 'asc':
+                                    case 'desc':
+                                        grid.prop('order', option).refresh(true);
+                                        break;
+                                    case '702': // Sort by filename
+                                    case '704': // Sort by filesize
+                                    case '5':   // Sort by last modified
+                                        grid.prop('sort', Number(option)).refresh(true);
+                                        break;
+                                    default:
+                                        break;
+                                    }
+                                })
+                        )
+                );
+            }
+        });
+
+        grid.setAllRequest(function () {
+            var prop = grid.prop();
+
+            return app.folder.getData().pipe(function (folder) {
+                // set folder data to view and update
+                return api.getAll({
+                    folder: prop.folder,
+                    order: prop.order,
+                    sort: prop.sort
+                });
+            });
+        });
+
         // Add status for uploads
 
         commons.wireGridAndWindow(grid, win);
@@ -259,6 +351,9 @@ define('io.ox/files/list/perspective',
         commons.wireGridAndRefresh(grid, api, win);
         commons.addGridFolderSupport(app, grid);
         commons.addGridToolbarFolder(app, grid);
+
+        grid.on('change:prop', updateGridOptions);
+        updateGridOptions();
 
         app.invalidateFolder = function (data) {
             api.propagate('change', data);
@@ -275,9 +370,10 @@ define('io.ox/files/list/perspective',
                 dropZone.remove();
                 if (dropZone) dropZone.include();
             }
+            updateGridOptions();
+            grid.refresh(true);
         });
 
-        grid.prop('folder', app.folder.get());
         grid.paint();
     };
     return perspective;

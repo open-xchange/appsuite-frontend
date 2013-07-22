@@ -192,8 +192,8 @@ define('io.ox/calendar/list/perspective',
                                     role: 'menu'
                                 })
                                 .append(
-                                    buildOption('desc', gt('Ascending')),
-                                    buildOption('asc', gt('Descending')),
+                                    buildOption('asc', gt('Ascending')),
+                                    buildOption('desc', gt('Descending')),
                                     $('<li class="divider">'),
                                     buildOption('all', gt('show all'))
                                 )
