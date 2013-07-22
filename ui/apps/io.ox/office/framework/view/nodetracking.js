@@ -399,7 +399,6 @@ define('io.ox/office/framework/view/nodetracking',
      * Event handler for 'keydown' browser events.
      */
     function keyDownHandler(event) {
-        Utils.log('tracking keydown: keyCode=' + event.keyCode);
         if (event.keyCode === KeyCodes.ESCAPE) {
             cancelTracking();
         }
