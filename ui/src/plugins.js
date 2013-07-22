@@ -280,7 +280,7 @@
     // css plugin
     define("css", {
         load: function (name, parentRequire, load, config) {
-            require(["text!" + name]).done(function (css) {
+            require(["text!" + name], function (css) {
                 var path = config.baseUrl + name;
                 load(insert(path, relativeCSS(dirname(path), css), "#css"));
             });
@@ -304,8 +304,7 @@
     }
 
     function insertLess(file) {
-        return require(['text!themes/' + theme + '/less/' + file.name])
-            .done(function (css) {
+        return require(['text!themes/' + theme + '/less/' + file.name], function (css) {
                 file.node = insert(file.path, css, file.selector, file.node);
             });
     }
@@ -387,20 +386,20 @@
             lang = language;
             langDef.resolve();
             if (!ox.signin) {
-                require(['io.ox/core/gettext']).done(function (gettext) {
+                require(['io.ox/core/gettext'], function (gettext) {
                     gettext.setLanguage(lang);
                 });
             }
             if (_.isEmpty(callbacks)) return $.when();
             var names = _.keys(callbacks);
             var files = _.map(names, function (n) { return n + '.' + lang; });
-            return require(files).done(function () {
+            return require(files, function () {
                 var args = _.toArray(arguments);
                 _.each(names, function (n, i) { callbacks[n](args[i]); });
             });
         },
         enable: function () {
-            require(['io.ox/core/gettext']).done(function (gt) { gt.enable(); });
+            require(['io.ox/core/gettext'], function (gt) { gt.enable(); });
         },
         load: function (name, parentRequire, load, config) {
             assert(langDef.state !== 'pending', _.printf(
@@ -418,7 +417,7 @@
                 load(f2);
             }
             function error() {
-                require(['io.ox/core/gettext']).done(function () {
+                require(['io.ox/core/gettext'], function () {
                     load(gt(name, {
                         nplurals: 2,
                         plural: 'n != 1',
