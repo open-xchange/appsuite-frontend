@@ -45,7 +45,7 @@ define('io.ox/core/cache',
     // listen for logout event
     ext.point('io.ox/core/logout').extend({
         logout: function () {
-            ox.cache.clear();
+            return ox.cache.clear();
         }
     });
 
