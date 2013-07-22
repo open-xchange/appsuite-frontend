@@ -134,7 +134,40 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
         });
 
         describe('showing a folder with some files', function () {
-            //TODO: implement me
+            beforeEach(function () {
+                this.testData = _.times(15, function (index) {
+                    return {
+                        id: 'item_' + index,
+                        name: 'item no. ' + index
+                    };
+                });
+                wireGridAndApiFor(this);
+
+                this.vgrid.addTemplate({
+                    build: function () {
+                        var name;
+                        this.addClass('testData').append(
+                            name = $('<div>')
+                        );
+                        return { name: name };
+                    },
+                    set: function (data, fields, index) {
+                        fields.name.text(data.name);
+                    }
+                });
+            });
+
+            it('should render 15 items', function () {
+                this.vgrid.paint();
+
+                waitsFor(function () {
+                    return this.node.text().indexOf('item no.') >= 0;
+                }, 'test data was not painted in time', 1000);
+
+                runs(function () {
+                    expect(this.node.find('.testData').length).toBe(15);
+                });
+            });
         });
 
         describe('showing a folder with a lot of files', function () {
