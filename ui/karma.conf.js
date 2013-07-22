@@ -12,18 +12,15 @@ frameworks = ['jasmine', 'requirejs'];
 
 // list of files / patterns to load in the browser
 files = [
-  'lib/underscore.js',
-  'lib/require.js',
-  'spec/main-test.js',
-  'lib/jquery.js',
-  'lib/require-fix.js',
-  {pattern: 'spec/**/*_spec.js', included: false},
-  {pattern: 'spec/shared/**/*.js'},
-  {pattern: 'apps/**/*.js', included: false},
-  'lib/modernizr.js',
-  'lib/backbone.js',
-  'lib/node_modules/sinon/pkg/sinon.js',
-  'tmp/boot.js'
+    'spec/main-test.js',
+    'spec/disable_amd.js', // disable AMD test, to prevent jquery mobile from defining anonymous module
+    'spec/pre_boot.js',
+    process.env['builddir'] + '/boot.js',
+    'spec/restore_amd.js',
+    'lib/node_modules/sinon/pkg/sinon.js',
+    {pattern: 'spec/**/*_spec.js', included: false},
+    {pattern: 'spec/shared/**/*.js'},
+    {pattern: 'apps/**/*.js', included: false}
 ];
 
 
