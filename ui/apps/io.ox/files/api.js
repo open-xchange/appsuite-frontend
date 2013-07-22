@@ -183,7 +183,7 @@ define('io.ox/files/api',
                 folder: coreConfig.get('folder/infostore'),
                 columns: allColumns,
                 extendColumns: 'io.ox/files/api/all',
-                sort: '700',
+                sort: '702',
                 order: 'asc'
             },
             list: {
