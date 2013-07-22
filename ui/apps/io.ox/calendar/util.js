@@ -175,6 +175,7 @@ define("io.ox/calendar/util",
                 if (data.full_time) {
                     startDate = date.Local.utc(startDate);
                     endDate = date.Local.utc(endDate);
+                    endDate -= date.DAY;
                 }
                 if (this.onSameDay(startDate, endDate)) {
                     return this.getDate(startDate);
