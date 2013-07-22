@@ -888,9 +888,11 @@ function checkExtensions(name, deps, f) {
 // run tests
 
 desc('Do a single run of all tests');
-task('test', [], function () {
+function setupKarma(options) {
     var karma = require("karma"),
         configFile = nextGen(karma) ? path.resolve('./karma.conf_next.js') : path.resolve('./karma.conf.js');
+
+    console.log('Karma version:', karma.VERSION, nextGen(karma) ? '(up-to-date)' : '(deprecated)');
     function nextGen(karma) {
         var version = {},
             tmp = karma.VERSION.split('.');
@@ -902,8 +904,12 @@ task('test', [], function () {
         return version.minor >= 9 && version.bugfix >= 3;
     }
 
-    karma.server.start({
-        configFile: configFile,
+    karma.server.start(_.extend({
+        configFile: configFile
+    }, options));
+}
+task('test', [], function () {
+    setupKarma({
         singleRun: true,
         autoWatch: false
     });
@@ -911,20 +917,5 @@ task('test', [], function () {
 
 desc('Start a karma testserver');
 task('testserver', [], function () {
-    var karma = require("karma"),
-        configFile = nextGen(karma) ? path.resolve('./karma.conf_next.js') : path.resolve('./karma.conf.js');
-    function nextGen(karma) {
-        var version = {},
-            tmp = karma.VERSION.split('.');
-
-        version.major = Number(tmp[0]);
-        version.minor = Number(tmp[1]);
-        version.bugfix = Number(tmp[2]);
-
-        return version.minor >= 9 && version.bugfix >= 3;
-    }
-
-    karma.server.start({
-        configFile: configFile
-    });
+    setupKarma();
 });
