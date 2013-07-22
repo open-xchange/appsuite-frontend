@@ -198,7 +198,7 @@ define('io.ox/files/api',
                 action: 'search',
                 columns: allColumns, // should be the same as all-request
                 extendColumns: 'io.ox/files/api/all',
-                sort: '700',
+                sort: '702',
                 order: 'asc',
                 omitFolder: true,
                 getData: function (query, options) {
