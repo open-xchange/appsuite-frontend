@@ -22,19 +22,26 @@ window.ox = {
     debug: true,
     language: 'de_DE',
     logoutLocation: 'signin',
-    online: navigator.onLine !== undefined ? navigator.onLine : true,
+    online: false,
     revision: '1',
     root: root,
     secretCookie: false, // auto-login
     serverConfig: {},
-    session: '',
-    signin: false,
+    session: {
+        context_id: 0,
+        locale: "de_DE",
+        random: "44444444444444444444444444444444",
+        session: "13371337133713371337133713371337",
+        user: "jan.doe",
+        user_id: 1337
+    },
+    signin: true,
     t0: new Date().getTime(), // for profiling
-    testTimeout: 30000,
-    ui: { session: {} },
-    user: '',
-    user_id: 0,
-    windowState: 'foreground'
+            testTimeout: 30000,
+            ui: { session: {} },
+            user: '',
+            user_id: 0,
+            windowState: 'foreground'
 };
 
 require(['gettext'], function (gettext) {
