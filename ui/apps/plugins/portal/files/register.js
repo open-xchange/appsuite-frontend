@@ -29,6 +29,14 @@ define('plugins/portal/files/register',
             return api.get({ folder: props.folder_id, id: props.id }).then(
                 function success(data) {
                     baton.data = data;
+                    api.on('delete', function (event, elements) {
+                        var filename = baton.data.filename;
+                        if (_(elements).any(function (element) { return element.filename === filename; })) {
+                            var widgetCol = portalWidgets.getCollection();
+                            widgetCol.remove(baton.model);
+                            widgetCol.save();
+                        }
+                    });
                 },
                 function fail(e) {
                     return e.code === 'IFO-0300' ? 'remove' : e;
@@ -76,14 +84,6 @@ define('plugins/portal/files/register',
         draw: function (baton) {
 
             var popup = this.busy();
-
-            api.on('delete', function (event, elements) {
-                var filename = baton.data.filename;
-                if (_(elements).any(function (element) { return element.filename === filename; })) {
-                    var widgetCol = portalWidgets.getCollection();
-                    widgetCol.remove(baton.model);
-                }
-            });
 
             require(['io.ox/files/list/view-detail'], function (view) {
                 var obj = api.reduce(baton.data);
