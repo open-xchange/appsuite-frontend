@@ -327,32 +327,40 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
 
                     active = false;
                     clearTimeout(timer);
-
-                    // remove existing alerts
-                    remove();
-
                     timer = setTimeout(remove, durations[o.type] || 5000);
 
                     var html = _.escape(o.message).replace(/\n/g, '<br>'),
-                        node = $('<div class="io-ox-alert" role="alert" tabindex="-1">')
-                            .addClass('io-ox-alert-' + o.type)
-                            .append(
-                                $('<div class="icon">').append(
-                                    $('<i>').addClass(icons[o.type] || 'icon-none')
-                                ),
-                                $('<div class="message user-select-text">').append(
-                                    o.headline ? $('<h2 class="headline">').text(o.headline) : [],
-                                    $('<div>').html(html)
-                                ),
-                                $('<a href="#" class="close" tabindex="1">').html('&times')
-                            );
+                        reuse = false,
+                        className = 'io-ox-alert io-ox-alert-' + o.type;
 
-                    $('body').append(node);
+                    // reuse existing alert?
+                    var node = $('.io-ox-alert.slide-in');
+
+                    if (node.length) {
+                        node.empty();
+                        reuse = true;
+                        className += ' slide-in';
+                    } else {
+                        node = $('<div role="alert" tabindex="-1">');
+                    }
+
+                    node.attr('class', className).append(
+                        $('<div class="icon">').append(
+                            $('<i>').addClass(icons[o.type] || 'icon-none')
+                        ),
+                        $('<div class="message user-select-text">').append(
+                            o.headline ? $('<h2 class="headline">').text(o.headline) : [],
+                            $('<div>').html(html)
+                        ),
+                        $('<a href="#" class="close" tabindex="1">').html('&times')
+                    );
+
+                    if (!reuse) $('body').append(node);
 
                     // put at end of stack not to run into opening click
                     setTimeout(function () {
                         active = true;
-                        node.addClass('slide-in');
+                        if (!reuse) node.addClass('slide-in');
                     }, 300);
                 }
             };
