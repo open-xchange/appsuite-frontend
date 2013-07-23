@@ -201,10 +201,12 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
                         checkboxes.each(function (index, checkbox) {
 
                             checkbox = $(checkbox);
+                            vgrid.focus();
                             checkbox.click();
 
                             expect(selection.get().length).toBe(1);
 
+                            vgrid.focus();
                             checkbox.click();
                             expect(selection.get().length).toBe(0);
                         });
