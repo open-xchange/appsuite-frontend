@@ -23,8 +23,8 @@ define('io.ox/contacts/widgets/pictureUpload',
         _.extend(this, {
 
             tagName: 'div',
+
             modelEvents: {
-                'change:pictureFile': 'previewPictureFile',
                 'change:image1_url': 'displayImageURL'
             },
 
@@ -38,8 +38,9 @@ define('io.ox/contacts/widgets/pictureUpload',
             },
 
             handleFileSelect: function (e, input) {
-                var fileData = {},
-                    $input = $(input);
+
+                var fileData = {}, $input = $(input);
+
                 if (this.oldMode) {
                     if ($input.val()) {
                         fileData = $input.parent();
@@ -50,8 +51,13 @@ define('io.ox/contacts/widgets/pictureUpload',
                 } else {
                     fileData = input.files[0];
                 }
-                this.model.set("pictureFile", fileData, {validate: true});
-                this.model.unset("image1");
+
+                this.model.set('pictureFile', fileData);
+                this.model.unset('image1');
+
+                // we have to call this manually because not all browsers (e.g. Firefox)
+                // detect a change of fileData properly
+                this.previewPictureFile();
             },
 
             displayImageURL: function (e) {
@@ -63,13 +69,13 @@ define('io.ox/contacts/widgets/pictureUpload',
             },
 
             previewPictureFile: function () {
+
                 if (this.oldMode) {
                     this.setImageURL();
                     return;
                 }
 
-                var self = this,
-                    file = this.model.get("pictureFile");
+                var self = this, file = this.model.get('pictureFile');
 
                 require(['io.ox/contacts/widgets/canvasresize'], function (canvasResize) {
                     canvasResize(file, {
