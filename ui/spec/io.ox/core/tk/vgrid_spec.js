@@ -15,7 +15,7 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
 
     describe('The VGrid', function () {
         beforeEach(function () {
-            this.node = $('<div>');
+            this.node = $('<div>').appendTo($('body', document));
             this.vgrid = new VGrid(this.node);
             this.api = {};
             this.api.getList = function (ids) {
