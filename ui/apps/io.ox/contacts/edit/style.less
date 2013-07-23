@@ -76,11 +76,11 @@
         float: left;
     }
 
-    .block:nth-child(even) {
+    .block.even {
         width: @step * 6 - 30;
     }
 
-    .block:nth-child(odd) {
+    .block.odd {
         width: @step * 6;
         margin-right: 30px;
         clear: both;
@@ -93,14 +93,26 @@
         clear: both;
     }
 
+    .block.two-columns {
+        p.field {
+            float: left;
+            &:nth-child(even) {
+                margin-right: 60px;
+            }
+            &:nth-child(odd) {
+                margin-right: 0;
+            }
+        }
+    }
+
     legend {
-        font-size: 16px;
+        font-size: 18px;
         line-height: 24px;
         font-weight: 300;
         margin-bottom: 14px;
         display: block;
         border-bottom: 0;
-        color: #333;
+        color: #DF5119; /* burning orange */
     }
 
     & p.field.rare {
@@ -121,7 +133,7 @@
 
     label.input {
         font-size: 12px;
-        color: #aaa;
+        color: #777;
     }
 
     .input-xlarge {
@@ -130,7 +142,7 @@
     }
 
     textarea {
-        height: 155px;
+        height: 221px;
         resize: none;
     }
 
@@ -143,19 +155,13 @@
         float: none;
     }
 
-    select.date {
-        width: 70px;
-        margin-right: 10px;
-    }
+    select.date { width: 70px; }
+    select.month { width: 140px; }
+    select.year { width: 100px; }
 
-    select.month {
-        width: 140px;
+    .native-date-picker select {
         margin-right: 10px;
-    }
-
-    select.year {
-        width: 100px;
-        margin-right: 10px;
+        &:last-child { margin-right: 0; }
     }
 
     .btn-group {
@@ -250,7 +256,7 @@
             clear: both;
             margin-top: 28px;
         }
-        .block, .block:nth-child(even), .block:nth-child(odd) {
+        .block, .block.even, .block.odd {
             width: 300px;
             margin-right: 0px;
         }
@@ -259,6 +265,11 @@
         }
         .block.double-block {
             width: 300px;
+        }
+        .block.two-columns p.field {
+            &:nth-child(even) {
+                margin-right: 0px;
+            }
         }
         .attachment-list .attachment {
             width: 300px;
