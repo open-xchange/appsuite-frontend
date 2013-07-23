@@ -34,7 +34,6 @@ define('plugins/portal/files/register',
                         if (_(elements).any(function (element) { return element.filename === filename; })) {
                             var widgetCol = portalWidgets.getCollection();
                             widgetCol.remove(baton.model);
-                            widgetCol.save();
                         }
                     });
                 },
@@ -46,8 +45,7 @@ define('plugins/portal/files/register',
 
         preview: function (baton) {
             var content = $('<div class="content pointer">'),
-                data, options, url,
-                widgetCol = portalWidgets.getCollection();
+                data, options, url;
 
             if ((/(png|jpe?g|gif|bmp)$/i).test(baton.data.filename)) {
                 data = { folder_id: baton.data.folder_id, id: baton.data.id };

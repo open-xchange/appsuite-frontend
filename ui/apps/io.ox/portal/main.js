@@ -410,12 +410,11 @@ define('io.ox/portal/main',
         _.tick(1, 'hour', app.updateTitle);
 
         win.show(function () {
-
             // draw scaffolds now for responsiveness
             collection.each(app.drawScaffold);
 
-            widgets.loadUsedPlugins().done(function () {
-                collection.each(app.drawWidget);
+            widgets.loadUsedPlugins().done(function (cleanCollection) {
+                cleanCollection.each(app.drawWidget);
             });
 
             // add side popup
@@ -456,7 +455,9 @@ define('io.ox/portal/main',
 
         $(window).on('scrollstop', function (e) {
             scrollPos = $(this).scrollTop() + this.innerHeight;
-            collection.each(app.drawWidget);
+            widgets.loadUsedPlugins().done(function (cleanCollection) {
+                cleanCollection.each(app.drawWidget);
+            });
         });
     });
 
