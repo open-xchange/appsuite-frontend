@@ -256,10 +256,7 @@ define('io.ox/office/tk/dropdown/dropdown',
 
                 // set size of menu node to 'auto' to be able to obtain the effective size
                 menuNode.css({ width: 'auto', minWidth: '', height: 'auto', minHeight: '', top: 0, bottom: '', left: 0, right: '' });
-                // Bug 26537: IE9 does not get the correct width, have to set children to inline-block mode...
-                if (Utils.IE9) { menuNode.children().css('display', 'inline-block'); }
                 menuNodeSize = { width: menuNode.outerWidth(), height: menuNode.outerHeight() };
-                if (Utils.IE9) { menuNode.children().css('display', ''); }
 
                 // restore min-width and min-height of the menu node, and other CSS properties
                 menuNode.css(menuMinSize);

@@ -834,10 +834,16 @@ i[class^="icon-"], i[class^=" icon-"] {
         /* border color for disabled focused controls */
         @disabled-focus-border-color: lighten(@selectedBackground, 15%);
 
-        /* the separator line between menu sections */
-        > .section-separator {
+        /* floating all elements left to make menus work correctly in IE9 (bug 26537) */
+        > * {
             display: block;
             width: 100%;
+            float: left;
+            clear: left;
+        }
+
+        /* the separator line between menu sections */
+        > .section-separator {
             height: 1px;
             margin: 5px 0;
             background: @default-border-color;
@@ -845,8 +851,6 @@ i[class^="icon-"], i[class^=" icon-"] {
 
         /* the heading label above a menu section */
         > label.section-heading {
-            display: block;
-            width: 100%;
             height: auto;
             padding-top: 7px;
             padding-bottom: 7px;
@@ -858,8 +862,6 @@ i[class^="icon-"], i[class^=" icon-"] {
 
         /* the root node of the menu section contents */
         > .section-container {
-            display: block;
-            width: 100%;
             .box-sizing(border-box);
 
             &:first-child { margin-top: 5px; }
