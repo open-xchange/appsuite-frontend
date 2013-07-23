@@ -73,7 +73,7 @@ define('io.ox/office/framework/view/basecontrols',
 
         // base constructor ---------------------------------------------------
 
-        Label.call(this, { classes: 'status-label', updateHandler: updateHandler });
+        Label.call(this, { classes: 'status-label' });
 
         // private methods ----------------------------------------------------
 
@@ -117,7 +117,7 @@ define('io.ox/office/framework/view/basecontrols',
 
         // initialization -----------------------------------------------------
 
-        this.setValue(null);
+        this.registerUpdateHandler(updateHandler).setValue(null);
         app.on('docs:destroy', stopNodeAnimation);
 
     }}); // class StatusLabel

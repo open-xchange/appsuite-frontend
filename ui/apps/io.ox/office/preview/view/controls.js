@@ -13,11 +13,12 @@
 
 define('io.ox/office/preview/view/controls',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/control/label',
      'io.ox/office/tk/control/button',
      'io.ox/office/tk/control/spinfield',
      'io.ox/office/tk/control/radiolist',
      'gettext!io.ox/office/main'
-    ], function (Utils, Button, SpinField, RadioList, gt) {
+    ], function (Utils, Label, Button, SpinField, RadioList, gt) {
 
     'use strict';
 
@@ -115,19 +116,9 @@ define('io.ox/office/preview/view/controls',
 
         // create the text input field for the page number, when page count is known
         app.on('docs:import:success', function () {
-
-            var pageInput = new SpinField({
-                    label: gt('Go to page'),
-                    tooltip: gt('Page number'),
-                    width: 45,
-                    css: { textAlign: 'right' },
-                    min: 1,
-                    max: app.getModel().getPageCount()
-                });
-
-            // insert the text field node into its own section
-            self.createMenuSection('pages', { separator: true })
-                .addSectionGroup('pages', pageInput);
+            self.createMenuSection('pages', { separator: true, classes: 'inline' })
+                .addSectionGroup('pages', new Label({ label: gt('Go to page') }))
+                .addSectionGroup('pages', new SpinField({ tooltip: gt('Page number'), width: 45, css: { textAlign: 'right' }, min: 1, max: app.getModel().getPageCount() }));
         });
 
     }}); // class PageChooser

@@ -117,16 +117,23 @@ define('io.ox/office/tk/dropdown/items',
             var menuNode = self.getMenuNode(),
                 sectionNode = menuNode.children('.section-container[data-section="' + sectionId + '"]'),
                 label = Utils.getStringOption(options, 'label', ''),
-                separator = Utils.getBooleanOption(options, 'separator', false);
+                separator = Utils.getBooleanOption(options, 'separator', false),
+                classes = Utils.getStringOption(options, 'classes');
 
             if (sectionNode.length === 0) {
+                // add separator line if specified
                 if (separator && (menuNode.children().length > 0)) {
                     menuNode.append($('<div>').addClass('section-separator'));
                 }
+                // add heading label if specified
                 if (label.length > 0) {
                     menuNode.append(Utils.createLabel({ label: label }).addClass('section-heading'));
                 }
-                sectionNode = Utils.createContainerNode('section-container').attr('data-section', sectionId).appendTo(menuNode);
+                // create the section root node
+                sectionNode = Utils.createContainerNode('section-container')
+                    .attr('data-section', sectionId)
+                    .addClass(classes)
+                    .appendTo(menuNode);
             }
             return sectionNode;
         }
@@ -232,6 +239,9 @@ define('io.ox/office/tk/dropdown/items',
          *      If specified, a heading label will be created for the section.
          *  @param {Boolean} [options.separator]
          *      If true, a horizontal line will be drawn above the section.
+         *  @param {String} [options.classes]
+         *      Additional CSS classes that will be added to the section root
+         *      node.
          *
          * @returns {Items}
          *  A reference to this instance.
@@ -338,7 +348,7 @@ define('io.ox/office/tk/dropdown/items',
         // initialization -----------------------------------------------------
 
         // add the design marker class
-        this.getMenuNode().addClass('design-' + Utils.getStringOption(options, 'itemDesign', 'default'));
+        this.getMenuNode().addClass('section-list design-' + Utils.getStringOption(options, 'itemDesign', 'default'));
 
         // register event handlers
         this.getMenuNode().on('keydown keypress keyup', menuKeyHandler);

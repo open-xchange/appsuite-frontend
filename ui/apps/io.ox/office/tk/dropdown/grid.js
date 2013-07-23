@@ -230,7 +230,7 @@ define('io.ox/office/tk/dropdown/grid',
         // initialization -----------------------------------------------------
 
         // additional formatting for grid layout
-        this.getMenuNode().addClass('grid-items');
+        this.getMenuNode().addClass('layout-grid');
 
         // register event handlers
         this.getMenuNode().on('keydown keypress keyup', menuKeyHandler);

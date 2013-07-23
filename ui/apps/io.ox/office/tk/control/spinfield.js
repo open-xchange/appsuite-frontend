@@ -40,17 +40,16 @@ define('io.ox/office/tk/control/spinfield',
      *  supported:
      *  @param {Number} [smallStep=1]
      *      The distance of small steps that will be used to increase or
-     *      decrease the current value of the spin field when using the cursor
-     *      keys.
+     *      decrease the current value of the spin field when using the spin
+     *      buttons or the cursor keys.
      *  @param {Number} [largeStep=10]
      *      The distance of large steps that will be used to increase or
      *      decrease the current value of the spin field when using the PAGEUP
      *      or PAGEPOWN key.
      *  @param {Boolean} [roundStep=false]
-     *      If set to true, and the current value of the spin field is
-     *      increased or decreased using the keyboard, the value will be
-     *      rounded to entire multiples of the step distance. Otherwise, the
-     *      fractional part will remain in the value.
+     *      If set to true, and the current value of the spin field will be
+     *      changed, the value will be rounded to entire multiples of the step
+     *      distance. Otherwise, the fractional part will remain in the value.
      */
     function SpinField(options) {
 
@@ -76,17 +75,70 @@ define('io.ox/office/tk/control/spinfield',
         // private methods ----------------------------------------------------
 
         /**
+         * Changes the current value of the spin field, according to the passed
+         * step and the rounding mode passed to the constructor.
+         */
+        function changeValue(step) {
+
+            var // the current value of the spin field
+                oldValue = self.getFieldValue(),
+                // the current value, rounded to the previous/next border
+                roundedValue = (step < 0) ? Utils.roundDown(oldValue, -step) : Utils.roundUp(oldValue, step),
+                // the new value, depending on rounding mode
+                newValue = (!roundStep || (oldValue === roundedValue)) ? (oldValue + step) : roundedValue;
+
+            // set new value, after restricting to minimum/maximum
+            newValue = validator.restrictValue(newValue);
+            self.setValue(newValue);
+        }
+
+        /**
+         * Creates and returns a spin button. Initializes tracking used to
+         * change the current value.
+         */
+        function createSpinButton(increase) {
+
+            var // the CSS class for the button node and the icon
+                classes = increase ? 'up' : 'down',
+                // create the spin button element
+                spinButton = Utils.createButton({ icon: 'docs-caret ' + classes }).addClass('spin-button ' + classes);
+
+            // enables or disables node tracking according to own enabled state
+            function initializeTracking() {
+                if (self.isEnabled()) {
+                    spinButton.enableTracking({ autoRepeat: true });
+                } else {
+                    spinButton.disableTracking();
+                }
+            }
+
+            // enable/disable node tracking according to own enabled state
+            self.on('group:enable', initializeTracking);
+            initializeTracking();
+
+            // register tracking event listeners to change the current value
+            spinButton.on({
+                'tracking:start tracking:repeat': function () { changeValue(increase ? smallStep : -smallStep); },
+                'tracking:end tracking:cancel': function () { self.getTextFieldNode().focus(); }
+            });
+
+            // enable/disable the button according to the current value
+            self.registerUpdateHandler(function (value) {
+                var enabled = increase ? (value < validator.getMax()) : (value > validator.getMin());
+                spinButton.toggleClass(Utils.DISABLED_CLASS, !enabled);
+            });
+
+            return spinButton;
+        }
+
+        /**
          * Handles keyboard events in the text field.
          */
         function textFieldKeyHandler(event) {
 
             function applyStep(step) {
-                var oldValue = null, newValue = null;
                 if ((event.type === 'keydown') && KeyCodes.matchModifierKeys(event)) {
-                    oldValue = self.getFieldValue();
-                    newValue = (step < 0) ? Utils.roundDown(oldValue, -step) : Utils.roundUp(oldValue, step);
-                    newValue = (!roundStep || (oldValue === newValue)) ? (oldValue + step) : newValue;
-                    self.setValue(validator.restrictValue(newValue));
+                    changeValue(step);
                     return false;
                 }
             }
@@ -105,17 +157,13 @@ define('io.ox/office/tk/control/spinfield',
 
         // initialization -----------------------------------------------------
 
-        // add special marker class used to adjust formatting
+        // add special marker class used to adjust formatting, add spin buttons
         this.getNode().addClass('spin-field').append(
-            $('<div>').append(
-                Utils.createButton({ icon: 'docs-caret up' }).addClass('spin-button up'),
-                Utils.createButton({ icon: 'docs-caret down' }).addClass('spin-button down')
-            )
+            $('<div>').append(createSpinButton(true), createSpinButton(false))
         );
 
         // register event handlers
-        this.getTextFieldNode()
-            .on('keydown keypress keyup', textFieldKeyHandler);
+        this.getTextFieldNode().on('keydown keypress keyup', textFieldKeyHandler);
 
     } // class SpinField
 
