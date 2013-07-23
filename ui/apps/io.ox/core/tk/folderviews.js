@@ -76,7 +76,7 @@ define('io.ox/core/tk/folderviews',
 
             drawChildren = function (reload, method) {
 
-                if (loading) return $.Deferred().resolve([]);
+                if (loading && loading.state() === 'pending') return loading;
 
                 // remove potential fail messages from previous refreshes
                 nodes.sub.find('.io-ox-fail').parent().remove();
@@ -149,7 +149,9 @@ define('io.ox/core/tk/folderviews',
             },
 
             openNode = function () {
-                if (!hasChildren() || open) { return $.when(); }
+                if (!hasChildren() || open) {
+                    return $.when();
+                }
                 open = true;
                 nodes.sub.show();
                 updateArrow();
@@ -168,10 +170,12 @@ define('io.ox/core/tk/folderviews',
 
             toggleNode = function () {
                 if (!open) {
-                    return openNode();
+                    return openNode().then(function () {
+                        return tree.repaint();
+                    });
                 } else {
                     closeNode();
-                    return $.when();
+                    return tree.repaint();
                 }
             },
 
@@ -848,15 +852,11 @@ define('io.ox/core/tk/folderviews',
                         .trigger('change');
                     return false;
                 }
-                treeNode.toggle().done(function () {
-                        self.repaint();
-                    });
+                treeNode.toggle();
                 return false;
             case 13:
                 // enter
-                treeNode.toggle().done(function () {
-                        self.repaint();
-                    });
+                treeNode.toggle();
                 return false;
             }
         });
@@ -1049,9 +1049,6 @@ define('io.ox/core/tk/folderviews',
                         drawSection(section, data[id]);
                     }
                 }
-            })
-            .done(function () {
-                self.selection.updateIndex();
             })
             .fail(function (error) {
                 self.container.append(
