@@ -125,6 +125,25 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
                     expect(this.vgrid.selection.get()).toEqual([]);
                 });
             });
+
+            it('should select one item when the checkbox is checked', function () {
+                this.vgrid.paint();
+
+                waitsFor(function () {
+                    return this.node.text().indexOf('lonely item') >= 0;
+                }, 'test data was not painted in time', 1000);
+
+                runs(function () {
+                    var checkbox = this.node.find('.testData').find('input:checkbox:visible');
+
+                    //ensure nothing is selected
+                    this.vgrid.selection.clear();
+
+                    checkbox.click();
+
+                    expect(this.vgrid.selection.get()).toEqual(this.testData);
+                });
+            });
         });
 
         describe('showing a folder with some files', function () {
@@ -160,6 +179,36 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
 
                 runs(function () {
                     expect(this.node.find('.testData').length).toBe(15);
+                });
+            });
+
+            describe('and select all checkbox visible', function () {
+                it('when clicking through the list, it should select only one item', function () {
+                    this.vgrid.paint();
+                    this.vgrid.setEditable(true);
+                    waitsFor(function () {
+                        return this.node.text().indexOf('item no.') >= 0;
+                    }, 'test data was not painted in time', 1000);
+
+                    runs(function () {
+                        var testDataNode = this.node.find('.testData'),
+                            checkboxes = testDataNode.find('input:visible'),
+                            vgrid = this.vgrid,
+                            selection = this.vgrid.selection,
+                            testData = this.testData;
+
+                        selection.clear();
+                        checkboxes.each(function (index, checkbox) {
+
+                            checkbox = $(checkbox);
+                            checkbox.click();
+
+                            expect(selection.get().length).toBe(1);
+
+                            checkbox.click();
+                            expect(selection.get().length).toBe(0);
+                        });
+                    });
                 });
             });
         });
