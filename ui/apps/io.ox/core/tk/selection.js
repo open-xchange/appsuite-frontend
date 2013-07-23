@@ -357,13 +357,17 @@ define('io.ox/core/tk/selection',
 
         update = function (updateIndex) {
 
-            updateIndex = updateIndex || false;
-            if (updateIndex) {
-                self.clearIndex();
+            if (container.is(':hidden')) {
+                return;
             }
+            updateIndex = updateIndex || false;
+
             // get nodes
             var nodes = $('.selectable:visible', container),
                 i = 0, $i = nodes.length, node = null;
+            if (updateIndex) {
+                self.clearIndex();
+            }
             for (; i < $i; i++) {
                 node = nodes.eq(i);
                 // is selected?
