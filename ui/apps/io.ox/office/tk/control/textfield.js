@@ -150,8 +150,8 @@ define('io.ox/office/tk/control/textfield',
                 }
                 break;
             case 'group:blur':
-                // Bug 27175: always commit value when losing focus (ESCAPE key has cleared 'initialText')
-                if (_.isString(initialText) && (initialText !== fieldNode.val())) {
+                // Bug 27175: always commit value when losing focus
+                if (initialText !== fieldNode.val()) {
                     // pass preserveFocus option to not interfere with current focus handling
                     self.triggerChange(fieldNode, { preserveFocus: true });
                 }
@@ -184,7 +184,6 @@ define('io.ox/office/tk/control/textfield',
             case KeyCodes.ESCAPE:
                 if (event.type === 'keydown') {
                     fieldNode.val(initialText);
-                    initialText = null;
                 }
             }
         }

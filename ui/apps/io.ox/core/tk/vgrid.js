@@ -1231,7 +1231,9 @@ define('io.ox/core/tk/vgrid',
         });
 
         scrollpane.on('focus', function () {
-            self.selection.selectSmart();
+            if (!options.multiple) {
+                self.selection.selectSmart();
+            }
         });
 
         // default implementation if hash cannot be mapped

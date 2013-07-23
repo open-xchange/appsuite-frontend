@@ -132,37 +132,40 @@ define("io.ox/core/tk/dialogs",
             },
 
             fnKey = function (e) {
+
                 var items, focus, index;
 
                 switch (e.which) {
+
                 case 27: // ESC
                     if (!isBusy) {
                         // prevent other elements to trigger close
                         e.stopPropagation();
-                        if (o.easyOut) {
-                            invoke('cancel');
-                        }
+                        if (o.easyOut) invoke('cancel');
                     }
                     break;
+
                 case 13: // Enter
-                    break;
+                    if (!isBusy && o.enter) invoke(o.enter);
+                    return false;
 
-                case 9:
-                    items = $(this).find('[tabindex="1"][disabled!="disabled"]:visible');
-                    if (items.length > 0) {
-                        e.preventDefault();
-                        focus = $(document.activeElement);
+                case 9: // tab
+                    if (o.tabTrap) {
+                        // get items first
+                        items = $(this).find('[tabindex][disabled!="disabled"]:visible');
+                        if (items.length) {
+                            e.preventDefault();
+                            focus = $(document.activeElement);
+                            index = (items.index(focus) >= 0) ? items.index(focus) : 0;
+                            index += (e.shiftKey) ? -1 : 1;
 
-                        index = (items.index(focus) >= 0) ? items.index(focus) : 0;
-                        index += (e.shiftKey) ? -1 : 1;
-
-                        if (index >= items.length) {
-                            index = 0;
-                        } else if (index < 0) {
-                            index = items.length - 1;
+                            if (index >= items.length) {
+                                index = 0;
+                            } else if (index < 0) {
+                                index = items.length - 1;
+                            }
+                            items.eq(index).focus();
                         }
-                        items[index].focus();
-                        return false;
                     }
                     break;
 

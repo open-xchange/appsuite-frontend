@@ -643,7 +643,9 @@ define('io.ox/core/commons-folderview',
 
         initTree = function (views) {
 
-            var open = app.settings.get('folderview/open/' + _.display());
+            // work with old non-device specific setting (<= 7.2.2) and new device-specific approach (>= 7.4)
+            var open = app.settings.get('folderview/open', {});
+            if (open && open[_.display()]) open = open[_.display()];
             open = _.isArray(open) ? open : [];
 
             // init tree before running toolbar extensions
