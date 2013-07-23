@@ -226,6 +226,7 @@ define('io.ox/core/tk/vgrid',
                 var grid = e.data.grid, checked = $(this).prop('checked');
                 if (checked) {
                     grid.selection.selectAll();
+                    updateSelectAll(grid.selection.get());
                 } else {
                     grid.selection.clear();
                     if (_.device('smartphone')) {
@@ -234,12 +235,12 @@ define('io.ox/core/tk/vgrid',
                 }
             },
 
-            uncheckSelectAll = function (list) {
-                if (list.length < 1) {
-                    ignoreCheckbox = true;
-                    node.find('.select-all input').prop('checked', false);
-                    ignoreCheckbox = false;
-                }
+            updateSelectAll = function (list) {
+                var check = (list.length >= 1) && (list.length === all.length);
+
+                ignoreCheckbox = true;
+                node.find('.select-all input').prop('checked', check);
+                ignoreCheckbox = false;
             },
 
             fnToggleEditable = function (e) {
@@ -909,7 +910,7 @@ define('io.ox/core/tk/vgrid',
         this.selection
             .on('change', function (e, list) {
                 // reset select-all checkbox
-                uncheckSelectAll(list);
+                updateSelectAll(list);
                 // prevent to long URLs
                 var id = _(list.length > 50 ? list.slice(0, 1) : list).map(function (obj) {
                     return self.selection.serialize(obj);
