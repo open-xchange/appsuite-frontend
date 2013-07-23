@@ -10,7 +10,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/about/about', ['io.ox/core/extensions', 'io.ox/core/tk/dialogs', 'io.ox/core/capabilities', 'gettext!io.ox/core'], function (ext, dialogs, cap, gt) {
+define('io.ox/core/about/about',
+    ['io.ox/core/extensions',
+     'io.ox/core/tk/dialogs',
+     'io.ox/core/capabilities',
+     'gettext!io.ox/core'], function (ext, dialogs, cap, gt) {
 
     'use strict';
 
@@ -20,8 +24,8 @@ define('io.ox/core/about/about', ['io.ox/core/extensions', 'io.ox/core/tk/dialog
             this.addClass('user-select-text').append(
                 $('<h4>').text(gt.noI18n(data.productName)),
                 $('<p>').append(
-                    $('<span>').text('UI version:'), $.txt(' '), $('<b>').text(data.version + ' ' + revision), $('<br>'),
-                    $('<span>').text('Server version:'), $.txt(' '), $('<b>').text(data.serverVersion)
+                    $.txt(gt('UI version')), $.txt(': '), $('<b>').text(data.version + ' ' + revision), $('<br>'),
+                    $.txt(gt('Server version')), $.txt(': '), $('<b>').text(data.serverVersion)
                 ),
                 $('<p>').text(gt('Contact: %1$s', data.contact)),
                 $('<p>').text(gt.noI18n(data.copyright))
