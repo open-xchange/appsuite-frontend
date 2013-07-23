@@ -213,6 +213,37 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
                         });
                     });
                 });
+
+                it('when selecting all items of the list, it should also check select all', function () {
+                    this.vgrid.paint();
+                    this.vgrid.setEditable(true);
+                    waitsFor(function () {
+                        return this.node.text().indexOf('item no.') >= 0;
+                    }, 'test data was not painted in time', 1000);
+
+                    runs(function () {
+                        var testDataNode = this.node.find('.testData'),
+                            checkboxes = testDataNode.find('input:visible'),
+                            vgrid = this.vgrid,
+                            selection = this.vgrid.selection,
+                            testData = this.testData,
+                            selectAll = vgrid.getToolbar().find('input', 'label.select-all');
+
+                        selection.clear();
+                        expect(selectAll.prop('checked')).toBeFalsy();
+                        checkboxes.each(function (index, checkbox) {
+                            vgrid.focus();
+                            $(checkbox).click();
+                            expect(selection.get().length).toBe(index+1);
+                            if (index < 14) {
+                                //expect it to be true, once all items are selected
+                                expect(selectAll.prop('checked')).toBeFalsy();
+                            }
+                        });
+                        expect(selection.get()).toEqual(this.testData);
+                        expect(selectAll.prop('checked')).toBeTruthy();
+                    });
+                });
             });
         });
 
