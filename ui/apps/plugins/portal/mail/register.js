@@ -19,7 +19,8 @@ define('plugins/portal/mail/register',
      'io.ox/mail/util',
      'io.ox/core/date',
      'io.ox/core/api/account',
-     'gettext!plugins/portal'], function (ext, strings, api, util, date, accountAPI, gt) {
+     'io.ox/portal/widgets',
+     'gettext!plugins/portal'], function (ext, strings, api, util, date, accountAPI, portalWidgets, gt) {
 
     'use strict';
 
@@ -112,9 +113,20 @@ define('plugins/portal/mail/register',
         // called right after initialize. Should return a deferred object when done
         load: function (baton) {
             var props = baton.model.get('props') || {};
-            return api.get({ folder: props.folder_id, id: props.id, view: 'text' }).done(function (data) {
-                baton.data = data;
-            });
+            return api.get({ folder: props.folder_id, id: props.id, view: 'text' }).then(
+                function success(data) {
+                    baton.data = data;
+                    api.on('delete', function (event, elements) {
+                        if (_(elements).any(function (element) { return (element.id === props.id && element.folder_id === props.folder_id); })) {
+                            var widgetCol = portalWidgets.getCollection();
+                            widgetCol.remove(baton.model);
+                        }
+                    });
+                },
+                function fail(e) {
+                    return e.code === 'MSG-0032' ? 'remove' : e;
+                }
+            );
         },
 
         preview: function (baton) {
