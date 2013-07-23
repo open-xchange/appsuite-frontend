@@ -102,9 +102,7 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
                 runs(function () {
                     var checkbox = this.vgrid.getToolbar().find('input', 'label.select-all');
 
-                    //"click" checkbox
-                    checkbox.prop('checked', !checkbox.prop('checked'));
-                    checkbox.change();
+                    checkbox.click();
 
                     expect(this.vgrid.selection.get().length).toBe(1);
                 });
@@ -119,12 +117,10 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
 
                 runs(function () {
                     var checkbox = this.vgrid.getToolbar().find('input', 'label.select-all');
-                    //"click" checkbox
-                    checkbox.prop('checked', !checkbox.prop('checked'));
-                    checkbox.change();
+                    //ensure item is selected
+                    this.vgrid.selection.selectAll();
 
-                    checkbox.prop('checked', !checkbox.prop('checked'));
-                    checkbox.change();
+                    checkbox.click();
 
                     expect(this.vgrid.selection.get().length).toBe(0);
                 });
