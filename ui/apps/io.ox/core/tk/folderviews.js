@@ -170,7 +170,7 @@ define('io.ox/core/tk/folderviews',
 
             toggleNode = function () {
                 if (!open) {
-                    return openNode().then(function () {
+                    return openNode().then(function () {
                         return tree.repaint();
                     });
                 } else {
