@@ -48,8 +48,9 @@ define('io.ox/backbone/mini-views/date',
     }
 
     var DateView = AbstractView.extend({
-        tagName: 'div',
+
         events: { 'change select': 'onChange' },
+
         onChange: function () {
             var year = this.$el.find('.year').val(),
                 month = this.$el.find('.month').val(),
@@ -62,9 +63,10 @@ define('io.ox/backbone/mini-views/date',
                 this.model.set(this.name, null);
             }
         },
+
         update: function () {
             var value = this.model.get(this.name);
-            // change boxes onyl for valid dates
+            // change boxes only for valid dates
             if (_.isNumber(value)) {
                 var d = new date.Local(date.Local.utc(value));
                 this.$el.find('.year').val(d.getYear());
@@ -72,10 +74,12 @@ define('io.ox/backbone/mini-views/date',
                 this.$el.find('.date').val(d.getDate());
             }
         },
+
         setup: function (options) {
             this.name = options.name;
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },
+
         render: function () {
 
             var self = this;

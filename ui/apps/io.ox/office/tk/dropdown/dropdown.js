@@ -18,6 +18,9 @@ define('io.ox/office/tk/dropdown/dropdown',
 
     'use strict';
 
+    var // marker CSS class for elements containing an opened drop-down menu
+        OPEN_CLASS = 'dropdown-open';
+
     // class DropDown =========================================================
 
     /**
@@ -66,6 +69,15 @@ define('io.ox/office/tk/dropdown/dropdown',
      *      menu and the group node, the value 'right' tries to align the right
      *      borders, and the value 'center' tries to place the drop-down menu
      *      centered to the group node.
+     *  @param {Function} [options.getFocusableHandler]
+     *      A function that returns all controls contained in the drop-down
+     *      menu that are currently focusable, as jQuery collection. Used by
+     *      the method 'DropDown.grabMenuFocus()' to decide which embedded
+     *      control to focus. Receives the jQuery collection of all focusable
+     *      controls currently available in the first parameter. If omitted,
+     *      or if the function returns an empty jQuery collection, uses all
+     *      available focusable form controls.
+     *
      */
     function DropDown(options) {
 
@@ -83,6 +95,9 @@ define('io.ox/office/tk/dropdown/dropdown',
 
             // horizontal alignment of the drop-down menu
             menuAlign = Utils.getStringOption(options, 'menuAlign', 'left'),
+
+            // callback function to filter the focusable controls in the drop-down menu
+            getFocusableHandler = Utils.getFunctionOption(options, 'getFocusableHandler', _.identity),
 
             // the drop-down button
             menuButton = Utils.createButton((caretMode === 'only') ? {} : options).addClass('dropdown-button'),
@@ -228,7 +243,7 @@ define('io.ox/office/tk/dropdown/dropdown',
 
             // initialize DOM
             $('body').append(menuNode);
-            groupNode.addClass(DropDown.OPEN_CLASS);
+            groupNode.addClass(OPEN_CLASS);
             menuNode.css({
                 top: groupPosition.top + groupPosition.height + DropDown.GROUP_BORDER_PADDING,
                 left: groupPosition.left
@@ -300,7 +315,7 @@ define('io.ox/office/tk/dropdown/dropdown',
 
             // initialize DOM
             $(document).off('mousedown click', globalClickHandler);
-            groupNode.removeClass(DropDown.OPEN_CLASS);
+            groupNode.removeClass(OPEN_CLASS);
             menuNode.detach();
             $(window).off('resize', refreshMenuNodePosition);
         }
@@ -361,14 +376,17 @@ define('io.ox/office/tk/dropdown/dropdown',
 
             switch (event.keyCode) {
             case KeyCodes.DOWN_ARROW:
+            case KeyCodes.PAGE_DOWN:
                 if (keydown && self.isEnabled()) {
                     showMenu();
                     self.grabMenuFocus();
                 }
                 return false;
             case KeyCodes.UP_ARROW:
-                if (keydown) {
-                    hideMenu();
+            case KeyCodes.PAGE_UP:
+                if (keydown && self.isEnabled()) {
+                    showMenu();
+                    self.grabMenuFocus({ bottom: true });
                 }
                 return false;
             }
@@ -417,7 +435,7 @@ define('io.ox/office/tk/dropdown/dropdown',
 
             switch (event.keyCode) {
             case KeyCodes.TAB:
-                if (keydown && !event.ctrlKey && !event.altKey && !event.metaKey) {
+                if (keydown && KeyCodes.matchModifierKeys(event, { shift: null })) {
                     hideMenu();
                     // To prevent problems with event bubbling (Firefox continues
                     // to bubble to the parent of the menu node, while Chrome
@@ -529,19 +547,36 @@ define('io.ox/office/tk/dropdown/dropdown',
          *  A collection with all focusable controls.
          */
         this.getFocusableMenuControls = function () {
-            return menuNode.find(Utils.VISIBLE_SELECTOR + Utils.FOCUSABLE_SELECTOR);
+            return menuNode.find(Utils.REALLY_VISIBLE_SELECTOR + Utils.FOCUSABLE_SELECTOR);
         };
 
         /**
          * Sets the focus into the first focusable control element of the
-         * drop-down menu element. May be overwritten by derived classes to add
-         * more sophisticated focus behavior.
+         * drop-down menu element.
+         *
+         * @param {Object} [options]
+         *  A map with options controlling the behavior of this method. The
+         *  following options are supported:
+         *  @param {Boolean} [options.bottom=false]
+         *      If set to true, the bottom entry of the drop-down menu should
+         *      be focused instead of the first.
          *
          * @returns {DropDown}
          *  A reference to this instance.
          */
-        this.grabMenuFocus = function () {
-            this.getFocusableMenuControls().first().focus();
+        this.grabMenuFocus = function (options) {
+
+            var // all focusable controls
+                focusableNodes = this.getFocusableMenuControls(),
+                // the preferred controls returned by the callback function
+                preferredNodes = getFocusableHandler.call(this, focusableNodes),
+                // whether to select the last control
+                bottom = Utils.getBooleanOption(options, 'bottom', false);
+
+            // fall back to all focusable controls if no preferred controls are available
+            if (preferredNodes.length === 0) { preferredNodes = focusableNodes; }
+            preferredNodes[bottom ? 'last' : 'first']().focus();
+
             return this;
         };
 
@@ -549,8 +584,8 @@ define('io.ox/office/tk/dropdown/dropdown',
          * Registers a private group instance that will be inserted into the
          * menu node. The 'group:change' events triggered by that group will be
          * forwarded to the listeners of this group instance, and updates of
-         * this group instance (calls to the own 'Group.update()' method) will
-         * be forwarded to the specified private group. The 'group:cancel'
+         * this group instance (calls to the own 'Group.setValue()' method)
+         * will be forwarded to the specified private group. The 'group:cancel'
          * events of the private group will be caught and used to hide the
          * drop-down menu, but will NOT be forwarded to listeners of this
          * group. The DOM root node of the group will not be inserted anywhere!
@@ -568,8 +603,8 @@ define('io.ox/office/tk/dropdown/dropdown',
             group.on('group:change', function (event, value, options) {
                 self.trigger('group:change', value, options);
             });
-            this.registerUpdateHandler(function (value) {
-                group.update(value);
+            this.registerUpdateHandler(function (value, options) {
+                group.setValue(value, options);
             });
 
             // do not forward 'group:cancel' events of the private group to
@@ -592,7 +627,7 @@ define('io.ox/office/tk/dropdown/dropdown',
 
         // register event handlers
         this.on({
-            'group:change group:cancel group:blur': hideMenu,
+            'group:blur': hideMenu,
             'group:show group:enable': function (event, state) { if (!state) { hideMenu(); } }
         });
         groupNode.on('keydown keypress keyup', groupKeyHandler);
@@ -609,13 +644,6 @@ define('io.ox/office/tk/dropdown/dropdown',
     } // class DropDown
 
     // static fields ----------------------------------------------------------
-
-    /**
-     * Marker CSS class for elements containing an opened drop-down menu.
-     *
-     * @constant
-     */
-    DropDown.OPEN_CLASS = 'dropdown-open';
 
     /**
      * Padding of drop-down menu to browser window borders, in pixels.

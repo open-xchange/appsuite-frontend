@@ -14,6 +14,7 @@
 define('io.ox/office/preview/view/view',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/control/button',
+     'io.ox/office/tk/control/spinfield',
      'io.ox/office/framework/view/baseview',
      'io.ox/office/framework/view/basecontrols',
      'io.ox/office/framework/view/pane',
@@ -25,7 +26,7 @@ define('io.ox/office/preview/view/view',
      'io.ox/office/preview/view/pageloader',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/view/style.less'
-    ], function (Utils, Button, BaseView, BaseControls, Pane, SidePane, Component, ToolBox, PreviewControls, PageGroup, PageLoader, gt) {
+    ], function (Utils, Button, SpinField, BaseView, BaseControls, Pane, SidePane, Component, ToolBox, PreviewControls, PageGroup, PageLoader, gt) {
 
     'use strict';
 
@@ -239,15 +240,13 @@ define('io.ox/office/preview/view/view',
          * Updates the status label with the current page number.
          */
         function updatePageStatus() {
-            statusLabel.update({
-                caption:
-                    //#. A label showing the current page index in the OX Documents preview application
-                    //#. %1$d is the current page index
-                    //#. %2$d is the total number of pages
-                    //#, c-format
-                    gt('Page %1$d of %2$d', selectedPage, model.getPageCount()),
-                type: 'info'
-            });
+            statusLabel.setValue(
+                //#. A label showing the current page index in the OX Documents preview application
+                //#. %1$d is the current page index
+                //#. %2$d is the total number of pages
+                //#, c-format
+                gt('Page %1$d of %2$d', selectedPage, model.getPageCount()),
+                { type: 'info' });
         }
 
         /**
@@ -255,13 +254,11 @@ define('io.ox/office/preview/view/view',
          * then switches back to the display of the current page number.
          */
         var updateZoomStatus = app.createDebouncedMethod(function () {
-            statusLabel.update({
-                caption:
-                    //#. %1$d is the current zoom factor, in percent
-                    //#, c-format
-                    gt('Zoom: %1$d%', Math.round(zoomFactor)),
-                type: 'info'
-            });
+            statusLabel.setValue(
+                //#. %1$d is the current zoom factor, in percent
+                //#, c-format
+                gt('Zoom: %1$d%', Math.round(zoomFactor)),
+                { type: 'info' });
         }, updatePageStatus, { delay: 1000 });
 
         /**
@@ -442,8 +439,23 @@ define('io.ox/office/preview/view/view',
          */
         function refreshLayout() {
 
-            var // content margin according to browser window size
+            var // find the page that is visible at the vertical center of the visible area
+                centerPage = _(pageNodes).sortedIndex(appPaneNode.scrollTop(), function (value) {
+                    if (_.isNumber(value)) { return value; }
+                    var pagePosition = Utils.getChildNodePositionInNode(appPaneNode, value);
+                    return pagePosition.top + pagePosition.height - 1;
+                }) + 1,
+                // the position of the center page in the visible area of the application pane
+                centerPagePosition = null,
+                // the ratio of the center page that is located exactly at the screen center
+                centerPageRatio = 0,
+                // current content margin according to browser window size
                 contentMargin = ((window.innerWidth <= 1024) || (window.innerHeight <= 640)) ? 0 : 30;
+
+            // restrict center page to valid page numbers, calculate page ration
+            centerPage = Utils.minMax(centerPage, 1, model.getPageCount());
+            centerPagePosition = Utils.getChildNodePositionInNode(appPaneNode, pageNodes[centerPage - 1], { visibleArea: true });
+            centerPageRatio = (centerPagePosition.height > 0) ? (-centerPagePosition.top / centerPagePosition.height) : 0;
 
             // set the current content margin between application pane border and page nodes
             self.setContentMargin(contentMargin);
@@ -464,8 +476,9 @@ define('io.ox/office/preview/view/view',
                 }
             });
 
-            // adjust scroll position after page sizes have been changed
-            scrollToPage(selectedPage);
+            // restore the correct scroll position with the new page sizes
+            centerPagePosition = Utils.getChildNodePositionInNode(appPaneNode, pageNodes[centerPage - 1]);
+            appPaneNode.scrollTop(centerPagePosition.top + Math.round(centerPagePosition.height * centerPageRatio));
         }
 
         /**

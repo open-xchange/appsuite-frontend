@@ -366,10 +366,9 @@ define('io.ox/contacts/edit/view-form', [
 
         function drawDate(options, model) {
             this.append(
-                $('<label class="input">').append(
-                    $.txt(options.label), $('<br>'),
-                    new mini.DateView({ name: options.field, model: model }).render().$el
-                )
+                $('<label class="input">').text(options.label),
+                // don't wrap the date control with a label (see bug #27559)
+                new mini.DateView({ name: options.field, model: model }).render().$el
             );
         }
 

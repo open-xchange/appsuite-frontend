@@ -19,13 +19,7 @@ define('io.ox/office/tk/control/group',
 
     'use strict';
 
-    var // CSS class for hidden groups
-        HIDDEN_CLASS = 'hidden',
-
-        // CSS class for disabled groups
-        DISABLED_CLASS = 'disabled',
-
-        // DOM event that will cause a 'group:change' event from a group
+    var // DOM event that will cause a 'group:change' event from a group
         INTERNAL_TRIGGER_EVENT = 'private:trigger',
 
         // the group instances currently focused (as array, groups may be embedded)
@@ -83,6 +77,9 @@ define('io.ox/office/tk/control/group',
 
             // the current value of this control group
             groupValue = null,
+
+            // the current value options of this control group
+            groupOptions = null,
 
             // update handler functions
             updateHandlers = [],
@@ -206,13 +203,18 @@ define('io.ox/office/tk/control/group',
 
         /**
          * Registers the passed update handler function. These handlers will be
-         * called from the method Group.update() in order of their
+         * called from the method Group.setValue() in order of their
          * registration.
          *
          * @param {Function} updateHandler
          *  The update handler function. Will be called in the context of this
-         *  group. Receives the value passed to the method Group.update(),
-         *  followed by the old value of the group.
+         *  group. Receives the following parameters:
+         *  (1) {Any} value
+         *      The value passed to the method Group.setValue().
+         *  (2) {Object|Undefined} options
+         *      The options map passed to the method Group.setValue().
+         *  (3) {Any} oldValue
+         *      The old value of the group.
          *
          * @returns {Group}
          *  A reference to this group.
@@ -276,7 +278,7 @@ define('io.ox/office/tk/control/group',
                 if (_.isNull(value)) {
                     self.triggerCancel(options);
                 } else {
-                    self.update(value);
+                    self.setValue(value, options);
                     self.trigger('group:change', value, options);
                 }
                 return false;
@@ -393,7 +395,7 @@ define('io.ox/office/tk/control/group',
          * parent DOM nodes (see method Group.isReallyVisible() to do that).
          */
         this.isVisible = function () {
-            return !groupNode.hasClass(HIDDEN_CLASS);
+            return !groupNode.hasClass(Utils.HIDDEN_CLASS);
         };
 
         /**
@@ -402,7 +404,7 @@ define('io.ox/office/tk/control/group',
          * parent nodes must be visible too).
          */
         this.isReallyVisible = function () {
-            return groupNode.is(Utils.VISIBLE_SELECTOR);
+            return groupNode.is(Utils.REALLY_VISIBLE_SELECTOR);
         };
 
         /**
@@ -436,9 +438,12 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.toggle = function (state) {
-            var visible = (state === true) || ((state !== false) && this.isVisible());
+
+            var // whether to show the group instance
+                visible = (state === true) || ((state !== false) && this.isVisible());
+
             if (this.isVisible() !== visible) {
-                groupNode.toggleClass(HIDDEN_CLASS, !visible);
+                groupNode.toggleClass(Utils.HIDDEN_CLASS, !visible);
                 this.trigger('group:show', visible);
             }
             return this;
@@ -467,10 +472,11 @@ define('io.ox/office/tk/control/group',
                 enabled = _.isUndefined(state) || (state === true);
 
             // enable/disable the entire group node with all its descendants
-            groupNode.toggleClass(Utils.DISABLED_CLASS, !enabled);
-
-            // trigger an 'group:enable' event so that derived classes can react
-            return this.trigger('group:enable', enabled);
+            if (this.isEnabled() !== enabled) {
+                groupNode.toggleClass(Utils.DISABLED_CLASS, !enabled);
+                this.trigger('group:enable', enabled);
+            }
+            return this;
         };
 
         /**
@@ -490,27 +496,32 @@ define('io.ox/office/tk/control/group',
          * @param {Any} value
          *  The new value to be displayed in the controls of this group.
          *
+         * @param {Object} [options]
+         *  A map with options that will be passed as second parameter to all
+         *  registered update handlers.
+         *
          * @returns {Group}
          *  A reference to this group.
          */
-        this.update = function (value) {
+        this.setValue = function (value, options) {
             var oldValue = groupValue;
             if (!_.isUndefined(value)) {
                 groupValue = value;
+                groupOptions = options;
                 _(updateHandlers).each(function (updateHandler) {
-                    updateHandler.call(this, value, oldValue);
+                    updateHandler.call(this, value, options, oldValue);
                 }, this);
             }
             return this;
         };
 
         /**
-         * Debounced call of the Group.update() method with the current value
+         * Debounced call of the Group.setValue() method with the current value
          * of this group. Can be used to refresh the appearance of the group
          * after changing its content.
          */
         this.refresh = _.debounce(function () {
-            self.update(groupValue);
+            self.setValue(groupValue, groupOptions);
         });
 
         /**

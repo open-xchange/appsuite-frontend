@@ -13,62 +13,12 @@
 
 define('io.ox/office/tk/control/unitfield',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/control/textfield'
-    ], function (Utils, TextField) {
+     'io.ox/office/tk/control/spinfield'
+    ], function (Utils, SpinField) {
 
     'use strict';
 
-    var // default validator without any restrictions on the field text
-        defaultValidator = null;
-
-    // class UnitField ========================================================
-
-    /**
-     * Creates a container element used to hold an input field for length and
-     * length unit.
-     *
-     * @constructor
-     *
-     * @extends TextField
-     *
-     * @param {Object} [options]
-     *  A map of options to control the properties of the unit field. Supports
-     *  all options of the Group base class, generic caption options (see
-     *  Utils.setControlCaption() for details), and all generic formatting
-     *  options of input fields (see method Utils.createTextField() for
-     *  details). Additionally, the following options are supported:
-     *  @param {Boolean} [options.readOnly=false]
-     *      If set to true, the text in the unit field cannot be edited.
-     *  @param {Boolean} [options.select=false]
-     *      If set to true, the entire text will be selected after the text
-     *      field has been clicked. Note that the text will always be selected
-     *      independent from this option, if the unit field gets focus via
-     *      keyboard navigation.
-     *  @param {UnitField.LengthUnitValidator} [options.validator]
-     *      A validator that will be used to convert the values from 'update'
-     *      events to the text representation used in this unit field, to
-     *      validate the text while typing in the unit field, and to convert
-     *      the entered text to the value returned by the action handler. If no
-     *      validator has been specified, a default validator will be used.
-     */
-    function UnitField(options) {
-
-        var // self reference
-            self = this;
-
-        // base constructor ---------------------------------------------------
-
-        TextField.call(this, Utils.extendOptions({validator: defaultValidator}, options));
-
-        // private methods ----------------------------------------------------
-
-        // methods ------------------------------------------------------------
-
-        // initialization -----------------------------------------------------
-
-    } // class UnitField
-
-    // class UnitField.LengthUnitValidator ========================================
+    // class UnitValidator ====================================================
 
     /**
      * A validator for unit fields that restricts the allowed values to
@@ -79,7 +29,7 @@ define('io.ox/office/tk/control/unitfield',
      *
      * @constructor
      *
-     * @extends TextField.Validator
+     * @extends SpinField.NumberValidator
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the validator. The
@@ -90,25 +40,22 @@ define('io.ox/office/tk/control/unitfield',
      *  @param {Number} [options.max]
      *      The maximum value allowed to enter. If omitted, defaults to
      *      Number.MAX_VALUE.
-     *  @param {Number} [options.digits=2]
-     *      The number of digits after the decimal point. If omitted, defaults
-     *      to 2.
+     *  @param {Number} [options.precision=1]
+     *      The precision used to round the current length. The length will be
+     *      rounded to multiples of this value. If omitted, the default
+     *      precision 1 will round to integers. Must be positive.
      */
-    UnitField.LengthUnitValidator = TextField.Validator.extend({ constructor: function (options) {
+    var UnitValidator = SpinField.NumberValidator.extend({ constructor: function (options) {
 
-        var // minimum and maximum
-            min = Utils.getNumberOption(options, 'min', -Number.MAX_VALUE, -Number.MAX_VALUE, Number.MAX_VALUE),
-            max = Utils.getNumberOption(options, 'max', Number.MAX_VALUE, min, Number.MAX_VALUE),
-            // the number of digits after the decimal point.
-            digits = Utils.getIntegerOption(options, 'digits', 2, 0, 10),
-            // the regular expression for the unit field
-            regex = new RegExp('^' + ((min < 0) ? '(-?' : '(') + '[0-9]*' + ((digits > 0) ? '[.|,]?' : '') + '[0-9]*)\\s*([a-zA-Z]*)?' + '$'),
+        var // the regular expression for the unit field
+            regex = null,
+
             // the supported units
             supportedUnits = ['px', 'pc', 'pt', 'in', 'cm', 'mm'];
 
         // base constructor ---------------------------------------------------
 
-        TextField.Validator.call(this);
+        SpinField.NumberValidator.call(this, options);
 
         // methods ------------------------------------------------------------
 
@@ -125,7 +72,7 @@ define('io.ox/office/tk/control/unitfield',
          *  the value is invalid, an empty string is returned.
          */
         this.valueToText = function (value) {
-            return _.isFinite(value) ? String(Utils.roundDigits(value / 100, digits)) + ' mm' : '';
+            return _.isFinite(value) ? String(Utils.round(value, this.getPrecision()) / 100) + ' mm' : '';
         };
 
         /**
@@ -143,15 +90,14 @@ define('io.ox/office/tk/control/unitfield',
          *  The length in 1/100 mm or null, if the number value is invalid.
          */
         this.textToValue = function (text) {
-            var a = regex.exec(text),
-                value = a[1],
-                unit = a[2];
 
-            value = (_.isFinite(value) && (min <= value) && (value <= max)) ? Utils.roundDigits(value, digits) : null;
+            var matches = regex.exec(text) || [],
+                value = matches[1],
+                unit = (matches[3] || '').toLowerCase();
 
-            if (value !== null) {
-                unit = (_.contains(supportedUnits, unit)) ? unit : 'mm';
-                value = Utils.convertLengthToHmm(value, unit);
+            if (_.isFinite(value)) {
+                unit = _(supportedUnits).contains(unit) ? unit : 'mm';
+                value = this.restrictValue(Utils.convertLengthToHmm(value, unit));
             }
 
             return value;
@@ -166,20 +112,43 @@ define('io.ox/office/tk/control/unitfield',
          *  expression.
          */
         this.validate = function (text) {
-            var check = regex.test(text);
-            return check;
+            return regex.test(text);
         };
 
-    }}); // class UnitField.LengthUnitValidator
+        // initialization -----------------------------------------------------
 
-    // global instance of the default validator for unit fields
-    // that supports only positive lengths with two digits after
-    // the decimal point
-    defaultValidator = new UnitField.LengthUnitValidator({min: 0});
+        // the regular expression for the unit field
+        regex = new RegExp('^(' + ((this.getMin() < 0) ? '-?' : '') + '[0-9]*([.,][0-9]*)?)\\s*([a-zA-Z]*)$');
+
+    }}); // class UnitValidator
+
+    // class UnitField ========================================================
+
+    /**
+     * A specialized spin field used to represent and input a length value
+     * together with a measurement unit.
+     *
+     * @constructor
+     *
+     * @extends SpinField
+     *
+     * @param {Object} [options]
+     *  A map of options to control the properties of the unit field. Supports
+     *  all options of the SpinField base class and the UnitValidator class (a
+     *  sub class of TextField.NumberValidator), except the option
+     *  'options.validator' which will be set to an instance of UnitValidator.
+     */
+    function UnitField(options) {
+
+        // base constructor ---------------------------------------------------
+
+        SpinField.call(this, Utils.extendOptions(options, { validator: new UnitValidator(options) }));
+
+    } // class UnitField
 
     // exports ================================================================
 
-    // derive this class from class TextField
-    return TextField.extend({ constructor: UnitField });
+    // derive this class from class SpinField
+    return SpinField.extend({ constructor: UnitField });
 
 });

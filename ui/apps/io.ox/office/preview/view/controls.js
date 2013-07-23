@@ -13,11 +13,12 @@
 
 define('io.ox/office/preview/view/controls',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/control/label',
      'io.ox/office/tk/control/button',
-     'io.ox/office/tk/control/textfield',
+     'io.ox/office/tk/control/spinfield',
      'io.ox/office/tk/control/radiolist',
      'gettext!io.ox/office/main'
-    ], function (Utils, Button, TextField, RadioList, gt) {
+    ], function (Utils, Label, Button, SpinField, RadioList, gt) {
 
     'use strict';
 
@@ -104,11 +105,10 @@ define('io.ox/office/preview/view/controls',
 
         // create the first/last list entries
         this.createOptionButton('first', { label: gt('Show first page') })
-            .createOptionButton('last', { label: gt('Show last page') })
-            .createSection('pages', { separator: true });
+            .createOptionButton('last', { label: gt('Show last page') });
 
         // enable/disable the list entries dynamically
-        this.getItemGroup().registerUpdateHandler(function (page) {
+        this.registerUpdateHandler(function (page) {
             var items = self.getItems();
             items.filter('[data-value="first"]').toggleClass(Utils.DISABLED_CLASS, page <= 1);
             items.filter('[data-value="last"]').toggleClass(Utils.DISABLED_CLASS, page >= app.getModel().getPageCount());
@@ -116,19 +116,9 @@ define('io.ox/office/preview/view/controls',
 
         // create the text input field for the page number, when page count is known
         app.on('docs:import:success', function () {
-
-            var pageInput = new TextField({
-                    label: gt('Go to page'),
-                    width: 50,
-                    validator: new TextField.NumberValidator({ min: 1, max: app.getModel().getPageCount(), digits: 0 }),
-                    tooltip: gt('Page number')
-                });
-
-            pageInput.getTextFieldNode().css({ textAlign: 'right' });
-            // register the text field to establish automatic event forwarding
-            self.registerMenuGroup(pageInput);
-            // insert the text field node into the prepared section
-            self.getSectionNode('pages').append(pageInput.getNode());
+            self.createMenuSection('pages', { separator: true, classes: 'inline' })
+                .addSectionGroup('pages', new Label({ label: gt('Go to page') }))
+                .addSectionGroup('pages', new SpinField({ tooltip: gt('Page number'), width: 45, css: { textAlign: 'right' }, min: 1, max: app.getModel().getPageCount() }));
         });
 
     }}); // class PageChooser
@@ -157,7 +147,7 @@ define('io.ox/office/preview/view/controls',
             .createOptionButton(100, { label: gt('100%') })
             .createOptionButton(150, { label: gt('150%') })
             .createOptionButton(200, { label: gt('200%') })
-            .createSection('fit', { separator: true })
+            .createMenuSection('fit', { separator: true })
             .createOptionButton('width', { sectionId: 'fit', label: gt('Fit to screen width') })
             .createOptionButton('page', { sectionId: 'fit', label: gt('Fit to screen size') });
 

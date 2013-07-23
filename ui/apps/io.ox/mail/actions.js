@@ -563,7 +563,7 @@ define('io.ox/mail/actions',
         capabilities: 'infostore',
         requires: 'some',
         multiple: function (list) {
-            notifications.yell('info', 'Attachments will be saved!');
+            notifications.yell('busy', gt('Attachments will be saved'));
             api.saveAttachments(list)
                 .done(function (data) {
                     notifications.yell('success', gt('Attachments have been saved'));
@@ -598,7 +598,12 @@ define('io.ox/mail/actions',
                 })
                 .then(
                     function success(data) {
-                        //TODO: Handle data not being an array or containing more than one contact
+
+                        if (!_.isArray(data) || data.length === 0) {
+                            notifications.yell('error', gt('Failed to add. Maybe the VCard attachment is invalid.'));
+                            return;
+                        }
+
                         var contact = data[0];
                         contact.folder_id = coreConfig.get('folder/contacts');
                         require(['io.ox/contacts/edit/main'], function (m) {
@@ -608,8 +613,8 @@ define('io.ox/mail/actions',
                             m.getApp(contact).launch();
                         });
                     },
-                    function fail(data) {
-                        console.err('FAILED!', data);
+                    function fail(e) {
+                        notifications.yell(e);
                     }
                 );
             });

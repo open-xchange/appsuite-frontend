@@ -60,7 +60,7 @@ define('io.ox/office/tk/dropdown/list',
         /**
          * Handles key events in the open drop-down list menu element.
          */
-        function listKeyHandler(event) {
+        function menuKeyHandler(event) {
 
             var // distinguish between event types (ignore keypress events)
                 keydown = event.type === 'keydown',
@@ -71,28 +71,24 @@ define('io.ox/office/tk/dropdown/list',
 
             switch (event.keyCode) {
             case KeyCodes.UP_ARROW:
-                if (keydown) {
-                    if (index <= 0) {
-                        self.hideMenu();
-                    } else {
-                        controls.eq(index - 1).focus();
-                    }
+                if (keydown && (index > 0)) {
+                    controls.eq(index - 1).focus();
                 }
                 return false;
             case KeyCodes.DOWN_ARROW:
-                if (keydown && (index >= 0) && (index + 1 < controls.length)) { controls.eq(index + 1).focus(); }
+                if (keydown && (index >= 0) && (index + 1 < controls.length)) {
+                    controls.eq(index + 1).focus();
+                }
                 return false;
             case KeyCodes.PAGE_UP:
-                if (keydown) { controls.eq(Math.max(0, index - List.PAGE_SIZE)).focus(); }
+                if (keydown && (index >= 0) && (controls.length > 0)) {
+                    controls.eq(Math.max(0, index - List.PAGE_SIZE)).focus();
+                }
                 return false;
             case KeyCodes.PAGE_DOWN:
-                if (keydown) { controls.eq(Math.min(controls.length - 1, index + List.PAGE_SIZE)).focus(); }
-                return false;
-            case KeyCodes.HOME:
-                if (keydown) { controls.first().focus(); }
-                return false;
-            case KeyCodes.END:
-                if (keydown) { controls.last().focus(); }
+                if (keydown && (index >= 0) && (controls.length > 0)) {
+                    controls.eq(Math.min(controls.length - 1, index + List.PAGE_SIZE)).focus();
+                }
                 return false;
             }
         }
@@ -100,11 +96,11 @@ define('io.ox/office/tk/dropdown/list',
         // initialization -----------------------------------------------------
 
         // additional formatting for vertical list items
-        this.getItemGroup().getNode().addClass('list');
+        this.getMenuNode().addClass('layout-list');
 
         // register event handlers
         this.on('menu:open', menuOpenHandler);
-        this.getItemGroup().getNode().on('keydown keypress keyup', listKeyHandler);
+        this.getMenuNode().on('keydown keypress keyup', menuKeyHandler);
 
     } // class List
 

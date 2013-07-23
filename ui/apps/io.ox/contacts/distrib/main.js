@@ -36,7 +36,7 @@ define('io.ox/contacts/distrib/main',
 
         app = ox.ui.createApp({
             name: 'io.ox/contacts/distrib',
-            title: 'Distribution List',
+            title: gt('Distribution List'),
             userContent: true
         });
 

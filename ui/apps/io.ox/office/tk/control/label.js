@@ -21,7 +21,10 @@ define('io.ox/office/tk/control/label',
     // class Label ============================================================
 
     /**
-     * Creates a label control listening to update requests.
+     * Creates a label control listening to update requests. By registering an
+     * update handler that modifies the caption it is even possible to update
+     * the label dynamically with the method 'Group.setValue()' based on any
+     * arbitrary value.
      *
      * @constructor
      *
@@ -30,39 +33,16 @@ define('io.ox/office/tk/control/label',
      * @param {Object} [options]
      *  A map of options to control the properties of the label. Supports all
      *  options of the Group base class, and all generic formatting options for
-     *  labels (see method Utils.createLabel() for details). Additionally,
-     *  supports the following options:
-     *  @param {Function} [updateHandler]
-     *      If specified, will be called every time the label has to be
-     *      updated. Will be called in the context of this control instance.
-     *      Receives the new value of the label control as first parameter.
+     *  labels (see method Utils.createLabel() for details).
      */
     function Label(options) {
 
         var // create the label
-            label = Utils.createLabel(options),
-
-            // the update handler
-            updateHandler = Utils.getFunctionOption(options, 'updateHandler');
+            label = Utils.createLabel(options);
 
         // base constructor ---------------------------------------------------
 
         Group.call(this, options);
-
-        // private methods ----------------------------------------------------
-
-        /**
-         * Sets the passed value as caption label.
-         *
-         * @param [value]
-         *  A value that will be set as caption label. If null or undefined is
-         *  passed, the caption label will be cleared. Otherwise, the label
-         *  will will be converted to a string value.
-         */
-        function defaultUpdateHandler(value) {
-            var labelOptions = Utils.extendOptions(options, { label: (_.isUndefined(value) || _.isNull(value)) ? undefined : value });
-            Utils.setControlCaption(label, labelOptions);
-        }
 
         // methods ------------------------------------------------------------
 
@@ -98,9 +78,8 @@ define('io.ox/office/tk/control/label',
 
         // initialization -----------------------------------------------------
 
-        // insert the label into this group, and register event handlers
-        this.addChildNodes(label)
-            .registerUpdateHandler(_.isFunction(updateHandler) ? updateHandler : defaultUpdateHandler);
+        // insert the label into this group
+        this.addChildNodes(label);
 
     } // class Label
 

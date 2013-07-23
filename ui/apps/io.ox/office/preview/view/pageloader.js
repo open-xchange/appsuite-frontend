@@ -17,8 +17,8 @@ define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], functi
 
     var // default page size used before a page has been loaded
         DEFAULT_PAGE_SIZE = {
-            width: Utils.convertLength(210, 'mm', 'px', 0),
-            height: Utils.convertLength(297, 'mm', 'px', 0)
+            width: Utils.convertLength(210, 'mm', 'px', 1),
+            height: Utils.convertLength(297, 'mm', 'px', 1)
         },
 
         // the maximum number of simultaneous pending AJAX page requests

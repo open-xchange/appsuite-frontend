@@ -144,7 +144,7 @@ define('io.ox/core/settings/errorlog/settings/pane',
             this.$el.append(
                 $('<section class="chart">'),
                 $('<section class="chart-description">').text(
-                    gt('The graph shows performance frequencies in percent. Grey line shows ideal performance, blue line is measured performance.')
+                    gt('The blue graph shows the distribution of request durations in percent. The grey graph shows a trivial network ping to recognize slow connections.')
                 )
             );
         },
@@ -153,32 +153,45 @@ define('io.ox/core/settings/errorlog/settings/pane',
 
             var canvas, data, list, chart, ctx;
 
-            data = [0, 0, 0, 0, 0, 0, 0];
-            list = http.statistics.data();
+            function transform(list) {
 
-            _(list).each(function (t) {
-                var i = 0;
-                if (t < 100) i = 1;
-                else if (t < 200) i = 2;
-                else if (t < 300) i = 3;
-                else if (t < 500) i = 4;
-                else if (t < 1000) i = 5;
-                else i = 6;
-                data[i]++;
-            });
+                var data = [
+                    0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0,
+                    0, 0
+                ];
 
-            data = _(data).map(function (i) {
-                return Math.round(i / list.length * 100);
-            });
+                // get frequencies
+                _(list).each(function (t) {
+                    if (t >= 1000) {
+                        data[data.length - 1]++;
+                    } else if (t >= 500) {
+                        data[data.length - 2]++;
+                    } else {
+                        data[Math.max(1, Math.round(t / 50))]++;
+                    }
+                });
+
+                // convert to percentages
+                data = _(data).map(function (i) {
+                    return Math.round(i / list.length * 100);
+                });
+
+                return data;
+            }
+
+
+            var data = transform(http.statistics.data()),
+                ping = transform(http.statistics.ping());
 
             chart = {
-                labels: ['', '< 100 ms', '< 200 ms', '< 300 ms', '< 500 ms', '< 1s', '> 1s'],
+                labels: [0, '', 100, '', 200, '', 300, '', 400, '', '> 0.5s', '> 1s'],
                 datasets: [{
                     fillColor: 'rgba(220, 220, 220, 0.5)',
                     strokeColor: 'rgba(220, 220, 220, 1)',
                     pointColor: 'rgba(220, 220, 220, 1)',
                     pointStrokeColor: '#fff',
-                    data: [0, 30, 50, 20, 0, 0, 0]
+                    data: ping
                 }, {
                     fillColor: 'rgba(0, 136, 204, 0.15)',
                     strokeColor: 'rgba(0, 136, 204, 0.80)',

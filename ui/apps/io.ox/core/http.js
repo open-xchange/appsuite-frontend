@@ -396,7 +396,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
     // statistics
     (function () {
 
-        var list = [], n = 0, loss = 0;
+        var list = [], ping = [], n = 0, loss = 0;
 
         log.took = function (t) {
             list.push(t);
@@ -405,6 +405,10 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
 
         log.loss = function () {
             loss++;
+        };
+
+        log.ping = function (t) {
+            ping.push(t);
         };
 
         log.statistics = {
@@ -426,6 +430,10 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
 
             loss: function () {
                 return Math.round(loss / n * 100) / 100;
+            },
+
+            ping: function () {
+                return ping;
             }
         };
     }());
@@ -1155,7 +1163,9 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                 params: { action: 'ping' }
             })
             .then(function () {
-                return _.now() - t0;
+                var took = _.now() - t0;
+                log.ping(took);
+                return took;
             });
         },
 

@@ -111,7 +111,7 @@ define('io.ox/office/preview/view/pagegroup',
             var // position and size of visible area in scrollable area
                 visiblePosition = Utils.getVisibleAreaPosition(scrollableNode),
                 // top margin of group node, used as offset in position calculations
-                topMargin = Utils.convertCssLength(self.getNode().css('margin-top'), 'px', 0),
+                topMargin = Utils.convertCssLength(self.getNode().css('margin-top'), 'px', 1),
                 // row range visible in the scrollable node (closed range)
                 firstRow = 0, lastRow = 0,
                 // page range visible in the scrollable node (closed range)

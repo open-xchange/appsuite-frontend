@@ -92,88 +92,66 @@ define('io.ox/office/tk/dropdown/grid',
         /**
          * Handles key events in the open drop-down grid menu element.
          */
-        function gridKeyHandler(event) {
+        function menuKeyHandler(event) {
 
             var // distinguish between event types (ignore keypress events)
                 keydown = event.type === 'keydown',
                 // all list items (button elements)
                 buttons = self.getItems(),
                 // index of the focused list item
-                index = buttons.index(event.target),
-                // new index
-                newIndex = index;
+                index = buttons.index(event.target);
 
             switch (event.keyCode) {
             case KeyCodes.LEFT_ARROW:
-                if (keydown) { buttons.eq(index - 1).focus(); }
+                if (keydown && (index > 0)) {
+                    buttons.eq(index - 1).focus();
+                }
                 return false;
             case KeyCodes.RIGHT_ARROW:
-                if (keydown) {
-                    if (index + 1 >= buttons.length) { index = -1; }
+                if (keydown && (index >= 0) && (index + 1 < buttons.length)) {
                     buttons.eq(index + 1).focus();
                 }
                 return false;
             case KeyCodes.UP_ARROW:
-                if (keydown) {
-                    if (index <= 0) {
-                        self.hideMenu();
-                    } else {
-                        newIndex = calcNewIndex(index, true);
-                        if (newIndex === index) {
-                            self.hideMenu();
-                        } else {
-                            buttons.eq(newIndex).focus();
-                        }
-                    }
+                if (keydown && (index >= 0) && (buttons.length > 0)) {
+                    buttons.eq(calcNewIndex(buttons, event.target, index, true)).focus();
                 }
                 return false;
             case KeyCodes.DOWN_ARROW:
-                if (keydown) {
-                    index = calcNewIndex(index, false);
-                    buttons.eq(index).focus();
+                if (keydown && (index >= 0) && (buttons.length > 0)) {
+                    buttons.eq(calcNewIndex(buttons, event.target, index, false)).focus();
                 }
-                return false;
-            case KeyCodes.HOME:
-                if (keydown) { buttons.first().focus(); }
-                return false;
-            case KeyCodes.END:
-                if (keydown) { buttons.last().focus(); }
                 return false;
             }
         }
 
         /**
-         * Calculates the previous/next button index dependent
-         * on the direction of movement.
+         * Calculates the previous/next button index dependent on the direction
+         * of movement.
          *
          * @param {Number} currIndex
          *  The index of the current button.
          *
          * @param {Boolean} up
-         *  The movement direction. TRUE means up otherwise
-         *  down.
+         *  The movement direction. True means up otherwise down.
          *
          * @returns {Number}
-         *  The index of the button which should get the focus.
-         *  If no previous/next button could be found currIndex
-         *  is returned.
-         *  The algorithm tries to find the nearest button in
-         *  the previous/next row. Nearest means the minimal
-         *  distance graphic wise.
+         *  The index of the button which should get the focus. If no previous
+         *  or next button could be found, currIndex is returned. The algorithm
+         *  tries to find the nearest button in the previous/next row. Nearest
+         *  means the minimal distance graphic wise.
          */
-        function calcNewIndex(currIndex, up) {
+        function calcNewIndex(buttons, focusNode, currIndex, up) {
             var // index
                 i,
                 // current td element
-                currTD = $(document.activeElement).closest('td'),
+                currTD = $(focusNode).closest('td'),
                 // position of current td element
                 pos = currTD.position(),
                 // next position
                 nextPos,
                 // the current index/resulting index
                 index = currIndex,
-                // all list items (button elements)
-                buttons = self.getItems(),
                 // table of the current element
                 table,
                 // tables inside the grid
@@ -215,7 +193,7 @@ define('io.ox/office/tk/dropdown/grid',
 
             if (findNextTable) {
                 // try find previous/next table in the grid
-                tables = self.getItemGroup().getNode().find('table');
+                tables = self.getMenuNode().find('table');
                 tableIndex = tables.index(table);
                 if (up && (tableIndex > 0)) {
                     table = tables.eq(tableIndex - 1);
@@ -251,8 +229,11 @@ define('io.ox/office/tk/dropdown/grid',
 
         // initialization -----------------------------------------------------
 
-        // additional formatting for grid layout, register event handlers
-        this.getItemGroup().getNode().addClass('grid').on('keydown keypress keyup', gridKeyHandler);
+        // additional formatting for grid layout
+        this.getMenuNode().addClass('layout-grid');
+
+        // register event handlers
+        this.getMenuNode().on('keydown keypress keyup', menuKeyHandler);
 
     } // class Grid
 

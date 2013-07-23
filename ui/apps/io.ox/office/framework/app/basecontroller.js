@@ -91,6 +91,8 @@ define('io.ox/office/framework/app/basecontroller',
                 enableHandler = Utils.getFunctionOption(definition, 'enable', true),
                 // handler for value getter (default to identity to forward parent value)
                 getHandler = Utils.getFunctionOption(definition, 'get', _.identity),
+                // handler for options getter (default to identity to forward parent value)
+                optionsHandler = Utils.getFunctionOption(definition, 'options', _.identity),
                 // handler for value setter
                 setHandler = Utils.getFunctionOption(definition, 'set'),
                 // behavior for returning browser focus to application
@@ -129,6 +131,14 @@ define('io.ox/office/framework/app/basecontroller',
             this.get = function () {
                 var parentValue = (parentKey in items) ? items[parentKey].get() : undefined;
                 return getAndCacheResult('value', getHandler, parentValue);
+            };
+
+            /**
+             * Returns the current value options of this item.
+             */
+            this.getOptions = function () {
+                var parentOptions = (parentKey in items) ? items[parentKey].getOptions() : undefined;
+                return getAndCacheResult('options', optionsHandler, parentOptions);
             };
 
             /**
@@ -404,6 +414,13 @@ define('io.ox/office/framework/app/basecontroller',
          *      the view components will not be changed. Defaults to a function
          *      that returns undefined; or, if a parent item has been
          *      registered, that returns its cached value directly.
+         *  @param {Function} [definition.options]
+         *      Getter function returning an additional map with options
+         *      depending on the current value of the item. If a parent item
+         *      has been specified (see above), the cached return value of its
+         *      options getter will be passed to this options getter. Defaults
+         *      to a function that returns undefined; or, if a parent item has
+         *      been registered, that returns its cached value directly.
          *  @param {Function} [definition.set]
          *      Setter function changing the value of an item to the first
          *      parameter of the setter. Can be omitted for read-only items.
@@ -604,6 +621,7 @@ define('io.ox/office/framework/app/basecontroller',
                 _(pendingItems || items).each(function (item) {
                     item.isEnabled();
                     item.get();
+                    item.getOptions();
                 });
                 pendingItems = {};
 
@@ -630,6 +648,22 @@ define('io.ox/office/framework/app/basecontroller',
             // do not clear the cache if currently running in a set handler
             if (runningSetters === 0) { clearResultCache(); }
             return (key in items) ? items[key].get() : undefined;
+        };
+
+        /**
+         * Returns the current value options of the specified item.
+         *
+         * @param {String} key
+         *  The key of the item.
+         *
+         * @returns {Object|Undefined}
+         *  The current value options of the item, or undefined, if the item
+         *  does not exist.
+         */
+        this.getOptions = function (key) {
+            // do not clear the cache if currently running in a set handler
+            if (runningSetters === 0) { clearResultCache(); }
+            return (key in items) ? items[key].getOptions() : undefined;
         };
 
         /**

@@ -19,10 +19,12 @@ define('io.ox/office/preview/app/fileactions',
 
     'use strict';
 
+    function isViewable(e) {
+        return e.collection.has('one', 'read') && ExtensionRegistry.isViewable(e.context.filename);
+    }
+
     new links.Action('io.ox/files/actions/office/view', {
-        requires: function (e) {
-            return e.collection.has('one', 'read') && ExtensionRegistry.isViewable(e.context.filename);
-        },
+        requires: isViewable,
         filter: function (data) {
             return ExtensionRegistry.isViewable(data.filename);
         },
@@ -31,14 +33,14 @@ define('io.ox/office/preview/app/fileactions',
         }
     });
 
-    ext.point('io.ox/files/links/inline').extend({
+    // disable default 'Open' action defined by OX Files
+    new links.Action('io.ox/files/actions/open', {
         id: 'disable_open',
-        index: 1,
-        prio: 'hi',
-        ref: 'io.ox/files/actions/open',
-        draw: function (baton) {
-            if (!_.isArray(baton.data) && ExtensionRegistry.isViewable(baton.data.filename)) {
-                baton.disable('io.ox/files/links/inline', 'open');
+        index: 'first',
+        requires: function (e) {
+            if (isViewable(e)) {
+                e.stopPropagation();
+                return false;
             }
         }
     });

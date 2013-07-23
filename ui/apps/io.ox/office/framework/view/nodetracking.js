@@ -59,8 +59,14 @@ define('io.ox/office/framework/view/nodetracking',
         // whether the mouse or touch point has been moved after tracking has started
         moved = false,
 
+        // the browser timer used for initial auto-repetition
+        repeatDelayTimer = null,
+
+        // the browser interval timer used for auto-repetition
+        repeatIntervalTimer = null,
+
         // the browser timer used for auto-scrolling
-        scrollTimer = null;
+        scrollIntervalTimer = null;
 
     // private global functions ===============================================
 
@@ -100,49 +106,88 @@ define('io.ox/office/framework/view/nodetracking',
     }
 
     /**
-     * Initializes auto-scrolling mode after tracking has been started.
+     * Initializes auto-repetition and auto-scrolling mode after tracking has
+     * been started.
      */
-    function initAutoScrolling() {
+    function initAutoMode() {
 
-        var // additional options for auto-scrolling
+        var // additional options for auto-repetition and auto-scrolling
             trackingOptions = trackingNode.data('tracking-options') || {},
+
+            // whether auto-repetition is enabled
+            autoRepeat = Utils.getBooleanOption(trackingOptions, 'autoRepeat', false),
+            // the time in milliseconds for first 'tracking:repeat' event
+            repeatDelay = Utils.getIntegerOption(trackingOptions, 'repeatDelay', 700, 10),
+            // the time in milliseconds between 'tracking:repeat' events
+            repeatInterval = Utils.getIntegerOption(trackingOptions, 'repeatInterval', 100, 10),
+
             // whether horizontal auto-scrolling is enabled
-            horizontal = Utils.getBooleanOption(trackingOptions, 'autoScroll', false) || (Utils.getStringOption(trackingOptions, 'autoScroll') === 'horizontal'),
+            scrollHorizontal = Utils.getBooleanOption(trackingOptions, 'autoScroll', false) || (Utils.getStringOption(trackingOptions, 'autoScroll') === 'horizontal'),
             // whether vertical auto-scrolling is enabled
-            vertical = Utils.getBooleanOption(trackingOptions, 'autoScroll', false) || (Utils.getStringOption(trackingOptions, 'autoScroll') === 'vertical'),
-            // the time in milliseconds between auto-scrolling events
+            scrollVertical = Utils.getBooleanOption(trackingOptions, 'autoScroll', false) || (Utils.getStringOption(trackingOptions, 'autoScroll') === 'vertical'),
+            // the time in milliseconds between 'tracking:scroll' events
             scrollInterval = Utils.getIntegerOption(trackingOptions, 'scrollInterval', 100, 100),
+
             // the border node for auto-scrolling
             borderNode = ('borderNode' in trackingOptions) ? $(trackingOptions.borderNode).first() : trackingNode,
             // the margin around the border box where auto-scrolling becomes active
             borderMargin = Utils.getIntegerOption(trackingOptions, 'borderMargin', 0),
             // the size of the border around the scrolling border box for acceleration
             borderSize = Utils.getIntegerOption(trackingOptions, 'borderSize', 30, 0),
+
             // the minimum scrolling speed
             minSpeed = Utils.getIntegerOption(trackingOptions, 'minSpeed', 10, 1),
             // the maximum scrolling speed
             maxSpeed = Utils.getIntegerOption(trackingOptions, 'maxSpeed', Math.max(100, minSpeed), minSpeed),
             // the speed acceleration between two 'tracking:scroll' events
             acceleration = Utils.getNumberOption(trackingOptions, 'acceleration', 1.2, 1.05),
+
             // the last scroll increment, in horizontal and vertical direction
             scrollX = 0, scrollY = 0;
+
+        // returns the current outer border box
+        function getBorderBox() {
+
+            var // the current screen position of the border node
+                borderBox = Utils.getNodePositionInWindow(borderNode);
+
+            // add border margin
+            borderBox.left -= borderMargin;
+            borderBox.right -= borderMargin;
+            borderBox.width += 2 * borderMargin;
+            borderBox.top -= borderMargin;
+            borderBox.bottom -= borderMargin;
+            borderBox.height += 2 * borderMargin;
+            return borderBox;
+        }
+
+        // callback for the auto-repetition timers
+        function autoRepeatHandler() {
+
+            var // the current screen position of the border node
+                borderBox = getBorderBox();
+
+            // trigger event if tracking position hovers border box
+            if ((borderBox.left <= lastX) && (lastX < borderBox.left + borderBox.width) && (borderBox.top <= lastY) && (lastY < borderBox.top + borderBox.height)) {
+                triggerEvent('tracking:repeat', undefined, { pageX: lastX, pageY: lastY });
+            }
+        }
 
         // returns the maximum speed for the passed distance to the border box
         function getMaxSpeed(distance) {
             return (borderSize === 0) ? maxSpeed : (Math.min(1, (distance - 1) / borderSize) * (maxSpeed - minSpeed) + minSpeed);
         }
 
-        if (!horizontal && !vertical) { return; }
+        // callback for the auto-scrolling interval timer
+        function autoScrollHandler() {
 
-        scrollTimer = window.setInterval(function () {
-
-            var // the current screen position of the scroll node
-                borderBox = Utils.getNodePositionInWindow(borderNode),
+            var // the current screen position of the border node
+                borderBox = getBorderBox(),
                 // the distances from border box to tracking position
-                leftDist = horizontal ? (borderBox.left - borderMargin - lastX) : 0,
-                rightDist = horizontal ? (lastX - (borderBox.left + borderBox.width + borderMargin)) : 0,
-                topDist = vertical ? (borderBox.top - borderMargin - lastY) : 0,
-                bottomDist = vertical ? (lastY - (borderBox.top + borderBox.height + borderMargin)) : 0;
+                leftDist = scrollHorizontal ? (borderBox.left - lastX) : 0,
+                rightDist = scrollHorizontal ? (lastX - (borderBox.left + borderBox.width)) : 0,
+                topDist = scrollVertical ? (borderBox.top - lastY) : 0,
+                bottomDist = scrollVertical ? (lastY - (borderBox.top + borderBox.height)) : 0;
 
             // start auto-scrolling after the first 'tracking:move' event
             if (!moved) { return; }
@@ -169,17 +214,30 @@ define('io.ox/office/framework/view/nodetracking',
             if ((Math.round(scrollX) !== 0) || (Math.round(scrollY) !== 0)) {
                 triggerEvent('tracking:scroll', undefined, { pageX: lastX, pageY: lastY, scrollX: Math.round(scrollX), scrollY: Math.round(scrollY) });
             }
+        }
 
-        }, scrollInterval);
+        if (autoRepeat) {
+            repeatDelayTimer = window.setTimeout(function () {
+                repeatDelayTimer = null;
+                autoRepeatHandler();
+                repeatIntervalTimer = window.setInterval(autoRepeatHandler, repeatInterval);
+            }, repeatDelay);
+        }
+
+        if (scrollHorizontal || scrollVertical) {
+            scrollIntervalTimer = window.setInterval(autoScrollHandler, scrollInterval);
+        }
     }
 
     /**
      * Deinitializes auto-scrolling mode after tracking has been finished or
      * canceled.
      */
-    function deinitAutoScrolling() {
-        window.clearTimeout(scrollTimer);
-        scrollTimer = null;
+    function deinitAutoMode() {
+        window.clearTimeout(repeatDelayTimer);
+        window.clearInterval(repeatIntervalTimer);
+        window.clearInterval(scrollIntervalTimer);
+        repeatDelayTimer = repeatIntervalTimer = scrollIntervalTimer = null;
     }
 
     /**
@@ -210,8 +268,8 @@ define('io.ox/office/framework/view/nodetracking',
             }
         });
 
-        // initialize auto scrolling
-        initAutoScrolling();
+        // initialize auto-repetition and auto-scrolling
+        initAutoMode();
     }
 
     /**
@@ -221,7 +279,7 @@ define('io.ox/office/framework/view/nodetracking',
         $(document).off(DOCUMENT_EVENT_MAP).off(DEFERRED_EVENT_MAP);
         trackingNode = null;
         overlayNode.detach();
-        deinitAutoScrolling();
+        deinitAutoMode();
     }
 
     /**
@@ -422,6 +480,18 @@ define('io.ox/office/framework/view/nodetracking',
      *          The start position of this tracking sequence, as passed to the
      *          initial 'tracking:start' event.
      *
+     * - 'tracking:repeat'
+     *      While holding mouse or touch point above the border node with
+     *      auto-repetition enabled (see below for the 'options' parameter of
+     *      this method). The event object contains the following properties:
+     *      (1) {Number} pageX, {Number} pageY
+     *          The page position, as passed to the previous 'tracking:move'
+     *          event (or the initial 'tracking:start' event, if no
+     *          'tracking:move' event has been triggered yet).
+     *      (2) {Number} startX, {Number} startY
+     *          The start position of this tracking sequence, as passed to the
+     *          initial 'tracking:start' event.
+     *
      * - 'tracking:scroll'
      *      While dragging the mouse or touch point around with auto-scrolling
      *      enabled (see below for the 'options' parameter of this method), and
@@ -456,6 +526,16 @@ define('io.ox/office/framework/view/nodetracking',
      *      events will be ignored. If set to 'touch', only touch events will
      *      be processed, and mouse events will be ignored. If set to 'all' or
      *      omitted, mouse and touch events will be processed.
+     *  @param {Boolean} [options.autoRepeat=false]
+     *      If set to true, auto-repetition will be activated. The active
+     *      tracking node will trigger 'tracking:repeat' events repeatedly as
+     *      long as tracking is active.
+     *  @param {Integer} [options.repeatDelay=700]
+     *      The delay between the initial 'tracking:start' event and the first
+     *      'tracking:repeat' event, while auto-repetition mode is active.
+     *  @param {Integer} [options.repeatInterval=100]
+     *      The delay between subsequent 'tracking:repeat' events, while
+     *      auto-repetition mode is active.
      *  @param {Boolean|String} [options.autoScroll=false]
      *      If set to true, auto-scrolling will be activated for horizontal and
      *      vertical direction. If set to either 'horizontal' or 'vertical',
@@ -475,28 +555,32 @@ define('io.ox/office/framework/view/nodetracking',
      *      of the 'tracking:scroll' event while auto-scrolling mode is active.
      *  @param {jQuery|HTMLElement|String} [options.borderNode]
      *      If specified, the node whose border box will be used to decide
-     *      whether to enable auto-scrolling mode. If the mouse or touch point
-     *      reaches or leaves the border box of this node, 'tracking:scroll'
-     *      events will be triggered. If omitted, the border box of the active
-     *      tracking node will be used instead. The size of the border box can
-     *      be modified with the option 'borderMargin'.
+     *      whether to enable auto-repetition and auto-scrolling mode. In
+     *      auto-repetition mode, the tracking point must hover the border node
+     *      in order to trigger 'tracking:repeat' events. In auto-scrolling
+     *      mode, if the mouse or touch point reaches or leaves the border box
+     *      of this node, 'tracking:scroll' events will be triggered. If
+     *      omitted, the border box of the active tracking node will be used
+     *      instead. The size of the border box can be modified with the option
+     *      'borderMargin'.
      *  @param {Integer} [options.borderMargin=0]
      *      The distance from the physical border box of the scroll node (see
-     *      option 'borderNode') where auto-scrolling becomes active. Positive
-     *      values increase the size of the border box, negative values
-     *      decrease its size.
+     *      option 'borderNode') where auto-repetition or auto-scrolling mode
+     *      becomes active. Positive values increase the size of the border
+     *      box, negative values decrease its size.
      *  @param {Integer} [options.borderSize=30]
      *      The size of the acceleration area outside the border box (defined
-     *      by the options 'borderNode' and 'borderMargin'). Will be used to
-     *      determine the maximum scroll distance that can be reached while
-     *      accelerating. If the tracking position hovers the inner edge of the
-     *      acceleration area, the scroll distance will stick to the minimum
-     *      scroll distance defined by the option 'minSpeed'. At the outer
-     *      edge (and outside the acceleration area), the scroll distance will
-     *      accelerate from the minimum distance to the maximum distance
-     *      defined by the option 'maxSpeed' over time. Inside the area, the
-     *      maximum available scroll distance will be between the defined
-     *      limits, according to the current tracking position.
+     *      by the options 'borderNode' and 'borderMargin') for auto-scrolling
+     *      mode. Will be used to determine the maximum scroll distance that
+     *      can be reached while accelerating. If the tracking position hovers
+     *      the inner edge of the acceleration area, the scroll distance will
+     *      stick to the minimum scroll distance defined by the option
+     *      'minSpeed'. At the outer edge, and outside the acceleration area,
+     *      the scroll distance will accelerate from the minimum distance to
+     *      the maximum distance defined by the option 'maxSpeed' over time.
+     *      Inside the area, the maximum available scroll distance will be
+     *      between the defined limits, according to the current tracking
+     *      position.
      *  @param {Number} [options.acceleration=1.2]
      *      Acceleration factor while increasing the (absolute value of the)
      *      scrolling distance between two 'tracking:scroll' events from the

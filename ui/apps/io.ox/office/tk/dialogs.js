@@ -25,8 +25,8 @@ define('io.ox/office/tk/dialogs',
      * Adds OK and Cancel buttons to the passed dialog.
      */
     function addDialogButtons(dialog, options) {
-        dialog.addButton('cancel', Utils.getStringOption(options, 'cancelLabel', gt('Cancel')))
-            .addPrimaryButton('ok', Utils.getStringOption(options, 'okLabel', gt('OK')));
+        dialog.addPrimaryButton('ok', Utils.getStringOption(options, 'okLabel', gt('OK')))
+            .addButton('cancel', Utils.getStringOption(options, 'cancelLabel', gt('Cancel')));
     }
 
     // static class Dialogs ===================================================

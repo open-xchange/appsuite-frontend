@@ -51,15 +51,13 @@ define('io.ox/office/framework/view/basecontrols',
     /**
      * A status label with special appearance and fade-out animation.
      *
-     * The method StatusLabel.update() expects a data object value containing
-     * the following properties:
-     *  - {String} [data.caption='']
-     *      The caption text to be shown in the label.
-     *  - {String} [data.type='info']
+     * The method StatusLabel.setValue() accepts an options map containing the
+     * following options:
+     *  - {String} [options.type='info']
      *      The label type ('success', 'warning', 'error', or 'info').
-     *  - {Boolean} [data.fadeOut=false]
+     *  - {Boolean} [options.fadeOut=false]
      *      Whether to fade out the label automatically after a short delay.
-     *  - {Number} [data.delay=0]
+     *  - {Number} [options.delay=0]
      *      The delay time after the status label will be actually updated.
      */
     BaseControls.StatusLabel = Label.extend({ constructor: function (app) {
@@ -75,7 +73,7 @@ define('io.ox/office/framework/view/basecontrols',
 
         // base constructor ---------------------------------------------------
 
-        Label.call(this, { classes: 'status-label', updateHandler: updateHandler });
+        Label.call(this, { classes: 'status-label' });
 
         // private methods ----------------------------------------------------
 
@@ -88,26 +86,24 @@ define('io.ox/office/framework/view/basecontrols',
         }
 
         /**
-         * Callback called from the Label.update() method.
+         * Callback called from the Label.setValue() method.
          */
-        function updateHandler(value) {
+        function updateHandler(caption, options) {
 
             if (initialTimer) { initialTimer.abort(); }
             initialTimer = app.executeDelayed(function () {
 
-                var // the new label text
-                    caption = Utils.getStringOption(value, 'caption', ''),
-                    // the new type of the label (colors)
-                    type = Utils.getStringOption(value, 'type', 'info');
+                var // the new type of the label (colors)
+                    type = Utils.getStringOption(options, 'type', 'info');
 
                 // stop running fade-out and remove CSS attributes added by jQuery
                 if (animationTimer) { animationTimer.abort(); }
                 stopNodeAnimation();
 
                 // update the status label
-                if (caption.length > 0) {
+                if (_.isString(caption) && (caption.length > 0)) {
                     self.setLabelText(caption).show().getNode().attr('data-type', type);
-                    if (Utils.getBooleanOption(value, 'fadeOut', false)) {
+                    if (Utils.getBooleanOption(options, 'fadeOut', false)) {
                         animationTimer = app.executeDelayed(function () {
                             self.getNode().fadeOut(function () { self.hide(); });
                         }, { delay: 2000 });
@@ -116,12 +112,12 @@ define('io.ox/office/framework/view/basecontrols',
                     self.hide();
                 }
 
-            }, { delay: Utils.getIntegerOption(value, 'delay', 0, 0) });
+            }, { delay: Utils.getIntegerOption(options, 'delay', 0, 0) });
         }
 
         // initialization -----------------------------------------------------
 
-        this.update(null);
+        this.registerUpdateHandler(updateHandler).setValue(null);
         app.on('docs:destroy', stopNodeAnimation);
 
     }}); // class StatusLabel
