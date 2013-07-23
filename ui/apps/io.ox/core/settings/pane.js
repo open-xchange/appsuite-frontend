@@ -173,7 +173,7 @@ define('io.ox/core/settings/pane',
     // Auto Start App
 
     (function () {
-        if (settings.isConfigurable('autoStart')) {
+        if (settings.isConfigurable('autoStart') && _.device('!smartphone')) {
             var options = {};
             _(appAPI.getFavorites()).each(function (app) {
                 options[app.path] = gt(app.title);
