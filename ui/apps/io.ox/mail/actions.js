@@ -563,7 +563,7 @@ define('io.ox/mail/actions',
         capabilities: 'infostore',
         requires: 'some',
         multiple: function (list) {
-            notifications.yell('info', 'Attachments will be saved!');
+            notifications.yell('busy', gt('Attachments will be saved'));
             api.saveAttachments(list)
                 .done(function (data) {
                     notifications.yell('success', gt('Attachments have been saved'));
