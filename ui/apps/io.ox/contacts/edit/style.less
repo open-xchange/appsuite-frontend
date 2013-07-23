@@ -164,6 +164,24 @@
         &:last-child { margin-right: 0; }
     }
 
+    .inline-error { display: none; }
+
+    .field.error {
+        label, input, .inline-error {
+            color: #B94A48;
+        }
+        input {
+            border-color: #B94A48;
+        }
+        input:focus {
+            .box-shadow(0 0 6px #D59392);
+        }
+        .inline-error {
+            margin-bottom: 14px;
+            display: block;
+        }
+    }
+
     .btn-group {
         margin-bottom: 20px;
         margin-top: 20px;

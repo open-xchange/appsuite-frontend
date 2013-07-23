@@ -350,8 +350,20 @@ define('io.ox/contacts/edit/view-form', [
                 $('<label class="input">').append(
                     $.txt(options.label), $('<br>'),
                     new mini.InputView({ name: options.field, model: model }).render().$el
-                )
-            );
+                ),
+                $('<div class="inline-error">')
+            )
+            .on({
+                invalid: function (e, message, error) {
+                    $(this).addClass('error')
+                        .find('.inline-error').text(message).end()
+                        .find('input').focus();
+                },
+                valid: function () {
+                    $(this).removeClass('error')
+                        .find('.inline-error').text('');
+                }
+            });
         }
 
         function drawTextarea(options, model) {

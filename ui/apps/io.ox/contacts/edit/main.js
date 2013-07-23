@@ -69,8 +69,27 @@ define('io.ox/contacts/edit/main',
                         });
 
                         editView.on('save:fail', function (e, error) {
-                            notifications.yell(error);
+
+                            // invalid data?
+                            var invalid = false, field;
+                            if (error && error.model) {
+                                _(error.model.attributeValidity).each(function (valid, id) {
+                                    if (!valid && !invalid) {
+                                        field = container.find('[data-field="' + id + '"]');
+                                        invalid = true;
+                                    }
+                                });
+                            }
+
                             win.idle();
+
+                            if (invalid) {
+                                notifications.yell('error', gt('Some fields contain invalid data'));
+                                field.get(0).scrollIntoView();
+                                field = null;
+                            } else {
+                                notifications.yell(error);
+                            }
                         });
 
                         editView.listenTo(contact, 'server:error', function (error) {

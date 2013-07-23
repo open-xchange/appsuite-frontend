@@ -23,7 +23,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         className: 'input-xlarge',
         events: { 'change': 'onChange' },
         onChange: function () {
-            this.model.set(this.name, this.$el.val());
+            this.model.set(this.name, this.$el.val(), { validate: true });
         },
         setup: function (options) {
             this.name = options.name;
