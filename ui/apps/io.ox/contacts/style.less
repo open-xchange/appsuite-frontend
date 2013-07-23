@@ -230,10 +230,18 @@
 
 /* smartphone */
 @media (max-width: 480px), (max-device-width: 480px)  {
-    .contact-detail .block {
-        width: 100%;
-        margin-right: 0;
-        line-height: 24px;
+    .contact-detail {
+        .io-ox-inline-links:first-child {
+            margin:0;
+            span.io-ox-action-link.dropdown {
+                float:right;
+            }
+        }
+        .block {
+            width: 100%;
+            margin-right: 0;
+            line-height: 24px;
+        }
     }
 }
 
