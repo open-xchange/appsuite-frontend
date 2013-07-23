@@ -95,7 +95,7 @@ define('plugins/portal/rss/register',
                                     return '';
                                 }
                             },
-                            $('<span class="bold">').text(_.noI18n(entry.subject)), $.txt('')
+                            $('<span class="bold">').html(_.noI18n(entry.subject)), $.txt('')
                         )
                     );
                 });
