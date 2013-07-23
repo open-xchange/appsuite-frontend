@@ -104,7 +104,7 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
 
                     checkbox.click();
 
-                    expect(this.vgrid.selection.get().length).toBe(1);
+                    expect(this.vgrid.selection.get()).toEqual(this.testData);
                 });
             });
 
@@ -122,7 +122,7 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
 
                     checkbox.click();
 
-                    expect(this.vgrid.selection.get().length).toBe(0);
+                    expect(this.vgrid.selection.get()).toEqual([]);
                 });
             });
         });
