@@ -318,6 +318,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             },
 
             onChangeTextAction: function (e) {
+
+                function validateValue(value) {
+                    var regex =  /\s/;
+                    return  regex.test(value);
+                }
+
                 e.preventDefault();
                 var node = $(e.target),
                     value = node.val(),
@@ -327,7 +333,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     actionArray =  this.model.get('actioncmds');
 
                 if (type === 'flags') {
-                    actionArray[actionID][type] = ['$' + value.toString()];
+
+                    if (!validateValue(value)) {
+                        actionArray[actionID][type] = ['$' + value.toString()];
+                    } else {
+                        notifications.yell('error', gt('The character " " is not allowed.'));
+                    }
+
                 } else {
                     actionArray[actionID][type] = type === 'to' || 'text' ? value : [value];
                 }
