@@ -1972,9 +1972,14 @@ input.nice-input {
 
 .foldertree-sidepanel {
 
-    background-color: @foldertreeSidepanelBackground;
+    @c1: lighten(@foldertreeSidepanelBackground, 8%);
+    @c2: @foldertreeSidepanelBackground;
 
-    background-image: radial-gradient(ellipse at center, lighten(@foldertreeSidepanelBackground, 8%) 0%, @foldertreeSidepanelBackground 100%);
+    background: @c2;
+    background: -moz-radial-gradient(center, ellipse cover, @c1 0%, @c2 100%);
+    background: -webkit-radial-gradient(center, ellipse cover, @c1 0%, @c2 100%);
+    background: -ms-radial-gradient(center, ellipse cover, @c1 0%, @c2 100%);
+    background: radial-gradient(ellipse at center, @c1 0%, @c2 100%);
 
     &.border-right {
         border: 0px none;
