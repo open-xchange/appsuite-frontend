@@ -317,7 +317,6 @@
 
 /* Detail view */
 .calendar-detail {
-
     font-weight: 300;
 
     .io-ox-inline-links:first-child {
@@ -516,6 +515,15 @@
     .group {
         margin: 0.75em 0 0.25em 0;
         color: #333;
+    }
+
+    @media all and (max-width: 480px), all and (max-device-width: 480px) {
+        .io-ox-inline-links:first-child {
+            margin:0;
+            span.io-ox-action-link.dropdown {
+                float:right;
+            }
+        }
     }
 }
 
