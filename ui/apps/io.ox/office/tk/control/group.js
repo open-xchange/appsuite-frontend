@@ -311,6 +311,7 @@ define('io.ox/office/tk/control/group',
          */
         this.registerFocusableContainerNode = function (node) {
             focusableNodes = focusableNodes.add(node);
+            node.on('focus focusin focusout blur', focusHandler);
             return this;
         };
 
