@@ -93,11 +93,6 @@ define('io.ox/mail/accounts/settings',
             this.append(
                 $('<label>').text(gt('Your password')).append(
                     $('<input type="password" class="span6 add-mail-account-password">')
-                    .on('keyup', function (e) {
-                        if (e.which === 13) {
-                            $(this).closest('.io-ox-dialog-popup').find('.modal-footer .btn-primary').trigger('click');
-                        }
-                    })
                 )
             );
         }
@@ -246,7 +241,8 @@ define('io.ox/mail/accounts/settings',
 
                 new dialogs.ModalDialog({
                     width: 400,
-                    async: true
+                    async: true,
+                    enter: 'add'
                 })
                 .header(
                     $('<h4>').text(gt('Add mail account'))
