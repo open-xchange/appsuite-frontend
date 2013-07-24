@@ -23,6 +23,7 @@ define('io.ox/mail/main',
      'io.ox/core/tk/upload',
      'io.ox/core/extPatterns/dnd',
      'io.ox/core/extPatterns/actions',
+     'io.ox/core/tk/dropdown-options',
      'io.ox/core/notifications',
      'io.ox/core/api/folder',
      'io.ox/core/api/account',
@@ -30,7 +31,7 @@ define('io.ox/mail/main',
      'io.ox/mail/actions',
      'less!io.ox/mail/style.less',
      'io.ox/mail/folderview-extensions'
-    ], function (util, api, ext, commons, VGrid, viewDetail, tmpl, gt, upload, dnd, actions, notifications, folderAPI, account, settings) {
+    ], function (util, api, ext, commons, VGrid, viewDetail, tmpl, gt, upload, dnd, actions, dropdownOptions, notifications, folderAPI, account, settings) {
 
     'use strict';
 
@@ -743,19 +744,32 @@ define('io.ox/mail/main',
             });
 
             var translations = { from: gt('From'), to: gt('To'), cc: gt('CC'), subject: gt('Subject'), text: gt('Mail text') },
-                defaults = ext.point('io.ox/mail/search/defaults').options();
+                checkboxes = ext.point('io.ox/mail/search/checkboxes').options(),
+                defaults = ext.point('io.ox/mail/search/defaults').options(),
+                data = {}, button;
 
-            win.nodes.search.find('.input-append').append(
-                _(ext.point('io.ox/mail/search/checkboxes').options()).map(function (flag, name) {
-                    return flag === true ?
-                        $('<label class="checkbox margin-right">').append(
-                            $('<input type="checkbox" value="on" tabindex="1">')
-                                .attr({ name: name, checked: defaults[name] ? 'checked' : null }),
-                            $.txt(translations[name])
-                        ) :
-                        $();
-                })
-            );
+            //normalise data
+            _(checkboxes).each(function (flag, name) {
+                if (flag === true) {
+                    data[name] = {
+                        name: name,
+                        label: translations[name] || name,
+                        checked: defaults[name] || false
+                    };
+                }
+            });
+            //add dropdown button
+            button = $('<button type="button" data-action="search-options" class="btn fixed-btn search-options" aria-hidden="true">')
+                    .append('<i class="icon-gear">');
+            win.nodes.search.find('.search-query-container').after(button);
+
+            //add dropdown menue
+            var dropdown = dropdownOptions({
+                id: 'mail.search',
+                anchor: button,
+                defaults: data,
+                settings: settings
+            });
 
         }());
 
