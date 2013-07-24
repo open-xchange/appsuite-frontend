@@ -366,11 +366,22 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     }
 
     function goOffline() {
+        // test connection with a ping
+        http.GET({module: 'system', params: {action: 'ping'}});
+    }
+
+    http.on("unreachable", function () {
         if (!disconnected) {
             disconnected = true;
             api.trigger("offline");
         }
-    }
+    });
+
+    http.on("reachable", function () {
+        if (disconnected && !connecting) {
+            reconnect();
+        }
+    });
 
     function reconnect() {
         if (connecting) {

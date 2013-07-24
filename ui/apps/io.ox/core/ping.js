@@ -13,17 +13,51 @@
 define('io.ox/core/ping', ['io.ox/core/http', 'settings!io.ox/core'], function (http, settings) {
 
     'use strict';
-
     var enabled = settings.get('ping/enabled', true),
-        interval = settings.get('ping/interval', 30);
+        interval = settings.get('ping/interval', 30),
+        mode = 'none',
+        intervalHandle = null;
 
     function ping() {
         if (ox.online) http.ping();
     }
 
-    if (enabled) {
-        ping();
-        setInterval(ping, interval * 1000);
+    function stopInterval() {
+        if (intervalHandle) {
+            clearInterval(intervalHandle);
+        }
     }
 
+    function normalPing() {
+        if (mode === 'normal') {
+            return;
+        }
+        stopInterval();
+        mode = 'normal';
+        ox.reachable = true;
+        ox.trigger("reachableChange");
+
+        if (enabled) {
+            ping();
+            intervalHandle = setInterval(ping, interval * 1000);
+        }
+    }
+
+    function hecticPing() {
+        if (mode === 'hectic') {
+            return;
+        }
+        stopInterval();
+        ox.reachable = false;
+        ox.trigger("reachableChange");
+        mode = 'hectic';
+        ping();
+        intervalHandle = setInterval(ping, interval * 200);
+    }
+
+
+    http.on("unreachable", hecticPing);
+    http.on("reachable", normalPing);
+
+    normalPing();
 });
