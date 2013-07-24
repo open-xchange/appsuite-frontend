@@ -714,8 +714,12 @@ define('io.ox/core/commons-folderview',
                         });
                     });
 
-                    api.on('delete:prepare', function (e, id, folder_id) {
-                        tree.select(folder_id);
+                    api.on('delete:prepare', function (e, data) {
+                        var folder = data.folder_id, id = data.id;
+                        if (folder === '1') {
+                            folder = api.getDefaultFolder(data.module) || '1';
+                        }
+                        tree.select(folder);
                         tree.removeNode(id);
                     });
 
