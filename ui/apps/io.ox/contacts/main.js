@@ -345,7 +345,7 @@ define("io.ox/contacts/main",
             addresses: true
         });
 
-        var translations = { names: gt('Names and e-mail addresses'), phones: gt('Phone numbers'), addresses: gt('Addresses')},
+        var translations = { names: gt('Names and email addresses'), phones: gt('Phone numbers'), addresses: gt('Addresses')},
             checkboxes = ext.point('io.ox/contacts/search/checkboxes').options(),
             defaults = ext.point('io.ox/contacts/search/defaults').options(),
             data = {}, button;

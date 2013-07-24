@@ -326,12 +326,12 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
             if (baton.view.editMode) {
                 this.append($('<div>').addClass('control-group').append(
                             $('<div>').addClass('controls').append(
-                            $('<button>').addClass('email-btn btn').text(gt('Share Link by E-mail')).on('click', function () {
+                            $('<button>').addClass('email-btn btn').text(gt('Share Link by email')).on('click', function () {
                                 sendInvitation(baton);
                             }))),
                             $('<br>'));
             } else {
-                var temp = $('<label>').addClass('checkbox').text(gt('Share Link by E-mail')).append(
+                var temp = $('<label>').addClass('checkbox').text(gt('Share Link by email')).append(
                                node = $('<input>').attr('type', 'checkbox').addClass('invite-checkbox').on('change', function () {
                                     if (node.attr('checked') === 'checked') {
                                         baton.model.attributes.invite = true;

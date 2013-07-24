@@ -646,7 +646,7 @@ define('io.ox/mail/write/test',
                         mail_server: "ox.open-xchange.com",
                         mail_url: "imap://ox.open-xchange.com:143",
                         meta: null,
-                        name: "E-Mail",
+                        name: "Email",
                         password: null,
                         personal: "Biggeleben", // just last_name
                         pop3_delete_write_through: false,

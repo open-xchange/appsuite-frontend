@@ -97,10 +97,10 @@ define('io.ox/mail/guidance/main',
 
             var topics = {
                 'Die Bestandteile von Mail': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.gui.html',
-                'E-Mails organisieren': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.manage.html',
-                'E-Mails im Team': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.share.html',
-                'Externe E-Mail-Accounts': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.externalaccounts.html',
-                'E-Mail-Einstellungen': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.settings.html'
+                'EMails organisieren': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.manage.html',
+                'EMails im Team': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.share.html',
+                'Externe EMail-Accounts': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.externalaccounts.html',
+                'EMail-Einstellungen': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.settings.html'
             };
 
             this.append(
