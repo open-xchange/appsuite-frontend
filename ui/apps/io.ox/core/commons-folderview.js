@@ -191,14 +191,16 @@ define('io.ox/core/commons-folderview',
             id: 'publications',
             index: 500,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="publications" role="menuitem">').text(gt('Publication')),
+                 //do not draw if not available
+                var link,
                     contacts = baton.data.module === 'contacts',
                     files = baton.data.module === 'infostore';
-                this.append($('<li class="divider" aria-hidden="true" role="presentation">'), $('<li>').append(link));
                 if (capabilities.has('publication') &&  (contacts || (files && api.can('publish', baton.data)))) {
+                    link = $('<a href="#" data-action="publications" role="menuitem">').text(gt('Publication'));
+                    this.append($('<li class="divider" aria-hidden="true" role="presentation">'), $('<li>').append(link));
                     link.attr('tabindex', 1).on('click', { baton: baton }, publish);
                 } else {
-                    link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
+                    //link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
                 }
             }
         });
@@ -214,16 +216,17 @@ define('io.ox/core/commons-folderview',
             id: 'subscribe',
             index: 600,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="subscriptions" role="menuitem">').text(gt('Subscription'));
-                this.append(
-                    $('<li>').append(link)
-                );
+                //do not draw if not available
                 if (api.can('write', baton.data) && capabilities.has('subscription') &&
                     (baton.data.module === 'contacts' || baton.data.module === 'infostore' || baton.data.module === 'calendar')
                 ) {
+                    var link = $('<a href="#" data-action="subscriptions" role="menuitem">').text(gt('Subscription'));
+                    this.append(
+                        $('<li>').append(link)
+                    );
                     link.attr('tabindex', 1).on('click', { baton: baton }, subscribe);
                 } else {
-                    link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
+                    //link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
                 }
             }
         });

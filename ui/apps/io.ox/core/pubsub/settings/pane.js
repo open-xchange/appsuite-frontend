@@ -331,7 +331,7 @@ define('io.ox/core/pubsub/settings/pane',
             hintNode, hint;
 
         if (!capabilities.has(type)) {
-            node.after($('<div class="empty">').text(gt('This feature is deactivated') + '.'));
+            //node.after($('<div class="empty">').text(gt('This feature is deactivated') + '.'));
             return;
         }
 
@@ -410,19 +410,26 @@ define('io.ox/core/pubsub/settings/pane',
         id: 'content',
         render: function () {
 
-            var baton = this.baton;
+            var baton = this.baton, both = capabilities.has('publication') && capabilities.has('subscription');
 
-            this.$el.append(
-                // pub
-                $('<h2 class="pane-headline">').text(gt('Publications')),
-                baton.pubListNode = $('<ul class="publications">'),
-                // sub
-                $('<h2 class="pane-headline">').text(gt('Subscriptions')),
-                baton.subListNode = $('<ul class="subscriptions">')
-            );
+            if (capabilities.has('publication')) {
+                this.$el.append(
+                    // pub
+                    both ? $('<h2 class="pane-headline">').text(gt('Publications')) : $(),
+                    baton.pubListNode = $('<ul class="publications">')
+                );
+                setupList(baton.pubListNode.empty(), baton.publications, 'publication');
+            }
 
-            setupList(baton.pubListNode.empty(), baton.publications, 'publication');
-            setupList(baton.subListNode.empty(), baton.subscriptions, 'subscription');
+            if (capabilities.has('subscription')) {
+                this.$el.append(
+                    // sub
+                    both ? $('<h2 class="pane-headline">').text(gt('Subscriptions')) : $(),
+                    baton.subListNode = $('<ul class="subscriptions">')
+                );
+                setupList(baton.subListNode.empty(), baton.subscriptions, 'subscription');
+            }
+
         }
     });
 });
