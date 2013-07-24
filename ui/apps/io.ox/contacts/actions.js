@@ -261,7 +261,8 @@ define('io.ox/contacts/actions',
 
     new Action('io.ox/contacts/actions/print', {
         requires: function (e) {
-            return e.collection.has('some', 'read') && _.device('!small');
+            console.log('Ey', e.context);
+            return e.collection.has('some', 'read') && _.device('!small') && !e.context.mark_as_distributionlist;
         },
         multiple: function (list, baton) {
             print.request('io.ox/contacts/print', list);
