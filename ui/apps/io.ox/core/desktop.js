@@ -1261,45 +1261,6 @@ define("io.ox/core/desktop",
             if (opt.search) {
                 // search
                 var triggerSearch = function (query) {
-                        // yeah, waiting for the one who reports this :)
-                        if (/^porn$/i.test(query)) {
-                            $("body").append(
-                                $('<div class="abs">')
-                                .css({ backgroundColor: "black", zIndex: 65000 })
-                                .append(
-                                    $('<div class="abs">')
-                                    .css({ top: "25%", textAlign: "center", color: "#aaa", fontWeight: "bold", fontSize: "50px", fontFamily: "'Comic Sans MS', Arial" })
-                                    .html('<span style="color: rgb(230,110,110)">YOU</span> SEARCHED FOR WHAT?')
-                                )
-                                .append(
-                                    $('<div class="abs">')
-                                    .css({ top: "50%", width: "670px", textAlign: "center", margin: "0 auto 0 auto", color: "#666" })
-                                    .html(
-                                        '<div style="font-size: 26px">WARNING: This website contains explicit adult material.</div>' +
-                                        '<div style="font-size: 18px">You may only enter this Website if you are at least 18 years of age, or at least the age of majority in the jurisdiction where you reside or from which you access this Website. If you do not meet these requirements, then you do not have permission to use the Website.</div>'
-                                    )
-                                )
-                                .click(function () { $(this).remove(); })
-                            );
-                        } else if (/^use the force$/i.test(query) && currentWindow) {
-                            // star wars!
-                            currentWindow.nodes.outer.css({
-                                webkitTransitionDuration: "2s",
-                                webkitTransform: "perspective(500px) rotate3d(1, 0, 0, 45deg)",
-                                top: "-150px"
-                            });
-                            // no search here
-                            return;
-                        } else if (/^no star wars$/i.test(query) && currentWindow) {
-                            // star wars!
-                            currentWindow.nodes.outer.css({
-                                webkitTransitionDuration: "1s",
-                                webkitTransform: "perspective(0px) rotate3d(1, 0, 0, 0deg)",
-                                top: ""
-                            });
-                            // no search here
-                            return;
-                        }
                         win.trigger("search", query);
                     };
 
