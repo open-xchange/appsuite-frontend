@@ -462,7 +462,7 @@ define('io.ox/office/preview/view/view',
             // between two pages is on top of the screen. Keep the size of this
             // gap constant independent from the page size (a negative integer
             // value in 'centerPageRatio' indicates the page gap mode).
-            // (2) If centerPagePosition.top is zero or negative, the upper
+            // (2) If 'centerPagePosition.top' is zero or negative, the upper
             // part of the page is hidden, and the ratio between hidden and
             // visible area of the page will be restored after changing the
             // page size (a positive quotient in 'centerPageRatio' indicates
@@ -487,7 +487,7 @@ define('io.ox/office/preview/view/view',
 
             // restore the correct scroll position with the new page sizes
             centerPagePosition = Utils.getChildNodePositionInNode(appPaneNode, pageNodes[centerPage - 1]);
-            appPaneNode.scrollTop(centerPagePosition.top + (centerPageRatio < 0) ? centerPageRatio : Math.round(centerPagePosition.height * centerPageRatio));
+            appPaneNode.scrollTop(centerPagePosition.top + ((centerPageRatio < 0) ? centerPageRatio : Math.round(centerPagePosition.height * centerPageRatio)));
         }
 
         /**
