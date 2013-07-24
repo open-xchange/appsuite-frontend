@@ -865,8 +865,19 @@ define('io.ox/mail/view-detail',
         id: 'header',
         draw: function (baton) {
             var header = $('<header>');
+            function setHeaderWidth() {
+                var wW = $(window).width();
+                return wW - 25;
+            }
             if (_.device('smartphone')) {
+                $(window)
+                    .off('orientationchange.mailheader')
+                    .on('orientationchange.mailheader', function () {
+                    header.css('max-width', setHeaderWidth());
+                });
                 header.addClass('details-collapsed');
+                header.css('max-width', setHeaderWidth());
+
             }
             ext.point('io.ox/mail/detail/header').invoke('draw', header, baton);
             this.append(header);
