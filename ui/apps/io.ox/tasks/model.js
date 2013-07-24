@@ -95,12 +95,12 @@ define('io.ox/tasks/model', ['io.ox/tasks/api',
         id: 'start-date-before-end-date',
         validate: function (attributes) {
             if (attributes.start_date && attributes.end_date && attributes.end_date < attributes.start_date) {
-                this.add('start_date', gt('The start date must be before the end date.'));
+                //this.add('start_date', gt('The start date must be before the end date.')); // see Bug 27742
                 this.add('end_date', gt('The start date must be before the end date.'));
             }
         }
     });
-    
+
     ext.point('io.ox/tasks/model/validation').extend({
         id: 'Actual-costs-out-of-limits',
         validate: function (attributes) {
