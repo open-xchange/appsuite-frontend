@@ -1417,8 +1417,11 @@ define("io.ox/core/desktop",
                     change: function (e) {
                         e.stopPropagation();
                         win.search.query = win.search.getQuery();
+                        win.search.options = JSON.stringify(win.search.getOptions());
+                        var changed = win.search.query !== win.search.previous || win.search.options !== win.search.optionsprev;
                         // trigger search?
-                        if (win.search.query !== '' && win.search.query !== win.search.previous) {
+                        if (win.search.query !== '' && changed) {
+                            win.search.optionsprev = win.search.options;
                             triggerSearch(win.search.previous = win.search.query);
                         }
                         else if (win.search.query === '') {
