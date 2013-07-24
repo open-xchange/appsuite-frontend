@@ -53,7 +53,7 @@ define('io.ox/core/about/about',
                 .build(function () {
                     this.getHeader().append(
                         $('<h4>').append(
-                            _.device('!touch') && !cap.has("boring") ?
+                            _.device('!touch') && cap.has('eggs') ?
                                 $('<span class="pull-right" style="color: rgba(0, 0, 0, 0.3); cursor: pointer;">').html('&pi;')
                                 .on('click', { popup: this }, click) : [],
                             $.txt(gt.noI18n(data.productName))
