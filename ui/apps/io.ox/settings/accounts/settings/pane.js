@@ -65,6 +65,52 @@ define('io.ox/settings/accounts/settings/pane',
             });
         },
 
+        drawItem = function (o) {
+            return $('<div class="selectable deletable-item">').attr({
+                'data-id': o.id,
+                'data-accounttype': o.accountType
+            }).append(
+                $('<div class="pull-right">').append(
+                    $('<a class="action" tabindex="3" data-action="edit">').text(gt('Edit')),
+                    $('<a class="close">').attr({
+                        'data-action': 'delete',
+                        title: gt('Delete'),
+                        tabindex: 3
+                    }).append($('<i class="icon-trash">'))
+                ),
+                $('<span data-property="displayName" class="list-title">')
+            );
+        },
+
+        drawAddButton = function () {
+            return $('<div class="controls">').append(
+                $('<div class="btn-group pull-right">').append(
+                    $('<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#" aria-haspopup="true" tabindex="1">').append(
+                        $.txt(gt('Add account')), $.txt(' '),
+                        $('<span class="caret">')
+                    ),
+                    $('<ul class="dropdown-menu" role="menu">')
+                )
+            );
+        },
+
+        drawRecoveryButton = function () {
+            return $('<button class="btn btn-danger" data-action="recover">').text(gt("Recovery Dialog")).on("click", function () {
+                ox.load(["io.ox/keychain/secretRecoveryDialog"]).done(function (srd) {
+                    srd.show();
+                });
+            });
+        },
+
+        drawPane = function () {
+            return $('<div class="io-ox-accounts-settings">').append(
+                $('<h1 class="no-margin">').text(gt('Mail and Social Accounts')),
+                drawAddButton(),
+                $('<ul class="settings-list">'),
+                drawRecoveryButton()
+            );
+        },
+
         AccountSelectView = Backbone.View.extend({
 
             _modelBinder: undefined,
