@@ -15,7 +15,7 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions", 'gettext!io.ox/bac
 
     // var regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
-    var regEmail = /\@/; // See also io.ox/mail/accounts/model.js
+    var regEmail = /\@\S/; // See also io.ox/mail/accounts/model.js
 
     var formats = {
         string: function (val) {

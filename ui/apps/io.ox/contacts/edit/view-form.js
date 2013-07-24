@@ -37,7 +37,7 @@ define('io.ox/contacts/edit/view-form', [
             personal: ['title', 'first_name', 'last_name', /*'display_name',*/ // yep, end-users don't understand it
                          'second_name', 'suffix', 'nickname', 'birthday',
                          'marital_status', 'number_of_children', 'spouse_name',
-                         'anniversary', 'url'],
+                         'anniversary', 'url', 'private_flag'],
             job: ['profession', 'position', 'department', 'company', 'room_number',
                     'employee_type', 'number_of_employees', 'sales_volume', 'tax_id',
                     'commercial_register', 'branches', 'business_category', 'info',
@@ -61,7 +61,6 @@ define('io.ox/contacts/edit/view-form', [
                             'state_other', 'country_other'],
 
             comment: ['note'],
-            private_flag: ['private_flag'],
 
             userfields: ['userfield01', 'userfield02', 'userfield03', 'userfield04', 'userfield05',
                         'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10',
@@ -78,12 +77,12 @@ define('io.ox/contacts/edit/view-form', [
                'telephone_callback', 'telephone_ip',
                // job
                'number_of_employees', 'sales_volume', 'tax_id', 'commercial_register', 'branches',
-               'business_category', 'info', 'manager_name', 'assistant_name', 'employee_type',
+               'business_category', 'info', 'manager_name', 'assistant_name', 'employee_type'
                // optional
-               'userfield04', 'userfield05',
-               'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10',
-               'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15',
-               'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20'
+               // 'userfield04', 'userfield05',
+               // 'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10',
+               // 'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15',
+               // 'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20'
                ],
 
         alwaysVisible: [
@@ -92,7 +91,7 @@ define('io.ox/contacts/edit/view-form', [
             'email1', 'email2', 'instant_messenger1',
             'cellular_telephone1', 'telephone_home1',
             'street_home', 'postal_code_home', 'city_home', 'state_home', 'country_home',
-            'private_flag', 'note',
+            'note',
             'attachments_list'
         ],
 
@@ -112,7 +111,6 @@ define('io.ox/contacts/edit/view-form', [
             job: gt('Job description'),
             comment: gt('Comment'),
             userfields: gt('User fields'),
-            private_flag: gt('Private'),
             attachments: gt('Attachments')
         }
     };
@@ -205,7 +203,7 @@ define('io.ox/contacts/edit/view-form', [
             var node = $(this).closest('.edit-contact');
 
             // update "has-content" class
-            node.find('.field input').each(function () {
+            node.find('.field input[type="text"]').each(function () {
                 var input = $(this),
                     field = input.closest('.field'),
                     hasContent = $.trim(input.val()) !== '';
@@ -217,6 +215,20 @@ define('io.ox/contacts/edit/view-form', [
             var isCompact = node.hasClass('compact'),
                 label = isCompact ? gt('Extended view') : gt('Compact view'),
                 icon = isCompact ? 'icon-expand-alt' : 'icon-collapse-alt';
+
+            // update hidden
+            node.find('.block').each(function () {
+                var block = $(this),
+                    hidden = isCompact && block.children('p.has-content, p.always').length === 0;
+                block.removeClass('odd even hidden');
+                if (hidden) block.addClass('hidden');
+            });
+
+            // update odd/even
+            node.find('.block:not(.hidden)').each(function (index) {
+                var block = $(this);
+                block.addClass(index % 2 ? 'even' : 'odd');
+            });
 
             node.find('.toggle-compact')
                 .find('i').attr('class', icon).end()
@@ -352,13 +364,26 @@ define('io.ox/contacts/edit/view-form', [
                 $('<label class="input">').append(
                     $.txt(options.label), $('<br>'),
                     new mini.InputView({ name: options.field, model: model }).render().$el
-                )
-            );
+                ),
+                $('<div class="inline-error">')
+            )
+            .on({
+                invalid: function (e, message, error) {
+                    $(this).addClass('error')
+                        .find('.inline-error').text(message).end()
+                        .find('input').focus();
+                },
+                valid: function () {
+                    $(this).removeClass('error')
+                        .find('.inline-error').text('');
+                }
+            });
         }
 
         function drawTextarea(options, model) {
             this.append(
                 $('<label>').append(
+                    $.txt('\u00A0'), $('<br>'),
                     new mini.TextView({ name: options.field, model: model }).render().$el
                 )
             );
@@ -437,13 +462,19 @@ define('io.ox/contacts/edit/view-form', [
                         .append($('<legend>').text(meta.i18n[id]));
 
                     if (id === 'attachments') block.addClass('double-block');
+                    if (id === 'userfields') block.addClass('double-block two-columns');
 
                     // draw fields inside block
                     ext.point(ref + '/edit/' + id).invoke('draw', block, baton);
 
-                    // only add if block contains at least one paragraph with content
-                    if (block.children('p.has-content, p.always').length > 0) {
-                        this.append(block);
+                    this.append(block);
+
+                    // hide block if block contains no paragraph with content
+                    if (block.children('p.has-content, p.always').length === 0) {
+                        block.addClass('hidden');
+                    } else {
+                        var position = this.find('.block:not(.hidden)').length;
+                        block.addClass(position % 2 ? 'odd' : 'even');
                     }
                 }
             });

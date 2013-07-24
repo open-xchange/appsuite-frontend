@@ -218,6 +218,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             if (_.device('smartphone')) {
                 $('[data-app-name="io.ox/portal"]:visible').addClass('notifications-open');
             }
+            $('#io-ox-notifications').find('[tabindex="1"]').focus();
             $('#io-ox-notifications').addClass('active');
             $('#io-ox-notifications-overlay').addClass('active');
             $(document).on('keydown.notification', $.proxy(function (e) {
@@ -235,7 +236,6 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             $('#io-ox-notifications').removeClass('active');
             if (_.device('!smartphone')) {
                 $('#io-ox-notifications-overlay').empty().removeClass('active');
-                $('#io-ox-notifications-icon > a').focus();
             } else {
                 $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
             }

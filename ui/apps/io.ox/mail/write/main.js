@@ -189,22 +189,38 @@ define('io.ox/mail/write/main',
             return $.trim(text).replace(/\r\n/g, '\n');
         }
 
+        app.getSignatures = function () {
+            return view.signatures;
+        };
+
+        app.isSignature = function (text) {
+
+            var signatures = _(this.getSignatures()).map(function (signature) {
+                return String(signature.content || '').replace(/(\r\n|\n|\r)/gm, '');
+            });
+
+            return _(signatures).indexOf(text) > - 1;
+        };
+
         app.setSignature = function (e) {
 
             var index = e.data.index,
                 signature, text,
                 ed = this.getEditor(),
-                isHTML = !!ed.removeBySelector,
-                modified = isHTML ? $('<root></root>').append(ed.getContent()).find('p.io-ox-signature').text() !== currentSignature.replace(/(\r\n|\n|\r)/gm, '') : false;
+                isHTML = !!ed.find;
 
             // remove current signature from editor
             if (isHTML) {
-                //only remove class if user modified content of signature paragraph block
-                if (modified) {
-                    ed.removeClassBySelector('.io-ox-signature', 'io-ox-signature');
-                } else {
-                    ed.removeBySelector('.io-ox-signature');
-                }
+                ed.find('.io-ox-signature').each(function () {
+                    var node = $(this), text = node.text();
+                    if (app.isSignature(text)) {
+                        // remove entire node
+                        node.remove();
+                    } else {
+                        // was modified so remove class
+                        node.removeClass('io-ox-signature');
+                    }
+                });
             } else {
                 if (currentSignature) {
                     ed.replaceParagraph(currentSignature, '');
@@ -217,7 +233,6 @@ define('io.ox/mail/write/main',
                 signature = view.signatures[index];
                 text = trimSignature(signature.content);
                 if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
-
                 if (isHTML) {
                     if (signature.misc && signature.misc.insertion === 'below') {
                         ed.appendContent('<p class="io-ox-signature">' + ed.ln2br(text) + '</p>');

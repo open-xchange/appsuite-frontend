@@ -309,7 +309,7 @@ define('io.ox/contacts/model',
         addressHome: gt('Address Home'),
         addressBusiness: gt('Address Business'),
         addressOther: gt('Address Other'),
-        private_flag: gt('Private'),
+        private_flag: gt('This contact is private and cannot be shared'),
         // don't think we show this anywhere so we don't use gt here not to nerf translators
         number_of_links: 'Number of links',
         number_of_images: 'Number of images',

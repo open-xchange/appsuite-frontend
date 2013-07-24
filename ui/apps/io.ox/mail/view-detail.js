@@ -335,11 +335,13 @@ define('io.ox/mail/view-detail',
 
     var that = {
 
-        getContent: function (data) {
+        getContent: function (data, options) {
 
             if (!data || !data.attachments) {
                 return { content: $(), isLarge: false, type: 'text/plain' };
             }
+
+            options = options || {};
 
             var att = data.attachments, source = '', type = 'text/plain',
                 isHTML = false, isLarge = false, content = '';
@@ -565,7 +567,7 @@ define('io.ox/mail/view-detail',
                         .filter('[href^="mailto:"]').on('click', mailTo);
                 });
 
-                if (!isLarge) {
+                if (!isLarge && options.blockquote !== 'expand') {
                     // blockquotes (top-level only)
                     content.find('blockquote').not(content.find('blockquote blockquote')).each(function () {
                         var node = $(this);
@@ -743,6 +745,7 @@ define('io.ox/mail/view-detail',
                     list = baton.data;
 
                 try {
+
                     // draw inline links for whole thread
                     if (list.length > 1) {
                         inline = $('<div class="thread-inline-actions">');
@@ -754,11 +757,10 @@ define('io.ox/mail/view-detail',
                             node.parent().parent().find('.rightside-inline-actions').empty().append(inline);
                         }
 
-
                         // replace delete action with one excluding the sent folder
                         scrubThreadDelete(inline.find('[data-action=delete]'));
-
                     }
+
                     // loop over thread - use fragment to be fast for tons of mails
                     for (i = 0; (obj = list[i]); i++) {
                         if (i >= top && i <= bottom) {
@@ -1491,7 +1493,7 @@ define('io.ox/mail/view-detail',
         id: 'content',
         draw: function (baton) {
 
-            var data = baton.data, content = that.getContent(data);
+            var data = baton.data, content = that.getContent(data, baton.options);
 
             this.append(
                 $('<article>').attr({

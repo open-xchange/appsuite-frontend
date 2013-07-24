@@ -352,6 +352,9 @@
         color: @gray;
         .transition(color 0.2s linear);
 
+        /* http://stackoverflow.com/questions/7947385/hovering-over-css-transition-in-safari-lightens-certain-font-color */
+        -webkit-transform: translateZ(0);
+
         &.icon-spin {
             color: #fff;
         }
@@ -1536,7 +1539,7 @@ span.hint {
 }
 
 nav.io-ox-inline-links + header {
-    position: relative;
+    position: static; /* see Bug 27736: dropdowns; */
     z-index: 2;
 }
 

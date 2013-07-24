@@ -84,11 +84,21 @@ define('io.ox/settings/accounts/settings/pane',
         },
 
         drawRecoveryButton = function () {
-            return $('<button class="btn btn-danger" data-action="recover">').text(gt("Recovery Dialog")).on("click", function () {
-                ox.load(["io.ox/keychain/secretRecoveryDialog"]).done(function (srd) {
-                    srd.show();
-                });
-            });
+            return $('<div class="hint">').append(
+                $.txt(
+                    gt('For security reasons, all account passwords are encrypted with your primary account password. ' +
+                        'If you change your primary password, your external accounts might stop working. In this case, ' +
+                        'you can use your old password to recovery all accounts:')
+                ),
+                $.txt(' '),
+                $('<a href="#" data-action="recover">').text(gt('Recover passwords'))
+                .on('click', function (e) {
+                    e.preventDefault();
+                    ox.load(['io.ox/keychain/secretRecoveryDialog']).done(function (srd) {
+                        srd.show();
+                    });
+                })
+            );
         },
 
         drawPane = function () {

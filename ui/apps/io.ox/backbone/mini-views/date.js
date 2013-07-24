@@ -49,6 +49,7 @@ define('io.ox/backbone/mini-views/date',
 
     var DateView = AbstractView.extend({
 
+        className: 'native-date-picker',
         events: { 'change select': 'onChange' },
 
         onChange: function () {

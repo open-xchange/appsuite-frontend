@@ -72,7 +72,7 @@ define('io.ox/mail/folderview-extensions',
                 $('<li>').append(
                     $('<a href="#" data-action="markfolderread" tabindex="1" role="menuitem">')
                     .text(gt('Mark all mails as read'))
-                    .on('click', { folder: baton.app.folder.get() }, markMailFolderRead)
+                    .on('click', { folder: baton.data.id }, markMailFolderRead)
                     .addClass(baton.data.unread === 0 ? 'disabled' : undefined)
                 )
             );
@@ -82,9 +82,9 @@ define('io.ox/mail/folderview-extensions',
     function expungeFolder(e) {
         e.preventDefault();
         // get current folder id
-        var baton = e.data.baton, id = baton.app.folder.get();
+        var folder = e.data.folder;
         notifications.yell('busy', gt('Cleaning up... This may take a few seconds.'));
-        mailAPI.expunge(id).done(function () {
+        mailAPI.expunge(folder).done(function () {
             notifications.yell('success', gt('The folder has been cleaned up.'));
         });
     }
@@ -96,7 +96,7 @@ define('io.ox/mail/folderview-extensions',
             var link = $('<a href="#" data-action="expunge" role="menuitem">').text(gt('Clean up'));
             this.append($('<li>').append(link));
             if (folderAPI.can('delete', baton.data)) {
-                link.attr('tabindex', 1).on('click', { baton: baton }, expungeFolder);
+                link.attr('tabindex', 1).on('click', { folder: baton.data.id }, expungeFolder);
             } else {
                 link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
             }

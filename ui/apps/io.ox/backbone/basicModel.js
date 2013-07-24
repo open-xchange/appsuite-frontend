@@ -14,6 +14,7 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
     "use strict";
 
     function ValidationErrors() {
+
         this.errors = {};
 
         this.add = function (attribute, error) {
@@ -62,11 +63,11 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
             }
             return ext.point(this.ref + subpath);
         },
+
         validate: function (attributes, evt, options) {
             options = options || {};
             var self = this,
                 errors = new ValidationErrors();
-
             attributes = attributes || this.toJSON();
             this.point("validation").invoke("validate", errors, attributes, errors, this);
             if (options.isSave) {

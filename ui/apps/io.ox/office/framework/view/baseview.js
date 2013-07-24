@@ -208,8 +208,8 @@ define('io.ox/office/framework/view/baseview',
                 }
             }
 
-            // do nothing if refreshing is currently locked, or the window is hidden
-            if ((layoutLocks > 0) || !app.getWindow().state.visible) { return; }
+            // do nothing if refreshing is currently locked, or the window is hidden, or import still running
+            if ((layoutLocks > 0) || viewHidden || !app.getWindow().state.visible || !app.isImportFinished()) { return; }
 
             // update fixed view panes
             _(fixedPanes).each(updatePane);
