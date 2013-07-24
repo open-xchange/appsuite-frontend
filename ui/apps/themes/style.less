@@ -2696,6 +2696,11 @@ input.flat-input {
             &:last-child {
                 border-bottom-width: 0;
             }
+
+            [class^="icon-"], [class*=" icon-"] {
+                line-height: inherit;
+                width: 30px;
+            }
         }
         li > a {
              .ellipsis;
@@ -2754,7 +2759,16 @@ input.flat-input {
             color: #aaa;
         }
     }
+}
 
+@media (max-width: 380px) {
+    .window-search .dropdown-menu {
+        left: auto;
+        right: 0;
+    }
+    .window-search .margin-right {
+        margin: 0px;
+    }
 }
 
 .slidedown {
