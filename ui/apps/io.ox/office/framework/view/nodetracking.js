@@ -71,6 +71,34 @@ define('io.ox/office/framework/view/nodetracking',
     // private global functions ===============================================
 
     /**
+     * Registers all event handlers needed to detect that tracking has been
+     * started at the specified nodes.
+     */
+    function registerStartTrackingHandlers(nodes, options) {
+
+        var // jQuery selector to filter for descendant nodes
+            selector = Utils.getStringOption(options, 'selector'),
+            // which source events are supported
+            sourceEvents = Utils.getStringOption(options, 'sourceEvents', 'all');
+
+        // register supported events
+        if ((sourceEvents === 'mouse') || (sourceEvents === 'all')) {
+            nodes.on(MOUSE_START_EVENT_MAP, selector);
+        }
+        if ((sourceEvents === 'touch') || (sourceEvents === 'all')) {
+            nodes.on(TOUCH_START_EVENT_MAP, selector);
+        }
+    }
+
+    /**
+     * Unregisters all event handlers needed to detect that tracking has been
+     * started at the specified nodes.
+     */
+    function unregisterStartTrackingHandlers(nodes) {
+        nodes.off(MOUSE_START_EVENT_MAP).off(TOUCH_START_EVENT_MAP);
+    }
+
+    /**
      * Triggers the specified event at the current tracking node. Always
      * inserts the properties 'startX' and 'startY' into the event object.
      *
@@ -256,7 +284,7 @@ define('io.ox/office/framework/view/nodetracking',
 
         // register event listeners
         $(document).on(DOCUMENT_EVENT_MAP);
-        // attach deferred events that would otherwise interfere with tracking
+        // Attach deferred events that would otherwise interfere with tracking
         // start event (e.g. another 'mousedown' event or a 'focusout' event
         // that causes canceling tracking otherwise). Check that tracking is
         // still active, a 'mouseup' event may be triggered before the deferred
@@ -268,6 +296,10 @@ define('io.ox/office/framework/view/nodetracking',
             }
         });
 
+        // unregister event handlers at tracking node, this helps to work with
+        // Chrome's touch emulation (sends touch and mouse events simultaneously)
+        unregisterStartTrackingHandlers(trackingNode);
+
         // initialize auto-repetition and auto-scrolling
         initAutoMode();
     }
@@ -277,6 +309,8 @@ define('io.ox/office/framework/view/nodetracking',
      */
     function deinitTracking() {
         $(document).off(DOCUMENT_EVENT_MAP).off(DEFERRED_EVENT_MAP);
+        // register event handlers at tracking node (removed in initTracking())
+        registerStartTrackingHandlers(trackingNode, trackingNode.data('tracking-options'));
         trackingNode = null;
         overlayNode.detach();
         deinitAutoMode();
@@ -591,22 +625,11 @@ define('io.ox/office/framework/view/nodetracking',
      *  A reference to this collection.
      */
     $.fn.enableTracking = function (options) {
-
-        var // jQuery selector to filter for descendant nodes
-            selector = Utils.getStringOption(options, 'selector'),
-            // which source events are supported
-            sourceEvents = Utils.getStringOption(options, 'sourceEvents', 'all');
-
         // prevent multiple registration of the event handlers
-        this.off(MOUSE_START_EVENT_MAP).off(TOUCH_START_EVENT_MAP);
-
-        // register supported events
-        if ((sourceEvents === 'mouse') || (sourceEvents === 'all')) {
-            this.on(MOUSE_START_EVENT_MAP, selector);
-        }
-        if ((sourceEvents === 'touch') || (sourceEvents === 'all')) {
-            this.on(TOUCH_START_EVENT_MAP, selector);
-        }
+        unregisterStartTrackingHandlers(this);
+        // register supported events that initiate tracking
+        registerStartTrackingHandlers(this, options);
+        // store options for later usage
         return this.data('tracking-options', options);
     };
 
@@ -623,7 +646,8 @@ define('io.ox/office/framework/view/nodetracking',
         if (trackingNode && (this.filter(trackingNode).length > 0)) {
             cancelTracking();
         }
-        return this.off(MOUSE_START_EVENT_MAP).off(TOUCH_START_EVENT_MAP);
+        unregisterStartTrackingHandlers(this);
+        return this;
     };
 
     /**
