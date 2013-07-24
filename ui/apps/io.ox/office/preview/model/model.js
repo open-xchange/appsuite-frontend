@@ -148,7 +148,6 @@ define('io.ox/office/preview/model/model',
          *  mark-up.
          */
         function loadSvgMarkup(page, priority) {
-
             return app.sendPreviewRequest({
                 params: {
                     convert_format: 'html',

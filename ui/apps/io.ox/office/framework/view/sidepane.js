@@ -94,7 +94,7 @@ define('io.ox/office/framework/view/sidepane',
          * Updates the side pane according to the current browser window size.
          */
         function refreshLayout() {
-            if (!self.isVisible()) { return; }
+            if (!self.isReallyVisible()) { return; }
 
             // update top/bottom positions of scrollable container in case the fixed tool boxes have changed
             scrollableNode.css({ top: fixedTopNode.height() - 1, bottom: fixedBottomNode.height() - 1 });

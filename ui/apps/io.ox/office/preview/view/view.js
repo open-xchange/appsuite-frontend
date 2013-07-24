@@ -165,6 +165,9 @@ define('io.ox/office/preview/view/view',
             self.addPane(bottomOverlayPane = new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
                 .addViewComponent(bottomToolBox = new ToolBox(app))
             );
+
+            // initially, hide the side pane, and show the overlay tool bars
+            self.toggleSidePane(false);
         }
 
         function deferredInitHandler() {
@@ -204,9 +207,6 @@ define('io.ox/office/preview/view/view',
                     .addGroup('zoom/type', new PreviewControls.ZoomTypeChooser())
                     .addGroup('zoom/inc',  new Button(PreviewControls.ZOOMIN_OPTIONS));
             }
-
-            // initially, hide the side pane, and show the overlay tool bars
-            self.toggleSidePane(false);
 
             // set focus to application pane, and update the view
             self.on('refresh:layout', refreshLayout);
@@ -452,10 +452,23 @@ define('io.ox/office/preview/view/view',
                 // current content margin according to browser window size
                 contentMargin = ((window.innerWidth <= 1024) || (window.innerHeight <= 640)) ? 0 : 30;
 
-            // restrict center page to valid page numbers, calculate page ration
+            // restrict center page to valid page numbers, get position of the center page
             centerPage = Utils.minMax(centerPage, 1, model.getPageCount());
             centerPagePosition = Utils.getChildNodePositionInNode(appPaneNode, pageNodes[centerPage - 1], { visibleArea: true });
-            centerPageRatio = (centerPagePosition.height > 0) ? (-centerPagePosition.top / centerPagePosition.height) : 0;
+
+            // Calculation of the page ratio
+            // -----------------------------
+            // (1) If 'centerPagePosition.top' is positive, currently the gap
+            // between two pages is on top of the screen. Keep the size of this
+            // gap constant independent from the page size (a negative integer
+            // value in 'centerPageRatio' indicates the page gap mode).
+            // (2) If centerPagePosition.top is zero or negative, the upper
+            // part of the page is hidden, and the ratio between hidden and
+            // visible area of the page will be restored after changing the
+            // page size (a positive quotient in 'centerPageRatio' indicates
+            // this case).
+            centerPageRatio = (centerPagePosition.top > 0) ? -centerPagePosition.top :
+                (centerPagePosition.height > 0) ? (-centerPagePosition.top / centerPagePosition.height) : 0;
 
             // set the current content margin between application pane border and page nodes
             self.setContentMargin(contentMargin);
@@ -464,13 +477,9 @@ define('io.ox/office/preview/view/view',
             availableSize.width = appPaneNode[0].clientWidth - 2 * contentMargin;
             availableSize.height = appPaneNode[0].clientHeight - 2 * contentMargin;
 
-            // process all page nodes
+            // process all page nodes, update 'current zoom factor' for the selected page
             pageNodes.each(function (index) {
-
-                var // update the zoom of the page node
-                    pageZoomFactor = updatePageZoom($(this));
-
-                // set as 'current zoom factor' for the selected page
+                var pageZoomFactor = updatePageZoom($(this));
                 if (index + 1 === selectedPage) {
                     zoomFactor = pageZoomFactor;
                 }
@@ -478,7 +487,7 @@ define('io.ox/office/preview/view/view',
 
             // restore the correct scroll position with the new page sizes
             centerPagePosition = Utils.getChildNodePositionInNode(appPaneNode, pageNodes[centerPage - 1]);
-            appPaneNode.scrollTop(centerPagePosition.top + Math.round(centerPagePosition.height * centerPageRatio));
+            appPaneNode.scrollTop(centerPagePosition.top + (centerPageRatio < 0) ? centerPageRatio : Math.round(centerPagePosition.height * centerPageRatio));
         }
 
         /**
