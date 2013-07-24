@@ -196,8 +196,10 @@ define('io.ox/mail/api',
 
             applyAutoRead: function (obj) {
 
+                if (!_.isObject(obj)) return;
+
                 // looks like attachment?
-                if (obj && obj.msgref) return;
+                if ('parent' in obj || 'msgref' in obj) return;
 
                 var cid = getCID(obj);
                 if (unseen[cid] === true) {
