@@ -13,7 +13,7 @@
 
 define("io.ox/core/tk/dropdown-options",
     ['io.ox/core/event',
-     'gettext!iopt.ox/core'], function (Events, gt) {
+     'gettext!io.ox/core'], function (Events, gt) {
 
     'use strict';
 
