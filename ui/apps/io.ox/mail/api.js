@@ -969,27 +969,31 @@ define('io.ox/mail/api',
      * @return {deferred}
      */
     api.copy = function (list, targetFolderId) {
+
         var response;
-        //targetFolderId
+
         return update(list, { folder_id: targetFolderId }, 'copy')
-            .pipe(function (resp) {
+            .then(function (resp) {
                 response = resp.response;
-                clearCaches(list, targetFolderId);
-                return resp.list;
+                return (clearCaches(list, targetFolderId)()).then(function () {
+                    return resp.list;
+                });
             })
-            .pipe(refreshAll)
-            .pipe(function () {
+            .then(function () {
+
                 var errorText;
-                for (var i = 0; i < response.length; i++) {//look if something went wrong
+                for (var i = 0; i < response.length; i++) { // look if something went wrong
                     if (response[i].error) {
                         errorText = response[i].error.error;
                         break;
                     }
                 }
+
+                api.trigger('copy', list, targetFolderId);
+                console.log('reload folder', targetFolderId);
                 folderAPI.reload(targetFolderId, list);
-                if (errorText) {
-                    return errorText;
-                }
+
+                if (errorText) return errorText;
             });
     };
 
