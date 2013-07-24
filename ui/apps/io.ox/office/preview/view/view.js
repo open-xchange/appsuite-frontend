@@ -475,7 +475,7 @@ define('io.ox/office/preview/view/view',
 
             // the available inner size in the application pane
             availableSize.width = appPaneNode[0].clientWidth - 2 * contentMargin;
-            availableSize.height = appPaneNode[0].clientHeight - 2 * contentMargin;
+            availableSize.height = ((zoomType === 'page') ? appPaneNode.height() : appPaneNode[0].clientHeight) - 2 * contentMargin;
 
             // process all page nodes, update 'current zoom factor' for the selected page
             pageNodes.each(function (index) {
