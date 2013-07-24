@@ -1172,10 +1172,13 @@ define("io.ox/core/desktop",
                     },
 
                     getOptions: function () {
-                        var tmp = {};
-                        _(self.nodes.search.find('form').serializeArray()).each(function (element) {
-                            tmp[element.name] = $.trim(element.value);
-                        });
+                        var tmp = {}, data = self.nodes.search.find('.search-options').data();
+                        if (data && data.options) {
+                            _.each(data.options, function (item) {
+                                if (item.checked !== undefined)
+                                    tmp[item.name] = item.checked ? 'on' : 'off';
+                            });
+                        }
                         return tmp;
                     },
 

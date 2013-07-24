@@ -19,6 +19,7 @@ define("io.ox/contacts/main",
      "io.ox/core/tk/vgrid",
      "io.ox/help/hints",
      "io.ox/contacts/view-detail",
+     'io.ox/core/tk/dropdown-options',
      "io.ox/core/extensions",
      "io.ox/core/extPatterns/actions",
      "io.ox/core/commons",
@@ -26,7 +27,7 @@ define("io.ox/contacts/main",
      "settings!io.ox/contacts",
      "io.ox/core/api/folder",
      "less!io.ox/contacts/style.less"
-    ], function (util, api, VGrid, hints, viewDetail, ext, actions, commons, gt, settings, folderAPI) {
+    ], function (util, api, VGrid, hints, viewDetail, dropdownOptions, ext, actions, commons, gt, settings, folderAPI) {
 
     "use strict";
 
@@ -344,18 +345,35 @@ define("io.ox/contacts/main",
             addresses: true
         });
 
+        var translations = { names: gt('Names and e-mail addresses'), phones: gt('Phone numbers'), addresses: gt('Addresses')},
+            checkboxes = ext.point('io.ox/contacts/search/checkboxes').options(),
+            defaults = ext.point('io.ox/contacts/search/defaults').options(),
+            data = {}, button;
 
-        win.nodes.search.find('.input-append').append(
-            _(ext.point('io.ox/contacts/search/checkboxes').options()).map(function (flag, name) {
-                var defaults = ext.point('io.ox/contacts/search/defaults').options();
-                return flag === true ?
-                    $('<label class="checkbox margin-right">').append(
-                        $('<input type="checkbox" value="on">').attr({ name: name, checked: defaults[name] ? 'checked' : null }),
-                        $.txt({ names: gt('Names and e-mail addresses'), phones: gt('Phone numbers'), addresses: gt('Addresses')}[name])
-                    ) :
-                    $();
-            })
-        );
+        //normalise data
+        _(checkboxes).each(function (flag, name) {
+            if (flag === true) {
+                data[name] = {
+                    name: name,
+                    label: translations[name] || name,
+                    checked: defaults[name] || false
+                };
+            }
+        });
+
+        //add dropdown button
+        button = $('<button type="button" data-action="search-options" class="btn fixed-btn search-options" aria-hidden="true">')
+                .append('<i class="icon-gear">');
+        win.nodes.search.find('.search-query-container').after(button);
+
+        //add dropdown menue
+        var dropdown = dropdownOptions({
+            id: 'contacts.search',
+            anchor: button,
+            defaults: data,
+            settings: settings
+        });
+
 
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, right);
