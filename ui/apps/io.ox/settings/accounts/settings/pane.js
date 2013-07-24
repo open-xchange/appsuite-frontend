@@ -83,11 +83,20 @@ define('io.ox/settings/accounts/settings/pane',
             );
         },
 
+        drawRecoveryButton = function () {
+            return $('<button class="btn btn-danger" data-action="recover">').text(gt("Recovery Dialog")).on("click", function () {
+                ox.load(["io.ox/keychain/secretRecoveryDialog"]).done(function (srd) {
+                    srd.show();
+                });
+            });
+        },
+
         drawPane = function () {
             return $('<div class="io-ox-accounts-settings">').append(
                 $('<h1 class="no-margin">').text(gt('Mail and Social Accounts')),
                 drawAddButton(),
-                $('<ul class="settings-list">')
+                $('<ul class="settings-list">'),
+                drawRecoveryButton()
             );
         },
 
