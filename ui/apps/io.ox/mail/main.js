@@ -612,6 +612,20 @@ define('io.ox/mail/main',
                 });
             });
 
+            api.on('refresh.seen', function (e, list) {
+                var container = grid.getContainer();
+                _(list).each(function (obj) {
+                    container.find('.thread-summary-item[data-obj-id="' + _.cid(obj) + '"]').removeClass('unread');
+                });
+            });
+
+            api.on('refresh.unseen', function (e, list) {
+                var container = grid.getContainer();
+                _(list).each(function (obj) {
+                    container.find('.thread-summary-item[data-obj-id="' + _.cid(obj) + '"]').addClass('unread');
+                });
+            });
+
             isInOpenThreadSummary = function (obj) {
                 var cid = _.cid(obj),
                     index = grid.selection.getIndex(cid) + 1;

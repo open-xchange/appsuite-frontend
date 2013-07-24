@@ -101,7 +101,7 @@ define('io.ox/mail/view-grid-template',
                 if (fields.account) {
                     fields.account.text(util.getAccountName(data));
                 }
-                if (util.isUnseen(data) || api.tracker.isPartiallyUnseen(data)) {
+                if (api.tracker.isUnseen(data) || (('threadSize' in data) && api.tracker.isPartiallyUnseen(data))) {
                     this.addClass('unread');
                 }
                 if (util.byMyself(data)) {

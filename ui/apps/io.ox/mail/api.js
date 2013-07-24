@@ -180,8 +180,12 @@ define('io.ox/mail/api',
             },
 
             isUnseen: function (obj) {
-                var cid = getCID(obj);
-                return !!unseen[cid];
+                if (_.isObject(obj)) {
+                    var cid = getCID(obj);
+                    return cid in unseen ? !!unseen[cid] : (obj.flags & 32) !== 32;
+                } else {
+                    return !!unseen[obj];
+                }
             },
 
             getColorLabel: function (obj) {
@@ -803,6 +807,7 @@ define('io.ox/mail/api',
                 })
                 .done(function () {
                     api.trigger('refresh.list');
+                    api.trigger('refresh.unseen', list);
                 }),
                 // server update
                 update(list, { flags: api.FLAGS.SEEN, value: false }).done(function () {
@@ -840,6 +845,7 @@ define('io.ox/mail/api',
                 })
                 .done(function () {
                     api.trigger('refresh.list');
+                    api.trigger('refresh.seen', list);
                 }),
                 // server update
                 update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
