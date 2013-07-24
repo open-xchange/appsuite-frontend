@@ -121,7 +121,7 @@ define('io.ox/files/api',
         'ogm' : 'video/ogg',
         'webm': 'video/webm',
         // open office
-        'odc':  'application/vnd.oasis.opendocument.chart',
+        'odc': 'application/vnd.oasis.opendocument.chart',
         'odb': 'application/vnd.oasis.opendocument.database',
         'odf': 'application/vnd.oasis.opendocument.formula',
         'odg': 'application/vnd.oasis.opendocument.graphics',
@@ -154,6 +154,11 @@ define('io.ox/files/api',
         'pps': 'application/vnd.ms-powerpoint'
     };
 
+    var translate_mime = {
+        'application/vnd.ms-word': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'audio/mp3': 'audio/mpeg'
+    };
+
     var regFixContentType = /^application\/(force-download|binary|x-download|octet-stream|vnd|vnd.ms-word.document.12|odt|x-pdf)$/i;
 
     var fixContentType = function (data) {
@@ -163,8 +168,8 @@ define('io.ox/files/api',
                 if (ext in mime_types) {
                     data.file_mimetype = mime_types[ext];
                 }
-            } else if (data.file_mimetype === 'audio/mp3') {
-                data.file_mimetype = 'audio/mpeg'; // might be superstition
+            } else if (translate_mime[data.file_mimetype]) {
+                data.file_mimetype = translate_mime[data.file_mimetype];
             }
         }
         return data;
