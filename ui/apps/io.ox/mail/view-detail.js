@@ -341,7 +341,7 @@ define('io.ox/mail/view-detail',
                 return { content: $(), isLarge: false, type: 'text/plain' };
             }
 
-            options = options || {};
+            options = options || {};
 
             var att = data.attachments, source = '', type = 'text/plain',
                 isHTML = false, isLarge = false, content = '';
