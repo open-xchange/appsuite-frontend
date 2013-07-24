@@ -46,6 +46,7 @@ define('io.ox/core/tk/folderviews',
         var ready = api.get({ folder: id, storage: storage }),
             nodes = {},
             children = null,
+            childrenLoaded,
             painted = false,
             detached = true,
             loading = null,
@@ -142,6 +143,9 @@ define('io.ox/core/tk/folderviews',
             updateArrow = function () {
                 var className = hasChildren() ? (isOpen() ? CLOSE : OPEN) : 'icon-none';
                 nodes.arrow.find('i').attr('class', className);
+                if (childrenLoaded && !children) {
+                    hideArrow();
+                }
             },
 
             hideArrow = function () {
@@ -273,6 +277,7 @@ define('io.ox/core/tk/folderviews',
                         hash[node.id] = node;
                     });
                 }
+                childrenLoaded = false;
                 // we assume that folder API takes care of clearing caches for periodic refreshes
                 // get sub folders
                 return api.getSubFolders({ folder: id, all: all, storage: storage }).then(function (data) {
@@ -297,6 +302,7 @@ define('io.ox/core/tk/folderviews',
                         })
                         .value();
                     http.resume();
+                    childrenLoaded = true;
 
                     // destroy remaining and thus deprecated tree nodes
                     _(hash).each(function (child) {
