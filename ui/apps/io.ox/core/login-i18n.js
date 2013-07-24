@@ -14,7 +14,7 @@
 define('io.ox/core/login-i18n', ['gettext!io.ox/core/login'], function (gt) {
     'use strict';
     return gt;
-    
+
     // A list of all strings to be included in the POT file.
     function list() {
         gt('User name');
@@ -36,7 +36,6 @@ define('io.ox/core/login-i18n', ['gettext!io.ox/core/login'], function (gt) {
         gt('Your operating system is not supported.');
         gt('Please update your browser.');
         gt('For best results, please use ');
-        gt('Your browser is slow and outdated!');
         gt('You have been automatically logged out');
         gt('Unsupported Preview - Certain functions disabled and stability ' +
            'not assured until general release later this year');
