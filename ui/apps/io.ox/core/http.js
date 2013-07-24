@@ -370,6 +370,16 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
         return (/^(0|4\d\d|5\d\d)$/).test(status);
     };
 
+    var isUnreachable = function (xhr) {
+        if (!xhr) {
+            return false;
+        }
+        if (xhr.status === 0) {
+            return true;
+        }
+        return (/^(5\d\d)$/).test(xhr.status);
+    };
+
     // error log
     var log = {
 
@@ -709,6 +719,11 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                 var status = (xhr && xhr.status) || 200;
                 if (isLoss(status)) log.loss();
 
+                if (isUnreachable(xhr)) {
+                    that.trigger("unreachable");
+                } else {
+                    that.trigger("reachable");
+                }
                 error = _.extend({ status: status, took: took }, error);
                 log.add(error, r.o);
             });
@@ -725,6 +740,8 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                 })
                 .done(function (response) {
                     // slow?
+                    that.trigger("reachable");
+                    
                     var took = _.now() - t0;
                     log.took(took);
                     if (took > log.SLOW) {
