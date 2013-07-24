@@ -119,7 +119,8 @@ define('io.ox/portal/settings/pane',
             }
         } else {
             if (_.device('small')) {
-                return $(target).append($('<i>').addClass('icon-off').css('font-size', '20px'));
+                var iconClass = (type === 'edit' ? 'icon-pencil' : 'icon-off');
+                return $(target).append($('<i>').addClass(iconClass).css('font-size', '20px'));
             } else {
                 return target.text(text);
             }
@@ -167,7 +168,7 @@ define('io.ox/portal/settings/pane',
 
     ext.point(POINT + '/view').extend({
         id: 'state',
-        index: 200,
+        index: 100,
         draw: function (baton) {
             var data = baton.model.toJSON();
             this[data.enabled ? 'removeClass' : 'addClass']('disabled');
@@ -202,30 +203,24 @@ define('io.ox/portal/settings/pane',
     });
 
     ext.point(POINT + '/view').extend({
-        id: 'remove',
-        index: 600,
-        draw: function (baton) {
-            var data = baton.model.toJSON();
-            if (!data.protectedWidget) {
-                this.append(
-                    // close (has float: right)
-                    $('<a href="#" class="close" data-action="remove" tabindex="1"><i class="icon-trash"/></a>')
-                );
-            }
-        }
-    });
-
-    ext.point(POINT + '/view').extend({
         id: 'controls',
-        index: 500,
+        index: 400,
         draw: function (baton) {
 
             var data = baton.model.toJSON();
 
-            if (data.enabled && !data.protectedWidget) {
+            if (data.protectedWidget) {
+                // early exit if protected Widget
+                this.append("&nbsp;");
+                return;
+            }
+
+            var $controls = $('<div class="widget-controls">');
+
+            if (data.enabled) {
                 // editable?
                 if (baton.view.options.editable) {
-                    this.append(
+                    $controls.append(
                         appendIconText($('<a href="#" class="action" data-action="edit" tabindex="1">'), gt('Edit'), 'edit')
                     );
                 }
@@ -239,17 +234,20 @@ define('io.ox/portal/settings/pane',
                         baton.view.onChangeColor(e);
                     });
                 }
-                this.append(
+                $controls.append(
                     $node,
-                    appendIconText($('<a href="#" class="action" data-action="toggle" tabindex="1">'), gt('Disable'), 'edit')
-                );
-            } else if (!data.protectedWidget) {
-                this.append(
-                    appendIconText($('<a href="#" class="action" data-action="toggle" tabindex="1">'), gt('Enable'), 'edit')
+                    appendIconText($('<a href="#" class="action" data-action="toggle" tabindex="1">'), gt('Disable'), 'disable')
                 );
             } else {
-                this.append("&nbsp;");
+                $controls.append(
+                    appendIconText($('<a href="#" class="action" data-action="toggle" tabindex="1">'), gt('Enable'), 'enable')
+                );
             }
+            $controls.append(
+                // close (has float: right)
+                $('<a href="#" class="close" data-action="remove" tabindex="1"><i class="icon-trash"/></a>')
+            );
+            this.append($controls);
         }
     });
 
