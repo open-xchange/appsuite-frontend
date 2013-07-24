@@ -14,38 +14,49 @@
 define('io.ox/keychain/secretRecoveryDialog', ['io.ox/keychain/api', 'io.ox/core/tk/dialogs', 'io.ox/core/notifications', 'gettext!io.ox/keychain'], function (api, dialogs, notifications, gt) {
     'use strict';
 
-    function fnKeyPress(e) {
-        if (e.which === 13) {
-            e.data.popup.invoke(e.data.action);
-        }
-    }
-
     return {
         show: function () {
-            new dialogs.ModalDialog({ easyOut: false, async: true, width: 400 })
+            new dialogs.ModalDialog({ easyOut: false, async: true, width: 500, enter: 'migrate' })
                 .build(function () {
                     this.getHeader().append(
-                        $('<h4>').text(gt('Your password has changed')),
-                        $('<div>').text(gt('Please provide the old password so the account passwords can be recovered.'))
+                        $('<h4>').text(gt('Recover passwords'))
                     );
                     this.getContentNode().append(
-                        $('<label>').text(gt('Password')),
-                        $('<input type="password" name"recovery-password" class="input-xlarge">')
-                        .on('keypress', { popup: this, action: 'migrate' }, fnKeyPress)
+                        $('<p>').text(gt('Please provide the old password so the account passwords can be recovered.')),
+                        $('<label>').append(
+                            $.txt(gt('Your old password')), $('<br>'),
+                            $('<input type="password" name"recovery-password" class="input-xlarge">')
+                        )
                     );
                 })
-                .addPrimaryButton('migrate', gt('Recover accounts'))
-                .addAlternativeButton('cancel', gt('Cancel'))
+                .addPrimaryButton('migrate', gt('Recover'))
+                .addButton('cancel', gt('Cancel'))
+                .addAlternativeButton('cleanUp', gt('Delete all accounts'), 'cleanup', { classes: 'btn-danger'})
                 .on('cancel', function () {
                     this.getContentNode().find('input').val('');
                 })
-                .addDangerButton('cleanUp', gt('Delete accounts'))
                 .on('cleanUp', function () {
-                    var self = this.busy();
-                    return api.cleanUpIrrecoverableItems().done(function () {
-                        self.getContentNode().find('input').val('');
-                        self.close();
-                    });
+                    var self = this.busy(), def = $.Deferred();
+                    // use native confirm dialog
+                    if (window.confirm(gt('Are you sure?'))) {
+                        api.cleanUpIrrecoverableItems().then(
+                            function () {
+                                self.getContentNode().find('input').val('');
+                                self.close();
+                                def.resolve();
+                            },
+                            function () {
+                                self.idle();
+                                self.getContentNode().find('input').focus();
+                                def.reject();
+                            }
+                        );
+                    } else {
+                        self.idle();
+                        self.getContentNode().find('input').focus();
+                        def.reject();
+                    }
+                    return def;
                 })
                 .on('migrate', function () {
                     var self = this.busy();

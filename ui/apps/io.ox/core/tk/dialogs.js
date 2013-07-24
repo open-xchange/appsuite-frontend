@@ -147,7 +147,7 @@ define("io.ox/core/tk/dialogs",
 
                 case 13: // Enter
                     // ignore textareas
-                    if ($(e.target).prop('tagName') === 'TEXTAREA') return;
+                    if ($(e.target).is('textarea')) return;
                     if (!isBusy && o.enter) invoke(o.enter);
                     return false;
 
