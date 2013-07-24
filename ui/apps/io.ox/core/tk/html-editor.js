@@ -386,7 +386,7 @@ define.async('io.ox/core/tk/html-editor',
         toolbar1 = 'undo,redo,|,bold,italic,underline,strikethrough' +
             ',|,emoji,|,bullist,numlist,outdent,indent' +
             ',|,justifyleft,justifycenter,justifyright' +
-            //',|,formatselect,fontselect,fontsizeselect' +
+            ',|,formatselect,fontselect,fontsizeselect' +
             ',|,forecolor,backcolor';
 
         toolbar2 = '';
@@ -453,8 +453,6 @@ define.async('io.ox/core/tk/html-editor',
 
             // colors
             theme_advanced_more_colors: false,
-            //theme_advanced_text_colors: '000000,555555,AAAAAA,0088CC,AA0000',
-            //theme_advanced_background_colors: 'FFFFFF,FFFF00,00FFFF,00FF00,00FFFF,FFBE33',
             theme_advanced_default_foreground_color: '#000000',
             theme_advanced_default_background_color: '#FFFFFF',
 
@@ -674,12 +672,9 @@ define.async('io.ox/core/tk/html-editor',
             this.replaceContent(str, '');
         };
 
-        this.removeBySelector = function (selector) {
-            $(selector, ed.getDoc()).remove();
-        };
-
-        this.removeClassBySelector = function (selector, name) {
-            $(selector, ed.getDoc()).removeClass(name);
+        // allow jQuery access
+        this.find = function (selector) {
+            return $(ed.getDoc()).find(selector);
         };
 
         this.replaceContent = function (str, rep) {
