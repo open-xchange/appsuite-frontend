@@ -576,6 +576,7 @@ define("io.ox/mail/write/view-main",
             accountAPI.getAllSenderAddresses().done(function (addresses) {
                 if (addresses.length <= 1) {
                     self.hideSection('sender');
+                    self.sections.senderLink.hide();
                 } else {
                     // show section
                     self.showSection('sender');
