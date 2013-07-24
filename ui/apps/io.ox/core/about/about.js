@@ -20,15 +20,18 @@ define('io.ox/core/about/about',
 
     ext.point('io.ox/core/about').extend({
         draw: function (data) {
-            var revision = 'revision' in data ? data.revision : ('Rev' + ox.revision);
+
+            var revision = 'revision' in data ? data.revision : ('Rev' + ox.revision),
+                copyright = String(data.copyright || '').replace(/\(c\)/i, '\u00A9');
+
             this.addClass('user-select-text').append(
-                $('<h4>').text(gt.noI18n(data.productName)),
                 $('<p>').append(
                     $.txt(gt('UI version')), $.txt(': '), $('<b>').text(data.version + ' ' + revision), $('<br>'),
                     $.txt(gt('Server version')), $.txt(': '), $('<b>').text(data.serverVersion)
                 ),
-                $('<p>').text(gt('Contact: %1$s', data.contact)),
-                $('<p>').text(gt.noI18n(data.copyright))
+                // contact data can use HTML
+                $('<p>').html(data.contact || ''),
+                $('<p>').text(gt.noI18n(copyright))
             );
         }
     });
@@ -43,6 +46,9 @@ define('io.ox/core/about/about',
     return {
 
         show: function () {
+
+            var data = ox.serverConfig || {};
+
             new dialogs.ModalDialog()
                 .build(function () {
                     this.getHeader().append(
@@ -50,10 +56,10 @@ define('io.ox/core/about/about',
                             _.device('!touch') && !cap.has("boring") ?
                                 $('<span class="pull-right" style="color: rgba(0, 0, 0, 0.3); cursor: pointer;">').html('&pi;')
                                 .on('click', { popup: this }, click) : [],
-                            $.txt(gt('About'))
+                            $.txt(gt.noI18n(data.productName))
                         )
                     );
-                    ext.point('io.ox/core/about').invoke('draw', this.getContentNode(), ox.serverConfig || {});
+                    ext.point('io.ox/core/about').invoke('draw', this.getContentNode(), data);
                 })
                 .addPrimaryButton("cancel", gt('Close'))
                 .show();
