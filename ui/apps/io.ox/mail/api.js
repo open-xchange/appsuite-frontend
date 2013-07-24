@@ -990,7 +990,6 @@ define('io.ox/mail/api',
                 }
 
                 api.trigger('copy', list, targetFolderId);
-                console.log('reload folder', targetFolderId);
                 folderAPI.reload(targetFolderId, list);
 
                 if (errorText) return errorText;
