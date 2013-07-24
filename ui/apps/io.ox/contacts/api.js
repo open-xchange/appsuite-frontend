@@ -210,6 +210,7 @@ define('io.ox/contacts/api',
      * @return {deferred} returns contact object
      */
     api.create = function (data, file) {
+
         // TODO: Ask backend for a fix, until that:
         wat(data, 'email1');
         wat(data, 'email2');
@@ -258,7 +259,7 @@ define('io.ox/contacts/api',
                 )
                 .pipe(function () {
                     if (attachmentHandlingNeeded) {
-                        api.addToUploadList(d.folder_id + '.' + d.id);//to make the detailview show the busy animation
+                        api.addToUploadList(d.folder_id + '.' + d.id); // to make the detailview show the busy animation
                     }
                     api.trigger('create', { id: d.id, folder: d.folder_id });
                     api.trigger('refresh.all');

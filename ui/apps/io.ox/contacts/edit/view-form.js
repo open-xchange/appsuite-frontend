@@ -394,7 +394,11 @@ define('io.ox/contacts/edit/view-form', [
         }
 
         function propagateAttachmentChange(model) {
+
             var folder_id = model.get('folder_id'), id = model.get('id');
+
+            if (id === undefined) return $.when();
+
             return api.get({ id: id, folder: folder_id }, false)
                 .then(function (data) {
                     return $.when(
