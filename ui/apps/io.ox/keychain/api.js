@@ -46,7 +46,7 @@
  
  **/
 
-define("io.ox/keychain/api", ["io.ox/core/extensions", "io.ox/core/event", 'io.ox/core/http'], function (ext, Events, http) {
+define("io.ox/keychain/api", ["io.ox/core/extensions", "io.ox/core/event", 'io.ox/core/http', "gettext!io.ox/keychain"], function (ext, Events, http, gt) {
     "use strict";
 
     var api = {};
@@ -160,8 +160,13 @@ define("io.ox/keychain/api", ["io.ox/core/extensions", "io.ox/core/event", 'io.o
         return http.GET({
             module: 'recovery/secret',
             params: {
-                action: 'clean_up'
+                action: 'remove'
             }
+        }).done(function () {
+            ox.cache.clear();
+            require(["io.ox/core/notifications"], function (n) {
+                n.yell("success", gt("The unrecoverable items have been cleaned up successfully. Please refresh this page to see the changes."));
+            });
         });
     };
 
