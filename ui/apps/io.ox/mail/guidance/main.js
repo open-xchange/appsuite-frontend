@@ -13,8 +13,9 @@
 define('io.ox/mail/guidance/main',
     ['io.ox/core/extensions',
      'io.ox/core/tk/dialogs',
+     'io.ox/core/capabilities',
      'gettext!io.ox/mail'
-    ], function (ext, dialogs, gt) {
+    ], function (ext, dialogs, capabilities, gt) {
 
     'use strict';
 
@@ -90,35 +91,32 @@ define('io.ox/mail/guidance/main',
 
     // Help
 
-    // biggeleben: disabled!
-    // we need a proper capability first, "help" would make sense
-    // plus we need English titles and are more flexible list of topics
+    if (capabilities.has('help')) {
+        ext.point('io.ox/mail/guidance').extend({
+            id: 'folder-statistic-help',
+            index: INDEX += 100,
+            draw: function (baton) {
 
-    // ext.point('io.ox/mail/guidance').extend({
-    //     id: 'folder-statistic-help',
-    //     index: INDEX += 100,
-    //     draw: function (baton) {
+                var topics = [
+                    [gt.pgettext('help', 'The E-Mail Components'), 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.gui.html'],
+                    [gt.pgettext('help', 'Managing E-Mail messages'), 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.manage.html'],
+                    [gt.pgettext('help', 'External E-Mail Accounts'), 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.externalaccounts.html'],
+                    [gt.pgettext('help', 'E-Mail Settings'), 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.settings.html']
+                ];
 
-    //         var topics = {
-    //             'Die Bestandteile von Mail': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.gui.html',
-    //             'EMails organisieren': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.manage.html',
-    //             'EMails im Team': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.share.html',
-    //             'Externe EMail-Accounts': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.externalaccounts.html',
-    //             'EMail-Einstellungen': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.settings.html'
-    //         };
-
-    //         this.append(
-    //             $('<h2>').text('Related articles'),
-    //             $('<section>').append(
-    //                 _(topics).map(function (link, text) {
-    //                     return $('<div>').append(
-    //                         $('<a>', { href: link, target: 'help' }).text(text)
-    //                     );
-    //                 })
-    //             )
-    //         );
-    //     }
-    // });
+                this.append(
+                    $('<h2>').text(gt('Related articles')),
+                    $('<section>').append(
+                        _(topics).map(function (pair) {
+                            return $('<div>').append(
+                                $('<a>', { href: pair[1], target: 'help' }).text(pair[0])
+                            );
+                        })
+                    )
+                );
+            }
+        });
+    }
 
     // Upsell
 
