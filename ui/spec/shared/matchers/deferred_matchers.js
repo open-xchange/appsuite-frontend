@@ -53,6 +53,20 @@ if (jasmine) {
 
             this.actual.fail(spy);
             return true;
+        },
+        toResolveWith: function (expected) {
+            var actual = this.actual;
+
+            waitsFor(function () {
+                return actual.state() === 'resolved';
+            }, 'Deferred object never resolved', 1000);
+
+            runs(function () {
+                actual.done(function (result) {
+                    expect(result).toEqual(expected);
+                });
+            });
+            return this.spec.results();
         }
     };
 
