@@ -17,9 +17,10 @@ define('io.ox/settings/accounts/settings/pane',
        'io.ox/keychain/api',
        'io.ox/keychain/model',
        'io.ox/core/api/folder',
+       'io.ox/core/notifications',
        'gettext!io.ox/settings/accounts',
        'withPluginsFor!keychainSettings'
-   ], function (ext, dialogs, api, keychainModel, folderAPI, gt) {
+   ], function (ext, dialogs, api, keychainModel, folderAPI, notifications, gt) {
 
     'use strict';
 
@@ -32,25 +33,28 @@ define('io.ox/settings/accounts/settings/pane',
         },
 
         removeSelectedItem = function (account) {
-            var def = $.Deferred();
+
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                new dialogs.ModalDialog({easyOut: true})
+                new dialogs.ModalDialog({ easyOut: true, async: true })
                     .text(gt('Do you really want to delete this account?'))
                     .addPrimaryButton('delete', gt('Delete account'))
                     .addButton('cancel', gt('Cancel'))
-                    .show()
-                    .done(function (action) {
-                        if (action === 'delete') {
-                            def.resolve();
-                            api.remove(account).done(function () {
+                    .on('delete', function () {
+                        var popup = this;
+                        api.remove(account).then(
+                            function success() {
                                 folderAPI.subFolderCache.remove('1');
                                 folderAPI.folderCache.remove('default' + account);
                                 folderAPI.trigger('update');
-                            });
-                        } else {
-                            def.reject();
-                        }
-                    });
+                                popup.close();
+                            },
+                            function fail(e) {
+                                popup.close();
+                                notifications.yell(e);
+                            }
+                        );
+                    })
+                    .show();
             });
         },
 
