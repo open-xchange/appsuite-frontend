@@ -101,7 +101,7 @@ define("io.ox/calendar/view-grid-template",
                             conflicts.append(
                                 $('<a>')
                                     .append(userAPI.getTextNode(participant.id))
-                                    .addClass('person-link')
+                                    .addClass('person-link ' + util.getConfirmationClass(participant.confirmation))
                                     .css('margin-left', '4px')
                                     .on('click', { internal_userid: participant.id }, fnClickPerson)
                             );
