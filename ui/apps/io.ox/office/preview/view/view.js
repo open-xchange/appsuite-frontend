@@ -87,6 +87,9 @@ define('io.ox/office/preview/view/view',
             // the queue for AJAX page requests
             pageLoader = new PageLoader(app),
 
+            // all page nodes with contents, keyed by one-based page number
+            loadedPageNodes = {},
+
             // one-based index of the selected page
             selectedPage = 0,
 
@@ -172,13 +175,18 @@ define('io.ox/office/preview/view/view',
 
         function deferredInitHandler() {
 
-            var sidePaneToolBox = null;
+            var // the bottom tool box in the side pane
+                sidePaneToolBox = null,
+                // the number of pages in the document
+                pageCount = model.getPageCount(),
+                // the HTML mark-up for the empty page nodes
+                pageMarkup = '';
 
-            if (model.getPageCount() >= 1) {
+            if (pageCount >= 1) {
 
                 // initialize side pane depending on page count
                 sidePane.addViewComponent(sidePaneToolBox = new ToolBox(app, { fixed: 'bottom' }));
-                if (model.getPageCount() > 1) {
+                if (pageCount > 1) {
                     sidePaneToolBox
                         .addGroup('pages/previous', new Button(PreviewControls.PREV_OPTIONS))
                         .addGroup('pages/current',  new PreviewControls.PageChooser(app))
@@ -196,7 +204,7 @@ define('io.ox/office/preview/view/view',
                 );
 
                 // initialize bottom overlay pane depending on page count
-                if (model.getPageCount() > 1) {
+                if (pageCount > 1) {
                     bottomToolBox.newLine().addRightTab()
                         .addGroup('pages/previous', new Button(PreviewControls.PREV_OPTIONS))
                         .addGroup('pages/current',  new PreviewControls.PageChooser(app))
@@ -216,18 +224,18 @@ define('io.ox/office/preview/view/view',
                     .on('tracking:start tracking:move tracking:end tracking:cancel', trackingHandler)
                     .on('gesturestart gesturechange gestureend', gestureHandler)
                     .on('scroll', app.createDebouncedMethod($.noop, updateVisiblePages, { delay: 100, maxDelay: 500 }));
+
+                // initialize all page nodes
+                _(pageCount).times(function (index) {
+                    pageMarkup += '<div class="page" data-page="' + (index + 1) + '"></div>';
+                });
+                self.insertContentNode(pageContainerNode.html(pageMarkup));
+                pageNodes = pageContainerNode.children();
             }
 
             // set focus to application pane, and update the view
             self.grabFocus();
             app.getController().update();
-
-            // initialize zoom and scroll position
-            refreshLayout();
-
-            // update visible pages once manually (no scroll event is triggered,
-            // if the first page is shown which does not cause any scrolling).
-            updateVisiblePages();
         }
 
         /**
@@ -348,6 +356,7 @@ define('io.ox/office/preview/view/view',
             // do not load initialized page again
             if (pageNode.children().length === 0) {
                 pageLoader.loadPage(pageNode, page, priority).done(function () {
+                    loadedPageNodes[page] = pageNode;
                     updatePageZoom(pageNode);
                     // new pages may have moved into the visible area
                     updateVisiblePages();
@@ -371,11 +380,6 @@ define('io.ox/office/preview/view/view',
                 loadPage(page, 'medium');
             }
 
-            // clears the specified page
-            function clearPage(page) {
-                pageNodes.eq(page - 1).empty();
-            }
-
             var // find the first page that is visible at the top border of the visible area
                 beginPage = _(pageNodes).sortedIndex(appPaneNode.scrollTop(), function (value) {
                     if (_.isNumber(value)) { return value; }
@@ -386,7 +390,11 @@ define('io.ox/office/preview/view/view',
                 endPage = _(pageNodes).sortedIndex(appPaneNode.scrollTop() + appPaneNode[0].clientHeight, function (value) {
                     if (_.isNumber(value)) { return value; }
                     return Utils.getChildNodePositionInNode(appPaneNode, value).top;
-                }) + 1;
+                }) + 1,
+                // first page loaded with lower priority
+                beginPageLowerPrio = Math.max(1, beginPage - 2),
+                // one-after last page loaded with lower priority
+                endPageLowerPrio = Math.min(endPage + 2, model.getPageCount() + 1);
 
             // abort old requests not yet running
             pageLoader.abortQueuedRequests();
@@ -394,13 +402,18 @@ define('io.ox/office/preview/view/view',
             // load visible pages with high priority
             Utils.iterateRange(beginPage, endPage, loadPageHighPriority);
 
-            // load 2 pages above and below the visible area with low priority
-            Utils.iterateRange(Math.max(1, beginPage - 2), beginPage, loadPageMediumPriority);
-            Utils.iterateRange(endPage, Math.min(endPage + 2, model.getPageCount() + 1), loadPageMediumPriority);
+            // load 2 pages above and below the visible area with medium priority
+            Utils.iterateRange(endPage, endPageLowerPrio, loadPageMediumPriority);
+            Utils.iterateRange(beginPage - 1, beginPageLowerPrio - 1, loadPageMediumPriority, { step: -1 });
 
             // clear all other pages
-            Utils.iterateRange(1, beginPage - 2, clearPage);
-            Utils.iterateRange(endPage + 2, model.getPageCount() + 1, clearPage);
+            _(loadedPageNodes).each(function (pageNode, page) {
+                if ((page < beginPageLowerPrio) || (page >= endPageLowerPrio)) {
+                    Utils.log('PreviewView.updateVisiblePages(): cleaning page ' + page);
+                    pageNode[0].innerHTML = '';
+                    delete loadedPageNodes[page];
+                }
+            });
 
             // activate the page located at the top border of the visible area
             selectPage(beginPage);
@@ -493,6 +506,31 @@ define('io.ox/office/preview/view/view',
             // restore the correct scroll position with the new page sizes
             centerPagePosition = Utils.getChildNodePositionInNode(appPaneNode, pageNodes[centerPage - 1]);
             appPaneNode.scrollTop(centerPagePosition.top + ((centerPageRatio < 0) ? centerPageRatio : Math.round(centerPagePosition.height * centerPageRatio)));
+        }
+
+        /**
+         * Initializes the view settings after the document has been opened.
+         *
+         * @param {Object} point
+         *  A save point that may have been created before by the method
+         *  PreviewView.getSavePoint().
+         */
+        function importSuccessHandler(point) {
+
+            // restore zoom type
+            zoomType = Utils.getOption(point, 'zoom');
+            if (_.isNumber(zoomType)) {
+                zoomType = Math.round(zoomType);
+            } else if (!_.isString(zoomType) || (zoomType.length === 0)) {
+                zoomType = 'page';
+            }
+
+            // restore selected page
+            self.showPage(Utils.getIntegerOption(point, 'page', 1, 1, model.getPageCount()));
+
+            // update visible pages once manually (no scroll event is triggered,
+            // if the first page is shown which does not cause any scrolling).
+            updateVisiblePages();
         }
 
         /**
@@ -603,39 +641,6 @@ define('io.ox/office/preview/view/view',
         }()); // end of gestureHandler() local scope
 
         // methods ------------------------------------------------------------
-
-        /**
-         * Initializes the view settings after the document has been opened.
-         *
-         * @param {Object} point
-         *  A save point that may have been created before by the method
-         *  PreviewView.getSavePoint().
-         */
-        this.initializeFromSavePoint = function (point) {
-
-            var // the number of pages in the document
-                pageCount = model.getPageCount(),
-                // the HTML mark-up for the empty page nodes
-                pageMarkup = '';
-
-            // initialize all page nodes
-            _(pageCount).times(function (index) {
-                pageMarkup += '<div class="page" data-page="' + (index + 1) + '"></div>';
-            });
-            this.insertContentNode(pageContainerNode.html(pageMarkup));
-            pageNodes = pageContainerNode.children();
-
-            // restore zoom type
-            zoomType = Utils.getOption(point, 'zoom');
-            if (_.isNumber(zoomType)) {
-                zoomType = Math.round(zoomType);
-            } else if (!_.isString(zoomType) || (zoomType.length === 0)) {
-                zoomType = 'page';
-            }
-
-            // restore selected page
-            selectPage(Utils.getIntegerOption(point, 'page', 1, 1, pageCount));
-        };
 
         /**
          * Returns whether the main side pane is currently visible.
@@ -814,6 +819,10 @@ define('io.ox/office/preview/view/view',
         this.getSavePoint = function () {
             return { page: selectedPage, zoom: zoomType };
         };
+
+        // initialization -----------------------------------------------------
+
+        app.on('docs:import:success', importSuccessHandler);
 
     } // class PreviewView
 

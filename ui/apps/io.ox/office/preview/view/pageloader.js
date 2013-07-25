@@ -22,7 +22,7 @@ define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], functi
         },
 
         // the maximum number of simultaneous pending AJAX page requests
-        MAX_REQUESTS = Modernizr.touch ? 2 : 5,
+        MAX_REQUESTS = 5,
 
         // the number of AJAX requests currently running
         runningRequests = 0,
@@ -273,7 +273,7 @@ define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], functi
                 childNode = $(pageNode).children().first(),
                 // the resulting width/height
                 width = Math.floor(pageSize.width * zoomFactor),
-                height = Math.floor(pageSize.height * zoomFactor);
+                height = Math.ceil(pageSize.height * zoomFactor);
 
             if (childNode.is('img')) {
                 // <img> element: resize with CSS width/height

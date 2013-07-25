@@ -117,7 +117,6 @@ define('io.ox/office/preview/main',
             .done(function (data) {
                 jobId = data.JobID;
                 self.getModel().setPageCount(data.PageCount);
-                self.getView().initializeFromSavePoint(point);
             })
             .promise();
         }

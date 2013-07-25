@@ -249,7 +249,7 @@ define('io.ox/office/framework/view/baseview',
         function windowShowHandler() {
 
             // do not show the window contents if view is still hidden explicitly
-            if (viewHidden) { return; }
+            if (viewHidden || (tempNode.children().length === 0)) { return; }
 
             // move all application nodes from temporary storage into view
             app.getWindowNode().append(tempNode.children());
@@ -267,7 +267,9 @@ define('io.ox/office/framework/view/baseview',
          */
         function windowHideHandler() {
             // move all application nodes from view to temporary storage
-            tempNode.append(app.getWindowNode().children());
+            if (tempNode.children().length === 0) {
+                tempNode.append(app.getWindowNode().children());
+            }
         }
 
         // methods ------------------------------------------------------------
