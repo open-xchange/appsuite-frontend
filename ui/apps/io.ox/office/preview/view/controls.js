@@ -72,7 +72,7 @@ define('io.ox/office/preview/view/controls',
 
         // base constructor ---------------------------------------------------
 
-        Button.call(this, { icon: 'icon-pencil', tooltip: gt('Edit document'), css: { color: 'yellow' } });
+        Button.call(this, { icon: 'icon-pencil', tooltip: gt('Edit document') });
 
         // initialization -----------------------------------------------------
 
