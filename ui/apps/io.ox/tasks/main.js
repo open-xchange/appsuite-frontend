@@ -86,17 +86,22 @@ define('io.ox/tasks/main',
             id: 'deleteButton',
             draw: function (baton) {
                 // remove old buttons first
-                removeButton();
+                if (showSwipeButton) {
+                    removeButton();
+                }
 
                 this.append(
-                    $('<div class="btn btn-danger swipeDelete fadein">')
+                    $('<div class="cell-button swipeDelete fadein fast">')
                         .text(gt('Delete'))
                         .on('mousedown', function (e) {
                             // we have to use mousedown as the selection listens to this, too
                             // otherwise we are to late to get the event
+                            e.stopImmediatePropagation();
+                        }).on('tap', function (e) {
                             e.preventDefault();
-                            actions.invoke('io.ox/tasks/actions/delete', null, baton);
                             removeButton();
+                            showSwipeButton = false;
+                            actions.invoke('io.ox/tasks/actions/delete', null, baton);
                         })
                 );
                 showSwipeButton = true;
@@ -266,9 +271,7 @@ define('io.ox/tasks/main',
                     .find('.icon-arrow-down').css('opacity', 0.4);
             }
         }
-        grid.selection.on('change', function () {
-            removeButton();
-        });
+        grid.selection.on('change', removeButton);
 
         grid.on('change:prop', function () {
             updateGridOptions();

@@ -97,21 +97,22 @@ define("io.ox/contacts/main",
                     removeButton();
                 }
                 this.append(
-                    $('<div class="btn btn-danger swipeDelete fadein">')
+                    $('<div class="mail cell-button swipeDelete fadein fast">')
                         .text(gt('Delete'))
                         .on('mousedown', function (e) {
                             // we have to use mousedown as the selection listens to this, too
                             // otherwise we are to late to get the event
+                            e.stopImmediatePropagation();
+                        }).on('tap', function (e) {
                             e.preventDefault();
-
-                            actions.invoke('io.ox/contacts/actions/delete', null, baton);
                             removeButton();
+                            showSwipeButton = false;
+                            actions.invoke('io.ox/contacts/actions/delete', null, baton);
                         })
                 );
                 showSwipeButton = true;
             }
         });
-
 
         // swipe handler
         var swipeRightHandler = function (e, id, cell) {
