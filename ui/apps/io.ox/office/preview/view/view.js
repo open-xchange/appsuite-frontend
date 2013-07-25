@@ -217,6 +217,7 @@ define('io.ox/office/preview/view/view',
             appPaneNode
                 .enableTracking({ selector: '.page', sourceEvents: 'mouse' })
                 .on('tracking:start tracking:move tracking:end tracking:cancel', trackingHandler)
+                .on('gesturestart gesturechange gestureend', gestureHandler)
                 .on('scroll', app.createDebouncedMethod($.noop, updateVisiblePages, { delay: 100, maxDelay: 500 }));
 
             // initialize zoom and scroll position
@@ -493,6 +494,9 @@ define('io.ox/office/preview/view/view',
         /**
          * Handles tracking events originating from the mouse and simulates
          * touch-like scrolling on the page nodes.
+         *
+         * @param {jQuery.Event}
+         *  The jQuery tracking event.
          */
         var trackingHandler = (function () {
 
@@ -534,8 +538,7 @@ define('io.ox/office/preview/view/view',
                 startScrollAnimation(function () { move.x *= 0.85; move.y *= 0.85; return move; }, 20);
             }
 
-            // return the actual trackingHandler() method
-            return function (event) {
+            function trackingHandler(event) {
 
                 switch (event.type) {
                 case 'tracking:start':
@@ -552,9 +555,48 @@ define('io.ox/office/preview/view/view',
                 case 'tracking:cancel':
                     break;
                 }
-            };
+            }
 
+            return trackingHandler;
         }()); // end of trackingHandler() local scope
+
+        /**
+         * Handles gesture events and changes the current zoom.
+         *
+         * @param {jQuery.Event}
+         *  The jQuery gesture event.
+         */
+        var gestureHandler = (function () {
+
+            var // the original zoom factor when zoom gesture has started
+                originalZoomFactor = 0;
+
+            // updates the zoom according to the current scale attribute
+            function setZoomType(event) {
+                var scale = event.originalEvent.scale;
+                // if current zoom type is 'zoom-to-something', wait until the
+                // scaling factor in the event is greater than 5%
+                if (_.isNumber(zoomType) || (scale <= 0.95) || (scale >= 1.05)) {
+                    self.setZoomType(originalZoomFactor * scale);
+                    app.getController().update();
+                }
+            }
+
+            function gestureHandler(event) {
+                switch (event.type) {
+                case 'gesturestart':
+                    originalZoomFactor = zoomFactor;
+                    setZoomType(event);
+                    break;
+                case 'gesturechange':
+                case 'gestureend':
+                    setZoomType(event);
+                    break;
+                }
+            }
+
+            return gestureHandler;
+        }()); // end of gestureHandler() local scope
 
         // methods ------------------------------------------------------------
 
