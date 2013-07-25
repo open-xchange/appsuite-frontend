@@ -55,7 +55,8 @@ define('io.ox/office/tk/dialogs',
             dialog = new CoreDialogs.ModalDialog({
                 width: Utils.getIntegerOption(options, 'width', 400),
                 async: Utils.getBooleanOption(options, 'async', false),
-                defaultEnter: Utils.getBooleanOption(options, 'defaultEnter', false)
+                tabTrap: true,
+                enter: Utils.getStringOption(options, 'enter', undefined)
             }),
             // the title text
             title = Utils.getStringOption(options, 'title'),
