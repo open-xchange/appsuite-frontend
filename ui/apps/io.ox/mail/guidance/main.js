@@ -90,61 +90,68 @@ define('io.ox/mail/guidance/main',
 
     // Help
 
-    ext.point('io.ox/mail/guidance').extend({
-        id: 'folder-statistic-help',
-        index: INDEX += 100,
-        draw: function (baton) {
+    // biggeleben: disabled!
+    // we need a proper capability first, "help" would make sense
+    // plus we need English titles and are more flexible list of topics
 
-            var topics = {
-                'Die Bestandteile von Mail': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.gui.html',
-                'EMails organisieren': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.manage.html',
-                'EMails im Team': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.share.html',
-                'Externe EMail-Accounts': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.externalaccounts.html',
-                'EMail-Einstellungen': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.settings.html'
-            };
+    // ext.point('io.ox/mail/guidance').extend({
+    //     id: 'folder-statistic-help',
+    //     index: INDEX += 100,
+    //     draw: function (baton) {
 
-            this.append(
-                $('<h2>').text('Related articles'),
-                $('<section>').append(
-                    _(topics).map(function (link, text) {
-                        return $('<div>').append(
-                            $('<a>', { href: link, target: 'help' }).text(text)
-                        );
-                    })
-                )
-            );
-        }
-    });
+    //         var topics = {
+    //             'Die Bestandteile von Mail': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.gui.html',
+    //             'EMails organisieren': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.manage.html',
+    //             'EMails im Team': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.share.html',
+    //             'Externe EMail-Accounts': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.externalaccounts.html',
+    //             'EMail-Einstellungen': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.settings.html'
+    //         };
+
+    //         this.append(
+    //             $('<h2>').text('Related articles'),
+    //             $('<section>').append(
+    //                 _(topics).map(function (link, text) {
+    //                     return $('<div>').append(
+    //                         $('<a>', { href: link, target: 'help' }).text(text)
+    //                     );
+    //                 })
+    //             )
+    //         );
+    //     }
+    // });
 
     // Upsell
 
-    ext.point('io.ox/mail/guidance').extend({
-        id: 'upsell',
-        index: INDEX += 100,
-        draw: function (baton) {
+    // biggeleben: disabled for 7.4
+    // we need a proper way to detect if upsell is generally enabled for that user
 
-            $('head').append(
-                $('<link href="http://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">')
-            );
+    // ext.point('io.ox/mail/guidance').extend({
+    //     id: 'upsell',
+    //     index: INDEX += 100,
+    //     draw: function (baton) {
 
-            var node = $('<section>')
-                .css({
-                    fontFamily: '"Nunito", Arial, sans-serif',
-                    fontSize: '24px',
-                    lineHeight: '28px',
-                    padding: '14px',
-                    color: '#fff',
-                    backgroundColor: '#FF5F13', // kind of nato orange
-                    borderRadius: '5px',
-                    textShadow: '1px 1px 3px #000',
-                    maxWidth: '450px',
-                    whiteSpace: 'pre'
-                })
-                .text('Upgrade to premium.\nGet a 90-day free trial ...');
+    //         $('head').append(
+    //             $('<link href="http://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">')
+    //         );
 
-            this.append(node);
-        }
-    });
+    //         var node = $('<section>')
+    //             .css({
+    //                 fontFamily: '"Nunito", Arial, sans-serif',
+    //                 fontSize: '24px',
+    //                 lineHeight: '28px',
+    //                 padding: '14px',
+    //                 color: '#fff',
+    //                 backgroundColor: '#FF5F13', // kind of nato orange
+    //                 borderRadius: '5px',
+    //                 textShadow: '1px 1px 3px #000',
+    //                 maxWidth: '450px',
+    //                 whiteSpace: 'pre'
+    //             })
+    //             .text('Upgrade to premium.\nGet a 90-day free trial ...');
+
+    //         this.append(node);
+    //     }
+    // });
 
     // Statistics
 
