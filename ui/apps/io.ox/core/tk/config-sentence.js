@@ -62,9 +62,10 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
             $anchor.on('click', function (e) {
                 e.preventDefault();
                 var type = (Modernizr.inputtypes.number && _.device('touch')) ? 'number' : 'text',
-                    $numberInput = $('<input type="' + type + '" size="2">').css({
+                    $numberInput = $('<input type="' + type + '" size="4">').css({
                     width: (Modernizr.inputtypes.number && _.device('touch')) ? '2em' : '1em',
-                    marginBottom: 0
+                    marginBottom: 0,
+                    padding: 0
                 }).val(self[attribute]);
                 var keys = new KeyListener($numberInput);
 
