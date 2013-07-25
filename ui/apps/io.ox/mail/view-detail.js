@@ -639,8 +639,6 @@ define('io.ox/mail/view-detail',
                 });
             }
 
-            console.log('draw mail!', _.cid(baton.data));
-
             try {
 
                 // threaded & send by myself (and not in sent folder)?
