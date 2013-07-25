@@ -68,7 +68,7 @@ define("io.ox/contacts/main",
 
         function thumbMove(e) {
             var text;
-            if (e.which === 1 && (text = $(this).data('text'))) grid.scrollToLabelText(text);
+            if (_.device('ios || android') && e.which === 1 && (text = $(this).data('text'))) grid.scrollToLabelText(text);
         }
 
         var vsplit = commons.vsplit(win.nodes.main, app);
