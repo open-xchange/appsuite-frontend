@@ -206,19 +206,21 @@ define('io.ox/office/preview/view/view',
                     .addGroup('zoom/dec',  new Button(PreviewControls.ZOOMOUT_OPTIONS))
                     .addGroup('zoom/type', new PreviewControls.ZoomTypeChooser())
                     .addGroup('zoom/inc',  new Button(PreviewControls.ZOOMIN_OPTIONS));
+
+                // no layout refreshes without any pages
+                self.on('refresh:layout', refreshLayout);
+
+                // initialize touch-like tracking with mouse, attach the scroll event handler
+                appPaneNode
+                    .enableTracking({ selector: '.page', sourceEvents: 'mouse' })
+                    .on('tracking:start tracking:move tracking:end tracking:cancel', trackingHandler)
+                    .on('gesturestart gesturechange gestureend', gestureHandler)
+                    .on('scroll', app.createDebouncedMethod($.noop, updateVisiblePages, { delay: 100, maxDelay: 500 }));
             }
 
             // set focus to application pane, and update the view
-            self.on('refresh:layout', refreshLayout);
             self.grabFocus();
             app.getController().update();
-
-            // initialize touch-like tracking with mouse, attach the scroll event handler
-            appPaneNode
-                .enableTracking({ selector: '.page', sourceEvents: 'mouse' })
-                .on('tracking:start tracking:move tracking:end tracking:cancel', trackingHandler)
-                .on('gesturestart gesturechange gestureend', gestureHandler)
-                .on('scroll', app.createDebouncedMethod($.noop, updateVisiblePages, { delay: 100, maxDelay: 500 }));
 
             // initialize zoom and scroll position
             refreshLayout();
@@ -452,6 +454,8 @@ define('io.ox/office/preview/view/view',
                 centerPageRatio = 0,
                 // current content margin according to browser window size
                 contentMargin = ((window.innerWidth <= 1024) || (window.innerHeight <= 640)) ? 0 : 30;
+
+            if (model.getPageCount() === 0) { return; }
 
             // restrict center page to valid page numbers, get position of the center page
             centerPage = Utils.minMax(centerPage, 1, model.getPageCount());
