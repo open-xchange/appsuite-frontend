@@ -111,12 +111,11 @@ define('io.ox/settings/accounts/settings/pane',
             );
         },
 
-        drawPane = function () {
+        drawPane = function (collection) {
             return $('<div class="io-ox-accounts-settings">').append(
                 $('<h1 class="no-margin">').text(gt('Mail and Social Accounts')),
                 drawAddButton(),
-                $('<ul class="settings-list">'),
-                drawRecoveryButton()
+                $('<ul class="settings-list">')
             );
         },
 
@@ -207,9 +206,15 @@ define('io.ox/settings/accounts/settings/pane',
                         this.collection.bind('remove', this.render);
                     },
                     render: function () {
-                        var self = this,
-                            $dropDown;
+
+                        var self = this, $dropDown;
+
                         self.$el.empty().append(drawPane);
+
+                        if (this.collection.length > 1) {
+                            self.$el.find('.io-ox-accounts-settings').append(drawRecoveryButton);
+                        }
+
                         this.collection.each(function (item) {
                             self.$el.find('.settings-list').append(
                                 new AccountSelectView({ model: item }).render().el
