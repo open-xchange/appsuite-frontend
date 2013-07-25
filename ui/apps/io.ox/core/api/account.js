@@ -496,10 +496,12 @@ define('io.ox/core/api/account',
     api.remove = function (data) {
         return http.PUT({
             module: 'account',
-            params: {action: 'delete'},
-            data: data
-        }).done(function () {
-            accountsAllCache.remove(data).done(function () {
+            params: { action: 'delete' },
+            data: data,
+            appendColumns: false
+        })
+        .then(function () {
+            return accountsAllCache.remove(data).done(function () {
                 api.trigger('refresh.all');
                 api.trigger('delete');
                 require(['io.ox/core/api/folder'], function (api) {
