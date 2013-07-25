@@ -84,7 +84,12 @@ define("io.ox/calendar/view-grid-template",
                         .text(gt('Conflicts:'))
                         .append(conflicts);
 
-                    _(data.participants).each(function (participant, index, list) {
+                    _.chain(data.participants)
+                    .filter(function (part) {
+                        // participants who declined the appointment cannot conflit
+                        return part.confirmation !== 2;
+                    })
+                    .each(function (participant, index, list) {
                         // check for resources
                         if (participant.type === 3) {
                             resourceAPI.get({id: participant.id}).done(function (resource) {
