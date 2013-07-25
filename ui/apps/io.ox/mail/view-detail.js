@@ -279,13 +279,6 @@ define('io.ox/mail/view-detail',
         return $('<a>', { href: href }).text(href);
     };
 
-    var delayedRead = function (data, node) {
-        setTimeout(function () {
-            api.tracker.applyAutoRead(data);
-            node = data = null;
-        }, 0); // without visual transition
-    };
-
     var blockquoteMore, blockquoteClickOpen, blockquoteClickClose, blockquoteCollapsedHeight = 57, mailTo;
 
     blockquoteMore = function (e) {
@@ -552,6 +545,7 @@ define('io.ox/mail/view-detail',
                             }
                         }
                     };
+                    // don't combine these two lines via add() - very slow!
                     content.contents().each(processTextNode);
                     $('*', content).not('style').contents().each(processTextNode);
                 }
@@ -628,9 +622,12 @@ define('io.ox/mail/view-detail',
                     .addClass('mail-detail-decorator')
                     .on('redraw', function (e, tmp) {
                         copyThreadData(tmp, data);
-                        container.replaceWith(
-                            self.draw(ext.Baton({ data: tmp, app: baton.app, options: baton.options }))
-                        );
+                        // changed? - or just marked seen?
+                        if (!_.isEqual(tmp, data)) {
+                            container.replaceWith(
+                                self.draw(ext.Baton({ data: tmp, app: baton.app, options: baton.options }))
+                            );
+                        }
                     });
 
             if (baton.options.tabindex) {
@@ -642,6 +639,8 @@ define('io.ox/mail/view-detail',
                 });
             }
 
+            console.log('draw mail!', _.cid(baton.data));
+
             try {
 
                 // threaded & send by myself (and not in sent folder)?
@@ -652,12 +651,13 @@ define('io.ox/mail/view-detail',
                 var isUnseen = api.tracker.isUnseen(data),
                     canAutoRead = api.tracker.canAutoRead(data);
 
-                if (isUnseen && !canAutoRead) {
-                    node.addClass('unread');
-                }
-
-                if (canAutoRead) {
-                    delayedRead(data, node);
+                if (isUnseen) {
+                    if (canAutoRead) {
+                        data.flags = data.flags | 32;
+                        api.tracker.applyAutoRead(data);
+                    } else {
+                        node.addClass('unread');
+                    }
                 }
 
                 ext.point('io.ox/mail/detail').invoke('draw', node, baton);
