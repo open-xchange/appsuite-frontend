@@ -373,6 +373,8 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     http.on("unreachable", function () {
         if (!disconnected) {
             disconnected = true;
+            subSocket.close();
+            socket.unsubscribe();
             api.trigger("offline");
         }
     });
