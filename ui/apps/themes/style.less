@@ -2843,3 +2843,5 @@ input.flat-input {
     }
 }
 
+/* fixes WBR handling in long character sequences, esp. for IE */
+wbr:after { content: "\00200B" }
