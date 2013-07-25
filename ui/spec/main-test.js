@@ -27,6 +27,7 @@ window.ox = {
     root: root,
     secretCookie: false, // auto-login
     serverConfig: {},
+    version: new Date(),
     session: {
         context_id: 0,
         locale: "de_DE",
