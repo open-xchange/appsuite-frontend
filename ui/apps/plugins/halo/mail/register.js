@@ -26,10 +26,10 @@ define("plugins/halo/mail/register",
             });
         }
 
-        var cid = encodeURIComponent(_.cid(obj));
-        api.on('update:' + cid, redraw);
+        var ecid = _.ecid(obj);
+        api.on('update:' + ecid, redraw);
         node.on('dispose', function () {
-            api.off('update:' + cid, redraw);
+            api.off('update:' + ecid, redraw);
         });
     }
 

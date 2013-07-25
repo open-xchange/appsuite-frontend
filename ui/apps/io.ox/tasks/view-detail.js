@@ -114,7 +114,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                 )
             );
 
-            if (api.uploadInProgress(encodeURIComponent(_.cid(data)))) {
+            if (api.uploadInProgress(_.ecid(data))) {
                 $('<div>').addClass('attachments-container')
                     .append(
                         $('<span>').text(gt('Attachments \u00A0\u00A0')).addClass('attachments'),
@@ -297,7 +297,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                 classes: 'attachment-item',
                 ref: 'io.ox/tasks/attachment/links'
             }).draw.call(container, data);
-        
+
         if (_.device('small')) {//no inline style for mobile
             $(bla).css('display', 'block');
         }

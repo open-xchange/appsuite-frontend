@@ -153,7 +153,7 @@ define('io.ox/core/api/factory',
                                             api.caches.get.remove(cid)
                                         )
                                         .done(function () {
-                                            api.trigger('update:' + encodeURIComponent(cid), obj);
+                                            api.trigger('update:' + _.ecid(obj), obj);
                                         });
                                     }
                                 })
@@ -361,7 +361,7 @@ define('io.ox/core/api/factory',
                     // trigger item specific events to be responsive
                     if (!silent) {
                         _(ids).each(function (obj) {
-                            api.trigger('delete:' + encodeURIComponent(_.cid(obj)));
+                            api.trigger('delete:' + _.ecid(obj));
                         });
                     }
                     hash = folders = defs = ids = null;

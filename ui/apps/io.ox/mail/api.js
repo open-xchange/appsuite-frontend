@@ -591,7 +591,7 @@ define('io.ox/mail/api',
         return http.resume().pipe(function (response) {
             // trigger update events
             _(list).each(function (obj) {
-                api.trigger('update:' + encodeURIComponent(_.cid(obj)), obj);
+                api.trigger('update:' + _.ecid(obj), obj);
             });
             if (apiAction === 'copy' || move) {//give response if its a copy action (to look if there was an error)
                 return { list: list, response: response};//not doing this as a standardaction to prevent errors with functions looking only for the list parameter

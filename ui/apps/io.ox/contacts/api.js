@@ -286,7 +286,7 @@ define('io.ox/contacts/api',
             if (attachmentHandlingNeeded) {
                 return $.when().pipe(function () {
                     api.addToUploadList(o.folder + '.' + o.id);//to make the detailview show the busy animation
-                    api.trigger('update:' + o.folder + '.' + o.id);
+                    api.trigger('update:' + _.ecid(o));
                     return { folder_id: o.folder, id: o.id };
                 });
             } else {
@@ -295,38 +295,38 @@ define('io.ox/contacts/api',
         } else {
             // go!
             return http.PUT({
-                    module: 'contacts',
-                    params: {
-                        action: 'update',
-                        id: o.id,
-                        folder: o.folder,
-                        timestamp: o.timestamp || _.then(),
-                        timezone: 'UTC'
-                    },
-                    data: o.data,
-                    appendColumns: false
-                })
-                .pipe(function () {
-                    // get updated contact
-                    return api.get({ id: o.id, folder: o.folder }, false)
-                        .pipe(function (data) {
-                            return $.when(
-                                api.caches.get.add(data),
-                                api.caches.all.grepRemove(o.folder + api.DELIM),
-                                api.caches.list.remove({ id: o.id, folder: o.folder }),
-                                fetchCache.clear()
-                            )
-                            .done(function () {
-                                if (attachmentHandlingNeeded) {
-                                    api.addToUploadList(encodeURIComponent(_.cid(data)));//to make the detailview show the busy animation
-                                }
-                                api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
-                                api.trigger('update', data);
-                                // trigger refresh.all, since position might have changed
-                                api.trigger('refresh.all');
-                            });
-                        });
+                module: 'contacts',
+                params: {
+                    action: 'update',
+                    id: o.id,
+                    folder: o.folder,
+                    timestamp: o.timestamp || _.then(),
+                    timezone: 'UTC'
+                },
+                data: o.data,
+                appendColumns: false
+            })
+            .then(function () {
+                // get updated contact
+                return api.get({ id: o.id, folder: o.folder }, false).then(function (data) {
+                    return $.when(
+                        api.caches.get.add(data),
+                        api.caches.all.grepRemove(o.folder + api.DELIM),
+                        api.caches.list.remove({ id: o.id, folder: o.folder }),
+                        fetchCache.clear()
+                    )
+                    .done(function () {
+                        if (attachmentHandlingNeeded) {
+                            // to make the detailview show the busy animation
+                            api.addToUploadList(_.ecid(data));
+                        }
+                        api.trigger('update:' + _.ecid(data), data);
+                        api.trigger('update', data);
+                        // trigger refresh.all, since position might have changed
+                        api.trigger('refresh.all');
+                    });
                 });
+            });
         }
     };
 
@@ -412,7 +412,7 @@ define('io.ox/contacts/api',
             })
             .done(function () {
                 _(list).map(function (data) {
-                    api.trigger('delete:' + encodeURIComponent(_.cid(data)), data);
+                    api.trigger('delete:' + _.ecid(data), data);
                     api.trigger('delete', data);
                 });
                 api.trigger('refresh.all');

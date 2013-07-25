@@ -452,7 +452,7 @@ define('io.ox/contacts/actions',
                     }
                 });
                 // trigger update event to get redraw of detail views
-                api.trigger('update:' + encodeURIComponent(_.cid(baton.data)), baton.data);
+                api.trigger('update:' + _.ecid(baton.data), baton.data);
                 notifications.yell('success', gt('This distribution list has been added to the portal'));
             });
         }

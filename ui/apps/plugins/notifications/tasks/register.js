@@ -96,7 +96,7 @@ define('plugins/notifications/tasks/register',
                         percent_completed: 100,
                         date_completed: _.now() })
                 .done(function (result) {
-                    api.trigger('update:' + encodeURIComponent(cid), result);
+                    api.trigger('update:' + _.ecid(obj), result);
                 });
             model = this.collection.get(item.attr('model-cid'));
             this.collection.remove(model);
@@ -475,7 +475,8 @@ define('plugins/notifications/tasks/register',
                                             confirmmessage: message}
                         }).done(function () {
                             //update detailview
-                            api.trigger('update:' + model.get('folder_id') + '.' + model.get('id'));
+                            var data = model.toJSON();
+                            api.trigger('update:' + _.ecid(data));
                             model.collection.remove(model);
                         });
                     }

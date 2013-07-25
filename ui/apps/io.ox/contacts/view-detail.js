@@ -154,7 +154,7 @@ define("io.ox/contacts/view-detail",
                 this.find('.private-flag').show();
             }
 
-            if (api.uploadInProgress(encodeURIComponent(_.cid(baton.data)))) {
+            if (api.uploadInProgress(_.ecid(baton.data))) {
                 this.find('.attachments-container').show();
             }
             else if (baton.data.number_of_attachments > 0) {

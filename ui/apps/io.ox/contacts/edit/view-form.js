@@ -409,7 +409,7 @@ define('io.ox/contacts/edit/view-form', [
                     )
                     .done(function () {
                         // to make the detailview remove the busy animation:
-                        api.removeFromUploadList(encodeURIComponent(_.cid(data)));
+                        api.removeFromUploadList(_.ecid(data));
                         api.trigger('refresh.list');
                     });
                 });

@@ -84,7 +84,7 @@ define('io.ox/core/api/user',
                                 // TODO: What about the contacts cache?
                             )
                             .done(function () {
-                                api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
+                                api.trigger('update:' + _.ecid(data), data);
                                 api.trigger('update', data);
                                 api.trigger('refresh.list');
                                 // TODO: What about the corresponding contact events?

@@ -449,7 +449,7 @@ define("io.ox/calendar/view-detail",
         index: 550,
         draw: function (data) {
             var $node;
-            if (calAPI.uploadInProgress(encodeURIComponent(_.cid(data)))) {
+            if (calAPI.uploadInProgress(_.ecid(data))) {
                 this.append(
                         $('<div class="io-ox-label">').text(gt('Attachments')),
                         $node = $('<div>').css({width: '30%', height: '12px'}).busy()

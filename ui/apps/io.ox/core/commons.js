@@ -506,7 +506,7 @@ define('io.ox/core/commons',
     $.createViewContainer = function (baton, api, getter) {
 
         var data = baton instanceof ext.Baton ? baton.data : baton,
-            cid,
+            cid, ecid,
             node = $('<div>').attr('data-cid', _([].concat(data)).map(_.cid).join(',')),
 
             update = function () {
@@ -557,11 +557,11 @@ define('io.ox/core/commons',
         } else {
             // single item
             cid = _.cid(data);
-            cid = encodeURIComponent(cid);
+            ecid = _.ecid(data);
             folderAPI.on('update',  { cid: cid, folder: data.folder_id }, checkFolder);
-            api.on('delete:' + cid, remove);
-            api.on('update:' + cid, update);
-            api.on('move:' + cid, move);
+            api.on('delete:' + ecid, remove);
+            api.on('update:' + ecid, update);
+            api.on('move:' + ecid, move);
             api.on('create', update);
         }
 
@@ -572,11 +572,11 @@ define('io.ox/core/commons',
                     api.off('update', redraw);
                 } else {
                     cid = _.cid(data);
-                    cid = encodeURIComponent(cid);
+                    ecid = _.ecid(data);
                     folderAPI.off('update', checkFolder);
-                    api.off('delete:' + cid, remove);
-                    api.off('update:' + cid, update);
-                    api.off('move:' + cid, move);
+                    api.off('delete:' + ecid, remove);
+                    api.off('update:' + ecid, update);
+                    api.off('move:' + ecid, move);
                     api.off('create', update);
                 }
                 api = update = data = node = getter = null;
