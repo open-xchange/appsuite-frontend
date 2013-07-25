@@ -15,7 +15,8 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
 
     describe('The VGrid', function () {
         beforeEach(function () {
-            this.node = $('<div>').appendTo($('body', document));
+            $('body', document).append($('<div id="testNode">'));
+            this.node = $('<div>').appendTo($('#testNode', document));
             this.vgrid = new VGrid(this.node);
             this.api = {};
             this.api.getList = function (ids) {
@@ -25,6 +26,10 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
                 });
                 return def;
             };
+        });
+
+        afterEach(function () {
+            $('#testNode', document).remove();
         });
 
         function wireGridAndApiFor(test) {
