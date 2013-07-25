@@ -98,7 +98,7 @@ define('io.ox/settings/accounts/settings/pane',
                 $.txt(
                     gt('For security reasons, all account passwords are encrypted with your primary account password. ' +
                         'If you change your primary password, your external accounts might stop working. In this case, ' +
-                        'you can use your old password to recover all accounts:')
+                        'you can use your old password to recover all account passwords:')
                 ),
                 $.txt(' '),
                 $('<a href="#" data-action="recover">').text(gt('Recover passwords'))
