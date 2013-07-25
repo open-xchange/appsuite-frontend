@@ -495,23 +495,22 @@ define('io.ox/core/api/account',
      */
     api.remove = function (data) {
 
-        // remove from local cache first to be responsive
-        return accountsAllCache.remove(data)
-            .done(function () {
+        return http.PUT({
+            module: 'account',
+            params: { action: 'delete' },
+            data: data,
+            appendColumns: false
+        })
+        .then(function () {
+            // remove from local cache
+            return accountsAllCache.remove(data).done(function () {
                 api.trigger('refresh.all');
                 api.trigger('delete');
                 require(['io.ox/core/api/folder'], function (api) {
                     api.propagate('account:delete');
                 });
-            })
-            .then(function () {
-                return http.PUT({
-                    module: 'account',
-                    params: { action: 'delete' },
-                    data: data,
-                    appendColumns: false
-                });
             });
+        });
     };
 
     /**

@@ -78,8 +78,8 @@ define("io.ox/oauth/settings",
             dialog
                 .append($form)
                 .addPrimaryButton('save', gt('Save'))
-                .addButton('reauthorize', gt('Reauthorize'))
-                .addButton('discard', gt('Discard'))
+                .addAlternativeButton('reauthorize', gt('Reauthorize'))
+                .addButton('cancel', gt('Cancel'))
                 .show()
                 .done(function (action) {
                     if (action === 'save') {
