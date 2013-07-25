@@ -55,7 +55,8 @@ if (jasmine) {
             return true;
         },
         toResolveWith: function (expected) {
-            var actual = this.actual;
+            var actual = this.actual,
+                isNot = this.isNot;
 
             waitsFor(function () {
                 return actual.state() === 'resolved';
@@ -63,9 +64,14 @@ if (jasmine) {
 
             runs(function () {
                 actual.done(function (result) {
-                    expect(result).toEqual(expected);
+                    if (isNot) {
+                        expect(result).not.toEqual(expected);
+                    } else {
+                        expect(result).toEqual(expected);
+                    }
                 });
             });
+            this.isNot = !isNot;
             return this.spec.results();
         }
     };
