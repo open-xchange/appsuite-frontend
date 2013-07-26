@@ -243,7 +243,7 @@ utils.copy(utils.list("src/"));
 
 //html
 
-function htmlFilter (data) {
+function versionFilter (data) {
     return data
         .replace(/@\s?version\s?@/g, version)
         .replace(/@\s?revision\s?@/g, rev)
@@ -251,21 +251,16 @@ function htmlFilter (data) {
         .replace(/@debug@/g, debug);
 }
 
-utils.copy(utils.list('html', 'core_head.html'),
-    { to: 'tmp', filter: htmlFilter });
-utils.copy(utils.list('html', 'font-awesome.html'),
-    { to: 'tmp', filter: htmlFilter });
-utils.copy(utils.list('html', 'core_body.html'),
-    { to: 'tmp', filter: htmlFilter });
-utils.concat('core', ['html/index.html'], { filter: utils.includeFilter });
-utils.concat('signin', ['html/signin.html'], { filter: utils.includeFilter });
-utils.concat('core.appcache', ['html/core.appcache'], { filter: htmlFilter });
-utils.concat('signin.appcache', ['html/signin.appcache'], { filter: htmlFilter });
+var htmlFilter = _.compose(versionFilter, utils.includeFilter);
+
+utils.concat('core', ['html/index.html'], { filter: htmlFilter });
+utils.concat('signin', ['html/signin.html'], { filter: htmlFilter });
+utils.concat('core.appcache', ['html/core.appcache'], { filter: versionFilter });
+utils.concat('signin.appcache', ['html/signin.appcache'], { filter: versionFilter });
 
 task('force');
-_.each(_.map(['core', 'signin', 'core.appcache', 'signin.appcache'], utils.dest)
-       .concat(['tmp/core_head.html', 'tmp/core_body.html']),
-       function (name) { file(name, ['force']); });
+_.each(['core', 'signin', 'core.appcache', 'signin.appcache'],
+       function (name) { file(utils.dest(name), ['force']); });
 
 //js
 
@@ -387,7 +382,7 @@ file("ox.pot", [utils.source("Jakefile.js")], function() {
         i18n.generatePOT(this.prereqs.slice(skipOxPotPrereqs)));
 });
 if (path.existsSync('html/core_body.html')) {
-    file('ox.pot', ['tmp/core_body.html']);
+    file('ox.pot', ['html/core_body.html']);
 }
 var skipOxPotPrereqs = jake.Task['ox.pot'].prereqs.length;
 
@@ -725,11 +720,15 @@ task("dist", [distDest], function () {
         if (code) return fail('cp exited with code ' + code);
 
         var file = path.join(dest, pkgName + '.spec');
-        fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')
-            .replace(/^(Version:\s*)\S+/gm, '$01' + ver)
-            .replace(/^(%define\s+ox_release\s+)\S+/gm, '$01' + rev)));
+        if (path.existsSync(file)) {
+            fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')
+                .replace(/^(Version:\s*)\S+/gm, '$01' + ver)
+                .replace(/^(%define\s+ox_release\s+)\S+/gm, '$01' + rev)));
+        }
         file = path.join(dest, 'debian/control');
-        fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')));
+        if (path.existsSync(file)) {
+            fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')));
+        }
 
         if (path.existsSync('i18n/languagenames.json')) {
             var languageNames = _.extend(

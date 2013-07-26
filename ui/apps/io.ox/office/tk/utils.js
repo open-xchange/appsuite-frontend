@@ -191,19 +191,31 @@ define.async('io.ox/office/tk/utils',
      *
      * @constant
      */
-    Utils.MAX_NODE_SIZE = _.browser.IE ? 1.5e6 : _.browser.WebKit ? 3e7 : 1e7;
+    Utils.MAX_NODE_SIZE = _.browser.IE ? 1.5e6 : _.browser.WebKit ? 33.5e6 : 17.8e6;
 
     /**
-     * The maximum size of the scrollable area of a container node, as a result
-     * by inserting multiple child nodes, in pixels. The size is limited by
-     * browsers; by inserting more nodes the scrollable size of the container
-     * node becomes incorrect or collapses to zero.
-     * - IE limits this to 21,474,836 (2^31/100) vertically and 10,737,418
-     *   (2^31/200) horizontally.
+     * The maximum width of a container node that can be reached by inserting
+     * multiple child nodes, in pixels. The width is limited by browsers; by
+     * inserting more nodes the width of the container node becomes incorrect
+     * or collapses to zero.
+     * - IE limits this to 10,737,418 (2^31/200) pixels.
      * - Firefox and Chrome do not allow to extend the container node beyond
-     *   the limits of a single node (see comment for Utils.MAX_NODE_SIZE).
+     *   the explicit size limits of a single node (see comment for the
+     *   Utils.MAX_NODE_SIZE constant above).
      */
-    Utils.MAX_CONTAINER_SIZE = _.browser.IE ? 1e7 : Utils.MAX_NODE_SIZE;
+    Utils.MAX_CONTAINER_WIDTH = _.browser.IE ? 10.7e7 : Utils.MAX_NODE_SIZE;
+
+    /**
+     * The maximum height of a container node that can be reached by inserting
+     * multiple child nodes, in pixels. The height is limited by browsers; by
+     * inserting more nodes the height of the container node becomes incorrect
+     * or collapses to zero.
+     * - IE limits this to 21,474,836 (2^31/100) pixels.
+     * - Firefox and Chrome do not allow to extend the container node beyond
+     *   the explicit size limits of a single node (see comment for the
+     *   Utils.MAX_NODE_SIZE constant above).
+     */
+    Utils.MAX_CONTAINER_HEIGHT = _.browser.IE ? 21.4e6 : Utils.MAX_NODE_SIZE;
 
     // generic JS object helpers ----------------------------------------------
 
@@ -2054,7 +2066,8 @@ define.async('io.ox/office/tk/utils',
      * for the Utils.MAX_NODE_SIZE constant), descendant nodes will be inserted
      * whose sizes add up to the specified total node size. The total size of
      * the node will still be restricted depending on the browser (see comment
-     * for the Utils.MAX_CONTAINER_SIZE constant).
+     * for the Utils.MAX_CONTAINER_WIDTH and Utils.MAX_CONTAINER_HEIGHT
+     * constants).
      *
      * @param {HTMLElement|jQuery} containerNode
      *  The DOM element that will be resized. If this object is a jQuery
@@ -2062,23 +2075,23 @@ define.async('io.ox/office/tk/utils',
      *
      * @param {Number} width
      *  The new total width of the node. The resulting width will not exceed
-     *  the value of Utils.MAX_CONTAINER_SIZE, depending on the current
+     *  the value of Utils.MAX_CONTAINER_WIDTH, depending on the current
      *  browser.
      *
      * @param {Number} height
      *  The new total height of the node. The resulting height will not exceed
-     *  the value of Utils.MAX_CONTAINER_SIZE, depending on the current
+     *  the value of Utils.MAX_CONTAINER_HEIGHT, depending on the current
      *  browser.
      */
     Utils.setContainerNodeSize = function (containerNode, width, height) {
         containerNode = $(containerNode);
 
         // restrict to maximum allowed node size
-        width = Utils.minMax(width, 0, Utils.MAX_CONTAINER_SIZE);
-        height = Utils.minMax(height, 0, Utils.MAX_CONTAINER_SIZE);
+        width = Utils.minMax(width, 0, Utils.MAX_CONTAINER_WIDTH);
+        height = Utils.minMax(height, 0, Utils.MAX_CONTAINER_HEIGHT);
 
-        // all browsers but IE (except node is small enough): set node size directly
-        if (!_.browser.ie || ((width <= Utils.MAX_NODE_SIZE) && (height <= Utils.MAX_NODE_SIZE))) {
+        // if node is small enough, set its size directly
+        if ((width <= Utils.MAX_NODE_SIZE) && (height <= Utils.MAX_NODE_SIZE)) {
             containerNode.empty().css({ width: width, height: height });
             return;
         }
@@ -2099,7 +2112,7 @@ define.async('io.ox/office/tk/utils',
             if (height > 0) { markup += '<div style="height:' + height + 'px;"></div>'; }
 
             // insert entire HTML mark-up into the container node
-            containerNode.css({ width: '', height: '' }).addClass('ie-node-size-container')[0].innerHTML = markup;
+            containerNode.css({ width: 'auto', height: 'auto' }).addClass('ie-node-size-container')[0].innerHTML = markup;
         }
     };
 
@@ -2784,6 +2797,21 @@ define.async('io.ox/office/tk/utils',
     };
 
     // global initialization ==================================================
+
+    // forward console output into a fixed DOM node on touch devices
+    if (Config.isDebug() && Modernizr.touch) {
+        var consoleNode = $('<div>', { id: 'io-ox-office-console' });
+        $('body').append(consoleNode);
+        consoleNode.on('click', function () { consoleNode.toggleClass('collapsed'); });
+        _(['log', 'info', 'warn', 'error']).each(function (methodName) {
+            var origMethod = _.bind(window.console[methodName], window.console);
+            window.console[methodName] = function (msg) {
+                consoleNode.append($('<p>').addClass(methodName).text(msg));
+                consoleNode.scrollTop(consoleNode[0].scrollHeight);
+                return origMethod(msg);
+            };
+        });
+    }
 
     // deferred initialization of class members according to current language
     gettext.language.done(function (language) {

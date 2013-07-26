@@ -18,7 +18,7 @@
 (function() {
 
     // File Caching
-    var fileCache = {
+    var fileCache, dummyFileCache = {
         retrieve: function (name) {
             return $.Deferred().reject();
         },
@@ -27,6 +27,8 @@
         }
     };
 
+    fileCache = dummyFileCache;
+
     function runCode(name, code) {
         eval("//@ sourceURL=" + name + ".js\n" + code);
 
@@ -34,10 +36,12 @@
     if (_.device('desktop') && !_.device("Safari") && window.IDBVersionChangeEvent !== undefined && Modernizr.indexeddb && window.indexedDB) {
         // IndexedDB
         (function () {
+
             var initialization = $.Deferred();
 
             var request = window.indexedDB.open('appsuite.filecache', 1);
             var db = null;
+
             request.onupgradeneeded = function (e) {
                 db = e.target.result;
                 db.createObjectStore('filecache', {keyPath: 'name'});
@@ -63,23 +67,34 @@
                 };
             };
 
+            request.onerror = function (e) {
+                // fallback
+                fileCache = dummyFileCache;
+                initialization.reject();
+            };
+
             fileCache.retrieve = function (name) {
                 var def = $.Deferred();
-                initialization.done(function () {
-                    var tx = db.transaction(['filecache'], 'readonly');
-                    var request = tx.objectStore('filecache').get(name);
-                    request.onsuccess = function (e) {
-                        if (!e.target.result) {
-                            def.reject();
-                            return;
-                        }
-                        if (e.target.result.version !== ox.version) {
-                            def.reject();
-                            return;
-                        }
-                        def.resolve(e.target.result.contents);
-                    };
-                });
+                initialization.then(
+                    function success() {
+                        var tx = db.transaction(['filecache'], 'readonly');
+                        var request = tx.objectStore('filecache').get(name);
+                        request.onsuccess = function (e) {
+                            if (!e.target.result) {
+                                def.reject();
+                                return;
+                            }
+                            if (e.target.result.version !== ox.version) {
+                                def.reject();
+                                return;
+                            }
+                            def.resolve(e.target.result.contents);
+                        };
+                    },
+                    function fail() {
+                        def.reject();
+                    }
+                );
                 return def;
             };
 
@@ -195,7 +210,10 @@
         window.dependencies = undefined;
         req.load = function (context, modulename, url) {
             var prefix = context.config.baseUrl;
-            if (modulename.charAt(0) !== '/') {
+            if (modulename.slice(0, 5) === 'apps/') {
+                url = ox.apiRoot + '/apps/load/' + ox.base + ',' + url.slice(5); 
+                return oldload.apply(this, arguments);
+            } else if (modulename.charAt(0) !== '/') {
                 if (url.slice(0, prefix.length) !== prefix) {
                     return oldload.apply(this, arguments);
                 }

@@ -689,7 +689,7 @@
         // escape cid - usefull for evant handlers
         ecid: function (o) {
             var cid = typeof o === 'string' ? o : _.cid(o);
-            return encodeURIComponent(cid).replace(/\./g, '\\.');
+            return encodeURIComponent(cid).replace(/\./g, ':');
         },
 
         // if someone has a better name ...

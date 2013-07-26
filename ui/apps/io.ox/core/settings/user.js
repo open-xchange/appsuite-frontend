@@ -29,15 +29,14 @@ define('io.ox/core/settings/user', [
     var factory = contactModel.protectedMethods.buildFactory('io.ox/core/user/model', api);
 
     //check grants for global address book
-    var options = {
-            access: {}
-        },
+    var options,
         hasAccess = function () {
-            var cont = function () {
-                return this.state() === 'resolved';
-            };
-            return 'gab' in options.access ? $.Deferred().resolve(options.access.gab) : folderAPI.get({ folder: 6, cache: false, suppressYell: true })
-                   .then(cont, cont);
+            var def = $.Deferred();
+            folderAPI.get({ folder: 6, cache: true, suppressYell: true })
+                .always(function () {
+                    def.resolve(this.state() === 'resolved');
+                });
+            return def;
         };
 
     return {
@@ -45,7 +44,12 @@ define('io.ox/core/settings/user', [
             $node.busy();
             return hasAccess()
                     .then(function (resp) {
-                        options.access.gab = resp;
+                        //set options for view create
+                        options = {
+                            access: {
+                                gab: resp
+                            }
+                        };
                         // Load the user
                         return factory.realm('edit').get({});
                     })

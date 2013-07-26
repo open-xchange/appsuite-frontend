@@ -302,6 +302,10 @@ define("io.ox/core/tk/dialogs",
             return this;
         };
 
+        this.addButtonMobile = function (action, label, dataaction, options) {
+            return addButton(action, label, dataaction, options);
+        };
+
         this.close = function () {
             if (!o || o.async)  {
                 close();
