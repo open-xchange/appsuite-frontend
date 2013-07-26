@@ -49,13 +49,15 @@ define(['io.ox/core/desktop'], function (desktop) {
             });
 
             it('should not launch an unregistered app', function () {
-                var app = this.app;
+                var app = this.app,
+                    def;
                 ox.manifests.disabled['io.ox/testApp/main'] = true;
 
-                app.launch();
+                def = app.launch();
 
                 ox.manifests.disabled = {};
                 expect(ox.ui.apps).not.toContain(app);
+                expect(def.state()).toBe('rejected');
 
                 //FIXME: this describes bug 26383
                 expectFail[this.getFullName()] = true;
