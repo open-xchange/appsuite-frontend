@@ -306,11 +306,21 @@ define('io.ox/core/permissions/permissions',
                     if (data.module === 'mail' && !(data.capabilities & Math.pow(2, 0))) {
                         isFolderAdmin = false;
                     }
-
-                    var dialog = new dialogs.ModalDialog()
-                    .header(
+                    var options;
+                    if (_.device('!desktop')) {
+                        options = {top: '40px', center: false};
+                    }
+                    var dialog = new dialogs.ModalDialog(options);
+                    dialog.getHeader().append(
                         api.getBreadcrumb(data.id, { subfolders: false, prefix: gt('Folder permissions') })
                     );
+                    if (_.device('!desktop')) {
+                        dialog.getHeader().append(
+                            dialog.addButtonMobile('save', gt('Save')).addClass('btn-primary'),
+                            dialog.addButtonMobile('cancel', gt('Cancel'))
+                        );
+                        dialog.getFooter().hide();
+                    }
 
                     // mail folders show up with "null"
                     var owner = data.created_by || ox.user_id;
@@ -347,8 +357,9 @@ define('io.ox/core/permissions/permissions',
                     });
 
                     if (isFolderAdmin) {
-
-                        dialog.addPrimaryButton('save', gt('Save')).addButton('cancel', gt('Cancel'));
+                        if (_.device('desktop')) {
+                            dialog.addPrimaryButton('save', gt('Save')).addButton('cancel', gt('Cancel'));
+                        }
 
                         var node =  $('<div class="autocomplete-controls input-append">').append(
                                 $('<input type="text" class="add-participant permissions-participant-input-field">'),
@@ -359,8 +370,8 @@ define('io.ox/core/permissions/permissions',
 
                         autocomplete.render({
                             autoselect: true,
-                            parentSelector: '.permissions-dialog > .modal-footer',
-                            placement: 'top',
+                            parentSelector: (_.device('desktop') ? '.permissions-dialog > .modal-footer' : '.permissions-dialog > .modal-header'),
+                            placement: (_.device('desktop') ? 'top' : 'bottom'),
                             contacts: false,
                             distributionlists: false,
                             groups: true,
@@ -394,7 +405,12 @@ define('io.ox/core/permissions/permissions',
                                 }
                             }
                         });
-                        dialog.getFooter().prepend(node);
+                        if (_.device('desktop')) {
+                            dialog.getFooter().prepend(node);
+                        } else {
+                            dialog.getHeader().append(node);
+                        }
+
                     } else {
                         dialog.addPrimaryButton('ok', gt('Close'));
                     }

@@ -25,6 +25,20 @@
             background-color: transparent;
             .prefix { font-weight: bold; font-size: 16px; }
         }
+        .btn {
+            float:right;
+            &.btn-primary { margin-left: 13px; }
+        }
+        *zoom: 1;
+        &:before,
+        &:after {
+          display: table;
+          content: "";
+          line-height: 0;
+        }
+        &:after {
+          clear: both;
+        }
     }
 
     .autocomplete-controls {
@@ -34,7 +48,6 @@
 
     .modal-body {
         height: 200px;
-        max-height: 200px;
         padding-bottom: 100px;
     }
 
@@ -108,4 +121,9 @@
         min-width: 600px;
         max-width: 768px;
     }
+}
+
+.touch .permissions-dialog .modal-body {
+    height: auto;
+    min-height: 200px;
 }
