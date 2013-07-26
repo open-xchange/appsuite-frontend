@@ -100,12 +100,18 @@ define.async('io.ox/core/manifests',
 
     ox.manifests = manifestManager;
 
+    function isDisabled(manifest) {
+        return (manifest.requires && manifest.upsell !== true) &&
+               !capabilities.has(manifest.requires);
+    }
+
     function process(manifest) {
 
         // apps don't have a namespace
         if (!manifest.namespace) {
             // Looks like an app
             manifestManager.apps[manifest.path] = manifest;
+            manifestManager.disabled[manifest.path] = isDisabled(manifest);
             return;
         }
 
@@ -119,9 +125,8 @@ define.async('io.ox/core/manifests',
 
         // check capabilities. skip this if upsell=true.
         // Such plugins take care of missing capabilities own their own
-        if (manifest.requires && manifest.upsell !== true) {
-            if (!capabilities.has(manifest.requires)) return;
-        }
+        if (isDisabled(manifest))
+            return;
 
         // check devie. this check cannot be bypassed by upsell=true
         if (manifest.device && !_.device(manifest.device)) return;
@@ -147,6 +152,7 @@ define.async('io.ox/core/manifests',
             manifestManager.apps = null;
             manifestManager.plugins = null;
             manifestManager.pluginPoints = null;
+            manifestManager.disabled = null;
         }
     };
 
@@ -156,6 +162,7 @@ define.async('io.ox/core/manifests',
         manifestManager.pluginPoints = {};
         manifestManager.plugins = {};
         manifestManager.apps = {};
+        manifestManager.disabled = {};
 
         _(ox.serverConfig.manifests).each(process);
 

@@ -50,16 +50,14 @@ define(['io.ox/core/desktop'], function (desktop) {
 
             it('should not launch an unregistered app', function () {
                 var app = this.app,
-                    expectFail = {};
+                    def;
+                ox.manifests.disabled['io.ox/testApp/main'] = true;
 
-                delete ox.manifests.apps['io.ox/testApp/main'];
-                app.launch();
+                def = app.launch();
 
+                ox.manifests.disabled = {};
                 expect(ox.ui.apps).not.toContain(app);
-
-                //FIXME: this describes bug 26383
-                expectFail[this.getFullName()] = true;
-                this.handleExpectedFail(expectFail);
+                expect(def.state()).toBe('rejected');
             });
 
             describe('should allow to customize the launch method', function () {

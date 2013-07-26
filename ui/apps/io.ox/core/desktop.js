@@ -337,7 +337,9 @@ define("io.ox/core/desktop",
 
         launch: function (options) {
 
-            var deferred = $.when(), self = this;
+            var deferred = $.when(),
+                self = this,
+                isDisabled = ox.manifests.disabled[this.getName() + '/main'] === true;
 
             // update hash
             if (this.get('name') !== _.url.hash('app')) {
@@ -349,11 +351,21 @@ define("io.ox/core/desktop",
 
             if (this.get('state') === 'ready') {
                 this.set('state', 'initializing');
-                (deferred = this.get('launch').call(this, options || {}) || $.when())
+                if (isDisabled) {
+                    deferred = $.Deferred().reject();
+                } else {
+                    deferred = this.get('launch').call(this, options || {}) || $.when();
+                }
+                deferred
                 .done(function () {
                     ox.ui.apps.add(self);
                     self.set('state', 'running');
                     self.trigger('launch', self);
+                })
+                .fail(function () {
+                    ox.launch(
+                        require('settings!io.ox/core').get('autoStart')
+                    );
                 });
             } else if (this.has('window')) {
                 // toggle app window
