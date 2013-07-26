@@ -720,11 +720,15 @@ task("dist", [distDest], function () {
         if (code) return fail('cp exited with code ' + code);
 
         var file = path.join(dest, pkgName + '.spec');
-        fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')
-            .replace(/^(Version:\s*)\S+/gm, '$01' + ver)
-            .replace(/^(%define\s+ox_release\s+)\S+/gm, '$01' + rev)));
+        if (path.existsSync(file)) {
+            fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')
+                .replace(/^(Version:\s*)\S+/gm, '$01' + ver)
+                .replace(/^(%define\s+ox_release\s+)\S+/gm, '$01' + rev)));
+        }
         file = path.join(dest, 'debian/control');
-        fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')));
+        if (path.existsSync(file)) {
+            fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')));
+        }
 
         if (path.existsSync('i18n/languagenames.json')) {
             var languageNames = _.extend(
