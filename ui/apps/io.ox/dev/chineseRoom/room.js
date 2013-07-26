@@ -112,6 +112,10 @@ define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups', 'io.ox/core/event
             console.log("Online!");
         });
 
+        this.group.on("reset", function () {
+            console.log("Reset!");
+        });
+
     }
 
     var rooms = {};
