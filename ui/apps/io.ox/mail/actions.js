@@ -659,7 +659,10 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/save', {
         id: 'saveEML',
-        requires: 'some',
+        requires: function (e) {
+            // ios cannot handle EML download
+            return _.device('!ios') && e.collection.has('some', 'read');
+        },
         multiple: function (data) {
             var url;
             if (_(data).first().msgref) {
