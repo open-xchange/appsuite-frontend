@@ -149,7 +149,13 @@ define("io.ox/core/tk/dialogs",
                 case 13: // Enter
                     // ignore textareas
                     if ($(e.target).is('textarea,input:file')) return;
-                    if (!isBusy && o.enter) invoke(o.enter);
+                    if (!isBusy && o.enter) {
+                        if (!_.isFunction(o.enter)) {
+                            invoke(o.enter);
+                        } else {
+                            return o.enter.call(self);
+                        }
+                    }
                     return false;
 
                 case 9: // tab
