@@ -388,7 +388,7 @@ define('io.ox/portal/settings/pane',
                 delay: 150,
                 handle: '.drag-handle',
                 scroll: true,
-                stop: function (e, ui) {
+                update: function (e, ui) {
                     widgets.save(list);
                 }
             });
@@ -408,6 +408,7 @@ define('io.ox/portal/settings/pane',
             });
 
             collection.on('sort', function () {
+                this.sort({ silent: true });
                 list.empty();
                 this.each(function (model) {
                     list.append(createView(model).render().el);
