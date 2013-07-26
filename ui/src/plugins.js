@@ -211,7 +211,10 @@
         window.dependencies = undefined;
         req.load = function (context, modulename, url) {
             var prefix = context.config.baseUrl;
-            if (modulename.charAt(0) !== '/') {
+            if (modulename.slice(0, 5) === 'apps/') {
+                url = ox.apiRoot + '/apps/load/' + ox.base + ',' + url.slice(5); 
+                return oldload.apply(this, arguments);
+            } else if (modulename.charAt(0) !== '/') {
                 if (url.slice(0, prefix.length) !== prefix) {
                     return oldload.apply(this, arguments);
                 }
