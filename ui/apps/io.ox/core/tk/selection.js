@@ -159,7 +159,6 @@ define('io.ox/core/tk/selection',
                 } else {
                     apply(id, e);
                 }
-
             }
         };
 

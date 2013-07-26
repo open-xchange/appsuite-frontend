@@ -1889,7 +1889,7 @@ input.nice-input {
     }
 
     .folder-row {
-        display: table-row;
+        display: block;
     }
 
     .subfolders.io-ox-busy {
@@ -1898,7 +1898,7 @@ input.nice-input {
 
     .folder-arrow {
 
-        display: table-cell;
+        display: inline-block;
         width: 50px;
         text-align: center;
         color: #aaa;
@@ -1916,7 +1916,7 @@ input.nice-input {
     .folder-label {
 
         font-weight: 300;
-        display: table-cell;
+        display: inline-block;
         margin: 0 1em 0 0;
 
         i {
@@ -1945,8 +1945,7 @@ input.nice-input {
     }
 
     .folder-counter {
-        display: table-cell;
-        text-align: right;
+        display: inline-block;
     }
 
     .folder-counter-badge {
@@ -1957,7 +1956,6 @@ input.nice-input {
         display: none;
         background-color: #f0f0f0;
         border-radius: 5px;
-        margin-left: 1em;
     }
 
     .show-counter {
@@ -1965,10 +1963,6 @@ input.nice-input {
         .folder-counter-badge {
             display: inline-block;
         }
-        .folder-label {
-            font-weight: bold;
-        }
-
     }
 
     .folder.selected .folder-counter-badge {
@@ -2071,18 +2065,17 @@ input.nice-input {
 
                 &.selected {
 
-                    font-weight: bold;
                     background-color: @foldertreeSelectedBackground;
 
                     .folder-label {
                         color: @foldertreeSelectedLabelColor;
-                        font-weight: bold;
+                        font-weight: 500;
                         text-shadow: none;
                     }
                 }
 
                 &.show-counter .folder-label {
-                    color: lighten(@linkColor, 20%);
+                    /* color: lighten(@linkColor, 20%); */
                 }
 
                 .shared-by {
