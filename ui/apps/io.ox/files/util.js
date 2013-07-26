@@ -31,7 +31,7 @@ define('io.ox/files/util',
                         extForm = _.last(name.split('.')),
                         $hint = $('<div class="row-fluid muted inset">').append(
                                     '<small style="padding-top: 8px">' +
-                                        gt('Please note, changing/removing will cause problems by viewing and editing.') +
+                                        gt('Please note, changing or removing will cause problems by viewing and editing.') +
                                         '</small>'
                                 ),
                         message;

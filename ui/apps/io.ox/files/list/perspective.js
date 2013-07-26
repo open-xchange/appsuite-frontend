@@ -303,8 +303,8 @@ define('io.ox/files/list/perspective',
                                     role: 'menu'
                                 })
                                 .append(
-                                    buildOption(702, gt('Filename')),
-                                    buildOption(704, gt('Filesize')),
+                                    buildOption(702, gt('File name')),
+                                    buildOption(704, gt('File size')),
                                     buildOption(5, gt('Last modified')),
                                     $('<li class="divider">'),
                                     buildOption('asc', gt('Ascending')),

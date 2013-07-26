@@ -59,7 +59,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                         $('<div>').addClass('alarm-date').text(
                             //#. %1$s reminder date of a task
                             //#, c-format
-                            gt('Remind date %1$s', _.noI18n(task.alarm))
+                            gt('Reminder date %1$s', _.noI18n(task.alarm))
                         )
                 );
             }
