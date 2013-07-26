@@ -375,26 +375,20 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                     return null;
                 }
             }
-            var mydate = new date.Local(myValue);
-            var parsedDate = date.Local.parse(value, date.TIME);
+            var mydate = new date.Local(myValue),
+                parsedDate = date.Local.parse(value, date.TIME);
 
             // just reject the change, if it's not parsable
             if (value !== '' && _.isNull(parsedDate)) {
                 model.trigger('change:' + attribute);//reset inputfields
-                //setTimeout(function () {notifications.yell('error', gt('Please enter a valid date.')); }, 300);
                 return model.get(attribute);
             }
             //set hours to 6:00 am if nothing is set
             if (value === '') {
-                mydate.setHours(6);
-                mydate.setMinutes(0);
-                mydate.setSeconds(0);
+                mydate.setHours(6, 0, 0, 0);
             } else {
-                mydate.setHours(parsedDate.getHours());
-                mydate.setMinutes(parsedDate.getMinutes());
-                mydate.setSeconds(parsedDate.getSeconds());
+                mydate.setHours(parsedDate.getHours(), parsedDate.getMinutes(), 0, 0);
             }
-
             return mydate.getTime();
         },
         _dateStrToDate: function (value, attribute, model) {
@@ -407,8 +401,9 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                     return null;
                 }
             }
-            var mydate = new date.Local(date.Local.utc(myValue));
-            var parsedDate;
+            var mydate = new date.Local(date.Local.utc(myValue)),
+                parsedDate;
+
             if (_.device('small')) {
                 parsedDate = date.Local.parse(value, date.DATE_TIME);
             } else {
@@ -421,15 +416,12 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
             // just reject the change, if it's not parsable
             if (_.isNull(parsedDate)) {
                 model.trigger('change:' + attribute);//reset inputfields
-                //setTimeout(function () {notifications.yell('error', gt('Please enter a valid date.')); }, 300);
                 return model.get(attribute);
             }
             if (_.device('small')) {
                 return parsedDate.getTime();
             } else {
-                mydate.setDate(parsedDate.getDate());
-                mydate.setMonth(parsedDate.getMonth());
-                mydate.setYear(parsedDate.getYear());
+                mydate.setYear(parsedDate.getYear(), parsedDate.getMonth(), parsedDate.getDate()).setSeconds(0, 0);
                 return date.Local.localTime(mydate.getTime());
             }
         }
@@ -445,10 +437,10 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         attribute: 'start_date',
         label: gt('Starts on'),
         updateModelDate: function () {
-            this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model), {validate: true});
+            this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model), { validate: true });
         },
         updateModelTime: function () {
-            this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model), {validate: true});
+            this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model), { validate: true });
         }
     }));
 
