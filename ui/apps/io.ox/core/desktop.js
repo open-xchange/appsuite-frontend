@@ -337,7 +337,9 @@ define("io.ox/core/desktop",
 
         launch: function (options) {
 
-            var deferred = $.when(), self = this, isRegistered = !!ox.manifests.apps[this.getName() + '/main'];
+            var deferred = $.when(),
+                self = this,
+                isDisabled = ox.manifests.disabled[this.getName() + '/main'] === true;
 
             // update hash
             if (this.get('name') !== _.url.hash('app')) {
@@ -349,10 +351,10 @@ define("io.ox/core/desktop",
 
             if (this.get('state') === 'ready') {
                 this.set('state', 'initializing');
-                if (isRegistered) {
-                    deferred = this.get('launch').call(this, options || {}) || $.when();
-                } else {
+                if (isDisabled) {
                     deferred = $.Deferred().reject();
+                } else {
+                    deferred = this.get('launch').call(this, options || {}) || $.when();
                 }
                 deferred
                 .done(function () {

@@ -811,7 +811,9 @@ define('io.ox/core/main',
             return getAutoLaunchDetails(m).app;
         })
         .filter(function (m) {
-            return !!ox.manifests.apps[m];
+            //don’t autoload without manifest
+            //don’t autoload disabled apps
+            return !!ox.manifests.apps[m] || ox.manifests.disabled[m];
         })
         .compact()
         .value();
