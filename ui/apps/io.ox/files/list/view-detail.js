@@ -404,7 +404,6 @@ define('io.ox/files/list/view-detail',
         index: 30,
         draw: function (baton) {
             var d = new date.Local(baton.data.last_modified);
-            console.log('Sooo', baton.data, d);
             this.find('td:last').append($('<span class="pull-right last_modified">').text(gt.noI18n(d.format(date.DATE_TIME))));
         }
     });
