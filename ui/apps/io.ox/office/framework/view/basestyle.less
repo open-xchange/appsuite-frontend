@@ -1181,3 +1181,40 @@ i[class^="icon-"], i[class^=" icon-"] {
     right: 0;
     overflow: hidden;
 }
+
+#io-ox-office-console {
+    position: fixed;
+    top: 10px;
+    bottom: 10px;
+    left: 10px;
+    width: 30%;
+    z-index: 60000;
+    overflow: auto;
+    background-color: fade(white, 90%);
+    border: 1px solid @textColor;
+    .border-radius(5px);
+    .drop-shadow();
+
+    &.collapsed {
+        top: 50%;
+        left: -20px;
+        width: 40px;
+        height: 40px;
+        margin-top: -10px;
+        .border-radius(50%);
+        background-color: fade(yellow, 50%);
+        > p { display: none; }
+    }
+
+    > p {
+        margin: 0;
+        padding: 0 5px;
+        border-bottom: 1px solid @textColor;
+        font-family: serif; 
+        font-size: 12px;
+        color: @textColor;
+        &.info { background-color: fade(blue, 10%); }
+        &.warn { background-color: fade(yellow, 10%); }
+        &.error { background-color: fade(red, 10%); }
+    }
+}

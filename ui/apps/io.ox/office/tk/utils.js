@@ -2798,6 +2798,21 @@ define.async('io.ox/office/tk/utils',
 
     // global initialization ==================================================
 
+    // forward console output into a fixed DOM node on touch devices
+    if (Config.isDebug() && Modernizr.touch) {
+        var consoleNode = $('<div>', { id: 'io-ox-office-console' });
+        $('body').append(consoleNode);
+        consoleNode.on('click', function () { consoleNode.toggleClass('collapsed'); });
+        _(['log', 'info', 'warn', 'error']).each(function (methodName) {
+            var origMethod = _.bind(window.console[methodName], window.console);
+            window.console[methodName] = function (msg) {
+                consoleNode.append($('<p>').addClass(methodName).text(msg));
+                consoleNode.scrollTop(consoleNode[0].scrollHeight);
+                return origMethod(msg);
+            };
+        });
+    }
+
     // deferred initialization of class members according to current language
     gettext.language.done(function (language) {
 
