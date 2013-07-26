@@ -51,6 +51,7 @@ define("io.ox/core/tk/dialogs",
             lastFocus = $(),
             innerFocus = $(),
             deferred = $.Deferred(),
+            lastSimpleScrollPos = 0,
             isBusy = false,
             self = this,
             data = {},
@@ -147,8 +148,14 @@ define("io.ox/core/tk/dialogs",
 
                 case 13: // Enter
                     // ignore textareas
-                    if ($(e.target).is('textarea')) return;
-                    if (!isBusy && o.enter) invoke(o.enter);
+                    if ($(e.target).is('textarea,input:file')) return;
+                    if (!isBusy && o.enter) {
+                        if (!_.isFunction(o.enter)) {
+                            invoke(o.enter);
+                        } else {
+                            return o.enter.call(self);
+                        }
+                    }
                     return false;
 
                 case 9: // tab
@@ -552,7 +559,7 @@ define("io.ox/core/tk/dialogs",
                             self.nodes.simple.find('[data-hidden-by-sidepopup]')
                                 .removeAttr('data-hidden-by-sidepopup')
                                 .show();
-                            $('body').scrollTop(0);
+                            $('body').scrollTop(self.lastSimpleScrollPos || 0);
                         }
                         self.nodes.simple = null;
                     }
@@ -662,6 +669,7 @@ define("io.ox/core/tk/dialogs",
 
                 // is inside simple-window?
                 if (self.nodes.simple.length) {
+                    self.lastSimpleScrollPos = $('body').scrollTop();
                     self.nodes.simple.find('.window-content:visible')
                         .attr('data-hidden-by-sidepopup', 'true')
                         .hide();

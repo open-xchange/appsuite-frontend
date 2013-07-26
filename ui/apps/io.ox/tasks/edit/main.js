@@ -166,7 +166,7 @@ define('io.ox/tasks/edit/main',
             } else {
                 if (app.edit) {
                     require(['io.ox/tasks/api'], function (api) {
-                        api.trigger('update:' + encodeURIComponent(taskModel.attributes.folder_id + '.' + taskModel.attributes.id));
+                        api.trigger('update:' + _.ecid(taskModel.attributes));
                         clean();
                         model.factory.realm('edit').release();//old model no longer needed
                         def.resolve();
@@ -179,7 +179,7 @@ define('io.ox/tasks/edit/main',
 
             return def;
         });
-        
+
         app.failSave = function () {
             if (this.model) {
                 var title = this.attributes.title;
@@ -191,7 +191,7 @@ define('io.ox/tasks/edit/main',
             }
             return false;
         };
-        
+
         app.failRestore = function (point) {
             var df = $.Deferred();
             this.markDirty();
@@ -207,7 +207,7 @@ define('io.ox/tasks/edit/main',
             df.resolve();
             return df;
         };
-        
+
         return app;
     }
 

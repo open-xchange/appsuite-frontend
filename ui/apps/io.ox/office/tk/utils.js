@@ -181,6 +181,30 @@ define.async('io.ox/office/tk/utils',
      */
     Utils.IE9 = _.isNumber(_.browser.IE) && (_.browser.IE < 10);
 
+    /**
+     * The maximum explicit size of single DOM nodes, in pixels. The size is
+     * limited by browsers; by using larger sizes the elements may collapse to
+     * zero size.
+     * - IE limits this to 1,533,917 (2^31/1400) in both directions.
+     * - Firefox limits this to 17,895,696 (0x1111110) in both directions.
+     * - Chrome limits this to 33,554,428 (0x1FFFFFC) in both directions.
+     *
+     * @constant
+     */
+    Utils.MAX_NODE_SIZE = _.browser.IE ? 1.5e6 : _.browser.WebKit ? 3e7 : 1e7;
+
+    /**
+     * The maximum size of the scrollable area of a container node, as a result
+     * by inserting multiple child nodes, in pixels. The size is limited by
+     * browsers; by inserting more nodes the scrollable size of the container
+     * node becomes incorrect or collapses to zero.
+     * - IE limits this to 21,474,836 (2^31/100) vertically and 10,737,418
+     *   (2^31/200) horizontally.
+     * - Firefox and Chrome do not allow to extend the container node beyond
+     *   the limits of a single node (see comment for Utils.MAX_NODE_SIZE).
+     */
+    Utils.MAX_CONTAINER_SIZE = _.browser.IE ? 1e7 : Utils.MAX_NODE_SIZE;
+
     // generic JS object helpers ----------------------------------------------
 
     /**
@@ -2022,6 +2046,61 @@ define.async('io.ox/office/tk/utils',
     Utils.scrollToChildNode = function (scrollableNode, childNode, options) {
         var windowPosition = Utils.getNodePositionInWindow(childNode);
         Utils.scrollToWindowRectangle(scrollableNode, windowPosition, options);
+    };
+
+    /**
+     * Sets the size of the passed DOM nodes. As a workaround for IE which
+     * restricts the explicit size of single nodes to ~1.5m pixels (see comment
+     * for the Utils.MAX_NODE_SIZE constant), descendant nodes will be inserted
+     * whose sizes add up to the specified total node size. The total size of
+     * the node will still be restricted depending on the browser (see comment
+     * for the Utils.MAX_CONTAINER_SIZE constant).
+     *
+     * @param {HTMLElement|jQuery} containerNode
+     *  The DOM element that will be resized. If this object is a jQuery
+     *  collection, resizes all node it contains.
+     *
+     * @param {Number} width
+     *  The new total width of the node. The resulting width will not exceed
+     *  the value of Utils.MAX_CONTAINER_SIZE, depending on the current
+     *  browser.
+     *
+     * @param {Number} height
+     *  The new total height of the node. The resulting height will not exceed
+     *  the value of Utils.MAX_CONTAINER_SIZE, depending on the current
+     *  browser.
+     */
+    Utils.setContainerNodeSize = function (containerNode, width, height) {
+        containerNode = $(containerNode);
+
+        // restrict to maximum allowed node size
+        width = Utils.minMax(width, 0, Utils.MAX_CONTAINER_SIZE);
+        height = Utils.minMax(height, 0, Utils.MAX_CONTAINER_SIZE);
+
+        // all browsers but IE (except node is small enough): set node size directly
+        if (!_.browser.ie || ((width <= Utils.MAX_NODE_SIZE) && (height <= Utils.MAX_NODE_SIZE))) {
+            containerNode.empty().css({ width: width, height: height });
+            return;
+        }
+
+        // IE: insert embedded nodes to expand the container node beyond the limits of a single node
+        if ((width !== containerNode.width()) || (height !== containerNode.height())) {
+
+            // generate the mark-up for the embedded horizontal sizer nodes
+            var markup = Utils.repeatString('<div style="width:' + Utils.MAX_NODE_SIZE + 'px;"></div>', Math.floor(width / Utils.MAX_NODE_SIZE));
+            width %= Utils.MAX_NODE_SIZE;
+            if (width > 0) { markup += '<div style="width:' + width + 'px;"></div>'; }
+
+            // generate the mark-up for the vertical sizer nodes
+            markup = '<div style="height:' + Math.min(height, Utils.MAX_NODE_SIZE) + 'px;">' + markup + '</div>';
+            height = Math.max(0, height - Utils.MAX_NODE_SIZE);
+            markup += Utils.repeatString('<div style="height:' + Utils.MAX_NODE_SIZE + 'px;"></div>', Math.floor(height / Utils.MAX_NODE_SIZE));
+            height %= Utils.MAX_NODE_SIZE;
+            if (height > 0) { markup += '<div style="height:' + height + 'px;"></div>'; }
+
+            // insert entire HTML mark-up into the container node
+            containerNode.css({ width: '', height: '' }).addClass('ie-node-size-container')[0].innerHTML = markup;
+        }
     };
 
     // form control elements --------------------------------------------------

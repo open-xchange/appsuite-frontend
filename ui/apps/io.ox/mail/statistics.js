@@ -23,8 +23,9 @@ define('io.ox/mail/statistics',
         HEIGHT = _.device('small') ? 150 : 200;
 
     function createCanvas() {
+
         // attribute notation does not work! don't know why. maybe retina whatever.
-        return $('<canvas width="' + WIDTH + '" height="' + HEIGHT + '">');
+        return $('<canvas width="' + WIDTH + '" height="' + HEIGHT + '" style="width:' + WIDTH + 'px; height:' + HEIGHT + 'px;"></canvas>');
     }
 
     var fetch = (function () {
@@ -155,7 +156,7 @@ define('io.ox/mail/statistics',
 
         hour: function (node, options) {
 
-            var canvas = $('<canvas width="500" height="200">');
+            var canvas = createCanvas();
 
             node.append(
                 $('<h2>').text(gt('Mails per hour (%)')),

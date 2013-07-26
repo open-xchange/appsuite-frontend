@@ -101,6 +101,22 @@
 /* icons                                                                     */
 /* ========================================================================= */
 
+/* hack for IE to expand nodes beyond the size limit of single nodes, see Utils.setContainerNodeSize() */
+.ie-node-size-container > div {
+    display: inline-block;
+    overflow: visible;
+    white-space: nowrap;
+
+    > div {
+        display: inline-block;
+        height: 0;
+    }
+}
+
+/* ========================================================================= */
+/* icons                                                                     */
+/* ========================================================================= */
+
 i[class^="docs-"] {
     display: inline-block;
     margin: 0;
@@ -223,6 +239,10 @@ i[class^="icon-"], i[class^=" icon-"] {
     /* the application pane in the middle between all view panes */
     &.app-pane {
         .box-sizing(content-box);
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
         margin: 0;
         padding: 0;
         background: @app-pane-fill-color;

@@ -224,17 +224,17 @@ define('io.ox/office/framework/app/baseapplication',
         function importDocument(point) {
 
             // notify listeners
-            self.trigger('docs:import:before');
+            self.trigger('docs:import:before', point);
 
             // call the import handler
             return importHandler.call(self, point)
                 .always(function () {
                     imported = true;
                     afterImport();
-                    self.trigger('docs:import:after');
+                    self.trigger('docs:import:after', point);
                 })
                 .done(function () {
-                    self.trigger('docs:import:success');
+                    self.trigger('docs:import:success', point);
                 })
                 .fail(function (result) {
                     var title = Utils.getStringOption(result, 'title', gt('Load Error')),

@@ -55,7 +55,8 @@ define('io.ox/office/tk/dialogs',
             dialog = new CoreDialogs.ModalDialog({
                 width: Utils.getIntegerOption(options, 'width', 400),
                 async: Utils.getBooleanOption(options, 'async', false),
-                defaultEnter: Utils.getBooleanOption(options, 'defaultEnter', false)
+                tabTrap: true,
+                enter: Utils.getFunctionOption(options, 'enter', undefined)
             }),
             // the title text
             title = Utils.getStringOption(options, 'title'),
@@ -291,6 +292,34 @@ define('io.ox/office/tk/dialogs',
         });
 
         return def.promise();
+    };
+
+    /**
+     * Default ENTER handler for dialogs.
+     * Must be set via 'enter' options at the
+     * dialog.
+     * Checks if the primary button is not disabled
+     * and invoke the stored function on controls
+     * which have the defaultEnter attribute set.
+     *
+     * @returns {Boolean}
+     *  TRUE if the event should be processed by
+     *  bubbling, otherwise FALSE.
+     */
+    Dialogs.defaultKeyEnterHandler = function () {
+        var button = null, focus = $(document.activeElement);
+
+        // handler for the ENTER key on the dialog
+        if (this.getFooter().children(':focus').length === 0 && focus.attr('defaultEnter')) {
+            button = this.getFooter().find('[disabled!="disabled"][data-action].btn-primary').first();
+            if (button.length) {
+                this.invoke(button.attr('data-action'));
+                return false;
+            }
+        }
+
+        // let the event bubble
+        return true;
     };
 
     // exports ================================================================

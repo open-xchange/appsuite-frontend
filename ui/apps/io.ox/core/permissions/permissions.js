@@ -59,7 +59,7 @@ define('io.ox/core/permissions/permissions',
             },
 
             render: function () {
-                var baton = ext.Baton({ model: this.model, view: this, admin: this.options.admin });
+                var baton = ext.Baton({ model: this.model, view: this, admin: this.options.admin, folder: this.options.folder });
                 ext.point(POINT + '/detail').invoke('draw', this.$el.empty(), baton);
                 return this;
             },
@@ -249,10 +249,15 @@ define('io.ox/core/permissions/permissions',
     addDropdown = function (permission, baton) {
         var bits = baton.model.get('bits'),
             selected = api.Bitmask(bits).get(permission),
+            admin = isFolderAdmin,
             menu;
         // folder fix
         if (permission === 'folder' && selected === 0) selected = 1;
-        if (!isFolderAdmin) {
+        // no admin choice for default folders (see Bug 27704)
+        if (permission === 'admin' && String(api.getDefaultFolder(baton.folder.module)) === baton.folder.id) {
+            admin = false;
+        }
+        if (!admin) {
             return $('<i>').text(menus[permission][selected]);
         }
         menu = $('<span class="dropdown">').append(
@@ -313,14 +318,14 @@ define('io.ox/core/permissions/permissions',
                     collection.on('reset', function () {
                         var node = dialog.getContentNode().empty();
                         this.each(function (model) {
-                            new PermissionsView({ model: model, collection: this, owner: owner, admin: isFolderAdmin })
+                            new PermissionsView({ model: model, collection: this, owner: owner, admin: isFolderAdmin, folder: data })
                             .render().$el.appendTo(node);
                         }, this);
                     });
 
                     collection.on('add', function (model, collection) {
                         var node = dialog.getContentNode();
-                        new PermissionsView({ model: model, collection: collection, owner: owner, admin: isFolderAdmin })
+                        new PermissionsView({ model: model, collection: collection, owner: owner, admin: isFolderAdmin, folder: data })
                         .render().$el.appendTo(node);
                     });
 

@@ -875,13 +875,6 @@ $(window).load(function () {
                         });
                     }
 
-                } else if (_.browser.IE <= 8) {
-                    // recommend chrome frame?
-                    var link = 'http://www.google.com/chromeframe/?user=true';
-                    feedback('info', function () {
-                        return $('<b>').text(gt('Your browser is slow and outdated!'))
-                            .add($('<br><a href="http://www.google.com/chrome" target="_blank">Google Chrome</a>.'));
-                    });
                 } else if (_.device('android') && !_.browser.chrome) {
                     // Offer Chrome to all non-chrome users on android
                     feedback('info', function () {

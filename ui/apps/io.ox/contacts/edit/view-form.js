@@ -135,9 +135,11 @@ define('io.ox/contacts/edit/view-form', [
         );
     });
 
-    function createContactEdit(ref) {
+    function createContactEdit(ref, options) {
+        var opt = $.extend({access: {}}, options || {}),
+            isMyContactData = ref === 'io.ox/core/user';
 
-        if (ref === 'io.ox/core/user') { // Remove attachment handling if view is used with user data instead of contact data
+        if (isMyContactData) { // Remove attachment handling if view is used with user data instead of contact data
             delete meta.sections.attachments;
             delete meta.i18n.attachments;
         }
@@ -153,9 +155,14 @@ define('io.ox/contacts/edit/view-form', [
             id: ref + '/edit/picture',
             index: 100,
             customizeNode: function () {
-                this.$el
-                    .css({ display: 'inline-block' })
-                    .addClass("contact-picture-upload f6-target");
+                //access to global address book?
+                if (isMyContactData && !opt.access.gab) {
+                    this.$el = $('');
+                } else {
+                    this.$el
+                        .css({ display: 'inline-block' })
+                        .addClass("contact-picture-upload f6-target");
+                }
             }
         }));
 
@@ -243,6 +250,9 @@ define('io.ox/contacts/edit/view-form', [
             },
             render: function () {
                 this.$el.text(util.getFullName(this.model.toJSON()) || '\u00A0');
+                //fix top margin if picture upload was removed
+                if (isMyContactData && !opt.access.gab)
+                    this.$el.css('margin-top', '0px');
                 return this;
             }
         });
@@ -408,7 +418,11 @@ define('io.ox/contacts/edit/view-form', [
         }
 
         function propagateAttachmentChange(model) {
+
             var folder_id = model.get('folder_id'), id = model.get('id');
+
+            if (id === undefined) return $.when();
+
             return api.get({ id: id, folder: folder_id }, false)
                 .then(function (data) {
                     return $.when(
@@ -419,7 +433,7 @@ define('io.ox/contacts/edit/view-form', [
                     )
                     .done(function () {
                         // to make the detailview remove the busy animation:
-                        api.removeFromUploadList(encodeURIComponent(_.cid(data)));
+                        api.removeFromUploadList(_.ecid(data));
                         api.trigger('refresh.list');
                     });
                 });

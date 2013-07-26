@@ -13,8 +13,8 @@
 
 #background_loader.secure {
     background-color: rgba(255, 255, 255, 0);
-    .transition(background-color 0.5s linear);
-
+    /* bug 27760 */
+    /* .transition(background-color 0.5 linear); */
     &.block {
         background-color: rgba(255, 255, 255, 0.5);
         text-align: center;
@@ -1242,6 +1242,21 @@ a.button {
 
     }
 
+    .swipeDelete {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        padding: 0 10px 0 10px;
+        line-height: 61px;
+        height: 100%;
+        background-color: #DA4F49;
+        color: #FFF;
+        font-size: 14px;
+        &:active {
+            background-color: darken(#DA4F49, 10%);
+        };
+    }
+
 }
 
 .io-ox-sidepopup .vgrid-cell {
@@ -1262,6 +1277,7 @@ a.button {
 }
 
 .rightside {
+    outline: none;
     position: absolute;
     top: 0px;
     right: 0px;
@@ -1873,7 +1889,7 @@ input.nice-input {
     }
 
     .folder-row {
-        display: table-row;
+        display: block;
     }
 
     .subfolders.io-ox-busy {
@@ -1882,7 +1898,7 @@ input.nice-input {
 
     .folder-arrow {
 
-        display: table-cell;
+        display: inline-block;
         width: 50px;
         text-align: center;
         color: #aaa;
@@ -1900,7 +1916,7 @@ input.nice-input {
     .folder-label {
 
         font-weight: 300;
-        display: table-cell;
+        display: inline-block;
         margin: 0 1em 0 0;
 
         i {
@@ -1929,8 +1945,7 @@ input.nice-input {
     }
 
     .folder-counter {
-        display: table-cell;
-        text-align: right;
+        display: inline-block;
     }
 
     .folder-counter-badge {
@@ -1941,7 +1956,6 @@ input.nice-input {
         display: none;
         background-color: #f0f0f0;
         border-radius: 5px;
-        margin-left: 1em;
     }
 
     .show-counter {
@@ -1949,10 +1963,6 @@ input.nice-input {
         .folder-counter-badge {
             display: inline-block;
         }
-        .folder-label {
-            font-weight: bold;
-        }
-
     }
 
     .folder.selected .folder-counter-badge {
@@ -2055,18 +2065,17 @@ input.nice-input {
 
                 &.selected {
 
-                    font-weight: bold;
                     background-color: @foldertreeSelectedBackground;
 
                     .folder-label {
                         color: @foldertreeSelectedLabelColor;
-                        font-weight: bold;
+                        font-weight: 500;
                         text-shadow: none;
                     }
                 }
 
                 &.show-counter .folder-label {
-                    color: lighten(@linkColor, 20%);
+                    /* color: lighten(@linkColor, 20%); */
                 }
 
                 .shared-by {
@@ -2190,7 +2199,6 @@ a.toolbar-action, .toolbar-action > a {
 
     .folder-summary {
         color: #888;
-        margin: 0;
     }
 
     .folder-actions {
@@ -2497,7 +2505,9 @@ input.flat-input {
         background-color: #eee; border-bottom: 1px solid #ccc;
         padding: 5px 13px 5px 13px;
     }
-
+    .vsplit-reverse {
+        .rightside-navbar, .rightside { display:none; }
+    }
     .input-medium.search-query { width: 80px; }
 }
 
@@ -2847,3 +2857,5 @@ input.flat-input {
     }
 }
 
+/* fixes WBR handling in long character sequences, esp. for IE */
+wbr:after { content: "\00200B" }

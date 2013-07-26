@@ -115,7 +115,7 @@ define("io.ox/calendar/edit/recurrence-view",
             function renderDate() {
                 var value = self[attribute];
                 if (value) {
-                    var myTime = dateAPI.Local.localTime(parseInt(value, 10));
+                    var myTime = dateAPI.Local.utc(parseInt(value, 10));
                     if (_.isNull(myTime)) {
                         value = '';
                     } else {

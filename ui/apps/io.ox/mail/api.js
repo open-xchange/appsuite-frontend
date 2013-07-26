@@ -180,8 +180,12 @@ define('io.ox/mail/api',
             },
 
             isUnseen: function (obj) {
-                var cid = getCID(obj);
-                return !!unseen[cid];
+                if (_.isObject(obj)) {
+                    var cid = getCID(obj);
+                    return cid in unseen ? !!unseen[cid] : (obj.flags & 32) !== 32;
+                } else {
+                    return !!unseen[obj];
+                }
             },
 
             getColorLabel: function (obj) {
@@ -196,8 +200,10 @@ define('io.ox/mail/api',
 
             applyAutoRead: function (obj) {
 
+                if (!_.isObject(obj)) return;
+
                 // looks like attachment?
-                if (obj && obj.msgref) return;
+                if ('parent' in obj || 'msgref' in obj) return;
 
                 var cid = getCID(obj);
                 if (unseen[cid] === true) {
@@ -585,7 +591,7 @@ define('io.ox/mail/api',
         return http.resume().pipe(function (response) {
             // trigger update events
             _(list).each(function (obj) {
-                api.trigger('update:' + encodeURIComponent(_.cid(obj)), obj);
+                api.trigger('update:' + _.ecid(obj), obj);
             });
             if (apiAction === 'copy' || move) {//give response if its a copy action (to look if there was an error)
                 return { list: list, response: response};//not doing this as a standardaction to prevent errors with functions looking only for the list parameter
@@ -801,6 +807,7 @@ define('io.ox/mail/api',
                 })
                 .done(function () {
                     api.trigger('refresh.list');
+                    api.trigger('refresh.unseen', list);
                 }),
                 // server update
                 update(list, { flags: api.FLAGS.SEEN, value: false }).done(function () {
@@ -838,6 +845,7 @@ define('io.ox/mail/api',
                 })
                 .done(function () {
                     api.trigger('refresh.list');
+                    api.trigger('refresh.seen', list);
                 }),
                 // server update
                 update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
@@ -967,27 +975,30 @@ define('io.ox/mail/api',
      * @return {deferred}
      */
     api.copy = function (list, targetFolderId) {
+
         var response;
-        //targetFolderId
+
         return update(list, { folder_id: targetFolderId }, 'copy')
-            .pipe(function (resp) {
+            .then(function (resp) {
                 response = resp.response;
-                clearCaches(list, targetFolderId);
-                return resp.list;
+                return (clearCaches(list, targetFolderId)()).then(function () {
+                    return resp.list;
+                });
             })
-            .pipe(refreshAll)
-            .pipe(function () {
+            .then(function () {
+
                 var errorText;
-                for (var i = 0; i < response.length; i++) {//look if something went wrong
+                for (var i = 0; i < response.length; i++) { // look if something went wrong
                     if (response[i].error) {
                         errorText = response[i].error.error;
                         break;
                     }
                 }
+
+                api.trigger('copy', list, targetFolderId);
                 folderAPI.reload(targetFolderId, list);
-                if (errorText) {
-                    return errorText;
-                }
+
+                if (errorText) return errorText;
             });
     };
 

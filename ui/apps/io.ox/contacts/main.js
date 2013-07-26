@@ -68,7 +68,7 @@ define("io.ox/contacts/main",
 
         function thumbMove(e) {
             var text;
-            if (e.which === 1 && (text = $(this).data('text'))) grid.scrollToLabelText(text);
+            if (_.device('ios || android') && e.which === 1 && (text = $(this).data('text'))) grid.scrollToLabelText(text);
         }
 
         var vsplit = commons.vsplit(win.nodes.main, app);
@@ -97,21 +97,22 @@ define("io.ox/contacts/main",
                     removeButton();
                 }
                 this.append(
-                    $('<div class="btn btn-danger swipeDelete fadein">')
+                    $('<div class="mail cell-button swipeDelete fadein fast">')
                         .text(gt('Delete'))
                         .on('mousedown', function (e) {
                             // we have to use mousedown as the selection listens to this, too
                             // otherwise we are to late to get the event
+                            e.stopImmediatePropagation();
+                        }).on('tap', function (e) {
                             e.preventDefault();
-
-                            actions.invoke('io.ox/contacts/actions/delete', null, baton);
                             removeButton();
+                            showSwipeButton = false;
+                            actions.invoke('io.ox/contacts/actions/delete', null, baton);
                         })
                 );
                 showSwipeButton = true;
             }
         });
-
 
         // swipe handler
         var swipeRightHandler = function (e, id, cell) {
@@ -345,7 +346,7 @@ define("io.ox/contacts/main",
             addresses: true
         });
 
-        var translations = { names: gt('Names and e-mail addresses'), phones: gt('Phone numbers'), addresses: gt('Addresses')},
+        var translations = { names: gt('Names and email addresses'), phones: gt('Phone numbers'), addresses: gt('Addresses')},
             checkboxes = ext.point('io.ox/contacts/search/checkboxes').options(),
             defaults = ext.point('io.ox/contacts/search/defaults').options(),
             data = {}, button;

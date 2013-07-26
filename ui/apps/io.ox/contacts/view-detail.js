@@ -154,7 +154,7 @@ define("io.ox/contacts/view-detail",
                 this.find('.private-flag').show();
             }
 
-            if (api.uploadInProgress(encodeURIComponent(_.cid(baton.data)))) {
+            if (api.uploadInProgress(_.ecid(baton.data))) {
                 this.find('.attachments-container').show();
             }
             else if (baton.data.number_of_attachments > 0) {
@@ -311,7 +311,7 @@ define("io.ox/contacts/view-detail",
     function mail(address, name) {
         if (!address) return null;
         return $('<div>').append(
-            $('<label>').text(gt('E-Mail')),
+            $('<label>').text(gt('Email')),
             $('<a>', { href: 'mailto:' + address })
                 .text(_.noI18n(address))
                 .on('click', { email: address, display_name: name }, clickMail)

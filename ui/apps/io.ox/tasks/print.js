@@ -36,7 +36,7 @@ define('io.ox/tasks/print',
             return '<b>' + states[data.status] + '</b>';
         }
     }
-    
+
     function getPriority(data) {
         if (data.priority) {
             return priorities[data.priority];
@@ -95,7 +95,7 @@ define('io.ox/tasks/print',
                     billing_information: gt('Billing information'),
                     companies: gt('Companies'),
                     date_completed: gt('Date completed'),
-                    alarm: gt('Remind date'),
+                    alarm: gt('Reminder date'),
                     priority: gt('Priority'),
                     recurrence: gt('This task recurs')
                 },

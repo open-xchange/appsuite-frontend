@@ -397,7 +397,7 @@ define('io.ox/core/api/folder',
                 )
                 .then(function () {
                     // trigger event
-                    api.trigger('delete:prepare', id, folder_id);
+                    api.trigger('delete:prepare', data);
                     // delete on server
                     return http.PUT({
                         module: 'folders',

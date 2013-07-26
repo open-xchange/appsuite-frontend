@@ -18,8 +18,9 @@ define('io.ox/files/actions',
      'io.ox/core/extPatterns/actions',
      'io.ox/core/capabilities',
      'io.ox/core/notifications',
+     'io.ox/core/util',
      'gettext!io.ox/files',
-     'settings!io.ox/files'], function (api, ext, links, actionPerformer, capabilities, notifications, gt, settings) {
+     'settings!io.ox/files'], function (api, ext, links, actionPerformer, capabilities, notifications, util, gt, settings) {
 
     'use strict';
 
@@ -216,7 +217,7 @@ define('io.ox/files/actions',
 
                 // create dialog
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog({ width: 600 })
+                    new dialogs.ModalDialog({ width: 500 })
                         .build(function () {
                             // header
                             this.header($('<h4>').text('Direct link'));
@@ -224,6 +225,7 @@ define('io.ox/files/actions',
                             this.getContentNode().addClass('user-select-text max-height-200').append(
 
                                 _(list).map(function (file) {
+
                                     var url = ox.abs + ox.root +
                                         '/#!&app=io.ox/files&perspective=list' +
                                         '&folder=' + encodeURIComponent(file.folder_id) +
@@ -232,8 +234,9 @@ define('io.ox/files/actions',
                                     return $('<p>').append(
                                         $('<div>').text(file.filename || file.title || ''),
                                         $('<div>').append(
-                                            $('<a class="direct-link">', { href: url, target: '_blank' })
-                                            .text(url)
+                                            $('<a class="direct-link" target="_blank">')
+                                            .attr('href', url)
+                                            .html(util.breakableHTML(url))
                                         )
                                     );
                                 })

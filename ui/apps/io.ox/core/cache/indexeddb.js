@@ -16,6 +16,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
 
     var SCHEMA = 1,
         QUEUE_DELAY = 5000,
+        MAX_LENGTH = 1024 * 1024, // 1MB
         instances = {},
         moduleDefined = $.Deferred(),
         db,
@@ -154,7 +155,10 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                     console.error('Could not serialize', id, key, data);
                 }
                 // don't wait for this
-                queue.add(key, data);
+                // don't store too large items
+                if (data.length <= MAX_LENGTH) {
+                    queue.add(key, data);
+                }
                 // clear();
                 // readwrite(function (cache) {
                 //     return OP(cache.put({ key: key, data: data }));

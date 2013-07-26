@@ -400,7 +400,7 @@ define('io.ox/tasks/api',
             return obj;
         }).done(function () {
             if (attachmentHandlingNeeded) {
-                api.addToUploadList(encodeURIComponent(_.cid(task)));//to make the detailview show the busy animation
+                api.addToUploadList(_.ecid(task));//to make the detailview show the busy animation
             }
             //trigger refresh, for vGrid etc
             api.trigger('refresh.all');

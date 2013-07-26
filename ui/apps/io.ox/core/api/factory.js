@@ -86,7 +86,7 @@ define('io.ox/core/api/factory',
         // create 3 caches for all, list, and get requests
         var caches = {
             all: new cache.SimpleCache(o.id + '-all', true),
-            //no persistant cache for list, because burst-writes block read (stupid queue implementation)
+            // no persistant cache for list, because burst-writes block read (stupid queue implementation)
             list: new cache.ObjectCache(o.id + '-list', false, o.keyGenerator),
             get: new cache.ObjectCache(o.id + '-get', true, o.keyGenerator)
         };
@@ -153,7 +153,7 @@ define('io.ox/core/api/factory',
                                             api.caches.get.remove(cid)
                                         )
                                         .done(function () {
-                                            api.trigger('update:' + encodeURIComponent(cid), obj);
+                                            api.trigger('update:' + _.ecid(obj), obj);
                                         });
                                     }
                                 })
@@ -361,7 +361,7 @@ define('io.ox/core/api/factory',
                     // trigger item specific events to be responsive
                     if (!silent) {
                         _(ids).each(function (obj) {
-                            api.trigger('delete:' + encodeURIComponent(_.cid(obj)));
+                            api.trigger('delete:' + _.ecid(obj));
                         });
                     }
                     hash = folders = defs = ids = null;

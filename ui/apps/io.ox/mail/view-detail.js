@@ -18,6 +18,7 @@ define('io.ox/mail/view-detail',
      'io.ox/mail/util',
      'io.ox/mail/api',
      'io.ox/core/http',
+     'io.ox/core/util',
      'io.ox/core/api/account',
      'settings!io.ox/mail',
      'gettext!io.ox/mail',
@@ -25,7 +26,7 @@ define('io.ox/mail/view-detail',
      'moxiecode/tiny_mce/plugins/emoji/main',
      'io.ox/mail/actions',
      'less!io.ox/mail/style.less'
-    ], function (ext, links, util, api, http, account, settings, gt, folder, emoji) {
+    ], function (ext, links, util, api, http, coreUtil, account, settings, gt, folder, emoji) {
 
     'use strict';
 
@@ -278,13 +279,6 @@ define('io.ox/mail/view-detail',
         return $('<a>', { href: href }).text(href);
     };
 
-    var delayedRead = function (data, node) {
-        setTimeout(function () {
-            api.tracker.applyAutoRead(data);
-            node = data = null;
-        }, 0); // without visual transition
-    };
-
     var blockquoteMore, blockquoteClickOpen, blockquoteClickClose, blockquoteCollapsedHeight = 57, mailTo;
 
     blockquoteMore = function (e) {
@@ -467,8 +461,10 @@ define('io.ox/mail/view-detail',
                         if (this.nodeType === 3) {
                             var node = $(this), text = this.nodeValue, length = text.length, m, n;
                             // split long character sequences for better wrapping
-                            if (length >= 60 && /\S{60}/.test(text)) {
-                                this.nodeValue = text.replace(/(\S{60})/g, '$1\u200B'); // zero width space
+                            if (length >= 20 && /\S{20}/.test(text)) {
+                                node.replaceWith(
+                                    $('<span>').html(coreUtil.breakableHTML(text))
+                                );
                             }
                             // some replacements
                             if ((m = text.match(regDocument)) && m.length) {
@@ -549,6 +545,7 @@ define('io.ox/mail/view-detail',
                             }
                         }
                     };
+                    // don't combine these two lines via add() - very slow!
                     content.contents().each(processTextNode);
                     $('*', content).not('style').contents().each(processTextNode);
                 }
@@ -625,9 +622,12 @@ define('io.ox/mail/view-detail',
                     .addClass('mail-detail-decorator')
                     .on('redraw', function (e, tmp) {
                         copyThreadData(tmp, data);
-                        container.replaceWith(
-                            self.draw(ext.Baton({ data: tmp, app: baton.app, options: baton.options }))
-                        );
+                        // changed? - or just marked seen?
+                        if (!_.isEqual(tmp, data)) {
+                            container.replaceWith(
+                                self.draw(ext.Baton({ data: tmp, app: baton.app, options: baton.options }))
+                            );
+                        }
                     });
 
             if (baton.options.tabindex) {
@@ -649,12 +649,13 @@ define('io.ox/mail/view-detail',
                 var isUnseen = api.tracker.isUnseen(data),
                     canAutoRead = api.tracker.canAutoRead(data);
 
-                if (isUnseen && !canAutoRead) {
-                    node.addClass('unread');
-                }
-
-                if (canAutoRead) {
-                    delayedRead(data, node);
+                if (isUnseen) {
+                    if (canAutoRead) {
+                        data.flags = data.flags | 32;
+                        api.tracker.applyAutoRead(data);
+                    } else {
+                        node.addClass('unread');
+                    }
                 }
 
                 ext.point('io.ox/mail/detail').invoke('draw', node, baton);
@@ -1014,16 +1015,21 @@ define('io.ox/mail/view-detail',
         index: 140,
         id: 'subject',
         draw: function (baton) {
+
             // soft-break long words (like long URLs)
-            var subject = $.trim(baton.data.subject).replace(/(\S{20})/g, '$1\u200B');
+            var subject = $.trim(baton.data.subject);
+            subject = subject ? $('<span>').html(coreUtil.breakableHTML(subject)) : '';
+
             this.append(
                 $('<div class="mail-detail-clear-left">'),
                 $('<div>')
                 .addClass('subject' + (_.device('!smartphone') ? ' clear-title' : '') + (subject === '' ? ' empty' : ''))
                 .append(
+                    // unread
                     $('<i class="icon-unread icon-circle">'),
                     // inject some zero width spaces for better word-break
-                    $.txt(_.noI18n(subject || gt('No subject'))),
+                    subject || $.txt(gt('No subject')),
+                    // priority
                     $('<span class="priority">').append(util.getPriority(baton.data))
                 )
             );

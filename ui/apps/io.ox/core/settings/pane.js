@@ -19,11 +19,12 @@ define('io.ox/core/settings/pane',
          'io.ox/core/http',
          'io.ox/core/api/apps',
          'io.ox/core/capabilities',
+         'io.ox/core/notifications',
          'plugins/portal/userSettings/register',
          'settings!io.ox/core',
          'settings!io.ox/core/settingOptions',
          'gettext!io.ox/core'],
-         function (ext, BasicModel, views, forms, http, appAPI, capabilities, userSettings, settings, settingOptions, gt) {
+         function (ext, BasicModel, views, forms, http, appAPI, capabilities, notifications, userSettings, settings, settingOptions, gt) {
 
     'use strict';
 
@@ -37,16 +38,30 @@ define('io.ox/core/settings/pane',
         draw: function () {
             var model = settings.createModel(BasicModel);
             model.on('change', function (model, e) {
-                settings.save();
-                var showNotice = _(reloadMe).any(function (attr) {
-                    return model.changed[attr];
-                });
 
-                if (model.changed.autoOpenNotification) {//AutonOpenNotification updates directly
-                    require("io.ox/core/notifications").yell("success", gt("The setting has been saved."));
-                } else if (showNotice) {
-                    require("io.ox/core/notifications").yell("success", gt("The setting has been saved and will become active when you enter the application the next time."));
-                }
+                settings.save().then(
+                    function success() {
+
+                        var showNotice = _(reloadMe).any(function (attr) {
+                            return model.changed[attr];
+                        });
+
+                        if (model.changed.autoOpenNotification) {//AutonOpenNotification updates directly
+                            notifications.yell(
+                                'success',
+                                gt("The setting has been saved.")
+                            );
+                        } else if (showNotice) {
+                            notifications.yell(
+                                'success',
+                                gt("The setting has been saved and will become active when you enter the application the next time.")
+                            );
+                        }
+                    },
+                    function fail(e) {
+                        notifications.yell(e);
+                    }
+                );
             });
             this.addClass('settings-container').append(
                 $('<h1>').text(gt("Basic settings"))
@@ -176,7 +191,7 @@ define('io.ox/core/settings/pane',
         if (settings.isConfigurable('autoStart') && _.device('!smartphone')) {
             var options = {};
             _(appAPI.getFavorites()).each(function (app) {
-                options[app.path] = gt(app.title);
+                options[app.path] = gt.pgettext('app', app.title);
             });
 
             options.none = gt('None');

@@ -244,10 +244,10 @@ define('io.ox/calendar/api',
                     return api.get(getObj)
                         .pipe(function (data) {
                             if (attachmentHandlingNeeded) {
-                                api.addToUploadList(encodeURIComponent(_.cid(data)));//to make the detailview show the busy animation
+                                api.addToUploadList(_.ecid(data));//to make the detailview show the busy animation
                             }
                             api.trigger('update', data);
-                            api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
+                            api.trigger('update:' + _.ecid(data), data);
                             return data;
                         });
                 }, function (error) {
@@ -272,7 +272,7 @@ define('io.ox/calendar/api',
                 .pipe(function (data) {
                     api.trigger('update', data);
                     //to make the detailview remove the busy animation
-                    api.removeFromUploadList(encodeURIComponent(_.cid(data)));
+                    api.removeFromUploadList(_.ecid(data));
                 });
         },
 
@@ -314,10 +314,10 @@ define('io.ox/calendar/api',
                 return api.get(getObj)
                         .pipe(function (data) {
                             if (attachmentHandlingNeeded) {
-                                api.addToUploadList(encodeURIComponent(_.cid(data)));//to make the detailview show the busy animation
+                                api.addToUploadList(_.ecid(data));//to make the detailview show the busy animation
                             }
                             api.trigger('create', data);
-                            api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
+                            api.trigger('update:' + _.ecid(data), data);
                             return data;
                         });
             });
@@ -342,7 +342,7 @@ define('io.ox/calendar/api',
                 delete get_cache[key];
                 api.trigger('refresh.all');
                 api.trigger('delete', resp);
-                api.trigger('delete:' + encodeURIComponent(_.cid(o)), o);
+                api.trigger('delete:' + _.ecid(o), o);
                 //remove Reminders in Notification Area
                 checkForNotification(o, true);
             }).fail(function () {
@@ -381,7 +381,7 @@ define('io.ox/calendar/api',
                 return api.get(o)
                         .pipe(function (data) {
                             api.trigger('update', data);
-                            api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
+                            api.trigger('update:' + _.ecid(data), data);
                             return data;
                         });
             });
@@ -489,8 +489,7 @@ define('io.ox/calendar/api',
                 all_cache = {};
                 get_cache = {};
                 _(list).each(function (obj) {
-                    var cid = encodeURIComponent(_.cid(obj));
-                    api.trigger('move:' + cid, targetFolderId);
+                    api.trigger('move:' + _.ecid(obj), targetFolderId);
                 });
                 api.trigger('refresh.all');
             });

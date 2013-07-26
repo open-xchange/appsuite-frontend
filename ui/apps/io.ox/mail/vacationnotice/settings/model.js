@@ -128,7 +128,7 @@ define('io.ox/mail/vacationnotice/settings/model',
         text: gt('Text'),
         days: gt('Number of days between vacation notices to the same sender'),
         headlineAdresses: gt('Enabled for the following addresses'),
-        addresses: gt('E-mail addresses'),
+        addresses: gt('Email addresses'),
         dateFrom: gt('From'),
         dateUntil: gt('End'),
         activateTimeFrame: gt('Send vacation notice during this time only')

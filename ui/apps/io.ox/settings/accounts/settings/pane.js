@@ -17,9 +17,10 @@ define('io.ox/settings/accounts/settings/pane',
        'io.ox/keychain/api',
        'io.ox/keychain/model',
        'io.ox/core/api/folder',
+       'io.ox/core/notifications',
        'gettext!io.ox/settings/accounts',
        'withPluginsFor!keychainSettings'
-   ], function (ext, dialogs, api, keychainModel, folderAPI, gt) {
+   ], function (ext, dialogs, api, keychainModel, folderAPI, notifications, gt) {
 
     'use strict';
 
@@ -32,43 +33,52 @@ define('io.ox/settings/accounts/settings/pane',
         },
 
         removeSelectedItem = function (account) {
-            var def = $.Deferred();
+
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                new dialogs.ModalDialog({easyOut: true})
+                new dialogs.ModalDialog({ easyOut: true, async: true })
                     .text(gt('Do you really want to delete this account?'))
                     .addPrimaryButton('delete', gt('Delete account'))
                     .addButton('cancel', gt('Cancel'))
-                    .show()
-                    .done(function (action) {
-                        if (action === 'delete') {
-                            def.resolve();
-                            api.remove(account).done(function () {
+                    .on('delete', function () {
+                        var popup = this;
+                        api.remove(account).then(
+                            function success() {
                                 folderAPI.subFolderCache.remove('1');
                                 folderAPI.folderCache.remove('default' + account);
                                 folderAPI.trigger('update');
-                            });
-                        } else {
-                            def.reject();
-                        }
-                    });
+                                popup.close();
+                            },
+                            function fail(e) {
+                                popup.close();
+                                notifications.yell(e);
+                            }
+                        );
+                    })
+                    .show();
             });
         },
 
         drawItem = function (o) {
-            return $('<div class="selectable deletable-item">').attr({
-                'data-id': o.id,
-                'data-accounttype': o.accountType
-            }).append(
-                $('<div class="pull-right">').append(
-                    $('<a class="action" tabindex="3" data-action="edit">').text(gt('Edit')),
-                    $('<a class="close">').attr({
-                        'data-action': 'delete',
-                        title: gt('Delete'),
-                        tabindex: 3
-                    }).append($('<i class="icon-trash">'))
-                ),
-                $('<span data-property="displayName" class="list-title">')
-            );
+            return $('<div class="selectable deletable-item">')
+                .attr({
+                    'data-id': o.id,
+                    'data-accounttype': o.accountType
+                })
+                .append(
+                    $('<div class="pull-right">').append(
+                        // edit
+                        $('<a href="#" class="action" tabindex="3" data-action="edit">').text(gt('Edit')),
+                        // delete
+                        o.id !== 0 ?
+                            // trash icon
+                            $('<a href="#" class="close" tabindex="3" data-action="delete">').attr({ title: gt('Delete') })
+                            .append($('<i class="icon-trash">')) :
+                            // empty dummy
+                            $('<a href="#" class="close" tabindex="-1">')
+                            .append($('<i class="icon-trash" style="visibility: hidden">'))
+                    ),
+                    $('<span data-property="displayName" class="list-title">')
+                );
         },
 
         drawAddButton = function () {
@@ -88,7 +98,7 @@ define('io.ox/settings/accounts/settings/pane',
                 $.txt(
                     gt('For security reasons, all account passwords are encrypted with your primary account password. ' +
                         'If you change your primary password, your external accounts might stop working. In this case, ' +
-                        'you can use your old password to recovery all accounts:')
+                        'you can use your old password to recover all account passwords:')
                 ),
                 $.txt(' '),
                 $('<a href="#" data-action="recover">').text(gt('Recover passwords'))
@@ -101,12 +111,11 @@ define('io.ox/settings/accounts/settings/pane',
             );
         },
 
-        drawPane = function () {
+        drawPane = function (collection) {
             return $('<div class="io-ox-accounts-settings">').append(
                 $('<h1 class="no-margin">').text(gt('Mail and Social Accounts')),
                 drawAddButton(),
-                $('<ul class="settings-list">'),
-                drawRecoveryButton()
+                $('<ul class="settings-list">')
             );
         },
 
@@ -114,10 +123,17 @@ define('io.ox/settings/accounts/settings/pane',
 
             tagName: 'li',
 
+            events: {
+                'click [data-action="edit"]': 'onEdit',
+                'click [data-action="delete"]': 'onDelete'
+            },
+
             _modelBinder: undefined,
+
             initialize: function (options) {
                 this._modelBinder = new Backbone.ModelBinder();
             },
+
             render: function () {
                 var self = this;
                 self.$el.empty().append(drawItem({
@@ -130,35 +146,24 @@ define('io.ox/settings/accounts/settings/pane',
 
                 return self;
             },
-            events: {
-                'click [data-action="edit"]': 'onSelect',
-                'click [data-action="delete"]': 'onDelete',
-                'keydown [data-action="edit"]': 'onSelect',
-                'keydown [data-action="delete"]': 'onDelete'
-            },
+
             onDelete: function (e) {
-                if ((e.type === 'click') || (e.which === 13)) {
-                    var account = {
-                        id: this.model.get('id'),
-                        accountType: this.model.get('accountType')
-                    };
-                    if (account.id !== 0) {
-                        removeSelectedItem(account);
-                    } else {
-                        new dialogs.ModalDialog({easyOut: true})
-                            .text(gt('Your primary mail account can not be deleted.'))
-                            .addPrimaryButton('ok', gt('Ok'))
-                            .show();
-                    }
-                    e.preventDefault();
-                }
+                e.preventDefault();
+                var account = {
+                    id: this.model.get('id'),
+                    accountType: this.model.get('accountType')
+                };
+                removeSelectedItem(account);
             },
-            onSelect: function (e) {
-                if (e.type !== 'click' && e.which !== 13) {
-                    return;
-                }
-                this.$el.parent().find('div[selected="selected"]').attr('selected', null);
-                this.$el.find('.deletable-item').attr('selected', 'selected');
+
+            onEdit: function (e) {
+                e.preventDefault();
+                e.data = {
+                    id: this.model.get('id'),
+                    accountType: this.model.get('accountType'),
+                    node: this.el
+                };
+                createExtpointForSelectedAccount(e);
             }
         });
 
@@ -201,9 +206,15 @@ define('io.ox/settings/accounts/settings/pane',
                         this.collection.bind('remove', this.render);
                     },
                     render: function () {
-                        var self = this,
-                            $dropDown;
+
+                        var self = this, $dropDown;
+
                         self.$el.empty().append(drawPane);
+
+                        if (this.collection.length > 1) {
+                            self.$el.find('.io-ox-accounts-settings').append(drawRecoveryButton);
+                        }
+
                         this.collection.each(function (item) {
                             self.$el.find('.settings-list').append(
                                 new AccountSelectView({ model: item }).render().el
@@ -239,29 +250,11 @@ define('io.ox/settings/accounts/settings/pane',
                         return this;
                     },
 
-                    events: {
-                        'click [data-action="edit"]': 'onEdit',
-                        'keydown [data-action="edit"]': 'onEdit'
-                    },
-
                     onAdd: function (args) {
                         require(['io.ox/settings/accounts/settings/createAccountDialog'], function (accountDialog) {
                             accountDialog.createAccountInteractively(args);
                         });
-                    },
-
-                    onEdit: function (e) {
-                        if ((e.type === 'click') || (e.which === 13)) {
-                            var selected = this.$el.find('[selected]');
-                            e.data = {};
-                            e.data.id = selected.data('id');
-                            e.data.accountType = selected.data('accounttype');
-                            e.data.node = this.el;
-                            createExtpointForSelectedAccount(e);
-                            e.preventDefault();
-                        }
                     }
-
                 });
 
                 var accountsList = new AccountsView();

@@ -159,7 +159,6 @@ define('io.ox/core/tk/selection',
                 } else {
                     apply(id, e);
                 }
-
             }
         };
 
@@ -252,24 +251,30 @@ define('io.ox/core/tk/selection',
                 node = $(this);
                 key = node.attr('data-obj-id');
                 id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
-                // exists?
-                if (id !== undefined && !isCheckbox(e)) {
-                    // explicit multiple?
-                    if (isMultiple(e)) {
-                        apply(id, e);
-                        return;
-                    }
-                    // selected?
-                    if (isSelected(id)) {
-                        // but one of many?
-                        if (hasMultiple()) {
-                            node.addClass('pending-select');
+                // adding timeouts to avoid strange effect that occurs across different browsers.
+                // if we do too much inside these event handlers, the mousedown and mouseup events
+                // do not trigger a click. this still happens if timeout interval if too short,
+                // for example, 10 msecs. (see Bug 27794 - Sorting menu remains open)
+                setTimeout(function () {
+                    // exists?
+                    if (id !== undefined && !isCheckbox(e)) {
+                        // explicit multiple?
+                        if (isMultiple(e)) {
+                            apply(id, e);
+                            return;
                         }
-                    } else {
-                        clear();
-                        apply(id, e);
+                        // selected?
+                        if (isSelected(id)) {
+                            // but one of many?
+                            if (hasMultiple()) {
+                                node.addClass('pending-select');
+                            }
+                        } else {
+                            clear();
+                            apply(id, e);
+                        }
                     }
-                }
+                }, 50);
             }
         };
 
@@ -279,13 +284,16 @@ define('io.ox/core/tk/selection',
                 node = $(this);
                 key = node.attr('data-obj-id');
                 id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
-                // exists?
-                if (id !== undefined) {
-                    if (node.hasClass('pending-select')) {
-                        clear();
-                        apply(id, e);
+                // see above (mousedownHandler)
+                setTimeout(function () {
+                    // exists?
+                    if (id !== undefined) {
+                        if (node.hasClass('pending-select')) {
+                            clear();
+                            apply(id, e);
+                        }
                     }
-                }
+                }, 50);
             }
             // remove helper classes
             container.find('.pending-select').removeClass('pending-select');

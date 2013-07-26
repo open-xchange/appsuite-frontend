@@ -18,6 +18,9 @@ define('io.ox/office/preview/model/model',
 
     'use strict';
 
+    var // the global cache size
+        CACHE_SIZE = 100;
+
     // class Cache ============================================================
 
     /**
@@ -35,7 +38,7 @@ define('io.ox/office/preview/model/model',
      * @param {Object} [context]
      *  The context used to call the createElementHandler callback function.
      */
-    function Cache(cacheSize, createElementHandler, context) {
+    function Cache(app, createElementHandler, context) {
 
         var // cached elements, mapped by key
             elements = {},
@@ -79,7 +82,7 @@ define('io.ox/office/preview/model/model',
             // update array of last used keys
             lastKeys = _(lastKeys).without(key);
             lastKeys.push(key);
-            if (lastKeys.length > cacheSize) {
+            if (lastKeys.length > CACHE_SIZE) {
                 delete elements[lastKeys.shift()];
             }
 
@@ -104,10 +107,10 @@ define('io.ox/office/preview/model/model',
             pageCount = 0,
 
             // the page cache containing Deferred objects with <img> elements
-            imageCache = new Cache(100, createImageNode),
+            imageCache = new Cache(app, createImageNode),
 
             // the page cache containing Deferred objects with SVG mark-up as strings
-            svgCache = new Cache(100, loadSvgMarkup);
+            svgCache = new Cache(app, loadSvgMarkup);
 
         // base constructor ---------------------------------------------------
 
