@@ -49,12 +49,12 @@ define(['io.ox/core/desktop'], function (desktop) {
             });
 
             it('should not launch an unregistered app', function () {
-                var app = this.app,
-                    expectFail = {};
+                var app = this.app;
+                ox.manifests.disabled['io.ox/testApp/main'] = true;
 
-                delete ox.manifests.apps['io.ox/testApp/main'];
                 app.launch();
 
+                ox.manifests.disabled = {};
                 expect(ox.ui.apps).not.toContain(app);
 
                 //FIXME: this describes bug 26383
