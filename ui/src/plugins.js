@@ -18,7 +18,7 @@
 (function() {
 
     // File Caching
-    var fileCache = {
+    var fileCache, dummyFileCache = {
         retrieve: function (name) {
             return $.Deferred().reject();
         },
@@ -26,6 +26,8 @@
             return;
         }
     };
+
+    fileCache = dummyFileCache;
 
     function runCode(name, code) {
         eval("//@ sourceURL=" + name + ".js\n" + code);
@@ -35,10 +37,12 @@
     if (_.device('desktop') && !_.device("safari") && window.IDBVersionChangeEvent !== undefined && Modernizr.indexeddb && window.indexedDB) {
         // IndexedDB
         (function () {
+
             var initialization = $.Deferred();
 
             var request = window.indexedDB.open('appsuite.filecache', 1);
             var db = null;
+
             request.onupgradeneeded = function (e) {
                 db = e.target.result;
                 db.createObjectStore('filecache', {keyPath: 'name'});
@@ -64,23 +68,34 @@
                 };
             };
 
+            request.onerror = function (e) {
+                // fallback
+                fileCache = dummyFileCache;
+                initialization.reject();
+            };
+
             fileCache.retrieve = function (name) {
                 var def = $.Deferred();
-                initialization.done(function () {
-                    var tx = db.transaction(['filecache'], 'readonly');
-                    var request = tx.objectStore('filecache').get(name);
-                    request.onsuccess = function (e) {
-                        if (!e.target.result) {
-                            def.reject();
-                            return;
-                        }
-                        if (e.target.result.version !== ox.version) {
-                            def.reject();
-                            return;
-                        }
-                        def.resolve(e.target.result.contents);
-                    };
-                });
+                initialization.then(
+                    function success() {
+                        var tx = db.transaction(['filecache'], 'readonly');
+                        var request = tx.objectStore('filecache').get(name);
+                        request.onsuccess = function (e) {
+                            if (!e.target.result) {
+                                def.reject();
+                                return;
+                            }
+                            if (e.target.result.version !== ox.version) {
+                                def.reject();
+                                return;
+                            }
+                            def.resolve(e.target.result.contents);
+                        };
+                    },
+                    function fail() {
+                        def.reject();
+                    }
+                );
                 return def;
             };
 
