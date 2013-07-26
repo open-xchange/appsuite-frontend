@@ -215,6 +215,9 @@ define('io.ox/office/preview/view/view',
                     .addGroup('zoom/type', new PreviewControls.ZoomTypeChooser())
                     .addGroup('zoom/inc',  new Button(PreviewControls.ZOOMIN_OPTIONS));
 
+                // save the scroll position while view is hidden
+                app.getWindow().on({ beforehide: windowHideHandler, show: windowShowHandler });
+
                 // no layout refreshes without any pages
                 self.on('refresh:layout', refreshLayout);
 
@@ -370,16 +373,6 @@ define('io.ox/office/preview/view/view',
          */
         function updateVisiblePages() {
 
-            // loads the specified page with high priority
-            function loadPageHighPriority(page) {
-                loadPage(page, 'high');
-            }
-
-            // loads the specified page with low priority
-            function loadPageMediumPriority(page) {
-                loadPage(page, 'medium');
-            }
-
             var // find the first page that is visible at the top border of the visible area
                 beginPage = _(pageNodes).sortedIndex(appPaneNode.scrollTop(), function (value) {
                     if (_.isNumber(value)) { return value; }
@@ -396,6 +389,19 @@ define('io.ox/office/preview/view/view',
                 // one-after last page loaded with lower priority
                 endPageLowerPrio = Math.min(endPage + 2, model.getPageCount() + 1);
 
+            // loads the specified page with high priority
+            function loadPageHighPriority(page) {
+                loadPage(page, 'high');
+            }
+
+            // loads the specified page with low priority
+            function loadPageMediumPriority(page) {
+                loadPage(page, 'medium');
+            }
+
+            // fail safety: do nothing if called while view is hidden (e.g. scroll handlers)
+            if (!self.isVisible()) { return; }
+
             // abort old requests not yet running
             pageLoader.abortQueuedRequests();
 
@@ -409,7 +415,6 @@ define('io.ox/office/preview/view/view',
             // clear all other pages
             _(loadedPageNodes).each(function (pageNode, page) {
                 if ((page < beginPageLowerPrio) || (page >= endPageLowerPrio)) {
-                    Utils.log('PreviewView.updateVisiblePages(): cleaning page ' + page);
                     pageNode[0].innerHTML = '';
                     delete loadedPageNodes[page];
                 }
@@ -509,11 +514,32 @@ define('io.ox/office/preview/view/view',
         }
 
         /**
+         * Stores the current scroll position while the view is hidden.
+         */
+        function windowHideHandler() {
+            appPaneNode.data({ scrollLeft: appPaneNode.scrollLeft(), scrollTop: appPaneNode.scrollTop() });
+        }
+
+        /**
+         * Restores the scroll position after the view was hidden.
+         */
+        function windowShowHandler() {
+            appPaneNode.scrollLeft(appPaneNode.data('scrollLeft') || 0).scrollTop(appPaneNode.data('scrollTop') || 0);
+        }
+
+        /**
+         * Returns a save point containing all settings needed to restore the
+         * current view settings.
+         */
+        function failSaveHandler() {
+            return { page: selectedPage, zoom: zoomType };
+        }
+
+        /**
          * Initializes the view settings after the document has been opened.
          *
          * @param {Object} point
-         *  A save point that may have been created before by the method
-         *  PreviewView.getSavePoint().
+         *  A save point that may have been created before by this application.
          */
         function importSuccessHandler(point) {
 
@@ -809,19 +835,11 @@ define('io.ox/office/preview/view/view',
             return this.setZoomType(_.isNumber(nextZoomFactor) ? nextZoomFactor : this.getMaxZoomFactor());
         };
 
-        /**
-         * Returns a save point containing all settings needed to restore the
-         * current view settings.
-         *
-         * @returns {Object}
-         *  A save point with all view settings.
-         */
-        this.getSavePoint = function () {
-            return { page: selectedPage, zoom: zoomType };
-        };
-
         // initialization -----------------------------------------------------
 
+        // fail-save handler returns data needed to restore the application after browser refresh
+        app.registerFailSaveHandler(failSaveHandler);
+        // initialize the view after import with the fail-save information
         app.on('docs:import:success', importSuccessHandler);
 
     } // class PreviewView

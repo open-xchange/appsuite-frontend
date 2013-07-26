@@ -209,7 +209,7 @@ define('io.ox/office/framework/view/baseview',
             }
 
             // do nothing if refreshing is currently locked, or the window is hidden, or import still running
-            if ((layoutLocks > 0) || viewHidden || !app.getWindow().state.visible || !app.isImportFinished()) { return; }
+            if ((layoutLocks > 0) || !self.isVisible() || !app.isImportFinished()) { return; }
 
             // update fixed view panes
             _(fixedPanes).each(updatePane);
@@ -288,6 +288,17 @@ define('io.ox/office/framework/view/baseview',
                 this.getAppPaneNode().focus();
             }
             return this;
+        };
+
+        /**
+         * Returns whether the contents of the view are currently visible.
+         *
+         * @returns {Boolean}
+         *  Whether the application is active, and the view has not been hidden
+         *  manually.
+         */
+        this.isVisible = function () {
+            return !viewHidden && app.getWindow().state.visible;
         };
 
         /**

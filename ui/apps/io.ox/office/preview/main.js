@@ -186,9 +186,7 @@ define('io.ox/office/preview/main',
 
         // initialization -----------------------------------------------------
 
-        // fail-save handler returns data needed to restore the application after browser refresh
-        this.registerQuitHandler(quitHandler)
-            .registerFailSaveHandler(function () { return self.getView().getSavePoint(); });
+        this.registerQuitHandler(quitHandler);
 
     }}); // class PreviewApplication
 
