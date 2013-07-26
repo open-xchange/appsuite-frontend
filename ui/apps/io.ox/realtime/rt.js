@@ -28,6 +28,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var shouldReconnect = false;
     var disconnected = true;
     var tentativeConnect = false;
+    var online = true;
     var socket = $.atmosphere;
     var splits = document.location.toString().split('/');
     var proto = splits[0];
@@ -285,13 +286,6 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             if (api.debug) {
                 console.log("On message called: ", response);
             }
-            if (tentativeConnect) {
-                if (api.debug) {
-                    console.log("Triggering Online because #onOpen was called");
-                }
-                api.trigger("online");
-                tentativeConnect = false;
-            }
 
             silenceCount = 0;
             request.requestCount = 0;
@@ -309,6 +303,18 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 }
                 return;
             }
+
+            if (tentativeConnect) {
+                if (api.debug) {
+                    console.log("Triggering Online because #onMessage was called");
+                }
+                if (!online) {
+                    api.trigger("online");
+                    online = true;
+                }
+                tentativeConnect = false;
+            }
+
             var message = response.responseBody;
             if (api.debug) {
                 console.log("Message received", response.responseBody);
@@ -375,14 +381,21 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             disconnected = true;
             subSocket.close();
             socket.unsubscribe();
-            api.trigger("offline");
+            if (online) {
+                api.trigger("offline");
+                online = false;
+            }
         }
     });
 
     http.on("reachable", function () {
-        if (disconnected && !connecting) {
+        if (!online && !connecting) {
             reconnect();
         }
+    });
+
+    ox.on('relogin:success', function () {
+        resetSequence(0);
     });
 
     function reconnect() {
