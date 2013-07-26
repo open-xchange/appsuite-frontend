@@ -81,7 +81,7 @@ define('io.ox/portal/settings/pane',
                         $.txt(gt('Add widget')), $.txt(' '),
                         $('<span class="caret">')
                     ),
-                    $('<ul class="dropdown-menu" role="menu">').on('click', 'a', addWidget)
+                    $('<ul class="dropdown-menu io-ox-portal-settings-dropdown" role="menu">').on('click', 'a:not(.io-ox-action-link)', addWidget)
                 )
             )
         );
@@ -89,8 +89,7 @@ define('io.ox/portal/settings/pane',
     }
 
     function repopulateAddButton() {
-
-        $('div.controls ul.dropdown-menu').empty().append(
+        $('.io-ox-portal-settings-dropdown').children('[role=presentation]').remove().end().append(
             _(widgets.getAllTypes()).map(function (options) {
 
                 var isUnique = options.unique && widgets.containsType(options.type),
