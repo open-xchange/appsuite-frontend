@@ -58,10 +58,6 @@ define(['io.ox/core/desktop'], function (desktop) {
                 ox.manifests.disabled = {};
                 expect(ox.ui.apps).not.toContain(app);
                 expect(def.state()).toBe('rejected');
-
-                //FIXME: this describes bug 26383
-                expectFail[this.getFullName()] = true;
-                this.handleExpectedFail(expectFail);
             });
 
             describe('should allow to customize the launch method', function () {
