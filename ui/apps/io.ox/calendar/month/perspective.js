@@ -279,6 +279,7 @@ define('io.ox/calendar/month/perspective',
                 }
 
                 var firstDay = $('#' + param.date.getYear() + '-' + param.date.getMonth() + '-1', self.pane),
+                    nextFirstDay = $('#' + param.date.getYear() + '-' + (param.date.getMonth() + 1) + '-1', self.pane),
                     scrollToDate = function (pos) {
                         // scroll to position
                         if (param.duration === 0) {
@@ -291,7 +292,7 @@ define('io.ox/calendar/month/perspective',
                         }
                     };
 
-                if (firstDay.length > 0) {
+                if (firstDay.length > 0 && nextFirstDay.length > 0) {
                     scrollToDate(firstDay.position().top);
                 } else {
                     if (param.date.getTime() < self.current.getTime()) {
@@ -300,7 +301,10 @@ define('io.ox/calendar/month/perspective',
                             scrollToDate(firstDay.position().top);
                         });
                     } else {
-                        self.isScrolling = false;
+                        this.drawWeeks().done(function () {
+                            firstDay = $('#' + param.date.getYear() + '-' + param.date.getMonth() + '-1', self.pane);
+                            scrollToDate(firstDay.position().top);
+                        });
                     }
                 }
             }
