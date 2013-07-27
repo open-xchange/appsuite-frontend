@@ -38,6 +38,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
     function IndexeddbStorage(id) {
 
         var fluent = {},
+            removed = {},
             queue,
             myDB,
             dbOpened = $.Deferred(); // OP(opened);
@@ -107,6 +108,9 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         _.extend(this, {
 
             clear: function () {
+                _(fluent).each(function (obj, key) {
+                    removed[key] = true;
+                });
                 fluent = {};
                 queue.clear();
                 return readwrite(function (tx) {
@@ -119,6 +123,9 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                     return $.Deferred().resolve(null);
                 }
                 key = String(key);
+                if (key in removed) {
+                    return $.Deferred().resolve(null);
+                }
                 if (key in fluent) {
                     try {
                         return $.Deferred().resolve(JSON.parse(fluent[key]));
@@ -151,6 +158,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 try {
                     data = JSON.stringify(data);
                     fluent[key] = data;
+                    delete removed[key];
                 } catch (e) {
                     console.error('Could not serialize', id, key, data);
                 }
@@ -159,11 +167,6 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 if (data.length <= MAX_LENGTH) {
                     queue.add(key, data);
                 }
-                // clear();
-                // readwrite(function (cache) {
-                //     return OP(cache.put({ key: key, data: data }));
-                // });
-                // go back to work
                 return $.Deferred().resolve(key);
             },
 
@@ -171,6 +174,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 key = String(key);
                 if (fluent[key]) {
                     delete fluent[key];
+                    removed[key] = true;
                 }
                 queue.remove(key);
                 return readwrite(function (cache) {
@@ -192,7 +196,8 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                     }).fail(def.reject);
 
                     return def;
-                }).then(function (keys) {
+                })
+                .then(function (keys) {
                     //merge keys from fluent cache
                     return _(keys).chain().union(_(fluent).keys()).uniq().value();
                 });
