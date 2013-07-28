@@ -143,13 +143,13 @@ define("io.ox/core/tk/dropdown-options",
             _(nodes).each(function (node, name) {
                 var item = data[name];
                 //reset
-                node.find('span').removeClass('icon-ok icon-remove');
+                node.find('i').removeClass('icon-ok icon-none');
                 //set icons
                 if (item.checked) {
                     selected.push(item.label);
-                    node.find('span').addClass('icon-ok');
+                    node.find('i').addClass('icon-ok');
                 } else {
-                    node.find('span').addClass('icon-remove');
+                    node.find('i').addClass('icon-none');
                 }
             });
 
@@ -181,16 +181,17 @@ define("io.ox/core/tk/dropdown-options",
             //create nodes
             _(data).each(function (item) {
                 $menu.append(
-                     nodes[item.name] = $('<li>')
-                        .append($('<a href="#">')
-                            .attr({ tabindex: $anchor.attr('tabindex') })
-                            .text(item.label)
-                            .append('<span class="pull-left"></span>')
-                            .on('click', function (e) {
-                                e.preventDefault();
-                                toggleValue(item);
-                                return false;
-                            })
+                     nodes[item.name] = $('<li>').append($('<a href="#">')
+                        .attr({ tabindex: $anchor.attr('tabindex') })
+                        .append(
+                            $('<i class="icon-none">'),
+                            $.txt(item.label)
+                        )
+                        .on('click', function (e) {
+                            e.preventDefault();
+                            e.stopPropagation(); // to keep down-down open
+                            toggleValue(item);
+                        })
                     )
                 );
 
@@ -202,10 +203,10 @@ define("io.ox/core/tk/dropdown-options",
                         $('<a href="#">')
                         .text(gt('close'))
                         .on('click', function (e) {
-                                e.preventDefault();
-                                self.toggle();
-                                return false;
-                            })
+                            e.preventDefault();
+                            e.stopPropagation(); // to keep down-down open
+                            self.toggle();
+                        })
                     )
                 );
             }
