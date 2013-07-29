@@ -2798,6 +2798,7 @@ define.async('io.ox/office/tk/utils',
 
     // global initialization ==================================================
 
+/*
     // forward console output into a fixed DOM node on touch devices
     if (Config.isDebug() && Modernizr.touch) {
         var consoleNode = $('<div>', { id: 'io-ox-office-console' });
@@ -2812,6 +2813,7 @@ define.async('io.ox/office/tk/utils',
             };
         });
     }
+*/
 
     // deferred initialization of class members according to current language
     gettext.language.done(function (language) {

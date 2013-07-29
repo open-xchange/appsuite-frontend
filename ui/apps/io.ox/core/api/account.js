@@ -518,11 +518,15 @@ define('io.ox/core/api/account',
      * @param  {object} data (accont object)
      * @return {deferred} returns boolean
      */
-    api.validate = function (data) {
+    api.validate = function (data, params) {
+        params = _.extend({
+            action: 'validate'
+        }, params);
+
         return http.PUT({
             module: 'account',
             appendColumns: false,
-            params: { action: 'validate' },
+            params: params,
             data: data
         })
         // always successful but either true or false

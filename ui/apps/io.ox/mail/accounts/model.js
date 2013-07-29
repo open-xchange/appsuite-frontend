@@ -84,7 +84,7 @@ define("io.ox/mail/accounts/model",
 
         },
 
-        validationCheck: function (data) {
+        validationCheck: function (data, options) {
 
             data = _.extend({
                 unified_inbox_enabled: false,
@@ -93,7 +93,7 @@ define("io.ox/mail/accounts/model",
 
             data.name = data.personal = data.primary_address;
 
-            return AccountApi.validate(data);
+            return AccountApi.validate(data, options);
         },
 
         save: function (obj, defered) {

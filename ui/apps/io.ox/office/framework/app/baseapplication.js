@@ -223,7 +223,8 @@ define('io.ox/office/framework/app/baseapplication',
          */
         function importDocument(point) {
 
-            // notify listeners
+            // prepare for importing
+            beforeImport();
             self.trigger('docs:import:before', point);
 
             // call the import handler
@@ -1507,9 +1508,6 @@ define('io.ox/office/framework/app/baseapplication',
 
             // in order to get the 'open' event of the window at all, it must be shown (also without file)
             win.show(function () {
-
-                // prepare for importing
-                beforeImport();
 
                 // Import the document, if launch options have been passed. No launch
                 // options are available in fail-restore, this situation will be handled

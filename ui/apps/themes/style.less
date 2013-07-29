@@ -1363,7 +1363,6 @@ a.nolink {
     border-left: 1px solid @defaultBorderColor;
 }
 
-
 input.search-query::-ms-clear {
     // Removes the native clear button for input fields on the search field
     display: none;
@@ -1393,6 +1392,10 @@ input[type=search] {
     line-height: 1em;
     padding: 0px;
     border: 0px none #a00;
+}
+
+.search-options + ul {
+    i.icon-none, i.icon-ok { display: inline-block; }
 }
 
 /* Dialogs */
@@ -2113,7 +2116,7 @@ input.nice-input {
             }
 
             .io-ox-fail {
-                background-color: rgba(0, 0, 0, 0.2);
+                background-color: rgba(0, 0, 0, 0.1);
                 padding: 1em;
             }
 

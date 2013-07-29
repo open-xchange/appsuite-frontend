@@ -419,7 +419,7 @@ define('io.ox/contacts/api',
             });
     };
 
-    api.on('refresh.all', function () {
+    api.on('refresh^', function () {
         api.caches.get.clear();
     });
 

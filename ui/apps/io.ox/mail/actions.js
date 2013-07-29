@@ -29,7 +29,6 @@ define('io.ox/mail/actions',
      'settings!io.ox/mail'
     ], function (ext, links, api, util, gt, coreConfig, folderAPI, notifications, print, contactAPI, account, ExtensionRegistry, actions, settings) {
 
-
     'use strict';
 
     var isDraftFolder = function (folder_id) {
@@ -604,14 +603,25 @@ define('io.ox/mail/actions',
                             return;
                         }
 
-                        var contact = data[0];
-                        contact.folder_id = coreConfig.get('folder/contacts');
-                        require(['io.ox/contacts/edit/main'], function (m) {
-                            if (m.reuse('edit', contact)) {
-                                return;
-                            }
-                            m.getApp(contact).launch();
-                        });
+                        var contact = data[0], folder = coreConfig.get('folder/contacts');
+
+                        if (contact.mark_as_distributionlist) {
+                            // edit distribution list
+                            require(['io.ox/contacts/distrib/main'], function (m) {
+                                m.getApp(contact).launch().done(function () {
+                                    this.create(folder, contact);
+                                });
+                            });
+                        } else {
+                            // edit contact
+                            require(['io.ox/contacts/edit/main'], function (m) {
+                                contact.folder_id = folder;
+                                if (m.reuse('edit', contact)) {
+                                    return;
+                                }
+                                m.getApp(contact).launch();
+                            });
+                        }
                     },
                     function fail(e) {
                         notifications.yell(e);
@@ -659,7 +669,10 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/save', {
         id: 'saveEML',
-        requires: 'some',
+        requires: function (e) {
+            // ios cannot handle EML download
+            return _.device('!ios') && e.collection.has('some', 'read');
+        },
         multiple: function (data) {
             var url;
             if (_(data).first().msgref) {

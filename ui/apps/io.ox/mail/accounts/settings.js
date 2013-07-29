@@ -166,7 +166,7 @@ define('io.ox/mail/accounts/settings',
             var deferedValidation = $.Deferred(),
                 deferedSave = $.Deferred();
 
-            myModel.validationCheck(data).then(
+            myModel.validationCheck(data, {ignoreInvalidTransport: true}).then(
                 function success(response) {
                     if (response === false) {
                         var message = gt('There was no suitable server found for this mail/password combination');

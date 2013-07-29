@@ -585,8 +585,10 @@ define("io.ox/contacts/view-detail",
                 // make sure we have a baton
                 baton = ext.Baton.ensure(baton);
 
-                var node = $.createViewContainer(baton.data, api).on('redraw', { view: this }, redraw);
-                node.addClass('contact-detail view');
+                var node = $.createViewContainer(baton.data, api)
+                    .on('redraw', { view: this, data: baton.data }, redraw)
+                    .addClass('contact-detail view');
+
                 ext.point('io.ox/contacts/detail').invoke('draw', node, baton);
 
                 return node;
