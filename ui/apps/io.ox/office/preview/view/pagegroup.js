@@ -138,6 +138,7 @@ define('io.ox/office/preview/view/pagegroup',
 
                 // clear the page node if it is not visible anymore
                 if (!visible) {
+                    app.destroyImageNodes(pageNode.children('img'));
                     pageNode.empty();
                     return;
                 }

@@ -657,9 +657,12 @@ define('io.ox/office/framework/app/baseapplication',
          * @param {String} url
          *  The image URL.
          *
-         * @param {Number} [timeout=10000]
-         *  The time before the Deferred will be rejected without response from
-         *  the image node.
+         * @param {Object} [options]
+         *  A map with options controlling the behavior of this method. The
+         *  following options are supported:
+         *  @param {Number} [options.timeout=10000]
+         *      The time before the Deferred will be rejected without response
+         *      from the image node.
          *
          * @returns {jQuery.Promise}
          *  The Promise of a Deferred object that will be resolved with the
@@ -668,13 +671,15 @@ define('io.ox/office/framework/app/baseapplication',
          *  been received from the image, or after the specified timeout delay
          *  without response.
          */
-        this.createImageNode = function (url, timeout) {
+        this.createImageNode = function (url, options) {
 
             var // the result Deferred object
                 def = $.Deferred(),
                 // the image node
                 imgNode = $('<img>', { src: url }),
-                // the timer for the 10 seconds timeout
+                // the duration of the failure timeout
+                timeout = Utils.getIntegerOption(options, 'timeout', 10000, 0),
+                // the timer for the failure timeout
                 timer = null;
 
             function loadHandler() {
@@ -692,14 +697,38 @@ define('io.ox/office/framework/app/baseapplication',
 
             // timeout if server hangs, or browser fails to send any events because
             // of internal errors (e.g.: SVG parse errors in Internet Explorer)
-            timer = this.executeDelayed(function () {
-                def.reject();
-            }, { delay: _.isNumber(timeout) ? timeout : 10000 });
+            timer = this.executeDelayed(function () { def.reject(); }, { delay: timeout });
 
             return def.always(function () {
                 timer.abort();
                 imgNode.off({ load: loadHandler, error: errorHandler });
             }).promise();
+        };
+
+        /**
+         * Safely destroys the passed image nodes. On platforms with restricted
+         * memory (especially iPad and iPhone), allocating too many images may
+         * result in an immediate browser crash. Simply removing image nodes
+         * from the DOM does not free the image resource data allocated by the
+         * browser. The suggested workaround is to replace the 'src' attribute
+         * of the image node with a local small image which will result in
+         * releasing the original image data by the internal resource manager.
+         * To be really sure that the garbage collector does not destroy the
+         * DOM node instance before the resource manager releases the image
+         * data, a reference to the node will be kept in memory for additional
+         * 60 seconds.
+         *
+         * @param {HTMLElement|jQuery} imgNodes
+         *  The image elements, either as single DOM node, or as jQuery
+         *  collection with one or multiple image elements.
+         */
+        this.destroyImageNodes = function (imgNodes) {
+            imgNodes = $(imgNodes);
+            if (imgNodes.length > 0) {
+                view.insertTemporaryNode(imgNodes);
+                $(imgNodes).off().attr('src', 'data:image/gif;base64,R0lGODdhAgACAIAAAAAAAP///ywAAAAAAgACAAACAoRRADs=');
+                _.delay(function () { imgNodes.remove(); imgNodes = null; }, 60000);
+            }
         };
 
         // application setup --------------------------------------------------

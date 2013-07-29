@@ -785,7 +785,8 @@ define('io.ox/office/framework/view/baseview',
             _(fixedPanes).invoke('destroy');
             _(overlayPanes).invoke('destroy');
             appPane.destroy();
-            appPane = fixedPanes = overlayPanes = null;
+            tempNode.remove();
+            appPane = fixedPanes = overlayPanes = tempNode = null;
         };
 
         // initialization -----------------------------------------------------
@@ -829,8 +830,10 @@ define('io.ox/office/framework/view/baseview',
             windowShowHandler();
         });
 
-        // remove hidden container node when application has been closed
-        app.on('quit', function () { tempNode.remove(); });
+        // safely destroy all image nodes
+        app.getWindow().on('quit', function () {
+            app.destroyImageNodes(app.getWindowNode().find('img'));
+        });
 
     } // class BaseView
 
