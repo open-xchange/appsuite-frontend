@@ -175,13 +175,13 @@ define('io.ox/office/tk/dropdown/dropdown',
             // first part of the position of the drop-down menu
             switch (preferredSide) {
             case 'top':
-                menuNodeProps.bottom = window.innerHeight - groupPosition.top + DropDown.GROUP_BORDER_PADDING;
+                menuNodeProps.bottom = window.innerHeight + window.pageYOffset - groupPosition.top + DropDown.GROUP_BORDER_PADDING;
                 break;
             case 'bottom':
                 menuNodeProps.top = groupPosition.top + groupPosition.height + DropDown.GROUP_BORDER_PADDING;
                 break;
             case 'left':
-                menuNodeProps.right = window.innerWidth - groupPosition.left + DropDown.GROUP_BORDER_PADDING;
+                menuNodeProps.right = window.innerWidth + window.pageXOffset - groupPosition.left + DropDown.GROUP_BORDER_PADDING;
                 break;
             case 'right':
                 menuNodeProps.left = groupPosition.left + groupPosition.width + DropDown.GROUP_BORDER_PADDING;
@@ -480,9 +480,9 @@ define('io.ox/office/tk/dropdown/dropdown',
 
                 // vertical space above, below, left of, and right of the group node
                 totalPadding = DropDown.WINDOW_BORDER_PADDING + DropDown.GROUP_BORDER_PADDING,
-                availableAbove = Math.max(groupPosition.top - totalPadding, 0),
+                availableAbove = Math.max(groupPosition.top - totalPadding - window.pageYOffset, 0),
                 availableBelow = Math.max(groupPosition.bottom - totalPadding, 0),
-                availableLeft = Math.max(groupPosition.left - totalPadding, 0),
+                availableLeft = Math.max(groupPosition.left - totalPadding - window.pageXOffset, 0),
                 availableRight = Math.max(groupPosition.right - totalPadding, 0);
 
             return {
