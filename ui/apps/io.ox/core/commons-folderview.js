@@ -551,7 +551,7 @@ define('io.ox/core/commons-folderview',
 
             function resetWidths() {
                 if ($(window).width() < 700) {
-                    app.getWindow().nodes.panel.css('left', '');
+                    app.getWindow().nodes.body.css('left', '');
                     sidepanel.removeAttr('style');
                 }
             }
@@ -564,7 +564,7 @@ define('io.ox/core/commons-folderview',
 
             function applyWidth(width) {
                 var nodes = app.getWindow().nodes;
-                nodes.panel.css('left', width + 'px');
+                nodes.body.css('left', width + 'px');
                 nodes.sidepanel.css('width', width + 'px');
                 windowContainer.data('resize-width', width);
             }
@@ -598,7 +598,7 @@ define('io.ox/core/commons-folderview',
             app.settings.set('folderview/visible/' + _.display(), visible = false).save();
             top = container.scrollTop();
             var nodes = app.getWindow().nodes;
-            nodes.panel.css('left', '0px');
+            nodes.body.css('left', '50px');
             nodes.sidepanel.removeClass('visible').css('width', '');
             app.trigger('folderview:close');
             if (app.getGrid) {

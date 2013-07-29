@@ -1313,7 +1313,6 @@ define("io.ox/core/desktop",
                 );
                 win.nodes.blocker = $();
                 win.nodes.sidepanel = $();
-                win.nodes.panel = $();
                 win.nodes.head = $();
                 win.nodes.body = $();
                 win.nodes.search = $();
@@ -1334,13 +1333,10 @@ define("io.ox/core/desktop",
                         ),
                         // window SIDEPANEL
                         win.nodes.sidepanel = $('<div class="window-sidepanel collapsed">'),
-                        // window MAIN PANEL
-                        win.nodes.panel = $('<div class="window-panel">').append(
-                            // window HEAD
-                            win.nodes.head = $('<div class="window-head">'),
-                            // window BODY
-                            win.nodes.body = $('<div class="window-body">')
-                        )
+                        // window HEAD
+                        win.nodes.head = $('<div class="window-head">'),
+                        // window BODY
+                        win.nodes.body = $('<div class="window-body">')
                     )
                     // capture controller events
                     .on('controller:quit', function () {
