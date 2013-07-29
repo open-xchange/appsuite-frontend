@@ -1797,9 +1797,9 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
-     * Returns the position and size of the specified node inside visible area
-     * of the browser window. This includes the distances of all four borders
-     * of the node to the borders of the browser window.
+     * Returns the position and size of the specified node inside the browser
+     * window area. This includes the distances of all four borders of the node
+     * to the borders of the browser window.
      *
      * @param {HTMLElement|jQuery} node
      *  The DOM element whose position relative to the browser window will be
@@ -1830,8 +1830,8 @@ define.async('io.ox/office/tk/utils',
         // add size and right/bottom distances
         position.width = $node.outerWidth();
         position.height = $node.outerHeight();
-        position.right = window.innerWidth - position.left - position.width;
-        position.bottom = window.innerHeight - position.top - position.height;
+        position.right = window.innerWidth + window.pageXOffset - position.left - position.width;
+        position.bottom = window.innerHeight + window.pageYOffset - position.top - position.height;
 
         return position;
     };
