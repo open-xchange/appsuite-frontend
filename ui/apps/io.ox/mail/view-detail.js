@@ -642,7 +642,6 @@ define('io.ox/mail/view-detail',
             try {
 
                 // fix z-index in threads?
-                console.log('hier?', data.threadSize, data);
                 if (data.threadSize > 1) {
                     container.css('zIndex', data.threadSize - data.threadPosition);
                 }
@@ -787,10 +786,10 @@ define('io.ox/mail/view-detail',
                     }
                     node.empty().get(0).appendChild(frag);
                     // get nodes
-                    nodes = node.find('.mail-detail').not('.thread-inline-actions');
+                    nodes = node.find('.mail-detail');
                     // set initial scroll position (37px not to see thread's inline links)
                     if (_.device('!smartphone')) {
-                        top = nodes.eq(pos).position().top - 20;
+                        top = nodes.eq(pos).parent().position().top;
                     }
                     scrollpane.scrollTop(list.length === 1 ? 0 : top);
                     scrollpane.on('scroll', { nodes: nodes, node: node }, _.debounce(autoResolve, 100));
