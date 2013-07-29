@@ -90,6 +90,9 @@ define('io.ox/office/preview/view/view',
             // all page nodes with contents, keyed by one-based page number
             loadedPageNodes = {},
 
+            // the timer used to defer loading more pages above and below the visible area
+            loadMorePagesTimer = null,
+
             // one-based index of the selected page
             selectedPage = 0,
 
@@ -117,138 +120,6 @@ define('io.ox/office/preview/view/view',
         });
 
         // private methods ----------------------------------------------------
-
-        /**
-         * Initialization after construction.
-         */
-        function initHandler() {
-
-            model = app.getModel();
-            appPaneNode = self.getAppPaneNode();
-
-            // make the application pane focusable for global navigation with F6 key
-            appPaneNode.addClass('f6-target').attr('tabindex', 1);
-
-            // create the side pane
-            self.addPane(sidePane = new SidePane(app, {
-                position: 'right',
-                resizeable: !Modernizr.touch,
-                minSize: SidePane.DEFAULT_WIDTH,
-                maxSize: 1.8 * SidePane.DEFAULT_WIDTH
-            }));
-
-            // create the page preview group
-            pageGroup = new PageGroup(app, sidePane);
-
-            // initialize the side pane
-            sidePane
-                .addViewComponent(new ToolBox(app, { fixed: 'top' })
-                    .addGroup('app/view/sidepane', new Button(BaseControls.HIDE_SIDEPANE_OPTIONS))
-                    .addRightTab()
-                    .addGroup('app/edit', new PreviewControls.EditDocumentButton(app))
-                    .addGap()
-                    .addGroup('app/quit', new Button(BaseControls.QUIT_OPTIONS))
-                )
-                .addViewComponent(new Component(app)
-                    .addGroup('pages/current', pageGroup)
-                );
-
-            // create the top overlay pane
-            self.addPane(topOverlayPane = new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
-                .addViewComponent(new ToolBox(app)
-                    .addGroup('app/view/sidepane', new Button(BaseControls.SHOW_SIDEPANE_OPTIONS))
-                    .addGap()
-                    .addGroup('app/edit', new PreviewControls.EditDocumentButton(app))
-                    .addGap()
-                    .addGroup('app/quit', new Button(BaseControls.QUIT_OPTIONS))
-                )
-            );
-
-            // create the bottom overlay pane
-            self.addPane(bottomOverlayPane = new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
-                .addViewComponent(bottomToolBox = new ToolBox(app))
-            );
-
-            // initially, hide the side pane, and show the overlay tool bars
-            self.toggleSidePane(false);
-        }
-
-        function deferredInitHandler() {
-
-            var // the bottom tool box in the side pane
-                sidePaneToolBox = null,
-                // the number of pages in the document
-                pageCount = model.getPageCount(),
-                // the HTML mark-up for the empty page nodes
-                pageMarkup = '';
-
-            if (pageCount >= 1) {
-
-                // initialize side pane depending on page count
-                sidePane.addViewComponent(sidePaneToolBox = new ToolBox(app, { fixed: 'bottom' }));
-                if (pageCount > 1) {
-                    sidePaneToolBox
-                        .addGroup('pages/previous', new Button(PreviewControls.PREV_OPTIONS))
-                        .addGroup('pages/current',  new PreviewControls.PageChooser(app))
-                        .addGroup('pages/next',     new Button(PreviewControls.NEXT_OPTIONS));
-                }
-                sidePaneToolBox
-                    .addRightTab()
-                    .addGroup('zoom/dec',  new Button(PreviewControls.ZOOMOUT_OPTIONS))
-                    .addGroup('zoom/type', new PreviewControls.ZoomTypeChooser())
-                    .addGroup('zoom/inc',  new Button(PreviewControls.ZOOMIN_OPTIONS));
-
-                // create the status overlay pane
-                self.addPane(new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true })
-                    .addViewComponent(new ToolBox(app).addPrivateGroup(statusLabel))
-                );
-
-                // initialize bottom overlay pane depending on page count
-                if (pageCount > 1) {
-                    bottomToolBox.newLine().addRightTab()
-                        .addGroup('pages/previous', new Button(PreviewControls.PREV_OPTIONS))
-                        .addGroup('pages/current',  new PreviewControls.PageChooser(app))
-                        .addGroup('pages/next',     new Button(PreviewControls.NEXT_OPTIONS));
-                }
-                bottomToolBox.newLine().addRightTab()
-                    .addGroup('zoom/dec',  new Button(PreviewControls.ZOOMOUT_OPTIONS))
-                    .addGroup('zoom/type', new PreviewControls.ZoomTypeChooser())
-                    .addGroup('zoom/inc',  new Button(PreviewControls.ZOOMIN_OPTIONS));
-
-                // save the scroll position while view is hidden
-                app.getWindow().on({ beforehide: windowHideHandler, show: windowShowHandler });
-
-                // no layout refreshes without any pages
-                self.on('refresh:layout', refreshLayout);
-
-                // initialize touch-like tracking with mouse, attach the scroll event handler
-                appPaneNode
-                    .enableTracking({ selector: '.page', sourceEvents: 'mouse' })
-                    .on('tracking:start tracking:move tracking:end tracking:cancel', trackingHandler)
-                    .on('gesturestart gesturechange gestureend', gestureHandler)
-                    .on('scroll', app.createDebouncedMethod($.noop, updateVisiblePages, { delay: 100, maxDelay: 500 }));
-
-                // initialize all page nodes
-                _(pageCount).times(function (index) {
-                    pageMarkup += '<div class="page" data-page="' + (index + 1) + '"></div>';
-                });
-                self.insertContentNode(pageContainerNode.html(pageMarkup));
-                pageNodes = pageContainerNode.children();
-            }
-
-            // set focus to application pane, and update the view
-            self.grabFocus();
-            app.getController().update();
-        }
-
-        /**
-         * Moves the browser focus to the application pane.
-         */
-        function grabFocusHandler() {
-            appPaneNode.focus();
-            // Bug 25924: sometimes, Firefox selects the entire page
-            window.getSelection().removeAllRanges();
-        }
 
         /**
          * Updates the status label with the current page number.
@@ -368,6 +239,19 @@ define('io.ox/office/preview/view/view',
         }
 
         /**
+         * Cancels all running background tasks regarding updating the page
+         * nodes in the visible area.
+         */
+        function cancelMorePagesTimer() {
+            // cancel the timer that loads more pages above and below the visible
+            // area, e.g. to prevent (or defer) out-of-memory situations on iPad
+            if (loadMorePagesTimer) {
+                loadMorePagesTimer.abort();
+                loadMorePagesTimer = null;
+            }
+        }
+
+        /**
          * Updates all pages that are currently visible in the application
          * pane.
          */
@@ -408,14 +292,18 @@ define('io.ox/office/preview/view/view',
             // load visible pages with high priority
             Utils.iterateRange(beginPage, endPage, loadPageHighPriority);
 
-            // load 2 pages above and below the visible area with medium priority
-            Utils.iterateRange(endPage, endPageLowerPrio, loadPageMediumPriority);
-            Utils.iterateRange(beginPage - 1, beginPageLowerPrio - 1, loadPageMediumPriority, { step: -1 });
+            // load two pages above and below the visible area with medium priority after a short delay
+            cancelMorePagesTimer();
+            loadMorePagesTimer = app.executeDelayed(function () {
+                Utils.iterateRange(endPage, endPageLowerPrio, loadPageMediumPriority);
+                Utils.iterateRange(beginPage - 1, beginPageLowerPrio - 1, loadPageMediumPriority, { step: -1 });
+            }, { delay: 500 });
 
             // clear all other pages
             _(loadedPageNodes).each(function (pageNode, page) {
                 if ((page < beginPageLowerPrio) || (page >= endPageLowerPrio)) {
-                    pageNode[0].innerHTML = '';
+                    app.destroyImageNodes(pageNode.children('img'));
+                    pageNode.empty();
                     delete loadedPageNodes[page];
                 }
             });
@@ -514,6 +402,15 @@ define('io.ox/office/preview/view/view',
         }
 
         /**
+         * Moves the browser focus to the application pane.
+         */
+        function grabFocusHandler() {
+            appPaneNode.focus();
+            // Bug 25924: sometimes, Firefox selects the entire page
+            window.getSelection().removeAllRanges();
+        }
+
+        /**
          * Stores the current scroll position while the view is hidden.
          */
         function windowHideHandler() {
@@ -563,7 +460,7 @@ define('io.ox/office/preview/view/view',
          * Handles tracking events originating from the mouse and simulates
          * touch-like scrolling on the page nodes.
          *
-         * @param {jQuery.Event}
+         * @param {jQuery.Event} event
          *  The jQuery tracking event.
          */
         var trackingHandler = (function () {
@@ -631,7 +528,7 @@ define('io.ox/office/preview/view/view',
         /**
          * Handles gesture events and changes the current zoom.
          *
-         * @param {jQuery.Event}
+         * @param {jQuery.Event} event
          *  The jQuery gesture event.
          */
         var gestureHandler = (function () {
@@ -665,6 +562,137 @@ define('io.ox/office/preview/view/view',
 
             return gestureHandler;
         }()); // end of gestureHandler() local scope
+
+        /**
+         * Handles scroll events and updates the visible pages.
+         *
+         * @param {jQuery.Event} event
+         *  The jQuery scroll event.
+         */
+        var scrollHandler = app.createDebouncedMethod(cancelMorePagesTimer, updateVisiblePages, { delay: 200, maxDelay: 1000 });
+
+        /**
+         * Initialization after construction.
+         */
+        function initHandler() {
+
+            model = app.getModel();
+            appPaneNode = self.getAppPaneNode();
+
+            // make the application pane focusable for global navigation with F6 key
+            appPaneNode.addClass('f6-target').attr('tabindex', 1);
+
+            // create the side pane
+            self.addPane(sidePane = new SidePane(app, {
+                position: 'right',
+                resizeable: !Modernizr.touch,
+                minSize: SidePane.DEFAULT_WIDTH,
+                maxSize: 1.8 * SidePane.DEFAULT_WIDTH
+            }));
+
+            // create the page preview group
+            pageGroup = new PageGroup(app, sidePane);
+
+            // initialize the side pane
+            sidePane
+                .addViewComponent(new ToolBox(app, { fixed: 'top' })
+                    .addGroup('app/view/sidepane', new Button(BaseControls.HIDE_SIDEPANE_OPTIONS))
+                    .addRightTab()
+                    .addGroup('app/edit', new PreviewControls.EditDocumentButton(app))
+                    .addGap()
+                    .addGroup('app/quit', new Button(BaseControls.QUIT_OPTIONS))
+                )
+                .addViewComponent(new Component(app)
+                    .addGroup('pages/current', pageGroup)
+                );
+
+            // create the top overlay pane
+            self.addPane(topOverlayPane = new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
+                .addViewComponent(new ToolBox(app)
+                    .addGroup('app/view/sidepane', new Button(BaseControls.SHOW_SIDEPANE_OPTIONS))
+                    .addGap()
+                    .addGroup('app/edit', new PreviewControls.EditDocumentButton(app))
+                    .addGap()
+                    .addGroup('app/quit', new Button(BaseControls.QUIT_OPTIONS))
+                )
+            );
+
+            // create the bottom overlay pane
+            self.addPane(bottomOverlayPane = new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
+                .addViewComponent(bottomToolBox = new ToolBox(app))
+            );
+
+            // initially, hide the side pane, and show the overlay tool bars
+            self.toggleSidePane(false);
+        }
+
+        function deferredInitHandler() {
+
+            var // the bottom tool box in the side pane
+                sidePaneToolBox = null,
+                // the number of pages in the document
+                pageCount = model.getPageCount(),
+                // the HTML mark-up for the empty page nodes
+                pageMarkup = '';
+
+            if (pageCount >= 1) {
+
+                // initialize side pane depending on page count
+                sidePane.addViewComponent(sidePaneToolBox = new ToolBox(app, { fixed: 'bottom' }));
+                if (pageCount > 1) {
+                    sidePaneToolBox
+                        .addGroup('pages/previous', new Button(PreviewControls.PREV_OPTIONS))
+                        .addGroup('pages/current',  new PreviewControls.PageChooser(app))
+                        .addGroup('pages/next',     new Button(PreviewControls.NEXT_OPTIONS));
+                }
+                sidePaneToolBox
+                    .addRightTab()
+                    .addGroup('zoom/dec',  new Button(PreviewControls.ZOOMOUT_OPTIONS))
+                    .addGroup('zoom/type', new PreviewControls.ZoomTypeChooser())
+                    .addGroup('zoom/inc',  new Button(PreviewControls.ZOOMIN_OPTIONS));
+
+                // create the status overlay pane
+                self.addPane(new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true })
+                    .addViewComponent(new ToolBox(app).addPrivateGroup(statusLabel))
+                );
+
+                // initialize bottom overlay pane depending on page count
+                if (pageCount > 1) {
+                    bottomToolBox.newLine().addRightTab()
+                        .addGroup('pages/previous', new Button(PreviewControls.PREV_OPTIONS))
+                        .addGroup('pages/current',  new PreviewControls.PageChooser(app))
+                        .addGroup('pages/next',     new Button(PreviewControls.NEXT_OPTIONS));
+                }
+                bottomToolBox.newLine().addRightTab()
+                    .addGroup('zoom/dec',  new Button(PreviewControls.ZOOMOUT_OPTIONS))
+                    .addGroup('zoom/type', new PreviewControls.ZoomTypeChooser())
+                    .addGroup('zoom/inc',  new Button(PreviewControls.ZOOMIN_OPTIONS));
+
+                // save the scroll position while view is hidden
+                app.getWindow().on({ beforehide: windowHideHandler, show: windowShowHandler });
+
+                // no layout refreshes without any pages
+                self.on('refresh:layout', refreshLayout);
+
+                // initialize touch-like tracking with mouse, attach the scroll event handler
+                appPaneNode
+                    .enableTracking({ selector: '.page', sourceEvents: 'mouse' })
+                    .on('tracking:start tracking:move tracking:end tracking:cancel', trackingHandler)
+                    .on('gesturestart gesturechange gestureend', gestureHandler)
+                    .on('scroll', scrollHandler);
+
+                // initialize all page nodes
+                _(pageCount).times(function (index) {
+                    pageMarkup += '<div class="page" data-page="' + (index + 1) + '"></div>';
+                });
+                self.insertContentNode(pageContainerNode.html(pageMarkup));
+                pageNodes = pageContainerNode.children();
+            }
+
+            // set focus to application pane, and update the view
+            self.grabFocus();
+            app.getController().update();
+        }
 
         // methods ------------------------------------------------------------
 
