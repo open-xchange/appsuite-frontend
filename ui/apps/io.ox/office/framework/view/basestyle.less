@@ -984,9 +984,12 @@ i[class^="icon-"], i[class^=" icon-"] {
 
             /* permanent borders for text fields */
             &.text-field {
+                .border-radius(5px);
+
                 .button, input {
                     border: 1px solid @default-border-color;
                 }
+
                 input {
                     height: @item-height;
                     .border-radius(5px);
@@ -1018,7 +1021,6 @@ i[class^="icon-"], i[class^=" icon-"] {
 
             /* additional settings for spin fields */
             &.spin-field {
-                .border-radius(5px);
                 .spin-field-settings(@item-height);
 
                 > input {
