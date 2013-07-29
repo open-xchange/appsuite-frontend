@@ -164,7 +164,7 @@ define('io.ox/tasks/edit/view',
 
             temp = tabs = null;
 
-            //hide participants tab for PIM user
+            // hide participants tab for PIM user
             if (!capabilities.has('delegate_tasks')) {
                 var node = self.$el;
 
