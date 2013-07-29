@@ -144,7 +144,7 @@ define('io.ox/core/settings/errorlog/settings/pane',
             this.$el.append(
                 $('<section class="chart">'),
                 $('<section class="chart-description">').text(
-                    gt('The blue graph shows the distribution of request durations in percent. The grey graph shows a trivial network ping to recognize slow connections.')
+                    gt('The blue graph shows the distribution of request durations in percent. The gray graph shows a trivial network ping to recognize slow connections.')
                 )
             );
         },

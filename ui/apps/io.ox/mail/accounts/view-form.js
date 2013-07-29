@@ -239,7 +239,7 @@ define('io.ox/mail/accounts/view-form',
                         if (response) {
                             saveAccount();
                         } else {
-                            notifications.yell('error', gt('This account cant be validated.'));
+                            notifications.yell('error', gt('This account cannot be validated'));
                             self.dialog.idle();
                         }
                     });
