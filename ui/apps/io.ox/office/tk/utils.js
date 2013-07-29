@@ -2809,14 +2809,16 @@ define.async('io.ox/office/tk/utils',
 /*
     // forward console output into a fixed DOM node on touch devices
     if (Config.isDebug() && Modernizr.touch) {
-        var consoleNode = $('<div>', { id: 'io-ox-office-console' });
-        $('body').append(consoleNode);
+        var consoleNode = $('<div>', { id: 'io-ox-office-console' }).appendTo('body'),
+            outputNode = $('<div>').addClass('output').appendTo(consoleNode),
+            clearButton = $('<button>').text('Clear').appendTo(consoleNode);
+        clearButton.on('click', function () { outputNode.empty(); return false; });
         consoleNode.on('click', function () { consoleNode.toggleClass('collapsed'); });
         _(['log', 'info', 'warn', 'error']).each(function (methodName) {
             var origMethod = _.bind(window.console[methodName], window.console);
             window.console[methodName] = function (msg) {
-                consoleNode.append($('<p>').addClass(methodName).text(msg));
-                consoleNode.scrollTop(consoleNode[0].scrollHeight);
+                outputNode.append($('<p>').addClass(methodName).text(msg));
+                outputNode.scrollTop(outputNode[0].scrollHeight);
                 return origMethod(msg);
             };
         });
