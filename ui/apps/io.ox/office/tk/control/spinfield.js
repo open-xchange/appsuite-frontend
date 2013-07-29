@@ -70,7 +70,7 @@ define('io.ox/office/tk/control/spinfield',
 
         // base constructors --------------------------------------------------
 
-        TextField.call(this, Utils.extendOptions(options, { validator: validator }));
+        TextField.call(this, Utils.extendOptions({ keyboard: 'number' }, options, { validator: validator }));
 
         // private methods ----------------------------------------------------
 

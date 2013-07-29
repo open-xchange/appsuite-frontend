@@ -118,8 +118,8 @@ define('io.ox/office/preview/view/controls',
         app.on('docs:import:success', function () {
             self.createMenuSection('pages', { separator: true, classes: 'inline' })
                 .addSectionGroup('pages', new Label({ label: gt('Go to page') }))
-                .addSectionGroup('pages', new TextField({ tooltip: gt('Page number'), width: 45, css: { textAlign: 'right' }, validator: new TextField.NumberValidator({ min: 1, max: app.getModel().getPageCount() }) }));
-//                .addSectionGroup('pages', new SpinField({ tooltip: gt('Page number'), width: 45, css: { textAlign: 'right' }, min: 1, max: app.getModel().getPageCount() }));
+                .addSectionGroup('pages', new TextField({ tooltip: gt('Page number'), width: 45, css: { textAlign: 'right' }, keyboard: 'number', validator: new TextField.NumberValidator({ min: 1, max: app.getModel().getPageCount() }) }));
+//                .addSectionGroup('pages', new SpinField({ tooltip: gt('Page number'), width: 45, css: { textAlign: 'right' }, keyboard: 'number', min: 1, max: app.getModel().getPageCount() }));
         });
 
     }}); // class PageChooser

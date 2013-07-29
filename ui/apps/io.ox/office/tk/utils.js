@@ -2585,12 +2585,20 @@ define.async('io.ox/office/tk/utils',
      *  method. Additionally, the following options are supported:
      *  @param {String} [options.placeholder='']
      *      A place holder text that will be shown in an empty text field.
+     *  @param {String} [options.keyboard='text']
+     *      Specifies which virtual keyboard should occur on touch devices.
+     *      Supported types are 'text' (default) for a generic text field with
+     *      alphanumeric keyboard, 'number' for floating-point numbers with
+     *      numeric keyboard, 'url' for an alphanumeric keyboard with additions
+     *      for entering URLs, or 'email' for an alphanumeric keyboard with
+     *      additions for entering e-mail addresses.
      *
      * @returns {jQuery}
      *  A jQuery object containing the new text field element.
      */
     Utils.createTextField = function (options) {
-        var textField = Utils.createControl('input', { type: 'text', tabindex: 1 }, options);
+        var type = Utils.getStringOption(options, 'keyboard', 'text'),
+            textField = Utils.createControl('input', { type: type, tabindex: 1 }, options);
         return textField.attr('placeholder', Utils.getStringOption(options, 'placeholder', ''));
     };
 
