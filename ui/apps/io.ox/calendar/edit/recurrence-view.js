@@ -583,6 +583,9 @@ define("io.ox/calendar/edit/recurrence-view",
 
                     this.nodes.alternative1.children().detach();
                     this.nodes.alternative2.hide().children().detach();
+
+                    this.sentences.rectype.set('recurrenceType', type);
+
                     switch (type) {
                     case RECURRENCE_TYPES.DAILY:
                         this.nodes.alternative1.append(this.sentences.daily.$el);
