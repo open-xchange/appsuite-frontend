@@ -744,9 +744,9 @@ define('io.ox/core/main',
                 autoStart = _([].concat(settings.get('autoStart'))).filter(function (o) {
                     return !_.isUndefined(o) && !_.isNull(o);
                 });
-            }
-            if (_.isEmpty(autoStart)) {
-                autoStart.push("io.ox/mail");
+                if (_.isEmpty(autoStart)) {
+                    autoStart.push('io.ox/mail');
+                }
             }
 
             return autoStart;
