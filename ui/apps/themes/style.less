@@ -1883,7 +1883,7 @@ input.nice-input {
 
             background-color: @foldertreeSelectedFocusBackground;
 
-            * {
+            .folder-label, .folder-arrow {
                 color: @foldertreeSelectedLabelColor;
             }
 
@@ -2012,6 +2012,11 @@ input.nice-input {
 
 .foldertree-sidepanel {
 
+    left: @windowHeadWidth;
+    bottom: -10px;
+
+    box-shadow: 0 0 5px -1px #333 inset;
+
     @c1: lighten(@foldertreeSidepanelBackground, 8%);
     @c2: @foldertreeSidepanelBackground;
 
@@ -2040,7 +2045,7 @@ input.nice-input {
 
     .foldertree-container {
 
-        bottom: 40px;
+        bottom: 50px;
 
         &.io-ox-foldertree {
 
@@ -2051,7 +2056,7 @@ input.nice-input {
             .folder {
 
                 .folder-label {
-                    text-shadow: 0 0 2px #000;
+                    text-shadow: 0 0 2px #fff;
                 }
 
                 &.selectable .folder-label {
@@ -2104,7 +2109,7 @@ input.nice-input {
                     }
 
                     .folder-label {
-                        color: @foldertreeSelectedLabelColor;
+                        color: @foldertreeFocusedLabelColor;
                     }
 
                 }
@@ -2122,7 +2127,7 @@ input.nice-input {
 
             .folder-arrow, a {
                 font-size: 13px;
-                color: lighten(@linkColor, 20%);
+                color: @linkColor;
             }
 
         }
@@ -2132,9 +2137,10 @@ input.nice-input {
     .foldertree-toolbar {
         top: auto;
         height: 40px - 1;
+        bottom: 10px;
         line-height: 40px - 1;
-        border-top: 1px solid darken(@foldertreeSidepanelBackground, 5%);
-        background-color: darken(@foldertreeSidepanelBackground, 1%);
+        border-top: 1px solid rgba(0, 0, 0, 0.20);
+        background-color: rgba(0, 0, 0, 0.02);
     }
 
     &.side-shift {
@@ -2162,7 +2168,7 @@ a.toolbar-action {
 .toolbar-action i.enabled { color: #888; }
 .toolbar-action:hover { background-color: rgba(0, 0, 0, 0.20); }
 a.toolbar-action, .toolbar-action > a {
-    color: @linkOnDark;
+    color: lighten(@linkColor, 10%);
     outline: 0;
     text-decoration: none;
     &:hover { text-decoration: none; }
