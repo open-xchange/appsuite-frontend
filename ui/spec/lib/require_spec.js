@@ -11,10 +11,6 @@
  */
 define(function () {
     describe('require static files', function () {
-        afterEach(function () {
-            this.handleExpectedFail({'require static files should fetch static files via backend.': true});
-        });
-
         it('should fetch static files via backend', function () {
             var def = require(['apps/file/doesnt/exist.js']);
 
