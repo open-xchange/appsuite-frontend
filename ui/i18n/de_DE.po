@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: Tue Jan 08 2013 04:14:01 GMT+0100 (CET)\n"
-"PO-Revision-Date: 2013-07-29 09:00+0200\n"
+"PO-Revision-Date: 2013-07-29 10:59+0200\n"
 "Last-Translator: Antje Faber\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: en_US\n"
@@ -668,6 +668,8 @@ msgid ""
 "The unrecoverable items have been cleaned up successfully. Please refresh "
 "this page to see the changes."
 msgstr ""
+"Die nicht wiederherstellbaren Objekte wurden erfolgreich aufgeräumt. "
+"Bitte aktualisieren Sie die Seite, um die Änderungen zu sehen."
 
 #: apps/io.ox/calendar/print.js:192 apps/io.ox/tasks/print.js:86
 msgid "Accepted"
@@ -2402,9 +2404,8 @@ msgid "Please enter the following data: %1$s"
 msgstr "Bitte geben Sie die folgenden Daten ein: %1$s"
 
 #: apps/io.ox/mail/accounts/view-form.js:242
-#, fuzzy
 msgid "This account cant be validated."
-msgstr "Der Account muss benannt werden"
+msgstr "Dieser Account kann nicht validiert werden."
 
 #: apps/io.ox/mail/accounts/view-form.js:263
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:365
@@ -3056,7 +3057,7 @@ msgstr "Ordner-Aktionen"
 #: apps/io.ox/mail/guidance/main.js:101
 msgctxt "help"
 msgid "The E-Mail Components"
-msgstr ""
+msgstr "Die Bestandteile von E-Mail"
 
 #: apps/io.ox/mail/guidance/main.js:102
 msgctxt "help"
@@ -3074,7 +3075,6 @@ msgid "E-Mail Settings"
 msgstr "E-Mail-Einstellungen"
 
 #: apps/io.ox/mail/guidance/main.js:108
-#, fuzzy
 msgid "Related articles"
 msgstr "Verwandte Artikel"
 
@@ -3170,9 +3170,8 @@ msgid "Append vcard"
 msgstr "Visitenkarte anhängen"
 
 #: apps/io.ox/mail/settings/pane.js:40
-#, fuzzy
 msgid "Insert the original emails text to a reply"
-msgstr "Ursprünglichen Mailtext in Antwort zitieren"
+msgstr "Ursprünglichen E-Mail-Text in Antwort zitieren"
 
 #: apps/io.ox/mail/settings/pane.js:41
 msgid "Forward emails as"
@@ -3308,19 +3307,16 @@ msgstr ""
 "Beim Lesen Kontakte automatisch im Ordner \"Gesammelte Adressen\" speichern?"
 
 #: apps/io.ox/mail/settings/old_pane.js:72
-#, fuzzy
 msgid "Insert the original email text to a reply"
-msgstr "Ursprünglichen Mailtext in Antwort zitieren"
+msgstr "Ursprünglichen E-Mail-Text in Antwort zitieren"
 
 #: apps/io.ox/mail/settings/old_pane.js:83
-#, fuzzy
 msgid "Forward emails as:"
-msgstr "Nachrichten weiterleiten als: "
+msgstr "E-Mails weiterleiten als:"
 
 #: apps/io.ox/mail/settings/old_pane.js:95
-#, fuzzy
 msgid "Format emails as:"
-msgstr "Nachrichten formatieren als "
+msgstr "E-Mails formatieren als: "
 
 #: apps/io.ox/mail/settings/old_pane.js:108
 msgid "Line wrap when sending text mails after: "
@@ -3732,6 +3728,8 @@ msgstr "Vollbild"
 msgid ""
 "Please note, changing or removing will cause problems by viewing and editing."
 msgstr ""
+"Bitte beachten Sie, dass das Ändern oder Entfernen der Dateiendung Probleme "
+"beim Betrachten und Bearbeiten der Datei verursacht."
 
 #: apps/io.ox/files/util.js:42
 msgid ""
@@ -5630,6 +5628,9 @@ msgid ""
 "The blue graph shows the distribution of request durations in percent. The "
 "grey graph shows a trivial network ping to recognize slow connections."
 msgstr ""
+"Die blaue Grafik zeigt die Verteilung der Anfragedauer in Prozent. Die "
+"graue Grafik zeigt das Ergebnis eines einfachen Netzwerk-'Ping' zum "
+"Erkennen langsamer Verbindungen. "
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:216
 msgid "Errors"
@@ -5845,7 +5846,6 @@ msgid "Uploading folders is not supported."
 msgstr "Das Hochladen von Ordnern wird nicht unterstützt."
 
 #: apps/io.ox/core/tk/dropdown-options.js:203
-#, fuzzy
 msgid "close"
 msgstr "Schließen"
 
@@ -5906,7 +5906,6 @@ msgstr "Veröffentlichung"
 
 #: apps/io.ox/core/pubsub/publications.js:329
 #: apps/io.ox/core/pubsub/publications.js:334
-#, fuzzy
 msgid "Share Link by email"
 msgstr "Link per E-Mail freigeben"
 
@@ -6356,9 +6355,8 @@ msgstr "SoftBank"
 
 #. Emoji collection. Emoji icons that work across Japanese (telecom) carriers.
 #: apps/moxiecode/tiny_mce/plugins/emoji/categories.js:44
-#, fuzzy
 msgid "Japanese Carrier"
-msgstr "Japanischer Anbieter"
+msgstr "Japanischer Hoster"
 
 #: apps/moxiecode/tiny_mce/plugins/emoji/categories.js:47
 msgid "Recently used"
