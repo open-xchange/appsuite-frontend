@@ -99,7 +99,7 @@ define('io.ox/editor/main',
 
         getFilename: function () {
             var title = this.getTitle(),
-                filename = String(title || (this.getContent().substr(0, 20).split('.')[0] || 'unnamed')).toLowerCase();
+                filename = String(title || this.getContent().substr(0, 20).split('.')[0] || 'unnamed');
             // has file extension?
             if (!/\.\w{1,4}$/.test(filename)) {
                 filename += '.txt';
