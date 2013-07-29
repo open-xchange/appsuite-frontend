@@ -16,7 +16,8 @@ define('io.ox/mail/folderview-extensions',
      'io.ox/core/api/folder',
      'io.ox/mail/api',
      'io.ox/core/notifications',
-     'gettext!io.ox/mail'], function (ext, folderAPI, mailAPI, notifications, gt) {
+     'io.ox/core/capabilities',
+     'gettext!io.ox/mail'], function (ext, folderAPI, mailAPI, notifications, capabilities, gt) {
 
     'use strict';
 
@@ -29,15 +30,19 @@ define('io.ox/mail/folderview-extensions',
         });
     }
 
-    ext.point(POINT + '/sidepanel/toolbar/add').extend({
-        id: 'add-account',
-        index: 300,
-        draw: function (baton) {
-            this.append($('<li>').append(
-                $('<a href="#" data-action="add-mail-account" tabindex="1" role="menuitem">').text(gt('Add mail account')).on('click', addAccount)
-            ));
-        }
-    });
+    if (capabilities.has('multiple_mail_accounts')) {
+        ext.point(POINT + '/sidepanel/toolbar/add').extend({
+            id: 'add-account',
+            index: 300,
+            draw: function (baton) {
+                this.append($('<li>').append(
+                    $('<a href="#" data-action="add-mail-account" tabindex="1" role="menuitem">')
+                    .text(gt('Add mail account'))
+                    .on('click', addAccount)
+                ));
+            }
+        });
+    }
 
     function subscribeIMAPFolder(e) {
         e.preventDefault();

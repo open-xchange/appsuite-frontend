@@ -1020,6 +1020,7 @@ a.button {
     z-index: 2;
     background-color: @background;
     overflow: hidden;
+    outline: 0;
 }
 
 .window-content textarea, textarea {
@@ -1883,12 +1884,10 @@ input.nice-input {
 
             background-color: @foldertreeSelectedFocusBackground;
 
-            .folder-label, .folder-arrow {
-                color: @foldertreeSelectedLabelColor;
+            * {
+                color: @foldertreeFocusedLabelColor;
             }
-
         }
-
     }
 
     .folder-row {
@@ -2015,7 +2014,7 @@ input.nice-input {
     left: @windowHeadWidth;
     bottom: -10px;
 
-    box-shadow: 0 0 5px -1px #333 inset;
+    box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.3) inset;
 
     @c1: lighten(@foldertreeSidepanelBackground, 8%);
     @c2: @foldertreeSidepanelBackground;
@@ -2141,12 +2140,10 @@ input.nice-input {
         line-height: 40px - 1;
         border-top: 1px solid rgba(0, 0, 0, 0.20);
         background-color: rgba(0, 0, 0, 0.02);
-    }
 
-    &.side-shift {
-        width: @windowContentShift;
-        left: 0 - @windowContentShift;
-        min-width: 170px;
+        .toolbar-action {
+            line-height: 40px - 1;
+        }
     }
 }
 
@@ -2168,7 +2165,7 @@ a.toolbar-action {
 .toolbar-action i.enabled { color: #888; }
 .toolbar-action:hover { background-color: rgba(0, 0, 0, 0.20); }
 a.toolbar-action, .toolbar-action > a {
-    color: lighten(@linkColor, 10%);
+    color: lighten(@linkColor, 5%);
     outline: 0;
     text-decoration: none;
     &:hover { text-decoration: none; }
@@ -2639,9 +2636,9 @@ input.flat-input {
     .clear-title {
         font-size: 15pt;
     }
-    .foldertree-sidepanel.side-shift {
-        width: @small-folderTreeShift;
-        .box-shadow(0px 0px 10px 3px #333);
+
+    .foldertree-sidepanel {
+        left: 0px;
     }
     .io-ox-foldertree {
         .folder-arrow, .folder-arrow i {
