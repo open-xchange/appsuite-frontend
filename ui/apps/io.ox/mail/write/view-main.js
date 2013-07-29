@@ -415,17 +415,15 @@ define("io.ox/mail/write/view-main",
         showEmojiPalette: function () {
             var self = this;
             return function () {
+                var tab = _.device('tablet'),
+                    innerContainer = self.rightside.find('.editor-inner-container');
                 if (self.emojiview === undefined) {
                     ox.load(['io.ox/core/emoji/view']).done(function (EmojiView) {
                         self.emojiview = new EmojiView({ editor: self.textarea, onInsertEmoji: self.onInsertEmoji });
-                        var emo = $('<div class="mceEmojiPane">').css({
-                            position: "fixed",
-                            bottom: "0px", // will hide the bottom toolbar
-                            left: "0px",
-                            height: "200px",
-                            width: "100%",
-                            "z-index": 1000 // bottom toolbar is 666
-                        });
+                        var emo = $('<div class="mceEmojiPane">');
+                        if (tab) {
+                            innerContainer.addClass('textarea-shift');
+                        }
                         self.emojiview.setElement(emo);
                         // nasty, but position:fixed elements must be in a non-scrollable container to work
                         // properly on iOS
@@ -438,9 +436,15 @@ define("io.ox/mail/write/view-main",
                 } else {
                     self.emojiview.toggle();
                     if (self.emojiview.isOpen) {
+                        if (tab) {
+                            innerContainer.addClass('textarea-shift');
+                        }
                         self.spacer.show();
                         self.scrollEmoji();
                     } else {
+                        if (tab) {
+                            innerContainer.removeClass('textarea-shift');
+                        }
                         self.spacer.hide();
                     }
                 }
@@ -632,7 +636,11 @@ define("io.ox/mail/write/view-main",
 
             this.emojiToggle = function () {
                 if (emojiMobileSupport) {
-                    self.subject.closest('.subject-wrapper').css('width', '85%');
+                    this.rightside.addClass('mobile-emoji-shift');
+                    /*self.subject.closest('.subject-wrapper').addClass('mobile-emoji-shift');
+                    if (_.device('tablet')) {
+                        self.rightside.find('.priority-overlay').addClass('mobile-emoji-shift priority-shift');
+                    }'*/
                     return $('<div>').addClass('emoji-icon')
                         .on('click', this.showEmojiPalette());
                 } else return $();
