@@ -641,6 +641,12 @@ define('io.ox/mail/view-detail',
 
             try {
 
+                // fix z-index in threads?
+                console.log('hier?', data.threadSize, data);
+                if (data.threadSize > 1) {
+                    container.css('zIndex', data.threadSize - data.threadPosition);
+                }
+
                 // threaded & send by myself (and not in sent folder)?
                 if (data.threadSize > 1 && util.byMyself(data) && !account.is('sent', data.folder_id)) {
                     node.addClass('by-myself');
@@ -764,6 +770,8 @@ define('io.ox/mail/view-detail',
 
                     // loop over thread - use fragment to be fast for tons of mails
                     for (i = 0; (obj = list[i]); i++) {
+                        obj.threadPosition = i;
+                        obj.threadSize = list.length;
                         if (i >= top && i <= bottom) {
                             mail = mails.shift();
                             copyThreadData(mail, obj);
