@@ -214,7 +214,6 @@ define('io.ox/core/api/folder',
                             // get standard folders
                             _(data).each(function (folder) {
                                 _(types).find(function (type, index) {
-                                    console.log('find type', type, folder.id, '>>>', account.is(type, folder.id));
                                     return account.is(type, folder.id) && !!(head[index + 1] = folder);
                                 });
                             });
