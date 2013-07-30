@@ -191,25 +191,51 @@ define('io.ox/core/api/folder',
                         appendColumns: true
                     })
                     .pipe(function (data, timestamp) {
+
                         // rearrange on multiple ???
                         if (data.timestamp) {
                             timestamp = _.then(); // force update
                             data = data.data;
                         }
-                        //apply blacklist
+
+                        // apply blacklist
                         data = _.filter(data, visible);
+
                         // fix order of mail folders (INBOX first)
                         if (opt.folder === '1') {
+
+                            var head = new Array(1 + 5), types = 'inbox sent drafts trash spam'.split(' ');
+
+                            // get unified folder first
+                            _(data).find(function (folder) {
+                                return account.isUnified(folder.id) && !!(head[0] = folder);
+                            });
+
+                            // get standard folders
+                            _(data).each(function (folder) {
+                                _(types).find(function (type, index) {
+                                    console.log('find type', type, folder.id, '>>>', account.is(type, folder.id));
+                                    return account.is(type, folder.id) && !!(head[index + 1] = folder);
+                                });
+                            });
+
+                            // exclude unified and standard folders
+                            data = _(data).reject(function (folder) {
+                                return account.isUnified(folder.id) || account.isStandardFolder(folder.id);
+                            });
+
+                            // sort the rest
                             data.sort(function (a, b) {
-                                if (account.isUnified(a.id)) return -1;
-                                if (account.isUnified(b.id)) return +1;
-                                if (a.id === 'default0/INBOX') return -1;
-                                if (b.id === 'default0/INBOX') return +1;
+                                // external accounts at last
                                 if (account.isExternal(a.id)) return +1;
                                 if (account.isExternal(b.id)) return -1;
                                 return a.title.toLowerCase() > b.title.toLowerCase() ? +1 : -1;
                             });
+
+                            // combine
+                            data.unshift.apply(data, _(head).compact());
                         }
+
                         return $.when(
                             // add to cache
                             cache.add(opt.folder, data),
