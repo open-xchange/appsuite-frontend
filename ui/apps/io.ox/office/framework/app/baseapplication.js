@@ -1346,20 +1346,32 @@ define('io.ox/office/framework/app/baseapplication',
          */
         this.download = function (format) {
 
-            var // call the download handler first
+            var // call the download handler first (sends pending actions)
                 downloadHandlerResult = downloadHandler.call(self, format);
 
             return $.when(downloadHandlerResult).then(function () {
 
-                var // the download URL of the document
-                    documentUrl = self.getFilterModuleUrl({
-                        action: 'getdocument',
-                        documentformat: format || 'native',
-                        filename: self.getFullFileName(),
-                        mimetype: self.getFileDescriptor().file_mimetype || ''
-                    });
+                var // call the flush handler next
+                    flushHandlerResult = flushHandler.call(self),
+                    fileDescriptor = self.getFileDescriptor();
 
-                return self.downloadFile(documentUrl);
+                return $.when(flushHandlerResult).then(function (result) {
+
+                    // propagate changed file to the files API
+                    FilesAPI.propagate('change', file);
+
+                    var // the download URL of the document
+                        documentUrl = self.getFilterModuleUrl({
+                            action: 'getdocument',
+                            documentformat: format || 'native',
+                            filename: self.getFullFileName(),
+                            mimetype: fileDescriptor.file_mimetype || '',
+                            version: 0, // always use the latest version
+                            nocache: _.uniqueId() // needed to trick the browser cache (is not evaluated by the backend)
+                        });
+
+                    return self.downloadFile(documentUrl);
+                });
             })
             .promise();
         };
