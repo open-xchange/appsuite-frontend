@@ -256,7 +256,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         // api = require('io.ox/core/api/folder'); api.caches.subFolderCache.clear().done(function () { api.caches.subFolderCache.keys().done(_.inspect); });
         if ((type === 'clear' || type === 'delete') && request.transaction) {
             request.transaction.oncomplete = function (e) {
-                def.resolve(e);
+                def.resolve(e.target.result);
             };
         } else {
             request.onsuccess = function (e) { def.resolve(e.target.result); };
