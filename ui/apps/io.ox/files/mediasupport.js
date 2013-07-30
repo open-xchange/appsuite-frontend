@@ -21,7 +21,7 @@ define('io.ox/files/mediasupport',
         audio: {
             Chrome:  'mp3|wav|m4a|m4b|ogg',
             Safari:  'mp3|wav|m4a|m4b|aac',
-            IE:      'mp3|wav|m4a|m4b',
+            IE:      'mp3|m4a|m4b',
             Firefox: 'mp3|wav|ogg|opus'
         },
         video: {

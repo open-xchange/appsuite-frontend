@@ -114,6 +114,8 @@ define('io.ox/files/api',
         'aac' : 'audio/aac',
         'm4a' : 'audio/mp4',
         'm4b' : 'audio/mp4',
+        'wav' : 'audio/wav',
+
         // video
         'mp4' : 'video/mp4',
         'm4v' : 'video/mp4',
