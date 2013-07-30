@@ -929,7 +929,7 @@ a.button {
     bottom: 0px;
     left: @windowHeadWidth;
     white-space: normal;
-    z-index: 10;
+    z-index: 1;
     .user-select(text);
 }
 
@@ -1020,6 +1020,7 @@ a.button {
     z-index: 2;
     background-color: @background;
     overflow: hidden;
+    outline: 0;
 }
 
 .window-content textarea, textarea {
@@ -1884,11 +1885,9 @@ input.nice-input {
             background-color: @foldertreeSelectedFocusBackground;
 
             * {
-                color: @foldertreeSelectedLabelColor;
+                color: @foldertreeFocusedLabelColor;
             }
-
         }
-
     }
 
     .folder-row {
@@ -2012,6 +2011,10 @@ input.nice-input {
 
 .foldertree-sidepanel {
 
+    left: @windowHeadWidth;
+
+    box-shadow: 0 0 10px -2px rgba(0, 0, 0, 0.7) inset;
+
     @c1: lighten(@foldertreeSidepanelBackground, 8%);
     @c2: @foldertreeSidepanelBackground;
 
@@ -2051,7 +2054,7 @@ input.nice-input {
             .folder {
 
                 .folder-label {
-                    text-shadow: 0 0 2px #000;
+                    text-shadow: 0 0 2px #fff;
                 }
 
                 &.selectable .folder-label {
@@ -2104,7 +2107,7 @@ input.nice-input {
                     }
 
                     .folder-label {
-                        color: @foldertreeSelectedLabelColor;
+                        color: @foldertreeFocusedLabelColor;
                     }
 
                 }
@@ -2122,7 +2125,7 @@ input.nice-input {
 
             .folder-arrow, a {
                 font-size: 13px;
-                color: lighten(@linkColor, 20%);
+                color: @linkColor;
             }
 
         }
@@ -2132,15 +2135,14 @@ input.nice-input {
     .foldertree-toolbar {
         top: auto;
         height: 40px - 1;
+        bottom: 0px;
         line-height: 40px - 1;
-        border-top: 1px solid darken(@foldertreeSidepanelBackground, 5%);
-        background-color: darken(@foldertreeSidepanelBackground, 1%);
-    }
+        border-top: 1px solid rgba(0, 0, 0, 0.20);
+        background-color: rgba(0, 0, 0, 0.02);
 
-    &.side-shift {
-        width: @windowContentShift;
-        left: 0 - @windowContentShift;
-        min-width: 170px;
+        .toolbar-action {
+            line-height: 40px - 1;
+        }
     }
 }
 
@@ -2162,7 +2164,7 @@ a.toolbar-action {
 .toolbar-action i.enabled { color: #888; }
 .toolbar-action:hover { background-color: rgba(0, 0, 0, 0.20); }
 a.toolbar-action, .toolbar-action > a {
-    color: @linkOnDark;
+    color: lighten(@linkColor, 5%);
     outline: 0;
     text-decoration: none;
     &:hover { text-decoration: none; }
@@ -2633,9 +2635,9 @@ input.flat-input {
     .clear-title {
         font-size: 15pt;
     }
-    .foldertree-sidepanel.side-shift {
-        width: @small-folderTreeShift;
-        .box-shadow(0px 0px 10px 3px #333);
+
+    .foldertree-sidepanel {
+        left: 0px;
     }
     .io-ox-foldertree {
         .folder-arrow, .folder-arrow i {

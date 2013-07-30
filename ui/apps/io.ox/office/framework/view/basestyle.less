@@ -750,7 +750,8 @@ i[class^="icon-"], i[class^=" icon-"] {
 
             > label {
                 height: auto;
-                padding: 2px 12px;
+                padding-top: 2px;
+                padding-bottom: 2px;
                 line-height: normal;
                 border: 1px solid fade(black, 20%);
                 .box-shadow(5px 10px 10px -10px white inset);
@@ -983,9 +984,12 @@ i[class^="icon-"], i[class^=" icon-"] {
 
             /* permanent borders for text fields */
             &.text-field {
+                .border-radius(5px);
+
                 .button, input {
                     border: 1px solid @default-border-color;
                 }
+
                 input {
                     height: @item-height;
                     .border-radius(5px);
@@ -1017,7 +1021,6 @@ i[class^="icon-"], i[class^=" icon-"] {
 
             /* additional settings for spin fields */
             &.spin-field {
-                .border-radius(5px);
                 .spin-field-settings(@item-height);
 
                 > input {
@@ -1187,13 +1190,44 @@ i[class^="icon-"], i[class^=" icon-"] {
     top: 10px;
     bottom: 10px;
     left: 10px;
-    width: 30%;
+    width: 35%;
     z-index: 60000;
-    overflow: auto;
+    overflow: hidden;
     background-color: fade(white, 90%);
     border: 1px solid @textColor;
     .border-radius(5px);
     .drop-shadow();
+
+    > * {
+        position: absolute;
+        left: 0;
+        right: 0;
+    }
+
+    > .output {
+        top: 0;
+        bottom: 39px;
+        overflow: auto;
+        > p {
+            margin: 0;
+            padding: 0 5px;
+            border-bottom: 1px solid @textColor;
+            font-family: serif; 
+            font-size: 12px;
+            color: @textColor;
+            word-wrap: break-word;
+            &.info { background-color: fade(blue, 10%); }
+            &.warn { background-color: fade(yellow, 10%); }
+            &.error { background-color: fade(red, 10%); }
+        }
+    }
+
+    > button {
+        bottom: 0;
+        height: 40px;
+        border: none;
+        border-top: 1px solid @textColor;
+    }
 
     &.collapsed {
         top: 50%;
@@ -1203,18 +1237,6 @@ i[class^="icon-"], i[class^=" icon-"] {
         margin-top: -10px;
         .border-radius(50%);
         background-color: fade(yellow, 50%);
-        > p { display: none; }
-    }
-
-    > p {
-        margin: 0;
-        padding: 0 5px;
-        border-bottom: 1px solid @textColor;
-        font-family: serif; 
-        font-size: 12px;
-        color: @textColor;
-        &.info { background-color: fade(blue, 10%); }
-        &.warn { background-color: fade(yellow, 10%); }
-        &.error { background-color: fade(red, 10%); }
+        > * { display: none; }
     }
 }

@@ -641,6 +641,11 @@ define('io.ox/mail/view-detail',
 
             try {
 
+                // fix z-index in threads?
+                if (data.threadSize > 1) {
+                    container.css('zIndex', data.threadSize - data.threadPosition);
+                }
+
                 // threaded & send by myself (and not in sent folder)?
                 if (data.threadSize > 1 && util.byMyself(data) && !account.is('sent', data.folder_id)) {
                     node.addClass('by-myself');
@@ -764,6 +769,8 @@ define('io.ox/mail/view-detail',
 
                     // loop over thread - use fragment to be fast for tons of mails
                     for (i = 0; (obj = list[i]); i++) {
+                        obj.threadPosition = i;
+                        obj.threadSize = list.length;
                         if (i >= top && i <= bottom) {
                             mail = mails.shift();
                             copyThreadData(mail, obj);
@@ -779,10 +786,10 @@ define('io.ox/mail/view-detail',
                     }
                     node.empty().get(0).appendChild(frag);
                     // get nodes
-                    nodes = node.find('.mail-detail').not('.thread-inline-actions');
+                    nodes = node.find('.mail-detail');
                     // set initial scroll position (37px not to see thread's inline links)
                     if (_.device('!smartphone')) {
-                        top = nodes.eq(pos).position().top - 20;
+                        top = nodes.eq(pos).parent().position().top;
                     }
                     scrollpane.scrollTop(list.length === 1 ? 0 : top);
                     scrollpane.on('scroll', { nodes: nodes, node: node }, _.debounce(autoResolve, 100));

@@ -22,7 +22,7 @@ define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], functi
         },
 
         // the maximum number of simultaneous pending AJAX page requests
-        MAX_REQUESTS = 5,
+        MAX_REQUESTS = Modernizr.touch ? 2 : 5,
 
         // the number of AJAX requests currently running
         runningRequests = 0,

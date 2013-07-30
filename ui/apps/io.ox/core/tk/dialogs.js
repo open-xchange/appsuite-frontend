@@ -604,9 +604,9 @@ define("io.ox/core/tk/dialogs",
             // get proper elements
             var my = $(this), zIndex, sidepopup;
             self.nodes = {
-                closest: target || my.parents(".io-ox-sidepopup-pane, .window-content, .window-panel, .io-ox-dialog-popup, .notifications-overlay").first(),
-                click: my.parents(".io-ox-sidepopup-pane, .window-body, .window-panel, .io-ox-dialog-popup, .notifications-overlay").first(),
-                target: target || my.parents(".window-body, .simple-window, .window-panel, .notifications-overlay").first(),
+                closest: target || my.parents(".io-ox-sidepopup-pane, .window-content, .window-container-center, .io-ox-dialog-popup, .notifications-overlay").first(),
+                click: my.parents(".io-ox-sidepopup-pane, .window-body, .window-container-center, .io-ox-dialog-popup, .notifications-overlay").first(),
+                target: target || my.parents(".window-body, .simple-window, .window-container-center, .notifications-overlay").first(),
                 simple: my.closest('.simple-window')
             };
 
@@ -614,7 +614,8 @@ define("io.ox/core/tk/dialogs",
             sidepopup = self.nodes.closest.prop("sidepopup") || null;
             self.lastTrigger = sidepopup ? sidepopup.lastTrigger : null;
             // get zIndex for visual stacking
-            zIndex = (my.parents(".io-ox-sidepopup, .window-content, .window-panel, .io-ox-dialog-popup, .notifications-overlay").css("zIndex") || 1) + 2;
+            zIndex = my.parents(".io-ox-sidepopup, .window-content, .window-container-center, .io-ox-dialog-popup, .notifications-overlay").css('zIndex');
+            zIndex = _.isNumber(zIndex) ? zIndex + 2 : 100;
             // second click?
             if (self.lastTrigger === this) {
                 close(e);
@@ -664,7 +665,7 @@ define("io.ox/core/tk/dialogs",
                         parentPopup.hasClass("right")  ? 'left' : 'right';
                 }
 
-                popup.add(arrow).removeClass("left right").addClass(mode).css('zIndex', zIndex);
+                popup.add(arrow).removeClass("left right").addClass(mode).css('z-index', zIndex);
                 arrow.css('zIndex', zIndex + 1);
 
                 if (options.closely && _.device('!small')) {

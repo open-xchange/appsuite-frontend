@@ -34,7 +34,7 @@ define('io.ox/mail/settings/old_pane',
                 this.createControlGroup().append(
                     this.createControlGroupLabel(),
                     this.createControlsWrapper().append(
-                        this.createCheckbox({property: 'removeDeletedPermanently', label: gt('Permanently remove deleted Emails?')}).addClass('expertmode'),
+                        this.createCheckbox({property: 'removeDeletedPermanently', label: gt('Permanently remove deleted emails?')}).addClass('expertmode'),
                         this.createCheckbox({property: 'contactCollectOnMailTransport', label: gt('Automatically collect contacts in the folder "Collected addresses" while sending?')}).addClass('expertmode'),
                         this.createCheckbox({property: 'contactCollectOnMailAccess', label: gt('Automatically collect contacts in the folder "Collected addresses" while reading?')}).addClass('expertmode'),
                         this.createCheckbox({property: 'useFixedWidthFont', label: gt('Use fixed-width font for text mails')}).addClass('expertmode')

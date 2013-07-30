@@ -15,10 +15,10 @@ define('io.ox/office/preview/view/controls',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/control/label',
      'io.ox/office/tk/control/button',
-     'io.ox/office/tk/control/spinfield',
+     'io.ox/office/tk/control/textfield',
      'io.ox/office/tk/control/radiolist',
      'gettext!io.ox/office/main'
-    ], function (Utils, Label, Button, SpinField, RadioList, gt) {
+    ], function (Utils, Label, Button, TextField, RadioList, gt) {
 
     'use strict';
 
@@ -118,7 +118,8 @@ define('io.ox/office/preview/view/controls',
         app.on('docs:import:success', function () {
             self.createMenuSection('pages', { separator: true, classes: 'inline' })
                 .addSectionGroup('pages', new Label({ label: gt('Go to page') }))
-                .addSectionGroup('pages', new SpinField({ tooltip: gt('Page number'), width: 45, css: { textAlign: 'right' }, min: 1, max: app.getModel().getPageCount() }));
+                .addSectionGroup('pages', new TextField({ tooltip: gt('Page number'), width: 45, css: { textAlign: 'right' }, keyboard: 'number', validator: new TextField.NumberValidator({ min: 1, max: app.getModel().getPageCount() }) }));
+//                .addSectionGroup('pages', new SpinField({ tooltip: gt('Page number'), width: 45, css: { textAlign: 'right' }, keyboard: 'number', min: 1, max: app.getModel().getPageCount() }));
         });
 
     }}); // class PageChooser

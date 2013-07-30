@@ -1797,9 +1797,9 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
-     * Returns the position and size of the specified node inside visible area
-     * of the browser window. This includes the distances of all four borders
-     * of the node to the borders of the browser window.
+     * Returns the position and size of the specified node inside the browser
+     * window area. This includes the distances of all four borders of the node
+     * to the borders of the browser window.
      *
      * @param {HTMLElement|jQuery} node
      *  The DOM element whose position relative to the browser window will be
@@ -1830,8 +1830,8 @@ define.async('io.ox/office/tk/utils',
         // add size and right/bottom distances
         position.width = $node.outerWidth();
         position.height = $node.outerHeight();
-        position.right = window.innerWidth - position.left - position.width;
-        position.bottom = window.innerHeight - position.top - position.height;
+        position.right = window.innerWidth + window.pageXOffset - position.left - position.width;
+        position.bottom = window.innerHeight + window.pageYOffset - position.top - position.height;
 
         return position;
     };
@@ -2585,12 +2585,20 @@ define.async('io.ox/office/tk/utils',
      *  method. Additionally, the following options are supported:
      *  @param {String} [options.placeholder='']
      *      A place holder text that will be shown in an empty text field.
+     *  @param {String} [options.keyboard='text']
+     *      Specifies which virtual keyboard should occur on touch devices.
+     *      Supported types are 'text' (default) for a generic text field with
+     *      alphanumeric keyboard, 'number' for floating-point numbers with
+     *      numeric keyboard, 'url' for an alphanumeric keyboard with additions
+     *      for entering URLs, or 'email' for an alphanumeric keyboard with
+     *      additions for entering e-mail addresses.
      *
      * @returns {jQuery}
      *  A jQuery object containing the new text field element.
      */
     Utils.createTextField = function (options) {
-        var textField = Utils.createControl('input', { type: 'text', tabindex: 1 }, options);
+        var type = Utils.getStringOption(options, 'keyboard', 'text'),
+            textField = Utils.createControl('input', { type: type, tabindex: 1 }, options);
         return textField.attr('placeholder', Utils.getStringOption(options, 'placeholder', ''));
     };
 
@@ -2801,14 +2809,16 @@ define.async('io.ox/office/tk/utils',
 /*
     // forward console output into a fixed DOM node on touch devices
     if (Config.isDebug() && Modernizr.touch) {
-        var consoleNode = $('<div>', { id: 'io-ox-office-console' });
-        $('body').append(consoleNode);
+        var consoleNode = $('<div>', { id: 'io-ox-office-console' }).appendTo('body'),
+            outputNode = $('<div>').addClass('output').appendTo(consoleNode),
+            clearButton = $('<button>').text('Clear').appendTo(consoleNode);
+        clearButton.on('click', function () { outputNode.empty(); return false; });
         consoleNode.on('click', function () { consoleNode.toggleClass('collapsed'); });
         _(['log', 'info', 'warn', 'error']).each(function (methodName) {
             var origMethod = _.bind(window.console[methodName], window.console);
             window.console[methodName] = function (msg) {
-                consoleNode.append($('<p>').addClass(methodName).text(msg));
-                consoleNode.scrollTop(consoleNode[0].scrollHeight);
+                outputNode.append($('<p>').addClass(methodName).text(msg));
+                outputNode.scrollTop(outputNode[0].scrollHeight);
                 return origMethod(msg);
             };
         });

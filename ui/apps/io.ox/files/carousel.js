@@ -212,7 +212,13 @@ define('io.ox/files/carousel',
 
         drawItem: function (file, index, isfirst) {
 
-            var item = this.inner.find('[data-index=' + index + ']');
+            var item = this.inner.find('[data-index=' + index + ']'), self = this;
+
+            function hChangeFolder(folder_id) {
+                self.app.folder.set(folder_id);
+                self.close();
+                self = null;
+            }
 
             if (this.firstStart) {
                 item.addClass('active');
@@ -226,7 +232,7 @@ define('io.ox/files/carousel',
                             .on('error', this.imgError) /* error doesn't seem to bubble */,
                         $('<div class="carousel-caption">').append(
                             $('<h4>').text(gt.noI18n(file.filename)),
-                            folderAPI.getBreadcrumb(file.folder_id, { handler: this.app.folder.set, subfolder: false, last: false })
+                            folderAPI.getBreadcrumb(file.folder_id, { handler: hChangeFolder, subfolder: false, last: false })
                         )
                     );
                 } else {
