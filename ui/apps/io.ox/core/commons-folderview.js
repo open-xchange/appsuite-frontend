@@ -194,16 +194,16 @@ define('io.ox/core/commons-folderview',
             id: 'publications',
             index: 500,
             draw: function (baton) {
-                 //do not draw if not available
-                var link,
-                    contacts = baton.data.module === 'contacts',
-                    files = baton.data.module === 'infostore';
-                if (capabilities.has('publication') &&  (contacts || (files && api.can('publish', baton.data)))) {
-                    link = $('<a href="#" data-action="publications" role="menuitem">').text(gt('Publication'));
-                    this.append($('<li class="divider" aria-hidden="true" role="presentation">'), $('<li>').append(link));
-                    link.attr('tabindex', 1).on('click', { baton: baton }, publish);
-                } else {
-                    //link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
+                // do not draw if not available
+                if (capabilities.has('publication') && api.can('publish', baton.data)) {
+                    this.append(
+                        $('<li class="divider" aria-hidden="true" role="presentation">'),
+                        $('<li>').append(
+                            $('<a href="#" data-action="publications" role="menuitem" tabindex="1">')
+                            .text(gt('Publication'))
+                            .on('click', { baton: baton }, publish)
+                        )
+                    );
                 }
             }
         });
@@ -219,17 +219,15 @@ define('io.ox/core/commons-folderview',
             id: 'subscribe',
             index: 600,
             draw: function (baton) {
-                //do not draw if not available
-                if (api.can('write', baton.data) && capabilities.has('subscription') &&
-                    (baton.data.module === 'contacts' || baton.data.module === 'infostore' || baton.data.module === 'calendar')
-                ) {
-                    var link = $('<a href="#" data-action="subscriptions" role="menuitem">').text(gt('Subscription'));
+                // do not draw if not available
+                if (capabilities.has('subscription') && api.can('subscribe', baton.data)) {
                     this.append(
-                        $('<li>').append(link)
+                        $('<li>').append(
+                            $('<a href="#" data-action="subscriptions" role="menuitem" tabindex="1">')
+                            .text(gt('Subscription'))
+                            .on('click', { baton: baton }, subscribe)
+                        )
                     );
-                    link.attr('tabindex', 1).on('click', { baton: baton }, subscribe);
-                } else {
-                    //link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
                 }
             }
         });
