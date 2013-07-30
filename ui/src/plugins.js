@@ -437,7 +437,7 @@
                 load(f2);
             }
             function error() {
-                require(['io.ox/core/gettext']).done(function () {
+                require(['io.ox/core/gettext']).done(function (gt) {
                     load(gt(name, {
                         nplurals: 2,
                         plural: 'n != 1',
