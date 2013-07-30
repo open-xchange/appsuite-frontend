@@ -126,7 +126,7 @@ define('io.ox/office/framework/app/extensionregistry',
      *  The lower-case extension of the passed file name.
      */
     ExtensionRegistry.getExtension = function (fileName) {
-        var index = fileName.lastIndexOf('.');
+        var index = String(fileName || '').lastIndexOf('.');
         return (index >= 0) ? fileName.substring(index + 1).toLowerCase() : '';
     };
 
@@ -141,7 +141,7 @@ define('io.ox/office/framework/app/extensionregistry',
      *  preserved.
      */
     ExtensionRegistry.getBaseName = function (fileName) {
-        var index = fileName.lastIndexOf('.');
+        var index = String(fileName || '').lastIndexOf('.');
         return (index > 0) ? fileName.substring(0, index) : index;
     };
 
