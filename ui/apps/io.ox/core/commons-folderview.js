@@ -58,6 +58,25 @@ define('io.ox/core/commons-folderview',
             }
         });
 
+        // draw click intercept-div which intercepts
+        // clicks on the visible rest of the grids on mobile
+        // when folder tree is expanded
+        ext.point(POINT + '/sidepanel/mobile').extend({
+            id: 'spacer',
+            draw: function (baton) {
+                this.prepend(
+                    // sidepanel
+                    baton.$.spacer = $('<div class="mobile-clickintercept">')
+                        .addClass('foldertree-click-intercept')
+                        .on('touchstart', {baton: baton}, function (e) {
+                            e.preventDefault();
+                            e.stopImmediatePropagation();
+                            e.data.baton.app.toggleFolderView();
+                        }).hide()
+                );
+            }
+        });
+
         // toolbar
         ext.point(POINT + '/sidepanel/toolbar').extend({
             id: 'add',
@@ -618,12 +637,14 @@ define('io.ox/core/commons-folderview',
             app.settings.set('folderview/visible/' + _.display(), visible = false).save();
             top = container.scrollTop();
             $('.window-container-center').removeClass('animate-moveright').addClass('animate-moveleft');
+            baton.$.spacer.hide();
             app.trigger('folderview:close');
         };
 
         fnShowSml = function () {
             app.settings.set('folderview/visible/' + _.display(), visible = true).save();
             $('.window-container-center').removeClass('animate-moveleft').addClass('animate-moveright');
+            baton.$.spacer.show();
             app.trigger('folderview:open');
             return $.when();
         };
@@ -797,6 +818,12 @@ define('io.ox/core/commons-folderview',
 
         // draw sidepanel & container
         ext.point(POINT + '/sidepanel').invoke('draw', app.getWindow().nodes.sidepanel, baton);
+
+        if (_.device('smartphone')) {
+            console.log(baton);
+            ext.point(POINT + '/sidepanel/mobile').invoke('draw', app.getWindow().nodes.outer, baton);
+        }
+
         sidepanel = baton.$.sidepanel;
         container = baton.$.container;
 
