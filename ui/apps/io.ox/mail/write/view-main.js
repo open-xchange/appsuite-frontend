@@ -819,7 +819,6 @@ define("io.ox/mail/write/view-main",
         e.preventDefault();
 
         var file = target.data('file'), message = file.message, app = target.data('app'), preview, reader;
-
         // nested message?
         if (message) {
             preview = new pre.Preview({
@@ -840,38 +839,54 @@ define("io.ox/mail/write/view-main",
             });
         } else if (file.id && file.folder_id) { // infostore
             // if is infostore
-            require(['io.ox/files/list/view-detail'], function (view) {
-                popup.append(view.draw(file, app));
-            });
-        } else if (file.atmsgref) { // forward mail attachment
-            require(['io.ox/preview/main'], function (p) {
-                var pos = file.atmsgref.lastIndexOf('/');
-                file.parent = {
-                    folder_id: file.atmsgref.substr(0, pos),
-                    id: file.atmsgref.substr(pos + 1)
-                };
-                var pre = new p.Preview({
-                    data: file,
+            require(['io.ox/files/api'], function (filesApi) {
+                var prev = new pre.Preview({
+                    name: file.filename,
                     filename: file.filename,
-                    source: 'mail',
-                    folder_id: file.parent.folder_id,
-                    id: file.parent.id,
-                    attached: file.id,
-                    parent: file.parent,
-                    mimetype: file.content_type,
-                    dataURL: mailAPI.getUrl(file, 'view')
+                    mimetype: file.file_mimetype,
+                    size: file.file_size,
+                    dataURL: filesApi.getUrl(file, 'bare'),
+                    version: file.version,
+                    id: file.id
                 }, {
                     width: popup.parent().width(),
                     height: 'auto'
                 });
-                if (pre.supportsPreview()) {
+                if (prev.supportsPreview()) {
                     popup.append(
                         $('<h4>').addClass('mail-attachment-preview').text(file.filename)
                     );
-                    pre.appendTo(popup);
+                    prev.appendTo(popup);
                     popup.append($('<div>').text('\u00A0'));
                 }
             });
+        } else if (file.atmsgref) { // forward mail attachment
+            var pos = file.atmsgref.lastIndexOf('/');
+            file.parent = {
+                folder_id: file.atmsgref.substr(0, pos),
+                id: file.atmsgref.substr(pos + 1)
+            };
+            var prev = new pre.Preview({
+                data: file,
+                filename: file.filename,
+                source: 'mail',
+                folder_id: file.parent.folder_id,
+                id: file.parent.id,
+                attached: file.id,
+                parent: file.parent,
+                mimetype: file.content_type,
+                dataURL: mailAPI.getUrl(file, 'view')
+            }, {
+                width: popup.parent().width(),
+                height: 'auto'
+            });
+            if (prev.supportsPreview()) {
+                popup.append(
+                    $('<h4>').addClass('mail-attachment-preview').text(file.filename)
+                );
+                prev.appendTo(popup);
+                popup.append($('<div>').text('\u00A0'));
+            }
 
         } else {
             // inject image as data-url
