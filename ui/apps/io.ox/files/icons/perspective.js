@@ -442,14 +442,8 @@ define('io.ox/files/icons/perspective',
                         win.busy(pct + sub / files.length, sub);
                     })
                     .fail(function (e) {
-                        if (e && e.code && (e.code === 'UPL-0005' || e.code === 'IFO-1700')) {
-                            notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
-                        }
-                        else if (e && e.code && e.code === 'FLS-0024') {
-                            notifications.yell('error', gt('The allowed quota is reached.'));
-                        }
-                        else {
-                            notifications.yell('error', gt('This file has not been added'));
+                        if (e && e.data && e.data.custom) {
+                            notifications.yell(e.data.custom.type, e.data.custom.text);
                         }
                     });
                 },
@@ -476,14 +470,8 @@ define('io.ox/files/icons/perspective',
                             var sub = e.loaded / e.total;
                             win.busy(pct + sub / files.length, sub);
                         }).fail(function (e) {
-                            if (e && e.code && (e.code === 'UPL-0005' || e.code === 'IFO-1700')) {
-                                notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
-                            }
-                            else if (e && e.code && e.code === 'FLS-0024') {
-                                notifications.yell('error', gt('The allowed quota is reached.'));
-                            }
-                            else {
-                                notifications.yell('error', gt('This file has not been added'));
+                            if (e && e.data && e.data.custom) {
+                                notifications.yell(e.data.custom.type, e.data.custom.text);
                             }
                         });
                 },

@@ -20,8 +20,9 @@ define('io.ox/files/api',
      'settings!io.ox/core',
      'io.ox/core/cache',
      'io.ox/core/date',
-     'io.ox/files/mediasupport'
-    ], function (http, apiFactory, coreConfig, cache, date, mediasupport) {
+     'io.ox/files/mediasupport',
+     'gettext!io.ox/files'
+    ], function (http, apiFactory, coreConfig, cache, date, mediasupport, gt) {
 
     'use strict';
 
@@ -286,6 +287,38 @@ define('io.ox/files/api',
     api.caches.versions = new cache.SimpleCache('files-versions', true);
 
     /**
+     * map error codes and text phrases for user feedback
+     * @param  {event} e
+     * @return {event}
+     */
+    var failedUpload = function (e) {
+        e.data = e.data || {};
+        //customized error messages
+        if (e && e.code && (e.code === 'UPL-0005' || e.code === 'IFO-1700')) {
+            e.data.custom = {
+                type: 'error',
+                text: gt(e.error, e.error_params[0], e.error_params[1])
+            };
+        } else if (e && e.code && e.code === 'IFO-0100' && e.problematic && e.problematic[0] && e.problematic[0].id === 700) {
+            e.data.custom = {
+                type: 'error',
+                text: gt('The provided filename exceeds the allowed length.')
+            };
+        } else if (e && e.code && e.code === 'FLS-0024') {
+            e.data.custom = {
+                type: 'error',
+                text: gt('The allowed quota is reached.')
+            };
+        } else {
+            e.data.custom = {
+                type: 'error',
+                text: gt('This file has not been added')
+            };
+        }
+        return e;
+    };
+
+    /**
      * upload a new file and store it
      * @param  {object} options
      *         'folder' - The folder ID to upload the file to. This is optional and defaults to the standard files folder
@@ -338,7 +371,7 @@ define('io.ox/files/api',
                     data: formData,
                     fixPost: true
                 })
-                .pipe(success);
+                .pipe(success, failedUpload);
 
         } else {
 
@@ -350,7 +383,7 @@ define('io.ox/files/api',
             return http.FORM({
                 form: options.form,
                 data: options.json
-            }).pipe(success);
+            }).pipe(success, failedUpload);
         }
     };
 
@@ -396,7 +429,7 @@ define('io.ox/files/api',
                     folder_id = String(options.json.folder_id),
                     obj = { folder_id: folder_id, id: id };
                 return api.propagate('change', obj, options.silent);
-            });
+            }, failedUpload);
     };
 
     /**
