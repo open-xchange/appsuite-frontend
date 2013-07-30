@@ -33,13 +33,18 @@
 
 
 .mediaplayer_container {
+    &:focus {
+        outline:none;
+    }
 
     z-index: 10001; /* at least 1 higher than slideshow overlay */
 
     background-color:@playerBg;
 
     .mediaplayer_inner {
-
+        &:focus {
+            outline:none;
+        }
         left: 50%;
         width: @playerWidth;
         margin-left: 0 - (@playerWidth / 2) - @playerMargin;
