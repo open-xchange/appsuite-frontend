@@ -820,7 +820,6 @@ define('io.ox/core/commons-folderview',
         ext.point(POINT + '/sidepanel').invoke('draw', app.getWindow().nodes.sidepanel, baton);
 
         if (_.device('smartphone')) {
-            console.log(baton);
             ext.point(POINT + '/sidepanel/mobile').invoke('draw', app.getWindow().nodes.outer, baton);
         }
 
