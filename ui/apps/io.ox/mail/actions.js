@@ -447,7 +447,7 @@ define('io.ox/mail/actions',
             return require(['io.ox/preview/main']).pipe(function (p) {
                 var list = _.getArray(e.context);
                 // is at least one attachment supported?
-                return e.collection.has('some') && _(list).reduce(function (memo, obj) {
+                return e.collection.has('some') && _.device('!smartphone') && _(list).reduce(function (memo, obj) {
                     return memo || new p.Preview({
                         filename: obj.filename,
                         mimetype: obj.content_type
@@ -543,7 +543,9 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/download-attachment', {
         id: 'download',
-        requires: 'some',
+        requires: function (e) {
+            return _.device('!ios') && e.collection.has('some');
+        },
         multiple: function (list) {
             var url;
             if (list.length === 1) {
