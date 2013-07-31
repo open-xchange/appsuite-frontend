@@ -293,10 +293,10 @@ define('io.ox/core/tk/selection',
                             apply(id, e);
                         }
                     }
+                    // remove helper classes
+                    container.find('.pending-select').removeClass('pending-select');
                 }, 50);
             }
-            // remove helper classes
-            container.find('.pending-select').removeClass('pending-select');
         };
 
         touchstartHandler = function (e) {
