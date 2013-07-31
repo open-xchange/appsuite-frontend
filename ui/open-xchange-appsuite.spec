@@ -133,8 +133,7 @@ UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
 %doc readme.txt
 %dir %{docroot}
 %{docroot}
-%exclude %{docroot}/help
-%{docroot}/help/help.css
+%exclude %{docroot}/help/*_*
 %dir /opt/open-xchange
 %dir /opt/open-xchange/sbin
 /opt/open-xchange/sbin/touch-appsuite
