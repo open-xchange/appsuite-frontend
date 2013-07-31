@@ -187,7 +187,6 @@ define('io.ox/calendar/edit/template',
     point.extend(new RecurrenceView({
         id: 'recurrence',
         className: 'span12',
-        tabindex: 1,
         index: recurrenceIndex
     }), {
         rowClass: 'collapsed'
