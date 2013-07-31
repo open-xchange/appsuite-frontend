@@ -786,7 +786,7 @@
             }
         }
         &:hover {
-            text-decoration: none;
+            text-decoration:none !important; // IE 10 needs important otherwise it will be ignored See: #27913
             i {
                 color: darken(@toolbarButtonColor, 20%);
                 text-decoration: none;
