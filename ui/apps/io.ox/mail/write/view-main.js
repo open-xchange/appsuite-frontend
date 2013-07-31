@@ -402,9 +402,12 @@ define("io.ox/mail/write/view-main",
          */
         scrollEmoji: function () {
             var self = this,
-                top = self.textarea.attr('offsettop') || 0;
+                top = self.textarea.attr('offsettop') || 0,
+                caretPos = self.textarea.textareaHelper('caretPos').top;
+
+            // wait for keyboard to hide
             setTimeout(function () {
-                self.app.attributes.window.nodes.main.scrollTop(parseFloat(top));
+                self.app.attributes.window.nodes.main.scrollTop(parseFloat(top + caretPos + 210));
             }, 350);
         },
         /**
@@ -694,6 +697,7 @@ define("io.ox/mail/write/view-main",
                             'offsetTop': $(this).offset().top
                         });
                     });
+
 
                 if (_.device('!smartphone')) {
                     // standard textarea for desktops

@@ -47,13 +47,15 @@
 
 /* Tabs */
 
+@thumbIndexWidth: 45px; // was 35, but we need 45 for proper Japanese
+
 .abs.contact-grid-container {
-    left: 35px;
+    left: @thumbIndexWidth;
     overflow: auto;
 }
 
 .contact-grid-index {
-    width: 35px;
+    width: @thumbIndexWidth;
     overflow: hidden;
     .user-select(none);
 }
