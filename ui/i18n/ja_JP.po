@@ -178,6 +178,18 @@ msgid "Attachment"
 msgid_plural "Attachments"
 msgstr[0] "添付ファイル"
 
+#: apps/io.ox/mail/view-detail.js:1200 apps/io.ox/mail/view-detail.js:1206
+msgctxt "plural"
+msgid "Show attachment"
+msgid_plural "Show attachments"
+msgstr[0] "添付表示"
+
+#: apps/io.ox/mail/view-detail.js:1209
+msgctxt "plural"
+msgid "Hide attachment"
+msgid_plural "Hide attachments"
+msgstr[0] "添付非表示"
+
 #: apps/io.ox/mail/view-detail.js:1184
 msgid "more"
 msgstr "その他"
