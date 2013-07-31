@@ -713,8 +713,10 @@ define('io.ox/mail/main',
         });
 
         // Uploads
-        app.queues = {
-            'importEML': upload.createQueue({
+        app.queues = {};
+
+        if (settings.get('features/importEML') !== false) {
+            app.queues.importEML = upload.createQueue({
                 start: function () {
                     win.busy();
                 },
@@ -733,13 +735,14 @@ define('io.ox/mail/main',
                 stop: function () {
                     win.idle();
                 }
-            })
-        };
+            });
+        }
 
-        // drop zone
-        var dropZone = new dnd.UploadZone({ ref: "io.ox/mail/dnd/actions" }, app);
-        win.on("show", dropZone.include).on('hide', dropZone.remove);
-
+        if (!_.isEmpty(app.queues)) {
+            // drop zone
+            var dropZone = new dnd.UploadZone({ ref: "io.ox/mail/dnd/actions" }, app);
+            win.on("show", dropZone.include).on('hide', dropZone.remove);
+        }
 
         //if viewSetting ins changed redraw detailviews and grid
         api.on('viewChanged', function () {
