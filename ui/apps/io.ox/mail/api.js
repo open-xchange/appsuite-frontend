@@ -327,9 +327,7 @@ define('io.ox/mail/api',
                 // a mail should be always marked as seen on fetch
                 data.flags = data.flags | 32;
                 // was unseen?
-                if (data.unseen) {
-                    folderAPI.decUnread(data);
-                }
+                if (data.unseen) folderAPI.decUnread(data);
                 return data;
             }
         },
