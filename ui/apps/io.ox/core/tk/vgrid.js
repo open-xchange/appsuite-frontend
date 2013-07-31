@@ -463,13 +463,14 @@ define('io.ox/core/tk/vgrid',
             }
             // reloop to get proper height
             return $.when.apply($, defs).pipe(function () {
-                var i, obj, node, top;
+                var i, obj, node, top, isVisible = container.is(':visible'), height;
                 for (i = 0; i < $i; i++) {
                     obj = labels.list[i];
                     obj.top = cumulatedLabelHeight + obj.pos * itemHeight;
                     node = labels.nodes.eq(i);
                     node.css({ top: obj.top + 'px' });
-                    cumulatedLabelHeight += (obj.height = node.outerHeight(true) || labelHeight);
+                    height = (isVisible && node.outerHeight(true)) || labelHeight;
+                    cumulatedLabelHeight += (obj.height = height);
                 }
                 // add tail?
                 if (options.tail) {
