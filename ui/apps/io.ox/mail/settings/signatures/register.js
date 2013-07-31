@@ -49,14 +49,16 @@ define('io.ox/mail/settings/signatures/register',
         popup.append(
             $('<div>').append(
                 $('<div class="row-fluid">').append(
-                    $name = $('<input type="text" class="span12">').attr('placeholder', gt('Name'))
+                    $('<label>').text(gt('Signature name')),
+                    $name = $('<input type="text" class="span12">')
                 ),
                 $error = $('<div>').addClass('help-block error'),
                 $('<div class="row-fluid">').append(
+                    $('<label>').text(gt('Signature text')),
                     $signature = $('<textarea class="span12" rows="10">')
                 ),
                 $('<div class="row-fluid">').append(
-                    $('<label>').text(gt('Signature insertion:')),
+                    $('<label>').text(gt('Signature position')),
                     $insertion = $('<select>').append(
                         $('<option value="above">').text(gt('Above content')),
                         $('<option value="below">').text(gt('Below content')).attr('selected', true)
