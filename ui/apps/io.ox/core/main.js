@@ -757,6 +757,14 @@ define('io.ox/core/main',
         var getAutoLaunchDetails = function (str) {
             var pair = (str || '').split(/:/), app = pair[0], method = pair[1] || '';
             return { app: (/\/main$/).test(app) ? app : app + '/main', method: method };
+        },
+        mobileAutoLaunchArray = function () {
+            var autoStart = _([].concat(settings.get('autoStartMobile', 'io.ox/portal'))).filter(function (o) {
+                return !_.isUndefined(o) && !_.isNull(o);
+            });
+            //always add mail as fallback
+            autoStart.push('io.ox/mail');
+            return autoStart;
         };
 
         // checks url which app to launch, needed to handle direct links
@@ -790,7 +798,9 @@ define('io.ox/core/main',
             }
 
             // always use portal on small devices!
-            if (_.device('small')) return ['io.ox/portal'];
+            if (_.device('small')) {
+                return mobileAutoLaunchArray();
+            }
 
             var appURL = _.url.hash('app'),
                 manifest = appURL && ox.manifests.apps[getAutoLaunchDetails(appURL).app];
@@ -815,7 +825,7 @@ define('io.ox/core/main',
         .filter(function (m) {
             //don’t autoload without manifest
             //don’t autoload disabled apps
-            return !!ox.manifests.apps[m] || ox.manifests.disabled[m];
+            return ox.manifests.apps[m] !== undefined && !ox.manifests.disabled[m];
         })
         .compact()
         .value();
@@ -1028,14 +1038,25 @@ define('io.ox/core/main',
                     debug('core: Stage "load" > autoLaunch ...');
 
                     // auto launch
-                    _(baton.autoLaunch).each(function (id) {
-                        // split app/call
-                        var details = getAutoLaunchDetails(id), launch, method;
-
-                        if (!ox.manifests.apps[details.app]) {
-                            ox.launch(settings.get('autoStart'));
+                    _(baton.autoLaunch)
+                    .chain()
+                    .map(function (id) {
+                        return getAutoLaunchDetails(id);
+                    })
+                    .filter(function (details) {
+                        //don’t autoload without manifest
+                        //don’t autoload disabled apps
+                        return ox.manifests.apps[details.app] !== undefined && !ox.manifests.disabled[details.app];
+                    })
+                    .each(function (details, index) {
+                        //only load first app on small devices
+                        if (_.device('small') && index > 0)
                             return;
-                        }
+
+                        // split app/call
+                        var launch, method;
+
+                        debug('autoLaunching', details.app);
                         launch = ox.launch(details.app);
                         method = details.method;
                         // explicit call?
