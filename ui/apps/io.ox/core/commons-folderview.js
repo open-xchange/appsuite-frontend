@@ -552,7 +552,7 @@ define('io.ox/core/commons-folderview',
             api.get({ folder: id }).done(function (data) {
                 if (_.device('small')) {
                     // close tree
-                    toggle();
+                    fnHideSml();
                 }
                 if (data.module === options.type) {
                     changeFolderOff();
