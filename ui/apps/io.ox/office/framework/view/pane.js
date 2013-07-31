@@ -52,9 +52,19 @@ define('io.ox/office/framework/view/pane',
      *  @param {String} [options.position='top']
      *      The border of the application window to attach the view pane to.
      *      Supported values are 'top', 'bottom', 'left', and 'right'.
+     *  @param {String} [options.size]
+     *      The size of the pane, between window border and application pane.
+     *      If omitted, the size will be determined by the DOM contents of the
+     *      pane root node.
      *  @param {String} [options.resizeable=false]
      *      If set to true, the pane will be resizeable at its inner border.
      *      Has no effect for transparent overlay panes.
+     *  @param {String} [options.minSize=1]
+     *      The minimum size of resizeable panes (when the 'options.resizeable'
+     *      option is set to true).
+     *  @param {String} [options.maxSize=0x7FFFFFFF]
+     *      The maximum size of resizeable panes (when the 'options.resizeable'
+     *      option is set to true).
      *  @param {Boolean} [options.overlay=false]
      *      If set to true, the pane will overlay the application pane instead
      *      of reserving and consuming the space needed for its size.
@@ -90,6 +100,9 @@ define('io.ox/office/framework/view/pane',
 
             // position of the pane in the application window
             position = Utils.getStringOption(options, 'position', 'top'),
+
+            // initial size of the pane in the application window
+            size = Utils.getIntegerOption(options, 'size', 0, 0),
 
             // overlay pane or fixed pane
             overlay = Utils.getBooleanOption(options, 'overlay', false),
@@ -163,7 +176,7 @@ define('io.ox/office/framework/view/pane',
                 }
             }
 
-            return function (event) {
+            function trackingHandler(event) {
                 switch (event.type) {
                 case 'tracking:start':
                     originalSize = paneSizeFunc();
@@ -177,8 +190,9 @@ define('io.ox/office/framework/view/pane',
                     setPaneSize(originalSize);
                     break;
                 }
-            };
+            }
 
+            return trackingHandler;
         }()); // end of local scope of method trackingHandler()
 
         // methods ------------------------------------------------------------
@@ -354,6 +368,11 @@ define('io.ox/office/framework/view/pane',
 
         // marker for touch devices
         node.toggleClass('touch', Modernizr.touch);
+
+        // fixed size if specified
+        if (size > 0) {
+            paneSizeFunc(size);
+        }
 
         // no size tracking for transparent view panes
         if (!transparent && Utils.getBooleanOption(options, 'resizeable', false)) {

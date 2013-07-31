@@ -576,7 +576,10 @@ define('io.ox/office/preview/view/view',
          * @param {jQuery.Event} event
          *  The jQuery scroll event.
          */
-        var scrollHandler = app.createDebouncedMethod(cancelMorePagesTimer, updateVisiblePages, { delay: 200, maxDelay: 1000 });
+        var scrollHandler = app.createDebouncedMethod(cancelMorePagesTimer, updateVisiblePages, {
+            delay: Modernizr.touch ? 200 : 100,
+            maxDelay: Modernizr.touch ? 1000 : 500
+        });
 
         /**
          * Initialization after construction.
@@ -592,6 +595,7 @@ define('io.ox/office/preview/view/view',
             // create the side pane
             self.addPane(sidePane = new SidePane(app, {
                 position: 'right',
+                size: Modernizr.touch ? 152 : SidePane.DEFAULT_WIDTH,
                 resizeable: !Modernizr.touch,
                 minSize: SidePane.DEFAULT_WIDTH,
                 maxSize: 1.8 * SidePane.DEFAULT_WIDTH
@@ -651,9 +655,10 @@ define('io.ox/office/preview/view/view',
                         .addGroup('pages/previous', new Button(PreviewControls.PREV_OPTIONS))
                         .addGroup('pages/current',  new PreviewControls.PageChooser(app))
                         .addGroup('pages/next',     new Button(PreviewControls.NEXT_OPTIONS));
+                    if (Modernizr.touch) { sidePaneToolBox.newLine(); }
                 }
+                if (!Modernizr.touch) { sidePaneToolBox.addRightTab(); }
                 sidePaneToolBox
-                    .addRightTab()
                     .addGroup('zoom/dec',  new Button(PreviewControls.ZOOMOUT_OPTIONS))
                     .addGroup('zoom/type', new PreviewControls.ZoomTypeChooser())
                     .addGroup('zoom/inc',  new Button(PreviewControls.ZOOMIN_OPTIONS));
