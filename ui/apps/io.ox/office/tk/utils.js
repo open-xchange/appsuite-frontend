@@ -94,11 +94,18 @@ define.async('io.ox/office/tk/utils',
     Utils.COUNTRY = '';
 
     /**
+     * CSS class for button elements.
+     *
+     * @constant
+     */
+    Utils.BUTTON_CLASS = 'button';
+
+    /**
      * CSS selector for button elements.
      *
      * @constant
      */
-    Utils.BUTTON_SELECTOR = '.button';
+    Utils.BUTTON_SELECTOR = '.' + Utils.BUTTON_CLASS;
 
     /**
      * CSS class for hidden elements.
@@ -111,7 +118,7 @@ define.async('io.ox/office/tk/utils',
     Utils.VISIBLE_SELECTOR = ':not(.' + Utils.HIDDEN_CLASS + ')';
 
     /**
-     * CSS selector for elements that are effectively visible.
+     * jQuery selector for elements that are effectively visible.
      *
      * @constant
      */
@@ -2205,8 +2212,7 @@ define.async('io.ox/office/tk/utils',
 
         control
             .width(Utils.getOption(options, 'width', ''))
-            .css(Utils.getObjectOption(options, 'css', {}))
-            .on('dragstart', false);
+            .css(Utils.getObjectOption(options, 'css', {}));
 
         Utils.setControlValue(control, Utils.getOption(options, 'value'), Utils.getStringOption(options, 'dataValue'));
         Utils.setControlUserData(control, Utils.getOption(options, 'userData'));
@@ -2344,6 +2350,19 @@ define.async('io.ox/office/tk/utils',
     // control captions -------------------------------------------------------
 
     /**
+     * Create and the HTML markup of an <i> DOM element representing an icon.
+     *
+     * @param {String} icon
+     *  The CSS class name of the icon.
+     *
+     * @returns {String}
+     *  The HTML markup of the icon element, as string.
+     */
+    Utils.createIconMarkup = function (icon) {
+        return '<i class="' + icon + ' ' + localeIconClasses + (Utils.RETINA ? ' retina' : '') + '"></i>';
+    };
+
+    /**
      * Create and returns a new <i> DOM element representing an icon.
      *
      * @param {String} icon
@@ -2352,8 +2371,8 @@ define.async('io.ox/office/tk/utils',
      * @returns {jQuery}
      *  The new icon element, as jQuery object.
      */
-    Utils.createIcon = function (icon, white) {
-        return $('<i>').addClass(icon + ' ' + localeIconClasses).toggleClass('retina', Utils.RETINA);
+    Utils.createIcon = function (icon) {
+        return $(Utils.createIconMarkup(icon));
     };
 
     /**
@@ -2368,6 +2387,44 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
+     * Creates the HTML markup of an icon and a text label for a form control.
+     *
+     * @param {Object} [options]
+     *  A map of options with the properties of the caption. The following
+     *  options are supported:
+     *  @param {String} [options.icon]
+     *      The full name of the Bootstrap or OX Documents icon class. If
+     *      omitted, no icon will be shown.
+     *  @param {String} [options.label]
+     *      The text label. Will follow an icon. If omitted, no text will be
+     *      shown.
+     *
+     * @returns {String}
+     *  The HTML markup of the caption element, as string.
+     */
+    Utils.createControlCaptionMarkup = function (options) {
+
+        var // option values
+            icon = Utils.getStringOption(options, 'icon'),
+            label = Utils.getStringOption(options, 'label'),
+            // the caption markup
+            markup = '';
+
+        // append the icon
+        if (icon) {
+            markup += '<span data-role="icon" data-icon="' + icon + '">' + Utils.createIconMarkup(icon) + '</span>';
+        }
+
+        // append the label
+        if (_.isString(label)) {
+            markup += '<span data-role="label">' + Utils.escapeHTML(label) + '</span>';
+        }
+
+        // embed in the caption container if any markup is present
+        return (markup.length > 0) ? ('<div class="caption">' + markup + '</div>') : '';
+    };
+
+    /**
      * Inserts an icon and a text label into the passed form control.
      *
      * @param {jQuery} control
@@ -2377,8 +2434,8 @@ define.async('io.ox/office/tk/utils',
      *  A map of options to control the properties of the caption. The
      *  following options are supported:
      *  @param {String} [options.icon]
-     *      The full name of the Bootstrap or OX icon class. If omitted, no
-     *      icon will be shown.
+     *      The full name of the Bootstrap or OX Documents icon class. If
+     *      omitted, no icon will be shown.
      *  @param {String} [options.label]
      *      The text label. Will follow an icon. If omitted, no text will be
      *      shown.
@@ -2388,47 +2445,22 @@ define.async('io.ox/office/tk/utils',
      */
     Utils.setControlCaption = function (control, options) {
 
-        var // option values
-            icon = Utils.getStringOption(options, 'icon'),
-            label = Utils.getStringOption(options, 'label'),
-            labelCss = Utils.getObjectOption(options, 'labelCss'),
-
-            // the caption container node
-            caption = null;
+        var // the caption container node
+            caption = $(Utils.createControlCaptionMarkup(options)),
+            // the label CSS attributes
+            labelCss = Utils.getObjectOption(options, 'labelCss', {});
 
         // restrict to one element in the passed collection
         control = control.first();
 
-        // create a caption container if missing
-        caption = control.children('div.caption');
-        if (caption.length === 0) {
-            control.prepend(caption = $('<div>').addClass('caption'));
+        // add CSS attributes
+        if (!_.isEmpty(labelCss)) {
+            caption.children(LABEL_SELECTOR).css(labelCss);
         }
 
-        // remove the old caption spans
-        caption.empty();
-
-        // append the icon
-        if (icon) {
-            caption.append($('<span>')
-                .attr('data-role', 'icon')
-                .attr('data-icon', icon)
-                .append(Utils.createIcon(icon))
-            );
-        }
-
-        // append the label
-        if (_.isString(label)) {
-            caption.append($('<span>')
-                .attr('data-role', 'label')
-                .text(label || '')
-                .css(labelCss || {}));
-        }
-
-        // remove the caption from the control if it is empty
-        if (caption.children().length === 0) {
-            caption.remove();
-        }
+        // remove the old caption, insert new caption
+        control.children('div.caption').remove();
+        control.prepend(caption);
     };
 
     /**
@@ -2495,12 +2527,50 @@ define.async('io.ox/office/tk/utils',
     // button elements --------------------------------------------------------
 
     /**
+     * Creates and returns the HTML markup of a button element.
+     *
+     * @param {String} [innerMarkup='']
+     *  The HTML markup that will be inserted into the button element, right
+     *  after the button caption element as specified by the passed options.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the properties of the new button. Supports
+     *  all generic options supported by the method Utils.setControlLabel().
+     *  Additionally, the following options are supported:
+     *  @param {Boolean} [focusable=false]
+     *      If set to true, a CSS marker class will be added marking the button
+     *      to be focusable.
+     *  @param {Number} [tabIndex=1]
+     *      The tab index set as 'tabindex' attribute at the button element.
+     *
+     * @returns {String}
+     *  The HTML markup of the button element, as string. The button element
+     *  will be represented by an <a> DOM element due to rendering bugs in
+     *  FireFox with <button> elements.
+     */
+    Utils.createButtonMarkup = function (innerMarkup, options) {
+
+        var // whether the button will be focusable
+            focusable = Utils.getBooleanOption(options, 'focusable', false),
+            // the tab index
+            tabIndex = Utils.getIntegerOption(options, 'tabIndex', 1),
+            // the HTML mark-up of the caption icon and label
+            captionMarkup = Utils.createControlCaptionMarkup(options);
+
+        innerMarkup = (innerMarkup || '') + captionMarkup;
+        return '<a class="' + Utils.BUTTON_CLASS + (focusable ? (' ' + Utils.FOCUSABLE_CLASS) : '') + '" href="#" tabindex="' + tabIndex + '">' + innerMarkup + '</a>';
+    };
+
+    /**
      * Creates and returns a new button element.
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the new button. Supports
      *  all generic options supported by the method Utils.createControl(), and
      *  all caption options supported by the method Utils.setControlLabel().
+     *  Additionally, the following options are supported:
+     *  @param {Number} [tabIndex=1]
+     *      The tab index set as 'tabindex' attribute at the button element.
      *
      * @returns {jQuery}
      *  A jQuery object containing the new button element. The button element
@@ -2509,10 +2579,12 @@ define.async('io.ox/office/tk/utils',
      */
     Utils.createButton = function (options) {
 
-        var // Create the DOM anchor element representing the button (href='#' is
+        var // the tab index
+            tabIndex = Utils.getIntegerOption(options, 'tabIndex', 1),
+            // Create the DOM anchor element representing the button (href='#' is
             // essential for tab traveling). Do NOT use <button> elements, Firefox has
             // problems with text clipping and correct padding of the <button> contents.
-            button = Utils.createControl('a', { href: '#', tabindex: 1 }, options).addClass('button');
+            button = Utils.createControl('a', { href: '#', tabindex: tabIndex }, options).addClass(Utils.BUTTON_CLASS);
 
         Utils.setControlCaption(button, options);
         return button;
@@ -2817,14 +2889,20 @@ define.async('io.ox/office/tk/utils',
      * @param {Object} [context]
      *  The context to be bound to the callback function.
      */
-    Utils.takeTime = function (message, callback, context) {
-        var t0 = _.now();
-        try {
-            return callback.call(context);
-        } finally {
-            Utils.log(message + ' (' + (_.now() - t0) + 'ms)');
-        }
-    };
+    Utils.takeTime = (function () {
+        var indent = '', INDENT_PIECE = '\xa0 ';
+        return function (message, callback, context) {
+            var t0 = _.now();
+            try {
+                Utils.log(indent + '=> ' + message);
+                indent += INDENT_PIECE;
+                return callback.call(context);
+            } finally {
+                indent = indent.substring(INDENT_PIECE.length);
+                Utils.log(indent + '<= ' + (_.now() - t0) + 'ms');
+            }
+        };
+    }());
 
     // global initialization ==================================================
 

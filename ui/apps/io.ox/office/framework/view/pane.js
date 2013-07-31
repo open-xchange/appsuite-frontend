@@ -394,9 +394,12 @@ define('io.ox/office/framework/view/pane',
         // context menu support
         if (!Utils.getBooleanOption(options, 'enableContextMenu', false)) {
             node.on('contextmenu', function (event) {
-                if (!$(event.target).is('input, textarea')) { return false; }
+                if (!$(event.target).is('input,textarea')) { return false; }
             });
         }
+
+        // disable dragging of controls (otherwise, it is possible to drag buttons and other controls around)
+        node.on('dragstart', Utils.BUTTON_SELECTOR + ',input,textarea,label', false);
 
     } // class Pane
 
