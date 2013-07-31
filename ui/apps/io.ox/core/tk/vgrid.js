@@ -421,12 +421,14 @@ define('io.ox/core/tk/vgrid',
             }
         }
         // due to performance reasons we don't scrol but jump
-        scrollToLabel = function (index) {
+        scrollToLabel = function (index, silent) {
             var obj = labels.list[index];
             if (obj !== undefined) {
                 scrollpane.scrollTop(obj.top);
-                // use select instead of set to udpate lastIndex internally
-                self.selection.set(all[obj.pos]).setLastIndex(all[obj.pos]);
+                if (silent !== true) {
+                    // use select instead of set to udpate lastIndex internally
+                    self.selection.set(all[obj.pos]).setLastIndex(all[obj.pos]);
+                }
             }
         };
 
@@ -1067,12 +1069,12 @@ define('io.ox/core/tk/vgrid',
             return labels;
         };
 
-        this.scrollToLabelText = function (e) {
+        this.scrollToLabelText = function (e, silent) {
             // get via text index
             var text = e.data ? e.data.text : e,
                 index = labels.textIndex[text];
             if (index !== undefined) {
-                scrollToLabel(index);
+                scrollToLabel(index, silent);
             }
         };
 

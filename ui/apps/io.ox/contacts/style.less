@@ -294,8 +294,18 @@ input#image1 {
 @media (max-width: 480px), (max-device-width: 480px)  {
     .abs.contact-grid-container {
         left: 0px;
+        right: @thumbIndexWidth;
     }
     .contact-grid-index {
-        width: 0;
+        left: auto;
+        right: 0;
+        width: @thumbIndexWidth;
+        padding: 10px 0;
+        .thumb-index {
+            font-size: 10px;
+            line-height: 11px;
+            padding: 0 5px 0 5px;
+            margin: 0px 1px 0 1px;
+        }
     }
 }
