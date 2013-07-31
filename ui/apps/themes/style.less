@@ -112,7 +112,6 @@
         float:right;
         position:relative;
     }
-
 }
 
 
@@ -246,7 +245,9 @@
         }
 
         &.user-content i[class^="icon-"] {
-            margin-right: 4px;
+            font-size: 14px; // default font size (see Bug 27900)
+            top: 0px;
+            margin-right: 7px;
             color: #ccc;
         }
 
@@ -785,6 +786,7 @@
             }
         }
         &:hover {
+            text-decoration:none !important; // IE 10 needs important otherwise it will be ignored See: #27913
             i {
                 color: darken(@toolbarButtonColor, 20%);
                 text-decoration: none;
@@ -1826,6 +1828,16 @@ input.nice-input {
         }
     }
 }
+/* only for mobile use */
+.foldertree-click-intercept {
+    background: rgba(0, 0, 0, 0);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 10%;
+    right: 0;
+    z-index: 1000;
+}
 
 /* folder tree */
 .io-ox-foldertree {
@@ -2437,6 +2449,9 @@ input.flat-input {
             .default-content-padding { padding-top: 7px; }
         }
     }
+    .foldertree-sidepanel {
+        left: 50px;
+    }
 }
 
 // TINY SCREENS
@@ -2514,6 +2529,10 @@ input.flat-input {
         .rightside-navbar, .rightside { display:none; }
     }
     .input-medium.search-query { width: 80px; }
+
+    .foldertree-sidepanel {
+        left: 0px;
+    }
 }
 
 // landscape fullscreen on iPhone
@@ -2612,10 +2631,11 @@ input.flat-input {
     }
     .foldertree-sidepanel {
         .foldertree-toolbar {
-            display: none;
+            /*display: none;*/
+            /*background-color: #ebebeb;*/
         }
         .foldertree-container {
-            bottom: 0px;
+            bottom: 50px;
             &.io-ox-foldertree {
                 .folder.selectable:hover {
                     background-color: inherit;
@@ -2709,6 +2729,9 @@ input.flat-input {
             border-radius: 1px;
             border-color: transparent;
         }
+        .dropdown-header {
+            display: none;
+        }
 
         li {
             background-color: #fff;
@@ -2724,7 +2747,7 @@ input.flat-input {
                 width: 30px;
             }
         }
-        li > a {
+        li > a, li > span {
              .ellipsis;
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
@@ -2757,6 +2780,11 @@ input.flat-input {
             height: 30px;
             position: absolute;
         }
+
+        .instant-preview {
+            padding: 3px 20px;
+        }
+
         .color-black { background-color: #333; }
         .color-red { background-color: @red; }
         .color-orange { background-color: @orange; }
@@ -2781,6 +2809,25 @@ input.flat-input {
             color: #aaa;
         }
     }
+
+    // Disable hover state on mobile devices for custom dropdowns
+    // -----------
+    .dropdown-menu li > a:hover,
+    .dropdown-menu li > a:focus,
+    .dropdown-submenu:hover > a {
+        text-decoration: none;
+        color: inherit;
+        background-color: inherit;
+        background-image: none;
+
+    }
+    .dropdown-menu li > a:active {
+        color: @dropdownLinkColorActive;
+        text-decoration: none;
+        outline: 0;
+        .vertical-gradient(@dropdownLinkBackgroundActive, darken(@dropdownLinkBackgroundActive, 5%));
+    }
+
 }
 
 @media (max-width: 380px) {

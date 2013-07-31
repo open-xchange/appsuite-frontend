@@ -936,6 +936,7 @@ define.async('io.ox/core/date',
             var fields = {}, match;
             regex.lastIndex = 0;
             while ((match = regex.exec(format))) {
+                if (!match[1]) continue;
                 var letter = match[1].charAt(0);
                 if (fields[letter]) break;
                 fields[letter] = true;

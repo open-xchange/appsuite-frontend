@@ -145,6 +145,8 @@ define('plugins/portal/rss/register',
     });
 
     function edit(model, view) {
+        //disable widget till data is set by user
+        model.set('candidate', true, { silent: true, validate: true });
 
         var dialog = new dialogs.ModalDialog({ async: true }),
             $url = $('<textarea class="input-block-level" rows="5">').attr('placeholder', 'http://').placeholder(),

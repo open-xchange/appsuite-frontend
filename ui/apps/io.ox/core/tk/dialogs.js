@@ -136,8 +136,7 @@ define("io.ox/core/tk/dialogs",
 
                 var items, focus, index;
 
-                switch (e.which) {
-
+                switch (e.which || e.keyCode) {
                 case 27: // ESC
                     if (!isBusy) {
                         // prevent other elements to trigger close
@@ -155,6 +154,8 @@ define("io.ox/core/tk/dialogs",
                         } else {
                             return o.enter.call(self);
                         }
+                    } else if (!isBusy) {
+                        $(e.target).trigger('click');
                     }
                     return false;
 
@@ -614,7 +615,8 @@ define("io.ox/core/tk/dialogs",
             sidepopup = self.nodes.closest.prop("sidepopup") || null;
             self.lastTrigger = sidepopup ? sidepopup.lastTrigger : null;
             // get zIndex for visual stacking
-            zIndex = my.parents(".io-ox-sidepopup, .window-content, .window-container-center, .io-ox-dialog-popup, .notifications-overlay").css('zIndex');
+            zIndex = my.parents(".io-ox-sidepopup, .window-content, .io-ox-dialog-popup, .window-container-center, .notifications-overlay").css('zIndex');
+            zIndex = parseInt(zIndex, 10);
             zIndex = _.isNumber(zIndex) ? zIndex + 2 : 100;
             // second click?
             if (self.lastTrigger === this) {

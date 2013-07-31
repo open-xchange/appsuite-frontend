@@ -191,25 +191,50 @@ define('io.ox/core/api/folder',
                         appendColumns: true
                     })
                     .pipe(function (data, timestamp) {
+
                         // rearrange on multiple ???
                         if (data.timestamp) {
                             timestamp = _.then(); // force update
                             data = data.data;
                         }
-                        //apply blacklist
+
+                        // apply blacklist
                         data = _.filter(data, visible);
+
                         // fix order of mail folders (INBOX first)
                         if (opt.folder === '1') {
+
+                            var head = new Array(1 + 5), types = 'inbox sent drafts trash spam'.split(' ');
+
+                            // get unified folder first
+                            _(data).find(function (folder) {
+                                return account.isUnified(folder.id) && !!(head[0] = folder);
+                            });
+
+                            // get standard folders
+                            _(data).each(function (folder) {
+                                _(types).find(function (type, index) {
+                                    return account.is(type, folder.id) && !!(head[index + 1] = folder);
+                                });
+                            });
+
+                            // exclude unified and standard folders
+                            data = _(data).reject(function (folder) {
+                                return account.isUnified(folder.id) || account.isStandardFolder(folder.id);
+                            });
+
+                            // sort the rest
                             data.sort(function (a, b) {
-                                if (account.isUnified(a.id)) return -1;
-                                if (account.isUnified(b.id)) return +1;
-                                if (a.id === 'default0/INBOX') return -1;
-                                if (b.id === 'default0/INBOX') return +1;
+                                // external accounts at last
                                 if (account.isExternal(a.id)) return +1;
                                 if (account.isExternal(b.id)) return -1;
                                 return a.title.toLowerCase() > b.title.toLowerCase() ? +1 : -1;
                             });
+
+                            // combine
+                            data.unshift.apply(data, _(head).compact());
                         }
+
                         return $.when(
                             // add to cache
                             cache.add(opt.folder, data),
@@ -775,9 +800,18 @@ define('io.ox/core/api/folder',
                 // view properties
                 return !isMail && !this.is('account', data) && (data.capabilities & 1);
             case 'publish':
-                // can publish (rough, currently only used for files)
-                return this.can('create', data) && rights !== 1 && rights !== 4;
+                // check folder capability
+                if (_(data.supported_capabilities).indexOf('PUBLICATION') === -1) return false;
+                // contact?
+                if (data.module === 'contacts') return true;
+                // files?
+                return data.module === 'files' && this.can('create', data) && rights !== 1 && rights !== 4;
             case 'subscribe':
+                // check folder capability
+                if (_(data.supported_capabilities).indexOf('SUBSCRIPTION') === -1) return false;
+                // check rights
+                return (/^(contacts|calendar|infostore)$/).test(data.module) && api.can('write', data);
+            case 'imap-subscribe':
                 // can subscribe
                 return isMail && Boolean(data.capabilities & Math.pow(2, 4));
             default:

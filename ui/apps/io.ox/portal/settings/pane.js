@@ -401,7 +401,6 @@ define('io.ox/portal/settings/pane',
             });
 
             collection.on('add', function (model) {
-                model.set({ candidate: true }, { silent: true, validate: true });
                 var view = createView(model).render();
                 list.prepend(view.el);
                 view.edit();

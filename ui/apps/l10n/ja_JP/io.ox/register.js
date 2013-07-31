@@ -13,10 +13,9 @@
 
 define('l10n/ja_JP/io.ox/register',
     ['io.ox/core/extensions',
-     'io.ox/backbone/views',
-     'io.ox/backbone/forms',
+     'io.ox/backbone/mini-views',
      'css!l10n/ja_JP/io.ox/style.css'
-    ], function (ext, views, forms) {
+    ], function (ext, mini) {
 
     'use strict';
 
@@ -54,12 +53,13 @@ define('l10n/ja_JP/io.ox/register',
         ext.point('io.ox/contacts/edit/' + point).extend({
             id: yomiID,
             index: 'last',
-            draw: function () {
+            draw: function (baton) {
                 var input = this.find('input[name="' + id + '"]');
                 // insert furigana field before orginal field
                 input.before(
-                    $('<input type="text" class="input-xlarge furigana" tabindex="1">')
-                    .attr({ name: yomiID, placeholder: '振り仮名 \u2026' /* Furigana + ellipsis */ })
+                    new mini.InputView({ name: yomiID, model: baton.model }).render().$el
+                    .addClass('furigana')
+                    .attr({ placeholder: '振り仮名 \u2026' /* Furigana + ellipsis */ })
                 );
                 // now move original input field after its label
                 input.closest('label').after(input);

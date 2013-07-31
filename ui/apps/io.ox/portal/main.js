@@ -108,8 +108,7 @@ define('io.ox/portal/main',
                 .append(
                     // border decoration
                     $('<div>')
-                        .addClass('decoration')
-                        .addClass('pending')
+                        .addClass('decoration pending')
                         .append(
                             $('<h2>').append(
                                 // add remove icon

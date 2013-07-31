@@ -1300,10 +1300,11 @@ define.async('io.ox/office/tk/utils',
      *  The new value of the CSS attribute.
      */
     Utils.setCssAttributeWithPrefixes = function (node, name, value) {
-        node = $(node);
+        var props = {};
         _(['-webkit-', '-moz-', '-ms-', '-o-', '']).each(function (prefix) {
-            node.css(prefix + name, value);
+            props[prefix + name] = value;
         });
+        $(node).css(props);
     };
 
     /**
@@ -1797,173 +1798,187 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
-     * Returns the position and size of the specified node inside the browser
-     * window area. This includes the distances of all four borders of the node
-     * to the borders of the browser window.
+     * Returns the position and size of the specified node inside the entire
+     * document page. This includes the distances of all four borders of the
+     * node to the borders of the document.
      *
      * @param {HTMLElement|jQuery} node
-     *  The DOM element whose position relative to the browser window will be
+     *  The DOM element whose position relative to the document page will be
      *  calculated. If this object is a jQuery collection, uses the first node
      *  it contains.
      *
      * @returns {Object}
-     *  An object with numeric attributes representing the position and size of
-     *  the node relative to the browser window in pixels:
-     *  - 'left': the distance of the left border of the node to the left
-     *      border of the browser window,
-     *  - 'top': the distance of the top border of the node to the top border
-     *      of the browser window,
-     *  - 'right': the distance of the right border of the node to the right
-     *      border of the browser window,
-     *  - 'bottom': the distance of the bottom border of the node to the bottom
-     *      border of the browser window,
-     *  - 'width': the outer width of the node (including its borders),
-     *  - 'height': the outer height of the node (including its borders).
+     *  An object with numeric properties representing the position and size of
+     *  the node relative to the document page, in pixels:
+     *  - {Number} left
+     *      The distance of the left border of the node to the left border of
+     *      the document page.
+     *  - {Number} top
+     *      The distance of the top border of the node to the top border of the
+     *      document page.
+     *  - {Number} right
+     *      The distance of the right border of the node to the right border of
+     *      the document page.
+     *  - {Number} bottom
+     *      The distance of the bottom border of the node to the bottom border
+     *      of the document page.
+     *  - {Number} width
+     *      The outer width of the node (including its borders).
+     *  - {Number} height
+     *      The outer height of the node (including its borders).
      */
-    Utils.getNodePositionInWindow = function (node) {
+    Utils.getNodePositionInPage = function (node) {
 
         var // the passed node, as jQuery object
             $node = $(node),
             // the offset of the node, relative to the browser window
             position = $node.offset();
 
-        // add size and right/bottom distances
         position.width = $node.outerWidth();
         position.height = $node.outerHeight();
-        position.right = window.innerWidth + window.pageXOffset - position.left - position.width;
-        position.bottom = window.innerHeight + window.pageYOffset - position.top - position.height;
+        position.right = document.body.clientWidth - position.left - position.width;
+        position.bottom = document.body.clientHeight - position.top - position.height;
 
         return position;
     };
 
     /**
-     * Returns the position of the visible area of the passed scrollable node.
+     * Returns the position of the visible area of the passed container node.
      * This includes the size of the visible area without scroll bars (if
      * shown), and the distances of all four borders of the visible area to the
      * borders of the entire scroll area.
      *
-     * @param {HTMLElement|jQuery} node
-     *  The scrollable DOM element. If this object is a jQuery collection, uses
+     * @param {HTMLElement|jQuery} containerNode
+     *  The DOM container element. If this object is a jQuery collection, uses
      *  the first node it contains.
      *
      * @returns {Object}
-     *  An object with numeric attributes representing the position and size of
-     *  the visible area relative to the entire scroll area of the node in
-     *  pixels:
-     *  - 'left': the distance of the left border of the visible area to the
-     *      left border of the entire scroll area,
-     *  - 'top': the distance of the top border of the visible area to the top
-     *      border of the entire scroll area,
-     *  - 'right': the distance of the right border of the visible area
-     *      (without scroll bar) to the right border of the entire scroll area,
-     *  - 'bottom': the distance of the bottom border of the visible area
-     *      (without scroll bar) to the bottom border of the entire scroll
-     *      area,
-     *  - 'width': the width of the visible area (without scroll bar),
-     *  - 'height': the height of the visible area (without scroll bar).
+     *  An object with numeric properties representing the position and size of
+     *  the visible area relative to the entire scroll area of the container
+     *  node in pixels:
+     *  - {Number} left
+     *      The distance of the left border of the visible area to the left
+     *      border of the entire scroll area.
+     *  - {Number} top
+     *      The distance of the top border of the visible area to the top
+     *      border of the entire scroll area.
+     *  - {Number} right
+     *      The distance of the right border of the visible area (without
+     *      scroll bar) to the right border of the entire scroll area.
+     *  - {Number} bottom
+     *      The distance of the bottom border of the visible area (without
+     *      scroll bar) to the bottom border of the entire scroll area.
+     *  - {Number} width
+     *      The width of the visible area (without scroll bar).
+     *  - {Number} height
+     *      The height of the visible area (without scroll bar).
      */
-    Utils.getVisibleAreaPosition = function (node) {
-        node = Utils.getDomNode(node);
+    Utils.getVisibleAreaPosition = function (containerNode) {
+        containerNode = Utils.getDomNode(containerNode);
         return {
-            left: node.scrollLeft,
-            top: node.scrollTop,
-            right: node.scrollWidth - node.clientWidth - node.scrollLeft,
-            bottom: node.scrollHeight - node.clientHeight - node.scrollTop,
-            width: node.clientWidth,
-            height: node.clientHeight
+            left: containerNode.scrollLeft,
+            top: containerNode.scrollTop,
+            right: containerNode.scrollWidth - containerNode.clientWidth - containerNode.scrollLeft,
+            bottom: containerNode.scrollHeight - containerNode.clientHeight - containerNode.scrollTop,
+            width: containerNode.clientWidth,
+            height: containerNode.clientHeight
         };
     };
 
     /**
-     * Returns the position and size of the specified window rectangle inside
-     * the passed scrollable node. This includes the size of the rectangle as
-     * specified, and the distances of all four borders of the rectangle to the
-     * borders of the visible area or entire scroll area of the scrollable
-     * node.
+     * Returns the position and size of the specified document page rectangle
+     * inside the passed DOM container node. This includes the size of the
+     * rectangle as specified, and the distances of all four borders of the
+     * rectangle to the borders of the visible area or entire scroll area of
+     * the container node.
      *
-     * @param {HTMLElement|jQuery} scrollableNode
-     *  The scrollable DOM element. If this object is a jQuery collection, uses
+     * @param {HTMLElement|jQuery} containerNode
+     *  The container DOM element. If this object is a jQuery collection, uses
      *  the first node it contains.
      *
-     * @param {Object} windowRect
-     *  The rectangle whose position and size relative to the scrollable node
-     *  will be calculated. Must provide the attributes 'left', 'top', 'width',
-     *  and 'height' in pixels. The attributes 'left' and 'top' are interpreted
-     *  relatively to the browser window.
+     * @param {Object} pageRect
+     *  The document page rectangle whose position will be converted relatively
+     *  to the position of the container node. Must provide the properties
+     *  'left', 'top', 'width', and 'height' in pixels. The properties 'left'
+     *  and 'top' are interpreted relatively to the entire document page.
      *
      * @param {Object} [options]
      *  A map of options to control the calculation. Supports the following
      *  options:
      *  @param {Boolean} [options.visibleArea=false]
-     *      If set to true, calculates the distances of the window rectangle to
-     *      the visible area of the scrollable node. Otherwise, returns the
-     *      top and left position and the size of the window rectangle
-     *      unmodified, and adds the distance of its right and bottom borders
-     *      to the right and bottom borders of the entire scroll area of the
-     *      scrollable node.
+     *      If set to true, calculates the distances of the rectangle to the
+     *      visible area of the container node. Otherwise, calculates the
+     *      distances of the rectangle to the entire scroll area of the
+     *      container node.
      *
      * @returns {Object}
-     *  An object with numeric attributes representing the position and size of
-     *  the window rectangle relative to the entire scroll area or visible area
-     *  of the scrollable node in pixels:
-     *  - 'left': the distance of the left border of the window rectangle to
-     *      the left border of the scrollable node,
-     *  - 'top': the distance of the top border of the window rectangle to the
-     *      top border of the scrollable node,
-     *  - 'right': the distance of the right border of the window rectangle to
-     *      the right border of the scrollable node,
-     *  - 'bottom': the distance of the bottom border of the window rectangle
-     *      to the bottom border of the scrollable node,
-     *  - 'width': the width of the window rectangle, as passed,
-     *  - 'height': the height of the window rectangle, as passed.
+     *  An object with numeric properties representing the position and size of
+     *  the page rectangle relative to the entire scroll area or visible area
+     *  of the container node, in pixels:
+     *  - {Number} left
+     *      The distance of the left border of the rectangle to the left border
+     *      of the container node.
+     *  - {Number} top
+     *      The distance of the top border of the rectangle to the top border
+     *      of the container node.
+     *  - {Number} right
+     *      The distance of the right border of the rectangle to the right
+     *      border of the container node.
+     *  - {Number} bottom
+     *      The distance of the bottom border of the rectangle to the bottom
+     *      border of the container node.
+     *  - {Number} width
+     *      The width of the rectangle, as passed.
+     *  - {Number} height
+     *      The height of the rectangle, as passed.
      */
-    Utils.getRectanglePositionInNode = function (scrollableNode, windowRect, options) {
+    Utils.getRectanglePositionInNode = function (containerNode, pageRect, options) {
 
-        var // the passed scrollable node, as jQuery object
-            $scrollableNode = $(scrollableNode),
-            // the offset of the scrollable node, relative to the browser window
-            scrollableOffset = $scrollableNode.offset(),
+        var // the passed container node, as jQuery object
+            $containerNode = $(containerNode),
+            // the offset of the container node, relative to the document body
+            containerOffset = containerNode.offset(),
             // the width of the left and top border of the scrollable node, in pixels
-            leftBorderWidth = Utils.convertCssLength($scrollableNode.css('borderLeftWidth'), 'px'),
-            topBorderWidth = Utils.convertCssLength($scrollableNode.css('borderTopWidth'), 'px'),
-            // dimensions of the visible area of the scrollable node
-            visiblePosition = Utils.getVisibleAreaPosition(scrollableNode),
+            leftBorderWidth = Utils.convertCssLength($containerNode.css('borderLeftWidth'), 'px'),
+            topBorderWidth = Utils.convertCssLength($containerNode.css('borderTopWidth'), 'px'),
+            // position and size of the visible area of the container node
+            visiblePosition = Utils.getVisibleAreaPosition(containerNode),
 
-            // the dimensions of the window rectangle, relative to the visible area of the scrollable node
-            dimensions = {
-                left: windowRect.left + leftBorderWidth - scrollableOffset.left,
-                top: windowRect.top + topBorderWidth - scrollableOffset.top,
-                width: windowRect.width,
-                height: windowRect.height
+            // the position and size, relative to the visible area of the container node
+            position = {
+                left: pageRect.left + leftBorderWidth - containerOffset.left,
+                top: pageRect.top + topBorderWidth - containerOffset.top,
+                width: pageRect.width,
+                height: pageRect.height
             };
 
         // add right and bottom distance of child node to visible area
-        dimensions.right = visiblePosition.width - dimensions.left - dimensions.width;
-        dimensions.bottom = visiblePosition.height - dimensions.top - dimensions.height;
+        position.right = visiblePosition.width - position.left - position.width;
+        position.bottom = visiblePosition.height - position.top - position.height;
 
         // add distances to entire scroll area, if option 'visibleArea' is not set
         if (!Utils.getBooleanOption(options, 'visibleArea', false)) {
             _(['left', 'top', 'right', 'bottom']).each(function (border) {
-                dimensions[border] += visiblePosition[border];
+                position[border] += visiblePosition[border];
             });
         }
 
-        return dimensions;
+        return position;
     };
 
     /**
-     * Returns the dimensions of the specified child node inside its scrollable
-     * ancestor node. This includes the size of the child node, and the
-     * distances of all four borders of the child node to the borders of the
-     * visible area or entire scroll area of the scrollable node.
+     * Returns the position and size of the specified child node inside its
+     * ancestor container node. This includes the outer size of the child node,
+     * and the distances of all four borders of the child node to the borders
+     * of the visible area or entire scroll area of the container node.
      *
-     * @param {HTMLElement|jQuery} scrollableNode
-     *  The scrollable DOM element. If this object is a jQuery collection, uses
+     * @param {HTMLElement|jQuery} containerNode
+     *  The DOM container element. If this object is a jQuery collection, uses
      *  the first node it contains.
      *
      * @param {HTMLElement|jQuery} childNode
      *  The DOM element whose dimensions will be calculated. Must be contained
-     *  in the specified scrollable element. If this object is a jQuery
+     *  in the specified container element. If this object is a jQuery
      *  collection, uses the first node it contains.
      *
      * @param {Object} [options]
@@ -1971,55 +1986,62 @@ define.async('io.ox/office/tk/utils',
      *  options:
      *  @param {Boolean} [options.visibleArea=false]
      *      If set to true, calculates the distances of the child node to the
-     *      visible area of the scrollable node. Otherwise, calculates the
+     *      visible area of the container node. Otherwise, calculates the
      *      distances of the child node to the entire scroll area of the
-     *      scrollable node.
+     *      container node.
      *
      * @returns {Object}
-     *  An object with numeric attributes representing the position and size of
+     *  An object with numeric properties representing the position and size of
      *  the child node relative to the entire scroll area or visible area of
-     *  the scrollable node in pixels:
-     *  - 'left': the distance of the left border of the child node to the
-     *      left border of the scrollable node,
-     *  - 'top': the distance of the top border of the child node to the top
-     *      border of the scrollable node,
-     *  - 'right': the distance of the right border of the child node to the
-     *      right border of the scrollable node,
-     *  - 'bottom': the distance of the bottom border of the child node to the
-     *      bottom border of the scrollable node,
-     *  - 'width': the outer width of the child node (including its borders),
-     *  - 'height': the outer height of the child node (including its borders).
+     *  the container node, in pixels:
+     *  - {Number} left
+     *      The distance of the left border of the child node to the left
+     *      border of the container node.
+     *  - {Number} top
+     *      The distance of the top border of the child node to the top border
+     *      of the container node.
+     *  - {Number} right
+     *      The distance of the right border of the child node to the right
+     *      border of the container node.
+     *  - {Number} bottom
+     *      The distance of the bottom border of the child node to the bottom
+     *      border of the container node.
+     *  - {Number} width
+     *      The outer width of the child node (including its borders).
+     *  - {Number} height
+     *      The outer height of the child node (including its borders).
      */
-    Utils.getChildNodePositionInNode = function (scrollableNode, childNode, options) {
-        var windowPosition = Utils.getNodePositionInWindow(childNode);
-        return Utils.getRectanglePositionInNode(scrollableNode, windowPosition, options);
+    Utils.getChildNodePositionInNode = function (containerNode, childNode, options) {
+        var pageRect = Utils.getNodePositionInPage(childNode);
+        return Utils.getRectanglePositionInNode(containerNode, pageRect, options);
     };
 
     /**
-     * Scrolls the passed window rectangle into the visible area of the
-     * specified scrollable node.
+     * Scrolls the passed page rectangle into the visible area of the specified
+     * container node.
      *
-     * @param {HTMLElement|jQuery} scrollableNode
-     *  The scrollable DOM element. If this object is a jQuery collection, uses
-     *  the first node it contains.
+     * @param {HTMLElement|jQuery} containerNode
+     *  The DOM container element. If this object is a jQuery collection, uses
+     *  the first node it contains. This method works independent from the
+     *  current overflow mode of the container node.
      *
-     * @param {Object} windowRect
-     *  The rectangle of the browser window that will be made visible by
-     *  scrolling the scrollable node. Must provide the attributes 'left',
-     *  'top', 'width', and 'height' in pixels. The attributes 'left' and 'top'
-     *  are interpreted relatively to the browser window.
+     * @param {Object} pageRect
+     *  The document page rectangle that will be made visible by scrolling the
+     *  container node. Must provide the properties 'left', 'top', 'width', and
+     *  'height' in pixels. The properties 'left' and 'top' are interpreted
+     *  relatively to the entire document page.
      *
      * @param {Object} [options]
      *  A map of options to control the scroll action. Supports the following
      *  options:
      *  @param {Number} [options.padding=0]
-     *      Minimum distance between the borders of the visible area and the
-     *      rectangle.
+     *      Minimum distance between the borders of the visible area in the
+     *      container node, and the rectangle scrolled into the visible area.
      */
-    Utils.scrollToWindowRectangle = function (scrollableNode, windowRect, options) {
+    Utils.scrollToPageRectangle = function (containerNode, pageRect, options) {
 
         var // dimensions of the rectangle in the visible area of the scrollable node
-            position = Utils.getRectanglePositionInNode(scrollableNode, windowRect, { visibleArea: true }),
+            position = Utils.getRectanglePositionInNode(containerNode, pageRect, { visibleArea: true }),
             // padding between scrolled element and border of visible area
             padding = Utils.getIntegerOption(options, 'padding', 0, 0);
 
@@ -2028,7 +2050,7 @@ define.async('io.ox/office/tk/utils',
             var maxPadding = Utils.minMax((leadingChildOffset + trailingChildOffset) / 2, 0, padding),
                 offset = Math.max(leadingChildOffset - Math.max(maxPadding - trailingChildOffset, 0), maxPadding);
 
-            Utils.getDomNode(scrollableNode)[scrollAttributeName] -= (offset - leadingChildOffset);
+            Utils.getDomNode(containerNode)[scrollAttributeName] -= (offset - leadingChildOffset);
         }
 
         updateScrollPosition(position.left, position.right, 'scrollLeft');
@@ -2036,17 +2058,17 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
-     * Scrolls the passed child node into the visible area of the specified
-     * scrollable container node.
+     * Scrolls the passed child node into the visible area of the specified DOM
+     * container node.
      *
-     * @param {HTMLElement|jQuery} scrollableNode
-     *  The scrollable DOM element that contains the specified child node. If
+     * @param {HTMLElement|jQuery} containerNode
+     *  The DOM container element that contains the specified child node. If
      *  this object is a jQuery collection, uses the first node it contains.
      *
      * @param {HTMLElement|jQuery} childNode
      *  The DOM element that will be made visible by scrolling the specified
-     *  scrollable container element. If this object is a jQuery collection,
-     *  uses the first node it contains.
+     *  container element. If this object is a jQuery collection, uses the
+     *  first node it contains.
      *
      * @param {Object} [options]
      *  A map of options to control the scroll action. Supports the following
@@ -2055,9 +2077,9 @@ define.async('io.ox/office/tk/utils',
      *      Minimum distance between the borders of the visible area and the
      *      child node.
      */
-    Utils.scrollToChildNode = function (scrollableNode, childNode, options) {
-        var windowPosition = Utils.getNodePositionInWindow(childNode);
-        Utils.scrollToWindowRectangle(scrollableNode, windowPosition, options);
+    Utils.scrollToChildNode = function (containerNode, childNode, options) {
+        var pageRect = Utils.getNodePositionInPage(childNode);
+        Utils.scrollToPageRectangle(containerNode, pageRect, options);
     };
 
     /**
@@ -2070,8 +2092,8 @@ define.async('io.ox/office/tk/utils',
      * constants).
      *
      * @param {HTMLElement|jQuery} containerNode
-     *  The DOM element that will be resized. If this object is a jQuery
-     *  collection, resizes all node it contains.
+     *  The DOM container element that will be resized. If this object is a
+     *  jQuery collection, resizes all node it contains.
      *
      * @param {Number} width
      *  The new total width of the node. The resulting width will not exceed
@@ -2597,7 +2619,7 @@ define.async('io.ox/office/tk/utils',
      *  A jQuery object containing the new text field element.
      */
     Utils.createTextField = function (options) {
-        var type = Utils.getStringOption(options, 'keyboard', 'text'),
+        var type = Modernizr.touch ? Utils.getStringOption(options, 'keyboard', 'text') : 'text',
             textField = Utils.createControl('input', { type: type, tabindex: 1 }, options);
         return textField.attr('placeholder', Utils.getStringOption(options, 'placeholder', ''));
     };

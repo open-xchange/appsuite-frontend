@@ -140,6 +140,15 @@ define('io.ox/office/tk/control/textfield',
                 fieldNode.select().off('mouseup');
                 validationFieldState = getFieldState();
                 break;
+            case 'beforedeactivate':
+                // Bug 27912: IE keeps text selection visible when losing focus (text
+                // is still highlighted although the control is not focused anymore).
+                // The 'beforedeactivate' event is triggered by IE only, before the
+                // focus leaves the text field. Do not interfere with focus handling
+                // in 'blur' events, e.g. Chrome gets confused when changing browser
+                // text selection while it currently changes the focus node.
+                Utils.setTextFieldSelection(fieldNode, 0);
+                break;
             case 'blur':
                 fieldNode.off('mouseup');
                 // IE9 does not trigger 'input' events when deleting characters or pasting
@@ -265,7 +274,7 @@ define('io.ox/office/tk/control/textfield',
             });
 
         fieldNode.on({
-            'focus focus:key blur:key blur': focusHandler,
+            'focus focus:key beforedeactivate blur:key blur': focusHandler,
             'keydown keypress keyup': fieldKeyHandler,
             'input': fieldInputHandler
         });

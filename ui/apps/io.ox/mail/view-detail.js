@@ -1142,13 +1142,24 @@ define('io.ox/mail/view-detail',
         // add instant preview
         if (regImage.test(contentType)) {
             dd.find('a').on('click', data, function (e) {
-                var node = $(this), data = e.data, p = node.parent(), url, src;
+                var node = $(this), data = e.data, p = node.parent(), url, src, used;
                 if (p.hasClass('open') && p.find('.instant-preview').length === 0) {
                     url = api.getUrl(data, 'view');
                     src = url + '&scaleType=contain&width=190&height=190'; // 190 + 2 * 15 pad = 220 max-width
-                    p.find('ul').append($('<li>').append($('<a>', { href: url, target: '_blank' }).append(
-                        $('<img>', { src: src, alt: '' }).addClass('instant-preview')
-                    )));
+                    //default vs. phone custom-dropdown
+                    used = $.extend({menu: p.find('ul')}, p.data() || { addlink: true });
+                    //append instant-preview if not done yet
+                    if (used.menu.find('.instant-preview').length !== 1) {
+                        var $li =  $('<li>').busy().append(
+                                (used.addlink ? $('<a>', { href: url, target: '_blank' }) : $('<span>'))
+                                .append(
+                                    $('<img>', { src: src, alt: '' }).addClass('instant-preview').load(function () {
+                                        $li.idle();
+                                    })
+                                )
+                            );
+                        used.menu.append($li);
+                    }
                 }
             });
         }

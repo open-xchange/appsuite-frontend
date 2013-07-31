@@ -167,9 +167,17 @@
     };
 
     var display = {};
+    function queryScreen() {
+        _(queries).each(function (query, key) {
+            display[key] = Modernizr.mq(query);
+        });
+    };
 
-    _(queries).each(function (query, key) {
-        display[key] = Modernizr.mq(query);
+    queryScreen();
+
+    // update device information live
+    $(window).on('resize.queryScreen', function (e) {
+       queryScreen();
     });
 
     var mobileOS = !!(_.browser.ios || _.browser.android || _.browser.blackberry || _.browser.windowsphone);

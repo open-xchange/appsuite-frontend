@@ -818,7 +818,11 @@ define("io.ox/mail/write/view-main",
 
         e.preventDefault();
 
-        var file = target.data('file'), message = file.message, app = target.data('app'), preview, reader;
+        var file = target.data('file'), message = file.message, app = target.data('app'),
+            editor = target.data('rightside').find('iframe').contents().find('body'),//get the editor in the iframe
+            preview, reader;
+
+        editor.one('click', this.close);//close if editor is selected(causes overlapping)
         // nested message?
         if (message) {
             preview = new pre.Preview({
@@ -910,8 +914,8 @@ define("io.ox/mail/write/view-main",
         }
     };
 
-    createPreview = function (file, app) {
-        return $('<a href="#" class="attachment-preview">').data({file: file, app: app }).text(gt('Preview'));
+    createPreview = function (file, app, rightside) {//rightside is needed to let the popup check for events in the editor iframe
+        return $('<a href="#" class="attachment-preview">').data({file: file, app: app, rightside: rightside }).text(gt('Preview'));
     };
 
     function round(num, digits) {
@@ -982,7 +986,7 @@ define("io.ox/mail/write/view-main",
                         $('<div class="row-2">').append(
                             info,
                             // preview?
-                            supportsPreview(file) ? createPreview(file, view.app) : $(),
+                            supportsPreview(file) ? createPreview(file, view.app, view.rightside) : $(),
                             // nbsp
                             $.txt('\u00A0')
                         ),

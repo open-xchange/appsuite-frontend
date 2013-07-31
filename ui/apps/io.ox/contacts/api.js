@@ -917,4 +917,5 @@ define('io.ox/contacts/api',
         api.trigger('update:' + key);
     };
 
+    return api;
 });

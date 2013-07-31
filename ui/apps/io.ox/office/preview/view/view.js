@@ -137,12 +137,16 @@ define('io.ox/office/preview/view/view',
         /**
          * Shows the current zoom factor in the status label for a short time,
          * then switches back to the display of the current page number.
+         *
+         * @param {Number} [scale=1]
+         *  If specified, a scaling factor relative to the current zoom factor.
          */
-        var updateZoomStatus = app.createDebouncedMethod(function () {
+        var updateZoomStatus = app.createDebouncedMethod(function (scale) {
+            scale = _.isNumber(scale) ? scale : 1;
             statusLabel.setValue(
                 //#. %1$d is the current zoom factor, in percent
                 //#, c-format
-                gt('Zoom: %1$d%', Math.round(zoomFactor)),
+                gt('Zoom: %1$d%', Math.round(zoomFactor * scale)),
                 { type: 'info' });
         }, updatePageStatus, { delay: 1000 });
 
@@ -315,9 +319,6 @@ define('io.ox/office/preview/view/view',
         /**
          * Recalculates the size of the specified page node, according to the
          * original page size and the current zoom type.
-         *
-         * @returns {Number}
-         *  The effective zoom factor of the page.
          */
         function updatePageZoom(pageNode) {
 
@@ -338,7 +339,6 @@ define('io.ox/office/preview/view/view',
 
             // set the zoom factor at the page node
             pageLoader.setZoomFactor(pageNode, pageZoomFactor / 100);
-            return pageZoomFactor;
         }
 
         /**
@@ -388,13 +388,12 @@ define('io.ox/office/preview/view/view',
             availableSize.width = appPaneNode[0].clientWidth - 2 * contentMargin;
             availableSize.height = ((zoomType === 'page') ? appPaneNode.height() : appPaneNode[0].clientHeight) - 2 * contentMargin;
 
-            // process all page nodes, update 'current zoom factor' for the selected page
-            pageNodes.each(function (index) {
-                var pageZoomFactor = updatePageZoom($(this));
-                if (index + 1 === selectedPage) {
-                    zoomFactor = pageZoomFactor;
-                }
-            });
+            // Process all page nodes, update 'current zoom factor' for the
+            // selected page. Detaching the page nodes while updating them
+            // reduces processing time per page node from ~10ms to ~0.5ms!
+            pageNodes.detach().each(function () { updatePageZoom($(this)); });
+            pageContainerNode.append(pageNodes);
+            zoomFactor = pageLoader.getPageZoom(pageNodes[selectedPage - 1]) * 100;
 
             // restore the correct scroll position with the new page sizes
             centerPagePosition = Utils.getChildNodePositionInNode(appPaneNode, pageNodes[centerPage - 1]);
@@ -533,31 +532,39 @@ define('io.ox/office/preview/view/view',
          */
         var gestureHandler = (function () {
 
-            var // the original zoom factor when zoom gesture has started
-                originalZoomFactor = 0;
-
-            // updates the zoom according to the current scale attribute
-            function setZoomType(event) {
+            // get the current relative scale factor from the passed event
+            function getScale(event) {
                 var scale = event.originalEvent.scale;
-                // if current zoom type is 'zoom-to-something', wait until the
-                // scaling factor in the event is greater than 5%
-                if (_.isNumber(zoomType) || (scale <= 0.95) || (scale >= 1.05)) {
-                    self.setZoomType(originalZoomFactor * scale);
-                    app.getController().update();
-                }
+                // if current zoom type is 'zoom-to-something', do not change it
+                // while scaling factor from event is between 0.95 and 1.05
+                return (_.isNumber(zoomType) || (scale <= 0.95) || (scale >= 1.05)) ? scale : null;
+            }
+
+            // changes the temporary page scaling while zooming
+            function changePageScale(scale) {
+                var cssScale = _.isNumber(scale) ? ('scale(' + scale + ')') : '';
+                Utils.setCssAttributeWithPrefixes(pageNodes, 'transform', cssScale);
+                updateZoomStatus(scale);
+            }
+
+            // updates the zoom according to the current scale factor
+            function changeZoom(event) {
+                var scale = getScale(event);
+                changePageScale(null);
+                if (_.isNumber(scale)) { self.setZoomType(zoomFactor * scale); }
+                app.getController().update();
             }
 
             function gestureHandler(event) {
                 switch (event.type) {
-                case 'gesturestart':
-                    originalZoomFactor = zoomFactor;
-                    setZoomType(event);
-                    break;
                 case 'gesturechange':
+                    changePageScale(getScale(event));
+                    break;
                 case 'gestureend':
-                    setZoomType(event);
+                    changeZoom(event);
                     break;
                 }
+                return false;
             }
 
             return gestureHandler;
@@ -569,7 +576,10 @@ define('io.ox/office/preview/view/view',
          * @param {jQuery.Event} event
          *  The jQuery scroll event.
          */
-        var scrollHandler = app.createDebouncedMethod(cancelMorePagesTimer, updateVisiblePages, { delay: 200, maxDelay: 1000 });
+        var scrollHandler = app.createDebouncedMethod(cancelMorePagesTimer, updateVisiblePages, {
+            delay: Modernizr.touch ? 200 : 100,
+            maxDelay: Modernizr.touch ? 1000 : 500
+        });
 
         /**
          * Initialization after construction.
@@ -585,6 +595,7 @@ define('io.ox/office/preview/view/view',
             // create the side pane
             self.addPane(sidePane = new SidePane(app, {
                 position: 'right',
+                size: Modernizr.touch ? 152 : SidePane.DEFAULT_WIDTH,
                 resizeable: !Modernizr.touch,
                 minSize: SidePane.DEFAULT_WIDTH,
                 maxSize: 1.8 * SidePane.DEFAULT_WIDTH
@@ -644,9 +655,10 @@ define('io.ox/office/preview/view/view',
                         .addGroup('pages/previous', new Button(PreviewControls.PREV_OPTIONS))
                         .addGroup('pages/current',  new PreviewControls.PageChooser(app))
                         .addGroup('pages/next',     new Button(PreviewControls.NEXT_OPTIONS));
+                    if (Modernizr.touch) { sidePaneToolBox.newLine(); }
                 }
+                if (!Modernizr.touch) { sidePaneToolBox.addRightTab(); }
                 sidePaneToolBox
-                    .addRightTab()
                     .addGroup('zoom/dec',  new Button(PreviewControls.ZOOMOUT_OPTIONS))
                     .addGroup('zoom/type', new PreviewControls.ZoomTypeChooser())
                     .addGroup('zoom/inc',  new Button(PreviewControls.ZOOMIN_OPTIONS));

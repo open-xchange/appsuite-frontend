@@ -260,8 +260,7 @@ define('io.ox/core/tk/upload',
             $node = $($node);
         } else {
             globalMode = true;
-            $node = $('<div/>')
-                .addClass('abs')
+            $node = $('<div class="abs">')
                 .css({
                     backgroundColor: '#000',
                     color: 'white',
@@ -270,7 +269,7 @@ define('io.ox/core/tk/upload',
                     fontSize: '42pt',
                     opacity: '0.75',
                     zIndex: 65000
-                }).text('Just drop the file anywhere...');
+                }).text(gt('Just drop the file anywhere') + '...');
         }
         this.enabled = true;
         Events.extend(this);

@@ -144,6 +144,9 @@ define('io.ox/calendar/actions',
                                 }
                                 if (action === 'series') {
                                     // edit the series, discard recurrence position
+                                    if (params.recurrence_id) {
+                                        o.id = params.recurrence_id;
+                                    }
                                     delete o.recurrence_position;
                                 }
 

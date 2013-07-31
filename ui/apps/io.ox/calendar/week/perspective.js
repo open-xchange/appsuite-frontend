@@ -215,6 +215,8 @@ define('io.ox/calendar/week/perspective',
                 self.view.folder(data);
                 // save folder data to view and update
                 self.getAppointments(useCache);
+                // refocus pane on update
+                self.view.pane.focus();
             });
         },
 

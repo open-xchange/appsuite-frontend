@@ -25,11 +25,13 @@ define('io.ox/core/commons-folderview',
     function initExtensions(POINT, app) {
 
         // mobile quirks
+        /* our product gets designed by others, turn this on again
         if (_.device('small')) {
             //nobody needs options and create in folder tree on mobile
             ext.point(POINT + '/sidepanel/toolbar').disable('add');
             ext.point(POINT + '/sidepanel/toolbar').disable('options');
         }
+        */
 
         // default options
         ext.point(POINT + '/options').extend({
@@ -54,6 +56,25 @@ define('io.ox/core/commons-folderview',
                         // toolbar
                         baton.$.toolbar = $('<div class="abs foldertree-toolbar">')
                     )
+                );
+            }
+        });
+
+        // draw click intercept-div which intercepts
+        // clicks on the visible rest of the grids on mobile
+        // when folder tree is expanded
+        ext.point(POINT + '/sidepanel/mobile').extend({
+            id: 'spacer',
+            draw: function (baton) {
+                this.prepend(
+                    // sidepanel
+                    baton.$.spacer = $('<div class="mobile-clickintercept">')
+                        .addClass('foldertree-click-intercept')
+                        .on('touchstart', {baton: baton}, function (e) {
+                            e.preventDefault();
+                            e.stopImmediatePropagation();
+                            e.data.baton.app.toggleFolderView();
+                        }).hide()
                 );
             }
         });
@@ -194,16 +215,16 @@ define('io.ox/core/commons-folderview',
             id: 'publications',
             index: 500,
             draw: function (baton) {
-                 //do not draw if not available
-                var link,
-                    contacts = baton.data.module === 'contacts',
-                    files = baton.data.module === 'infostore';
-                if (capabilities.has('publication') &&  (contacts || (files && api.can('publish', baton.data)))) {
-                    link = $('<a href="#" data-action="publications" role="menuitem">').text(gt('Publication'));
-                    this.append($('<li class="divider" aria-hidden="true" role="presentation">'), $('<li>').append(link));
-                    link.attr('tabindex', 1).on('click', { baton: baton }, publish);
-                } else {
-                    //link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
+                // do not draw if not available
+                if (capabilities.has('publication') && api.can('publish', baton.data)) {
+                    this.append(
+                        $('<li class="divider" aria-hidden="true" role="presentation">'),
+                        $('<li>').append(
+                            $('<a href="#" data-action="publications" role="menuitem" tabindex="1">')
+                            .text(gt('Publication'))
+                            .on('click', { baton: baton }, publish)
+                        )
+                    );
                 }
             }
         });
@@ -219,17 +240,15 @@ define('io.ox/core/commons-folderview',
             id: 'subscribe',
             index: 600,
             draw: function (baton) {
-                //do not draw if not available
-                if (api.can('write', baton.data) && capabilities.has('subscription') &&
-                    (baton.data.module === 'contacts' || baton.data.module === 'infostore' || baton.data.module === 'calendar')
-                ) {
-                    var link = $('<a href="#" data-action="subscriptions" role="menuitem">').text(gt('Subscription'));
+                // do not draw if not available
+                if (capabilities.has('subscription') && api.can('subscribe', baton.data)) {
                     this.append(
-                        $('<li>').append(link)
+                        $('<li>').append(
+                            $('<a href="#" data-action="subscriptions" role="menuitem" tabindex="1">')
+                            .text(gt('Subscription'))
+                            .on('click', { baton: baton }, subscribe)
+                        )
                     );
-                    link.attr('tabindex', 1).on('click', { baton: baton }, subscribe);
-                } else {
-                    //link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
                 }
             }
         });
@@ -340,7 +359,7 @@ define('io.ox/core/commons-folderview',
             id: 'permissions',
             index: 300,
             draw: function (baton) {
-                if (capabilities.has('!alone')) {
+                if (capabilities.has('!alone') && _.device('!smartphone')) {
                     var link = $('<a href="#" data-action="permissions" tabindex="1" role="menuitem">').text(gt('Permissions'));
                     this.append(
                         $('<li class="divider" aria-hidden="true" role="presentation">'),
@@ -414,9 +433,11 @@ define('io.ox/core/commons-folderview',
             id: 'properties',
             index: 400,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="properties" tabindex="1" role="menuitem">').text(gt('Properties'));
-                this.append($('<li>').append(link));
-                link.on('click', { baton: baton }, showFolderProperties);
+                if (_.device('!smartphone')) {
+                    var link = $('<a href="#" data-action="properties" tabindex="1" role="menuitem">').text(gt('Properties'));
+                    this.append($('<li>').append(link));
+                    link.on('click', { baton: baton }, showFolderProperties);
+                }
             }
         });
 
@@ -481,12 +502,14 @@ define('io.ox/core/commons-folderview',
             id: 'move',
             index: 200,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="delete" role="menuitem">').text(gt('Move'));
-                this.append($('<li>').append(link));
-                if (api.can('deleteFolder', baton.data)) {
-                    link.attr('tabindex', 1).on('click', { baton: baton }, moveFolder);
-                } else {
-                    link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
+                if (_.device('!smartphone')) {
+                    var link = $('<a href="#" data-action="delete" role="menuitem">').text(gt('Move'));
+                    this.append($('<li>').append(link));
+                    if (api.can('deleteFolder', baton.data)) {
+                        link.attr('tabindex', 1).on('click', { baton: baton }, moveFolder);
+                    } else {
+                        link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
+                    }
                 }
             }
         });
@@ -503,7 +526,7 @@ define('io.ox/core/commons-folderview',
             tmpVisible = false,
             top = 0,
             onChangeFolder, changeFolder, changeFolderOff, changeFolderOn,
-            fnHide, fnShow, fnShowSml, fnHideSml, initResize, restoreWidth, makeResizable,
+            fnHide, fnShow, fnResize, fnShowSml, fnHideSml, initResize, restoreWidth, makeResizable,
             toggle, toggleTree, loadTree, initTree,
             name = app.getName(),
             POINT = name + '/folderview',
@@ -529,7 +552,7 @@ define('io.ox/core/commons-folderview',
             api.get({ folder: id }).done(function (data) {
                 if (_.device('small')) {
                     // close tree
-                    toggle();
+                    fnHideSml();
                 }
                 if (data.module === options.type) {
                     changeFolderOff();
@@ -592,13 +615,26 @@ define('io.ox/core/commons-folderview',
                 var width = $(this).data('resize-width') || 250;
                 app.settings.set('folderview/width/' + _.display(), width).save();
             });
+
+            $(window).off('resize.folderview').on('resize.folderview', function (e) {
+                if (!visible) { fnHide(); } else { fnShow();  }
+            });
+        };
+
+        fnResize = function () {
+            var nodes = app.getWindow().nodes;
+            if ($(document).width() > 700) {
+                nodes.body.css('left', '50px');
+            } else {
+                nodes.body.css('left', '0px');
+            }
         };
 
         fnHide = function () {
             app.settings.set('folderview/visible/' + _.display(), visible = false).save();
             top = container.scrollTop();
             var nodes = app.getWindow().nodes;
-            nodes.body.css('left', '50px');
+            fnResize();
             nodes.sidepanel.removeClass('visible').css('width', '');
             app.trigger('folderview:close');
             if (app.getGrid) {
@@ -609,6 +645,7 @@ define('io.ox/core/commons-folderview',
         fnShow = function () {
             app.settings.set('folderview/visible/' + _.display(), visible = true).save();
             var nodes = app.getWindow().nodes;
+            fnResize();
             nodes.sidepanel.addClass('visible');
             restoreWidth();
             baton.$.container.focus();
@@ -620,12 +657,14 @@ define('io.ox/core/commons-folderview',
             app.settings.set('folderview/visible/' + _.display(), visible = false).save();
             top = container.scrollTop();
             $('.window-container-center').removeClass('animate-moveright').addClass('animate-moveleft');
+            baton.$.spacer.hide();
             app.trigger('folderview:close');
         };
 
         fnShowSml = function () {
             app.settings.set('folderview/visible/' + _.display(), visible = true).save();
             $('.window-container-center').removeClass('animate-moveleft').addClass('animate-moveright');
+            baton.$.spacer.show();
             app.trigger('folderview:open');
             return $.when();
         };
@@ -799,6 +838,11 @@ define('io.ox/core/commons-folderview',
 
         // draw sidepanel & container
         ext.point(POINT + '/sidepanel').invoke('draw', app.getWindow().nodes.sidepanel, baton);
+
+        if (_.device('smartphone')) {
+            ext.point(POINT + '/sidepanel/mobile').invoke('draw', app.getWindow().nodes.outer, baton);
+        }
+
         sidepanel = baton.$.sidepanel;
         container = baton.$.container;
 

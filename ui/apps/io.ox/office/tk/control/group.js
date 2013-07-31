@@ -187,21 +187,6 @@ define('io.ox/office/tk/control/group',
         };
 
         /**
-         * Returns the position and size of the group node in the browser
-         * window.
-         *
-         * @returns {Object}
-         *  An object with numeric 'left', 'top', 'right', 'bottom', 'width',
-         *  and 'height' attributes representing the position and size of the
-         *  group node in pixels. The attributes 'right' and 'bottom' represent
-         *  the distance of the right/bottom corner of the group node to the
-         *  right/bottom border of the browser window.
-         */
-        this.getNodePosition = function () {
-            return Utils.getNodePositionInWindow(groupNode);
-        };
-
-        /**
          * Registers the passed update handler function. These handlers will be
          * called from the method Group.setValue() in order of their
          * registration.

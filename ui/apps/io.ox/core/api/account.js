@@ -205,6 +205,14 @@ define('io.ox/core/api/account',
         }).compact().value();
     };
 
+    api.getStandardFolders = function () {
+        return _(typeHash).keys();
+    };
+
+    api.isStandardFolder = function (id) {
+        return typeHash[id] !== undefined;
+    };
+
     /**
      * get account id
      * @param  {string|number} str (folder_id|account_id)
@@ -429,12 +437,13 @@ define('io.ox/core/api/account',
             _(list).each(function (account) {
                 // remember account id
                 idHash[account.id] = true;
-                // remember types
-                _('sent trash drafts spam'.split(' ')).each(function (type) {
+                // add inbox first
+                typeHash['default' + account.id + '/INBOX'] = 'inbox';
+                // remember types (explicit order!)
+                _('sent drafts trash spam'.split(' ')).each(function (type) {
                     typeHash[account[type + '_fullname']] = type;
                 });
-                // add inbox
-                typeHash['default' + account.id + '/INBOX'] = 'inbox';
+
             });
             return list;
         });

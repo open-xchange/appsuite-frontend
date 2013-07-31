@@ -111,45 +111,82 @@ define('io.ox/office/tk/dropdown/dropdown',
             // an interval timer to refresh the the menu node while it is open
             refreshTimer = null,
 
+            // the DOM element that was last focused
+            lastActiveElement = null,
+
+            // the width and height of the virtual keyboard on touch devices
+            keyboardWidth = 0,
+            keyboardHeight = 0,
+
             // last position and size of the group node
             lastGroupPosition = null;
 
         // private methods ----------------------------------------------------
 
         /**
+         * Returns the position and size of the visible area in the browser
+         * window, relative to the entire document page.
+         *
+         * @param {Number} [padding=0]
+         *  Additional padding size that will be removed from the resulting
+         *  visible area.
+         */
+        function getVisibleWindowArea(padding) {
+
+            var // the visible area of the browser window
+                visibleArea = { left: window.pageXOffset, top: window.pageYOffset };
+
+            padding = _.isNumber(padding) ? Math.max(padding, 0) : 0;
+            visibleArea.left += padding;
+            visibleArea.top += padding;
+
+            // The properties window.inner(Width|Height) for their own are not
+            // reliable when virtual keyboard on touch devices is visible. This
+            // 'hack' works for applications with fixed page size.
+            visibleArea.width = Math.max(Math.min(window.innerWidth, document.body.clientWidth - keyboardWidth) - 2 * padding, 0);
+            visibleArea.height = Math.max(Math.min(window.innerHeight, document.body.clientHeight - keyboardHeight) - 2 * padding, 0);
+
+            // add right/bottom distance to the result
+            visibleArea.right = document.body.clientWidth - visibleArea.width - visibleArea.left;
+            visibleArea.bottom = document.body.clientHeight - visibleArea.height - visibleArea.top;
+
+            return visibleArea;
+        }
+
+        /**
+         * Returns the position of the root node of this group, relative to the
+         * visible area of the browser window.
+         */
+        function getGroupPositionInWindow() {
+
+            var // the node position, relative to the document page
+                nodePosition = Utils.getNodePositionInPage(self.getNode()),
+                // the visible area of the browser window
+                visibleArea = getVisibleWindowArea();
+
+            // adjust to visible area of the browser window
+            _(['left', 'top', 'right', 'bottom']).each(function (border) {
+                nodePosition[border] -= visibleArea[border];
+            });
+
+            return nodePosition;
+        }
+
+        /**
          * Initializes the size and position of the drop-down menu.
          */
         function refreshMenuNodePosition() {
 
-            var // position and size of the parent group node
-                groupPosition = self.getNodePosition(),
+            var // position and size of the parent group node in the page
+                groupPosition = Utils.getNodePositionInPage(self.getNode()),
                 // the sizes available at every side of the group node
                 availableSizes = self.getAvailableMenuSizes(),
                 // resulting width and height available for the menu node
                 availableWidth = 0, availableHeight = 0,
                 // new CSS properties of the menu node
-                menuNodeProps = { top: '', bottom: '', left: '', right: '' },
+                menuNodeProps = {},
                 // the side of the group node preferred for the drop-down menu
                 preferredSide = null, maxRatio = 0;
-
-            // returns the left offset of the drop-down menu according to the preferred alignment
-            function getLeftOffset(width) {
-
-                var offset = 0;
-
-                switch (menuAlign) {
-                case 'right':
-                    offset = groupPosition.left + groupPosition.width - width;
-                    break;
-                case 'center':
-                    offset = groupPosition.left + Math.floor((groupPosition.width - width) / 2);
-                    break;
-                default:
-                    offset = groupPosition.left;
-                }
-
-                return Utils.minMax(offset, DropDown.WINDOW_BORDER_PADDING, window.innerWidth - DropDown.WINDOW_BORDER_PADDING - width);
-            }
 
             // calculate the ratio of the menu node being visible at every side of the group
             _(availableSizes).each(function (size) {
@@ -172,16 +209,16 @@ define('io.ox/office/tk/dropdown/dropdown',
             availableWidth = availableSizes[preferredSide].width;
             availableHeight = availableSizes[preferredSide].height;
 
-            // first part of the position of the drop-down menu
+            // first part of the position of the drop-down menu (keep in visible area of browser window)
             switch (preferredSide) {
             case 'top':
-                menuNodeProps.bottom = window.innerHeight + window.pageYOffset - groupPosition.top + DropDown.GROUP_BORDER_PADDING;
+                menuNodeProps.bottom = document.body.clientHeight - groupPosition.top + DropDown.GROUP_BORDER_PADDING;
                 break;
             case 'bottom':
                 menuNodeProps.top = groupPosition.top + groupPosition.height + DropDown.GROUP_BORDER_PADDING;
                 break;
             case 'left':
-                menuNodeProps.right = window.innerWidth + window.pageXOffset - groupPosition.left + DropDown.GROUP_BORDER_PADDING;
+                menuNodeProps.right = document.body.clientWidth - groupPosition.left + DropDown.GROUP_BORDER_PADDING;
                 break;
             case 'right':
                 menuNodeProps.left = groupPosition.left + groupPosition.width + DropDown.GROUP_BORDER_PADDING;
@@ -192,15 +229,31 @@ define('io.ox/office/tk/dropdown/dropdown',
             menuNodeProps.width = Math.min(availableWidth, menuNodeSize.width + ((menuNodeSize.height > availableHeight) ? Utils.SCROLLBAR_WIDTH : 0));
             menuNodeProps.height = Math.min(availableHeight, menuNodeSize.height + ((menuNodeSize.width > availableWidth) ? Utils.SCROLLBAR_HEIGHT : 0));
 
-            // second part of the position of the drop-down menu (do not exceed bottom or right border of browser window)
+            // second part of the position of the drop-down menu (keep in visible area of browser window)
             if (Utils.isVerticalPosition(preferredSide)) {
-                menuNodeProps.left = getLeftOffset(menuNodeProps.width);
+                switch (menuAlign) {
+                case 'right':
+                    menuNodeProps.left = groupPosition.left + groupPosition.width - menuNodeProps.width;
+                    break;
+                case 'center':
+                    menuNodeProps.left = groupPosition.left + Math.floor((groupPosition.width - menuNodeProps.width) / 2);
+                    break;
+                default:
+                    menuNodeProps.left = groupPosition.left;
+                }
             } else {
-                menuNodeProps.top = Math.min(groupPosition.top, window.innerHeight - DropDown.WINDOW_BORDER_PADDING - menuNodeProps.height);
+                menuNodeProps.top = groupPosition.top;
             }
 
+//            Utils.info('refreshMenuNodePosition');
+//            Utils.log('group: ' + JSON.stringify(groupPosition).replace(/"/g, '').replace(/,/g, ', '));
+//            Utils.log('window: ' + JSON.stringify(getVisibleWindowArea()).replace(/"/g, '').replace(/,/g, ', '));
+//            Utils.log('g-in-w: ' + JSON.stringify(getGroupPositionInWindow()).replace(/"/g, '').replace(/,/g, ', '));
+//            Utils.log('avail: ' + JSON.stringify(availableSizes).replace(/"/g, '').replace(/,/g, ', '));
+//            Utils.log('preferred: ' + preferredSide);
+
             // apply final CSS formatting
-            menuNode.css(menuNodeProps);
+            self.setMenuNodePosition(menuNodeProps);
         }
 
         /**
@@ -212,12 +265,40 @@ define('io.ox/office/tk/dropdown/dropdown',
          */
         function refreshMenuNode() {
 
-            var groupPosition = null;
+            var // whether to update the position of the drop-down menu
+                refreshPosition = false,
+                // the position of the group node in the visible area of the window
+                groupPosition = null;
 
             if (self.isReallyVisible()) {
-                groupPosition = self.getNodePosition();
-                if (!_.isEqual(lastGroupPosition, groupPosition)) {
+
+                // on touch devices, try to detect the size of the virtual keyboard
+                if (Modernizr.touch && (lastActiveElement !== document.activeElement)) {
+                    lastActiveElement = document.activeElement;
+                    refreshPosition = true;
+                    // if a text field is focused, try to scroll the browser window
+                    // right/down to get the size of the virtual keyboard
+                    if ($(lastActiveElement).is('input, textarea')) {
+                        var pageX = window.pageXOffset, pageY = window.pageYOffset;
+                        window.scrollTo(10000, 10000);
+                        keyboardWidth = window.pageXOffset;
+                        keyboardHeight = window.pageYOffset;
+                        window.scrollTo(pageX, pageY);
+                    } else {
+                        keyboardWidth = keyboardHeight = 0;
+                    }
+                }
+
+                // check whether the position of the group node has changed
+                // (for example, by scrolling a parent node of the group)
+                if (!refreshPosition) {
+                    groupPosition = getGroupPositionInWindow();
+                    refreshPosition = !_.isEqual(lastGroupPosition, groupPosition);
                     lastGroupPosition = groupPosition;
+                }
+
+                // refresh the position of the menu node, notify all listeners
+                if (refreshPosition) {
                     if (autoLayout) { refreshMenuNodePosition(); }
                     self.trigger('menu:refresh');
                 }
@@ -234,7 +315,7 @@ define('io.ox/office/tk/dropdown/dropdown',
         function showMenu() {
 
             var // position and size of the group node
-                groupPosition = self.getNodePosition(),
+                groupPosition = Utils.getNodePositionInPage(self.getNode()),
                 // original min-width and min-height attributes of the menu node
                 menuMinSize = null;
 
@@ -271,8 +352,9 @@ define('io.ox/office/tk/dropdown/dropdown',
 
             // start a timer that regularly checks the position of the menu node, and
             // hide the menu automatically when the drop-down button becomes inaccessible
-            lastGroupPosition = self.getNodePosition();
-            refreshTimer = window.setInterval(refreshMenuNode, 50);
+            lastActiveElement = null;
+            lastGroupPosition = getGroupPositionInWindow();
+            refreshTimer = window.setInterval(refreshMenuNode, Modernizr.touch ? 200 : 50);
 
             // Add a global click handler to close the menu automatically when
             // clicking somewhere in the page. Listening to the 'mousedown'
@@ -464,6 +546,10 @@ define('io.ox/office/tk/dropdown/dropdown',
          * Returns the available sizes for the drop-down menu node at every
          * side of the group node.
          *
+         * @internal
+         *  Used by sub classes of this DropDown class for custom rendering of
+         *  the drop-down menu.
+         *
          * @returns {Object}
          *  The sizes (objects with 'width' and 'height' attributes) available
          *  for the menu node, mapped by the side names 'top', 'bottom',
@@ -471,26 +557,62 @@ define('io.ox/office/tk/dropdown/dropdown',
          */
         this.getAvailableMenuSizes = function () {
 
-            var // position and size of the parent group node
-                groupPosition = self.getNodePosition(),
-
-                // available total width and height
-                availableWidth = Math.max(window.innerWidth - 2 * DropDown.WINDOW_BORDER_PADDING, 0),
-                availableHeight = Math.max(window.innerHeight - 2 * DropDown.WINDOW_BORDER_PADDING, 0),
+            var // position and size of the group node in the visible area of the browser window
+                groupPosition = getGroupPositionInWindow(),
+                // visible area of the browser window, reduced by border padding
+                availableArea = getVisibleWindowArea(DropDown.WINDOW_BORDER_PADDING),
 
                 // vertical space above, below, left of, and right of the group node
                 totalPadding = DropDown.WINDOW_BORDER_PADDING + DropDown.GROUP_BORDER_PADDING,
-                availableAbove = Math.max(groupPosition.top - totalPadding - window.pageYOffset, 0),
-                availableBelow = Math.max(groupPosition.bottom - totalPadding, 0),
-                availableLeft = Math.max(groupPosition.left - totalPadding - window.pageXOffset, 0),
-                availableRight = Math.max(groupPosition.right - totalPadding, 0);
+                availableAbove = Utils.minMax(groupPosition.top - totalPadding, 0, availableArea.height),
+                availableBelow = Utils.minMax(groupPosition.bottom - totalPadding, 0, availableArea.height),
+                availableLeft = Utils.minMax(groupPosition.left - totalPadding, 0, availableArea.width),
+                availableRight = Utils.minMax(groupPosition.right - totalPadding, 0, availableArea.width);
 
             return {
-                top: { width: availableWidth, height: availableAbove },
-                bottom: { width: availableWidth, height: availableBelow },
-                left: { width: availableLeft, height: availableHeight },
-                right: { width: availableRight, height: availableHeight }
+                top: { width: availableArea.width, height: availableAbove },
+                bottom: { width: availableArea.width, height: availableBelow },
+                left: { width: availableLeft, height: availableArea.height },
+                right: { width: availableRight, height: availableArea.height }
             };
+        };
+
+        /**
+         * Sets the position of the drop-down menu according to the passed CSS
+         * positioning attributes. The resulting position of the menu node will
+         * be adjusted according to the current visible area of the browser
+         * window.
+         *
+         * @internal
+         *  Used by sub classes of this DropDown class for custom rendering of
+         *  the drop-down menu.
+         *
+         * @param {Object} menuNodeProps
+         *  The CSS positioning properties for the menu node, relative to the
+         *  document page. Must contain one horizontal offset (either 'left' or
+         *  'right'), and one vertical offset (either 'top' or 'bottom').
+         *  Optionally, may contain the new size ('width' and/or 'height') of
+         *  the menu node.
+         *
+         * @returns {DropDown}
+         *  A reference to this instance.
+         */
+        this.setMenuNodePosition = function (menuNodeProps) {
+
+            var // visible area of the browser window, reduced by border padding
+                availableArea = getVisibleWindowArea(DropDown.WINDOW_BORDER_PADDING),
+                // the width and height of the menu node (may be missing in passed properties)
+                menuWidth = _.isNumber(menuNodeProps.width) ? menuNodeProps.width : menuNode.outerWidth(),
+                menuHeight = _.isNumber(menuNodeProps.height) ? menuNodeProps.height : menuNode.outerHeight();
+
+            // restrict all existing positioning attributes to the visible area
+            menuNodeProps.left = _.isNumber(menuNodeProps.left) ? Utils.minMax(menuNodeProps.left, availableArea.left, availableArea.left + availableArea.width - menuWidth) : '';
+            menuNodeProps.right = _.isNumber(menuNodeProps.right) ? Utils.minMax(menuNodeProps.right, availableArea.right, availableArea.right + availableArea.width - menuWidth) : '';
+            menuNodeProps.top = _.isNumber(menuNodeProps.top) ? Utils.minMax(menuNodeProps.top, availableArea.top, availableArea.top + availableArea.height - menuHeight) : '';
+            menuNodeProps.bottom = _.isNumber(menuNodeProps.bottom) ? Utils.minMax(menuNodeProps.bottom, availableArea.bottom, availableArea.bottom + availableArea.height - menuHeight) : '';
+
+            menuNode.css(menuNodeProps);
+            return this;
         };
 
         /**

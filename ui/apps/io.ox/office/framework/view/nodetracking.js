@@ -177,7 +177,7 @@ define('io.ox/office/framework/view/nodetracking',
         function getBorderBox() {
 
             var // the current screen position of the border node
-                borderBox = Utils.getNodePositionInWindow(borderNode);
+                borderBox = Utils.getNodePositionInPage(borderNode);
 
             // add border margin
             borderBox.left -= borderMargin;

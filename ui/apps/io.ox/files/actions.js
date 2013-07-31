@@ -73,7 +73,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/audioplayer', {
         requires: function (e) {
-            return _.device('!android') && checkMedia(e, 'audio', true);
+            return _.device('!android') && e.collection.has('multiple') && checkMedia(e, 'audio', true);
         },
         action: function (baton) {
             baton.app = baton.grid.getApp();

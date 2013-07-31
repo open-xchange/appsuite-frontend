@@ -1,0 +1,4 @@
+{
+    namespace: ['core', 'signin'],
+    device: "small && iOS"
+}

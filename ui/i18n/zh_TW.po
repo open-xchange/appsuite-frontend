@@ -2891,7 +2891,7 @@ msgid ""
 msgstr ""
 "約會將於 <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">每 "
 "<span class=\"number-control\">2</span> 月</a> 的 <a href=\"#\" data-widget="
-"\"custom\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</"
+"\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</"
 "a> 日重複。 "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:319
@@ -2980,7 +2980,7 @@ msgid ""
 "\">october</a>. "
 msgstr ""
 "約會將於每年的 <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
-"\">十月</a> <a href=\"#\" data-widget=\"custom\" data-attribute=\"dayInMonth"
+"\">十月</a> <a href=\"#\" data-widget=\"number\" data-attribute=\"dayInMonth"
 "\"><span class=\"number-control\">10</span></a> 日重複。 "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:401

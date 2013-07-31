@@ -57,8 +57,16 @@ define('io.ox/backbone/mini-views/date',
                 month = this.$el.find('.month').val(),
                 day = this.$el.find('.date').val();
             if (year !== '' && month !== '' && day !== '') {
+                //check if date is invalid(like feb 30) and prevent month jump
+                var tempDate =  new date.Local(year, month, day),
+                    tempMonth = tempDate.getMonth();
+                if (tempMonth.toString() !== month) {
+                    tempDate.setDate(0);//last valid day of previous month
+                    //set dayfield to right day (needs to be done or an invalid date can be selected if model already has the corrected date)
+                    this.$el.find('.date').val(tempDate.getDate());
+                }
                 this.model.set(this.name,
-                    date.Local.localTime(new date.Local(year, month, day))
+                        date.Local.localTime(tempDate)
                 );
             } else {
                 this.model.set(this.name, null);

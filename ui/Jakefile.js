@@ -334,7 +334,7 @@ if (path.existsSync('help')) {
             to: helpDir.replace(/@lang@/g, lang)
         });
     });
-    utils.copy(['help/help.css'], { to: helpDir });
+    utils.copy(['help/help.css']);
 }
 
 // postinst utilities
@@ -711,8 +711,12 @@ task("dist", [distDest], function () {
     }
     function addL10n(spec) {
         spec = replaceL10n(spec, 'l10n', i18n.languages());
+        function isDir(Lang) {
+            return fs.statSync(path.join('help', Lang)).isDirectory();
+        }
         if (path.existsSync('help')) {
-            spec = replaceL10n(spec, 'help', fs.readdirSync('help'));
+            spec = replaceL10n(spec, 'help',
+                               _.filter(fs.readdirSync('help'), isDir));
         }
         return spec;
     }

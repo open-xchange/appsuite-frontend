@@ -171,7 +171,7 @@ define('io.ox/core/commons',
                 var list = grid.selection.get(), index;
                 if (list.length === 1) {
                     index = grid.selection.getIndex(list[0]);
-                    grid.selection.selectIndex(index + 1);
+                    grid.selection.clear(true).selectIndex(index + 1);
                 }
             });
         },

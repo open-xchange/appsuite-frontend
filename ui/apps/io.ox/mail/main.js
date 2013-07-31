@@ -578,7 +578,8 @@ define('io.ox/mail/main',
                 }
             }
 
-            grid.getContainer().on('click', '.thread-size', function () {
+            grid.getContainer().on('mousedown', '.thread-size', function (e) {//use mousedown to prevent selection change
+                e.preventDefault();//prevent selection change (needed on mobile);
                 var cell = $(this).closest('.vgrid-cell'),
                     index = parseInt(cell.attr('data-index'), 10) + 1,
                     cid = cell.attr('data-obj-id');
@@ -589,7 +590,7 @@ define('io.ox/mail/main',
                 var sel = grid.selection.get(), cid, index;
                 if (sel.length === 1) {
                     cid = grid.selection.serialize(sel[0]);
-                    index = grid.selection.getIndex(cid);
+                    index = grid.selection.getIndex(cid) + 1;
                     // cursor right? (open)
                     if (key === 39) {
                         open(index, cid);
@@ -712,8 +713,10 @@ define('io.ox/mail/main',
         });
 
         // Uploads
-        app.queues = {
-            'importEML': upload.createQueue({
+        app.queues = {};
+
+        if (settings.get('features/importEML') !== false) {
+            app.queues.importEML = upload.createQueue({
                 start: function () {
                     win.busy();
                 },
@@ -732,13 +735,14 @@ define('io.ox/mail/main',
                 stop: function () {
                     win.idle();
                 }
-            })
-        };
+            });
+        }
 
-        // drop zone
-        var dropZone = new dnd.UploadZone({ ref: "io.ox/mail/dnd/actions" }, app);
-        win.on("show", dropZone.include).on('hide', dropZone.remove);
-
+        if (!_.isEmpty(app.queues)) {
+            // drop zone
+            var dropZone = new dnd.UploadZone({ ref: "io.ox/mail/dnd/actions" }, app);
+            win.on("show", dropZone.include).on('hide', dropZone.remove);
+        }
 
         //if viewSetting ins changed redraw detailviews and grid
         api.on('viewChanged', function () {

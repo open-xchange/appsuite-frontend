@@ -170,6 +170,8 @@ define('plugins/portal/tumblr/register',
     });
 
     function edit(model, view) {
+        //disable widget till data is set by user
+        model.set('candidate', true, { silent: true, validate: true });
 
         var dialog = new dialogs.ModalDialog({ async: true, width: 400 }),
             $url = $('<input type="text" class="input-block-level" placeholder=".tumblr.com">').placeholder(),

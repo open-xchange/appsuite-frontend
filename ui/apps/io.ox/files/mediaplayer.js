@@ -47,7 +47,7 @@ define('io.ox/files/mediaplayer',
         currentFile: null,
         features: ['playpause', 'progress', 'current', 'volume'],
 
-        container: $('<div class="abs mediaplayer_container">'),
+        container: $('<div class="abs mediaplayer_container" tabindex="-1">'),
         trackdisplay: $('<div class="mediaplayer_track css-table"><div class="css-table-row">' +
                 '<div class="css-table-cell album"></div><div class="css-table-cell"><div class="track"></div></div>' +
                 '</div></div>'),
@@ -118,7 +118,7 @@ define('io.ox/files/mediaplayer',
                 .off('click')
                 .on('click', $.proxy(this.minimize, this));
 
-            $(document).on('keydown', function (e) {
+            this.container.on('keydown', function (e) {
                 // close on ESC unless in fullscreen mode
                 // note: macos' native fullscreen mode does not close on ESC (same for Chrome & Firefox)
                 if (e.keyCode === 27 && BigScreen.element === null && !MediaElementPlayer.fullscreen) self.close();
@@ -180,6 +180,7 @@ define('io.ox/files/mediaplayer',
                 audioWidth: $(window).width() <= 700 ? 294 : 480,
                 videoWidth: $(window).width() <= 700 ? 294 : 480,
                 plugins: plugins,
+                pluginPath: 'apps/mediaelement/',
                 enableAutosize: false,
                 timerRate: 250,
                 features: this.features,
