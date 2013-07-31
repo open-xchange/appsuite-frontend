@@ -520,7 +520,7 @@ define('io.ox/core/commons-folderview',
             tmpVisible = false,
             top = 0,
             onChangeFolder, changeFolder, changeFolderOff, changeFolderOn,
-            fnHide, fnShow, fnShowSml, fnHideSml, initResize, restoreWidth, makeResizable,
+            fnHide, fnShow, fnResize, fnShowSml, fnHideSml, initResize, restoreWidth, makeResizable,
             toggle, toggleTree, loadTree, initTree,
             name = app.getName(),
             POINT = name + '/folderview',
@@ -609,13 +609,26 @@ define('io.ox/core/commons-folderview',
                 var width = $(this).data('resize-width') || 250;
                 app.settings.set('folderview/width/' + _.display(), width).save();
             });
+
+            $(window).off('resize.folderview').on('resize.folderview', function (e) {
+                if (!visible) { fnHide(); } else { fnShow();  }
+            });
+        };
+
+        fnResize = function () {
+            var nodes = app.getWindow().nodes;
+            if ($(document).width() > 700) {
+                nodes.body.css('left', '50px');
+            } else {
+                nodes.body.css('left', '0px');
+            }
         };
 
         fnHide = function () {
             app.settings.set('folderview/visible/' + _.display(), visible = false).save();
             top = container.scrollTop();
             var nodes = app.getWindow().nodes;
-            nodes.body.css('left', '50px');
+            fnResize();
             nodes.sidepanel.removeClass('visible').css('width', '');
             app.trigger('folderview:close');
             if (app.getGrid) {
@@ -626,6 +639,7 @@ define('io.ox/core/commons-folderview',
         fnShow = function () {
             app.settings.set('folderview/visible/' + _.display(), visible = true).save();
             var nodes = app.getWindow().nodes;
+            fnResize();
             nodes.sidepanel.addClass('visible');
             restoreWidth();
             baton.$.container.focus();
