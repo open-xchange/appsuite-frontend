@@ -578,7 +578,8 @@ define('io.ox/mail/main',
                 }
             }
 
-            grid.getContainer().on('click', '.thread-size', function () {
+            grid.getContainer().on('mousedown', '.thread-size', function (e) {//use mousedown to prevent selection change
+                e.preventDefault();//prevent selection change (needed on mobile);
                 var cell = $(this).closest('.vgrid-cell'),
                     index = parseInt(cell.attr('data-index'), 10) + 1,
                     cid = cell.attr('data-obj-id');
