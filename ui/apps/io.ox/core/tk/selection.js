@@ -1019,6 +1019,11 @@ define('io.ox/core/tk/selection',
             function start(e) {
                 source = $(this);
                 data = self.unique(self.unfold());
+                // empty?
+                if (data.length === 0) {
+                    var cid = source.attr('data-obj-id');
+                    data = cid ? [_.cid(cid)] : [];
+                }
                 // bind events
                 $('.dropzone').each(function () {
                     var node = $(this), selector = node.attr('data-dropzones');
