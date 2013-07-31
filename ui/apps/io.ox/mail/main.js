@@ -590,7 +590,7 @@ define('io.ox/mail/main',
                 var sel = grid.selection.get(), cid, index;
                 if (sel.length === 1) {
                     cid = grid.selection.serialize(sel[0]);
-                    index = grid.selection.getIndex(cid);
+                    index = grid.selection.getIndex(cid) + 1;
                     // cursor right? (open)
                     if (key === 39) {
                         open(index, cid);
