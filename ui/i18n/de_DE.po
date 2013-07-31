@@ -1090,7 +1090,7 @@ msgstr[1] "%d Tage"
 
 #: apps/io.ox/calendar/util.js:360
 msgid "Work Day"
-msgstr "Wochentag"
+msgstr "Arbeitstag"
 
 #: apps/io.ox/calendar/util.js:363
 msgid "Weekend Day"
