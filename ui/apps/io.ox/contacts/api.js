@@ -916,5 +916,5 @@ define('io.ox/contacts/api',
         //trigger refresh
         api.trigger('update:' + key);
     };
-
+    return api;
 });
