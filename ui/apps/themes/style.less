@@ -2631,10 +2631,11 @@ input.flat-input {
     }
     .foldertree-sidepanel {
         .foldertree-toolbar {
-            display: none;
+            /*display: none;*/
+            /*background-color: #ebebeb;*/
         }
         .foldertree-container {
-            bottom: 0px;
+            bottom: 50px;
             &.io-ox-foldertree {
                 .folder.selectable:hover {
                     background-color: inherit;
@@ -2728,6 +2729,9 @@ input.flat-input {
             border-radius: 1px;
             border-color: transparent;
         }
+        .dropdown-header {
+            display: none;
+        }
 
         li {
             background-color: #fff;
@@ -2800,6 +2804,25 @@ input.flat-input {
             color: #aaa;
         }
     }
+
+    // Disable hover state on mobile devices for custom dropdowns
+    // -----------
+    .dropdown-menu li > a:hover,
+    .dropdown-menu li > a:focus,
+    .dropdown-submenu:hover > a {
+        text-decoration: none;
+        color: inherit;
+        background-color: inherit;
+        background-image: none;
+
+    }
+    .dropdown-menu li > a:active {
+        color: @dropdownLinkColorActive;
+        text-decoration: none;
+        outline: 0;
+        .vertical-gradient(@dropdownLinkBackgroundActive, darken(@dropdownLinkBackgroundActive, 5%));
+    }
+
 }
 
 @media (max-width: 380px) {

@@ -35,11 +35,13 @@ define('io.ox/mail/folderview-extensions',
             id: 'add-account',
             index: 300,
             draw: function (baton) {
-                this.append($('<li>').append(
-                    $('<a href="#" data-action="add-mail-account" tabindex="1" role="menuitem">')
-                    .text(gt('Add mail account'))
-                    .on('click', addAccount)
-                ));
+                if (_.device('!smartphone')) {
+                    this.append($('<li>').append(
+                        $('<a href="#" data-action="add-mail-account" tabindex="1" role="menuitem">')
+                        .text(gt('Add mail account'))
+                        .on('click', addAccount)
+                    ));
+                }
             }
         });
     }
@@ -53,10 +55,12 @@ define('io.ox/mail/folderview-extensions',
         id: 'subscribe-folder',
         index: 400,
         draw: function (baton) {
-            this.append($('<li>').append(
-                $('<a href="#" data-action="subscribe" tabindex="1" role="menuitem">').text(gt('Subscribe IMAP folders'))
-                .on('click', { app: baton.app, selection: baton.tree.selection }, subscribeIMAPFolder)
-            ));
+            if (_.device('!smartphone')) {
+                this.append($('<li>').append(
+                    $('<a href="#" data-action="subscribe" tabindex="1" role="menuitem">').text(gt('Subscribe IMAP folders'))
+                    .on('click', { app: baton.app, selection: baton.tree.selection }, subscribeIMAPFolder)
+                ));
+            }
         }
     });
 
