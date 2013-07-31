@@ -264,6 +264,9 @@ define('l10n/ja_JP/io.ox/register',
                         text: firstOther,
                         enabled: function () { return firstOther !== Infinity; }
                     });
+                // this could still be improved.
+                // once we know the codes or the range of the Japanese alphabet
+                // we could definer other as "all characters except latin except japanese"
                 baton.data = _.map(kana, baton.Thumb);
                 baton.data.push(abcThumb);
                 baton.data.push(otherThumb);
