@@ -242,15 +242,31 @@ define('l10n/ja_JP/io.ox/register',
         getIndex: function (baton) {
             baton.furiganaCollapsed = isCollapsed(this);
             if (baton.furiganaCollapsed) {
-                var firstLetter = _.min(_.keys(baton.labels),
-                        function (label) { return label.charCodeAt(0); }),
-                    abc = new baton.Thumb({
+                var keys = _(baton.labels).keys(),
+                    // get all latin keys A-Z plus umlauts
+                    latin = _(keys).filter(function (char) { return (/[a-zäöü]/ig).test(char); }),
+                    // get all ASCII keys
+                    ascii = _(keys).filter(function (char) { return (/[\x00-\xFF]/g).test(char); }),
+                    // get ASCII without latin
+                    other = _(ascii).difference(latin),
+                    // get first occurrences
+                    firstLatin = _.min(latin, function (label) { return label.charCodeAt(0); }),
+                    firstOther = _.min(other, function (label) { return label.charCodeAt(0); }),
+                    // add thumb index for ABC
+                    abcThumb = new baton.Thumb({
                         label: _.noI18n('ABC'),
-                        text: firstLetter,
-                        enabled: function (baton) { return firstLetter <= 'z'; }
+                        text: firstLatin,
+                        enabled: function () { return firstLatin !== Infinity; }
+                    }),
+                    // add thumb index for other characters
+                    otherThumb = new baton.Thumb({
+                        label: _.noI18n('その他'),
+                        text: firstOther,
+                        enabled: function () { return firstOther !== Infinity; }
                     });
                 baton.data = _.map(kana, baton.Thumb);
-                baton.data.push(abc);
+                baton.data.push(abcThumb);
+                baton.data.push(otherThumb);
             } else {
                 baton.data = _.map(
                     kana.concat('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')),
