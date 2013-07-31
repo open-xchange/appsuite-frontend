@@ -189,6 +189,21 @@ define('io.ox/contacts/actions',
     moveAndCopy('move', gt('Move'), gt('Contacts have been moved'), 'some delete');
     moveAndCopy('copy', gt('Copy'), gt('Contacts have been copied'), 'some read');
 
+    function tentativeLoad(list, options) {
+        var load = false;
+        options = options || {};
+        if (options.check) {
+            load = _(list).any(function (ctx) {
+                return !options.check(ctx);
+            });
+        }
+        if (load) {
+            return api.getList();
+        } else {
+            return new $.Deferred().resolve(list);
+        }
+    }
+
     new Action('io.ox/contacts/actions/send', {
 
         capabilities: 'webmail',
@@ -199,7 +214,7 @@ define('io.ox/contacts/actions',
                 return false;
             } else {
                 var list = [].concat(ctx);
-                return api.getList(list).pipe(function (list) {
+                return tentativeLoad(list, {check: function (obj) {return obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3; }}).pipe(function (list) {
                     var test = (e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
                         return memo + (obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
                     }, 0).value() > 0);
@@ -226,7 +241,7 @@ define('io.ox/contacts/actions',
                 return !!obj[1];
             }
 
-            api.getList(list).done(function (list) {
+            tentativeLoad(list, {check: function (obj) {return obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3; }}).done(function (list) {
                 // set recipient
                 var data = { to: _.chain(list).map(mapContact).flatten(true).filter(filterContact).value() };
                 // open compose
@@ -247,7 +262,7 @@ define('io.ox/contacts/actions',
         // don't even need an email address
 
         multiple: function (list) {
-            api.getList(list).done(function (list) {
+            tentativeLoad(list).done(function (list) {
                 require(['io.ox/mail/write/main'], function (m) {
                     api.getList(list).done(function (list) {
                         m.getApp().launch().done(function () {
@@ -337,7 +352,7 @@ define('io.ox/contacts/actions',
                 return false;
             } else {
                 var list = [].concat(ctx);
-                return api.getList(list).pipe(function (list) {
+                return tentativeLoad(list, {check: function (obj) { return obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3; }}).pipe(function (list) {
                     return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
                         return memo + (obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
                     }, 0).value() > 0;
@@ -387,7 +402,7 @@ define('io.ox/contacts/actions',
                 return cleaned;
             }
 
-            api.getList(list).done(function (list) {
+            tentativeLoad(list, {check: function (obj) { return obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3; }}).done(function (list) {
                 // set participants
                 var def = $.Deferred(),
                     resolvedContacts = [],
