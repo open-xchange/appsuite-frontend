@@ -148,7 +148,7 @@ define('io.ox/contacts/edit/view-form', [
 
             ContactEditView = point.createView({
                 tagName: 'div',
-                className: 'edit-contact compact container-fluid default-content-padding'
+                className: 'edit-contact compact container-fluid'
             });
 
         point.extend(new PictureUpload({

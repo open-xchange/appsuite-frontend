@@ -61,7 +61,9 @@ define('io.ox/contacts/edit/main',
                         app.setTitle(appTitle || gt('Create contact'));
                         app.contact = contact;
                         var editView = new view.ContactEditView({ model: contact });
-                        container.append(editView.render().$el);
+                        container.append(
+                            editView.render().$el.addClass('default-content-padding')
+                        );
                         container.find('input[type=text]:visible').eq(0).focus();
 
                         editView.on('save:start', function () {
