@@ -216,10 +216,9 @@ define("io.ox/calendar/edit/recurrence-view",
 
     var RecurrenceView = function (options) {
         _.extend(this, {
-            tabindex: 0,
+            tabindex: 1,
             init: function () {
                 var self = this;
-
                 // Construct the UI
                 this.controls = {
                     checkbox: $('<input tabindex="1" type="checkbox">'),
@@ -229,7 +228,9 @@ define("io.ox/calendar/edit/recurrence-view",
 
                 // add tabindex to all control elements
                 _.each(this.controls, function (value) {
-                    value.attr({ tabindex: self.tabindex });
+                    if (!value.hasClass('control-label')) {
+                        value.attr({ tabindex: self.tabindex });
+                    }
                 });
 
                 this.nodes = {
