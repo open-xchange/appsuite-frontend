@@ -20,8 +20,9 @@ define('io.ox/contacts/edit/main',
      'io.ox/core/extPatterns/dnd',
      'io.ox/core/capabilities',
      'io.ox/core/notifications',
+     'io.ox/core/util',
      'less!io.ox/contacts/edit/style.less'
-     ], function (view, model, gt, ext, util, dnd, capabilities, notifications) {
+     ], function (view, model, gt, ext, util, dnd, capabilities, notifications, coreUtil) {
 
     'use strict';
 
@@ -143,8 +144,12 @@ define('io.ox/contacts/edit/main',
                             id: data.id,
                             folder: data.folder_id
                         })
-                        .done(function (contact) {
-                            cont(contact);
+                        .done(function (model) {
+                            // fix "display_name only" contacts, e.g. in collected addresses folder
+                            if ($.trim(model.get('first_name')) === '' && $.trim(model.get('last_name')) === '') {
+                                model.set('last_name', coreUtil.unescapeDisplayName(model.get('display_name')), { silent: true });
+                            }
+                            cont(model);
                         });
                     } else {
                         cont(model.factory.create(data));
