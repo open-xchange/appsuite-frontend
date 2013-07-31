@@ -1300,10 +1300,11 @@ define.async('io.ox/office/tk/utils',
      *  The new value of the CSS attribute.
      */
     Utils.setCssAttributeWithPrefixes = function (node, name, value) {
-        node = $(node);
+        var props = {};
         _(['-webkit-', '-moz-', '-ms-', '-o-', '']).each(function (prefix) {
-            node.css(prefix + name, value);
+            props[prefix + name] = value;
         });
+        $(node).css(props);
     };
 
     /**

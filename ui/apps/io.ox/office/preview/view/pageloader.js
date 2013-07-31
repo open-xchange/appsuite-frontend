@@ -239,7 +239,7 @@ define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], functi
         this.loadPage = app.createDebouncedMethod(registerPageNode, loadQueuedPages);
 
         /**
-         * returns the original size of the image in the passed page node. The
+         * Returns the original size of the image in the passed page node. The
          * size will be stored in the page node after the page has been loaded.
          * If the passed page has not been loaded yet, returns a default page
          * size.
@@ -250,6 +250,19 @@ define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], functi
          */
         this.getPageSize = function (pageNode) {
             return $(pageNode).data('page-size') || DEFAULT_PAGE_SIZE;
+        };
+
+        /**
+         * Returns the current zoom factor of the passed page node. The zoom
+         * factor will be stored in the page node after the page has been
+         * loaded and rendered. If the passed page has not been loaded yet,
+         * returns the default zoom factor of 1.
+         *
+         * @returns {Number}
+         *  The current zoom factor.
+         */
+        this.getPageZoom = function (pageNode) {
+            return $(pageNode).data('page-zoom') || 1;
         };
 
         /**
@@ -285,7 +298,7 @@ define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], functi
 
             // Chrome bug/problem: sometimes, the page node has width 0 (e.g., if browser zoom is
             // not 100%) regardless of existing SVG, must set its size explicitly to see anything...
-            $(pageNode).width(width).height(height);
+            $(pageNode).width(width).height(height).data('page-zoom', zoomFactor);
 
             return this;
         };
