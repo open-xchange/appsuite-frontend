@@ -71,7 +71,7 @@ if (jasmine) {
                     }
                 });
             });
-            this.isNot = !isNot;
+            this.isNot = false;
             return this.spec.results();
         }
     };
