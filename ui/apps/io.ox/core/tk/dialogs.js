@@ -136,8 +136,7 @@ define("io.ox/core/tk/dialogs",
 
                 var items, focus, index;
 
-                switch (e.which) {
-
+                switch (e.which || e.keyCode) {
                 case 27: // ESC
                     if (!isBusy) {
                         // prevent other elements to trigger close
@@ -155,6 +154,8 @@ define("io.ox/core/tk/dialogs",
                         } else {
                             return o.enter.call(self);
                         }
+                    } else if (!isBusy) {
+                        $(e.target).trigger('click');
                     }
                     return false;
 
