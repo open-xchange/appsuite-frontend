@@ -621,6 +621,12 @@ define('io.ox/contacts/api',
             else
                 return deferred.resolve(defaultUrl);
         }
+        if (!_.isUndefined(obj.image1_url)) {
+            if (!obj.image1_url) {
+                return deferred.resolve(defaultUrl);
+            }
+            return deferred.resolve(obj.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param($.extend({}, options)));
+        }
         if (obj.id || obj.contact_id) {
             // duck checks
             if (api.looksLikeResource(obj)) {
@@ -910,7 +916,5 @@ define('io.ox/contacts/api',
         //trigger refresh
         api.trigger('update:' + key);
     };
-
-    return api;
 
 });
