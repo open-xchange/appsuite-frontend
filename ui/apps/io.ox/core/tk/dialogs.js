@@ -615,7 +615,8 @@ define("io.ox/core/tk/dialogs",
             sidepopup = self.nodes.closest.prop("sidepopup") || null;
             self.lastTrigger = sidepopup ? sidepopup.lastTrigger : null;
             // get zIndex for visual stacking
-            zIndex = my.parents(".io-ox-sidepopup, .window-content, .window-container-center, .io-ox-dialog-popup, .notifications-overlay").css('zIndex');
+            zIndex = my.parents(".io-ox-sidepopup, .window-content, .io-ox-dialog-popup, .window-container-center, .notifications-overlay").css('zIndex');
+            zIndex = parseInt(zIndex, 10);
             zIndex = _.isNumber(zIndex) ? zIndex + 2 : 100;
             // second click?
             if (self.lastTrigger === this) {
