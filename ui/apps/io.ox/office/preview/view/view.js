@@ -556,7 +556,6 @@ define('io.ox/office/preview/view/view',
             }
 
             function gestureHandler(event) {
-                Utils.log(event.type + ' scale=' + event.originalEvent.scale);
                 switch (event.type) {
                 case 'gesturechange':
                     changePageScale(getScale(event));
