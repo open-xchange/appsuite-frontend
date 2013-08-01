@@ -13,7 +13,7 @@ define(['io.ox/core/cache/indexeddb'], function (indexeddb) {
     //FIXME: indexeddb does return undefined, if browser doesn’t support it
     if (!indexeddb)
         return;
-    xdescribe('The IndexedDB', function () {
+    describe('The IndexedDB', function () {
         beforeEach(function () {
             var def = $.Deferred();
             def = indexeddb.clear();
@@ -35,7 +35,6 @@ define(['io.ox/core/cache/indexeddb'], function (indexeddb) {
                     //wait until key is stored
                     return indexeddb.clear();
                 }).then(function (result) {
-                    cache1 = indexeddb.getInstance('appsuite.test.cache1');
                     return cache1.get('testKey');
                 });
 
