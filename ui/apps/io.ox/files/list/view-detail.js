@@ -94,7 +94,8 @@ define('io.ox/files/list/view-detail',
                 size: file.file_size,
                 dataURL: filesAPI.getUrl(file, 'bare'),
                 version: file.version,
-                id: file.id
+                id: file.id,
+                folder_id: file.folder_id
             };
         }
 

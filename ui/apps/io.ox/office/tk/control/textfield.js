@@ -64,10 +64,13 @@ define('io.ox/office/tk/control/textfield',
             validator = Utils.getObjectOption(options, 'validator', defaultValidator),
 
             // saved state of the text field, used to restore while validating
-            validationFieldState = null,
+            fieldState = null,
 
             // initial value of text field when focused, needed for ESCAPE key handling
-            initialText = null;
+            initialText = null,
+
+            // whether the group is focused (needed to detect whether to restore selection)
+            focused = false;
 
         // base constructor ---------------------------------------------------
 
@@ -76,20 +79,19 @@ define('io.ox/office/tk/control/textfield',
         // private methods ----------------------------------------------------
 
         /**
-         * Returns the current value and selection of the text field.
+         * Saves the current value and selection of the text field node.
          */
-        function getFieldState() {
-            var state = Utils.getTextFieldSelection(fieldNode);
-            state.value = fieldNode.val();
-            return state;
+        function saveFieldState() {
+            fieldState = Utils.getTextFieldSelection(fieldNode);
+            fieldState.value = fieldNode.val();
         }
 
         /**
          * Restores the current value and selection of the text field.
          */
-        function restoreFieldState(state) {
-            fieldNode.val(state.value);
-            Utils.setTextFieldSelection(fieldNode, state.start, state.end);
+        function restoreFieldState() {
+            fieldNode.val(fieldState.value);
+            Utils.setTextFieldSelection(fieldNode, fieldState.start, fieldState.end);
         }
 
         /**
@@ -97,7 +99,7 @@ define('io.ox/office/tk/control/textfield',
          */
         function updateHandler(value) {
             fieldNode.val((_.isUndefined(value) || _.isNull(value)) ? '' : validator.valueToText(value));
-            validationFieldState = getFieldState();
+            saveFieldState();
         }
 
         /**
@@ -114,31 +116,28 @@ define('io.ox/office/tk/control/textfield',
             switch (event.type) {
             case 'group:focus':
                 // save current value, if this group receives initial focus
-                initialText = fieldNode.val();
+                initialText = fieldState.value = fieldNode.val();
                 break;
             case 'focus':
-                // select entire text on mouse click when specified via option
-                if (select) { fieldNode.select().one('mouseup', false); }
-                validationFieldState = getFieldState();
-                // IE9 does not trigger 'input' events when deleting characters or
-                // pasting text, use a timer interval as a workaround
-                if (Utils.IE9) {
-                    fieldNode.data({
-                        lastValue: fieldNode.val(),
-                        updateTimer: window.setInterval(function () {
-                            var value = fieldNode.val();
-                            if (value !== fieldNode.data('lastValue')) {
-                                fieldNode.data('lastValue', value);
-                                fieldInputHandler();
-                            }
-                        }, 250)
-                    });
+                if (focused) {
+                    // focused again (e.g. from drop-down menu): restore selection
+                    restoreFieldState();
+                } else if (select) {
+                    // select entire text on mouse click when specified via option
+                    fieldNode.select().one('mouseup', false);
                 }
+                saveFieldState();
+                // IE9 does not trigger 'input' events when deleting characters
+                // or pasting text, use a timer interval as a workaround
+                if (Utils.IE9) {
+                    fieldNode.data('update-timer', window.setInterval(fieldInputHandler, 250));
+                }
+                focused = true;
                 break;
             case 'focus:key':
                 // always select entire text when reaching the field with keyboard
                 fieldNode.select().off('mouseup');
-                validationFieldState = getFieldState();
+                saveFieldState();
                 break;
             case 'beforedeactivate':
                 // Bug 27912: IE keeps text selection visible when losing focus (text
@@ -147,15 +146,23 @@ define('io.ox/office/tk/control/textfield',
                 // focus leaves the text field. Do not interfere with focus handling
                 // in 'blur' events, e.g. Chrome gets confused when changing browser
                 // text selection while it currently changes the focus node.
-                Utils.setTextFieldSelection(fieldNode, 0);
+                if (_.browser.IE) {
+                    saveFieldState();
+                    Utils.setTextFieldSelection(fieldNode, 0);
+                }
                 break;
             case 'blur':
                 fieldNode.off('mouseup');
+                // save field state to be able to restore selection (but not in
+                // IE, see 'beforedeactivate' event handler above)
+                if (!_.browser.IE) {
+                    saveFieldState();
+                }
                 // IE9 does not trigger 'input' events when deleting characters or pasting
                 // text, remove the timer interval that has been started as a workaround
                 if (Utils.IE9) {
-                    window.clearInterval(fieldNode.data('updateTimer'));
-                    fieldNode.data('updateTimer', null);
+                    window.clearInterval(fieldNode.data('update-timer'));
+                    fieldNode.data('update-timer', null);
                 }
                 break;
             case 'group:blur':
@@ -165,6 +172,7 @@ define('io.ox/office/tk/control/textfield',
                     self.triggerChange(fieldNode, { preserveFocus: true });
                 }
                 initialText = null;
+                focused = false;
                 break;
             }
         }
@@ -203,30 +211,35 @@ define('io.ox/office/tk/control/textfield',
          */
         function fieldInputHandler() {
 
-            var // result of the text field validation
+            var // current value of the text field
+                value = fieldNode.val(),
+                // original field state
+                oldFieldState = null,
+                // result of the text field validation
                 result = null;
 
             // do not perform validation if nothing has changed
-            if (!_.isEqual(validationFieldState, getFieldState())) {
+            if (value === fieldState.value) { return; }
 
-                // validate the current field text
-                result = validator.validate(fieldNode.val());
+            // save old field state, validate the current field text
+            oldFieldState = _.clone(fieldState);
+            result = validator.validate(value);
 
-                // update the text field according to the validation result
-                if (result === false) {
-                    // false: restore the old field state stored in validationFieldState
-                    restoreFieldState(validationFieldState);
-                } else if (_.isString(result) && (result !== fieldNode.val())) {
-                    // insert the validation result and restore the old selection
-                    restoreFieldState(Utils.extendOptions(validationFieldState, { value: result }));
-                }
-
-                // trigger 'textfield:validated' event to all listeners, pass old field state
-                self.trigger('textfield:validated', validationFieldState);
-
-                // save current state of the text field
-                validationFieldState = getFieldState();
+            // update the text field according to the validation result
+            if (result === false) {
+                // false: restore the old field state stored in validationFieldState
+                restoreFieldState();
+            } else if (_.isString(result) && (result !== value)) {
+                // insert the validation result and restore the old selection
+                fieldState.value = result;
+                restoreFieldState();
             }
+
+            // trigger 'textfield:validated' event to all listeners, pass old field state
+            self.trigger('textfield:validated', oldFieldState);
+
+            // update current state of the text field
+            saveFieldState();
         }
 
         // methods ------------------------------------------------------------

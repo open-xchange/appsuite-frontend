@@ -199,6 +199,7 @@ define('io.ox/preview/main',
 
                 var $a = clickableLink(file, function (e) {
                         e.preventDefault();
+
                         if (file.module) {
                             file.source = 'task';
                             file.folder_id = file.folder;

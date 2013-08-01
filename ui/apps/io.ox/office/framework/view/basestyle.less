@@ -63,11 +63,6 @@
     .box-shadow(0 @size (2 * @size) fade(black, 20%));
 }
 
-/* shadow for alert banners */
-.alert-shadow() {
-    .box-shadow(0 5px 15px -5px black);
-}
-
 .clearfix {
     &:before, &:after {
         display: table;
@@ -528,6 +523,10 @@ i[class^="icon-"], i[class^=" icon-"] {
                 .border-radius(@border-radius);
                 vertical-align: top;
                 white-space: nowrap;
+
+                &.hidden {
+                    display: none !important;
+                }
             }
         }
 
@@ -1115,7 +1114,7 @@ i[class^="icon-"], i[class^=" icon-"] {
     position: absolute;
     z-index: 2000;
     padding: 8px 14px;
-    .alert-shadow();
+    .drop-shadow(7px);
     cursor: default;
 
     h4 { margin-bottom: 8px; }
@@ -1158,7 +1157,7 @@ i[class^="icon-"], i[class^=" icon-"] {
                 max-width: 500px;
                 margin: 0 auto;
                 padding: 0;
-                .alert-shadow();
+                .drop-shadow(7px);
                 cursor: default;
 
                 > div {

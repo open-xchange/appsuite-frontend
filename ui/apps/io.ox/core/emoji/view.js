@@ -68,6 +68,7 @@ define('io.ox/core/emoji/view', ['moxiecode/tiny_mce/plugins/emoji/main'], funct
 
             this.emoji = emoji.getInstance();
             this.editor = options.editor;
+            this.subject = options.subject || false;
             this.isRendered = false;
             this.isOpen = false;
             this.currentCategory = '';
@@ -169,7 +170,6 @@ define('io.ox/core/emoji/view', ['moxiecode/tiny_mce/plugins/emoji/main'], funct
             function draw(category) {
                 return $('<a href="#" class="emoji" tabindex="5">')
                     .attr('data-category', category.name)
-                    .attr('title', category.title)
                     .addClass(category.iconClass);
             }
 
@@ -201,7 +201,6 @@ define('io.ox/core/emoji/view', ['moxiecode/tiny_mce/plugins/emoji/main'], funct
             _(list).each(function (icon) {
                 node.append(
                     $('<a href="#" class="emoji" tabindex="5">')
-                    .attr('title', icon.desc)
                     .addClass(icon.css)
                     .data('icon', icon)
                 );
