@@ -26,8 +26,8 @@
         var recently = {},
             icon = $(e.target).data('icon'),
             html = '<img src="apps/themes/login/1x1.gif" rel="0" ' +
-                'class="emoji ' + icon.css + '" data-emoji-unicode="' + icon.unicode + '" ' +
-                'data-mce-resize="false">';
+                'class="mceItemNoResize emoji ' + icon.css + '" data-emoji-unicode="' + icon.unicode + '" ' +
+                'data-mce-resize="false" contenteditable="false">';
 
         this.emoji.recent(icon.unicode);
         this.editor.execCommand('mceInsertContent', false, html);
