@@ -160,17 +160,18 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                     })
                     // sort by timestamp
                     .sortBy(function (array) {
-                        return array[1].time;
+                        return 0 - array[1].time;
                     })
                     // get first 40 icons (5 rows; 8 per row)
                     .first(40)
                     // now sort by frequency (descending order)
                     .sortBy(function (array) {
-                        return 0 - array[1].count;
+                        return array[1].count;
                     })
                     // extract the icon
                     .pluck(0)
-                    .value();
+                    .value()
+                    .reverse();
             }
 
             return _(this.icons).filter(function (icon) {
