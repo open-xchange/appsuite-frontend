@@ -19,7 +19,7 @@ define('io.ox/calendar/print',
      'io.ox/core/api/group',
      'io.ox/core/api/resource',
      'io.ox/core/util',
-     'gettext!io.ox/calendar'], function (print, api, util, contactsUtil, userAPI, groupAPI, resourceAPI, util, gt) {
+     'gettext!io.ox/calendar'], function (print, api, util, contactsUtil, userAPI, groupAPI, resourceAPI, coreUtil, gt) {
 
     'use strict';
 
@@ -77,7 +77,7 @@ define('io.ox/calendar/print',
 
     function getContent(data) {
         // soft-break long words (like long URLs)
-        return util.breakableText($.trim(data.note));
+        return coreUtil.breakableText($.trim(data.note));
     }
 
     function unify(data, userList, groupList, resourceList, externalContacts) {
