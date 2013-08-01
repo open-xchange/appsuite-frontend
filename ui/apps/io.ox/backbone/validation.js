@@ -16,6 +16,10 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions", 'gettext!io.ox/bac
     // var regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
     var regEmail = /\@\S/; // See also io.ox/mail/accounts/model.js
+    
+    var emptycheck  = function (value) {
+        return (_.isUndefined(value) || value === null || value === '');
+    };
 
     var formats = {
         string: function (val) {
@@ -26,9 +30,9 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions", 'gettext!io.ox/bac
             return true;
         },
         number: function (val) {
-
-            var isValid = !isNaN(parseFloat(val, 10)) &&  //check if its a number
-                          (parseFloat(val, 10).toString().length === val.toString().length);//check if parseFloat did not cut the value (1ad2 would be made to 1 without error)
+            var isValid = (emptycheck(val)) || //empty value is valid (if not, add the mandatory flag)
+                          (!isNaN(parseFloat(val, 10)) &&  //check if its a number
+                          (parseFloat(val, 10).toString().length === val.toString().length));//check if parseFloat did not cut the value (1ad2 would be made to 1 without error)
             return isValid ||
                 'Please enter a valid number';
         },
@@ -118,7 +122,7 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions", 'gettext!io.ox/bac
                         validate: function (attributes, errors) {
                             var value = attributes[attribute];
 
-                            if (_.isUndefined(value) || value === null || value === '') {
+                            if (emptycheck(value)) {
                                 errors.add(attribute, gt('Please enter a value'));
                             }
                         }
