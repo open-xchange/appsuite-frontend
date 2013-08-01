@@ -10,13 +10,16 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/backbone/validation", ["io.ox/core/extensions", 'gettext!io.ox/backbone/validation'], function (ext, gt) {
+define("io.ox/backbone/validation",
+    ["io.ox/core/extensions",
+     "io.ox/core/util",
+     'gettext!io.ox/backbone/validation'], function (ext, util, gt) {
     "use strict";
 
     // var regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
     var regEmail = /\@\S/; // See also io.ox/mail/accounts/model.js
-    
+
     var emptycheck  = function (value) {
         return (_.isUndefined(value) || value === null || value === '');
     };
@@ -62,9 +65,7 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions", 'gettext!io.ox/bac
             return _.now() > val || gt('Please enter a date in the past');
         },
         email: function (val) {
-            var result = (regEmail.test(val) || val === '');
-            return result || gt('Please enter a valid email address');
-
+            return util.isValidMailAddress(val) || gt('Please enter a valid email address');
         },
         url: function (val) {
             return true;
