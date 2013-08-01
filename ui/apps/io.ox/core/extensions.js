@@ -67,7 +67,7 @@ define("io.ox/core/extensions",
             list = function () {
                 return _.chain(extensions)
                     .select(function (obj) {
-                        return !disabled[obj.id];
+                        return !disabled[obj.id] && !disabled['*'];
                     });
             },
             // look for existing extension
@@ -329,7 +329,7 @@ define("io.ox/core/extensions",
         };
 
         this.isEnabled = function (id) {
-            return !disabled[id];
+            return !disabled[id] && !disabled['*'];
         };
 
         this.inspect = function () {
