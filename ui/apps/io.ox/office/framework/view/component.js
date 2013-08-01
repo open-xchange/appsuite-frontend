@@ -404,6 +404,30 @@ define('io.ox/office/framework/view/component',
         };
 
         /**
+         * Visits all control groups registered at this view component.
+         *
+         * @param {Function} iterator
+         *  The iterator called for each control group. Receives the reference
+         *  to the control group, and its insertion index. If the iterator
+         *  returns the Utils.BREAK object, the iteration process will be
+         *  stopped immediately.
+         *
+         * @param {Object} [context]
+         *  If specified, the iterator will be called with this context (the
+         *  symbol 'this' will be bound to the context inside the iterator
+         *  function).
+         *
+         * @returns {Utils.BREAK|Undefined}
+         *  A reference to the Utils.BREAK object, if the iterator has returned
+         *  Utils.BREAK to stop the iteration process, otherwise undefined.
+         */
+        this.iterateGroups = function (iterator, context) {
+            return _(groups).any(function (group, index) {
+                return iterator.call(context, group, index) === Utils.BREAK;
+            }) ? Utils.BREAK : undefined;
+        };
+
+        /**
          * Calls the destroy methods of all child objects, and removes this
          * view component from the page.
          */
