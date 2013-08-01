@@ -68,6 +68,7 @@ define('io.ox/core/emoji/view', ['moxiecode/tiny_mce/plugins/emoji/main'], funct
 
             this.emoji = emoji.getInstance();
             this.editor = options.editor;
+            this.subject = options.subject || false;
             this.isRendered = false;
             this.isOpen = false;
             this.currentCategory = '';

@@ -379,7 +379,8 @@ define("io.ox/mail/write/view-main",
             var recently = {},
                 icon = $(e.target).data('icon'),
                 content = this.editor.val(),
-                caret = parseInt($(this.editor).attr('caretPosition'), 10);
+                caret = parseInt($(this.editor).attr('caretPosition'), 10),
+                subjectCaret = parseInt($(this.subject).attr('caretPosition'), 10);
 
             this.emoji.recent(icon.unicode);
 
@@ -392,9 +393,16 @@ define("io.ox/mail/write/view-main",
                 }
             }
             // insert unicode and increse caret position manually
-            this.editor
-                .val(insert(caret, content, icon.unicode))
-                .attr('caretPosition', caret + 2);
+            if (this.editor.attr('emojifocus') === 'true') {
+                this.editor
+                    .val(insert(caret, content, icon.unicode))
+                    .attr('caretPosition', caret + 2);
+            } else {
+                this.subject
+                    .val(insert(subjectCaret, this.subject.val(), icon.unicode))
+                    .attr('caretPosition', subjectCaret + 2);
+            }
+
         },
         /**
          * needs to be fixed, does not work properly
@@ -422,7 +430,7 @@ define("io.ox/mail/write/view-main",
                     innerContainer = self.rightside.find('.editor-inner-container');
                 if (self.emojiview === undefined) {
                     ox.load(['io.ox/core/emoji/view']).done(function (EmojiView) {
-                        self.emojiview = new EmojiView({ editor: self.textarea, onInsertEmoji: self.onInsertEmoji });
+                        self.emojiview = new EmojiView({ editor: self.textarea, subject: self.subject, onInsertEmoji: self.onInsertEmoji });
                         var emo = $('<div class="mceEmojiPane">');
                         if (tab) {
                             innerContainer.addClass('textarea-shift');
@@ -642,10 +650,6 @@ define("io.ox/mail/write/view-main",
             this.emojiToggle = function () {
                 if (emojiMobileSupport) {
                     this.rightside.addClass('mobile-emoji-shift');
-                    /*self.subject.closest('.subject-wrapper').addClass('mobile-emoji-shift');
-                    if (_.device('tablet')) {
-                        self.rightside.find('.priority-overlay').addClass('mobile-emoji-shift priority-shift');
-                    }'*/
                     return $('<div>').addClass('emoji-icon')
                         .on('click', this.showEmojiPalette());
                 } else return $();
@@ -692,7 +696,9 @@ define("io.ox/mail/write/view-main",
                     .attr({ name: 'content', tabindex: '4', disabled: 'disabled', caretPosition: '0' })
                     .addClass('text-editor')
                     .addClass(settings.get('useFixedWidthFont') ? 'monospace' : '')
-                    .on('keyup', function (e) {
+                    .on('keyup click', function (e) {
+                        $(this).attr('emojiFocus', 'true');
+                        self.subject.attr('emojiFocus', 'false');
                         if (this.selectionStart === undefined) return;
                         $(this).attr({
                             'caretPosition': this.selectionStart,
@@ -719,6 +725,8 @@ define("io.ox/mail/write/view-main",
                     self.textarea
                         .on('keyup change input paste', autogrow)
                         .on('focus', function () {
+                            $(this).attr('emojiFocus', 'true');
+                            self.subject.attr('emojiFocus', 'false');
                             // do we have emoji support
                             if (emojiMobileSupport && self.emojiview && self.emojiview.isOpen) {
 
@@ -778,6 +786,29 @@ define("io.ox/mail/write/view-main",
                                     app.setTitle(title);
                                 } else {
                                     app.setTitle(app.getDefaultWindowTitle());
+                                }
+                            })
+                            .on('keyup click', function () {
+                                // subject has focus
+                                $(this).attr('emojiFocus', 'true');
+                                $(self.textarea).attr('emojiFocus', 'false');
+                                if (this.selectionStart === undefined) return;
+                                $(this).attr({
+                                    'caretPosition': this.selectionStart,
+                                    'offsetTop': $(this).offset().top
+                                });
+                            })
+                            .on('focus', function () {
+                                // do we have emoji support
+                                if (emojiMobileSupport && self.emojiview && self.emojiview.isOpen) {
+
+                                    if (self.emojiview.isOpen) {
+                                        self.emojiview.toggle();
+                                        self.spacer.hide();
+                                    } else {
+                                        self.emojiview.toggle();
+                                        self.spacer.show();
+                                    }
                                 }
                             }),
                             'mail_subject'
