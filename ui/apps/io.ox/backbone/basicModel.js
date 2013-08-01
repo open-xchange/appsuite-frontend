@@ -120,10 +120,7 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
                 action = 'destroy';
             }
             if ((action === 'update' || action === 'create')) {
-                this.validate(this.toJSON(), null, {
-                    isSave: true
-                });
-                if (!this.isValid()) {
+                if (!this.isValid({isSave: true})) {//isValid actually calls the validate function, no need to do this manually
                     return $.Deferred().reject({error: gt('Invalid data'), model: this});
                 }
             }
@@ -163,8 +160,8 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
                 return self.has(attribute) && self.get(attribute) !== '';
             });
         },
-        isValid: function () {
-            this.validate(this.toJSON());
+        isValid: function (options) {
+            this.validate(this.toJSON(), null, options);
             return this._valid;
         },
         hasValidAttributes: function () {
