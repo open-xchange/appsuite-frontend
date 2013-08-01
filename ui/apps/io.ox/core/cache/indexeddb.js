@@ -346,12 +346,20 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
 
     function destroyDB() {
         // Drop all databases
-        var def = $.Deferred();
+        var def = $.Deferred(),
+            clear_instances = _(instances).chain()
+                .values()
+                .map(function (db) {
+                    return db.clear();
+                });
 
-        OP(window.indexedDB.deleteDatabase('cache'), 'deleteDatabase').then(
-            def.resolve,
-            def.reject
-        );
+        $.when.apply($, clear_instances).then(function () {
+            instances = {};
+            OP(window.indexedDB.deleteDatabase('cache'), 'deleteDatabase').then(
+                def.resolve,
+                def.reject
+            );
+        });
 
         return def;
     }
