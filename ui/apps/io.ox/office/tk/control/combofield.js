@@ -233,6 +233,11 @@ define('io.ox/office/tk/control/combofield',
         // drop-down button is not focusable in combo fields
         this.getMenuButton().removeClass(Utils.FOCUSABLE_CLASS);
 
+        // keep focus in text field when clicking in the drop-down menu
+        this.getMenuNode().on('focusin', function () {
+            self.getTextFieldNode().focus();
+        });
+
     } // class ComboField
 
     // exports ================================================================

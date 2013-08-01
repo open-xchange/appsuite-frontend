@@ -103,7 +103,7 @@ define('io.ox/office/tk/dropdown/dropdown',
             menuButton = Utils.createButton((caretMode === 'only') ? {} : options).addClass('dropdown-button'),
 
             // the drop-down menu element containing the menu view component
-            menuNode = $('<div>').addClass('io-ox-office-main dropdown-container'),
+            menuNode = $('<div>').addClass('io-ox-office-main dropdown-container').attr('tabindex', -1),
 
             // current size of the drop-down menu (calculated when opening the menu)
             menuNodeSize = null,

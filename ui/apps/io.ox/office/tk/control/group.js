@@ -138,15 +138,21 @@ define('io.ox/office/tk/control/group',
                 var // the top entry of the focus stack
                     stackEntry = null;
 
+                // Returns whether the focus node is one of the focusable
+                // container nodes, or if it is contained in one of these nodes.
+                function isFocusable(focusableNodes) {
+                    return (focusableNodes.filter(focusNode).length > 0) || (focusableNodes.has(focusNode).length > 0);
+                }
+
                 // trigger a 'group:blur' event at all cached focus groups that
                 // do not contain the passed focus node anymore
-                while ((focusStack.length > 0) && (_.last(focusStack).nodes.find(focusNode).length === 0)) {
+                while ((focusStack.length > 0) && !isFocusable(_.last(focusStack).nodes)) {
                     stackEntry = focusStack.pop();
                     changeFocusState(stackEntry.group, false);
                 }
 
                 // trigger a 'group:focus' event at this group, if it is not already focused
-                if (!groupNode.hasClass(Utils.FOCUSED_CLASS) && (focusableNodes.find(focusNode).length > 0)) {
+                if (!groupNode.hasClass(Utils.FOCUSED_CLASS) && isFocusable(focusableNodes)) {
                     focusStack.push({ group: self, nodes: focusableNodes });
                     changeFocusState(self, true);
                 }
@@ -157,14 +163,12 @@ define('io.ox/office/tk/control/group',
             // event to be sure to generate the 'group:focus' event (using
             // document.activeElement and jQuery.find(':focus') is not reliable
             // before the event has been processed by the browser)
-            case 'focus':
             case 'focusin':
                 processEvent(event.target);
                 break;
             // focus lost: order of focus events is not reliable, process event
             // asynchronously, check directly whether the group is still focused
             case 'focusout':
-            case 'blur':
                 _.defer(function () { processEvent(document.activeElement); });
                 break;
             }
