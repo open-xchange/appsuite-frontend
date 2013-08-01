@@ -302,10 +302,21 @@ input#image1 {
         width: @thumbIndexWidth;
         padding: 10px 0;
         .thumb-index {
-            font-size: 10px;
-            line-height: 11px;
+            font-size: 11px;
+            line-height: 12px;
             padding: 0 5px 0 5px;
             margin: 0px 1px 0 1px;
+        }
+    }
+}
+
+// 4 inch retina
+@media (max-width: 480px) and (device-aspect-ratio: 40/71) {
+    .contact-grid-index {
+        padding: 20px 0;
+        .thumb-index {
+            font-size: 13px;
+            line-height: 14px;
         }
     }
 }
