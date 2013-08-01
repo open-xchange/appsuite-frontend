@@ -390,7 +390,7 @@ define('io.ox/office/preview/view/view',
 
             // Process all page nodes, update 'current zoom factor' for the
             // selected page. Detaching the page nodes while updating them
-            // reduces processing time per page node from ~10ms to ~0.5ms!
+            // reduces total processing time by 95% on touch devices!
             pageNodes.detach().each(function () { updatePageZoom($(this)); });
             pageContainerNode.append(pageNodes);
             zoomFactor = pageLoader.getPageZoom(pageNodes[selectedPage - 1]) * 100;

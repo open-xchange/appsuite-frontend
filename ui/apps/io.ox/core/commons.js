@@ -139,6 +139,12 @@ define('io.ox/core/commons',
                                 )
                             )
                         );
+                        if (_.device('small')) {//don't stay in empty detail view
+                            var vsplit = node.closest('.vsplit');
+                            if (!vsplit.hasClass('vsplit-reverse')) {//only click if in detail view to prevent infinite loop
+                                vsplit.find('.rightside-navbar a').trigger('click');//trigger back button
+                            }
+                        }
                     }
                     // remember current selection
                     last = flat;
@@ -169,7 +175,7 @@ define('io.ox/core/commons',
                 grid.selection.removeFromIndex(ids);
 
                 var list = grid.selection.get(), index;
-                if (list.length === 1) {
+                if (list.length === 1 && !_.device('small')) {//don't jump to next item on mobile devices (jump back to grid view to be consistent)
                     index = grid.selection.getIndex(list[0]);
                     grid.selection.clear(true).selectIndex(index + 1);
                 }
@@ -446,9 +452,13 @@ define('io.ox/core/commons',
         addFolderView: folderview.add,
 
         vsplit: (function () {
+            var selectionInProgress = false;
 
             var click = function (e) {
                 e.preventDefault();
+                if (selectionInProgress) {//prevent execution of selection to prevent window from flipping back
+                    selectionInProgress = false;
+                }
                 $(this).parent().find('.rightside-inline-actions').empty();
                 $(this).closest('.vsplit').addClass('vsplit-reverse').removeClass('vsplit-slide');
                 if (e.data.app) {
@@ -461,8 +471,12 @@ define('io.ox/core/commons',
 
             var select = function (e) {
                 var node = $(this);
+                selectionInProgress = true;
                 setTimeout(function () {
-                    node.closest('.vsplit').addClass('vsplit-slide').removeClass('vsplit-reverse');
+                    if (selectionInProgress) {//if still valid
+                        node.closest('.vsplit').addClass('vsplit-slide').removeClass('vsplit-reverse');
+                        selectionInProgress = false;
+                    }
                 }, 100);
             };
 

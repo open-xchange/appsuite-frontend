@@ -19,11 +19,15 @@ define('plugins/mobile/ios-resize/register', [], function () {
 
     // mattes: once we have precise numbers from ios7 beta, we can unlock this for ios7
 
+    var height = 0;
+
     function resize() {
-        var height = document.documentElement.clientHeight;
+        var h = document.documentElement.clientHeight;
+        // not changed?
+        if (h === height) return;
         // is not in landscape fullscreen? if not add height of address bar
-        if (height !== 320) height += 60;
-        $('body').css({ position: 'relative', minHeight: height + 'px' });
+        if (h !== 320) h += 60;
+        $('body').css({ position: 'relative', minHeight: (height = h) + 'px' });
         setTimeout(scrollTo, 0, 0, 1);
     }
 

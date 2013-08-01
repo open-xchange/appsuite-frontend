@@ -555,7 +555,6 @@ define('io.ox/calendar/actions',
         ref: 'io.ox/calendar/detail/actions/sendmail'
     }));
 
-
     ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
         index: 100,
         prio: 'hi',

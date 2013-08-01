@@ -131,6 +131,12 @@ define('io.ox/tasks/edit/main',
                     app.dropZone.remove();
                 }
             });
+
+            //FIXME: resolve workaround for firefox (bug 27919)
+            if (_.browser.Firefox) {
+                $(self.getWindow().nodes.main[0]).removeAttr('tabindex');
+            }
+
             //ready for show
             win.show();
         });

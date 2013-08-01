@@ -63,12 +63,19 @@ define("io.ox/contacts/main",
 
         function thumbClick(e) {
             var text = $(this).data('text');
-            if (text) grid.scrollToLabelText(text);
+            if (text) grid.scrollToLabelText(text, /* silent? */ _.device('small'));
         }
 
         function thumbMove(e) {
-            var text;
-            if (_.device('ios || android') && e.which === 1 && (text = $(this).data('text'))) grid.scrollToLabelText(text);
+            e.preventDefault();
+            if (e.originalEvent && e.originalEvent.targetTouches) {
+                var touches = e.originalEvent.targetTouches[0],
+                    x = touches.clientX,
+                    y = touches.clientY,
+                    element = document.elementFromPoint(x, y),
+                    text = $(element).data('text');
+                if (text) grid.scrollToLabelText(text, /* silent? */ _.device('small'));
+            }
         }
 
         var vsplit = commons.vsplit(win.nodes.main, app);
@@ -82,7 +89,7 @@ define("io.ox/contacts/main",
             // thumb index
             thumbs = $('<div class="atb contact-grid-index">')
                 .on('click', '.thumb-index', thumbClick)
-                .on('mousemove', '.thumb-index', thumbMove)
+                .on('touchmove', thumbMove)
         );
 
         // folder tree
@@ -305,7 +312,7 @@ define("io.ox/contacts/main",
         grid.on('change:ids', function () {
             hasDeletePermission = undefined;
             removeButton();
-            if (_.device('!small')) {
+            if (true || _.device('!small')) {
                 ext.point('io.ox/contacts/thumbIndex').invoke('draw', thumbs, baton);
             }
         });

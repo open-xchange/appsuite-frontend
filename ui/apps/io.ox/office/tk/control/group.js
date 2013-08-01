@@ -306,6 +306,22 @@ define('io.ox/office/tk/control/group',
         };
 
         /**
+         * Inserts the passed HTML mark-up into this group (all existing child
+         * nodes will be removed). Triggers a 'group:layout' event notifying
+         * all listeners about the changed layout of this group.
+         *
+         * @param {String} markup
+         *  The HTML mark-up to be inserted into this group, as string.
+         *
+         * @returns {Group}
+         *  A reference to this group.
+         */
+        this.setChildMarkup = function (markup) {
+            groupNode.html(markup);
+            return this.trigger('group:layout');
+        };
+
+        /**
          * Inserts the passed DOM elements into this group, and triggers a
          * 'group:layout' event notifying all listeners about the changed
          * layout of this group.

@@ -77,21 +77,11 @@ define('io.ox/mail/actions',
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {
-                                // prevent user from staying on the empty detail view page
-                                if (_.device('small')) {
-                                    // press back button manually
-                                    $('.rightside-navbar a').trigger('click');
-                                }
                                 api.remove(list);
                             }
                         });
                 });
             } else {
-                // prevent user from staying on the empty detail view page
-                if (_.device('small')) {
-                    // press back button manually
-                    $('.rightside-navbar a').trigger('click');
-                }
                 api.remove(list);
             }
         }

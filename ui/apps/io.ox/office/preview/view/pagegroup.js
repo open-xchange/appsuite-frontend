@@ -42,8 +42,8 @@ define('io.ox/office/preview/view/pagegroup',
             // the scrollable area in the side pane
             scrollableNode = sidePane.getScrollableNode(),
 
-            // all button elements, mapped by one-based page index
-            buttonNodes = [],
+            // all button nodes as permanent jQuery collection, for performance
+            buttonNodes = $(),
 
             // the queue for AJAX page requests
             pageLoader = new PageLoader(app),
@@ -64,8 +64,8 @@ define('io.ox/office/preview/view/pagegroup',
          * Highlights the button representing the page with the passed index.
          */
         function updateHandler(page) {
-            var buttonNodes = self.getNode().find(Utils.BUTTON_SELECTOR).removeAttr('tabindex');
-            Utils.selectOptionButton(buttonNodes, page).attr('tabindex', 1);
+            Utils.toggleButtons(Utils.getSelectedButtons(buttonNodes).removeAttr('tabindex'), false);
+            Utils.toggleButtons(buttonNodes.eq(page - 1).attr('tabindex', 1), true);
         }
 
         /**
@@ -73,7 +73,7 @@ define('io.ox/office/preview/view/pagegroup',
          * into the parent button node.
          *
          * @param {jQuery} pageNode
-         *  The page node.
+         *  The page node, as jQuery object.
          */
         function updatePageSize(pageNode) {
 
@@ -81,11 +81,9 @@ define('io.ox/office/preview/view/pagegroup',
                 pageSize = pageLoader.getPageSize(pageNode),
                 // the child node in the page, containing the SVG
                 childNode = pageNode.children().first(),
-                // the parent button node
-                buttonNode = pageNode.closest(Utils.BUTTON_SELECTOR),
-                // the available width and height inside the button node
-                maxWidth = buttonNode.width(),
-                maxHeight = buttonNode.height() - 20,
+                // maximum width and height available for the page
+                maxWidth = buttonWidth - 12,
+                maxHeight = BUTTON_HEIGHT - 33,
                 // the zoom factor according to available size
                 widthFactor = 0, heightFactor = 0, zoomFactor = 0;
 
@@ -129,12 +127,14 @@ define('io.ox/office/preview/view/pagegroup',
             pageLoader.abortQueuedRequests();
 
             // load pages for all visible button nodes, clear pages of hidden button nodes
-            _(buttonNodes).each(function (buttonNode, page) {
+            buttonNodes.each(function () {
 
-                var // whether the button is in the visible range
+                var // one-based page index
+                    page = Utils.getControlValue($(this)),
+                    // whether the button is in the visible range
                     visible = (firstPage <= page) && (page <= lastPage),
                     // the page node already contained in the button node
-                    pageNode = buttonNode.children('.page');
+                    pageNode = $(this).children('.page');
 
                 // clear the page node if it is not visible anymore
                 if (!visible) {
@@ -154,6 +154,31 @@ define('io.ox/office/preview/view/pagegroup',
         }
 
         /**
+         * Creates the button nodes for all pages and inserts them into the
+         * root node of this group.
+         */
+        function createButtonNodes() {
+
+            var // number of pages shown in the document
+                pageCount = app.getModel().getPageCount(),
+                // the HTML mark-up for the button nodes
+                markup = '';
+
+            // generate the HTML mark-up for all button nodes
+            Utils.iterateRange(1, pageCount + 1, function (page) {
+                markup += Utils.createButtonMarkup('<div class="page"></div>', { focusable: true, label: String(page) });
+            });
+
+            // insert the buttons into the group
+            self.setChildMarkup(markup);
+            buttonNodes = self.getNode().children();
+            buttonNodes.removeAttr('tabindex');
+
+            // set one-based page index as button value
+            buttonNodes.each(function (index) { Utils.setControlValue($(this), index + 1); });
+        }
+
+        /**
          * Updates the position of the button nodes according to the current
          * width of the side pane.
          */
@@ -164,22 +189,16 @@ define('io.ox/office/preview/view/pagegroup',
                 // inner width available for button nodes
                 innerWidth = scrollableNode.outerWidth() - 2 * HOR_MARGIN - Utils.SCROLLBAR_WIDTH,
                 // initialize button nodes on first call
-                initializeButtons = buttonNodes.length === 0;
-
-            // creates and inserts a new button node for the specified page
-            function createButtonNode(page) {
-                var buttonNode = Utils.createButton({ value: page, label: String(page) }),
-                    pageNode = $('<div>').addClass('page');
-                buttonNodes[page] = buttonNode.append(pageNode);
-                self.addFocusableControl(buttonNode);
-            }
+                initializeButtons = buttonNodes.length === 0,
+                // the focused button (needs to be restored after detach/append)
+                focusButton = Utils.getFocusedControl(buttonNodes);
 
             // do nothing, if the side pane is not visible, or no pages are available
             if ((pageCount === 0) || !self.isReallyVisible()) { return; }
 
             // create empty button nodes for all pages on first call
             if (initializeButtons) {
-                Utils.iterateRange(1, pageCount + 1, createButtonNode);
+                createButtonNodes();
             }
 
             // calculate number of pages available per row, and effective button width
@@ -189,17 +208,24 @@ define('io.ox/office/preview/view/pagegroup',
             // update size of the own group node
             self.getNode().width(innerWidth).height(Math.ceil(pageCount / columns) * BUTTON_HEIGHT);
 
-            // update position and size of all button nodes
-            _(buttonNodes).each(function (buttonNode, page) {
+            // Update position and size of all button nodes. Detaching the
+            // button nodes while updating them reduces total processing time
+            // by 95% on touch devices!
+            buttonNodes.detach().each(function () {
 
-                var // zero-based column index of the button
+                var // one-based page index
+                    page = Utils.getControlValue($(this)),
+                    // zero-based column index of the button
                     col = (page - 1) % columns,
                     // zero-based row index of the button
                     row = Math.floor((page - 1) / columns);
 
-                buttonNode.css({ left: col * buttonWidth, top: row * BUTTON_HEIGHT, width: buttonWidth, height: BUTTON_HEIGHT });
-                updatePageSize(buttonNode.children('.page'));
+                $(this).css({ left: col * buttonWidth, top: row * BUTTON_HEIGHT, width: buttonWidth, height: BUTTON_HEIGHT });
+                updatePageSize($(this).children('.page'));
             });
+            self.getNode().append(buttonNodes);
+            // restore focus after detach/append
+            focusButton.focus();
 
             // select active button on first call (after positioning the buttons)
             if (initializeButtons) {
@@ -231,10 +257,8 @@ define('io.ox/office/preview/view/pagegroup',
                     page = Utils.getControlValue($(document.activeElement));
 
                 page = Utils.minMax(page + diff, 1, app.getModel().getPageCount());
-                if (page in buttonNodes) {
-                    self.triggerChange(buttonNodes[page], { preserveFocus: true });
-                    buttonNodes[page].focus();
-                }
+                self.triggerChange(buttonNodes.eq(page - 1), { preserveFocus: true });
+                buttonNodes.eq(page - 1).focus();
             }
 
             // no extra modifier keys must be pressed
@@ -272,8 +296,8 @@ define('io.ox/office/preview/view/pagegroup',
          *  A reference to this instance.
          */
         this.selectAndShowPage = function (page) {
-            if (page in buttonNodes) {
-                scrollToButton(buttonNodes[page]);
+            if ((1 <= page) && (page <= buttonNodes.length)) {
+                scrollToButton(buttonNodes.eq(page - 1));
                 updateHandler(page);
             }
             return this;

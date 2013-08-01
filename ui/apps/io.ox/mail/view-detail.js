@@ -616,14 +616,15 @@ define('io.ox/mail/view-detail',
             baton = ext.Baton.ensure(baton);
 
             var data = baton.data,
+                copy = _.extend({}, data),
                 self = this,
                 node = $('<section class="mail-detail">'),
                 container = $.createViewContainer(data, api)
                     .addClass('mail-detail-decorator')
                     .on('redraw', function (e, tmp) {
-                        copyThreadData(tmp, data);
+                        copyThreadData(tmp, copy);
                         // changed? - or just marked seen?
-                        if (!_.isEqual(tmp, data)) {
+                        if (!_.isEqual(tmp, copy)) {
                             container.replaceWith(
                                 self.draw(ext.Baton({ data: tmp, app: baton.app, options: baton.options }))
                             );

@@ -760,6 +760,9 @@ define('io.ox/office/tk/dropdown/dropdown',
             menuNode.css('overflow', 'auto');
         }
 
+        // disable dragging of controls (otherwise, it is possible to drag buttons and other controls around)
+        menuNode.on('dragstart', Utils.BUTTON_SELECTOR + ',input,textarea,label', false);
+
     } // class DropDown
 
     // static fields ----------------------------------------------------------

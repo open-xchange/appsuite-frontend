@@ -317,6 +317,9 @@
 @calendarToolbarHeight: 41px;
 @weekviewTimeWith: 58px;
 
+// Contact pictures
+@contact-picture-radius: 50%;
+
 // Dimensions
 @windowHeadWidth: 50px;
 @windowContentShift: 250px;
@@ -398,7 +401,7 @@
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
-    .border-radius(50%);
+    .border-radius(@contact-picture-radius);
 }
 
 .ellipsis {

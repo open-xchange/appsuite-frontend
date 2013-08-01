@@ -327,9 +327,7 @@ define('io.ox/mail/api',
                 // a mail should be always marked as seen on fetch
                 data.flags = data.flags | 32;
                 // was unseen?
-                if (data.unseen) {
-                    folderAPI.decUnread(data);
-                }
+                if (data.unseen) folderAPI.decUnread(data);
                 return data;
             }
         },
@@ -1372,7 +1370,7 @@ define('io.ox/mail/api',
             }
         } else {
             // inject filename for more convenient file downloads
-            url += (data.filename ? '/' + encodeURIComponent(data.filename) : '') + '?' +
+            url += (data.filename ? '/' + encodeURIComponent(data.filename.replace(/[\\:]/g, '_')) : '') + '?' +
                 $.param({
                     action: 'attachment',
                     folder: (data.parent || data.mail).folder_id,
