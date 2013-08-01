@@ -25,9 +25,11 @@ define('plugins/mobile/ios-resize/register', [], function () {
         var h = document.documentElement.clientHeight;
         // not changed?
         if (h === height) return;
+        // remember
+        height = h;
         // is not in landscape fullscreen? if not add height of address bar
         if (h !== 320) h += 60;
-        $('body').css({ position: 'relative', minHeight: (height = h) + 'px' });
+        $('body').css({ position: 'relative', minHeight: h + 'px' });
         setTimeout(scrollTo, 0, 0, 1);
     }
 
