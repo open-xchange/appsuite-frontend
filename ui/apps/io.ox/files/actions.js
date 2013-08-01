@@ -254,6 +254,7 @@ define('io.ox/files/actions',
             return e.collection.has('some') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
         },
         multiple: function (list) {
+
             var question = gt.ngettext(
                     'Do you really want to delete this file?',
                     'Do you really want to delete these files?',

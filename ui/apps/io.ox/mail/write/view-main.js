@@ -533,20 +533,22 @@ define("io.ox/mail/write/view-main",
                             _(signatures.concat(dummySignature))
                             .inject(function (memo, o, index) {
                                 var preview = (o.content || '')
-                                    .replace(/\s\s+/g, ' ') // remove subsequent white-space
-                                    .replace(/(\W\W\W)\W+/g, '$1 '); // reduce special char sequences
+                                    // remove subsequent white-space
+                                    .replace(/\s\s+/g, ' ')
+                                    // remove ASCII art
+                                    .replace(/([\-=+*°._!?\/\^]{4,})/g, '');
                                 preview = preview.length > 150 ? preview.substr(0, 150) + ' ...' : preview;
                                 return memo.add(
-                                    $('<div>').addClass('section-item pointer')
+                                    $('<div class="section-item pointer">')
                                     .addClass(index >= signatures.length ? 'signature-remove' : '')
                                     .append(
-                                        $('<a>', { href: '#', tabindex: '7' })
+                                        $('<a href="#" tabindex="7">')
                                         .on('click dragstart', $.preventDefault)
                                         .text(o.displayname)
                                     )
                                     .append(
                                         preview.length ?
-                                            $('<div>').addClass('signature-preview')
+                                            $('<div class="signature-preview">')
                                             .text(_.noI18n(' ' + preview)) :
                                             $()
                                     )
