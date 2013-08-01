@@ -54,8 +54,11 @@ define('io.ox/office/tk/control/textfield',
         var // self reference
             self = this,
 
-            // create the input field control
-            fieldNode = Utils.createTextField(options),
+            // create the input field control (width has to be set at the wrapper node)
+            fieldNode = Utils.createTextField(Utils.extendOptions(options, { width: undefined })).addClass(Utils.FOCUSABLE_CLASS),
+
+            // create the wrapper node for the input field (IE renders input fields with padding wrong)
+            wrapperNode = $('<div>').addClass('input-wrapper').width(Utils.getOption(options, 'width', '')).append(fieldNode),
 
             // whether to select the entire text on click
             select = Utils.getBooleanOption(options, 'select', false),
@@ -278,7 +281,7 @@ define('io.ox/office/tk/control/textfield',
         this.getNode().addClass('text-field');
 
         // insert the text field into this group, and register event handlers
-        this.addFocusableControl(fieldNode)
+        this.addChildNodes(wrapperNode)
             .registerUpdateHandler(updateHandler)
             .registerChangeHandler(null, { node: fieldNode, valueResolver: resolveValueHandler })
             .on({
@@ -290,6 +293,13 @@ define('io.ox/office/tk/control/textfield',
             'focus focus:key beforedeactivate blur:key blur': focusHandler,
             'keydown keypress keyup': fieldKeyHandler,
             'input': fieldInputHandler
+        });
+
+        // forward clicks on the wrapper node (left/right padding beside the input field)
+        wrapperNode.on('click', function (event) {
+            if (self.isEnabled() && wrapperNode.is(event.target)) {
+                fieldNode.focus();
+            }
         });
 
     } // class TextField
