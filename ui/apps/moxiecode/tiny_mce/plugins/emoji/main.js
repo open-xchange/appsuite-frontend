@@ -83,7 +83,9 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
     _.extend(Emoji.prototype, {
 
-        iconInfo: function (unicode, mapping) {
+        iconInfo: function (unicode) {
+
+            var mapping = emoji.EMOJI_MAP[unicode];
 
             if (!unicode || !mapping || !mapping[1][1] || !mapping[1][2]) return { invalid: true };
 
@@ -234,9 +236,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                 .chain()
                 .values()
                 .flatten(true)
-                .map(function (unicode) {
-                    return this.iconInfo(unicode, emoji.EMOJI_MAP[unicode]);
-                }, this)
+                .map(this.iconInfo, this)
                 .value();
         }
     });
