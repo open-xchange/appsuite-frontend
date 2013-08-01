@@ -74,7 +74,7 @@ define('io.ox/editor/main',
         },
 
         updateTitle: function () {
-            //old value
+            // old value
             this.data.saved.filename = this.model.get('filename');
             this.$el.find('input.title').val(this.model.get('filename'));
         },
@@ -87,7 +87,7 @@ define('io.ox/editor/main',
             var filename = this.getFilename(),
                 title = this.getTitle();
             this.model.set({
-                title: title || filename,
+                title: filename,
                 filename: filename,
                 content: this.getContent()
             });

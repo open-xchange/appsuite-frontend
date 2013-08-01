@@ -661,7 +661,10 @@ define('io.ox/files/actions',
     new ActionLink(POINT + '/links/toolbar/default', {
         index: 200,
         id: 'note',
-        label: gt('Add note'),
+        label:
+            //#. Please translate like "take a note", "Notiz" in German, for example.
+            //#. more like "to notice" than "to notify".
+            gt('Add note'),
         ref: POINT + '/actions/editor-new'
     });
 
