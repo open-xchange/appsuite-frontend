@@ -87,12 +87,12 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
             var mapping = emoji.EMOJI_MAP[unicode];
 
-            if (!unicode || !mapping || !mapping[1][1] || !mapping[1][2]) return { invalid: true };
+            if (!unicode || !mapping || !mapping[1] || !mapping[2]) return { invalid: true };
 
             return {
                 css: this.cssFor(unicode),
                 unicode: unicode,
-                desc: mapping[1][1],
+                desc: mapping[1],
                 category: this.category_map[unicode]
             };
         },
