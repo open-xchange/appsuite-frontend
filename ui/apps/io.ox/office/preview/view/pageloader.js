@@ -106,6 +106,7 @@ define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], functi
             if (_.browser.Chrome) {
                 // as SVG mark-up (Chrome does not show embedded images in <img> elements linked to an SVG file)
                 def = app.getModel().loadPageAsSvg(page, priority).then(function (svgMarkup) {
+                    // do NOT use the jQuery.html() method for SVG mark-up!
                     pageNode[0].innerHTML = svgMarkup;
                     // resolve with original image size
                     return resolveSize();

@@ -154,6 +154,31 @@ define('io.ox/office/preview/view/pagegroup',
         }
 
         /**
+         * Creates the button nodes for all pages and inserts them into the
+         * root node of this group.
+         */
+        function createButtonNodes() {
+
+            var // number of pages shown in the document
+                pageCount = app.getModel().getPageCount(),
+                // the HTML mark-up for the button nodes
+                markup = '';
+
+            // generate the HTML mark-up for all button nodes
+            Utils.iterateRange(1, pageCount + 1, function (page) {
+                markup += Utils.createButtonMarkup('<div class="page"></div>', { focusable: true, label: String(page) });
+            });
+
+            // insert the buttons into the group
+            self.setChildMarkup(markup);
+            buttonNodes = self.getNode().children();
+            buttonNodes.removeAttr('tabindex');
+
+            // set one-based page index as button value
+            buttonNodes.each(function (index) { Utils.setControlValue($(this), index + 1); });
+        }
+
+        /**
          * Updates the position of the button nodes according to the current
          * width of the side pane.
          */
@@ -165,22 +190,15 @@ define('io.ox/office/preview/view/pagegroup',
                 innerWidth = scrollableNode.outerWidth() - 2 * HOR_MARGIN - Utils.SCROLLBAR_WIDTH,
                 // initialize button nodes on first call
                 initializeButtons = buttonNodes.length === 0,
-                // the HTML mark-up for the button nodes
-                markup = '';
+                // the focused button (needs to be restored after detach/append)
+                focusButton = Utils.getFocusedControl(buttonNodes);
 
             // do nothing, if the side pane is not visible, or no pages are available
             if ((pageCount === 0) || !self.isReallyVisible()) { return; }
 
             // create empty button nodes for all pages on first call
             if (initializeButtons) {
-                // generate the HTML mark-up for all button nodes
-                Utils.iterateRange(1, pageCount + 1, function (page) {
-                    markup += Utils.createButtonMarkup('<div class="page"></div>', { tabIndex: page, label: String(page) });
-                });
-                self.getNode()[0].innerHTML = markup;
-                buttonNodes = self.getNode().children();
-                // set one-based page index as button value
-                buttonNodes.each(function (index) { Utils.setControlValue($(this), index + 1); });
+                createButtonNodes();
             }
 
             // calculate number of pages available per row, and effective button width
@@ -190,9 +208,9 @@ define('io.ox/office/preview/view/pagegroup',
             // update size of the own group node
             self.getNode().width(innerWidth).height(Math.ceil(pageCount / columns) * BUTTON_HEIGHT);
 
-            // Update position and size of all button nodes. Detaching the button
-            // nodes while updating them reduces total processing time by 95% on
-            // touch devices!
+            // Update position and size of all button nodes. Detaching the
+            // button nodes while updating them reduces total processing time
+            // by 95% on touch devices!
             buttonNodes.detach().each(function () {
 
                 var // one-based page index
@@ -206,6 +224,8 @@ define('io.ox/office/preview/view/pagegroup',
                 updatePageSize($(this).children('.page'));
             });
             self.getNode().append(buttonNodes);
+            // restore focus after detach/append
+            focusButton.focus();
 
             // select active button on first call (after positioning the buttons)
             if (initializeButtons) {

@@ -2141,7 +2141,7 @@ define.async('io.ox/office/tk/utils',
             if (height > 0) { markup += '<div style="height:' + height + 'px;"></div>'; }
 
             // insert entire HTML mark-up into the container node
-            containerNode.css({ width: 'auto', height: 'auto' }).addClass('ie-node-size-container')[0].innerHTML = markup;
+            containerNode.css({ width: 'auto', height: 'auto' }).addClass('ie-node-size-container').html(markup);
         }
     };
 
