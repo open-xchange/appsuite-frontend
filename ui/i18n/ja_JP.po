@@ -3758,6 +3758,10 @@ msgstr "インストール ファイルをダウンロード (Windows)"
 msgid "Uploading folders is not supported."
 msgstr "フォルダのアップロードはサポートされていません。"
 
+#: apps/io.ox/core/tk/upload.js:272
+msgid "Just drop the file anywhere"
+msgstr "添付ファイルをドラッグ&ドロップしてください。"
+
 #: apps/io.ox/core/tk/mobiscroll.js:35
 msgid "Minutes"
 msgstr "分"
@@ -4246,7 +4250,7 @@ msgstr "<b>%1$d</b> 個の要素が選択されています。"
 
 #: apps/io.ox/core/commons.js:138
 msgid "No elements selected"
-msgstr "要素が選択されていません。"
+msgstr "項目が選択されていません。"
 
 #: apps/io.ox/core/commons.js:279
 msgid "Searched in all folders"
