@@ -254,7 +254,7 @@ define('l10n/ja_JP/io.ox/register',
                     firstOther = _.min(other, function (label) { return label.charCodeAt(0); }),
                     // add thumb index for ABC
                     abcThumb = new baton.Thumb({
-                        label: _.noI18n('ABC'),
+                        label: _.noI18n('A～Z'),
                         text: firstLatin,
                         enabled: function () { return firstLatin !== Infinity; }
                     }),
