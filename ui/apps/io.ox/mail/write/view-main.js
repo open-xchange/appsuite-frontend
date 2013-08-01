@@ -857,7 +857,8 @@ define("io.ox/mail/write/view-main",
                     size: file.file_size,
                     dataURL: filesApi.getUrl(file, 'bare'),
                     version: file.version,
-                    id: file.id
+                    id: file.id,
+                    folder_id: file.folder_id
                 }, {
                     width: popup.parent().width(),
                     height: 'auto'
