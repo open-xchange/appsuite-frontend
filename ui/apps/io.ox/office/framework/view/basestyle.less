@@ -1195,7 +1195,7 @@ i[class^="icon-"], i[class^=" icon-"] {
     top: 10px;
     bottom: 10px;
     left: 10px;
-    width: 35%;
+    width: 40%;
     z-index: 60000;
     overflow: hidden;
     background-color: fade(white, 90%);
@@ -1215,15 +1215,17 @@ i[class^="icon-"], i[class^=" icon-"] {
         overflow: auto;
         > p {
             margin: 0;
-            padding: 0 5px;
-            border-bottom: 1px solid @textColor;
-            font-family: serif; 
-            font-size: 12px;
+            padding: 1px 5px;
+            border-bottom: 1px solid #ccc;
+            font-family: monospace;
+            font-size: 10px;
+            line-height: 12px;
             color: @textColor;
             word-wrap: break-word;
-            &.info { background-color: fade(blue, 10%); }
-            &.warn { background-color: fade(yellow, 10%); }
-            &.error { background-color: fade(red, 10%); }
+            > i { margin-right: 4px; }
+            &.info { background-color: fade(blue, 5%); > i { color: blue; } }
+            &.warn { background-color: fade(yellow, 5%); > i { color: #f90; } }
+            &.error { background-color: fade(red, 5%); > i { color: red; } }
         }
     }
 
