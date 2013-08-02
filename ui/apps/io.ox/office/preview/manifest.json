@@ -8,5 +8,10 @@
         "requires": "document_preview",
         "path": "io.ox/office/preview/app/mailactions",
         "namespace": "io.ox/mail/actions"
+    },
+    {
+        "requires": "document_preview",
+        "path": "io.ox/office/preview/app/taskactions",
+        "namespace": "io.ox/tasks/actions"
     }
 ]
