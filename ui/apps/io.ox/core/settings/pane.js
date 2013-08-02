@@ -39,27 +39,31 @@ define('io.ox/core/settings/pane',
             var model = settings.createModel(BasicModel);
             model.on('change', function (model, e) {
 
-                settings.save().then(
+                settings.saveAndYell().then(
                     function success() {
 
                         var showNotice = _(reloadMe).any(function (attr) {
                             return model.changed[attr];
                         });
 
-                        if (model.changed.autoOpenNotification) {//AutonOpenNotification updates directly
-                            notifications.yell(
-                                'success',
-                                gt("The setting has been saved.")
-                            );
-                        } else if (showNotice) {
+                        // if (model.changed.autoOpenNotification) {//AutonOpenNotification updates directly
+                        //     notifications.yell(
+                        //         'success',
+                        //         gt("The setting has been saved.")
+                        //     );
+                        // } else if (showNotice) {
+                        //     notifications.yell(
+                        //         'success',
+                        //         gt("The setting has been saved and will become active when you enter the application the next time.")
+                        //     );
+                        // }
+
+                        if (showNotice) {
                             notifications.yell(
                                 'success',
                                 gt("The setting has been saved and will become active when you enter the application the next time.")
                             );
                         }
-                    },
-                    function fail(e) {
-                        notifications.yell(e);
                     }
                 );
             });
