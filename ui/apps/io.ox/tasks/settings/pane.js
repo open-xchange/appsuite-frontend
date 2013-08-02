@@ -78,7 +78,7 @@ define('io.ox/tasks/settings/pane',
         },
 
         save: function () {
-            tasksViewSettings.model.save();
+            tasksViewSettings.model.saveAndYell();
         }
     });
 
