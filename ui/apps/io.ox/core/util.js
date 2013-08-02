@@ -117,5 +117,5 @@ test('first..last@domain.com', false);
 test('.first.last@domain.com', false);
 test('"quoted"@domain.com', true);
 test('"another@"@domain.com', true);
-test('"but"not"@domain.com', true);
+test('"but"not"@domain.com', false);
 */
