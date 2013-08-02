@@ -15,7 +15,7 @@ define('plugins/mobile/ios-resize/register', [], function () {
     'use strict';
 
     // just do this for iphone with iOS6!
-    if (!_.device('small && iOS >= 6 && iOS < 7')) return;
+    if (!_.device('small && !standalone && iOS >= 6 && iOS < 7')) return;
 
     // mattes: once we have precise numbers from ios7 beta, we can unlock this for ios7
 
