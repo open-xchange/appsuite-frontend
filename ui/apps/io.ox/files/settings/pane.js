@@ -62,7 +62,7 @@ define('io.ox/files/settings/pane',
         },
 
         save: function () {
-            filesViewSettings.model.save();
+            filesViewSettings.model.saveAndYell();
         }
     });
 

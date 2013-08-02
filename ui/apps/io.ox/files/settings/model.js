@@ -26,6 +26,10 @@ define('io.ox/files/settings/model',
             settings.save(this.attributes);
         },
 
+        saveAndYell: function () {
+            settings.saveAndYell(this.attributes);
+        },
+
         destroy: function () {
             console.log('destroy in model.js');
         }
