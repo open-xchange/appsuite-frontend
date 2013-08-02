@@ -1484,8 +1484,24 @@ msgid "Please enter a valid name"
 msgstr "有効な名前を入力してください。"
 
 #: apps/io.ox/mail/settings/signatures/register.js:48
+msgid "Add signature"
+msgstr "署名を追加"
+
+#: apps/io.ox/mail/settings/signatures/register.js:48
 msgid "Edit signature"
 msgstr "署名を編集"
+
+#: apps/io.ox/mail/settings/signatures/register.js:52
+msgid "Signature name"
+msgstr ""
+
+#: apps/io.ox/mail/settings/signatures/register.js:57
+msgid "Signature text"
+msgstr ""
+
+#: apps/io.ox/mail/settings/signatures/register.js:61
+msgid "Signature position"
+msgstr ""
 
 #: apps/io.ox/contacts/print.js:76
 #: apps/io.ox/contacts/view-detail.js:425
