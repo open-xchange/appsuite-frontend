@@ -555,7 +555,7 @@ msgstr "日本の通信事業者"
 
 #: apps/moxiecode/tiny_mce/plugins/emoji/categories.js:41
 msgid "Recently used"
-msgstr "最近変更されたファイル"
+msgstr "最近使用した絵文字"
 
 #. Emoji category
 #. Japanese: 顔
