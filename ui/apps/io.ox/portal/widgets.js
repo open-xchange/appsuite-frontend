@@ -177,7 +177,7 @@ define('io.ox/portal/widgets',
                 type: type
             };
 
-            settings.set('widgets/user/' + id, widget).save();
+            settings.set('widgets/user/' + id, widget).saveAndYell();
 
             collection.unshift(widget);
         },
@@ -244,7 +244,7 @@ define('io.ox/portal/widgets',
             this.update(obj);
             collection.trigger('sort');
 
-            return settings.set('widgets/user', this).save().then(
+            return settings.set('widgets/user', this).saveAndYell().then(
                 function () {
                     notifications.yell('success', gt("Settings saved."));
                 },
@@ -304,12 +304,9 @@ define('io.ox/portal/widgets',
     );
 
     collection.on('change', function () {
-        settings.set('widgets/user', api.toJSON()).save()
+        settings.set('widgets/user', api.toJSON()).saveAndYell();
         // don’t handle positive case here, since this is called quite often
         // TODO: make sure, this is only called as much as needed, also _.throttle handles this (see settings.save)
-        .fail(function () {
-            notifications.yell('error', gt("Could not save settings."));
-        });
     });
 
     collection.on('remove', function (model) {
@@ -317,7 +314,7 @@ define('io.ox/portal/widgets',
             // Don't you dare!
             return;
         }
-        settings.remove('widgets/user/' + model.get('id')).save();
+        settings.remove('widgets/user/' + model.get('id')).saveAndYell();
     });
 
     return api;
