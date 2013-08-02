@@ -335,6 +335,10 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                 };
             }
             return;
+        },
+
+        sendEncoding: function () {
+            return settings.get('sendEncoding', 'unified');
         }
     };
 });
