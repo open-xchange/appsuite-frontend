@@ -1493,15 +1493,15 @@ msgstr "署名を編集"
 
 #: apps/io.ox/mail/settings/signatures/register.js:52
 msgid "Signature name"
-msgstr ""
+msgstr "署名タイトル"
 
 #: apps/io.ox/mail/settings/signatures/register.js:57
 msgid "Signature text"
-msgstr ""
+msgstr "署名内容"
 
 #: apps/io.ox/mail/settings/signatures/register.js:61
 msgid "Signature position"
-msgstr ""
+msgstr "​署名位置​"
 
 #: apps/io.ox/contacts/print.js:76
 #: apps/io.ox/contacts/view-detail.js:425
