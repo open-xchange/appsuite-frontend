@@ -255,6 +255,19 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
             };
         }());
 
+        /**
+         * facade for this.save to notify user in case of errors
+         * @return {deferred}
+         */
+        this.saveAndYell = function (custom) {
+            var notify = function (e) {
+                require(['io.ox/core/notifications'], function (notifications) {
+                    notifications.yell(e);
+                });
+            };
+            return this.save(custom).fail(notify);
+        };
+
         Event.extend(this);
     };
 
