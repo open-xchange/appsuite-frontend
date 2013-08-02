@@ -297,6 +297,44 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             });
 
             return node.html();
+        },
+
+        imageTagsToPUA: function (html) {
+
+            var node = $('<div>').append(html);
+
+            node.find('img[data-emoji-unicode]').each(function (index, node) {
+                var unicode = $(node).attr('data-emoji-unicode'),
+                    info = emoji.EMOJI_MAP[unicode],
+                    converted;
+
+                if (info[5] && info[5][0] !== '-') {
+                    converted = info[5][0];
+                }
+                //convert to PUA or leave as is
+                unicode = converted || unicode;
+                $(node).replaceWith(unicode);
+            });
+
+            return node.html();
+        },
+
+        converterFor: function (options) {
+            var self = this;
+
+            options = _.extend({
+                from: 'unified',
+                to: 'unified'
+            }, options);
+
+            if (options.from === options.to) {
+                return _.identity;
+            } else if (options.from === 'unified' && options.to === 'pua') {
+                return function (text) {
+                    return self.imageTagsToPUA(self.unifiedToImageTag(text));
+                };
+            }
+            return;
         }
     };
 });
