@@ -168,7 +168,7 @@ define('io.ox/mail/settings/pane',
         },
 
         save: function () {
-            mailViewSettings.model.save().done(function () {
+            mailViewSettings.model.saveAndYell().done(function () {
                 //update mailapi
                 require(['io.ox/mail/api'], function (mailApi) {
                     mailApi.updateViewSettings();
