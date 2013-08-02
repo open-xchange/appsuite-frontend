@@ -25,6 +25,10 @@ define('io.ox/calendar/settings/model',
             return settings.save(this.attributes);
         },
 
+        saveAndYell: function () {
+            return settings.saveAndYell(this.attributes);
+        },
+
         destroy: function () {
             console.log("destroy in model.js");
         }
