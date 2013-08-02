@@ -51,7 +51,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
     var Settings = function (path, tree, meta) {
 
         var self = this, detached = false,
-            initial = JSON.parse(JSON.stringify(tree || {}));
+            saved = JSON.parse(JSON.stringify(tree || {}));
 
         tree = tree || {};
         meta = meta || {};
@@ -162,7 +162,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                         if (!detached) {
                             tree = data[0].tree;
                             meta = data[0].meta;
-                            initial = JSON.parse(JSON.stringify(tree));
+                            saved = JSON.parse(JSON.stringify(tree));
                             return applyDefaults();
                         } else {
                             return $.when();
@@ -171,7 +171,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                     function fail(e) {
                         tree = {};
                         meta = {};
-                        initial = {};
+                        saved = {};
                         detached = true;
                         console.error('Cannot load jslob', path, e);
                         return applyDefaults();
@@ -234,7 +234,10 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                     params: { action: 'set', id: path },
                     data: data
                 })
-                .done(function () { self.trigger('save'); });
+                .done(function () {
+                    saved = JSON.parse(JSON.stringify(data));
+                    self.trigger('save');
+                });
             }, 5000); // limit to 5 seconds
 
             return function (custom) {
@@ -242,8 +245,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                 if (detached) {
                     console.warn('Not saving detached settings.', path);
                 }
-
-                if (!custom && _.isEqual(initial, tree)) return $.when();
+                if (!custom && _.isEqual(saved, tree)) return $.when();
 
                 var data = { tree: custom || tree, meta: meta };
                 settingsCache.add(path, data);

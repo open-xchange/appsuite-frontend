@@ -286,6 +286,7 @@ define('io.ox/office/framework/app/basecontroller',
          * in all registered view components.
          */
         function componentCancelHandler(event, options) {
+            self.update();
             grabApplicationFocus(options);
         }
 

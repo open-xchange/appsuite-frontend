@@ -239,8 +239,15 @@ define('io.ox/core/tk/attachments',
         }
 
         ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
-            id: 'open',
+            id: 'preview',
             index: 100,
+            label: gt('Preview'),
+            ref: 'io.ox/core/tk/attachment/actions/preview-attachment'
+        }));
+
+        ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
+            id: 'open',
+            index: 150,
             label: gt('Open in new tab'),
             ref: 'io.ox/core/tk/attachment/actions/open-attachment'
         }));
@@ -251,6 +258,51 @@ define('io.ox/core/tk/attachments',
             label: gt('Download'),
             ref: 'io.ox/core/tk/attachment/actions/download-attachment'
         }));
+
+        //attachment actions
+        new links.Action('io.ox/core/tk/attachment/actions/preview-attachment', {
+            id: 'preview',
+            requires: function (e) {
+                return require(['io.ox/preview/main'])
+                    .pipe(function (p) {
+                        var list = _.getArray(e.context);
+                        // is at least one attachment supported?
+                        return e.collection.has('some') && _(list).reduce(function (memo, obj) {
+                            return memo || new p.Preview({
+                                filename: obj.filename,
+                                mimetype: obj.content_type
+                            })
+                            .supportsPreview();
+                        }, false);
+                    });
+            },
+            multiple: function (list, baton) {
+                ox.load(['io.ox/core/tk/dialogs',
+                         'io.ox/preview/main',
+                         'io.ox/core/api/attachment']).done(function (dialogs, p, attachmentApi) {
+                    //build Sidepopup
+                    new dialogs.SidePopup().show(baton.e, function (popup) {
+                        _(list).each(function (data, index) {
+                            data.dataURL = attachmentApi.getUrl(data, 'view');
+                            var pre = new p.Preview(data, {
+                                width: popup.parent().width(),
+                                height: 'auto'
+                            });
+                            if (pre.supportsPreview()) {
+                                popup.append(
+                                    $('<h4>').text(data.filename)
+                                );
+                                pre.appendTo(popup);
+                                popup.append($('<div>').text('\u00A0'));
+                            }
+                        });
+                        if (popup.find('h4').length === 0) {
+                            popup.append($('<h4>').text(gt('No preview available')));
+                        }
+                    });
+                });
+            }
+        });
 
         new links.Action('io.ox/core/tk/attachment/actions/open-attachment', {
             id: 'open',

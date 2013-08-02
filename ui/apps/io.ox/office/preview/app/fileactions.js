@@ -13,44 +13,26 @@
 define('io.ox/office/preview/app/fileactions',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
-     'io.ox/office/framework/app/extensionregistry',
+     'io.ox/office/preview/app/actionshelper',
      'gettext!io.ox/office/main'
-    ], function (ext, links, ExtensionRegistry, gt) {
+    ], function (ext, links, ActionsHelper, gt) {
 
     'use strict';
 
-    function isViewable(e) {
-        return e.collection.has('one', 'read') && ExtensionRegistry.isViewable(e.context.filename);
-    }
-
-    new links.Action('io.ox/files/actions/office/view', {
-        requires: isViewable,
-        filter: function (data) {
-            return ExtensionRegistry.isViewable(data.filename);
-        },
-        action: function (baton) {
-            ox.launch('io.ox/office/preview/main', { action: 'load', file: baton.data });
-        }
-    });
-
-    // disable default 'Open' action defined by OX Files
-    new links.Action('io.ox/files/actions/open', {
-        id: 'disable_open',
-        index: 'first',
-        requires: function (e) {
-            if (isViewable(e)) {
-                e.stopPropagation();
-                return false;
-            }
-        }
+    ActionsHelper.createViewerAction('io.ox/files/actions/office/view', function (baton) {
+        // directly return the data object created by OX Files as file descriptor
+        return baton.data;
     });
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'view',
+        id: 'office_view',
         index: 100,
         prio: 'hi',
         label: gt('View'),
         ref: 'io.ox/files/actions/office/view'
     }));
+
+    // disable default 'Open' action defined by OX Files
+    ActionsHelper.disableActionForViewable('io.ox/files/actions/open');
 
 });

@@ -1033,9 +1033,16 @@ define('io.ox/mail/write/main',
         app.send = function () {
             // get mail
             var mail = this.getMail(), def = $.Deferred();
+            var convert = emoji.converterFor({to: emoji.sendEncoding()});
 
             blockReuse(mail.data.sendtype);
             prepareMailForSending(mail);
+
+            //convert to target emoji send encoding
+            if (convert && emoji.sendEncoding() !== 'unified') {
+                //convert to send encoding (NOOP, if target encoding is 'unified')
+                mail.data.attachments[0].content = convert(mail.data.attachments[0].content);
+            }
 
             function cont() {
                 // start being busy

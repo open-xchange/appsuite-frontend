@@ -1828,6 +1828,18 @@ input.nice-input {
         }
     }
 }
+/* fix for android stock browser overflowing bug in autocomplete */
+.legacy-chrome {
+    .autocomplete-popup {
+        &.top-placement {
+            .box-shadow(none);
+
+        }
+        &.bottom-placement {
+           .box-shadow(none);
+        }
+    }
+}
 /* only for mobile use */
 .foldertree-click-intercept {
     background: rgba(0, 0, 0, 0);

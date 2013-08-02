@@ -156,7 +156,7 @@ define('io.ox/backbone/mini-views/attachments',
 
             function done() {
                 if (self.options.changeCallback) {
-                    self.options.changeCallback(self.model);
+                    self.options.changeCallback(self.model, id);
                 }
             }
 

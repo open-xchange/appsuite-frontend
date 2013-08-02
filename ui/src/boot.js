@@ -141,6 +141,9 @@ $(window).load(function () {
     }
 
     if (_.device('Android')) {
+        if (_.browser.chrome === 18) {
+             $('html').addClass('legacy-chrome');
+        }
         // disable context menu on chrome for android
         document.oncontextmenu = function (e) {
             e.preventDefault();
