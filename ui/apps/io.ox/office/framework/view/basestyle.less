@@ -440,13 +440,20 @@ i[class^="icon-"], i[class^=" icon-"] {
 
     /* text fields --------------------------------------------------------- */
 
-    input {
+    .input-wrapper {
+        display: inline-block;
+        .box-sizing(border-box);
         width: 150px;
-        padding-left: @input-padding;
-        padding-right: @input-padding;
-        line-height: normal;
+        padding: 0 @input-padding;
+        vertical-align: top;
         cursor: text;
-        .input-placeholder-color(#ccc);
+
+        > input {
+            width: 100%;
+            height: 100%;
+            line-height: normal;
+            .input-placeholder-color(#ccc);
+        }
     }
 
     &.text-field {
@@ -561,14 +568,17 @@ i[class^="icon-"], i[class^=" icon-"] {
                 }
             }
 
-            label, .button, input {
+            label, .button, .input-wrapper {
                 height: @control-height;
                 border: 1px solid #181818;
-                color: white;
 
-                + label, + .button, + input {
+                + label, + .button, + .input-wrapper {
                     margin-left: -1px;
                 }
+            }
+
+            label, .button, input {
+                color: white;
             }
 
             label, .button {
@@ -602,7 +612,7 @@ i[class^="icon-"], i[class^=" icon-"] {
             }
 
             /* fade out text fields in disabled groups */
-            &.disabled input, input.disabled {
+            &.disabled .input-wrapper > input, .input-wrapper.disabled > input {
                 color: fade(white, 50%);
             }
 
@@ -644,14 +654,14 @@ i[class^="icon-"], i[class^=" icon-"] {
             }
 
             /* tiny 3D shadow effect and hover highlighting for enabled input fields */
-            &:not(.disabled) input:not(.disabled):not(:focus) {
+            &:not(.disabled):not(.focused) .input-wrapper:not(.disabled) {
                 .box-shadow(@textfield-shadow-effect);
                 &:hover { background: fade(white, 5%); }
             }
 
             /* default focus border for all controls in focused text fields */
             &.text-field.focused {
-                .button, input {
+                .button, .input-wrapper {
                     border-color: @disabled-focus-border-color;
                 }
             }
@@ -661,9 +671,12 @@ i[class^="icon-"], i[class^=" icon-"] {
                 .box-shadow(@focus-glow-effect);
 
                 /* white background and focus border when focused */
-                .button, input {
+                .button, .input-wrapper {
                     background: white !important;
                     border-color: @focus-border-color;
+                }
+
+                .button, input {
                     color: @textColor;
                 }
 
@@ -990,11 +1003,11 @@ i[class^="icon-"], i[class^=" icon-"] {
             &.text-field {
                 .border-radius(5px);
 
-                .button, input {
+                .button, .input-wrapper {
                     border: 1px solid @default-border-color;
                 }
 
-                input {
+                .input-wrapper {
                     height: @item-height;
                     .border-radius(5px);
                 }
@@ -1002,14 +1015,14 @@ i[class^="icon-"], i[class^=" icon-"] {
 
             /* additional hover highlighting for text fields */
             &.text-field:not(.disabled):not(.focused):hover {
-                .button, input {
+                .button, .input-wrapper {
                     border-color: darken(@default-border-color, 5%);
                 }
             }
 
             /* focus border for all controls in disabled text fields */
             &.text-field.disabled.focused {
-                .button, input {
+                .button, .input-wrapper {
                     border-color: @disabled-focus-border-color;
                 }
             }
@@ -1018,7 +1031,7 @@ i[class^="icon-"], i[class^=" icon-"] {
             &.text-field:not(.disabled).focused {
                 .box-shadow(@focus-glow-effect);
 
-                .button, input {
+                .button, .input-wrapper {
                     border-color: @focus-border-color;
                 }
             }
@@ -1027,7 +1040,7 @@ i[class^="icon-"], i[class^=" icon-"] {
             &.spin-field {
                 .spin-field-settings(@item-height);
 
-                > input {
+                > .input-wrapper {
                     .border-top-right-radius(0);
                     .border-bottom-right-radius(0);
                 }

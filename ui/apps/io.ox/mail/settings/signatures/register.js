@@ -45,7 +45,7 @@ define('io.ox/mail/settings/signatures/register',
         if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
 
         popup = new dialogs.ModalDialog();
-        popup.header($("<h4>").text(gt('Edit signature')));
+        popup.header($("<h4>").text(signature.id === null ? gt('Add signature') : gt('Edit signature')));
         popup.append(
             $('<div>').append(
                 $('<div class="row-fluid">').append(

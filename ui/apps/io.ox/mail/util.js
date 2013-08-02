@@ -358,7 +358,7 @@ define('io.ox/mail/util',
         },
 
         getFullDate: function (timestamp) {
-            var t = new date.Local(date.Local.utc(timestamp));
+            var t = new date.Local(timestamp);
             return t.format(date.DATE_TIME);
         },
 

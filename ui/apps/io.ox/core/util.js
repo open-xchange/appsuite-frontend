@@ -43,6 +43,79 @@ define('io.ox/core/util', [/* only add light core deps, not stuff like account A
 
         breakableText: function (text) {
             return String(text || '').replace(/(\S{20})/g, '$1\u200B');
-        }
+        },
+
+        isValidMailAddress: (function () {
+
+            var regQuotes = /^"[^"]+"$/,
+                regLocal = /@/,
+                regInvalid = /["\\,:; ]/,
+                regDot = /^\./,
+                regDoubleDots = /\.\./,
+                regDomainIPAddress = /^\[(\d{1,3}\.){3}\d{1,3}\]$/,
+                regDomainIPv6 = /^\[IPv6(:\w{0,4}){0,8}\]$/i, // yep, vage
+                regDomain = /[a-z]$/i;
+
+            // email address validation is not trivial
+            // this in not 100% RFC but a good check (https://tools.ietf.org/html/rfc3696#page-5)
+            function validate(val) {
+                // empty is ok!
+                if (val === '') return true;
+                // has no @?
+                var index = val.lastIndexOf('@');
+                if (index <= 0) return false;
+                // get local and domain part
+                var local = val.substr(0, index), domain = val.substr(index + 1);
+                // check local part length
+                if (local.length > 64 && local.length > 0) return false;
+                // check domain part length
+                if (domain.length > 255) return false;
+                // no quotes?
+                if (!regQuotes.test(local)) {
+                    // ... but another @? ... start with dot? ... consective dots? ... invalid chars?
+                    if (regLocal.test(local) || regDot.test(local) || regDoubleDots.test(local) || regInvalid.test(local)) return false;
+                }
+                // valid domain?
+                if (regDomainIPAddress.test(domain) || regDomainIPv6.test(domain) || regDomain.test(domain)) return true;
+                // no?
+                return false;
+            }
+
+            return function (val) {
+                return validate($.trim(val));
+            };
+
+        }())
     };
 });
+
+/*
+function test(val, expected) {
+    var util = require('io.ox/core/util'),
+        valid = util.isValidMailAddress(val) === expected;
+    console[valid ? 'log' : 'error'](val);
+}
+test('name@domain.com', true);
+test('name@host', true);
+test('name@123', false);
+test('name@[1.2.3.4]', true);
+test('name@[1.2.3.4.5]', false);
+test('name@[1.2.3.A]', false);
+test('name@[1.2.3.4444]', false);
+test('name@[IPv6:2001:db8:1ff::a0b:dbd0]', true);
+test('name@[2001:db8:1ff::a0b:dbd0]', false);
+test('@domain.com', false);
+test('name@', false);
+test('@', false);
+test('name@abc@domain.com', false);
+test('first.last@domain.com', true);
+test('first,last@domain.com', false);
+test('first last@domain.com', false);
+test('first\\last@domain.com', false);
+test('first"last@domain.com', false);
+test('first..last@domain.com', false);
+test('.first.last@domain.com', false);
+test('"quoted"@domain.com', true);
+test('"another@"@domain.com', true);
+test('"but"not"@domain.com', true);
+*/

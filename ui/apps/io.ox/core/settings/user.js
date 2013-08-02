@@ -63,7 +63,6 @@ define('io.ox/core/settings/user', [
 
                         $node.append($userEditView);
                         $($node.find('.edit-contact')[0]).on('dispose', function () {
-                            $(document.activeElement).blur();//make the active element lose focus to get the changes of the field a user was editing
                             if (!_.isEmpty(user.changed)) {//check if there is something to save
                                 new dialogs.ModalDialog()
                                 .text(gt('Do you really want to discard your changes?'))
