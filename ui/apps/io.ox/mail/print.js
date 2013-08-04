@@ -33,7 +33,7 @@ define('io.ox/mail/print',
             return $.trim(source.replace(/\n/g, '').replace(/<br[ ]?\/?>/g, '\n'));
         } else {
             //use cleanup from detailview
-            return detailview.getContent(data, { blockquote: 'expand' }).content.html();
+            return detailview.getContent(data, { autoCollapseBlockquotes: false }).content.html();
         }
     }
 

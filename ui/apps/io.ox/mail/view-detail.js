@@ -570,7 +570,12 @@ define('io.ox/mail/view-detail',
                         .filter('[href^="mailto:"]').on('click', mailTo);
                 });
 
-                if (!isLarge && options.blockquote !== 'expand') {
+                // auto-collapse blockquotes?
+                var autoCollapse = !isLarge &&
+                    options.autoCollapseBlockquotes !== false &&
+                    settings.get('features/autoCollapseBlockquotes', true) === true;
+
+                if (autoCollapse) {
                     // blockquotes (top-level only)
                     content.find('blockquote').not(content.find('blockquote blockquote')).each(function () {
                         var node = $(this);
