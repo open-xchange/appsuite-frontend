@@ -5790,8 +5790,8 @@ msgid "Couldn't load contact data."
 msgstr "連絡先のデータを読み込めませんでした。"
 
 #: apps/io.ox/contacts/main.js:351
-msgid "Names and e-mail addresses"
-msgstr "名前とメール アドレス"
+msgid "Names and email addresses"
+msgstr "名前とメールアドレス"
 
 #: apps/io.ox/contacts/main.js:351
 msgid "Addresses"
