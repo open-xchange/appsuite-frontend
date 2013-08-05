@@ -14,11 +14,13 @@
 define('io.ox/office/framework/view/baseview',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
+     'io.ox/office/tk/keycodes',
      'io.ox/office/framework/view/pane',
+     'gettext!io.ox/office/main',
      'io.ox/office/framework/view/nodetracking',
      'less!io.ox/office/framework/view/basestyle.less',
      'less!io.ox/office/framework/view/docs-icons.less'
-    ], function (Events, Utils, Pane) {
+    ], function (Events, Utils, KeyCodes, Pane, gt) {
 
     'use strict';
 
@@ -538,39 +540,100 @@ define('io.ox/office/framework/view/baseview',
          * Sets the application into the busy state by displaying a window
          * blocker element covering the entire GUI of the application. The
          * contents of the header and footer in the blocker element are
-         * cleared, and the passed callback may insert new contents into these
-         * elements.
+         * cleared, and the passed initialization callback function may insert
+         * new contents into these elements.
          *
-         * @param {Function} [callback]
-         *  A function that can fill custom contents into the header and footer
-         *  of the window blocker element. Receives the following parameters:
-         *  (1) {jQuery} header
-         *      The header element above the centered progress bar.
-         *  (2) {jQuery} footer
-         *      The footer element below the centered progress bar.
-         *  (3) {jQuery} blocker
-         *      The entire window blocker element (containing the header,
-         *      footer, and progress bar elements).
-         *  Will be called in the context of this view instance.
+         * @param {Object} [options]
+         *  A map with additional options. The following options are supported:
+         *  @param {Boolean} [options.showFileName=false]
+         *      If set to true, the file name will be shown in the top-left
+         *      corner of the blocker element.
+         *  @param {Function} [options.initHandler]
+         *      A function that can fill custom contents into the header and
+         *      footer of the window blocker element. Receives the following
+         *      parameters:
+         *      (1) {jQuery} header
+         *          The header element above the centered progress bar.
+         *      (2) {jQuery} footer
+         *          The footer element below the centered progress bar.
+         *      (3) {jQuery} blocker
+         *          The entire window blocker element (containing the header,
+         *          footer, and progress bar elements).
+         *      Will be called in the context of this view instance.
+         *  @param {Function} [options.cancelHandler]
+         *      If specified, a 'Cancel' button will be shown after a short
+         *      delay. Pressing that button, or pressing the ESCAPE key, will
+         *      execute this callback function, and will leave the busy mode
+         *      afterwards. Will be called in the context of this view
+         *      instance.
          *
          * @returns {BaseView}
          *  A reference to this instance.
          */
-        this.enterBusy = function (callback) {
+        this.enterBusy = function (options) {
 
             // enter busy state, and extend the blocker element
             app.getWindow().busy(null, null, function () {
 
-                var // the window blocker element (bound to 'this')
-                    blocker = this;
+                var // the initialization handler
+                    initHandler = Utils.getFunctionOption(options, 'initHandler'),
+                    // the cancel handler
+                    cancelHandler = Utils.getFunctionOption(options, 'cancelHandler'),
+                    // the window blocker element (bound to 'this')
+                    blockerNode = this,
+                    // the header container node
+                    headerNode = blockerNode.find('.header').empty(),
+                    // the header container node
+                    footerNode = blockerNode.find('.footer').empty(),
+                    // the container element with the button to cancel the import process
+                    cancelNode = null;
+
+                // keyboard event handler for busy mode (ESCAPE key)
+                function busyKeydownHandler(event) {
+                    if (event.keyCode === KeyCodes.ESCAPE) {
+                        cancelHandler.call(self);
+                        return false;
+                    }
+                }
 
                 // special marker for custom CSS formatting, clear header/footer
-                blocker.addClass('io-ox-office-blocker').find('.header, .footer').empty();
+                blockerNode.addClass('io-ox-office-blocker');
 
-                // execute callback
-                if (_.isFunction(callback)) {
-                    callback.call(self, blocker.find('.header'), blocker.find('.footer'), blocker);
+                // add file name to header area
+                if (Utils.getBooleanOption(options, 'showFileName', false)) {
+                    headerNode.append($('<div>').addClass('filename clear-title').text(app.getFullFileName()));
                 }
+
+                // initialize 'Cancel' button (hide initially, show after a delay)
+                if (_.isFunction(cancelHandler)) {
+
+                    // create and insert the container node for the Cancel button
+                    cancelNode = $('<div>').addClass('cancel-node').hide().appendTo(footerNode);
+
+                    // create the Cancel button
+                    $.button({ label: gt('Cancel') })
+                        .addClass('btn-warning')
+                        .on('click', function () { cancelHandler.call(self); })
+                        .appendTo(cancelNode);
+
+                    // register a keyboard handler for the ESCAPE key
+                    app.getWindowNode().on('keydown', busyKeydownHandler);
+                    app.getWindow().one('idle', function () {
+                        app.getWindowNode().off('keydown', busyKeydownHandler);
+                    });
+
+                    // make the blocker focusable for keyboard input
+                    blockerNode.attr('tabindex', 1).focus();
+
+                    // show the Cancel button after a delay
+                    _.delay(function () { cancelNode.show().find('.btn').focus(); }, 5000);
+                }
+
+                // execute initialization handler
+                if (_.isFunction(initHandler)) {
+                    initHandler.call(self, headerNode, footerNode, blockerNode);
+                }
+
             });
 
             return this;
@@ -838,6 +901,10 @@ define('io.ox/office/framework/view/baseview',
     } // class BaseView
 
     // exports ================================================================
+
+    $(document).on('focusin focusout', function (event) {
+        Utils.log(event.type + ' ' + event.target.nodeName + '.' + event.target.className);
+    });
 
     return _.makeExtendable(BaseView);
 
