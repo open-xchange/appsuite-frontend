@@ -24,82 +24,82 @@ define('io.ox/contacts/model',
     function buildFactory(ref, api) {
         var isMyContactData = ref === 'io.ox/core/user/model',
             factory = new ModelFactory({
-            api: api,
-            ref: ref,
+                api: api,
+                ref: ref,
 
-            model: {
+                model: {
 
-                addMember: function (member) {
+                    addMember: function (member) {
 
-                    var currentDistListArray = this.get('distribution_list');
+                        var currentDistListArray = this.get('distribution_list');
 
-                    if (currentDistListArray === undefined) {
-                        this.set('distribution_list', [member], {validate: true});
-                    } else {
-                        currentDistListArray.push(member);
-                        this.set('distribution_list', currentDistListArray, {validate: true});
+                        if (currentDistListArray === undefined) {
+                            this.set('distribution_list', [member], {validate: true});
+                        } else {
+                            currentDistListArray.push(member);
+                            this.set('distribution_list', currentDistListArray, {validate: true});
+                        }
+
+                        this.trigger('change');
+                        this.trigger('change:distribution_list');
+                    },
+
+                    removeMember: function (mail, name) {
+
+                        var currentDistlist = this.get('distribution_list');
+
+                        _(currentDistlist).each(function (val, key) {
+                            if (val.mail === mail && val.display_name === name) {
+                                currentDistlist.splice(key, 1);
+                            }
+                        });
+
+                        this.set('distribution_list', currentDistlist);
+
+                        this.trigger('change');
+                        this.trigger('change:distribution_list');
+
                     }
-
-                    this.trigger("change");
-                    this.trigger("change:distribution_list");
                 },
 
-                removeMember: function (mail, name) {
-
-                    var currentDistlist = this.get('distribution_list');
-
-                    _(currentDistlist).each(function (val, key) {
-                        if (val.mail === mail && val.display_name === name) {
-                            currentDistlist.splice(key, 1);
-                        }
-                    });
-
-                    this.set('distribution_list', currentDistlist);
-
-                    this.trigger("change");
-                    this.trigger("change:distribution_list");
-
-                }
-            },
-
-            update: function (model) {
-                // Some special handling for profile pictures
-                var data = model.changedSinceLoading(),
-                    file = data.pictureFile,
-                    //consistent usage for settings yell handling
-                    yell = !isMyContactData ? _.identity : settingsUtil.yell;
-                if (file) {
-                    delete data.pictureFile;
-                    return yell(
-                            api.editNewImage({id: model.id, folder_id: model.get('folder_id') }, data, file)
+                update: function (model) {
+                    // Some special handling for profile pictures
+                    var data = model.changedSinceLoading(),
+                        file = data.pictureFile,
+                        //consistent usage for settings yell handling
+                        yell = !isMyContactData ? _.identity : settingsUtil.yell;
+                    if (file) {
+                        delete data.pictureFile;
+                        return yell(
+                                api.editNewImage({id: model.id, folder_id: model.get('folder_id') }, data, file)
+                            );
+                    } else {
+                        return yell(
+                            api.update({id: model.id, folder: model.get('folder_id'), data: data})
                         );
-                } else {
-                    return yell(
-                        api.update({id: model.id, folder: model.get('folder_id'), data: data})
-                    );
+                    }
+                },
+
+                updateEvents: ['edit'],
+
+                create: function (model) {
+                    // Some special handling for profile pictures
+                    var json, file;
+                    if (model.attributes.pictureFile) {
+                        file = model.get('pictureFile');
+                        json = model.toJSON();
+                        delete json.pictureFile;
+                    } else {
+                        json = model.toJSON();
+                    }
+
+                    return api.create(json, file);
+                },
+
+                destroy: function (model) {
+                    return api.remove({id: model.id, folder_id: model.get('folder_id')});
                 }
-            },
-
-            updateEvents: ['edit'],
-
-            create: function (model) {
-                // Some special handling for profile pictures
-                var json, file;
-                if (model.attributes.pictureFile) {
-                    file = model.get("pictureFile");
-                    json = model.toJSON();
-                    delete json.pictureFile;
-                } else {
-                    json = model.toJSON();
-                }
-
-                return api.create(json, file);
-            },
-
-            destroy: function (model) {
-                return api.remove({id: model.id, folder_id: model.get('folder_id')});
-            }
-        });
+            });
 
         Validators.validationFor(ref, {
             display_name: { format: 'string' },
