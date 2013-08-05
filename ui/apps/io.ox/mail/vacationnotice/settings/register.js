@@ -60,9 +60,6 @@ define('io.ox/mail/vacationnotice/settings/register',
                     filters.editVacationtNotice($container, multiValues, user.email1).done(function (filter) {
                         filterModel = filter;
                         touchAttributes(filterModel);
-                        filter.on('update', function () {
-                            require("io.ox/core/notifications").yell("success", gt("Your vacation notice has been saved"));
-                        });
                     }).fail(function (error) {
                         var msg;
                         if (error.code === 'MAIL_FILTER-0015') {
@@ -81,13 +78,10 @@ define('io.ox/mail/vacationnotice/settings/register',
         },
 
         save: function () {
-            return filterModel.save().then(
-                function success() {
+            return filterModel.save().done(
+                function () {
                     touchAttributes(filterModel);
-                    notifications.yell('success', gt('Your vacation notice has been saved'));
-                },
-                function fail() {
-                    notifications.yell('error', gt('Could not save vacation notice'));
+                    //notifications.yell('success', gt('Your vacation notice has been saved'));
                 }
             );
         }
