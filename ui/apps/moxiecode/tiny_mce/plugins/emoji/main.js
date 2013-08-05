@@ -313,7 +313,13 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                 $(node).replaceWith(unicode);
             });
 
-            return node.html();
+            if (node.children().length === 0) {
+                //treat html parameter as plain text
+                return node.text();
+            } else {
+                //treat html parameter as html code
+                return node.html();
+            }
         },
 
         converterFor: function (options) {
