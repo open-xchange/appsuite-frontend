@@ -33,8 +33,11 @@ define('l10n/ja_JP/io.ox/register',
             function addFurigana(selector, yomiField) {
                 var value = baton.data[yomiField];
                 if (!value) return;
-                self.find(selector).prepend(
-                    $('<div class="furigana">').text(value)
+                self.find(selector)
+                .addClass('with-furigana')
+                .prepend(
+                    $('<span class="furigana">').text(value),
+                    $('<br>')
                 );
             }
         }
