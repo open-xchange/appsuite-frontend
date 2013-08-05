@@ -14,24 +14,25 @@
 define('io.ox/office/tk/config', ['settings!io.ox/office'], function (settings) {
 
     'use strict';
-    var // the configuration items of the module 'com.open-xchange.documents'
-        documentsConfig = settings.get("module");
+
+    var // the configuration items of the OX Documents modules
+        documentsConfig = settings.get('module', {});
 
     // static class Config ====================================================
 
     /**
-     * Wraps the configuration of the module 'com.open-xchange.documents'.
+     * Wraps the configuration of the OX Documents module.
      */
     var Config = {};
 
-    
+
     /**
      * Returns the complete set of configuration properties.
      *
      * @returns {Object}
-     *  The complete set of configuration properties of the module
-     *  'com.open-xchange.documents'.
-     **/
+     *  The complete set of configuration properties of the OX Documents
+     *  module.
+     */
     Config.get = function () {
         return documentsConfig;
     };
@@ -40,7 +41,7 @@ define('io.ox/office/tk/config', ['settings!io.ox/office'], function (settings) 
      * Returns the value of the configuration property 'debugavailable'.
      *
      * @returns {Boolean}
-     *  Whether debug mode is enabled.
+     *  Whether debug mode is enabled in all OX Documents applications.
      */
     Config.isDebug = function () {
         return !!documentsConfig.debugavailable;
