@@ -34,7 +34,8 @@ define('l10n/ja_JP/io.ox/register',
                 var value = baton.data[yomiField];
                 if (!value) return;
                 self.find(selector).prepend(
-                    $('<div class="furigana">').text(value));
+                    $('<div class="furigana">').text(value)
+                );
             }
         }
     });
