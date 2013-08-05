@@ -63,9 +63,6 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
         opt = opt || {};
 
-        // inherit from emoji
-        _.extend(this, emoji);
-
         // plain data API
         this.icons = [];
         this.collections = parseCollections();
@@ -243,7 +240,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
         }
     });
 
-    return {
+    return  _.extend({
 
         getInstance: function (opt) {
             return new Emoji(opt);
@@ -340,5 +337,5 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
         sendEncoding: function () {
             return settings.get('sendEncoding', 'unified');
         }
-    };
+    }, emoji);
 });
