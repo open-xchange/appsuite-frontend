@@ -902,10 +902,6 @@ define('io.ox/office/framework/view/baseview',
 
     // exports ================================================================
 
-    $(document).on('focusin focusout', function (event) {
-        Utils.log(event.type + ' ' + event.target.nodeName + '.' + event.target.className);
-    });
-
     return _.makeExtendable(BaseView);
 
 });
