@@ -15,13 +15,15 @@ define('io.ox/contacts/model',
       ['io.ox/backbone/modelFactory',
        'io.ox/backbone/validation',
        'io.ox/contacts/api',
+       'io.ox/settings/util',
        'gettext!io.ox/contacts'
-       ], function (ModelFactory, Validators, api, gt) {
+       ], function (ModelFactory, Validators, api, settingsUtil, gt) {
 
     'use strict';
 
     function buildFactory(ref, api) {
-        var factory = new ModelFactory({
+        var isMyContactData = ref === 'io.ox/core/user/model',
+            factory = new ModelFactory({
             api: api,
             ref: ref,
 
@@ -63,12 +65,18 @@ define('io.ox/contacts/model',
             update: function (model) {
                 // Some special handling for profile pictures
                 var data = model.changedSinceLoading(),
-                    file = data.pictureFile;
+                    file = data.pictureFile,
+                    //consistent usage for settings yell handling
+                    yell = !isMyContactData ? _.identity : settingsUtil.yell;
                 if (file) {
                     delete data.pictureFile;
-                    return api.editNewImage({id: model.id, folder_id: model.get('folder_id') }, data, file);
+                    return yell(
+                            api.editNewImage({id: model.id, folder_id: model.get('folder_id') }, data, file)
+                        );
                 } else {
-                    return api.update({id: model.id, folder: model.get('folder_id'), data: data});
+                    return yell(
+                        api.update({id: model.id, folder: model.get('folder_id'), data: data})
+                    );
                 }
             },
 
