@@ -1037,8 +1037,11 @@ define('io.ox/mail/view-detail',
         draw: function (baton) {
 
             // soft-break long words (like long URLs)
-            var subject = $.trim(baton.data.subject);
-            subject = subject ? $('<span>').html(coreUtil.breakableHTML(subject)) : '';
+            var subject = $.trim(baton.data.subject),
+                html = processEmoji(coreUtil.breakableHTML(subject));
+
+            // process emoji
+            subject = subject ? $('<span>').html(html) : '';
 
             this.append(
                 $('<div class="mail-detail-clear-left">'),
