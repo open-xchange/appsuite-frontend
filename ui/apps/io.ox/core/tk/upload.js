@@ -64,7 +64,11 @@ define('io.ox/core/tk/upload',
         var self = this, $overlay, nodes = [], nodeGenerator, currentRow, height, showOverlay, highlightedAction, removeOverlay;
         Events.extend(this);
 
-        $overlay = $('<div>').addClass('abs io-ox-dropzone-multiple-overlay');
+        $overlay = $('<div>').addClass('abs io-ox-dropzone-multiple-overlay')
+            .on('click', function () {
+                $overlay.detach();
+                return false;
+            });
 
         showOverlay = function (e) {
             if (!isFileDND(e)) {
