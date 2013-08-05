@@ -91,6 +91,7 @@ define('io.ox/mail/view-detail',
 
     function processEmoji(text) {
         text = emoji.softbankToUnified(text);
+        text = emoji.jisToUnified(text);
         return emoji.unifiedToImageTag(text, {
             forceEmojiIcons: settings.get('emoji/forceEmojiIcons', false)
         });
