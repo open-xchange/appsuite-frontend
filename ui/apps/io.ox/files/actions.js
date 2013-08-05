@@ -422,8 +422,8 @@ define('io.ox/files/actions',
                 //'enter'
                 $form.on('submit', function (e) {
                     e.preventDefault();
-                    dialog.close();
                     process();
+                    dialog.close();
                 });
 
                 dialog = new dialogs.ModalDialog()
@@ -436,6 +436,13 @@ define('io.ox/files/actions',
 
                 dialog.show(function () {
                     $input.get()[0].setSelectionRange(0, $input.val().lastIndexOf('.'));
+                    $input.on('keydown', function (e) {
+                        if ((e.keyCode || e.which) === 13) {
+                            e.preventDefault();
+                            process();
+                            dialog.close();
+                        }
+                    });
                 })
                 .done(function (action) {
                     if (action === 'rename') {
