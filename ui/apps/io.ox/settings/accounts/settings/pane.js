@@ -17,10 +17,11 @@ define('io.ox/settings/accounts/settings/pane',
        'io.ox/keychain/api',
        'io.ox/keychain/model',
        'io.ox/core/api/folder',
+       'io.ox/settings/util',
        'io.ox/core/notifications',
        'gettext!io.ox/settings/accounts',
        'withPluginsFor!keychainSettings'
-   ], function (ext, dialogs, api, keychainModel, folderAPI, notifications, gt) {
+   ], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, gt) {
 
     'use strict';
 
@@ -41,17 +42,18 @@ define('io.ox/settings/accounts/settings/pane',
                     .addButton('cancel', gt('Cancel'))
                     .on('delete', function () {
                         var popup = this;
-                        api.remove(account).then(
-                            function success() {
-                                folderAPI.subFolderCache.remove('1');
-                                folderAPI.folderCache.remove('default' + account);
-                                folderAPI.trigger('update');
-                                popup.close();
-                            },
-                            function fail(e) {
-                                popup.close();
-                                notifications.yell(e);
-                            }
+                        settingsUtil.yell(
+                            api.remove(account).then(
+                                function success() {
+                                    folderAPI.subFolderCache.remove('1');
+                                    folderAPI.folderCache.remove('default' + account);
+                                    folderAPI.trigger('update');
+                                    popup.close();
+                                },
+                                function fail(e) {
+                                    popup.close();
+                                }
+                            )
                         );
                     })
                     .show();
