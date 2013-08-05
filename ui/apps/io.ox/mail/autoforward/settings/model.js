@@ -15,8 +15,9 @@ define('io.ox/mail/autoforward/settings/model',
       ['io.ox/backbone/modelFactory',
        'io.ox/backbone/validation',
        'io.ox/core/api/mailfilter',
+       'io.ox/settings/util',
        'gettext!io.ox/mail'
-       ], function (ModelFactory, Validators, api, gt) {
+       ], function (ModelFactory, Validators, api, settingsUtil, gt) {
 
     'use strict';
 
@@ -62,14 +63,20 @@ define('io.ox/mail/autoforward/settings/model',
             update: function (model) {
                 $(document.activeElement).blur();//make the active element lose focus to get the changes of the field a user was editing
                 if (model.attributes.forwardmail === '') {
-                    return api.deleteRule(model.attributes.id);
+                    return settingsUtil.yell(
+                        api.deleteRule(model.attributes.id)
+                    );
                 } else {
-                    return api.update(providePreparedData(model.attributes));
+                    return settingsUtil.yell(
+                        api.update(providePreparedData(model.attributes))
+                    );
                 }
             },
             create: function (model) {
                 $(document.activeElement).blur();//make the active element lose focus to get the changes of the field a user was editing
-                return api.create(providePreparedData(model.attributes));
+                return settingsUtil.yell(
+                    api.create(providePreparedData(model.attributes))
+                );
             }
 
         });
