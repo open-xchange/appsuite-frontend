@@ -175,28 +175,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
             onSave: function () {
                 var self = this;
-
-                this.model.save().done(function (response) {
-                    self.dialog.close();
-                    if (response === null) {
-                        notifications.yell('success', gt('Mailfilter updated'));
-                    } else {
-                        notifications.yell('success', gt('Mailfilter created'));
-                        var newCreatedFilter =  self.model.attributes;
-                        newCreatedFilter.id = response;
-                        self.collection.add(newCreatedFilter);
-                    }
-
-                }).fail(function (response) {
-                    self.dialog.idle();
-                    if (response.error_params[0] === null || response.error_params[0] === '') {
-                        notifications.yell('error', gt(response.error));
-                    } else {
-                        _.each(response.error_params, function (error) {
-                            notifications.yell('error', gt(error));
-                        });
-                    }
-                });
+                this.model.save().then(self.dialog.close, self.dialog.idle);
             },
 
             onChangeValueExtern: function (e) {

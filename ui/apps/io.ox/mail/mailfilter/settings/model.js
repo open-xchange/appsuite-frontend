@@ -14,8 +14,9 @@ define('io.ox/mail/mailfilter/settings/model',
       ['io.ox/backbone/modelFactory',
        'io.ox/backbone/validation',
        'io.ox/core/api/mailfilter',
+       'io.ox/settings/util',
        'gettext!io.ox/mail'
-       ], function (ModelFactory, Validators, api, gt) {
+       ], function (ModelFactory, Validators, api, settingsUtil, gt) {
 
     'use strict';
 
@@ -25,11 +26,17 @@ define('io.ox/mail/mailfilter/settings/model',
             ref: ref,
 
             update: function (model) {
-                return api.update(model.attributes);
+                //yell on reject
+                return settingsUtil.yell(
+                    api.update(model.attributes)
+                );
 
             },
             create: function (model) {
-                return api.create(model.attributes);
+                //yell on reject
+                return settingsUtil.yell(
+                    api.create(model.attributes)
+                );
             }
 
         });

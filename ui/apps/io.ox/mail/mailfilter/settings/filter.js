@@ -17,10 +17,11 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'io.ox/mail/mailfilter/settings/model',
     'io.ox/core/tk/dialogs',
     'gettext!io.ox/mail',
+    'io.ox/settings/util',
     'text!io.ox/mail/mailfilter/settings/tpl/listbox.html',
     'text!io.ox/mail/mailfilter/settings/tpl/filter_select.html',
     'io.ox/mail/mailfilter/settings/filter/view-form'
-], function (ext, api, mailfilterModel, dialogs, gt, listboxtmpl, tmpl, AccountDetailView) {
+], function (ext, api, mailfilterModel, dialogs, gt, settingsUtil, listboxtmpl, tmpl, AccountDetailView) {
 
     'use strict';
 
@@ -204,9 +205,12 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             self = this,
                             id = selected.data('id');
                         if (id !== false) {
-                            api.deleteRule(id).done(function () {
-                                self.collection.remove(id);
-                            });
+                             //yell on reject
+                            settingsUtil.yell(
+                                api.deleteRule(id).done(function () {
+                                    self.collection.remove(id);
+                                })
+                            );
                         }
 
                     },
@@ -221,9 +225,12 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                         selectedObj.set('active', state);
 
-                        api.update(selectedObj).done(function () {
-                            self.render();
-                        });
+                        //yell on reject
+                        settingsUtil.yell(
+                            api.update(selectedObj).done(function () {
+                                self.render();
+                            })
+                        );
                     },
 
                     onMakeSortable: function () {
@@ -239,7 +246,10 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                 data = _.map(arrayOfFilters, function (single) {
                                     return parseInt($(single).attr('data-id'), 10);
                                 });
-                                api.reorder(data); //TODO needs a response?;
+                                 //yell on reject
+                                settingsUtil.yell(
+                                    api.reorder(data)
+                                );
                             }
                         });
                     }
