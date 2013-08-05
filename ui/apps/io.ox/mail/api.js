@@ -1207,13 +1207,19 @@ define('io.ox/mail/api',
             data.datasources = _.chain(data.contacts_ids).map(mapArgs).value();
         }
 
+        api.trigger('beforesend', { data: data, files: files, form: form });
+
         if (Modernizr.filereader && 'FormData' in window) {
             deferred = handleSendXHR2(data, files, deferred);
         } else {
             deferred = handleSendTheGoodOldWay(data, form);
         }
 
-        return deferred.then(function (text) {
+        return deferred
+            .done(function (text) {
+                api.trigger('send', { data: data, files: files, form: form });
+            })
+            .then(function (text) {
             // wait a moment, then update mail index
             setTimeout(function () {
                 // clear inbox & sent folder
