@@ -12,6 +12,8 @@ define('plugins/mobile/addToHomescreen/register',
      'css!plugins/mobile/addToHomescreen/style.css'], function (ext, gt) {
 
     "use strict";
+    if (ox.debug) return;
+
     var nav = window.navigator,
         isIDevice = _.device('iOS'),
         isIPad = false,
