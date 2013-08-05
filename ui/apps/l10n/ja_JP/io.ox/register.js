@@ -14,8 +14,9 @@
 define('l10n/ja_JP/io.ox/register',
     ['io.ox/core/extensions',
      'io.ox/backbone/mini-views',
+     'settings!io.ox/core',
      'css!l10n/ja_JP/io.ox/style.css'
-    ], function (ext, mini) {
+    ], function (ext, mini, settings) {
 
     'use strict';
 
@@ -33,7 +34,8 @@ define('l10n/ja_JP/io.ox/register',
                 var value = baton.data[yomiField];
                 if (!value) return;
                 self.find(selector).prepend(
-                    $('<div class="furigana">').text(value));
+                    $('<div class="furigana">').text(value)
+                );
             }
         }
     });
@@ -70,12 +72,15 @@ define('l10n/ja_JP/io.ox/register',
     ext.point('io.ox/contacts/edit').extend({
         index: 'last',
         draw: function (baton) {
-            watchKana(this.find('input[name="last_name"]'),
-                      this.find('input[name="yomiLastName"]'));
-            watchKana(this.find('input[name="first_name"]'),
-                      this.find('input[name="yomiFirstName"]'));
-            watchKana(this.find('input[name="company"]'),
-                      this.find('input[name="yomiCompany"]'));
+            // auto-complete for furigana fields?
+            if (settings.get('features/furiganaAutoComplete', false) === true) {
+                watchKana(this.find('input[name="last_name"]'),
+                          this.find('input[name="yomiLastName"]'));
+                watchKana(this.find('input[name="first_name"]'),
+                          this.find('input[name="yomiFirstName"]'));
+                watchKana(this.find('input[name="company"]'),
+                          this.find('input[name="yomiCompany"]'));
+            }
         }
     });
 

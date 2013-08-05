@@ -426,7 +426,7 @@ define('io.ox/files/actions',
                     process();
                 });
 
-                dialog = new dialogs.ModalDialog()
+                dialog = new dialogs.ModalDialog({enter: 'rename'})
                     .header($('<h4>').text(gt('Rename')))
                     .append(
                         $form

@@ -11,12 +11,14 @@
  */
 
 define('io.ox/office/preview/app/actionshelper',
-    ['io.ox/core/extensions',
+    ['io.ox/core/capabilities',
+     'io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
+     'io.ox/preview/main',
      'io.ox/office/tk/utils',
      'io.ox/office/framework/app/extensionregistry',
      'gettext!io.ox/office/main'
-    ], function (ext, links, Utils, ExtensionRegistry, gt) {
+    ], function (capabilities, ext, links, preview, Utils, ExtensionRegistry, gt) {
 
     'use strict';
 
@@ -35,6 +37,13 @@ define('io.ox/office/preview/app/actionshelper',
      */
     function isViewable(data) {
         return data.collection.has('one') && ExtensionRegistry.isViewable(data.context.filename);
+    }
+
+    /**
+     * Launches a new OX Viewer application with the passed file descriptor.
+     */
+    function launchApplication(file) {
+        ox.launch('io.ox/office/preview/main', { action: 'load', file: file });
     }
 
     // static class ActionsHelper =============================================
@@ -62,10 +71,7 @@ define('io.ox/office/preview/app/actionshelper',
         new links.Action(actionId, {
             requires: isViewable,
             action: function (baton) {
-                ox.launch('io.ox/office/preview/main', {
-                    action: 'load',
-                    file: fileDescriptorHandler(baton)
-                });
+                launchApplication(fileDescriptorHandler(baton));
             }
         });
     };
@@ -112,6 +118,75 @@ define('io.ox/office/preview/app/actionshelper',
             }
         });
     };
+
+    // static initialization ==================================================
+
+    // register preview renderer for documents supported by OX Viewer
+    if (capabilities.has('document_preview')) {
+        (function () {
+
+            function getWidth(options) {
+                return Utils.getIntegerOption(options, 'width', 400);
+            }
+
+            function getUrl(file, options) {
+                var url = file.dataURL || file.url;
+                return url + '&format=preview_image&width=' + getWidth(options) + '&delivery=view&scaleType=contain';
+            }
+
+            function drawPreview(file, options) {
+
+                var // the outer container node for the preview image
+                    containerNode = this,
+                    // the link node that will launch OX Viewer when clicked
+                    linkNode = preview.protectedMethods.clickableLink(file, function (e) {
+                        e.preventDefault();
+                        if (file.module) {
+                            file.source = 'task';
+                            file.folder_id = file.folder;
+                        } else if (file.data && file.data.mail) {
+                            file.folder_id = file.data.mail.folder_id;
+                            file.attached = file.data.id;
+                            file.id = file.data.mail.id;
+                            file.source = 'mail';
+                        }
+                        launchApplication(file);
+                    }).appendTo(containerNode),
+                    // the image node showing the first page of the document
+                    imgNode = $('<img>', { alt: '' }).addClass('io-ox-clickable').appendTo(linkNode),
+                    // a Deferred object waiting for the image
+                    def = $.Deferred();
+
+                containerNode.css({ minHeight: 20 }).busy();
+
+                // prepare and load the preview image
+                imgNode
+                    .css({ width: getWidth(options), maxWidth: '100%', visibility: 'hidden' })
+                    .on('load', function () { def.resolve(); })
+                    .on('error', function () { def.reject(); })
+                    .attr('src', getUrl(file, options));
+
+                // react on the result of the image
+                def
+                .always(function () { containerNode.css({ minHeight: '' }).idle(); })
+                .done(function () { imgNode.css('visibility', ''); })
+                .fail(function () { containerNode.empty(); });
+
+                preview.protectedMethods.dragOutHandler(linkNode);
+            }
+
+            // create a new rendering engine for all supported documents
+            preview.Renderer.point.extend(new preview.Engine({
+                id: 'office',
+                index: 10,
+                supports: ExtensionRegistry.getViewableExtensions(), // TODO: mimetypes too?
+                getUrl: getUrl,
+                draw: drawPreview,
+                omitDragoutAndClick: true
+            }));
+
+        }());
+    }
 
     // exports ================================================================
 

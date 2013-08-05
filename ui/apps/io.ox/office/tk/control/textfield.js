@@ -101,7 +101,9 @@ define('io.ox/office/tk/control/textfield',
          * The update handler for this text field.
          */
         function updateHandler(value) {
-            fieldNode.val((_.isUndefined(value) || _.isNull(value)) ? '' : validator.valueToText(value));
+            value = (_.isUndefined(value) || _.isNull(value)) ? '' : validator.valueToText(value);
+            fieldNode.val(value);
+            self.getNode().attr('data-value', value);
             saveFieldState();
         }
 

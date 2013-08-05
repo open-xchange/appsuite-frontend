@@ -72,13 +72,15 @@ define('io.ox/core/permissions/permissions',
             updateDropdown: function (e) {
                 e.preventDefault();
                 var $el     = $(e.target),
+                    $span   = $el.parent().parent().parent(),
                     value   = $el.attr('data-value'),
-                    link    = $el.parent().parent().parent().children('a'),
+                    link    = $span.children('a'),
                     type    = link.attr('data-type'),
                     newbits = api.Bitmask(this.model.get('bits')).set(type, value).get();
                 link.text($el.text());
                 this.model.set('bits', newbits, {validate: true});
                 this.updateRole();
+                this.render();
             },
 
             applyRole: function (e) {
@@ -250,7 +252,7 @@ define('io.ox/core/permissions/permissions',
         var bits = baton.model.get('bits'),
             selected = api.Bitmask(bits).get(permission),
             admin = isFolderAdmin,
-            menu;
+            menu, ul;
         // folder fix
         if (permission === 'folder' && selected === 0) selected = 1;
         // no admin choice for default folders (see Bug 27704)
@@ -262,15 +264,16 @@ define('io.ox/core/permissions/permissions',
         }
         menu = $('<span class="dropdown">').append(
             $('<a href="#">').attr({
+                'tabindex': 1,
                 'data-type': permission,
                 'aria-haspopup': true,
                 'data-toggle': 'dropdown'
             }).text(menus[permission][selected]),
-            $('<ul class="dropdown-menu" role="menu">')
+            ul = $('<ul class="dropdown-menu" role="menu">')
         );
         _(menus[permission]).each(function (item, value) {
             if (value === '64') return true; // Skip maximum rights
-            menu.find('ul').append(
+            ul.append(
                 $('<li>').append(
                     $('<a>', { href: '#', 'data-value': value, role: 'menuitem'}).addClass('bit').text(item)
                 )
@@ -282,11 +285,11 @@ define('io.ox/core/permissions/permissions',
     addRoles = function (baton) {
         if (!isFolderAdmin) return $();
         return $('<span class="dropdown preset">').append(
-            $('<a href="#" data-type="permission" data-toggle="dropdown">'),
-            $('<ul class="dropdown-menu">').append(
+            $('<a href="#" data-type="permission" data-toggle="dropdown" aria-haspopup="true" tabindex="1">'),
+            $('<ul class="dropdown-menu" role="menu">').append(
                 _(presets).map(function (obj) {
                     return $('<li>').append(
-                        $('<a>', { href: '#', 'data-value': obj.bits }).addClass('role').text(obj.label)
+                        $('<a>', { href: '#', 'data-value': obj.bits, role: 'menuitem' }).addClass('role').text(obj.label)
                     );
                 })
             )

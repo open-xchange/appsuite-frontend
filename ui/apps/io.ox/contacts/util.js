@@ -90,13 +90,20 @@ define('io.ox/contacts/util', ['io.ox/core/util', 'gettext!io.ox/contacts'], fun
                 };
             }
 
-            // use existing display name?
+            // we need last_name and first_name ahead of display_name,
+            // for example, to keep furigana support
+
+            // fallback #1: just last_name
+            if (obj.last_name) return single(2, obj.last_name);
+
+            // fallback #2: just first_name
+            if (obj.first_name) return single(1, obj.first_name);
+
+            // fallback #3: use existing display name?
             if (obj.display_name) {
                 return single(4, util.unescapeDisplayName(obj.display_name));
             }
-            // fallback
-            if (obj.last_name) return single(2, obj.last_name);
-            if (obj.first_name) return single(1, obj.first_name);
+
             return { format: _.noI18n(''), params: [] };
         },
 

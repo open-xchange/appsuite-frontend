@@ -143,18 +143,20 @@ define('io.ox/mail/settings/pane',
 
             mailViewSettings = new MailSettingsView({model: mailSettings});
 
-            mailViewSettings.model.on('change', function (model, e) {
+            // mattes: please see bug 27510. maybe we don't need this
 
-                var showNotice = _(reloadMe).any(function (attr) {
-                    if (_.isBoolean(mailViewSettings.model.changed[attr])) {
-                        return true;
-                    }
-                });
+            // mailViewSettings.model.on('change', function (model, e) {
 
-                if (showNotice) {
-                    require("io.ox/core/notifications").yell("success", gt("The setting has been saved and will become active when you enter the application the next time."));
-                }
-            });
+            //     var showNotice = _(reloadMe).any(function (attr) {
+            //         if (_.isBoolean(mailViewSettings.model.changed[attr])) {
+            //             return true;
+            //         }
+            //     });
+
+            //     if (showNotice) {
+            //         require("io.ox/core/notifications").yell("success", gt("The setting has been saved and will become active when you enter the application the next time."));
+            //     }
+            // });
 
             var holder = $('<div>').css('max-width', '800px');
             this.append(holder.append(

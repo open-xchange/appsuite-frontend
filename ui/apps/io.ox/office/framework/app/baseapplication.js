@@ -263,6 +263,14 @@ define('io.ox/office/framework/app/baseapplication',
             return $.when.apply($, results);
         }
 
+        /**
+         * Handler for 'unload' events from the browser triggered when
+         * reloading or closing the entire page.
+         */
+        function unloadHandler() {
+            self.executeQuitHandlers();
+        }
+
         // public methods -----------------------------------------------------
 
         /**
@@ -833,9 +841,13 @@ define('io.ox/office/framework/app/baseapplication',
          *
          * @internal
          *  Not for external use. Only used from the implementation of the
-         *  'io.ox/core/logout' extension point.
+         *  'io.ox/core/logout' extension point and the window's 'unload' event
+         *  handler.
          */
         this.executeQuitHandlers = function () {
+            // Bug 28044: unbind the 'unload' event handler immediately, otherwise
+            // logging out may trigger quit handlers twice (from logout and unload)
+            $(window).off('unload', unloadHandler);
             return callHandlers(quitHandlers);
         };
 
@@ -1403,27 +1415,26 @@ define('io.ox/office/framework/app/baseapplication',
                 $.when(flushHandlerResult).then(function () {
 
                     function attachFile(composeResult, descriptor)  {
-                            composeResult.app.addFiles(
-                                [{filename: descriptor.filename,
-                                    folder_id: descriptor.folder_id,
-                                    id: descriptor.id,
-                                    size: descriptor.file_size,
-                                    file_size: descriptor.file_size
-                                }]);
-                        }
+                        composeResult.app.addFiles([{
+                            filename: descriptor.filename,
+                            folder_id: descriptor.folder_id,
+                            id: descriptor.id,
+                            size: descriptor.file_size,
+                            file_size: descriptor.file_size
+                        }]);
+                    }
+
                     //fileDescriptor.mailFolder, .mailUID
                     require(['io.ox/mail/write/main'], function (m) {
                         m.getApp().launch().done(function () {
                             if (fileDescriptor.mailUID) {
                                 this.replyall({
-                                        id: fileDescriptor.mailUID,
-                                        folder: fileDescriptor.mailFolder
-                                    }).done(function (result) {
-                                        attachFile(result, fileDescriptor);
-                                    });
-
-                            }
-                            else {
+                                    id: fileDescriptor.mailUID,
+                                    folder: fileDescriptor.mailFolder
+                                }).done(function (result) {
+                                    attachFile(result, fileDescriptor);
+                                });
+                            } else {
                                 this.compose().done(function (result) {
                                     attachFile(result, fileDescriptor);
                                 });
@@ -1512,7 +1523,7 @@ define('io.ox/office/framework/app/baseapplication',
             self.setWindow(win);
 
             // wait for unload events and execute quit handlers
-            self.registerEventHandler(window, 'unload', function () { callHandlers(quitHandlers); });
+            self.registerEventHandler(window, 'unload', unloadHandler);
 
             // create the MVC instances
             model = new ModelClass(self);
