@@ -17,9 +17,8 @@ define('io.ox/preview/main',
     ['io.ox/core/extensions',
      'io.ox/core/capabilities',
      'io.ox/files/mediasupport',
-     'io.ox/office/framework/app/extensionregistry',
      'gettext!io.ox/preview'
-    ], function (ext, capabilities, mediasupport, ExtensionRegistry, gt) {
+    ], function (ext, capabilities, mediasupport, gt) {
 
     'use strict';
 
@@ -176,61 +175,6 @@ define('io.ox/preview/main',
         }));
     }
 
-    function previewLoaded() {
-        $(this).css('visibility', '').closest('div').idle();
-    }
-
-    function previewFailed() {
-        $(this).closest('div').empty();
-    }
-
-    // if available register office typed renderer
-    if (capabilities.has('document_preview')) {
-        Renderer.point.extend(new Engine({
-            id: 'office',
-            index: 10,
-            supports: ExtensionRegistry.getViewableExtensions(),
-            getUrl: function (file, options) {
-                options = _.extend({ width: 400 }, options);
-                var url = file.dataURL || file.url;
-                return url + '&format=preview_image&width=' + options.width + '&delivery=view&scaleType=contain';
-            },
-            draw: function (file, options) {
-
-                var $a = clickableLink(file, function (e) {
-                        e.preventDefault();
-
-                        if (file.module) {
-                            file.source = 'task';
-                            file.folder_id = file.folder;
-                        } else if (file.data && file.data.mail) {
-                            file.folder_id = file.data.mail.folder_id;
-                            file.attached = file.data.id;
-                            file.id = file.data.mail.id;
-                            file.source = 'mail';
-                        }
-
-                        ox.launch('io.ox/office/preview/main', { action: 'load', file: file });
-                    }),
-                    width = options.width || '400',
-                    $img = $('<img alt="">')
-                        .css({ width: width + 'px', maxWidth: '100%', visibility: 'hidden' })
-                        .addClass('io-ox-clickable')
-                        .on({ load: previewLoaded, error: previewFailed });
-
-                this.busy();
-
-                // setting src now; just helpful for debugging/setTimeout
-                $img.attr('src', file.dataURL + '&format=preview_image&width=' + width + '&delivery=view&scaleType=contain');
-
-                $a.append($img);
-                dragOutHandler($a);
-                this.append($a);
-            },
-            omitDragoutAndClick: true
-        }));
-    }
-
     Renderer.point.extend(new Engine({
         id: 'eml',
         supports: ['eml', 'message/rfc822'],
@@ -363,6 +307,7 @@ define('io.ox/preview/main',
 
     return {
         Preview: Preview,
+        Renderer: Renderer,
         Engine: Engine,
         Extension: Extension,
         protectedMethods: {
