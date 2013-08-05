@@ -90,7 +90,7 @@ define('io.ox/mail/view-detail',
         regImageSrc = /(<img[^>]+src=")\/ajax/g;
 
     function processEmoji(text) {
-        text = emoji.getInstance().softbankToUnified(text);
+        text = emoji.softbankToUnified(text);
         return emoji.unifiedToImageTag(text, {
             forceEmojiIcons: settings.get('emoji/forceEmojiIcons', false)
         });
