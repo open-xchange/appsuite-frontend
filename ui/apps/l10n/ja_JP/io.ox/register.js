@@ -43,48 +43,50 @@ define('l10n/ja_JP/io.ox/register',
         }
     });
 
-    // Edit view
+    _(['io.ox/core/user', 'io.ox/contacts']).each(function (ref) {
 
-    ext.point('io.ox/contacts/edit/personal')
-        .replace({ id: 'last_name', index: 200 })
-        .replace({ id: 'first_name', index: 300 });
+        // Edit view
+        ext.point(ref + '/edit/personal')
+            .replace({ id: 'last_name', index: 200 })
+            .replace({ id: 'first_name', index: 300 });
 
-    yomiField('personal', 'last_name', 'yomiLastName');
-    yomiField('personal', 'first_name', 'yomiFirstName');
-    yomiField('job', 'company', 'yomiCompany');
+        yomiField('personal', 'last_name', 'yomiLastName');
+        yomiField('personal', 'first_name', 'yomiFirstName');
+        yomiField('job', 'company', 'yomiCompany');
 
-    function yomiField(point, id, yomiID) {
+        function yomiField(point, id, yomiID) {
 
-        ext.point('io.ox/contacts/edit/' + point).extend({
-            id: yomiID,
+            ext.point(ref + '/edit/' + point).extend({
+                id: yomiID,
+                index: 'last',
+                draw: function (baton) {
+                    var input = this.find('input[name="' + id + '"]');
+                    // insert furigana field before orginal field
+                    input.before(
+                        new mini.InputView({ name: yomiID, model: baton.model }).render().$el
+                        .addClass('furigana')
+                        .attr({ placeholder: '振り仮名 \u2026' /* Furigana + ellipsis */ })
+                    );
+                    // now move original input field after its label
+                    input.closest('label').after(input);
+                }
+            });
+        }
+
+        ext.point(ref + '/edit').extend({
             index: 'last',
             draw: function (baton) {
-                var input = this.find('input[name="' + id + '"]');
-                // insert furigana field before orginal field
-                input.before(
-                    new mini.InputView({ name: yomiID, model: baton.model }).render().$el
-                    .addClass('furigana')
-                    .attr({ placeholder: '振り仮名 \u2026' /* Furigana + ellipsis */ })
-                );
-                // now move original input field after its label
-                input.closest('label').after(input);
+                // auto-complete for furigana fields?
+                if (settings.get('features/furiganaAutoComplete', false) === true) {
+                    watchKana(this.find('input[name="last_name"]'),
+                              this.find('input[name="yomiLastName"]'));
+                    watchKana(this.find('input[name="first_name"]'),
+                              this.find('input[name="yomiFirstName"]'));
+                    watchKana(this.find('input[name="company"]'),
+                              this.find('input[name="yomiCompany"]'));
+                }
             }
         });
-    }
-
-    ext.point('io.ox/contacts/edit').extend({
-        index: 'last',
-        draw: function (baton) {
-            // auto-complete for furigana fields?
-            if (settings.get('features/furiganaAutoComplete', false) === true) {
-                watchKana(this.find('input[name="last_name"]'),
-                          this.find('input[name="yomiLastName"]'));
-                watchKana(this.find('input[name="first_name"]'),
-                          this.find('input[name="yomiFirstName"]'));
-                watchKana(this.find('input[name="company"]'),
-                          this.find('input[name="yomiCompany"]'));
-            }
-        }
     });
 
     function watchKana($field, $yomiField) {
