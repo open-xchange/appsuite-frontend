@@ -81,6 +81,16 @@ define([
                     });
                 });
             });
+
+            describe('shift_jis -> unified', function () {
+                it('should provide a jisToUnified method', function () {
+                    expect(emoji.jisToUnified).toBeFunction();
+                });
+
+                it('should convert from shift_jis encoding to unified', function () {
+                    expect(emoji.jisToUnified('\uf98b')).toBe('\u2600');
+                });
+            });
             // everything else should be tested by emoji lib
         });
     });
