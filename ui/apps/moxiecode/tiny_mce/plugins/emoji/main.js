@@ -12,11 +12,12 @@
 define('moxiecode/tiny_mce/plugins/emoji/main',
        ['3rd.party/emoji/emoji',
        'moxiecode/tiny_mce/plugins/emoji/categories',
+       'moxiecode/tiny_mce/plugins/emoji/conversions',
        'io.ox/core/extensions',
        'settings!io.ox/mail/emoji',
        'css!3rd.party/emoji/emoji.css',
        'less!moxiecode/tiny_mce/plugins/emoji/emoji.less'
-    ], function (emoji, categories, ext, settings) {
+    ], function (emoji, categories, conversions, ext, settings) {
 
     "use strict";
 
@@ -343,5 +344,5 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
         sendEncoding: function () {
             return settings.get('sendEncoding', 'unified');
         }
-    }, emoji);
+    }, conversions, emoji);
 });
