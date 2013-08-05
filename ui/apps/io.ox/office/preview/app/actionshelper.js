@@ -11,17 +11,16 @@
  */
 
 define('io.ox/office/preview/app/actionshelper',
-    ['io.ox/core/extPatterns/links',
-     'io.ox/office/framework/app/extensionregistry'
-    ], function (links, ExtensionRegistry) {
+    ['io.ox/core/extensions',
+     'io.ox/core/extPatterns/links',
+     'io.ox/office/tk/utils',
+     'io.ox/office/framework/app/extensionregistry',
+     'gettext!io.ox/office/main'
+    ], function (ext, links, Utils, ExtensionRegistry, gt) {
 
     'use strict';
 
-    // static class ActionsHelper =============================================
-
-    var ActionsHelper = {};
-
-    // methods ----------------------------------------------------------------
+    // private global functions ===============================================
 
     /**
      * Returns whether the file selection described in the passed callback data
@@ -34,9 +33,19 @@ define('io.ox/office/preview/app/actionshelper',
      *  Whether the passed data describes exactly one file that is viewable in
      *  the OX Viewer application.
      */
-    ActionsHelper.isViewable = function (data) {
+    function isViewable(data) {
         return data.collection.has('one') && ExtensionRegistry.isViewable(data.context.filename);
-    };
+    }
+
+    // static class ActionsHelper =============================================
+
+    /**
+     * Defines static methods to create new actions and links to launch the OX
+     * Viewer application from various other applications in OX AppSuite.
+     */
+    var ActionsHelper = {};
+
+    // methods ----------------------------------------------------------------
 
     /**
      * Creates a new action that will show a single document in the OX Viewer
@@ -51,7 +60,7 @@ define('io.ox/office/preview/app/actionshelper',
      */
     ActionsHelper.createViewerAction = function (actionId, fileDescriptorHandler) {
         new links.Action(actionId, {
-            requires: ActionsHelper.isViewable,
+            requires: isViewable,
             action: function (baton) {
                 ox.launch('io.ox/office/preview/main', {
                     action: 'load',
@@ -59,6 +68,28 @@ define('io.ox/office/preview/app/actionshelper',
                 });
             }
         });
+    };
+
+    /**
+     * Creates a new clickable link that launches OX Viewer for a specific
+     * file.
+     *
+     * @param {String} pointId
+     *  The identifier of the extension point containing the links.
+     *
+     * @param {String} actionId
+     *  The identifier of the action launching the OX Viewer application.
+     *
+     * @param {Object} [options]
+     *  Additional options passed to the constructor of the link.
+     */
+    ActionsHelper.createViewerLink = function (pointId, actionId, options) {
+        ext.point(pointId).extend(new links.Link(Utils.extendOptions({
+            id: 'office_view',
+            index: 100,
+            label: gt('View'),
+            ref: actionId
+        }, options)));
     };
 
     /**
@@ -74,7 +105,7 @@ define('io.ox/office/preview/app/actionshelper',
             id: 'disable_action',
             index: 'first',
             requires: function (data) {
-                if (ActionsHelper.isViewable(data)) {
+                if (isViewable(data)) {
                     data.stopPropagation();
                     return false;
                 }

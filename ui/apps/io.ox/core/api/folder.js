@@ -18,7 +18,8 @@ define('io.ox/core/api/folder',
      'io.ox/core/api/account',
      'io.ox/core/event',
      'io.ox/core/notifications',
-     'gettext!io.ox/core'], function (http, cache, mailSettings, settings, account, Events, notifications, gt) {
+     'io.ox/core/capabilities',
+     'gettext!io.ox/core'], function (http, cache, mailSettings, settings, account, Events, notifications, capabilities, gt) {
 
     'use strict';
 
@@ -47,6 +48,14 @@ define('io.ox/core/api/folder',
             // get cache
             opt = opt || {};
             var cache = opt.storage ? opt.storage.folderCache : folderCache;
+            // make sure it's a string
+            id = String(id);
+            // fetch GAB but GAB is disabled?
+            if (id === '6' && !capabilities.has('gab')) {
+                var error = gt('Accessing global address book is not permitted');
+                console.warn(error);
+                return $.Deferred().reject({ error: error });
+            }
             // cache miss?
             var getter = function () {
                 return http.GET({
@@ -1070,20 +1079,27 @@ define('io.ox/core/api/folder',
                 return ul;
             }
             finally {
-                api.getPath({ folder: id }).done(function (list) {
-                    var exclude = _(options.exclude);
-                    _(list).each(function (o, i, list) {
-                        if (!exclude.contains(o.id)) {
-                            add.call(ul, o, i, list, options);
+                api.getPath({ folder: id }).then(
+                    function success(list) {
+                        var exclude = _(options.exclude);
+                        _(list).each(function (o, i, list) {
+                            if (!exclude.contains(o.id)) {
+                                add.call(ul, o, i, list, options);
+                            }
+                        });
+                        if (options.leaf) {
+                            ul.append(
+                                $('<li>').append($('<span class="divider">').text(gt.noI18n(' / ')), options.leaf)
+                            );
                         }
-                    });
-                    if (options.leaf) {
-                        ul.append(
-                            $('<li>').append($('<span class="divider">').text(gt.noI18n(' / ')), options.leaf)
-                        );
+                        ul = null;
+                    },
+                    function fail() {
+                        // cannot show breadcrumb, for example due to disabled GAB
+                        ul.remove();
+                        ul = null;
                     }
-                    ul = null;
-                });
+                );
             }
         };
     }());

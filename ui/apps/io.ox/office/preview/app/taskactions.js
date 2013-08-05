@@ -10,32 +10,33 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/preview/app/mailactions', ['io.ox/office/preview/app/actionshelper'], function (ActionsHelper) {
+define('io.ox/office/preview/app/taskactions', ['io.ox/office/preview/app/actionshelper'], function (ActionsHelper) {
 
     'use strict';
 
     var // the identifier of the 'View' action
-        ACTION_ID = 'io.ox/mail/actions/office/view';
+        ACTION_ID = 'io.ox/tasks/actions/office/view';
 
     // global initialization ==================================================
 
     // create the action to view the file attachment in OX Viewer
     ActionsHelper.createViewerAction(ACTION_ID, function (baton) {
         return {
-            source: 'mail',
-            folder_id: baton.data.mail.folder_id,
-            id: baton.data.mail.id,
-            attached: baton.data.id,
+            source: 'task',
+            folder_id: baton.data.folder,
+            id: baton.data.id,
+            attached: baton.data.attached,
+            module: baton.data.module,
             filename: baton.data.filename
         };
     });
 
     // create a link in the attachment drop-down menu
-    ActionsHelper.createViewerLink('io.ox/mail/attachment/links', ACTION_ID, { index: 250 });
+    ActionsHelper.createViewerLink('io.ox/tasks/attachment/links', ACTION_ID, { index: 250 });
 
-    // disable 'Preview' and 'Open in browser' actions defined by OX Mail
-    ActionsHelper.disableActionForViewable('io.ox/mail/actions/preview-attachment');
-    ActionsHelper.disableActionForViewable('io.ox/mail/actions/open-attachment');
+    // disable 'Preview' and 'Open in browser' actions defined by OX Tasks
+    ActionsHelper.disableActionForViewable('io.ox/tasks/actions/preview-attachment');
+    ActionsHelper.disableActionForViewable('io.ox/tasks/actions/open-attachment');
 
     // exports ================================================================
 

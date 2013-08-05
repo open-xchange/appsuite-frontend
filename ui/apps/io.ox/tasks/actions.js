@@ -17,17 +17,14 @@ define('io.ox/tasks/actions',
      'io.ox/core/extPatterns/links',
      'gettext!io.ox/tasks',
      'io.ox/core/notifications',
-     'io.ox/core/print',
-     'io.ox/office/framework/app/extensionregistry'], function (ext, util, links, gt, notifications, print, ExtensionRegistry) {
+     'io.ox/core/print'
+    ], function (ext, util, links, gt, notifications, print) {
 
     'use strict';
 
     //  actions
     var Action = links.Action, Button = links.Button,
-        ActionGroup = links.ActionGroup, ActionLink = links.ActionLink,
-        isPreviewable = function (e) {
-            return e.collection.has('one') && ExtensionRegistry.isViewable(e.context.filename);
-        };
+        ActionGroup = links.ActionGroup, ActionLink = links.ActionLink;
 
     new Action('io.ox/tasks/actions/create', {
         requires: function (e) {
@@ -375,34 +372,13 @@ define('io.ox/tasks/actions',
 
     new Action('io.ox/tasks/actions/open-attachment', {
         id: 'open',
-        requires: function (e) {
-            return !isPreviewable(e);
-        },
+        requires: 'some',
         multiple: function (list) {
             ox.load(['io.ox/core/api/attachment']).done(function (attachmentApi) {
                 _(list).each(function (data) {
                     var url = attachmentApi.getUrl(data, 'open');
                     window.open(url);
                 });
-            });
-        }
-    });
-
-    new Action('io.ox/tasks/actions/open', {
-        requires: function (e) {
-            return isPreviewable(e);
-        },
-        action: function (o) {
-            var file = {};
-            file.id = o.data.id;
-            file.filename = o.data.filename;
-            file.folder_id = o.data.folder;
-            file.source = 'task';
-            file.module = o.data.module;
-            file.attached = o.data.attached;
-            ox.launch('io.ox/office/preview/main', {
-                action: 'load',
-                file: file
             });
         }
     });
@@ -586,13 +562,6 @@ define('io.ox/tasks/actions',
         index: 100,
         label: gt('Preview'),
         ref: 'io.ox/tasks/actions/preview-attachment'
-    }));
-
-    ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
-        id: 'open1',
-        index: 250,
-        label: gt('Open'),
-        ref: 'io.ox/tasks/actions/open'
     }));
 
     ext.point('io.ox/tasks/attachment/links').extend(new links.Link({

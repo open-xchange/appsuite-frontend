@@ -89,6 +89,13 @@ define('io.ox/mail/view-detail',
         regMailComplexReplace = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&]+)&gt;/g, /* "name" <address> */
         regImageSrc = /(<img[^>]+src=")\/ajax/g;
 
+    function processEmoji(text) {
+        text = emoji.getInstance().softbankToUnified(text);
+        return emoji.unifiedToImageTag(text, {
+            forceEmojiIcons: settings.get('emoji/forceEmojiIcons', false)
+        });
+    }
+
     var insertEmoticons = (function () {
 
         var emotes = {
@@ -116,32 +123,29 @@ define('io.ox/mail/view-detail',
                     return !emote ? match : emote;
                 });
             }
-            text = emoji.getInstance().softbankToUnified(text);
-            return emoji.unifiedToImageTag(text, {
-                forceEmojiIcons: settings.get('emoji/forceEmojiIcons', false)
-            });
+            return text;
         };
     }());
 
     var beautifyText = function (text) {
 
-        var content = markupQuotes(
-            insertEmoticons(
-                $.trim(text)
-                // remove line breaks
-                .replace(/\n|\r/g, '')
-                // replace leading BR
-                .replace(/^\s*(<br\/?>\s*)+/g, '')
-                // reduce long BR sequences
-                .replace(/(<br\/?>\s*){3,}/g, '<br><br>')
-                // remove split block quotes
-                .replace(/<\/blockquote>\s*(<br\/?>\s*)+<blockquote[^>]+>/g, '<br><br>')
-                // add markup for email addresses
-                .replace(regMailComplex, '<a href="mailto:$6">$2$3</a>')
-            )
-        );
+        text = $.trim(text)
+            // remove line breaks
+            .replace(/\n|\r/g, '')
+            // replace leading BR
+            .replace(/^\s*(<br\/?>\s*)+/g, '')
+            // reduce long BR sequences
+            .replace(/(<br\/?>\s*){3,}/g, '<br><br>')
+            // remove split block quotes
+            .replace(/<\/blockquote>\s*(<br\/?>\s*)+<blockquote[^>]+>/g, '<br><br>')
+            // add markup for email addresses
+            .replace(regMailComplex, '<a href="mailto:$6">$2$3</a>');
 
-        return content;
+        text = insertEmoticons(text);
+        text = processEmoji(text);
+        text = markupQuotes(text);
+
+        return text;
     };
 
     var getContentType = function (type) {
@@ -377,8 +381,10 @@ define('io.ox/mail/view-detail',
 
                 // replace images on source level
                 source = source.replace(regImageSrc, '$1' + ox.apiRoot);
+
+                // apply emoji stuff for HTML
                 if (isHTML && !isLarge) {
-                    source = emoji.unifiedToImageTag(source);
+                    source = processEmoji(source);
                 }
 
                 // robust constructor for large HTML
@@ -564,7 +570,12 @@ define('io.ox/mail/view-detail',
                         .filter('[href^="mailto:"]').on('click', mailTo);
                 });
 
-                if (!isLarge && options.blockquote !== 'expand') {
+                // auto-collapse blockquotes?
+                var autoCollapse = !isLarge &&
+                    options.autoCollapseBlockquotes !== false &&
+                    settings.get('features/autoCollapseBlockquotes', true) === true;
+
+                if (autoCollapse) {
                     // blockquotes (top-level only)
                     content.find('blockquote').not(content.find('blockquote blockquote')).each(function () {
                         var node = $(this);
