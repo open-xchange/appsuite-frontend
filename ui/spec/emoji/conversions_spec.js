@@ -53,7 +53,7 @@ define([
                     expect(this.convert('\u2600')).toBe('\ue04a');
                 });
 
-                it('shoudl fall back to unified if no PUA encoding available', function () {
+                it('should fall back to unified if no PUA encoding available', function () {
                     expect(this.convert(this.testIcons.unified)).toBe(this.testIcons.unified);
                 });
 
