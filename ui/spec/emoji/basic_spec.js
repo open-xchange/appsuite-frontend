@@ -46,9 +46,15 @@ define([
             });
 
             it('should convert unified unicode emoji to image tag', function () {
-                var imgTag = emoji.unifiedToImageTag('\u2600');
+                var imgTag = emoji.unifiedToImageTag('\u2600'),
+                    text = emoji.unifiedToImageTag('On Tuesday "Some Body" <somebody@example.com> wrote: \u2600'),
+                    test = 'On Tuesday "Some Body" <somebody@example.com> wrote: ' +
+                           '<img src="apps/themes/login/1x1.gif" class="emoji-unified emoji2600" ' +
+                           'data-emoji-unicode="\u2600">';
 
                 expect($(imgTag).attr('data-emoji-unicode')).toBe('\u2600');
+                //leave text between <> as is!
+                expect(text).toBe(test);
             });
 
             it('should convert special image tags to unified emoji unicode', function () {
