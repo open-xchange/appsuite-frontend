@@ -57,7 +57,7 @@ define([
                     expect(this.convert(this.testIcons.unified)).toBe(this.testIcons.unified);
                 });
 
-                it('should leave non-emoji characters intact', function () {
+                it('should leave non-emoji characters intact in text format', function () {
                     expect(this.convert('> \u2600')).toBe('> \ue04a');
                 });
 
@@ -65,6 +65,11 @@ define([
                     //TODO: converting <img src="test.png" /> will be converted to <img src="test.png">
                     //this is because of jQuery doing to much magic, may be this can break stuff :\
                     expect(this.convert('<img src="test.png">\u2600')).toEqual('<img src="test.png">\ue04a');
+                });
+
+                it('should leave "<" or ">" characters embedded in text intact', function () {
+                    var testStr = 'On Tuesday "Some Body" <somebody@example.com> wrote:';
+                    expect(this.convert(testStr)).toEqual(testStr);
                 });
 
                 describe('convert image tags to PUA encoding', function () {
