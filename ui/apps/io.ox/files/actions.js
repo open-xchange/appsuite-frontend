@@ -288,10 +288,11 @@ define('io.ox/files/actions',
                                 api.propagate('delete', list[0]);
                                 notifications.yell('success', responseSuccess);
                             }).fail(function (e) {
+                                console.log(e);
                                 if (e && e.code && e.code === 'IFO-0415') {
                                     notifications.yell('error', responseFailLocked);
                                 } else {
-                                    notifications.yell('error', responseFail);
+                                    notifications.yell('error', responseFail + "\n" + e.error);
                                 }
                             });
                         }
