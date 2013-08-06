@@ -217,15 +217,20 @@ define('plugins/notifications/mail/register',
             }
 
             api.on('new-mail', function (e, mails, unseenMails) {
-                if (!_.isArray(mails)) {
-                    mails = [].concat(mails);
-                }
-                addMails(e, mails, unseenMails);
-                if (notifications.collection.length === 0) {//all mails read. remove new Mail title
+
+                if (!_.isArray(mails)) mails = [].concat(mails);
+
+                // diabolic testers might run this with some 10K of unread mails
+                // this is irrelevant for practise, so we just consider the first 100 messages
+                // that's still a lot to read / the number if not correct but we should get rid of it anyway
+                addMails(e, mails.slice(0, 100), unseenMails);
+
+                if (notifications.collection.length === 0) { // all mails read. remove new Mail title
                     api.newMailTitle(false);
                 }
                 notifications.collection.trigger('reset');
             });
+
             api.on('move', function (e, mails, newFolder) {
                 if (!_.isArray(mails)) {
                     mails = [].concat(mails);

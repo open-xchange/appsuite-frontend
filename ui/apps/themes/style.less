@@ -181,17 +181,6 @@
         display: inline-block;
         -webkit-tap-highlight-color: transparent;
 
-        .badge {
-
-            background-color: @badgeBackground;
-            padding: 2px 9px;
-
-            &.badge-info {
-                background-color: @linkColor;
-            }
-
-        }
-
         & > a {
             color: @topbarLauncherColor;
             padding: 12px;
@@ -293,7 +282,6 @@
             -webkit-animation-name: launcherColours;
             -webkit-animation-timing-function: ease-in-out;
         }
-
     }
 
     .launcher-dropdown {
@@ -326,7 +314,6 @@
         li.active-app a {
             font-weight: bold;
         }
-
     }
 
     i[class^="icon-"] {
@@ -368,6 +355,30 @@
         }
     }
 
+    .launcher a.notifications-icon {
+
+        height: 40px;
+        display: inline-block;
+        padding: 0 12px;
+
+        &.empty i {
+            color: @notificationIconEmpty;
+        }
+
+        &:focus {
+            i { color: white; }
+            background-color: @linkColor;
+        }
+
+        &.active {
+            color: white;
+            background-color: @notificationIconBackgroundActive;
+        }
+
+        &.active:hover, &.active:focus {
+            background-color: darken(@notificationIconBackgroundActive, 5%);
+        }
+    }
 }
 
 /* empty desktop */
