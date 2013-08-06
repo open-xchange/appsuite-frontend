@@ -567,7 +567,7 @@ define('io.ox/tasks/actions',
     ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
         id: 'open',
         index: 200,
-        label: gt('Open in new tab'),
+        label: gt('Open in browser'),
         ref: 'io.ox/tasks/actions/open-attachment'
     }));
 

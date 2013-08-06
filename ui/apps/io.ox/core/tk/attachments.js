@@ -252,7 +252,7 @@ define('io.ox/core/tk/attachments',
         ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
             id: 'open',
             index: 150,
-            label: gt('Open in new tab'),
+            label: gt('Open in browser'),
             ref: 'io.ox/core/tk/attachment/actions/open-attachment'
         }));
 
