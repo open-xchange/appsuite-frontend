@@ -297,7 +297,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             return node.html();
         },
 
-        imageTagsToPUA: function (html) {
+        imageTagsToPUA: function (html, format) {
 
             var node = $('<div>').append(html);
 
@@ -314,16 +314,19 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                 $(node).replaceWith(unicode);
             });
 
-            if (node.children().length === 0) {
+            if (format === 'text') {
                 //treat html parameter as plain text
                 return node.text();
-            } else {
+            } else if (format === 'html') {
                 //treat html parameter as html code
+                return node.html();
+            } else {
+                console.warn('unknown format string', format);
                 return node.html();
             }
         },
 
-        converterFor: function (options) {
+        converterFor: function (options, format) {
             var self = this;
 
             options = _.extend({
@@ -334,8 +337,8 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             if (options.from === options.to) {
                 return _.identity;
             } else if (options.from === 'unified' && options.to === 'pua') {
-                return function (text) {
-                    return self.imageTagsToPUA(self.unifiedToImageTag(text));
+                return function (text, format) {
+                    return self.imageTagsToPUA(self.unifiedToImageTag(text), format || 'html');
                 };
             }
             return;
