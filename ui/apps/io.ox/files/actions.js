@@ -514,8 +514,6 @@ define('io.ox/files/actions',
 
                 var vGrid = baton.grid || (baton.app && baton.app.getGrid());
 
-                console.log('move ...', type);
-
                 require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/api/folder'], function (dialogs, views, folderAPI) {
 
                     function commit(target) {
@@ -556,11 +554,8 @@ define('io.ox/files/actions',
                                     settings.set('folderpopup/last', id).save();
                                 }
                             });
-                        console.log('move #2...', folderId, id, tree);
                         dialog.show(function () {
-                            console.log('huhu');
                             tree.paint().done(function () {
-                                console.log('huhu > DONE');
                                 tree.select(id).done(function () {
                                     dialog.getBody().focus();
                                 });
