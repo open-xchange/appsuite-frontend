@@ -81,10 +81,6 @@ define('io.ox/mail/autoforward/settings/model',
 
         });
 
-        Validators.validationFor(ref, {
-            forwardmail: {  format: 'email' },
-            active: { format: 'boolean' }
-        });
         return factory;
 
     }
