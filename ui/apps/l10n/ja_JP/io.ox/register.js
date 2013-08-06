@@ -15,8 +15,9 @@ define('l10n/ja_JP/io.ox/register',
     ['io.ox/core/extensions',
      'io.ox/backbone/mini-views',
      'settings!io.ox/core',
+     'gettext!l10n/ja_JP',
      'css!l10n/ja_JP/io.ox/style.css'
-    ], function (ext, mini, settings) {
+    ], function (ext, mini, settings, gt) {
 
     'use strict';
 
@@ -43,6 +44,18 @@ define('l10n/ja_JP/io.ox/register',
         }
     });
 
+    var placeholders = {
+        last_name:
+            //#. Placeholder in furigana field
+            gt('Furigana for last name'),
+        first_name:
+            //#. Placeholder in furigana field
+            gt('Furigana for first name'),
+        company:
+            //#. Placeholder in furigana field
+            gt('Furigana for company')
+    };
+
     _(['io.ox/core/user', 'io.ox/contacts']).each(function (ref) {
 
         // Edit view
@@ -65,7 +78,7 @@ define('l10n/ja_JP/io.ox/register',
                     input.before(
                         new mini.InputView({ name: yomiID, model: baton.model }).render().$el
                         .addClass('furigana')
-                        .attr({ placeholder: '振り仮名 \u2026' /* Furigana + ellipsis */ })
+                        .attr('placeholder', placeholders[id])
                     );
                     // now move original input field after its label
                     input.closest('label').after(input);
