@@ -23,7 +23,7 @@ define('io.ox/mail/view-detail',
      'settings!io.ox/mail',
      'gettext!io.ox/mail',
      'io.ox/core/api/folder',
-     'moxiecode/tiny_mce/plugins/emoji/main',
+     'io.ox/mail/emoji/util',
      'io.ox/mail/actions',
      'less!io.ox/mail/style.less'
     ], function (ext, links, util, api, http, coreUtil, account, settings, gt, folder, emoji) {
@@ -89,14 +89,6 @@ define('io.ox/mail/view-detail',
         regMailComplexReplace = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&]+)&gt;/g, /* "name" <address> */
         regImageSrc = /(<img[^>]+src=")\/ajax/g;
 
-    function processEmoji(text) {
-        text = emoji.softbankToUnified(text);
-        text = emoji.jisToUnified(text);
-        return emoji.unifiedToImageTag(text, {
-            forceEmojiIcons: settings.get('emoji/forceEmojiIcons', false)
-        });
-    }
-
     var insertEmoticons = (function () {
 
         var emotes = {
@@ -143,7 +135,7 @@ define('io.ox/mail/view-detail',
             .replace(regMailComplex, '<a href="mailto:$6">$2$3</a>');
 
         text = insertEmoticons(text);
-        text = processEmoji(text);
+        text = emoji.processEmoji(text);
         text = markupQuotes(text);
 
         return text;
@@ -385,7 +377,7 @@ define('io.ox/mail/view-detail',
 
                 // apply emoji stuff for HTML
                 if (isHTML && !isLarge) {
-                    source = processEmoji(source);
+                    source = emoji.processEmoji(source);
                 }
 
                 // robust constructor for large HTML
@@ -1037,8 +1029,11 @@ define('io.ox/mail/view-detail',
         draw: function (baton) {
 
             // soft-break long words (like long URLs)
-            var subject = $.trim(baton.data.subject);
-            subject = subject ? $('<span>').html(coreUtil.breakableHTML(subject)) : '';
+            var subject = $.trim(baton.data.subject),
+                html = emoji.processEmoji(coreUtil.breakableHTML(subject));
+
+            // process emoji
+            subject = subject ? $('<span>').html(html) : '';
 
             this.append(
                 $('<div class="mail-detail-clear-left">'),

@@ -16,8 +16,9 @@ define('io.ox/mail/view-grid-template',
      'io.ox/mail/api',
      'io.ox/core/tk/vgrid',
      'io.ox/core/api/account',
+     'io.ox/mail/emoji/util',
      'gettext!io.ox/core/mail',
-     'less!io.ox/mail/style.less'], function (util, api, VGrid, account, gt) {
+     'less!io.ox/mail/style.less'], function (util, api, VGrid, account, emoji, gt) {
 
     'use strict';
 
@@ -79,7 +80,9 @@ define('io.ox/mail/view-grid-template',
                 fields.priority.empty().append(util.getPriority(data));
                 var subject = $.trim(data.subject);
                 if (subject !== '') {
-                    fields.subject.removeClass('empty').text(_.noI18n(subject));
+                    fields.subject.removeClass('empty').empty().html(
+                        emoji.processEmoji(subject)
+                    );
                 } else {
                     fields.subject.addClass('empty').text(gt('No subject'));
                 }

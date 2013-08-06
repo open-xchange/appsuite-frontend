@@ -167,25 +167,29 @@ define('io.ox/contacts/edit/view-form', [
         }));
 
         // Save
-        point.basicExtend(new links.Button({
-            id: "save",
-            index: 110,
-            label: gt("Save"),
-            ref: ref + "/actions/edit/save",
-            cssClasses: "btn btn-primary control f6-target",
-            tabIndex: 2,
-            tagtype: "button"
-        }));
+        if (!isMyContactData) {
+            point.basicExtend(new links.Button({
+                id: "save",
+                index: 110,
+                label: gt("Save"),
+                ref: ref + "/actions/edit/save",
+                cssClasses: "btn btn-primary control f6-target",
+                tabIndex: 2,
+                tagtype: "button",
+                hidde: isMyContactData
+            }));
 
-        point.basicExtend(new links.Button({
-            id: "discard",
-            index: 120,
-            label: gt("Discard"),
-            ref: ref + "/actions/edit/discard",
-            cssClasses: "btn control",
-            tabIndex: 3,
-            tagtype: "button"
-        }));
+            point.basicExtend(new links.Button({
+                id: "discard",
+                index: 120,
+                label: gt("Discard"),
+                ref: ref + "/actions/edit/discard",
+                cssClasses: "btn control",
+                tabIndex: 3,
+                tagtype: "button"
+            }));
+        }
+
         /*
          * extension point for mobile toolbar on the bottom of the page
          */

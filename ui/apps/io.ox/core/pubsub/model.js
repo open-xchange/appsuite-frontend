@@ -15,9 +15,10 @@ define('io.ox/core/pubsub/model',
     ['io.ox/core/extensions',
      'io.ox/backbone/basicModel',
      'io.ox/core/api/pubsub',
+     'io.ox/settings/util',
      'gettext!io.ox/core/pubsub'
     ],
-    function (ext, BasicModel, api, gt) {
+    function (ext, BasicModel, api, settingsUtil, gt) {
 
     'use strict';
 
@@ -30,10 +31,14 @@ define('io.ox/core/pubsub/model',
                 return api.get({id: model.id, folder: model.get('folder')});
             },
             update: function (model) {
-                return api.update(model.attributes);
+                return settingsUtil.yellOnReject(
+                     api.update(model.attributes)
+                );
             },
             destroy: function (model) {
-                return api.destroy(model.id);
+                return settingsUtil.yellOnReject(
+                    api.destroy(model.id)
+                );
             }
         };
     }

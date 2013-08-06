@@ -198,7 +198,7 @@ define('io.ox/contacts/actions',
             });
         }
         if (load) {
-            return api.getList();
+            return api.getList(list);
         } else {
             return new $.Deferred().resolve(list);
         }
@@ -214,12 +214,13 @@ define('io.ox/contacts/actions',
                 return false;
             } else {
                 var list = [].concat(ctx);
-                return tentativeLoad(list, {check: function (obj) {return obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3; }}).pipe(function (list) {
-                    var test = (e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
-                        return memo + (obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
-                    }, 0).value() > 0);
-                    return test;
-                });
+                return tentativeLoad(list, { check: function (obj) { return obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3; }})
+                    .pipe(function (list) {
+                        var test = (e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
+                            return memo + (obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
+                        }, 0).value() > 0);
+                        return test;
+                    });
             }
         },
 
@@ -241,7 +242,7 @@ define('io.ox/contacts/actions',
                 return !!obj[1];
             }
 
-            tentativeLoad(list, {check: function (obj) {return obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3; }}).done(function (list) {
+            tentativeLoad(list, { check: function (obj) { return obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3; }}).done(function (list) {
                 // set recipient
                 var data = { to: _.chain(list).map(mapContact).flatten(true).filter(filterContact).value() };
                 // open compose
@@ -352,11 +353,12 @@ define('io.ox/contacts/actions',
                 return false;
             } else {
                 var list = [].concat(ctx);
-                return tentativeLoad(list, {check: function (obj) { return obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3; }}).pipe(function (list) {
-                    return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
-                        return memo + (obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
-                    }, 0).value() > 0;
-                });
+                return tentativeLoad(list, { check: function (obj) { return obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3; }})
+                    .pipe(function (list) {
+                        return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
+                            return memo + (obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
+                        }, 0).value() > 0;
+                    });
             }
         },
 

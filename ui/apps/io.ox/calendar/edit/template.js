@@ -213,14 +213,14 @@ define('io.ox/calendar/edit/template',
                 this.append(
                     $('<a href="#">')
                         .text(gt('Expand form'))
-                        .addClass('actionToggle')
+                        .addClass('actionToggle spacer')
                         .on('click', function (e) {
                             e.preventDefault();
                             $('.row-fluid.collapsed', baton.parentView.$el).toggle();
                             if (collapsed) {
-                                $(this).text(gt('Expand form'));
+                                $(this).text(gt('Expand form')).addClass('spacer');
                             } else {
-                                $(this).text(gt('Collapse form'));
+                                $(this).text(gt('Collapse form')).removeClass('spacer');
                             }
                             collapsed = !collapsed;
                         })

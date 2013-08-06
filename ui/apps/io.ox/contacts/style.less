@@ -132,16 +132,17 @@
             font-weight: 200;
             color: #888;
             margin: 0 0 14px 0;
+            clear: both; // required if h1 contains floating element, for example, furigana
         }
     }
 
     .attachments-container {
         min-height: 3em;
-        
+
         .dropdown {
             position: static;
         }
-        
+
         .dropdown.open {
             position: relative;
         }

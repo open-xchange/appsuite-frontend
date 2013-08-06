@@ -312,7 +312,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                 if (_.isObject(type)) {
                     if ('error' in type) {
                         o.type = 'error';
-                        o.message = type.error;
+                        o.message = type.message || type.error;
                         o.headline = gt('Error');
                     } else {
                         o = type;

@@ -177,7 +177,8 @@
 
     // update device information live
     $(window).on('resize.queryScreen', function (e) {
-       queryScreen();
+        // disabled due to sideeffects
+         //queryScreen();
     });
 
     var mobileOS = !!(_.browser.ios || _.browser.android || _.browser.blackberry || _.browser.windowsphone);
@@ -207,9 +208,7 @@
          *if _.device values are changed it might cause sideEffects
          */
         recheckDevice: function () {
-            _(queries).each(function (query, key) {
-                display[key] = Modernizr.mq(query);
-            });
+            queryScreen();
 
             mobileOS = !!(_.browser.ios || _.browser.android || _.browser.blackberry || _.browser.windowsphone);
             // define devices as combination of screensize and OS

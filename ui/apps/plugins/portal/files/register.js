@@ -47,7 +47,11 @@ define('plugins/portal/files/register',
             var content = $('<div class="content pointer">'),
                 data, options, url;
 
-            if ((/(png|jpe?g|gif|bmp)$/i).test(baton.data.filename)) {
+            if (_.isEmpty(baton.data.filename)) {
+                //old 'description only files'
+                data = { folder_id: baton.data.folder_id, id: baton.data.id };
+                content.html(_.escape(baton.data.description).replace(/\n/g, '<br>'));
+            } else if ((/(png|jpe?g|gif|bmp)$/i).test(baton.data.filename)) {
                 data = { folder_id: baton.data.folder_id, id: baton.data.id };
                 options = { width: 300, height: 300, scaleType: 'cover' };
                 url = api.getUrl(data, 'view') + '&' + $.param(options);

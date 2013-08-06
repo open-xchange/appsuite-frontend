@@ -133,8 +133,6 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                         if (!error.model) {//backend Error
                             if (error.error_params[0].indexOf('PUB-0006') === 0) {
                                 popup.getBody().find('.siteName-control').addClass('error').find('.help-inline').text(gt('Name already taken'));
-                            } else {
-                                notifications.yell('error', _.noI18n(error.error));
                             }
                         } else {//validation gone wrong
                             //must be namefield empty because other fields are correctly filled by default

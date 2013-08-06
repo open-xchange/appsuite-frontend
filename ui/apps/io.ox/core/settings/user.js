@@ -64,16 +64,7 @@ define('io.ox/core/settings/user', [
                         $node.append($userEditView);
                         $($node.find('.edit-contact')[0]).on('dispose', function () {
                             if (!_.isEmpty(user.changed)) {//check if there is something to save
-                                new dialogs.ModalDialog()
-                                .text(gt('Do you really want to discard your changes?'))
-                                .addPrimaryButton('save', gt('Save changes'))
-                                .addButton('discard', gt('Discard changes'))
-                                .show()
-                                .done(function (action) {
-                                    if  (action === 'save') {
-                                        user.save();
-                                    }
-                                });
+                                user.save();
                             }
                         });
 

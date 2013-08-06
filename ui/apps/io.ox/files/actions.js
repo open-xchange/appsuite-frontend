@@ -126,33 +126,38 @@ define('io.ox/files/actions',
     }
 
     new Action('io.ox/files/actions/download', {
-        requires: 'some',
+        requires: hasFilename,
         multiple: function (list) {
             // loop over list, get full file object and trigger downloads
-            if (list.length === 1) {
-                var o = _.first(list);
-                api.get(o).done(function (file) {
-                    if (o.version) {
-                        file = _.extend({}, file, { version: o.version });
-                    }
-                    window.open(api.getUrl(file, 'download'));
-                });
-            } else {
-                window.open(api.getUrl(list, 'zip'));
-            }
+            filterUnsupported(list).done(function (files) {
+                if (files.length === 1) {
+                    var o = _.first(files);
+                    api.get(o).done(function (file) {
+                        if (o.version) {
+                            file = _.extend({}, file, { version: o.version });
+                        }
+                        window.open(api.getUrl(file, 'download'));
+                    });
+                } else {
+                    window.open(api.getUrl(files, 'zip'));
+                }
+            });
         }
     });
 
     new Action('io.ox/files/actions/open', {
-        requires: 'some',
+        requires: hasFilename,
         multiple: function (list) {
             // loop over list, get full file object and open new window
             _(list).each(function (o) {
                 api.get(o).done(function (file) {
-                    if (o.version) {
-                        file = _.extend({}, file, { version: o.version });
+                    //not 'description only' files
+                    if (!_.isEmpty(file.filename)) {
+                        if (o.version) {
+                            file = _.extend({}, file, { version: o.version });
+                        }
+                        window.open(api.getUrl(file, 'open'));
                     }
-                    window.open(api.getUrl(file, 'open'));
                 });
             });
         }
@@ -514,8 +519,6 @@ define('io.ox/files/actions',
 
                 var vGrid = baton.grid || (baton.app && baton.app.getGrid());
 
-                console.log('move ...', type);
-
                 require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/api/folder'], function (dialogs, views, folderAPI) {
 
                     function commit(target) {
@@ -556,11 +559,8 @@ define('io.ox/files/actions',
                                     settings.set('folderpopup/last', id).save();
                                 }
                             });
-                        console.log('move #2...', folderId, id, tree);
                         dialog.show(function () {
-                            console.log('huhu');
                             tree.paint().done(function () {
-                                console.log('huhu > DONE');
                                 tree.select(id).done(function () {
                                     dialog.getBody().focus();
                                 });
@@ -946,6 +946,39 @@ define('io.ox/files/actions',
             });
         }
     });
+
+    /**
+     * identify 'description only files'
+     * @param  {event}  e
+     * @return {boolean} one or more
+     */
+    function hasFilename(e) {
+        if (e.collection.has('one') && !_.isEmpty(e.baton.data.filename)) {
+            return true;
+        }
+        if (_.isUndefined(e.baton.allIds)) {
+            e.baton.allIds = e.baton.data;
+        }
+        return api.getList(e.baton.allIds).then(function (data) {
+                e.baton.allIds = data;
+                return _(data).reduce(function (memo, obj) {
+                    return memo || !_.isEmpty(obj.filename);
+                }, false);
+            });
+    }
+
+    /**
+     * filters 'description only files'
+     * @param  {object|array} list or single item
+     * @return {deferred} resolves as array
+     */
+    function filterUnsupported(list) {
+        return api.getList(list).then(function (data) {
+                return _(data).filter(function (obj) {
+                    return !_.isEmpty(obj.filename);
+                });
+            });
+    }
 
     function checkMedia(e, type, fromSelection) {
         if (!e.collection.has('multiple') && !settings.get(type + 'Enabled')) {

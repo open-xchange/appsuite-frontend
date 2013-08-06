@@ -255,6 +255,45 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
             };
         }());
 
+        /**
+         * facade for this.save to notify user in case of errors
+         * @return {deferred}
+         */
+        this.saveAndYell = function (custom, options) {
+            var def = this.save(custom),
+                //options
+                opt = $.extend({
+                    debug: false
+                }, options),
+                notify = function (e) {
+                    require(['io.ox/core/notifications'], function (notifications) {
+                        notifications.yell(e);
+                    });
+                };
+
+            //debug
+            if (opt.debug) {
+                def.always(function () {
+                    var list = _.isArray(this) ? this : [this];
+                    _.each(list, function (current) {
+                        if (current.state)
+                            console.warn('SAVEANDYELL: ' +  current.state());
+                        else if (def.state)
+                            console.warn('SAVEANDYELL: ' +  def.state());
+                    });
+                });
+            }
+
+            //yell on reject
+            return def.fail(function (e) {
+                        require(['io.ox/core/notifications'], function (notifications) {
+                            var obj = e || { type: 'error' };
+                            //use obj.message for custom error message
+                            notifications.yell(obj);
+                        });
+                    });
+        };
+
         Event.extend(this);
     };
 

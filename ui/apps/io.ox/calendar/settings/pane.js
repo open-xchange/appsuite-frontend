@@ -151,7 +151,7 @@ define('io.ox/calendar/settings/pane',
             );
         },
         save: function () {
-            return calendarViewSettings.model.save();
+            return calendarViewSettings.model.saveAndYell();
         }
     });
 });

@@ -21,12 +21,6 @@ define('io.ox/core/relogin',
 
     var queue = [], pending = false;
 
-    function fnKeyPress(e) {
-        if (e.which === 13) {
-            e.data.popup.invoke(e.data.action);
-        }
-    }
-
     function relogin(e, request, deferred) {
 
         if (!ox.online) return;
@@ -41,7 +35,7 @@ define('io.ox/core/relogin',
 
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
 
-                new dialogs.ModalDialog({ easyOut: false, async: true, width: 400 })
+                new dialogs.ModalDialog({ easyOut: false, async: true, width: 400, enter: 'relogin' })
                     .build(function () {
                         this.getHeader().append(
                             $('<h4>').text(gt('Your session is expired')),
@@ -50,7 +44,6 @@ define('io.ox/core/relogin',
                         this.getContentNode().append(
                             $('<label>').text(gt('Password')),
                             $('<input type="password" name"relogin-password" class="input-xlarge">')
-                            .on('keypress', { popup: this, action: 'relogin' }, fnKeyPress)
                         );
                     })
                     .addPrimaryButton('relogin', gt('Relogin'))

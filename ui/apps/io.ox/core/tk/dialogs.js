@@ -146,15 +146,15 @@ define("io.ox/core/tk/dialogs",
                     break;
 
                 case 13: // Enter
-                    // ignore textareas
-                    if (!isBusy && o.enter && $(e.target).is('input[type="text"]')) {
+                    if (!isBusy && o.enter && $(e.target).is('input:text, input:password')) {
                         if (!_.isFunction(o.enter)) {
                             invoke(o.enter);
                         } else {
                             return o.enter.call(self);
                         }
+                        return false;
                     }
-                    return false;
+                    break;
 
                 case 9: // tab
                     if (o.tabTrap) {

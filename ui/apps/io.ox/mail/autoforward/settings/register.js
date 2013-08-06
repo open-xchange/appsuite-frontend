@@ -42,9 +42,6 @@ define('io.ox/mail/autoforward/settings/register',
                     var multiValues = {};
                     filters.editAutoForward($container, multiValues, user.email1).done(function (filter) {
                         filterModel = filter;
-                        filter.on('update create', function () {
-                            require("io.ox/core/notifications").yell("success", gt("Your auto forward has been saved"));
-                        });
                     }).fail(function (error) {
                         var msg;
                         if (error.code === 'MAIL_FILTER-0015') {
@@ -63,11 +60,7 @@ define('io.ox/mail/autoforward/settings/register',
         },
 
         save: function () {
-            filterModel.save().done(function () {
-            }).fail(function () {
-                notifications.yell('error', gt('Could not save auto forward'));
-            });
-
+            filterModel.save();
         }
     });
 });
