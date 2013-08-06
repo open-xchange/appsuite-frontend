@@ -741,7 +741,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                 .done(function (response) {
                     // slow?
                     that.trigger("reachable");
-                    
+
                     var took = _.now() - t0;
                     log.took(took);
                     if (took > log.SLOW) {
@@ -857,7 +857,8 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                     data: o.data,
                     dataType: o.dataType,
                     processData: o.processData,
-                    contentType: o.contentType !== undefined ? o.contentType : "application/x-www-form-urlencoded"
+                    contentType: o.contentType !== undefined ? o.contentType : "application/x-www-form-urlencoded",
+                    beforeSend: o.beforeSend
                 }
             };
             // use timeout?
