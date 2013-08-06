@@ -51,6 +51,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var closeCount = 0;
     var ackBuffer = {};
     var rejectAll = false;
+    var transmitting = false;
 
     Event.extend(api);
 
@@ -466,6 +467,12 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     }
 
     function drainBuffer() {
+        if (transmitting) {
+            // Purge sequenced, but leave unsequenced
+            queue.stanzas = _(queue.stanzas).reject(function (s) { return !_.isUndefined(s.seq); });
+            return;
+        }
+        transmitting = true;
         request.requestCount = 0;
         // Send queue.stanzas
         http.PUT({
@@ -476,12 +483,14 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             },
             data: queue.stanzas
         }).done(function (resp) {
+            transmitting = false;
             if (resp.acknowledgements) {
                 _(resp.acknowledgements).each(function (sequenceNumber) {
                     receivedAcknowledgement(sequenceNumber);
                 });
             }
         }).fail(function (resp) {
+            transmitting = false;
             if (resp.code === "RT_STANZA-1006") {
                 resetSequence(0);
             }
