@@ -250,7 +250,9 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
         // HTML related API
         unifiedToImageTag: function (text, options) {
 
-            var parsedText,
+            var pos,
+                oldpos = -1,
+                searchText = '<span class="emoji',
                 self = this;
 
             options = options || {};
@@ -258,32 +260,47 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             if (options.forceEmojiIcons !== true && _.device('emoji')) {
                 return text;
             }
-            parsedText = $('<div>').append(emoji.unifiedToHTML(text));
 
-            parsedText.find('span.emoji').each(function (index, node) {
-                //parse unicode number
-                var unicode = parseUnicode(_.find($(node).attr('class').split('emoji'), function (item) {
+            text = emoji.unifiedToHTML(text);
+            var isFalsyString = function (item) {
                     return item.trim();
-                })),
+                },
+                cssFromCollection = function (c) {
+                    return self.getInstance({collection: c}).cssFor(unicode);
+                },
+                createImageTag = function (css, unicode) {
+                    return $('<div>').append(
+                        $('<img src="apps/themes/login/1x1.gif" class="' + css + '">')
+                        .attr('data-emoji-unicode', unicode)
+                    ).html();
+                };
+
+            while (text.indexOf(searchText, oldpos + 1) >= 0 && oldpos < text.indexOf(searchText, oldpos + 1)) {
+                pos = text.indexOf(searchText, oldpos + 1);
+                oldpos = pos;
+
+                var node = $('<div>').append(
+                    text.slice(pos, text.indexOf('>', pos) + 1)
+                );
+                //parse unicode number
+                var unicode = parseUnicode(_.find(node.find('span').attr('class').split('emoji'), isFalsyString)),
                 css,
                 defaultCollection = self.getInstance();
+
+                if (!unicode) {
+                    continue;
+                }
 
                 if (!settings.get('overrideUserCollection', false)) {
                     css = defaultCollection.cssFor(unicode);
                 }
-                css = css || defaultCollection.collections.map(function (c) {
-                    return self.getInstance({collection: c}).cssFor(unicode);
-                })
-                .filter(function (css) {
-                    return _.isString(css);
-                })[0];
+                css = css || defaultCollection.collections.map(cssFromCollection)
+                .filter(_.isString)[0];
 
-                $(node).replaceWith(
-                    $('<img src="apps/themes/login/1x1.gif" class="' + css + '">')
-                    .attr('data-emoji-unicode', unicode)
-                );
-            });
-            return parsedText.html();
+                text = text.replace(node.html(), createImageTag(css, unicode));
+            }
+
+            return text;
         },
 
         imageTagsToUnified: function (html) {
@@ -297,33 +314,34 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             return node.html();
         },
 
-        imageTagsToPUA: function (html, format) {
+        imageTagsToPUA: function (text) {
+            var pos,
+                oldpos = -1;
 
-            var node = $('<div>').append(html);
+            while (text.indexOf('<img ', oldpos + 1) >= 0 && oldpos < text.indexOf('<img ', oldpos + 1)) {
+                pos = text.indexOf('<img ', oldpos + 1);
+                oldpos = pos;
 
-            node.find('img[data-emoji-unicode]').each(function (index, node) {
-                var unicode = $(node).attr('data-emoji-unicode'),
-                    info = emoji.EMOJI_MAP[unicode],
+                var node = $('<div>').append(
+                        text.slice(pos, text.indexOf('>', pos) + 1)
+                    ),
+                    unicode = node.find('img').attr('data-emoji-unicode');
+
+                if (!unicode) {
+                    continue;
+                }
+                var info = emoji.EMOJI_MAP[unicode],
                     converted;
 
-                if (info[5] && info[5][0] !== '-') {
+                if (info && info[5] && info[5][0] !== '-') {
                     converted = info[5][0];
                 }
                 //convert to PUA or leave as is
-                unicode = converted || unicode;
-                $(node).replaceWith(unicode);
-            });
-
-            if (format === 'text') {
-                //treat html parameter as plain text
-                return node.text();
-            } else if (format === 'html') {
-                //treat html parameter as html code
-                return node.html();
-            } else {
-                console.warn('unknown format string', format);
-                return node.html();
+                unicode = converted || unicode || '';
+                text = text.replace(node.html(), unicode);
             }
+
+            return text;
         },
 
         converterFor: function (options, format) {
