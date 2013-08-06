@@ -310,7 +310,7 @@ define('io.ox/files/api',
         } else {
             e.data.custom = {
                 type: 'error',
-                text: gt('This file has not been added')
+                text: gt('This file has not been added') + "\n" + e.error
             };
         }
         return e;
