@@ -78,7 +78,7 @@ define("io.ox/contacts/view-detail",
     }
 
     function buildDropdown(container, label, data) {
-        new links.DropdownLinks({
+        return new links.DropdownLinks({
             label: label,
             classes: 'attachment-item',
             ref: 'io.ox/contacts/attachment/links'
@@ -180,7 +180,7 @@ define("io.ox/contacts/view-detail",
                             buildDropdown(section, _.noI18n(a.filename), a);
                         });
                         if (data.length > 1) {
-                            buildDropdown(section, gt('All attachments'), data);
+                            buildDropdown(section, gt('All attachments'), data).find('a').removeClass('attachment-item');
                         }
                         section.on('a', 'click', function (e) { e.preventDefault(); });
                     },

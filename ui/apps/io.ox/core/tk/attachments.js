@@ -199,14 +199,14 @@ define('io.ox/core/tk/attachments',
                         baton = self.processArguments.apply(this, $.makeArray(arguments));
                     }
 
-                    var $node = $('<div>').appendTo(this);
+                    var $node = $('<div>').addClass('attachment-list').appendTo(this);
 
-                    function drawAttachment(attachment) {
-                        new links.DropdownLinks({
-                            label: attachment.filename,
+                    function drawAttachment(data, label) {
+                        return new links.DropdownLinks({
+                            label: label || data.filename,
                             classes: 'attachment-link',
                             ref: 'io.ox/core/tk/attachments/links'
-                        }).draw.call($node, attachment);
+                        }).draw.call($node, data);
                     }
 
                     function redraw(e, obj) {
@@ -220,7 +220,11 @@ define('io.ox/core/tk/attachments',
                             folder: baton.data.folder || baton.data.folder_id
                         }).done(function (attachments) {
                             if (attachments.length) {
-                                _(attachments).each(drawAttachment);
+                                _(attachments).each(function (a, index) {
+                                    drawAttachment(a, _.noI18n(a.filename));
+                                });
+                                if (attachments.length > 1)
+                                    drawAttachment(attachments, gt('All attachments')).find('a').removeClass('attachment-link');
                             } else {
                                 $node.append(gt("None"));
                             }
