@@ -206,7 +206,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             id = selected.data('id');
                         if (id !== false) {
                              //yell on reject
-                            settingsUtil.yell(
+                            settingsUtil.yellOnReject(
                                 api.deleteRule(id).done(function () {
                                     self.collection.remove(id);
                                 })
@@ -226,7 +226,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         selectedObj.set('active', state);
 
                         //yell on reject
-                        settingsUtil.yell(
+                        settingsUtil.yellOnReject(
                             api.update(selectedObj).done(function () {
                                 self.render();
                             })
@@ -247,7 +247,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                     return parseInt($(single).attr('data-id'), 10);
                                 });
                                  //yell on reject
-                                settingsUtil.yell(
+                                settingsUtil.yellOnReject(
                                     api.reorder(data)
                                 );
                             }

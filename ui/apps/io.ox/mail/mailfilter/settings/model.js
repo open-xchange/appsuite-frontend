@@ -27,14 +27,14 @@ define('io.ox/mail/mailfilter/settings/model',
 
             update: function (model) {
                 //yell on reject
-                return settingsUtil.yell(
+                return settingsUtil.yellOnReject(
                     api.update(model.attributes)
                 );
 
             },
             create: function (model) {
                 //yell on reject
-                return settingsUtil.yell(
+                return settingsUtil.yellOnReject(
                     api.create(model.attributes)
                 );
             }

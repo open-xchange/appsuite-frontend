@@ -19,7 +19,7 @@ define('io.ox/settings/util',
     'use strict';
 
     return {
-        yell: function (def, options) {
+        yellOnReject: function (def, options) {
             var opt = $.extend({
                     details: true,
                     debug: false
@@ -28,13 +28,20 @@ define('io.ox/settings/util',
             //debug
             if (opt.debug) {
                 def.always(function () {
-                    console.warn('NOTIFIY: ' +  this.state());
+                    var list = _.isArray(this) ? this : [this];
+                    _.each(list, function (current) {
+                        if (current.state)
+                            console.warn('NOTIFIY: ' +  current.state());
+                        else if (def.state)
+                            console.warn('NOTIFIY: ' +  def.state());
+                    });
                 });
             }
 
+            //yell on error
             return def.fail(
                 function (e) {
-                    var obj = e || {};
+                    var obj = e || { type: 'error' };
                     if (obj.code  === 'MAIL_FILTER-0015') {
                         //custom error message
                         obj.message = gtcore('Unable to contact mailfilter backend.');
@@ -49,7 +56,7 @@ define('io.ox/settings/util',
                         });
                     }
 
-                    //yell favors obj.message over obj.error
+                    //notification.yell favors obj.message over obj.error
                     notifications.yell(obj);
                 }
             );

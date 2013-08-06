@@ -67,7 +67,7 @@ define('io.ox/contacts/model',
                     var data = model.changedSinceLoading(),
                         file = data.pictureFile,
                         //consistent usage for settings yell handling
-                        yell = !isMyContactData ? _.identity : settingsUtil.yell;
+                        yell = !isMyContactData ? _.identity : settingsUtil.yellOnReject;
                     if (file) {
                         delete data.pictureFile;
                         return yell(

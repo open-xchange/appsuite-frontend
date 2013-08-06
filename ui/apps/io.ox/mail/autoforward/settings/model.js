@@ -63,18 +63,18 @@ define('io.ox/mail/autoforward/settings/model',
             update: function (model) {
                 $(document.activeElement).blur();//make the active element lose focus to get the changes of the field a user was editing
                 if (model.attributes.forwardmail === '') {
-                    return settingsUtil.yell(
+                    return settingsUtil.yellOnReject(
                         api.deleteRule(model.attributes.id)
                     );
                 } else {
-                    return settingsUtil.yell(
+                    return settingsUtil.yellOnReject(
                         api.update(providePreparedData(model.attributes))
                     );
                 }
             },
             create: function (model) {
                 $(document.activeElement).blur();//make the active element lose focus to get the changes of the field a user was editing
-                return settingsUtil.yell(
+                return settingsUtil.yellOnReject(
                     api.create(providePreparedData(model.attributes))
                 );
             }

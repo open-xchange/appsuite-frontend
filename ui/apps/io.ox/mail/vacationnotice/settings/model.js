@@ -96,7 +96,7 @@ define('io.ox/mail/vacationnotice/settings/model',
             ref: ref,
 
             update: function (model) {
-                return settingsUtil.yell(
+                return settingsUtil.yellOnReject(
                     api.update(providePreparedData(model.attributes))
                 );
             },
@@ -106,7 +106,7 @@ define('io.ox/mail/vacationnotice/settings/model',
                 preparedData.rulename = gt("vacation notice");
                 preparedData.flags = ["vacation"];
 
-                return settingsUtil.yell(
+                return settingsUtil.yellOnReject(
                     api.create(preparedData)
                 );
             }

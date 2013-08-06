@@ -31,12 +31,13 @@ define('io.ox/core/pubsub/model',
                 return api.get({id: model.id, folder: model.get('folder')});
             },
             update: function (model) {
-                return settingsUtil.yell(
+                return settingsUtil.yellOnReject(
                      api.update(model.attributes)
                 );
             },
             destroy: function (model) {
-                return settingsUtil.yell(
+                debugger;
+                return settingsUtil.yellOnReject(
                     api.destroy(model.id)
                 );
             }

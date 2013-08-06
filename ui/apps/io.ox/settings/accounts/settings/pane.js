@@ -42,7 +42,7 @@ define('io.ox/settings/accounts/settings/pane',
                     .addButton('cancel', gt('Cancel'))
                     .on('delete', function () {
                         var popup = this;
-                        settingsUtil.yell(
+                        settingsUtil.yellOnReject(
                             api.remove(account).then(
                                 function success() {
                                     folderAPI.subFolderCache.remove('1');
