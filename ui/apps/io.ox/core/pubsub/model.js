@@ -36,7 +36,6 @@ define('io.ox/core/pubsub/model',
                 );
             },
             destroy: function (model) {
-                debugger;
                 return settingsUtil.yellOnReject(
                     api.destroy(model.id)
                 );
