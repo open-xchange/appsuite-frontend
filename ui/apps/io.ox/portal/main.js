@@ -149,7 +149,9 @@ define('io.ox/portal/main',
     collection.on('add', function (model) {
         app.drawScaffold(model);
         widgets.loadUsedPlugins().done(function () {
-            app.drawWidget(model);
+            if (model.has('candidate') !== true) {
+                app.drawWidget(model);
+            }
         });
     });
 
