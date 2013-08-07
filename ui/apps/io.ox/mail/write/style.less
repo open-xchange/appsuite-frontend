@@ -475,7 +475,8 @@
             .box-sizing(border-box);
         }
 
-        .mceEmojiPane {
+        /* only apply this adjustments on tablet, therefore checking for .touch */
+        .touch & .mceEmojiPane {
             position: absolute;
             right: 0px;
             top: 97px;
