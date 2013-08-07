@@ -55,7 +55,7 @@ define('plugins/notifications/calendar/register',
                 $('<div class="location">').text(model.get('location')),
                 $('<div class="organizer">').text(model.get('blue')),
                 $('<div class="actions">').append(
-                    $('<button tabindex="1" class="btn btn-inverse" data-action="accept_decline">').text(gt('Accept / Decline'))
+                    $('<button type="button" tabindex="1" class="btn btn-inverse" data-action="accept_decline">').text(gt('Accept / Decline'))
                 )
             );
         }

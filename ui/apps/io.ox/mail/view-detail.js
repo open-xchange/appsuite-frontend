@@ -1304,7 +1304,7 @@ define('io.ox/mail/view-detail',
                         $('<div class="well">').append(
                             $('<div class="invitation">').text(gt('Someone shared a file with you')),
                             $('<div class="subscription-actions">').append(
-                                $('<button class="btn" data-action="show">').text(gt('Show file'))
+                                $('<button type="button" class="btn" data-action="show">').text(gt('Show file'))
                             )
                         )
                     );
@@ -1313,9 +1313,9 @@ define('io.ox/mail/view-detail',
                         $('<div class="well">').append(
                             $('<div class="invitation">').text(gt('Someone shared a folder with you. Would you like to subscribe those %1$s?', label)),
                             $('<div class="subscription-actions">').append(
-                                $('<button class="btn" data-action="show">').text(gt('Show original publication')),
+                                $('<button type="button" class="btn" data-action="show">').text(gt('Show original publication')),
                                 "&nbsp;",
-                                $('<button class="btn btn-primary" data-action="subscribe">').text(gt('Subscribe'))
+                                $('<button type="button" class="btn btn-primary" data-action="subscribe">').text(gt('Subscribe'))
                             )
                         )
                     );

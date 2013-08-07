@@ -198,7 +198,8 @@ define('io.ox/files/list/view-detail',
                     $('<div class="pull-left">').append(
                         $input
                     ),
-                    $uploadButton = $('<button>', { 'data-action': 'upload', tabindex: 1 }).addClass('uploadbutton btn btn-primary pull-right').text(gt('Upload file')),
+                    $uploadButton = $('<button type="button" data-action="upload" tabindex="1">')
+                        .addClass('uploadbutton btn btn-primary pull-right').text(gt('Upload file')),
                     $('<div>').addClass('comment').append(
                         $comment = $('<div class="row-fluid">').append(
                             $('<label>').text(gt('Version Comment')),

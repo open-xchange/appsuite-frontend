@@ -30,7 +30,7 @@ define('io.ox/core/tk/reminder-util',
                             }
                             return ret;
                         }),
-                    $('<button class="btn btn-inverse remindOkBtn" data-action="ok">').text(gt('OK'))
+                    $('<button type="button" class="btn btn-inverse remindOkBtn" data-action="ok">').text(gt('OK'))
                 );
         } else {//special link dropdown
             node.append(
@@ -48,7 +48,7 @@ define('io.ox/core/tk/reminder-util',
                             return ret;
                         })
                     ),
-                    $('<button tabindex="1" class="btn btn-inverse remindOkBtn" data-action="ok">').text(gt('OK'))
+                    $('<button type="button" tabindex="1" class="btn btn-inverse remindOkBtn" data-action="ok">').text(gt('OK'))
                 ).find('after').css('clear', 'both');
         }
     }

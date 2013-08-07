@@ -290,17 +290,11 @@ define('io.ox/tasks/edit/view',
             }
             //row 0
             this.fields.headline = $('<h1>').addClass('clear-title title').text(headlineText);
-            this.fields.cancel = $('<button>')
-                .attr('data-action', 'discard')
-                .addClass('btn cancel')
+            this.fields.cancel = $('<button type="button" data-action="discard" class="btn cancel">')
                 .text(gt('Discard'))
-                .on('click', function () {
-                    app.quit();
-                });
+                .on('click', function () { app.quit(); });
 
-            this.fields.saveButton = $('<button>')
-                .attr('data-action', 'save')
-                .addClass('btn btn-primary task-edit-save')
+            this.fields.saveButton = $('<button type="button" data-action="save" class="btn btn-primary task-edit-save">')
                 .text(saveBtnText)
                 .on('click', function (e) {
 

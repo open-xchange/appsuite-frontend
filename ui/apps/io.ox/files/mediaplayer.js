@@ -272,8 +272,8 @@ define('io.ox/files/mediaplayer',
                 this.container.append(
                     $('<div id="io-ox-mediaplayer" class="atb mediaplayer_inner" tabindex="1">').append(
                         $('<div class="mediaplayer_buttons pull-right">').append(
-                            $('<button class="btn btn-inverse minimizemediaplayer" tabindex="1">').text(gt('Minimize')),
-                            $('<button class="btn btn-primary closemediaplayer" tabindex="1">')
+                            $('<button type="button" class="btn btn-inverse minimizemediaplayer" tabindex="1">').text(gt('Minimize')),
+                            $('<button type="button" class="btn btn-primary closemediaplayer" tabindex="1">')
                                 .text(gt('Close'))
                                 .one('click', $.proxy(this.close, this))
                         ),

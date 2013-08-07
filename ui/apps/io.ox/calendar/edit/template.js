@@ -59,7 +59,7 @@ define('io.ox/calendar/edit/template',
         index: 100,
         id: 'save',
         draw: function (baton) {
-            this.append($('<button class="btn btn-primary save" data-action="save" >')
+            this.append($('<a class="btn btn-primary save" data-action="save" >')
                 .text(baton.mode === 'edit' ? gt("Save") : gt("Create"))
                 .on('click', function () {
                     //check if attachments are changed
@@ -79,7 +79,7 @@ define('io.ox/calendar/edit/template',
         index: 200,
         id: 'discard',
         draw: function (baton) {
-            this.append($('<button class="btn discard" data-action="discard" >')
+            this.append($('<a class="btn discard" data-action="discard" >')
                 .text(gt("Discard"))
                 .on('click', function () {
                     baton.app.quit();
@@ -316,7 +316,7 @@ define('io.ox/calendar/edit/template',
             node.append(
                     pNode = $('<div class="input-append span6">').append(
                         $('<input type="text" class="add-participant" tabindex="1">').attr("placeholder", gt("Add participant/resource")),
-                        $('<button class="btn" type="button" data-action="add" tabindex="1">')
+                        $('<button type="button" class="btn" data-action="add" tabindex="1">')
                             .append($('<i class="icon-plus">'))
                     )
                 );

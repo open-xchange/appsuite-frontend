@@ -42,7 +42,7 @@ define('io.ox/contacts/distrib/create-dist-view',
             this.$el.append(
                 $('<h1 class="clear-title title">').text(gt('Create distribution list')),
                 // save/create button
-                $('<button class="btn btn-primary" data-action="save" tabindex="3">').text(buttonText).on('click', function () {
+                $('<button type="button" class="btn btn-primary" data-action="save" tabindex="3">').text(buttonText).on('click', function () {
                     self.options.parentView.trigger('save:start');
                     self.options.model.save().done(function () {
                         self.options.parentView.trigger('save:success');
@@ -51,7 +51,7 @@ define('io.ox/contacts/distrib/create-dist-view',
                     });
                 }),
                 // cancel button
-                $('<button class="btn" data-action="discard" tabindex="2">').text(gt('Discard')).on('click', function () {
+                $('<button type="button" class="btn" data-action="discard" tabindex="2">').text(gt('Discard')).on('click', function () {
                     // use this sneaky channel
                     $(this).trigger('controller:quit');
                 })
@@ -85,7 +85,7 @@ define('io.ox/contacts/distrib/create-dist-view',
 
             var pNode = $('<div class="autocomplete-controls input-append">').append(
                     $('<input tabindex="1" type="text" class="add-participant">').attr('placeholder', gt('Add member') + ' ...'),
-                    $('<button class="btn" type="button" data-action="add" tabindex="1">')
+                    $('<button type="button" class="btn" data-action="add" tabindex="1">')
                         .append($('<i class="icon-plus">'))
                 ),
 

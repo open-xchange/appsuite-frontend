@@ -61,7 +61,7 @@ define('io.ox/portal/main',
             var $btn = $();
             if (_.device('!small')) {
                 // please no button
-                $btn = $('<button class="btn btn-primary pull-right">')
+                $btn = $('<button type="button" class="btn btn-primary pull-right">')
                     .attr('data-action', 'customize')
                     .text(gt('Customize this page'))
                     .on('click', openSettings);

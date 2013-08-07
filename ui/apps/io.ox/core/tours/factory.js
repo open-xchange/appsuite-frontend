@@ -84,9 +84,9 @@ define('io.ox/core/tours/factory',
 
     // some basic i18n support
     _.extend(window.Tourist.Tip.Base.prototype, {
-        finalButtonTemplate: '<button class="btn btn-primary btn-small pull-right tour-next">' + gt('Finish tour') + '</button>',
-        nextButtonTemplate: '<button class="btn btn-primary btn-small pull-right tour-next">' + gt('Next step') + '</button>',
-        skipButtonTemplate: '<button class="btn btn-small pull-right tour-next">' + gt('Skip this step') + '</button>'
+        finalButtonTemplate: '<button type="button" class="btn btn-primary btn-small pull-right tour-next">' + gt('Finish tour') + '</button>',
+        nextButtonTemplate: '<button type="button" class="btn btn-primary btn-small pull-right tour-next">' + gt('Next step') + '</button>',
+        skipButtonTemplate: '<button type="button" class="btn btn-small pull-right tour-next">' + gt('Skip this step') + '</button>'
     });
 
     api.create({

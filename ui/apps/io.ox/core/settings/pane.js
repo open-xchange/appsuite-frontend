@@ -260,7 +260,7 @@ define('io.ox/core/settings/pane',
     //     index: 200000,
     //     draw: function () {
     //         this.append(
-    //             $('<button class="btn">').text(gt("Clear cache")).on("click", function (e) {
+    //             $('<button type="button" class="btn">').text(gt("Clear cache")).on("click", function (e) {
     //                 e.preventDefault();
     //                 require(["io.ox/core/cache"], function () {
     //                     ox.cache.clear();

@@ -421,7 +421,7 @@ define('io.ox/core/tk/forms',
         },
 
         createButton: function (options) {
-            return $('<button>').addClass(options.btnclass).text(options.label);
+            return $('<button type="button">').addClass(options.btnclass).text(options.label);
         }
 
 

@@ -43,7 +43,7 @@ define('io.ox/files/carousel',
         inner:          $('<div class="abs carousel-inner">'),
         prevControl:    $('<a class="carousel-control left">').text(gt.noI18n('‹')).attr('data-slide', 'prev'),
         nextControl:    $('<a class="carousel-control right">').text(gt.noI18n('›')).attr('data-slide', 'next'),
-        closeControl:   $('<button class="btn btn-primary closecarousel">').text(gt('Close')),
+        closeControl:   $('<button type="button" class="btn btn-primary closecarousel">').text(gt('Close')),
 
        /**
         * The config parameter used to initialize a carousel.

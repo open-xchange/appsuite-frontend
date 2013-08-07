@@ -322,12 +322,18 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
         draw: function (baton) {
             var node;
             if (baton.view.editMode) {
-                this.append($('<div>').addClass('control-group').append(
-                            $('<div>').addClass('controls').append(
-                            $('<button>').addClass('email-btn btn').text(gt('Share link by email')).on('click', function () {
+                this.append(
+                    $('<div>').addClass('control-group').append(
+                        $('<div>').addClass('controls').append(
+                        $('<button type="button" class="email-btn btn">')
+                            .text(gt('Share link by email'))
+                            .on('click', function () {
                                 sendInvitation(baton);
-                            }))),
-                            $('<br>'));
+                            })
+                        )
+                    ),
+                    $('<br>')
+                );
             } else {
                 var temp = $('<label>').addClass('checkbox').text(gt('Share link by email')).append(
                                node = $('<input>').attr('type', 'checkbox').addClass('invite-checkbox').on('change', function () {

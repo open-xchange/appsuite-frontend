@@ -138,8 +138,8 @@ define('io.ox/editor/main',
                         // save & close buttons
 
                         $('<div class="button-wrap">').append(
-                            $('<button class="save btn btn-primary" tabindex="3">').text(gt('Save')),
-                            $('<button class="quit btn" tabindex="4">').text(gt('Close'))
+                            $('<button type="button" class="save btn btn-primary" tabindex="3">').text(gt('Save')),
+                            $('<button type="button" class="quit btn" tabindex="4">').text(gt('Close'))
                         )
 
                     ),
