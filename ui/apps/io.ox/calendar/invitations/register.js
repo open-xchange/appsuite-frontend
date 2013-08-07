@@ -587,7 +587,16 @@ define('io.ox/calendar/invitations/register',
                         }
                     });
                 })
-                .fail(notifications.yell);
+                .fail(function (error) {
+                    //appointment or task was deleted in the meantime
+                    baton.$.well.idle();
+                    baton.$.well.hide();
+                    if (data.type === 'appointment') {
+                        notifications.yell('error', gt('Failed to update confirmation status; most probably the appointment has been deleted.'));
+                    } else {
+                        notifications.yell('error', gt('Failed to update confirmation status; most probably the task has been deleted.'));
+                    }
+                });
             })
             // disable button matching current status
             .find(selector).addClass('disabled').attr('disabled', 'disabled');
