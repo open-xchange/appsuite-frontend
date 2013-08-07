@@ -14,13 +14,10 @@
 /* Grid */
 
 .io-ox-settings-main {
-
     .window-controls label {
         display: inline-block;
         margin-bottom: 0;
     }
-
-
 }
 
 .vgrid-cell.settings {
@@ -130,6 +127,11 @@
         &:focus {
           border-color: hsl(214, 91%, 65%);
           z-index: 2;
+        }
+        .hint {
+            margin: 14px 0;
+            padding: 14px;
+            max-width: 500px;
         }
 
         .selectable[selected] {
@@ -287,6 +289,5 @@
                 margin-left: 5px;
             }
         }
-
-   }
+    }
 }

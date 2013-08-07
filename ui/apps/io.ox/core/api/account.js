@@ -493,7 +493,8 @@ define('io.ox/core/api/account',
         return http.PUT({
             module: 'account',
             params: { action: 'update' },
-            data: data
+            data: data,
+            appendColumns: false
         })
         .then(function (result) {
 
