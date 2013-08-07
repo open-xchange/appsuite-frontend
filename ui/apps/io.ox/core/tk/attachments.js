@@ -341,13 +341,16 @@ define('io.ox/core/tk/attachments',
 
         new links.Action('io.ox/core/tk/attachment/actions/open-attachment', {
             id: 'open',
-            requires: 'one',
-            action: function (baton) {
-                var url = attachmentAPI.getUrl(baton.data, 'view');
-                window.open(url);
+            requires: 'some',
+            multiple: function (list) {
+                _(list).each(function (data) {
+                    var url = attachmentAPI.getUrl(data, 'open');
+                    window.open(url);
+                });
             }
         });
 
+        //attachments api currently doesn't support zip download
         new links.Action('io.ox/core/tk/attachment/actions/download-attachment', {
             id: 'download',
             requires: 'one',
