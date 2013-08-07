@@ -1152,7 +1152,8 @@ define('io.ox/mail/write/main',
 
             // get mail
             var mail = this.getMail(),
-                def = new $.Deferred();
+                def = new $.Deferred(),
+                old_vcard_flag;
 
             prepareMailForSending(mail);
 
@@ -1167,6 +1168,7 @@ define('io.ox/mail/write/main',
 
             // never append vcard when saving as draft
             // backend will append vcard for every send operation (which save as draft is)
+            old_vcard_flag = mail.data.vcard;
             delete mail.data.vcard;
 
             mailAPI.send(mail.data, mail.files, view.form.find('.oldschool'))
@@ -1194,7 +1196,7 @@ define('io.ox/mail/write/main',
                     view.form.find('.section-item.file').remove();
                     $(_.initial(view.form.find(':input[name][type=file]'))).remove();
                     draftMail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
-                    draftMail.vcard = app.view.form.find('input[name=vcard]').prop('checked');
+                    draftMail.vcard = old_vcard_flag;
                     app.setMail({ data: draftMail, mode: mail.mode, initial: false, replaceBody: 'no', format: format});
                 });
             });
