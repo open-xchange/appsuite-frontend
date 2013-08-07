@@ -256,7 +256,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/delete', {
         requires: function (e) {
-            return e.collection.has('some') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
+            return e.collection.has('some') && e.collection.has('delete') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
         },
         multiple: function (list) {
 
