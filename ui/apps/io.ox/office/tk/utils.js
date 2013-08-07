@@ -1079,14 +1079,11 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
-     * Extends the passed object with the specified attributes. Unlike
-     * underscore's extend() method, does not modify the passed object, but
-     * creates and returns a clone. Additionally, extends embedded objects
-     * deeply instead of replacing them.
-     *
-     * @param {Object} [options]
-     *  An object containing some attribute values. If undefined, creates and
-     *  extends a new empty object.
+     * Creates and returns a merged options map from the passed objects. Unlike
+     * Underscore's extend() method, does not modify the passed objects, but
+     * creates and returns a clone. Additionally, extends embedded plain JS
+     * objects deeply instead of replacing them, for example, extending the
+     * objects {a:{b:1}} and {a:{c:2}} will result in {a:{b:1,c:2}}.
      *
      * @param {Object} [...]
      *  Other objects whose attributes will be inserted into the former object.
@@ -1095,7 +1092,10 @@ define.async('io.ox/office/tk/utils',
      * @returns {Object}
      *  A new clone of the passed object, extended by the new attributes.
      */
-    Utils.extendOptions = function (options) {
+    Utils.extendOptions = function () {
+
+        var // the resulting options
+            options = {};
 
         function isPlainObject(value) {
             return _.isObject(value) && (value.constructor === Object);
@@ -1110,17 +1110,14 @@ define.async('io.ox/office/tk/utils',
                     }
                     extend(options[name], value);
                 } else {
-                    // extension value is not an object: clear old value, even if it was an object
+                    // extension value is not a plain object: clear old value, even if it was an object
                     options[name] = value;
                 }
             });
         }
 
-        // create a deep copy of the passed options, or an empty object
-        options = _.isObject(options) ? _.copy(options, true) : {};
-
-        // add all extensions to the clone
-        for (var index = 1; index < arguments.length; index += 1) {
+        // add all objects to the clone
+        for (var index = 0; index < arguments.length; index += 1) {
             if (_.isObject(arguments[index])) {
                 extend(options, arguments[index]);
             }
