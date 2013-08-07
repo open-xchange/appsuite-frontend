@@ -206,7 +206,7 @@ define('io.ox/core/tk/attachments',
                             label: label || data.filename,
                             classes: 'attachment-link',
                             ref: 'io.ox/core/tk/attachments/links'
-                        }).draw.call($node, data);
+                        }).draw.call($node, { data: data, options: options});
                     }
 
                     function redraw(e, obj) {
@@ -257,6 +257,13 @@ define('io.ox/core/tk/attachments',
         }));
 
         ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
+            id: 'slideshow',
+            index: 190,
+            label: gt('Slideshow'),
+            ref: 'io.ox/core/tk/attachment/actions/slideshow-attachment'
+        }));
+
+        ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
             id: 'download',
             index: 200,
             label: gt('Download'),
@@ -303,6 +310,30 @@ define('io.ox/core/tk/attachments',
                         if (popup.find('h4').length === 0) {
                             popup.append($('<h4>').text(gt('No preview available')));
                         }
+                    });
+                });
+            }
+        });
+
+        new links.Action('io.ox/core/tk/attachment/actions/slideshow-attachment', {
+            id: 'slideshow',
+            requires: function (e) {
+                return e.collection.has('multiple') && _(e.context).reduce(function (memo, obj) {
+                    return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
+                }, false);
+            },
+            multiple: function (list, baton) {
+                require(['io.ox/files/carousel'], function (slideshow) {
+                    var files = _(list).map(function (file) {
+                        return {
+                            url: attachmentAPI.getUrl(file, 'open'),
+                            filename: file.filename
+                        };
+                    });
+                    slideshow.init({
+                        baton: {allIds: files},
+                        attachmentMode: false,
+                        selector: baton.options.selector
                     });
                 });
             }
