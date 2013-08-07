@@ -230,8 +230,7 @@ define('io.ox/core/commons',
                 index: 200,
                 draw: function () {
                     this.append(
-                        $('<div class="grid-info">')
-                        .on('click', '.folder-name', fnOpen)
+                        $('<div class="grid-info">').on('click', '.folder-name', fnOpen)
                     );
                 }
             });
@@ -245,6 +244,7 @@ define('io.ox/core/commons',
             }
 
             function drawFolderInfo(folder_id) {
+
                 if (!folder_id) return;
 
                 var node = getInfoNode();
@@ -254,20 +254,22 @@ define('io.ox/core/commons',
                 .append(
                     $('<a href="#" class="folder-name" data-action="open-folderview" tabindex="1">'),
                     $.txt(' '),
-                    $('<span class="folder-count">').attr('data-folder-id', folder_id)
+                    $('<span class="folder-count">')
                 );
 
-                folderAPI.get({ folder: folder_id }).done(function (data) {
+                folderAPI.get({ folder: folder_id }).then(
+                    function success(data) {
 
-                    var total = data.total,
-                        node = grid.getToolbar().find('[data-folder-id="' + folder_id + '"]');
+                        var total = data.total,
+                            node = grid.getToolbar().find('[data-folder-id="' + folder_id + '"]');
 
-                    node.find('.folder-name').text(data.title);
+                        node.find('.folder-name').text(data.title);
 
-                    if (total > 0) {
-                        node.find('.folder-count').text('(' + total + ')');
+                        if (total > 0) {
+                            node.find('.folder-count').text('(' + total + ')');
+                        }
                     }
-                });
+                );
             }
 
             grid.on('change:prop:folder change:mode', function (e, value) {
@@ -305,8 +307,13 @@ define('io.ox/core/commons',
             ext.point(app.get('name') + '/vgrid/toolbar').invoke('draw', grid.getToolbar());
 
             // try to set initial value
-            var id = app.folder.get();
-            drawFolderInfo(id);
+            $.when(
+                app.folder.initialized,
+                app.getWindow().shown
+            )
+            .done(function (result) {
+                drawFolderInfo(result[0]);
+            });
         },
 
         /**

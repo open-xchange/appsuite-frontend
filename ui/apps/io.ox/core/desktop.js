@@ -124,9 +124,11 @@ define("io.ox/core/desktop",
             // add folder management
             this.folder = (function () {
 
-                var folder = null, that, win = null, grid = null, type;
+                var folder = null, that, win = null, grid = null, type, initialized = $.Deferred();
 
                 that = {
+
+                    initialized: initialized.promise(),
 
                     unset: function () {
                         // unset
@@ -139,7 +141,6 @@ define("io.ox/core/desktop",
                         if (grid) {
                             grid.clear();
                         }
-
                     },
 
                     set: function (id) {
@@ -176,6 +177,10 @@ define("io.ox/core/desktop",
                                         self.trigger('folder:change', folder, data);
                                     }
                                     def.resolve(data, appchange);
+
+                                    if (initialized.state() !== 'resolved') {
+                                        initialized.resolve(folder, data);
+                                    }
                                 })
                                 .fail(def.reject);
                             });
@@ -863,7 +868,8 @@ define("io.ox/core/desktop",
                 var quitOnClose = false,
                     perspectives = {},
                     self = this,
-                    firstShow = true;
+                    firstShow = true,
+                    shown = $.Deferred();
 
                 this.updateToolbar = function () {
                     var folder = this.app && this.app.folder ? this.app.folder.get() : null,
@@ -917,6 +923,8 @@ define("io.ox/core/desktop",
                     }
                 });
 
+                this.shown = shown.promise();
+
                 this.show = function (cont) {
                     var appchange = false;
                     //use the url app string before the first ':' to exclude parameter additions (see how mail write adds the current mode here)
@@ -969,6 +977,7 @@ define("io.ox/core/desktop",
                             }
 
                             if (firstShow) {
+                                shown.resolve();
                                 self.trigger("show:initial"); // alias for open
                                 self.trigger("open");
                                 self.state.running = true;
