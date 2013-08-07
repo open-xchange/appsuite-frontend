@@ -116,8 +116,7 @@ define('io.ox/calendar/freebusy/templates',
 
         getQuitControl: function () {
             return $('<div class="close-control">').append(
-                $('<a href="#" tabindex="3" data-action="quit">').text(gt('Quit')),
-                $('<i class="icon-remove">')
+                $('<a href="#" tabindex="3" data-action="quit">').text(gt('Quit')).append($('<i class="icon-remove">'))
             );
         },
 
