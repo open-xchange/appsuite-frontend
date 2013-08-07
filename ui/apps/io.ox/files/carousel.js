@@ -62,7 +62,8 @@ define('io.ox/files/carousel',
         * method is used to get the URL for the file.
         *
         */
-        config: {
+        config: {},
+        defaultconfig: {
             fullScreen: false,
             baton: null,
             step: 3,
@@ -72,11 +73,13 @@ define('io.ox/files/carousel',
         init: function (config) {
             this.inner.empty();
             this.container.empty().remove();
-            $.extend(this.config, config);
+            this.config = $.extend({}, this.defaultconfig, config);
 
             this.app = config.baton.app;
             if (config.attachmentMode) {
                 this.win = $('.window-container.io-ox-mail-window');
+            } else if (config.selector) {
+                this.win = $(config.selector);
             } else {
                 this.win = this.app.getWindow();
             }
@@ -247,7 +250,7 @@ define('io.ox/files/carousel',
 
         prevItem: function () {
             if (this.prevControl.is(':visible')) {
-                console.log('prevItem');
+                //console.log('prevItem');
                 if (!this.pos.sliding && this.pos.cur > 0) {
                     this.container.carousel('prev');
                 }
@@ -256,7 +259,7 @@ define('io.ox/files/carousel',
 
         nextItem: function () {
             if (this.nextControl.is(':visible')) {
-                console.log('nextItem');
+                //console.log('nextItem');
                 if (!this.pos.sliding && this.pos.cur < (this.list.length - 1)) {
                     this.container.carousel('next');
                 }
@@ -267,6 +270,8 @@ define('io.ox/files/carousel',
             var win;
             if (this.config.attachmentMode) {
                 win = $('.window-container.io-ox-mail-window');
+            } else if (this.config.selector) {
+                win = $(this.config.selector);
             } else {
                 win = this.win.nodes.outer;
             }
