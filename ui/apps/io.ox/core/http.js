@@ -261,6 +261,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
             "314" : "subscribed",
             "315" : "subscr_subflds",
             "316" : "standard_folder_type",
+            "317" : "supported_capabilities",
             "3010" : "com.openexchange.publish.publicationFlag",
             "3020" : "com.openexchange.subscribe.subscriptionFlag",
             "3030" : "com.openexchange.folderstorage.displayName"
