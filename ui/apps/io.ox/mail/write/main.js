@@ -622,7 +622,7 @@ define('io.ox/mail/write/main',
             mail.initial = mail.initial || false;
 
             //config settings
-            mail.data.vcard = settings.get('appendVcard');
+            mail.data.vcard = mail.data.vcard || settings.get('appendVcard');
 
             // call setters
             var data = mail.data;
@@ -1194,6 +1194,7 @@ define('io.ox/mail/write/main',
                     view.form.find('.section-item.file').remove();
                     $(_.initial(view.form.find(':input[name][type=file]'))).remove();
                     draftMail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
+                    draftMail.vcard = app.view.form.find('input[name=vcard]').prop('checked');
                     app.setMail({ data: draftMail, mode: mail.mode, initial: false, replaceBody: 'no', format: format});
                 });
             });
