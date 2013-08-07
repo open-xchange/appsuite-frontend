@@ -59,7 +59,7 @@ define('io.ox/calendar/edit/template',
         index: 100,
         id: 'save',
         draw: function (baton) {
-            this.append($('<a class="btn btn-primary save" data-action="save" >')
+            this.append($('<button type="button" class="btn btn-primary save" data-action="save" >')
                 .text(baton.mode === 'edit' ? gt("Save") : gt("Create"))
                 .on('click', function () {
                     //check if attachments are changed
@@ -79,7 +79,7 @@ define('io.ox/calendar/edit/template',
         index: 200,
         id: 'discard',
         draw: function (baton) {
-            this.append($('<a class="btn discard" data-action="discard" >')
+            this.append($('<button type="button" class="btn discard" data-action="discard" >')
                 .text(gt("Discard"))
                 .on('click', function () {
                     baton.app.quit();
