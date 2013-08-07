@@ -29,7 +29,6 @@ define('io.ox/mail/view-detail',
     ], function (ext, links, util, api, http, coreUtil, account, settings, gt, folder, emoji) {
 
     'use strict';
-
     // define global iframe resize handler
     window.iframeResize = function (guid, doc) {
         _.defer(function () {

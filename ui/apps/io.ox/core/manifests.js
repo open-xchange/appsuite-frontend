@@ -85,7 +85,8 @@ define.async('io.ox/core/manifests',
                 // Not explicitely plugin aware, so, let's require everything beforehand
                 return {
                     dependencies: this.withPluginsFor(pointName, dependencies),
-                    definitionFunction: definitionFunction
+                    definitionFunction: definitionFunction,
+                    after: this.pluginsFor('after:' + pointName)
                 };
             }
         },
