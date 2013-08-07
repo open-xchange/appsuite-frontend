@@ -498,6 +498,30 @@ define('io.ox/contacts/actions',
     });
 
     //attachment actions
+    new links.Action('io.ox/contacts/actions/slideshow-attachment', {
+        id: 'slideshow',
+        requires: function (e) {
+            return e.collection.has('multiple') && _(e.context).reduce(function (memo, obj) {
+                return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
+            }, false);
+        },
+        multiple: function (list, baton) {
+            require(['io.ox/core/api/attachment', 'io.ox/files/carousel'], function (attachmentApi, slideshow) {
+                var files = _(list).map(function (file) {
+                    return {
+                        url: attachmentApi.getUrl(file, 'open'),
+                        filename: file.filename
+                    };
+                });
+                slideshow.init({
+                    baton: {allIds: files},
+                    attachmentMode: false,
+                    selector: '.window-container.io-ox-contacts-window'
+                });
+            });
+        }
+    });
+
     new Action('io.ox/contacts/actions/preview-attachment', {
         id: 'preview',
         requires: function (e) {
@@ -695,6 +719,13 @@ define('io.ox/contacts/actions',
     }));
 
     // Attachments
+    ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
+        id: 'slideshow',
+        index: 100,
+        label: gt('Slideshow'),
+        ref: 'io.ox/contacts/actions/slideshow-attachment'
+    }));
+
     ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
         id: 'preview',
         index: 100,
