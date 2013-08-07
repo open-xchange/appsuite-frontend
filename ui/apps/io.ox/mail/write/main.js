@@ -951,7 +951,7 @@ define('io.ox/mail/write/main',
                     return obj;
                 }, {}),
                 headers,
-                content,
+                attachments,
                 mail,
                 files = [],
                 parse = function (list) {
@@ -967,15 +967,15 @@ define('io.ox/mail/write/main',
 
             // get content
             if (editorMode === 'html') {
-                content = {
+                attachments = {
                     content: (app.getEditor() ? app.getEditor().getContent() : '')
                         // reverse img fix
                         .replace(/(<img[^>]+src=")(\/appsuite\/)?api\//g, '$1/ajax/')
                 };
                 //don’t send emoji images, but unicode characters
-                content.content = emoji.imageTagsToUnified(content.content);
+                attachments.content = emoji.imageTagsToUnified(attachments.content);
             } else {
-                content = {
+                attachments = {
                     content: (app.getEditor() ? app.getEditor().getContent() : ''),
                     raw: true
                         // .replace(/</g, '&lt;') // escape <
@@ -983,7 +983,12 @@ define('io.ox/mail/write/main',
                 };
             }
 
-            content.content_type = getContentType(editorMode);
+            // remove trailing white-space, line-breaks, and empty paragraphs
+            attachments.content = attachments.content.replace(
+                /(\s|&nbsp;|\0x20|<br\/?>|<p( class="io-ox-signature")>(&nbsp;|\s|<br\/?>)*<\/p>)*$/g, ''
+            );
+
+            attachments.content_type = getContentType(editorMode);
 
             // might fail
             try {
@@ -1002,7 +1007,7 @@ define('io.ox/mail/write/main',
                 subject: data.subject + '',
                 priority: parseInt(data.priority, 10) || 3,
                 vcard: parseInt(data.vcard, 10) || 0,
-                attachments: [content],
+                attachments: [attachments],
                 nested_msgs: []
             };
             // add msgref?
