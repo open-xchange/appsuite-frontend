@@ -379,6 +379,28 @@
             background-color: darken(@notificationIconBackgroundActive, 5%);
         }
     }
+    
+    .launcher.minimizedmediaplayer {
+
+        height: 40px;
+        display: inline-block;
+        padding: 0 12px;
+
+        &:focus {
+            i { color: white; }
+            background-color: @linkColor;
+            outline-style: none;
+        }
+
+        &.active {
+            color: white;
+            background-color: @topbarLauncherBackgroundHover;
+        }
+
+        &.active:hover, &.active:focus {
+            background-color: @topbarLauncherBackgroundHover;
+        }
+    }
 }
 
 /* empty desktop */
