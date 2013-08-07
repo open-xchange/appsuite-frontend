@@ -324,7 +324,9 @@ define('io.ox/office/framework/view/nodetracking',
         if (trackingNode) {
             triggerEvent('tracking:cancel');
             deinitTracking();
+            return true;
         }
+        return false;
     }
 
     /**
@@ -653,6 +655,9 @@ define('io.ox/office/framework/view/nodetracking',
     /**
      * Cancels tracking the current tracking node. The tracking node will
      * trigger a 'tracking:cancel' event.
+     *
+     * @returns {Boolean}
+     *  Whether tracking was actually active and has been canceled.
      */
     $.cancelTracking = cancelTracking;
 
