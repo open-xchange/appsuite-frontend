@@ -466,8 +466,28 @@ define('io.ox/mail/write/main',
             app.getEditor().setContent(content);
         };
 
+        app.getRecipients = function (id) {
+
+            // get raw list
+            var list = _(view.form.find('input[name=' + id + ']')).map(function (node) {
+                var recipient = mailUtil.parseRecipient($(node).val()),
+                    typesuffix = mailUtil.getChannel(recipient[1]) === 'email' ? '' : mailUtil.getChannelSuffixes().msisdn;
+                return ['"' + recipient[0] + '"', recipient[1], typesuffix];
+            });
+
+            return list;
+        };
+
+        app.getTo = function () {
+            return app.getRecipients('to');
+        };
+
         app.setTo = function (list) {
             view.addRecipients('to', list || []);
+        };
+
+        app.getCC = function () {
+            return app.getRecipients('cc');
         };
 
         app.setCC = function (list) {
@@ -475,6 +495,10 @@ define('io.ox/mail/write/main',
             if (list && list.length) {
                 view.showSection('cc', false);
             }
+        };
+
+        app.getBCC = function () {
+            return app.getRecipients('bcc');
         };
 
         app.setBCC = function (list) {

@@ -32,10 +32,11 @@ define("io.ox/mail/write/view-main",
      'io.ox/core/api/snippets',
      'io.ox/core/strings',
      'io.ox/core/util',
+     'io.ox/core/notifications',
      'io.ox/mail/sender',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, mailAPI, ViewClass, Model, contactsAPI, contactsUtil, mailUtil, pre, userAPI, capabilities, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, util, sender, settings, gt) {
+    ], function (ext, links, actions, mailAPI, ViewClass, Model, contactsAPI, contactsUtil, mailUtil, pre, userAPI, capabilities, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, util, notifications, sender, settings, gt) {
 
     'use strict';
 
@@ -340,30 +341,47 @@ define("io.ox/mail/write/view-main",
         * @return {void}
         */
         addRecipients: function (id, list) {
-            var hash = {};
 
-            if (list && list.length) {
-                list = getNormalized(list);
-                //hash current recipients
-                this.app.getWindowNode().find('input[name=' + id + ']').map(function () {
-                    var rcpt = mailUtil.parseRecipient($(this).val())[1];
-                    hash[rcpt] = true;
-                });
-                // ignore doublets and draw remaining
-                list = _(list).filter(function (recipient) {
-                    if (hash[recipient.email] === undefined && hash[mailUtil.cleanupPhone(recipient.phone)] === undefined) {
-                        //draw recipient
-                        var node = $('<div>'), value;
-                        drawContact(id, node, recipient);
-                        // add to proper section (to, CC, ...)
-                        this.sections[id + 'List'].append(node);
-                        // if list itself contains doublets
-                        value = recipient.email !== '' ? recipient.email : mailUtil.cleanupPhone(recipient.phone);
-                        return hash[value] = true;
-                    }
-                }, this);
-                this.sections[id + 'List'].show().trigger('show');
+            if (!list || !list.length) return;
+
+            // get current recipients
+            var recipients = this.app.getRecipients(id),
+                maximum = settings.get('maximumNumberOfRecipients', 0),
+                hash = {};
+
+            // too many recipients?
+            if (maximum > 0 && (recipients.length + list.length) > maximum) {
+                notifications.yell('info',
+                    //#. Mail compose. Maximum number of recipients exceeded
+                    //#. %1$s = maximum
+                    gt('The number of recipients is limited to %1$s recipients per field', maximum)
+                );
+                return;
             }
+
+            list = getNormalized(list);
+
+            // hash current recipients
+            this.app.getWindowNode().find('input[name=' + id + ']').map(function () {
+                var rcpt = mailUtil.parseRecipient($(this).val())[1];
+                hash[rcpt] = true;
+            });
+
+            // ignore doublets and draw remaining
+            list = _(list).filter(function (recipient) {
+                if (hash[recipient.email] === undefined && hash[mailUtil.cleanupPhone(recipient.phone)] === undefined) {
+                    //draw recipient
+                    var node = $('<div>'), value;
+                    drawContact(id, node, recipient);
+                    // add to proper section (to, CC, ...)
+                    this.sections[id + 'List'].append(node);
+                    // if list itself contains doublets
+                    value = recipient.email !== '' ? recipient.email : mailUtil.cleanupPhone(recipient.phone);
+                    return hash[value] = true;
+                }
+            }, this);
+
+            this.sections[id + 'List'].show().trigger('show');
         },
 
         /**
