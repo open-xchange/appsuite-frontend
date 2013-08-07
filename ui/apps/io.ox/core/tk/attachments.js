@@ -243,6 +243,13 @@ define('io.ox/core/tk/attachments',
         }
 
         ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
+            id: 'slideshow',
+            index: 100,
+            label: gt('Slideshow'),
+            ref: 'io.ox/core/tk/attachment/actions/slideshow-attachment'
+        }));
+
+        ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
             id: 'preview',
             index: 100,
             label: gt('Preview'),
@@ -254,13 +261,6 @@ define('io.ox/core/tk/attachments',
             index: 150,
             label: gt('Open in browser'),
             ref: 'io.ox/core/tk/attachment/actions/open-attachment'
-        }));
-
-        ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
-            id: 'slideshow',
-            index: 190,
-            label: gt('Slideshow'),
-            ref: 'io.ox/core/tk/attachment/actions/slideshow-attachment'
         }));
 
         ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
