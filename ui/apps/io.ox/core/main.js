@@ -958,7 +958,9 @@ define('io.ox/core/main',
                                 )
                             ),
                             $('<div class="content">'),
-                            $('<div class="footer">').append($('<button class="btn btn-primary">').text(gt('Continue')))
+                            $('<div class="footer">').append(
+                                $('<button type="button" class="btn btn-primary">').text(gt('Continue'))
+                            )
                         )
                     );
 

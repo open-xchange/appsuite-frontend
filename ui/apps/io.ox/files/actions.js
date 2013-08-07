@@ -256,7 +256,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/delete', {
         requires: function (e) {
-            return e.collection.has('some') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
+            return e.collection.has('some') && e.collection.has('delete') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
         },
         multiple: function (list) {
 
@@ -293,12 +293,12 @@ define('io.ox/files/actions',
                                 api.propagate('delete', list[0]);
                                 notifications.yell('success', responseSuccess);
                             }).fail(function (e) {
-                                console.log(e);
                                 if (e && e.code && e.code === 'IFO-0415') {
                                     notifications.yell('error', responseFailLocked);
                                 } else {
                                     notifications.yell('error', responseFail + "\n" + e.error);
                                 }
+                                api.trigger('refresh:all');
                             });
                         }
                     });

@@ -25,7 +25,7 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
                 .addClass('span6 progress-field');
 
             $('<div>').addClass('input-append').append(progress,
-                    $('<button tabindex="1">').attr('data-action', 'minus').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-minus'))
+                    $('<button type="button" tabindex="1">').attr('data-action', 'minus').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-minus'))
                     .on('click', function () {
                         var temp = parseInt(progress.val(), 10);
                         temp -= 25;
@@ -37,7 +37,7 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
                             progress.trigger('change');
                         }
                     }),
-                    $('<button tabindex="1">').attr('data-action', 'plus').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-plus'))
+                    $('<button type="button" tabindex="1">').attr('data-action', 'plus').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-plus'))
                     .on('click', function () {
                         var temp = parseInt(progress.val(), 10);
                         temp += 25;

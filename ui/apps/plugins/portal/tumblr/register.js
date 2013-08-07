@@ -197,7 +197,7 @@ define('plugins/portal/tumblr/register',
             });
 
         dialog.on('cancel', function () {
-            if (model.has('candidate')) {
+            if (model.has('candidate') && _.isEmpty(model.attributes.props)) {
                 view.removeWidget();
             }
         });

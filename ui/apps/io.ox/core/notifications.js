@@ -17,23 +17,29 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
     'use strict';
 
     var BadgeView = Backbone.View.extend({
-        tagName: 'span',
-        className: 'badge',
+        tagName: 'a',
+        className: 'notifications-icon',
         initialize: function (options) {
             this.model.on('change', _.bind(this.onChange, this));
         },
-        render: function () {
-            this.$el.text(_.noI18n(this.model.get('count')));
-            return this;
-        },
         onChange: function () {
-            this.$el.text(_.noI18n(this.model.get('count')));
+            var count = this.model.get('count');
+            if (count > 0) {
+                this.$el.removeClass('empty');
+            } else {
+                this.$el.addClass('empty');
+            }
+        },
+        render: function () {
+            this.$el.attr({ href: '#', tabindex: '1' }).append('<i class="icon-exclamation-sign">');
+            this.onChange();
+            return this;
         },
         setNotifier: function (b) {
             if (b) {
-                this.$el.addClass('badge-info').attr('aria-disabled', false);
+                this.$el.addClass('active').attr('aria-disabled', false);
             } else {
-                this.$el.removeClass('badge-info').attr('aria-disabled', true);
+                this.$el.removeClass('active').attr('aria-disabled', true);
             }
         },
         setCount: function (count, newMails) {
@@ -98,6 +104,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             //view
             var self = this,
                 badgeView = new BadgeView({ model: new Backbone.Model({ count: 0})});
+
             this.notificationsView = new NotificationsView();
 
             $('#io-ox-core').prepend(
@@ -154,8 +161,11 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                 }
             }
 
-            return addLauncher('right', $('<a href="#" tabindex="1">').on('keydown', focusNotifications).append(badgeView.render().$el.show()), $.proxy(this.toggleList, this)).attr('id', 'io-ox-notifications-icon');
-
+            return addLauncher(
+                'right',
+                badgeView.render().$el.on('keydown', focusNotifications),
+                $.proxy(this.toggleList, this)
+            ).attr('id', 'io-ox-notifications-icon');
         },
         get: function (key, listview) {
             if (_.isUndefined(this.notifications[key])) {

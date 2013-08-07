@@ -533,7 +533,7 @@ define.async('io.ox/core/tk/html-editor',
             // trim white-space and clean up pseudo XHTML
             // remove empty paragraphs at the end
             get = function () {
-                return trimOut(ed.getContent())
+                return trimOut(emoji.imageTagsToUnified(ed.getContent()))
                     .replace(/<(\w+)[ ]?\/>/g, '<$1>')
                     .replace(/(<p>(<br>)?<\/p>)+$/, '');
             };

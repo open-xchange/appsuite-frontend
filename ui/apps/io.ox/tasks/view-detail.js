@@ -273,7 +273,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                         buildDropdown(attachmentNode, _.noI18n(a.filename), a);
                     });
                     if (data.length > 1) {
-                        buildDropdown(attachmentNode, gt('all'), data);
+                        buildDropdown(attachmentNode, gt('All attachments'), data).find('a').removeClass('attachment-item');
                     }
                     attachmentNode.delegate('a', 'click', function (e) {e.preventDefault(); });
                 }).fail(function () {
@@ -301,6 +301,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
         if (_.device('small')) {//no inline style for mobile
             $(bla).css('display', 'block');
         }
+        return bla;
     };
 
     return taskDetailView;

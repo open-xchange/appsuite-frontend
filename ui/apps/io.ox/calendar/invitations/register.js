@@ -162,7 +162,7 @@ define('io.ox/calendar/invitations/register',
                         return _(baton.analysis.actions).contains(action);
                     })
                     .map(function (action) {
-                        return $('<button class="btn">')
+                        return $('<button type="button" class="btn">')
                             .attr('data-action', action)
                             .addClass(buttonClasses[action])
                             .text(i18n[action])
@@ -545,11 +545,11 @@ define('io.ox/calendar/invitations/register',
                 )
             )
             .append(
-                $('<button class="btn btn-danger" data-action="2">').text(gt("Decline")),
+                $('<button type="button" class="btn btn-danger" data-action="2">').text(gt("Decline")),
                 '&nbsp;',
-                $('<button class="btn btn-warning" data-action="3">').text(gt("Tentative")),
+                $('<button type="button" class="btn btn-warning" data-action="3">').text(gt("Tentative")),
                 '&nbsp;',
-                $('<button class="btn btn-success" data-action="1">').text(gt("Accept"))
+                $('<button type="button" class="btn btn-success" data-action="1">').text(gt("Accept"))
             )
             .on('click', 'button', function (e) {
 
@@ -587,7 +587,16 @@ define('io.ox/calendar/invitations/register',
                         }
                     });
                 })
-                .fail(notifications.yell);
+                .fail(function (error) {
+                    //appointment or task was deleted in the meantime
+                    baton.$.well.idle();
+                    baton.$.well.hide();
+                    if (data.type === 'appointment') {
+                        notifications.yell('error', gt('Failed to update confirmation status; most probably the appointment has been deleted.'));
+                    } else {
+                        notifications.yell('error', gt('Failed to update confirmation status; most probably the task has been deleted.'));
+                    }
+                });
             })
             // disable button matching current status
             .find(selector).addClass('disabled').attr('disabled', 'disabled');

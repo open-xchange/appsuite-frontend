@@ -84,7 +84,7 @@ define('io.ox/calendar/freebusy/templates',
         getAutoCompleteControls: function () {
             return $('<div class="autocomplete-controls input-append pull-left">').append(
                 $('<input type="text" class="add-participant" tabindex="1">').attr('placeholder', gt('Add participant') + ' ...'),
-                $('<button class="btn add-button" type="button" data-action="add" tabindex="-1">').append($('<i class="icon-plus">'))
+                $('<button type="button" class="btn add-button" data-action="add" tabindex="-1">').append($('<i class="icon-plus">'))
             );
         },
 
@@ -116,8 +116,7 @@ define('io.ox/calendar/freebusy/templates',
 
         getQuitControl: function () {
             return $('<div class="close-control">').append(
-                $('<a href="#" tabindex="3" data-action="quit">').text(gt('Quit')),
-                $('<i class="icon-remove">')
+                $('<a href="#" tabindex="3" data-action="quit">').text(gt('Quit')).append($('<i class="icon-remove">'))
             );
         },
 

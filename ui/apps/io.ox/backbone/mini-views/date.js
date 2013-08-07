@@ -70,6 +70,7 @@ define('io.ox/backbone/mini-views/date',
                 );
             } else {
                 this.model.set(this.name, null);
+                this.$el.find('.date').children().attr('disabled', false);//enable all
             }
         },
 
@@ -81,6 +82,13 @@ define('io.ox/backbone/mini-views/date',
                 this.$el.find('.year').val(d.getYear());
                 this.$el.find('.month').val(d.getMonth());
                 this.$el.find('.date').val(d.getDate());
+                //disable invalid dayfields
+                d.setMonth(d.getMonth() + 1);
+                d.setDate(0);
+                var validDays = d.getDate(),
+                    options = this.$el.find('.date').children().attr('disabled', false);
+                options = options.slice(validDays + 1, options.length);
+                options.attr('disabled', true);
             }
         },
 

@@ -91,10 +91,10 @@ define('io.ox/office/tk/control/radiogroup',
         function keyHandler(event) {
 
             var // distinguish between event types
-                keydown = event.type === 'keydown';
+                keyup = event.type === 'keyup';
 
             if (event.keyCode === KeyCodes.SPACE) {
-                if (keydown) { self.triggerChange(event.target, { preserveFocus: true }); }
+                if (keyup) { self.triggerChange(event.target, { preserveFocus: true }); }
                 return false;
             }
         }

@@ -48,7 +48,7 @@ define('plugins/notifications/tasks/register',
                 $('<span class="end_date">').text(_.noI18n(model.get('end_date'))),
                 $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge')),
                 $('<div class="actions">').append(
-                    $('<button tabindex="1" class="btn btn-inverse" data-action="done">').text(gt('Done'))
+                    $('<button type="button" tabindex="1" class="btn btn-inverse" data-action="done">').text(gt('Done'))
                 )
             )
         );
@@ -390,7 +390,7 @@ define('plugins/notifications/tasks/register',
                 $('<span class="end_date">').text(_.noI18n(task.end_date)),
                 $('<span class="status">').text(task.status).addClass(task.badge),
                 $('<div class="actions">').append(
-                    $('<button class="btn btn-inverse" data-action="change_state">').text(gt('Accept/Decline'))
+                    $('<button type="button" class="btn btn-inverse" data-action="change_state">').text(gt('Accept/Decline'))
                 )
             );
             task = null;

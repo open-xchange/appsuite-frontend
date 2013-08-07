@@ -1416,19 +1416,22 @@ define('io.ox/mail/api',
                 order: 'desc'
             }
         })
-        .pipe(function (unseen) {
-            var recent;
+        .then(function (unseen) {
+
             // check most recent mail
-            recent = _(unseen).filter(function (obj) {
-                return obj.received_date > lastUnseenMail;
+            var recent = _(unseen).filter(function (obj) {
+                // ignore mails 'mark as deleted'
+                return obj.received_date > lastUnseenMail && (obj.flags & 2) !== 2;
             });
-            if ((recent.flags & 2) !== 2) { // ignore mails 'mark as deleted'. Trigger even if no new mails are added to ensure read mails are removed
-                api.trigger('new-mail', recent, unseen);
-                if (recent.length > 0) {
-                    lastUnseenMail = recent[0].received_date;
-                    api.newMailTitle(true);
-                }
+
+            // Trigger even if no new mails are added to ensure read mails are removed
+            api.trigger('new-mail', recent, unseen);
+
+            if (recent.length > 0) {
+                lastUnseenMail = recent[0].received_date;
+                api.newMailTitle(true);
             }
+
             return {
                 unseen: unseen,
                 recent: recent || []

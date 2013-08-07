@@ -98,9 +98,10 @@ define("io.ox/core/extPatterns/links",
 
         this.draw = function (baton) {
             baton = ext.Baton.ensure(baton);
+            var attr = { href: '#', 'class': 'btn', 'data-action': self.id, tabIndex: self.tabIndex };
+            if (tag === 'button') attr.type = 'button';
             this.append(
-                $('<' + tag + ' href="#" class="btn">')
-                .attr({ "data-action": self.id, tabIndex: self.tabIndex })
+                $('<' + tag + '>', attr)
                 .addClass(self.cssClasses)
                 .css(self.css || {})
                 .on('click', { extension: self, baton: baton }, click)

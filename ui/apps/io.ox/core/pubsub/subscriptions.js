@@ -166,7 +166,7 @@ define('io.ox/core/pubsub/subscriptions',
         node.prepend($('<div class="alert alert-error alert-block">').append(
             $('<strong>').text(label),
             $.txt(' ' + msg),
-            $('<button data-dismiss="alert" class="btn close">').text('x'))
+            $('<button type="button" data-dismiss="alert" class="btn close">').text('x'))
         );
 
     }
@@ -197,7 +197,7 @@ define('io.ox/core/pubsub/subscriptions',
                 var accounts = _.where(keychainApi.getAll(), { serviceId: fd.options.type });
                 if (accounts.length === 1) {
                     setSource(accounts[0].id);
-                    controls = $('<button>').addClass('btn disabled').text(accounts[0].displayName);
+                    controls = $('<button type="button" class="btn disabled">').text(accounts[0].displayName);
                 } else if (accounts.length > 1) {
                     controls = $('<select name="' + fd.name + '">').on('change', function () {
                         setSource($(this).val());
@@ -210,7 +210,7 @@ define('io.ox/core/pubsub/subscriptions',
                     // set initially to first account in list
                     setSource(accounts[0].id);
                 } else {
-                    controls = $('<button>').addClass('btn').text(gt('Add new account')).on('click', function () {
+                    controls = $('<button type="button" class="btn">').text(gt('Add new account')).on('click', function () {
                         oauth().done(function (data) {
                             buildForm(node, baton);
                         });
