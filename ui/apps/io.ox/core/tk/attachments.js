@@ -270,6 +270,13 @@ define('io.ox/core/tk/attachments',
             ref: 'io.ox/core/tk/attachment/actions/download-attachment'
         }));
 
+        ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
+            id: 'save',
+            index: 400,
+            label: gt('Save in file store'),
+            ref: 'io.ox/core/tk/attachment/actions/save-attachment'
+        }));
+
         //attachment actions
         new links.Action('io.ox/core/tk/attachment/actions/preview-attachment', {
             id: 'preview',
@@ -357,6 +364,21 @@ define('io.ox/core/tk/attachments',
             action: function (baton) {
                 var url = attachmentAPI.getUrl(baton.data, 'download');
                 window.open(url);
+            }
+        });
+
+        new links.Action('io.ox/core/tk/attachment/actions/save-attachment', {
+            id: 'save',
+            capabilities: 'infostore',
+            requires: 'some',
+            multiple: function (list) {
+                //cannot be converted to multiple request because of backend bug (module overides params.module)
+                _(list).each(function (data) {
+                    attachmentAPI.save(data);
+                });
+                require(['io.ox/core/notifications'], function (notifications) {
+                    setTimeout(function () {notifications.yell('success', gt('Attachments have been saved!')); }, 300);
+                });
             }
         });
 
