@@ -298,23 +298,22 @@ define('io.ox/tasks/main',
         index: 100,
         draw: function () {
             this.prepend(
-                $('<div>').addClass('grid-options dropdown').css({ display: 'inline-block', 'float': 'right' })
+                $('<div class="grid-options dropdown">')
                 .append(
-                    $('<a>', { href: '#' })
-                    .attr('data-toggle', 'dropdown')
+                    $('<a href="#" tabindex="1" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').attr('aria-label', gt('Sort options'))
                     .append($('<i class="icon-arrow-down">'), $('<i class="icon-arrow-up">'))
                     .dropdown(),
-                    $('<ul>').addClass('dropdown-menu')
+                    $('<ul class="dropdown-menu" role="menu">')
                     .append(
-                        $('<li>').append($("<a data-option='state'>").text(gt('Status')).prepend($('<i>'))), // state becomes Bundesland :)
-                        $('<li>').append($("<a data-option='202'>").text(gt('Due date')).prepend($('<i>'))),
-                        $('<li>').append($("<a data-option='200'>").text(gt('Subject')).prepend($('<i>'))),
-                        $('<li>').append($("<a data-option='309'>").text(gt('Priority')).prepend($('<i>'))),
+                        $('<li>').append($('<a href="#" data-option="state">').text(gt('Status')).prepend($('<i>'))), // state becomes Bundesland :)
+                        $('<li>').append($('<a href="#" data-option="202">').text(gt('Due date')).prepend($('<i>'))),
+                        $('<li>').append($('<a href="#" data-option="200">').text(gt('Subject')).prepend($('<i>'))),
+                        $('<li>').append($('<a href="#" data-option="309">').text(gt('Priority')).prepend($('<i>'))),
                         $('<li class="divider">'),
-                        $('<li>').append($("<a data-option='asc'>").text(gt('Ascending')).prepend($('<i>'))),
-                        $('<li>').append($("<a data-option='desc'>").text(gt('Descending')).prepend($('<i>'))),
+                        $('<li>').append($('<a href="#" data-option="asc">').text(gt('Ascending')).prepend($('<i>'))),
+                        $('<li>').append($('<a href="#" data-option="desc">').text(gt('Descending')).prepend($('<i>'))),
                         $('<li class="divider">'),
-                        $('<li>').append($("<a data-option='done'>").text(gt('Show done tasks')).prepend($('<i>')))
+                        $('<li>').append($('<a href="#" data-option="done">').text(gt('Show done tasks')).prepend($('<i>')))
                     ).on('click', 'a', { grid: grid }, taskToolbarOptions)
                 )
             );

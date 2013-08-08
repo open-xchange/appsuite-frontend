@@ -17,12 +17,13 @@
 define('io.ox/files/api',
     ['io.ox/core/http',
      'io.ox/core/api/factory',
+     'io.ox/core/api/folder',
      'settings!io.ox/core',
      'io.ox/core/cache',
      'io.ox/core/date',
      'io.ox/files/mediasupport',
      'gettext!io.ox/files'
-    ], function (http, apiFactory, coreConfig, cache, date, mediasupport, gt) {
+    ], function (http, apiFactory, folderAPI, coreConfig, cache, date, mediasupport, gt) {
 
     'use strict';
 
@@ -602,6 +603,7 @@ define('io.ox/files/api',
                         if (!noRefreshAll) api.trigger('refresh.all');
                     }
                 }
+                folderAPI.reload(fid);
                 return ready;
             });
         } else {

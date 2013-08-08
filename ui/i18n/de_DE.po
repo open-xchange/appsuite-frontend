@@ -1033,7 +1033,7 @@ msgstr "Neue Datei hochladen"
 #. more like "to notice" than "to notify".
 #: apps/io.ox/files/actions.js:674
 msgid "Add note"
-msgstr "Hinweis hinzufügen"
+msgstr "Notiz anlegen"
 
 #: apps/io.ox/files/actions.js:684
 msgid "Change View"

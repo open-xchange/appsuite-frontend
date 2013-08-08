@@ -90,6 +90,10 @@ define.async('io.ox/core/manifests',
                 };
             }
         },
+        isDisabled: function (id) {
+            validate();
+            return this.disabled[id];
+        },
         apps: null,
         plugins: null,
         pluginPoints: null
