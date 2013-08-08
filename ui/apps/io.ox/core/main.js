@@ -512,7 +512,7 @@ define('io.ox/core/main',
             index: 200,
             draw: function () {
                 this.append(
-                    addLauncher('right', $('<i class="icon-refresh">').attr('aria-label', gt('Refresh')), function () {
+                    addLauncher('right', $('<i class="icon-refresh launcher-icon">').attr('aria-label', gt('Refresh')), function () {
                         refresh();
                         return $.when();
                     })
@@ -635,7 +635,7 @@ define('io.ox/core/main',
                 this.append(
                     div = $('<div class="launcher" role="presentation">').append(
                         a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="menuitem" aria-haspopup="true" tabindex="1">').append(
-                            $('<i class="icon-cog icon-white" aria-hidden="true">')
+                            $('<i class="icon-cog icon-white launcher-icon" aria-hidden="true">')
                         ),
                         ul = $('<ul class="dropdown-menu" role="menu">')
                     )
