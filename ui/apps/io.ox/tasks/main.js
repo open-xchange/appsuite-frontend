@@ -313,7 +313,7 @@ define('io.ox/tasks/main',
                         $('<li>').append($('<a href="#" data-option="asc">').text(gt('Ascending')).prepend($('<i>'))),
                         $('<li>').append($('<a href="#" data-option="desc">').text(gt('Descending')).prepend($('<i>'))),
                         $('<li class="divider">'),
-                        $('<li>').append($('<a data-option="done">').text(gt('Show done tasks')).prepend($('<i>')))
+                        $('<li>').append($('<a href="#" data-option="done">').text(gt('Show done tasks')).prepend($('<i>')))
                     ).on('click', 'a', { grid: grid }, taskToolbarOptions)
                 )
             );
