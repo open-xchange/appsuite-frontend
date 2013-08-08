@@ -334,10 +334,10 @@ define('io.ox/tasks/actions',
             }, false);
         },
         multiple: function (list, baton) {
-            require(['io.ox/core/api/attachment', 'io.ox/files/carousel'], function (attachmentApi, slideshow) {
+            require(['io.ox/core/api/attachment', 'io.ox/files/carousel'], function (attachmentAPI, slideshow) {
                 var files = _(list).map(function (file) {
                     return {
-                        url: attachmentApi.getUrl(file, 'open'),
+                        url: attachmentAPI.getUrl(file, 'open'),
                         filename: file.filename
                     };
                 });
@@ -369,11 +369,11 @@ define('io.ox/tasks/actions',
         multiple: function (list, baton) {
             ox.load(['io.ox/core/tk/dialogs',
                      'io.ox/preview/main',
-                     'io.ox/core/api/attachment']).done(function (dialogs, p, attachmentApi) {
+                     'io.ox/core/api/attachment']).done(function (dialogs, p, attachmentAPI) {
                 //build Sidepopup
                 new dialogs.SidePopup().show(baton.e, function (popup) {
                     _(list).each(function (data, index) {
-                        data.dataURL = attachmentApi.getUrl(data, 'view');
+                        data.dataURL = attachmentAPI.getUrl(data, 'view');
                         var pre = new p.Preview(data, {
                             width: popup.parent().width(),
                             height: 'auto'
@@ -398,9 +398,9 @@ define('io.ox/tasks/actions',
         id: 'open',
         requires: 'some',
         multiple: function (list) {
-            ox.load(['io.ox/core/api/attachment']).done(function (attachmentApi) {
+            ox.load(['io.ox/core/api/attachment']).done(function (attachmentAPI) {
                 _(list).each(function (data) {
-                    var url = attachmentApi.getUrl(data, 'open');
+                    var url = attachmentAPI.getUrl(data, 'open');
                     window.open(url);
                 });
             });
@@ -411,9 +411,9 @@ define('io.ox/tasks/actions',
         id: 'download',
         requires: 'some',
         multiple: function (list) {
-            ox.load(['io.ox/core/api/attachment']).done(function (attachmentApi) {
+            ox.load(['io.ox/core/api/attachment']).done(function (attachmentAPI) {
                 _(list).each(function (data) {
-                    var url = attachmentApi.getUrl(data, 'download');
+                    var url = attachmentAPI.getUrl(data, 'download');
                     window.open(url);
                 });
             });
@@ -425,10 +425,10 @@ define('io.ox/tasks/actions',
         capabilities: 'infostore',
         requires: 'some',
         multiple: function (list) {
-            ox.load(['io.ox/core/api/attachment']).done(function (attachmentApi) {
+            ox.load(['io.ox/core/api/attachment']).done(function (attachmentAPI) {
                 //cannot be converted to multiple request because of backend bug (module overides params.module)
                 _(list).each(function (data) {
-                    attachmentApi.save(data);
+                    attachmentAPI.save(data);
                 });
                 setTimeout(function () {notifications.yell('success', gt('Attachments have been saved!')); }, 300);
             });

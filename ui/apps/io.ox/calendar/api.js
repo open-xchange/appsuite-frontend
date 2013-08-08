@@ -35,12 +35,12 @@ define('io.ox/calendar/api',
             if (removeAction) {
                 api.trigger('delete:appointment', obj);
             } else if (obj.alarm !== '-1' && obj.end_date > _.now()) {//new appointments
-                require(['io.ox/core/api/reminder'], function (reminderApi) {
-                    reminderApi.getReminders();
+                require(['io.ox/core/api/reminder'], function (reminderAPI) {
+                    reminderAPI.getReminders();
                 });
             } else if (obj.alarm || obj.end_date || obj.start_date) {//if one of this has changed during update action
-                require(['io.ox/core/api/reminder'], function (reminderApi) {
-                    reminderApi.getReminders();
+                require(['io.ox/core/api/reminder'], function (reminderAPI) {
+                    reminderAPI.getReminders();
                 });
             }
         },

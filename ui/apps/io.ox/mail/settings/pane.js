@@ -170,8 +170,8 @@ define('io.ox/mail/settings/pane',
         save: function () {
             mailViewSettings.model.saveAndYell().done(function () {
                 //update mailapi
-                require(['io.ox/mail/api'], function (mailApi) {
-                    mailApi.updateViewSettings();
+                require(['io.ox/mail/api'], function (mailAPI) {
+                    mailAPI.updateViewSettings();
                 });
             }).fail(function () {
                 notifications.yell('error', gt('Could not save settings'));

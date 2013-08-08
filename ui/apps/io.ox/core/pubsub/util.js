@@ -16,7 +16,7 @@ define('io.ox/core/pubsub/util',
      'settings!io.ox/core',
      'io.ox/core/api/folder',
      'io.ox/core/pubsub/model',
-     'gettext!io.ox/mail'], function (api, coreConfig, folderApi, model, gt) {
+     'gettext!io.ox/mail'], function (api, coreConfig, folderAPI, model, gt) {
 
     'use strict';
 
@@ -100,7 +100,7 @@ define('io.ox/core/pubsub/util',
             var parent = coreConfig.get('folder/' + module),
                 folder = '';
             //create folder
-            return folderApi.create({
+            return folderAPI.create({
                 folder: parent,
                 data: {
                     title: name || gt('New folder'),

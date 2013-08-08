@@ -17,7 +17,7 @@ define("plugins/portal/tasks/register",
      'gettext!plugins/portal',
      'io.ox/core/strings',
      'io.ox/tasks/util'
-    ], function (ext, taskApi, gt, strings, util) {
+    ], function (ext, taskAPI, gt, strings, util) {
 
     "use strict";
 
@@ -26,7 +26,7 @@ define("plugins/portal/tasks/register",
         title: gt('Tasks'),
 
         initialize: function (baton) {
-            taskApi.on('update create delete', function (event, element) {
+            taskAPI.on('update create delete', function (event, element) {
                 require(['io.ox/portal/main'], function (portal) {//refresh portal
                     var portalApp = portal.getApp(),
                         portalModel = portalApp.getWidgetCollection()._byId.tasks_0;
@@ -43,7 +43,7 @@ define("plugins/portal/tasks/register",
         },
 
         load: function (baton) {
-            return taskApi.getAllMyTasks().done(function (data) { // super special getAll method
+            return taskAPI.getAllMyTasks().done(function (data) { // super special getAll method
                 baton.data = data;
             });
         },

@@ -898,13 +898,13 @@ define("io.ox/mail/write/view-main",
             });
         } else if (file.id && file.folder_id) { // infostore
             // if is infostore
-            require(['io.ox/files/api'], function (filesApi) {
+            require(['io.ox/files/api'], function (filesAPI) {
                 var prev = new pre.Preview({
                     name: file.filename,
                     filename: file.filename,
                     mimetype: file.file_mimetype,
                     size: file.file_size,
-                    dataURL: filesApi.getUrl(file, 'bare'),
+                    dataURL: filesAPI.getUrl(file, 'bare'),
                     version: file.version,
                     id: file.id,
                     folder_id: file.folder_id

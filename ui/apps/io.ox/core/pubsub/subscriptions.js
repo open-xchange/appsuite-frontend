@@ -22,7 +22,7 @@ define('io.ox/core/pubsub/subscriptions',
      'gettext!io.ox/core/pubsub',
      'settings!io.ox/core'
     ],
-    function (ext, pubsub, api, folderApi, notifications, dialogs, keychainApi, gt) {
+    function (ext, pubsub, api, folderAPI, notifications, dialogs, keychainAPI, gt) {
 
     'use strict';
 
@@ -52,7 +52,7 @@ define('io.ox/core/pubsub/subscriptions',
                 var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, services: data, popup: popup, newFolder: true });
 
                 function removeFolder(id) {
-                    return folderApi.remove({ folder: id });
+                    return folderAPI.remove({ folder: id });
                 }
 
                 function saveModel(newFolder) {
@@ -139,7 +139,7 @@ define('io.ox/core/pubsub/subscriptions',
 
                         // add new folders under module's default folder!
                         var folder = require('settings!io.ox/core').get('folder/' + self.model.get('entityModule'));
-                        folderApi.create({
+                        folderAPI.create({
                             folder: folder,
                             data: {
                                 title: service.displayName || gt('New Folder'),
@@ -188,13 +188,13 @@ define('io.ox/core/pubsub/subscriptions',
 
         function oauth() {
             var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
-            return keychainApi.createInteractively(service.displayName.toLowerCase(), win);
+            return keychainAPI.createInteractively(service.displayName.toLowerCase(), win);
         }
 
         _.each(service.formDescription, function (fd) {
             var controls;
             if (fd.widget === 'oauthAccount') {
-                var accounts = _.where(keychainApi.getAll(), { serviceId: fd.options.type });
+                var accounts = _.where(keychainAPI.getAll(), { serviceId: fd.options.type });
                 if (accounts.length === 1) {
                     setSource(accounts[0].id);
                     controls = $('<button type="button" class="btn disabled">').text(accounts[0].displayName);

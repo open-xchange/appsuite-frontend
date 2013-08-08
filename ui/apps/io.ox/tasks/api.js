@@ -13,7 +13,7 @@
 define('io.ox/tasks/api',
         ['io.ox/core/http',
          'io.ox/core/api/factory',
-         'io.ox/core/api/folder'], function (http, apiFactory, folderApi) {
+         'io.ox/core/api/folder'], function (http, apiFactory, folderAPI) {
 
     'use strict';
 
@@ -39,8 +39,8 @@ define('io.ox/tasks/api',
             //      move operation (change due date for example)
             if (modifications.folder_id && modifications.folder_id !== ids[0].folder_id) {//move operation! Every notifications needs to be reseted or they will link to unavailable tasks
                 api.getTasks();
-                require(['io.ox/core/api/reminder'], function (reminderApi) {
-                    reminderApi.getReminders();
+                require(['io.ox/core/api/reminder'], function (reminderAPI) {
+                    reminderAPI.getReminders();
                 });
                 return;
             }
@@ -80,8 +80,8 @@ define('io.ox/tasks/api',
             }
 
             if (modifications.alarm || modifications.alarm === null) {//reminders need updates because alarm changed is set or unset
-                require(['io.ox/core/api/reminder'], function (reminderApi) {
-                    reminderApi.getReminders();
+                require(['io.ox/core/api/reminder'], function (reminderAPI) {
+                    reminderAPI.getReminders();
                 });
             }
             //check overdue
@@ -243,7 +243,7 @@ define('io.ox/tasks/api',
                     folder = obj.folder_id;
                 } else {
                     console.log('no folderAttribute for cache Keygen found, using default');
-                    folder = folderApi.getDefaultFolder('tasks');
+                    folder = folderAPI.getDefaultFolder('tasks');
                 }
             }
 
@@ -251,7 +251,7 @@ define('io.ox/tasks/api',
         },
         requests: {
             all: {
-                folder: folderApi.getDefaultFolder('tasks'),
+                folder: folderAPI.getDefaultFolder('tasks'),
                 columns: '1,20,101,200,202,203,220,300,301',
                 extendColumns: 'io.ox/tasks/api/all',
                 sort: '202',
@@ -501,7 +501,7 @@ define('io.ox/tasks/api',
      * @return {string} default folder for tasks
      */
     api.getDefaultFolder = function () {
-        return folderApi.getDefaultFolder('tasks');
+        return folderAPI.getDefaultFolder('tasks');
     };
 
     /**
