@@ -825,7 +825,7 @@ define('io.ox/core/main',
         .filter(function (m) {
             //don’t autoload without manifest
             //don’t autoload disabled apps
-            return ox.manifests.apps[m] !== undefined && !ox.manifests.disabled[m];
+            return ox.manifests.apps[m] !== undefined && !ox.manifests.isDisabled(m);
         })
         .compact()
         .value();
@@ -1048,7 +1048,7 @@ define('io.ox/core/main',
                     .filter(function (details) {
                         //don’t autoload without manifest
                         //don’t autoload disabled apps
-                        return ox.manifests.apps[details.app] !== undefined && !ox.manifests.disabled[details.app];
+                        return ox.manifests.apps[details.app] !== undefined && !ox.manifests.isDisabled(details.app);
                     })
                     .each(function (details, index) {
                         //only load first app on small devices
