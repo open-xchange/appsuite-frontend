@@ -507,9 +507,7 @@ define('io.ox/office/tk/dropdown/dropdown',
          */
         function menuKeyHandler(event) {
 
-            var // MacOS is handled differently
-                macos = _.device('macos'),
-                // distinguish between event types
+            var // distinguish between event types
                 keydown = event.type === 'keydown';
 
             switch (event.keyCode) {
@@ -522,20 +520,22 @@ define('io.ox/office/tk/dropdown/dropdown',
                     // from the menu *button*), stop propagation of the original
                     // event, and simulate a TAB key event from the menu button
                     // to move the focus to the next control.
-                    menuButton.trigger({ type: 'keydown', keyCode: KeyCodes.TAB, shiftKey: event.shiftKey });
+                    menuButton.trigger(event);
                     return false;
-                }
-                break;
-            case KeyCodes.F6:
-                if (keydown && (macos || event.ctrlKey)) {
-                    hideMenu();
                 }
                 break;
             case KeyCodes.ESCAPE:
-                if (keydown) {
-                    hideMenu();
-                    return false;
-                }
+                if (keydown) { hideMenu(); }
+                return false;
+            case KeyCodes.F6:
+                // Hide drop-down menu on global F6 focus traveling. This will set
+                // the focus back to the drop-down button, so that F6 will jump to
+                // the next view component. Jumping directly from the drop-down menu
+                // (which is located near the body element in the DOM) would select
+                // the wrong element. Ignore all modifier keys here, even on
+                // non-MacOS systems where F6 traveling is triggered by Ctrl+F6
+                // (browsers will move the focus away anyway).
+                if (keydown) { hideMenu(); }
                 break;
             }
         }

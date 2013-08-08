@@ -248,6 +248,16 @@ i[class^="icon-"], i[class^=" icon-"] {
             outline: none;
         }
 
+        /* the container element for hidden contents */
+        > .app-hidden {
+            position: absolute;
+            top: -2px;
+            height: 1px;
+            left: 0;
+            overflow: hidden;
+            line-height: normal;
+        }
+
         /* the container element for the application contents */
         > .app-container {
             position: absolute;
@@ -269,13 +279,6 @@ i[class^="icon-"], i[class^=" icon-"] {
                 display: inline-block;
                 width: auto;
                 height: auto;
-
-                /* generic design of a 'page': white background with box shadow */
-                > .page {
-                    position: relative;
-                    background: white;
-                    .box-shadow(0 0 8px fade(black, 20%));
-                }
             }
         }
     }

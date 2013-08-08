@@ -596,7 +596,7 @@ define('io.ox/office/preview/view/view',
             self.addPane(sidePane = new SidePane(app, {
                 position: 'right',
                 size: Modernizr.touch ? 152 : SidePane.DEFAULT_WIDTH,
-                resizeable: !Modernizr.touch,
+                resizable: !Modernizr.touch,
                 minSize: SidePane.DEFAULT_WIDTH,
                 maxSize: 1.8 * SidePane.DEFAULT_WIDTH
             }));

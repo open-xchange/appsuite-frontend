@@ -92,7 +92,7 @@ define('io.ox/office/framework/view/baseview',
      *      focused.
      *  @param {Boolean} [options.scrollable=false]
      *      If set to true, the application pane will be scrollable, and the
-     *      application container node becomes resizeable. By default, the size
+     *      application container node becomes resizable. By default, the size
      *      of the application container node is locked and synchronized with
      *      the size of the application pane (with regard to padding, see the
      *      option 'options.appPanePadding').
@@ -126,11 +126,14 @@ define('io.ox/office/framework/view/baseview',
             // centered application pane
             appPane = null,
 
+            // root container node for invisible contents
+            appHiddenNode = $('<div>').addClass('abs app-hidden'),
+
             // root application container node
             appContainerNode = $('<div>').addClass('app-container'),
 
             // busy node for the application pane
-            appBusyNode = $('<div>').addClass('abs'),
+            appBusyNode = $('<div>').addClass('abs app-busy'),
 
             // all fixed view panes, in insertion order
             fixedPanes = [],
@@ -388,7 +391,7 @@ define('io.ox/office/framework/view/baseview',
          *  A reference to this instance.
          */
         this.attachAppPane = function () {
-            this.getAppPaneNode().prepend(appContainerNode);
+            appContainerNode.insertAfter(appHiddenNode);
             return this;
         };
 
@@ -458,6 +461,23 @@ define('io.ox/office/framework/view/baseview',
         this.removeAllContentNodes = function () {
             appContainerNode.empty();
             return this.refreshPaneLayout();
+        };
+
+        /**
+         * Inserts new DOM nodes into the hidden container node of the
+         * application pane.
+         *
+         * @param {HTMLElement|jQuery}
+         *  The DOM node(s) to be inserted into the hidden container of the
+         *  application pane. If this object is a jQuery collection, inserts
+         *  all contained DOM nodes into the application pane.
+         *
+         * @returns {BaseView}
+         *  A reference to this instance.
+         */
+        this.insertHiddenNode = function (hiddenNode) {
+            appHiddenNode.append(hiddenNode);
+            return this;
         };
 
         /**
@@ -858,13 +878,13 @@ define('io.ox/office/framework/view/baseview',
         appPane = new Pane(app, { classes: 'app-pane', enableContextMenu: true });
         appPane.getNode()
             .toggleClass('scrolling', Utils.getBooleanOption(options, 'scrollable', false))
-            .append(appContainerNode, appBusyNode.hide());
+            .append(appHiddenNode, appContainerNode, appBusyNode.hide());
 
         // initialize content margin from passed options
         this.setContentMargin(Utils.getOption(options, 'contentMargin', 0));
 
         // add the main application pane to the application window
-        app.getWindowNode().addClass(windowNodeClasses).append(appPane.getNode());
+        app.getWindowNode().addClass(windowNodeClasses).removeAttr('tabindex').append(appPane.getNode());
 
         // add shadow nodes above application pane, but below other panes
         _(['top', 'bottom', 'left', 'right']).each(function (border) {
