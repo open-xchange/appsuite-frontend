@@ -338,9 +338,13 @@ define('io.ox/mail/util',
         getPriority: function (data) {
             // normal?
             if (data.priority === 3) return $();
-            var i = '<i class="icon-star"/>',
-                stars = $('<span>').append(_.noI18n('\u00A0'), i, i, i);
-            return stars.addClass(data.priority < 3 ? 'high' : 'low');
+            var i = '<i class="icon-exclamation"/>',
+                indicator = $('<span>').append(_.noI18n('\u00A0'), i, i, i);
+            if (data.priority < 3) {
+                return indicator.addClass('high').attr('title', gt('High priority'));
+            } else {
+                return indicator.addClass('low').attr('title', gt('Low priority'));
+            }
         },
 
         getAccountName: function (data) {

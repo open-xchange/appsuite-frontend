@@ -232,6 +232,30 @@
 .vgrid-cell .thread-summary-left { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .vgrid-cell .thread-summary-right { float: right; }
 
+
+/* vgrid touch helper */
+.io-ox-mail-window {
+    .vgrid-cell {
+        .touch-helper {
+            /*
+            a transparent div to enlarge the touchable area around the
+            thread-size badge - aka "can't touch this, dadada-dada-dada"
+            */
+            height: 40px;
+            width: 40px;
+            position: absolute;
+            background: transparent;
+            right: 7px;
+            top: 0;
+            height: 80%;
+            top: 10%;
+        }
+    }
+}
+
+
+
+
 /* Detail view */
 
 .rightside.mail-detail-pane {
@@ -339,6 +363,12 @@
 
     .recipient-actions {
         display:inline-block;
+        a.all-link {
+            text-decoration: none;
+        }
+        i.icon-group {
+            color: #aaa;
+        }
     }
 
     .alert {
@@ -438,7 +468,6 @@
 
     .priority {
         font-weight: bold;
-        font-size: 80%;
         vertical-align: top;
         white-space: nowrap;
         .high {
