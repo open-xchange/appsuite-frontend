@@ -344,7 +344,7 @@ define("io.ox/core/desktop",
 
             var deferred = $.when(),
                 self = this,
-                isDisabled = ox.manifests.disabled[this.getName() + '/main'] === true;
+                isDisabled = ox.manifests.isDisabled(this.getName() + '/main');
 
             // update hash
             if (this.get('name') !== _.url.hash('app')) {

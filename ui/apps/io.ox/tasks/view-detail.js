@@ -167,7 +167,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
             }
 
             if (task.participants.length > 0) {
-                require(['io.ox/core/api/user'], function (userApi) {
+                require(['io.ox/core/api/user'], function (userAPI) {
                     var table,
                         states = [
                             [gt('Not yet confirmed'), 'gray'],
@@ -177,7 +177,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                         ],
                         lookupParticipant = function (node, table, participant) {
                             if (participant.id) {//external participants dont have an id but the display name is already given
-                                userApi.get({id: participant.id}).done(function (userInformation) {
+                                userAPI.get({id: participant.id}).done(function (userInformation) {
                                         drawParticipant(table, participant, userInformation.display_name, userInformation);
                                     }).fail(function () {
                                         failedToLoad(node, table, participant);

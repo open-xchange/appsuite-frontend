@@ -18,9 +18,8 @@ define('io.ox/core/settings/user', [
     'io.ox/contacts/edit/view-form',
     'io.ox/core/tk/dialogs',
     'io.ox/contacts/util',
-    'io.ox/core/api/folder',
-    'gettext!io.ox/core'
-], function (ext, api, contactModel, ViewForm, dialogs, util, folderAPI, gt) {
+    'io.ox/core/api/folder'
+], function (ext, api, contactModel, ViewForm, dialogs, util, folderAPI) {
 
     'use strict';
 
@@ -62,11 +61,6 @@ define('io.ox/core/settings/user', [
                         $userEditView.find('[data-id="private_flag"]').remove();
 
                         $node.append($userEditView);
-                        $($node.find('.edit-contact')[0]).on('dispose', function () {
-                            if (!_.isEmpty(user.changed)) {//check if there is something to save
-                                user.save();
-                            }
-                        });
 
                         user.on('change:first_name change:last_name', function () {
                             user.set('display_name', util.getFullName(user.toJSON(), {validate: true}));
@@ -74,6 +68,9 @@ define('io.ox/core/settings/user', [
                         });
 
                         user.on('sync:start', function () {
+                            if (user.get('birthday') === null) {//if birthday is null on save, set selectors to empty. Otherwise the user might think a partially filled birthday is saved
+                                $node.find('[data-field="birthday"]').find('.year,.month,.date').val('');
+                            }
                             // dont't hide on IE to fix form submit.
                             if (!_.browser.IE || _.browser.IE > 9) {
                                 dialogs.busy($node);

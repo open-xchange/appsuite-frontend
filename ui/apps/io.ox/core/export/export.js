@@ -19,7 +19,7 @@ define('io.ox/core/export/export',
     'io.ox/core/notifications',
     'io.ox/formats/vcard',
     'gettext!io.ox/core',
-    'less!io.ox/core/export/style.less'], function (ext, dialogs, api, folderApi, notifications, vcard, gt) {
+    'less!io.ox/core/export/style.less'], function (ext, dialogs, api, folderAPI, notifications, vcard, gt) {
 
     'use strict';
 
@@ -30,7 +30,7 @@ define('io.ox/core/export/export',
         id: 'default',
         draw: function (id, title) {
             this.append(
-                folderApi.getBreadcrumb(id, { subfolders: false, prefix: gt(title) })
+                folderAPI.getBreadcrumb(id, { subfolders: false, prefix: gt(title) })
             );
         }
     });
@@ -120,7 +120,7 @@ define('io.ox/core/export/export',
                 dialog = new dialogs.ModalDialog({ width: 500 }),
                 baton = {id: id, module: module, simulate: true, format: {}, nodes: {}};
             // get folder and build dialog
-            folderApi.get({ folder: id}).done(function (folder) {
+            folderAPI.get({ folder: id}).done(function (folder) {
                 dialog
                     .build(function () {
                         //header

@@ -258,13 +258,26 @@ define('io.ox/core/tk/autocomplete',
                         }
                         break;
                     case 13: // enter
-                        scrollpane.find('.selected').trigger('click');
 
-                        //calendar: add string
-                        var val = $.trim($(this).val());
-                        if (val.length > 0) {
-                            $(this).trigger('selected', val);
+                        // two different behaviors are possible:
+                        // 1. use the exact value that is in the input field
+                        // 2. use selected item or auto-select first item
+                        // we use second approach here - this still allows to add custom mail addresses
+
+                        var selected = scrollpane.find('.selected');
+
+                        if (selected.length) {
+                            // use selected item
+                            selected.trigger('click');
+                        } else {
+                            // auto-select first item
+                            scrollpane.find('.autocomplete-item').first().click();
                         }
+
+                        // calendar: add string
+                        var value = $.trim($(this).val());
+                        if (value.length > 0) $(this).trigger('selected', val);
+
                         break;
                     case 9:  // tab
                         e.preventDefault();

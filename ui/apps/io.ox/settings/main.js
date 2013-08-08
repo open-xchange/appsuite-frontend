@@ -22,7 +22,7 @@ define('io.ox/settings/main',
       'settings!io.ox/settings/configjump',
       'io.ox/core/settings/errorlog/settings/pane',
       'io.ox/core/settings/downloads/pane',
-      'less!io.ox/settings/style.less'], function (VGrid, appsApi, ext, forms, View, commons, gt, configJumpSettings) {
+      'less!io.ox/settings/style.less'], function (VGrid, appsAPI, ext, forms, View, commons, gt, configJumpSettings) {
 
     'use strict';
 
@@ -168,7 +168,7 @@ define('io.ox/settings/main',
         //grid.requiresLabel = tmpl.requiresLabel;
 
         // Create extensions for the apps
-        var appsInitialized = appsApi.getInstalled().done(function (installed) {
+        var appsInitialized = appsAPI.getInstalled().done(function (installed) {
             var apps = _.filter(installed, function (item) {
                 return item.settings;
             });
