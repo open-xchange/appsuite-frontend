@@ -190,7 +190,7 @@ define('io.ox/office/framework/app/baseapplication',
          *  A reference to this application instance.
          */
         function updateTitle() {
-            self.setTitle(self.getShortFileName() || gt('Unnamed'));
+            self.setTitle(self.getShortFileName() || gt('unnamed'));
         }
 
         /**
