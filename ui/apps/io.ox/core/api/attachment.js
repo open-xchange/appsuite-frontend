@@ -176,7 +176,7 @@ define('io.ox/core/api/attachment', ['io.ox/core/http',
             switch (mode) {
             case 'view':
             case 'open':
-                return url + '&delivery=view&content_type=' + (data.file_mimetype || '');
+                return url + '&delivery=view';
             case 'download':
                 return url + '&delivery=download';
             default:
