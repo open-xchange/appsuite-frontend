@@ -113,7 +113,7 @@ define('io.ox/office/preview/main',
          * will be really closed.
          */
         function quitHandler() {
-            self.sendPreviewRequest({ params: { convert_action: 'endconvert' } });
+            return self.sendPreviewRequest({ params: { convert_action: 'endconvert' } });
         }
 
         // methods ------------------------------------------------------------
