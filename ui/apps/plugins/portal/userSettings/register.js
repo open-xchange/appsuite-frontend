@@ -74,7 +74,7 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
                     }
                 })
                 .done(function () {
-                    notifications.yell('success', gt('Your passward has been changed'));
+                    notifications.yell('success', gt('Your password has been changed'));
                     node.find('input[type="password"]').val('');
                     dialog.close();
                     dialog = null;
