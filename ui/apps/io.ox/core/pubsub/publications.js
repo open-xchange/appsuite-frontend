@@ -19,7 +19,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                                           'io.ox/core/api/templating',
                                           'io.ox/core/notifications',
                                           'io.ox/core/tk/dialogs',
-                                          'less!io.ox/core/pubsub/style.less'], function (gt, pubsub, ext, forms, api, templApi, notifications, dialogs)  {
+                                          'less!io.ox/core/pubsub/style.less'], function (gt, pubsub, ext, forms, api, templAPI, notifications, dialogs)  {
 
     'use strict';
 
@@ -142,7 +142,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                 });
             });
             if (!this.infostoreItem) {
-                templApi.getNames().done(function (data) {//get the templates if needed
+                templAPI.getNames().done(function (data) {//get the templates if needed
                     baton.templates = data;
                     ext.point('io.ox/core/pubsub/publications/dialog').invoke('draw', popup.getBody(), baton);
                     //go

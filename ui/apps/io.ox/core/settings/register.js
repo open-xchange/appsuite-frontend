@@ -14,12 +14,15 @@
 define('io.ox/core/settings/register', ['io.ox/core/extensions', 'gettext!io.ox/core/settings'], function (ext, gt) {
 
     'use strict';
+    
+    var usermodel;
 
     ext.point("io.ox/settings/pane").extend({
-        id: 'users',
+        id: 'io.ox/users',
         title: gt("My contact data"),
         ref: 'io.ox/users',
         loadSettingPane: false,
+        lazySaveSettings: true,//don't save on every modelchange (causes ugly busy animations while editing)
         index: 750
     });
 
@@ -28,7 +31,9 @@ define('io.ox/core/settings/register', ['io.ox/core/extensions', 'gettext!io.ox/
         draw: function () {
             var $node = this;
             require(["io.ox/core/settings/user"], function (users) {
-                users.editCurrentUser($node).fail(function () {
+                users.editCurrentUser($node).done(function (model) {
+                    usermodel = model;
+                }).fail(function () {
                     $node.append(
                         $.fail(gt("Couldn't load your contact data."), function () {
                             users.editCurrentUser($node).done(function () {
@@ -38,6 +43,9 @@ define('io.ox/core/settings/register', ['io.ox/core/extensions', 'gettext!io.ox/
                     );
                 });
             });
+        },
+        save: function () {
+            return usermodel.save();
         }
     });
 });

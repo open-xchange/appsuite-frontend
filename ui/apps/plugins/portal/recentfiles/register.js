@@ -18,7 +18,7 @@ define('plugins/portal/recentfiles/register',
      'io.ox/core/date',
      'gettext!plugins/portal',
      'settings!io.ox/core',
-     'less!plugins/portal/recentfiles/style.less'], function (ext, filesApi, userApi, date, gt, settings) {
+     'less!plugins/portal/recentfiles/style.less'], function (ext, filesAPI, userAPI, date, gt, settings) {
 
     'use strict';
 
@@ -51,13 +51,13 @@ define('plugins/portal/recentfiles/register',
             title: title,
 
             load: function (baton) {
-                return filesApi.search('', searchOptions).then(function (files) {
+                return filesAPI.search('', searchOptions).then(function (files) {
                     // update baton
                     baton.data = files;
                     // get user ids
                     var userIds = _(files).chain().pluck('modified_by').uniq().value();
                     // map userids back to each file
-                    return userApi.getList(userIds)
+                    return userAPI.getList(userIds)
                         .done(function (users) {
                             _(files).each(function (file) {
                                 file.modified_by = _(users).find(function (user) { return user.id === file.modified_by; });
@@ -104,8 +104,8 @@ define('plugins/portal/recentfiles/register',
             draw: function (baton) {
                 var popup = this.busy();
                 require(['io.ox/files/list/view-detail'], function (view) {
-                    var obj = filesApi.reduce(baton.item);
-                    filesApi.get(obj).done(function (data) {
+                    var obj = filesAPI.reduce(baton.item);
+                    filesAPI.get(obj).done(function (data) {
                         popup.idle().append(view.draw(data));
                     });
                 });

@@ -19,7 +19,7 @@ define('plugins/notifications/tasks/register',
      'io.ox/tasks/util',
      'io.ox/core/tk/reminder-util',
      'less!plugins/notifications/tasks/style.less'
-    ], function (ext, gt, api, reminderApi, util, reminderUtil) {
+    ], function (ext, gt, api, reminderAPI, util, reminderUtil) {
 
     'use strict';
 
@@ -239,7 +239,7 @@ define('plugins/notifications/tasks/register',
 
         deleteReminder: function (e) {
             e.stopPropagation();
-            reminderApi.deleteReminder(this.model.get('reminder').id);
+            reminderAPI.deleteReminder(this.model.get('reminder').id);
             this.model.collection.remove(this.model);
         },
 
@@ -254,7 +254,7 @@ define('plugins/notifications/tasks/register',
             if (time !== '0') {//0 means 'pick a time here' was selected. Do nothing.
                 dates = util.computePopupTime(endDate, time);
                 endDate = dates.alarmDate;
-                reminderApi.remindMeAgain(endDate.getTime(), model.get('reminder').id).pipe(function () {
+                reminderAPI.remindMeAgain(endDate.getTime(), model.get('reminder').id).pipe(function () {
                     return $.when(api.caches.get.remove(key), api.caches.list.remove(key));//update Caches
                 }).done(function () {
                     api.trigger('update:' + key[0]);//update detailview
@@ -334,7 +334,7 @@ define('plugins/notifications/tasks/register',
         register: function (controller) {
             var notifications = controller.get('io.ox/tasksreminder', NotificationsReminderView);
 
-            reminderApi.on('add:tasks:reminder', function (e, reminders) {
+            reminderAPI.on('add:tasks:reminder', function (e, reminders) {
                 var taskIds = [];
                 _(reminders).each(function (reminder) {
                     taskIds.push({id: reminder.target_id,
@@ -360,7 +360,7 @@ define('plugins/notifications/tasks/register',
                 _(ids).each(function (id) {
                     notifications.collection.remove(notifications.collection._byId[id.id]);
                 });
-                reminderApi.getReminders();//to delete stored reminders
+                reminderAPI.getReminders();//to delete stored reminders
             });
         }
     });

@@ -568,8 +568,8 @@ define('io.ox/mail/main',
                     close(index, cid);
                 }
             }
-
-            grid.getContainer().on('mousedown', '.thread-size', function (e) {//use mousedown to prevent selection change
+            //use mousedown to prevent selection change
+            grid.getContainer().on('mousedown', '.thread-size, .touch-helper', function (e) {
                 e.preventDefault();//prevent selection change (needed on mobile);
                 var cell = $(this).closest('.vgrid-cell'),
                     index = parseInt(cell.attr('data-index'), 10) + 1,

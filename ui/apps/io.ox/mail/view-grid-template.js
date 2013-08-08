@@ -34,13 +34,17 @@ define('io.ox/mail/view-grid-template',
 
             build: function () {
                 var from, date, priority, subject, attachment, threadSize, threadSizeCount, threadSizeIcon,
-                    flag, answered, forwarded, unread, account = null;
+                    flag, answered, forwarded, unread, account = null, touchHelper = $();
+                if (_.device('smartphone')) {
+                    touchHelper = $('<div class="touch-helper">');
+                }
                 this.addClass('mail').append(
                     $('<div>').append(
                         date = $('<span class="date">'),
                         from = $('<div class="from">')
                     ),
                     $('<div>').append(
+                        touchHelper,
                         threadSize = $('<div class="thread-size">').append(
                             threadSizeCount = $('<span class="number">'),
                             $.txt(' '),
@@ -70,6 +74,7 @@ define('io.ox/mail/view-grid-template',
                     threadSize: threadSize,
                     threadSizeCount: threadSizeCount,
                     threadSizeIcon: threadSizeIcon,
+                    touchHelper: touchHelper,
                     flag: flag,
                     answered: answered,
                     forwarded: forwarded,
@@ -87,6 +92,7 @@ define('io.ox/mail/view-grid-template',
                     fields.subject.addClass('empty').text(gt('No subject'));
                 }
                 if (!data.threadSize || data.threadSize <= 1) {
+                    if (_.device('smartphone')) fields.touchHelper.hide();
                     fields.threadSize.css('display', 'none');
                     fields.threadSizeCount.text(_.noI18n(''));
                 } else {
