@@ -1107,7 +1107,7 @@ define('io.ox/mail/view-detail',
                 if (_.device('!smartphone')) {
                     if (!(!showCC && showTO && data.to[0][1] === 'undisclosed-recipients:;')) {
                         var dd = $('<div class="recipient-actions">');
-                        drawAllDropDown(dd, gt('All recipients'), data);
+                        drawAllDropDown(dd, $('<i class="icon-group">'), data);
                         dd.appendTo(container);
                     }
                 }

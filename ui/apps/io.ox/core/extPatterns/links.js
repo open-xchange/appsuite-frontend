@@ -236,10 +236,11 @@ define("io.ox/core/extPatterns/links",
             $parent = $('<div>').addClass('dropdown')
                 .css({ display: 'inline-block', zIndex: (z = z > 0 ? z - 1 : 11000) })
                 .appendTo(this),
+            label = options.label || baton.label || '###',
             $toggle = $('<a href="#" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
                 .data('context', baton.data)
-                .text(options.label || baton.label || '###')
                 .append(
+                    _.isString(label) ? $.txt(label) : label,
                     $('<span>').text(_.noI18n(' ')),
                     $('<b>').addClass('caret')
                 )

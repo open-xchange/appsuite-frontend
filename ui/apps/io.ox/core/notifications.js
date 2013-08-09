@@ -24,23 +24,24 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
         },
         onChange: function () {
             var count = this.model.get('count');
-            if (count > 0) {
-                this.$el.removeClass('empty');
-            } else {
-                this.$el.addClass('empty');
-            }
+            this.$el.find('.badge').toggleClass('empty', count === 0);
+            this.$el.find('.number').text(count >= 100 ? '99+' : count);
+        },
+        onToggle: function (open) {
+            this.$el.find('.badge i').attr('class', open ? 'icon-caret-down' : 'icon-caret-right');
         },
         render: function () {
-            this.$el.attr({ href: '#', tabindex: '1' }).append('<i class="icon-exclamation-sign">');
+            this.$el.attr({ href: '#', tabindex: '1' }).append(
+                $('<span class="badge">').append(
+                    $('<spann class="number">'), $.txt(' '),
+                    $('<i class="icon-caret-right">')
+                )
+            );
             this.onChange();
             return this;
         },
         setNotifier: function (b) {
-            if (b) {
-                this.$el.addClass('active').attr('aria-disabled', false);
-            } else {
-                this.$el.removeClass('active').attr('aria-disabled', true);
-            }
+            this.$el.attr('aria-disabled', !b).find('.badge').toggleClass('active', !!b);
         },
         setCount: function (count, newMails) {
             var newOther = count - this.model.get('count') - newMails;//check if there are new notifications, that are not mail
@@ -102,8 +103,9 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
 
         attach: function (addLauncher) {
             //view
-            var self = this,
-                badgeView = new BadgeView({ model: new Backbone.Model({ count: 0})});
+            var self = this;
+
+            this.badgeView = new BadgeView({ model: new Backbone.Model({ count: 0})});
 
             this.notificationsView = new NotificationsView();
 
@@ -117,19 +119,19 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             );
 
             //auto open on new notification
-            this.badges.push(badgeView);
+            this.badges.push(this.badgeView);
 
             function changeAutoOpen(value) {
                 value = value || settings.get('autoOpenNotification', 'noEmail');
 
-                badgeView.off('newNotifications newMailNotifications');//prevent stacking of eventhandlers
+                self.badgeView.off('newNotifications newMailNotifications');//prevent stacking of eventhandlers
 
                 if (value === 'always') {
-                    badgeView.on('newNotifications newMailNotifications', function () {
+                    self.badgeView.on('newNotifications newMailNotifications', function () {
                         self.showList();
                     });
                 } else if (value === 'noEmail') {
-                    badgeView.on('newNotifications', function () {
+                    self.badgeView.on('newNotifications', function () {
                         self.showList();
                     });
                 }
@@ -141,7 +143,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             });
 
             //close if count set to 0
-            badgeView.on('lastItemDeleted', function () {
+            self.badgeView.on('lastItemDeleted', function () {
                 var overlay = $('#io-ox-notifications-overlay');
                 if (overlay.has('.mail-detail-decorator').length > 0) {
                     overlay.on("mail-detail-closed", _.bind(self.slowClose, self));
@@ -163,7 +165,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
 
             return addLauncher(
                 'right',
-                badgeView.render().$el.on('keydown', focusNotifications),
+                self.badgeView.render().$el.on('keydown', focusNotifications),
                 $.proxy(this.toggleList, this)
             ).attr('id', 'io-ox-notifications-icon');
         },
@@ -231,6 +233,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             $('#io-ox-notifications').find('[tabindex="1"]').focus();
             $('#io-ox-notifications').addClass('active');
             $('#io-ox-notifications-overlay').addClass('active');
+            this.badgeView.onToggle(true);
             $(document).on('keydown.notification', $.proxy(function (e) {
                 if (e.which === 27) { // escapekey
                     $(document).off('keydown.notification');
@@ -242,7 +245,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             _.each(this.badges, function (badgeView) {
                 badgeView.setNotifier(false);
             });
-
+            this.badgeView.onToggle(false);
             $('#io-ox-notifications').removeClass('active');
             if (_.device('!smartphone')) {
                 $('#io-ox-notifications-overlay').empty().removeClass('active');

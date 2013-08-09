@@ -204,15 +204,10 @@
             & > a { color: @topbarLauncherColor-hover; background-color: @topbarLauncherBackgroundHover; }
         }
 
-        a:focus {
+        a:focus, a:active {
             outline: 0;
             color: @topbarLauncherColor-hover;
             background-color: #08c;
-        }
-
-        a:active {
-            color: @topbarLauncherColor-hover;
-            background-color: @topbarLauncherBackgroundHover;
         }
 
         &.upsell {
@@ -316,7 +311,7 @@
         }
     }
 
-    i[class^="icon-"] {
+    i[class^="icon-"].launcher-icon {
         color: @topbarIconColor;
         font-size: 20px;
         text-decoration: none;
@@ -361,22 +356,26 @@
         display: inline-block;
         padding: 0 12px;
 
-        &.empty i {
-            color: @notificationIconEmpty;
+        .badge {
+            color: #aaa;
+            background-color: @notificationIconBackground;
         }
 
-        &:focus {
-            i { color: white; }
-            background-color: @linkColor;
-        }
-
-        &.active {
+        .badge.active {
             color: white;
             background-color: @notificationIconBackgroundActive;
         }
 
-        &.active:hover, &.active:focus {
-            background-color: darken(@notificationIconBackgroundActive, 5%);
+        &:focus .badge, &:active .badge {
+            color: white;
+            background-color: darken(@linkColor, 10%);
+        }
+
+        .badge i {
+            /* avoid flicker */
+            width: 8px;
+            text-align: center;
+            display: inline-block;
         }
     }
 

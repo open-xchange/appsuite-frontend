@@ -835,12 +835,12 @@ define("io.ox/mail/write/view-main",
                     // append emojitoggle
                     this.emojiToggle(),
                     // priority
-                    this.priorityOverlay = $('<div>').addClass('priority-overlay')
+                    this.priorityOverlay = $('<div class="priority-overlay">')
                         .attr('title', 'Priority')
                         .append(
-                            $('<i class="icon-star">'),
-                            $('<i class="icon-star">'),
-                            $('<i class="icon-star">')
+                            $('<i class="icon-exclamation">'),
+                            $('<i class="icon-exclamation">'),
+                            $('<i class="icon-exclamation">')
                         )
                         .on('click', $.proxy(togglePriority, this))
                 ),
