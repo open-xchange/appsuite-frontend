@@ -234,14 +234,12 @@ i[class^="icon-"], i[class^=" icon-"] {
 
     /* the application pane in the middle between all view panes */
     &.app-pane {
-        .box-sizing(content-box);
         left: 0;
         right: 0;
         top: 0;
         bottom: 0;
         margin: 0;
         padding: 0;
-        background: @app-pane-fill-color;
 
         /* prevent dotted focus rectangle around the control */
         &, &:focus, &:active {
@@ -249,36 +247,29 @@ i[class^="icon-"], i[class^=" icon-"] {
         }
 
         /* the container element for hidden contents */
-        > .app-hidden {
-            position: absolute;
-            top: -2px;
-            height: 1px;
-            left: 0;
-            overflow: hidden;
+        > .app-hidden-root {
+            bottom: auto;
+            height: auto;
+            overflow: visible;
             line-height: normal;
         }
 
         /* the container element for the application contents */
-        > .app-container {
-            position: absolute;
-            display: block;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-        }
+        > .app-content-root {
+            background: @app-pane-fill-color;
 
-        /* scrollable application pane, center container node horizontally into application pane */
-        &.scrolling {
-            .overflow(auto);
-            text-align: center;
+            /* scrollable application pane, center container node horizontally into application pane */
+            &.scrolling {
+                .overflow(auto);
+                text-align: center;
 
-            /* the container element for the application contents */
-            > .app-container {
-                position: relative;
-                display: inline-block;
-                width: auto;
-                height: auto;
+                /* the child container element for the application contents in the scrollable node */
+                > .app-content {
+                    position: relative;
+                    display: inline-block;
+                    width: auto;
+                    height: auto;
+                }
             }
         }
     }

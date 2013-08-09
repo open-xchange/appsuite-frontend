@@ -57,8 +57,8 @@ define('io.ox/office/preview/view/view',
             // the preview model
             model = null,
 
-            // the DOM node of the scrollable application pane
-            appPaneNode = null,
+            // the scrollable document content node
+            contentRootNode = null,
 
             // the main side pane containing the thumbnails
             sidePane = null,
@@ -113,8 +113,8 @@ define('io.ox/office/preview/view/view',
         BaseView.call(this, app, {
             initHandler: initHandler,
             deferredInitHandler: deferredInitHandler,
-            grabFocusHandler: grabFocusHandler,
-            scrollable: true,
+            contentFocusable: true,
+            contentScrollable: true,
             contentMargin: 30,
             overlayMargin: { left: 8, right: Utils.SCROLLBAR_WIDTH + 8, bottom: Utils.SCROLLBAR_HEIGHT }
         });
@@ -169,10 +169,10 @@ define('io.ox/office/preview/view/view',
         /**
          * Scrolls the application pane node by the passed distance.
          */
-        function scrollAppPaneNode(diffX, diffY) {
-            var scrollLeft = appPaneNode.scrollLeft() + Math.round(diffX),
-                scrollTop = appPaneNode.scrollTop() + Math.round(diffY);
-            appPaneNode.scrollLeft(scrollLeft).scrollTop(scrollTop);
+        function scrollContentRootNode(diffX, diffY) {
+            var scrollLeft = contentRootNode.scrollLeft() + Math.round(diffX),
+                scrollTop = contentRootNode.scrollTop() + Math.round(diffY);
+            contentRootNode.scrollLeft(scrollLeft).scrollTop(scrollTop);
         }
 
         /**
@@ -201,7 +201,7 @@ define('io.ox/office/preview/view/view',
             abortScrollAnimation();
             scrollAnimation = app.repeatDelayed(function (index) {
                 var move = callback.call(self, index);
-                scrollAppPaneNode(move.x, move.y);
+                scrollContentRootNode(move.x, move.y);
             }, { delay: ANIMATION_DELAY, cycles: frames })
             .done(function () { scrollAnimation = null; });
         }
@@ -218,7 +218,7 @@ define('io.ox/office/preview/view/view',
                 pageNode = (page > 0) ? pageNodes.eq(page - 1) : $();
 
             if (pageNode.length > 0) {
-                appPaneNode.scrollTop(Utils.getChildNodePositionInNode(appPaneNode, pageNode).top - self.getContentMargin().top);
+                contentRootNode.scrollTop(Utils.getChildNodePositionInNode(contentRootNode, pageNode).top - self.getContentMargin().top);
             }
         }
 
@@ -262,15 +262,15 @@ define('io.ox/office/preview/view/view',
         function updateVisiblePages() {
 
             var // find the first page that is visible at the top border of the visible area
-                beginPage = _(pageNodes).sortedIndex(appPaneNode.scrollTop(), function (value) {
+                beginPage = _(pageNodes).sortedIndex(contentRootNode.scrollTop(), function (value) {
                     if (_.isNumber(value)) { return value; }
-                    var pagePosition = Utils.getChildNodePositionInNode(appPaneNode, value);
+                    var pagePosition = Utils.getChildNodePositionInNode(contentRootNode, value);
                     return pagePosition.top + pagePosition.height - 1;
                 }) + 1,
                 // find the first page that is not visible anymore at the bottom border of the visible area
-                endPage = _(pageNodes).sortedIndex(appPaneNode.scrollTop() + appPaneNode[0].clientHeight, function (value) {
+                endPage = _(pageNodes).sortedIndex(contentRootNode.scrollTop() + contentRootNode[0].clientHeight, function (value) {
                     if (_.isNumber(value)) { return value; }
-                    return Utils.getChildNodePositionInNode(appPaneNode, value).top;
+                    return Utils.getChildNodePositionInNode(contentRootNode, value).top;
                 }) + 1,
                 // first page loaded with lower priority
                 beginPageLowerPrio = Math.max(1, beginPage - 2),
@@ -349,9 +349,9 @@ define('io.ox/office/preview/view/view',
         function refreshLayout() {
 
             var // find the page that is visible at the vertical center of the visible area
-                centerPage = _(pageNodes).sortedIndex(appPaneNode.scrollTop(), function (value) {
+                centerPage = _(pageNodes).sortedIndex(contentRootNode.scrollTop(), function (value) {
                     if (_.isNumber(value)) { return value; }
-                    var pagePosition = Utils.getChildNodePositionInNode(appPaneNode, value);
+                    var pagePosition = Utils.getChildNodePositionInNode(contentRootNode, value);
                     return pagePosition.top + pagePosition.height - 1;
                 }) + 1,
                 // the position of the center page in the visible area of the application pane
@@ -365,7 +365,7 @@ define('io.ox/office/preview/view/view',
 
             // restrict center page to valid page numbers, get position of the center page
             centerPage = Utils.minMax(centerPage, 1, model.getPageCount());
-            centerPagePosition = Utils.getChildNodePositionInNode(appPaneNode, pageNodes[centerPage - 1], { visibleArea: true });
+            centerPagePosition = Utils.getChildNodePositionInNode(contentRootNode, pageNodes[centerPage - 1], { visibleArea: true });
 
             // Calculation of the page ratio
             // -----------------------------
@@ -385,8 +385,8 @@ define('io.ox/office/preview/view/view',
             self.setContentMargin(contentMargin);
 
             // the available inner size in the application pane
-            availableSize.width = appPaneNode[0].clientWidth - 2 * contentMargin;
-            availableSize.height = ((zoomType === 'page') ? appPaneNode.height() : appPaneNode[0].clientHeight) - 2 * contentMargin;
+            availableSize.width = contentRootNode[0].clientWidth - 2 * contentMargin;
+            availableSize.height = ((zoomType === 'page') ? contentRootNode.height() : contentRootNode[0].clientHeight) - 2 * contentMargin;
 
             // Process all page nodes, update 'current zoom factor' for the
             // selected page. Detaching the page nodes while updating them
@@ -396,31 +396,22 @@ define('io.ox/office/preview/view/view',
             zoomFactor = pageLoader.getPageZoom(pageNodes[selectedPage - 1]) * 100;
 
             // restore the correct scroll position with the new page sizes
-            centerPagePosition = Utils.getChildNodePositionInNode(appPaneNode, pageNodes[centerPage - 1]);
-            appPaneNode.scrollTop(centerPagePosition.top + ((centerPageRatio < 0) ? centerPageRatio : Math.round(centerPagePosition.height * centerPageRatio)));
-        }
-
-        /**
-         * Moves the browser focus to the application pane.
-         */
-        function grabFocusHandler() {
-            appPaneNode.focus();
-            // Bug 25924: sometimes, Firefox selects the entire page
-            window.getSelection().removeAllRanges();
+            centerPagePosition = Utils.getChildNodePositionInNode(contentRootNode, pageNodes[centerPage - 1]);
+            contentRootNode.scrollTop(centerPagePosition.top + ((centerPageRatio < 0) ? centerPageRatio : Math.round(centerPagePosition.height * centerPageRatio)));
         }
 
         /**
          * Stores the current scroll position while the view is hidden.
          */
         function windowHideHandler() {
-            appPaneNode.data({ scrollLeft: appPaneNode.scrollLeft(), scrollTop: appPaneNode.scrollTop() });
+            contentRootNode.data({ scrollLeft: contentRootNode.scrollLeft(), scrollTop: contentRootNode.scrollTop() });
         }
 
         /**
          * Restores the scroll position after the view was hidden.
          */
         function windowShowHandler() {
-            appPaneNode.scrollLeft(appPaneNode.data('scrollLeft') || 0).scrollTop(appPaneNode.data('scrollTop') || 0);
+            contentRootNode.scrollLeft(contentRootNode.data('scrollLeft') || 0).scrollTop(contentRootNode.data('scrollTop') || 0);
         }
 
         /**
@@ -510,7 +501,7 @@ define('io.ox/office/preview/view/view',
                     abortScrollAnimation();
                     break;
                 case 'tracking:move':
-                    scrollAppPaneNode(-event.moveX, -event.moveY);
+                    scrollContentRootNode(-event.moveX, -event.moveY);
                     updateLastMoves(event.moveX, event.moveY);
                     break;
                 case 'tracking:end':
@@ -587,10 +578,7 @@ define('io.ox/office/preview/view/view',
         function initHandler() {
 
             model = app.getModel();
-            appPaneNode = self.getAppPaneNode();
-
-            // make the application pane focusable for global navigation with F6 key
-            appPaneNode.addClass('f6-target').attr('tabindex', 1);
+            contentRootNode = self.getContentRootNode();
 
             // create the side pane
             self.addPane(sidePane = new SidePane(app, {
@@ -635,6 +623,11 @@ define('io.ox/office/preview/view/view',
 
             // initially, hide the side pane, and show the overlay tool bars
             self.toggleSidePane(false);
+
+            // Bug 25924: sometimes, Firefox selects the entire page
+            contentRootNode.on('focus', function () {
+                window.getSelection().removeAllRanges();
+            });
         }
 
         function deferredInitHandler() {
@@ -687,7 +680,7 @@ define('io.ox/office/preview/view/view',
                 self.on('refresh:layout', refreshLayout);
 
                 // initialize touch-like tracking with mouse, attach the scroll event handler
-                appPaneNode
+                contentRootNode
                     .enableTracking({ selector: '.page', sourceEvents: 'mouse' })
                     .on('tracking:start tracking:move tracking:end tracking:cancel', trackingHandler)
                     .on('gesturestart gesturechange gestureend', gestureHandler)

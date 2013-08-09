@@ -90,12 +90,16 @@ define('io.ox/office/framework/view/baseview',
      *      into the application pane. Used in the method BaseView.grabFocus()
      *      of this class. If omitted, the application pane itself will be
      *      focused.
-     *  @param {Boolean} [options.scrollable=false]
-     *      If set to true, the application pane will be scrollable, and the
-     *      application container node becomes resizable. By default, the size
-     *      of the application container node is locked and synchronized with
-     *      the size of the application pane (with regard to padding, see the
-     *      option 'options.appPanePadding').
+     *  @param {Boolean} [options.contentFocusable=false]
+     *      If set to true, the container node for the document contents will
+     *      be focusable and will be registered for global focus traversal with
+     *      the F6 key.
+     *  @param {Boolean} [options.contentScrollable=false]
+     *      If set to true, the container node for the document contents will
+     *      be scrollable. By default, the size of the container node is locked
+     *      and synchronized with the size of the application pane (with regard
+     *      to content margins, see the option 'options.contentMargin' for
+     *      details).
      *  @param {Number|Object} [options.contentMargin=0]
      *      The margins between the fixed application pane and the embedded
      *      application container node, in pixels. If set to a number, all
@@ -126,11 +130,14 @@ define('io.ox/office/framework/view/baseview',
             // centered application pane
             appPane = null,
 
-            // root container node for invisible contents
-            appHiddenNode = $('<div>').addClass('abs app-hidden'),
+            // root container node for invisible document contents
+            hiddenRootNode = $('<div>').addClass('abs app-hidden-root'),
 
-            // root application container node
-            appContainerNode = $('<div>').addClass('app-container'),
+            // root container node for visible document contents (may be scrollable)
+            contentRootNode = $('<div>').addClass('abs app-content-root'),
+
+            // container node for application contents
+            appContentNode = $('<div>').addClass('app-content').appendTo(contentRootNode),
 
             // busy node for the application pane
             appBusyNode = $('<div>').addClass('abs app-busy'),
@@ -155,6 +162,9 @@ define('io.ox/office/framework/view/baseview',
 
             // margins of overlay panes to the borders of the application pane
             overlayMargin = getMarginFromValue(Utils.getOption(options, 'overlayMargin', 0)),
+
+            // whether the content root node is focusable by itself
+            contentFocusable = Utils.getBooleanOption(options, 'contentFocusable', false),
 
             // whether the application is hidden explicitly
             viewHidden = false;
@@ -289,8 +299,10 @@ define('io.ox/office/framework/view/baseview',
         this.grabFocus = function () {
             if (_.isFunction(grabFocusHandler)) {
                 grabFocusHandler.call(this);
+            } else if (contentFocusable) {
+                contentRootNode.focus();
             } else {
-                this.getAppPaneNode().focus();
+                this.getAppPaneNode().find('[tabindex]').first().focus();
             }
             return this;
         };
@@ -374,25 +386,40 @@ define('io.ox/office/framework/view/baseview',
         };
 
         /**
-         * Detaches the application pane from the DOM.
+         * Detaches the document contents in the application pane from the DOM.
          *
          * @returns {BaseView}
          *  A reference to this instance.
          */
         this.detachAppPane = function () {
-            appContainerNode.detach();
+            appContentNode.detach();
             return this;
         };
 
         /**
-         * Attaches the application pane to the DOM.
+         * Attaches the document contents in the application pane to the DOM.
          *
          * @returns {BaseView}
          *  A reference to this instance.
          */
         this.attachAppPane = function () {
-            appContainerNode.insertAfter(appHiddenNode);
+            contentRootNode.append(appContentNode);
             return this;
+        };
+
+        /**
+         * Returns the root container node for the application contents. Note
+         * that this is NOT the direct parent node where applications insert
+         * their own contents, but the (optionally scrollable) root node
+         * containing the target container node for document contents. The
+         * method BaseView.insertContentNode() is intended to be used to insert
+         * own contents into the application pane.
+         *
+         * @returns {jQuery}
+         *  The DOM node of the application pane.
+         */
+        this.getContentRootNode = function () {
+            return contentRootNode;
         };
 
         /**
@@ -406,10 +433,10 @@ define('io.ox/office/framework/view/baseview',
          */
         this.getContentMargin = function () {
             return {
-                left: Utils.convertCssLength(appContainerNode.css('margin-left'), 'px', 1),
-                right: Utils.convertCssLength(appContainerNode.css('margin-right'), 'px', 1),
-                top: Utils.convertCssLength(appContainerNode.css('margin-top'), 'px', 1),
-                bottom: Utils.convertCssLength(appContainerNode.css('margin-bottom'), 'px', 1)
+                left: Utils.convertCssLength(appContentNode.css('margin-left'), 'px', 1),
+                right: Utils.convertCssLength(appContentNode.css('margin-right'), 'px', 1),
+                top: Utils.convertCssLength(appContentNode.css('margin-top'), 'px', 1),
+                bottom: Utils.convertCssLength(appContentNode.css('margin-bottom'), 'px', 1)
             };
         };
 
@@ -430,7 +457,7 @@ define('io.ox/office/framework/view/baseview',
          */
         this.setContentMargin = function (margin) {
             margin = getMarginFromValue(margin);
-            appContainerNode.css('margin', margin.top + 'px ' + margin.right + 'px ' + margin.bottom + 'px ' + margin.left + 'px');
+            appContentNode.css('margin', margin.top + 'px ' + margin.right + 'px ' + margin.bottom + 'px ' + margin.left + 'px');
             return this;
         };
 
@@ -438,7 +465,7 @@ define('io.ox/office/framework/view/baseview',
          * Inserts new DOM nodes into the container node of the application
          * pane.
          *
-         * @param {HTMLElement|jQuery}
+         * @param {HTMLElement|jQuery} contentNode
          *  The DOM node(s) to be inserted into the application pane. If this
          *  object is a jQuery collection, inserts all contained DOM nodes into
          *  the application pane.
@@ -447,7 +474,7 @@ define('io.ox/office/framework/view/baseview',
          *  A reference to this instance.
          */
         this.insertContentNode = function (contentNode) {
-            appContainerNode.append(contentNode);
+            appContentNode.append(contentNode);
             return this.refreshPaneLayout();
         };
 
@@ -459,7 +486,7 @@ define('io.ox/office/framework/view/baseview',
          *  A reference to this instance.
          */
         this.removeAllContentNodes = function () {
-            appContainerNode.empty();
+            appContentNode.empty();
             return this.refreshPaneLayout();
         };
 
@@ -467,7 +494,7 @@ define('io.ox/office/framework/view/baseview',
          * Inserts new DOM nodes into the hidden container node of the
          * application pane.
          *
-         * @param {HTMLElement|jQuery}
+         * @param {HTMLElement|jQuery} hiddenNode
          *  The DOM node(s) to be inserted into the hidden container of the
          *  application pane. If this object is a jQuery collection, inserts
          *  all contained DOM nodes into the application pane.
@@ -476,7 +503,7 @@ define('io.ox/office/framework/view/baseview',
          *  A reference to this instance.
          */
         this.insertHiddenNode = function (hiddenNode) {
-            appHiddenNode.append(hiddenNode);
+            hiddenRootNode.append(hiddenNode);
             return this;
         };
 
@@ -874,14 +901,9 @@ define('io.ox/office/framework/view/baseview',
 
         // initialization -----------------------------------------------------
 
-        // create the application pane, and insert the container node
+        // create the application pane, and insert the container nodes
         appPane = new Pane(app, { classes: 'app-pane', enableContextMenu: true });
-        appPane.getNode()
-            .toggleClass('scrolling', Utils.getBooleanOption(options, 'scrollable', false))
-            .append(appHiddenNode, appContainerNode, appBusyNode.hide());
-
-        // initialize content margin from passed options
-        this.setContentMargin(Utils.getOption(options, 'contentMargin', 0));
+        appPane.getNode().append(hiddenRootNode, contentRootNode, appBusyNode.hide());
 
         // add the main application pane to the application window
         app.getWindowNode().addClass(windowNodeClasses).removeAttr('tabindex').append(appPane.getNode());
@@ -890,6 +912,15 @@ define('io.ox/office/framework/view/baseview',
         _(['top', 'bottom', 'left', 'right']).each(function (border) {
             app.getWindowNode().append(shadowNodes[border] = $('<div>').addClass('app-pane-shadow'));
         });
+
+        // initialize content node from passed options
+        contentRootNode.toggleClass('scrolling', Utils.getBooleanOption(options, 'contentScrollable', false));
+        this.setContentMargin(Utils.getOption(options, 'contentMargin', 0));
+
+        // make the content root node focusable for global navigation with F6 key
+        if (contentFocusable) {
+            contentRootNode.addClass('f6-target').attr('tabindex', 1);
+        }
 
         // listen to browser window resize events when the application window is visible
         app.registerWindowResizeHandler(refreshPaneLayout);
