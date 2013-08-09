@@ -238,7 +238,7 @@ utils.topLevelTask('default', ['buildApp'], function() {
     utils.summary('default')();
 });
 
-utils.copy(utils.list("html", [".htaccess", "blank.html", "busy.html", "print.html", "favicon.ico"]));
+utils.copy(utils.list("html", [".htaccess", "blank.html", "busy.html", "unsupported.html", "print.html", "favicon.ico"]));
 utils.copy(utils.list("src/"));
 
 //html
