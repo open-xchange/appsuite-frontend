@@ -214,16 +214,5 @@ function (date, ext) {
                 .toEqual('02:30 CEST - 02:30 CET');
             });
         });
-        describe('constructor', function () {
-            it('from a full date', function () {
-                expect(new D(2013, 7, 9).format('yyyyMMdd')).toEqual('20130809');
-            });
-            it('from the first century', function () {
-                expect(new D(13, 7, 9).format('yyyyMMdd')).toEqual('00130809');
-            });
-            it('from a birthday', function () {
-                expect(new D(0, 7, 9).format('yyyyMMdd')).toEqual('00010809');
-            });
-        });
     });
 });

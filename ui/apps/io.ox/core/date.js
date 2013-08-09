@@ -732,8 +732,7 @@ define.async('io.ox/core/date',
                     this.local = LocalDate.localTime(this.t);
                     break;
                 default:
-                    var d = new Date(0);
-                    this.local = d.setUTCFullYear.apply(d, arguments);
+                    this.local = Date.UTC.apply(Date, arguments);
                     this.t = LocalDate.utc(this.local);
             }
         }
