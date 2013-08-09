@@ -70,11 +70,12 @@ define('io.ox/contacts/distrib/main',
             });
 
             view.on('save:fail', function () {
+                require("io.ox/core/notifications").yell("error", gt("Failed to save distribution list."));
                 win.idle();
             });
 
             view.on('save:success', function () {
-
+                require("io.ox/core/notifications").yell("success", gt("Distribution list has been saved"));
                 considerSaved = true;
                 win.idle();
                 app.quit();

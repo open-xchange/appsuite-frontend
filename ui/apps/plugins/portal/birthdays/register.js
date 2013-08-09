@@ -62,8 +62,8 @@ define('plugins/portal/birthdays/register',
 
             // ignore broken birthdays
             contacts = _(contacts).filter(function (contact) {
-                // null, undefined, empty string, 0 (yep 1.1.1970). And > 1863-01-01.
-                return !!contact.birthday && contact.birthday > -3376598400000;
+                // null, undefined, empty string, 0 (yep 1.1.1970).
+                return !!contact.birthday;
             });
 
             if (contacts.length === 0) {
@@ -73,8 +73,14 @@ define('plugins/portal/birthdays/register',
             } else {
                 $list.addClass('pointer');
                 _(contacts.slice(0, numOfItems)).each(function (contact) {
-                    var birthday = new date.Local(date.Local.utc(contact.birthday)).format(date.DATE),
+                    var birthday = new date.UTC(contact.birthday),
                         name = util.getFullName(contact);
+                    if (birthday.getYear() === 1) {//Year 0 is special for birthdays without year (backend changes this to 1...)
+                        birthday = birthday.format(date.DATE);//date without Year needed here, not implemented yet
+                    } else {
+                        birthday = birthday.format(date.DATE);
+                    }
+                        
                     if (!isDuplicate(name, hash)) {
                         $list.append(
                             $('<div class="line">').append(
