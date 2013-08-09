@@ -182,6 +182,7 @@ define('io.ox/files/mediaplayer',
                 plugins: plugins,
                 pluginPath: 'apps/mediaelement/',
                 enableAutosize: false,
+                autosizeProgress: false,
                 timerRate: 250,
                 features: this.features,
                 pauseOtherPlayers: true,
@@ -224,7 +225,9 @@ define('io.ox/files/mediaplayer',
                     }
                 ],
                 success: function (me, domObject) {
-
+                    $('.mediaplayer_container .mejs-time-rail').css({
+                        width: ($(window).width() <= 700 ? '140px' : '330px')
+                    });
                     self.mediaelement = me;
                     me.addEventListener('ended', function () {
                         self.select('next');
