@@ -234,47 +234,41 @@ i[class^="icon-"], i[class^=" icon-"] {
 
     /* the application pane in the middle between all view panes */
     &.app-pane {
-        .box-sizing(content-box);
         left: 0;
         right: 0;
         top: 0;
         bottom: 0;
         margin: 0;
         padding: 0;
-        background: @app-pane-fill-color;
 
         /* prevent dotted focus rectangle around the control */
         &, &:focus, &:active {
             outline: none;
         }
 
-        /* the container element for the application contents */
-        > .app-container {
-            position: absolute;
-            display: block;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
+        /* the container element for hidden contents */
+        > .app-hidden-root {
+            bottom: auto;
+            height: auto;
+            overflow: visible;
+            line-height: normal;
         }
 
-        /* scrollable application pane, center container node horizontally into application pane */
-        &.scrolling {
-            .overflow(auto);
-            text-align: center;
+        /* the container element for the application contents */
+        > .app-content-root {
+            background: @app-pane-fill-color;
 
-            /* the container element for the application contents */
-            > .app-container {
-                position: relative;
-                display: inline-block;
-                width: auto;
-                height: auto;
+            /* scrollable application pane, center container node horizontally into application pane */
+            &.scrolling {
+                .overflow(auto);
+                text-align: center;
 
-                /* generic design of a 'page': white background with box shadow */
-                > .page {
+                /* the child container element for the application contents in the scrollable node */
+                > .app-content {
                     position: relative;
-                    background: white;
-                    .box-shadow(0 0 8px fade(black, 20%));
+                    display: inline-block;
+                    width: auto;
+                    height: auto;
                 }
             }
         }

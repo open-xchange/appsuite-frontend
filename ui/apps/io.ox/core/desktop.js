@@ -918,7 +918,7 @@ define("io.ox/core/desktop",
                             // search area
                             this.search = $('<div class="window-search">'),
                             // default perspective
-                            this.main = $('<div class="abs window-content">').attr({ tabindex: -1 })
+                            this.main = $('<div class="abs window-content">')
                         );
                     }
                 });
@@ -1247,7 +1247,7 @@ define("io.ox/core/desktop",
                     var id = pers.name, node;
                     if (this.nodes[id] === undefined) {
                         this.nodes.body.append(
-                            node = $('<div class="abs window-content" tabindex="-1">').hide()
+                            node = $('<div class="abs window-content">').hide()
                         );
                         perspectives[id] = pers;
                         return this.nodes[id] = node;

@@ -22,6 +22,9 @@ define('io.ox/mail/view-grid-template',
 
     'use strict';
 
+    var colorLabelIconEmpty = 'icon-bookmark-empty',
+        colorLabelIcon = 'icon-bookmark';
+
     var that = {
 
         // main grid template
@@ -50,13 +53,13 @@ define('io.ox/mail/view-grid-template',
                             $.txt(' '),
                             threadSizeIcon = $('<i class="icon-caret-right">')
                         ),
-                        flag = $('<i class="flag icon-flag-alt">'),
+                        flag = $('<i class="flag ' + colorLabelIconEmpty + '">'),
                         attachment = $('<i class="icon-paper-clip">'),
                         priority = $('<span class="priority">'),
                         $('<div class="subject">').append(
                             unread = $('<i class="icon-unread icon-circle">'),
-                            answered = $('<i class="icon-circle-arrow-left">'),
-                            forwarded = $('<i class="icon-circle-arrow-right">'),
+                            answered = $('<i class="icon-answered icon-reply">'),
+                            forwarded = $('<i class="icon-forwarded icon-mail-forward">'),
                             subject = $('<span class="drag-title">')
                         )
                     )
@@ -106,7 +109,7 @@ define('io.ox/mail/view-grid-template',
                 fields.date.text(_.noI18n(util.getTime(data.received_date)));
                 fields.attachment.css('display', data.attachment ? '' : 'none');
                 var color = api.tracker.getColorLabel(data);
-                fields.flag.get(0).className = 'flag flag_' + color + ' ' + (color === 0 ? 'icon-flag-alt' : 'icon-flag');
+                fields.flag.get(0).className = 'flag flag_' + color + ' ' + (color === 0 ? colorLabelIconEmpty : colorLabelIcon);
                 if (fields.account) {
                     fields.account.text(util.getAccountName(data));
                 }

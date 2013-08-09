@@ -2927,6 +2927,11 @@ define.async('io.ox/office/tk/utils',
     }());
 */
 
+    // global focus log
+//    $(document).on('focusin focusout', function (event) {
+//        Utils.log(event.type + ': ' + event.target.nodeName + '.' + (event.target.className || '').replace(/ /g, '.'));
+//    });
+
     // deferred initialization of class members according to current language
     gettext.language.done(function (language) {
 

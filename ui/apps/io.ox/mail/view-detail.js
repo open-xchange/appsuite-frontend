@@ -972,6 +972,9 @@ define('io.ox/mail/view-detail',
         YELLOW:     gt('Yellow')
     };
 
+    var colorLabelIconEmpty = 'icon-bookmark-empty',
+        colorLabelIcon = 'icon-bookmark';
+
     function changeLabel(e) {
 
         e.preventDefault();
@@ -980,7 +983,7 @@ define('io.ox/mail/view-detail',
             className = 'flag-dropdown-icon ';
 
         // set proper icon class
-        className += color === 0 ? 'icon-flag-alt' : 'icon-flag';
+        className += color === 0 ? colorLabelIconEmpty : colorLabelIcon;
         className += ' flag_' + color;
 
         node.find('.flag-dropdown-icon').attr('class', className);
@@ -1000,7 +1003,7 @@ define('io.ox/mail/view-detail',
                     // box
                     $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" tabindex="1">').append(
                         $('<i class="flag-dropdown-icon">')
-                            .addClass(color === 0 ? 'icon-flag-alt' : 'icon-flag')
+                            .addClass(color === 0 ? colorLabelIconEmpty : colorLabelIcon)
                             .addClass('flag_' + color)
                     ),
                     // drop down
