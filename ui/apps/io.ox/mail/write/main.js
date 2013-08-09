@@ -1072,6 +1072,24 @@ define('io.ox/mail/write/main',
                 //convert to send encoding (NOOP, if target encoding is 'unified')
                 mail.data.attachments[0].content = convert(mail.data.attachments[0].content, mail.format);
             }
+            function askForDraftSave() {
+                // show dialog
+                require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                    new dialogs.ModalDialog()
+                        .text(gt("Do you want to keep the draft after sending this mail?"))
+                        .addPrimaryButton("delete", gt('Delete the draft after sending.'))
+                        .addButton("save", gt('Keep the draft.'))
+                        .show()
+                        .done(function (action) {
+                            if (action === 'save') {
+                                mail.data.keepDraft = true;//temporary flag
+                                cont();
+                            } else {
+                                cont();
+                            }
+                        });
+                });
+            }
 
             function cont() {
                 // start being busy
@@ -1160,7 +1178,11 @@ define('io.ox/mail/write/main',
                             })
                             .done(function (action) {
                                 if (action === 'send') {
-                                    cont();
+                                    if (mail.data.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {//ask if draftmail should be deleted after sending
+                                        askForDraftSave();
+                                    } else {
+                                        cont();
+                                    }
                                 } else {
                                     focus('subject');
                                     def.reject();
@@ -1170,6 +1192,8 @@ define('io.ox/mail/write/main',
                 }
 
 
+            } else if (mail.data.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {//ask if draftmail should be deleted after sending
+                askForDraftSave();
             } else {
                 cont();
             }
