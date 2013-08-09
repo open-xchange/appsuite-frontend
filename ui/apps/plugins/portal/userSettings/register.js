@@ -38,7 +38,6 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
 
             popup.show(e, function (pane) {
                 pane.append($node);
-                pane.closest('.io-ox-sidepopup').find('.io-ox-sidepopup-close').hide();
             });
         });
     }
