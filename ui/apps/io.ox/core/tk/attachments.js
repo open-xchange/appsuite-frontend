@@ -190,6 +190,97 @@ define('io.ox/core/tk/attachments',
             }, options);
         }
 
+        /**
+         * gui widget collecting files user wants to upload
+         * @param {object} options
+         * @param {object} baton
+         */
+        function SimpleEditableFileList(options, baton) {
+            _.extend(this, {
+
+                init: function () {
+                    var self = this;
+                    this.oldMode = _.browser.IE < 10;
+                    this.files = [];
+                },
+
+                render: function () {
+                    var self = this,
+                        odd = true,
+                        row;
+                    self.$el.empty();
+                    _(this.files).each(function (file) {
+                        self.$el
+                            .addClass('io-ox-core-tk-attachment-list').append(self.renderFile(file));
+                    });
+                    return this;
+                },
+
+                renderFile: function (attachment) {
+                    var self = this,
+                        size, removeFile,
+                        $el = $('<div class="span6">').append(
+                            $('<div class="io-ox-core-tk-attachment file">').append(
+                                $('<i class="icon-paper-clip">'),
+                                $('<div class="row-1">').text(attachment.filename),
+                                $('<div class="row-2">').append(
+                                    size = $('<span class="filesize">').text(strings.fileSize(attachment.file_size))
+                                ),
+                                removeFile = $('<a href="#" class="remove" tabindex="1" title="Remove attachment">').append($('<i class="icon-trash">'))
+                            )
+                        );
+
+                    removeFile.on('click', function () { self.remove(attachment); });
+
+                    if (size.text() === "0 B") {
+                        size.text(" ");
+                    }
+
+                    return $el;
+                },
+
+                listChanged: function () {
+                    this.$el.empty();
+                    this.render();
+                },
+
+                get: function () {
+                    return [].concat(this.files);
+                },
+
+                clear: function () {
+                    this.files = [];
+                    this.listChanged();
+                },
+
+                add: function (file) {
+                    if (this.oldMode) {
+                        this.files.push({file: file.hiddenField, cid: counter++, filename: file.name, file_size: file.size});
+                    } else {
+                        this.files.push({file: file, cid: counter++, filename: file.name, file_size: file.size});
+                    }
+                    this.listChanged();
+                },
+
+                remove: function (attachment) {
+                    this.files = _.filter(this.files, function (att) {
+                        return att.cid !== attachment.cid;
+                    });
+                    if (this.oldMode) {
+                        attachment.file.remove();
+                    }
+                    this.listChanged();
+                }
+            }, options);
+
+            //use referenced placeholde
+            if (baton) {
+                baton.$el = this.$el = (baton.$el || $('<div>').addClass('row-fluid'));
+                baton.fileList = this;
+            }
+            this.init();
+        }
+
         function AttachmentList(options) {
             var self = this;
             _.extend(this, {
@@ -426,6 +517,7 @@ define('io.ox/core/tk/attachments',
 
         return {
             EditableAttachmentList: EditableAttachmentList,
+            SimpleEditableFileList: SimpleEditableFileList,
             AttachmentList: AttachmentList,
             fileUploadWidget: fileUploadWidget
         };
