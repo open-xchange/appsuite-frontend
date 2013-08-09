@@ -45,6 +45,7 @@ define('io.ox/files/mediaplayer',
         win: null,
         mediaelement: null,
         currentFile: null,
+        currentVolume: 0.8,
         features: ['playpause', 'progress', 'current', 'volume'],
 
         container: $('<div class="abs mediaplayer_container" tabindex="-1">'),
@@ -184,6 +185,7 @@ define('io.ox/files/mediaplayer',
                 enableAutosize: false,
                 autosizeProgress: false,
                 timerRate: 250,
+                startVolume: self.currentVolume,
                 features: this.features,
                 pauseOtherPlayers: true,
                 keyActions: [
@@ -230,16 +232,26 @@ define('io.ox/files/mediaplayer',
                     });
                     self.mediaelement = me;
                     me.addEventListener('ended', function () {
+                        self.currentVolume = me.volume;
                         self.select('next');
 
                     }, false);
-
+                    me.addEventListener('volumechange', function () {
+                        self.currentVolume = me.volume;
+                        if (window.mejs) {
+                            _(window.mejs.players).each(function (player) {
+                                player.setVolume(self.currentVolume);
+                            });
+                        }
+                    }, false);
                     if (!_.browser.Firefox) {
                         me.addEventListener('canplay', function () {
                             // Player is ready
+                            me.setVolume(self.currentVolume);
                             me.play();
                         }, false);
                         me.play();
+                        me.setVolume(self.currentVolume);
                     }
                 }
             });
