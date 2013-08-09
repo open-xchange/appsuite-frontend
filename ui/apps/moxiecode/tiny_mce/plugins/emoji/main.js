@@ -72,8 +72,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
         // make settings accessible, esp. for editor plugin
         this.settings = settings;
 
-        //FIXME: check if default is still valid after icons have been removed
-        var defaultCollection = settings.get('defaultCollection', 'japan_carrier');
+        var defaultCollection = settings.get('defaultCollection', this.collections[0]);
         this.currentCollection = opt.collection || settings.get('userCollection', defaultCollection);
 
         this.createCategoryMap();
