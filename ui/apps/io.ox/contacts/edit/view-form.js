@@ -135,9 +135,8 @@ define('io.ox/contacts/edit/view-form', [
         );
     });
 
-    function createContactEdit(ref, options) {
-        var opt = $.extend({access: {}}, options || {}),
-            isMyContactData = ref === 'io.ox/core/user';
+    function createContactEdit(ref) {
+        var isMyContactData = ref === 'io.ox/core/user';
 
         if (isMyContactData) { // Remove attachment handling if view is used with user data instead of contact data
             delete meta.sections.attachments;
@@ -156,12 +155,12 @@ define('io.ox/contacts/edit/view-form', [
             index: 100,
             customizeNode: function () {
                 //access to global address book?
-                if (isMyContactData && !opt.access.gab) {
-                    this.$el = $('');
-                } else {
+                if (capabilities.has('gab')) {
                     this.$el
                         .css({ display: 'inline-block' })
                         .addClass("contact-picture-upload f6-target");
+                } else {
+                    this.$el = $('');
                 }
             }
         }));
@@ -255,7 +254,7 @@ define('io.ox/contacts/edit/view-form', [
             render: function () {
                 this.$el.text(util.getFullName(this.model.toJSON()) || '\u00A0');
                 //fix top margin if picture upload was removed
-                if (isMyContactData && !opt.access.gab)
+                if (!capabilities.has('gab'))
                     this.$el.css('margin-top', '0px');
                 return this;
             }
@@ -303,9 +302,9 @@ define('io.ox/contacts/edit/view-form', [
                         $('<i class="icon-expand-alt">')
                     )
                 );
-                
+
                 var inputs = this.find('.field').not('.rare,[data-field="attachments_list"]').not('.has-content');//check if all non rare non attachment fields are filled
-               
+
                 if (inputs.length === 0) {//if all fields are filled the link must be compact view, not extend view
                     link.trigger('click');//only one button must trigger this
                 }

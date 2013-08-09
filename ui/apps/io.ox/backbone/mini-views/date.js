@@ -28,7 +28,8 @@ define('io.ox/backbone/mini-views/date',
             i = Math.min(from, to),
             $i = Math.max(from, to),
             d = new date.Local(0),
-            options = [];
+            options = [],
+            empty;
 
         for (; i <= $i; i++) {
             setter.call(d, i);
@@ -41,7 +42,9 @@ define('io.ox/backbone/mini-views/date',
         }
 
         // add empty option - do that after revert
-        options.unshift($('<option>').text(''));
+        empty = $('<option>').text('');
+        if (name === 'year') {empty.val('0000'); }
+        options.unshift(empty);
 
         // append
         return node.append(options);
@@ -58,16 +61,15 @@ define('io.ox/backbone/mini-views/date',
                 day = this.$el.find('.date').val();
             if (year !== '' && month !== '' && day !== '') {
                 //check if date is invalid(like feb 30) and prevent month jump
-                var tempDate =  new date.Local(year, month, day),
+                var str = year + '-' + _.pad(parseInt(month, 10) + 1, 2) + '-' + _.pad(day, 2),
+                    tempDate = date.UTC.parse(str, 'yyyy-M-d'),
                     tempMonth = tempDate.getMonth();
                 if (tempMonth.toString() !== month) {
                     tempDate.setDate(0);//last valid day of previous month
                     //set dayfield to right day (needs to be done or an invalid date can be selected if model already has the corrected date)
                     this.$el.find('.date').val(tempDate.getDate());
                 }
-                this.model.set(this.name,
-                        date.Local.localTime(tempDate)
-                );
+                this.model.set(this.name, tempDate.getTime());
             } else {
                 this.model.set(this.name, null);
                 this.$el.find('.date').children().attr('disabled', false);//enable all

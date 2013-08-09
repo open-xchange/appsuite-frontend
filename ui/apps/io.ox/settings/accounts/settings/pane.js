@@ -33,33 +33,6 @@ define('io.ox/settings/accounts/settings/pane',
             }
         },
 
-        removeSelectedItem = function (account) {
-
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                new dialogs.ModalDialog({ easyOut: true, async: true })
-                    .text(gt('Do you really want to delete this account?'))
-                    .addPrimaryButton('delete', gt('Delete account'))
-                    .addButton('cancel', gt('Cancel'))
-                    .on('delete', function () {
-                        var popup = this;
-                        settingsUtil.yellOnReject(
-                            api.remove(account).then(
-                                function success() {
-                                    folderAPI.subFolderCache.remove('1');
-                                    folderAPI.folderCache.remove('default' + account);
-                                    folderAPI.trigger('update');
-                                    popup.close();
-                                },
-                                function fail(e) {
-                                    popup.close();
-                                }
-                            )
-                        );
-                    })
-                    .show();
-            });
-        },
-
         drawItem = function (o) {
             return $('<div class="selectable deletable-item">')
                 .attr({
@@ -150,12 +123,36 @@ define('io.ox/settings/accounts/settings/pane',
             },
 
             onDelete: function (e) {
+
                 e.preventDefault();
-                var account = {
-                    id: this.model.get('id'),
-                    accountType: this.model.get('accountType')
-                };
-                removeSelectedItem(account);
+
+                var account = { id: this.model.get('id'), accountType: this.model.get('accountType') },
+                    self = this;
+
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    new dialogs.ModalDialog({ easyOut: true, async: true })
+                    .text(gt('Do you really want to delete this account?'))
+                    .addPrimaryButton('delete', gt('Delete account'))
+                    .addButton('cancel', gt('Cancel'))
+                    .on('delete', function () {
+                        var popup = this;
+                        settingsUtil.yellOnReject(
+                            api.remove(account).then(
+                                function success() {
+                                    folderAPI.subFolderCache.remove('1');
+                                    folderAPI.folderCache.remove('default' + account.id);
+                                    folderAPI.trigger('update');
+                                    self.model.collection.remove(self.model);
+                                    popup.close();
+                                },
+                                function fail(e) {
+                                    popup.close();
+                                }
+                            )
+                        );
+                    })
+                    .show();
+                });
             },
 
             onEdit: function (e) {
