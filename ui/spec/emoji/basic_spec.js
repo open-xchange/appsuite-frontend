@@ -57,6 +57,15 @@ define([
                 expect(text).toBe(test);
             });
 
+            it('should convert more than one emoji icon to image tag', function () {
+                var imgTag = emoji.unifiedToImageTag('\u2600 \u2601'),
+                    expected = '<img src="apps/themes/login/1x1.gif" class="emoji-unified emoji2600" ' +
+                               'data-emoji-unicode="\u2600"> <img src="apps/themes/login/1x1.gif" ' +
+                               'class="emoji-unified emoji2601" data-emoji-unicode="\u2601">';
+
+                expect(imgTag).toBe(expected);
+            });
+
             it('should convert special image tags to unified emoji unicode', function () {
                 var imgTag = emoji.unifiedToImageTag('\u2600');
 
