@@ -416,14 +416,14 @@ define('io.ox/office/framework/view/baseview',
          * own contents into the application pane.
          *
          * @returns {jQuery}
-         *  The DOM node of the application pane.
+         *  The DOM root node for visible document contents.
          */
         this.getContentRootNode = function () {
             return contentRootNode;
         };
 
         /**
-         * returns the current margins between the fixed application pane and
+         * Returns the current margins between the fixed application pane and
          * the embedded application container node.
          *
          * @returns {Object}
@@ -488,6 +488,16 @@ define('io.ox/office/framework/view/baseview',
         this.removeAllContentNodes = function () {
             appContentNode.empty();
             return this.refreshPaneLayout();
+        };
+
+        /**
+         * Returns the root container node for hidden application contents.
+         *
+         * @returns {jQuery}
+         *  The DOM root node for hidden document contents.
+         */
+        this.getHiddenRootNode = function () {
+            return hiddenRootNode;
         };
 
         /**
@@ -906,7 +916,7 @@ define('io.ox/office/framework/view/baseview',
         appPane.getNode().append(hiddenRootNode, contentRootNode, appBusyNode.hide());
 
         // add the main application pane to the application window
-        app.getWindowNode().addClass(windowNodeClasses).removeAttr('tabindex').append(appPane.getNode());
+        app.getWindowNode().addClass(windowNodeClasses).append(appPane.getNode());
 
         // add shadow nodes above application pane, but below other panes
         _(['top', 'bottom', 'left', 'right']).each(function (border) {
