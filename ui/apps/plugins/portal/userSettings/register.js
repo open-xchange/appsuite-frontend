@@ -27,11 +27,9 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
             userEdit.editCurrentUser($node).done(function (user) {
                 userModel = user;//needed because otherwise user is undefined on popup close
                 $node.addClass('settings-detail-pane').one('save', function () {//popup triggers this only for nodes with this class
-                    if (userModel.changedAttributes()) {//only save if something was changed
-                        userModel.save().done(function () {
-                            require("io.ox/core/notifications").yell("success", gt("Your data has been saved"));
-                        });
-                    }
+                    userModel.save().done(function () {
+                        require("io.ox/core/notifications").yell("success", gt("Your data has been saved"));
+                    });
                 });
             }).fail(function () {
                 $node.append(
