@@ -264,8 +264,10 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             var isFalsyString = function (item) {
                     return item.trim();
                 },
-                cssFromCollection = function (c) {
-                    return self.getInstance({collection: c}).cssFor(unicode);
+                cssFromCollection = function (unicode) {
+                    return function (c) {
+                        return self.getInstance({collection: c}).cssFor(unicode);
+                    };
                 },
                 createImageTag = function (css, unicode) {
                     return $('<div>').append(
@@ -283,7 +285,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                 );
                 //parse unicode number
                 var unicode = parseUnicode(_.find(node.find('span').attr('class').split('emoji'), isFalsyString)),
-                css,
+                css = null,
                 defaultCollection = self.getInstance();
 
                 if (!unicode) {
@@ -293,7 +295,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                 if (!settings.get('overrideUserCollection', false)) {
                     css = defaultCollection.cssFor(unicode);
                 }
-                css = css || defaultCollection.collections.map(cssFromCollection)
+                css = css || defaultCollection.collections.map(cssFromCollection(unicode))
                 .filter(_.isString)[0];
 
                 text = text.replace(node.html(), createImageTag(css, unicode));

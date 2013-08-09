@@ -23,39 +23,17 @@ define('io.ox/core/settings/user', [
 
     'use strict';
 
-
     // Model Factory for use with the edit dialog
     var factory = contactModel.protectedMethods.buildFactory('io.ox/core/user/model', api);
 
-    //check grants for global address book
-    var options,
-        hasAccess = function () {
-            var def = $.Deferred();
-            folderAPI.get({ folder: 6, cache: true, suppressYell: true })
-                .always(function () {
-                    def.resolve(this.state() === 'resolved');
-                });
-            return def;
-        };
-
     return {
         editCurrentUser: function ($node) {
-            $node.busy();
-            return hasAccess()
-                    .then(function (resp) {
-                        //set options for view create
-                        options = {
-                            access: {
-                                gab: resp
-                            }
-                        };
-                        // Load the user
-                        return factory.realm('edit').get({});
-                    })
-                    .always(function (user) {
-                        $node.idle();
+            //$node.busy();
+            return factory.realm('edit').get({})
+                    .done(function (user) {
+                        //$node.idle();
                         // The edit dialog
-                        var UserEdit = ViewForm.protectedMethods.createContactEdit('io.ox/core/user', options),
+                        var UserEdit = ViewForm.protectedMethods.createContactEdit('io.ox/core/user'),
                             $userEditView = new UserEdit({model: user}).render().$el;
 
                         $userEditView.find('[data-id="private_flag"]').remove();

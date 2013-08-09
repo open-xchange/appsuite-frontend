@@ -359,7 +359,7 @@ define('io.ox/core/commons-folderview',
             id: 'permissions',
             index: 300,
             draw: function (baton) {
-                if (capabilities.has('!alone') && _.device('!smartphone')) {
+                if (capabilities.has('!alone') && capabilities.has('gab') && _.device('!smartphone')) {
                     var link = $('<a href="#" data-action="permissions" tabindex="1" role="menuitem">').text(gt('Permissions'));
                     this.append(
                         $('<li class="divider" aria-hidden="true" role="presentation">'),
@@ -435,6 +435,10 @@ define('io.ox/core/commons-folderview',
             draw: function (baton) {
                 if (_.device('!smartphone')) {
                     var link = $('<a href="#" data-action="properties" tabindex="1" role="menuitem">').text(gt('Properties'));
+                    if (!capabilities.has('gab')) {
+                        //workaround: add divider if not set by permissions yet
+                        this.append($('<li class="divider" aria-hidden="true" role="presentation">'));
+                    }
                     this.append($('<li>').append(link));
                     link.on('click', { baton: baton }, showFolderProperties);
                 }
