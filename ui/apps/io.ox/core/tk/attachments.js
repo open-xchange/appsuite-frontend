@@ -297,11 +297,11 @@ define('io.ox/core/tk/attachments',
             multiple: function (list, baton) {
                 ox.load(['io.ox/core/tk/dialogs',
                          'io.ox/preview/main',
-                         'io.ox/core/api/attachment']).done(function (dialogs, p, attachmentApi) {
+                         'io.ox/core/api/attachment']).done(function (dialogs, p, attachmentAPI) {
                     //build Sidepopup
                     new dialogs.SidePopup().show(baton.e, function (popup) {
                         _(list).each(function (data, index) {
-                            data.dataURL = attachmentApi.getUrl(data, 'view');
+                            data.dataURL = attachmentAPI.getUrl(data, 'view');
                             var pre = new p.Preview(data, {
                                 width: popup.parent().width(),
                                 height: 'auto'
