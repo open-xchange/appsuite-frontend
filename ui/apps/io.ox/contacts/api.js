@@ -186,6 +186,20 @@ define('io.ox/contacts/api',
                     return data;
                 }
             }
+        },
+        pipe: {
+            all: function (response) {
+                // move contacts with empty sort_name to end of array
+                // would be nice if backend does this
+                var i = 0, item, count = 0;
+                while ((item = response[i++])) {
+                    if (item.sort_name === '') count++;
+                }
+                if (count > 0) {
+                    response = response.slice(count).concat(response.slice(0, count));
+                }
+                return response;
+            }
         }
     });
 
