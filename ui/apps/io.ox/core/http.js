@@ -722,8 +722,10 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
 
                 if (isUnreachable(xhr)) {
                     that.trigger("unreachable");
+                    ox.trigger('connection:down');
                 } else {
                     that.trigger("reachable");
+                    ox.trigger('connection:up');
                 }
                 error = _.extend({ status: status, took: took }, error);
                 log.add(error, r.o);
@@ -740,9 +742,11 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                     }
                 })
                 .done(function (response) {
-                    // slow?
-                    that.trigger("reachable");
 
+                    that.trigger("reachable");
+                    ox.trigger('connection:up');
+
+                    // slow?
                     var took = _.now() - t0;
                     log.took(took);
                     if (took > log.SLOW) {
