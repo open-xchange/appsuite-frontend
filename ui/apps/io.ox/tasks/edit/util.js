@@ -54,8 +54,9 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
             return progress;
         },
         buildExtensionRow: function (parent, extensions, baton) {
-            var row = $('<div>').addClass('row-fluid task-edit-row').appendTo(parent);
+            var row = $('<div class="row-fluid task-edit-row">').appendTo(parent);
             for (var i = 0; i < extensions.length; i++) {
+                if (!extensions[i]) continue;
                 if (!(_.isArray(extensions[i]))) { //check for true extensionpoint
                     extensions[i].invoke('draw', row, baton);
                 } else { //its a normal node

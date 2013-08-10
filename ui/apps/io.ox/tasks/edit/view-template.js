@@ -274,8 +274,12 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         id: 'participants_list',
         index: 1400,
         draw: function (baton) {
-            this.append(new pViews.UserContainer({collection: baton.model.getParticipants(),
-                                                  baton: baton}).render().$el);
+            this.append(
+                new pViews.UserContainer({
+                    collection: baton.model.getParticipants(),
+                    baton: baton
+                }).render().$el
+            );
         }
     });
 
