@@ -11,57 +11,14 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
+@import "apps/io.ox/office/tk/definitions";
+
+/* restrict all definitions to office applications */
+.io-ox-office-main {
+
 /* ========================================================================= */
-/* generic mix-in classes                                                    */
+/* browser fixes and workarounds                                             */
 /* ========================================================================= */
-
-.opacity(@opacity) {
-    opacity: (@opacity / 100);
-    filter: ~"alpha(opacity=@{opacity})";
-}
-
-.border-top-left-radius(@radius) {
-    -webkit-border-top-left-radius: @radius;
-    -moz-border-radius-topleft: @radius;
-    border-top-left-radius: @radius;
-}
-
-.border-bottom-left-radius(@radius) {
-    -webkit-border-bottom-left-radius: @radius;
-    -moz-border-radius-bottomleft: @radius;
-    border-bottom-left-radius: @radius;
-}
-
-.border-top-right-radius(@radius) {
-    -webkit-border-top-right-radius: @radius;
-    -moz-border-radius-topright: @radius;
-    border-top-right-radius: @radius;
-}
-
-.border-bottom-right-radius(@radius) {
-    -webkit-border-bottom-right-radius: @radius;
-    -moz-border-radius-bottomright: @radius;
-    border-bottom-right-radius: @radius;
-}
-
-.box-shadow-2(@shadow1, @shadow2) {
-    -webkit-box-shadow: @shadow1, @shadow2;
-    -moz-box-shadow: @shadow1, @shadow2;
-    -ms-box-shadow: @shadow1, @shadow2;
-    box-shadow: @shadow1, @shadow2;
-}
-
-.box-shadow-4(@shadow1, @shadow2, @shadow3, @shadow4) {
-    -webkit-box-shadow: @shadow1, @shadow2, @shadow3, @shadow4;
-    -moz-box-shadow: @shadow1, @shadow2, @shadow3, @shadow4;
-    -ms-box-shadow: @shadow1, @shadow2, @shadow3, @shadow4;
-    box-shadow: @shadow1, @shadow2, @shadow3, @shadow4;
-}
-
-/* shadow for hovering elements */
-.drop-shadow(@size: 5px) {
-    .box-shadow(0 @size (2 * @size) fade(black, 20%));
-}
 
 .clearfix {
     &:before, &:after {
@@ -73,28 +30,6 @@
         clear: both;
     }
 }
-
-/* color of place holder in text fields */
-.input-placeholder-color(@color) {
-    &::-webkit-input-placeholder, &:-moz-placeholder, &::-moz-placeholder, &:-ms-input-placeholder {
-        color: @color;
-    }
-}
-
-/* Safari on iPad does not clip rounded borders in absolutely positioned elements, e.g. the color box in color buttons */
-/* http://stackoverflow.com/questions/5736503/how-to-make-css3-rounded-corners-hide-overflow-in-chrome-opera */
-/* but using a 35-bytes GIF instead of a 108-bytes PNG as the image */
-.ipad-safari-overflow-fix() {
-    /* restrict to touch devices, because this style hides focus glow effects outside the node */
-    .touch & { -webkit-mask-image: url(data:image/gif;base64,R0lGODdhAgACAIAAAAAAAP///ywAAAAAAgACAAACAoRRADs=); }
-}
-
-/* restrict all definitions to office applications */
-.io-ox-office-main {
-
-/* ========================================================================= */
-/* icons                                                                     */
-/* ========================================================================= */
 
 /* hack for IE to expand nodes beyond the size limit of single nodes, see Utils.setContainerNodeSize() */
 .ie-node-size-container > div {
@@ -135,12 +70,6 @@ i[class^="icon-"], i[class^=" icon-"] {
 /* ========================================================================= */
 /* view panes                                                                */
 /* ========================================================================= */
-
-/* background color for panes */
-@pane-fill-color: #333333;
-
-/* background color for application pane */
-@app-pane-fill-color: #e5e5e5;
 
 > .view-pane {
     position: absolute;
@@ -696,7 +625,7 @@ i[class^="icon-"], i[class^=" icon-"] {
                 > div { margin-left: -1px; }
             }
 
-            /* border and glow effect for drops with open drop-down menus (but not combo fields) */
+            /* border and glow effect for buttons with open drop-down menus (but not combo fields) */
             &.dropdown-open:not(.combo-field) {
                 z-index: 5;
                 .box-shadow(@dropdown-glow-effect);
