@@ -71,12 +71,20 @@ define('io.ox/core/main',
     // handle online/offline mode
     //
 
+    function showIndicator(text) {
+        $('#io-ox-offline').text(text).stop().show().animate({ bottom: '0px' }, 200);
+    }
+
+    function hideIndicator() {
+        $('#io-ox-offline').stop().animate({ bottom: '-41px' }, 200, function () { $(this).hide(); });
+    }
+
     ox.on('connection:online connection:offline', function (e) {
         if (e.type === 'connection:offline') {
-            $('#io-ox-offline').text(gt('Offline')).fadeIn(DURATION);
+            showIndicator(gt('Offline'));
             ox.online = false;
         } else {
-            $('#io-ox-offline').hide();
+            hideIndicator();
             ox.online = true;
         }
     });
@@ -84,9 +92,9 @@ define('io.ox/core/main',
     ox.on('connection:up connection:down', function (e) {
         if (ox.online) {
             if (e.type === 'connection:down') {
-                $('#io-ox-offline').text(gt('Server unreachable')).fadeIn(DURATION);
+                showIndicator(gt('Server unreachable'));
             } else {
-                $('#io-ox-offline').hide();
+                hideIndicator();
             }
         }
     });

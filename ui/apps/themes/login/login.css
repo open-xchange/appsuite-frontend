@@ -275,34 +275,6 @@ body.down #io-ox-login-container .alert.alert-info {
     font-size: 13px;
 }
 
-#io-ox-offline {
-    position: absolute;
-    bottom: 0px;
-    width: 200px;
-    left: 50%;
-    margin-left: -100px;
-    height: 2.5em;
-    font-weight: bold;
-    line-height: 2.5em;
-    text-align: center;
-    border: 1px solid #aaa;
-    border-width: 1px 1px 0px 1px;
-    color: black;
-    z-index: 650000;
-    -moz-border-radius: 5px 5px 0px 0px;
-    -webkit-border-radius: 5px 5px 0px 0px;
-    border-radius: 5px 5px 0px 0px;
-    background: #ffe36b; /* Old browsers */
-    background: -moz-linear-gradient(top, #ffe36b 0%, #fcbb3a 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffe36b), color-stop(100%,#fcbb3a)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #ffe36b 0%,#fcbb3a 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #ffe36b 0%,#fcbb3a 100%); /* Opera11.10+ */
-    background: -ms-linear-gradient(top, #ffe36b 0%,#fcbb3a 100%); /* IE10+ */
-    background: linear-gradient(top, #ffe36b 0%, #fcbb3a 100%); /* W3C */
-    text-shadow: 0px 0px 1px white;
-    -ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffe36b', endColorstr='#fcbb3a',GradientType=0)";
-}
-
 .io-ox-ui-disabled {
     cursor: default !important;
     pointer-events: none;
