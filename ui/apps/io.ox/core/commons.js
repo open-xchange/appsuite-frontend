@@ -150,11 +150,21 @@ define('io.ox/core/commons',
                     last = flat;
                 }
             });
+
             grid.selection.on('_m_change', function (e, selection) {
                 var len = selection.length;
                 commons.mobileMultiSelection(id, node, this.unique(this.unfold()), api, grid);
             });
 
+            // look for id change
+            if (api) {
+                api.on('change:id', function (e, data, former_id) {
+                    var list = grid.selection.get();
+                    if (list.length && list[0].id === former_id) {
+                        grid.selection.set({ id: data.id, folder_id: data.folder_id });
+                    }
+                });
+            }
         },
 
         /**

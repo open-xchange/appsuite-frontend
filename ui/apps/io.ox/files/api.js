@@ -527,7 +527,7 @@ define('io.ox/files/api',
                 // id has changed?
                 if (data.id !== file.id) {
                     data.former_id = file.id;
-                    //data.id = '58728';
+                    api.trigger('change:id', data, data.former_id);
                     return api.propagate('rename', data);
                 }  else {
                     return api.propagate('change', data);
