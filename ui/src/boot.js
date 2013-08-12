@@ -154,21 +154,9 @@ $(window).load(function () {
     // be busy
     $('#background_loader').busy();
 
-    // handle online/offline mode
-    if (!ox.signin) {
-        $(window).on('online offline', function (e) {
-            if (e.type === 'offline') {
-                $('#io-ox-offline').text('Offline').fadeIn(DURATION);
-                ox.online = false;
-            } else {
-                $('#io-ox-offline').text('Online').fadeOut(DURATION);
-                ox.online = true;
-            }
-        });
-        if (!ox.online) {
-            $(window).trigger('offline');
-        }
-    }
+    $(window).on('online offline', function (e) {
+        ox.trigger('connection:' + e.type);
+    });
 
     // handle document visiblity
     $(window).on('blur focus', function (e) {

@@ -3195,7 +3195,7 @@ msgstr "Wollen Sie den Inhalt des Ordners \"%s\" wirklich löschen?"
 #: apps/io.ox/core/tk/vgrid.js:699
 #: apps/io.ox/mail/folderview-extensions.js:127
 msgid "Empty"
-msgstr "Leer"
+msgstr "Leeren"
 
 #: apps/io.ox/mail/folderview-extensions.js:142
 msgid "Empty folder"

@@ -67,6 +67,34 @@ define('io.ox/core/main',
         });
     };
 
+    //
+    // handle online/offline mode
+    //
+
+    ox.on('connection:online connection:offline', function (e) {
+        if (e.type === 'connection:offline') {
+            $('#io-ox-offline').text(gt('Offline')).fadeIn(DURATION);
+            ox.online = false;
+        } else {
+            $('#io-ox-offline').hide();
+            ox.online = true;
+        }
+    });
+
+    ox.on('connection:up connection:down', function (e) {
+        if (ox.online) {
+            if (e.type === 'connection:down') {
+                $('#io-ox-offline').text(gt('Server unreachable')).fadeIn(DURATION);
+            } else {
+                $('#io-ox-offline').hide();
+            }
+        }
+    });
+
+    if (!ox.online) {
+        $(window).trigger('offline');
+    }
+
     var topbar = $('#io-ox-topbar'),
         launchers = $('.launchers', topbar),
         launcherDropdown = $('.launcher-dropdown ul', topbar);
