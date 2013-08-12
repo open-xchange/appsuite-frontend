@@ -35,7 +35,26 @@
     &.wallpaper {
         .radial-gradient(@wallpaperColor1, @wallpaperColor2, @wallpaperColor3);
     }
+}
 
+#io-ox-offline {
+    position: absolute;
+    bottom: 0px;
+    width: 240px;
+    left: 50%;
+    margin-left: -120px;
+    height: 40px;
+    font-weight: bold;
+    line-height: 40px;
+    text-align: center;
+    color: #fff;
+    border: 1px solid #FF7000;
+    border-width: 1px 1px 0px 1px;
+    cursor: default;
+    z-index: 650000;
+    .box-shadow(0 0 20px 0 rgba(0, 0, 0, 0.30));
+    .border-radius(5px 5px 0px 0px);
+    .vertical-gradient(#FF7000, #CA0101);
 }
 
 /* scrollable for touch devices, esp. iOS */
@@ -558,7 +577,6 @@
     z-index: 65500;
     box-shadow: 0px 0px 50px -1px rgba(0, 0, 0, 0.60);
     outline: 0;
-    word-break:break-all;
     .border-radius(8px);
     .transition(top 0.20s ease-out);
 

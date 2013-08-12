@@ -150,11 +150,21 @@ define('io.ox/core/commons',
                     last = flat;
                 }
             });
+
             grid.selection.on('_m_change', function (e, selection) {
                 var len = selection.length;
                 commons.mobileMultiSelection(id, node, this.unique(this.unfold()), api, grid);
             });
 
+            // look for id change
+            if (api) {
+                api.on('change:id', function (e, data, former_id) {
+                    var list = grid.selection.get();
+                    if (list.length && list[0].id === former_id) {
+                        grid.selection.set({ id: data.id, folder_id: data.folder_id });
+                    }
+                });
+            }
         },
 
         /**
@@ -530,12 +540,17 @@ define('io.ox/core/commons',
             cid, ecid,
             node = $('<div>').attr('data-cid', _([].concat(data)).map(_.cid).join(',')),
 
-            update = function () {
+            update = function (e, changed) {
+
+                // id change?
+                if (changed && changed.former_id) data = changed;
+
                 if ((getter = getter || (api ? api.get : null))) {
                     // fallback for create trigger
                     if (!data.id) {
                         data.id = arguments[1].id;
                     }
+                    // get fresh object
                     getter(api.reduce(data)).done(function (data) {
                         if (baton instanceof ext.Baton) {
                             baton.data = data;
