@@ -18,7 +18,7 @@ define('io.ox/office/framework/app/extensionregistry',
 
     'use strict';
 
-    var // which file formats are editable
+    var // which file formats are editable (maps format identifier to Booleans)
         EDITABLE_FILE_FORMATS = {
             ooxml: true,
             odf: Utils.getBooleanOption(Config.get(), 'odfsupport', false)
@@ -33,6 +33,7 @@ define('io.ox/office/framework/app/extensionregistry',
             text: {
                 module: 'io.ox/office/text',
                 requires: 'text',
+                editable: !_.browser.Android,
                 extensions: {
                     docx: { format: 'ooxml' },
                     docm: { format: 'ooxml', macros: true },
@@ -49,6 +50,7 @@ define('io.ox/office/framework/app/extensionregistry',
             spreadsheet: {
                 module: 'io.ox/office/spreadsheet',
                 requires: 'spreadsheet',
+                editable: true,
                 extensions: {
                     xlsx: { format: 'ooxml' },
                     xlsm: { format: 'ooxml', macros: true },
@@ -67,6 +69,7 @@ define('io.ox/office/framework/app/extensionregistry',
             presentation: {
                 module: 'io.ox/office/presentation',
                 requires: 'presentation',
+                editable: true,
                 extensions: {
                     pptx: { format: 'ooxml' },
                     pptm: { format: 'ooxml', macros: true },
@@ -100,6 +103,9 @@ define('io.ox/office/framework/app/extensionregistry',
             }
         },
 
+        // all application configurations, mapped by application identifier
+        applicationMap = {},
+
         // all configurations, mapped by lower-case extension
         fileExtensionMap = {},
 
@@ -115,6 +121,20 @@ define('io.ox/office/framework/app/extensionregistry',
     var ExtensionRegistry = {};
 
     // methods ----------------------------------------------------------------
+
+    /**
+     * Returns whether the passed module name specifies an OX Documents
+     * application that can edit documents on the current platform.
+     *
+     * @param {String} editModule
+     *  The module name of the application.
+     *
+     * @returns {Boolean}
+     *  Whether the application is able to edit documents.
+     */
+    ExtensionRegistry.supportsEditMode = function (editModule) {
+        return Utils.getBooleanOption(applicationMap[editModule], 'editable', false);
+    };
 
     /**
      * Returns the lower-case extension of the passed file name.
@@ -365,11 +385,16 @@ define('io.ox/office/framework/app/extensionregistry',
     _(FILE_EXTENSION_CONFIGURATION).each(function (moduleConfiguration, documentType) {
 
         var // the capability required to edit the file
+            editable = Utils.getBooleanOption(moduleConfiguration, 'editable', false),
+            // the capability required to edit the file
             requires = Utils.getStringOption(moduleConfiguration, 'requires', null),
             // the module name of the edit application
             module = Utils.getStringOption(moduleConfiguration, 'module', null),
             // whether the edit module is available at all
-            editAvailable = _.isString(requires) && Capabilities.has(requires) && _.isString(module);
+            editAvailable = editable && _.isString(requires) && Capabilities.has(requires) && _.isString(module);
+
+        // application configuration antry
+        applicationMap[documentType] = { editable: editAvailable };
 
         // process all extensions registered for the module
         _(moduleConfiguration.extensions).each(function (extensionSettings, extension) {
