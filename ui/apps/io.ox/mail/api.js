@@ -234,6 +234,12 @@ define('io.ox/mail/api',
 
     }());
 
+    // color_label resort hash
+    var colorLabelResort = _('0 1 7 10 6 3 9 2 5 8 4'.split(' ')).invert(),
+        colorLabelSort = function (a, b) {
+            return colorLabelResort[b.color_label] - colorLabelResort[a.color_label];
+        };
+
     // generate basic API
     var api = apiFactory({
         module: 'mail',
@@ -304,6 +310,11 @@ define('io.ox/mail/api',
         },
         pipe: {
             all: function (response, opt) {
+                // fix sort order for "label"
+                if (opt.sort === '102') {
+                    response.sort(colorLabelSort);
+                    if (opt.order === 'desc') response.reverse();
+                }
                 // reset tracker! if we get a seen mail here, although we have it in 'explicit unseen' hash,
                 // another devices might have set it back to seen.
                 tracker.reset(response.data || response); // threadedAll || all
