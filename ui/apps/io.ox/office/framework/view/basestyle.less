@@ -374,6 +374,8 @@ i[class^="icon-"], i[class^=" icon-"] {
         > input {
             width: 100%;
             height: 100%;
+            /* bug 28206: IE hides cursor in right-aligned text fields */
+            padding-right: 1px;
             line-height: normal;
             .input-placeholder-color(#ccc);
         }
