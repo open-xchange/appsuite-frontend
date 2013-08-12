@@ -344,7 +344,8 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
 
                     var html = _.escape(o.message).replace(/\n/g, '<br>'),
                         reuse = false,
-                        className = 'io-ox-alert io-ox-alert-' + o.type;
+                        className = 'io-ox-alert io-ox-alert-' + o.type,
+                        wordbreak = html.indexOf('http') >= 0 ? 'break-all' : 'normal';
 
                     // reuse existing alert?
                     var node = $('.io-ox-alert.slide-in');
@@ -363,7 +364,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                         ),
                         $('<div class="message user-select-text">').append(
                             o.headline ? $('<h2 class="headline">').text(o.headline) : [],
-                            $('<div>').html(html)
+                            $('<div>').css('word-break', wordbreak).html(html)
                         ),
                         $('<a href="#" class="close" tabindex="1">').html('&times')
                     );
