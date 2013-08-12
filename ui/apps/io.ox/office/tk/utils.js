@@ -2928,9 +2928,17 @@ define.async('io.ox/office/tk/utils',
 */
 
     // global focus log
-//    $(document).on('focusin focusout', function (event) {
-//        Utils.log(event.type + ': ' + event.target.nodeName + '.' + (event.target.className || '').replace(/ /g, '.'));
-//    });
+/*
+    (function () {
+        function getNodeName(node) {
+            var id = node.id || '', classes = node.className || '';
+            return node.nodeName + (id ? ('#' + id) : '') + (classes ? ('.' + classes.replace(/ +/g, '.')) : '');
+        }
+        $(document).on('focusin focusout', function (event) {
+            Utils.log(event.type + ': ' + getNodeName(event.target));
+        });
+    }());
+*/
 
     // deferred initialization of class members according to current language
     gettext.language.done(function (language) {
