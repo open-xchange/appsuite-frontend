@@ -35,6 +35,9 @@ define('io.ox/files/views/create', [
                 ext.point(POINT + '/form').invoke('draw', $form, baton);
                 ext.point(POINT + '/filelist').invoke();
 
+                //clear file list
+                baton.fileList.clear();
+
                 //save handler
                 $form.on('submit', function (e) {
                     e.preventDefault();
@@ -43,7 +46,6 @@ define('io.ox/files/views/create', [
 
                 /**
                  * upload filelist collected by fileList
-                 * @return {[type]} [description]
                  */
                 function uploadFiles() {
                     var $input = $form.find('input[type="file"]'),
@@ -72,9 +74,8 @@ define('io.ox/files/views/create', [
                             form: $form,
                             file: _(files).first(),
                             json: {
-                                folder: folder,
-                                description: $form.find('textarea').val(),
-                                title: $form.find('input[type="text"]').val()
+                                folder: app.folder.get(),
+                                description: $form.find('textarea').val()
                             },
                             folder: folder
                         }).done(function (data) {

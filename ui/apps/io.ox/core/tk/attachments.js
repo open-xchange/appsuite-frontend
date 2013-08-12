@@ -266,6 +266,7 @@ define('io.ox/core/tk/attachments',
                     this.files = _.filter(this.files, function (att) {
                         return att.cid !== attachment.cid;
                     });
+                    //remove hidden input field from form
                     if (this.oldMode) {
                         attachment.file.remove();
                     }
