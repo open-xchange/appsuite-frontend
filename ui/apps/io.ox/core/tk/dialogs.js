@@ -35,10 +35,9 @@ define("io.ox/core/tk/dialogs",
                 easyOut: true,
                 center: true,
                 async: false,
+                maximize: false,
                 top: "50%",
                 container: $('body')
-                // width (px), height (px),
-                // maxWidth (px), maxHeight (px)
             }, options),
 
             nodes = {
@@ -340,40 +339,58 @@ define("io.ox/core/tk/dialogs",
                 nodes.header.remove();
             }
 
-            var dim = {
-                width: parseInt(o.width || nodes.popup.width() * 1.1, 10),
-                height: parseInt(o.height || nodes.popup.height(), 10)
+            var fnSetDimensions = function () {
+                var dim = {
+                    width: parseInt(o.width || nodes.popup.width() * 1.1, 10),
+                    height: parseInt(o.height || nodes.popup.height(), 10)
+                };
+                // limit width & height
+                _(["width", "height"]).each(function (d) {
+                    // apply explicit limit
+                    var id = o[$.camelCase("max-" + d)];
+                    if (o[id] && dim[d] > o[id]) {
+                        dim[d] = o[id];
+                    }
+                    // apply document limits
+                    var max = $(document)[d]() - 50;
+                    if (dim[d] && dim[d] > max) {
+                        dim[d] = max;
+                    }
+                });
+                return dim;
             };
 
-            // limit width & height
-            _(["width", "height"]).each(function (d) {
-                // apply explicit limit
-                var id = o[$.camelCase("max-" + d)];
-                if (o[id] && dim[d] > o[id]) {
-                    dim[d] = o[id];
-                }
-                // apply document limits
-                var max = $(document)[d]() - 50;
-                if (dim[d] && dim[d] > max) {
-                    dim[d] = max;
-                }
-            });
+            var fnSetMaxDimensions = function () {
+                var dim = fnSetDimensions();
+                nodes.popup.css({
+                    width: dim.width + "px",
+                    top: o.top || "0px"
+                });
+                nodes.body.css({
+                    'max-height': $(window).height() - 170 + 'px'
+                });
+            };
+
+            var dim = fnSetDimensions();
 
             // apply dimensions, only on desktop and pad
             if (_.device('!small')) {
+                nodes.popup.css('width', dim.width + 'px');
                 if (o.center) {
                     // center vertically
                     nodes.popup.css({
-                        width: dim.width + "px",
-                        top: "50%",
-                        marginTop: 0 - (dim.height / 2 >> 0) + "px"
+                        top: '50%',
+                        marginTop: 0 - (dim.height / 2 >> 0) + 'px'
                     });
                 } else {
                     // use fixed top position
-                    nodes.popup.css({
-                        width: dim.width + "px",
-                        top: o.top || "0px"
-                    });
+                    nodes.popup.css('top', o.top || '0px');
+                    if (o.maximize) {
+                        fnSetMaxDimensions();
+                        $(window)
+                            .off('resize.maximizedpopup')
+                            .on('resize.maximizedpopup', fnSetMaxDimensions);
+                    }
                 }
             }
 
