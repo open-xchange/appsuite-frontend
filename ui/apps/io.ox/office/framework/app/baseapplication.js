@@ -190,7 +190,21 @@ define('io.ox/office/framework/app/baseapplication',
          *  A reference to this application instance.
          */
         function updateTitle() {
+
+            var // the root ndoe of the application window
+                windowNode = self.getWindowNode();
+
+            // set title for application launcher
             self.setTitle(self.getShortFileName() || gt('unnamed'));
+
+            // add data from file descriptor to application root node, for Selenium testing
+            if (file) {
+                if (file.folder_id) { windowNode.attr('data-file-folder', file.folder_id); }
+                if (file.id) { windowNode.attr('data-file-id', file.id); }
+                if (file.filename) { windowNode.attr('data-file-name', file.filename); }
+                if (file.source) { windowNode.attr('data-file-source', file.source); }
+                if (file.attachment) { windowNode.attr('data-file-attachment', file.attachment); }
+            }
         }
 
         /**
@@ -1404,8 +1418,10 @@ define('io.ox/office/framework/app/baseapplication',
          *
          */
         this.sendMail = function () {
+
             var // call the download handler first
                 downloadHandlerResult = downloadHandler.call(self);
+
             $.when(downloadHandlerResult).then(function () {
 
                 var // the file descriptor of the document
@@ -1425,8 +1441,8 @@ define('io.ox/office/framework/app/baseapplication',
                     }
 
                     //fileDescriptor.mailFolder, .mailUID
-                    require(['io.ox/mail/write/main'], function (m) {
-                        m.getApp().launch().done(function () {
+                    require(['io.ox/mail/write/main'], function (MailModule) {
+                        MailModule.getApp().launch().done(function () {
                             if (fileDescriptor.mailUID) {
                                 this.replyall({
                                     id: fileDescriptor.mailUID,
