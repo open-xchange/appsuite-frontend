@@ -211,7 +211,7 @@ define('moxiecode/tiny_mce/plugins/emoji/conversions',
         "\uf7f2": "\u26a0",
         "\uf78f": "\ud83d\udea5",
         "\uf791": "\ud83d\ude8f",
-        "\u0000": "\u26fd", //FIXME
+        "\uf97a": "\u26fd",
         "\uf763": "\u2668",
         "\uf762": "\u26fa",
         "\uf761": "\u26f2",
@@ -219,6 +219,8 @@ define('moxiecode/tiny_mce/plugins/emoji/conversions',
         "\uf764": "\ud83c\udfa1",
         "\ufba8": "\ud83c\udfed",
         "\ufbaa": "\u0000", //FIXME
+        //PUA encoding 0xe50a, no unified version
+        //see [1](http://www.unicode.org/~scherer/emoji4unicode/snapshot/full.html#e-4C5)
         "\ufba9": "\ud83d\uddfc",
         "\ufba6": "\ud83c\udff0",
         "\ufba5": "\ud83c\udfef",

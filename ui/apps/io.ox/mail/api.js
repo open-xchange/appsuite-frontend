@@ -234,6 +234,12 @@ define('io.ox/mail/api',
 
     }());
 
+    // color_label resort hash
+    var colorLabelResort = _('0 1 7 10 6 3 9 2 5 8 4'.split(' ')).invert(),
+        colorLabelSort = function (a, b) {
+            return colorLabelResort[b.color_label] - colorLabelResort[a.color_label];
+        };
+
     // generate basic API
     var api = apiFactory({
         module: 'mail',
@@ -304,6 +310,11 @@ define('io.ox/mail/api',
         },
         pipe: {
             all: function (response, opt) {
+                // fix sort order for "label"
+                if (opt.sort === '102') {
+                    response.sort(colorLabelSort);
+                    if (opt.order === 'desc') response.reverse();
+                }
                 // reset tracker! if we get a seen mail here, although we have it in 'explicit unseen' hash,
                 // another devices might have set it back to seen.
                 tracker.reset(response.data || response); // threadedAll || all
@@ -1268,7 +1279,15 @@ define('io.ox/mail/api',
 
     function handleSendXHR2(data, files) {
 
-        var form = new FormData();
+        var form = new FormData(),
+            keepDraft = data.keepDraft,
+            deleteDraftOnTransport;
+        if (data.keepDraft) {//don't send temporary flag
+            deleteDraftOnTransport = false;
+            delete data.keepDraft;
+        } else {
+            deleteDraftOnTransport = data.sendtype === api.SENDTYPE.EDIT_DRAFT;
+        }
         // add mail data
         form.append('json_0', JSON.stringify(data));
         // add files
@@ -1280,7 +1299,7 @@ define('io.ox/mail/api',
             module: 'mail',
             params: {
                 action: 'new',
-                deleteDraftOnTransport: data.sendtype === api.SENDTYPE.EDIT_DRAFT
+                deleteDraftOnTransport: deleteDraftOnTransport
             },
             data: form,
             dataType: 'text'
@@ -1288,6 +1307,9 @@ define('io.ox/mail/api',
     }
 
     function handleSendTheGoodOldWay(data, form) {
+        if (data.keepDraft) {//don't send temporary flag
+            delete data.keepDraft;
+        }
         return http.FORM({
             module: 'mail',
             action: 'new',
@@ -1416,19 +1438,22 @@ define('io.ox/mail/api',
                 order: 'desc'
             }
         })
-        .pipe(function (unseen) {
-            var recent;
+        .then(function (unseen) {
+
             // check most recent mail
-            recent = _(unseen).filter(function (obj) {
-                return obj.received_date > lastUnseenMail;
+            var recent = _(unseen).filter(function (obj) {
+                // ignore mails 'mark as deleted'
+                return obj.received_date > lastUnseenMail && (obj.flags & 2) !== 2;
             });
-            if ((recent.flags & 2) !== 2) { // ignore mails 'mark as deleted'. Trigger even if no new mails are added to ensure read mails are removed
-                api.trigger('new-mail', recent, unseen);
-                if (recent.length > 0) {
-                    lastUnseenMail = recent[0].received_date;
-                    api.newMailTitle(true);
-                }
+
+            // Trigger even if no new mails are added to ensure read mails are removed
+            api.trigger('new-mail', recent, unseen);
+
+            if (recent.length > 0) {
+                lastUnseenMail = recent[0].received_date;
+                api.newMailTitle(true);
             }
+
             return {
                 unseen: unseen,
                 recent: recent || []

@@ -184,7 +184,7 @@ define('io.ox/mail/settings/signatures/register',
 
             $pane.append($('<br>'), $('<br>'), $('<br>'));
 
-            var $button = $('<button class="btn btn-primary">')
+            var $button = $('<button type="button" class="btn btn-primary">')
                 .text(gt('Import signatures')).appendTo($pane);
 
             $button.on('click', function () {
@@ -321,7 +321,7 @@ define('io.ox/mail/settings/signatures/register',
                     snippets.on('refresh.all', fnDrawAll);
 
                     $('<div class="sectioncontent">').append(
-                        $('<button class="btn btn-primary">').text(gt('Add new signature')).on('click', fnEditSignature)
+                        $('<button type="button" class="btn btn-primary">').text(gt('Add new signature')).on('click', fnEditSignature)
                     ).appendTo($node);
 
                     $('<br>').appendTo($node);

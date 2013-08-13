@@ -386,7 +386,7 @@ define('io.ox/core/tk/vgrid',
 
                     // draw link
                     this.append(
-                        $('<div>').addClass('grid-info').append(
+                        $('<div class="grid-info">').append(
                             link = $('<a href="#">').on('click', fnShowAll)
                         )
                     );
@@ -1255,8 +1255,8 @@ define('io.ox/core/tk/vgrid',
 
             self.selection.on('change', function (e, list) {
                 var folder = self.prop('folder');
-                if (options.settings && list.length === 1) {
-                    // we only store the current selection if its length is 1
+                if (options.settings && list.length <= 1) {
+                    // we only store the current selection if its length is max 1
                     options.settings.set(['vgrid', 'previous', folder], _.cid(list[0])).save();
                     // always store in fluent hash
                     hash[folder] = list;

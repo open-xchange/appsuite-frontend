@@ -12,6 +12,16 @@
  */
 
 /* ========================================================================= */
+/* generic variables                                                         */
+/* ========================================================================= */
+
+/* dark background color for view panes */
+@pane-fill-color: #333333;
+
+/* background color for the application pane background */
+@app-pane-fill-color: #e5e5e5;
+
+/* ========================================================================= */
 /* generic mix-in classes                                                    */
 /* ========================================================================= */
 
@@ -44,6 +54,7 @@
     border-bottom-right-radius: @radius;
 }
 
+/* combines 2 shadow effects at an element */
 .box-shadow-2(@shadow1, @shadow2) {
     -webkit-box-shadow: @shadow1, @shadow2;
     -moz-box-shadow: @shadow1, @shadow2;
@@ -51,6 +62,15 @@
     box-shadow: @shadow1, @shadow2;
 }
 
+/* combines 3 shadow effects at an element */
+.box-shadow-3(@shadow1, @shadow2, @shadow3) {
+    -webkit-box-shadow: @shadow1, @shadow2, @shadow3;
+    -moz-box-shadow: @shadow1, @shadow2, @shadow3;
+    -ms-box-shadow: @shadow1, @shadow2, @shadow3;
+    box-shadow: @shadow1, @shadow2, @shadow3;
+}
+
+/* combines 4 shadow effects at an element */
 .box-shadow-4(@shadow1, @shadow2, @shadow3, @shadow4) {
     -webkit-box-shadow: @shadow1, @shadow2, @shadow3, @shadow4;
     -moz-box-shadow: @shadow1, @shadow2, @shadow3, @shadow4;
@@ -58,20 +78,9 @@
     box-shadow: @shadow1, @shadow2, @shadow3, @shadow4;
 }
 
-/* shadow for hovering elements */
+/* shadow effect for elements hovering ove their background */
 .drop-shadow(@size: 5px) {
-    .box-shadow(0 @size (2 * @size) fade(black, 20%));
-}
-
-.clearfix {
-    &:before, &:after {
-        display: table;
-        content: "";
-        line-height: 0;
-    }
-    &:after {
-        clear: both;
-    }
+     .box-shadow(0 @size (2 * @size) fade(black, 20%));
 }
 
 /* color of place holder in text fields */
@@ -89,12 +98,26 @@
     .touch & { -webkit-mask-image: url(data:image/gif;base64,R0lGODdhAgACAIAAAAAAAP///ywAAAAAAgACAAACAoRRADs=); }
 }
 
+/* ========================================================================= */
+
+
 /* restrict all definitions to office applications */
 .io-ox-office-main {
 
 /* ========================================================================= */
-/* icons                                                                     */
+/* browser fixes and workarounds                                             */
 /* ========================================================================= */
+
+.clearfix {
+    &:before, &:after {
+        display: table;
+        content: "";
+        line-height: 0;
+    }
+    &:after {
+        clear: both;
+    }
+}
 
 /* hack for IE to expand nodes beyond the size limit of single nodes, see Utils.setContainerNodeSize() */
 .ie-node-size-container > div {
@@ -135,12 +158,6 @@ i[class^="icon-"], i[class^=" icon-"] {
 /* ========================================================================= */
 /* view panes                                                                */
 /* ========================================================================= */
-
-/* background color for panes */
-@pane-fill-color: #333333;
-
-/* background color for application pane */
-@app-pane-fill-color: #e5e5e5;
 
 > .view-pane {
     position: absolute;
@@ -234,47 +251,41 @@ i[class^="icon-"], i[class^=" icon-"] {
 
     /* the application pane in the middle between all view panes */
     &.app-pane {
-        .box-sizing(content-box);
         left: 0;
         right: 0;
         top: 0;
         bottom: 0;
         margin: 0;
         padding: 0;
-        background: @app-pane-fill-color;
 
         /* prevent dotted focus rectangle around the control */
         &, &:focus, &:active {
             outline: none;
         }
 
-        /* the container element for the application contents */
-        > .app-container {
-            position: absolute;
-            display: block;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
+        /* the container element for hidden contents */
+        > .app-hidden-root {
+            bottom: auto;
+            height: auto;
+            overflow: visible;
+            line-height: normal;
         }
 
-        /* scrollable application pane, center container node horizontally into application pane */
-        &.scrolling {
-            .overflow(auto);
-            text-align: center;
+        /* the container element for the application contents */
+        > .app-content-root {
+            background: @app-pane-fill-color;
 
-            /* the container element for the application contents */
-            > .app-container {
-                position: relative;
-                display: inline-block;
-                width: auto;
-                height: auto;
+            /* scrollable application pane, center container node horizontally into application pane */
+            &.scrolling {
+                .overflow(auto);
+                text-align: center;
 
-                /* generic design of a 'page': white background with box shadow */
-                > .page {
+                /* the child container element for the application contents in the scrollable node */
+                > .app-content {
                     position: relative;
-                    background: white;
-                    .box-shadow(0 0 8px fade(black, 20%));
+                    display: inline-block;
+                    width: auto;
+                    height: auto;
                 }
             }
         }
@@ -451,6 +462,8 @@ i[class^="icon-"], i[class^=" icon-"] {
         > input {
             width: 100%;
             height: 100%;
+            /* bug 28206: IE hides cursor in right-aligned text fields */
+            padding-right: 1px;
             line-height: normal;
             .input-placeholder-color(#ccc);
         }
@@ -702,7 +715,7 @@ i[class^="icon-"], i[class^=" icon-"] {
                 > div { margin-left: -1px; }
             }
 
-            /* border and glow effect for drops with open drop-down menus (but not combo fields) */
+            /* border and glow effect for buttons with open drop-down menus (but not combo fields) */
             &.dropdown-open:not(.combo-field) {
                 z-index: 5;
                 .box-shadow(@dropdown-glow-effect);

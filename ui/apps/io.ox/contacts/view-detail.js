@@ -78,7 +78,7 @@ define("io.ox/contacts/view-detail",
     }
 
     function buildDropdown(container, label, data) {
-        new links.DropdownLinks({
+        return new links.DropdownLinks({
             label: label,
             classes: 'attachment-item',
             ref: 'io.ox/contacts/attachment/links'
@@ -180,7 +180,7 @@ define("io.ox/contacts/view-detail",
                             buildDropdown(section, _.noI18n(a.filename), a);
                         });
                         if (data.length > 1) {
-                            buildDropdown(section, gt('All attachments'), data);
+                            buildDropdown(section, gt('All attachments'), data).find('a').removeClass('attachment-item');
                         }
                         section.on('a', 'click', function (e) { e.preventDefault(); });
                     },
@@ -427,8 +427,14 @@ define("io.ox/contacts/view-detail",
                         simple(gt('Suffix'), data.suffix),
                         simple(gt('Nickname'), data.nickname),
                         row(gt('Birthday'), function () {
-                            if (baton.data.birthday)
-                                return new date.Local(date.Local.utc(baton.data.birthday)).format(date.DATE); //use utc time. birthdays must not be converted
+                            if (baton.data.birthday) {
+                                var birthday = new date.UTC(baton.data.birthday);//use utc time. birthdays must not be converted
+                                if (birthday.getYear() === 1) {//Year 0 is special for birthdays without year (backend changes this to 1...)
+                                    return birthday.format(date.DATE);//date without Year needed here, not implemented yet
+                                } else {
+                                    return birthday.format(date.DATE);
+                                }
+                            }
                         }),
                         row(gt('URL'), function () {
                             if (baton.data.url)

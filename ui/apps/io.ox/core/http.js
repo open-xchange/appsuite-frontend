@@ -722,8 +722,10 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
 
                 if (isUnreachable(xhr)) {
                     that.trigger("unreachable");
+                    ox.trigger('connection:down');
                 } else {
                     that.trigger("reachable");
+                    ox.trigger('connection:up');
                 }
                 error = _.extend({ status: status, took: took }, error);
                 log.add(error, r.o);
@@ -740,9 +742,11 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                     }
                 })
                 .done(function (response) {
-                    // slow?
-                    that.trigger("reachable");
 
+                    that.trigger("reachable");
+                    ox.trigger('connection:up');
+
+                    // slow?
                     var took = _.now() - t0;
                     log.took(took);
                     if (took > log.SLOW) {
@@ -966,10 +970,12 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                 def = $.Deferred(),
                 data = JSON.stringify(options.data),
                 url = ox.apiRoot + '/' + options.module + '?action=' + options.action + '&session=' + ox.session,
-                form = options.form;
+                form = options.form,
+                blank = $.Deferred();
 
             $('#tmp').append(
                 $('<iframe>', { name: name, id: name, height: 1, width: 1, src: ox.base + '/blank.html' })
+                .on('load error', blank.resolve)
             );
 
             window[callback] = function (response) {
@@ -1003,8 +1009,9 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                 encoding: 'multipart/form-data',
                 action: url + '&' + _.serialize(options.params),
                 target: name
-            })
-            .submit();
+            });
+
+            blank.done(function () { form.submit(); form = null; });
 
             return def;
         },

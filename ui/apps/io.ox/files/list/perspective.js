@@ -271,25 +271,15 @@ define('io.ox/files/list/perspective',
             index: 100,
             draw: function () {
                 this.prepend(
-                    optDropdown = $('<div>').addClass('grid-options dropdown').css({ display: 'inline-block', 'float': 'right' })
+                    optDropdown = $('<div class="grid-options dropdown">')
                         .append(
-                            $('<a>', {
-                                    href: '#',
-                                    tabindex: 1,
-                                    'data-toggle': 'dropdown',
-                                    role: 'menuitem',
-                                    'aria-haspopup': true,
-                                    'aria-label': gt('Sort options')
-                                })
-                                .attr('data-toggle', 'dropdown')
+                            $('<a href="#" tabindex="1" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').attr('aria-label', gt('Sort options'))
                                 .append(
                                     $('<i class="icon-arrow-down">'),
                                     $('<i class="icon-arrow-up">')
                                 )
                                 .dropdown(),
-                            $('<ul>').addClass("dropdown-menu").attr({
-                                    role: 'menu'
-                                })
+                            $('<ul class="dropdown-menu" role="menu">')
                                 .append(
                                     buildOption(702, gt('File name')),
                                     buildOption(704, gt('File size')),

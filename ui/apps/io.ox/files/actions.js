@@ -126,39 +126,52 @@ define('io.ox/files/actions',
     }
 
     new Action('io.ox/files/actions/download', {
-        requires: hasFilename,
+        requires: function (e) {
+            return !(e.collection.has('one') && _.isEmpty(e.baton.data.filename));
+        },
         multiple: function (list) {
             // loop over list, get full file object and trigger downloads
-            filterUnsupported(list).done(function (files) {
-                if (files.length === 1) {
-                    var o = _.first(files);
+            filterUnsupported(list).done(function (filtered) {
+                if (filtered.length === 1) {
+                    var o = _.first(filtered);
                     api.get(o).done(function (file) {
                         if (o.version) {
                             file = _.extend({}, file, { version: o.version });
                         }
                         window.open(api.getUrl(file, 'download'));
                     });
-                } else {
-                    window.open(api.getUrl(files, 'zip'));
+                } else if (filtered.length > 1) {
+                    window.open(api.getUrl(filtered, 'zip'));
                 }
+                //'description only' items
+                if (filtered.length === 0 || list.length !== filtered.length) {
+                    notifications.yell('info', gt("Items without a file can not be downloaded."));
+                }
+
             });
         }
     });
 
     new Action('io.ox/files/actions/open', {
-        requires: hasFilename,
+        requires: function (e) {
+            return !(e.collection.has('one') && _.isEmpty(e.baton.data.filename));
+        },
         multiple: function (list) {
-            // loop over list, get full file object and open new window
-            _(list).each(function (o) {
-                api.get(o).done(function (file) {
-                    //not 'description only' files
-                    if (!_.isEmpty(file.filename)) {
+            var onlyinvalid = false;
+            filterUnsupported(list).done(function (filtered) {
+                // loop over list, get full file object and open new window
+                _(filtered).each(function (o) {
+                    api.get(o).done(function (file) {
                         if (o.version) {
                             file = _.extend({}, file, { version: o.version });
                         }
                         window.open(api.getUrl(file, 'open'));
-                    }
+                    });
                 });
+                //'description only' items
+                if (list.length === 0 || filtered.length !== list.length) {
+                    notifications.yell('info', gt("Items without a file can not be opened."));
+                }
             });
         }
     });
@@ -256,7 +269,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/delete', {
         requires: function (e) {
-            return e.collection.has('some') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
+            return e.collection.has('some') && e.collection.has('delete') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
         },
         multiple: function (list) {
 
@@ -293,12 +306,12 @@ define('io.ox/files/actions',
                                 api.propagate('delete', list[0]);
                                 notifications.yell('success', responseSuccess);
                             }).fail(function (e) {
-                                console.log(e);
                                 if (e && e.code && e.code === 'IFO-0415') {
                                     notifications.yell('error', responseFailLocked);
                                 } else {
                                     notifications.yell('error', responseFail + "\n" + e.error);
                                 }
+                                api.trigger('refresh:all');
                             });
                         }
                     });
@@ -946,26 +959,6 @@ define('io.ox/files/actions',
             });
         }
     });
-
-    /**
-     * identify 'description only files'
-     * @param  {event}  e
-     * @return {boolean} one or more
-     */
-    function hasFilename(e) {
-        if (e.collection.has('one') && !_.isEmpty(e.baton.data.filename)) {
-            return true;
-        }
-        if (_.isUndefined(e.baton.allIds)) {
-            e.baton.allIds = e.baton.data;
-        }
-        return api.getList(e.baton.allIds).then(function (data) {
-                e.baton.allIds = data;
-                return _(data).reduce(function (memo, obj) {
-                    return memo || !_.isEmpty(obj.filename);
-                }, false);
-            });
-    }
 
     /**
      * filters 'description only files'

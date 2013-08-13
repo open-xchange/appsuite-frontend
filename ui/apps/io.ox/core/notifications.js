@@ -17,24 +17,31 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
     'use strict';
 
     var BadgeView = Backbone.View.extend({
-        tagName: 'span',
-        className: 'badge',
+        tagName: 'a',
+        className: 'notifications-icon',
         initialize: function (options) {
             this.model.on('change', _.bind(this.onChange, this));
         },
+        onChange: function () {
+            var count = this.model.get('count');
+            this.$el.find('.badge').toggleClass('empty', count === 0);
+            this.$el.find('.number').text(count >= 100 ? '99+' : count);
+        },
+        onToggle: function (open) {
+            this.$el.find('.badge i').attr('class', open ? 'icon-caret-down' : 'icon-caret-right');
+        },
         render: function () {
-            this.$el.text(_.noI18n(this.model.get('count')));
+            this.$el.attr({ href: '#', tabindex: '1' }).append(
+                $('<span class="badge">').append(
+                    $('<spann class="number">'), $.txt(' '),
+                    $('<i class="icon-caret-right">')
+                )
+            );
+            this.onChange();
             return this;
         },
-        onChange: function () {
-            this.$el.text(_.noI18n(this.model.get('count')));
-        },
         setNotifier: function (b) {
-            if (b) {
-                this.$el.addClass('badge-info').attr('aria-disabled', false);
-            } else {
-                this.$el.removeClass('badge-info').attr('aria-disabled', true);
-            }
+            this.$el.attr('aria-disabled', !b).find('.badge').toggleClass('active', !!b);
         },
         setCount: function (count, newMails) {
             var newOther = count - this.model.get('count') - newMails;//check if there are new notifications, that are not mail
@@ -96,8 +103,10 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
 
         attach: function (addLauncher) {
             //view
-            var self = this,
-                badgeView = new BadgeView({ model: new Backbone.Model({ count: 0})});
+            var self = this;
+
+            this.badgeView = new BadgeView({ model: new Backbone.Model({ count: 0})});
+
             this.notificationsView = new NotificationsView();
 
             $('#io-ox-core').prepend(
@@ -110,19 +119,19 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             );
 
             //auto open on new notification
-            this.badges.push(badgeView);
+            this.badges.push(this.badgeView);
 
             function changeAutoOpen(value) {
                 value = value || settings.get('autoOpenNotification', 'noEmail');
 
-                badgeView.off('newNotifications newMailNotifications');//prevent stacking of eventhandlers
+                self.badgeView.off('newNotifications newMailNotifications');//prevent stacking of eventhandlers
 
                 if (value === 'always') {
-                    badgeView.on('newNotifications newMailNotifications', function () {
+                    self.badgeView.on('newNotifications newMailNotifications', function () {
                         self.showList();
                     });
                 } else if (value === 'noEmail') {
-                    badgeView.on('newNotifications', function () {
+                    self.badgeView.on('newNotifications', function () {
                         self.showList();
                     });
                 }
@@ -134,7 +143,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             });
 
             //close if count set to 0
-            badgeView.on('lastItemDeleted', function () {
+            self.badgeView.on('lastItemDeleted', function () {
                 var overlay = $('#io-ox-notifications-overlay');
                 if (overlay.has('.mail-detail-decorator').length > 0) {
                     overlay.on("mail-detail-closed", _.bind(self.slowClose, self));
@@ -154,8 +163,11 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                 }
             }
 
-            return addLauncher('right', $('<a href="#" tabindex="1">').on('keydown', focusNotifications).append(badgeView.render().$el.show()), $.proxy(this.toggleList, this)).attr('id', 'io-ox-notifications-icon');
-
+            return addLauncher(
+                'right',
+                self.badgeView.render().$el.on('keydown', focusNotifications),
+                $.proxy(this.toggleList, this)
+            ).attr('id', 'io-ox-notifications-icon');
         },
         get: function (key, listview) {
             if (_.isUndefined(this.notifications[key])) {
@@ -221,6 +233,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             $('#io-ox-notifications').find('[tabindex="1"]').focus();
             $('#io-ox-notifications').addClass('active');
             $('#io-ox-notifications-overlay').addClass('active');
+            this.badgeView.onToggle(true);
             $(document).on('keydown.notification', $.proxy(function (e) {
                 if (e.which === 27) { // escapekey
                     $(document).off('keydown.notification');
@@ -232,7 +245,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             _.each(this.badges, function (badgeView) {
                 badgeView.setNotifier(false);
             });
-
+            this.badgeView.onToggle(false);
             $('#io-ox-notifications').removeClass('active');
             if (_.device('!smartphone')) {
                 $('#io-ox-notifications-overlay').empty().removeClass('active');
@@ -331,7 +344,8 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
 
                     var html = _.escape(o.message).replace(/\n/g, '<br>'),
                         reuse = false,
-                        className = 'io-ox-alert io-ox-alert-' + o.type;
+                        className = 'io-ox-alert io-ox-alert-' + o.type,
+                        wordbreak = html.indexOf('http') >= 0 ? 'break-all' : 'normal';
 
                     // reuse existing alert?
                     var node = $('.io-ox-alert.slide-in');
@@ -350,7 +364,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                         ),
                         $('<div class="message user-select-text">').append(
                             o.headline ? $('<h2 class="headline">').text(o.headline) : [],
-                            $('<div>').html(html)
+                            $('<div>').css('word-break', wordbreak).html(html)
                         ),
                         $('<a href="#" class="close" tabindex="1">').html('&times')
                     );

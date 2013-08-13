@@ -14,9 +14,9 @@ define('io.ox/core/api/reminder', ['io.ox/core/http',
                                    'io.ox/tasks/api',
                                    'io.ox/calendar/api',
                                    'io.ox/core/date',
-                                   'io.ox/core/event'], function (http, taskApi, calendarApi, date, Events) {
+                                   'io.ox/core/event'], function (http, taskAPI, calendarAPI, date, Events) {
     'use strict';
-    
+
     //object to store reminders that are not to display yet
     var reminderStorage = {},
         nextReminder,//next reminder to be triggered
@@ -58,7 +58,7 @@ define('io.ox/core/api/reminder', ['io.ox/core/http',
                     }
                 }
             });
-            
+
             if  (changed) {
                 clearTimeout(reminderTimer);
                 var timeout = nextReminder.alarm - _.now();
@@ -77,7 +77,7 @@ define('io.ox/core/api/reminder', ['io.ox/core/http',
                 }, timeout);
             }
         };
-        
+
 
     var api = {
         /**

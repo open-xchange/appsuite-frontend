@@ -28,7 +28,7 @@ define('io.ox/office/framework/view/pane',
      * - 'pane:show': After the view pane has been shown or hidden. The event
      *      handler receives the new visibility state.
      * - 'pane:resize': After the view pane has been resized. The event handler
-     *      receives the new size of the resizeable dimension, in pixels.
+     *      receives the new size of the resizable dimension, in pixels.
      * - 'pane:layout': After the size of the view pane has been changed, by
      *      manipulating (showing, hiding, changing) the view components or
      *      control groups it contains.
@@ -56,14 +56,14 @@ define('io.ox/office/framework/view/pane',
      *      The size of the pane, between window border and application pane.
      *      If omitted, the size will be determined by the DOM contents of the
      *      pane root node.
-     *  @param {String} [options.resizeable=false]
-     *      If set to true, the pane will be resizeable at its inner border.
-     *      Has no effect for transparent overlay panes.
+     *  @param {String} [options.resizable=false]
+     *      If set to true, the pane will be resizable at its inner border. Has
+     *      no effect for transparent overlay panes.
      *  @param {String} [options.minSize=1]
-     *      The minimum size of resizeable panes (when the 'options.resizeable'
+     *      The minimum size of resizable panes (when the 'options.resizable'
      *      option is set to true).
      *  @param {String} [options.maxSize=0x7FFFFFFF]
-     *      The maximum size of resizeable panes (when the 'options.resizeable'
+     *      The maximum size of resizable panes (when the 'options.resizable'
      *      option is set to true).
      *  @param {Boolean} [options.overlay=false]
      *      If set to true, the pane will overlay the application pane instead
@@ -110,10 +110,10 @@ define('io.ox/office/framework/view/pane',
             // transparent overlay pane
             transparent = overlay && Utils.getBooleanOption(options, 'transparent', false),
 
-            // minimum size of the view pane (for resizeable panes)
+            // minimum size of the view pane (for resizable panes)
             minSize = Utils.getIntegerOption(options, 'minSize', 1, 1),
 
-            // maximum size of the view pane (for resizeable panes)
+            // maximum size of the view pane (for resizable panes)
             maxSize = Utils.getIntegerOption(options, 'maxSize', 0x7FFFFFFF, minSize),
 
             // view components contained in this pane
@@ -375,7 +375,7 @@ define('io.ox/office/framework/view/pane',
         }
 
         // no size tracking for transparent view panes
-        if (!transparent && Utils.getBooleanOption(options, 'resizeable', false)) {
+        if (!transparent && Utils.getBooleanOption(options, 'resizable', false)) {
             $('<div>').addClass('resizer ' + position)
                 .append($('<div>').addClass('handle h1'), $('<div>').addClass('handle h2'))
                 .enableTracking()

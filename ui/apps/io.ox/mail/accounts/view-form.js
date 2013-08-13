@@ -18,7 +18,7 @@ define('io.ox/mail/accounts/view-form',
      'text!io.ox/mail/accounts/account_detail.html',
       'settings!io.ox/mail',
      'gettext!io.ox/settings/settings'
-    ], function (View, notifications, AccountApi, tmpl, settings, gt) {
+    ], function (View, notifications, AccountAPI, tmpl, settings, gt) {
 
     'use strict';
 
@@ -78,7 +78,7 @@ define('io.ox/mail/accounts/view-form',
 
             data.name = data.personal = data.primary_address;
 
-            return AccountApi.validate(data);
+            return AccountAPI.validate(data);
         },
 
         AccountDetailView = Backbone.View.extend({

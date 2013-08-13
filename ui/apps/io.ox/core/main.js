@@ -67,6 +67,42 @@ define('io.ox/core/main',
         });
     };
 
+    //
+    // handle online/offline mode
+    //
+
+    function showIndicator(text) {
+        $('#io-ox-offline').text(text).stop().show().animate({ bottom: '0px' }, 200);
+    }
+
+    function hideIndicator() {
+        $('#io-ox-offline').stop().animate({ bottom: '-41px' }, 200, function () { $(this).hide(); });
+    }
+
+    ox.on('connection:online connection:offline', function (e) {
+        if (e.type === 'connection:offline') {
+            showIndicator(gt('Offline'));
+            ox.online = false;
+        } else {
+            hideIndicator();
+            ox.online = true;
+        }
+    });
+
+    ox.on('connection:up connection:down', function (e) {
+        if (ox.online) {
+            if (e.type === 'connection:down') {
+                showIndicator(gt('Server unreachable'));
+            } else {
+                hideIndicator();
+            }
+        }
+    });
+
+    if (!ox.online) {
+        $(window).trigger('offline');
+    }
+
     var topbar = $('#io-ox-topbar'),
         launchers = $('.launchers', topbar),
         launcherDropdown = $('.launcher-dropdown ul', topbar);
@@ -82,12 +118,12 @@ define('io.ox/core/main',
     gt.pgettext('app', 'Conversations');
 
     var tabManager = _.debounce(function () {
-
         var items = launchers.children('.launcher'),
-            launcherDropDownIcon = $('.launcher-dropdown', topbar);
+            launcherDropDownIcon = $('.launcher-dropdown', topbar),
+            forceDesktopLaunchers = settings.get('forceDesktopLaunchers', false);
 
         // we don't show any launcher in top-bar on small devices
-        if (_.device('small')) {
+        if (_.device('small') && !forceDesktopLaunchers) {
             items.hide();
             launcherDropDownIcon.show();
             return;
@@ -131,6 +167,7 @@ define('io.ox/core/main',
             }
         }
         $('li', launcherDropdown).hide();
+
         if (hidden > 0) {
             launcherDropDownIcon.show();
             for (i = hidden; i > 0; i--) {
@@ -473,7 +510,8 @@ define('io.ox/core/main',
         ox.ui.apps.on('launch resume', function (model, collection, e) {
             // mark last active app
             if (_.device('small')) {
-                launchers.hide();
+                // does weird things...disabling for the moment
+                //launchers.hide();
             }
             launchers.children().removeClass('active-app')
                 .filter('[data-app-guid="' + model.guid + '"]').addClass('active-app');
@@ -512,7 +550,7 @@ define('io.ox/core/main',
             index: 200,
             draw: function () {
                 this.append(
-                    addLauncher('right', $('<i class="icon-refresh">').attr('aria-label', gt('Refresh')), function () {
+                    addLauncher('right', $('<i class="icon-refresh launcher-icon">').attr('aria-label', gt('Refresh')), function () {
                         refresh();
                         return $.when();
                     })
@@ -635,7 +673,7 @@ define('io.ox/core/main',
                 this.append(
                     div = $('<div class="launcher" role="presentation">').append(
                         a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="menuitem" aria-haspopup="true" tabindex="1">').append(
-                            $('<i class="icon-cog icon-white" aria-hidden="true">')
+                            $('<i class="icon-cog icon-white launcher-icon" aria-hidden="true">')
                         ),
                         ul = $('<ul class="dropdown-menu" role="menu">')
                     )
@@ -825,7 +863,7 @@ define('io.ox/core/main',
         .filter(function (m) {
             //don’t autoload without manifest
             //don’t autoload disabled apps
-            return ox.manifests.apps[m] !== undefined && !ox.manifests.disabled[m];
+            return ox.manifests.apps[m] !== undefined && !ox.manifests.isDisabled(m);
         })
         .compact()
         .value();
@@ -958,7 +996,9 @@ define('io.ox/core/main',
                                 )
                             ),
                             $('<div class="content">'),
-                            $('<div class="footer">').append($('<button class="btn btn-primary">').text(gt('Continue')))
+                            $('<div class="footer">').append(
+                                $('<button type="button" class="btn btn-primary">').text(gt('Continue'))
+                            )
                         )
                     );
 
@@ -1046,7 +1086,7 @@ define('io.ox/core/main',
                     .filter(function (details) {
                         //don’t autoload without manifest
                         //don’t autoload disabled apps
-                        return ox.manifests.apps[details.app] !== undefined && !ox.manifests.disabled[details.app];
+                        return ox.manifests.apps[details.app] !== undefined && !ox.manifests.isDisabled(details.app);
                     })
                     .each(function (details, index) {
                         //only load first app on small devices

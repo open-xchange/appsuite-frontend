@@ -22,6 +22,9 @@ define('io.ox/mail/view-grid-template',
 
     'use strict';
 
+    var colorLabelIconEmpty = 'icon-bookmark-empty',
+        colorLabelIcon = 'icon-bookmark';
+
     var that = {
 
         // main grid template
@@ -34,25 +37,29 @@ define('io.ox/mail/view-grid-template',
 
             build: function () {
                 var from, date, priority, subject, attachment, threadSize, threadSizeCount, threadSizeIcon,
-                    flag, answered, forwarded, unread, account = null;
+                    flag, answered, forwarded, unread, account = null, touchHelper = $();
+                if (_.device('smartphone')) {
+                    touchHelper = $('<div class="touch-helper">');
+                }
                 this.addClass('mail').append(
                     $('<div>').append(
                         date = $('<span class="date">'),
                         from = $('<div class="from">')
                     ),
                     $('<div>').append(
+                        touchHelper,
                         threadSize = $('<div class="thread-size">').append(
                             threadSizeCount = $('<span class="number">'),
                             $.txt(' '),
                             threadSizeIcon = $('<i class="icon-caret-right">')
                         ),
-                        flag = $('<i class="flag icon-flag-alt">'),
+                        flag = $('<i class="flag ' + colorLabelIconEmpty + '">'),
                         attachment = $('<i class="icon-paper-clip">'),
                         priority = $('<span class="priority">'),
                         $('<div class="subject">').append(
                             unread = $('<i class="icon-unread icon-circle">'),
-                            answered = $('<i class="icon-circle-arrow-left">'),
-                            forwarded = $('<i class="icon-circle-arrow-right">'),
+                            answered = $('<i class="icon-answered icon-reply">'),
+                            forwarded = $('<i class="icon-forwarded icon-mail-forward">'),
                             subject = $('<span class="drag-title">')
                         )
                     )
@@ -70,6 +77,7 @@ define('io.ox/mail/view-grid-template',
                     threadSize: threadSize,
                     threadSizeCount: threadSizeCount,
                     threadSizeIcon: threadSizeIcon,
+                    touchHelper: touchHelper,
                     flag: flag,
                     answered: answered,
                     forwarded: forwarded,
@@ -87,6 +95,7 @@ define('io.ox/mail/view-grid-template',
                     fields.subject.addClass('empty').text(gt('No subject'));
                 }
                 if (!data.threadSize || data.threadSize <= 1) {
+                    if (_.device('smartphone')) fields.touchHelper.hide();
                     fields.threadSize.css('display', 'none');
                     fields.threadSizeCount.text(_.noI18n(''));
                 } else {
@@ -100,7 +109,7 @@ define('io.ox/mail/view-grid-template',
                 fields.date.text(_.noI18n(util.getTime(data.received_date)));
                 fields.attachment.css('display', data.attachment ? '' : 'none');
                 var color = api.tracker.getColorLabel(data);
-                fields.flag.get(0).className = 'flag flag_' + color + ' ' + (color === 0 ? 'icon-flag-alt' : 'icon-flag');
+                fields.flag.get(0).className = 'flag flag_' + color + ' ' + (color === 0 ? colorLabelIconEmpty : colorLabelIcon);
                 if (fields.account) {
                     fields.account.text(util.getAccountName(data));
                 }

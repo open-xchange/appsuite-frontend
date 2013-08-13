@@ -186,6 +186,20 @@ define('io.ox/contacts/api',
                     return data;
                 }
             }
+        },
+        pipe: {
+            all: function (response) {
+                // move contacts with empty sort_name to end of array
+                // would be nice if backend does this
+                var i = 0, item, count = 0;
+                while ((item = response[i++])) {
+                    if (item.sort_name === '') count++;
+                }
+                if (count > 0) {
+                    response = response.slice(count).concat(response.slice(0, count));
+                }
+                return response;
+            }
         }
     });
 
@@ -246,18 +260,18 @@ define('io.ox/contacts/api',
 
         // go!
         return http[method](opt)
-            .pipe(function (fresh) {
+            .then(function (fresh) {
                 // UPLOAD does not process response data, so ...
                 fresh = fresh.data || fresh;
                 // get brand new object
                 return api.get({ id: fresh.id, folder: data.folder_id });
             })
-            .pipe(function (d) {
+            .then(function (d) {
                 return $.when(
                     api.caches.all.grepRemove(d.folder_id + api.DELIM),
                     fetchCache.clear()
                 )
-                .pipe(function () {
+                .then(function () {
                     if (attachmentHandlingNeeded) {
                         api.addToUploadList(d.folder_id + '.' + d.id); // to make the detailview show the busy animation
                     }
@@ -300,7 +314,7 @@ define('io.ox/contacts/api',
                     action: 'update',
                     id: o.id,
                     folder: o.folder,
-                    timestamp: o.timestamp || _.then(),
+                    timestamp: _.then(),
                     timezone: 'UTC'
                 },
                 data: o.data,
@@ -340,12 +354,14 @@ define('io.ox/contacts/api',
      * @return {deferred} object with timestamp
      */
     api.editNewImage = function (o, changes, file) {
+
         var filter = function (data) {
             $.when(
                 api.caches.get.clear(),
                 api.caches.list.clear(),
                 fetchCache.clear()
-            ).pipe(function () {
+            )
+            .pipe(function () {
                 api.trigger('refresh.list');
                 api.trigger('update:image', { // TODO needs a switch for created by hand or by test
                     id: o.id,
@@ -363,7 +379,7 @@ define('io.ox/contacts/api',
 
             return http.UPLOAD({
                 module: 'contacts',
-                params: { action: 'update', id: o.id, folder: o.folder_id, timestamp: o.timestamp || _.now() },
+                params: { action: 'update', id: o.id, folder: o.folder_id, timestamp: _.then() },
                 data: form,
                 fixPost: true
             })
@@ -374,7 +390,7 @@ define('io.ox/contacts/api',
                 action: 'update',
                 form: file,
                 data: changes,
-                params: {id: o.id, folder: o.folder_id, timestamp: o.timestamp || _.now()}
+                params: {id: o.id, folder: o.folder_id, timestamp: _.then() }
             })
             .pipe(filter);
         }

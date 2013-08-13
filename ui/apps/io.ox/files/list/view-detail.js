@@ -198,7 +198,8 @@ define('io.ox/files/list/view-detail',
                     $('<div class="pull-left">').append(
                         $input
                     ),
-                    $uploadButton = $('<button>', { 'data-action': 'upload', tabindex: 1 }).addClass('uploadbutton btn btn-primary pull-right').text(gt('Upload file')),
+                    $uploadButton = $('<button type="button" data-action="upload" tabindex="1">')
+                        .addClass('uploadbutton btn btn-primary pull-right').text(gt('Upload file')),
                     $('<div>').addClass('comment').append(
                         $comment = $('<div class="row-fluid">').append(
                             $('<label>').text(gt('Version Comment')),
@@ -414,15 +415,17 @@ define('io.ox/files/list/view-detail',
     });
 
     var draw = function (baton, app) {
+
         if (!baton) return $('<div>');
+
         baton = ext.Baton.ensure(baton);
-        if (app) {//save the appname so the extensions know what opened them (to disable some options for example)
+
+        if (app) { //save the appname so the extensions know what opened them (to disable some options for example)
             baton.openedBy = app.getName();
         }
+
         var node = $.createViewContainer(baton.data, filesAPI);
-
         node.on('redraw', createRedraw(node)).addClass('file-details view');
-
         ext.point(POINT).invoke('draw', node, baton, app);
 
         return node;
@@ -430,7 +433,9 @@ define('io.ox/files/list/view-detail',
 
     var createRedraw = function (node) {
         return function (e, data) {
-            node.replaceWith(draw(data));
+            var replacement = draw(data);
+            if ('former_id' in data) replacement.attr('former-id', data.former_id);
+            node.replaceWith(replacement);
         };
     };
 

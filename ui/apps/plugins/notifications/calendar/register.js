@@ -20,7 +20,7 @@ define('plugins/notifications/calendar/register',
      'io.ox/core/api/user',
      'io.ox/core/tk/reminder-util',
      'gettext!plugins/notifications'
-    ], function (calApi, reminderApi, util, ext, userApi, reminderUtil, gt) {
+    ], function (calAPI, reminderAPI, util, ext, userAPI, reminderUtil, gt) {
 
     'use strict';
 
@@ -55,7 +55,7 @@ define('plugins/notifications/calendar/register',
                 $('<div class="location">').text(model.get('location')),
                 $('<div class="organizer">').text(model.get('blue')),
                 $('<div class="actions">').append(
-                    $('<button tabindex="1" class="btn btn-inverse" data-action="accept_decline">').text(gt('Accept / Decline'))
+                    $('<button type="button" tabindex="1" class="btn btn-inverse" data-action="accept_decline">').text(gt('Accept / Decline'))
                 )
             );
         }
@@ -104,7 +104,7 @@ define('plugins/notifications/calendar/register',
                 sidepopup.close();
             } else {
                 // fetch proper appointment first
-                calApi.get(obj).done(function (data) {
+                calAPI.get(obj).done(function (data) {
                     require(['io.ox/core/tk/dialogs', 'io.ox/calendar/view-detail'], function (dialogs, view) {
                         // open SidePopup without array
                         new dialogs.SidePopup({ arrow: false, side: 'right' })
@@ -209,7 +209,7 @@ define('plugins/notifications/calendar/register',
                 self.collection.hidden.push(self.model.get('cid'));
                 setTimeout(function () {
                     //get updated data
-                    calApi.get(reminder.get('caldata')).done(function (calObj) {
+                    calAPI.get(reminder.get('caldata')).done(function (calObj) {
                         self.collection.hidden = _.without(self.collection.hidden, reminder.get('cid'));
                         //fill in new data
                         reminder.set('caldata', calObj);
@@ -227,7 +227,7 @@ define('plugins/notifications/calendar/register',
             // stopPropagation could be prevented by another markup structure
             e.stopPropagation();
             var self = this;
-            reminderApi.deleteReminder(self.model.get('remdata').id).done(function () {
+            reminderAPI.deleteReminder(self.model.get('remdata').id).done(function () {
                 self.collection.remove(self.model);
             });
         }
@@ -292,7 +292,7 @@ define('plugins/notifications/calendar/register',
             var InviteNotifications = controller.get('io.ox/calendar', InviteNotificationsView),
                 ReminderNotifications = controller.get('io.ox/calendarreminder', ReminderNotificationsView);
             ReminderNotifications.collection.hidden = [];
-            calApi
+            calAPI
                 .on('new-invites', function (e, invites) {
                     var tmp = [];
 
@@ -308,7 +308,7 @@ define('plugins/notifications/calendar/register',
                             };
                             // TODO: ignore organizerId until we know better
                             var def = $.Deferred();
-                            userApi.get({ id: invite.organizerId || invite.created_by })
+                            userAPI.get({ id: invite.organizerId || invite.created_by })
                                 .done(function (user) {
                                     inObj.organizer = user.display_name;
                                     tmp.push(inObj);
@@ -358,7 +358,7 @@ define('plugins/notifications/calendar/register',
                 });
             }
 
-            reminderApi
+            reminderAPI
                 .on('add:calendar:reminder', function (e, reminder) {
 
                     var tmp = [],
@@ -371,7 +371,7 @@ define('plugins/notifications/calendar/register',
                             folder: remObj.folder,
                             recurrence_position: remObj.recurrence_position
                         };
-                        calApi.get(obj).done(function (data) {
+                        calAPI.get(obj).done(function (data) {
 
                             var inObj = {
                                 cid: _.cid(remObj),
@@ -408,11 +408,11 @@ define('plugins/notifications/calendar/register',
                         });
                     });
                 });
-            calApi.on('delete:appointment', removeReminders)
+            calAPI.on('delete:appointment', removeReminders)
                   .on('delete:appointment', function () {
-                        reminderApi.getReminders();
+                        reminderAPI.getReminders();
                     });
-            reminderApi.getReminders();
+            reminderAPI.getReminders();
         }
     });
     return true;

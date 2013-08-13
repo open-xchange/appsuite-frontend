@@ -89,7 +89,7 @@ define('io.ox/office/preview/main',
             })
             .then(function (data) {
                 var def = $.Deferred(),
-                    loadError = !_.isNumber(data.JobID) || (data.JobID <= 0) || !_.isNumber(data.PageCount) || (data.PageCount <= 0);
+                    loadError = !_.isString(data.JobID) || (data.JobID.length <= 0) || !_.isNumber(data.PageCount) || (data.PageCount <= 0);
 
                 if (loadError) {
                     var cause = Utils.getStringOption(data, 'cause', '');
@@ -113,19 +113,19 @@ define('io.ox/office/preview/main',
          * will be really closed.
          */
         function quitHandler() {
-            self.sendPreviewRequest({ params: { convert_action: 'endconvert' } });
+            return self.sendPreviewRequest({ params: { convert_action: 'endconvert' } });
         }
 
         // methods ------------------------------------------------------------
 
         this.sendPreviewRequest = function (options) {
-            return _.isNumber(jobId) ? this.sendConverterRequest(Utils.extendOptions({
+            return _.isString(jobId) ? this.sendConverterRequest(Utils.extendOptions({
                 params: { action: 'convertdocument', job_id: jobId }
             }, options)) : $.Deferred().reject();
         };
 
         this.getPreviewModuleUrl = function (options) {
-            return _.isNumber(jobId) ? this.getConverterModuleUrl(Utils.extendOptions({
+            return _.isString(jobId) ? this.getConverterModuleUrl(Utils.extendOptions({
                 action: 'convertdocument',
                 job_id: jobId
             }, options)) : undefined;
@@ -137,7 +137,7 @@ define('io.ox/office/preview/main',
          */
         this.isDocumentEditable = function () {
             // TODO: edit mail attachments and task attachments
-            return _.isNumber(jobId) && (!('source' in this.getFileDescriptor())) && ExtensionRegistry.isEditable(this.getFullFileName());
+            return _.isString(jobId) && (!('source' in this.getFileDescriptor())) && ExtensionRegistry.isEditable(this.getFullFileName());
         };
 
         /**

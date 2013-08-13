@@ -34,10 +34,32 @@
         margin-left: 14px;
     }
 
+    .picture-upload-view {
+
+        position: relative;
+
+        form {
+            position: absolute;
+            z-index: 1;
+        }
+
+        input[type=file] {
+            width: 90px;
+            height: 90px;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .picture-uploader {
+            z-index: 0;
+        }
+    }
+
     .contact-picture-upload {
 
         float: left;
         margin: 0 30px 10px 0;
+        position: relative;
 
         .picture-uploader {
             width: 80px;

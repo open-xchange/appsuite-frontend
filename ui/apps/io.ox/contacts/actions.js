@@ -498,6 +498,30 @@ define('io.ox/contacts/actions',
     });
 
     //attachment actions
+    new links.Action('io.ox/contacts/actions/slideshow-attachment', {
+        id: 'slideshow',
+        requires: function (e) {
+            return e.collection.has('multiple') && _(e.context).reduce(function (memo, obj) {
+                return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
+            }, false);
+        },
+        multiple: function (list, baton) {
+            require(['io.ox/core/api/attachment', 'io.ox/files/carousel'], function (attachmentAPI, slideshow) {
+                var files = _(list).map(function (file) {
+                    return {
+                        url: attachmentAPI.getUrl(file, 'open'),
+                        filename: file.filename
+                    };
+                });
+                slideshow.init({
+                    baton: {allIds: files},
+                    attachmentMode: false,
+                    selector: '.window-container.io-ox-contacts-window'
+                });
+            });
+        }
+    });
+
     new Action('io.ox/contacts/actions/preview-attachment', {
         id: 'preview',
         requires: function (e) {
@@ -517,11 +541,11 @@ define('io.ox/contacts/actions',
         multiple: function (list, baton) {
             require(['io.ox/core/tk/dialogs',
                      'io.ox/preview/main',
-                     'io.ox/core/api/attachment'], function (dialogs, p, attachmentApi) {
+                     'io.ox/core/api/attachment'], function (dialogs, p, attachmentAPI) {
                 //build Sidepopup
                 new dialogs.SidePopup().show(baton.e, function (popup) {
                     _(list).each(function (data, index) {
-                        data.dataURL = attachmentApi.getUrl(data, 'view');
+                        data.dataURL = attachmentAPI.getUrl(data, 'view');
                         var pre = new p.Preview(data, {
                             width: popup.parent().width(),
                             height: 'auto'
@@ -546,9 +570,9 @@ define('io.ox/contacts/actions',
         id: 'open',
         requires: 'some',
         multiple: function (list) {
-            require(['io.ox/core/api/attachment'], function (attachmentApi) {
+            require(['io.ox/core/api/attachment'], function (attachmentAPI) {
                 _(list).each(function (data) {
-                    var url = attachmentApi.getUrl(data, 'open');
+                    var url = attachmentAPI.getUrl(data, 'open');
                     window.open(url);
                 });
             });
@@ -559,9 +583,9 @@ define('io.ox/contacts/actions',
         id: 'download',
         requires: 'some',
         multiple: function (list) {
-            require(['io.ox/core/api/attachment'], function (attachmentApi) {
+            require(['io.ox/core/api/attachment'], function (attachmentAPI) {
                 _(list).each(function (data) {
-                    var url = attachmentApi.getUrl(data, 'download');
+                    var url = attachmentAPI.getUrl(data, 'download');
                     window.open(url);
                 });
             });
@@ -573,10 +597,10 @@ define('io.ox/contacts/actions',
         capabilities: 'infostore',
         requires: 'some',
         multiple: function (list) {
-            require(['io.ox/core/api/attachment'], function (attachmentApi) {
+            require(['io.ox/core/api/attachment'], function (attachmentAPI) {
                 //cannot be converted to multiple request because of backend bug (module overides params.module)
                 _(list).each(function (data) {
-                    attachmentApi.save(data);
+                    attachmentAPI.save(data);
                 });
                 setTimeout(function () {notifications.yell('success', gt('Attachments have been saved!')); }, 300);
             });
@@ -696,6 +720,13 @@ define('io.ox/contacts/actions',
 
     // Attachments
     ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
+        id: 'slideshow',
+        index: 100,
+        label: gt('Slideshow'),
+        ref: 'io.ox/contacts/actions/slideshow-attachment'
+    }));
+
+    ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
         id: 'preview',
         index: 100,
         label: gt('Preview'),
@@ -705,7 +736,7 @@ define('io.ox/contacts/actions',
     ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
         id: 'open',
         index: 200,
-        label: gt('Open in new tab'),
+        label: gt('Open in browser'),
         ref: 'io.ox/contacts/actions/open-attachment'
     }));
 

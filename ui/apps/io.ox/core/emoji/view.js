@@ -181,6 +181,9 @@ define('io.ox/core/emoji/view', ['moxiecode/tiny_mce/plugins/emoji/main'], funct
             footer.empty().append(
                 _(categories).map(draw)
             );
+
+            // resond to number of categories
+            footer.parent().toggleClass('one-row-footer', categories.length <= 6);
         },
 
         // get emojis of current category

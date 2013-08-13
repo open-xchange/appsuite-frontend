@@ -150,11 +150,21 @@ define('io.ox/core/commons',
                     last = flat;
                 }
             });
+
             grid.selection.on('_m_change', function (e, selection) {
                 var len = selection.length;
                 commons.mobileMultiSelection(id, node, this.unique(this.unfold()), api, grid);
             });
 
+            // look for id change
+            if (api) {
+                api.on('change:id', function (e, data, former_id) {
+                    var list = grid.selection.get();
+                    if (list.length && list[0].id === former_id) {
+                        grid.selection.set({ id: data.id, folder_id: data.folder_id });
+                    }
+                });
+            }
         },
 
         /**
@@ -230,8 +240,7 @@ define('io.ox/core/commons',
                 index: 200,
                 draw: function () {
                     this.append(
-                        $('<div class="grid-info">')
-                        .on('click', '.folder-name', fnOpen)
+                        $('<div class="grid-info">').on('click', '.folder-name', fnOpen)
                     );
                 }
             });
@@ -245,6 +254,7 @@ define('io.ox/core/commons',
             }
 
             function drawFolderInfo(folder_id) {
+
                 if (!folder_id) return;
 
                 var node = getInfoNode();
@@ -254,20 +264,22 @@ define('io.ox/core/commons',
                 .append(
                     $('<a href="#" class="folder-name" data-action="open-folderview" tabindex="1">'),
                     $.txt(' '),
-                    $('<span class="folder-count">').attr('data-folder-id', folder_id)
+                    $('<span class="folder-count">')
                 );
 
-                folderAPI.get({ folder: folder_id }).done(function (data) {
+                folderAPI.get({ folder: folder_id }).then(
+                    function success(data) {
 
-                    var total = data.total,
-                        node = grid.getToolbar().find('[data-folder-id="' + folder_id + '"]');
+                        var total = data.total,
+                            node = grid.getToolbar().find('[data-folder-id="' + folder_id + '"]');
 
-                    node.find('.folder-name').text(data.title);
+                        node.find('.folder-name').text(data.title);
 
-                    if (total > 0) {
-                        node.find('.folder-count').text('(' + total + ')');
+                        if (total > 0) {
+                            node.find('.folder-count').text('(' + total + ')');
+                        }
                     }
-                });
+                );
             }
 
             grid.on('change:prop:folder change:mode', function (e, value) {
@@ -305,8 +317,13 @@ define('io.ox/core/commons',
             ext.point(app.get('name') + '/vgrid/toolbar').invoke('draw', grid.getToolbar());
 
             // try to set initial value
-            var id = app.folder.get();
-            drawFolderInfo(id);
+            $.when(
+                app.folder.initialized,
+                app.getWindow().shown
+            )
+            .done(function (result) {
+                drawFolderInfo(result[0]);
+            });
         },
 
         /**
@@ -523,12 +540,17 @@ define('io.ox/core/commons',
             cid, ecid,
             node = $('<div>').attr('data-cid', _([].concat(data)).map(_.cid).join(',')),
 
-            update = function () {
+            update = function (e, changed) {
+
+                // id change?
+                if (changed && changed.former_id) data = changed;
+
                 if ((getter = getter || (api ? api.get : null))) {
                     // fallback for create trigger
                     if (!data.id) {
                         data.id = arguments[1].id;
                     }
+                    // get fresh object
                     getter(api.reduce(data)).done(function (data) {
                         if (baton instanceof ext.Baton) {
                             baton.data = data;

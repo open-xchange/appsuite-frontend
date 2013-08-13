@@ -974,11 +974,12 @@ define.async('io.ox/core/date',
 
     // TODO: get default from local clock
     return $.when(
+        api.getTimeZone('UTC'),
         api.getTimeZone(settings.get('timezone', 'UTC'))
             .then(null, function () { return api.getTimeZone('UTC'); }),
         locale
-    ).then(function (tz) {
-
+    ).then(function (utc, tz) {
+        api.UTC = utc;
         api.Local = tz;
         return api;
     });

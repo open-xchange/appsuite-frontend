@@ -25,7 +25,7 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
                 .addClass('span6 progress-field');
 
             $('<div>').addClass('input-append').append(progress,
-                    $('<button tabindex="1">').attr('data-action', 'minus').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-minus'))
+                    $('<button type="button" tabindex="1">').attr('data-action', 'minus').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-minus'))
                     .on('click', function () {
                         var temp = parseInt(progress.val(), 10);
                         temp -= 25;
@@ -37,7 +37,7 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
                             progress.trigger('change');
                         }
                     }),
-                    $('<button tabindex="1">').attr('data-action', 'plus').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-plus'))
+                    $('<button type="button" tabindex="1">').attr('data-action', 'plus').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-plus'))
                     .on('click', function () {
                         var temp = parseInt(progress.val(), 10);
                         temp += 25;
@@ -54,8 +54,9 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
             return progress;
         },
         buildExtensionRow: function (parent, extensions, baton) {
-            var row = $('<div>').addClass('row-fluid task-edit-row').appendTo(parent);
+            var row = $('<div class="row-fluid task-edit-row">').appendTo(parent);
             for (var i = 0; i < extensions.length; i++) {
+                if (!extensions[i]) continue;
                 if (!(_.isArray(extensions[i]))) { //check for true extensionpoint
                     extensions[i].invoke('draw', row, baton);
                 } else { //its a normal node

@@ -45,7 +45,8 @@ define("io.ox/core/extPatterns/links",
                 .addClass(self.cssClasses || 'io-ox-action-link')
                 .attr({
                     'data-prio': self.prio || 'lo',
-                    'data-ref': self.ref
+                    'data-ref': self.ref,
+                    'data-prio-mobile': self.prioMobile || 'none'
                 })
                 .data({ ref: self.ref, baton: baton })
                 .click(click)
@@ -98,9 +99,10 @@ define("io.ox/core/extPatterns/links",
 
         this.draw = function (baton) {
             baton = ext.Baton.ensure(baton);
+            var attr = { href: '#', 'class': 'btn', 'data-action': self.id, tabIndex: self.tabIndex };
+            if (tag === 'button') attr.type = 'button';
             this.append(
-                $('<' + tag + ' href="#" class="btn">')
-                .attr({ "data-action": self.id, tabIndex: self.tabIndex })
+                $('<' + tag + '>', attr)
                 .addClass(self.cssClasses)
                 .css(self.css || {})
                 .on('click', { extension: self, baton: baton }, click)
@@ -196,6 +198,7 @@ define("io.ox/core/extPatterns/links",
                 // add toggle unless multi-selection
                 var all = nav.children(),
                     lo = all.filter('[data-prio="lo"]'),
+                    stayOnTop = all.filter('[data-prio-mobile="none"]'),
                     isSmall = _.device('small');
 
                 if (!multiple && (isSmall || (all.length > 5 && lo.length > 1))) {
@@ -212,8 +215,17 @@ define("io.ox/core/extPatterns/links",
                                 var left = $(this).parent().position().left;
                                 $(this).next().attr('class', 'dropdown-menu' + (left < 100 ? '' : ' dropdown-right'));
                             }),
-                            $('<ul class="dropdown-menu dropdown-right" role="menu">').append(
-                                (isSmall ? all : lo).map(wrapAsListItem)
+                            $('<ul class="dropdown-menu dropdown-right" role="menu">').append((function () {
+                                if (isSmall) {
+                                    if (stayOnTop) {
+                                        return stayOnTop.map(wrapAsListItem);
+                                    } else {
+                                        return all.stayOnTop.map(wrapAsListItem);
+                                    }
+                                } else {
+                                    return lo.map(wrapAsListItem);
+                                }
+                            }())
                             )
                         )
                     );
@@ -235,10 +247,11 @@ define("io.ox/core/extPatterns/links",
             $parent = $('<div>').addClass('dropdown')
                 .css({ display: 'inline-block', zIndex: (z = z > 0 ? z - 1 : 11000) })
                 .appendTo(this),
+            label = options.label || baton.label || '###',
             $toggle = $('<a href="#" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
                 .data('context', baton.data)
-                .text(options.label || baton.label || '###')
                 .append(
+                    _.isString(label) ? $.txt(label) : label,
                     $('<span>').text(_.noI18n(' ')),
                     $('<b>').addClass('caret')
                 )

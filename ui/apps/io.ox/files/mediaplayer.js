@@ -45,6 +45,8 @@ define('io.ox/files/mediaplayer',
         win: null,
         mediaelement: null,
         currentFile: null,
+        currentVolume: 0.8,
+        isMuted: false,
         features: ['playpause', 'progress', 'current', 'volume'],
 
         container: $('<div class="abs mediaplayer_container" tabindex="-1">'),
@@ -182,7 +184,9 @@ define('io.ox/files/mediaplayer',
                 plugins: plugins,
                 pluginPath: 'apps/mediaelement/',
                 enableAutosize: false,
+                autosizeProgress: false,
                 timerRate: 250,
+                startVolume: self.currentVolume,
                 features: this.features,
                 pauseOtherPlayers: true,
                 keyActions: [
@@ -224,16 +228,30 @@ define('io.ox/files/mediaplayer',
                     }
                 ],
                 success: function (me, domObject) {
-
+                    if (self.isMuted) {
+                        me.setMuted(true);
+                    }
+                    me.setVolume(self.currentVolume);
+                    $('.mediaplayer_container .mejs-time-rail').css({
+                        width: ($(window).width() <= 700 ? '140px' : '330px')
+                    });
                     self.mediaelement = me;
                     me.addEventListener('ended', function () {
+                        self.currentVolume = me.volume;
+                        self.isMuted = me.muted;
                         self.select('next');
 
                     }, false);
-
+                    me.addEventListener('volumechange', function (e) {
+                        self.currentVolume = me.volume;
+                        self.isMuted = me.muted;
+                    }, false);
                     if (!_.browser.Firefox) {
                         me.addEventListener('canplay', function () {
-                            // Player is ready
+                            me.setVolume(self.currentVolume);
+                            if (self.isMuted) {
+                                me.setMuted(true);
+                            }
                             me.play();
                         }, false);
                         me.play();
@@ -272,8 +290,8 @@ define('io.ox/files/mediaplayer',
                 this.container.append(
                     $('<div id="io-ox-mediaplayer" class="atb mediaplayer_inner" tabindex="1">').append(
                         $('<div class="mediaplayer_buttons pull-right">').append(
-                            $('<button class="btn btn-inverse minimizemediaplayer" tabindex="1">').text(gt('Minimize')),
-                            $('<button class="btn btn-primary closemediaplayer" tabindex="1">')
+                            $('<button type="button" class="btn btn-inverse minimizemediaplayer" tabindex="1">').text(gt('Minimize')),
+                            $('<button type="button" class="btn btn-primary closemediaplayer" tabindex="1">')
                                 .text(gt('Close'))
                                 .one('click', $.proxy(this.close, this))
                         ),

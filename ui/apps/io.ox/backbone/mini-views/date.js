@@ -28,7 +28,8 @@ define('io.ox/backbone/mini-views/date',
             i = Math.min(from, to),
             $i = Math.max(from, to),
             d = new date.Local(0),
-            options = [];
+            options = [],
+            empty;
 
         for (; i <= $i; i++) {
             setter.call(d, i);
@@ -41,7 +42,9 @@ define('io.ox/backbone/mini-views/date',
         }
 
         // add empty option - do that after revert
-        options.unshift($('<option>').text(''));
+        empty = $('<option>').text('');
+        if (name === 'year') {empty.val('0000'); }
+        options.unshift(empty);
 
         // append
         return node.append(options);
@@ -56,20 +59,20 @@ define('io.ox/backbone/mini-views/date',
             var year = this.$el.find('.year').val(),
                 month = this.$el.find('.month').val(),
                 day = this.$el.find('.date').val();
-            if (year !== '' && month !== '' && day !== '') {
+            if (month !== '' && day !== '') {//year doesn't matter, it's always set
                 //check if date is invalid(like feb 30) and prevent month jump
-                var tempDate =  new date.Local(year, month, day),
+                var str = year + '-' + _.pad(parseInt(month, 10) + 1, 2) + '-' + _.pad(day, 2),
+                    tempDate = date.UTC.parse(str, 'yyyy-M-d'),
                     tempMonth = tempDate.getMonth();
                 if (tempMonth.toString() !== month) {
                     tempDate.setDate(0);//last valid day of previous month
                     //set dayfield to right day (needs to be done or an invalid date can be selected if model already has the corrected date)
                     this.$el.find('.date').val(tempDate.getDate());
                 }
-                this.model.set(this.name,
-                        date.Local.localTime(tempDate)
-                );
+                this.model.set(this.name, tempDate.getTime());
             } else {
                 this.model.set(this.name, null);
+                this.$el.find('.date').children().attr('disabled', false);//enable all
             }
         },
 
@@ -77,10 +80,34 @@ define('io.ox/backbone/mini-views/date',
             var value = this.model.get(this.name);
             // change boxes only for valid dates
             if (_.isNumber(value)) {
-                var d = new date.Local(date.Local.utc(value));
-                this.$el.find('.year').val(d.getYear());
+                var d = new date.UTC(value),
+                    year = d.getYear();
+                year = year.toString();
+                
+                if (year === '1') {//workaround because backend makes year 0 to year 1
+                    year = '0000';
+                } else if (year !== '0') {
+                    //if the year is not our dropdown we add it
+                    var yearValues = [];
+                    this.$el.find('.year option').each(function () {
+                        yearValues.push($(this).val());
+                        
+                    });
+                    
+                    if (!_.contains(yearValues, year)) {
+                        this.$el.find('.year').append($('<option>').val(year).text(year));
+                    }
+                }
+                this.$el.find('.year').val(year);
                 this.$el.find('.month').val(d.getMonth());
                 this.$el.find('.date').val(d.getDate());
+                //disable invalid dayfields
+                d.setMonth(d.getMonth() + 1);
+                d.setDate(0);
+                var validDays = d.getDate(),
+                    options = this.$el.find('.date').children().attr('disabled', false);
+                options = options.slice(validDays + 1, options.length);
+                options.attr('disabled', true);
             }
         },
 

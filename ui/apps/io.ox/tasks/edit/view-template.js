@@ -274,8 +274,12 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         id: 'participants_list',
         index: 1400,
         draw: function (baton) {
-            this.append(new pViews.UserContainer({collection: baton.model.getParticipants(),
-                                                  baton: baton}).render().$el);
+            this.append(
+                new pViews.UserContainer({
+                    collection: baton.model.getParticipants(),
+                    baton: baton
+                }).render().$el
+            );
         }
     });
 
@@ -293,7 +297,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                 node.append(
                     input = $('<div class="input-append span6">').append(
                         $('<input type="text" class="add-participant task-participant-input-field" tabindex="1">').attr("placeholder", gt("Add participant/resource")),
-                        $('<button class="btn" type="button" data-action="add" tabindex="1">')
+                        $('<button type="button" class="btn" data-action="add" tabindex="1">')
                             .append($('<i class="icon-plus">'))
                     ),
                     $('<div>').css('height', '220px') // default height of autocomplete popup, we do need expand the page to a height which can show the autocomplete popup

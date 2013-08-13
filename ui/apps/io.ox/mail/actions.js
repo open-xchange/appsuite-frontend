@@ -840,7 +840,7 @@ define('io.ox/mail/actions',
         requires: 'one',
         action: function (baton) {
             var data = baton.data;
-            require(['io.ox/core/tk/dialogs', 'io.ox/tasks/api', 'io.ox/tasks/util'], function (dialogs, taskApi, tasksUtil) {
+            require(['io.ox/core/tk/dialogs', 'io.ox/tasks/api', 'io.ox/tasks/util'], function (dialogs, taskAPI, tasksUtil) {
                 //create popup dialog
                 var popup = new dialogs.ModalDialog()
                     .addPrimaryButton('create', gt('Create reminder'))
@@ -884,7 +884,7 @@ define('io.ox/mail/actions',
                         //Calculate the right time
                         var dates = tasksUtil.computePopupTime(endDate, dateSelector.val());
 
-                        taskApi.create({title: titleInput.val(),
+                        taskAPI.create({title: titleInput.val(),
                             folder_id: coreConfig.get('folder/tasks'),
                             end_date: dates.endDate.getTime(),
                             start_date: dates.endDate.getTime(),

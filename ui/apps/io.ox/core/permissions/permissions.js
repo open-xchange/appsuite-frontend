@@ -26,6 +26,14 @@ define('io.ox/core/permissions/permissions',
 
     'use strict';
 
+    function performRender() {
+        this.render();
+    }
+
+    function performRemove() {
+        this.remove();
+    }
+
     var POINT = 'io.ox/core/permissions',
 
         folder_id,
@@ -49,6 +57,15 @@ define('io.ox/core/permissions/permissions',
         }),
 
         PermissionsView = Backbone.View.extend({
+            initialize: function () {
+            //TODO:switch to listenTo here, once backbone is up to date
+            //see [1](http://blog.rjzaworski.com/2013/01/why-listento-in-backbone/)
+                this.model.off('change', performRender);
+                this.model.on('change', performRender, this);
+
+                this.model.off('remove', performRemove, this);
+                this.model.on('remove', performRemove, this);
+            },
 
             className: "permission row-fluid",
 
@@ -80,13 +97,11 @@ define('io.ox/core/permissions/permissions',
                 link.text($el.text());
                 this.model.set('bits', newbits, {validate: true});
                 this.updateRole();
-                this.render();
             },
 
             applyRole: function (e) {
                 var node = $(e.target), bits = node.attr('data-value');
                 this.model.set('bits', parseInt(bits, 10), {validate: true});
-                this.render();
             },
 
             updateRole: function () {
@@ -174,6 +189,12 @@ define('io.ox/core/permissions/permissions',
                     baton.name = contactsUtil.getFullName(user);
                     baton.picture = contactsAPI.getPictureURLSync(user, { width: 64, height: 64, scaleType: 'cover' });
                     ext.point(POINT + '/entity').invoke('draw', self, baton);
+                    if (_.browser.Safari) {
+                        self.css('opacity', 0);
+                        _.defer(function () {
+                            self.css('opacity', 1);
+                        });
+                    }
                 });
             }
         }
@@ -366,7 +387,7 @@ define('io.ox/core/permissions/permissions',
 
                         var node =  $('<div class="autocomplete-controls input-append">').append(
                                 $('<input type="text" class="add-participant permissions-participant-input-field">'),
-                                $('<button class="btn" type="button" data-action="add">')
+                                $('<button type="button" class="btn" data-action="add">')
                                     .append($('<i class="icon-plus">'))
                             ),
                             autocomplete = new AddParticipantsView({ el: node });

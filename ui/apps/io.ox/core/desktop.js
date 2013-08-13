@@ -124,9 +124,11 @@ define("io.ox/core/desktop",
             // add folder management
             this.folder = (function () {
 
-                var folder = null, that, win = null, grid = null, type;
+                var folder = null, that, win = null, grid = null, type, initialized = $.Deferred();
 
                 that = {
+
+                    initialized: initialized.promise(),
 
                     unset: function () {
                         // unset
@@ -139,7 +141,6 @@ define("io.ox/core/desktop",
                         if (grid) {
                             grid.clear();
                         }
-
                     },
 
                     set: function (id) {
@@ -176,6 +177,10 @@ define("io.ox/core/desktop",
                                         self.trigger('folder:change', folder, data);
                                     }
                                     def.resolve(data, appchange);
+
+                                    if (initialized.state() !== 'resolved') {
+                                        initialized.resolve(folder, data);
+                                    }
                                 })
                                 .fail(def.reject);
                             });
@@ -339,7 +344,7 @@ define("io.ox/core/desktop",
 
             var deferred = $.when(),
                 self = this,
-                isDisabled = ox.manifests.disabled[this.getName() + '/main'] === true;
+                isDisabled = ox.manifests.isDisabled(this.getName() + '/main');
 
             // update hash
             if (this.get('name') !== _.url.hash('app')) {
@@ -863,7 +868,8 @@ define("io.ox/core/desktop",
                 var quitOnClose = false,
                     perspectives = {},
                     self = this,
-                    firstShow = true;
+                    firstShow = true,
+                    shown = $.Deferred();
 
                 this.updateToolbar = function () {
                     var folder = this.app && this.app.folder ? this.app.folder.get() : null,
@@ -912,10 +918,12 @@ define("io.ox/core/desktop",
                             // search area
                             this.search = $('<div class="window-search">'),
                             // default perspective
-                            this.main = $('<div class="abs window-content">').attr({ tabindex: -1 })
+                            this.main = $('<div class="abs window-content">')
                         );
                     }
                 });
+
+                this.shown = shown.promise();
 
                 this.show = function (cont) {
                     var appchange = false;
@@ -969,6 +977,7 @@ define("io.ox/core/desktop",
                             }
 
                             if (firstShow) {
+                                shown.resolve();
                                 self.trigger("show:initial"); // alias for open
                                 self.trigger("open");
                                 self.state.running = true;
@@ -1238,7 +1247,7 @@ define("io.ox/core/desktop",
                     var id = pers.name, node;
                     if (this.nodes[id] === undefined) {
                         this.nodes.body.append(
-                            node = $('<div class="abs window-content" tabindex="-1">').hide()
+                            node = $('<div class="abs window-content">').hide()
                         );
                         perspectives[id] = pers;
                         return this.nodes[id] = node;
@@ -1517,7 +1526,7 @@ define("io.ox/core/desktop",
                 buttonTimer = setTimeout(function () {
                     // add button to abort
                     if (!$blocker[0].firstChild) {
-                        var button = $('<button>').addClass('btn btn-primary').text(gt('Cancel')).fadeIn();
+                        var button = $('<button type="button" class="btn btn-primary">').text(gt('Cancel')).fadeIn();
                         button.on('click', function () {
                             def.reject(true);
                             clear(blockerTimer);

@@ -35,7 +35,26 @@
     &.wallpaper {
         .radial-gradient(@wallpaperColor1, @wallpaperColor2, @wallpaperColor3);
     }
+}
 
+#io-ox-offline {
+    position: absolute;
+    bottom: 0px;
+    width: 240px;
+    left: 50%;
+    margin-left: -120px;
+    height: 40px;
+    font-weight: bold;
+    line-height: 40px;
+    text-align: center;
+    color: #fff;
+    border: 1px solid #FF7000;
+    border-width: 1px 1px 0px 1px;
+    cursor: default;
+    z-index: 650000;
+    .box-shadow(0 0 20px 0 rgba(0, 0, 0, 0.30));
+    .border-radius(5px 5px 0px 0px);
+    .vertical-gradient(#FF7000, #CA0101);
 }
 
 /* scrollable for touch devices, esp. iOS */
@@ -181,17 +200,6 @@
         display: inline-block;
         -webkit-tap-highlight-color: transparent;
 
-        .badge {
-
-            background-color: @badgeBackground;
-            padding: 2px 9px;
-
-            &.badge-info {
-                background-color: @linkColor;
-            }
-
-        }
-
         & > a {
             color: @topbarLauncherColor;
             padding: 12px;
@@ -215,15 +223,10 @@
             & > a { color: @topbarLauncherColor-hover; background-color: @topbarLauncherBackgroundHover; }
         }
 
-        a:focus {
+        a:focus, a:active {
             outline: 0;
             color: @topbarLauncherColor-hover;
             background-color: #08c;
-        }
-
-        a:active {
-            color: @topbarLauncherColor-hover;
-            background-color: @topbarLauncherBackgroundHover;
         }
 
         &.upsell {
@@ -293,7 +296,6 @@
             -webkit-animation-name: launcherColours;
             -webkit-animation-timing-function: ease-in-out;
         }
-
     }
 
     .launcher-dropdown {
@@ -326,10 +328,9 @@
         li.active-app a {
             font-weight: bold;
         }
-
     }
 
-    i[class^="icon-"] {
+    i[class^="icon-"].launcher-icon {
         color: @topbarIconColor;
         font-size: 20px;
         text-decoration: none;
@@ -368,6 +369,56 @@
         }
     }
 
+    .launcher a.notifications-icon {
+
+        height: 40px;
+        display: inline-block;
+        padding: 0 12px;
+
+        .badge {
+            color: #aaa;
+            background-color: @notificationIconBackground;
+        }
+
+        .badge.active {
+            color: white;
+            background-color: @notificationIconBackgroundActive;
+        }
+
+        &:focus .badge, &:active .badge {
+            color: white;
+            background-color: darken(@linkColor, 10%);
+        }
+
+        .badge i {
+            /* avoid flicker */
+            width: 8px;
+            text-align: center;
+            display: inline-block;
+        }
+    }
+
+    .launcher.minimizedmediaplayer {
+
+        height: 40px;
+        display: inline-block;
+        padding: 0 12px;
+
+        &:focus {
+            i { color: white; }
+            background-color: @linkColor;
+            outline-style: none;
+        }
+
+        &.active {
+            color: white;
+            background-color: @topbarLauncherBackgroundHover;
+        }
+
+        &.active:hover, &.active:focus {
+            background-color: @topbarLauncherBackgroundHover;
+        }
+    }
 }
 
 /* empty desktop */
@@ -526,7 +577,6 @@
     z-index: 65500;
     box-shadow: 0px 0px 50px -1px rgba(0, 0, 0, 0.60);
     outline: 0;
-    word-break:break-all;
     .border-radius(8px);
     .transition(top 0.20s ease-out);
 
@@ -661,6 +711,13 @@
         width: 400px;
         height: 20px;
         margin-left: -200px;
+    }
+
+    @media (max-width: 480px), (max-device-width: 480px) {
+        .progress {
+            width: 150px;
+            margin-left: -75px;
+        }
     }
 
     .header {
@@ -1097,12 +1154,22 @@ a.button {
                 color: #888;
             }
         }
+
+        .grid-options.dropdown {
+            display:inline-block;
+            float:right;
+        }
     }
 
     .select-all {
         float: left;
-        margin-top: 5px;
         width: 30px;
+        height: 34px;
+        margin-top: 0;
+        margin-bottom: 0;
+        margin-left: -10px;
+        padding-top: 5px;
+        padding-left: 10px;
         display: none;
     }
 
@@ -1334,8 +1401,15 @@ a.button {
     padding: 30px 40px 30px 40px;
 }
 
+.attachment-list {
+    .dropdown {
+        margin-right: 1em;
+    }
+}
+
 a.attachment-link {
     color: @mailAttachmentLinkColor;
+    word-break: break-all;
 }
 
 a.attachment-link:hover {
@@ -1665,6 +1739,9 @@ nav.io-ox-inline-links + header {
         .box-shadow(10px 0px 50px -5px @shadowColor);
     }
 
+    .window-container-center > &.left {
+        left: @windowHeadWidth;
+    }
 }
 
 .io-ox-sidepopup-overlay {
@@ -2144,7 +2221,7 @@ input.nice-input {
             }
 
             .io-ox-fail {
-                background-color: rgba(0, 0, 0, 0.1);
+                background-color: rgba(0, 0, 0, 0.05);
                 padding: 1em;
             }
 
@@ -2566,6 +2643,12 @@ input.flat-input {
 @media (max-width: 480px), (max-device-width: 480px) {
     .default-content-padding {
         padding: 5px 10px 5px 10px;
+    }
+
+    #io-ox-topbar {
+        .launcher a.notifications-icon {
+            padding: 0 5px;
+        }
     }
     .app-bottom-toolbar {
         position: fixed;

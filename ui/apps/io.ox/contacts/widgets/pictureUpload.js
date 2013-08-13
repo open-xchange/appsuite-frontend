@@ -24,6 +24,8 @@ define('io.ox/contacts/widgets/pictureUpload',
 
             tagName: 'div',
 
+            className: 'picture-upload-view',
+
             modelEvents: {
                 'change:image1_url': 'displayImageURL'
             },
@@ -114,20 +116,17 @@ define('io.ox/contacts/widgets/pictureUpload',
                 }
 
                 this.$el.append(
-                    self.imgCon = $('<div class="picture-uploader thumbnail">')
-                        .append(
+                    self.imgCon = $('<div class="picture-uploader thumbnail">').append(
                         this.closeBtn = $('<div class="close">')
                             .html('&times;')
-                            .on('click', function (e) { self.resetImage(e); })[hasImage ? 'show' : 'hide']()
-                    ).append(
+                            .on('click', function (e) { self.resetImage(e); })[hasImage ? 'show' : 'hide'](),
                         this.addImgText = $('<div class="add-img-text">')
                             .append(
                                 $('<span>').text(gt('Click to upload image'))
                             )[hasImage ? 'hide' : 'show']()
                     ),
-                    $('<form>').css('margin', 0).append(
+                    $('<form>').append(
                         self.fileInput = $('<input type="file" name="file" accepts="image/*" tabindex="1">')
-                            .css({ height: '1px', width: '1px', cursor: 'pointer', opacity: 0 })
                             .on('change', function (e) {
                                 self.handleFileSelect(e, this);
                             })

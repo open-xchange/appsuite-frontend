@@ -97,7 +97,7 @@ define('io.ox/mail/statistics',
                             _(data).map(function (obj) {
                                 return $('<li>').append(
                                     $('<a href="#" class="halo-link">')
-                                    .data({ email1: obj[0] }).text(obj[0] + ' (' + obj[1] + ')')
+                                    .data({ email1: obj[0], side: 'right' }).text(obj[0] + ' (' + obj[1] + ')')
                                 );
                             })
                         )

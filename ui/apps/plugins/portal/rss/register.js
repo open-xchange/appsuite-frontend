@@ -21,7 +21,7 @@ define('plugins/portal/rss/register',
     'io.ox/rss/api',
     'io.ox/core/date',
     'io.ox/core/tk/dialogs',
-    'gettext!io.ox/portal'], function (ext, strings, accountApi, serviceApi, messageApi, keychain, rss, date, dialogs, gt) {
+    'gettext!io.ox/portal'], function (ext, strings, accountAPI, serviceAPI, messageAPI, keychain, rss, date, dialogs, gt) {
 
     'use strict';
 
@@ -31,7 +31,7 @@ define('plugins/portal/rss/register',
             return $.when();
         }
 
-        return accountApi.all('com.openexchange.messaging.rss').pipe(function (accounts) {
+        return accountAPI.all('com.openexchange.messaging.rss').pipe(function (accounts) {
             var index = 0;
             _(accounts).each(function (account) {
                 index += 100;
@@ -172,7 +172,7 @@ define('plugins/portal/rss/register',
             });
 
         dialog.on('cancel', function () {
-            if (model.has('candidate')) {
+            if (model.has('candidate') && _.isEmpty(model.attributes.props)) {
                 view.removeWidget();
             }
         });

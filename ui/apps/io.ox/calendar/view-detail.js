@@ -467,7 +467,8 @@ define("io.ox/calendar/view-detail",
     ext.point("io.ox/calendar/detail/attachments").extend(new attachments.AttachmentList({
         id: 'attachment-list',
         index: 200,
-        module: 1
+        module: 1,
+        selector: '.window-container.io-ox-calendar-window'
     }));
 
     function redraw(e, data) {

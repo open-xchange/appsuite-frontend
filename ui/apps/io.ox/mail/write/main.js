@@ -466,8 +466,28 @@ define('io.ox/mail/write/main',
             app.getEditor().setContent(content);
         };
 
+        app.getRecipients = function (id) {
+
+            // get raw list
+            var list = _(view.form.find('input[name=' + id + ']')).map(function (node) {
+                var recipient = mailUtil.parseRecipient($(node).val()),
+                    typesuffix = mailUtil.getChannel(recipient[1]) === 'email' ? '' : mailUtil.getChannelSuffixes().msisdn;
+                return ['"' + recipient[0] + '"', recipient[1], typesuffix];
+            });
+
+            return list;
+        };
+
+        app.getTo = function () {
+            return app.getRecipients('to');
+        };
+
         app.setTo = function (list) {
             view.addRecipients('to', list || []);
+        };
+
+        app.getCC = function () {
+            return app.getRecipients('cc');
         };
 
         app.setCC = function (list) {
@@ -475,6 +495,10 @@ define('io.ox/mail/write/main',
             if (list && list.length) {
                 view.showSection('cc', false);
             }
+        };
+
+        app.getBCC = function () {
+            return app.getRecipients('bcc');
         };
 
         app.setBCC = function (list) {
@@ -622,7 +646,7 @@ define('io.ox/mail/write/main',
             mail.initial = mail.initial || false;
 
             //config settings
-            mail.data.vcard = settings.get('appendVcard');
+            mail.data.vcard = mail.data.vcard || settings.get('appendVcard');
 
             // call setters
             var data = mail.data;
@@ -927,7 +951,7 @@ define('io.ox/mail/write/main',
                     return obj;
                 }, {}),
                 headers,
-                content,
+                attachments,
                 mail,
                 files = [],
                 parse = function (list) {
@@ -943,15 +967,15 @@ define('io.ox/mail/write/main',
 
             // get content
             if (editorMode === 'html') {
-                content = {
+                attachments = {
                     content: (app.getEditor() ? app.getEditor().getContent() : '')
                         // reverse img fix
                         .replace(/(<img[^>]+src=")(\/appsuite\/)?api\//g, '$1/ajax/')
                 };
                 //don’t send emoji images, but unicode characters
-                content.content = emoji.imageTagsToUnified(content.content);
+                attachments.content = emoji.imageTagsToUnified(attachments.content);
             } else {
-                content = {
+                attachments = {
                     content: (app.getEditor() ? app.getEditor().getContent() : ''),
                     raw: true
                         // .replace(/</g, '&lt;') // escape <
@@ -959,7 +983,12 @@ define('io.ox/mail/write/main',
                 };
             }
 
-            content.content_type = getContentType(editorMode);
+            // remove trailing white-space, line-breaks, and empty paragraphs
+            attachments.content = attachments.content.replace(
+                /(\s|&nbsp;|\0x20|<br\/?>|<p( class="io-ox-signature")>(&nbsp;|\s|<br\/?>)*<\/p>)*$/g, ''
+            );
+
+            attachments.content_type = getContentType(editorMode);
 
             // might fail
             try {
@@ -978,7 +1007,7 @@ define('io.ox/mail/write/main',
                 subject: data.subject + '',
                 priority: parseInt(data.priority, 10) || 3,
                 vcard: parseInt(data.vcard, 10) || 0,
-                attachments: [content],
+                attachments: [attachments],
                 nested_msgs: []
             };
             // add msgref?
@@ -1042,6 +1071,24 @@ define('io.ox/mail/write/main',
             if (convert && emoji.sendEncoding() !== 'unified') {
                 //convert to send encoding (NOOP, if target encoding is 'unified')
                 mail.data.attachments[0].content = convert(mail.data.attachments[0].content, mail.format);
+            }
+            function askForDraftSave() {
+                // show dialog
+                require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                    new dialogs.ModalDialog()
+                        .text(gt("Do you want to keep the draft after sending this mail?"))
+                        .addPrimaryButton("delete", gt('Delete the draft after sending.'))
+                        .addButton("save", gt('Keep the draft.'))
+                        .show()
+                        .done(function (action) {
+                            if (action === 'save') {
+                                mail.data.keepDraft = true;//temporary flag
+                                cont();
+                            } else {
+                                cont();
+                            }
+                        });
+                });
             }
 
             function cont() {
@@ -1131,7 +1178,11 @@ define('io.ox/mail/write/main',
                             })
                             .done(function (action) {
                                 if (action === 'send') {
-                                    cont();
+                                    if (mail.data.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {//ask if draftmail should be deleted after sending
+                                        askForDraftSave();
+                                    } else {
+                                        cont();
+                                    }
                                 } else {
                                     focus('subject');
                                     def.reject();
@@ -1141,6 +1192,8 @@ define('io.ox/mail/write/main',
                 }
 
 
+            } else if (mail.data.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {//ask if draftmail should be deleted after sending
+                askForDraftSave();
             } else {
                 cont();
             }
@@ -1152,12 +1205,15 @@ define('io.ox/mail/write/main',
 
             // get mail
             var mail = this.getMail(),
-                def = new $.Deferred();
+                def = new $.Deferred(),
+                old_vcard_flag;
 
             prepareMailForSending(mail);
 
             // send!
-            mail.data.sendtype = mailAPI.SENDTYPE.DRAFT;
+            if (mail.data.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
+                mail.data.sendtype = mailAPI.SENDTYPE.DRAFT;
+            }
 
             if (_(mail.data.flags).isUndefined()) {
                 mail.data.flags = mailAPI.FLAGS.DRAFT;
@@ -1167,6 +1223,7 @@ define('io.ox/mail/write/main',
 
             // never append vcard when saving as draft
             // backend will append vcard for every send operation (which save as draft is)
+            old_vcard_flag = mail.data.vcard;
             delete mail.data.vcard;
 
             mailAPI.send(mail.data, mail.files, view.form.find('.oldschool'))
@@ -1194,6 +1251,7 @@ define('io.ox/mail/write/main',
                     view.form.find('.section-item.file').remove();
                     $(_.initial(view.form.find(':input[name][type=file]'))).remove();
                     draftMail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
+                    draftMail.vcard = old_vcard_flag;
                     app.setMail({ data: draftMail, mode: mail.mode, initial: false, replaceBody: 'no', format: format});
                 });
             });

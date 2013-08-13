@@ -209,9 +209,12 @@ define('io.ox/preview/main',
         supports: ['txt', 'plain/text', 'asc', 'js', 'md'],
         draw: function (file) {
             var node = this;
-            $.ajax({ url: file.dataURL, dataType: 'text' }).done(function (text) {
-                // plain text preview
-                node.addClass('plaintext').text(_.noI18n(text));
+            require(['io.ox/mail/emoji/util', 'less!io.ox/preview/style.less'], function (emoji) {
+                $.ajax({ url: file.dataURL, dataType: 'text' }).done(function (text) {
+                    // plain text preview with emoji support
+                    text = emoji.processEmoji(text);
+                    node.addClass('preview-plaintext').html(text);
+                });
             });
         },
         omitClick: true

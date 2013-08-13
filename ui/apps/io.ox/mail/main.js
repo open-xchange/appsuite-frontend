@@ -373,24 +373,15 @@ define('io.ox/mail/main',
             index: 100,
             draw: function () {
                 this.prepend(
-                    $('<div>').addClass('grid-options dropdown').css({ display: 'inline-block', 'float': 'right' })
+                    $('<div class="grid-options dropdown">')
                     .append(
-                        $('<a>', {
-                            href: '#',
-                            tabindex: 1,
-                            'data-toggle': 'dropdown',
-                            role: 'menuitem',
-                            'aria-haspopup': true,
-                            'aria-label': gt('Sort options')
-                        })
+                        $('<a href="#" tabindex="1" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').attr('aria-label', gt('Sort options'))
                         .append(
                             $('<i class="icon-envelope">').css('marginRight', '0.5em').hide(),
                             $('<i class="icon-arrow-down">'), $('<i class="icon-arrow-up">')
                         )
                         .dropdown(),
-                        $('<ul>').addClass("dropdown-menu").attr({
-                            role: 'menu'
-                        })
+                        $('<ul class="dropdown-menu" role="menu">')
                         .on('click', 'a', { grid: grid }, hToolbarOptions)
                     )
                 );
@@ -577,8 +568,8 @@ define('io.ox/mail/main',
                     close(index, cid);
                 }
             }
-
-            grid.getContainer().on('mousedown', '.thread-size', function (e) {//use mousedown to prevent selection change
+            //use mousedown to prevent selection change
+            grid.getContainer().on('mousedown', '.thread-size, .touch-helper', function (e) {
                 e.preventDefault();//prevent selection change (needed on mobile);
                 var cell = $(this).closest('.vgrid-cell'),
                     index = parseInt(cell.attr('data-index'), 10) + 1,

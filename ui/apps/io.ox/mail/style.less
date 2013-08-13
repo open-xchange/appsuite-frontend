@@ -90,10 +90,10 @@
     &.unread i.icon-unread { display: inline-block; float:left; color: @linkColor; }
 
     /* answered */
-    &.answered i.icon-circle-arrow-left { display: inline-block; color: darken(@greenLight, 20%); float:left; }
+    &.answered i.icon-answered { display: inline-block; color: darken(@greenLight, 20%); float:left; }
 
     /* forward */
-    &.forwarded i.icon-circle-arrow-right { display: inline-block; color: #555; float:left;}
+    &.forwarded i.icon-forwarded { display: inline-block; color: #888; float:left;}
 
     &.unread .subject {
         font-weight: normal;
@@ -232,6 +232,30 @@
 .vgrid-cell .thread-summary-left { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .vgrid-cell .thread-summary-right { float: right; }
 
+
+/* vgrid touch helper */
+.io-ox-mail-window {
+    .vgrid-cell {
+        .touch-helper {
+            /*
+            a transparent div to enlarge the touchable area around the
+            thread-size badge - aka "can't touch this, dadada-dada-dada"
+            */
+            height: 40px;
+            width: 40px;
+            position: absolute;
+            background: transparent;
+            right: 7px;
+            top: 0;
+            height: 80%;
+            top: 10%;
+        }
+    }
+}
+
+
+
+
 /* Detail view */
 
 .rightside.mail-detail-pane {
@@ -338,7 +362,13 @@
     }
 
     .recipient-actions {
-        display:inline-block;
+        display: inline-block;
+        a.all-link {
+            text-decoration: none;
+        }
+        i.icon-group {
+            color: #aaa;
+        }
     }
 
     .alert {
@@ -438,7 +468,6 @@
 
     .priority {
         font-weight: bold;
-        font-size: 80%;
         vertical-align: top;
         white-space: nowrap;
         .high {
@@ -811,7 +840,7 @@ h4.mail-attachment-preview {
         }
         a.attachment-link {
             display:block;
-            word-break:break-all;
+            word-break: break-all;
         }
         div.dropdown.flag-dropdown.clear-title.flag { margin:0; }
 

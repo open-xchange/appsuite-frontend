@@ -190,6 +190,98 @@ define('io.ox/core/tk/attachments',
             }, options);
         }
 
+        /**
+         * gui widget collecting files user wants to upload
+         * @param {object} options
+         * @param {object} baton
+         */
+        function SimpleEditableFileList(options, baton) {
+            _.extend(this, {
+
+                init: function () {
+                    var self = this;
+                    this.oldMode = _.browser.IE < 10;
+                    this.files = [];
+                },
+
+                render: function () {
+                    var self = this,
+                        odd = true,
+                        row;
+                    self.$el.empty();
+                    _(this.files).each(function (file) {
+                        self.$el
+                            .addClass('io-ox-core-tk-attachment-list').append(self.renderFile(file));
+                    });
+                    return this;
+                },
+
+                renderFile: function (attachment) {
+                    var self = this,
+                        size, removeFile,
+                        $el = $('<div class="span6">').append(
+                            $('<div class="io-ox-core-tk-attachment file">').append(
+                                $('<i class="icon-paper-clip">'),
+                                $('<div class="row-1">').text(attachment.filename),
+                                $('<div class="row-2">').append(
+                                    size = $('<span class="filesize">').text(strings.fileSize(attachment.file_size))
+                                ),
+                                removeFile = $('<a href="#" class="remove" tabindex="1" title="Remove attachment">').append($('<i class="icon-trash">'))
+                            )
+                        );
+
+                    removeFile.on('click', function () { self.remove(attachment); });
+
+                    if (size.text() === "0 B") {
+                        size.text(" ");
+                    }
+
+                    return $el;
+                },
+
+                listChanged: function () {
+                    this.$el.empty();
+                    this.render();
+                },
+
+                get: function () {
+                    return [].concat(this.files);
+                },
+
+                clear: function () {
+                    this.files = [];
+                    this.listChanged();
+                },
+
+                add: function (file) {
+                    if (this.oldMode) {
+                        this.files.push({file: file.hiddenField, cid: counter++, filename: file.name, file_size: file.size});
+                    } else {
+                        this.files.push({file: file, cid: counter++, filename: file.name, file_size: file.size});
+                    }
+                    this.listChanged();
+                },
+
+                remove: function (attachment) {
+                    this.files = _.filter(this.files, function (att) {
+                        return att.cid !== attachment.cid;
+                    });
+                    //remove hidden input field from form
+                    if (this.oldMode) {
+                        attachment.file.remove();
+                    }
+                    this.listChanged();
+                }
+            }, options);
+
+            //use referenced placeholde
+            if (baton) {
+                baton.$el = this.$el = (baton.$el || $('<div>').addClass('row-fluid'));
+                baton.fileList = this;
+            }
+            this.init();
+        }
+
         function AttachmentList(options) {
             var self = this;
             _.extend(this, {
@@ -199,14 +291,14 @@ define('io.ox/core/tk/attachments',
                         baton = self.processArguments.apply(this, $.makeArray(arguments));
                     }
 
-                    var $node = $('<div>').appendTo(this);
+                    var $node = $('<div>').addClass('attachment-list').appendTo(this);
 
-                    function drawAttachment(attachment) {
-                        new links.DropdownLinks({
-                            label: attachment.filename,
+                    function drawAttachment(data, label) {
+                        return new links.DropdownLinks({
+                            label: label || data.filename,
                             classes: 'attachment-link',
                             ref: 'io.ox/core/tk/attachments/links'
-                        }).draw.call($node, attachment);
+                        }).draw.call($node, { data: data, options: options});
                     }
 
                     function redraw(e, obj) {
@@ -220,7 +312,11 @@ define('io.ox/core/tk/attachments',
                             folder: baton.data.folder || baton.data.folder_id
                         }).done(function (attachments) {
                             if (attachments.length) {
-                                _(attachments).each(drawAttachment);
+                                _(attachments).each(function (a, index) {
+                                    drawAttachment(a, _.noI18n(a.filename));
+                                });
+                                if (attachments.length > 1)
+                                    drawAttachment(attachments, gt('All attachments')).find('a').removeClass('attachment-link');
                             } else {
                                 $node.append(gt("None"));
                             }
@@ -239,6 +335,13 @@ define('io.ox/core/tk/attachments',
         }
 
         ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
+            id: 'slideshow',
+            index: 100,
+            label: gt('Slideshow'),
+            ref: 'io.ox/core/tk/attachment/actions/slideshow-attachment'
+        }));
+
+        ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
             id: 'preview',
             index: 100,
             label: gt('Preview'),
@@ -248,7 +351,7 @@ define('io.ox/core/tk/attachments',
         ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
             id: 'open',
             index: 150,
-            label: gt('Open in new tab'),
+            label: gt('Open in browser'),
             ref: 'io.ox/core/tk/attachment/actions/open-attachment'
         }));
 
@@ -257,6 +360,13 @@ define('io.ox/core/tk/attachments',
             index: 200,
             label: gt('Download'),
             ref: 'io.ox/core/tk/attachment/actions/download-attachment'
+        }));
+
+        ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
+            id: 'save',
+            index: 400,
+            label: gt('Save in file store'),
+            ref: 'io.ox/core/tk/attachment/actions/save-attachment'
         }));
 
         //attachment actions
@@ -279,11 +389,11 @@ define('io.ox/core/tk/attachments',
             multiple: function (list, baton) {
                 ox.load(['io.ox/core/tk/dialogs',
                          'io.ox/preview/main',
-                         'io.ox/core/api/attachment']).done(function (dialogs, p, attachmentApi) {
+                         'io.ox/core/api/attachment']).done(function (dialogs, p, attachmentAPI) {
                     //build Sidepopup
                     new dialogs.SidePopup().show(baton.e, function (popup) {
                         _(list).each(function (data, index) {
-                            data.dataURL = attachmentApi.getUrl(data, 'view');
+                            data.dataURL = attachmentAPI.getUrl(data, 'view');
                             var pre = new p.Preview(data, {
                                 width: popup.parent().width(),
                                 height: 'auto'
@@ -304,21 +414,63 @@ define('io.ox/core/tk/attachments',
             }
         });
 
-        new links.Action('io.ox/core/tk/attachment/actions/open-attachment', {
-            id: 'open',
-            requires: 'one',
-            action: function (baton) {
-                var url = attachmentAPI.getUrl(baton.data, 'view');
-                window.open(url);
+        new links.Action('io.ox/core/tk/attachment/actions/slideshow-attachment', {
+            id: 'slideshow',
+            requires: function (e) {
+                return e.collection.has('multiple') && _(e.context).reduce(function (memo, obj) {
+                    return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
+                }, false);
+            },
+            multiple: function (list, baton) {
+                require(['io.ox/files/carousel'], function (slideshow) {
+                    var files = _(list).map(function (file) {
+                        return {
+                            url: attachmentAPI.getUrl(file, 'open'),
+                            filename: file.filename
+                        };
+                    });
+                    slideshow.init({
+                        baton: {allIds: files},
+                        attachmentMode: false,
+                        selector: baton.options.selector
+                    });
+                });
             }
         });
 
+        new links.Action('io.ox/core/tk/attachment/actions/open-attachment', {
+            id: 'open',
+            requires: 'some',
+            multiple: function (list) {
+                _(list).each(function (data) {
+                    var url = attachmentAPI.getUrl(data, 'open');
+                    window.open(url);
+                });
+            }
+        });
+
+        //attachments api currently doesn't support zip download
         new links.Action('io.ox/core/tk/attachment/actions/download-attachment', {
             id: 'download',
             requires: 'one',
             action: function (baton) {
                 var url = attachmentAPI.getUrl(baton.data, 'download');
                 window.open(url);
+            }
+        });
+
+        new links.Action('io.ox/core/tk/attachment/actions/save-attachment', {
+            id: 'save',
+            capabilities: 'infostore',
+            requires: 'some',
+            multiple: function (list) {
+                //cannot be converted to multiple request because of backend bug (module overides params.module)
+                _(list).each(function (data) {
+                    attachmentAPI.save(data);
+                });
+                require(['io.ox/core/notifications'], function (notifications) {
+                    setTimeout(function () {notifications.yell('success', gt('Attachments have been saved!')); }, 300);
+                });
             }
         });
 
@@ -348,7 +500,10 @@ define('io.ox/core/tk/attachments',
                                 })
                         ),
                         $('<a>', {'data-dismiss': 'fileupload', tabindex: 1, href: '#'}).addClass('btn fileupload-exists').text(gt('Cancel')),
-                        (options.displayButton ? $('<button>', { 'data-action': 'upload', tabindex: 1 }).addClass('btn btn-primary').text(gt('Upload file')).hide() : '')
+                        (options.displayButton ?
+                            $('<button type="button" class="btn btn-primary" data-action="upload" tabindex="1">')
+                                .text(gt('Upload file')).hide() : ''
+                        )
                     )
                 )
 
@@ -363,6 +518,7 @@ define('io.ox/core/tk/attachments',
 
         return {
             EditableAttachmentList: EditableAttachmentList,
+            SimpleEditableFileList: SimpleEditableFileList,
             AttachmentList: AttachmentList,
             fileUploadWidget: fileUploadWidget
         };

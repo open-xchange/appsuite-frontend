@@ -458,12 +458,6 @@ define('io.ox/mail/view-detail',
                     var processTextNode = function () {
                         if (this.nodeType === 3) {
                             var node = $(this), text = this.nodeValue, length = text.length, m, n;
-                            // split long character sequences for better wrapping
-                            if (length >= 20 && /\S{20}/.test(text)) {
-                                node.replaceWith(
-                                    $('<span>').html(coreUtil.breakableHTML(text))
-                                );
-                            }
                             // some replacements
                             if ((m = text.match(regDocument)) && m.length) {
                                 // link to document
@@ -540,6 +534,12 @@ define('io.ox/mail/view-detail',
                                         .contents()
                                     );
                                 }
+                            }
+                            else if (length >= 20 && /\S{20}/.test(text)) {
+                                // split long character sequences for better wrapping
+                                node.replaceWith(
+                                    $('<span>').html(coreUtil.breakableHTML(text))
+                                );
                             }
                         }
                     };
@@ -972,6 +972,9 @@ define('io.ox/mail/view-detail',
         YELLOW:     gt('Yellow')
     };
 
+    var colorLabelIconEmpty = 'icon-bookmark-empty',
+        colorLabelIcon = 'icon-bookmark';
+
     function changeLabel(e) {
 
         e.preventDefault();
@@ -980,7 +983,7 @@ define('io.ox/mail/view-detail',
             className = 'flag-dropdown-icon ';
 
         // set proper icon class
-        className += color === 0 ? 'icon-flag-alt' : 'icon-flag';
+        className += color === 0 ? colorLabelIconEmpty : colorLabelIcon;
         className += ' flag_' + color;
 
         node.find('.flag-dropdown-icon').attr('class', className);
@@ -1000,7 +1003,7 @@ define('io.ox/mail/view-detail',
                     // box
                     $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" tabindex="1">').append(
                         $('<i class="flag-dropdown-icon">')
-                            .addClass(color === 0 ? 'icon-flag-alt' : 'icon-flag')
+                            .addClass(color === 0 ? colorLabelIconEmpty : colorLabelIcon)
                             .addClass('flag_' + color)
                     ),
                     // drop down
@@ -1107,7 +1110,7 @@ define('io.ox/mail/view-detail',
                 if (_.device('!smartphone')) {
                     if (!(!showCC && showTO && data.to[0][1] === 'undisclosed-recipients:;')) {
                         var dd = $('<div class="recipient-actions">');
-                        drawAllDropDown(dd, gt('All recipients'), data);
+                        drawAllDropDown(dd, $('<i class="icon-group">'), data);
                         dd.appendTo(container);
                     }
                 }
@@ -1303,7 +1306,7 @@ define('io.ox/mail/view-detail',
                         $('<div class="well">').append(
                             $('<div class="invitation">').text(gt('Someone shared a file with you')),
                             $('<div class="subscription-actions">').append(
-                                $('<button class="btn" data-action="show">').text(gt('Show file'))
+                                $('<button type="button" class="btn" data-action="show">').text(gt('Show file'))
                             )
                         )
                     );
@@ -1312,9 +1315,9 @@ define('io.ox/mail/view-detail',
                         $('<div class="well">').append(
                             $('<div class="invitation">').text(gt('Someone shared a folder with you. Would you like to subscribe those %1$s?', label)),
                             $('<div class="subscription-actions">').append(
-                                $('<button class="btn" data-action="show">').text(gt('Show original publication')),
+                                $('<button type="button" class="btn" data-action="show">').text(gt('Show original publication')),
                                 "&nbsp;",
-                                $('<button class="btn btn-primary" data-action="subscribe">').text(gt('Subscribe'))
+                                $('<button type="button" class="btn btn-primary" data-action="subscribe">').text(gt('Subscribe'))
                             )
                         )
                     );
