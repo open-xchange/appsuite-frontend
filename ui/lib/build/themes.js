@@ -20,13 +20,19 @@ var _ = require('../underscore');
 
 // themes
 
+var coreDir = process.env.coreDir || utils.builddir;
+var oldImporter = less.Parser.importer;
+less.Parser.importer = function (file, paths, callback, env) {
+    paths = !paths.length ? ['.', coreDir] :
+        paths.slice(0, -2).concat([path.join(coreDir, paths[0])]);
+    return oldImporter.call(this, file, paths, callback, env);
+};
+
 desc('Precompiles LessCSS files for every theme');
 utils.topLevelTask('update-themes', []);
 
 if (!utils.envBoolean('skipLess')) compileLess();
 function compileLess() {
-
-    var coreDir = process.env.coreDir || utils.builddir;
 
     function core(file) { return path.join(coreDir, file).replace(/\\/g, '/'); }
 
@@ -53,7 +59,6 @@ function compileLess() {
              defsInCore ? core(defs) : defs, srcInCore ? core(src) : src],
             function () {
                 new less.Parser({
-                    paths: ['.', coreDir],
                     relativeUrls: true
                 }).parse('@import "apps/themes/definitions.less";\n' +
                          '@import "' + defs.replace(/\\/g, '/') + '";\n' +
