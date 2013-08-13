@@ -31,32 +31,8 @@ define('io.ox/keychain/secretRecoveryDialog', ['io.ox/keychain/api', 'io.ox/core
                 })
                 .addPrimaryButton('migrate', gt('Recover'))
                 .addButton('cancel', gt('Cancel'))
-                .addAlternativeButton('cleanUp', gt('Delete all accounts'), 'cleanup', { classes: 'btn-danger'})
                 .on('cancel', function () {
                     this.getContentNode().find('input').val('');
-                })
-                .on('cleanUp', function () {
-                    var self = this.busy(), def = $.Deferred();
-                    // use native confirm dialog
-                    if (window.confirm(gt('Are you sure?'))) {
-                        api.cleanUpIrrecoverableItems().then(
-                            function () {
-                                self.getContentNode().find('input').val('');
-                                self.close();
-                                def.resolve();
-                            },
-                            function () {
-                                self.idle();
-                                self.getContentNode().find('input').focus();
-                                def.reject();
-                            }
-                        );
-                    } else {
-                        self.idle();
-                        self.getContentNode().find('input').focus();
-                        def.reject();
-                    }
-                    return def;
                 })
                 .on('migrate', function () {
                     var self = this.busy();
