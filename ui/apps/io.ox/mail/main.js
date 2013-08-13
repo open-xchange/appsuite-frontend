@@ -255,7 +255,7 @@ define('io.ox/mail/main',
             if (grid.prop('sort') === 'thread' && !isOn) {
                 grid.prop('sort', '610');
             } //jump back only if thread was the original setting
-            else if (grid.prop('sort') === '610' && type === 'folder' && isOn && settings.get('vgrid/sort', 'thread') === 'thread') {
+            else if (grid.prop('sort') === '610' && type === 'folder' && isOn && sortSettings.sort === 'thread') {
                 grid.prop('sort', 'thread');
             }
 
