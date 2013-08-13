@@ -138,6 +138,8 @@ define('io.ox/office/tk/control/combofield',
             case KeyCodes.ESCAPE:
                 if (keydown && self.isMenuVisible()) {
                     self.hideMenu();
+                    // Bug 28215: IE needs explicit selection again, otherwise text cursor is hidden
+                    Utils.setTextFieldSelection(self.getTextFieldNode(), self.getTextFieldNode().val().length);
                     // let the Group base class not trigger the 'group:cancel' event
                     event.preventDefault();
                 }
