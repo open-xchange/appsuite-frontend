@@ -814,7 +814,7 @@ define('io.ox/core/api/folder',
                 // contact?
                 if (data.module === 'contacts') return true;
                 // files?
-                return data.module === 'files' && this.can('create', data) && rights !== 1 && rights !== 4;
+                return data.module === 'infostore' && this.can('create', data) && rights !== 1 && rights !== 4;
             case 'subscribe':
                 // check folder capability
                 if (_(data.supported_capabilities).indexOf('subscription') === -1) return false;
