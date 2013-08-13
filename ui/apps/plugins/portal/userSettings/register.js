@@ -18,29 +18,34 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
 
     function changeUserData(e) {
 
-        require(['io.ox/core/tk/dialogs', 'io.ox/core/settings/user'], function (dialogs, userEdit) {
+        require(["io.ox/core/tk/dialogs", "io.ox/core/settings/user"], function (dialogs, users) {
+            var usermodel,
+                dialog = new dialogs.ModalDialog({
+                    top: "40px",
+                    width: 900,
+                    center: false,
+                    maximize: true
+                })
+                .addPrimaryButton("save", gt('Save'))
+                .addButton('discard', gt("Discard"));
 
-            var popup = new dialogs.SidePopup({ easyOut: true, saveOnClose: true}),
-                $node = $('<div>'),
-                userModel;
+            var $node = dialog.getContentNode();
 
-            userEdit.editCurrentUser($node).done(function (user) {
-                userModel = user;//needed because otherwise user is undefined on popup close
-                $node.addClass('settings-detail-pane').one('save', function () {//popup triggers this only for nodes with this class
-                    userModel.save().done(function () {
-                        require("io.ox/core/notifications").yell("success", gt("Your data has been saved"));
-                    });
-                });
+            users.editCurrentUser($node).done(function (model) {
+                usermodel = model;
             }).fail(function () {
                 $node.append(
                     $.fail(gt("Couldn't load your contact data."), function () {
-                        userEdit.editCurrentUser($node);
+                        users.editCurrentUser($node).done(function () {
+                            $node.find('[data-action="discard"]').hide();
+                        });
                     })
                 );
             });
-
-            popup.show(e, function (pane) {
-                pane.append($node);
+            dialog.show().done(function (action) {
+                if (action === 'save') {
+                    usermodel.save();
+                }
             });
         });
     }
