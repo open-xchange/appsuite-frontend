@@ -705,6 +705,7 @@ define('io.ox/office/framework/view/baseview',
          */
         this.leaveBusy = function () {
             app.getWindow().idle();
+            this.grabFocus();
             return this;
         };
 
