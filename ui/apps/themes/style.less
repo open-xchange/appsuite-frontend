@@ -214,13 +214,18 @@
     .launcher {
 
         max-width: 10em;
-        .ellipsis;
         cursor: pointer;
+        .ellipsis();
 
-        &.hover {
+        // IE10 needs this :link class otherwise :active is not removed
+        a:link {
+            color: @topbarLauncherColor;
+            background-color: transparent;
+        }
+
+        a:hover {
             color: @topbarLauncherColor-hover;
             background-color: @topbarLauncherBackgroundHover;
-            & > a { color: @topbarLauncherColor-hover; background-color: @topbarLauncherBackgroundHover; }
         }
 
         a:focus, a:active {
