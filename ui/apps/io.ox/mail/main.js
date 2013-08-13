@@ -227,14 +227,16 @@ define('io.ox/mail/main',
         });
 
         //get sorting settings with fallback for extpoint
-        var sortSettings = {};
-        sortSettings.sort = options.sort || settings.get('vgrid/sort', 'thread');
-        sortSettings.order = options.desc || settings.get('vgrid/order', 'desc');
-        sortSettings.unread = options.unread || settings.get('unread', false);
+        var sortSettings = {
+            sort: options.sort || settings.get('vgrid/sort', 'thread'),
+            order: options.desc || settings.get('vgrid/order', 'desc'),
+            unread: options.unread || settings.get('unread', false)
+        };
 
         //set to default sort
         grid.on('beforechange:prop:folder', function () {
-            grid.prop('sort', sortSettings.sort)
+            var invalid = sortSettings.sort === 'thread' && settings.get('threadView') === 'off';
+            grid.prop('sort', invalid ? '610' : sortSettings.sort)
                 .prop('order', sortSettings.order)
                 .prop('unread', sortSettings.unread);
         });
