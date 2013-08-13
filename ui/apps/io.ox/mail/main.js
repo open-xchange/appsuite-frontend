@@ -232,11 +232,6 @@ define('io.ox/mail/main',
         sortSettings.order = options.desc || settings.get('vgrid/order', 'desc');
         sortSettings.unread = options.unread || settings.get('unread', false);
 
-        //check if folder actually supports threadview
-        if (sortSettings.sort === 'thread' && options.threadView === false) {
-            sortSettings.sort = '610';
-        }
-
         //set to default sort
         grid.on('beforechange:prop:folder', function () {
             grid.prop('sort', sortSettings.sort)
