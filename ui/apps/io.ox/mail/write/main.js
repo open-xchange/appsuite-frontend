@@ -1211,7 +1211,9 @@ define('io.ox/mail/write/main',
             prepareMailForSending(mail);
 
             // send!
-            mail.data.sendtype = mailAPI.SENDTYPE.DRAFT;
+            if (mail.data.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
+                mail.data.sendtype = mailAPI.SENDTYPE.DRAFT;
+            }
 
             if (_(mail.data.flags).isUndefined()) {
                 mail.data.flags = mailAPI.FLAGS.DRAFT;

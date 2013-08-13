@@ -182,6 +182,15 @@ define.async('io.ox/office/tk/utils',
     Utils.RETINA = _.device('retina');
 
     /**
+     * A Boolean flag specifying whether the browser is running on the Android
+     * operating system. This weak test replaces the broken '_.browser.Android'
+     * test, see bug 28239.
+     *
+     * @constant
+     */
+    Utils.ANDROID = window.navigator.userAgent.toLowerCase().indexOf('android') > -1;
+
+    /**
      * A Boolean flag specifying whether the Internet Explorer 9 is running.
      *
      * @constant
@@ -2928,9 +2937,17 @@ define.async('io.ox/office/tk/utils',
 */
 
     // global focus log
-//    $(document).on('focusin focusout', function (event) {
-//        Utils.log(event.type + ': ' + event.target.nodeName + '.' + (event.target.className || '').replace(/ /g, '.'));
-//    });
+/*
+    (function () {
+        function getNodeName(node) {
+            var id = node.id || '', classes = node.className || '';
+            return node.nodeName + (id ? ('#' + id) : '') + (classes ? ('.' + classes.replace(/ +/g, '.')) : '');
+        }
+        $(document).on('focusin focusout', function (event) {
+            Utils.log(event.type + ': ' + getNodeName(event.target));
+        });
+    }());
+*/
 
     // deferred initialization of class members according to current language
     gettext.language.done(function (language) {

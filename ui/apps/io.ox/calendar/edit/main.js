@@ -239,14 +239,7 @@ define('io.ox/calendar/edit/main',
                             self.considerSaved = false;
                         });
 
-                        var node = $(self.getWindow().nodes.main[0]);
-
-                        //FIXME: resolve workaround for firefox (bug 27919)
-                        if (_.browser.Firefox) {
-                            node.removeAttr('tabindex');
-                        }
-
-                        node.append(self.view.render().el);
+                        $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                         self.getWindow().show(_.bind(self.onShowWindow, self));
                     });
                 }

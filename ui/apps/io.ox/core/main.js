@@ -118,12 +118,12 @@ define('io.ox/core/main',
     gt.pgettext('app', 'Conversations');
 
     var tabManager = _.debounce(function () {
-
         var items = launchers.children('.launcher'),
-            launcherDropDownIcon = $('.launcher-dropdown', topbar);
+            launcherDropDownIcon = $('.launcher-dropdown', topbar),
+            forceDesktopLaunchers = settings.get('forceDesktopLaunchers', false);
 
         // we don't show any launcher in top-bar on small devices
-        if (_.device('small')) {
+        if (_.device('small') && !forceDesktopLaunchers) {
             items.hide();
             launcherDropDownIcon.show();
             return;
@@ -167,6 +167,7 @@ define('io.ox/core/main',
             }
         }
         $('li', launcherDropdown).hide();
+
         if (hidden > 0) {
             launcherDropDownIcon.show();
             for (i = hidden; i > 0; i--) {
@@ -509,7 +510,8 @@ define('io.ox/core/main',
         ox.ui.apps.on('launch resume', function (model, collection, e) {
             // mark last active app
             if (_.device('small')) {
-                launchers.hide();
+                // does weird things...disabling for the moment
+                //launchers.hide();
             }
             launchers.children().removeClass('active-app')
                 .filter('[data-app-guid="' + model.guid + '"]').addClass('active-app');

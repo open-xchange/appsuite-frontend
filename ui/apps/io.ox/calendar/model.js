@@ -97,6 +97,12 @@ define('io.ox/calendar/model',
         getUpdatedAttributes: function (model) {
             var attributesToSave = model.changedSinceLoading();
             attributesToSave.id = model.id;
+
+            if (model.get('recurrence_type') > 0) {
+                attributesToSave.start_date = model.get('start_date');
+                attributesToSave.end_date = model.get('end_date');
+            }
+
             if (!attributesToSave.folder) {
                 attributesToSave.folder = model.get('folder') || model.get('folder_id');
             }

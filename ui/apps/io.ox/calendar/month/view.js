@@ -184,19 +184,20 @@ define('io.ox/calendar/month/view',
                 if (util.getConfirmationStatus(model.attributes, myself) !== 2 || settings.get('showDeclinedAppointments', false)) {
 
                     var startTSUTC = Math.max(model.get('start_date'), this.weekStart),
-                        endTSUTC = Math.min(model.get('end_date'), this.weekEnd) - 1;
+                        endTSUTC = Math.min(model.get('end_date'), this.weekEnd) - 1,
+                        maxCount = 7;
 
                     // fix full-time UTC timestamps
                     if (model.get('full_time')) {
                         startTSUTC = date.Local.utc(startTSUTC);
                         endTSUTC = date.Local.utc(endTSUTC);
+                        maxCount = 0;
                     }
 
                     var startDate = new date.Local(startTSUTC),
                         endDate = new date.Local(endTSUTC),
                         start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime(),
-                        end = new date.Local(endDate.getYear(), endDate.getMonth(), endDate.getDate()).getTime(),
-                        maxCount = 7;
+                        end = new date.Local(endDate.getYear(), endDate.getMonth(), endDate.getDate()).getTime();
 
                     // draw across multiple days
                     while (maxCount >= 0) {
