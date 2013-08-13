@@ -40,5 +40,6 @@ define('io.ox/core/login-i18n', ['gettext!io.ox/core/login'], function (gt) {
         gt('Unsupported Preview - Certain functions disabled and stability ' +
            'not assured until general release later this year');
         gt('Offline mode');
+        gt('Your browser\'s cookie functionality is disabled. Please turn it on.');
     }
 });

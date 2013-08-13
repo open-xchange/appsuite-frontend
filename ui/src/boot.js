@@ -877,6 +877,13 @@ $(window).load(function () {
                             .add($.txt(gt('Get the latest version from the ')))
                             .add($('<a href="http://play.google.com/store/apps/details?id=com.android.chrome">Play Store</>'));
                     });
+                } else {
+                    // cookie check (else clause because we don't want to show multiple warnings; plus this is an edge case)
+                    _.setCookie('test', 'cookie');
+                    if (_.getCookie('test') !== 'cookie') {
+                        feedback('info', gt('Your browser\'s cookie functionality is disabled. Please turn it on.'));
+                    }
+                    _.setCookie('test', null);
                 }
 
                 // show login dialog
