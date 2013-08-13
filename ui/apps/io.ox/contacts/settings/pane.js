@@ -19,34 +19,108 @@ define('io.ox/contacts/settings/pane',
 
     'use strict';
 
-    var contactsSettings =  settings.createModel(contactsSettingsModel),
-        contactsSettingsView;
+    var POINT = 'io.ox/contacts/settings/detail', pane;
 
-    var ContactsSettingsView = Backbone.View.extend({
-        tagName: "div",
-        render: function () {
-            this.$el.append(
-                $('<div class="clear-title">').text(gt.pgettext('app', 'Address Book'))
+    ext.point(POINT).extend({
+        draw: function () {
+            var self = this;
+            pane = $('<div class="io-ox-contacts-settings">');
+            self.append(pane);
+            ext.point(POINT + '/pane').invoke('draw', pane);
+        }
+    });
+
+    ext.point(POINT + '/pane').extend({
+        index: 100,
+        id: 'header',
+        draw: function () {
+            this.append(
+                $('<h1 class="no-margin">').text(gt('Address Book'))
             );
-            return this;
         }
     });
 
-    ext.point('io.ox/contacts/settings/detail').extend({
+    ext.point(POINT + '/pane').extend({
         index: 200,
-        id: 'contactssettings',
-        draw: function (data) {
+        id: 'displaynames',
+        draw: function () {
+            var preferences = {
+                    'auto': gt('Language-specific default'),
+                    'firstname lastname': gt('First name Last name'),
+                    'lastname, firstname': gt('Last name, First name')
+                },
+                preference = settings.get('fullNameFormat', 'auto'),
+                buildInputRadio = function (list, selected) {
+                    return _.pairs(list).map(function (option) {
+                        var o = $('<input type="radio" name="fullNameFormat">').val(option[0]);
+                        if (selected === option[0]) o.attr('checked', 'checked');
+                        return $('<label class="radio">').text(option[1]).append(o);
+                    });
+                };
 
-            contactsSettingsView = new ContactsSettingsView({model: contactsSettings});
-            var holder = $('<div>').css('max-width', '800px');
-            this.append(holder.append(
-                contactsSettingsView.render().el
-            ));
-        },
-
-        save: function () {
-            contactsSettings.save();
+            this.append(
+                $('<div class="settings sectiondelimiter">'),
+                $('<div class="control-group">').append(
+                    $('<label for="displayformat" class="control-label">').text(gt('Display of names')),
+                    $('<div class="controls">').append(
+                        buildInputRadio(preferences, preference)
+                    ).on('click', 'input', function (e) {
+                        settings.set('fullNameFormat', this.value).save();
+                    })
+                )
+            );
         }
     });
 
+    ext.point(POINT + '/pane').extend({
+        index: 300,
+        id: 'myaccount',
+        draw: function () {
+            var self = this,
+                usermodel,
+                button = $('<button type="button" class="btn btn-primary" data-action="add">')
+                    .text(gt('My contact data'));
+
+            button.on('click', function () {
+                require(["io.ox/core/tk/dialogs", "io.ox/core/settings/user"], function (dialogs, users) {
+                    var dialog = new dialogs.ModalDialog({
+                            top: "40px",
+                            width: 900,
+                            center: false,
+                            maximize: true
+                        })
+                        .addPrimaryButton("save", gt('Save'))
+                        .addButton('discard', gt("Discard"));
+
+                    var $node = dialog.getContentNode();
+
+                    users.editCurrentUser($node).done(function (model) {
+                        usermodel = model;
+                    }).fail(function () {
+                        $node.append(
+                            $.fail(gt("Couldn't load your contact data."), function () {
+                                users.editCurrentUser($node).done(function () {
+                                    $node.find('[data-action="discard"]').hide();
+                                });
+                            })
+                        );
+                    });
+                    dialog.show().done(function (action) {
+                        if (action === 'save') {
+                            usermodel.save();
+                        }
+                    });
+                });
+            });
+
+            this.append(
+                $('<div class="settings sectiondelimiter">'),
+                $('<div class="section">').append(
+                    $('<div id="controls">').append(
+                        $('<div class="btn-group pull-left">').append(button)
+                    )
+                )
+            );
+        }
+    });
 });

@@ -763,7 +763,7 @@ define('io.ox/calendar/week/view',
                         fulltimeCount++;
                         var app = this.renderAppointment(model),
                             fulltimePos = (model.get('start_date') - this.startDate.getDays() * date.DAY) / date.DAY,
-                            fulltimeWidth = (model.get('end_date') - model.get('start_date')) / date.DAY + Math.min(0, fulltimePos);
+                            fulltimeWidth = Math.max(((model.get('end_date') - model.get('start_date')) / date.DAY + Math.min(0, fulltimePos)), 1);
                         // loop over all column positions
                         for (var row = 0; row < fulltimeColPos.length; row++) {
                             if  (fulltimeColPos[row] <= model.get('start_date')) {

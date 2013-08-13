@@ -181,11 +181,7 @@ define('io.ox/core/main',
         var node = $('<li class="launcher">');
 
         if (fn) {
-            node.hover(
-                function () { if (!Modernizr.touch) { $(this).addClass('hover'); } },
-                function () { if (!Modernizr.touch) { $(this).removeClass('hover'); } }
-            )
-            .on('click', function (e) {
+            node.on('click', function (e) {
                 e.preventDefault();
                 var self = $(this), content;
                 // set fixed width, hide label, be busy

@@ -644,7 +644,7 @@ define('io.ox/mail/actions',
         },
         multiple: function (data) {
             var url;
-            if (_(data).first().msgref) {
+            if (_(data).first().msgref && _.isObject(_(data).first().parent)) {
                 //using msgref reference if previewing during compose (forward previewed mail as attachment)
                 url = api.getUrl(data, 'eml:reference');
             } else if (!_.isObject(_(data).first().parent)) {

@@ -11,7 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/contacts/util', ['io.ox/core/util', 'gettext!io.ox/contacts'], function (util, gt) {
+define('io.ox/contacts/util',
+    ['io.ox/core/util',
+     'settings!io.ox/contacts',
+     'gettext!io.ox/contacts'], function (util, settings, gt) {
 
     'use strict';
 
@@ -70,24 +73,35 @@ define('io.ox/contacts/util', ['io.ox/core/util', 'gettext!io.ox/contacts'], fun
         getFullNameFormat: function (obj) {
             // combine title, last_name, and first_name
             if (obj.last_name && obj.first_name) {
-                var title = getTitle(obj.title);
-                return title ? {
-                    format:
+
+                var title = getTitle(obj.title),
+                    preference = settings.get('fullNameFormat', 'auto'),
+                    format,
+                    params = [_.noI18n(obj.first_name), _.noI18n(obj.last_name)];
+
+                if (title) params.push(_.noI18n(title));
+
+                if (preference === 'firstname lastname') {
+                    format = title ? '%3$s %1$s %2$s' : '%1$s %2$s';
+                }
+                else if (preference === 'lastname, firstname') {
+                    format = title ? '%3$s %2$s, %1$s' : '%2$s, %1$s';
+                }
+                else {
+                    // auto/fallback
+                    format = title ?
                         //#. Name with title
                         //#. %1$s is the first name
                         //#. %2$s is the last name
                         //#. %3$s is the title
-                        gt('%3$s %2$s, %1$s'),
-                    params: [_.noI18n(obj.first_name), _.noI18n(obj.last_name),
-                             _.noI18n(title)]
-                } : {
-                    format:
+                        gt('%3$s %2$s, %1$s') :
                         //#. Name without title
                         //#. %1$s is the first name
                         //#. %2$s is the last name
-                        gt('%2$s, %1$s'),
-                    params: [_.noI18n(obj.first_name), _.noI18n(obj.last_name)]
-                };
+                        gt('%2$s, %1$s');
+                }
+
+                return { format: format, params: params };
             }
 
             // we need last_name and first_name ahead of display_name,

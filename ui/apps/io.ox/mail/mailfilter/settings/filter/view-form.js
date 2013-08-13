@@ -175,7 +175,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
             onSave: function () {
                 var self = this;
-                this.model.save().then(self.dialog.close, self.dialog.idle);
+                this.model.save().then(function (id) {
+                    if (id) {
+                        self.model.set('id', id);
+                        self.options.listView.collection.add(self.model);
+                    }
+                    self.dialog.close();
+                }, self.dialog.idle);
             },
 
             onChangeValueExtern: function (e) {
