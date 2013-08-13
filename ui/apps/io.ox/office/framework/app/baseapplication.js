@@ -128,12 +128,14 @@ define('io.ox/office/framework/app/baseapplication',
      * @param {Object} [options]
      *  A map of options to control the behavior of the application. The
      *  following options are supported:
-     *  @param {Function} [options.downloadHandler]
-     *      A function that will be called before the document will be
-     *      downloaded. Will be called in the context of this application. May
-     *      return a Deferred object. In this case, the application will wait
-     *      until this Deferred object has been resolved or rejected. In the
-     *      latter case, the download will be aborted.
+     *  @param {Function} [options.flushHandler]
+     *      A function that will be called before the document will be accessed
+     *      at its source location, e.g. before downloading it, printing it, or
+     *      sending it as e-mail. Will be called in the context of this
+     *      application. May return a Deferred object. In this case, the
+     *      application will wait until this Deferred object has been resolved
+     *      or rejected. In the latter case, all subsequent actions will be
+     *      skipped.
      */
     function BaseApplication(ModelClass, ViewClass, ControllerClass, importHandler, appOptions, launchOptions, options) {
 
@@ -143,10 +145,7 @@ define('io.ox/office/framework/app/baseapplication',
             // file descriptor of the document edited by this application
             file = Utils.getObjectOption(launchOptions, 'file', null),
 
-            // callback before downloading the document
-            downloadHandler = Utils.getFunctionOption(options, 'downloadHandler', $.noop),
-
-            // callback to flush the document before sending it as mail
+            // callback to flush the document before accessing its source
             flushHandler = Utils.getFunctionOption(options, 'flushHandler', $.noop),
 
             // all registered before-quit handlers
@@ -1372,34 +1371,29 @@ define('io.ox/office/framework/app/baseapplication',
          */
         this.download = function (format) {
 
-            var // call the download handler first (sends pending actions)
-                downloadHandlerResult = downloadHandler.call(self, format);
+            var // the Promise that will be resolved with the download URL
+                downloadPromise = this.hasFileDescriptor() ? $.when(flushHandler.call(this)).then(resolveDownloadUrl) : $.Deferred().reject();
 
-            return $.when(downloadHandlerResult).then(function () {
+            // callback for Deferred.then() to resolve the Deferred object with the download URL
+            function resolveDownloadUrl() {
 
-                var // call the flush handler next
-                    flushHandlerResult = flushHandler.call(self),
-                    fileDescriptor = self.getFileDescriptor();
+                // propagate changed file to the files API
+                FilesAPI.propagate('change', file);
 
-                return $.when(flushHandlerResult).then(function (result) {
-
-                    // propagate changed file to the files API
-                    FilesAPI.propagate('change', file);
-
-                    var // the download URL of the document
-                        documentUrl = self.getFilterModuleUrl({
-                            action: 'getdocument',
-                            documentformat: format || 'native',
-                            filename: self.getFullFileName(),
-                            mimetype: fileDescriptor.file_mimetype || '',
-                            version: 0, // always use the latest version
-                            nocache: _.uniqueId() // needed to trick the browser cache (is not evaluated by the backend)
-                        });
-
-                    return self.downloadFile(documentUrl);
+                // resolve with the download URL of the document
+                return self.getFilterModuleUrl({
+                    action: 'getdocument',
+                    documentformat: format || 'native',
+                    filename: self.getFullFileName(),
+                    mimetype: file.file_mimetype || '',
+                    version: 0, // always use the latest version
+                    nocache: _.uniqueId() // needed to trick the browser cache (is not evaluated by the backend)
                 });
-            })
-            .promise();
+            }
+
+            // Bug 28251: call downloadFile() with a Promise that will be resolved
+            // with the download URL to prevent the pop-up blocker of the browser
+            return this.downloadFile(downloadPromise);
         };
 
         /**
@@ -1416,51 +1410,39 @@ define('io.ox/office/framework/app/baseapplication',
         /**
          * Creates a new mail message with the current document attached
          *
+         * @returns {BaseApplication}
+         *  A reference to this instance.
          */
         this.sendMail = function () {
 
-            var // call the download handler first
-                downloadHandlerResult = downloadHandler.call(self);
+            var // the Promise with the result of the flush callback handler
+                flushPromise = this.hasFileDescriptor() ? $.when(flushHandler.call(this)) : $.Deferred().reject();
 
-            $.when(downloadHandlerResult).then(function () {
+            // launch Mail application if flushing was successful
+            flushPromise.done(function () {
+                ox.launch('io.ox/mail/write/main').done(function () {
 
-                var // the file descriptor of the document
-                    flushHandlerResult = flushHandler.call(self),
-                    fileDescriptor = self.getFileDescriptor();
-
-                $.when(flushHandlerResult).then(function () {
-
-                    function attachFile(composeResult, descriptor)  {
+                    function attachFile(composeResult)  {
                         composeResult.app.addFiles([{
-                            filename: descriptor.filename,
-                            folder_id: descriptor.folder_id,
-                            id: descriptor.id,
-                            size: descriptor.file_size,
-                            file_size: descriptor.file_size
+                            filename: file.filename,
+                            folder_id: file.folder_id,
+                            id: file.id,
+                            size: file.file_size,
+                            file_size: file.file_size
                         }]);
                     }
 
-                    //fileDescriptor.mailFolder, .mailUID
-                    require(['io.ox/mail/write/main'], function (MailModule) {
-                        MailModule.getApp().launch().done(function () {
-                            if (fileDescriptor.mailUID) {
-                                this.replyall({
-                                    id: fileDescriptor.mailUID,
-                                    folder: fileDescriptor.mailFolder
-                                }).done(function (result) {
-                                    attachFile(result, fileDescriptor);
-                                });
-                            } else {
-                                this.compose().done(function (result) {
-                                    attachFile(result, fileDescriptor);
-                                });
-                            }
-                        });
-                    });
-
+                    if (file.mailUID) {
+                        this.replyall({ id: file.mailUID, folder: file.mailFolder }).done(attachFile);
+                    } else {
+                        this.compose().done(attachFile);
+                    }
                 });
             });
+
+            return this;
         };
+
         /**
          * Will be called automatically from the OX core framework to create
          * and return a save point containing the current state of the
