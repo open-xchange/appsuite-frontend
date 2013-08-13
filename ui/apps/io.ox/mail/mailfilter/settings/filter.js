@@ -33,7 +33,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
             header = data.id === undefined ? gt('Create new rule') : gt('Edit rule'),
             testArray, actionArray, rulename;
 
-        myView = new AccountDetailView({model: data});
+        myView = new AccountDetailView({ model: data, listView: evt.data.listView });
 
         testArray = _.copy(myView.model.get('test'), true);
         actionArray = _.copy(myView.model.get('actioncmds'), true);
@@ -56,11 +56,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
         myView.collection = collection;
 
         myView.dialog.on('save', function () {
-//            if (myModel.isValid()) {
             myView.dialog.getBody().find('.io-ox-mailfilter-edit').trigger('save');
-//            } else {
-//                myView.dialog.idle();
-//            }
         });
 
         myView.dialog.on('cancel', function () {
@@ -138,7 +134,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                 }),
 
-                    MailfilterEdit = Backbone.View.extend({
+                MailfilterEdit = Backbone.View.extend({
 
                     initialize: function () {
                         this.template = doT.template(listboxtmpl);
@@ -178,10 +174,11 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     },
 
                     onAdd: function (args) {
-                        args.data = {};
-                        args.data.node = this.el;
-
-                        args.data.obj = factory.create(mailfilterModel.protectedMethods.provideEmptyModel());
+                        args.data = {
+                            node: this.el,
+                            listView: this,
+                            obj: factory.create(mailfilterModel.protectedMethods.provideEmptyModel())
+                        };
                         createExtpointForSelectedFilter(args);
                     },
 
