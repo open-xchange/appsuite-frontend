@@ -658,7 +658,7 @@ define('io.ox/office/framework/view/baseview',
 
                 // add file name to header area
                 if (Utils.getBooleanOption(options, 'showFileName', false)) {
-                    headerNode.append($('<div>').addClass('filename clear-title').text(app.getFullFileName()));
+                    headerNode.append($('<div>').addClass('filename clear-title').text(gt.noI18n(app.getFullFileName())));
                 }
 
                 // initialize 'Cancel' button (hide initially, show after a delay)
