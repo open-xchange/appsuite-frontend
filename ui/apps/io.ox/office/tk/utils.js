@@ -182,6 +182,15 @@ define.async('io.ox/office/tk/utils',
     Utils.RETINA = _.device('retina');
 
     /**
+     * A Boolean flag specifying whether the browser is running on the Android
+     * operating system. This weak test replaces the broken '_.browser.Android'
+     * test, see bug 28239.
+     *
+     * @constant
+     */
+    Utils.ANDROID = window.navigator.userAgent.toLowerCase().indexOf('android') > -1;
+
+    /**
      * A Boolean flag specifying whether the Internet Explorer 9 is running.
      *
      * @constant
