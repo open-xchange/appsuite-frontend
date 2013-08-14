@@ -219,15 +219,20 @@ define('io.ox/core/tk/attachments',
                 renderFile: function (attachment) {
                     var self = this,
                         size, removeFile,
-                        $el = $('<div class="span6">').append(
-                            $('<div class="io-ox-core-tk-attachment file">').append(
-                                $('<i class="icon-paper-clip">'),
-                                $('<div class="row-1">').text(attachment.filename),
-                                $('<div class="row-2">').append(
-                                    size = $('<span class="filesize">').text(strings.fileSize(attachment.file_size))
-                                ),
-                                removeFile = $('<a href="#" class="remove" tabindex="1" title="Remove attachment">').append($('<i class="icon-trash">'))
-                            )
+                        $el = $('<div>')
+                            .addClass(this.itemClasses)
+                            .append(
+                                //item
+                                $('<div class="item file">')
+                                    .addClass(this.fileClasses)
+                                    .append(
+                                        $('<i class="icon-paper-clip">'),
+                                        $('<div class="row-1">').text(attachment.filename),
+                                        $('<div class="row-2">').append(
+                                            size = $('<span class="filesize">').text(strings.fileSize(attachment.file_size))
+                                        ),
+                                        removeFile = $('<a href="#" class="remove" tabindex="1" title="Remove attachment">').append($('<i class="icon-trash">'))
+                                )
                         );
 
                     removeFile.on('click', function () { self.remove(attachment); });

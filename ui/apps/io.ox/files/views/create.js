@@ -185,12 +185,14 @@ define('io.ox/files/views/create', [
 
         //referenced via baton.fileList
         ext.point(POINT + '/filelist').extend(new attachments.SimpleEditableFileList({
-            id: 'attachment_list',
-            className: 'div',
-            index: 300
-        }, baton), {
-            rowClass: 'collapsed'
-        });
+                    id: 'attachment_list',
+                    itemClasses: 'span6',
+                    fileClasses: 'background',
+                    index: 300
+                },
+                baton
+            )
+        );
 
         return {
             show: show
