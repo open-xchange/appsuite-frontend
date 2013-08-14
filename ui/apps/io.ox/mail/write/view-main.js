@@ -410,8 +410,15 @@ define("io.ox/mail/write/view-main",
                     return emoji + text;
                 }
             }
+
+            this.editor
+                .val(insert(caret, content, icon.unicode))
+                .attr('caretPosition', caret + 2);
+
+            /* disabled emoji input on subject at the moment */
+
             // insert unicode and increse caret position manually
-            if (this.editor.attr('emojifocus') === 'true') {
+            /*if (this.editor.attr('emojifocus') === 'true') {
                 this.editor
                     .val(insert(caret, content, icon.unicode))
                     .attr('caretPosition', caret + 2);
@@ -419,7 +426,7 @@ define("io.ox/mail/write/view-main",
                 this.subject
                     .val(insert(subjectCaret, this.subject.val(), icon.unicode))
                     .attr('caretPosition', subjectCaret + 2);
-            }
+            }*/
 
         },
         /**
@@ -719,8 +726,9 @@ define("io.ox/mail/write/view-main",
                     .addClass('text-editor')
                     .addClass(settings.get('useFixedWidthFont') ? 'monospace' : '')
                     .on('keyup click', function (e) {
-                        $(this).attr('emojiFocus', 'true');
-                        self.subject.attr('emojiFocus', 'false');
+                        /* disabled emoji input for subject */
+                        //$(this).attr('emojiFocus', 'true');
+                        //self.subject.attr('emojiFocus', 'false');
                         if (this.selectionStart === undefined) return;
                         $(this).attr({
                             'caretPosition': this.selectionStart,
@@ -748,7 +756,7 @@ define("io.ox/mail/write/view-main",
                         .on('keyup change input paste', autogrow)
                         .on('focus', function () {
                             $(this).attr('emojiFocus', 'true');
-                            self.subject.attr('emojiFocus', 'false');
+                            //self.subject.attr('emojiFocus', 'false');
                             // do we have emoji support
                             if (emojiMobileSupport && self.emojiview && self.emojiview.isOpen) {
 
@@ -809,7 +817,9 @@ define("io.ox/mail/write/view-main",
                                 } else {
                                     app.setTitle(app.getDefaultWindowTitle());
                                 }
-                            })
+                            }),
+                            /* disabled emoji input for subject field */
+                            /*
                             .on('keyup click', function () {
                                 // subject has focus
                                 $(this).attr('emojiFocus', 'true');
@@ -832,7 +842,7 @@ define("io.ox/mail/write/view-main",
                                         self.spacer.show();
                                     }
                                 }
-                            }),
+                            }),*/
                             'mail_subject'
                         )
                     ),
