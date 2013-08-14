@@ -516,7 +516,9 @@ define("io.ox/mail/write/view-main",
             this.addLink('cc', gt('Copy (CC) to'));
             this.addSection('cc', gt('Copy (CC) to'), false, true)
                 .append(this.createRecipientList('cc'))
-                .append(this.createField('cc'));
+                .append(this.createField('cc')
+                        .find('input').attr('placeholder', gt.format('%1$s ...', gt('in copy'))).placeholder().end()
+                    );
 
 
             // BCC
@@ -524,7 +526,9 @@ define("io.ox/mail/write/view-main",
             this.addLink('bcc', gt('Blind copy (BCC) to'));
             this.addSection('bcc', gt('Blind copy (BCC) to'), false, true)
                 .append(this.createRecipientList('bcc'))
-                .append(this.createField('bcc'));
+                .append(this.createField('bcc')
+                        .find('input').attr('placeholder', gt.format('%1$s ...', gt('in blind copy'))).placeholder().end()
+                    );
 
 
             // Attachments
