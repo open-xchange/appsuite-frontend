@@ -228,7 +228,8 @@
             background-color: @topbarLauncherBackgroundHover;
         }
 
-        a:focus, a:active {
+        // don't add a:active otherwise IE10 messes it up
+        a:focus {
             outline: 0;
             color: @topbarLauncherColor-hover;
             background-color: #08c;
