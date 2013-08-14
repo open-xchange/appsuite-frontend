@@ -54,7 +54,7 @@ define('io.ox/backbone/mini-views/date',
 
         // add empty option - do that after revert
         empty = $('<option>').text('');
-        if (name === 'year') { empty.val('0000'); }
+        if (name === 'year') { empty.val('0001'); }
         options.unshift(empty);
 
         // append
@@ -88,25 +88,22 @@ define('io.ox/backbone/mini-views/date',
         },
 
         update: function () {
-            var value = this.model.get(this.name);
+            var value = this.model.get(this.name), d, year, text;
             // change boxes only for valid dates
             if (_.isNumber(value)) {
-                var d = new date.UTC(value),
-                    year = d.getYear();
-                year = year.toString();
-
-                if (year === '1') {//workaround because backend makes year 0 to year 1
-                    year = '0000';
-                } else if (year !== '0') {
-                    //if the year is not our dropdown we add it
+                d = new date.UTC(value);
+                year = String(d.getYear());
+                if (year !== '1') {
+                    // if the year is not our dropdown we add it
                     var yearValues = [];
                     this.$el.find('.year option').each(function () {
                         yearValues.push($(this).val());
-
                     });
-
                     if (!_.contains(yearValues, year)) {
-                        this.$el.find('.year').append($('<option>').val(year).text(year));
+                        text = localize('year', year);
+                        this.$el.find('.year').append(
+                            $('<option>').val(year).text(text)
+                        );
                     }
                 }
                 this.$el.find('.year').val(year);
