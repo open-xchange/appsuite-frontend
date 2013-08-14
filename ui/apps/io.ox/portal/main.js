@@ -454,12 +454,14 @@ define('io.ox/portal/main',
             }
         });
 
-        $(window).on('scrollstop', function (e) {
+        var lazyLayout = _.debounce(function (e) {
             scrollPos = $(this).scrollTop() + this.innerHeight;
             widgets.loadUsedPlugins().done(function (cleanCollection) {
                 cleanCollection.each(app.drawWidget);
             });
-        });
+        }, 300);
+
+        $(window).on('scrollstop resize', lazyLayout);
     });
 
     return {
