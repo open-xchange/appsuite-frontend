@@ -21,6 +21,15 @@ define('io.ox/backbone/mini-views/date',
     // <div><select class="date"><select class="month"><select class="year"></div>
     //
 
+    // core/date.js would be a better place but who cares
+    function localize(name, text) {
+        if (ox.language === 'ja_JP') {
+            if (name === 'year') return text + '年';
+            if (name === 'date') return text + '日';
+        }
+        return text;
+    }
+
     // helper
     function createSelect(name, from, to, setter, format) {
 
@@ -29,11 +38,13 @@ define('io.ox/backbone/mini-views/date',
             $i = Math.max(from, to),
             d = new date.Local(0),
             options = [],
-            empty;
+            empty, text;
 
         for (; i <= $i; i++) {
             setter.call(d, i);
-            options.push($('<option>').val(i).text(d.format(format)));
+            text = d.format(format);
+            text = localize(name, text);
+            options.push($('<option>').val(i).text(text));
         }
 
         // revert?
@@ -43,7 +54,7 @@ define('io.ox/backbone/mini-views/date',
 
         // add empty option - do that after revert
         empty = $('<option>').text('');
-        if (name === 'year') {empty.val('0000'); }
+        if (name === 'year') { empty.val('0000'); }
         options.unshift(empty);
 
         // append
@@ -83,7 +94,7 @@ define('io.ox/backbone/mini-views/date',
                 var d = new date.UTC(value),
                     year = d.getYear();
                 year = year.toString();
-                
+
                 if (year === '1') {//workaround because backend makes year 0 to year 1
                     year = '0000';
                 } else if (year !== '0') {
@@ -91,9 +102,9 @@ define('io.ox/backbone/mini-views/date',
                     var yearValues = [];
                     this.$el.find('.year option').each(function () {
                         yearValues.push($(this).val());
-                        
+
                     });
-                    
+
                     if (!_.contains(yearValues, year)) {
                         this.$el.find('.year').append($('<option>').val(year).text(year));
                     }
@@ -120,7 +131,7 @@ define('io.ox/backbone/mini-views/date',
 
             var self = this;
 
-            date.getFormat(date.DATE).replace(
+            date.getFormat(date.locale.formats.yMMMd).replace(
                 /(Y+|y+|u+)|(M+|L+)|(d+)|(?:''|'(?:[^']|'')*'|[^A-Za-z'])+/g,
                 function (match, y, m, d) {
                     var proto = date.Local.prototype, node, year;
