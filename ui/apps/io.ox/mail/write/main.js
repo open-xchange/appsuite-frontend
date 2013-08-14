@@ -60,7 +60,8 @@ define('io.ox/mail/write/main',
     var timerScale = {
         minute: 60000, //60s
         minutes: 60000
-    };
+    },
+        autoSavedMail = false;
 
     function stopAutoSave(app) {
         if (app.autosave) {
@@ -91,6 +92,7 @@ define('io.ox/mail/write/main',
             // only auto-save if something changed (see Bug #26927)
             if (app.dirty()) {
                 app.saveDraft();
+                autoSavedMail = true;
             } else {
                 delay();
             }
@@ -1072,30 +1074,16 @@ define('io.ox/mail/write/main',
                 //convert to send encoding (NOOP, if target encoding is 'unified')
                 mail.data.attachments[0].content = convert(mail.data.attachments[0].content, mail.format);
             }
-            function askForDraftSave() {
-                // show dialog
-                require(["io.ox/core/tk/dialogs"], function (dialogs) {
-                    new dialogs.ModalDialog()
-                        .text(gt("Do you want to keep the draft after sending this mail?"))
-                        .addPrimaryButton("delete", gt('Delete the draft after sending.'))
-                        .addButton("save", gt('Keep the draft.'))
-                        .show()
-                        .done(function (action) {
-                            if (action === 'save') {
-                                mail.data.keepDraft = true;//temporary flag
-                                cont();
-                            } else {
-                                cont();
-                            }
-                        });
-                });
-            }
 
             function cont() {
                 // start being busy
                 win.busy();
                 // close window now (!= quit / might be reopened)
                 win.preQuit();
+                //look if mail was autosaved, if so delete the draft on send
+                if (autoSavedMail) {
+                    mail.data.deleteDraft = true;
+                }
                 // send!
                 mailAPI.send(mail.data, mail.files, view.form.find('.oldschool')).always(function (result) {
                     if (result.error && !result.warnings) {
@@ -1178,11 +1166,7 @@ define('io.ox/mail/write/main',
                             })
                             .done(function (action) {
                                 if (action === 'send') {
-                                    if (mail.data.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {//ask if draftmail should be deleted after sending
-                                        askForDraftSave();
-                                    } else {
-                                        cont();
-                                    }
+                                    cont();
                                 } else {
                                     focus('subject');
                                     def.reject();
@@ -1192,8 +1176,6 @@ define('io.ox/mail/write/main',
                 }
 
 
-            } else if (mail.data.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {//ask if draftmail should be deleted after sending
-                askForDraftSave();
             } else {
                 cont();
             }

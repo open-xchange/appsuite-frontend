@@ -1280,12 +1280,11 @@ define('io.ox/mail/api',
     function handleSendXHR2(data, files) {
 
         var form = new FormData(),
-            keepDraft = data.keepDraft,
             deleteDraftOnTransport;
-        if (data.keepDraft) {//don't send temporary flag
-            deleteDraftOnTransport = false;
-            delete data.keepDraft;
-        } else {
+        if (data.deleteDraft || settings.get('features/alwaysDeleteDraft', false)) {//don't send temporary flag
+            deleteDraftOnTransport = true;
+            delete data.deleteDraft;
+        } else if (settings.get('features/alwaysDeleteDraft', false)) {
             deleteDraftOnTransport = data.sendtype === api.SENDTYPE.EDIT_DRAFT;
         }
         // add mail data
@@ -1307,8 +1306,8 @@ define('io.ox/mail/api',
     }
 
     function handleSendTheGoodOldWay(data, form) {
-        if (data.keepDraft) {//don't send temporary flag
-            delete data.keepDraft;
+        if (data.deleteDraft) {//don't send temporary flag
+            delete data.deleteDraft;
         }
         return http.FORM({
             module: 'mail',
