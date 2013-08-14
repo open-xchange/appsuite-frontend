@@ -144,6 +144,16 @@ define('io.ox/office/tk/control/combofield',
                     event.preventDefault();
                 }
                 break;
+            case KeyCodes.SPACE:
+                // Bug 28208: SPACE key with open drop-down menu and selected list item: trigger change
+                var button = Utils.getSelectedButtons(self.getItems());
+                if (keydown && self.isMenuVisible() && (button.length > 0)) {
+                    self.hideMenu();
+                    self.triggerChange(button, { preserveFocus: true });
+                    // do not insert the space character into the text field
+                    return false;
+                }
+                break;
             }
         }
 
