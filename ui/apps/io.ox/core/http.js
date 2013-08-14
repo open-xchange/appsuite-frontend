@@ -975,7 +975,6 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
 
             $('#tmp').append(
                 $('<iframe>', { name: name, id: name, height: 1, width: 1, src: ox.base + '/blank.html' })
-                .on('load error', blank.resolve)
             );
 
             window[callback] = function (response) {
@@ -1011,7 +1010,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                 target: name
             });
 
-            blank.done(function () { form.submit(); form = null; });
+            form.submit();
 
             return def;
         },
