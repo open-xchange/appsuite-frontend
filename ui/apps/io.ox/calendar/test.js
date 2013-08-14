@@ -72,10 +72,10 @@ define('io.ox/calendar/test', ['io.ox/core/extensions', 'io.ox/calendar/util'], 
                     j.expect(str).toEqual('Weekly on Monday, Tuesday, Wednesday');
                 });
 
-                j.it('On workdays', function () {
+                j.it('On work days', function () {
                     data.days = 2 + 4 + 8 + 16 + 32;
                     var str = util.getRecurrenceString(data);
-                    j.expect(str).toEqual('On workdays');
+                    j.expect(str).toEqual('On work days');
                 });
 
                 j.it('Weekly on all days -> Every day', function () {
@@ -100,10 +100,10 @@ define('io.ox/calendar/test', ['io.ox/core/extensions', 'io.ox/calendar/util'], 
                     j.expect(str).toEqual('Every 2 weeks on Monday, Tuesday, Wednesday');
                 });
 
-                j.it('Every 2 weeks on weekdays', function () {
+                j.it('Every 2 weeks on work days', function () {
                     data.days = 2 + 4 + 8 + 16 + 32;
                     var str = util.getRecurrenceString(data);
-                    j.expect(str).toEqual('Every 2 weeks on weekdays');
+                    j.expect(str).toEqual('Every 2 weeks on work days');
                 });
 
                 j.it('Every 2 weeks on all days', function () {

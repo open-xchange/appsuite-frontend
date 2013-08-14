@@ -365,7 +365,10 @@ define("io.ox/calendar/util",
             function getDayString(i) {
                 var tmp = [];
                 if (i === 62) {
-                    tmp.push(gt('weekdays'));
+                    tmp.push(
+                        //#. recurrence string
+                        gt('work days')
+                    );
                 } else {
                     if ((i & SUNDAY) !== 0) tmp.push(gt('Sunday'));
                     if ((i & MONDAY) !== 0) tmp.push(gt('Monday'));
@@ -416,18 +419,23 @@ define("io.ox/calendar/util",
                 }
 
 
-                // special case: weekly on workdays
-                if (days === 62 && interval === 1) {
-                    return gt('On workdays');
+                // special case: weekly on work days
+                if (days === 62) {
+                    return interval === 1 ?
+                        //#. recurrence string
+                        gt('On work days') :
+                        //#. recurrence string
+                        //#. %1$d: numeric
+                        gt('Every %1$d weeks on work days', interval);
                 }
 
                 return interval === 1 ?
                     //#. recurrence string
-                    //#. %1$s day string, e.g. "weekdays" or "Friday" or "Monday, Tuesday, Wednesday"
+                    //#. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
                     gt('Weekly on %1$s', getDayString(days)) :
                     //#. recurrence string
                     //#. %1$d: numeric
-                    //#. %2$s: day string, e.g. "weekdays" or "Friday" or "Monday, Tuesday, Wednesday"
+                    //#. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
                     gt('Every %1$d weeks on %2$s', interval, getDayString(days));
 
             // MONTHLY

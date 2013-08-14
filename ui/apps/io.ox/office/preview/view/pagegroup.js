@@ -166,7 +166,7 @@ define('io.ox/office/preview/view/pagegroup',
 
             // generate the HTML mark-up for all button nodes
             Utils.iterateRange(1, pageCount + 1, function (page) {
-                markup += Utils.createButtonMarkup('<div class="page"></div>', { focusable: true, label: String(page) });
+                markup += Utils.createButtonMarkup('<div class="page"></div>', { focusable: true, label: _.noI18n(String(page)) });
             });
 
             // insert the buttons into the group

@@ -130,7 +130,7 @@
             ua.split('Chrome/')[1].split(' ')[0].split('.')[0] : undefined,
         /** is Firefox? */
         Firefox: (ua.indexOf('Gecko') > -1 && ua.indexOf('Firefox') > -1 && ua.indexOf('KHTML') === -1) ?
-            ua.split('Firefox/')[1].split('.')[0] : undefined,
+            ua.split(/Firefox(\/| )/)[2].split('.')[0] : undefined,
         /** OS **/
         Blackberry: Blackberry,
         WindowsPhone: (WindowsPhone && (ua.indexOf('IEMobile/10.0') > -1 )) ? true : undefined, // no version here yet
@@ -148,7 +148,7 @@
         // '7.2.3' will be 7.2
         // '6.0.1' will be 6
         if (_.isString(value)) {
-            value = parseFloat(value, 10);
+            value = value === '' ? true : parseFloat(value, 10);
             _.browser[key] = value;
         }
         key = key.toLowerCase();

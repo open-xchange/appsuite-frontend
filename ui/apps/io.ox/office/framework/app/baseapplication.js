@@ -190,7 +190,7 @@ define('io.ox/office/framework/app/baseapplication',
          */
         function updateTitle() {
 
-            var // the root ndoe of the application window
+            var // the root node of the application window
                 windowNode = self.getWindowNode();
 
             // set title for application launcher

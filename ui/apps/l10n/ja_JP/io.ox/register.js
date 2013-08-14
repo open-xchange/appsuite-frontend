@@ -229,8 +229,8 @@ define('l10n/ja_JP/io.ox/register',
     ext.point('io.ox/contacts/getLabel').extend({
         id: 'furigana',
         getLabel: function (data) {
-            var c = (data.sort_name || '#').slice(0, 1).toUpperCase()
-                                                       .charCodeAt(0);
+            var c = (data.sort_name || '').slice(0, 1)
+                    .toUpperCase().charCodeAt(0);
             // special handling of kana characters
             if (c >= 0x3040 && c < 0x3100) {
                 c = exceptions[c] || c;
@@ -274,7 +274,7 @@ define('l10n/ja_JP/io.ox/register',
                     other = _(ascii).difference(latin),
                     // get first occurrences
                     firstLatin = _.min(latin, function (label) { return label.charCodeAt(0); }),
-                    firstOther = _.min(other, function (label) { return label.charCodeAt(0); }),
+                    firstOther = _.min(other, function (label) { return label.charCodeAt(0) || Infinity; }),
                     // add thumb index for ABC
                     abcThumb = new baton.Thumb({
                         label: _.noI18n('A～Z'),
@@ -291,8 +291,7 @@ define('l10n/ja_JP/io.ox/register',
                 // once we know the codes or the range of the Japanese alphabet
                 // we could definer other as "all characters except latin except japanese"
                 baton.data = _.map(kana, baton.Thumb);
-                baton.data.push(abcThumb);
-                baton.data.push(otherThumb);
+                baton.data.push(otherThumb, abcThumb);
             } else {
                 baton.data = _.map(
                     kana.concat('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')),
