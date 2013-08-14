@@ -189,6 +189,16 @@ define('io.ox/core/tk/upload',
                         }
                     }
 
+                    if (options.actions[0].id === 'importEML') {
+                        for (var i = 0; i < files.length; i++) {
+                            var valid_extensions = /(\.eml)$/i;
+                            if (!valid_extensions.test(files[i].name)) {
+                                notifications.yell('error', gt('Mail was not imported, only .eml files are supported.'));
+                                return false;
+                            }
+                        }
+                    }
+
                     for (var i = 0, l = files.length; i < l; i++) {
                         self.trigger('drop', action.id, files[i], action);
                     }
