@@ -1,4 +1,13 @@
 #!/bin/sh
+#
+# This script updates all timestamps in the HTML files of OX App Suite.
+#
+# This file is licensed under a Creative Commons License.
+#
+# http://creativecommons.org/licenses/by-nc-sa/2.5/
+#
+# Copyright (C) Open-Xchange Inc., 2013
+# Mail: info@open-xchange.com
 
 ## cd ##
 
