@@ -94,10 +94,12 @@
                 margin-top:43px;
                 video {
                     width:100%;
+                    max-height:270px;
                 }
             }
             // MediaElement Container
             .mejs-container {
+                max-height:270px;
 
                 .mejs-mediaelement {
                     text-align:center;
@@ -212,5 +214,10 @@
                 }
             }
         }
+    }
+}
+.mejs-fullscreen .mediaplayer_container .mediaplayer_inner .mediaplayer_player {
+     .mejs-video video, .mejs-container {
+        max-height:100% !important;
     }
 }
