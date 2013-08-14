@@ -198,7 +198,7 @@ define("io.ox/contacts/main",
 
         // The label function can be overwritten by an extension.
         var getLabel = function (data) {
-            return (data.sort_name || '#').slice(0, 1).toUpperCase();
+            return (data.sort_name || '').slice(0, 1).toUpperCase();
         };
         ext.point('io.ox/contacts/getLabel').each(function (extension) {
             if (extension.getLabel) getLabel = extension.getLabel;
