@@ -640,9 +640,9 @@ define('io.ox/office/framework/view/baseview',
                     blockerNode = this,
                     // the header container node
                     headerNode = blockerNode.find('.header').empty(),
-                    // the header container node
+                    // the footer container node
                     footerNode = blockerNode.find('.footer').empty(),
-                    // the container element with the button to cancel the import process
+                    // the container element with the button to cancel the busy mode
                     cancelNode = null;
 
                 // keyboard event handler for busy mode (ESCAPE key)
@@ -658,7 +658,7 @@ define('io.ox/office/framework/view/baseview',
 
                 // add file name to header area
                 if (Utils.getBooleanOption(options, 'showFileName', false)) {
-                    headerNode.append($('<div>').addClass('filename clear-title').text(gt.noI18n(app.getFullFileName())));
+                    headerNode.append($('<div>').addClass('filename clear-title').text(_.noI18n(app.getFullFileName())));
                 }
 
                 // initialize 'Cancel' button (hide initially, show after a delay)
@@ -788,7 +788,7 @@ define('io.ox/office/framework/view/baseview',
             // make the alert banner closeable
             if (closeable) {
                 // add closer symbol
-                alert.prepend($('<a>', { href: '#' }).text('\xd7').addClass('close').attr('tabindex', 1))
+                alert.prepend($('<a>', { href: '#' }).text(_.noI18n('\xd7')).addClass('close').attr('tabindex', 1))
                     .css('cursor', 'pointer')
                     // alert can be closed by clicking anywhere in the banner
                     .on('click', closeAlert);

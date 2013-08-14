@@ -15,9 +15,8 @@ define('io.ox/office/preview/view/pagegroup',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/keycodes',
      'io.ox/office/tk/control/group',
-     'io.ox/office/preview/view/pageloader',
-     'gettext!io.ox/office/main'
-    ], function (Utils, KeyCodes, Group, PageLoader, gt) {
+     'io.ox/office/preview/view/pageloader'
+    ], function (Utils, KeyCodes, Group, PageLoader) {
 
     'use strict';
 
@@ -167,7 +166,7 @@ define('io.ox/office/preview/view/pagegroup',
 
             // generate the HTML mark-up for all button nodes
             Utils.iterateRange(1, pageCount + 1, function (page) {
-                markup += Utils.createButtonMarkup('<div class="page"></div>', { focusable: true, label: gt.noI18n(page) });
+                markup += Utils.createButtonMarkup('<div class="page"></div>', { focusable: true, label: _.noI18n(String(page)) });
             });
 
             // insert the buttons into the group

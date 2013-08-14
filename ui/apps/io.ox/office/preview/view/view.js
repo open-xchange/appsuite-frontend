@@ -130,7 +130,7 @@ define('io.ox/office/preview/view/view',
                 //#. %1$d is the current page index
                 //#. %2$d is the total number of pages
                 //#, c-format
-                gt('Page %1$d of %2$d', gt.noI18n(selectedPage), gt.noI18n(model.getPageCount())),
+                gt('Page %1$d of %2$d', _.noI18n(selectedPage), _.noI18n(model.getPageCount())),
                 { type: 'info' });
         }
 
@@ -146,7 +146,7 @@ define('io.ox/office/preview/view/view',
             statusLabel.setValue(
                 //#. %1$d is the current zoom factor, in percent
                 //#, c-format
-                gt('Zoom: %1$d%', Math.round(zoomFactor * scale)),
+                gt('Zoom: %1$d%', _.noI18n(Math.round(zoomFactor * scale))),
                 { type: 'info' });
         }, updatePageStatus, { delay: 1000 });
 
