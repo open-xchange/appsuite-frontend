@@ -254,7 +254,8 @@ define('io.ox/office/framework/app/basecontroller',
          * Moves the browser focus to the application pane.
          */
         function grabApplicationFocus(options) {
-            if (!Utils.getBooleanOption(options, 'preserveFocus', false)) {
+            // Bug 28214: focus back to application if source GUI element is hidden now
+            if (!Utils.getBooleanOption(options, 'preserveFocus', false) || !$(window.document.activeElement).is(Utils.REALLY_VISIBLE_SELECTOR)) {
                 app.getView().grabFocus();
             }
         }
