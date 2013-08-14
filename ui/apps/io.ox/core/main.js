@@ -506,8 +506,9 @@ define('io.ox/core/main',
         ox.ui.apps.on('launch resume', function (model, collection, e) {
             // mark last active app
             if (_.device('small')) {
-                // does weird things...disabling for the moment
-                //launchers.hide();
+                if (!settings.get('forceDesktopLaunchers', false)) {
+                    launchers.hide();
+                }
             }
             launchers.children().removeClass('active-app')
                 .filter('[data-app-guid="' + model.guid + '"]').addClass('active-app');
