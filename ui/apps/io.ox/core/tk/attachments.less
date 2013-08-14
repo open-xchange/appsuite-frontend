@@ -12,6 +12,101 @@
 
 .io-ox-core-tk-attachment-list {
 
+    .section-item {
+
+        position: relative;
+        line-height: 1.5em;
+        background-color: white;
+        margin-bottom: 2px;
+        padding: 4px 2.5em 4px 5px;
+
+
+        &.pointer {
+            cursor: pointer;
+        }
+
+        div {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .remove {
+            display: inline-block;
+            position: absolute;
+            top: 1px;
+            right: 1px;
+            bottom: 1px;
+            width: 2em;
+            line-height: 1em;
+            background-color: #f5f5f5;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        .remove:hover {
+            background-color: #a00;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .remove [class^="icon-"] {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            margin-top: -0.5em;
+            text-align: center;
+        }
+
+        .group-label {
+            display: block;
+            font-style: italic;
+            margin-right: 1em;
+        }
+
+        &.signature-remove a {
+            color: #800;
+        }
+
+         .signature-preview {
+            font-style: italic;
+            color: #888;
+            white-space: normal;
+        }
+
+        &.upload {
+            background-color: #f5f5f5;
+            padding-right: 5px;
+        }
+
+        &.file {
+            position: relative;
+            height: 3em;
+            line-height: 1.5em;
+        }
+    }
+
+    .section-item > i {
+        position: absolute;
+        font-size: 20px;
+        top: 15px;
+        left: 11px;
+    }
+
+    .section-item .row-1 {
+        position: absolute; left: 40px; right: 30px;
+        overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .section-item .row-2 {
+        position: absolute; left: 40px; right: 30px; top: 23px;
+    }
+
+    .section-item .filesize {
+        color: #aaa;
+    }
+
     .span6:nth-child(odd) { margin-left: 0; }
 
     .io-ox-core-tk-attachment {
