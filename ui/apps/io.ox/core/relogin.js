@@ -64,9 +64,11 @@ define('io.ox/core/relogin',
                                 // process queue
                                 var i = 0, item, http = require('io.ox/core/http');
                                 for (; (item = queue[i]); i++) {
-                                    http.retry(item.request)
-                                        .done(item.deferred.resolve)
-                                        .fail(item.deferred.fail);
+                                    if (!item.request.noRetry) {
+                                        http.retry(item.request)
+                                            .done(item.deferred.resolve)
+                                            .fail(item.deferred.fail);
+                                    }
                                 }
                                 // set flag
                                 pending = false;
