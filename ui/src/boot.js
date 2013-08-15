@@ -627,28 +627,45 @@ $(window).load(function () {
                     // fetch user config
                     ox.secretCookie = hash.secretCookie === 'true';
                     fetchUserSpecificServerConfig().done(function () {
-                        serverUp();
-                        // store login data (cause we have all valid languages now)
-                        session.set({
-                            locale: hash.language,
-                            session: hash.session,
-                            user: hash.user,
-                            user_id: parseInt(hash.user_id || '0', 10),
-                            context_id: hash.context_id
-                        });
-                        // cleanup url
-                        _.url.hash({
-                            language: null,
-                            session: null,
-                            user: null,
-                            user_id: null,
-                            context_id: null,
-                            secretCookie: null,
-                            store: null
-                        });
-                        // go ...
-                        loadCoreFiles().done(function () {
-                            loadCore();
+                        var whoami = $.Deferred();
+                        if (hash.user && hash.language && hash.user_id) {
+                            whoami.resolve(hash);
+                        } else {
+                            require(["io.ox/core/http"], function (http) {
+                                http.GET({
+                                    module: 'system',
+                                    params: {
+                                        action: 'whoami'
+                                    }
+                                }).done(whoami.resolve).fail(whoami.reject);
+                            });
+                        }
+
+                        whoami.done(function (resp) {
+                            serverUp();
+                            // store login data (cause we have all valid languages now)
+                            session.set({
+                                locale: resp.language,
+                                session: resp.session,
+                                user: resp.user,
+                                user_id: parseInt(resp.user_id || '0', 10),
+                                context_id: resp.context_id
+                            });
+                            // cleanup url
+                            _.url.hash({
+                                language: null,
+                                session: null,
+                                user: null,
+                                user_id: null,
+                                context_id: null,
+                                secretCookie: null,
+                                store: null
+                            });
+                            // go ...
+                            loadCoreFiles().done(function () {
+                                loadCore();
+                            });
+
                         });
                     });
                 });
