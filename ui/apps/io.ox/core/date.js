@@ -971,12 +971,14 @@ define.async('io.ox/core/date',
     });
 
     // TODO: get default from local clock
-    return $.when(
-        api.getTimeZone(config.get('timezone', 'UTC'))
-            .then(null, function () { return api.getTimeZone('UTC'); }),
-        locale
-    ).then(function (tz) {
-        api.Local = tz;
-        return api;
+    return config.load().then(function () {
+        return $.when(
+            api.getTimeZone(config.get('timezone', 'UTC'))
+                .then(null, function () { return api.getTimeZone('UTC'); }),
+            locale
+        ).then(function (tz) {
+            api.Local = tz;
+            return api;
+        });
     });
 });
