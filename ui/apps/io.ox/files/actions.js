@@ -152,6 +152,21 @@ define('io.ox/files/actions',
         }
     });
 
+    new Action('io.ox/files/actions/downloadversion', {
+        requires: 'one',
+        multiple: function (list) {
+            // loop over list, get full file object and trigger downloads
+            _(list).each(function (o) {
+                api.get(o).done(function (file) {
+                    if (o.version) {
+                        file = _.extend({}, file, { version: o.version });
+                    }
+                    window.open(api.getUrl(file, 'download'));
+                });
+            });
+        }
+    });
+
     new Action('io.ox/files/actions/open', {
         requires: function (e) {
             return !(e.collection.has('one') && _.isEmpty(e.baton.data.filename));
@@ -872,7 +887,7 @@ define('io.ox/files/actions',
         id: 'download',
         index: 200,
         label: gt('Download'),
-        ref: 'io.ox/files/actions/download'
+        ref: 'io.ox/files/actions/downloadversion'
     }));
 
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
