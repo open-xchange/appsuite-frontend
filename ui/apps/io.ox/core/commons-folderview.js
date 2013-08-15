@@ -462,19 +462,20 @@ define('io.ox/core/commons-folderview',
                             .addPrimaryButton('ok', title)
                             .addButton('cancel', gt('Cancel'));
                     dialog.getBody().css('height', '250px');
-                    var tree = new views.FolderTree(dialog.getBody(), {
-                        type: baton.options.type,
-                        rootFolderId: '1',
-                        skipRoot: true,
-                        tabindex: 0,
-                        cut: folder.id,
-                        customize: function (data) {
-                            var canMove = api.can('moveFolder', folder, data);
-                            if (!canMove) {
-                                this.removeClass('selectable').addClass('disabled');
+                    var type = baton.options.type,
+                        tree = new views.FolderTree(dialog.getBody(), {
+                            type: type,
+                            rootFolderId: type === 'infostore' ? '9' : '1',
+                            skipRoot: true,
+                            tabindex: 0,
+                            cut: folder.id,
+                            customize: function (data) {
+                                var canMove = api.can('moveFolder', folder, data);
+                                if (!canMove) {
+                                    this.removeClass('selectable').addClass('disabled');
+                                }
                             }
-                        }
-                    });
+                        });
                     dialog.show(function () {
                         tree.paint().done(function () {
                             // open the foldertree to the current folder
@@ -506,14 +507,16 @@ define('io.ox/core/commons-folderview',
             id: 'move',
             index: 200,
             draw: function (baton) {
-                if (_.device('!smartphone')) {
-                    var link = $('<a href="#" data-action="delete" role="menuitem">').text(gt('Move'));
-                    this.append($('<li>').append(link));
-                    if (api.can('deleteFolder', baton.data)) {
-                        link.attr('tabindex', 1).on('click', { baton: baton }, moveFolder);
-                    } else {
-                        link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
-                    }
+
+                if (!/^(mail|infostore)$/.test(baton.options.type)) return;
+                if (_.device('smartphone')) return;
+
+                var link = $('<a href="#" data-action="delete" role="menuitem">').text(gt('Move'));
+                this.append($('<li>').append(link));
+                if (api.can('deleteFolder', baton.data)) {
+                    link.attr('tabindex', 1).on('click', { baton: baton }, moveFolder);
+                } else {
+                    link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
                 }
             }
         });
