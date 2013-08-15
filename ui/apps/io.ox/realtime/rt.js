@@ -556,7 +556,17 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             },
             data: options
         }).done(function (responseStanza) {
-            return new RealtimeStanza(responseStanza);
+            var stanza = new RealtimeStanza(responseStanza);
+            if (stanza.get("", "error")) {
+                if (api.debug) {
+                    console.log("Received Stanza contained an error");
+                }
+                var error = stanza.get("", "error");
+                if (error.data && error.data.code === 6) {
+                    resetSequence(0);
+                }
+            }
+            return stanza;
         }).fail(function (resp) {
             if (resp.code === "RT_STANZA-1006" || resp.code === 'RT_STANZA-0006') {
                 resetSequence(0);
