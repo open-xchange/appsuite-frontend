@@ -33,11 +33,11 @@ define('l10n/ja_JP/io.ox/register',
             addFurigana('.company', 'yomiCompany');
             function addFurigana(selector, yomiField) {
                 var value = baton.data[yomiField];
-                if (!value) return;
                 self.find(selector)
                 .addClass('with-furigana')
                 .prepend(
-                    $('<span class="furigana">').text(value),
+                    // the nbsp is important to keep correct vertical alignment!
+                    $('<span class="furigana">').text(value || '\u00A0'),
                     $('<br>')
                 );
             }
