@@ -25,7 +25,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
         onChange: function () {
             var count = this.model.get('count');
             this.$el.find('.badge').toggleClass('empty', count === 0);
-            this.$el.find('.number').text(count >= 100 ? '99+' : count);
+            this.$el.find('.number').text(_.noI18n(count >= 100 ? '99+' : count));
         },
         onToggle: function (open) {
             this.$el.find('.badge i').attr('class', open ? 'icon-caret-down' : 'icon-caret-right');
@@ -33,7 +33,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
         render: function () {
             this.$el.attr({ href: '#', tabindex: '1' }).append(
                 $('<span class="badge">').append(
-                    $('<spann class="number">'), $.txt(' '),
+                    $('<span class="number">'), $.txt(' '),
                     $('<i class="icon-caret-right">')
                 )
             );
