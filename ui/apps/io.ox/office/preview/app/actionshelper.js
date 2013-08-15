@@ -161,7 +161,7 @@ define('io.ox/office/preview/app/actionshelper',
 
                 // prepare and load the preview image
                 imgNode
-                    .css({ width: getWidth(options), maxWidth: '100%', visibility: 'hidden' })
+                    .css({ width: getWidth(options), maxWidth: getWidth(options), visibility: 'hidden' })
                     .on('load', function () { def.resolve(); })
                     .on('error', function () { def.reject(); })
                     .attr('src', getUrl(file, options));

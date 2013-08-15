@@ -114,7 +114,7 @@ define('io.ox/files/list/view-detail',
 
                 function fnDrawPreview() {
                     var width = $previewNode.innerWidth();
-                    if (width > lastWidth) {
+                    if (width !== lastWidth) {
                         $previewNode.empty();
                         lastWidth = width; // Must only recalculate once we get bigger
                         var prev = new preview.Preview(parseArguments(baton.data), { width: width, height: 'auto'});
