@@ -558,7 +558,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         }).done(function (responseStanza) {
             return new RealtimeStanza(responseStanza);
         }).fail(function (resp) {
-            if (resp.code === "RT_STANZA-1006") {
+            if (resp.code === "RT_STANZA-1006" || resp.code === 'RT_STANZA-0006') {
                 resetSequence(0);
             }
         });
