@@ -131,7 +131,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                     popup.idle();
                     if (!self.model.valid) {
                         if (!error.model) {//backend Error
-                            if (error.error_params[0].indexOf('PUB-0006') === 0) {
+                            if (error.code === 'PUB-0006') {
                                 popup.getBody().find('.siteName-control').addClass('error').find('.help-inline').text(gt('Name already taken'));
                             }
                         } else {//validation gone wrong
