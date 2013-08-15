@@ -37,7 +37,7 @@ define('io.ox/contacts/edit/view-form', [
             personal: ['title', 'first_name', 'last_name', /*'display_name',*/ // yep, end-users don't understand it
                          'second_name', 'suffix', 'nickname', 'birthday',
                          'marital_status', 'number_of_children', 'spouse_name',
-                         'anniversary', 'url', 'private_flag'],
+                         'anniversary', 'url'],
             job: ['profession', 'position', 'department', 'company', 'room_number',
                     'employee_type', 'number_of_employees', 'sales_volume', 'tax_id',
                     'commercial_register', 'branches', 'business_category', 'info',
@@ -119,6 +119,10 @@ define('io.ox/contacts/edit/view-form', [
     if (!capabilities.has('infostore')) {
         delete meta.sections.attachments;
         delete meta.i18n.attachments;
+    }
+
+    if (capabilities.has('gab')) {
+        meta.sections.personal.push('private_flag');
     }
 
     _.each(['home', 'business', 'other'], function (type) {
