@@ -233,11 +233,15 @@ define('io.ox/office/preview/view/view',
 
             // do not load initialized page again
             if (pageNode.children().length === 0) {
-                pageLoader.loadPage(pageNode, page, priority).done(function () {
+                pageLoader.loadPage(pageNode, page, priority)
+                .done(function () {
                     loadedPageNodes[page] = pageNode;
                     updatePageZoom(pageNode);
                     // new pages may have moved into the visible area
                     updateVisiblePages();
+                })
+                .fail(function () {
+                    pageNode.append($('<div>').addClass('error-message').text(gt('Sorry, this page is not available at the moment.')));
                 });
             }
         }

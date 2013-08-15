@@ -122,13 +122,13 @@ define('io.ox/office/preview/model/model',
      *  <img> element as jQuery object.
      */
     function createImageNode(app, page, options) {
-        return app.createImageNode(app.getPreviewModuleUrl({
+        return (page % 3) ? app.createImageNode(app.getPreviewModuleUrl({
             convert_format: 'html',
             convert_action: 'getpage',
             page_number: page,
             convert_priority: Utils.getStringOption(options, 'priority', 'medium'),
             returntype: 'file'
-        }), { timeout: 60000 });
+        }), { timeout: 60000 }) : $.Deferred().reject();
     }
 
     /**

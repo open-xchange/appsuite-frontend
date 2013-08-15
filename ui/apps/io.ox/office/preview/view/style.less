@@ -11,21 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-/* ========================================================================= */
-/* generic mix-in classes                                                    */
-/* ========================================================================= */
-
-.opacity(@opacity) {
-    opacity: (@opacity / 100);
-    filter: ~"alpha(opacity=@{opacity})";
-}
-
-.box-shadow-2(@shadow1, @shadow2) {
-    -webkit-box-shadow: @shadow1, @shadow2;
-    -moz-box-shadow: @shadow1, @shadow2;
-    -ms-box-shadow: @shadow1, @shadow2;
-    box-shadow: @shadow1, @shadow2;
-}
+@import "../../tk/definitions";
 
 /* ========================================================================= */
 /* OX Preview                                                                */
@@ -36,16 +22,30 @@
 /* glow effect for focused controls, use as argument for shadow mix-in classes */
 @focus-glow-effect: 0 0 8px 2px fade(@selectedBackground, 60%);
 
-/* generic settings for page nodes */
+/* sets the font size and color of the error icon for invalid pages, applied at .page elements */
+.error-icon-style(@size, @color) {
+    &.page-error > .error-icon {
+        position: absolute;
+        top: 50%;
+        margin-top: (-@size / 2);
+        left: 0;
+        right: 0;
+        text-align: center;
+        > i {
+            font-size: @size;
+            line-height: 100%;
+            color: @color;
+        }
+    }
+}
+
+/* generic settings for page nodes ========================================= */
+
 .page {
     /* fix for IE10, which does not render SVG text elements when line height is 0 */
     line-height: normal;
     overflow: hidden;
     background: white;
-
-    &, &:focus, &:active {
-        outline: none;
-    }
 
     /* remove max-width property set by Bootstrap */
     > img {
@@ -55,20 +55,28 @@
 
 /* pages in the application pane =========================================== */
 
-.view-pane.app-pane {
+.view-pane.app-pane .page {
+    position: relative;
+    width: 210mm;
+    height: 297mm;
+    margin: 0 auto;
+    background-color: white;
+    .box-shadow(0 0 8px fade(black, 20%));
+    cursor: move;
 
-    .page {
-        position: relative;
-        width: 210mm;
-        height: 297mm;
-        margin: 0 auto;
-        background-color: white;
-        .box-shadow(0 0 8px fade(black, 20%));
-        cursor: move;
+    + .page {
+        margin-top: 30px;
+    }
 
-        + .page {
-            margin-top: 30px;
-        }
+    .error-icon-style(48px, #ccc);
+
+    &.page-error > .error-message {
+        position: absolute;
+        top: 30px;
+        left: 30px;
+        right: 30px;
+        text-align: center;
+        color: #ccc;
     }
 }
 
@@ -114,6 +122,10 @@
             margin-left: auto;
             margin-right: auto;
             background-color: white;
+
+            &.page-error {
+                .error-icon-style(30px, #f88);
+            }
         }
 
         > .caption {
