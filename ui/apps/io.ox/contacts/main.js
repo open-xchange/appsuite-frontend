@@ -191,6 +191,8 @@ define("io.ox/contacts/main",
                         // nothing is written down, add some text, so user isn’t confused
                         fields.name.addClass('bright-text').append(gt("Empty name and description found."));
                         fields.description.append(gt("Edit to set a name."));
+                    } else {
+                        fields.name.removeClass('bright-text');
                     }
                 }
             }
