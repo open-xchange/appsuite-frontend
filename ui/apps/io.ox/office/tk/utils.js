@@ -2151,6 +2151,50 @@ define.async('io.ox/office/tk/utils',
         }
     };
 
+    // event handling ---------------------------------------------------------
+
+    /**
+     * Attaches an event handler to the given jQuery object and assures
+     * that the handler is the first one to be executed if more than
+     * one handler is attached to the object.
+     *
+     * Note: $._data() is not a supported public interface; the actual
+     * data structures may change incompatibly from jQuery version to version.
+     *
+     * @param {jQuery} object
+     *  The jQuery object the handler function is attached.
+     * @param {String} event
+     *  The event type and optional namespaces, such as 'click' or 'keydown.myPlugin'.
+     * @param {Function} func
+     *  The handler function to execute when the event is triggered.
+     *  @returns {Boolean}
+     *  Returns true if handler has been added as first one.
+     */
+    Utils.bindAsFirstHandler = function (object, event, func) {
+
+        object = (object instanceof $) ? object : $(object);
+
+        // normally attach the event first
+        object.on(event, func);
+
+        if (!_.isFunction($._data)) { return false; }
+
+        // move the handler function
+        object.each(function () {
+            var // all handlers for the event
+                handlers = $._data(this, 'events')[event.split('.')[0]],
+                // the handler that has just been inserted at the end of the list
+                handler = _.isArray(handlers) ? handlers.pop() : null;
+
+            // move the handler to the beginning of the list
+            if (handler) {
+                handlers.splice(0, 0, handler);
+            }
+        });
+
+        return true;
+    };
+
     // form control elements --------------------------------------------------
 
     /**
