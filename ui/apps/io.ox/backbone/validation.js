@@ -71,7 +71,8 @@ define("io.ox/backbone/validation",
         },
         phone: function (val) {
             return settings.get('features/validatePhoneNumbers', false) === false ||
-                util.isValidPhoneNumber(val) || gt('Please enter a valid phone number');
+                util.isValidPhoneNumber(val) ||
+                gt('Please enter a valid phone number. Allowed characters are: %1$s', '0-9 , . - ( ) # + ; /');
         },
         url: function (val) {
             return true;
