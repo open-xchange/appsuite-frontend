@@ -491,7 +491,7 @@
             vertical-align: top;
 
             border: 1px solid #ccc;
-            border-width: 1px 1px 1px 0;
+            border-width: 1px 1px 1px 1px;
 
             @background: #f5f5f5;
             @emojiTabHeight: 34px;
@@ -630,9 +630,14 @@
     }
 }
 
-// TINY SCREENS
+// MEDIUM SCREENS
 @media (max-width: 700px) {
-
+    .io-ox-mail-write-window {
+        .touch & .mceEmojiPane {
+            top: 299px;
+            bottom: 51px;
+        }
+    }
     .io-ox-mail-write {
 
         .overflow();
