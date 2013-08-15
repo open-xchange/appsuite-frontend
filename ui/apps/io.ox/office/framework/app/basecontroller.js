@@ -254,8 +254,13 @@ define('io.ox/office/framework/app/basecontroller',
          * Moves the browser focus to the application pane.
          */
         function grabApplicationFocus(options) {
-            // Bug 28214: focus back to application if source GUI element is hidden now
-            if (!Utils.getBooleanOption(options, 'preserveFocus', false) || !$(window.document.activeElement).is(Utils.REALLY_VISIBLE_SELECTOR)) {
+            var source = Utils.getOption(options, 'source');
+            // Bug 28214: Focus back to application if source GUI element is hidden now.
+            // If the source GUI element is hidden now, IE has already changed the
+            // 'document.activeElement' property, so it cannot be used to detect visibility.
+            // Therefore, all group instances now insert the source DOM node into the value
+            // options when triggering the 'group:change' event.
+            if (!Utils.getBooleanOption(options, 'preserveFocus', false) || (source && !$(source).is(Utils.REALLY_VISIBLE_SELECTOR))) {
                 app.getView().grabFocus();
             }
         }

@@ -268,7 +268,7 @@ define('io.ox/office/tk/control/group',
                     self.triggerCancel(options);
                 } else {
                     self.setValue(value, options);
-                    self.trigger('group:change', value, options);
+                    self.trigger('group:change', value, Utils.extendOptions(options, { source: node[0] }));
                 }
                 return false;
             }
