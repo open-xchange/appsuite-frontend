@@ -159,12 +159,12 @@ define('io.ox/contacts/edit/view-form', [
             index: 100,
             customizeNode: function () {
                 //access to global address book?
-                if (capabilities.has('gab')) {
+                if (isMyContactData && !capabilities.has('gab')) {
+                    this.$el = $('');
+                } else {
                     this.$el
                         .css({ display: 'inline-block' })
                         .addClass("contact-picture-upload f6-target");
-                } else {
-                    this.$el = $('');
                 }
             }
         }));
@@ -258,7 +258,7 @@ define('io.ox/contacts/edit/view-form', [
             render: function () {
                 this.$el.text(util.getFullName(this.model.toJSON()) || '\u00A0');
                 //fix top margin if picture upload was removed
-                if (!capabilities.has('gab'))
+                if (isMyContactData && !capabilities.has('gab'))
                     this.$el.css('margin-top', '0px');
                 return this;
             }
