@@ -38,7 +38,7 @@ define('io.ox/mail/statistics',
             var cid = JSON.stringify(options);
 
             if (!hash[cid] || hash[cid].state() === 'rejected') {
-                hash[cid] = api.getAll({ folder: options.folder, columns: COLUMNS });
+                hash[cid] = api.getAll({ folder: options.folder, columns: COLUMNS }, false);
             }
 
             return hash[cid].promise();
