@@ -275,6 +275,32 @@ define('io.ox/calendar/edit/main',
             },
 
             onShowWindow: function () {
+
+                var array = [],
+                    signatureSequenz = ['keyup', 'focus'];
+
+                function stopPointerEvents(e) {
+
+                    if (e.type === 'focus') {
+                        array.push('focus');
+                    }
+
+                    if (e.type === 'keyup') {
+                        array.push('keyup');
+                    }
+
+                    if (array.length === 2) {
+                        if (_.isEmpty(_.difference(signatureSequenz, array))) {
+                            e.data.list.css('pointer-events', 'none');
+                        }
+                        array = [];
+                    }
+
+                    self.getWindow().nodes.main.find('.control-group').on('mousemove', function () {
+                        e.data.list.css('pointer-events', 'auto');
+                    });
+                }
+
                 var self = this;
                 if (self.model.get('title')) {
                     self.getWindow().setTitle(self.model.get('title'));
@@ -286,6 +312,12 @@ define('io.ox/calendar/edit/main',
                 });
                 $(self.getWindow().nodes.main).find('input')[0].focus(); // focus first input element
                 $(self.getWindow().nodes.main[0]).addClass('scrollable'); // make window scrollable
+
+                var controlsBlock = $(self.getWindow().nodes.main).find('.controls'),
+                    list = controlsBlock.find('ul'),
+                    input = controlsBlock.find('input');
+
+                input.on('keyup focus', {list: list}, stopPointerEvents);
             },
 
             onSave: function () {
