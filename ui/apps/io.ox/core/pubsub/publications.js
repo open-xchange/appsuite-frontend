@@ -327,7 +327,9 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                         $('<button type="button" class="email-btn btn">')
                             .text(gt('Share link by email'))
                             .on('click', function () {
-                                sendInvitation(baton);
+                                sendInvitation(baton).always(function () {
+                                    baton.popup.close();
+                                });
                             })
                         )
                     ),
