@@ -188,12 +188,6 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             }
             var error = stanza.get("", "error");
             if (error.data && error.data.code === 1005) {
-                if (api.debug) {
-                    console.log("Closing socket, because I got a session expired error");
-                }
-                subSocket.close();
-                socket.unsubscribe();
-                disconnected = true;
                 ox.trigger('relogin:required');
             } else if (error.data && error.data.code === 1006) {
                 resetSequence(-1);
@@ -393,6 +387,15 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         if (!online && !connecting) {
             reconnect();
         }
+    });
+
+    ox.on("relogin:required", function () {
+        if (api.debug) {
+            console.log("Closing socket, because I got a session expired error");
+        }
+        subSocket.close();
+        socket.unsubscribe();
+        disconnected = true;
     });
 
     ox.on('relogin:success', function () {
