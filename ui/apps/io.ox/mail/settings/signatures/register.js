@@ -44,7 +44,7 @@ define('io.ox/mail/settings/signatures/register',
 
         if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
 
-        popup = new dialogs.ModalDialog();
+        popup = new dialogs.ModalDialog({ async: true });
         popup.header($("<h4>").text(signature.id === null ? gt('Add signature') : gt('Edit signature')));
         popup.append(
             $('<div>').append(
@@ -67,39 +67,36 @@ define('io.ox/mail/settings/signatures/register',
             )
         )
         .addPrimaryButton('save', gt('Save'))
-        .addButton('discard', gt('Discard'))
-        .show(function () {
+        .addButton('cancel', gt('Discard'))
+        .on('save', function (action) {
+            if ($name.val() !== '') {
+                var update = signature.id ? {} : {type: 'signature', module: 'io.ox/mail', displayname: '', content: '', misc: {insertion: 'below'}};
 
-        }).done(function (action) {
-            if (action === 'save') {
-                if ($name.val() !== '') {
-                    var update = signature.id ? {} : {type: 'signature', module: 'io.ox/mail', displayname: '', content: '', misc: {insertion: 'below'}};
+                update.id = signature.id;
+                update.misc = { insertion: $insertion.val() };
 
-                    update.id = signature.id;
-                    update.misc = { insertion: $insertion.val() };
+                if ($signature.val() !== signature.content) update.content = $signature.val();
+                if ($name.val() !== signature.displayname) update.displayname = $name.val();
 
-                    if ($signature.val() !== signature.content) update.content = $signature.val();
-                    if ($name.val() !== signature.displayname) update.displayname = $name.val();
+                popup.busy();
 
-                    popup.busy();
-
-                    var def = null;
-                    if (signature.id) {
-                        def = snippets.update(update);
-                    } else {
-                        def = snippets.create(update);
-                    }
-                    def.done(function (resp) {
-                        popup.idle();
-                        popup.close();
-                    }).fail(require('io.ox/core/notifications').yell);
-
-                    return false;
+                var def = null;
+                if (signature.id) {
+                    def = snippets.update(update);
                 } else {
-                    validateField($name, $error);
+                    def = snippets.create(update);
                 }
+                def.done(function (resp) {
+                    popup.idle();
+                    popup.close();
+                }).fail(require('io.ox/core/notifications').yell);
+
+                popup.close();
+            } else {
+                popup.idle();
+                validateField($name, $error);
             }
-        });
+        }).show();
 
         $name.val(signature.displayname);
         $signature.val(signature.content);
