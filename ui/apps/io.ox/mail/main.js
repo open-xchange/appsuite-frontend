@@ -122,7 +122,7 @@ define('io.ox/mail/main',
                 showSwipeButton = false;
             }
         };
-
+        // mobile stuff
         ext.point('io.ox/mail/swipeDelete').extend({
             index: 666,
             id: 'deleteButton',
@@ -148,6 +148,11 @@ define('io.ox/mail/main',
                 showSwipeButton = true;
             }
         });
+
+        // reenable PDF downnloading for smartphone
+        if (_.device('ios')) {
+            ext.point('io.ox/mail/actions/open-attachment').disable('disable_action');
+        }
 
         // grid
         var originalOptions = ext.point('io.ox/mail/vgrid/options').options(),
