@@ -183,8 +183,6 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                                         control.removeClass('error');
                                         control.find('.help-inline').text('');
                                     }
-                                    //make input lowercase and save to model
-                                    node.val(node.val().toLowerCase());
                                     baton.target.siteName = node.val();
                                 }),
                              $('<span>').addClass('help-inline'))));
