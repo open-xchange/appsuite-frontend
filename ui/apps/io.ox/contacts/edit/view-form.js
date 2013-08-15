@@ -178,8 +178,7 @@ define('io.ox/contacts/edit/view-form', [
                 ref: ref + "/actions/edit/save",
                 cssClasses: "btn btn-primary control f6-target",
                 tabIndex: 2,
-                tagtype: "button",
-                hidde: isMyContactData
+                tagtype: "button"
             }));
 
             point.basicExtend(new links.Button({
