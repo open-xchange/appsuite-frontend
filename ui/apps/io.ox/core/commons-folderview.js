@@ -621,7 +621,7 @@ define('io.ox/core/commons-folderview',
             });
 
             $(window).off('resize.folderview').on('resize.folderview', function (e) {
-                if (!visible) { fnHide(); } else { fnShow();  }
+                if (!visible) { fnHide(); } else { fnShow(true);  }
             });
         };
 
@@ -646,13 +646,15 @@ define('io.ox/core/commons-folderview',
             }
         };
 
-        fnShow = function () {
+        fnShow = function (resized) {
             app.settings.set('folderview/visible/' + _.display(), visible = true).save();
             var nodes = app.getWindow().nodes;
             fnResize();
             nodes.sidepanel.addClass('visible');
             restoreWidth();
-            baton.$.container.focus();
+            if (!resized) {
+                baton.$.container.focus();
+            }
             app.trigger('folderview:open');
             return $.when();
         };
