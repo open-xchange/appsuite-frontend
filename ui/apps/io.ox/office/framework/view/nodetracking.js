@@ -669,25 +669,30 @@ define('io.ox/office/framework/view/nodetracking',
         var // the DOM node currently focused
             focusNode = null,
             // the last received 'focusout' event
-            lastEvent = null;
+            lastOutEvent = null;
 
         function focusInHandler(event) {
-            if ($.contains(document.body, event.target)) {
-                focusNode = event.target;
+            // ignore focus events at document (sent by Firefox only)
+            // IE sometimes sends wrong targets in focusin events, always use activeElement
+            if (window.document.activeElement !== window.document) {
+                focusNode = window.document.activeElement;
+                lastOutEvent = null;
             }
         }
 
         function focusOutHandler(event) {
-            // always process last 'focusout' event only, defer execution, to
-            // process one or more 'focusin' events directly following before
-            lastEvent = event;
-            _.defer(function () {
-                if (lastEvent && (focusNode === lastEvent.target)) {
-                    focusNode = null;
-                    cancelTracking();
-                }
-                focusNode = lastEvent = null;
-            });
+            // ignore focus events at document (sent by Firefox only)
+            if (event.target !== window.document) {
+                lastOutEvent = event;
+                // always process last 'focusout' event only, defer execution, to
+                // process one or more 'focusin' events directly following before
+                _.defer(function () {
+                    if (lastOutEvent && (focusNode === lastOutEvent.target)) {
+                        cancelTracking();
+                    }
+                    focusNode = lastOutEvent = null;
+                });
+            }
         }
 
         $(document).on({ focusin: focusInHandler, focusout: focusOutHandler });
