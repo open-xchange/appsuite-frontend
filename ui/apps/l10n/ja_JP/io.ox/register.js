@@ -264,45 +264,45 @@ define('l10n/ja_JP/io.ox/register',
         },
         getIndex: function (baton) {
             baton.furiganaCollapsed = isCollapsed(this);
+
+            var keys = _(baton.labels).keys(),
+                // get all latin keys A-Z plus umlauts
+                latin = _(keys).filter(function (char) { return (/[a-zäöü]/ig).test(char); }),
+                // get all ASCII keys
+                ascii = _(keys).filter(function (char) { return (/[\x00-\xFF]/g).test(char); }),
+                // get ASCII without latin
+                other = _(ascii).difference(latin),
+                // get first occurrences
+                firstLatin = _.min(latin, function (label) { return label.charCodeAt(0); }),
+                firstOther = _.min(other, function (label) { return label.charCodeAt(0) || Infinity; }),
+                // add thumb index for ABC
+                abcThumb = new baton.Thumb({
+                    label: _.noI18n('A～Z'),
+                    text: firstLatin,
+                    enabled: function () { return firstLatin !== Infinity; }
+                }),
+                // add thumb index for other characters
+                otherThumb = new baton.Thumb({
+                    label: _.noI18n('その他'),
+                    text: firstOther,
+                    enabled: function () { return firstOther !== Infinity; }
+                });
+
             if (baton.furiganaCollapsed) {
-                var keys = _(baton.labels).keys(),
-                    // get all latin keys A-Z plus umlauts
-                    latin = _(keys).filter(function (char) { return (/[a-zäöü]/ig).test(char); }),
-                    // get all ASCII keys
-                    ascii = _(keys).filter(function (char) { return (/[\x00-\xFF]/g).test(char); }),
-                    // get ASCII without latin
-                    other = _(ascii).difference(latin),
-                    // get first occurrences
-                    firstLatin = _.min(latin, function (label) { return label.charCodeAt(0); }),
-                    firstOther = _.min(other, function (label) { return label.charCodeAt(0) || Infinity; }),
-                    // add thumb index for ABC
-                    abcThumb = new baton.Thumb({
-                        label: _.noI18n('A～Z'),
-                        text: firstLatin,
-                        enabled: function () { return firstLatin !== Infinity; }
-                    }),
-                    // add thumb index for other characters
-                    otherThumb = new baton.Thumb({
-                        label: _.noI18n('その他'),
-                        text: firstOther,
-                        enabled: function () { return firstOther !== Infinity; }
-                    });
                 // this could still be improved.
                 // once we know the codes or the range of the Japanese alphabet
                 // we could definer other as "all characters except latin except japanese"
                 baton.data = _.map(kana, baton.Thumb);
                 baton.data.push(otherThumb, abcThumb);
             } else {
-                baton.data = _.map(
-                    kana.concat('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')),
-                    baton.Thumb);
+                baton.data = _.map(kana, baton.Thumb);
+                // apply "other" index if A-Z is expanded, too
+                baton.data = baton.data.concat(otherThumb);
+                // append a-z expanded
+                var az  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                baton.data = baton.data.concat(_.map(az.split(''), baton.Thumb));
             }
         }
     });
-
-    // is code missing here?
-    // $(window).resize(_.debounce(function () {
-
-    // }, 300));
 
 });
