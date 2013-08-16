@@ -191,7 +191,7 @@ define('io.ox/office/preview/view/pagegroup',
                 // initialize button nodes on first call
                 initializeButtons = buttonNodes.length === 0,
                 // the focused button (needs to be restored after detach/append)
-                focusButton = Utils.getFocusedControl(buttonNodes);
+                focusButton = buttonNodes.filter(window.document.activeElement);
 
             // do nothing, if the side pane is not visible, or no pages are available
             if ((pageCount === 0) || !self.isReallyVisible()) { return; }

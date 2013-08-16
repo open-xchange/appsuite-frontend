@@ -20,7 +20,8 @@ define('io.ox/contacts/actions',
      'io.ox/core/print',
      'io.ox/portal/util',
      'gettext!io.ox/contacts',
-     'settings!io.ox/contacts'], function (ext, links, api, coreConfig, notifications, print, portalUtil, gt, settings) {
+     'settings!io.ox/contacts',
+     'io.ox/core/extPatterns/actions'], function (ext, links, api, coreConfig, notifications, print, portalUtil, gt, settings, actions) {
 
     'use strict';
 
@@ -607,8 +608,57 @@ define('io.ox/contacts/actions',
         }
     });
 
-    //  points
 
+    // Mobile multi select extension points
+    // action send mail to contact
+    ext.point('io.ox/contacts/mobileMultiSelect/toolbar').extend({
+        id: 'sendmail',
+        index: 10,
+        draw: function (data) {
+            var selection = data.data,
+                baton = new ext.Baton({data: data.data});
+            $(this).append($('<div class="toolbar-button">')
+                .append($('<a href="#">')
+                    .append(
+                        $('<i>')
+                            .addClass('icon-envelope')
+                            .on('click', {grid: data.grid}, function (e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                actions.invoke('io.ox/contacts/actions/send', null, baton);
+                                // need to clear the selection after aciton is invoked
+                                e.data.grid.selection.clear();
+                            })
+                    )
+                )
+            );
+        }
+    });
+    // delete contact(s)
+    ext.point('io.ox/contacts/mobileMultiSelect/toolbar').extend({
+        id: 'delete',
+        index: 20,
+        draw: function (data) {
+            var selection = data.data,
+                baton = new ext.Baton({data: data.data});
+            $(this).append($('<div class="toolbar-button">')
+                .append($('<a href="#">')
+                    .append(
+                        $('<i>')
+                            .addClass('icon-trash')
+                            .on('click', {grid: data.grid}, function (e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                actions.invoke('io.ox/contacts/actions/delete', null, baton);
+                                e.data.grid.selection.clear();
+                            })
+                    )
+                )
+            );
+        }
+    });
+
+    //  points
     ext.point('io.ox/contacts/detail/actions').extend(new links.InlineLinks({
         index: 100,
         id: 'inline-links',

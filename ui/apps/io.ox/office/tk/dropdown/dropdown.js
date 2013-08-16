@@ -385,7 +385,7 @@ define('io.ox/office/tk/dropdown/dropdown',
             window.clearInterval(refreshTimer);
 
             // move focus to drop-down button, if drop-down menu is focused
-            if (Utils.containsFocusedControl(menuNode)) {
+            if (Utils.containsFocus(menuNode)) {
                 menuButton.focus();
             }
 

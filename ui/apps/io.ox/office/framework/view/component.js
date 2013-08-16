@@ -92,9 +92,6 @@ define('io.ox/office/framework/view/component',
             // all control groups, mapped by key
             groupsByKey = {},
 
-            // whether the pane will be focusable with keyboard
-            focusable = Utils.getBooleanOption(options, 'focusable', true),
-
             // handler called to insert a new group into this view component
             groupInserter = Utils.getFunctionOption(options, 'groupInserter');
 
@@ -123,7 +120,6 @@ define('io.ox/office/framework/view/component',
          */
         function groupLayoutHandler() {
             var newNodeSize = getNodeSize();
-            updateFocusable();
             if (!_.isEqual(nodeSize, newNodeSize)) {
                 nodeSize = newNodeSize;
                 self.trigger('component:layout');
@@ -177,18 +173,10 @@ define('io.ox/office/framework/view/component',
          * Returns all visible group objects that contain focusable controls as
          * array.
          */
-        function getFocusableGroups(reallyVisible) {
+        function getFocusableGroups() {
             return _(groups).filter(function (group) {
-                return (reallyVisible ? group.isReallyVisible() : group.isVisible()) && group.hasFocusableControls();
+                return group.isReallyVisible() && group.hasFocusableControls();
             });
-        }
-
-        /**
-         * Updates the CSS marker class controlling whether this view component
-         * is focusable with special keyboard shortcuts.
-         */
-        function updateFocusable() {
-            node.toggleClass('f6-target', focusable && (getFocusableGroups().length > 0));
         }
 
         /**
@@ -202,11 +190,11 @@ define('io.ox/office/framework/view/component',
         function moveFocus(forward) {
 
             var // all visible group objects with focusable controls
-                focusableGroups = getFocusableGroups(true),
+                focusableGroups = getFocusableGroups(),
                 // extract all focusable controls from the groups
                 controls = _(focusableGroups).reduce(function (controls, group) { return controls.add(group.getFocusableControls()); }, $()),
                 // focused control
-                control = Utils.getFocusedControl(controls),
+                control = controls.filter(window.document.activeElement),
                 // index of focused control in all enabled controls
                 index = controls.index(control);
 
@@ -393,7 +381,7 @@ define('io.ox/office/framework/view/component',
         this.grabFocus = function () {
 
             var // all visible group objects with focusable controls
-                focusableGroups = this.hasFocus() ? [] : getFocusableGroups(true);
+                focusableGroups = this.hasFocus() ? [] : getFocusableGroups();
 
             // set focus to first focusable group
             if (focusableGroups.length > 0) {
@@ -442,6 +430,9 @@ define('io.ox/office/framework/view/component',
 
         // marker for touch devices
         node.toggleClass('touch', Modernizr.touch);
+
+        // whether the pane will be focusable with keyboard
+        node.toggleClass('f6-target', Utils.getBooleanOption(options, 'focusable', true));
 
         // hover effect for groups embedded in the view component
         node.toggleClass('hover-effect', Utils.getBooleanOption(options, 'hoverEffect', false));

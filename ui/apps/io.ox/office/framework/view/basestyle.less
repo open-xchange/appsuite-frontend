@@ -175,14 +175,6 @@ i[class^="icon-"], i[class^=" icon-"] {
             outline: none;
         }
 
-        /* the container element for hidden contents */
-        > .app-hidden-root {
-            bottom: auto;
-            height: auto;
-            overflow: visible;
-            line-height: normal;
-        }
-
         /* the container element for the application contents */
         > .app-content-root {
             background: @app-pane-fill-color;
@@ -214,15 +206,6 @@ i[class^="icon-"], i[class^=" icon-"] {
 /* ========================================================================= */
 /* control groups                                                            */
 /* ========================================================================= */
-
-/* border color for focused controls */
-@focus-border-color: @selectedBackground;
-
-/* glow effect for focused controls, use as argument for shadow mix-in classes */
-@focus-glow-effect: 0 0 8px 2px fade(@selectedBackground, 60%);
-
-/* glow effect for active drop-down buttons, use as argument for shadow mix-in classes */
-@dropdown-glow-effect: 0 0 8px 2px fade(white, 60%);
 
 /* horizontal padding in control elements */
 @control-padding: 8px;
@@ -421,9 +404,6 @@ i[class^="icon-"], i[class^=" icon-"] {
         @selected-button-shadow-effect: 10px 20px 20px -20px fade(white, 50%) inset;
         /* default 3D effect for text fields */
         @textfield-shadow-effect: -10px -20px 20px -20px fade(white, 10%) inset;
-
-        /* border color for disabled focused controls */
-        @disabled-focus-border-color: darken(@selectedBackground, 15%);
 
         display: block;
         .box-sizing(content-box);
@@ -633,7 +613,7 @@ i[class^="icon-"], i[class^=" icon-"] {
                 .box-shadow(@dropdown-glow-effect);
 
                 .button {
-                    border-color: #e5e5e5;
+                    border-color: @dropdown-border-color;
 
                     &:not(.selected) {
                         background-color: fade(white, 30%);
@@ -990,8 +970,6 @@ i[class^="icon-"], i[class^=" icon-"] {
             /* shadow effects for selected buttons */
             @shadow-effect-1: 0 5px 10px fade(black, 20%);
             @shadow-effect-2: 0 2px 4px fade(black, 20%) inset;
-            /* focus border, as shadow effect resulting in a single line */
-            @focus-border-effect: 0 0 0 1px @focus-border-color;
             /* focus border for disabled buttons, as shadow effect resulting in a single line */
             @disabled-focus-border-effect: 0 0 0 1px @disabled-focus-border-color;
 

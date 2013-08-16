@@ -71,6 +71,7 @@ define('io.ox/core/commons',
         mobileMultiSelection: (function () {
             var points = {};
 
+            // counter is always shown
             ext.point('io.ox/core/commons/mobile/multiselect').extend({
                 id: 'selectCounter',
                 index: '100',
@@ -663,7 +664,7 @@ define('io.ox/core/commons',
             if (next.attr('tabindex')) {
                 next.focus();
             } else {
-                next.find('[tabindex]').first().focus();
+                next.find('[tabindex]:visible').first().focus();
             }
         }
     });

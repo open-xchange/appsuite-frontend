@@ -21,6 +21,26 @@
 /* background color for the application pane background */
 @app-pane-fill-color: #e5e5e5;
 
+/* focus ------------------------------------------------------------------- */
+
+/* border color for focused controls */
+@focus-border-color: @selectedBackground;
+
+/* border color for disabled focused controls */
+@disabled-focus-border-color: darken(@selectedBackground, 15%);
+
+/* focus border as shadow effect, used as argument for box-shadow */
+@focus-border-effect: 0 0 0 1px @focus-border-color;
+
+/* glow effect for focused controls, used as argument for box-shadow */
+@focus-glow-effect: 0 0 8px 2px fade(@focus-border-color, 60%);
+
+/* border color for active drop-down buttons */
+@dropdown-border-color: #e5e5e5;
+
+/* glow effect for active drop-down buttons, used as argument for box-shadow */
+@dropdown-glow-effect: 0 0 8px 2px fade(white, 60%);
+
 /* ========================================================================= */
 /* generic mix-in classes                                                    */
 /* ========================================================================= */
@@ -78,7 +98,7 @@
     box-shadow: @shadow1, @shadow2, @shadow3, @shadow4;
 }
 
-/* shadow effect for elements hovering ove their background */
+/* shadow effect for elements hovering over their background */
 .drop-shadow(@size: 5px) {
      .box-shadow(0 @size (2 * @size) fade(black, 20%));
 }

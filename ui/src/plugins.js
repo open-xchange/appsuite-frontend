@@ -65,10 +65,17 @@
                         initialization.resolve();
                     }
                 };
+                request.onerror = function (e) {
+                    // console.log('request error innerlevel', e);
+                    // fallback
+                    fileCache = dummyFileCache;
+                    initialization.reject();
+                };
             };
 
             request.onerror = function (e) {
                 // fallback
+                // console.log('request error outerlevel', e);
                 fileCache = dummyFileCache;
                 initialization.reject();
             };
@@ -211,7 +218,7 @@
         req.load = function (context, modulename, url) {
             var prefix = context.config.baseUrl;
             if (modulename.slice(0, 5) === 'apps/') {
-                url = ox.apiRoot + '/apps/load/' + ox.base + ',' + url.slice(5); 
+                url = ox.apiRoot + '/apps/load/' + ox.base + ',' + url.slice(5);
                 return oldload.apply(this, arguments);
             } else if (modulename.charAt(0) !== '/') {
                 if (url.slice(0, prefix.length) !== prefix) {
