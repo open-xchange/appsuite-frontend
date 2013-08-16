@@ -130,7 +130,7 @@ define('io.ox/files/views/create', [
                 //dialog
                 dialog.header($('<h4>').text(gt('Upload new files')));
                 dialog.getBody().append($('<div>').addClass('row-fluid').append($form));
-                dialog.getBody().append(baton.fileList.$el);
+                dialog.getBody().append(baton.fileList.getNode());
                 dialog
                     .addPrimaryButton('save', gt('Save'), 'save')
                     .addButton('cancel', gt('Cancel'), 'cancel')

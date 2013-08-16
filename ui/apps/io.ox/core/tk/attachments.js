@@ -22,13 +22,14 @@ define('io.ox/core/tk/attachments',
     ], function (ext, attachmentAPI, strings, gt, links) {
 
         'use strict';
-        var counter = 0;
+        var oldMode = _.browser.IE < 10;
 
         function EditableAttachmentList(options) {
+            var counter = 0;
+
             _.extend(this, {
 
                 init: function () {
-                    this.oldMode = _.browser.IE < 10;
                     var self = this;
                     this.attachmentsToAdd = [];
                     this.attachmentsToDelete = [];
@@ -114,7 +115,7 @@ define('io.ox/core/tk/attachments',
                     this.render();
                 },
                 addFile: function (file) {
-                    if (this.oldMode) {
+                    if (oldMode) {
                         this.addAttachment({file: file.hiddenField, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size});
                     } else {
                         this.addAttachment({file: file, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size});
@@ -130,7 +131,7 @@ define('io.ox/core/tk/attachments',
                         this.attachmentsToAdd = _(this.attachmentsToAdd).reject(function (att) {
                             return att.cid === attachment.cid;
                         });
-                        if (this.oldMode) {
+                        if (oldMode) {
                             attachment.file.remove();
                         }
                     } else {
@@ -163,7 +164,7 @@ define('io.ox/core/tk/attachments',
                     }
 
                     if (this.attachmentsToAdd.length) {
-                        if (this.oldMode) {
+                        if (oldMode) {
                             attachmentAPI.createOldWay(apiOptions, self.baton.parentView.$el.find('#attachmentsForm')[0]).fail(function (resp) {
                                 self.model.trigger('backendError', resp);
                             }).done(function () {
@@ -196,22 +197,23 @@ define('io.ox/core/tk/attachments',
          * @param {object} baton
          */
         function SimpleEditableFileList(options, baton) {
+            var counter = 0,
+                files = [],
+                $el = $('<div>').addClass('row-fluid');
+
             _.extend(this, {
 
                 init: function () {
                     var self = this;
-                    this.oldMode = _.browser.IE < 10;
-                    this.files = [];
                 },
 
                 render: function () {
                     var self = this,
                         odd = true,
                         row;
-                    self.$el.empty();
-                    _(this.files).each(function (file) {
-                        self.$el
-                            .addClass('io-ox-core-tk-attachment-list').append(self.renderFile(file));
+                    $el.empty();
+                    _(files).each(function (file) {
+                        $el.addClass('io-ox-core-tk-attachment-list').append(self.renderFile(file));
                     });
                     return this;
                 },
@@ -245,45 +247,50 @@ define('io.ox/core/tk/attachments',
                 },
 
                 listChanged: function () {
-                    this.$el.empty();
+                    $el.empty();
                     this.render();
                 },
 
                 get: function () {
-                    return [].concat(this.files);
+                    return [].concat(files);
+                },
+
+                getNode: function () {
+                    return $el;
                 },
 
                 clear: function () {
-                    this.files = [];
+                    files = [];
                     this.listChanged();
                 },
 
                 add: function (file) {
-                    if (this.oldMode) {
-                        this.files.push({file: file.hiddenField, cid: counter++, filename: file.name, file_size: file.size});
+                    if (oldMode) {
+                        files.push({file: file.hiddenField, cid: counter++, filename: file.name, file_size: file.size});
                     } else {
-                        this.files.push({file: file, cid: counter++, filename: file.name, file_size: file.size});
+                        files.push({file: file, cid: counter++, filename: file.name, file_size: file.size});
                     }
                     this.listChanged();
                 },
 
                 remove: function (attachment) {
-                    this.files = _.filter(this.files, function (att) {
+                    files = _.filter(files, function (att) {
                         return att.cid !== attachment.cid;
                     });
                     //remove hidden input field from form
-                    if (this.oldMode) {
+                    if (oldMode) {
                         attachment.file.remove();
                     }
                     this.listChanged();
                 }
             }, options);
 
-            //use referenced placeholde
+            //use referenced placeholder
             if (baton) {
-                baton.$el = this.$el = (baton.$el || $('<div>').addClass('row-fluid'));
+                $el = (baton.$el || $el);
                 baton.fileList = this;
             }
+
             this.init();
         }
 
