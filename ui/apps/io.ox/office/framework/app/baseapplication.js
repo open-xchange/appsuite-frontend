@@ -201,6 +201,7 @@ define('io.ox/office/framework/app/baseapplication',
                 if (file.folder_id) { windowNode.attr('data-file-folder', file.folder_id); }
                 if (file.id) { windowNode.attr('data-file-id', file.id); }
                 if (file.filename) { windowNode.attr('data-file-name', file.filename); }
+                if (file.version) { windowNode.attr('data-file-version', file.version); }
                 if (file.source) { windowNode.attr('data-file-source', file.source); }
                 if (file.attachment) { windowNode.attr('data-file-attachment', file.attachment); }
             }
@@ -219,6 +220,7 @@ define('io.ox/office/framework/app/baseapplication',
          * Hides the busy indicator, and restores the entire view into.
          */
         function afterImport() {
+            updateTitle();
             view.show();
             self.getWindow().idle();
         }
