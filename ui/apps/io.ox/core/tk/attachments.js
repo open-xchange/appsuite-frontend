@@ -223,6 +223,8 @@ define('io.ox/core/tk/attachments',
                 counter = 0,
                 files = [],
                 $el = (options.$el || $('<div>').addClass('row-fluid'));
+                       //.css('border', '1px solid red');
+
             if (options.registerTo) {
                 _.each([].concat(options.registerTo), function (obj) {
                     obj.fileList = self;

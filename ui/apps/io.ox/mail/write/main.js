@@ -1065,6 +1065,7 @@ define('io.ox/mail/write/main',
                     });
                 }
             });
+            //files = files.concat(view.baton.fileList.get());
             // return data, file references, mode, format
             return {
                 data: mail,
