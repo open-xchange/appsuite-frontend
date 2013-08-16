@@ -664,7 +664,7 @@ define('io.ox/core/commons',
             if (next.attr('tabindex')) {
                 next.focus();
             } else {
-                next.find('[tabindex]').first().focus();
+                next.find('[tabindex]:visible').first().focus();
             }
         }
     });

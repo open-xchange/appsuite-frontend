@@ -92,9 +92,6 @@ define('io.ox/office/framework/view/component',
             // all control groups, mapped by key
             groupsByKey = {},
 
-            // whether the pane will be focusable with keyboard
-            focusable = Utils.getBooleanOption(options, 'focusable', true),
-
             // handler called to insert a new group into this view component
             groupInserter = Utils.getFunctionOption(options, 'groupInserter');
 
@@ -123,7 +120,6 @@ define('io.ox/office/framework/view/component',
          */
         function groupLayoutHandler() {
             var newNodeSize = getNodeSize();
-            updateFocusable();
             if (!_.isEqual(nodeSize, newNodeSize)) {
                 nodeSize = newNodeSize;
                 self.trigger('component:layout');
@@ -181,14 +177,6 @@ define('io.ox/office/framework/view/component',
             return _(groups).filter(function (group) {
                 return group.isReallyVisible() && group.hasFocusableControls();
             });
-        }
-
-        /**
-         * Updates the CSS marker class controlling whether this view component
-         * is focusable with special keyboard shortcuts.
-         */
-        function updateFocusable() {
-            node.toggleClass('f6-target', focusable && (getFocusableGroups().length > 0));
         }
 
         /**
@@ -371,7 +359,6 @@ define('io.ox/office/framework/view/component',
                 node.toggleClass(Utils.HIDDEN_CLASS, !visible);
                 this.trigger('component:show', visible);
                 nodeSize = getNodeSize();
-                updateFocusable();
             }
             return this;
         };
@@ -443,6 +430,9 @@ define('io.ox/office/framework/view/component',
 
         // marker for touch devices
         node.toggleClass('touch', Modernizr.touch);
+
+        // whether the pane will be focusable with keyboard
+        node.toggleClass('f6-target', Utils.getBooleanOption(options, 'focusable', true));
 
         // hover effect for groups embedded in the view component
         node.toggleClass('hover-effect', Utils.getBooleanOption(options, 'hoverEffect', false));
