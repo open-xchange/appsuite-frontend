@@ -199,21 +199,27 @@ define('io.ox/core/tk/attachments',
         function SimpleEditableFileList(options, baton) {
             var counter = 0,
                 files = [],
-                $el = $('<div>').addClass('row-fluid');
+                $el = (options.$el || $('<div>').addClass('row-fluid'));
 
             _.extend(this, {
 
                 init: function () {
                     var self = this;
+                    //use referenced placeholder
+                    if (baton) {
+                        baton.fileList = self;
+                    }
+                    // add preview side-popup
+                    new dialogs.SidePopup().delegate($el, '.attachment-preview', this.previewAttachment);
                 },
 
                 render: function () {
                     var self = this,
                         odd = true,
                         row;
-                    $el.empty();
+                    this.empty();
                     _(files).each(function (file) {
-                        $el.addClass('io-ox-core-tk-attachment-list').append(self.renderFile(file));
+                        $el.addClass('io-ox-core-tk-attachment-list').prepend(self.renderFile(file));
                     });
                     return this;
                 },
@@ -221,10 +227,11 @@ define('io.ox/core/tk/attachments',
                 renderFile: function (attachment) {
                     var self = this,
                         size, removeFile,
+                        //item
                         $el = $('<div>')
                             .addClass(this.itemClasses)
                             .append(
-                                //item
+                                //file
                                 $('<div class="item file">')
                                     .addClass(this.fileClasses)
                                     .append(
@@ -247,8 +254,13 @@ define('io.ox/core/tk/attachments',
                 },
 
                 listChanged: function () {
-                    $el.empty();
+                    this.empty();
                     this.render();
+                },
+
+                empty: function () {
+                    //remove all items
+                    $el.find('.file').parent().remove();
                 },
 
                 get: function () {
@@ -284,12 +296,6 @@ define('io.ox/core/tk/attachments',
                     this.listChanged();
                 }
             }, options);
-
-            //use referenced placeholder
-            if (baton) {
-                $el = (baton.$el || $el);
-                baton.fileList = this;
-            }
 
             this.init();
         }
