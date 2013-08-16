@@ -460,6 +460,8 @@ $(window).load(function () {
 
         function updateServerConfig(data) {
             ox.serverConfig = data || {};
+            require('io.ox/core/capabilities').reset();
+            require('io.ox/core/manifests').reset();
             capabilities.reset();
             manifests.reset();
         }
@@ -736,7 +738,6 @@ $(window).load(function () {
             // shortcut
             var sc = ox.serverConfig,
                 lang = sc.languages,
-                capabilities = require("io.ox/core/capabilities"),
                 node,
                 id = '',
                 footer = '',
