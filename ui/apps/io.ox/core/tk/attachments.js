@@ -16,13 +16,35 @@ define('io.ox/core/tk/attachments',
         'io.ox/core/extensions',
         'io.ox/core/api/attachment',
         'io.ox/core/strings',
+        'io.ox/preview/main',
+        'io.ox/core/tk/dialogs',
         'gettext!io.ox/core/tk/attachments',
         'io.ox/core/extPatterns/links',
         'less!io.ox/core/tk/attachments.less'
-    ], function (ext, attachmentAPI, strings, gt, links) {
+    ], function (ext, attachmentAPI, strings, pre, dialogs, gt, links) {
 
         'use strict';
-        var oldMode = _.browser.IE < 10;
+        var oldMode = _.browser.IE < 10,
+            supportsPreview = function (file) {
+                // is not local?
+                if (file.message) { // mail
+                    return new pre.Preview({ mimetype: 'message/rfc822' }).supportsPreview();
+                } else if (file.display_name) { // v-card
+                    return true;
+                } else if (file.id && file.folder_id) { // infostore
+                    return true;
+                } else if (file.atmsgref) { // forward mail attachment
+                    return true;
+                } else {
+                    return window.FileReader && (/^image\/(png|gif|jpe?g|bmp)$/i).test(file.type);
+                }
+            },
+            createPreview = function (file, app, rightside) {
+                //rightside is needed for mail to let the popup check for events in the editor iframe
+                return $('<a href="#" class="attachment-preview">')
+                            .data({file: file, app: app, rightside: rightside })
+                            .text(gt('Preview'));
+            };
 
         function EditableAttachmentList(options) {
             var counter = 0;
@@ -213,6 +235,109 @@ define('io.ox/core/tk/attachments',
                     new dialogs.SidePopup().delegate($el, '.attachment-preview', this.previewAttachment);
                 },
 
+                previewAttachment: function (popup, e, target) {
+                    e.preventDefault();
+
+                    var file = target.data('file'), message = file.message, app = target.data('app'),
+                        editor = (target.data('rightside') || $()).find('iframe').contents().find('body'),//get the editor in the iframe
+                        preview, reader;
+
+                    //close if editor is selected (causes overlapping, bug 27875)
+                    editor.one('click', this.close);
+
+                    // nested message?
+                    if (message) {
+                        preview = new pre.Preview({
+                                data: { nested_message: message },
+                                mimetype: 'message/rfc822'
+                            }, {
+                                width: popup.parent().width(),
+                                height: 'auto'
+                            });
+                        if (preview.supportsPreview()) {
+                            preview.appendTo(popup);
+                            popup.append($('<div>').text(_.noI18n('\u00A0')));
+                        }
+                    } else if (file.display_name) {
+                        // if is vCard
+                        require(['io.ox/contacts/view-detail'], function (view) {
+                            popup.append(view.draw(file));
+                        });
+                    } else if (file.id && file.folder_id) { // infostore
+                        // if is infostore
+                        require(['io.ox/files/api'], function (filesAPI) {
+                            var prev = new pre.Preview({
+                                name: file.filename,
+                                filename: file.filename,
+                                mimetype: file.file_mimetype,
+                                size: file.file_size,
+                                dataURL: filesAPI.getUrl(file, 'bare'),
+                                version: file.version,
+                                id: file.id,
+                                folder_id: file.folder_id
+                            }, {
+                                width: popup.parent().width(),
+                                height: 'auto'
+                            });
+                            if (prev.supportsPreview()) {
+                                popup.append(
+                                    $('<h4>').addClass('mail-attachment-preview').text(file.filename)
+                                );
+                                prev.appendTo(popup);
+                                popup.append($('<div>').text('\u00A0'));
+                            }
+                        });
+                    } else if (file.atmsgref) { // forward mail attachment
+                        require(['io.ox/mail/api'], function (mailAPI) {
+                            var pos = file.atmsgref.lastIndexOf('/');
+                            file.parent = {
+                                folder_id: file.atmsgref.substr(0, pos),
+                                id: file.atmsgref.substr(pos + 1)
+                            };
+                            var prev = new pre.Preview({
+                                data: file,
+                                filename: file.filename,
+                                source: 'mail',
+                                folder_id: file.parent.folder_id,
+                                id: file.parent.id,
+                                attached: file.id,
+                                parent: file.parent,
+                                mimetype: file.content_type,
+                                dataURL: mailAPI.getUrl(file, 'view')
+                            }, {
+                                width: popup.parent().width(),
+                                height: 'auto'
+                            });
+                            if (prev.supportsPreview()) {
+                                popup.append(
+                                    $('<h4>').addClass('mail-attachment-preview').text(file.filename)
+                                );
+                                prev.appendTo(popup);
+                                popup.append($('<div>').text('\u00A0'));
+                            }
+                        });
+                    } else {
+                        // inject image as data-url
+                        reader = new FileReader();
+                        reader.onload = function (e) {
+                            popup.css({ width: '100%', height: '100%' })
+                            .append(
+                                $('<div>')
+                                .css({
+                                    width: '100%',
+                                    height: '100%',
+                                    backgroundImage: 'url(' + e.target.result + ')',
+                                    backgroundRepeat: 'no-repeat',
+                                    backgroundPosition: 'center center',
+                                    backgroundSize: 'contain'
+                                })
+                            );
+                            reader = reader.onload = null;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                },
+
                 render: function () {
                     var self = this,
                         odd = true,
@@ -226,7 +351,9 @@ define('io.ox/core/tk/attachments',
 
                 renderFile: function (attachment) {
                     var self = this,
-                        size, removeFile,
+                        showpreview = options.preview && supportsPreview(attachment.file) && baton.view && baton.view.rightside,
+                        removeFile,
+                        size = attachment.file_size !== undefined ? gt.format('%1$s\u00A0 ', strings.fileSize(attachment.file_size)) : '',
                         //item
                         $el = $('<div>')
                             .addClass(this.itemClasses)
@@ -238,7 +365,8 @@ define('io.ox/core/tk/attachments',
                                         $('<i class="icon-paper-clip">'),
                                         $('<div class="row-1">').text(attachment.filename),
                                         $('<div class="row-2">').append(
-                                            size = $('<span class="filesize">').text(strings.fileSize(attachment.file_size))
+                                            size = $('<span class="filesize">').text(size),
+                                            showpreview ? createPreview(attachment.file, baton.app, baton.view.rightside) : $()
                                         ),
                                         removeFile = $('<a href="#" class="remove" tabindex="1" title="Remove attachment">').append($('<i class="icon-trash">'))
                                 )

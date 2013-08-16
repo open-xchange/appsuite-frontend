@@ -188,6 +188,7 @@ define('io.ox/files/views/create', [
                     id: 'attachment_list',
                     itemClasses: 'span6',
                     fileClasses: 'background',
+                    preview: false,
                     index: 300
                 },
                 baton

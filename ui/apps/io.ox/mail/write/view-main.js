@@ -34,9 +34,10 @@ define("io.ox/mail/write/view-main",
      'io.ox/core/util',
      'io.ox/core/notifications',
      'io.ox/mail/sender',
+     'io.ox/core/tk/attachments',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, mailAPI, ViewClass, Model, contactsAPI, contactsUtil, mailUtil, pre, userAPI, capabilities, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, util, notifications, sender, settings, gt) {
+    ], function (ext, links, actions, mailAPI, ViewClass, Model, contactsAPI, contactsUtil, mailUtil, pre, userAPI, capabilities, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, util, notifications, sender, attachments, settings, gt) {
 
     'use strict';
 
@@ -105,9 +106,14 @@ define("io.ox/mail/write/view-main",
 
     var View = ViewClass.extend({
 
-        initialize: function () {
+        initialize: function (app, model) {
             var self = this;
             this.sections = {};
+            this.baton = ext.Baton({
+                app: app,
+                //files preview
+                view: this
+            });
         },
 
         focusSection: function (id) {
@@ -541,15 +547,66 @@ define("io.ox/mail/write/view-main",
             // Attachments
             this.fileCount = 0;
             var uploadSection = this.createSection('attachments', gt('Attachments'), false, true);
+
+            //TODO: remove after feature is developed
+            var useSimpleFileList = false;
+            var $inputWrap = attachments.fileUploadWidget({
+                    displayLabel: false,
+                    displayButton: true,
+                    buttontext: gt('Add Attachment'),
+                    buttonicon: 'icon-paper-clip'
+
+                }),
+                $input = $inputWrap.find('input[type="file"]'),
+                    changeHandler = function (e) {
+                        //register rightside node
+                        e.preventDefault();
+                        if (_.browser.IE !== 9) {
+                            _($input[0].files).each(function (file) {
+                                self.baton.fileList.add(file);
+                            });
+                            $input.trigger('reset.fileupload');
+                        } else {
+                            //IE
+                            if ($input.val()) {
+                                var fileData = {
+                                    name: $input.val().match(/[^\/\\]+$/),
+                                    size: 0,
+                                    hiddenField: $input
+                                };
+                                self.baton.attachmentList.addFile(fileData);
+                                //hide input field with file
+                                $input.addClass('add-attachment').hide();
+                                //create new input field
+                                $input = $('<input>', { type: 'file', name: 'file' })
+                                        .on('change', changeHandler)
+                                        .appendTo($input.parent());
+                            }
+                        }
+                    };
+            $input.on('change', changeHandler);
+
             this.scrollpane.append(
                 $('<form class="oldschool">').append(
                     this.createLink('attachments', gt('Attachments')),
                     uploadSection.label,
                     uploadSection.section.append(
-                        this.createUpload()
+                        useSimpleFileList || ox.tmp ? $inputWrap : this.createUpload()
                     )
                 )
             );
+
+            ext.point(POINT + '/filelist').invoke();
+            //referenced via baton.fileList
+            ext.point(POINT + '/filelist').extend(new attachments.SimpleEditableFileList({
+                id: 'attachment_list',
+                className: 'div',
+                preview: true,
+                index: 300,
+                $el: uploadSection.section
+            }, this.baton), {
+                rowClass: 'collapsed'
+            });
             // add preview side-popup
             new dialogs.SidePopup().delegate(this.sections.attachments, '.attachment-preview', previewAttachment);
 
