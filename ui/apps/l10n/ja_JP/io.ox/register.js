@@ -14,10 +14,11 @@
 define('l10n/ja_JP/io.ox/register',
     ['io.ox/core/extensions',
      'io.ox/backbone/mini-views',
+     'l10n/ja_JP/io.ox/collation',
      'settings!io.ox/core',
      'gettext!l10n/ja_JP',
      'css!l10n/ja_JP/io.ox/style.css'
-    ], function (ext, mini, settings, gt) {
+    ], function (ext, mini, collation, settings, gt) {
 
     'use strict';
 
@@ -229,19 +230,30 @@ define('l10n/ja_JP/io.ox/register',
     ext.point('io.ox/contacts/getLabel').extend({
         id: 'furigana',
         getLabel: function (data) {
-            var c = (data.sort_name || '').slice(0, 1)
-                    .toUpperCase().charCodeAt(0);
-            // special handling of kana characters
-            if (c >= 0x3040 && c < 0x3100) {
-                c = exceptions[c] || c;
 
-                // convert katakana to hiragana
-                if (c >= 0x30a1 && c <= 0x30fe) c -= 0x60;
+            // var c = (data.sort_name || '').slice(0, 1)
+            //         .toUpperCase().charCodeAt(0);
+            // // special handling of kana characters
+            // if (c >= 0x3040 && c < 0x3100) {
+            //     c = exceptions[c] || c;
 
-                // find the hiragana which represents the entire range
-                c = letters[_.sortedIndex(ranges, c)];
-            }
-            return String.fromCharCode(c);
+            //     // convert katakana to hiragana
+            //     if (c >= 0x30a1 && c <= 0x30fe) c -= 0x60;
+
+            //     // find the hiragana which represents the entire range
+            //     c = letters[_.sortedIndex(ranges, c)];
+            // }
+            // return String.fromCharCode(c);
+
+            var c = String(data.sort_name || '').substr(0, 1).toUpperCase();
+            // empty?
+            if (c === '') return 'その他';
+            // kana?
+            if (collation.isKana(c)) return collation.getKanaLabel(c);
+            // latin?
+            if (/^[A-ZÄÖÜ]/.test(c)) return 'A～Z';
+            // other!
+            return 'その他';
         }
     });
 
@@ -263,43 +275,38 @@ define('l10n/ja_JP/io.ox/register',
             }, 300));
         },
         getIndex: function (baton) {
-            baton.furiganaCollapsed = isCollapsed(this);
 
             var keys = _(baton.labels).keys(),
                 // get all latin keys A-Z plus umlauts
-                latin = _(keys).filter(function (char) { return (/[a-zäöü]/ig).test(char); }),
-                // get all ASCII keys
-                ascii = _(keys).filter(function (char) { return (/[\x00-\xFF]/g).test(char); }),
+                hasLatin = _(keys).any(function (char) { return char === 'A～Z'; }),
                 // get ASCII without latin
-                other = _(ascii).difference(latin),
-                // get first occurrences
-                firstLatin = _.min(latin, function (label) { return label.charCodeAt(0); }),
-                firstOther = _.min(other, function (label) { return label.charCodeAt(0) || Infinity; }),
+                hasOther = _(keys).any(function (char) { return char === 'その他'; }),
                 // add thumb index for ABC
                 abcThumb = new baton.Thumb({
                     label: _.noI18n('A～Z'),
-                    text: firstLatin,
-                    enabled: function () { return firstLatin !== Infinity; }
+                    text: 'A～Z',
+                    enabled: function () { return hasLatin; }
                 }),
                 // add thumb index for other characters
                 otherThumb = new baton.Thumb({
                     label: _.noI18n('その他'),
-                    text: firstOther,
-                    enabled: function () { return firstOther !== Infinity; }
+                    text: 'その他',
+                    enabled: function () { return hasOther; }
                 });
+
+            baton.furiganaCollapsed = isCollapsed(this);
+            baton.data = _.map(kana, baton.Thumb);
 
             if (baton.furiganaCollapsed) {
                 // this could still be improved.
                 // once we know the codes or the range of the Japanese alphabet
                 // we could definer other as "all characters except latin except japanese"
-                baton.data = _.map(kana, baton.Thumb);
-                baton.data.push(otherThumb, abcThumb);
+                baton.data.push(abcThumb, otherThumb);
             } else {
-                baton.data = _.map(kana, baton.Thumb);
                 // apply "other" index if A-Z is expanded, too
                 baton.data = baton.data.concat(otherThumb);
                 // append a-z expanded
-                var az  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                var az = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
                 baton.data = baton.data.concat(_.map(az.split(''), baton.Thumb));
             }
         }
