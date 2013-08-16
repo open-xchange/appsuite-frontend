@@ -1185,7 +1185,10 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
             var t0 = _.now();
             return this.GET({
                 module: 'system',
-                params: { action: 'ping' }
+                params: {
+                    action: 'ping',
+                    timestamp: _.now()
+                }
             })
             .then(function () {
                 var took = _.now() - t0;
