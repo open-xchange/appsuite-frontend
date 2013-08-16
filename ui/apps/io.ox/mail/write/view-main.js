@@ -609,7 +609,8 @@ define("io.ox/mail/write/view-main",
                 rowClass: 'collapsed'
             });
             // add preview side-popup
-            new dialogs.SidePopup().delegate(this.sections.attachments, '.attachment-preview', previewAttachment);
+            if (!!ox.efl)
+                new dialogs.SidePopup().delegate(this.sections.attachments, '.attachment-preview', previewAttachment);
 
 
             // Signatures
