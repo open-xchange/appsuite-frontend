@@ -189,6 +189,7 @@ define('io.ox/files/views/create', [
                     itemClasses: 'span6',
                     fileClasses: 'background',
                     preview: false,
+                    registerTo: baton,
                     index: 300
                 },
                 baton

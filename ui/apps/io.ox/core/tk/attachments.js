@@ -223,14 +223,12 @@ define('io.ox/core/tk/attachments',
                 files = [],
                 $el = (options.$el || $('<div>').addClass('row-fluid'));
 
+            if (options.registerTo)
+                options.registerTo.fileList = this;
             _.extend(this, {
 
                 init: function () {
                     var self = this;
-                    //use referenced placeholder
-                    if (baton) {
-                        baton.fileList = self;
-                    }
                     // add preview side-popup
                     new dialogs.SidePopup().delegate($el, '.attachment-preview', this.previewAttachment);
                 },

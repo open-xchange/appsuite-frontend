@@ -603,7 +603,8 @@ define("io.ox/mail/write/view-main",
                 className: 'div',
                 preview: true,
                 index: 300,
-                $el: uploadSection.section
+                $el: uploadSection.section,
+                registerTo: self
             }, this.baton), {
                 rowClass: 'collapsed'
             });
