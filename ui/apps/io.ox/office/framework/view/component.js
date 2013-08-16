@@ -194,7 +194,7 @@ define('io.ox/office/framework/view/component',
                 // extract all focusable controls from the groups
                 controls = _(focusableGroups).reduce(function (controls, group) { return controls.add(group.getFocusableControls()); }, $()),
                 // focused control
-                control = Utils.getFocusedControl(controls),
+                control = controls.filter(window.document.activeElement),
                 // index of focused control in all enabled controls
                 index = controls.index(control);
 

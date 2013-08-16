@@ -1138,11 +1138,9 @@ define.async('io.ox/office/tk/utils',
     // generic DOM/CSS helpers ------------------------------------------------
 
     /**
-     * A jQuery selector that returns true if the DOM node bound to the 'this'
-     * symbol is a text node. Can be used in all helper functions that expect a
-     * jQuery selector.
-     *
-     * @constant
+     * A jQuery function selector that returns true if the DOM node bound to
+     * the 'this' symbol is a text node. Can be used in all helper functions
+     * that expect a jQuery selector including functions.
      */
     Utils.JQ_TEXTNODE_SELECTOR = function () { return this.nodeType === 3; };
 
@@ -1246,6 +1244,22 @@ define.async('io.ox/office/tk/utils',
 
         // use the native Node.contains() method
         return outerNode.contains(innerNode);
+    };
+
+    /**
+     * Returns whether one of the descendant elements in the passed element
+     * contains the active (focused) element.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  A single DOM element, or a jQuery collection, whose descendants will be
+     *  checked for the active (focused) element.
+     *
+     * @returns {Boolean}
+     *  Whether one of the descendant elements in the passed element contains
+     *  the active (focused) element.
+     */
+    Utils.containsFocus = function (node) {
+        return $(node).find(window.document.activeElement).length > 0;
     };
 
     /**
@@ -2339,64 +2353,6 @@ define.async('io.ox/office/tk/utils',
         control.data('userdata', value);
     };
 
-    /**
-     * Returns whether the first form control in the passed jQuery collection
-     * is currently focused.
-     *
-     * @param {jQuery} control
-     *  A jQuery collection containing a form control.
-     *
-     * @returns {Boolean}
-     *  True, if the form control is focused.
-     */
-    Utils.isControlFocused = function (control) {
-        return control.first().is(':focus');
-    };
-
-    /**
-     * Returns the form control from the passed jQuery collection, if it is
-     * currently focused.
-     *
-     * @param {jQuery} controls
-     *  A jQuery collection containing form controls.
-     *
-     * @returns {jQuery}
-     *  The focused control, as new jQuery collection. Will be empty, if the
-     *  passed collection does not contain a focused control.
-     */
-    Utils.getFocusedControl = function (controls) {
-        return controls.filter(':focus');
-    };
-
-    /**
-     * Returns whether the passed jQuery collection contains a focused control.
-     *
-     * @param {jQuery} controls
-     *  A jQuery collection containing form controls.
-     *
-     * @returns {Boolean}
-     *  True, if one of the elements in the passed jQuery collection is
-     *  focused.
-     */
-    Utils.hasFocusedControl = function (controls) {
-        return Utils.getFocusedControl(controls).length !== 0;
-    };
-
-    /**
-     * Returns whether one of the elements in the passed jQuery collection
-     * contains a control that is focused.
-     *
-     * @param {jQuery} node
-     *  A jQuery collection with container elements that contain different form
-     *  controls.
-     *
-     * @returns {Boolean}
-     *  True, if one of the container elements contains a focused form control.
-     */
-    Utils.containsFocusedControl = function (node) {
-        return node.find(':focus').length !== 0;
-    };
-
     // control captions -------------------------------------------------------
 
     /**
@@ -2608,7 +2564,7 @@ define.async('io.ox/office/tk/utils',
             captionMarkup = Utils.createControlCaptionMarkup(options);
 
         innerMarkup = (innerMarkup || '') + captionMarkup;
-        return '<a class="' + Utils.BUTTON_CLASS + (focusable ? (' ' + Utils.FOCUSABLE_CLASS) : '') + '" href="#" tabindex="' + tabIndex + '">' + innerMarkup + '</a>';
+        return '<a class="' + Utils.BUTTON_CLASS + (focusable ? (' ' + Utils.FOCUSABLE_CLASS) : '') + '" tabindex="' + tabIndex + '">' + innerMarkup + '</a>';
     };
 
     /**
@@ -2631,10 +2587,10 @@ define.async('io.ox/office/tk/utils',
 
         var // the tab index
             tabIndex = Utils.getIntegerOption(options, 'tabIndex', 1),
-            // Create the DOM anchor element representing the button (href='#' is
-            // essential for tab traveling). Do NOT use <button> elements, Firefox has
-            // problems with text clipping and correct padding of the <button> contents.
-            button = Utils.createControl('a', { href: '#', tabindex: tabIndex }, options).addClass(Utils.BUTTON_CLASS);
+            // Create the DOM anchor element representing the button. Do NOT use
+            // <button> elements, Firefox has problems with text clipping and
+            // correct padding of the <button> contents.
+            button = Utils.createControl('a', { tabindex: tabIndex }, options).addClass(Utils.BUTTON_CLASS);
 
         Utils.setControlCaption(button, options);
         return button;
