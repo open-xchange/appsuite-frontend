@@ -145,7 +145,7 @@ define("io.ox/contacts/main",
         grid = new VGrid(gridContainer, {
             settings: settings,
             swipeRightHandler: swipeRightHandler,
-            showToggle: _.device('smartphone') ? false: true
+            showToggle: true//_.device('smartphone') ? false: true
         });
 
         // helper to remove button from grid

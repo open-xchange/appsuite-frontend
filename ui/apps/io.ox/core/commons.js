@@ -71,6 +71,7 @@ define('io.ox/core/commons',
         mobileMultiSelection: (function () {
             var points = {};
 
+            // counter is always shown
             ext.point('io.ox/core/commons/mobile/multiselect').extend({
                 id: 'selectCounter',
                 index: '100',
