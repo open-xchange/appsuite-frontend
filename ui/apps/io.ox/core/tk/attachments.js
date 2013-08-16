@@ -488,10 +488,16 @@ define('io.ox/core/tk/attachments',
 
         var fileUploadWidget = function (options) {
             options = _.extend({
+                buttontext: gt('Select file'),
                 tabindex: 1
             }, options);
             var node = $('<div>').addClass((options.wrapperClass ? options.wrapperClass : 'row-fluid')),
-            input;
+                icon = options.buttonicon ? $('<i>').addClass(options.buttonicon) : $(),
+                input;
+
+            //add space for icon
+            options.buttontext = options.buttonicon ? '\u00A0' + options.buttontext : options.buttontext;
+
             if (options.displayLabel) node.append($('<label>').text(gt.noI18n(options.displayLabelText) || gt('File')));
             node.append(
                 $('<div>', { 'data-provides': 'fileupload' }).addClass('fileupload fileupload-new')
@@ -501,7 +507,8 @@ define('io.ox/core/tk/attachments',
                             $('<span>').addClass('fileupload-preview')
                         ),
                         $('<span>').addClass('btn btn-file').append(
-                            $('<span>').addClass('fileupload-new').text(gt('Select file')),
+                            icon,
+                            $('<span>').addClass('fileupload-new').text(options.buttontext),
                             $('<span>').addClass('fileupload-exists').text(gt('Change')),
                             input = $('<input name="file" type="file">')
                                 .prop({
