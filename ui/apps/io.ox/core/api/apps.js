@@ -47,8 +47,10 @@ define('io.ox/core/api/apps',
 
     appData.categories = _(appData.categories).uniq();
 
-    // TODO: Make favourites dynamic
-    _(['io.ox/portal', 'io.ox/mail', 'io.ox/contacts', 'io.ox/calendar', 'io.ox/files', 'io.ox/tasks']).each(function (id) {
+    // TODO: Make favorites dynamic
+    var allFavorites = ['io.ox/portal', 'io.ox/mail', 'io.ox/contacts',
+                        'io.ox/calendar', 'io.ox/files', 'io.ox/tasks'];
+    _(allFavorites).each(function (id) {
         var app = appData.apps[id];
         if (app && capabilities.has(app.requires)) {
             appData.favorites.push(id);
@@ -135,8 +137,8 @@ define('io.ox/core/api/apps',
                 .value();
         },
 
-        getSpecial = function (prop) {
-            return _(appData[prop]).map(function (id) {
+        getSpecial = function (prop, apps) {
+            return _(apps || appData[prop]).map(function (id) {
                 return bless(appData.apps[id], id);
             }).concat(
                 // Add extension point categories
@@ -198,6 +200,14 @@ define('io.ox/core/api/apps',
          */
         getFavorites: function () {
             return getSpecial('favorites');
+        },
+
+        /**
+         * get all favorites, regardless of the required capabilities
+         * @return {array} app objects
+         */
+        getAllFavorites: function () {
+            return getSpecial('favorites', allFavorites);
         },
 
         /**

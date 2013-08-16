@@ -720,7 +720,7 @@ define('io.ox/core/main',
         ext.point('io.ox/core/topbar/favorites').extend({
             id: 'default',
             draw: function () {
-                var favorites = appAPI.getFavorites();
+                var favorites = appAPI.getAllFavorites();
                 favorites.sort(function (a, b) {
                     return ext.indexSorter(a, b);
                 });
