@@ -245,13 +245,8 @@ define('io.ox/contacts/edit/main',
                 contact.on('change:first_name change:last_name change:title',
                     function (model, value, options) {
                         if (model.changed.display_name) return;
-                        var dn = model.get('display_name');
-                        // only change display name if empty or previous default
-                        if (!dn || dn === util.getFullName(model.previousAttributes()))
-                        {
-                            model.set('display_name',
-                                      util.getFullName(model.toJSON()));
-                        }
+                        var dn = util.getFullName(model.toJSON());
+                        if (dn) model.set('display_name', dn);
                     });
             }
         });
