@@ -522,7 +522,12 @@ define('io.ox/mail/actions',
                 // download zip file
                 url = api.getUrl(list, 'zip');
             }
-            window.location.assign(url);
+            // download via iframe
+            // window.location.assign(url); has a weird impact on ongoing uploads (see Bug 27420)
+            // window.open(url); might leave open tabs
+            $('#tmp').append(
+                $('<iframe>', { src: url }).addClass('hidden download-frame')
+            );
         }
     });
 
@@ -656,7 +661,12 @@ define('io.ox/mail/actions',
                 // download attachment eml
                 url = api.getUrl(_(data).first(), 'download');
             }
-            window.location.assign(url);
+            // download via iframe
+            // window.location.assign(url); has a weird impact on ongoing uploads (see Bug 27420)
+            // window.open(url); might leave open tabs
+            $('#tmp').append(
+                $('<iframe>', { src: url }).addClass('hidden download-frame')
+            );
         }
     });
 

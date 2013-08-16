@@ -44,6 +44,7 @@ define('plugins/portal/files/register',
         },
 
         preview: function (baton) {
+
             var content = $('<div class="content pointer">'),
                 data, options, url;
 

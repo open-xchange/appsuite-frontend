@@ -191,6 +191,8 @@ define("io.ox/contacts/main",
                         // nothing is written down, add some text, so user isn’t confused
                         fields.name.addClass('bright-text').append(gt("Empty name and description found."));
                         fields.description.append(gt("Edit to set a name."));
+                    } else {
+                        fields.name.removeClass('bright-text');
                     }
                 }
             }
@@ -394,6 +396,10 @@ define("io.ox/contacts/main",
             if (updated.folder === app.currentContact.folder_id && updated.id === app.currentContact.id) {
                 showContact(app.currentContact);
             }
+        });
+
+        api.on('create update delete refresh.all', function () {
+            folderAPI.reload(app.folder.get());
         });
 
         app.getGrid = function () {

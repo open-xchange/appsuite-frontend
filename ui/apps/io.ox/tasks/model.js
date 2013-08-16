@@ -102,19 +102,21 @@ define('io.ox/tasks/model', ['io.ox/tasks/api',
         }
     });
 
+    var MAX = 9999999999.99;
+
     ext.point('io.ox/tasks/model/validation').extend({
         id: 'Actual-costs-out-of-limits',
         validate: function (attributes) {
-            if (attributes.actual_costs && (attributes.actual_costs < -130000 || attributes.actual_costs > 130000)) {
-                this.add('actual_costs', gt('Costs must be between -130000 and 130000.'));
+            if (attributes.actual_costs && (attributes.actual_costs < -MAX || attributes.actual_costs > MAX)) {
+                this.add('actual_costs', gt('Costs must be between -%1$d and %1$d.', MAX, MAX));
             }
         }
     });
     ext.point('io.ox/tasks/model/validation').extend({
         id: 'target-costs-out-of-limits',
         validate: function (attributes) {
-            if (attributes.target_costs && (attributes.target_costs < -130000 || attributes.target_costs > 130000)) {
-                this.add('target_costs', gt('Costs must be between -130000 and 130000.'));
+            if (attributes.target_costs && (attributes.target_costs < -MAX || attributes.target_costs > MAX)) {
+                this.add('target_costs', gt('Costs must be between -%1$d and %1$d.', MAX, MAX));
             }
         }
     });

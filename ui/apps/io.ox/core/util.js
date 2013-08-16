@@ -85,6 +85,23 @@ define('io.ox/core/util', [/* only add light core deps, not stuff like account A
                 return validate($.trim(val));
             };
 
+        }()),
+
+        isValidPhoneNumber: (function () {
+
+            var regex = /^\+?[0-9 .,;\-\/\(\)\*\#]+$/,
+                tooShort = /^\+\d{0,2}$/;
+
+            function validate(val) {
+                // empty is ok!
+                if (val === '') return true;
+                if (tooShort.test(val)) return false;
+                return regex.test(val);
+            }
+
+            return function (val) {
+                return validate($.trim(val));
+            };
         }())
     };
 });
@@ -118,4 +135,34 @@ test('.first.last@domain.com', false);
 test('"quoted"@domain.com', true);
 test('"another@"@domain.com', true);
 test('"but"not"@domain.com', false);
+*/
+
+/*
+function test(val, expected) {
+    var util = require('io.ox/core/util'),
+        valid = util.isValidPhoneNumber(val) === expected;
+    console[valid ? 'log' : 'error'](val);
+}
+test('', true);
+test(' ', true);
+test('01234567', true);
+test('0123 4567', true);
+test('+491234567', true);
+test('0123+4567', false);
+test('+49 (0) 1234567', true);
+test('+1', false);
+test('+49', false);
+test('+49 0 1234567', true);
+test('+49-0-1234567', true);
+test('+49-0-1234567#1', true);
+test('+49-0-1234567,1,2', true);
+test('+49.0.1234567', true);
+test('+49 0 / 1234567', true);
+test('+49 0 / 123456 - 7', true);
+test('+49 0 / 123456 - ABC', false);
+test('+49 0::1234567', false);
+test('+49 0 1234 [567]', false);
+test('++49 0 1234567', false);
+test('+49_0_1234567', false);
+test('+49 0 1234567 \\ 23', false);
 */

@@ -189,12 +189,6 @@ define('io.ox/core/permissions/permissions',
                     baton.name = contactsUtil.getFullName(user);
                     baton.picture = contactsAPI.getPictureURLSync(user, { width: 64, height: 64, scaleType: 'cover' });
                     ext.point(POINT + '/entity').invoke('draw', self, baton);
-                    if (_.browser.Safari) {
-                        self.css('opacity', 0);
-                        _.defer(function () {
-                            self.css('opacity', 1);
-                        });
-                    }
                 });
             }
         }
@@ -330,7 +324,7 @@ define('io.ox/core/permissions/permissions',
                     if (data.module === 'mail' && !(data.capabilities & Math.pow(2, 0))) {
                         isFolderAdmin = false;
                     }
-                    var options;
+                    var options = {top: '40px', center: false, maximize: true, width: 800};
                     if (_.device('!desktop')) {
                         options = {top: '40px', center: false};
                     }

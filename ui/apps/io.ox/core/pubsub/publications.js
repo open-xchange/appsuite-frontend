@@ -131,7 +131,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                     popup.idle();
                     if (!self.model.valid) {
                         if (!error.model) {//backend Error
-                            if (error.error_params[0].indexOf('PUB-0006') === 0) {
+                            if (error.code === 'PUB-0006') {
                                 popup.getBody().find('.siteName-control').addClass('error').find('.help-inline').text(gt('Name already taken'));
                             }
                         } else {//validation gone wrong
@@ -183,8 +183,6 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                                         control.removeClass('error');
                                         control.find('.help-inline').text('');
                                     }
-                                    //make input lowercase and save to model
-                                    node.val(node.val().toLowerCase());
                                     baton.target.siteName = node.val();
                                 }),
                              $('<span>').addClass('help-inline'))));
@@ -289,7 +287,6 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
         return require(['io.ox/mail/write/main', 'io.ox/contacts/util', 'io.ox/core/api/user']).then(function (m, util, userAPI) {
                 userAPI.getCurrentUser().then(function (user) {
                     //predefined data for mail
-                    console.log(baton);
                     var url = baton.target.url,
                         text = gt('Hi!<br><br>%1$s shares a publication with you:<br>%2$s', util.getMailFullName(user.toJSON()), '<a href="' + url + '">' + url + '</a>'),
                         textplain = gt('Hi!<br><br>%1$s shares a publication with you:<br>%2$s', util.getMailFullName(user.toJSON()), url),
@@ -328,7 +325,9 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                         $('<button type="button" class="email-btn btn">')
                             .text(gt('Share link by email'))
                             .on('click', function () {
-                                sendInvitation(baton);
+                                sendInvitation(baton).always(function () {
+                                    baton.popup.close();
+                                });
                             })
                         )
                     ),

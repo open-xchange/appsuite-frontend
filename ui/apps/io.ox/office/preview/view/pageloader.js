@@ -177,16 +177,11 @@ define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], functi
                     delete map[pageData.page];
                 })
                 .done(function (pageSize) {
+                    pageData.node.removeClass('page-error');
                     pageData.def.resolve(pageSize);
                 })
                 .fail(function (result) {
-                    pageData.node.empty().append(
-                        Utils.createIcon('icon-remove').css({
-                            color: '#f88',
-                            fontSize: Math.min(pageData.node.height(), 60) + 'px',
-                            lineHeight: pageData.node.height() + 'px'
-                        })
-                    );
+                    pageData.node.addClass('page-error').empty().append($('<div>').addClass('error-icon').append(Utils.createIcon('icon-remove')));
                     pageData.def.reject(result);
                 });
 

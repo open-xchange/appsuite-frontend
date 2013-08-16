@@ -123,7 +123,7 @@ define('io.ox/core/main',
             forceDesktopLaunchers = settings.get('forceDesktopLaunchers', false);
 
         // we don't show any launcher in top-bar on small devices
-        if (_.device('small') && !forceDesktopLaunchers) {
+        if (_.device('smartphone') && !forceDesktopLaunchers) {
             items.hide();
             launcherDropDownIcon.show();
             return;
@@ -505,7 +505,7 @@ define('io.ox/core/main',
 
         ox.ui.apps.on('launch resume', function (model, collection, e) {
             // mark last active app
-            if (_.device('small')) {
+            if (_.device('smartphone')) {
                 if (!settings.get('forceDesktopLaunchers', false)) {
                     launchers.hide();
                 }
@@ -1087,7 +1087,7 @@ define('io.ox/core/main',
                     })
                     .each(function (details, index) {
                         //only load first app on small devices
-                        if (_.device('small') && index > 0)
+                        if (_.device('smartphone') && index > 0)
                             return;
 
                         // split app/call

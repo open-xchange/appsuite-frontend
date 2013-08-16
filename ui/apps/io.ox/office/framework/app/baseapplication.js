@@ -1380,15 +1380,42 @@ define('io.ox/office/framework/app/baseapplication',
                 // propagate changed file to the files API
                 FilesAPI.propagate('change', file);
 
-                // resolve with the download URL of the document
-                return self.getFilterModuleUrl({
-                    action: 'getdocument',
-                    documentformat: format || 'native',
-                    filename: self.getFullFileName(),
-                    mimetype: file.file_mimetype || '',
-                    version: 0, // always use the latest version
-                    nocache: _.uniqueId() // needed to trick the browser cache (is not evaluated by the backend)
-                });
+                if (file.source === 'mail')
+                    // resolve with the download URL of a mail attachment
+                    return self.getServerModuleUrl('mail', {
+                        action: 'attachment',
+                        documentformat: format || 'native',
+                        mimetype: file.file_mimetype || '',
+                        filename: file.filename,
+                        folder: file.folder_id,
+                        id: file.id,
+                        attachment: file.attached,
+                        deliver: 'download',
+                        nocache: _.uniqueId() // needed to trick the browser cache (is not evaluated by the backend)
+                    });
+                else if (file.source === 'task')
+                    // resolve with the download URL of a task attachment
+                    return self.getServerModuleUrl('attachment', {
+                        action: 'document',
+                        documentformat: format || 'native',
+                        mimetype: file.file_mimetype || '',
+                        filename: file.filename,
+                        folder: file.folder_id,
+                        id: file.id,
+                        module: file.module,
+                        deliver: 'download',
+                        nocache: _.uniqueId() // needed to trick the browser cache (is not evaluated by the backend)
+                    });
+                else
+                    // resolve with the download URL of the document
+                    return self.getFilterModuleUrl({
+                        action: 'getdocument',
+                        documentformat: format || 'native',
+                        filename: self.getFullFileName(),
+                        mimetype: file.file_mimetype || '',
+                        version: 0, // always use the latest version
+                        nocache: _.uniqueId() // needed to trick the browser cache (is not evaluated by the backend)
+                    });
             }
 
             // Bug 28251: call downloadFile() with a Promise that will be resolved

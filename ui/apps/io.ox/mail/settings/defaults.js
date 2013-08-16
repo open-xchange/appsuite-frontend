@@ -41,7 +41,11 @@ define('io.ox/mail/settings/defaults', ['gettext!io.ox/mail'], function (gt) {
             //for persistent sort
             'sort': 'thread',
             'order': 'desc',
-            'unread': false
+            'unread': false,
+            //hidden atm
+            'features': {
+                'alwaysDeleteDraft': true
+            }
         };
 
     return settingsDefaults;

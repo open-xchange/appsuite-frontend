@@ -151,6 +151,7 @@ define('io.ox/portal/widgets',
 
             // find free id
             var widgets = _(settings.get('widgets/user', {})).extend(settings.get('widgets/protected', {})),
+                defaults = settings.get('widgets/defaults', {}),
                 widget, i = 0, id = type + '_0',
                 colors = api.getColors();
 
@@ -160,7 +161,7 @@ define('io.ox/portal/widgets',
                 inverse: false,
                 plugin: type,
                 props: {}
-            }, options || {});
+            }, defaults[type] || {}, options || {});
 
             while (id in widgets) {
                 id = type + '_' + (++i);

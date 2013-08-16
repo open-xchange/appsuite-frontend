@@ -13,7 +13,9 @@
 define("io.ox/backbone/validation",
     ["io.ox/core/extensions",
      "io.ox/core/util",
-     'gettext!io.ox/backbone/validation'], function (ext, util, gt) {
+     'settings!io.ox/core',
+     'gettext!io.ox/backbone/validation'], function (ext, util, settings, gt) {
+
     "use strict";
 
     // var regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
@@ -66,6 +68,11 @@ define("io.ox/backbone/validation",
         },
         email: function (val) {
             return util.isValidMailAddress(val) || gt('Please enter a valid email address');
+        },
+        phone: function (val) {
+            return settings.get('features/validatePhoneNumbers', false) === false ||
+                util.isValidPhoneNumber(val) ||
+                gt('Please enter a valid phone number. Allowed characters are: %1$s', '0-9 , . - ( ) # + ; /');
         },
         url: function (val) {
             return true;

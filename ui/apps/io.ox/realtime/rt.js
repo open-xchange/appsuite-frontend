@@ -231,7 +231,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                     outOfOrder = true;
                 }
                 if (!outOfOrder) {
-                    console.log("RECEIVED", stanza.seq);
+                    if (api.debug) {
+                        console.log("RECEIVED", stanza.seq);
+                    }
                     api.trigger("receive", stanza);
                     api.trigger("receive:" + stanza.selector, stanza);
                     if (stanza.seq !== -1) {

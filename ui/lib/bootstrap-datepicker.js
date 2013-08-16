@@ -482,11 +482,19 @@
 			this.picker.find('.datepicker-days thead th.datepicker-switch')
 						.text(dates[this.o.language].months[month]+' '+year);
 			this.picker.find('tfoot th.today')
-						.text(dates[this.o.language].today)
-						.toggle(this.o.todayBtn !== false);
+						.text(dates[this.o.language].today);
+						// .toggle(this.o.todayBtn !== false);
+			// Bug 27629 - After creating an appointment week view "scrolls up" to 0 AM (Firefox only)
+			if (this.o.todayBtn === false) {
+				this.picker.find('tfoot th.today').hide();
+			}
 			this.picker.find('tfoot th.clear')
-						.text(dates[this.o.language].clear)
-						.toggle(this.o.clearBtn !== false);
+						.text(dates[this.o.language].clear);
+						// .toggle(this.o.clearBtn !== false);
+			// Bug 27629 - After creating an appointment week view "scrolls up" to 0 AM (Firefox only)
+			if (this.o.clearBtn === false) {
+				this.picker.find('tfoot th.clear').hide();
+			}
 			this.updateNavArrows();
 			this.fillMonths();
 			var prevMonth = UTCDate(year, month-1, 28,0,0,0,0),
