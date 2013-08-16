@@ -219,12 +219,16 @@ define('io.ox/core/tk/attachments',
          * @param {object} baton
          */
         function EditableFileList(options, baton) {
-            var counter = 0,
+            var self = this,
+                counter = 0,
                 files = [],
                 $el = (options.$el || $('<div>').addClass('row-fluid'));
+            if (options.registerTo) {
+                _.each([].concat(options.registerTo), function (obj) {
+                    obj.fileList = self;
+                });
+            }
 
-            if (options.registerTo)
-                options.registerTo.fileList = this;
             _.extend(this, {
 
                 init: function () {
@@ -348,35 +352,66 @@ define('io.ox/core/tk/attachments',
                 },
 
                 renderFile: function (attachment) {
-                    var self = this,
-                        showpreview = options.preview && supportsPreview(attachment.file) && baton.view && baton.view.rightside,
-                        removeFile,
-                        size = attachment.file_size !== undefined ? gt.format('%1$s\u00A0 ', strings.fileSize(attachment.file_size)) : '',
-                        //item
-                        $el = $('<div>')
-                            .addClass(this.itemClasses)
-                            .append(
-                                //file
-                                $('<div class="item file">')
-                                    .addClass(this.fileClasses)
-                                    .append(
-                                        $('<i class="icon-paper-clip">'),
-                                        $('<div class="row-1">').text(attachment.filename),
-                                        $('<div class="row-2">').append(
-                                            size = $('<span class="filesize">').text(size),
-                                            showpreview ? createPreview(attachment.file, baton.app, baton.view.rightside) : $()
-                                        ),
-                                        removeFile = $('<a href="#" class="remove" tabindex="1" title="Remove attachment">').append($('<i class="icon-trash">'))
-                                )
-                        );
+                    var self = this, node,
+                        showpreview = options.preview && supportsPreview(attachment.file) && baton.view && baton.view.rightside;
 
-                    removeFile.on('click', function () { self.remove(attachment); });
+                    /*
+                     * Files, VCard, and Messages are very close here
+                     * there's no real separation
+                     */
+                    var icon, name, size, info,
+                        isMessage = 'message' in attachment,
+                        isFile = 'size' in attachment || 'file_size' in attachment;
 
-                    if (size.text() === "0 B") {
-                        size.text(" ");
+                    // message?
+                    if (isMessage) {
+                        info = $('<span>').addClass('filesize').text('');
+                        icon = $('<i>').addClass('icon-paper-clip');
+                        name = attachment.message.subject || '\u00A0';
+                    } else if (isFile) {
+                        // filesize
+                        size = attachment.size;
+                        size = size !== undefined ? gt.format('%1$s\u00A0 ', strings.fileSize(size)) : '';
+                        info = $('<span>').addClass('filesize').text(size);
+                        icon = $('<i>').addClass('icon-paper-clip');
+                        name = attachment.name || '';
+                    } else {
+                        // vcard
+                        info = $('<span>').addClass('filesize').text(gt.noI18n('vCard\u00A0'));
+                        icon = $('<i>').addClass('icon-list-alt');
+                        name = 'TODO';
+                        //name = contactsUtil.getFullName(attachment);
                     }
 
-                    return $el;
+                    //item
+                    node = $('<div>')
+                        .addClass(this.itemClasses)
+                        .append(
+                            //file
+                            $('<div class="item file">')
+                                .addClass(this.fileClasses)
+                                .append(
+                                    icon,
+                                    $('<div class="row-1">').text(_.noI18n(name)),
+                                    $('<div class="row-2">').append(
+                                        info,
+                                        showpreview ? createPreview(attachment.file, baton.app, baton.view.rightside) : $(),
+                                        $.txt('\u00A0')
+                                    ),
+                                     // remove
+                                    $('<a href="#" class="remove" tabindex="6">')
+                                    .attr('title', gt('Remove attachment'))
+                                    .append(
+                                        $('<i class="icon-trash">')
+                                    )
+                                    .on('click', function (e) {
+                                        e.preventDefault();
+                                        self.remove(attachment);
+                                    })
+                            )
+                    );
+
+                    return node;
                 },
 
                 listChanged: function () {
@@ -403,11 +438,7 @@ define('io.ox/core/tk/attachments',
                 },
 
                 add: function (file) {
-                    if (oldMode) {
-                        files.push({file: file.hiddenField, cid: counter++, filename: file.name, file_size: file.size});
-                    } else {
-                        files.push({file: file, cid: counter++, filename: file.name, file_size: file.size});
-                    }
+                    files.push({file: (oldMode ? file.hiddenField : file), cid: counter++, name: file.filename || file.name, size: file.file_size || file.size, type: file.type || 'file'});
                     this.listChanged();
                 },
 

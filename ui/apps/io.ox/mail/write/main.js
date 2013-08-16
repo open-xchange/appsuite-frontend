@@ -298,10 +298,14 @@ define('io.ox/mail/write/main',
             if (_.browser.IE === undefined || _.browser.IE > 9) {
                 var dropZone = upload.dnd.createDropZone({'type': 'single'});
                 dropZone.on('drop', function (e, file) {
-                    view.form.find('input[type=file]').last()
-                        .prop('file', file)
-                        .trigger('change');
-                    view.showSection('attachments');
+                    if (ox.efl)
+                        view.fileList.add(_.extend(file, { type: 'file' }));
+                    else {
+                        view.form.find('input[type=file]').last()
+                            .prop('file', file)
+                            .trigger('change');
+                        view.showSection('attachments');
+                    }
                 });
             }
             win.on('show', function () {
@@ -526,9 +530,14 @@ define('io.ox/mail/write/main',
                     }
                     attachment.type = 'file';
                     found = true;
-                    view.form.find('input[type=file]').last()
-                        .prop('attachment', attachment)
-                        .trigger('change');
+
+                    if (ox.efl)
+                        view.fileList.add(_.extend(attachment, { type: 'attachment' }));
+                    else {
+                        view.form.find('input[type=file]').last()
+                            .prop('attachment', attachment)
+                            .trigger('change');
+                    }
                 }
             });
             if (found) {
@@ -540,9 +549,13 @@ define('io.ox/mail/write/main',
             var found = false;
             _(list || []).each(function (obj) {
                 found = true;
-                view.form.find('input[type=file]').last()
-                    .prop('nested', { message: obj, name: obj.subject, content_type: 'message/rfc822' })
-                    .trigger('change');
+                if (ox.efl)
+                    view.fileList.add({ message: obj, name: obj.subject, content_type: 'message/rfc822', type: 'nested'});
+                else {
+                    view.form.find('input[type=file]').last()
+                        .prop('nested', { message: obj, name: obj.subject, content_type: 'message/rfc822' })
+                        .trigger('change');
+                }
             });
             if (found) {
                 view.showSection('attachments');
@@ -553,9 +566,13 @@ define('io.ox/mail/write/main',
             var found = false;
             _(list || []).each(function (obj) {
                 found = true;
-                view.form.find('input[type=file]').last()
-                    .prop('file', obj)
-                    .trigger('change');
+                if (ox.efl)
+                    view.fileList.add(_.extend(obj, { type: 'file' }));
+                else {
+                    view.form.find('input[type=file]').last()
+                        .prop('file', obj)
+                        .trigger('change');
+                }
             });
             if (found) {
                 view.showSection('attachments');

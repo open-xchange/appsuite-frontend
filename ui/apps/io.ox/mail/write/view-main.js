@@ -604,7 +604,7 @@ define("io.ox/mail/write/view-main",
                 preview: true,
                 index: 300,
                 $el: uploadSection.section,
-                registerTo: self
+                registerTo: [self, this.baton]
             }, this.baton), {
                 rowClass: 'collapsed'
             });
