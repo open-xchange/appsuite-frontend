@@ -218,7 +218,7 @@ define('io.ox/core/tk/attachments',
          * @param {object} options
          * @param {object} baton
          */
-        function SimpleEditableFileList(options, baton) {
+        function EditableFileList(options, baton) {
             var counter = 0,
                 files = [],
                 $el = (options.$el || $('<div>').addClass('row-fluid'));
@@ -671,7 +671,7 @@ define('io.ox/core/tk/attachments',
 
         return {
             EditableAttachmentList: EditableAttachmentList,
-            SimpleEditableFileList: SimpleEditableFileList,
+            EditableFileList: EditableFileList,
             AttachmentList: AttachmentList,
             fileUploadWidget: fileUploadWidget
         };

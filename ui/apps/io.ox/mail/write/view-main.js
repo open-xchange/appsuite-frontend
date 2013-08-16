@@ -549,7 +549,7 @@ define("io.ox/mail/write/view-main",
             var uploadSection = this.createSection('attachments', gt('Attachments'), false, true);
 
             //TODO: remove after feature is developed
-            var useSimpleFileList = false;
+            ox.efl = false;
             var $inputWrap = attachments.fileUploadWidget({
                     displayLabel: false,
                     displayButton: true,
@@ -591,14 +591,14 @@ define("io.ox/mail/write/view-main",
                     this.createLink('attachments', gt('Attachments')),
                     uploadSection.label,
                     uploadSection.section.append(
-                        useSimpleFileList || ox.tmp ? $inputWrap : this.createUpload()
+                        ox.efl ? $inputWrap : this.createUpload()
                     )
                 )
             );
 
             ext.point(POINT + '/filelist').invoke();
             //referenced via baton.fileList
-            ext.point(POINT + '/filelist').extend(new attachments.SimpleEditableFileList({
+            ext.point(POINT + '/filelist').extend(new attachments.EditableFileList({
                 id: 'attachment_list',
                 className: 'div',
                 preview: true,
