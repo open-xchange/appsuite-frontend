@@ -177,9 +177,9 @@ define('io.ox/office/framework/view/component',
          * Returns all visible group objects that contain focusable controls as
          * array.
          */
-        function getFocusableGroups(reallyVisible) {
+        function getFocusableGroups() {
             return _(groups).filter(function (group) {
-                return (reallyVisible ? group.isReallyVisible() : group.isVisible()) && group.hasFocusableControls();
+                return group.isReallyVisible() && group.hasFocusableControls();
             });
         }
 
@@ -202,7 +202,7 @@ define('io.ox/office/framework/view/component',
         function moveFocus(forward) {
 
             var // all visible group objects with focusable controls
-                focusableGroups = getFocusableGroups(true),
+                focusableGroups = getFocusableGroups(),
                 // extract all focusable controls from the groups
                 controls = _(focusableGroups).reduce(function (controls, group) { return controls.add(group.getFocusableControls()); }, $()),
                 // focused control
@@ -371,6 +371,7 @@ define('io.ox/office/framework/view/component',
                 node.toggleClass(Utils.HIDDEN_CLASS, !visible);
                 this.trigger('component:show', visible);
                 nodeSize = getNodeSize();
+                updateFocusable();
             }
             return this;
         };
@@ -393,7 +394,7 @@ define('io.ox/office/framework/view/component',
         this.grabFocus = function () {
 
             var // all visible group objects with focusable controls
-                focusableGroups = this.hasFocus() ? [] : getFocusableGroups(true);
+                focusableGroups = this.hasFocus() ? [] : getFocusableGroups();
 
             // set focus to first focusable group
             if (focusableGroups.length > 0) {
