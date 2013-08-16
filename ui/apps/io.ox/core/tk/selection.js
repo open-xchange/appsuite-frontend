@@ -449,15 +449,17 @@ define('io.ox/core/tk/selection',
                 //look what's new
                 tmpIndex = _.difference(_(observedItemsIndex).keys(), tmpIndex);
                 var obj, run = true;
-                if (observedItems[observedItemsIndex[tmpIndex[0]]].data.thread) {//check if this is a mailthread selection
-                    for (i = 0; i < tmpIndex.length && run; i++) {
-                        obj = observedItems[observedItemsIndex[tmpIndex[i]]].data.thread;
-                        for (var e = 0; e < obj.length; e++) {
-                            if (obj[e].id === tmp[0].id) {
-                                select(observedItems[observedItemsIndex[tmpIndex[i]]].data);
-                                //we found the thread, no need to continue
-                                run = false;
-                                break;
+                if (tmpIndex.length > 0) {
+                    if (observedItems[observedItemsIndex[tmpIndex[0]]].data.thread) {//check if this is a mailthread selection
+                        for (i = 0; i < tmpIndex.length && run; i++) {
+                            obj = observedItems[observedItemsIndex[tmpIndex[i]]].data.thread;
+                            for (var e = 0; e < obj.length; e++) {
+                                if (obj[e].id === tmp[0].id) {
+                                    select(observedItems[observedItemsIndex[tmpIndex[i]]].data);
+                                    //we found the thread, no need to continue
+                                    run = false;
+                                    break;
+                                }
                             }
                         }
                     }
