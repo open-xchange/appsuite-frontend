@@ -398,6 +398,10 @@ define("io.ox/contacts/main",
             }
         });
 
+        api.on('create update delete refresh.all', function () {
+            folderAPI.reload(app.folder.get());
+        });
+
         app.getGrid = function () {
             return grid;
         };
