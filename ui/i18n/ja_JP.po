@@ -6098,7 +6098,7 @@ msgstr "新規メール"
 
 #: apps/plugins/notifications/mail/register.js:30
 msgid "Show Inbox"
-msgstr "受信トレイを表示"
+msgstr "受信フォルダを表示"
 
 #: apps/plugins/notifications/calendar/register.js:30
 msgid "Invitations"
