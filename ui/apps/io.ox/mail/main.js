@@ -522,7 +522,7 @@ define('io.ox/mail/main',
             // add label template
             grid.addLabelTemplate(tmpl.thread);
             grid.requiresLabel = function (i, data, current) {
-                return openThreads[i] !== undefined;
+                return openThreads[i] !== undefined && grid.prop('sort') === 'thread';
             };
 
             function refresh(list, index) {
