@@ -308,10 +308,6 @@ define('io.ox/portal/main',
             });
     }
 
-    function getTitle(data, fallback) {
-        return data.title || (data.props ? (data.props.description || data.props.title) : '') || fallback || '';
-    }
-
     app.drawWidget = function (model, index) {
         var node = model.node,
             load = _.device('small') ? (node.offset().top < scrollPos) : true;
@@ -330,7 +326,7 @@ define('io.ox/portal/main',
             // set/update title
             var baton = ext.Baton({ model: model, point: 'io.ox/portal/widget/' + model.get('type') }),
                 point = ext.point(baton.point),
-                title = node.find('h2 .title').text(_.noI18n(getTitle(model.toJSON(), point.prop('title')))),
+                title = node.find('h2 .title').text(_.noI18n(widgets.getTitle(model.toJSON(), point.prop('title')))),
                 requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, true).value();
             // remember
             model.set('baton', baton, { validate: true, silent: true });

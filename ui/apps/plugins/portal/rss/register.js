@@ -54,6 +54,13 @@ define('plugins/portal/rss/register',
         title: gt('RSS Feed'),
 
         load: function (baton) {
+
+            // console.log('RSS title fix', this);
+            // this.find('.title').text('YEAH!!!');
+            // var props = baton.model.get('props');
+            // props.title = "YEAH !!!!";
+            // baton.model.set('props', props);
+
             return migrate().pipe(function () {
                 var urls = baton.model.get('props').url || [];
                 return rss.getMany(urls).done(function (data) {

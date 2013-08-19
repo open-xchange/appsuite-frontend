@@ -134,8 +134,11 @@ define('io.ox/portal/widgets',
             return 'black red orange lightgreen green lightblue blue purple pink gray'.split(' ');
         },
 
-        getTitle: function (data, fallback) {
-            return data.title || (data.props ? (data.props.description || data.props.title) : '') || fallback || '';
+        getTitle: function (data, title) {
+            // precedence if title is a function
+            if (_.isFunction(title)) return title(data);
+            // try custom title, then fallback
+            return data.title || (data.props ? (data.props.description || data.props.title) : '') || title || '';
         },
 
         getPluginByType: function (type) {
@@ -304,11 +307,10 @@ define('io.ox/portal/widgets',
             .value()
     );
 
-    collection.on('change', function () {
+    collection.on('change', _.debounce(function () {
         settings.set('widgets/user', api.toJSON()).saveAndYell();
         // don’t handle positive case here, since this is called quite often
-        // TODO: make sure, this is only called as much as needed, also _.throttle handles this (see settings.save)
-    });
+    }, 100));
 
     collection.on('remove', function (model) {
         if (model.get("protectedWidget")) {

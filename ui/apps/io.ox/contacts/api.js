@@ -18,8 +18,9 @@ define('io.ox/contacts/api',
      'io.ox/core/notifications',
      'io.ox/core/cache',
      'io.ox/contacts/util',
+     'l10n/ja_JP/io.ox/collation',
      'settings!io.ox/contacts'
-     ], function (ext, http, apiFactory, notifications, cache, util, settings) {
+     ], function (ext, http, apiFactory, notifications, cache, util, collation, settings) {
 
     'use strict';
 
@@ -189,6 +190,12 @@ define('io.ox/contacts/api',
         },
         pipe: {
             all: function (response) {
+                // japanese sorting
+                if (ox.language === 'ja_JP') {
+                    response.sort(collation.sorter);
+                    //console.debug('Japanese order', _(response).pluck('sort_name'));
+                    return response;
+                }
                 // move contacts with empty sort_name to end of array
                 // would be nice if backend does this
                 var i = 0, item, count = 0;

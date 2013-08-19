@@ -99,6 +99,31 @@ define('io.ox/contacts/edit/main',
                             notifications.yell(error);
                         });
 
+                        function fnToggleSave(isDirty) {
+                            var node = container.find('.btn[data-action="save"]');
+                            if (isDirty) node.removeAttr('disabled'); else node.attr('disabled', 'disabled');
+                        }
+
+                        if (!data.id) {
+                            editView.listenTo(contact, 'change', function () {
+                                var isDirty = getDirtyStatus(),
+                                    node = container.find('.btn[data-action="save"]');
+                                fnToggleSave(isDirty);
+                            });
+
+                            container.find('.btn[data-action="save"]').attr('disabled', 'disabled');
+
+                            container.find('input[type="text"]').on('keyup', _.debounce(function (e) {
+                                var isDirty = getDirtyStatus();
+                                if (!isDirty && $(this).val()) {
+                                    fnToggleSave(true);
+                                } else if (!isDirty) {
+                                    fnToggleSave(false);
+                                }
+                            }, 100));
+
+                        }
+
                         editView.on('save:success', function (e, data) {
                             if (def.resolve) {
                                 def.resolve(data);
@@ -157,13 +182,21 @@ define('io.ox/contacts/edit/main',
                     }
 
                     getDirtyStatus = function () {
-                        var changes = app.contact.changedSinceLoading();
-                        if (considerSaved) {
-                            return false;
+                        var isNew = !data.id,
+                            changes = app.contact.changedSinceLoading();
+                        if (isNew) {
+                            if (changes.display_name && (!changes.first_name && !changes.last_name)) {
+                                delete changes.display_name;
+                            }
+                            for (var k in changes) {
+                                if (changes.hasOwnProperty(k) && !changes[k]) {
+                                    delete changes[k];
+                                }
+                            }
                         }
-                        if (changes.folder_id && _(changes).size() === 1) {
-                            return false;
-                        }
+                        if (considerSaved) return false;
+                        if (changes.folder_id && _(changes).size() === 1) return false;
+                        if (changes.display_name && _(changes).size() === 1) return false;
                         return app.contact && !_.isEmpty(app.contact.changedSinceLoading());
                     };
 
@@ -212,13 +245,8 @@ define('io.ox/contacts/edit/main',
                 contact.on('change:first_name change:last_name change:title',
                     function (model, value, options) {
                         if (model.changed.display_name) return;
-                        var dn = model.get('display_name');
-                        // only change display name if empty or previous default
-                        if (!dn || dn === util.getFullName(model.previousAttributes()))
-                        {
-                            model.set('display_name',
-                                      util.getFullName(model.toJSON()));
-                        }
+                        var dn = util.getFullName(model.toJSON());
+                        if (dn) model.set('display_name', dn);
                     });
             }
         });

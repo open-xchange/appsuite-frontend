@@ -129,12 +129,21 @@ define('io.ox/contacts/distrib/main',
                 name: 'io.ox/contacts/distrib'
             }));
 
+            function fnToggleSave(isDirty) {
+                var node = container.find('.btn[data-action="save"]');
+                if (isDirty) node.removeAttr('disabled'); else node.attr('disabled', 'disabled');
+            }
+
             win.on('show', function () {
+                if (!container.find('[data-extension-id="displayname"] input').val()) {
+                    container.find('.btn[data-action="save"]').attr('disabled', 'disabled');
+                }
                 container.find('input[type=text]:visible').eq(0).focus();
-                container.find('[data-extension-id="displayname"] input').on('keyup', function () {
+                container.find('[data-extension-id="displayname"] input').on('keyup', _.debounce(function () {
                     var title = _.noI18n($.trim($(this).val()));
                     app.setTitle(title);
-                });
+                    fnToggleSave($(this).val());
+                }, 150));
             });
 
             container = $('<div>').addClass('create-distributionlist container-fluid default-content-padding');

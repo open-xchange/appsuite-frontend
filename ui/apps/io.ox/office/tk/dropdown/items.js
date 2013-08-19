@@ -174,11 +174,6 @@ define('io.ox/office/tk/dropdown/items',
                 keydown = event.type === 'keydown',
                 keyup = event.type === 'keyup';
 
-            if (keydown && KeyCodes.matchKeyCode(event, 'TAB', { shift: null })) {
-                self.triggerChange(event.target, { preserveFocus: true });
-                return; // let TAB key bubble up
-            }
-
             // ignore all other key events in input fields
             if ($(event.target).is('input, textarea')) { return; }
 
@@ -199,6 +194,16 @@ define('io.ox/office/tk/dropdown/items',
                     self.getFocusableMenuControls().last().focus();
                 }
                 return false;
+            }
+        }
+
+        /**
+         * Handles 'menu:leave' events and triggers a change event for the last
+         * focused list item.
+         */
+        function menuLeaveHandler() {
+            if (Utils.containsFocus(self.getMenuNode())) {
+                self.triggerChange(window.document.activeElement, { preserveFocus: true });
             }
         }
 
@@ -352,6 +357,7 @@ define('io.ox/office/tk/dropdown/items',
 
         // register event handlers
         this.getMenuNode().on('keydown keypress keyup', menuKeyHandler);
+        this.on('menu:leave', menuLeaveHandler);
 
         // default sort functor: sort by button label text, case insensitive
         sortFunctor = _.isFunction(sortFunctor) ? sortFunctor : function (button) {
