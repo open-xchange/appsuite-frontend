@@ -309,10 +309,6 @@ define('io.ox/portal/main',
             });
     }
 
-    function getTitle(data, fallback) {
-        return data.title || (data.props ? (data.props.description || data.props.title) : '') || fallback || '';
-    }
-
     app.drawWidget = function (model, index) {
 
         index = index || 0;
@@ -332,7 +328,7 @@ define('io.ox/portal/main',
         }
 
         // set/update title
-        title = node.find('h2 .title').text(_.noI18n(getTitle(model.toJSON(), point.prop('title'))));
+        title = node.find('h2 .title').text(_.noI18n(widgets.getTitle(model.toJSON(), point.prop('title'))));
 
         if (!model.drawn) {
 

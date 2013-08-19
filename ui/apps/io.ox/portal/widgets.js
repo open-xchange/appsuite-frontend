@@ -141,8 +141,11 @@ define('io.ox/portal/widgets',
             return 'black red orange lightgreen green lightblue blue purple pink gray'.split(' ');
         },
 
-        getTitle: function (data, fallback) {
-            return data.title || (data.props ? (data.props.description || data.props.title) : '') || fallback || '';
+        getTitle: function (data, title) {
+            // precedence if title is a function
+            if (_.isFunction(title)) return title(data);
+            // try custom title, then fallback
+            return data.title || (data.props ? (data.props.description || data.props.title) : '') || title || '';
         },
 
         getPluginByType: function (type) {
