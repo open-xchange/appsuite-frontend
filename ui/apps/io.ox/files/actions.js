@@ -403,79 +403,81 @@ define('io.ox/files/actions',
             return e.collection.has('one') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
         },
         action: function (baton) {
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                var $input = $('<input type="text" name="name" class="span12">'),
-                    dialog = null;
+
+            require(['io.ox/core/tk/dialogs', 'io.ox/files/util', 'io.ox/core/notifications'], function (dialogs, util, notifications) {
+
+                var filename = baton.data.filename || baton.data.title;
 
                 /**
                  * @return {promise}
                  */
-                function fnRename() {
-                    var name = $input.val(),
-                        update = {
+                function fnRename(name) {
+
+                    var update = {
                             id: baton.data.id,
                             folder_id: baton.data.folder_id
                         };
-                    //'title only' entries
+
+                    // 'title only' entries
                     if (!baton.data.filename && baton.data.title) {
                         update.title = name;
                     } else {
                         update.filename = name;
                     }
 
-                    return api.update(update).fail(require('io.ox/core/notifications').yell);
+                    return api.update(update).fail(notifications.yell);
                 }
 
                 /**
                  * user have to confirm if name doesn't contains a file extension
                  * @return {promise}
                  */
-                function process() {
-                    require(['io.ox/files/util'], function (util) {
-                        util.confirmDialog($input.val(), baton.data.filename || baton.data.title)
-                            .then(function () {
-                                return fnRename();
-                            }, function () {
-                                //store user input and call action again
-                                baton.data.filename_tmp = $input.val();
-                                actionPerformer.invoke('io.ox/files/actions/rename', null, baton);
-                            });
-                    });
+                function process($input) {
+
+                    var name = $.trim($input.val()), invalid = false;
+
+                    // check for valid filename
+                    ext.point('io.ox/core/filename')
+                        .invoke('validate', null, name, 'file')
+                        .find(function (result) {
+                            if (result !== true) {
+                                notifications.yell('warning', result);
+                                return (invalid = true);
+                            }
+                        });
+
+                    if (invalid) return $.Deferred().reject();
+
+                    return util.confirmDialog(name, filename)
+                        .then(
+                            function yes() {
+                                return fnRename(name);
+                            },
+                            function no() {
+                                setTimeout(function () { $input.focus(); }, 0);
+                            }
+                        );
                 }
 
-                $input.val(baton.data.filename_tmp || baton.data.filename || baton.data.title);
-                delete baton.data.filename_tmp;
-                var $form = $('<form>')
-                    .css('margin', '0 0 0 0')
+                new dialogs.ModalDialog({ enter: 'rename', async: true })
+                    .header(
+                        $('<h4>').text(gt('Rename'))
+                    )
                     .append(
                         $('<div class="row-fluid">').append(
-                            $input
+                            $('<input type="text" name="name" class="span12">')
                         )
-                    );
-
-                //'enter'
-                $form.on('submit', function (e) {
-                    e.preventDefault();
-                    dialog.close();
-                    process();
-                });
-
-                dialog = new dialogs.ModalDialog({enter: 'rename'})
-                    .header($('<h4>').text(gt('Rename')))
-                    .append(
-                        $form
                     )
                     .addPrimaryButton('rename', gt('Rename'))
-                    .addButton('cancel', gt('Cancel'));
-
-                dialog.show(function () {
-                    $input.get()[0].setSelectionRange(0, $input.val().lastIndexOf('.'));
-                })
-                .done(function (action) {
-                    if (action === 'rename') {
-                        process();
-                    }
-                });
+                    .addButton('cancel', gt('Cancel'))
+                    .on('rename', function (popup) {
+                        var $input = this.getContentNode().find('input[name="name"]');
+                        process($input).then(this.close, this.idle);
+                    })
+                    .show(function () {
+                        var $input = this.find('input[name="name"]').val(filename);
+                        $input.get()[0].setSelectionRange(0, $input.val().lastIndexOf('.'));
+                    });
             });
         }
     });

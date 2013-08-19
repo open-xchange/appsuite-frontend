@@ -19,7 +19,8 @@ define('io.ox/core/api/folder',
      'io.ox/core/event',
      'io.ox/core/notifications',
      'io.ox/core/capabilities',
-     'gettext!io.ox/core'], function (http, cache, mailSettings, settings, account, Events, notifications, capabilities, gt) {
+     'io.ox/core/extensions',
+     'gettext!io.ox/core'], function (http, cache, mailSettings, settings, account, Events, notifications, capabilities, ext, gt) {
 
     'use strict';
 
@@ -1116,6 +1117,33 @@ define('io.ox/core/api/folder',
         subFolderCache: subFolderCache,
         visibleCache: visibleCache
     };
+
+    // filename validator
+    ext.point('io.ox/core/filename')
+        .extend({
+            index: 100,
+            id: 'empty',
+            validate: function (name, type) {
+                if (name === '') {
+                    return type === 'file' ?
+                        gt('File names must not be empty') :
+                        gt('Folder names must not be empty');
+                }
+                return true;
+            }
+        })
+        .extend({
+            index: 200,
+            id: 'slash',
+            validate: function (name, type) {
+                if (/\//.test(name)) {
+                    return type === 'file' ?
+                        gt('File names must not contain slashes') :
+                        gt('Folder names must not contain slashes');
+                }
+                return true;
+            }
+        });
 
     return api;
 });
