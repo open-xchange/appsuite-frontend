@@ -495,11 +495,6 @@ define('io.ox/files/icons/perspective',
                 shortcutPoint.deactivate();
             });
 
-            api.on('delete.version', function () {
-                // Close dialog after delete
-                dialog.close();
-            });
-
             api.on('update', function (e, obj) {
                 // update icon
                 var cid = _.cid(obj),
