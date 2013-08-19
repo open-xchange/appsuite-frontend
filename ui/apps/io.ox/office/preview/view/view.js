@@ -233,7 +233,7 @@ define('io.ox/office/preview/view/view',
 
             // do not load initialized page again
             if (pageNode.children().length === 0) {
-                pageLoader.loadPage(pageNode, page, priority)
+                pageLoader.loadPage(pageNode, page, { format: 'svg', priority: priority })
                 .done(function () {
                     loadedPageNodes[page] = pageNode;
                     updatePageZoom(pageNode);
@@ -590,7 +590,7 @@ define('io.ox/office/preview/view/view',
                 size: Modernizr.touch ? 152 : SidePane.DEFAULT_WIDTH,
                 resizable: !Modernizr.touch,
                 minSize: SidePane.DEFAULT_WIDTH,
-                maxSize: 1.8 * SidePane.DEFAULT_WIDTH
+                maxSize: PageGroup.getRequiredWidth(4) + Utils.SCROLLBAR_WIDTH
             }));
 
             // create the page preview group
