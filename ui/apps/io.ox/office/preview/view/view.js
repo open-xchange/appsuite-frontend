@@ -203,7 +203,7 @@ define('io.ox/office/preview/view/view',
                 var move = callback.call(self, index);
                 scrollContentRootNode(move.x, move.y);
             }, { delay: ANIMATION_DELAY, cycles: frames })
-            .done(function () { scrollAnimation = null; });
+            .always(function () { scrollAnimation = null; });
         }
 
         /**

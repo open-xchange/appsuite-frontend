@@ -182,7 +182,7 @@ define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], functi
             }, { delay: 20 });
 
             // forget reference to the timer, when all page requests are running
-            timer.done(function () { timer = null; });
+            timer.always(function () { timer = null; });
         }
 
         // methods ------------------------------------------------------------
