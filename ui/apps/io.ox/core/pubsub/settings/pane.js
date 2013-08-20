@@ -257,13 +257,9 @@ define('io.ox/core/pubsub/settings/pane',
         tagName: 'li',
         className: '',
         initialize: function () {
-            //TODO:switch to listenTo here, once backbone is up to date
-            //see [1](http://blog.rjzaworski.com/2013/01/why-listento-in-backbone/)
-            this.model.off('change', performRender);
-            this.model.on('change', performRender, this);
+            this.listenTo(this.model, 'change', performRender);
 
-            this.model.off('remove', performRemove, this);
-            this.model.on('remove', performRemove, this);
+            this.listenTo(this.model, 'remove', performRemove);
         },
         events: {
             'click [data-action="toggle"]': 'onToggle',
@@ -311,6 +307,9 @@ define('io.ox/core/pubsub/settings/pane',
         onRemove: function (ev) {
             ev.preventDefault();
             this.model.destroy();
+        },
+        close: function () {
+            this.stopListening();
         }
     });
 
