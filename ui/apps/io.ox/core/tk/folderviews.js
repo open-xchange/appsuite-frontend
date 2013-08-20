@@ -555,13 +555,27 @@ define('io.ox/core/tk/folderviews',
          * a module name, for now
          */
         this.addProcess = function (folder, title, opt) {
-            var self = this,
-            opt = opt || {};
+
+            var opt = opt || {},
+                invalid = false;
+
+            // check for valid filename
+            ext.point('io.ox/core/filename')
+                .invoke('validate', null, title, 'folder')
+                .find(function (result) {
+                    if (result !== true) {
+                        notifications.yell('warning', result);
+                        return (invalid = true);
+                    }
+                });
+
+            if (invalid) return $.Deferred().reject();
+
             // call API
             return api.create({
                 folder: folder,
                 data: {
-                    title: $.trim(title) || gt('New folder'),
+                    title: $.trim(title),
                     module: opt.module
                 }
             });
@@ -580,7 +594,8 @@ define('io.ox/core/tk/folderviews',
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog({
                         async: true,
-                        width: 400
+                        width: 400,
+                        enter: 'add'
                     })
                     .header(
                         $('<h4>').text(folder === '1' ? gt('Add new folder') : gt('Add new subfolder'))
@@ -589,23 +604,19 @@ define('io.ox/core/tk/folderviews',
                         this.getContentNode().append(
                             $('<div class="row-fluid">').append(
                                 folder !== '1' ? api.getBreadcrumb(folder, { subfolders: false }) : [],
-                                $('<input>', { type: 'text' })
+                                $('<input type="text" class="span12">')
                                 .attr('placeholder', gt('Folder name'))
-                                .addClass('span12')
-                                .on('keypress', { popup: this, action: 'add' }, fnKeyPress)
                             )
                         );
                     })
                     .addPrimaryButton('add', gt('Add folder'))
                     .addButton('cancel', gt('Cancel'))
                     .on('add', function () {
-                        var popup = this;
-                        self.addProcess(folder, this.getContentNode().find('input').val(), opt).always(function () {
-                            popup.close();
-                        });
+                        self.addProcess(folder, this.getContentNode().find('input').val(), opt)
+                            .then(this.close, this.idle);
                     })
                     .show(function () {
-                        this.find('input').focus();
+                        this.find('input').val(gt('New folder')).focus();
                     });
                 });
             }
@@ -638,6 +649,21 @@ define('io.ox/core/tk/folderviews',
         };
 
         this.renameProcess = function (folder, changes) {
+
+            var invalid = false;
+
+            // check for valid folder name
+            ext.point('io.ox/core/filename')
+                .invoke('validate', null, changes.title, 'folder')
+                .find(function (result) {
+                    if (result !== true) {
+                        notifications.yell('warning', result);
+                        return (invalid = true);
+                    }
+                });
+
+            if (invalid) return $.Deferred().reject();
+
             return api.update({ folder: folder, changes: changes });
         };
 
@@ -678,7 +704,7 @@ define('io.ox/core/tk/folderviews',
                     .addButton('cancel', gt('Cancel'))
                     .on('rename', function () {
                         self.renameProcess(folder.id, { title: this.getContentNode().find('input').val() })
-                            .always(this.close);
+                            .then(this.close, this.idle);
                     })
                     .show(function () {
                         this.find('input').focus();

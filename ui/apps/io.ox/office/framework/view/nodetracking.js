@@ -59,6 +59,9 @@ define('io.ox/office/framework/view/nodetracking',
         // whether the mouse or touch point has been moved after tracking has started
         moved = false,
 
+        // whether tracking is currently finishing (prevent conflicts when calling $.cancelTracking() from event handlers)
+        finishing = false,
+
         // the browser timer used for initial auto-repetition
         repeatDelayTimer = null,
 
@@ -321,9 +324,11 @@ define('io.ox/office/framework/view/nodetracking',
      * 'tracking:cancel' event at the current tracking node.
      */
     function cancelTracking() {
-        if (trackingNode) {
+        if (trackingNode && !finishing) {
+            finishing = true;
             triggerEvent('tracking:cancel');
             deinitTracking();
+            finishing = false;
             return true;
         }
         return false;
@@ -361,9 +366,11 @@ define('io.ox/office/framework/view/nodetracking',
      */
     function trackingEnd(event, pageX, pageY) {
         if (trackingNode) {
+            finishing = true;
             trackingMove(event, pageX, pageY);
             triggerEvent('tracking:end', event, { pageX: pageX, pageY: pageY, endX: pageX, endY: pageY, offsetX: pageX - startX, offsetY: pageY - startY });
             deinitTracking();
+            finishing = false;
         }
     }
 

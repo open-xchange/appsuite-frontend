@@ -968,8 +968,9 @@ define('io.ox/office/framework/app/baseapplication',
          *  Deferred object is resolved or rejected. After resolving the
          *  Deferred object, the delay time will start, and the callback will
          *  be called again. Otherwise, after the Deferred object has been
-         *  rejected, execution will be stopped. All other return values will
-         *  be ignored, and the callback loop will continue.
+         *  rejected, execution will be stopped, and the Promise returned by
+         *  this method will be rejected too. All other return values will be
+         *  ignored, and the callback loop will continue.
          *
          * @param {Object} [options]
          *  A map with options controlling the behavior of this method. The
@@ -988,13 +989,18 @@ define('io.ox/office/framework/app/baseapplication',
          *      If specified, the maximum number of cycles to be executed.
          *
          * @returns {jQuery.Promise}
-         *  The Promise of a Deferred object that will be resolved after the
-         *  callback function has been invoked the last time. This Promise
-         *  contains an additional method 'abort()' that can be called before
-         *  or while the callback loop is executed to stop the loop
-         *  immediately. In that case, the Promise will never be resolved. When
-         *  the application will be closed, it aborts all running callback
-         *  loops automatically (also, without resolving the Promise).
+         *  The Promise of a Deferred object that will be resolved or rejected
+         *  after the callback function has been invoked the last time. The
+         *  Promise will be resolved, if the callback function has returned the
+         *  Utils.BREAK object in the last iteration, or if the maximum number
+         *  of iterations (see option 'options.cycles') has been reached. It
+         *  will be rejected, if the callback function has returned a rejected
+         *  Deferred object or Promise. The returned Promise contains an
+         *  additional method 'abort()' that can be called before or while the
+         *  callback loop is executed to stop the loop immediately. In that
+         *  case, the Promise will never be resolved nor rejected. When the
+         *  application will be closed, it aborts all running callback loops
+         *  automatically (also, without resolving/rejecting the Promise).
          */
         this.repeatDelayed = function (callback, options) {
 
@@ -1022,7 +1028,7 @@ define('io.ox/office/framework/app/baseapplication',
 
                     // immediately break the loop if callback returns Utils.BREAK
                     if (result === Utils.BREAK) {
-                        def.resolve();
+                        def.resolve(Utils.BREAK);
                         return;
                     }
 
@@ -1041,8 +1047,8 @@ define('io.ox/office/framework/app/baseapplication',
                             }
                         }
                     })
-                    .fail(function () {
-                        def.resolve();
+                    .fail(function (response) {
+                        def.reject(response);
                     });
 
                 }, Utils.extendOptions(options, { delay: delay }));
@@ -1090,9 +1096,10 @@ define('io.ox/office/framework/app/baseapplication',
          *  resolved or rejected. After resolving the Deferred object, the
          *  delay time will start, and the callback will be called again for
          *  the chunk in the array. Otherwise, after the Deferred object has
-         *  been rejected, execution will be stopped. All other return values
-         *  will be ignored, and the callback loop will continue to the end of
-         *  the array.
+         *  been rejected, execution will be stopped, and the Promise returned
+         *  by this method will be rejected too. All other return values will
+         *  be ignored, and the callback loop will continue to the end of the
+         *  array.
          *
          * @param {Array|jQuery} dataArray
          *  A JavaScript array, or another array-like object that provides an
@@ -1118,16 +1125,16 @@ define('io.ox/office/framework/app/baseapplication',
          *
          * @returns {jQuery.Promise}
          *  The Promise of a Deferred object that will be resolved after all
-         *  array elements have been processed successfully; or rejected, if
-         *  the callback function returns Utils.BREAK or a rejected Deferred
-         *  object. The Promise will be notified about the progress (as a
-         *  floating-point value between 0.0 and 1.0). The Promise contains an
-         *  additional method 'abort()' that can be called before processing
-         *  all array elements has been finished to cancel the entire loop
-         *  immediately. In that case, the Promise will neither be resolved nor
-         *  rejected. When the application will be closed, it aborts all
-         *  running loops automatically (also, without resolving nor rejecting
-         *  the Promise).
+         *  array elements have been processed successfully or the callback
+         *  function returns Utils.BREAK; or rejected, if the callback function
+         *  returns a rejected Deferred object. The Promise will be notified
+         *  about the progress (as a floating-point value between 0.0 and 1.0).
+         *  The Promise contains an additional method 'abort()' that can be
+         *  called before processing all array elements has been finished to
+         *  cancel the entire loop immediately. In that case, the Promise will
+         *  neither be resolved nor rejected. When the application will be
+         *  closed, it aborts all running loops automatically (also, without
+         *  resolving/rejecting the Promise).
          */
         this.processArrayDelayed = function (callback, dataArray, options) {
 
@@ -1161,16 +1168,16 @@ define('io.ox/office/framework/app/baseapplication',
 
                 // immediately break the loop, if Utils.BREAK is returned
                 if (result === Utils.BREAK) {
-                    def.reject();
+                    def.resolve(Utils.BREAK);
                     // stop the loop timer
                     return Utils.BREAK;
                 }
 
                 // handle Deferred objects returned by the callback
                 return $.when(result)
-                .fail(function () {
+                .fail(function (response) {
                     // immediately break the loop, if returned Deferred has been rejected
-                    def.reject();
+                    def.reject(response);
                     // the Deferred returned by $.when(result) is rejected, so the
                     // background loop will be stopped automatically
                 })
@@ -1394,7 +1401,7 @@ define('io.ox/office/framework/app/baseapplication',
                         id: file.id,
                         module: file.module,
                         attachment: file.attached
-                        
+
                     });
             }
 

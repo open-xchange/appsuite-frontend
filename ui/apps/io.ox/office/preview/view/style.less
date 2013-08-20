@@ -39,10 +39,11 @@
 /* generic settings for page nodes ========================================= */
 
 .page {
+    position: relative;
+    overflow: hidden;
+    background-color: white;
     /* fix for IE10, which does not render SVG text elements when line height is 0 */
     line-height: normal;
-    overflow: hidden;
-    background: white;
 
     /* remove max-width property set by Bootstrap */
     > img {
@@ -53,11 +54,9 @@
 /* pages in the application pane =========================================== */
 
 .view-pane.app-pane .page {
-    position: relative;
     width: 210mm;
     height: 297mm;
     margin: 0 auto;
-    background-color: white;
     .box-shadow(0 0 8px fade(black, 20%));
     cursor: move;
 
@@ -115,10 +114,7 @@
         }
 
         > .page {
-            position: relative;
-            margin-left: auto;
-            margin-right: auto;
-            background-color: white;
+            display: inline-block;
 
             &.page-error {
                 .error-icon-style(30px, #f88);

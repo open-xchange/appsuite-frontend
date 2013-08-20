@@ -1540,17 +1540,21 @@ define("io.ox/core/desktop",
         }
 
         function clear(blockerTimer) {
-            //launched is a deferred used for a delayed clear
+            clearTimeout(blockerTimer);
+            clearTimeout(buttonTimer);
+            blockerTimer = null;
+            buttonTimer = null;
+            setTimeout(function () {
+                if (blockerTimer === null) {
+                    ox.idle();
+                }
+            }, 0);
+        }
+
+        function clearViaLauncher(blockerTimer) {
+//            launched is a deferred used for a delayed clear
             launched.always(function () {
-                clearTimeout(blockerTimer);
-                clearTimeout(buttonTimer);
-                blockerTimer = null;
-                buttonTimer = null;
-                setTimeout(function () {
-                    if (blockerTimer === null) {
-                        ox.idle();
-                    }
-                }, 0);
+                clear(blockerTimer);
             });
         }
 
@@ -1566,7 +1570,7 @@ define("io.ox/core/desktop",
             }
             var blockertimer = startTimer();
 
-            require(req).always(clear(blockertimer)).then(
+            require(req).always(clearViaLauncher(blockertimer)).then(
                 def.resolve,
                 function fail() {
                     def.reject(false);
