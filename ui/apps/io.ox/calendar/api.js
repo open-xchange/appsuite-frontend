@@ -114,10 +114,10 @@ define('io.ox/calendar/api',
                         params: params
                     })
                     .done(function (data) {
-                        get_cache[key] = JSON.stringify(data);
+                        get_cache[key] = data;
                     });
             } else {
-                return $.Deferred().resolve(JSON.parse(get_cache[key]));
+                return $.Deferred().resolve(get_cache[key]);
             }
         },
 
