@@ -49,8 +49,8 @@ define('plugins/portal/mail/register',
         load: function (baton) {
             return accountAPI.getUnifiedMailboxName().then(function (mailboxName) {
                 var folderName = mailboxName ? mailboxName + '/INBOX' : api.getDefaultFolder();
-                return api.getAll({ folder:  folderName }, false).pipe(function (mails) {
-                    return api.getList(mails.slice(0, 25)).done(function (data) {
+                return api.getAll({ folder:  folderName, limit: 10 }, false).pipe(function (mails) {
+                    return api.getList(mails.slice(0, 10)).done(function (data) {
                         baton.data = data;
                     });
                 });
