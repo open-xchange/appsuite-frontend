@@ -183,24 +183,52 @@ define('io.ox/calendar/actions',
 
     new Action('io.ox/calendar/detail/actions/delete', {
         id: 'delete',
-        requires: 'one delete',
-        action: function (baton) {
-            var params = baton.data,
-                o = {
-                id: params.id,
-                folder: params.folder_id
-            };
-            if (!_.isUndefined(params.recurrence_position)) {
-                o.recurrence_position = params.recurrence_position;
-            }
+        requires: 'delete',
+        multiple: function (list) {
 
-            api.get(o).done(function (data) {
-                ox.load(['io.ox/calendar/model']).done(function (Model) {
-                    // different warnings especially for events with
-                    // external users should handled here
-                    var myModel = new Model.Appointment(data);
-                    if (data.recurrence_type > 0) {
-                        ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
+            var apiCalls = [];
+
+            _(list).each(function (obj) {
+                var o = {
+                    id: obj.id,
+                    folder: obj.folder_id
+                };
+                if (!_.isUndefined(obj.recurrence_position)) {
+                    o.recurrence_position = obj.recurrence_position;
+                }
+
+                apiCalls.push(api.get(o));
+            });
+
+            $.when.apply($, apiCalls)
+                .pipe(function () {
+                    return _.chain(arguments)
+                        .flatten(true)
+                        .filter(function (app) {
+                            return _.isObject(app);
+                        }).value();
+                })
+                .then(function (appList) {
+
+                    var hasRec = _(appList).some(function (app) {
+                        return app.recurrence_type > 0;
+                    });
+
+                    ox.load(['io.ox/calendar/model', 'io.ox/core/tk/dialogs']).done(function (Model, dialogs) {
+                        // different warnings especially for events with
+                        // external users should handled here
+
+                        var cont = function (series) {
+                            _(appList).each(function (obj) {
+                                var myModel = new Model.Appointment(obj);
+                                if (series) {
+                                    delete myModel.attributes.recurrence_position;
+                                }
+                                myModel.destroy();
+                            });
+                        };
+
+                        if (hasRec) {
                             new dialogs.ModalDialog()
                                 .text(gt('Do you want to delete the whole series or just one appointment within the series?'))
                                 .addPrimaryButton('appointment', gt('Delete appointment'))
@@ -211,14 +239,9 @@ define('io.ox/calendar/actions',
                                     if (action === 'cancel') {
                                         return;
                                     }
-                                    if (action === 'series') {
-                                        delete myModel.attributes.recurrence_position;
-                                    }
-                                    myModel.destroy();
+                                    cont(action === 'series');
                                 });
-                        });
-                    } else {
-                        ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
+                        } else {
                             new dialogs.ModalDialog()
                                 .text(gt('Do you want to delete this appointment?'))
                                 .addPrimaryButton('ok', gt('Delete'))
@@ -228,13 +251,11 @@ define('io.ox/calendar/actions',
                                     if (action === 'cancel') {
                                         return;
                                     }
-                                    myModel.destroy();
+                                    cont();
                                 });
-                        });
-                    }
-
+                        }
+                    });
                 });
-            });
         }
     });
 
