@@ -386,6 +386,44 @@
         color: #888;
         display: block;
     }
+
+    &.tumblr {
+        h2 { margin:26px 0 4px 0 }
+        .post {
+            margin-bottom: 26px;
+            img { display:block; }
+            blockquote {
+                em {
+                    display:block;
+                    &:before {
+                        content: '-- ';
+                    };
+                }
+                margin-bottom:5px;
+            }
+        }
+
+        .post-bar {
+            font-size: 90%;
+            color: gray;
+            font-weight: 300;
+            a {
+                color: gray;
+                margin-left:8px;
+                &:hover {
+                    color:#0088cc;
+                }
+            }
+            a, i {
+                text-decoration:none;
+                &.icon-tag {
+                    margin-right:4px;
+                }
+            }
+            .post-date { float:left; }
+            text-align:right;
+        }
+    }
 }
 
 /* RESPONSIVE */

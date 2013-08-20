@@ -16,8 +16,9 @@ define('plugins/portal/tumblr/register',
      'io.ox/portal/feed',
      'gettext!io.ox/portal',
      'io.ox/core/tk/dialogs',
+     'io.ox/core/date',
      'settings!io.ox/portal'
-    ], function (ext, Feed, gt, dialogs, settings) {
+    ], function (ext, Feed, gt, dialogs, date, settings) {
 
     'use strict';
 
@@ -65,98 +66,142 @@ define('plugins/portal/tumblr/register',
             var data = baton.data,
                 title = data.blog ? data.blog.name : '',
                 sizes, url = '', width = 0,
-                post = _(data.posts).first();
+                firstPosts = _.first(data.posts, 8),
+                firstPost = _(firstPosts).first();
 
             if (title) {
-                this.find('h2 .title').text(_.noI18n(title));
+                this.find('h2 span.title').text(_.noI18n(title));
             }
 
-            if (post) {
-                // has photos?
-                if (_.isArray(post.photos) && post.photos.length && (sizes = post.photos[0].alt_sizes)) {
-                    // add photo
-                    // find proper size
-                    _(sizes).each(function (photo) {
-                        if (width === 0 || (photo.width > 250 && photo.width < 1000)) {
-                            url = photo.url;
-                            width = photo.width;
-                        }
-                    });
-                    this.addClass('photo-stream').append(
-                        $('<div class="content pointer">').css('backgroundImage', 'url(' + url + ')')
-                        .addClass('decoration')
-                    );
 
-                } else {
-                    // use text
-                    var body = [];
-                    // remove external links (breaks https)
-                    if (post.body) { // is sometimes undefined / replace throws error
-                        post.body = post.body.replace(/src=/g, 'nosrc=');
+            if (firstPost && _.isArray(firstPost.photos) && firstPost.photos.length && (sizes = firstPost.photos[0].alt_sizes)) {
+                // add photo
+                // find proper size
+                _(sizes).each(function (photo) {
+                    if (width === 0 || (photo.width > 250 && photo.width < 1000)) {
+                        url = photo.url;
+                        width = photo.width;
                     }
-                    $('<div>').html(post.body).contents().each(function () {
-                        var text = _.escape($.trim($(this).text()));
-                        if (text !== '') { body.push(_.noI18n(text)); }
-                    });
+                });
+                this.addClass('photo-stream').append(
+                    $('<div class="content pointer decoration">').css('backgroundImage', 'url(' + url + ')')
+                );
 
-                    this.append(
-                        $('<div class="content pointer">').html(body.join(' <span class="accent">&bull;</span> '))
-                        .addClass('decoration')
-                    );
-                }
+            } else {
+                var titles = [];
+                _(firstPosts).each(function (post) {
+                    if (post.title) {
+                        titles.push(
+                            $('<div class="paragraph">').append(
+                                $('<span class="bold">').html(_.noI18n(post.title)), $.txt('')
+                            )
+                        );
+                    }
+                });
+
+                this.append(
+                    $('<div class="content pointer">').append(titles)
+                );
             }
+
         },
 
         draw: (function () {
 
             function drawPost(post) {
+                var sizes, url = '', width = 0,
+                    node = $('<div class="post">').attr('data-post-type', post.type);
 
-                var sizes, url = '', width = 0, img;
+                var postTitle = function () {
+                    var title = $('<h2>').text(_.noI18n(post.title));
+                    if (post.url || post.post_url) {
+                        return $('<a>', { href: post.url || post.post_url, target: '_blank' }).append(title);
+                    } else {
+                        return title;
+                    }
+                },
 
-                if (_.isArray(post.photos) && post.photos.length && (sizes = post.photos[0].alt_sizes)) {
-                    // add photo
-                    // find proper size
-                    _(sizes).each(function (photo) {
-                        if (width === 0 || (photo.width > 500 && photo.width < 1200)) {
-                            url = photo.url;
-                            width = photo.width;
+                postDate = function () {
+                    var pd = new date.Local(post.timestamp * 1000);
+                    return $('<span class="post-date">').text(' ' + pd.format(date.DATE_TIME));
+                },
+                postTags = function () {
+                    var tags = [],
+                        tagBaseUri = 'http://' + post.blog_name + '.tumblr.com/tagged/';
+                    if (post.tags && post.tags.length > 0) {
+                        _(post.tags).each(function (tag) {
+                            tags.push($('<a>', { href: tagBaseUri + tag, target: '_blank' })
+                                .addClass('tag').text(tag).prepend($('<i class="icon-tag">')));
+                        });
+                    }
+                    return tags;
+                },
+                postPhotos = function () {
+                    var img, node;
+                    if (_.isArray(post.photos) && post.photos.length && (sizes = post.photos[0].alt_sizes)) {
+                        _(sizes).each(function (photo) {
+                            if (width === 0 || (photo.width > 500 && photo.width < 1200)) {
+                                url = photo.url;
+                                width = photo.width;
+                            }
+                        });
+                        img = $('<img>').attr({'src': url}).css({
+                            'width': '100%',
+                            'max-width': width,
+                            'margin-bottom': '13px'
+                        });
+                        if (post.post_url || post.link_url) {
+                            return $('<a>', { href: post.post_url || post.link_url, target: '_blank' }).append(img);
+                        } else {
+                            return img;
                         }
-                    });
-                    this.append(img = $('<div class="photo">').css('backgroundImage', 'url(' + url + ')'));
-                    if (post.post_url || post.link_url) {
-                        img.wrap($('<a>', { href: post.post_url || post.link_url, target: '_blank' }));
                     }
+                },
+                postBody = function () {
+                    var strippedHtml = post.body
+                        .replace(/<(?!img\s*\/?)[^>]+>/g, "\n")
+                        .replace(/<img.+?src=[\'"]([^\'"]+)[\'"].*?>/i, '<img src="$1">');
+                    if (post.type === 'chat') {
+                        strippedHtml = strippedHtml.replace(/\n/g, '<br />');
+                    }
+                    return $('<div class="post-body">').html(strippedHtml);
+                },
+                postQuote = function () {
+                    return $('<blockquote>').append(_.escape($.trim(post.text)))
+                        .append($('<em>').text(_.escape($.trim(post.source))));
+                },
+                postLink = function () {
+                    return $('<a>', { href: post.post_url, target: '_blank', title: gt('Read article on tumblr.com') }).append($('<i class="icon-tumblr-sign">'));
+                },
+                postExternalLink = function () {
+                    return $('<a>', { href: post.url, target: '_blank', title: gt('Open external link') }).append($('<i class="icon-external-link-sign">'));
+                },
+                postNav = function () {
+                    var nav = $('<div class="post-bar">');
+                    if (post.tags) nav.append(postTags());
+                    if (post.timestamp) nav.append(postDate());
+                    if (post.url) nav.append(postExternalLink());
+                    if (post.post_url) nav.append(postLink());
+                    return nav;
+                };
 
+                if (post.type === 'photo') {
+                    node.append(postPhotos());
                 } else {
-                    // use text
-                    if (post.title) {
-                        this.append(
-                            $('<h2>').text(_.noI18n(post.title))
-                        );
-                    }
-                    if (post.post_url) {
-                        this.append(
-                            $('<div class="post-url">').append(
-                                $('<a>', { href: post.post_url, target: '_blank' }).text(gt('Read article on tumblr.com'))
-                            )
-                        );
-                    }
-                    var body = [];
-                    $('<div>').html(post.body).contents().each(function () {
-                        var text = _.escape($.trim($(this).text()));
-                        if (text !== '') { body.push(_.noI18n(text)); }
-                    });
-                    this.append(
-                        $('<div class="text">').html(body.join('<span class="text-delimiter">&bull;</span>'))
-                    );
+                    if (post.title) node.append(postTitle());
+                    if (post.body) node.append(postBody());
+                    if (post.text) node.append(postQuote());
+
+                    node.append(postNav());
                 }
+                this.append(node);
             }
 
             return function (baton) {
 
                 var data = baton.data,
                     title = data.blog ? data.blog.name : '',
-                    node = $('<div class="portal-feed">');
+                    node = $('<div class="portal-feed tumblr">');
 
                 if (title) {
                     node.append($('<h1>').text(_.noI18n(title)));
