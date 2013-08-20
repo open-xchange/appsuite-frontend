@@ -10,18 +10,273 @@ msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #. Placeholder in furigana field
-#: apps/l10n/ja_JP/io.ox/register.js:50
+#: apps/l10n/ja_JP/io.ox/register.js:51
 msgid "Furigana for last name"
 msgstr ""
 
 #. Placeholder in furigana field
-#: apps/l10n/ja_JP/io.ox/register.js:53
+#: apps/l10n/ja_JP/io.ox/register.js:54
 msgid "Furigana for first name"
 msgstr ""
 
 #. Placeholder in furigana field
-#: apps/l10n/ja_JP/io.ox/register.js:56
+#: apps/l10n/ja_JP/io.ox/register.js:57
 msgid "Furigana for company"
+msgstr ""
+
+#. Appears in file icon view during searches
+#: apps/io.ox/files/icons/perspective.js:62
+msgid "Searched for: %1$s"
+msgstr ""
+
+#: apps/io.ox/portal/widgets.js:253
+msgid "Settings saved."
+msgstr ""
+
+#: apps/io.ox/portal/widgets.js:260
+msgid "Could not save settings."
+msgstr ""
+
+#: apps/io.ox/portal/main.js:33
+msgid "Good morning, %s"
+msgstr ""
+
+#: apps/io.ox/portal/main.js:35
+msgid "Good evening, %s"
+msgstr ""
+
+#: apps/io.ox/portal/main.js:37
+msgid "Hello %s"
+msgstr ""
+
+#: apps/io.ox/portal/main.js:66
+msgid "Customize this page"
+msgstr ""
+
+#. Portal. Logged in as user
+#: apps/io.ox/portal/main.js:78
+msgid "Signed in as %1$s"
+msgstr ""
+
+#: apps/io.ox/portal/main.js:117
+msgid "Disable widget"
+msgstr ""
+
+#: apps/io.ox/portal/main.js:260 apps/plugins/portal/facebook/register.js:264
+#: apps/plugins/portal/twitter/register.js:401
+msgid "Click here to add your account"
+msgstr ""
+
+#: apps/io.ox/portal/main.js:297
+msgid "An error occurred."
+msgstr ""
+
+#: apps/io.ox/portal/main.js:300
+msgid "Click to try again."
+msgstr ""
+
+#: apps/io.ox/contacts/distrib/main.js:39
+msgid "Distribution List"
+msgstr ""
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:43
+#: apps/io.ox/contacts/distrib/main.js:53
+msgid "Create distribution list"
+msgstr ""
+
+#: apps/io.ox/contacts/distrib/main.js:73
+msgid "Failed to save distribution list."
+msgstr ""
+
+#: apps/io.ox/contacts/distrib/main.js:78
+msgid "Distribution list has been saved"
+msgstr ""
+
+#: apps/io.ox/calendar/edit/main.js:49 apps/io.ox/contacts/distrib/main.js:170
+#: apps/io.ox/contacts/edit/main.js:221 apps/io.ox/editor/main.js:289
+#: apps/io.ox/tasks/edit/main.js:153
+msgid "Do you really want to discard your changes?"
+msgstr ""
+
+#: apps/io.ox/calendar/edit/main.js:50 apps/io.ox/calendar/edit/template.js:83
+#: apps/io.ox/contacts/distrib/create-dist-view.js:54
+#: apps/io.ox/contacts/distrib/main.js:171 apps/io.ox/contacts/edit/main.js:222
+#: apps/io.ox/contacts/edit/view-form.js:187
+#: apps/io.ox/contacts/settings/pane.js:93 apps/io.ox/editor/main.js:290
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:60
+#: apps/io.ox/mail/settings/signatures/register.js:70
+#: apps/io.ox/mail/write/main.js:1273 apps/io.ox/mail/write/main.js:1291
+#: apps/io.ox/mail/write/main.js:1293 apps/io.ox/mail/write/view-main.js:68
+#: apps/io.ox/tasks/edit/view-template.js:72 apps/io.ox/tasks/edit/view.js:294
+#: apps/plugins/portal/userSettings/register.js:30
+msgid "Discard"
+msgstr ""
+
+#: apps/io.ox/calendar/acceptdeny.js:70 apps/io.ox/calendar/actions.js:138
+#: apps/io.ox/calendar/actions.js:208 apps/io.ox/calendar/actions.js:225
+#: apps/io.ox/calendar/actions.js:346 apps/io.ox/calendar/edit/main.js:51
+#: apps/io.ox/calendar/edit/main.js:159
+#: apps/io.ox/calendar/month/perspective.js:111
+#: apps/io.ox/calendar/week/perspective.js:79
+#: apps/io.ox/calendar/week/perspective.js:122 apps/io.ox/contacts/actions.js:52
+#: apps/io.ox/contacts/actions.js:53 apps/io.ox/contacts/actions.js:150
+#: apps/io.ox/contacts/actions.js:151 apps/io.ox/contacts/distrib/main.js:163
+#: apps/io.ox/contacts/distrib/main.js:172 apps/io.ox/contacts/edit/main.js:190
+#: apps/io.ox/contacts/edit/main.js:223
+#: apps/io.ox/core/commons-folderview.js:463 apps/io.ox/core/desktop.js:1529
+#: apps/io.ox/core/export/export.js:70 apps/io.ox/core/import/import.js:114
+#: apps/io.ox/core/main.js:313 apps/io.ox/core/main.js:346
+#: apps/io.ox/core/permissions/permissions.js:323
+#: apps/io.ox/core/permissions/permissions.js:338
+#: apps/io.ox/core/permissions/permissions.js:344
+#: apps/io.ox/core/permissions/permissions.js:364
+#: apps/io.ox/core/permissions/permissions.js:379
+#: apps/io.ox/core/permissions/permissions.js:385 apps/io.ox/core/print.js:107
+#: apps/io.ox/core/pubsub/publications.js:92
+#: apps/io.ox/core/pubsub/subscriptions.js:47 apps/io.ox/core/relogin.js:50
+#: apps/io.ox/core/tk/attachments.js:501 apps/io.ox/core/tk/attachments.js:502
+#: apps/io.ox/core/tk/attachments.js:507 apps/io.ox/core/tk/folderviews.js:600
+#: apps/io.ox/core/tk/folderviews.js:629 apps/io.ox/core/tk/folderviews.js:678
+#: apps/io.ox/core/tk/folderviews.js:730 apps/io.ox/core/tk/mobiscroll.js:34
+#: apps/io.ox/core/upsell.js:34 apps/io.ox/editor/main.js:291
+#: apps/io.ox/files/actions.js:288 apps/io.ox/files/actions.js:301
+#: apps/io.ox/files/actions.js:316 apps/io.ox/files/actions.js:441
+#: apps/io.ox/files/actions.js:454 apps/io.ox/files/actions.js:469
+#: apps/io.ox/files/actions.js:497 apps/io.ox/files/actions.js:510
+#: apps/io.ox/files/actions.js:525 apps/io.ox/files/actions.js:546
+#: apps/io.ox/files/actions.js:559 apps/io.ox/files/actions.js:574
+#: apps/io.ox/files/actions.js:640 apps/io.ox/files/actions.js:653
+#: apps/io.ox/files/actions.js:668 apps/io.ox/files/views/create.js:135
+#: apps/io.ox/files/views/create.js:136
+#: apps/io.ox/keychain/secretRecoveryDialog.js:33
+#: apps/io.ox/mail/accounts/settings.js:43
+#: apps/io.ox/mail/accounts/settings.js:255
+#: apps/io.ox/mail/accounts/view-form.js:267 apps/io.ox/mail/actions.js:72
+#: apps/io.ox/mail/actions.js:300 apps/io.ox/mail/actions.js:847
+#: apps/io.ox/mail/actions.js:857 apps/io.ox/mail/folderview-extensions.js:128
+#: apps/io.ox/mail/mailfilter/settings/filter.js:52
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:348
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:354
+#: apps/io.ox/mail/write/main.js:1275 apps/io.ox/mail/write/main.js:1293
+#: apps/io.ox/mail/write/main.js:1295 apps/io.ox/oauth/settings.js:82
+#: apps/io.ox/office/framework/view/baseview.js:671
+#: apps/io.ox/office/tk/dialogs.js:29 apps/io.ox/portal/settings/pane.js:343
+#: apps/io.ox/settings/accounts/settings/pane.js:136
+#: apps/io.ox/tasks/actions.js:61 apps/io.ox/tasks/actions.js:198
+#: apps/io.ox/tasks/actions.js:523 apps/io.ox/tasks/edit/main.js:155
+#: apps/io.ox/tasks/edit/main.js:160 apps/io.ox/tasks/edit/util.js:122
+#: apps/io.ox/tasks/edit/util.js:126 apps/io.ox/tasks/edit/util.js:127
+#: apps/plugins/portal/flickr/register.js:227
+#: apps/plugins/portal/rss/register.js:169
+#: apps/plugins/portal/rss/register.js:176
+#: apps/plugins/portal/tumblr/register.js:194
+#: apps/plugins/portal/userSettings/register.js:65
+#: apps/plugins/portal/userSettings/register.js:70
+msgid "Cancel"
+msgstr ""
+
+#: apps/io.ox/calendar/edit/template.js:63
+#: apps/io.ox/contacts/distrib/create-dist-view.js:40
+#: apps/io.ox/contacts/edit/view-form.js:173
+#: apps/io.ox/contacts/edit/view-form.js:177
+#: apps/io.ox/contacts/settings/pane.js:92
+#: apps/io.ox/core/permissions/permissions.js:322
+#: apps/io.ox/core/permissions/permissions.js:337
+#: apps/io.ox/core/permissions/permissions.js:343
+#: apps/io.ox/core/permissions/permissions.js:364
+#: apps/io.ox/core/permissions/permissions.js:379
+#: apps/io.ox/core/permissions/permissions.js:385
+#: apps/io.ox/core/tk/dialogs.js:482 apps/io.ox/core/tk/dialogs.js:501
+#: apps/io.ox/core/tk/folderviews.js:729 apps/io.ox/editor/main.js:125
+#: apps/io.ox/editor/main.js:141 apps/io.ox/files/actions.js:496
+#: apps/io.ox/files/actions.js:509 apps/io.ox/files/actions.js:524
+#: apps/io.ox/files/views/create.js:134 apps/io.ox/files/views/create.js:135
+#: apps/io.ox/mail/accounts/settings.js:42
+#: apps/io.ox/mail/mailfilter/settings/filter.js:51
+#: apps/io.ox/mail/settings/signatures/register.js:69
+#: apps/io.ox/mail/write/view-main.js:59 apps/io.ox/oauth/settings.js:80
+#: apps/io.ox/tasks/edit/view-template.js:43 apps/io.ox/tasks/edit/view.js:65
+#: apps/io.ox/tasks/edit/view.js:288 apps/plugins/portal/flickr/register.js:226
+#: apps/plugins/portal/rss/register.js:168
+#: apps/plugins/portal/rss/register.js:175
+#: apps/plugins/portal/tumblr/register.js:193
+#: apps/plugins/portal/userSettings/register.js:29
+msgid "Save"
+msgstr ""
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:40
+msgid "Create list"
+msgstr ""
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:68
+msgid "List name"
+msgstr ""
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:87
+msgid "Add member"
+msgstr ""
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:130
+msgid "Members"
+msgstr ""
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:186
+#: apps/io.ox/contacts/view-detail.js:240
+msgid "This list has no members yet"
+msgstr ""
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:274
+msgid "To add participants manually, just provide a valid email address (e.g john.doe@example.com or \"John Doe\" <jd@example.com>)"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/main.js:62
+msgid "Create contact"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/main.js:90
+msgid "Some fields contain invalid data"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/main.js:181
+msgid "New contact"
+msgstr ""
+
+#: apps/plugins/portal/rss/register.js:54
+#: apps/plugins/portal/rss/register.js:219
+msgid "RSS Feed"
+msgstr ""
+
+#: apps/plugins/portal/rss/register.js:93
+msgid "No RSS feeds found."
+msgstr ""
+
+#: apps/plugins/portal/rss/register.js:121
+msgid "show image"
+msgstr ""
+
+#: apps/plugins/portal/rss/register.js:165
+msgid "RSS Feeds"
+msgstr ""
+
+#: apps/io.ox/contacts/model.js:279 apps/io.ox/contacts/view-detail.js:439
+#: apps/plugins/portal/rss/register.js:168
+msgid "URL"
+msgstr ""
+
+#: apps/io.ox/calendar/edit/template.js:203 apps/io.ox/files/actions.js:492
+#: apps/io.ox/files/actions.js:520 apps/io.ox/files/views/create.js:179
+#: apps/io.ox/files/views/create.js:180
+#: apps/io.ox/tasks/edit/view-template.js:49
+#: apps/io.ox/tasks/edit/view-template.js:99
+#: apps/plugins/portal/flickr/register.js:221
+#: apps/plugins/portal/rss/register.js:163
+#: apps/plugins/portal/rss/register.js:170
+#: apps/plugins/portal/tumblr/register.js:188
+msgid "Description"
+msgstr ""
+
+#: apps/plugins/portal/rss/register.js:196
+msgid "Please enter a feed URL."
 msgstr ""
 
 #: apps/io.ox/core/main.js:111 apps/io.ox/launchpad/main.js:28
@@ -335,48 +590,6 @@ msgstr ""
 
 #: apps/io.ox/mail/settings/signatures/register.js:64
 msgid "Below content"
-msgstr ""
-
-#: apps/io.ox/calendar/edit/template.js:63
-#: apps/io.ox/contacts/distrib/create-dist-view.js:40
-#: apps/io.ox/contacts/edit/view-form.js:173
-#: apps/io.ox/contacts/edit/view-form.js:177
-#: apps/io.ox/contacts/settings/pane.js:92
-#: apps/io.ox/core/permissions/permissions.js:322
-#: apps/io.ox/core/permissions/permissions.js:337
-#: apps/io.ox/core/permissions/permissions.js:343
-#: apps/io.ox/core/permissions/permissions.js:364
-#: apps/io.ox/core/permissions/permissions.js:379
-#: apps/io.ox/core/permissions/permissions.js:385
-#: apps/io.ox/core/tk/dialogs.js:482 apps/io.ox/core/tk/dialogs.js:501
-#: apps/io.ox/core/tk/folderviews.js:729 apps/io.ox/editor/main.js:125
-#: apps/io.ox/editor/main.js:141 apps/io.ox/files/actions.js:496
-#: apps/io.ox/files/actions.js:509 apps/io.ox/files/actions.js:524
-#: apps/io.ox/files/views/create.js:134 apps/io.ox/files/views/create.js:135
-#: apps/io.ox/mail/accounts/settings.js:42
-#: apps/io.ox/mail/mailfilter/settings/filter.js:51
-#: apps/io.ox/mail/settings/signatures/register.js:69
-#: apps/io.ox/mail/write/view-main.js:59 apps/io.ox/oauth/settings.js:80
-#: apps/io.ox/tasks/edit/view-template.js:43 apps/io.ox/tasks/edit/view.js:65
-#: apps/io.ox/tasks/edit/view.js:288 apps/plugins/portal/flickr/register.js:226
-#: apps/plugins/portal/rss/register.js:168
-#: apps/plugins/portal/tumblr/register.js:193
-#: apps/plugins/portal/userSettings/register.js:29
-msgid "Save"
-msgstr ""
-
-#: apps/io.ox/calendar/edit/main.js:50 apps/io.ox/calendar/edit/template.js:83
-#: apps/io.ox/contacts/distrib/create-dist-view.js:54
-#: apps/io.ox/contacts/distrib/main.js:162 apps/io.ox/contacts/edit/main.js:189
-#: apps/io.ox/contacts/edit/view-form.js:187
-#: apps/io.ox/contacts/settings/pane.js:93 apps/io.ox/editor/main.js:290
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:60
-#: apps/io.ox/mail/settings/signatures/register.js:70
-#: apps/io.ox/mail/write/main.js:1273 apps/io.ox/mail/write/main.js:1291
-#: apps/io.ox/mail/write/main.js:1293 apps/io.ox/mail/write/view-main.js:68
-#: apps/io.ox/tasks/edit/view-template.js:72 apps/io.ox/tasks/edit/view.js:294
-#: apps/plugins/portal/userSettings/register.js:30
-msgid "Discard"
 msgstr ""
 
 #: apps/io.ox/core/tk/vgrid.js:270 apps/io.ox/core/tk/vgrid.js:379
@@ -706,67 +919,6 @@ msgstr ""
 
 #: apps/io.ox/mail/write/main.js:1274
 msgid "Save as draft"
-msgstr ""
-
-#: apps/io.ox/calendar/acceptdeny.js:70 apps/io.ox/calendar/actions.js:138
-#: apps/io.ox/calendar/actions.js:208 apps/io.ox/calendar/actions.js:225
-#: apps/io.ox/calendar/actions.js:346 apps/io.ox/calendar/edit/main.js:51
-#: apps/io.ox/calendar/edit/main.js:159
-#: apps/io.ox/calendar/month/perspective.js:111
-#: apps/io.ox/calendar/week/perspective.js:79
-#: apps/io.ox/calendar/week/perspective.js:122 apps/io.ox/contacts/actions.js:52
-#: apps/io.ox/contacts/actions.js:53 apps/io.ox/contacts/actions.js:150
-#: apps/io.ox/contacts/actions.js:151 apps/io.ox/contacts/distrib/main.js:163
-#: apps/io.ox/contacts/edit/main.js:190
-#: apps/io.ox/core/commons-folderview.js:463 apps/io.ox/core/desktop.js:1529
-#: apps/io.ox/core/export/export.js:70 apps/io.ox/core/import/import.js:114
-#: apps/io.ox/core/main.js:313 apps/io.ox/core/main.js:346
-#: apps/io.ox/core/permissions/permissions.js:323
-#: apps/io.ox/core/permissions/permissions.js:338
-#: apps/io.ox/core/permissions/permissions.js:344
-#: apps/io.ox/core/permissions/permissions.js:364
-#: apps/io.ox/core/permissions/permissions.js:379
-#: apps/io.ox/core/permissions/permissions.js:385 apps/io.ox/core/print.js:107
-#: apps/io.ox/core/pubsub/publications.js:92
-#: apps/io.ox/core/pubsub/subscriptions.js:47 apps/io.ox/core/relogin.js:50
-#: apps/io.ox/core/tk/attachments.js:501 apps/io.ox/core/tk/attachments.js:502
-#: apps/io.ox/core/tk/attachments.js:507 apps/io.ox/core/tk/folderviews.js:600
-#: apps/io.ox/core/tk/folderviews.js:629 apps/io.ox/core/tk/folderviews.js:678
-#: apps/io.ox/core/tk/folderviews.js:730 apps/io.ox/core/tk/mobiscroll.js:34
-#: apps/io.ox/core/upsell.js:34 apps/io.ox/editor/main.js:291
-#: apps/io.ox/files/actions.js:288 apps/io.ox/files/actions.js:301
-#: apps/io.ox/files/actions.js:316 apps/io.ox/files/actions.js:441
-#: apps/io.ox/files/actions.js:454 apps/io.ox/files/actions.js:469
-#: apps/io.ox/files/actions.js:497 apps/io.ox/files/actions.js:510
-#: apps/io.ox/files/actions.js:525 apps/io.ox/files/actions.js:546
-#: apps/io.ox/files/actions.js:559 apps/io.ox/files/actions.js:574
-#: apps/io.ox/files/actions.js:640 apps/io.ox/files/actions.js:653
-#: apps/io.ox/files/actions.js:668 apps/io.ox/files/views/create.js:135
-#: apps/io.ox/files/views/create.js:136
-#: apps/io.ox/keychain/secretRecoveryDialog.js:33
-#: apps/io.ox/mail/accounts/settings.js:43
-#: apps/io.ox/mail/accounts/settings.js:255
-#: apps/io.ox/mail/accounts/view-form.js:267 apps/io.ox/mail/actions.js:72
-#: apps/io.ox/mail/actions.js:300 apps/io.ox/mail/actions.js:847
-#: apps/io.ox/mail/actions.js:857 apps/io.ox/mail/folderview-extensions.js:128
-#: apps/io.ox/mail/mailfilter/settings/filter.js:52
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:348
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:354
-#: apps/io.ox/mail/write/main.js:1275 apps/io.ox/mail/write/main.js:1293
-#: apps/io.ox/mail/write/main.js:1295 apps/io.ox/oauth/settings.js:82
-#: apps/io.ox/office/framework/view/baseview.js:671
-#: apps/io.ox/office/tk/dialogs.js:29 apps/io.ox/portal/settings/pane.js:343
-#: apps/io.ox/settings/accounts/settings/pane.js:136
-#: apps/io.ox/tasks/actions.js:61 apps/io.ox/tasks/actions.js:198
-#: apps/io.ox/tasks/actions.js:523 apps/io.ox/tasks/edit/main.js:155
-#: apps/io.ox/tasks/edit/main.js:160 apps/io.ox/tasks/edit/util.js:122
-#: apps/io.ox/tasks/edit/util.js:126 apps/io.ox/tasks/edit/util.js:127
-#: apps/plugins/portal/flickr/register.js:227
-#: apps/plugins/portal/rss/register.js:169
-#: apps/plugins/portal/tumblr/register.js:194
-#: apps/plugins/portal/userSettings/register.js:65
-#: apps/plugins/portal/userSettings/register.js:70
-msgid "Cancel"
 msgstr ""
 
 #: apps/io.ox/mail/write/view-main.js:50
@@ -1846,17 +1998,6 @@ msgstr[1] ""
 msgid "Rename"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:203 apps/io.ox/files/actions.js:492
-#: apps/io.ox/files/actions.js:520 apps/io.ox/files/views/create.js:179
-#: apps/io.ox/files/views/create.js:180
-#: apps/io.ox/tasks/edit/view-template.js:49
-#: apps/io.ox/tasks/edit/view-template.js:99
-#: apps/plugins/portal/flickr/register.js:221
-#: apps/plugins/portal/rss/register.js:163
-#: apps/plugins/portal/tumblr/register.js:188
-msgid "Description"
-msgstr ""
-
 #: apps/io.ox/files/actions.js:614
 msgid "Files have been moved"
 msgstr ""
@@ -2080,11 +2221,6 @@ msgstr ""
 msgid "Adjust"
 msgstr ""
 
-#. Appears in file icon view during searches
-#: apps/io.ox/files/icons/perspective.js:62
-msgid "Searched for: %1$s"
-msgstr ""
-
 #: apps/io.ox/editor/main.js:136
 msgid "Enter document title here"
 msgstr ""
@@ -2095,12 +2231,6 @@ msgstr ""
 
 #: apps/io.ox/editor/main.js:171
 msgid "Editor"
-msgstr ""
-
-#: apps/io.ox/calendar/edit/main.js:49 apps/io.ox/contacts/distrib/main.js:161
-#: apps/io.ox/contacts/edit/main.js:188 apps/io.ox/editor/main.js:289
-#: apps/io.ox/tasks/edit/main.js:153 apps/io.ox/tasks/edit/main.js:158
-msgid "Do you really want to discard your changes?"
 msgstr ""
 
 #: apps/io.ox/core/tk/reminder-util.js:33 apps/io.ox/core/tk/reminder-util.js:51
@@ -2299,14 +2429,6 @@ msgstr ""
 msgid "Please enter a value"
 msgstr ""
 
-#: apps/io.ox/portal/widgets.js:250
-msgid "Settings saved."
-msgstr ""
-
-#: apps/io.ox/portal/widgets.js:257
-msgid "Could not save settings."
-msgstr ""
-
 #: apps/io.ox/portal/settings/pane.js:49
 msgid "Portal settings"
 msgstr ""
@@ -2338,44 +2460,6 @@ msgstr ""
 #. Just disable portal widget - in contrast to delete
 #: apps/io.ox/portal/settings/pane.js:347
 msgid "Just disable widget"
-msgstr ""
-
-#: apps/io.ox/portal/main.js:33
-msgid "Good morning, %s"
-msgstr ""
-
-#: apps/io.ox/portal/main.js:35
-msgid "Good evening, %s"
-msgstr ""
-
-#: apps/io.ox/portal/main.js:37
-msgid "Hello %s"
-msgstr ""
-
-#: apps/io.ox/portal/main.js:66
-msgid "Customize this page"
-msgstr ""
-
-#. Portal. Logged in as user
-#: apps/io.ox/portal/main.js:78
-msgid "Signed in as %1$s"
-msgstr ""
-
-#: apps/io.ox/portal/main.js:117
-msgid "Disable widget"
-msgstr ""
-
-#: apps/io.ox/portal/main.js:260 apps/plugins/portal/facebook/register.js:264
-#: apps/plugins/portal/twitter/register.js:401
-msgid "Click here to add your account"
-msgstr ""
-
-#: apps/io.ox/portal/main.js:297
-msgid "An error occurred."
-msgstr ""
-
-#: apps/io.ox/portal/main.js:300
-msgid "Click to try again."
 msgstr ""
 
 #: apps/io.ox/preview/main.js:79
@@ -5147,11 +5231,6 @@ msgstr ""
 msgid "Could not load attachments for this contact."
 msgstr ""
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:186
-#: apps/io.ox/contacts/view-detail.js:240
-msgid "This list has no members yet"
-msgstr ""
-
 #: apps/io.ox/contacts/view-detail.js:314
 msgid "Email"
 msgstr ""
@@ -5193,11 +5272,6 @@ msgstr ""
 
 #: apps/io.ox/contacts/view-detail.js:429
 msgid "Birthday"
-msgstr ""
-
-#: apps/io.ox/contacts/model.js:279 apps/io.ox/contacts/view-detail.js:439
-#: apps/plugins/portal/rss/register.js:161
-msgid "URL"
 msgstr ""
 
 #: apps/io.ox/contacts/view-detail.js:445
@@ -5431,43 +5505,6 @@ msgstr ""
 msgid "Couldn't load your contact data."
 msgstr ""
 
-#: apps/io.ox/contacts/distrib/main.js:39
-msgid "Distribution List"
-msgstr ""
-
-#: apps/io.ox/contacts/distrib/create-dist-view.js:43
-#: apps/io.ox/contacts/distrib/main.js:53
-msgid "Create distribution list"
-msgstr ""
-
-#: apps/io.ox/contacts/distrib/main.js:73
-msgid "Failed to save distribution list."
-msgstr ""
-
-#: apps/io.ox/contacts/distrib/main.js:78
-msgid "Distribution list has been saved"
-msgstr ""
-
-#: apps/io.ox/contacts/distrib/create-dist-view.js:40
-msgid "Create list"
-msgstr ""
-
-#: apps/io.ox/contacts/distrib/create-dist-view.js:68
-msgid "List name"
-msgstr ""
-
-#: apps/io.ox/contacts/distrib/create-dist-view.js:87
-msgid "Add member"
-msgstr ""
-
-#: apps/io.ox/contacts/distrib/create-dist-view.js:130
-msgid "Members"
-msgstr ""
-
-#: apps/io.ox/contacts/distrib/create-dist-view.js:274
-msgid "To add participants manually, just provide a valid email address (e.g john.doe@example.com or \"John Doe\" <jd@example.com>)"
-msgstr ""
-
 #: apps/io.ox/contacts/print.js:75
 msgid "Phone list"
 msgstr ""
@@ -5492,18 +5529,6 @@ msgstr[1] ""
 
 #: apps/io.ox/contacts/print.js:86
 msgid "This note will not be printed"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/main.js:62
-msgid "Create contact"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/main.js:90
-msgid "Some fields contain invalid data"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/main.js:156
-msgid "New contact"
 msgstr ""
 
 #: apps/io.ox/contacts/edit/view-form.js:105
@@ -6080,27 +6105,6 @@ msgstr ""
 #: apps/plugins/portal/quota/register.js:149
 #: apps/plugins/portal/quota/register.js:162
 msgid "Quota"
-msgstr ""
-
-#: apps/plugins/portal/rss/register.js:54
-#: apps/plugins/portal/rss/register.js:212
-msgid "RSS Feed"
-msgstr ""
-
-#: apps/plugins/portal/rss/register.js:86
-msgid "No RSS feeds found."
-msgstr ""
-
-#: apps/plugins/portal/rss/register.js:114
-msgid "show image"
-msgstr ""
-
-#: apps/plugins/portal/rss/register.js:158
-msgid "RSS Feeds"
-msgstr ""
-
-#: apps/plugins/portal/rss/register.js:189
-msgid "Please enter a feed URL."
 msgstr ""
 
 #: apps/plugins/portal/flickr/register.js:56
