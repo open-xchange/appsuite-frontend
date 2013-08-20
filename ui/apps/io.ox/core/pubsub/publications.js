@@ -249,9 +249,9 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                             }))))
                     );
             if (baton.target['protected'] === true) {
-                node.attr('checked', 'checked');
+                node.attr('checked', true);
             } else {
-                node.attr('checked', 'unchecked');
+                node.attr('checked', false);
             }
         }
     });
