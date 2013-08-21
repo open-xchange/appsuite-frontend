@@ -295,9 +295,9 @@ define('io.ox/tasks/main',
     //extension points
     ext.point('io.ox/tasks/vgrid/toolbar').extend({
         id: 'dropdown',
-        index: 100,
+        index: 'last',
         draw: function () {
-            this.prepend(
+            this.append(
                 $('<div class="grid-options dropdown">')
                 .append(
                     $('<a href="#" tabindex="1" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').attr('aria-label', gt('Sort options'))
