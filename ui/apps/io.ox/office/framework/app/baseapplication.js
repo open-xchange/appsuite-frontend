@@ -1231,7 +1231,8 @@ define('io.ox/office/framework/app/baseapplication',
          *  function returns a Deferred object or Promise, the synchronized
          *  method will wait for it, and will forward its state and response to
          *  its Promise. Otherwise, the Promise will be resolved with the
-         *  return value of the callback function.
+         *  return value of the callback function. When the application will be
+         *  closed, pending callbacks will not be executed anymore.
          */
         this.createSynchronizedMethod = function (callback, options) {
 
