@@ -21,7 +21,10 @@ define('io.ox/core/tk/upload',
 
     function hasLeftViewport(e) {
         e = e.originalEvent || e;
-        if (_.browser.Firefox || _.browser.Safari || _.browser.IE) return true;
+        if (_.browser.Safari || _.browser.IE) return true;
+        if (_.browser.Firefox && (window.innerWidth < e.clientX || window.innerHeight < e.clientY) || e.clientX > 0 || e.clientY > 0) {
+            return true;
+        }
         return (e.clientX === 0 && e.clientY === 0);
     }
 
@@ -61,7 +64,11 @@ define('io.ox/core/tk/upload',
         var self = this, $overlay, nodes = [], nodeGenerator, currentRow, height, showOverlay, highlightedAction, removeOverlay;
         Events.extend(this);
 
-        $overlay = $('<div>').addClass('abs io-ox-dropzone-multiple-overlay');
+        $overlay = $('<div>').addClass('abs io-ox-dropzone-multiple-overlay')
+            .on('click', function () {
+                $overlay.detach();
+                return false;
+            });
 
         showOverlay = function (e) {
             if (!isFileDND(e)) {
@@ -78,7 +85,7 @@ define('io.ox/core/tk/upload',
         };
 
         removeOverlay = function (e) {
-            if (!isFileDND(e) || ignored(e)) {
+            if ((!hasLeftViewport || _.browser.Chrome) && (!isFileDND(e) || ignored(e))) {
                 return;
             }
             $overlay.detach();
@@ -177,6 +184,16 @@ define('io.ox/core/tk/upload',
                             var entry = items[i].webkitGetAsEntry();
                             if (entry.isDirectory) {
                                 notifications.yell('error', gt('Uploading folders is not supported.'));
+                                return false;
+                            }
+                        }
+                    }
+
+                    if (options.actions[0].id === 'importEML') {
+                        for (var i = 0; i < files.length; i++) {
+                            var valid_extensions = /(\.eml)$/i;
+                            if (!valid_extensions.test(files[i].name)) {
+                                notifications.yell('error', gt('Mail was not imported, only .eml files are supported.'));
                                 return false;
                             }
                         }
