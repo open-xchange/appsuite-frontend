@@ -626,7 +626,10 @@ define('io.ox/mail/view-detail',
                     .addClass('mail-detail-decorator')
                     .on('redraw', function (e, tmp) {
                         copyThreadData(tmp, copy);
-                        // changed? - or just marked seen?
+                        // get current label
+                        tmp.color_label = parseInt(tmp.color_label, 10) || 0;
+                        copy.color_label = api.tracker.getColorLabel(copy);
+                        // changed? - or just marked seen? or label changed?
                         if (!_.isEqual(tmp, copy)) {
                             container.replaceWith(
                                 self.draw(ext.Baton({ data: tmp, app: baton.app, options: baton.options }))
@@ -979,7 +982,9 @@ define('io.ox/mail/view-detail',
 
         e.preventDefault();
 
-        var color = e.data.color, node = $(this).closest('.flag-dropdown'),
+        var data = e.data.data,
+            color = e.data.color,
+            node = $(this).closest('.flag-dropdown'),
             className = 'flag-dropdown-icon ';
 
         // set proper icon class
@@ -987,8 +992,9 @@ define('io.ox/mail/view-detail',
         className += ' flag_' + color;
 
         node.find('.flag-dropdown-icon').attr('class', className);
+        node.find('.dropdown-toggle').focus();
 
-        return api.changeColor(e.data.data, color);
+        return api.changeColor(data, color);
     }
 
     ext.point('io.ox/mail/detail/header').extend({
@@ -1001,7 +1007,7 @@ define('io.ox/mail/view-detail',
             this.append(
                 $('<div class="dropdown flag-dropdown clear-title flag">').append(
                     // box
-                    $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" tabindex="1">').append(
+                    $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" tabindex="1">').append(
                         $('<i class="flag-dropdown-icon">')
                             .addClass(color === 0 ? colorLabelIconEmpty : colorLabelIcon)
                             .addClass('flag_' + color)
