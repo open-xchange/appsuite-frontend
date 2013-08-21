@@ -246,6 +246,7 @@ define('io.ox/portal/widgets',
                     obj[id].index = index;
                 }
             });
+
             this.update(obj);
             collection.trigger('sort');
 
