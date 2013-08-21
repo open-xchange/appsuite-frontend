@@ -863,7 +863,11 @@ define('io.ox/core/api/folder',
                         // compare folder data. Might be different due to differences in get & list requests (sadly),
                         // so we cannot use _.isEqual(). Actually we are just interested in some fields:
                         // unread, title, subfolders, subscr_subflds
-                        var equalData = a.title === b.title && a.subfolders === b.subfolders && a.subscr_subflds === b.subscr_subflds;
+                        var equalData = a.title === b.title &&
+                                        a.subfolders === b.subfolders &&
+                                        a.subscr_subflds === b.subscr_subflds &&
+                                        a['com.openexchange.publish.publicationFlag'] === b['com.openexchange.publish.publicationFlag'] &&
+                                        a['com.openexchange.publish.subscriptionFlag'] === b['com.openexchange.publish.subscriptionFlag'];
                         api.trigger('update:total', id, b);
                         api.trigger('update:total:' + id, b);
                         api.trigger('update:unread', id, b);

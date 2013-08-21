@@ -555,6 +555,52 @@ define("io.ox/contacts/view-detail",
         }
     });
 
+    ext.point("io.ox/contacts/detail/content").extend({
+        index: 10000,
+        id: 'qr',
+        draw: function (baton) {
+            var data = baton.data;
+            if (Modernizr.canvas && !data.mark_as_distributionlist) {
+                var node = $('<div>').addClass('block'),
+                    show = function (e) {
+                        e.preventDefault();
+                        node.empty().busy();
+                        require(["io.ox/contacts/view-qrcode"], function (qr) {
+                            var vc = qr.getVCard(data);
+                            node.append(
+                                $('<span>').addClass('qrcode').append(
+                                    $('<i class="icon-qrcode">'), $.txt(' '),
+                                    $("<a>", { href: '#' })
+                                    .text(gt('Hide QR code'))
+                                    .on('click', hide)
+                                )
+                            );
+                            node.idle().qrcode(vc);
+                            vc = qr = null;
+                        });
+                    },
+                    hide = function (e) {
+                        e.preventDefault();
+                        node.empty();
+                        node.append(
+                            $('<i class="icon-qrcode">'), $.txt(' '),
+                            showLink
+                        );
+                    },
+                    showLink = $("<a>", { href: '#' }).text(gt('Show QR code')).on("click", show);
+
+                this.append(
+                    node
+                 );
+
+                node.append(
+                    $('<i class="icon-qrcode">'), $.txt(' '),
+                    showLink
+                );
+            }
+        }
+    });
+
     ext.point("io.ox/contacts/detail").extend({
         index: 'last',
         id: 'breadcrumb',

@@ -51,24 +51,6 @@ define('io.ox/tasks/edit/view',
                 }
             });
         },
-        changeMode: function (mode) {
-            //maybe unneeded, test this
-            /*if (mode === 'edit') {
-                if (this.fields.headline) {
-                    this.fields.headline.text(gt('Edit task'));
-                }
-                if (this.fields.saveButton) {
-                    this.fields.saveButton.text(gt('Save'));
-                }
-            } else {
-                if (this.fields.headline) {
-                    this.fields.headline.text(gt('Create task'));
-                }
-                if (this.fields.saveButton) {
-                    this.fields.saveButton.text(gt('Create'));
-                }
-            }*/
-        },
         render: function (app) {
             var self = this,
                 rows = {};

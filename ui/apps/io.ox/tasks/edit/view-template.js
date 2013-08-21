@@ -37,6 +37,8 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         draw: function (baton) {
             var saveBtnText = gt('Create'),
                 headlineText = gt('Create task'),
+                headline,
+                saveBtn,
                 self = this,
                 app = baton.app;
             if (baton.model.attributes.id) {
@@ -44,8 +46,8 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                 headlineText = gt('Edit task');
             }
             this.append($('<div>').addClass('task-edit-headline row-fluid').append(
-                    $('<h1>').addClass('clear-title title').text(headlineText),//title
-                    $('<button type="button" data-action="save" class="btn btn-primary task-edit-save">')//save button
+                    headline = $('<h1>').addClass('clear-title title').text(headlineText),//title
+                    saveBtn = $('<button type="button" data-action="save" class="btn btn-primary task-edit-save">')//save button
                         .text(saveBtnText)
                         .on('click', function (e) {
                             e.stopPropagation();
@@ -72,6 +74,16 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                         .text(gt('Discard'))
                         .on('click', function () { app.quit(); })
                     ));
+            
+            baton.parentView.on('changeMode', function (e, mode) {
+                if (mode === 'edit') {
+                    headline.text(gt('Edit task'));
+                    saveBtn.text(gt('Save'));
+                } else {
+                    headline.text(gt('Create task'));
+                    saveBtn.text(gt('Create'));
+                }
+            });
         }
     });
     

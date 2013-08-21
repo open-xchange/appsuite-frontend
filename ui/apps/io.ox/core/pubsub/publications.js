@@ -125,7 +125,9 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                             // close popup now
                             popup.close();
                         }
-                        ox.trigger('refresh^');
+                        require(['io.ox/core/api/folder'], function (folderAPI) {
+                            folderAPI.reload(baton.model.get('entity').folder);
+                        });
                     });
                 }).fail(function (error) {
                     popup.idle();
@@ -249,9 +251,9 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                             }))))
                     );
             if (baton.target['protected'] === true) {
-                node.attr('checked', 'checked');
+                node.attr('checked', true);
             } else {
-                node.attr('checked', 'unchecked');
+                node.attr('checked', false);
             }
         }
     });
