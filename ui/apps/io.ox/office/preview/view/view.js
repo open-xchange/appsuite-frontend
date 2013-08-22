@@ -618,15 +618,7 @@ define('io.ox/office/preview/view/view',
                 );
 
             // create the top overlay pane
-            self.addPane(topOverlayPane = new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
-                .addViewComponent(new ToolBox(app)
-                    .addGroup('app/view/sidepane', new Button(BaseControls.SHOW_SIDEPANE_OPTIONS))
-                    .addGap()
-                    .addGroup('app/edit', new PreviewControls.EditDocumentButton(app))
-                    .addGap()
-                    .addGroup('app/quit', new Button(BaseControls.QUIT_OPTIONS))
-                )
-            );
+            self.addPane(topOverlayPane = new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true }));
 
             // create the bottom overlay pane
             self.addPane(bottomOverlayPane = new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
@@ -646,6 +638,8 @@ define('io.ox/office/preview/view/view',
 
             var // the bottom tool box in the side pane
                 sidePaneToolBox = null,
+                // the tool box in the top overlay pane
+                overlayPaneToolBox = new ToolBox(app),
                 // the number of pages in the document
                 pageCount = model.getPageCount(),
                 // the HTML mark-up for the empty page nodes
@@ -704,7 +698,18 @@ define('io.ox/office/preview/view/view',
                 });
                 self.insertContentNode(pageContainerNode.html(pageMarkup));
                 pageNodes = pageContainerNode.children();
+
+                // add controls to the top overlay pane
+                overlayPaneToolBox
+                    .addGroup('app/view/sidepane', new Button(BaseControls.SHOW_SIDEPANE_OPTIONS))
+                    .addGap()
+                    .addGroup('app/edit', new PreviewControls.EditDocumentButton(app))
+                    .addGap();
             }
+
+            // always add the quit button
+            overlayPaneToolBox.addGroup('app/quit', new Button(BaseControls.QUIT_OPTIONS));
+            topOverlayPane.addViewComponent(overlayPaneToolBox);
 
             // set focus to application pane, and update the view
             self.grabFocus();

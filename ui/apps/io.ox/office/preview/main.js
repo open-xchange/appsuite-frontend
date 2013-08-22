@@ -88,18 +88,15 @@ define('io.ox/office/preview/main',
                 }
             })
             .then(function (data) {
+
                 var def = $.Deferred(),
                     loadError = !_.isString(data.JobID) || (data.JobID.length <= 0) || !_.isNumber(data.PageCount) || (data.PageCount <= 0);
 
-                if (loadError) {
-                    var cause = Utils.getStringOption(data, 'cause', '');
-
-                    if (cause === 'passwordProtected') {
-                        _.extend(data, {message: gt('The document is password protected.')});
-                    }
+                if (loadError && Utils.getStringOption(data, 'cause', '') === 'passwordProtected') {
+                    data = _.extend({}, data, { message: gt('The document is protected by a password.') });
                 }
 
-                return (loadError ? def.reject(data) : def.resolve(data));
+                return loadError ? def.reject(data) : def.resolve(data);
             })
             .done(function (data) {
                 jobId = data.JobID;
