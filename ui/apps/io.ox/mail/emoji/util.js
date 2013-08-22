@@ -19,6 +19,16 @@ define('io.ox/mail/emoji/util',
     return {
 
         processEmoji: function (text) {
+            var i = 0, asciiOnly = true;
+            for (i; i < text.length; i++) {
+                if (text.charCodeAt(i) > 255) {
+                    asciiOnly = false;
+                    break;
+                }
+            }
+            if (asciiOnly) {
+                return text;
+            }
             text = emoji.softbankToUnified(text);
             text = emoji.jisToUnified(text);
             return emoji.unifiedToImageTag(text, {
