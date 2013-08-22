@@ -2546,7 +2546,7 @@ define.async('io.ox/office/tk/utils',
      *  @param {Boolean} [focusable=false]
      *      If set to true, a CSS marker class will be added marking the button
      *      to be focusable.
-     *  @param {Number} [tabIndex=1]
+     *  @param {Number} [tabIndex=0]
      *      The tab index set as 'tabindex' attribute at the button element.
      *
      * @returns {String}
@@ -2559,7 +2559,7 @@ define.async('io.ox/office/tk/utils',
         var // whether the button will be focusable
             focusable = Utils.getBooleanOption(options, 'focusable', false),
             // the tab index
-            tabIndex = Utils.getIntegerOption(options, 'tabIndex', 1),
+            tabIndex = Utils.getIntegerOption(options, 'tabIndex', 0),
             // the HTML mark-up of the caption icon and label
             captionMarkup = Utils.createControlCaptionMarkup(options);
 
@@ -2575,7 +2575,7 @@ define.async('io.ox/office/tk/utils',
      *  all generic options supported by the method Utils.createControl(), and
      *  all caption options supported by the method Utils.setControlLabel().
      *  Additionally, the following options are supported:
-     *  @param {Number} [tabIndex=1]
+     *  @param {Number} [tabIndex=0]
      *      The tab index set as 'tabindex' attribute at the button element.
      *
      * @returns {jQuery}
@@ -2586,7 +2586,7 @@ define.async('io.ox/office/tk/utils',
     Utils.createButton = function (options) {
 
         var // the tab index
-            tabIndex = Utils.getIntegerOption(options, 'tabIndex', 1),
+            tabIndex = Utils.getIntegerOption(options, 'tabIndex', 0),
             // Create the DOM anchor element representing the button. Do NOT use
             // <button> elements, Firefox has problems with text clipping and
             // correct padding of the <button> contents.
@@ -2698,7 +2698,7 @@ define.async('io.ox/office/tk/utils',
      */
     Utils.createTextField = function (options) {
         var type = Modernizr.touch ? Utils.getStringOption(options, 'keyboard', 'text') : 'text',
-            textField = Utils.createControl('input', { type: type, tabindex: 1 }, options);
+            textField = Utils.createControl('input', { type: type, tabindex: 0 }, options);
         return textField.attr('placeholder', Utils.getStringOption(options, 'placeholder', ''));
     };
 

@@ -67,26 +67,28 @@ define('io.ox/office/tk/dropdown/list',
                 // all focusable controls in the list
                 controls = self.getFocusableMenuControls(),
                 // index of the focused list item
-                index = controls.index(event.target);
+                index = controls.index(event.target),
+                // whether focus can be moved
+                valid = (index >= 0) && (controls.length > 1);
 
             switch (event.keyCode) {
             case KeyCodes.UP_ARROW:
-                if (keydown && (index > 0)) {
-                    controls.eq(index - 1).focus();
+                if (keydown && valid) {
+                    controls.eq((index - 1 + controls.length) % controls.length).focus();
                 }
                 return false;
             case KeyCodes.DOWN_ARROW:
-                if (keydown && (index >= 0) && (index + 1 < controls.length)) {
-                    controls.eq(index + 1).focus();
+                if (keydown && valid) {
+                    controls.eq((index + 1) % controls.length).focus();
                 }
                 return false;
             case KeyCodes.PAGE_UP:
-                if (keydown && (index >= 0) && (controls.length > 0)) {
+                if (keydown && valid) {
                     controls.eq(Math.max(0, index - List.PAGE_SIZE)).focus();
                 }
                 return false;
             case KeyCodes.PAGE_DOWN:
-                if (keydown && (index >= 0) && (controls.length > 0)) {
+                if (keydown && valid) {
                     controls.eq(Math.min(controls.length - 1, index + List.PAGE_SIZE)).focus();
                 }
                 return false;

@@ -680,7 +680,7 @@ define('io.ox/office/framework/view/baseview',
                     });
 
                     // make the blocker focusable for keyboard input
-                    blockerNode.attr('tabindex', 1).focus();
+                    blockerNode.attr('tabindex', 0).focus();
 
                     // show the Cancel button after a delay
                     _.delay(function () { cancelNode.show().find('.btn').focus(); }, 5000);
@@ -774,7 +774,7 @@ define('io.ox/office/framework/view/baseview',
             // make the alert banner closeable
             if (closeable) {
                 // add closer symbol
-                alert.prepend($('<a>', { href: '#' }).text(_.noI18n('\xd7')).addClass('close').attr('tabindex', 1))
+                alert.prepend($('<a>', { href: '#' }).text(_.noI18n('\xd7')).addClass('close').attr('tabindex', 0))
                     .css('cursor', 'pointer')
                     // alert can be closed by clicking anywhere in the banner
                     .on('click', closeAlert);
@@ -898,7 +898,7 @@ define('io.ox/office/framework/view/baseview',
 
         // make the content root node focusable for global navigation with F6 key
         if (contentFocusable) {
-            contentRootNode.addClass('f6-target').attr('tabindex', 1);
+            contentRootNode.addClass('f6-target').attr('tabindex', 0);
         }
 
         // listen to browser window resize events when the application window is visible

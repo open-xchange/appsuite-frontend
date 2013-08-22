@@ -71,7 +71,7 @@ define('io.ox/office/preview/view/pagegroup',
          */
         function updateHandler(page) {
             Utils.toggleButtons(Utils.getSelectedButtons(buttonNodes).removeAttr('tabindex'), false);
-            Utils.toggleButtons(buttonNodes.eq(page - 1).attr('tabindex', 1), true);
+            Utils.toggleButtons(buttonNodes.eq(page - 1).attr('tabindex', 0), true);
         }
 
         /**
