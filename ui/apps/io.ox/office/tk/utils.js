@@ -2912,27 +2912,25 @@ define.async('io.ox/office/tk/utils',
 
     // global initialization ==================================================
 
-    // forward console output into a fixed DOM node on touch devices
+    // forward console output into a fixed DOM node
 /*
     (function () {
-        if (Config.isDebug() && Modernizr.touch) {
-            var ICONS = { info: 'icon-info-sign', warn: 'icon-warning-sign', error: 'icon-remove-sign' },
-                consoleNode = $('<div>', { id: 'io-ox-office-console' }).appendTo('body'),
-                outputNode = $('<div>').addClass('output').appendTo(consoleNode),
-                clearButton = $('<button>').text('Clear').appendTo(consoleNode);
-            clearButton.on('click', function () { outputNode.empty(); return false; });
-            consoleNode.on('click', function () { consoleNode.toggleClass('collapsed'); });
-            _(['log', 'info', 'warn', 'error']).each(function (methodName) {
-                var origMethod = _.bind(window.console[methodName], window.console);
-                window.console[methodName] = function (msg) {
-                    outputNode.append($('<p>').addClass(methodName).append(
-                        (methodName in ICONS) ? Utils.createIcon(ICONS[methodName]) : $(),
-                        $('<span>').text(msg)));
-                    outputNode.scrollTop(outputNode[0].scrollHeight);
-                    return origMethod(msg);
-                };
-            });
-        }
+        var ICONS = { info: 'icon-info-sign', warn: 'icon-warning-sign', error: 'icon-remove-sign' },
+            consoleNode = $('<div>', { id: 'io-ox-office-console' }).appendTo('body'),
+            outputNode = $('<div>').addClass('output').appendTo(consoleNode),
+            clearButton = $('<button>').text('Clear').appendTo(consoleNode);
+        clearButton.on('click', function () { outputNode.empty(); return false; });
+        consoleNode.on('click', function () { consoleNode.toggleClass('collapsed'); });
+        _(['log', 'info', 'warn', 'error']).each(function (methodName) {
+            var origMethod = _.bind(window.console[methodName], window.console);
+            window.console[methodName] = function (msg) {
+                outputNode.append($('<p>').addClass(methodName).append(
+                    (methodName in ICONS) ? Utils.createIcon(ICONS[methodName]) : $(),
+                    $('<span>').text(msg)));
+                outputNode.scrollTop(outputNode[0].scrollHeight);
+                return origMethod(msg);
+            };
+        });
     }());
 */
 

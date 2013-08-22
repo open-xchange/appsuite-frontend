@@ -163,7 +163,7 @@ define("io.ox/core/extensions",
             }
 
             if (!extension.id) {
-                extensions.id = 'default';
+                extension.id = 'default';
                 extension.index = extension.index || 100;
             } else {
                 extension.index = extension.index || 1000000000;

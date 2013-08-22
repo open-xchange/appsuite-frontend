@@ -1199,6 +1199,94 @@ define('io.ox/office/framework/app/baseapplication',
         };
 
         /**
+         * Creates a synchronized method wrapping a callback function that
+         * executes asynchronous code. The synchronized method buffers multiple
+         * fast invocations and executes the callback function successively,
+         * always waiting for the asynchronous code. In difference to debounced
+         * methods, invocations of a synchronized method will never be skipped,
+         * and each call of the asynchronous callback function receives its
+         * original arguments passed to the synchronized method.
+         *
+         * @param {Function} callback
+         *  A function that will be called every time the synchronized method
+         *  has been called. Receives all parameters that have been passed to
+         *  the synchronized method. If this function returns a pending
+         *  Deferred object or Promise, subsequent invocations of the
+         *  synchronized method will be postponed until the Deferred object or
+         *  Promise will be resolved or rejected. All other return values will
+         *  be interpreted as synchronous invocations of the callback function.
+         *
+         * @param {Object} [options]
+         *  A map with options controlling the behavior of the synchronized
+         *  method created by this method. The following options are supported:
+         *  @param {Object} [options.context]
+         *      The context that will be bound to 'this' in the passed callback
+         *      function.
+         *
+         * @returns {Function}
+         *  The debounced method that can be called multiple times, and that
+         *  executes the asynchronous callback function sequentially. Returns
+         *  the Promise of a Deferred object that will be resolved or rejected
+         *  after the callback function has been invoked. If the callback
+         *  function returns a Deferred object or Promise, the synchronized
+         *  method will wait for it, and will forward its state and response to
+         *  its Promise. Otherwise, the Promise will be resolved with the
+         *  return value of the callback function. When the application will be
+         *  closed, pending callbacks will not be executed anymore.
+         */
+        this.createSynchronizedMethod = function (callback, options) {
+
+            var // the context for the callback function
+                context = Utils.getOption(options, 'context'),
+                // arguments and returned Promise of pending calls of the method
+                pendingInvocations = [],
+                // Promise representing the callback function currently running
+                runningPromise = null,
+                // the background loop processing all pending invocations
+                timer = null;
+
+            // invokes the callback once with the passed set of arguments
+            function invokeCallback(invocationData) {
+                // create the Promise
+                runningPromise = $.when(callback.apply(context, invocationData.args));
+                // register callbacks after assignment to handle synchronous callbacks correctly
+                runningPromise
+                    .always(function () { runningPromise = null; })
+                    .done(function (response) { invocationData.def.resolve(response); })
+                    .fail(function (response) { invocationData.def.reject(response); });
+            }
+
+            // create and return the synchronized method
+            return function () {
+
+                var // all data about the current invocation (arguments and returned Deferred object)
+                    invocationData = { args: _.toArray(arguments), def: $.Deferred() };
+
+                // cache invocation data, if a callback function is currently running
+                if (runningPromise) {
+                    pendingInvocations.push(invocationData);
+                    // start timer that processes the array
+                    if (!timer) {
+                        timer = self.repeatDelayed(function () {
+                            if (runningPromise) { return runningPromise; }
+                            if (pendingInvocations.length === 0) { return Utils.BREAK; }
+                            invokeCallback(pendingInvocations.shift());
+                            return runningPromise;
+                        });
+                        // forget the timer after the last callback invocation
+                        timer.always(function () { timer = null; });
+                    }
+                } else {
+                    // invoke the callback function directly on first call
+                    invokeCallback(invocationData);
+                }
+
+                // return a Promise that will be resolved/rejected after invocation
+                return invocationData.def.promise();
+            };
+        };
+
+        /**
          * Creates a debounced method that can be called multiple times during
          * the current script execution. The passed callback will be executed
          * once in a browser timeout.

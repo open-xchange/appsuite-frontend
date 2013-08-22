@@ -513,8 +513,6 @@ define('io.ox/office/tk/dropdown/dropdown',
             switch (event.keyCode) {
             case KeyCodes.TAB:
                 if (keydown && KeyCodes.matchModifierKeys(event, { shift: null })) {
-                    // notify listeners that menu is left by tab navigation
-                    self.trigger('menu:leave');
                     hideMenu();
                     // To prevent problems with event bubbling (Firefox continues
                     // to bubble to the parent of the menu node, while Chrome
@@ -538,8 +536,6 @@ define('io.ox/office/tk/dropdown/dropdown',
                 // non-MacOS systems where F6 traveling is triggered by Ctrl+F6
                 // (browsers will move the focus away anyway).
                 if (keydown) {
-                    // notify listeners that menu is left by tab navigation
-                    self.trigger('menu:leave');
                     hideMenu();
                 }
                 break;

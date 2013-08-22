@@ -141,9 +141,14 @@ define('plugins/portal/facebook/register',
             return keychain.isEnabled('facebook') && ! keychain.hasStandardAccount('facebook');
         },
 
-        performSetUp: function () {
+        performSetUp: function (baton) {
             var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
-            return keychain.createInteractively('facebook', win);
+            return $.when(
+                keychain.createInteractively('facebook', win))
+            .then(function () {
+                baton.model.node.removeClass("requires-setup");
+                ox.trigger('refresh^');
+            });
         },
 
         preview: function (baton) {

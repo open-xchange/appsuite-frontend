@@ -1162,8 +1162,9 @@ a.button {
         }
 
         .grid-options.dropdown {
-            display:inline-block;
-            float:right;
+            position: absolute;
+            right: 13px;
+            top: 0px;
         }
     }
 
@@ -2445,11 +2446,11 @@ a.toolbar-action, .toolbar-action > a {
     border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25);
 }
 
-.btn-primary { .btn-custom(#08c); }
-.btn-inverse { .btn-custom(#222); }
-.btn-success { .btn-custom(#51a351); }
-.btn-warning { .btn-custom(#f89406); }
-.btn-danger  { .btn-custom(#bd362f); }
+.btn-primary { .btn-custom(@btnPrimaryBackground); }
+.btn-inverse { .btn-custom(@btnInverseBackgroundHighlight); }
+.btn-success { .btn-custom(@btnSuccessBackgroundHighlight); }
+.btn-warning { .btn-custom(@btnWarningBackgroundHighlight); }
+.btn-danger  { .btn-custom(@btnDangerBackgroundHighlight); }
 
 /** BOOTSTRAP FIXES **/
 

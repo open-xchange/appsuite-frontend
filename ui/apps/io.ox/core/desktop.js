@@ -1476,6 +1476,14 @@ define("io.ox/core/desktop",
                             return $('<i class="icon-search">').attr('aria-label', gt('Search'));
                         }
                     });
+
+                    // look for ctrl/cmd + F
+                    win.nodes.outer.on('keydown', function (e) {
+                        if (e.which === 70 && e.metaKey) {
+                            e.preventDefault();
+                            win.search.toggle();
+                        }
+                    });
                 }
 
                 // add fullscreen handler

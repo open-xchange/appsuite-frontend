@@ -191,7 +191,6 @@ define('io.ox/calendar/month/view',
                     if (model.get('full_time')) {
                         startTSUTC = date.Local.utc(startTSUTC);
                         endTSUTC = date.Local.utc(endTSUTC);
-                        maxCount = 0;
                     }
 
                     var startDate = new date.Local(startTSUTC),

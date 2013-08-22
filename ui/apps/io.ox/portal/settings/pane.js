@@ -174,6 +174,33 @@ define('io.ox/portal/settings/pane',
         }
     });
 
+
+    function dragViaKeyboard(e) {
+
+        var node = $(this),
+            list = node.closest('.widget-list'),
+            items = list.children(),
+            current = node.parent(),
+            index = items.index(current),
+            id = current.attr('data-widget-id');
+
+        function cont() {
+            widgets.save(list);
+            list.find('[data-widget-id="' + id + '"] .drag-handle').focus();
+        }
+
+        if (e.which === 38 && index > 0) { // up
+            e.preventDefault();
+            current.insertBefore(current.prev());
+            cont();
+        }
+        else if (e.which === 40 && index < items.length) { // down
+            e.preventDefault();
+            current.insertAfter(current.next());
+            cont();
+        }
+    }
+
     ext.point(POINT + '/view').extend({
         id: 'drag-handle',
         index: 200,
@@ -182,7 +209,11 @@ define('io.ox/portal/settings/pane',
             .addClass('draggable')
             .attr('title', gt('Drag to reorder widget'))
             .append(
-                $('<div class="drag-handle"><i class="icon-reorder"/></div>')
+                $('<a href="#" class="drag-handle" tabindex="1">')
+                .attr('aria-label', gt('Use cursor keys to change the item position'))
+                .append($('<i class="icon-reorder">'))
+                .on('click', $.preventDefault)
+                .on('keydown', dragViaKeyboard)
             );
         }
     });
@@ -191,12 +222,14 @@ define('io.ox/portal/settings/pane',
         id: 'title',
         index: 300,
         draw: function (baton) {
-            var data = baton.model.toJSON();
+            var data = baton.model.toJSON(),
+                point = ext.point(baton.view.point),
+                title = widgets.getTitle(data, point.prop('title'));
             this.append(
                 // widget title
                 $('<div>')
                 .addClass('widget-title pull-left widget-color-' + (data.color || 'black') + ' widget-' + data.type)
-                .text(widgets.getTitle(data, baton.view.options.title))
+                .text(title)
             );
         }
     });
@@ -242,10 +275,12 @@ define('io.ox/portal/settings/pane',
                     appendIconText($('<a href="#" class="action" data-action="toggle" tabindex="1">'), gt('Enable'), 'enable')
                 );
             }
+
             $controls.append(
                 // close (has float: right)
-                $('<a href="#" class="close" data-action="remove" tabindex="1"><i class="icon-trash"/></a>')
+                $('<a href="#" class="remove-widget" data-action="remove" tabindex="1"><i class="icon-trash"/></a>')
             );
+
             this.append($controls);
         }
     });
@@ -272,7 +307,8 @@ define('io.ox/portal/settings/pane',
             var color = this.model.get('color');
             this.model.set('color', color === undefined || color === 'default' ? 'black' : color, {validate: true});
             // get widget options
-            this.options = ext.point('io.ox/portal/widget/' + this.model.get('type') + '/settings').options();
+            this.point = 'io.ox/portal/widget/' + this.model.get('type');
+            this.options = ext.point(this.point + '/settings').options();
         },
 
         render: function () {
@@ -364,8 +400,9 @@ define('io.ox/portal/settings/pane',
     var views = {};
 
     function createView(model) {
-        var id = model.get('id');
-        return (views[id] = new WidgetSettingsView({ model: model }));
+        var id = model.get('id'),
+            point = 'io.ox/portal/widget/' + model.get('type');
+        return (views[id] = new WidgetSettingsView({ model: model, point: point }));
     }
 
     ext.point(POINT + '/pane').extend({
