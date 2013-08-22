@@ -196,7 +196,9 @@ define('io.ox/calendar/list/perspective',
                                         break;
                                     case 'all':
                                         settings.set('showAllPrivateAppointments', !settings.get('showAllPrivateAppointments', false)).save();
-                                        app.trigger('folder:change');
+                                        //no folder change trigger here (folderview would throw error)
+                                        updateGridOptions();
+                                        grid.refresh(true);
                                         break;
                                     default:
                                         break;
