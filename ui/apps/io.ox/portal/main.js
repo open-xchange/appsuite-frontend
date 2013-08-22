@@ -250,7 +250,7 @@ define('io.ox/portal/main',
 
     function setup(e) {
         var baton = e.data.baton;
-        ext.point(baton.point).invoke('performSetUp');
+        ext.point(baton.point).invoke('performSetUp', null, baton);
     }
 
     app.drawDefaultSetup = function (baton) {
