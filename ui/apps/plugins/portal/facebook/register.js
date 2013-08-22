@@ -262,9 +262,11 @@ define('plugins/portal/facebook/register',
             if (error.code !== "OAUTH-0006") return; // let the default handling do the job
 
             $(this).empty().append(
-                $('<h2>').append(
-                    $('<a href="#" class="disable-widget"><i class="icon-remove"/></a>'),
-                    $('<span class="title">').text(gt('Facebook'))
+                $('<div class="decoration">').append(
+                    $('<h2>').append(
+                        $('<a href="#" class="disable-widget"><i class="icon-remove"/></a>'),
+                        $('<span class="title">').text(gt('Facebook'))
+                    )
                 ),
                 $('<div class="content">').text(gt('Click here to add your account'))
                 .on('click', {}, function () {
