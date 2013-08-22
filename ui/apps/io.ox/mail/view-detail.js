@@ -626,8 +626,17 @@ define('io.ox/mail/view-detail',
                     .addClass('mail-detail-decorator')
                     .on('redraw', function (e, tmp) {
                         copyThreadData(tmp, copy);
-                        // changed? - or just marked seen?
-                        if (!_.isEqual(tmp, copy)) {
+                        // mails can only change color_label and flags
+                        var current = {
+                                color_label: container.find('.flag-dropdown-icon').attr('data-color'),
+                                flags: copy.flags
+                            },
+                            fresh = {
+                                color_label: tmp.color_label,
+                                flags: tmp.flags
+                            };
+                        // changed? - or just marked seen? or label changed?
+                        if (!_.isEqual(current, fresh)) {
                             container.replaceWith(
                                 self.draw(ext.Baton({ data: tmp, app: baton.app, options: baton.options }))
                             );
@@ -979,16 +988,19 @@ define('io.ox/mail/view-detail',
 
         e.preventDefault();
 
-        var color = e.data.color, node = $(this).closest('.flag-dropdown'),
+        var data = e.data.data,
+            color = e.data.color,
+            node = $(this).closest('.flag-dropdown'),
             className = 'flag-dropdown-icon ';
 
         // set proper icon class
         className += color === 0 ? colorLabelIconEmpty : colorLabelIcon;
         className += ' flag_' + color;
 
-        node.find('.flag-dropdown-icon').attr('class', className);
+        node.find('.flag-dropdown-icon').attr({ 'class': className, 'data-color': color });
+        node.find('.dropdown-toggle').focus();
 
-        return api.changeColor(e.data.data, color);
+        return api.changeColor(data, color);
     }
 
     ext.point('io.ox/mail/detail/header').extend({
@@ -1001,8 +1013,9 @@ define('io.ox/mail/view-detail',
             this.append(
                 $('<div class="dropdown flag-dropdown clear-title flag">').append(
                     // box
-                    $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" tabindex="1">').append(
+                    $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" tabindex="1">').append(
                         $('<i class="flag-dropdown-icon">')
+                            .attr('data-color', color)
                             .addClass(color === 0 ? colorLabelIconEmpty : colorLabelIcon)
                             .addClass('flag_' + color)
                     ),

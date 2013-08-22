@@ -236,6 +236,7 @@ define('io.ox/portal/widgets',
          * @return - a deffered object with the save request
          */
         save: function (widgetList) {
+
             var obj = this.toJSON(), old_state = obj, self = this;
 
             // update all indexes
@@ -245,15 +246,14 @@ define('io.ox/portal/widgets',
                     obj[id].index = index;
                 }
             });
+
             this.update(obj);
             collection.trigger('sort');
 
-            return settings.set('widgets/user', this).saveAndYell().then(
+            return settings.set('widgets/user', this).save().fail(
+                // don't say anything if successful
                 function () {
-                    notifications.yell('success', gt("Settings saved."));
-                },
-                function () {
-                    //reset old state
+                    // reset old state
                     self.update(old_state);
                     collection.trigger('sort');
                     widgetList.sortable('cancel');

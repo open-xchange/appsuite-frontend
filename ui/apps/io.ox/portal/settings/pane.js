@@ -174,6 +174,33 @@ define('io.ox/portal/settings/pane',
         }
     });
 
+
+    function dragViaKeyboard(e) {
+
+        var node = $(this),
+            list = node.closest('.widget-list'),
+            items = list.children(),
+            current = node.parent(),
+            index = items.index(current),
+            id = current.attr('data-widget-id');
+
+        function cont() {
+            widgets.save(list);
+            list.find('[data-widget-id="' + id + '"] .drag-handle').focus();
+        }
+
+        if (e.which === 38 && index > 0) { // up
+            e.preventDefault();
+            current.insertBefore(current.prev());
+            cont();
+        }
+        else if (e.which === 40 && index < items.length) { // down
+            e.preventDefault();
+            current.insertAfter(current.next());
+            cont();
+        }
+    }
+
     ext.point(POINT + '/view').extend({
         id: 'drag-handle',
         index: 200,
@@ -182,7 +209,11 @@ define('io.ox/portal/settings/pane',
             .addClass('draggable')
             .attr('title', gt('Drag to reorder widget'))
             .append(
-                $('<div class="drag-handle"><i class="icon-reorder"/></div>')
+                $('<a href="#" class="drag-handle" tabindex="1">')
+                .attr('aria-label', gt('Use cursor keys to change the item position'))
+                .append($('<i class="icon-reorder">'))
+                .on('click', $.preventDefault)
+                .on('keydown', dragViaKeyboard)
             );
         }
     });
@@ -242,10 +273,12 @@ define('io.ox/portal/settings/pane',
                     appendIconText($('<a href="#" class="action" data-action="toggle" tabindex="1">'), gt('Enable'), 'enable')
                 );
             }
+
             $controls.append(
                 // close (has float: right)
-                $('<a href="#" class="close" data-action="remove" tabindex="1"><i class="icon-trash"/></a>')
+                $('<a href="#" class="remove-widget" data-action="remove" tabindex="1"><i class="icon-trash"/></a>')
             );
+
             this.append($controls);
         }
     });

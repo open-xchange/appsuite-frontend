@@ -745,14 +745,6 @@ define('io.ox/office/framework/view/baseview',
          *      automatically. If not specified, the default of five seconds is
          *      used. The value 0 will show a closeable alert banner that will
          *      not vanish automatically.
-         *  @param {String} [options.buttonLabel]
-         *      If specified, a push button will be shown with the passed
-         *      caption label.
-         *  @param {Function|String} [options.buttonAction]
-         *      Must be specified together with the 'options.buttonLabel'
-         *      option. When the button has been pressed, the passed function
-         *      will be executed. If set to a string, the controller item with
-         *      the passed key will be executed instead.
          *
          * @returns {BaseView}
          *  A reference to this instance.
@@ -763,12 +755,6 @@ define('io.ox/office/framework/view/baseview',
                 closeable = Utils.getBooleanOption(options, 'closeable', false),
                 // auto-close timeout delay
                 delay = Utils.getIntegerOption(options, 'timeout', 5000, 0),
-                // the label of the push button to be shown in the alert banner
-                buttonLabel = Utils.getStringOption(options, 'buttonLabel'),
-                // the callback action for the push button
-                buttonAction = Utils.getFunctionOption(options, 'buttonAction'),
-                // the controller key for the push button
-                buttonKey = Utils.getStringOption(options, 'buttonAction'),
                 // create a new alert node
                 alert = $('<div>')
                     .addClass('alert alert-' + type)
@@ -804,27 +790,9 @@ define('io.ox/office/framework/view/baseview',
             // return focus to application pane when alert has been clicked (also if not closeable)
             alert.on('click', function () { self.grabFocus(); });
 
-            // create a function that executes the specified controller item
-            if (_.isString(buttonKey)) {
-                buttonAction = function () { app.getController().change(buttonKey); };
-            }
-
-            // insert the push button into the alert banner
-            if (_.isString(buttonLabel) && _.isFunction(buttonAction)) {
-                alert.prepend(
-                    $.button({ label: buttonLabel })
-                        .addClass('btn-' + ((type === 'error') ? 'danger' : type) + ' btn-mini')
-                        .attr('tabindex', 1)
-                        .on('click', function () {
-                            closeAlert();
-                            buttonAction.call(self);
-                        })
-                );
-            }
-
             // if the alert is closeable without timeout, or contains a button,
             // add it to the global F6 focus traveling chain
-            if ((closeable && (delay === 0)) || (_.isString(buttonLabel) && _.isFunction(buttonAction))) {
+            if (closeable && (delay === 0)) {
                 alert.addClass('f6-target');
             }
 

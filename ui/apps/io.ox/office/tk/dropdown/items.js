@@ -198,16 +198,6 @@ define('io.ox/office/tk/dropdown/items',
         }
 
         /**
-         * Handles 'menu:leave' events and triggers a change event for the last
-         * focused list item.
-         */
-        function menuLeaveHandler() {
-            if (Utils.containsFocus(self.getMenuNode())) {
-                self.triggerChange(window.document.activeElement, { preserveFocus: true });
-            }
-        }
-
-        /**
          * Filters the passed collection of focusable drop-down menu controls
          * to the controls currently selected.
          */
@@ -357,7 +347,6 @@ define('io.ox/office/tk/dropdown/items',
 
         // register event handlers
         this.getMenuNode().on('keydown keypress keyup', menuKeyHandler);
-        this.on('menu:leave', menuLeaveHandler);
 
         // default sort functor: sort by button label text, case insensitive
         sortFunctor = _.isFunction(sortFunctor) ? sortFunctor : function (button) {

@@ -584,6 +584,12 @@
             i { color: #888; }
         }
 
+        .drag-handle:focus {
+            background-color: @linkColor;
+            outline: 0;
+            i { color: #FFF; }
+        }
+
         .widget-title {
             font-weight: bold;
             margin-top:1px;
@@ -592,10 +598,8 @@
             text-align: left;
         }
 
-        .close {
-            position: relative;
-            top: -1px;
-            width: 1em;
+        .remove-widget {
+            color: #aaa;
         }
 
         .action {
