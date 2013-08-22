@@ -110,6 +110,9 @@ define('io.ox/core/pubsub/settings/pane',
 
         var options = {
             handler: function (id, data) {
+                if (!mapping[data.module]) {
+                    return;
+                }
                 ox.launch(mapping[data.module] + '/main', { folder: id }).done(function () {
                     this.folder.set(id);
                 });
