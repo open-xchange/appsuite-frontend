@@ -1688,13 +1688,14 @@ define('io.ox/office/framework/app/baseapplication',
         // call all registered quit handlers
         this.setQuit(function () {
 
-            // return existing Deferred if a quit request is already running
-            if (currentQuitDef && (currentQuitDef.state() === 'pending')) {
-                return currentQuitDef.promise();
-            }
+            var // store original 'quit()' method (needs to be restored after resuming)
+                origQuitMethod = self.quit;
 
             // create the result deferred (rejecting means resume application)
             currentQuitDef = $.Deferred();
+
+            // override 'quit()' method to prevent repeated/recursive calls while in quit mode
+            self.quit = function () { return currentQuitDef.promise(); };
 
             // call all before-quit handlers, rejecting one will resume application
             callHandlers(beforeQuitHandlers)
@@ -1720,10 +1721,13 @@ define('io.ox/office/framework/app/baseapplication',
                 });
             })
             .fail(function () {
+                // resume to running state of application
+                self.quit = origQuitMethod;
                 currentQuitDef.reject();
+                currentQuitDef = null;
             });
 
-            return currentQuitDef.always(function () { currentQuitDef = null; }).promise();
+            return currentQuitDef.promise();
         });
 
         // prevent usage of these methods in derived classes
