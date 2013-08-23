@@ -43,7 +43,7 @@ define('io.ox/core/api/reminder', ['io.ox/core/http',
                     ids.push(item.id);
                 }
             });
-            api.removefromStorage(ids, needsForceCheck);
+            api.removeFromStorage(ids, needsForceCheck);
         },
         checkReminders = function () {//function to check reminders and add a timer to trigger the next one
             var changed = false;
@@ -85,7 +85,7 @@ define('io.ox/core/api/reminder', ['io.ox/core/http',
         * @param  {ids} reminderIds
         * @param  {forceCheck} checkReminders is called even if next reminder was not deleted
         */
-        removefromStorage: function (ids, forceCheck) {//removesReminders
+        removeFromStorage: function (ids, forceCheck) {//removesReminders
             var removedNext = false;
             _(ids).each(function (id) {
                 if (nextReminder && nextReminder.id === id) {
@@ -175,6 +175,28 @@ define('io.ox/core/api/reminder', ['io.ox/core/http',
             api.trigger('refresh.all');
         });
     };
+    
+    var findReminders = function (e, objs) {
+        //make sure we have an array
+        objs = objs ? [].concat(objs) : [];
+        var remindersToRemove = [];
+        _(objs).each(function (obj) {
+            if (!obj.data || obj.data.confirmation === 2) {//remove if no data is given (user was removed from a task) or if declined
+                _(reminderStorage).each(function (reminder) {
+                    if (obj.id === reminder.target_id) {
+                        remindersToRemove.push(reminder.id);
+                    }
+                });
+            }
+        });
+        if (remindersToRemove.length > 0) {
+            api.removeFromStorage(remindersToRemove);
+        }
+    };
+    
+    //remove reminders for declined appointments or tasks. Makes no sense to show a reminder then
+    calendarAPI.on('mark:invite:confirmed', findReminders);
+    taskAPI.on('mark:task:confirmed', findReminders);
 
     ox.on('refresh^', function () {
         api.refresh();
