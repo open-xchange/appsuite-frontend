@@ -18,7 +18,8 @@ define('io.ox/calendar/api',
      'io.ox/core/event',
      'settings!io.ox/core',
      'io.ox/core/notifications',
-     'io.ox/core/api/factory'], function (http, Events, coreConfig, notifications, factory) {
+     'io.ox/core/date',
+     'io.ox/core/api/factory'], function (http, Events, coreConfig, notifications, date, factory) {
 
     'use strict';
 
@@ -414,12 +415,14 @@ define('io.ox/calendar/api',
      */
     api.getInvites = function () {
 
-        var now = _.now(), start = now - 2 * HOUR;
+        var now = _.now(),
+            start = now - 2 * HOUR,
+            end = new date.Local().addYears(5).getTime();
 
         return getUpdates({
             folder: 'all',
             start: start,
-            end: start + 28 * 5 * DAY, // next four month?!?
+            end: end, // 5 years like OX6
             timestamp: 0,
             recurrence_master: true
         })
