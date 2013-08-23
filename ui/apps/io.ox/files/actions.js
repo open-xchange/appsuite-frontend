@@ -171,7 +171,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/open', {
         requires: function (e) {
-            return !(e.collection.has('one') && _.isEmpty(e.baton.data.filename));
+            return !(e.collection.has('one') && _.isEmpty(e.baton.data.filename)) && !e.collection.has('multiple');
         },
         multiple: function (list) {
             var onlyinvalid = false;
