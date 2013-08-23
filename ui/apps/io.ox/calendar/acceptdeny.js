@@ -76,23 +76,23 @@ define('io.ox/calendar/acceptdeny',
             })
             .done(function (action, data, node) {
 
-                var folder = folderAPI.get({ folder: o.folder });
-                folder.done(function (folder) {
-                    var val = $.trim($(node).find('[data-property="comment"]').val());
+                if (action === 'cancel') {
+                    return;
+                }
 
-                    if (action === 'cancel') {
-                        return;
-                    }
-                    o.data = {};
-                    o.data.confirmmessage = val;
-                    // add current user id in shared folder
+                // add confirmmessage to request body
+                o.data = {
+                    confirmmessage: $.trim($(node).find('[data-property="comment"]').val())
+                };
+
+                folderAPI.get({ folder: o.folder }).done(function (folder) {
+
+                    // add current user id in shared or public folder
                     if (folderAPI.is('shared', folder)) {
                         o.data.id = folder.created_by;
                     }
 
                     switch (action) {
-                    case 'cancel':
-                        return;
                     case 'accepted':
                         o.data.confirmation = 1;
                         break;
@@ -102,6 +102,8 @@ define('io.ox/calendar/acceptdeny',
                     case 'tentative':
                         o.data.confirmation = 3;
                         break;
+                    default:
+                        return;
                     }
 
                     api.confirm(o)
