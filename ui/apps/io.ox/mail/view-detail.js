@@ -358,7 +358,7 @@ define('io.ox/mail/view-detail',
                 });
 
                 source = $.trim(source);
-                isLarge = source.length > 1024 * 512; // > 512 KB
+                isLarge = source.length > 1024 * 100; // > 100 KB
 
                 // empty?
                 if (source === '') {
