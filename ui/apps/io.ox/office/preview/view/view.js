@@ -593,7 +593,7 @@ define('io.ox/office/preview/view/view',
             contentRootNode = self.getContentRootNode();
 
             // create the side pane
-            self.addPane(sidePane = new SidePane(app, {
+            self.addPane(sidePane = new SidePane(app, 'sidepane', {
                 position: 'right',
                 size: Modernizr.touch ? 152 : SidePane.DEFAULT_WIDTH,
                 resizable: !Modernizr.touch,
@@ -606,23 +606,23 @@ define('io.ox/office/preview/view/view',
 
             // initialize the side pane
             sidePane
-                .addViewComponent(new ToolBox(app, { fixed: 'top' })
+                .addViewComponent(new ToolBox(app, 'main', { fixed: 'top' })
                     .addGroup('app/view/sidepane', new Button(BaseControls.HIDE_SIDEPANE_OPTIONS))
                     .addRightTab()
                     .addGroup('app/edit', new PreviewControls.EditDocumentButton(app))
                     .addGap()
                     .addGroup('app/quit', new Button(BaseControls.QUIT_OPTIONS))
                 )
-                .addViewComponent(new Component(app)
+                .addViewComponent(new Component(app, 'thumbs')
                     .addGroup('pages/current', pageGroup)
                 );
 
             // create the top overlay pane
-            self.addPane(topOverlayPane = new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true }));
+            self.addPane(topOverlayPane = new Pane(app, 'overlaytop', { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true }));
 
             // create the bottom overlay pane
-            self.addPane(bottomOverlayPane = new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
-                .addViewComponent(bottomToolBox = new ToolBox(app))
+            self.addPane(bottomOverlayPane = new Pane(app, 'overlaybottom', { position: 'bottom', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
+                .addViewComponent(bottomToolBox = new ToolBox(app, 'overlaypages'))
             );
 
             // initially, hide the side pane, and show the overlay tool bars
@@ -639,7 +639,7 @@ define('io.ox/office/preview/view/view',
             var // the bottom tool box in the side pane
                 sidePaneToolBox = null,
                 // the tool box in the top overlay pane
-                overlayPaneToolBox = new ToolBox(app),
+                overlayPaneToolBox = new ToolBox(app, 'overlaymain'),
                 // the number of pages in the document
                 pageCount = model.getPageCount(),
                 // the HTML mark-up for the empty page nodes
@@ -648,7 +648,7 @@ define('io.ox/office/preview/view/view',
             if (pageCount >= 1) {
 
                 // initialize side pane depending on page count
-                sidePane.addViewComponent(sidePaneToolBox = new ToolBox(app, { fixed: 'bottom' }));
+                sidePane.addViewComponent(sidePaneToolBox = new ToolBox(app, 'pages', { fixed: 'bottom' }));
                 if (pageCount > 1) {
                     sidePaneToolBox
                         .addGroup('pages/previous', new Button(PreviewControls.PREV_OPTIONS))
@@ -663,8 +663,8 @@ define('io.ox/office/preview/view/view',
                     .addGroup('zoom/inc',  new Button(PreviewControls.ZOOMIN_OPTIONS));
 
                 // create the status overlay pane
-                self.addPane(new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true })
-                    .addViewComponent(new ToolBox(app).addPrivateGroup(statusLabel))
+                self.addPane(new Pane(app, 'statuslabel', { position: 'bottom', classes: 'inline right', overlay: true, transparent: true })
+                    .addViewComponent(new ToolBox(app, 'statuslabel').addPrivateGroup(statusLabel))
                 );
 
                 // initialize bottom overlay pane depending on page count

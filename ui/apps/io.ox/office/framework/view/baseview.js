@@ -740,7 +740,7 @@ define('io.ox/office/framework/view/baseview',
         // initialization -----------------------------------------------------
 
         // create the application pane, and insert the container nodes
-        appPane = new Pane(app, { classes: 'app-pane', enableContextMenu: true });
+        appPane = new Pane(app, 'app', { classes: 'app-pane', enableContextMenu: true });
         appPane.getNode().append(hiddenRootNode, contentRootNode, appBusyNode.hide());
 
         // add the main application pane to the application window

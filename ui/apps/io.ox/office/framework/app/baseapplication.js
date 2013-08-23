@@ -191,7 +191,7 @@ define('io.ox/office/framework/app/baseapplication',
         function updateTitle() {
 
             var // the root node of the application window
-                windowNode = self.getWindowNode();
+                windowNode = self.getWindow().nodes.outer;
 
             // set title for application launcher
             self.setTitle(self.getShortFileName() || gt('unnamed'));
@@ -361,6 +361,17 @@ define('io.ox/office/framework/app/baseapplication',
         this.setUserSettingsValue = function (key, value) {
             Settings.set(this.getDocumentType() + '/' + key, value).save();
             return this;
+        };
+
+        /**
+         * Returns the unique DOM identifier of the outer root node of this
+         * application.
+         *
+         * @returns {String}
+         *  The unique window DOM identifier.
+         */
+        this.getWindowId = function () {
+            return this.getWindow().nodes.outer.attr('id');
         };
 
         // file descriptor ----------------------------------------------------
@@ -1621,6 +1632,7 @@ define('io.ox/office/framework/app/baseapplication',
 
             // set the window at the application instance
             self.setWindow(win);
+            updateTitle();
 
             // wait for unload events and execute quit handlers
             self.registerEventHandler(window, 'unload', unloadHandler);
@@ -1726,9 +1738,6 @@ define('io.ox/office/framework/app/baseapplication',
             model.destroy();
             model = view = controller = null;
         });
-
-        // set application title to current file name
-        updateTitle();
 
     } // class BaseApplication
 

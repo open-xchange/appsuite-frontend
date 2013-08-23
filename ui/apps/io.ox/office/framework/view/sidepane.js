@@ -41,6 +41,10 @@ define('io.ox/office/framework/view/sidepane',
      * @param {BaseApplication} app
      *  The application containing this side pane.
      *
+     * @param {String} id
+     *  The identifier for this view pane. Must be unique across all view panes
+     *  in the application.
+     *
      * @param {Object} [options]
      *  A map of options to control the properties of the side pane. Supports
      *  all options supported by the base class Pane. The 'options.position'
@@ -63,7 +67,7 @@ define('io.ox/office/framework/view/sidepane',
      *      have changed), after expanding or collapsing a tool box, or when
      *      the size of the browser window has been changed.
      */
-    function SidePane(app, options) {
+    function SidePane(app, id, options) {
 
         var // self reference
             self = this,
@@ -79,7 +83,7 @@ define('io.ox/office/framework/view/sidepane',
 
         // base constructor ---------------------------------------------------
 
-        Pane.call(this, app, Utils.extendOptions({
+        Pane.call(this, app, id, Utils.extendOptions({
             // default options, can be overridden by passed options
             size: SidePane.DEFAULT_WIDTH
         }, options, {
@@ -139,6 +143,10 @@ define('io.ox/office/framework/view/sidepane',
          * Creates a tool box in this side pane, and registers it for automatic
          * visibility handling.
          *
+         * @param {String} id
+         *  The identifier for the new tool box. Must be unique across all view
+         *  components in the application.
+         *
          * @param {Object} [options]
          *  A map of options to control the properties of the new tool box.
          *  Supports all options supported by the constructor of the class
@@ -158,10 +166,10 @@ define('io.ox/office/framework/view/sidepane',
          * @returns {ToolBox}
          *  The new tool box instance.
          */
-        this.createToolBox = function (options) {
+        this.createToolBox = function (id, options) {
 
             var // the new tool box instance
-                toolBox = new ToolBox(app, options),
+                toolBox = new ToolBox(app, id, options),
                 // the controller item controlling the visibility of the tool box
                 visibleKey = Utils.getStringOption(options, 'visible');
 
