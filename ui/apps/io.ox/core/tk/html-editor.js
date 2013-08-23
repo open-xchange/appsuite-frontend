@@ -12,7 +12,7 @@
  */
 
 define.async('io.ox/core/tk/html-editor',
-    ['moxiecode/tiny_mce/plugins/emoji/main',
+    ['io.ox/core/emoji/util',
      'io.ox/core/capabilities',
      'settings!io.ox/core',
      'io.ox/core/extensions'
@@ -49,7 +49,7 @@ define.async('io.ox/core/tk/html-editor',
             .replace(/([^=])"([\w\- ]+)"/g, '$1\u201C$2\u201D')
             // beautify dashes
             .replace(/(\w\s)-(\s\w)/g, '$1\u2013$2');
-        o.content = emoji.unifiedToImageTag(o.content);
+        o.content = emoji.processEmoji(o.content);
     }
 
     // simplify DOM tree
@@ -517,7 +517,7 @@ define.async('io.ox/core/tk/html-editor',
             },
 
             set = function (str) {
-                ed.setContent(emoji.unifiedToImageTag(str) + '');
+                ed.setContent(emoji.processEmoji(str) + '');
             },
 
             clear = function () {
