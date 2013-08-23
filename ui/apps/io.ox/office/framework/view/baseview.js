@@ -165,7 +165,10 @@ define('io.ox/office/framework/view/baseview',
             contentFocusable = Utils.getBooleanOption(options, 'contentFocusable', false),
 
             // whether the application is hidden explicitly
-            viewHidden = false;
+            viewHidden = false,
+
+            // cached notification, shown when application becomes visible
+            lastNotification = null;
 
         // base constructor ---------------------------------------------------
 
@@ -258,6 +261,11 @@ define('io.ox/office/framework/view/baseview',
             if (app.isImportFinished()) {
                 app.getController().update();
                 self.grabFocus();
+                // show notification cached while view was hidden
+                if (lastNotification) {
+                    Notifications.yell(lastNotification);
+                    lastNotification = null;
+                }
             }
         }
 
@@ -693,74 +701,30 @@ define('io.ox/office/framework/view/baseview',
         };
 
         /**
-         * Shows an error alert banner at the top of the application window. An
-         * alert currently shown will be removed before.
+         * Shows an alert banner, if the application is currently visible.
+         * Otherwise, the last alert banner will be cached until the
+         * application becomes visible again.
          *
-         * @param {String} title
-         *  The alert title.
+         * @param {String} type
+         *  The type of the alert banner. Supported types are 'success',
+         *  'info', 'warning', and 'error'.
          *
          * @param {String} message
-         *  The alert message text.
+         *  The message text shown in the alert banner.
+         *
+         * @param {String} [headline]
+         *  An optional headline shown above the message text.
          *
          * @returns {BaseView}
          *  A reference to this instance.
          */
-        this.showError = function (title, message, options) {
-            Notifications.yell({ type: 'error', headline: title, message: message });
-            return this;
-        };
-
-        /**
-         * Shows a warning alert banner at the top of the application window.
-         * An alert currently shown will be removed before.
-         *
-         * @param {String} title
-         *  The alert title.
-         *
-         * @param {String} message
-         *  The alert message text.
-         *
-         * @returns {BaseView}
-         *  A reference to this instance.
-         */
-        this.showWarning = function (title, message, options) {
-            Notifications.yell({ type: 'warning', headline: title, message: message });
-            return this;
-        };
-
-        /**
-         * Shows a success alert banner at the top of the application window.
-         * An alert currently shown will be removed before.
-         *
-         * @param {String} title
-         *  The alert title.
-         *
-         * @param {String} message
-         *  The alert message text.
-         *
-         * @returns {BaseView}
-         *  A reference to this instance.
-         */
-        this.showSuccess = function (title, message, options) {
-            Notifications.yell({ type: 'success', headline: title, message: message });
-            return this;
-        };
-
-        /**
-         * Shows an informational alert banner at the top of the application
-         * window. An alert currently shown will be removed before.
-         *
-         * @param {String} title
-         *  The alert title.
-         *
-         * @param {String} message
-         *  The alert message text.
-         *
-         * @returns {BaseView}
-         *  A reference to this instance.
-         */
-        this.showInfo = function (title, message, options) {
-            Notifications.yell({ type: 'info', headline: title, message: message });
+        this.yell = function (type, message, headline) {
+            var notification = { type: type, message: message, headline: headline };
+            if (this.isVisible()) {
+                Notifications.yell(notification);
+            } else {
+                lastNotification = notification;
+            }
             return this;
         };
 

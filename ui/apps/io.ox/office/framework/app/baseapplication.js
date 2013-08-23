@@ -253,11 +253,11 @@ define('io.ox/office/framework/app/baseapplication',
                     self.trigger('docs:import:success', point);
                 })
                 .fail(function (result) {
-                    var title = Utils.getStringOption(result, 'title', gt('Load Error')),
+                    var cause = Utils.getStringOption(result, 'cause', 'unknown'),
                         message = Utils.getStringOption(result, 'message', gt('An error occurred while loading the document.')),
-                        cause = Utils.getStringOption(result, 'cause', 'unknown');
+                        headline = Utils.getStringOption(result, 'headline', gt('Load Error'));
                     if (cause !== 'timeout') {
-                        view.showError(title, message);
+                        view.yell('error', message, headline);
                     }
                     Utils.error('BaseApplication.launch(): Importing document "' + self.getFullFileName() + '" failed. Error code: "' + cause + '".');
                     self.trigger('docs:import:error', cause);
