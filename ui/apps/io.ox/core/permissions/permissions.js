@@ -274,6 +274,10 @@ define('io.ox/core/permissions/permissions',
         if (permission === 'admin' && String(api.getDefaultFolder(baton.folder.module)) === baton.folder.id) {
             admin = false;
         }
+        // See Bug 27704
+        if (permission === 'admin' && baton.folder.type === 5) {
+            admin = false;
+        }
         if (!admin) {
             return $('<i>').text(menus[permission][selected]);
         }
