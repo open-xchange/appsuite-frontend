@@ -696,7 +696,11 @@ define('io.ox/core/tk/vgrid',
             if (list.length === 0 && loaded) {
                 detachPool();
                 scrollpane.append(
-                    $.fail(emptyMessage ? emptyMessage(self.getMode()) : gt('Empty'))
+                    $.fail(emptyMessage ?
+                        emptyMessage(self.getMode()) :
+                        //#. list is empty / no items
+                        gt.pgettext('vgrid', 'Empty')
+                    )
                 );
             }
 

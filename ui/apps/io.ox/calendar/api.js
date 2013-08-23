@@ -18,7 +18,8 @@ define('io.ox/calendar/api',
      'io.ox/core/event',
      'settings!io.ox/core',
      'io.ox/core/notifications',
-     'io.ox/core/api/factory'], function (http, Events, coreConfig, notifications, factory) {
+     'io.ox/core/date',
+     'io.ox/core/api/factory'], function (http, Events, coreConfig, notifications, date, factory) {
 
     'use strict';
 
@@ -232,10 +233,9 @@ define('io.ox/calendar/api',
                         df.reject(obj);
                         return df;
                     }
-
-                    getObj.id = o.id;
+                    getObj.id = obj.id || o.id;
                     getObj.folder = folder_id;
-                    if (o.recurrence_position !== null) {
+                    if (o.recurrence_position !== null && obj.id === o.id) {
                         getObj.recurrence_position = o.recurrence_position;
                     }
 
@@ -247,7 +247,7 @@ define('io.ox/calendar/api',
                                 api.addToUploadList(_.ecid(data));//to make the detailview show the busy animation
                             }
                             api.trigger('update', data);
-                            api.trigger('update:' + _.ecid(data), data);
+                            api.trigger('update:' + _.ecid(o), data);
                             return data;
                         });
                 }, function (error) {
@@ -414,12 +414,14 @@ define('io.ox/calendar/api',
      */
     api.getInvites = function () {
 
-        var now = _.now(), start = now - 2 * HOUR;
+        var now = _.now(),
+            start = now - 2 * HOUR,
+            end = new date.Local().addYears(5).getTime();
 
         return getUpdates({
             folder: 'all',
             start: start,
-            end: start + 28 * 5 * DAY, // next four month?!?
+            end: end, // 5 years like OX6
             timestamp: 0,
             recurrence_master: true
         })

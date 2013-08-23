@@ -179,6 +179,8 @@ i[class^="icon-"], i[class^=" icon-"] {
         > .app-content-root {
             background: @app-pane-fill-color;
 
+            &:focus, &:active { outline: none; }
+
             /* scrollable application pane, center container node horizontally into application pane */
             &.scrolling {
                 .overflow(auto);
@@ -1021,27 +1023,6 @@ i[class^="icon-"], i[class^=" icon-"] {
     } /* end of &.section-list */
 
 } /* end of &.dropdown-container */
-
-/* ========================================================================= */
-/* alert banners                                                             */
-/* ========================================================================= */
-
-.alert {
-    position: absolute;
-    z-index: 2000;
-    padding: 8px 14px;
-    .drop-shadow(7px);
-    cursor: default;
-
-    h4 { margin-bottom: 8px; }
-    p { margin: 0; }
-
-    button, .close {
-        position: static;
-        float: right;
-        margin: 0 0 5px 14px;
-    }
-}
 
 } /* end of .io-ox-office-main */
 

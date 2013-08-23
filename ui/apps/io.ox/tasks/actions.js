@@ -272,8 +272,7 @@ define('io.ox/tasks/actions',
                                             confirmmessage: message}
                         }).done(function () {
                             //update detailview
-                            api.trigger("update:" + data.folder_id + '.' + data.id);
-                            api.trigger("mark:task:confirmed", [{id: data.id}]);
+                            api.trigger("update:" + _.ecid({id: data.id, folder_id: data.folder_id}));
                         });
                     }
                 });

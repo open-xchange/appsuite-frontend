@@ -71,7 +71,7 @@ define('io.ox/office/preview/view/pagegroup',
          */
         function updateHandler(page) {
             Utils.toggleButtons(Utils.getSelectedButtons(buttonNodes).removeAttr('tabindex'), false);
-            Utils.toggleButtons(buttonNodes.eq(page - 1).attr('tabindex', 1), true);
+            Utils.toggleButtons(buttonNodes.eq(page - 1).attr('tabindex', 0), true);
         }
 
         /**
@@ -124,7 +124,7 @@ define('io.ox/office/preview/view/pagegroup',
                 pageLoader.loadPage(pageNode, page, { format: 'png', width: ZOOM_FACTOR * MAX_PAGE_WIDTH, height: ZOOM_FACTOR * MAX_PAGE_HEIGHT, priority: 'low' })
                 .done(function (pageSize) {
                     // remove explicit size from page node, set size at image node
-                    pageNode.css({ width: '', height: '' }).children('img').attr({
+                    pageNode.css({ width: '', height: '' }).children('img').css({
                         width: Math.floor(pageSize.width / ZOOM_FACTOR),
                         height: Math.floor(pageSize.height / ZOOM_FACTOR)
                     });

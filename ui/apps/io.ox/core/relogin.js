@@ -51,7 +51,7 @@ define('io.ox/core/relogin',
                     .on('cancel', function () {
                         ox.trigger('relogin:cancel');
                         var location = settings.get('customLocations/logout');
-                        _.url.redirect(location || ox.logoutLocation);
+                        _.url.redirect(location || ox.serverConfig.logoutLocation || ox.logoutLocation);
                     })
                     .on('relogin', function () {
                         var self = this.busy();

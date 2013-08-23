@@ -49,6 +49,10 @@ define('io.ox/office/framework/view/component',
      * @param {BaseApplication} app
      *  The application containing this view component instance.
      *
+     * @param {String} id
+     *  The identifier for this view component. Must be unique across all view
+     *  components in the application.
+     *
      * @param {Object} [options]
      *  A map of options to control the properties of the new view component.
      *  The following options are supported:
@@ -75,7 +79,7 @@ define('io.ox/office/framework/view/component',
      *      context of this view component instance. If omitted, groups will be
      *      appended to the root node of this view component.
      */
-    function Component(app, options) {
+    function Component(app, id, options) {
 
         var // self reference
             self = this,
@@ -300,8 +304,11 @@ define('io.ox/office/framework/view/component',
                 self.trigger('group:change', key, value, options);
             });
 
-            // set the key as data attribute
-            group.getNode().attr('data-key', key);
+            // create unique DOM identifier for Selenium testing, set the key as data attribute
+            group.getNode().attr({
+                'id': node.attr('id') + '-group-' + key.replace(/[^a-zA-Z0-9]+/g, '-') + '-' + groupsByKey[key].length,
+                'data-key': key
+            });
 
             return this;
         };
@@ -427,6 +434,9 @@ define('io.ox/office/framework/view/component',
         };
 
         // initialization -----------------------------------------------------
+
+        // create unique DOM identifier for Selenium testing
+        node.attr('id', app.getWindowId() + '-component-' + id);
 
         // marker for touch devices
         node.toggleClass('touch', Modernizr.touch);

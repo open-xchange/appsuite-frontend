@@ -276,33 +276,34 @@ define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], functi
          * @param {HTMLElement|jQuery} pageNode
          *  The page node containing the SVG contents.
          *
-         * @param {Number} zoomFactor
-         *  The new zoom factor.
+         * @param {Number} pageZoom
+         *  The new zoom factor, as floating point number (the value 1
+         *  represents the original page size).
          *
          * @returns {PageLoader}
          *  A reference to this instance.
          */
-        this.setZoomFactor = function (pageNode, zoomFactor) {
+        this.setPageZoom = function (pageNode, pageZoom) {
 
             var // the original size of the page
                 pageSize = this.getPageSize(pageNode),
                 // the child node in the page, containing the SVG
                 childNode = $(pageNode).children().first(),
                 // the resulting width/height
-                width = Math.floor(pageSize.width * zoomFactor),
-                height = Math.ceil(pageSize.height * zoomFactor);
+                width = Math.floor(pageSize.width * pageZoom),
+                height = Math.ceil(pageSize.height * pageZoom);
 
             if (childNode.is('img')) {
                 // <img> element: resize with CSS width/height
                 childNode.width(width).height(height);
             } else {
                 // <svg> element (Chrome): scale with CSS zoom (supported in WebKit)
-                childNode.css('zoom', zoomFactor);
+                childNode.css('zoom', pageZoom);
             }
 
             // Chrome bug/problem: sometimes, the page node has width 0 (e.g., if browser zoom is
             // not 100%) regardless of existing SVG, must set its size explicitly to see anything...
-            $(pageNode).width(width).height(height).data('page-zoom', zoomFactor);
+            $(pageNode).width(width).height(height).data('page-zoom', pageZoom);
 
             return this;
         };

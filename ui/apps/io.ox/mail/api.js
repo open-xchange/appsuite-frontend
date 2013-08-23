@@ -61,6 +61,24 @@ define('io.ox/mail/api',
 
             addThread: function (obj) {
                 var cid = getCID(obj);
+                if (threads[cid]) {
+                    if (threads[cid].length !== obj.thread.length) {//thread has changed
+                        api.trigger('threadChanged:' + cid.replace(/\s/g, '%20'), obj);//trigger event(folders may contain spaces. This would trigger 2 events)
+                    } else {
+                        var tempTracker  = threads[cid].map(function (temp) {
+                                return _.cid(temp);
+                            }),
+                            tempObj =  obj.thread.map(function (temp) {
+                                return _.cid(temp);
+                            });
+                        for (var i = 0; i < tempTracker.length; i++) {//thread has changed
+                            if (tempTracker[i] !== tempObj[i]) {
+                                api.trigger('threadChanged:' + cid.replace(/\s/g, '%20'), obj);//trigger event(folders may contain spaces. This would trigger 2 events)
+                                break;
+                            }
+                        }
+                    }
+                }
                 threads[cid] = obj.thread;
                 _(obj.thread).each(function (o) {
                     threadHash[_.cid(o)] = cid;
@@ -505,6 +523,12 @@ define('io.ox/mail/api',
             useCache = (cacheControl[cid] !== false);
         }
         return getAll.call(this, options, useCache, null, false)
+            .then(function (threads) {
+                for (var i = 0; i < threads.data.length; i++) {//reverse thread root elements
+                    _.extend(threads.data[i], threads.data[i].thread[threads.data[i].thread.length - 1]);
+                }
+                return threads;
+            })
             .done(function (response) {
                 _(response.data).each(tracker.addThread);
                 cacheControl[cid] = true;

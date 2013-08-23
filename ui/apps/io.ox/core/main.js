@@ -55,8 +55,9 @@ define('io.ox/core/main',
                 function logout() {
                     session.logout().always(function () {
                         // get logout locations
-                        var location = settings.get('customLocations/logout');
-                        _.url.redirect(location || (ox.logoutLocation + (opt.autologout ? '#autologout=true' : '')));
+                        var location = settings.get('customLocations/logout'),
+                            fallback = ox.serverConfig.logoutLocation || ox.logoutLocation;
+                        _.url.redirect(location || (fallback + (opt.autologout ? '#autologout=true' : '')));
                     });
                 },
                 function cancel() {

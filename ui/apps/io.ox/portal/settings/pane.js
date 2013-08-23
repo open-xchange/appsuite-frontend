@@ -222,12 +222,14 @@ define('io.ox/portal/settings/pane',
         id: 'title',
         index: 300,
         draw: function (baton) {
-            var data = baton.model.toJSON();
+            var data = baton.model.toJSON(),
+                point = ext.point(baton.view.point),
+                title = widgets.getTitle(data, point.prop('title'));
             this.append(
                 // widget title
                 $('<div>')
                 .addClass('widget-title pull-left widget-color-' + (data.color || 'black') + ' widget-' + data.type)
-                .text(widgets.getTitle(data, baton.view.options.title))
+                .text(title)
             );
         }
     });
@@ -305,7 +307,8 @@ define('io.ox/portal/settings/pane',
             var color = this.model.get('color');
             this.model.set('color', color === undefined || color === 'default' ? 'black' : color, {validate: true});
             // get widget options
-            this.options = ext.point('io.ox/portal/widget/' + this.model.get('type') + '/settings').options();
+            this.point = 'io.ox/portal/widget/' + this.model.get('type');
+            this.options = ext.point(this.point + '/settings').options();
         },
 
         render: function () {
@@ -397,8 +400,9 @@ define('io.ox/portal/settings/pane',
     var views = {};
 
     function createView(model) {
-        var id = model.get('id');
-        return (views[id] = new WidgetSettingsView({ model: model }));
+        var id = model.get('id'),
+            point = 'io.ox/portal/widget/' + model.get('type');
+        return (views[id] = new WidgetSettingsView({ model: model, point: point }));
     }
 
     ext.point(POINT + '/pane').extend({

@@ -172,6 +172,7 @@ body.down #io-ox-login-container .alert.alert-info {
 #io-ox-login-form input[type=submit]:focus,
 #io-ox-login-form input[type=checkbox]:focus {
     box-shadow: 0 0 15px 2px white;
+    outline: 0;
 }
 
 #io-ox-login-container-scrollpane {

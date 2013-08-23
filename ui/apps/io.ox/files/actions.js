@@ -63,7 +63,9 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/actions/publish', {
-        requires: 'one',
+        requires: function (e) {
+            return !(e.collection.has('one') && _.isEmpty(e.baton.data.filename));
+        },
         action: function (baton) {
             require(['io.ox/core/pubsub/publications'], function (publications) {
                 publications.buildPublishDialog(baton);
@@ -169,7 +171,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/open', {
         requires: function (e) {
-            return !(e.collection.has('one') && _.isEmpty(e.baton.data.filename));
+            return !(e.collection.has('one') && _.isEmpty(e.baton.data.filename)) && !e.collection.has('multiple');
         },
         multiple: function (list) {
             var onlyinvalid = false;

@@ -358,7 +358,7 @@ define('io.ox/mail/view-detail',
                 });
 
                 source = $.trim(source);
-                isLarge = source.length > 1024 * 512; // > 512 KB
+                isLarge = source.length > 1024 * 100; // > 100 KB
 
                 // empty?
                 if (source === '') {
@@ -755,6 +755,43 @@ define('io.ox/mail/view-detail',
                 modifiedBaton.data = inboxMails;
                 deleteAction.data('baton', modifiedBaton);
             }
+            
+            function updateThread(node, scrollpane, batonOld, data) {
+                var nodeTable  = {},
+                    top = scrollpane.scrollTop(),
+                    currentMail,
+                    currentMailOffset,
+                    nodes = node.find('.mail-detail');
+                //fill nodeTable
+                for (var i = 0; i < batonOld.data.length; i++) {//bring nodes and mails together;
+                    if ($(nodes[i]).parent().hasClass('mail-detail-decorator')) {
+                        nodes[i] = $(nodes[i]).parent().get(0);
+                    }
+                    nodeTable[_.cid(batonOld.data[i])] = nodes[i];
+                }
+                //remember current scrollposition
+                currentMail = $(nodes[0]);//select first
+                for (var i = 1; i < nodes.length && $(nodes[i]).position().top <= top; i++) {
+                    currentMail = $(nodes[i]);
+                }
+                currentMailOffset = top - currentMail.position().top;
+                node.find('.mail-detail.io-ox-busy,.mail-detail-decorator').detach();
+                for (var i = 0; i < data.thread.length; i++) {//draw new thread
+                    if (nodeTable[_.cid(data.thread[i])]) {
+                        node.append(nodeTable[_.cid(data.thread[i])]);
+                    } else {
+                        node.append(that.drawScaffold(
+                                ext.Baton({ data: data.thread[i], app: batonOld.app, options: batonOld.options }),
+                                that.autoResolveThreads).addClass('io-ox-busy').get(0)//no 200ms wait for busy animation because this changes our scroll position
+                            );
+                    }
+                }
+                nodes = node.find('.mail-detail');
+                scrollpane.off('scroll').on('scroll', { nodes: nodes, node: node }, _.debounce(autoResolve, 100));//update event parameters
+                //scroll to old position
+                scrollpane.scrollTop(currentMail.position().top + currentMailOffset);
+                batonOld.data = data.thread;//update baton
+            }
 
             function drawThread(node, baton, pos, top, bottom, mails) {
 
@@ -764,7 +801,8 @@ define('io.ox/mail/view-detail',
                     list = baton.data;
 
                 try {
-
+                    //prevent ugly event duplication
+                    api.off('threadChanged:' + _.cid(baton.data[baton.data.length - 1]).replace(/\s/g, '%20'));
                     // draw inline links for whole thread
                     if (list.length > 1) {
                         inline = $('<div class="thread-inline-actions">');
@@ -808,6 +846,10 @@ define('io.ox/mail/view-detail',
                     scrollpane.on('scroll', { nodes: nodes, node: node }, _.debounce(autoResolve, 100));
                     scrollpane.one('scroll.now', { nodes: nodes, node: node }, autoResolve);
                     scrollpane.trigger('scroll.now'); // to be sure
+                    api.on('threadChanged:' + _.cid(baton.data[baton.data.length - 1]).replace(/\s/g, '%20'),
+                            { baton: baton, scrollpane: scrollpane, nodes: nodes, node: node}, function (e, data) {
+                        updateThread(e.data.node, e.data.scrollpane, e.data.baton, data);
+                    });
                     nodes = frag = node = scrollpane = list = mail = mails = null;
                 } catch (e) {
                     console.error('mail.drawThread', e.message, e);

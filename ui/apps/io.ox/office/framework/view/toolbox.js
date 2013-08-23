@@ -36,6 +36,10 @@ define('io.ox/office/framework/view/toolbox',
      * @param {BaseApplication} app
      *  The application containing this tool box instance.
      *
+     * @param {String} id
+     *  The identifier for this tool box. Must be unique across all view
+     *  components in the application.
+     *
      * @param {Object} [options]
      *  A map of options controlling the appearance and behavior of the tool
      *  box. Supports all options of the Component base class. Additionally,
@@ -46,7 +50,7 @@ define('io.ox/office/framework/view/toolbox',
      *      all its contents but the heading label) and expand (show all its
      *      contents) the tool box.
      */
-    function ToolBox(app, options) {
+    function ToolBox(app, id, options) {
 
         var // self reference
             self = this,
@@ -68,7 +72,7 @@ define('io.ox/office/framework/view/toolbox',
 
         // base constructor ---------------------------------------------------
 
-        Component.call(this, app, Utils.extendOptions(options, { groupInserter: groupInserter }));
+        Component.call(this, app, id, Utils.extendOptions(options, { groupInserter: groupInserter }));
 
         // private methods ----------------------------------------------------
 

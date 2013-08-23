@@ -285,7 +285,16 @@ define('io.ox/calendar/actions',
 
     new Action('io.ox/calendar/detail/actions/changestatus', {
         id: 'change_status',
-        requires: 'one modify',
+        requires: function (e) {
+            var app = e.baton.data,
+                iamUser = false;
+            for (var i = 0; i < app.users.length; i++) {
+                if (app.users[i].id === ox.user_id) {
+                    iamUser = true;
+                }
+            }
+            return iamUser && e.collection.has('one');
+        },
         action: function (baton) {
             // load & call
             ox.load(['io.ox/calendar/acceptdeny']).done(function (acceptdeny) {

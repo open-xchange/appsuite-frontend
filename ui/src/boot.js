@@ -639,7 +639,10 @@ $(window).load(function () {
                                     params: {
                                         action: 'whoami'
                                     }
-                                }).done(whoami.resolve).fail(whoami.reject);
+                                }).done(function (resp) {
+                                    resp.language = resp.locale;
+                                    whoami.resolve(resp);
+                                }).fail(whoami.reject);
                             });
                         }
 

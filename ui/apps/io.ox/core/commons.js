@@ -542,9 +542,10 @@ define('io.ox/core/commons',
             node = $('<div>').attr('data-cid', _([].concat(data)).map(_.cid).join(',')),
 
             update = function (e, changed) {
-
                 // id change?
-                if (changed && changed.former_id) data = changed;
+                if (changed && (changed.former_id || changed.id !== data.id)) {
+                    data = changed;
+                }
 
                 if ((getter = getter || (api ? api.get : null))) {
                     // fallback for create trigger

@@ -191,7 +191,7 @@ define('io.ox/office/framework/app/baseapplication',
         function updateTitle() {
 
             var // the root node of the application window
-                windowNode = self.getWindowNode();
+                windowNode = self.getWindow().nodes.outer;
 
             // set title for application launcher
             self.setTitle(self.getShortFileName() || gt('unnamed'));
@@ -253,11 +253,11 @@ define('io.ox/office/framework/app/baseapplication',
                     self.trigger('docs:import:success', point);
                 })
                 .fail(function (result) {
-                    var title = Utils.getStringOption(result, 'title', gt('Load Error')),
+                    var cause = Utils.getStringOption(result, 'cause', 'unknown'),
                         message = Utils.getStringOption(result, 'message', gt('An error occurred while loading the document.')),
-                        cause = Utils.getStringOption(result, 'cause', 'unknown');
+                        headline = Utils.getStringOption(result, 'headline', gt('Load Error'));
                     if (cause !== 'timeout') {
-                        view.showError(title, message);
+                        view.yell('error', message, headline);
                     }
                     Utils.error('BaseApplication.launch(): Importing document "' + self.getFullFileName() + '" failed. Error code: "' + cause + '".');
                     self.trigger('docs:import:error', cause);
@@ -361,6 +361,17 @@ define('io.ox/office/framework/app/baseapplication',
         this.setUserSettingsValue = function (key, value) {
             Settings.set(this.getDocumentType() + '/' + key, value).save();
             return this;
+        };
+
+        /**
+         * Returns the unique DOM identifier of the outer root node of this
+         * application.
+         *
+         * @returns {String}
+         *  The unique window DOM identifier.
+         */
+        this.getWindowId = function () {
+            return this.getWindow().nodes.outer.attr('id');
         };
 
         // file descriptor ----------------------------------------------------
@@ -1621,6 +1632,7 @@ define('io.ox/office/framework/app/baseapplication',
 
             // set the window at the application instance
             self.setWindow(win);
+            updateTitle();
 
             // wait for unload events and execute quit handlers
             self.registerEventHandler(window, 'unload', unloadHandler);
@@ -1675,13 +1687,15 @@ define('io.ox/office/framework/app/baseapplication',
 
         // call all registered quit handlers
         this.setQuit(function () {
-            // return existing Deferred if a quit request is already running
-            if (currentQuitDef && (currentQuitDef.state() === 'pending')) {
-                return currentQuitDef.promise();
-            }
+
+            var // store original 'quit()' method (needs to be restored after resuming)
+                origQuitMethod = self.quit;
 
             // create the result deferred (rejecting means resume application)
             currentQuitDef = $.Deferred();
+
+            // override 'quit()' method to prevent repeated/recursive calls while in quit mode
+            self.quit = function () { return currentQuitDef.promise(); };
 
             // call all before-quit handlers, rejecting one will resume application
             callHandlers(beforeQuitHandlers)
@@ -1707,10 +1721,13 @@ define('io.ox/office/framework/app/baseapplication',
                 });
             })
             .fail(function () {
+                // resume to running state of application
+                self.quit = origQuitMethod;
                 currentQuitDef.reject();
+                currentQuitDef = null;
             });
 
-            return currentQuitDef.always(function () { currentQuitDef = null; }).promise();
+            return currentQuitDef.promise();
         });
 
         // prevent usage of these methods in derived classes
@@ -1726,9 +1743,6 @@ define('io.ox/office/framework/app/baseapplication',
             model.destroy();
             model = view = controller = null;
         });
-
-        // set application title to current file name
-        updateTitle();
 
     } // class BaseApplication
 
