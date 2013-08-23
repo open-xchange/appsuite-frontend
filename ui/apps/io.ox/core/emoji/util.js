@@ -35,6 +35,15 @@ define('io.ox/core/emoji/util',
                     forceEmojiIcons: settings.get('emoji/forceEmojiIcons', false)
                 });
             });
+        },
+        imageTagsToUnified: function (html) {
+            var node = $('<div>').append(html);
+
+            node.find('img[data-emoji-unicode]').each(function (index, node) {
+                $(node).replaceWith($(node).attr('data-emoji-unicode'));
+            });
+
+            return node.html();
         }
     };
 
