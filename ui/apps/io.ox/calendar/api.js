@@ -233,10 +233,9 @@ define('io.ox/calendar/api',
                         df.reject(obj);
                         return df;
                     }
-
-                    getObj.id = o.id;
+                    getObj.id = obj.id || o.id;
                     getObj.folder = folder_id;
-                    if (o.recurrence_position !== null) {
+                    if (o.recurrence_position !== null && obj.id === o.id) {
                         getObj.recurrence_position = o.recurrence_position;
                     }
 
@@ -248,7 +247,7 @@ define('io.ox/calendar/api',
                                 api.addToUploadList(_.ecid(data));//to make the detailview show the busy animation
                             }
                             api.trigger('update', data);
-                            api.trigger('update:' + _.ecid(data), data);
+                            api.trigger('update:' + _.ecid(o), data);
                             return data;
                         });
                 }, function (error) {
