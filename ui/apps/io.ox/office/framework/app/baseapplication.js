@@ -1687,6 +1687,7 @@ define('io.ox/office/framework/app/baseapplication',
 
         // call all registered quit handlers
         this.setQuit(function () {
+
             // return existing Deferred if a quit request is already running
             if (currentQuitDef && (currentQuitDef.state() === 'pending')) {
                 return currentQuitDef.promise();
