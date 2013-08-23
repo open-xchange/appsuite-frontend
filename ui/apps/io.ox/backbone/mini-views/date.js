@@ -12,10 +12,17 @@
 
 define('io.ox/backbone/mini-views/date',
     ['io.ox/backbone/mini-views/abstract',
-     'io.ox/core/date'
-    ], function (AbstractView, date) {
+     'io.ox/core/date',
+     'gettext!io.ox/core'
+    ], function (AbstractView, date, gt) {
 
     'use strict';
+
+    var titles = {
+        year: gt('Year'),
+        month: gt('Month'),
+        date: gt('Day')
+    };
 
     //
     // <div><select class="date"><select class="month"><select class="year"></div>
@@ -33,7 +40,7 @@ define('io.ox/backbone/mini-views/date',
     // helper
     function createSelect(name, from, to, setter, format) {
 
-        var node = $('<select tabindex="1">').attr('name', name),
+        var node = $('<select tabindex="1">').attr({ name: name, title: titles[name] }),
             i = Math.min(from, to),
             $i = Math.max(from, to),
             d = new date.Local(0),
