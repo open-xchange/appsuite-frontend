@@ -141,7 +141,7 @@ define('io.ox/mail/folderview-extensions',
         ).done(function (folder, dialogs) {
             new dialogs.ModalDialog()
                 .text(gt('Do you really want to empty folder "%s"?', folder.title))
-                .addPrimaryButton('delete', gt('Empty'))
+                .addPrimaryButton('delete', gt('Empty folder'))
                 .addButton('cancel', gt('Cancel'))
                 .show()
                 .done(function (action) {
