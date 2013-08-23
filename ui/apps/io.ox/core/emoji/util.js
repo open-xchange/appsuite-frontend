@@ -11,8 +11,7 @@
  */
 
 define('io.ox/core/emoji/util',
-    ['moxiecode/tiny_mce/plugins/emoji/main',
-     'settings!io.ox/mail'], function (emoji, settings) {
+    ['settings!io.ox/mail'], function (settings) {
 
     'use strict';
 
@@ -29,10 +28,12 @@ define('io.ox/core/emoji/util',
             if (asciiOnly) {
                 return text;
             }
-            text = emoji.softbankToUnified(text);
-            text = emoji.jisToUnified(text);
-            return emoji.unifiedToImageTag(text, {
-                forceEmojiIcons: settings.get('emoji/forceEmojiIcons', false)
+            require(['moxiecode/tiny_mce/plugins/emoji/main'], function (emoji) {
+                text = emoji.softbankToUnified(text);
+                text = emoji.jisToUnified(text);
+                return emoji.unifiedToImageTag(text, {
+                    forceEmojiIcons: settings.get('emoji/forceEmojiIcons', false)
+                });
             });
         }
     };
