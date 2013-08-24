@@ -1383,8 +1383,8 @@ define("io.ox/core/desktop",
                     keydown: function (e) {
                         if (e.which === 27) {
                             win.search.close();
-                        } else if (e.which === 13 && $(this).val() === '') {
-                            win.search.clear();
+                        } else if (e.which === 13) {
+                            searchHandler.change(e);
                         }
                     },
 
