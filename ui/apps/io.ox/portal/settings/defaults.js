@@ -17,43 +17,7 @@ define('io.ox/portal/settings/defaults', [], function () {
 
     var settingsDefaults = {
         widgets: {
-            user: {
-                mail_0: {
-                    plugin: 'plugins/portal/mail/register',
-                    color: 'blue',
-                    index: 1
-                },
-                calendar_0: {
-                    plugin: 'plugins/portal/calendar/register',
-                    color: 'red',
-                    index: 2
-                },
-                tasks_0: {
-                    plugin: 'plugins/portal/tasks/register',
-                    color: 'green',
-                    index: 3
-                },
-                birthdays_0: {
-                    plugin: 'plugins/portal/birthdays/register',
-                    color: 'lightgreen',
-                    index: 4
-                },
-                facebook_0: {
-                    plugin: 'plugins/portal/facebook/register',
-                    color: 'blue',
-                    index: 4
-                },
-                twitter_0: {
-                    plugin: 'plugins/portal/twitter/register',
-                    color: 'pink',
-                    index: 5
-                },
-                linkedin_0: {
-                    plugin: 'plugins/portal/linkedin/register',
-                    color: 'lightblue',
-                    index: 6
-                }
-            }
+            user: {}
         }
     };
 
