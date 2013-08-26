@@ -3014,3 +3014,16 @@ input.flat-input {
 
 /* fixes WBR handling in long character sequences, esp. for IE */
 wbr:after { content: "\00200B" }
+
+.legacy-chrome .animate-moveleft {
+    -webkit-transform: none;
+    -webkit-transition-property: none;
+    -webkit-transition-duration: none;
+    left:0;
+}
+.legacy-chrome .animate-moveright {
+    -webkit-transform: none;
+    -webkit-transition-property: none;
+    -webkit-transition-duration: none;
+    left:90%;
+}
