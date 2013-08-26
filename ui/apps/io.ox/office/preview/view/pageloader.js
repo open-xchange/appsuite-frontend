@@ -36,26 +36,50 @@ define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], functi
      * Calculates the original size of the passed page image node.
      *
      * @param {jQuery} imageNode
-     *  The node whose size will be calculated.
+     *  The node whose size will be calculated. May be an <img> element linking
+     *  to an image, or an <svg> element containing parsed SVG mark-up.
+     *
+     * @param {Number} [zoom]
+     *  If specified, the zoom factor passed in the server request. Needed to
+     *  calculate the original page size from the physical size of the image.
      *
      * @returns {Object|Null}
      *  The size of the image node (in pixels), in the properties 'width' and
      *  'height'; or null if the size is not valid (zero).
      */
-    function calculateImageSize(imageNode) {
+    function calculateImageSize(imageNode, zoom) {
 
         var // the original parent node
             parentNode = imageNode.parent(),
             // the resulting size of the passed image node
             width = 0, height = 0;
 
-        // insert the image node into a temporary unrestricted node and get its size
-        tempNode.append(imageNode).appendTo('body');
-        width = imageNode.width();
-        height = imageNode.height();
-        // move image node back to its parent
-        parentNode.append(imageNode);
-        tempNode.remove();
+        // try to use the naturalWidth/naturalHeight attributes of <img> elements
+        if (imageNode.is('img')) {
+            // remove the 'max-width' attribute added by Bootstrap CSS
+            imageNode.css('max-width', 'none');
+            width = imageNode[0].naturalWidth || 0;
+            height = imageNode[0].naturalHeight || 0;
+        }
+
+        // naturalWidth/naturalHeight may not work for <img> elements linking to SVG
+        if ((width === 0) || (height === 0)) {
+
+            // insert the image node into a temporary unrestricted node and get its size
+            tempNode.append(imageNode).appendTo('body');
+            width = imageNode.width();
+            height = imageNode.height();
+
+            // move image node back to its parent
+            parentNode.append(imageNode);
+            tempNode.remove();
+        }
+
+        // zoom correction
+        if (_.isNumber(zoom) && (zoom > 0)) {
+            width /= zoom;
+            height /= zoom;
+        }
 
         return ((width > 0) && (height > 0)) ? { width: width, height: height } : null;
     }
@@ -87,15 +111,18 @@ define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], functi
         function loadPageIntoNode(pageNode, page, options) {
 
             var // the Deferred object waiting for the image
-                def = null;
+                def = null,
+                // the target image format
+                format = Utils.getStringOption(options, 'format', 'png');
 
             function resolveSize() {
-                var pageSize = calculateImageSize(pageNode.children().first());
+                var pageSize = calculateImageSize(pageNode.children().first(), Utils.getNumberOption(options, 'zoom'));
                 if (pageSize) { pageNode.data('page-size', pageSize); }
                 return pageSize || $.Deferred().reject();
             }
 
-            if (_.browser.Chrome && (Utils.getStringOption(options, 'format', 'png') === 'svg')) {
+            if (_.browser.Chrome && (format === 'svg')) {
+
                 // as SVG mark-up (Chrome does not show embedded images in <img> elements linked to an SVG file)
                 def = app.getModel().loadPageAsSvgMarkup(page, Utils.getStringOption(options, 'priority', 'medium')).then(function (svgMarkup) {
                     // do NOT use the jQuery.html() method for SVG mark-up!
@@ -104,7 +131,13 @@ define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], functi
                     return resolveSize();
                 });
             } else {
-                // preferred: as an image element linking to the image file (Safari cannot parse SVG mark-up at all)
+
+                // Bug 25765: Safari cannot parse SVG mark-up, and cannot show images embedded in <img> elements linking to SVG
+                if ((_.browser.Safari || (_.browser.iOS && _.browser.WebKit)) && (format === 'svg')) {
+                    options = Utils.extendOptions(options, { format: 'jpg', zoom: Utils.RETINA ? 2 : 1 });
+                }
+
+                // preferred: as an image element linking to the image file
                 def = app.getModel().loadPageAsImage(page, options).then(function (imgNode) {
                     pageNode.empty().append(imgNode);
                     // resolve with original image size (naturalWidth/naturalHeight with SVG does not work in IE10)

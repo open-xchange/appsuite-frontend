@@ -31,7 +31,7 @@ define('io.ox/office/preview/view/view',
     'use strict';
 
     var // predefined zoom factors
-        ZOOM_FACTORS = [25, 35, 50, 75, 100, 150, 200, 300, 400, 600, 800, 1200, 1600],
+        ZOOM_FACTORS = [25, 35, 50, 75, 100, 150, 200, 300, 400, 600, 800],
 
         // the speed of scroll animations
         ANIMATION_DELAY = 25;
