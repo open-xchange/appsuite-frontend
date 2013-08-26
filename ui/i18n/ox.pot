@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
+#: apps/io.ox/portal/widgets.js:366
+msgid "Could not save settings."
+msgstr ""
+
 #. Placeholder in furigana field
 #: apps/l10n/ja_JP/io.ox/register.js:51
 msgid "Furigana for last name"
@@ -2339,10 +2343,6 @@ msgstr ""
 
 #: apps/io.ox/backbone/validation.js:134
 msgid "Please enter a value"
-msgstr ""
-
-#: apps/io.ox/portal/widgets.js:260
-msgid "Could not save settings."
 msgstr ""
 
 #: apps/io.ox/portal/settings/pane.js:49
