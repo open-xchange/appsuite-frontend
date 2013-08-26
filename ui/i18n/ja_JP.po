@@ -247,7 +247,7 @@ msgstr "CC:"
 #: apps/io.ox/mail/write/view-main.js:527
 #, fuzzy
 msgid "in copy"
-msgstr "BCC:"
+msgstr "CC:"
 
 #: apps/io.ox/mail/write/view-main.js:533
 #: apps/io.ox/mail/write/view-main.js:534
