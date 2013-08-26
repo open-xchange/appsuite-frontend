@@ -65,8 +65,6 @@ RewriteRule ^$ core [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule help/([a-z_A-Z]+)(.+) help/en_US$2 [L]
 
-RewriteCond %{HTTP_USER_AGENT} "MSIE 5" [OR]
-RewriteCond %{HTTP_USER_AGENT} "MSIE 6" [OR]
-RewriteCond %{HTTP_USER_AGENT} "MSIE 7"
-RewriteRule signin$ /appsuite/unsupported.html [R]
-
+RewriteCond %{HTTP_USER_AGENT} "MSIE [6-8]" [NC]
+RewriteCond %{REQUEST_URI} !^/appsuite/unsupported.html
+RewriteRule ^.*$ /appsuite/unsupported.html [R=301,L]
