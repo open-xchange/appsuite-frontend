@@ -133,7 +133,7 @@ define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], functi
             } else {
 
                 // Bug 25765: Safari cannot parse SVG mark-up, and cannot show images embedded in <img> elements linking to SVG
-                if ((_.browser.Safari || (_.browser.iOS && _.browser.WebKit)) && (format === 'svg')) {
+                if (Utils.SAFARI && (format === 'svg')) {
                     options = Utils.extendOptions(options, { format: 'jpg', zoom: Utils.RETINA ? 2 : 1 });
                 }
 
