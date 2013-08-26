@@ -36,7 +36,8 @@ define('io.ox/core/api/folder',
          */
         visible = function (folder) {
             var blacklist = settings.get('folder/blacklist') || {};
-            return folder !== undefined && blacklist[String(folder.data ? folder.data.id : folder.id)] === undefined;
+            var blacklistedFolder = blacklist[String(folder.data ? folder.data.id : folder.id)];
+            return folder !== undefined && (blacklistedFolder === undefined || blacklistedFolder === false);
         },
 
         // magic permission check
