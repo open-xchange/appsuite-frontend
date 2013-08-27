@@ -5461,7 +5461,7 @@ msgstr "ミドル ネーム"
 
 #: apps/io.ox/contacts/model.js:226 apps/io.ox/contacts/view-detail.js:427
 msgid "Suffix"
-msgstr "敬称(後)"
+msgstr "敬称（後）"
 
 #: apps/io.ox/contacts/model.js:237 apps/io.ox/contacts/view-detail.js:428
 msgid "Nickname"
@@ -5864,7 +5864,7 @@ msgstr "姓"
 #: apps/io.ox/contacts/model.js:227
 msgctxt "salutation"
 msgid "Title"
-msgstr "肩書き"
+msgstr "敬称（前）"
 
 #: apps/io.ox/contacts/model.js:228 apps/io.ox/contacts/model.js:245
 #: apps/io.ox/contacts/model.js:259
@@ -10401,7 +10401,7 @@ msgstr "全絵文字"
 #~ msgstr "スーダン"
 
 #~ msgid "Suffix:"
-#~ msgstr "敬称:"
+#~ msgstr "敬称（後）:"
 
 #~ msgid "Sun"
 #~ msgstr "日曜日"
