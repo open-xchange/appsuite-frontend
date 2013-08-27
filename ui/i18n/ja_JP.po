@@ -1479,7 +1479,7 @@ msgstr "スレッド ビュー"
 
 #: apps/io.ox/mail/settings/pane.js:59
 msgid "Enabled for inbox only"
-msgstr "受信トレイのみ"
+msgstr "受信フォルダのみ"
 
 #: apps/io.ox/mail/settings/pane.js:60
 msgid "Enabled for all mail folders"
