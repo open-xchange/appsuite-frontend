@@ -88,10 +88,10 @@ define('io.ox/office/tk/control/button',
 
             switch (event.keyCode) {
             case KeyCodes.SPACE:
-                if (keyup) { self.triggerChange(event.target, { preserveFocus: true }); }
-                return false;
             case KeyCodes.ENTER:
-                if (keyup) { button.click(); }
+                if (keyup) {
+                    self.triggerChange(event.target, { preserveFocus: event.keyCode === KeyCodes.SPACE });
+                }
                 return false;
             }
         }
