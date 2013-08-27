@@ -270,14 +270,20 @@ define('io.ox/core/permissions/permissions',
             menu, ul;
         // folder fix
         if (permission === 'folder' && selected === 0) selected = 1;
-        // no admin choice for default folders (see Bug 27704)
-        if (permission === 'admin' && String(api.getDefaultFolder(baton.folder.module)) === baton.folder.id) {
-            admin = false;
+
+        if (permission === 'admin') {
+            if (
+                // no admin choice for default folders (see Bug 27704)
+                (String(api.getDefaultFolder(baton.folder.module)) === baton.folder.id) ||
+                // See Bug 27704
+                (baton.folder.type === 5) ||
+                 // Public Contacts folders can't have other users with admin permissions
+                (baton.folder.type === 1 && baton.folder.module === 'contacts')
+            ) {
+                admin = false;
+            }
         }
-        // See Bug 27704
-        if (permission === 'admin' && baton.folder.type === 5) {
-            admin = false;
-        }
+
         if (!admin) {
             return $('<i>').text(menus[permission][selected]);
         }
