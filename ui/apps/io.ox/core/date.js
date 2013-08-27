@@ -392,12 +392,14 @@ define.async('io.ox/core/date',
         Y: function(n) {
             return function (s, d) {
                 d.wcentury = n === 2 && s.match(/^\d\d$/);
+                d.wyStr = s.length;
                 d.wy = Number(s);
             };
         },
         y: function (n) {
             return function (s, d) {
                 d.century = n === 2 && s.match(/^\d\d$/);
+                d.yStr = s.length;
                 d.y = Number(s);
             };
         },
@@ -441,19 +443,21 @@ define.async('io.ox/core/date',
         {
             return null;
         }
-        function adjustYear(year, isCentury) {
-            if (isCentury) {
-                year = Number(year) + century;
-                var date = new D(year - 20, d.m, d.d, d.h, d.min, d.s, d.ms);
-                if (date.getTime() > threshold.getTime()) year -= 100;
+        function adjustYear(year, strLen) {
+            year = Number(year);
+            var yL = year.toString().length;
+            if (yL <= 2 && yL === strLen) {
+                year += century;
             }
+            // var date = new D(year - 20, d.m, d.d, d.h, d.min, d.s, d.ms);
+            // if (date.getTime() > threshold.getTime()) year -= 100;
             if (d.bc) year = 1 - year;
             return year;
         }
-        d.y = adjustYear(d.y);
+        d.y = adjustYear(d.y, d.yStr);
         var date = new D(0);
         if ("wy" in d) {
-            d.wy = adjustYear(d.wy);
+            d.wy = adjustYear(d.wy, d.wyStr);
             date.setYear(d.wy);
             var jan1st = date.getDays(), start = getWeekStart(date);
             if (7 - (jan1st - start) < api.locale.daysInFirstWeek) start += 7;

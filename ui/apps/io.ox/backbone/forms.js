@@ -769,17 +769,21 @@ define('io.ox/backbone/forms',
             },
 
             _dateStrToDate: function (value, attribute, model) {
-                var myValue = parseInt(model.get(attribute), 10);
+                console.log('_dateStrToDate', value, attribute, model);
+                var myValue = parseInt(model.get(attribute), 10),
+                    formatStr;
                 if (isNaN(myValue)) {
                     return value;
                 }
-                var mydate = new date.Local(myValue),
-                    parsedDate;
+
                 if (options.display === "DATETIME" && _.device('small') && !model.get('full_time')) {
-                    parsedDate = date.Local.parse(value, date.getFormat(date.DATE) + ' ' + date.getFormat(date.TIME));
+                    formatStr = date.getFormat(date.DATE) + ' ' + date.getFormat(date.TIME);
                 } else {
-                    parsedDate = date.Local.parse(value, date.DATE);
+                    formatStr = date.DATE;
                 }
+                var parsedDate = date.Local.parse(value, formatStr);
+
+                console.log('parsedDate', parsedDate.toString());
 
                 if (_.isNull(parsedDate)) {
                     return value;
@@ -790,14 +794,15 @@ define('io.ox/backbone/forms',
                     return parsedDate.local;
                 }
 
-                if (options.display === "DATETIME" && _.device('small') && !model.get('full_time')) {
-                    return parsedDate.getTime();
-                } else {
+                if (options.display !== "DATETIME" || !_.device('small') || model.get('full_time')) {
+                    var mydate = new date.Local(myValue);
                     mydate.setDate(parsedDate.getDate());
                     mydate.setMonth(parsedDate.getMonth());
                     mydate.setYear(parsedDate.getYear());
-                    return mydate.getTime();
+                    parsedDate = mydate;
                 }
+
+                return parsedDate.getTime();
             }
         };
 
@@ -983,7 +988,7 @@ define('io.ox/backbone/forms',
             },
 
             onFullTimeChange: function () {
-                if (_.device('small')) {//
+                if (_.device('small')) {
                     if (this.model.get('full_time')) {
                         this.nodes.dayField.mobiscroll('option', 'timeWheels', '');//remove the timewheels
                         this.nodes.dayField.mobiscroll('option', 'timeFormat', '');//remove the timeFormat
