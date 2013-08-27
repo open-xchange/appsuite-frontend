@@ -384,7 +384,9 @@ define('io.ox/core/permissions/permissions',
                         }
 
                         var node =  $('<div class="autocomplete-controls input-append">').append(
-                                $('<input type="text" class="add-participant permissions-participant-input-field">'),
+                                $('<input type="text" class="add-participant permissions-participant-input-field">').on('focus', function () {
+                                    autocomplete.trigger('update');
+                                }),
                                 $('<button type="button" class="btn" data-action="add">')
                                     .append($('<i class="icon-plus">'))
                             ),
