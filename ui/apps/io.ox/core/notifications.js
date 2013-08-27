@@ -303,6 +303,8 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
 
                     // click on notification?
                     if (alert.length) {
+                        // don't close on links
+                        if (target.is('a')) return;
                         // close if clicked on close icon or if clicked on success notifications
                         if (target.hasClass('close') || alert.hasClass('io-ox-alert-success')) {
                             e.preventDefault();
@@ -319,7 +321,10 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
 
                 if (type === 'close') return remove();
 
-                var o = {};
+                var o = {
+                    duration: 0,
+                    html: false
+                };
 
                 // catch server error?
                 if (_.isObject(type)) {
@@ -328,7 +333,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                         o.message = type.message || type.error;
                         o.headline = gt('Error');
                     } else {
-                        o = type;
+                        o = _.extend(o, type);
                     }
                 } else {
                     o.type = type || 'info';
@@ -340,9 +345,9 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
 
                     active = false;
                     clearTimeout(timer);
-                    timer = setTimeout(remove, durations[o.type] || 5000);
+                    timer = setTimeout(remove, o.duration || durations[o.type] || 5000);
 
-                    var html = _.escape(o.message).replace(/\n/g, '<br>'),
+                    var html = o.html ? o.message : _.escape(o.message).replace(/\n/g, '<br>'),
                         reuse = false,
                         className = 'io-ox-alert io-ox-alert-' + o.type,
                         wordbreak = html.indexOf('http') >= 0 ? 'break-all' : 'normal';

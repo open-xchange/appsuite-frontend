@@ -12,8 +12,7 @@
  */
 
 define('io.ox/core/pubsub/publications',
-    ['gettext!io.ox/core/pubsub',
-     'io.ox/core/pubsub/model',
+    ['io.ox/core/pubsub/model',
      'io.ox/core/extensions',
      'io.ox/backbone/forms',
      'io.ox/core/api/pubsub',
@@ -21,7 +20,9 @@ define('io.ox/core/pubsub/publications',
      'io.ox/core/api/folder',
      'io.ox/core/notifications',
      'io.ox/core/tk/dialogs',
-     'less!io.ox/core/pubsub/style.less'], function (gt, pubsub, ext, forms, api, templAPI, folderAPI, notifications, dialogs)  {
+     'settings!io.ox/core',
+     'gettext!io.ox/core/pubsub',
+     'less!io.ox/core/pubsub/style.less'], function (pubsub, ext, forms, api, templAPI, folderAPI, notifications, dialogs, settings, gt)  {
 
     'use strict';
 
@@ -106,15 +107,25 @@ define('io.ox/core/pubsub/publications',
             popup.on('publish', function (action) {
 
                 self.model.save().done(function (id) {
-                    notifications.yell('success', gt("Publication has been added"));
 
                     //set id, if none is present (new model)
                     if (!self.model.id) { self.model.id = id; }
 
                     self.model.fetch().done(function (model, collection) {
+
                         var publications = pubsub.publications(),
                             pubUrl = model[model.target].url;
-                        notifications.yell('success', gt('The publication has been made available as %s', pubUrl));
+
+                        notifications.yell({
+                            type: 'success',
+                            html: true,
+                            message: gt(
+                                'The publication has been made available as %s',
+                                '<a href="' + pubUrl + '" target="_blank">' + pubUrl + '</a>'
+                            ),
+                            duration: 10000
+                        });
+
                         //update the model-(collection)
                         publications.add(model, {merge: true});
                         if (self.model.get('invite')) {
@@ -160,6 +171,9 @@ define('io.ox/core/pubsub/publications',
                     // get folder first to have its name
                     folderAPI.get({ folder: baton.model.get('entity').folder }).then(
                         function success(data) {
+                            var target = baton.model.get('target'),
+                                description = baton.model.get(target);
+                            description.siteName = data.title;
                             popup.getBody().find('.siteName-value').val(data.title);
                             show();
                         },
@@ -247,26 +261,27 @@ define('io.ox/core/pubsub/publications',
         }
     });
 
+    function cipherChange(e) {
+        e.data.baton.target['protected'] = $(this).prop('checked');
+    }
+
     ext.point('io.ox/core/pubsub/publications/dialog').extend({
         id: 'cypher',
         index: 300,
         draw: function (baton) {
-            var node;
-            this.append($('<div>').addClass('control-group').append(
-                    $('<div>').addClass('controls checkboxes').append(
-                            $('<label>').addClass('checkbox').text(gt('Add cipher code')).append(
-                            node = $('<input>').attr('type', 'checkbox').addClass('cypher-checkbox').on('change', function () {
-                                if (node.attr('checked') === 'checked') {
-                                    baton.target['protected'] = true;
-                                } else {
-                                    baton.target['protected'] = false;
-                                }
-                            }))))
-                    );
-            if (baton.target['protected'] === true) {
-                node.attr('checked', true);
-            } else {
-                node.attr('checked', false);
+            // end-users don't understand this, so this becomes optional
+            if (settings.get('features/publicationCipherCode', false)) {
+                this.append(
+                    $('<div class="control-group">').append(
+                        $('<div class="controls checkboxes">').append(
+                            $('<label class="checkbox">').text(gt('Add cipher code')).append(
+                                $('<input type="checkbox" class="cypher-checkbox">')
+                                .prop('checked', baton.target['protected'] === true)
+                                .on('change', { baton: baton }, cipherChange)
+                            )
+                        )
+                    )
+                );
             }
         }
     });
