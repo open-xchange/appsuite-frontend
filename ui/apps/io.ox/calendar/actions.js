@@ -288,9 +288,11 @@ define('io.ox/calendar/actions',
         requires: function (e) {
             var app = e.baton.data,
                 iamUser = false;
-            for (var i = 0; i < app.users.length; i++) {
-                if (app.users[i].id === ox.user_id) {
-                    iamUser = true;
+            if (app.users) {
+                for (var i = 0; i < app.users.length; i++) {
+                    if (app.users[i].id === ox.user_id) {
+                        iamUser = true;
+                    }
                 }
             }
             return iamUser && e.collection.has('one');
