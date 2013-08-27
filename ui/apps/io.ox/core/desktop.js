@@ -1297,6 +1297,7 @@ define("io.ox/core/desktop",
                 id: 'window-' + guid,
                 name: '',
                 search: false,
+                searchShortcut: false,
                 title: '',
                 toolbar: false,
                 width: 0
@@ -1480,13 +1481,15 @@ define("io.ox/core/desktop",
                         }
                     });
 
-                    // look for ctrl/cmd + F
-                    win.nodes.outer.on('keydown', function (e) {
-                        if (e.which === 70 && e.metaKey) {
-                            e.preventDefault();
-                            win.search.toggle();
-                        }
-                    });
+                    if (opt.searchShortcut) {
+                        // look for ctrl/cmd + F
+                        win.nodes.outer.on('keydown', function (e) {
+                            if (e.which === 70 && e.metaKey) {
+                                e.preventDefault();
+                                win.search.toggle();
+                            }
+                        });
+                    }
                 }
 
                 // add fullscreen handler
