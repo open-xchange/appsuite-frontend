@@ -55,7 +55,7 @@ define('io.ox/tasks/edit/view',
             var self = this,
                 rows = {};
             self.baton.app = app;
-            
+
             //hide stuff
             if (!capabilities.has('infostore')) {
                 ext.point('io.ox/tasks/edit/view/tabs').disable('attachments_tab');
@@ -64,7 +64,7 @@ define('io.ox/tasks/edit/view',
             if (!capabilities.has('delegate_tasks')) {
                 ext.point('io.ox/tasks/edit/view/tabs').disable('participants_tab');
             }
-            
+
             util.splitExtensionsByRow(this.point.list(), rows, true);
             //draw the rows
             _(rows).each(function (row, key) {
@@ -80,13 +80,25 @@ define('io.ox/tasks/edit/view',
             _(rows.rest).each(function (extension) {
                 extension.invoke('draw', this.$el, self.baton);
             });
-            
+
             //change title if available
             if (self.model.get('title')) {
                 app.setTitle(self.model.get('title'));
             }
+
+            // Disable Save Button if title is empty on startup
+            if (!self.$el.find('#task-edit-title').val()) {
+                self.$el.find('.btn[data-action="save"]').attr('disabled', 'disabled');
+            }
+
+            // Toggle disabled state of save button
+            function fnToggleSave(isDirty) {
+                var node = self.$el.find('.btn[data-action="save"]');
+                if (_.device('smartphone')) node = self.$el.parent().parent().find('.btn[data-action="save"]');
+                if (isDirty) node.removeAttr('disabled'); else node.attr('disabled', 'disabled');
+            }
             //delegate some events
-            self.$el.delegate('#task-edit-title', 'keyup', function () {
+            self.$el.delegate('#task-edit-title', 'keyup blur', function () {
                 var newTitle = _.noI18n($(this).val());
                 if (!newTitle) {
                     if (self.model.get('id')) {
@@ -95,6 +107,7 @@ define('io.ox/tasks/edit/view',
                         newTitle = gt('Create task');
                     }
                 }
+                fnToggleSave($(this).val());
                 app.setTitle(newTitle);
             });
             return this.$el;
