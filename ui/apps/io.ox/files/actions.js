@@ -477,7 +477,7 @@ define('io.ox/files/actions',
                         process($input).then(this.close, this.idle);
                     })
                     .show(function () {
-                        var $input = this.find('input[name="name"]').val(filename);
+                        var $input = this.find('input[name="name"]').focus().val(filename);
                         $input.get()[0].setSelectionRange(0, $input.val().lastIndexOf('.'));
                     });
             });
