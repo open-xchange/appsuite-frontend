@@ -503,6 +503,15 @@ i[class^="icon-"], i[class^=" icon-"] {
                 }
             }
 
+            /* no borders around controls */
+            &.no-borders {
+                .box-shadow(none);
+
+                label, .button, .input-wrapper {
+                    border-color: transparent;
+                }
+            }
+
             /* default background for selected toggle/radio buttons */
             .button.selected {
                 background: fade(@selectedBackground, 30%);
@@ -560,10 +569,14 @@ i[class^="icon-"], i[class^=" icon-"] {
                 &.selected { .box-shadow-2(@selected-button-shadow-effect, @focus-glow-effect); }
             }
 
-            /* tiny 3D shadow effect and hover highlighting for enabled input fields */
-            &:not(.disabled):not(.focused) .input-wrapper:not(.disabled) {
+            /* tiny 3D shadow effect for enabled input fields */
+            &:not(.disabled):not(.focused):not(.no-borders) .input-wrapper:not(.disabled) {
                 .box-shadow(@textfield-shadow-effect);
-                &:hover { background: fade(white, 5%); }
+            }
+
+            /* hover highlighting for enabled input fields */
+            &:not(.disabled):not(.focused) .input-wrapper:not(.disabled):hover {
+                background: fade(white, 5%);
             }
 
             /* default focus border for all controls in focused text fields */

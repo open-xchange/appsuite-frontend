@@ -93,8 +93,16 @@ define('io.ox/office/tk/control/radiogroup',
             var // distinguish between event types
                 keyup = event.type === 'keyup';
 
-            if (event.keyCode === KeyCodes.SPACE) {
-                if (keyup) { self.triggerChange(event.target, { preserveFocus: true }); }
+            switch (event.keyCode) {
+            case KeyCodes.SPACE:
+            case KeyCodes.ENTER:
+                // Bug 28528: ENTER key must be handled explicitly, <a> elements
+                // without 'href' attribute do not trigger click events. The 'href'
+                // attribute has been removed from the buttons to prevent useless
+                // tooltips with the link address.
+                if (keyup) {
+                    self.triggerChange(event.target, { preserveFocus: event.keyCode === KeyCodes.SPACE });
+                }
                 return false;
             }
         }

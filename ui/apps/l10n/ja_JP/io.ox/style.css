@@ -23,11 +23,6 @@
     color: #888;
 }
 
-.edit-contact .furigana {
-    border-color: #eee;
-    box-shadow: none;
-}
-
 .edit-contact .input-xlarge.furigana {
-    margin-bottom: 0px;
+    margin-bottom: 2px;
 }

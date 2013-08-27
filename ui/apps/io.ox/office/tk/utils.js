@@ -2751,9 +2751,7 @@ define.async('io.ox/office/tk/utils',
      *  omitted, sets a text cursor according to the passed start position.
      */
     Utils.setTextFieldSelection = function (textField, start, end) {
-        var node = Utils.getDomNode(textField);
-        node.selectionStart = start;
-        node.selectionEnd = _.isNumber(end) ? end : start;
+        Utils.getDomNode(textField).setSelectionRange(start, _.isNumber(end) ? end : start);
     };
 
     /**
@@ -2772,7 +2770,7 @@ define.async('io.ox/office/tk/utils',
         var node = Utils.getDomNode(textField), start = node.selectionStart;
         text = _.isString(text) ? text : '';
         node.value = node.value.substring(0, start) + text + node.value.substring(node.selectionEnd);
-        node.selectionStart = node.selectionEnd = start + text.length;
+        node.setSelectionRange(start + text.length, start + text.length);
     };
 
     // global timer -----------------------------------------------------------

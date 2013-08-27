@@ -180,8 +180,13 @@ define('io.ox/office/tk/dropdown/items',
             // handle generic keys
             switch (event.keyCode) {
             case KeyCodes.SPACE:
+            case KeyCodes.ENTER:
+                // Bug 28528: ENTER key must be handled explicitly, <a> elements
+                // without 'href' attribute do not trigger click events. The 'href'
+                // attribute has been removed from the buttons to prevent useless
+                // tooltips with the link address.
                 if (keyup && $(event.target).is(Utils.BUTTON_SELECTOR)) {
-                    self.triggerChange(event.target, { preserveFocus: true });
+                    self.triggerChange(event.target, { preserveFocus: event.keyCode === KeyCodes.SPACE });
                 }
                 return false;
             case KeyCodes.HOME:

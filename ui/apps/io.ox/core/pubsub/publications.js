@@ -11,15 +11,18 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
-                                          'io.ox/core/pubsub/model',
-                                          'io.ox/core/extensions',
-                                          'io.ox/backbone/forms',
-                                          'io.ox/core/api/pubsub',
-                                          'io.ox/core/api/templating',
-                                          'io.ox/core/notifications',
-                                          'io.ox/core/tk/dialogs',
-                                          'less!io.ox/core/pubsub/style.less'], function (gt, pubsub, ext, forms, api, templAPI, notifications, dialogs)  {
+define('io.ox/core/pubsub/publications',
+    ['io.ox/core/pubsub/model',
+     'io.ox/core/extensions',
+     'io.ox/backbone/forms',
+     'io.ox/core/api/pubsub',
+     'io.ox/core/api/templating',
+     'io.ox/core/api/folder',
+     'io.ox/core/notifications',
+     'io.ox/core/tk/dialogs',
+     'settings!io.ox/core',
+     'gettext!io.ox/core/pubsub',
+     'less!io.ox/core/pubsub/style.less'], function (pubsub, ext, forms, api, templAPI, folderAPI, notifications, dialogs, settings, gt)  {
 
     'use strict';
 
@@ -102,16 +105,27 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
             var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, templates: [], popup: popup, target: self.model.attributes[self.model.attributes.target]});
 
             popup.on('publish', function (action) {
+
                 self.model.save().done(function (id) {
-                    notifications.yell('success', gt("Publication has been added"));
 
                     //set id, if none is present (new model)
                     if (!self.model.id) { self.model.id = id; }
 
                     self.model.fetch().done(function (model, collection) {
+
                         var publications = pubsub.publications(),
                             pubUrl = model[model.target].url;
-                        notifications.yell('success', gt('The publication has been made available as %s', pubUrl));
+
+                        notifications.yell({
+                            type: 'success',
+                            html: true,
+                            message: gt(
+                                'The publication has been made available as %s',
+                                '<a href="' + pubUrl + '" target="_blank">' + pubUrl + '</a>'
+                            ),
+                            duration: 10000
+                        });
+
                         //update the model-(collection)
                         publications.add(model, {merge: true});
                         if (self.model.get('invite')) {
@@ -125,11 +139,10 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                             // close popup now
                             popup.close();
                         }
-                        require(['io.ox/core/api/folder'], function (folderAPI) {
-                            folderAPI.reload(baton.model.get('entity').folder);
-                        });
+                        folderAPI.reload(baton.model.get('entity').folder);
                     });
-                }).fail(function (error) {
+                })
+                .fail(function (error) {
                     popup.idle();
                     if (!self.model.valid) {
                         if (!error.model) {//backend Error
@@ -143,14 +156,31 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                     }
                 });
             });
+
+            function show() {
+                // show popup
+                popup.show(function () {
+                    popup.getBody().find('input:text, input:checkbox').first().focus();
+                });
+            }
+
             if (!this.infostoreItem) {
                 templAPI.getNames().done(function (data) {//get the templates if needed
                     baton.templates = data;
                     ext.point('io.ox/core/pubsub/publications/dialog').invoke('draw', popup.getBody(), baton);
-                    //go
-                    popup.show(function () {
-                        popup.getBody().find('input[type="text"]').focus();
-                    });
+                    // get folder first to have its name
+                    folderAPI.get({ folder: baton.model.get('entity').folder }).then(
+                        function success(data) {
+                            var target = baton.model.get('target'),
+                                description = baton.model.get(target);
+                            description.siteName = data.title;
+                            popup.getBody().find('.siteName-value').val(data.title);
+                            show();
+                        },
+                        function fail() {
+                            show();
+                        }
+                    );
                 });
             } else {
                 ext.point('io.ox/core/pubsub/publications/dialog').each(function (extension) {
@@ -158,12 +188,9 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                         extension.invoke('draw', popup.getBody(), baton);
                     }
                 });
-                //go
-                popup.show(function () {
-                    popup.getBody().find('input[type="checkbox"]:first').focus();
-                });
+                // go!
+                show();
             }
-
         }
     });
 
@@ -234,26 +261,27 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
         }
     });
 
+    function cipherChange(e) {
+        e.data.baton.target['protected'] = $(this).prop('checked');
+    }
+
     ext.point('io.ox/core/pubsub/publications/dialog').extend({
         id: 'cypher',
         index: 300,
         draw: function (baton) {
-            var node;
-            this.append($('<div>').addClass('control-group').append(
-                    $('<div>').addClass('controls checkboxes').append(
-                            $('<label>').addClass('checkbox').text(gt('Add cipher code')).append(
-                            node = $('<input>').attr('type', 'checkbox').addClass('cypher-checkbox').on('change', function () {
-                                if (node.attr('checked') === 'checked') {
-                                    baton.target['protected'] = true;
-                                } else {
-                                    baton.target['protected'] = false;
-                                }
-                            }))))
-                    );
-            if (baton.target['protected'] === true) {
-                node.attr('checked', true);
-            } else {
-                node.attr('checked', false);
+            // end-users don't understand this, so this becomes optional
+            if (settings.get('features/publicationCipherCode', false)) {
+                this.append(
+                    $('<div class="control-group">').append(
+                        $('<div class="controls checkboxes">').append(
+                            $('<label class="checkbox">').text(gt('Add cipher code')).append(
+                                $('<input type="checkbox" class="cypher-checkbox">')
+                                .prop('checked', baton.target['protected'] === true)
+                                .on('change', { baton: baton }, cipherChange)
+                            )
+                        )
+                    )
+                );
             }
         }
     });

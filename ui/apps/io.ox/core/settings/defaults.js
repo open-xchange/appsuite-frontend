@@ -32,7 +32,10 @@ define('io.ox/core/settings/defaults', function (ext) {
         refreshInterval: 5 * 60000,
         autoStart: 'io.ox/mail/main',
         autoOpenNotification: 'noEmail',
-        autoLogout: 0
+        autoLogout: 0,
+        settings: {
+            downloadsDisabled: false
+        }
     };
 
 });
