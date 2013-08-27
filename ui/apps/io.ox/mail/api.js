@@ -1214,12 +1214,19 @@ define('io.ox/mail/api',
      * @return {deferred}
      */
     api.send = function (data, files, form) {
+
         var deferred,
             flatten = function (recipient) {
                 var name = $.trim(recipient[0] || '').replace(/^["']+|["']+$/g, ''),
-                    address = recipient[1],
-                    typesuffix = recipient[2] || '';
-                return name === '' ? address : '"' + name + '" <' + address + typesuffix + '>';
+                    address = String(recipient[1] || ''),
+                    typesuffix = recipient[2] || '',
+                    isMSISDN;
+                // don't send display name for MSISDN numbers
+                isMSISDN = typesuffix === '/TYPE=PLMN' || /\/TYPE=PLMN$/.test(address);
+                // always use angular brackets!
+                if (isMSISDN) return '<' + address + typesuffix + '>';
+                // otherise ... check if name is empty or name and address are identical
+                return name === '' || name === address ? address : '"' + name + '" <' + address + '>';
             };
 
         // clone data (to avoid side-effects)
