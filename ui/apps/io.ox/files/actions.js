@@ -19,8 +19,9 @@ define('io.ox/files/actions',
      'io.ox/core/capabilities',
      'io.ox/core/notifications',
      'io.ox/core/util',
+     'io.ox/core/api/folder',
      'gettext!io.ox/files',
-     'settings!io.ox/files'], function (api, ext, links, actionPerformer, capabilities, notifications, util, gt, settings) {
+     'settings!io.ox/files'], function (api, ext, links, actionPerformer, capabilities, notifications, util, folderAPI, gt, settings) {
 
     'use strict';
 
@@ -944,6 +945,22 @@ define('io.ox/files/actions',
 
     // Iconview Inline Links
 
+    new Action('io.ox/files/icons/share', {
+        requires: function (e) {
+            return e.baton.app.folder.getData().then(function (data) {
+                return capabilities.has('publication') && folderAPI.can('publish', data);
+            });
+        },
+        action: function (baton) {
+            require(['io.ox/core/pubsub/publications'], function (publications) {
+                baton.app.folder.getData().then(function (data) {
+                    baton = ext.Baton({ data: data });
+                    publications.buildPublishDialog(baton);
+                });
+            });
+        }
+    });
+
     new Action('io.ox/files/icons/slideshow', {
         requires: function (e) {
             return _(e.baton.allIds).reduce(function (memo, obj) {
@@ -1050,13 +1067,21 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/icons/inline').extend(new links.Link({
         index: 100,
         prio: 'hi',
+        id: 'share',
+        label: gt('Share this folder'),
+        ref: 'io.ox/files/icons/share'
+    }));
+
+    ext.point('io.ox/files/icons/inline').extend(new links.Link({
+        index: 200,
+        prio: 'hi',
         id: 'slideshow',
         label: gt('View Slideshow'),
         ref: 'io.ox/files/icons/slideshow'
     }));
 
     ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        index: 200,
+        index: 300,
         prio: 'hi',
         cssClasses: 'io-ox-action-link fullscreen',
         id: 'slideshow-fullscreen',
@@ -1066,14 +1091,14 @@ define('io.ox/files/actions',
 
 
     ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        index: 300,
+        index: 400,
         id: 'mediaplayer-audio',
         label: gt('Play audio files'),
         ref: 'io.ox/files/icons/audioplayer'
     }));
 
     ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        index: 400,
+        index: 500,
         id: 'mediaplayer-video',
         label: gt('Play video files'),
         ref: 'io.ox/files/icons/videoplayer'

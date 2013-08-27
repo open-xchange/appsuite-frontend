@@ -11,15 +11,17 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
-                                          'io.ox/core/pubsub/model',
-                                          'io.ox/core/extensions',
-                                          'io.ox/backbone/forms',
-                                          'io.ox/core/api/pubsub',
-                                          'io.ox/core/api/templating',
-                                          'io.ox/core/notifications',
-                                          'io.ox/core/tk/dialogs',
-                                          'less!io.ox/core/pubsub/style.less'], function (gt, pubsub, ext, forms, api, templAPI, notifications, dialogs)  {
+define('io.ox/core/pubsub/publications',
+    ['gettext!io.ox/core/pubsub',
+     'io.ox/core/pubsub/model',
+     'io.ox/core/extensions',
+     'io.ox/backbone/forms',
+     'io.ox/core/api/pubsub',
+     'io.ox/core/api/templating',
+     'io.ox/core/api/folder',
+     'io.ox/core/notifications',
+     'io.ox/core/tk/dialogs',
+     'less!io.ox/core/pubsub/style.less'], function (gt, pubsub, ext, forms, api, templAPI, folderAPI, notifications, dialogs)  {
 
     'use strict';
 
@@ -102,6 +104,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
             var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, templates: [], popup: popup, target: self.model.attributes[self.model.attributes.target]});
 
             popup.on('publish', function (action) {
+
                 self.model.save().done(function (id) {
                     notifications.yell('success', gt("Publication has been added"));
 
@@ -125,11 +128,10 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                             // close popup now
                             popup.close();
                         }
-                        require(['io.ox/core/api/folder'], function (folderAPI) {
-                            folderAPI.reload(baton.model.get('entity').folder);
-                        });
+                        folderAPI.reload(baton.model.get('entity').folder);
                     });
-                }).fail(function (error) {
+                })
+                .fail(function (error) {
                     popup.idle();
                     if (!self.model.valid) {
                         if (!error.model) {//backend Error
@@ -143,14 +145,28 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                     }
                 });
             });
+
+            function show() {
+                // show popup
+                popup.show(function () {
+                    popup.getBody().find('input:text, input:checkbox').first().focus();
+                });
+            }
+
             if (!this.infostoreItem) {
                 templAPI.getNames().done(function (data) {//get the templates if needed
                     baton.templates = data;
                     ext.point('io.ox/core/pubsub/publications/dialog').invoke('draw', popup.getBody(), baton);
-                    //go
-                    popup.show(function () {
-                        popup.getBody().find('input[type="text"]').focus();
-                    });
+                    // get folder first to have its name
+                    folderAPI.get({ folder: baton.model.get('entity').folder }).then(
+                        function success(data) {
+                            popup.getBody().find('.siteName-value').val(data.title);
+                            show();
+                        },
+                        function fail() {
+                            show();
+                        }
+                    );
                 });
             } else {
                 ext.point('io.ox/core/pubsub/publications/dialog').each(function (extension) {
@@ -158,12 +174,9 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                         extension.invoke('draw', popup.getBody(), baton);
                     }
                 });
-                //go
-                popup.show(function () {
-                    popup.getBody().find('input[type="checkbox"]:first').focus();
-                });
+                // go!
+                show();
             }
-
         }
     });
 

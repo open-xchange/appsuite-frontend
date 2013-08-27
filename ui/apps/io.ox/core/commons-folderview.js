@@ -221,7 +221,7 @@ define('io.ox/core/commons-folderview',
                         $('<li class="divider" aria-hidden="true" role="presentation">'),
                         $('<li>').append(
                             $('<a href="#" data-action="publications" role="menuitem" tabindex="1">')
-                            .text(gt('Publication'))
+                            .text(gt('Share this folder'))
                             .on('click', { baton: baton }, publish)
                         )
                     );
