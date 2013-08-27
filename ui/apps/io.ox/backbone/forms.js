@@ -769,7 +769,6 @@ define('io.ox/backbone/forms',
             },
 
             _dateStrToDate: function (value, attribute, model) {
-                console.log('_dateStrToDate', value, attribute, model);
                 var myValue = parseInt(model.get(attribute), 10),
                     formatStr;
                 if (isNaN(myValue)) {
@@ -782,8 +781,6 @@ define('io.ox/backbone/forms',
                     formatStr = date.DATE;
                 }
                 var parsedDate = date.Local.parse(value, formatStr);
-
-                console.log('parsedDate', parsedDate.toString());
 
                 if (_.isNull(parsedDate)) {
                     return value;
