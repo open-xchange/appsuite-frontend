@@ -1156,9 +1156,11 @@ define("io.ox/core/desktop",
                     active: false,
                     query: '',
                     previous: '',
+                    lastFocus: '',
 
                     open: function () {
                         if (!this.active) {
+                            this.lastFocus = $(document.activeElement);
                             self.trigger('search:open');
                             self.nodes.body.addClass('search-open');
                             self.nodes.searchField.focus();
@@ -1175,6 +1177,7 @@ define("io.ox/core/desktop",
                             self.nodes.searchField.val('');
                             self.trigger('search:cancel cancel-search');
                             this.query = this.previous = '';
+                            this.lastFocus.focus();
                         }
                         return this;
                     },

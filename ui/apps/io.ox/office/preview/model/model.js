@@ -131,6 +131,7 @@ define('io.ox/office/preview/model/model',
         // add width and height, if specified in the cache key
         if ('width' in key) { urlParams.target_width = key.width; }
         if ('height' in key) { urlParams.target_height = key.height; }
+        if ('zoom' in key) { urlParams.target_zoom = key.zoom; }
 
         // request the image and create the <img> element (wrapped in a Deferred object)
         return app.createImageNode(app.getPreviewModuleUrl(urlParams), { timeout: 60000 });
@@ -249,6 +250,10 @@ define('io.ox/office/preview/model/model',
          *      If specified, the requested height of the image, in pixels. If
          *      the option 'options.width' is specified too, the resulting
          *      height may be less than this value.
+         *  @param {Number} [options.zoom]
+         *      If specified, the requested zoom factor of the image, relative
+         *      to its original size; or, if either 'options.width' or
+         *      'options.height' have been specified, relative to that size.
          *  @param {String} [options.priority='medium']
          *      Specifies with which priority the server will handle the image
          *      request. Must be one of the strings 'low', 'medium' (default),
@@ -262,14 +267,16 @@ define('io.ox/office/preview/model/model',
         this.loadPageAsImage = function (page, options) {
 
             var format = Utils.getStringOption(options, 'format', 'png'),
-                width = Utils.getIntegerOption(options, 'width', 0, 0),
-                height = Utils.getIntegerOption(options, 'height', 0, 0),
+                width = Utils.getIntegerOption(options, 'width'),
+                height = Utils.getIntegerOption(options, 'height'),
+                zoom = Utils.getNumberOption(options, 'zoom'),
                 priority = Utils.getStringOption(options, 'priority', 'medium'),
                 cacheKey = { page: page, format: format },
                 cacheOptions = { priority: priority };
 
-            if (width > 0) { cacheKey.width = width; }
-            if (height > 0) { cacheKey.height = height; }
+            if (_.isNumber(width) && (width > 0)) { cacheKey.width = width; }
+            if (_.isNumber(height) && (height > 0)) { cacheKey.height = height; }
+            if (_.isNumber(zoom) && (zoom !== 1)) { cacheKey.zoom = zoom; }
 
             return staticImageCache.getElement(app, cacheKey, cacheOptions).then(function (imgNode) {
                 // clone the cached image on every access

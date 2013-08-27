@@ -58,15 +58,13 @@ ExpiresByType audio/mp3 "access plus 6 months"
 </FilesMatch>
 
 RewriteEngine On
+
+RewriteCond %{HTTP_USER_AGENT} "MSIE [6-8]" [NC]
+RewriteRule ^(/?|signin)$ /appsuite/unsupported.html [R=301,L]
+
 RewriteRule v=[^\/]+/(.+) $1 [L]
 RewriteRule ^$ core [L]
 
 # online help fallback
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule help/([a-z_A-Z]+)(.+) help/en_US$2 [L]
-
-RewriteCond %{HTTP_USER_AGENT} "MSIE 5" [OR]
-RewriteCond %{HTTP_USER_AGENT} "MSIE 6" [OR]
-RewriteCond %{HTTP_USER_AGENT} "MSIE 7"
-RewriteRule signin$ /appsuite/unsupported.html [R]
-

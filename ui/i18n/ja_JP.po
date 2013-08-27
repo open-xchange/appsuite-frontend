@@ -247,7 +247,7 @@ msgstr "CC:"
 #: apps/io.ox/mail/write/view-main.js:527
 #, fuzzy
 msgid "in copy"
-msgstr "BCC:"
+msgstr "CC:"
 
 #: apps/io.ox/mail/write/view-main.js:533
 #: apps/io.ox/mail/write/view-main.js:534
@@ -5461,7 +5461,7 @@ msgstr "ミドル ネーム"
 
 #: apps/io.ox/contacts/model.js:226 apps/io.ox/contacts/view-detail.js:427
 msgid "Suffix"
-msgstr "敬称"
+msgstr "敬称(後)"
 
 #: apps/io.ox/contacts/model.js:237 apps/io.ox/contacts/view-detail.js:428
 msgid "Nickname"

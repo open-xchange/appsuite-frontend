@@ -101,6 +101,7 @@ define('io.ox/contacts/edit/main',
 
                         function fnToggleSave(isDirty) {
                             var node = container.find('.btn[data-action="save"]');
+                            if (_.device('smartphone')) node = container.parent().parent().find('.btn[data-action="save"]');
                             if (isDirty) node.removeAttr('disabled'); else node.attr('disabled', 'disabled');
                         }
 

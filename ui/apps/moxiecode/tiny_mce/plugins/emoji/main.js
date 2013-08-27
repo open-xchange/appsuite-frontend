@@ -280,9 +280,10 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                 pos = text.indexOf(searchText, oldpos + 1);
                 oldpos = pos;
 
-                var node = $('<div>').append(
-                    text.slice(pos, text.indexOf('>', pos) + 1)
-                );
+                var endpos = text.indexOf('>', pos) + 1,
+                    node = $('<div>').append(
+                        text.slice(pos, endpos)
+                    );
                 //parse unicode number
                 var unicode = parseUnicode(_.find(node.find('span').attr('class').split('emoji'), isFalsyString)),
                 css = null,
@@ -298,7 +299,10 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                 css = css || defaultCollection.collections.map(cssFromCollection(unicode))
                 .filter(_.isString)[0];
 
-                text = text.replace(node.html(), createImageTag(css, unicode));
+                if (text.substr(endpos, 7) === '</span>') {
+                    endpos += 7;
+                }
+                text = text.replace(text.slice(pos, endpos), createImageTag(css, unicode));
             }
 
             return text;

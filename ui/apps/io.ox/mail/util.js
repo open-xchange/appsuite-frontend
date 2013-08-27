@@ -239,7 +239,7 @@ define('io.ox/mail/util',
                 if (field === 'from' && 'headers' in data && 'Sender' in data.headers) {
                     sender = this.parseRecipients(data.headers.Sender);
                     // only show if display names differ (otherwise it looks like a senseless duplicate)
-                    if (sender[0][0] !== data.from[0][0]) {
+                    if (sender[0][0] !== data.from[0][0] && sender[0][1] !== data.from[0][1]) {
                         tmp.append(
                             $.txt(_.noI18n(' ')),
                             //#. (From) email1 via email2. Appears in email detail view.

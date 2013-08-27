@@ -229,7 +229,16 @@ define('io.ox/core/commons',
             if (win.state.visible) { on(); }
         },
 
-        addGridToolbarFolder: function (app, grid) {
+        /**
+         * [ description]
+         * @param  {Object}  app           application object
+         * @param  {Object}  grid          grid object
+         * @param  {Boolean} countGridData if true then use frontend data to count grid elements
+         * @return void
+         */
+        addGridToolbarFolder: function (app, grid, countGridData) {
+
+            countGridData = countGridData || false;
 
             function fnOpen(e) {
                 e.preventDefault();
@@ -251,7 +260,11 @@ define('io.ox/core/commons',
                 searchAcrossFolders = name !== 'io.ox/mail';
 
             function getInfoNode() {
-                return grid.getToolbar().find('.grid-info:visible');
+                if (app.getWindow && app.getWindow().state.visible) {
+                    return grid.getToolbar().find('.grid-info');
+                } else {
+                    return $();
+                }
             }
 
             function drawFolderInfo(folder_id) {
@@ -271,9 +284,8 @@ define('io.ox/core/commons',
                 folderAPI.get({ folder: folder_id }).then(
                     function success(data) {
 
-                        var total = data.total,
+                        var total = countGridData ? grid.getIds().length : data.total,
                             node = grid.getToolbar().find('[data-folder-id="' + folder_id + '"]');
-
                         node.find('.folder-name').text(data.title);
 
                         if (total > 0) {
@@ -283,7 +295,7 @@ define('io.ox/core/commons',
                 );
             }
 
-            grid.on('change:prop:folder change:mode', function (e, value) {
+            grid.on('change:prop:folder change:mode change:ids', function (e, value) {
 
                 var folder_id = grid.prop('folder'), mode = grid.getMode(), node;
                 if (mode === 'all') {
