@@ -14,11 +14,12 @@ define('io.ox/core/settings/downloads/pane',
     ['io.ox/core/extensions',
      'io.ox/core/capabilities',
      'gettext!io.ox/core',
-     'less!io.ox/core/settings/downloads/style.less'], function (ext, capabilities, gt) {
+     'settings!io.ox/core',
+     'less!io.ox/core/settings/downloads/style.less'], function (ext, capabilities, gt, settings) {
 
     'use strict';
-    // please no download on mobile devices
-    if (_.device('!desktop')) return;
+    // please no download on mobile devices or when disabled via setting
+    if (_.device('!desktop') || settings.get('settings/downloadsDisabled')) return;
 
     ext.point('io.ox/settings/pane').extend({
         id: 'io.ox/core/downloads',
