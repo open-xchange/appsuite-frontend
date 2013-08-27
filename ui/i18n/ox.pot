@@ -9,8 +9,110 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: apps/io.ox/portal/widgets.js:366
-msgid "Could not save settings."
+#: apps/io.ox/core/desktop.js:563
+msgid "There are unsaved changes."
+msgstr ""
+
+#. Title of the browser window
+#. %1$s is the name of the page, e.g. OX App Suite
+#. %2$s is the title of the active app, e.g. Calendar
+#: apps/io.ox/core/desktop.js:972 apps/io.ox/core/desktop.js:1140
+msgctxt "window title"
+msgid "%1$s %2$s"
+msgstr ""
+
+#: apps/io.ox/core/desktop.js:1420 apps/io.ox/core/desktop.js:1422
+#: apps/io.ox/core/desktop.js:1476 apps/plugins/portal/flickr/register.js:217
+msgid "Search"
+msgstr ""
+
+#: apps/io.ox/core/desktop.js:1468
+#: apps/io.ox/office/framework/app/toolbaractions.js:105
+msgid "Toggle search"
+msgstr ""
+
+#: apps/io.ox/calendar/acceptdeny.js:70 apps/io.ox/calendar/actions.js:138
+#: apps/io.ox/calendar/actions.js:208 apps/io.ox/calendar/actions.js:225
+#: apps/io.ox/calendar/actions.js:236 apps/io.ox/calendar/actions.js:248
+#: apps/io.ox/calendar/actions.js:346 apps/io.ox/calendar/actions.js:367
+#: apps/io.ox/calendar/actions.js:376 apps/io.ox/calendar/edit/main.js:51
+#: apps/io.ox/calendar/edit/main.js:159
+#: apps/io.ox/calendar/month/perspective.js:111
+#: apps/io.ox/calendar/week/perspective.js:79
+#: apps/io.ox/calendar/week/perspective.js:86
+#: apps/io.ox/calendar/week/perspective.js:122
+#: apps/io.ox/calendar/week/perspective.js:129 apps/io.ox/contacts/actions.js:52
+#: apps/io.ox/contacts/actions.js:53 apps/io.ox/contacts/actions.js:150
+#: apps/io.ox/contacts/actions.js:151 apps/io.ox/contacts/distrib/main.js:163
+#: apps/io.ox/contacts/distrib/main.js:172 apps/io.ox/contacts/edit/main.js:190
+#: apps/io.ox/contacts/edit/main.js:223
+#: apps/io.ox/core/commons-folderview.js:463 apps/io.ox/core/desktop.js:1529
+#: apps/io.ox/core/desktop.js:1537 apps/io.ox/core/export/export.js:70
+#: apps/io.ox/core/import/import.js:114 apps/io.ox/core/main.js:313
+#: apps/io.ox/core/main.js:346 apps/io.ox/core/main.js:347
+#: apps/io.ox/core/permissions/permissions.js:323
+#: apps/io.ox/core/permissions/permissions.js:338
+#: apps/io.ox/core/permissions/permissions.js:342
+#: apps/io.ox/core/permissions/permissions.js:344
+#: apps/io.ox/core/permissions/permissions.js:364
+#: apps/io.ox/core/permissions/permissions.js:379
+#: apps/io.ox/core/permissions/permissions.js:383
+#: apps/io.ox/core/permissions/permissions.js:385 apps/io.ox/core/print.js:107
+#: apps/io.ox/core/pubsub/publications.js:92
+#: apps/io.ox/core/pubsub/subscriptions.js:47 apps/io.ox/core/relogin.js:50
+#: apps/io.ox/core/tk/attachments.js:501 apps/io.ox/core/tk/attachments.js:502
+#: apps/io.ox/core/tk/attachments.js:507 apps/io.ox/core/tk/folderviews.js:600
+#: apps/io.ox/core/tk/folderviews.js:613 apps/io.ox/core/tk/folderviews.js:629
+#: apps/io.ox/core/tk/folderviews.js:640 apps/io.ox/core/tk/folderviews.js:678
+#: apps/io.ox/core/tk/folderviews.js:704 apps/io.ox/core/tk/folderviews.js:730
+#: apps/io.ox/core/tk/folderviews.js:756 apps/io.ox/core/tk/mobiscroll.js:34
+#: apps/io.ox/core/upsell.js:34 apps/io.ox/editor/main.js:291
+#: apps/io.ox/files/actions.js:288 apps/io.ox/files/actions.js:301
+#: apps/io.ox/files/actions.js:316 apps/io.ox/files/actions.js:318
+#: apps/io.ox/files/actions.js:441 apps/io.ox/files/actions.js:454
+#: apps/io.ox/files/actions.js:469 apps/io.ox/files/actions.js:472
+#: apps/io.ox/files/actions.js:474 apps/io.ox/files/actions.js:497
+#: apps/io.ox/files/actions.js:510 apps/io.ox/files/actions.js:525
+#: apps/io.ox/files/actions.js:527 apps/io.ox/files/actions.js:529
+#: apps/io.ox/files/actions.js:546 apps/io.ox/files/actions.js:559
+#: apps/io.ox/files/actions.js:574 apps/io.ox/files/actions.js:576
+#: apps/io.ox/files/actions.js:578 apps/io.ox/files/actions.js:640
+#: apps/io.ox/files/actions.js:653 apps/io.ox/files/actions.js:668
+#: apps/io.ox/files/actions.js:670 apps/io.ox/files/actions.js:672
+#: apps/io.ox/files/views/create.js:135 apps/io.ox/files/views/create.js:136
+#: apps/io.ox/keychain/secretRecoveryDialog.js:33
+#: apps/io.ox/mail/accounts/settings.js:43
+#: apps/io.ox/mail/accounts/settings.js:255
+#: apps/io.ox/mail/accounts/view-form.js:267 apps/io.ox/mail/actions.js:72
+#: apps/io.ox/mail/actions.js:300 apps/io.ox/mail/actions.js:847
+#: apps/io.ox/mail/actions.js:857 apps/io.ox/mail/folderview-extensions.js:128
+#: apps/io.ox/mail/folderview-extensions.js:145
+#: apps/io.ox/mail/mailfilter/settings/filter.js:52
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:348
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:354
+#: apps/io.ox/mail/write/main.js:1275 apps/io.ox/mail/write/main.js:1293
+#: apps/io.ox/mail/write/main.js:1295 apps/io.ox/oauth/settings.js:82
+#: apps/io.ox/office/framework/view/baseview.js:662
+#: apps/io.ox/office/framework/view/baseview.js:671
+#: apps/io.ox/office/tk/dialogs.js:29 apps/io.ox/portal/settings/pane.js:343
+#: apps/io.ox/portal/settings/pane.js:379
+#: apps/io.ox/settings/accounts/settings/pane.js:136
+#: apps/io.ox/tasks/actions.js:61 apps/io.ox/tasks/actions.js:198
+#: apps/io.ox/tasks/actions.js:522 apps/io.ox/tasks/actions.js:523
+#: apps/io.ox/tasks/edit/main.js:155 apps/io.ox/tasks/edit/main.js:160
+#: apps/io.ox/tasks/edit/util.js:122 apps/io.ox/tasks/edit/util.js:126
+#: apps/io.ox/tasks/edit/util.js:127 apps/plugins/portal/flickr/register.js:227
+#: apps/plugins/portal/rss/register.js:169
+#: apps/plugins/portal/rss/register.js:176
+#: apps/plugins/portal/tumblr/register.js:194
+#: apps/plugins/portal/tumblr/register.js:239
+#: apps/plugins/portal/userSettings/register.js:65
+#: apps/plugins/portal/userSettings/register.js:70
+msgid "Cancel"
+msgstr ""
+
+#: apps/io.ox/core/desktop.js:1635
+msgid "Failed to start application. Maybe you have connection problems. Please try again."
 msgstr ""
 
 #. Placeholder in furigana field
@@ -717,86 +819,6 @@ msgstr ""
 
 #: apps/io.ox/mail/write/main.js:1274
 msgid "Save as draft"
-msgstr ""
-
-#: apps/io.ox/calendar/acceptdeny.js:70 apps/io.ox/calendar/actions.js:138
-#: apps/io.ox/calendar/actions.js:208 apps/io.ox/calendar/actions.js:225
-#: apps/io.ox/calendar/actions.js:236 apps/io.ox/calendar/actions.js:248
-#: apps/io.ox/calendar/actions.js:346 apps/io.ox/calendar/actions.js:367
-#: apps/io.ox/calendar/actions.js:376 apps/io.ox/calendar/edit/main.js:51
-#: apps/io.ox/calendar/edit/main.js:159
-#: apps/io.ox/calendar/month/perspective.js:111
-#: apps/io.ox/calendar/week/perspective.js:79
-#: apps/io.ox/calendar/week/perspective.js:86
-#: apps/io.ox/calendar/week/perspective.js:122
-#: apps/io.ox/calendar/week/perspective.js:129 apps/io.ox/contacts/actions.js:52
-#: apps/io.ox/contacts/actions.js:53 apps/io.ox/contacts/actions.js:150
-#: apps/io.ox/contacts/actions.js:151 apps/io.ox/contacts/distrib/main.js:163
-#: apps/io.ox/contacts/distrib/main.js:172 apps/io.ox/contacts/edit/main.js:190
-#: apps/io.ox/contacts/edit/main.js:223
-#: apps/io.ox/core/commons-folderview.js:463 apps/io.ox/core/desktop.js:1529
-#: apps/io.ox/core/desktop.js:1537 apps/io.ox/core/export/export.js:70
-#: apps/io.ox/core/import/import.js:114 apps/io.ox/core/main.js:313
-#: apps/io.ox/core/main.js:346 apps/io.ox/core/main.js:347
-#: apps/io.ox/core/permissions/permissions.js:323
-#: apps/io.ox/core/permissions/permissions.js:338
-#: apps/io.ox/core/permissions/permissions.js:342
-#: apps/io.ox/core/permissions/permissions.js:344
-#: apps/io.ox/core/permissions/permissions.js:364
-#: apps/io.ox/core/permissions/permissions.js:379
-#: apps/io.ox/core/permissions/permissions.js:383
-#: apps/io.ox/core/permissions/permissions.js:385 apps/io.ox/core/print.js:107
-#: apps/io.ox/core/pubsub/publications.js:92
-#: apps/io.ox/core/pubsub/subscriptions.js:47 apps/io.ox/core/relogin.js:50
-#: apps/io.ox/core/tk/attachments.js:501 apps/io.ox/core/tk/attachments.js:502
-#: apps/io.ox/core/tk/attachments.js:507 apps/io.ox/core/tk/folderviews.js:600
-#: apps/io.ox/core/tk/folderviews.js:613 apps/io.ox/core/tk/folderviews.js:629
-#: apps/io.ox/core/tk/folderviews.js:640 apps/io.ox/core/tk/folderviews.js:678
-#: apps/io.ox/core/tk/folderviews.js:704 apps/io.ox/core/tk/folderviews.js:730
-#: apps/io.ox/core/tk/folderviews.js:756 apps/io.ox/core/tk/mobiscroll.js:34
-#: apps/io.ox/core/upsell.js:34 apps/io.ox/editor/main.js:291
-#: apps/io.ox/files/actions.js:288 apps/io.ox/files/actions.js:301
-#: apps/io.ox/files/actions.js:316 apps/io.ox/files/actions.js:318
-#: apps/io.ox/files/actions.js:441 apps/io.ox/files/actions.js:454
-#: apps/io.ox/files/actions.js:469 apps/io.ox/files/actions.js:472
-#: apps/io.ox/files/actions.js:474 apps/io.ox/files/actions.js:497
-#: apps/io.ox/files/actions.js:510 apps/io.ox/files/actions.js:525
-#: apps/io.ox/files/actions.js:527 apps/io.ox/files/actions.js:529
-#: apps/io.ox/files/actions.js:546 apps/io.ox/files/actions.js:559
-#: apps/io.ox/files/actions.js:574 apps/io.ox/files/actions.js:576
-#: apps/io.ox/files/actions.js:578 apps/io.ox/files/actions.js:640
-#: apps/io.ox/files/actions.js:653 apps/io.ox/files/actions.js:668
-#: apps/io.ox/files/actions.js:670 apps/io.ox/files/actions.js:672
-#: apps/io.ox/files/views/create.js:135 apps/io.ox/files/views/create.js:136
-#: apps/io.ox/keychain/secretRecoveryDialog.js:33
-#: apps/io.ox/mail/accounts/settings.js:43
-#: apps/io.ox/mail/accounts/settings.js:255
-#: apps/io.ox/mail/accounts/view-form.js:267 apps/io.ox/mail/actions.js:72
-#: apps/io.ox/mail/actions.js:300 apps/io.ox/mail/actions.js:847
-#: apps/io.ox/mail/actions.js:857 apps/io.ox/mail/folderview-extensions.js:128
-#: apps/io.ox/mail/folderview-extensions.js:145
-#: apps/io.ox/mail/mailfilter/settings/filter.js:52
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:348
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:354
-#: apps/io.ox/mail/write/main.js:1275 apps/io.ox/mail/write/main.js:1293
-#: apps/io.ox/mail/write/main.js:1295 apps/io.ox/oauth/settings.js:82
-#: apps/io.ox/office/framework/view/baseview.js:662
-#: apps/io.ox/office/framework/view/baseview.js:671
-#: apps/io.ox/office/tk/dialogs.js:29 apps/io.ox/portal/settings/pane.js:343
-#: apps/io.ox/portal/settings/pane.js:376 apps/io.ox/portal/settings/pane.js:379
-#: apps/io.ox/settings/accounts/settings/pane.js:136
-#: apps/io.ox/tasks/actions.js:61 apps/io.ox/tasks/actions.js:198
-#: apps/io.ox/tasks/actions.js:522 apps/io.ox/tasks/actions.js:523
-#: apps/io.ox/tasks/edit/main.js:155 apps/io.ox/tasks/edit/main.js:160
-#: apps/io.ox/tasks/edit/util.js:122 apps/io.ox/tasks/edit/util.js:126
-#: apps/io.ox/tasks/edit/util.js:127 apps/plugins/portal/flickr/register.js:227
-#: apps/plugins/portal/rss/register.js:169
-#: apps/plugins/portal/rss/register.js:176
-#: apps/plugins/portal/tumblr/register.js:194
-#: apps/plugins/portal/tumblr/register.js:239
-#: apps/plugins/portal/userSettings/register.js:65
-#: apps/plugins/portal/userSettings/register.js:70
-msgid "Cancel"
 msgstr ""
 
 #: apps/io.ox/mail/write/view-main.js:50
@@ -2258,11 +2280,6 @@ msgstr ""
 msgid "Show side panel"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1468
-#: apps/io.ox/office/framework/app/toolbaractions.js:105
-msgid "Toggle search"
-msgstr ""
-
 #: apps/io.ox/office/framework/app/toolbaractions.js:159
 msgid "Send as mail"
 msgstr ""
@@ -2343,6 +2360,10 @@ msgstr ""
 
 #: apps/io.ox/backbone/validation.js:134
 msgid "Please enter a value"
+msgstr ""
+
+#: apps/io.ox/portal/widgets.js:366
+msgid "Could not save settings."
 msgstr ""
 
 #: apps/io.ox/portal/settings/pane.js:49
@@ -4864,27 +4885,6 @@ msgid "1 item"
 msgid_plural "%1$d items"
 msgstr[0] ""
 msgstr[1] ""
-
-#: apps/io.ox/core/desktop.js:563
-msgid "There are unsaved changes."
-msgstr ""
-
-#. Title of the browser window
-#. %1$s is the name of the page, e.g. OX App Suite
-#. %2$s is the title of the active app, e.g. Calendar
-#: apps/io.ox/core/desktop.js:972 apps/io.ox/core/desktop.js:1140
-msgctxt "window title"
-msgid "%1$s %2$s"
-msgstr ""
-
-#: apps/io.ox/core/desktop.js:1420 apps/io.ox/core/desktop.js:1422
-#: apps/io.ox/core/desktop.js:1476 apps/plugins/portal/flickr/register.js:217
-msgid "Search"
-msgstr ""
-
-#: apps/io.ox/core/desktop.js:1635
-msgid "Failed to start application. Maybe you have connection problems. Please try again."
-msgstr ""
 
 #. Reminder (objective case): in X weeks
 #. %d is the number of weeks
