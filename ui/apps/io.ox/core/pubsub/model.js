@@ -64,7 +64,6 @@ define('io.ox/core/pubsub/model',
                 return this.attributes[this.attributes.source];
             },
             setSource: function (source, obj) {
-                console.log(source, obj, this);
                 delete this.attributes[this.attributes.source];
                 this.attributes.source = source.id;
                 this.attributes[this.attributes.source] = obj || {};
