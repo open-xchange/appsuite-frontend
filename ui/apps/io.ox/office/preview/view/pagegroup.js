@@ -240,6 +240,7 @@ define('io.ox/office/preview/view/pagegroup',
 
             switch (event.keyCode) {
             case KeyCodes.SPACE:
+            case KeyCodes.ENTER:
                 showPage(0);
                 return false;
             case KeyCodes.LEFT_ARROW:
