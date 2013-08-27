@@ -755,7 +755,7 @@ define('io.ox/mail/view-detail',
                 modifiedBaton.data = inboxMails;
                 deleteAction.data('baton', modifiedBaton);
             }
-            
+
             function updateThread(node, scrollpane, batonOld, data) {
                 var nodeTable  = {},
                     top = scrollpane.scrollTop(),
@@ -1127,7 +1127,8 @@ define('io.ox/mail/view-detail',
             // figure out if 'to' just contains myself - might be a mailing list, for example
             var showCC = data.cc && data.cc.length > 0,
                 showTO = data.to && data.to.length > 0,
-                show = showTO || showCC,
+                showBCC = data.bcc && data.bcc.length > 0,
+                show = showTO || showCC || showBCC,
                 container = $('<div>').addClass('to-cc list');
 
             if (showTO) {
@@ -1149,6 +1150,17 @@ define('io.ox/mail/view-detail',
                         _.noI18n('\u00A0\u00A0')
                     ),
                     util.serializeList(data, 'cc'),
+                    $.txt(_.noI18n(' \u00A0 '))
+                );
+            }
+            if (showBCC) {
+                container.append(
+                    // BCC
+                    $('<span>').addClass('io-ox-label').append(
+                        $.txt(gt('Bcc')),
+                        _.noI18n('\u00A0\u00A0')
+                    ),
+                    util.serializeList(data, 'bcc'),
                     $.txt(_.noI18n(' \u00A0 '))
                 );
             }
