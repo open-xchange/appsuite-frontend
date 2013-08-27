@@ -217,7 +217,6 @@ define('io.ox/mail/settings/signatures/register',
             var $node = this;
             require(['io.ox/core/config'], function (config) {
                 var $list, signatures;
-
                 function fnDrawAll() {
                     snippets.getAll('signature').done(function (sigs) {
                         signatures = {};
@@ -323,7 +322,7 @@ define('io.ox/mail/settings/signatures/register',
 
                     $('<br>').appendTo($node);
 
-                    if (config.get('gui.mail.signatures') && !_.isNull && config.get('gui.mail.signatures').length > 0) {
+                    if (config.get('gui.mail.signatures') && !_.isNull(config.get('gui.mail.signatures')) && config.get('gui.mail.signatures').length > 0) {
                         $('<a href="#">').text(gt('Import signatures')).on('click', function (e) {
                             fnImportSignatures(e, config.get('gui.mail.signatures'));
                             return false;
