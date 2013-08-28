@@ -48,7 +48,9 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/upload', {
         requires: function (e) {
-            return e.collection.has('create');
+            return e.baton.app.folder.getData().then(function (data) {
+                return folderAPI.can('create', data);
+            });
         },
         action: function (baton) {
             require(['io.ox/files/views/create'], function (create) {
@@ -1067,13 +1069,22 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/icons/inline').extend(new links.Link({
         index: 100,
         prio: 'hi',
+        id: 'upload',
+        label: gt('Upload new file'),
+        ref: 'io.ox/files/actions/upload',
+        cssClasses: 'io-ox-action-link btn btn-primary'
+    }));
+
+    ext.point('io.ox/files/icons/inline').extend(new links.Link({
+        index: 200,
+        prio: 'hi',
         id: 'share',
         label: gt('Share this folder'),
         ref: 'io.ox/files/icons/share'
     }));
 
     ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        index: 200,
+        index: 300,
         prio: 'hi',
         id: 'slideshow',
         label: gt('View Slideshow'),
@@ -1081,7 +1092,7 @@ define('io.ox/files/actions',
     }));
 
     ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        index: 300,
+        index: 400,
         prio: 'hi',
         cssClasses: 'io-ox-action-link fullscreen',
         id: 'slideshow-fullscreen',
@@ -1091,7 +1102,7 @@ define('io.ox/files/actions',
 
 
     ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        index: 400,
+        index: 500,
         id: 'mediaplayer-audio',
         label: gt('Play audio files'),
         ref: 'io.ox/files/icons/audioplayer'

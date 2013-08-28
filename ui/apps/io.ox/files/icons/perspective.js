@@ -18,13 +18,14 @@ define('io.ox/files/icons/perspective',
      'io.ox/core/tk/upload',
      'io.ox/core/extPatterns/dnd',
      'io.ox/core/extPatterns/shortcuts',
+     'io.ox/core/extPatterns/actions',
      'io.ox/core/api/folder',
      'gettext!io.ox/files',
      'io.ox/core/capabilities',
      'io.ox/core/tk/selection',
      'io.ox/core/notifications',
      'apps/io.ox/core/tk/jquery.imageloader.js'
-     ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, folderAPI, gt, Caps, Selection, notifications) {
+     ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, actions, folderAPI, gt, Caps, Selection, notifications) {
 
     'use strict';
 
@@ -374,9 +375,13 @@ define('io.ox/files/icons/perspective',
 
                 loadFilesDef.reject();
 
-                loadFilesDef = loadFiles(app)
-                    .done(function (ids) {
+                loadFilesDef = loadFiles(app);
+
+                loadFilesDef.then(
+                    function success(ids) {
+
                         iconview.empty().idle();
+                        baton.allIds = allIds = ids;
                         ext.point('io.ox/files/icons').invoke('draw', iconview, baton);
                         iconContainer = baton.$.iconContainer;
 
@@ -391,25 +396,27 @@ define('io.ox/files/icons/perspective',
                         iconContainer.append(
                             $('<div class="scroll-spacer">').css({ height: '20px', clear: 'both' })
                         );
+
                         displayedRows = layout.iconRows;
                         start = 0;
                         end = displayedRows * layout.iconCols;
                         if (layout.iconCols <= 3) end = end + 10;
-                        baton.allIds = allIds = ids;
+
                         self.selection.clear();
                         self.selection.resetLastIndex();
                         self.selection.init(allIds);
                         redraw(allIds.slice(start, end));
                         ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), baton);
-                    })
-                    .fail(function (response) {
+                    },
+                    function fail(response) {
                         if (response) {
                             iconview.idle();
                             iconContainer.prepend(
                                 $('<div class="alert alert-info">').text(response.error)
                             );
                         }
-                    });
+                    }
+                );
             };
 
             recalculateLayout = function () {
@@ -510,15 +517,15 @@ define('io.ox/files/icons/perspective',
                     api.getAll({ folder: app.folder.get() }, false).done(function (ids) {
 
                         var hash = {},
-                        oldhash  = {},
-                        oldIds   = [],
-                        newIds   = [],
-                        changed  = [],
-                        deleted  = [],
-                        added    = [],
-                        indexPrev,
-                        indexPrevPosition,
-                        indexNextPosition;
+                            oldhash  = {},
+                            oldIds   = [],
+                            newIds   = [],
+                            changed  = [],
+                            deleted  = [],
+                            added    = [],
+                            indexPrev,
+                            indexPrevPosition,
+                            indexNextPosition;
 
                         indexPrev = function (index, cid) {
                             return _.indexOf(drawnCids, _.indexOf(index, cid) - 1);
