@@ -36,10 +36,11 @@ define('io.ox/portal/widgets',
     var generation = Number(settings.get("generation", 0));
 
     var widgets = (function () {
+
         var widgets = {};
-        
+
         var userValues = settings.get("settings" + widgetSet, {});
-        
+
         // Load the users widgets
         _(settings.get("widgets/user", {})).each(function (widgetDef, id) {
             widgets[id] = _.extend({}, widgetDef, {userWidget: true});
@@ -75,7 +76,7 @@ define('io.ox/portal/widgets',
                 });
             }
         });
-        
+
         if (_.isEmpty(widgets)) {
             // Fallback. No widgets configured and no ones saved previously.
 
@@ -126,7 +127,9 @@ define('io.ox/portal/widgets',
 
             settings.set("widgets/user", widgets).save();
         }
+
         return widgets;
+
     }());
 
     var api = {
@@ -151,7 +154,7 @@ define('io.ox/portal/widgets',
         },
 
         getSettings: function () {
-           
+
             var allTypes = ext.point('io.ox/portal/widget').pluck('id');
 
             return _(widgets)
@@ -274,6 +277,8 @@ define('io.ox/portal/widgets',
 
             settings.set('widgets/user/' + id, widget).saveAndYell();
 
+            // add to widget hash and collection
+            widgets[id] = widget;
             collection.unshift(widget);
         },
 
@@ -398,6 +403,7 @@ define('io.ox/portal/widgets',
             return false;
         }
     };
+
     collection.reset(
         // fix "candidate=true" bug (maybe just a development issue)
         _(api.getSettings())
