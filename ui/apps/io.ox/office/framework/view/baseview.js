@@ -302,12 +302,14 @@ define('io.ox/office/framework/view/baseview',
          *  A reference to this instance.
          */
         this.grabFocus = function () {
-            if (_.isFunction(grabFocusHandler)) {
-                grabFocusHandler.call(this);
-            } else if (contentFocusable) {
-                contentRootNode.focus();
-            } else {
-                this.getAppPaneNode().find('[tabindex]').first().focus();
+            if (this.isVisible()) {
+                if (_.isFunction(grabFocusHandler)) {
+                    grabFocusHandler.call(this);
+                } else if (contentFocusable) {
+                    contentRootNode.focus();
+                } else {
+                    this.getAppPaneNode().find('[tabindex]').first().focus();
+                }
             }
             return this;
         };
