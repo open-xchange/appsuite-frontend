@@ -120,7 +120,7 @@
         /** is WebKit? */
         WebKit: webkit,
         /** Safari */
-        Safari: !iOS && !Android && webkit && !chrome && !phantom ?
+        Safari: !Android && webkit && !chrome && !phantom ?
             ua.split('Version/')[1].split(' Safari')[0] : undefined,
         /** PhantomJS (needed for headless spec runner) */
         PhantomJS: webkit && phantom ?

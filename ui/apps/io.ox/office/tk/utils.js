@@ -182,15 +182,6 @@ define.async('io.ox/office/tk/utils',
     Utils.RETINA = _.device('retina');
 
     /**
-     * A Boolean flag specifying whether Safari is the current browser, on all
-     * platforms (desktop or tablet). This test replaces the broken
-     * '_.browser.Safari' test, see bug 28516.
-     *
-     * @constant
-     */
-    Utils.SAFARI = _.browser.Safari || (_.browser.iOS && _.browser.WebKit);
-
-    /**
      * A Boolean flag specifying whether the Internet Explorer 9 is running.
      *
      * @constant
