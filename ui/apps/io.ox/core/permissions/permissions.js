@@ -334,7 +334,9 @@ define('io.ox/core/permissions/permissions',
                     if (data.module === 'mail' && !(data.capabilities & Math.pow(2, 0))) {
                         isFolderAdmin = false;
                     }
-                    var options = {top: '40px', center: false, maximize: true, width: 800};
+
+
+                    var options = {top: 60, width: 800, center: false, maximize: true};
                     if (_.device('!desktop')) {
                         options = {top: '40px', center: false};
                     }
