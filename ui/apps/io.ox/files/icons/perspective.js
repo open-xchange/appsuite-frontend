@@ -236,6 +236,7 @@ define('io.ox/files/icons/perspective',
                     app.getWindow().search.clear();
                     app.getWindow().search.active = false;
                     self.main.closest('.search-open').removeClass('search-open');
+                    dialog.close();
                     allIds = [];
                     self.selection.clear();
                     drawFirst();
