@@ -303,8 +303,8 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
 
                     // click on notification?
                     if (alert.length) {
-                        // don't close on links
-                        if (target.is('a')) return;
+                        // don't close on plain links
+                        if (target.is('a') && !target.hasClass('close')) return;
                         // close if clicked on close icon or if clicked on success notifications
                         if (target.hasClass('close') || alert.hasClass('io-ox-alert-success')) {
                             e.preventDefault();
