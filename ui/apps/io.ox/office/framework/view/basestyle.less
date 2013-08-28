@@ -306,7 +306,7 @@ i[class^="icon-"], i[class^=" icon-"] {
     /* fade out caption for buttons and labels in disabled groups */
     &.disabled label, &.disabled .button, label.disabled, .button.disabled {
         > .caption, > span {
-            .opacity(50);
+            opacity: 0.5;
         }
     }
 
@@ -671,7 +671,7 @@ i[class^="icon-"], i[class^=" icon-"] {
                 /* do not fade out disabled headings (but stick to default mouse pointer) */
                 &.disabled .button, .button.disabled {
                     > .caption, > span {
-                        .opacity(100);
+                        opacity: 1;
                     }
                 }
             }
@@ -759,10 +759,10 @@ i[class^="icon-"], i[class^=" icon-"] {
 .view-pane:not(.touch) {
     &.hover-effect, &:not(.hover-effect) > .view-component.hover-effect {
         .transition(opacity 0.2s linear);
-        .opacity(70);
+        opacity: 0.7;
 
         &.focused, &:hover {
-            .opacity(100);
+            opacity: 1;
         }
     }
 }
