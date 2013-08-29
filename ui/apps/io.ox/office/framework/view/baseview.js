@@ -269,10 +269,10 @@ define('io.ox/office/framework/view/baseview',
 
             // move all application nodes from temporary storage into view
             app.getWindowNode().append(tempNode.children());
-            refreshPaneLayout();
 
             // do not update GUI and grab focus while document is still being imported
             if (app.isImportFinished()) {
+                refreshPaneLayout();
                 app.getController().update();
                 self.grabFocus();
                 // show notification cached while view was hidden
