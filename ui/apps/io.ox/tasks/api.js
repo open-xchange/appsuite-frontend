@@ -312,6 +312,7 @@ define('io.ox/tasks/api',
             data: task,
             appendColumns: false
         }).then(function (obj) {
+            task.id = obj.id;
             response = obj;
             var cacheObj = _.copy(task, true),
             cacheKey = api.cid({folder: cacheObj.folder_id,
