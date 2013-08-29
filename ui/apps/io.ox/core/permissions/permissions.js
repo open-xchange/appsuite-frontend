@@ -170,6 +170,7 @@ define('io.ox/core/permissions/permissions',
         addDropdown,
         addRoles,
         addRemoveButton,
+        preventAdminPermissions,
         isFolderAdmin = false;
 
     ext.point(POINT + '/detail').extend({
@@ -263,28 +264,29 @@ define('io.ox/core/permissions/permissions',
         }
     };
 
-    addDropdown = function (permission, baton) {
-        var bits = baton.model.get('bits'),
-            selected = api.Bitmask(bits).get(permission),
-            admin = isFolderAdmin,
-            menu, ul;
-        // folder fix
-        if (permission === 'folder' && selected === 0) selected = 1;
-
+    preventAdminPermissions = function (permission, baton) {
         if (permission === 'admin') {
             if (
                 // no admin choice for default folders (see Bug 27704)
                 (String(api.getDefaultFolder(baton.folder.module)) === baton.folder.id) ||
                 // See Bug 27704
                 (baton.folder.type === 5) ||
-                 // Private Contacts folders can't have other users with admin permissions
+                (baton.folder.type === 2 && baton.model.id === 0) ||
+                // Private Contacts folders can't have other users with admin permissions
                 (baton.folder.type === 1 && baton.folder.module === 'contacts')
             ) {
-                admin = false;
+                return true;
             }
         }
+    };
 
-        if (!admin) {
+    addDropdown = function (permission, baton) {
+        var bits = baton.model.get('bits'),
+            selected = api.Bitmask(bits).get(permission),
+            admin = isFolderAdmin,
+            menu, ul;
+
+        if (preventAdminPermissions(permission, baton)) {
             return $('<i>').text(menus[permission][selected]);
         }
         menu = $('<span class="dropdown">').append(
@@ -308,7 +310,8 @@ define('io.ox/core/permissions/permissions',
     };
 
     addRoles = function (baton) {
-        if (!isFolderAdmin || (baton.folder.type === 1 && baton.folder.module === 'contacts')) return $();
+        if (!isFolderAdmin) return $();
+        if (preventAdminPermissions('admin', baton)) return $();
         return $('<span class="dropdown preset">').append(
             $('<a href="#" data-type="permission" data-toggle="dropdown" aria-haspopup="true" tabindex="1">'),
             $('<ul class="dropdown-menu" role="menu">').append(
