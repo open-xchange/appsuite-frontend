@@ -31,6 +31,7 @@ define('io.ox/calendar/list/perspective',
     perspective.render = function (app) {
 
         var win = app.getWindow(),
+            self = this,
             vsplit = commons.vsplit(this.main, app),
             left = vsplit.left.addClass('border-right'),
             right = vsplit.right.addClass('default-content-padding calendar-detail-pane').attr('tabindex', 1).scrollable(),
@@ -41,6 +42,8 @@ define('io.ox/calendar/list/perspective',
             grid = new VGrid(left, gridOptions),
             findRecurrence = false,
             optDropdown = null;
+
+        this.grid = grid;
 
         if (_.url.hash('id') && _.url.hash('id').split(',').length === 1) {// use only for single items
             findRecurrence = _.url.hash('id').split('.').length === 2;//check if recurrencePosition is missing
@@ -149,23 +152,28 @@ define('io.ox/calendar/list/perspective',
             return $('<li>').append($('<a href="#"><i/></a>').attr('data-option', value).append($.txt(text)));
         }
 
-        function updateGridOptions() {
+        this.updateGridOptions = function () {
             var dropdown = grid.getToolbar().find('.grid-options'),
                 list = dropdown.find('ul'),
+                showAll = $('[data-option="all"]', list).parent(),
                 props = grid.prop();
             // uncheck all
             list.find('i').attr('class', 'icon-none');
-            // sort
+
+            app.folder.getData().done(function (folder) {
+                showAll[folder.type === 1 ? 'show' : 'hide']();
+            });
+
+            // sort & showall
             list.find(
-                    '[data-option="' + props.order + '"], ' +
-                    '[data-option="' + (settings.get('showAllPrivateAppointments', false) ? 'all' : '~all') + '"]'
-                )
+                '[data-option="' + props.order + '"], ' +
+                '[data-option="' + (settings.get('showAllPrivateAppointments', false) ? 'all' : '~all') + '"]')
                 .find('i').attr('class', 'icon-ok');
             // order
             var opacity = [1, 0.4][props.order === 'asc' ? 'slice' : 'reverse']();
             dropdown.find('.icon-arrow-down').css('opacity', opacity[0]).end()
                 .find('.icon-arrow-up').css('opacity', opacity[1]).end();
-        }
+        };
 
         ext.point('io.ox/calendar/vgrid/toolbar').extend({
             id: 'dropdown',
@@ -197,7 +205,7 @@ define('io.ox/calendar/list/perspective',
                                     case 'all':
                                         settings.set('showAllPrivateAppointments', !settings.get('showAllPrivateAppointments', false)).save();
                                         //no folder change trigger here (folderview would throw error)
-                                        updateGridOptions();
+                                        self.updateGridOptions();
                                         grid.refresh(true);
                                         break;
                                     default:
@@ -265,8 +273,8 @@ define('io.ox/calendar/list/perspective',
         commons.addGridFolderSupport(app, grid);
         commons.addGridToolbarFolder(app, grid, true);
 
-        grid.on('change:prop', updateGridOptions);
-        updateGridOptions();
+        grid.on('change:prop', self.updateGridOptions);
+        self.updateGridOptions();
 
         grid.setListRequest(function (ids) {
             return $.Deferred().resolve(ids);
@@ -274,7 +282,7 @@ define('io.ox/calendar/list/perspective',
 
         grid.prop('folder', app.folder.get());
         app.on('folder:change', function () {
-            updateGridOptions();
+            self.updateGridOptions();
             grid.refresh(true);
         });
 
@@ -287,6 +295,17 @@ define('io.ox/calendar/list/perspective',
         });
 
         grid.paint();
+    };
+
+    /**
+     * handle different views in this perspective
+     * triggered by desktop.js
+     * @param  {object} app the application
+     * @param  {object} opt options from perspective
+     */
+    perspective.afterShow = function (app, opt) {
+        this.updateGridOptions();
+        this.grid.refresh(true);
     };
 
     return perspective;
