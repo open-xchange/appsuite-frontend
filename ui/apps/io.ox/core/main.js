@@ -984,7 +984,7 @@ define('io.ox/core/main',
                         });
 
                     $('#io-ox-core').append(
-                        dialog = $('<div class="core-boot-dialog">').append(
+                        dialog = $('<div class="core-boot-dialog" tabindex="0">').append(
                             $('<div class="header">').append(
                                 $('<h3>').text(gt('Restore applications')),
                                 $('<div>').text(
