@@ -112,7 +112,9 @@ define('io.ox/contacts/edit/main',
                                 fnToggleSave(isDirty);
                             });
 
-                            container.find('.btn[data-action="save"]').attr('disabled', 'disabled');
+                            if (contact.id === undefined && _.keys(contact.attributes).length <= 1) {
+                                container.find('.btn[data-action="save"]').attr('disabled', 'disabled');
+                            }
 
                             container.find('input[type="text"]').on('keyup', _.debounce(function (e) {
                                 var isDirty = getDirtyStatus();

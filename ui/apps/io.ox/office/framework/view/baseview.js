@@ -246,6 +246,20 @@ define('io.ox/office/framework/view/baseview',
         }
 
         /**
+         * Shows the specified notification message. If the message is of type
+         * 'error', the message will be stored internally and automatically
+         * shown again, after the application has been hidden and shown.
+         *
+         * @param {Object} notification
+         *  The notification message data. Supports all options also supported
+         *  by the static method 'Notifications.yell()'.
+         */
+        function showNotification(notification) {
+            Notifications.yell(notification);
+            lastNotification = (notification.type === 'error') ? notification : null;
+        }
+
+        /**
          * Updates the view after the application becomes active/visible.
          */
         function windowShowHandler() {
@@ -263,8 +277,7 @@ define('io.ox/office/framework/view/baseview',
                 self.grabFocus();
                 // show notification cached while view was hidden
                 if (lastNotification) {
-                    Notifications.yell(lastNotification);
-                    lastNotification = null;
+                    showNotification(lastNotification);
                 }
             }
         }
@@ -289,12 +302,14 @@ define('io.ox/office/framework/view/baseview',
          *  A reference to this instance.
          */
         this.grabFocus = function () {
-            if (_.isFunction(grabFocusHandler)) {
-                grabFocusHandler.call(this);
-            } else if (contentFocusable) {
-                contentRootNode.focus();
-            } else {
-                this.getAppPaneNode().find('[tabindex]').first().focus();
+            if (this.isVisible()) {
+                if (_.isFunction(grabFocusHandler)) {
+                    grabFocusHandler.call(this);
+                } else if (contentFocusable) {
+                    contentRootNode.focus();
+                } else {
+                    this.getAppPaneNode().find('[tabindex]').first().focus();
+                }
             }
             return this;
         };
@@ -721,7 +736,7 @@ define('io.ox/office/framework/view/baseview',
         this.yell = function (type, message, headline) {
             var notification = { type: type, message: message, headline: headline };
             if (this.isVisible()) {
-                Notifications.yell(notification);
+                showNotification(notification);
             } else {
                 lastNotification = notification;
             }

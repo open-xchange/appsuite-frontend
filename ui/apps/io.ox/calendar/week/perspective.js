@@ -229,6 +229,7 @@ define('io.ox/calendar/week/perspective',
 
         /**
          * handle different views in this perspective
+         * triggered by desktop.js
          * @param  {object} app the application
          * @param  {object} opt options from perspective
          */

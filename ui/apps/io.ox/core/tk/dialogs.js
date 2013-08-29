@@ -363,11 +363,13 @@ define("io.ox/core/tk/dialogs",
             var fnSetMaxDimensions = function () {
                 var dim = fnSetDimensions();
                 nodes.popup.css({
-                    width: dim.width + "px",
-                    top: o.top || "0px"
+                    width: dim.width,
+                    top: o.top || 0
                 });
+                var height = $(window).height() - 170 - o.top;
                 nodes.body.css({
-                    'max-height': $(window).height() - 170 + 'px'
+                    'height': height,
+                    'max-height': height
                 });
             };
 

@@ -118,7 +118,7 @@ define('io.ox/mail/settings/old_pane',
                                 )
                             ),
                             that.createControlGroup().addClass('expertmode').append(
-                                that.createControlGroupLabel({text: gt('Auto-save Email drafts?'), 'for': 'auto'}),
+                                that.createControlGroupLabel({text: gt('Auto-save email drafts?'), 'for': 'auto'}),
                                 that.createControlsWrapper().append(
                                     that.createSelectbox({property: 'autoSafeDraftsAfter', id: 'last', classes: 'input-xlarge', items: {'Disabled': 'disabled', '1 Minute': '1_minute', '3 Minutes': '3_minutes', '5 Minutes': '5_minutes', '10 Minutes': '10_minutes' }})
                                 )

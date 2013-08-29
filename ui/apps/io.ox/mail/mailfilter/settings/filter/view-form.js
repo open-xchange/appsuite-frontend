@@ -97,6 +97,16 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             return $(el).find('[data-test-id]');
         },
 
+        checkForPosition = function (array, target) {
+            var position;
+            _.each(array, function (val, index) {
+                if (_.isEqual(val, target)) {
+                    position = index;
+                }
+            });
+            return position;
+        },
+
         prepareFolderForDisplay = function (folder) {
             var arrayOfParts = folder.split("/");
             arrayOfParts.shift();
@@ -473,7 +483,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     }
 
                 } else if (appliedTest.length !== 1 && test.id === 'true') {
-                    listTests.append($('<li>').addClass('filter-settings-view').attr({'data-test-id': num}).text(gt('All messages')).append(
+
+                    listTests.append($('<li>').addClass('filter-settings-view warning').attr({'data-test-id': num}).text(gt('All messages')).append(
                             elements.drawDeleteButton('test')
                     ));
                 } else if (test.id === 'envelope') {
@@ -548,7 +559,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                         }
                     }
                     else {
-                        listActions.append($('<li>').addClass('filter-settings-view').attr('data-action-id', num).text(actionsTranslations[action.id]).append(
+                        var classSet = action.id === 'discard' ? 'filter-settings-view warning' : 'filter-settings-view';
+                        listActions.append($('<li>').addClass(classSet).attr('data-action-id', num).text(actionsTranslations[action.id]).append(
                                 elements.drawDeleteButton('action')
                         ));
                     }
@@ -603,6 +615,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 optionsSwitch = elements.drawOptionsExtern(arrayOfTests.id, {allof: gt('Apply rule if all conditions are met'), anyof: gt('Apply rule if any condition is met.')}, options);
             if (arrayOfTests.id === 'allof' || arrayOfTests.id === 'anyof') {
                 this.append($('<div>').addClass('line').append(optionsSwitch));
+                if (arrayOfTests.id === 'anyof' && checkForPosition(arrayOfTests.tests, {id: 'true'}) !== undefined) {
+                    this.append($('<div>').addClass('warning').text(gt('The condition "All messages" is active.')));
+                }
             } else {
                 this.append($('<div>').addClass('line').text(gt('Apply rule if all conditions are met')));
             }

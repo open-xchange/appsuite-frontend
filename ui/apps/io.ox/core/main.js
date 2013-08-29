@@ -49,7 +49,7 @@ define('io.ox/core/main',
 
             $('#io-ox-core').hide();
 
-            var deferreds = ext.point('io.ox/core/logout').invoke('logout').compact().value();
+            var deferreds = ext.point('io.ox/core/logout').invoke('logout', this, new ext.Baton(opt)).compact().value();
 
             $.when.apply($, deferreds).then(
                 function logout() {
@@ -352,11 +352,9 @@ define('io.ox/core/main',
                             })
                             .show()
                             .done(function (action) {
-                                if (action === 'cancel') {
-                                    resetTimeout();
-                                    clearInterval(countdownTimer);
-                                    dialog = null;
-                                }
+                                resetTimeout();
+                                clearInterval(countdownTimer);
+                                dialog = null;
                                 if (action === 'force') {
                                     logout();
                                 }

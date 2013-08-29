@@ -959,6 +959,13 @@ define('io.ox/core/tk/selection',
             function drag(e) {
                 // unbind
                 $(document).off('mousemove.dnd', drag);
+                // get data now
+                data = self.unique(self.unfold());
+                // empty?
+                if (data.length === 0) {
+                    var cid = source.attr('data-obj-id');
+                    data = cid ? [_.cid(cid)] : [];
+                }
                 // create helper
                 helper = $('<div class="drag-helper">').append(
                     $('<span class="badge badge-important">').text(data.length),
@@ -1018,12 +1025,7 @@ define('io.ox/core/tk/selection',
 
             function start(e) {
                 source = $(this);
-                data = self.unique(self.unfold());
-                // empty?
-                if (data.length === 0) {
-                    var cid = source.attr('data-obj-id');
-                    data = cid ? [_.cid(cid)] : [];
-                }
+                data = [];
                 // bind events
                 $('.dropzone').each(function () {
                     var node = $(this), selector = node.attr('data-dropzones');

@@ -41,7 +41,10 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
 
         myView.dialog = new dialogs.ModalDialog({
-            width: 685,
+            top: 60,
+            width: 600,
+            center: false,
+            maximize: true,
             async: true
         }).header($('<h4>').text(header));
 
