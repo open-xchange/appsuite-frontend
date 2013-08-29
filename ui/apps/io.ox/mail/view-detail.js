@@ -75,8 +75,10 @@ define('io.ox/mail/view-detail',
     var regHTML = /^text\/html$/i,
         regImage = /^image\/(jpe?g|png|gif|bmp)$/i,
         regFolder = /^(\s*)(http[^#]+#m=infostore&f=(\d+))(\s*)$/i,
+        regFolderAlt = /^(\s*)(http[^#]+#!&?app=io\.ox\/files&folder=(\d+))(\s*)$/i,
         regDocument = /^(\s*)(http[^#]+#m=infostore&f=(\d+)&i=(\d+))(\s*)$/i,
         regDocumentAlt = /^(\s*)(http[^#]+#!&?app=io\.ox\/files(?:&perspective=list)?&folder=(\d+)&id=([\d\.]+))(\s*)$/i,
+        regDocumentAlt2 = /^(\s*)(http[^#]+#!&?app=io\.ox\/files&folder=(\d+)(?:&perspective=list)?&id=([\d\.]+))(\s*)$/i,
         regTask = /^(\s*)(http[^#]+#m=task&i=(\d+)&f=(\d+))(\s*)$/i,
         regTaskAlt = /^(\s*)(http[^#]+#!&?app=io\.ox\/tasks?&id=\d+.(\d+)&folder=([\d\.]+))(\s*)$/i,
         regAppointment = /^(\s*)(http[^#]+#m=calendar&i=(\d+)&f=(\d+))(\s*)$/i,
@@ -204,28 +206,44 @@ define('io.ox/mail/view-detail',
         return match && match.length && _(ox.serverConfig.hosts).indexOf(match[1]) > -1;
     };
 
-    var drawDocumentLink = function (matches, title) {
-        var link, href, folder, id;
-        // create link
-        link = $('<a>', { href: '#' })
-            .css({ textDecoration: 'none', fontFamily: 'Arial' })
-            .append($('<span class="label label-info">').text(title));
-        // get values
-        href = matches[2];
-        folder = matches[3];
-        id = matches[4];
-        // internal document?
-        /* TODO: activate internal Links when files app is ready */
-        if (isValidHost(href)) {
-            // yep, internal
-            href = '#app=io.ox/files&perspective=list&folder=' + folder + '&id=' + id;
-            link.on('click', { hash: href, folder: folder, id: id }, openDocumentLink);
-        } else {
-            // nope, external
-            link.attr({ href: matches[0], target: '_blank' });
+    var drawDocumentLink, drawFolderLink;
+
+    (function () {
+
+        function draw(matches, title, perspective) {
+            var link, href, folder, id;
+            // create link
+            link = $('<a>', { href: '#' })
+                .css({ textDecoration: 'none', fontFamily: 'Arial' })
+                .append($('<span class="label label-info">').text(title));
+            // get values
+            href = matches[2];
+            folder = matches[3];
+            id = matches[4];
+            // internal document?
+            /* TODO: activate internal Links when files app is ready */
+            if (isValidHost(href)) {
+                // yep, internal
+                href = '#app=io.ox/files&perspective=' + perspective + '&folder=' + folder + '&id=' + id;
+                link.on('click', { hash: href, folder: folder, id: id }, openDocumentLink);
+            } else {
+                // nope, external
+                link.attr({ href: matches[0], target: '_blank' });
+            }
+            return link;
         }
-        return link;
-    };
+
+        drawFolderLink = function (matches, title) {
+            return draw(matches, title, 'icons');
+        };
+
+        drawDocumentLink = function (matches, title) {
+            return draw(matches, title, 'list');
+        };
+
+    }());
+
+    // biggeleben: the following is not really DRY ...
 
     var drawAppointmentLink = function (matches, title) {
         var link, href, folder, id;
@@ -289,7 +307,7 @@ define('io.ox/mail/view-detail',
             .off('click.open')
             .on('dblclick.close', blockquoteClickClose)
             .stop().animate({ maxHeight: h }, 300, function () {
-                $(this).removeClass('collapsed-blockquote');
+                $(this).css('opacity', 1.00).removeClass('collapsed-blockquote');
             });
         $(this).next().hide();
     };
@@ -302,7 +320,7 @@ define('io.ox/mail/view-detail',
         $(this).off('dblclick.close')
             .on('click.open', blockquoteClickOpen)
             .stop().animate({ maxHeight: blockquoteCollapsedHeight }, 300, function () {
-                $(this).addClass('collapsed-blockquote');
+                $(this).css('opacity', 0.50).addClass('collapsed-blockquote');
             });
         $(this).next().show();
     };
@@ -464,7 +482,7 @@ define('io.ox/mail/view-detail',
                                 node.replaceWith(
                                      $($.txt(m[1])).add(drawDocumentLink(m, gt('Document'))).add($.txt(m[5]))
                                 );
-                            } else if ((m = text.match(regDocumentAlt)) && m.length) {
+                            } else if ((m = (text.match(regDocumentAlt) || text.match(regDocumentAlt2))) && m.length) {
                                 // link to document (new syntax)
                                 node.replaceWith(
                                      $($.txt(m[1])).add(drawDocumentLink(m, gt('Document'))).add($.txt(m[6]))
@@ -472,7 +490,12 @@ define('io.ox/mail/view-detail',
                             } else if ((m = text.match(regFolder)) && m.length) {
                                 // link to folder
                                 node.replaceWith(
-                                    $($.txt(m[1])).add(drawDocumentLink(m, gt('Folder'))).add($.txt(m[4]))
+                                    $($.txt(m[1])).add(drawFolderLink(m, gt('Folder'))).add($.txt(m[4]))
+                                );
+                            } else if ((m = text.match(regFolderAlt)) && m.length) {
+                                // link to folder
+                                node.replaceWith(
+                                    $($.txt(m[1])).add(drawFolderLink(m, gt('Folder'))).add($.txt(m[4]))
                                 );
                             } else if ((m = text.match(regTask) || text.match(regTaskAlt)) && m.length) {
                                 // link to folder
@@ -572,7 +595,7 @@ define('io.ox/mail/view-detail',
                     content.find('blockquote').not(content.find('blockquote blockquote')).each(function () {
                         var node = $(this);
                         node.addClass('collapsed-blockquote')
-                            .css({ opacity: 0.75, maxHeight: blockquoteCollapsedHeight })
+                            .css({ opacity: 0.50, maxHeight: blockquoteCollapsedHeight })
                             .on('click.open', blockquoteClickOpen)
                             .on('dblclick.close', blockquoteClickClose)
                             .after(
