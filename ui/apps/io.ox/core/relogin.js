@@ -37,6 +37,7 @@ define('io.ox/core/relogin',
 
                 new dialogs.ModalDialog({ easyOut: false, async: true, width: 400, enter: 'relogin' })
                     .build(function () {
+                        this.getPopup().addClass('relogin');
                         this.getHeader().append(
                             $('<h4>').text(gt('Your session is expired')),
                             $('<div>').text(gt('Please sign in again to continue'))
