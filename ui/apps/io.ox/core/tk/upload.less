@@ -1,27 +1,30 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
 .io-ox-dropzone-multiple-overlay {
+
+    color: #333;
     background-color: rgba(0,0,0,0.1);
-    color: #000;
     text-align: center;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 24pt;
     font-weight: 300;
-    line-height: 1.2;
+    line-height: 1.2em;
     z-index: 65000;
     height: 100%;
-    width:100%;
+    width: 100%;
+
+    @hoverColor: #AFC587;
+
     .io-ox-dropzone-action {
         .box-sizing(border-box);
         div {
@@ -30,23 +33,33 @@
             background: #fff;
         }
         &.io-ox-dropzone-hover {
-            color: #000;
             div {
-                background-color: #dff0d8;
+                border-color: darken(@hoverColor, 30%);
+                background-color: @hoverColor;
             }
         }
     }
 }
 
+// this if for all browsers without css filter support
+.io-ox-dropzone-active {
+    .io-ox-dropzone-multiple-overlay {
+        background-color: rgba(255, 255, 255, 0.60);
+    }
+}
+
+// add directly to io-ox-core to get animation on dragleave
+.cssfilters #io-ox-core {
+    -webkit-filter: blur(0px);
+    .transition(-webkit-filter 0.2s ease-in);
+}
+
+// for those with css filter support
 .cssfilters .io-ox-dropzone-active {
-    #io-ox-core{
-        -webkit-filter: blur(40px);
-        -webkit-transition: 0.4s all ease-in;
-        -o-transition: 0.4s all ease-in;
-        -moz-transition: 0.4s all ease-in;
-        transition: 0.4s all ease-in;
+    #io-ox-core {
+        -webkit-filter: blur(20px);
     }
     .io-ox-dropzone-multiple-overlay {
-        background-color: rgba(255, 255, 255, 0.6);
+        background-color: rgba(255, 255, 255, 0.20);
     }
 }
