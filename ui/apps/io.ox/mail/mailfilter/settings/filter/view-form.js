@@ -106,6 +106,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             return position;
         },
 
+        renderWarningForEmptyTests = function (node) {
+            var warning = $('<div>').addClass('alert alert-block').text(gt('This rule applies to all messages. Please add a condition to restrict this rule to specific messages.'));
+            node.append(warning);
+        },
+
         prepareFolderForDisplay = function (folder) {
             var arrayOfParts = folder.split("/");
             arrayOfParts.shift();
@@ -149,9 +154,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 e.preventDefault();
                 var node = $(e.target),
                     testID = node.closest('li').attr('data-test-id'),
-                    testArray =  this.model.get('test'),
-                    renderWarning = false,
-                    warning = $('<div>').addClass('alert alert-block').text(gt('All actions will be applied to all messages.'));
+                    testArray =  this.model.get('test');
 
                 if (checkForMultipleTests(this.el).length > 2) {
                     testArray.tests.splice(testID, 1);
@@ -162,16 +165,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                         testArray = testArray.tests[0];
                     } else {
                         testArray = { id: 'true' };
-                        renderWarning = true;
                     }
 
                 }
 
                 this.model.set('test', testArray);
                 this.render();
-                if (renderWarning) {
-                    this.$el.find('.sectiontitle.expertmode.conditions').after(warning);
-                }
 
             },
 
@@ -569,10 +568,15 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             });
 
             var headlineTest = $('<legend>').addClass("sectiontitle expertmode conditions").text(gt('Conditions')),
-                headlineActions = $('<legend>').addClass("sectiontitle expertmode actions").text(gt('Actions'));
+                headlineActions = $('<legend>').addClass("sectiontitle expertmode actions").text(gt('Actions')),
+                notification = $('<div>');
+
+            if (_.isEqual(appliedTest[0], {id : 'true'})) {
+                renderWarningForEmptyTests(notification);
+            }
 
             this.append(
-                headlineTest, listTests,
+                headlineTest, notification, listTests,
                 elements.drawOptionsExtern(gt('Add condition'), headerTranslation, {
                     test: 'create',
                     classes: 'no-positioning block',
