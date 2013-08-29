@@ -384,13 +384,11 @@ define("io.ox/contacts/main",
             settings: settings
         });
 
-
-
         commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, right);
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(grid, api, win);
-        commons.addGridToolbarFolder(app, grid);
+        commons.addGridToolbarFolder(app, grid, 'CONTACTS');
 
         api.on('update:image', function (evt, updated) {
             if (updated.folder === app.currentContact.folder_id && updated.id === app.currentContact.id) {
