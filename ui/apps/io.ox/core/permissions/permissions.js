@@ -277,7 +277,7 @@ define('io.ox/core/permissions/permissions',
                 (String(api.getDefaultFolder(baton.folder.module)) === baton.folder.id) ||
                 // See Bug 27704
                 (baton.folder.type === 5) ||
-                 // Public Contacts folders can't have other users with admin permissions
+                 // Private Contacts folders can't have other users with admin permissions
                 (baton.folder.type === 1 && baton.folder.module === 'contacts')
             ) {
                 admin = false;
@@ -308,7 +308,7 @@ define('io.ox/core/permissions/permissions',
     };
 
     addRoles = function (baton) {
-        if (!isFolderAdmin) return $();
+        if (!isFolderAdmin || (baton.folder.type === 1 && baton.folder.module === 'contacts')) return $();
         return $('<span class="dropdown preset">').append(
             $('<a href="#" data-type="permission" data-toggle="dropdown" aria-haspopup="true" tabindex="1">'),
             $('<ul class="dropdown-menu" role="menu">').append(
