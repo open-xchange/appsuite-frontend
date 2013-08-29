@@ -372,7 +372,7 @@ define('io.ox/mail/main',
 
         ext.point('io.ox/mail/vgrid/toolbar').extend({
             id: 'dropdown',
-            index: 'last',
+            index: 1000,
             draw: function () {
                 this.append(
                     $('<div class="grid-options dropdown">')
