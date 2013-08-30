@@ -53,17 +53,8 @@ define('io.ox/core/tk/upload',
             },
 
             nodeGenerator = function () {
-                var dropzonePadding = 150,
-                    height,
-                    $actionTile = $('<div>').appendTo($overlay).addClass('io-ox-dropzone-action').css({'padding': dropzonePadding + 'px'});
+                var $actionTile = $('<div class="io-ox-dropzone-action">');
                 $overlay.append($actionTile);
-                if (options.actions.length === 1) {
-                    height = $(window).height() / 3;
-                    $actionTile.css({height: height, 'line-height': height + 'px', 'padding-top': height + 'px', 'padding-bottom': height + 'px'});
-                } else {
-                    height = $(window).height() / options.actions.length - (dropzonePadding * options.actions.length) + (dropzonePadding / 2);
-                    $actionTile.css({height: height, 'line-height': height + 'px', 'margin-bottom': dropzonePadding + 'px'});
-                }
                 return $actionTile;
             };
 

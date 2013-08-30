@@ -11,7 +11,7 @@
  */
 
 .io-ox-dropzone-multiple-overlay {
-
+    display:table;
     color: #333;
     background-color: rgba(0,0,0,0.1);
     text-align: center;
@@ -22,12 +22,17 @@
     z-index: 65000;
     height: 100%;
     width: 100%;
+    border-collapse: seperate;
+    border-spacing: 100px;
 
     @hoverColor: #AFC587;
 
     .io-ox-dropzone-action {
+        display:table-row;
         .box-sizing(border-box);
         div {
+            display:table-cell;
+            vertical-align:middle;
             b { pointer-events:none }
             border: 1px dashed #aaa;
             background: #fff;
