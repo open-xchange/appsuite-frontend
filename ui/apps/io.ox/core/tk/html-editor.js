@@ -380,17 +380,23 @@ define.async('io.ox/core/tk/html-editor',
     function Editor(textarea) {
 
         var def = $.Deferred(), ed,
-            toolbar1, toolbar2, toolbar3;
+            toolbar1, toolbar2, toolbar3, advanced,
+            width = $(document).width();
 
         // toolbar default
         toolbar1 = 'undo,redo,|,bold,italic,underline,strikethrough' +
             ',|,emoji,|,bullist,numlist,outdent,indent' +
-            ',|,justifyleft,justifycenter,justifyright' +
-            ',|,formatselect,fontselect,fontsizeselect' +
+            ',|,justifyleft,justifycenter,justifyright';
+        advanced = 'formatselect,fontselect,fontsizeselect' +
             ',|,forecolor,backcolor';
-
         toolbar2 = '';
         toolbar3 = '';
+
+        if (width > 1110) { // yep, need a bit more than 1024, incl. emoji
+            toolbar1 += ',|,' + advanced;
+        } else {
+            toolbar2 = advanced;
+        }
 
         // consider custom configurations
         toolbar1 = settings.get('tinyMCE/theme_advanced_buttons1', toolbar1);
