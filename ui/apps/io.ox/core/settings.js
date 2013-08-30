@@ -228,17 +228,13 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
          */
         this.save = (function () {
 
-            var request, save = _.throttle(function (data, update) {
+            var request, save = _.throttle(function (data) {
                 request = http.PUT({
                     module: 'jslob',
-                    params: { action: update ? 'update' : 'set', id: path },
+                    params: { action: 'set', id: path },
                     data: data
                 })
-                .done(function (result) {
-                    if (update) {
-                        //this has been an update!
-                        data = result.tree;
-                    }
+                .done(function () {
                     saved = JSON.parse(JSON.stringify(data));
                     self.trigger('save');
                 });
@@ -251,24 +247,9 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                 }
                 if (!custom && _.isEqual(saved, tree)) return $.when();
 
-                var data = { tree: custom || tree, meta: meta },
-                     deleted = _(saved).chain()
-                         .keys()
-                         .difference(_.keys(data.tree))
-                         .value()
-                         .length > 0, // we have deleted keys, can’t update
-                    changed = _(data.tree).chain()
-                        .pairs()
-                        .map(function (prop) {
-                            var eq = _.isEqual(saved[prop[0]], prop[1]);
-                            return eq ? null : prop;
-                        })
-                        .compact()
-                        .object()
-                        .value();
-
+                var data = { tree: custom || tree, meta: meta };
                 settingsCache.add(path, data);
-                save(deleted ? data.tree : changed, !deleted);
+                save(data.tree);
 
                 return request;
             };
