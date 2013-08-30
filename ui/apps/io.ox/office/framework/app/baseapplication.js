@@ -1488,11 +1488,7 @@ define('io.ox/office/framework/app/baseapplication',
                 // propagate changed file to the files API
                 return FilesAPI.propagate('change', file).then(function () {
 
-                    var def = $.Deferred();
-
-                    self.executeDelayed(function () {
-
-                        def.resolve(self.getFilterModuleUrl({
+                    return self.getFilterModuleUrl({
                                 action: 'getdocument',
                                 documentformat: format || 'native',
                                 filename: self.getFullFileName(),
@@ -1504,10 +1500,7 @@ define('io.ox/office/framework/app/baseapplication',
                                 id: file.id,
                                 module: file.module,
                                 attachment: file.attached
-                            }));
-                    }, { delay: 5000 });
-
-                    return def;
+                            });
                 });
             }
 
