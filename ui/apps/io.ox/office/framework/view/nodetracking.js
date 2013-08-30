@@ -680,9 +680,8 @@ define('io.ox/office/framework/view/nodetracking',
 
         function focusInHandler(event) {
             // ignore focus events at document (sent by Firefox only)
-            // IE sometimes sends wrong targets in focusin events, always use activeElement
-            if (window.document.activeElement !== window.document) {
-                focusNode = window.document.activeElement;
+            if (event.target !== window.document) {
+                focusNode = event.target;
                 lastOutEvent = null;
             }
         }

@@ -65,14 +65,13 @@ define('io.ox/mail/folderview-extensions',
     });
 
     function markMailFolderRead(e) {
-        var folder = e.data.folder,
-            unhandledMails = e.data.unhandledMails;
+        var folder = e.data.folder;
 
         e.preventDefault();
 
         $.when(
             mailAPI.markFolderRead(folder),
-            mailAPI.markRead(unhandledMails)
+            mailAPI.markRead(unhandledMails(e.data.app, folder))
           ).done(function () {
             // TODO: unify events?
             mailAPI.trigger('update:set-seen', {}); //remove notifications in notification area
@@ -80,26 +79,45 @@ define('io.ox/mail/folderview-extensions',
         });
     }
 
+    function unhandledMails(app, folder) {
+        if (app.folder.get() !== folder) {
+            console.warn('unhandledMails: folders not in sync, yet, assuming unread mails');
+            return {unread: true};
+        }
+
+        return _.chain(app.getGrid().getIds() || [])
+            .pluck('thread')
+            .compact()
+            .flatten(true)
+            .filter(function notInFolderAndUnseen(mail) {
+                return mail.folder_id !== folder && (mail.flags & mailAPI.FLAGS.SEEN) === 0;
+            })
+            .value();
+    }
+
     ext.point(POINT + '/sidepanel/toolbar/options').extend({
         id: 'mark-folder-read',
         index: 50,
         draw: function (baton) {
             var folder = baton.data.id,
-                unhandledMails = _.chain(baton.app.getGrid().getIds() || [])
-                    .pluck('thread')
-                    .compact()
-                    .flatten(true)
-                    .filter(function notInFolderAndUnseen(mail) {
-                        return mail.folder_id !== folder && (mail.flags & mailAPI.FLAGS.SEEN) === 0;
-                    })
-                    .value();
+                link;
+
+            //wait 0.5s to make sure folder has been changed
+            //it would be great to have a deferred object to
+            //resolve in VGrid, once it’s done loading,
+            //indicating the loading status.
+            //FIXME: implement it, once VGrid exposes it’s loading state
+            _.delay(function (app, unread) {
+                if (unread === 0 && _(unhandledMails(app, folder)).isEmpty()) {
+                    link.addClass('disabled');
+                }
+            }, 500, baton.app, baton.data.unread);
 
             this.append(
                 $('<li>').append(
-                    $('<a href="#" data-action="markfolderread" tabindex="1" role="menuitem">')
+                    link = $('<a href="#" data-action="markfolderread" tabindex="1" role="menuitem">')
                     .text(gt('Mark all mails as read'))
-                    .on('click', { folder: baton.data.id, unhandledMails: unhandledMails }, markMailFolderRead)
-                    .addClass(baton.data.unread === 0 && _(unhandledMails).isEmpty() ? 'disabled' : undefined)
+                    .on('click', { folder: baton.data.id, app: baton.app }, markMailFolderRead)
                 )
             );
         }

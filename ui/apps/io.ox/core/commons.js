@@ -233,12 +233,9 @@ define('io.ox/core/commons',
          * [ description]
          * @param  {Object}  app           application object
          * @param  {Object}  grid          grid object
-         * @param  {Boolean} countGridData if true then use frontend data to count grid elements
          * @return void
          */
-        addGridToolbarFolder: function (app, grid, countGridData) {
-
-            countGridData = countGridData || false;
+        addGridToolbarFolder: function (app, grid) {
 
             function fnOpen(e) {
                 e.preventDefault();
@@ -255,16 +252,15 @@ define('io.ox/core/commons',
                 }
             });
 
-            // right now, only mail folders support "total"
             var name = app.get('name'),
+                // right now, only mail folders supports "total" properly
+                countGridData = name !== 'io.ox/mail',
+                // only mail searches not across all folders
                 searchAcrossFolders = name !== 'io.ox/mail';
 
             function getInfoNode() {
-                if (app.getWindow && app.getWindow().state.visible) {
-                    return grid.getToolbar().find('.grid-info');
-                } else {
-                    return $();
-                }
+                var visible = app.getWindow && app.getWindow().state.visible;
+                return visible ? grid.getToolbar().find('.grid-info') : $();
             }
 
             function drawFolderInfo(folder_id) {
@@ -281,18 +277,17 @@ define('io.ox/core/commons',
                     $('<span class="folder-count">')
                 );
 
-                folderAPI.get({ folder: folder_id }).then(
-                    function success(data) {
+                folderAPI.get({ folder: folder_id }).then(function success(data) {
 
-                        var total = countGridData ? grid.getIds().length : data.total,
-                            node = grid.getToolbar().find('[data-folder-id="' + folder_id + '"]');
-                        node.find('.folder-name').text(data.title);
+                    var total = countGridData ? grid.getIds().length : data.total,
+                        node = grid.getToolbar().find('[data-folder-id="' + folder_id + '"]');
 
-                        if (total > 0) {
-                            node.find('.folder-count').text('(' + total + ')');
-                        }
+                    node.find('.folder-name').text(data.title);
+
+                    if (total > 0) {
+                        node.find('.folder-count').text('(' + total + ')');
                     }
-                );
+                });
             }
 
             grid.on('change:prop:folder change:mode change:ids', function (e, value) {
@@ -324,7 +319,8 @@ define('io.ox/core/commons',
 
             // unread counter for mail
             folderAPI.on('update:total', function (e, id, data) {
-                drawFolderInfo(id, data);
+                // check for current folder (otherwise we get cross-app results! see bug #28558)
+                if (id === app.folder.get()) drawFolderInfo(id);
             });
 
             ext.point(app.get('name') + '/vgrid/toolbar').invoke('draw', grid.getToolbar());

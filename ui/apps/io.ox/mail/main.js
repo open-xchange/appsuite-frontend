@@ -372,7 +372,7 @@ define('io.ox/mail/main',
 
         ext.point('io.ox/mail/vgrid/toolbar').extend({
             id: 'dropdown',
-            index: 'last',
+            index: 1000,
             draw: function () {
                 this.append(
                     $('<div class="grid-options dropdown">')
@@ -394,7 +394,7 @@ define('io.ox/mail/main',
         settings.on('change', handleSettingsChange);
         drawGridOptions();
 
-        commons.addGridToolbarFolder(app, grid);
+        commons.addGridToolbarFolder(app, grid, 'MAIL');
 
         grid.on('change:ids', function (e, all) {
             // get node & clear now

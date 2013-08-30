@@ -1486,22 +1486,22 @@ define('io.ox/office/framework/app/baseapplication',
             function resolveDownloadUrl() {
 
                 // propagate changed file to the files API
-                FilesAPI.propagate('change', file);
+                return FilesAPI.propagate('change', file).then(function () {
 
-                return self.getFilterModuleUrl({
-                        action: 'getdocument',
-                        documentformat: format || 'native',
-                        filename: self.getFullFileName(),
-                        mimetype: file.file_mimetype || '',
-                        version: 0, // always use the latest version
-                        nocache: _.uniqueId(), // needed to trick the browser cache (is not evaluated by the backend)
-                        source: file.source,// document source: file|mail|task
-                        folder: file.folder_id,
-                        id: file.id,
-                        module: file.module,
-                        attachment: file.attached
-
-                    });
+                    return self.getFilterModuleUrl({
+                            action: 'getdocument',
+                            documentformat: format || 'native',
+                            filename: self.getFullFileName(),
+                            mimetype: file.file_mimetype || '',
+                            version: 0, // always use the latest version
+                            nocache: _.uniqueId(), // needed to trick the browser cache (is not evaluated by the backend)
+                            source: file.source,// document source: file|mail|task
+                            folder: file.folder_id,
+                            id: file.id,
+                            module: file.module,
+                            attachment: file.attached
+                        });
+                });
             }
 
             // Bug 28251: call downloadFile() with a Promise that will be resolved

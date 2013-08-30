@@ -616,7 +616,7 @@ define('io.ox/core/tk/folderviews',
                             .then(this.close, this.idle);
                     })
                     .show(function () {
-                        this.find('input').val(gt('New folder')).focus();
+                        this.find('input').val(gt('New folder')).focus().select();
                     });
                 });
             }

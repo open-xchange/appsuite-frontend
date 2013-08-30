@@ -308,7 +308,6 @@ define('io.ox/core/pubsub/settings/pane',
             baton.view.render();
         },
         onRemove: function (ev) {
-            ev.preventDefault();
             this.model.destroy();
         },
         close: function () {

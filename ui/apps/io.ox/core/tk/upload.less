@@ -1,22 +1,69 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+
 .io-ox-dropzone-multiple-overlay {
-    background-color: rgba(0, 0, 0, 0.80);
-    color: #fff;
+    display:table;
+    color: #333;
+    background-color: rgba(0,0,0,0.1);
     text-align: center;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 24pt;
     font-weight: 300;
-    line-height: 1.2;
+    line-height: 1.2em;
     z-index: 65000;
+    height: 100%;
+    width: 100%;
+    border-spacing: 50px;
+
+    @hoverColor: #AFC587;
 
     .io-ox-dropzone-action {
-        & > div {
-            pointer-events: none;
+        display:table-row;
+        .box-sizing(border-box);
+        div {
+            display:table-cell;
+            vertical-align:middle;
+            b { pointer-events:none }
+            border: 1px dashed #aaa;
+            background: #fff;
         }
         &.io-ox-dropzone-hover {
-            color: #000;
-            background-color: rgba(255, 255, 255, 0.80);
-            display: inline-block
+            div {
+                border-color: darken(@hoverColor, 30%);
+                background-color: @hoverColor;
+            }
         }
     }
 }
 
+// this if for all browsers without css filter support
+.io-ox-dropzone-active {
+    .io-ox-dropzone-multiple-overlay {
+        background-color: rgba(255, 255, 255, 0.60);
+    }
+}
+
+// add directly to io-ox-core to get animation on dragleave
+.cssfilters #io-ox-core {
+    -webkit-filter: blur(0px);
+    .transition(-webkit-filter 0.2s ease-in);
+}
+
+// for those with css filter support
+.cssfilters .io-ox-dropzone-active {
+    #io-ox-core {
+        -webkit-filter: blur(20px);
+    }
+    .io-ox-dropzone-multiple-overlay {
+        background-color: rgba(255, 255, 255, 0.20);
+    }
+}

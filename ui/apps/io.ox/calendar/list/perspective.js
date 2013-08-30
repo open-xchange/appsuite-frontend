@@ -271,7 +271,7 @@ define('io.ox/calendar/list/perspective',
         commons.wireGridAndWindow(grid, win);
         commons.wireGridAndRefresh(grid, api, win);
         commons.addGridFolderSupport(app, grid);
-        commons.addGridToolbarFolder(app, grid, true);
+        commons.addGridToolbarFolder(app, grid);
 
         grid.on('change:prop', self.updateGridOptions);
         self.updateGridOptions();

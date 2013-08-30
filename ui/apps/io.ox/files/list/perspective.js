@@ -268,7 +268,7 @@ define('io.ox/files/list/perspective',
 
         ext.point('io.ox/files/vgrid/toolbar').extend({
             id: 'dropdown',
-            index: 'last',
+            index: 1000,
             draw: function () {
                 this.append(
                     optDropdown = $('<div class="grid-options dropdown">')

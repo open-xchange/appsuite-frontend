@@ -51,7 +51,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             'Cc': gt('CC'),
             'cleanHeader': gt('Header'),
             'envelope': gt('Envelope'),
-            'true': gt('All messages'),
             'size': gt('Size (bytes)')
         },
 
@@ -105,6 +104,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 }
             });
             return position;
+        },
+
+        renderWarningForEmptyTests = function (node) {
+            var warning = $('<div>').addClass('alert alert-block').text(gt('This rule applies to all messages. Please add a condition to restrict this rule to specific messages.'));
+            node.append(warning);
         },
 
         prepareFolderForDisplay = function (folder) {
@@ -482,11 +486,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                         );
                     }
 
-                } else if (appliedTest.length !== 1 && test.id === 'true') {
-
-                    listTests.append($('<li>').addClass('filter-settings-view warning').attr({'data-test-id': num}).text(gt('All messages')).append(
-                            elements.drawDeleteButton('test')
-                    ));
                 } else if (test.id === 'envelope') {
 
                     listTests.append($('<li>').addClass('filter-settings-view').attr({'data-type': 'values', 'data-test-id': num}).text(headerTranslation[test.id]).append(
@@ -568,11 +567,16 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 }
             });
 
-            var headlineTest = $('<legend>').addClass("sectiontitle expertmode").text(gt('Conditions')),
-                headlineActions = $('<legend>').addClass("sectiontitle expertmode").text(gt('Actions'));
+            var headlineTest = $('<legend>').addClass("sectiontitle expertmode conditions").text(gt('Conditions')),
+                headlineActions = $('<legend>').addClass("sectiontitle expertmode actions").text(gt('Actions')),
+                notification = $('<div>');
+
+            if (_.isEqual(appliedTest[0], {id : 'true'})) {
+                renderWarningForEmptyTests(notification);
+            }
 
             this.append(
-                headlineTest, listTests,
+                headlineTest, notification, listTests,
                 elements.drawOptionsExtern(gt('Add condition'), headerTranslation, {
                     test: 'create',
                     classes: 'no-positioning block',
@@ -615,9 +619,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 optionsSwitch = elements.drawOptionsExtern(arrayOfTests.id, {allof: gt('Apply rule if all conditions are met'), anyof: gt('Apply rule if any condition is met.')}, options);
             if (arrayOfTests.id === 'allof' || arrayOfTests.id === 'anyof') {
                 this.append($('<div>').addClass('line').append(optionsSwitch));
-                if (arrayOfTests.id === 'anyof' && checkForPosition(arrayOfTests.tests, {id: 'true'}) !== undefined) {
-                    this.append($('<div>').addClass('warning').text(gt('The condition "All messages" is active.')));
-                }
             } else {
                 this.append($('<div>').addClass('line').text(gt('Apply rule if all conditions are met')));
             }
