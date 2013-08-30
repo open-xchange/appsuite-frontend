@@ -81,7 +81,9 @@ define('io.ox/portal/main',
                         }
                     });
                     // please no button
-                    $btn.append($('<button type="button" class="btn btn-primary pull-right">')
+                    $btn.find('.controls')
+                        .prepend($('<button type="button" class="btn btn-primary pull-right">')
+                        .css({ marginLeft: '5px' })
                         .attr('data-action', 'customize')
                         .text(gt('Customize this page'))
                         .on('click', openSettings));
