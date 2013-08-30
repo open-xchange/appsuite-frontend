@@ -540,12 +540,14 @@ define("io.ox/mail/write/view-main",
 
             // Attachments
             this.fileCount = 0;
-            var uploadSection = this.createSection('attachments', gt('Attachments'), false, true);
+            var uploadSection = this.createSection('attachments', gt('Attachments'), false, true),
+                dndInfo =  $('<div class="alert alert-info">').text(gt('You can drag and drop files from your computer here to add as attachment.'));
             this.scrollpane.append(
                 $('<form class="oldschool">').append(
                     this.createLink('attachments', gt('Attachments')),
                     uploadSection.label,
                     uploadSection.section.append(
+                        (_.device('!touch') && (!_.browser.IE || _.browser.IE > 9) ? dndInfo : ''),
                         this.createUpload()
                     )
                 )
