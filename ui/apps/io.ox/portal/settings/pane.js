@@ -308,13 +308,11 @@ define('io.ox/portal/settings/pane',
         id: "list",
         draw: function () {
 
-
+            this.append(list.empty());
 
             collection.each(function (model) {
                 list.append(createView(model).render().el);
             });
-
-            this.append(list);
 
             // make sortable
             list.sortable({
