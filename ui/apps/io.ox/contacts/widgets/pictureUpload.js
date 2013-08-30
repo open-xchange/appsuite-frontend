@@ -37,6 +37,9 @@ define('io.ox/contacts/widgets/pictureUpload',
                 this.addImgText.show();
                 this.setImageURL();
                 this.fileInput.val('');
+                if (this.oldMode) {
+                    this.fileInput.removeAttr('style');
+                }
             },
 
             handleFileSelect: function (e, input) {
@@ -138,6 +141,10 @@ define('io.ox/contacts/widgets/pictureUpload',
                             })
                     )
                 );
+
+                if (!self.oldMode || hasImage) {
+                    self.fileInput.css({ height: '1px', width: '1px', cursor: 'pointer'});
+                }
 
                 self.imgCon.on('click', function () { self.fileInput.trigger('click'); });
 
