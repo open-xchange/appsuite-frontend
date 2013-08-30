@@ -244,11 +244,10 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/actions/showlink', {
-
+        capabilities: '!alone',
         requires: function (e) {
             return e.collection.has('some');
         },
-
         multiple: function (list) {
 
             api.getList(list).done(function (list) {
@@ -347,6 +346,7 @@ define('io.ox/files/actions',
     };
 
     new Action('io.ox/files/actions/lock', {
+        capabilities: '!alone',
         requires: function (e) {
             var list = _.getArray(e.context);
             return e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/write') &&//hide in mail write preview
@@ -375,6 +375,7 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/actions/unlock', {
+        capabilities: '!alone',
         requires: function (e) {
             var list = _.getArray(e.context);
             return e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/write') &&//hide in mail write preview
@@ -754,134 +755,154 @@ define('io.ox/files/actions',
 
     // INLINE
 
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'editor',
-        index: 150,
-        prio: 'hi',
-        label: gt('Edit'),
-        ref: 'io.ox/files/actions/editor'
-    }));
+    var index = 100;
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'open',
-        index: 100,
+        index: index += 100,
         prio: 'hi',
         label: gt('Open'),
         ref: 'io.ox/files/actions/open'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'editor',
+        index: index += 100,
+        prio: 'hi',
+        label: gt('Edit'),
+        ref: 'io.ox/files/actions/editor'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'download',
-        index: 200,
+        index: index += 100,
         prio: 'hi',
         label: gt('Download'),
         ref: 'io.ox/files/actions/download'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'sendlink',
-        index: 300,
-        label: gt('Send as link'),
-        ref: 'io.ox/files/actions/sendlink'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'send',
-        index: 400,
-        label: gt('Send by mail'),
-        ref: 'io.ox/files/actions/send'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'publish',
-        index: 500,
-        prio: 'lo',
-        label: gt('Publish'),
-        ref: 'io.ox/files/actions/publish'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'showlink',
-        index: 600,
-        label: gt('Show link'),
-        ref: 'io.ox/files/actions/showlink'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'rename',
-        index: 700,
-        label: gt('Rename'),
-        ref: 'io.ox/files/actions/rename'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'edit-description',
-        index: 800,
-        label: gt('Edit description'),
-        ref: 'io.ox/files/actions/edit-description'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'move',
-        index: 900,
-        label: gt('Move'),
-        ref: 'io.ox/files/actions/move'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'copy',
-        index: 1000,
-        label: gt('Copy'),
-        ref: 'io.ox/files/actions/copy'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'delete',
-        index: 1100,
+        index: index += 100,
         prio: 'hi',
         label: gt('Delete'),
         ref: 'io.ox/files/actions/delete'
     }));
 
+    // low
+
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'lock',
-        index: 820,
+        id: 'publish',
+        index: index += 100,
         prio: 'lo',
-        label: gt('Lock'),
-        ref: 'io.ox/files/actions/lock'
+        label: gt('Share this file'),
+        ref: 'io.ox/files/actions/publish',
+        section: 'share'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'unlock',
-        index: 850,
-        prio: 'hi',
-        label: gt('Unlock'),
-        ref: 'io.ox/files/actions/unlock'
+        id: 'send',
+        index: index += 100,
+        prio: 'lo',
+        label: gt('Send by mail'),
+        ref: 'io.ox/files/actions/send',
+        section: 'share'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'sendlink',
+        index: index += 100,
+        prio: 'lo',
+        label: gt('Send as internal link'),
+        ref: 'io.ox/files/actions/sendlink',
+        section: 'share'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'showlink',
+        index: index += 100,
+        prio: 'lo',
+        label: gt('Show internal link'),
+        ref: 'io.ox/files/actions/showlink',
+        section: 'share'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'add-to-portal',
-        index: 1200,
+        index: index += 100,
         prio: 'lo',
         label: gt('Add to portal'),
-        ref: 'io.ox/files/actions/add-to-portal'
+        ref: 'io.ox/files/actions/add-to-portal',
+        section: 'share'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        index: 2000,
+        id: 'rename',
+        index: index += 100,
+        label: gt('Rename'),
+        ref: 'io.ox/files/actions/rename',
+        section: 'edit'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'edit-description',
+        index: index += 100,
+        label: gt('Edit description'),
+        ref: 'io.ox/files/actions/edit-description',
+        section: 'edit'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'move',
+        index: index += 100,
+        label: gt('Move'),
+        ref: 'io.ox/files/actions/move',
+        section: 'file-op'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'copy',
+        index: index += 100,
+        label: gt('Copy'),
+        ref: 'io.ox/files/actions/copy',
+        section: 'file-op'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'lock',
+        index: index += 100,
+        prio: 'lo',
+        label: gt('Lock'),
+        ref: 'io.ox/files/actions/lock',
+        section: 'file-op'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'unlock',
+        index: index += 100,
+        prio: 'hi',
+        label: gt('Unlock'),
+        ref: 'io.ox/files/actions/unlock',
+        section: 'file-op'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        index: index += 100,
         id: 'mediaplayer-audio',
         label: gt('Play audio files'),
-        ref: 'io.ox/files/actions/audioplayer'
+        ref: 'io.ox/files/actions/audioplayer',
+        section: 'media'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        index: 2100,
+        index: index += 100,
         id: 'mediaplayer-video',
         label: gt('Play video files'),
-        ref: 'io.ox/files/actions/videoplayer'
+        ref: 'io.ox/files/actions/videoplayer',
+        section: 'media'
     }));
-    // version links
 
+    // version links
 
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
         id: 'open',
