@@ -463,7 +463,10 @@ define('io.ox/core/tk/vgrid',
             }
             // reloop to get proper height
             return $.when.apply($, defs).pipe(function () {
-                var i, obj, node, top, isVisible = container.is(':visible'), height;
+                var i, obj, node, top,
+                    //isVisible is only needed in for loop; visible selectors are slow, avoid them if possible
+                    isVisible = $i > 0 ? container.is(':visible') : undefined,
+                    height;
                 for (i = 0; i < $i; i++) {
                     obj = labels.list[i];
                     obj.top = cumulatedLabelHeight + obj.pos * itemHeight;
