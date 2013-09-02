@@ -366,14 +366,14 @@ define('io.ox/core/tk/attachments',
                      * there's no real separation
                      */
                     var icon, name, size, info,
-                        isMessage = 'message' in attachment,
-                        isFile = 'size' in attachment || 'file_size' in attachment;
+                        isMessage = 'message' in attachment.file || attachment.type === 'nested',
+                        isFile = ('size' in attachment && attachment.size) || ('file_size' in attachment && attachment.file_size);
 
                     // message?
                     if (isMessage) {
                         info = $('<span>').addClass('filesize').text('');
                         icon = $('<i>').addClass('icon-paper-clip');
-                        name = attachment.message.subject || '\u00A0';
+                        name = attachment.name || '\u00A0';
                     } else if (isFile) {
                         // filesize
                         size = attachment.size;
@@ -385,8 +385,8 @@ define('io.ox/core/tk/attachments',
                         // vcard
                         info = $('<span>').addClass('filesize').text(gt.noI18n('vCard\u00A0'));
                         icon = $('<i>').addClass('icon-list-alt');
-                        name = 'TODO';
-                        //name = contactsUtil.getFullName(attachment);
+                        //lazy way; use contactsUtil.getFullName(attachment) for the perfect solution
+                        name = attachment.file.display_name || attachment.file.email1 || '';
                     }
 
                     //item
