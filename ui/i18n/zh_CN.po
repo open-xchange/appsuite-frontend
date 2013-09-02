@@ -60,7 +60,7 @@ msgstr "无主题"
 #: apps/io.ox/calendar/week/perspective.js:51
 #: apps/io.ox/calendar/week/perspective.js:183
 #: apps/io.ox/mail/write/main.js:924
-msgid "An error occured. Please try again."
+msgid "An error occurred. Please try again."
 msgstr "发生了一个错误。请重试。"
 
 #: apps/io.ox/mail/write/main.js:1079
@@ -1201,7 +1201,7 @@ msgstr "添加订阅中。可能稍时片刻..."
 
 #: apps/io.ox/mail/view-detail.js:1342
 msgid ""
-"Created private folder '%1$s' in %2$s and subscribed succesfully to shared "
+"Created private folder '%1$s' in %2$s and subscribed successfully to shared "
 "folder"
 msgstr "已创建 %2$s 里私人文件夹 '%1$s'，并成功订阅到分享文件夹"
 
@@ -1342,7 +1342,7 @@ msgid "Use fixed-width font for text mails"
 msgstr "文本邮件使用固定宽度"
 
 #: apps/io.ox/mail/settings/old_pane.js:71 apps/io.ox/mail/settings/pane.js:39
-msgid "Append vcard"
+msgid "Append vCard"
 msgstr "追加 vcard"
 
 #: apps/io.ox/mail/settings/old_pane.js:72 apps/io.ox/mail/settings/pane.js:40
@@ -1668,7 +1668,7 @@ msgstr "邮件过滤器"
 #: apps/io.ox/mail/autoforward/settings/register.js:48
 #: apps/io.ox/mail/mailfilter/settings/register.js:40
 #: apps/io.ox/mail/vacationnotice/settings/register.js:66
-msgid "Unable to contact mailfilter backend."
+msgid "Unable to load mail filter settings."
 msgstr "无法联系邮件过滤后台。"
 
 #: apps/io.ox/mail/mailfilter/settings/register.js:43
@@ -1920,7 +1920,7 @@ msgid "Attachments have been saved"
 msgstr "已保存附件"
 
 #: apps/io.ox/mail/actions.js:571
-msgid "Failed to add. Maybe the VCard attachment is invalid."
+msgid "Failed to add. Maybe the vCard attachment is invalid."
 msgstr "添加失败，VCard 附件可能无效。"
 
 #: apps/io.ox/mail/actions.js:632
@@ -3049,7 +3049,7 @@ msgid "Progress %1$s %"
 msgstr "进度 %1$s %"
 
 #: apps/io.ox/tasks/view-detail.js:120 apps/io.ox/tasks/view-detail.js:268
-msgid "Attachments   "
+msgid "Attachments"
 msgstr "附件"
 
 #: apps/io.ox/tasks/view-detail.js:134
@@ -3371,7 +3371,7 @@ msgid "Undone"
 msgstr "已复原"
 
 #: apps/io.ox/tasks/actions.js:159 apps/io.ox/tasks/actions.js:231
-msgid "A severe error occured!"
+msgid "A severe error occurred!"
 msgstr "发生一个严重错误！"
 
 #: apps/io.ox/tasks/actions.js:161
@@ -4885,11 +4885,11 @@ msgid "Hide request body"
 msgstr "隐藏请求内文"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:75
-msgid "Show strack trace"
+msgid "Show stack trace"
 msgstr "显示堆叠痕迹"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:77
-msgid "Hide strack trace"
+msgid "Hide stack trace"
 msgstr "隐藏堆叠痕迹"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:111
@@ -4973,7 +4973,7 @@ msgid "Language"
 msgstr "语言"
 
 #: apps/io.ox/core/settings/pane.js:146
-msgid "Timezone"
+msgid "Time zone"
 msgstr "时区"
 
 #: apps/io.ox/core/settings/pane.js:155
@@ -5369,7 +5369,7 @@ msgstr "不能加载此联系人的附件。"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:186
 #: apps/io.ox/contacts/view-detail.js:240
-msgid "This list has no members yet"
+msgid "This list has no contacts yet"
 msgstr "本列表还没有成员"
 
 #: apps/io.ox/contacts/view-detail.js:314
@@ -5657,16 +5657,16 @@ msgid "List name"
 msgstr "列表名"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:87
-msgid "Add member"
+msgid "Add contact"
 msgstr "添加成员"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:130
-msgid "Members"
+msgid "Contacts"
 msgstr "成员"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:274
 msgid ""
-"To add participants manually, just provide a valid email address (e.g john."
+"To add contacts manually, just provide a valid email address (e.g john."
 "doe@example.com or \"John Doe\" <jd@example.com>)"
 msgstr ""
 "要手动添加参与者，只要提供一个有效电子邮件地址（例如： john.doe@example.com "

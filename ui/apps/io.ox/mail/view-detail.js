@@ -1429,7 +1429,7 @@ define('io.ox/mail/view-detail',
                         require(['io.ox/core/pubsub/util']).done(function (pubsubUtil) {
                             pubsubUtil.autoSubscribe(pub.module, pub.name, pub.url).then(
                                 function success(data) {
-                                    notifications.yell('success', gt("Created private folder '%1$s' in %2$s and subscribed succesfully to shared folder", pub.name, pub.module));
+                                    notifications.yell('success', gt("Created private folder '%1$s' in %2$s and subscribed successfully to shared folder", pub.name, pub.module));
                                     //refresh folder views
                                     folder.trigger('update');
                                 },

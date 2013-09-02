@@ -68,7 +68,7 @@ define('io.ox/mail/settings/old_pane',
                             that.createControlGroup().append(
                                 that.createControlGroupLabel({text: gt('Compose')}),
                                 that.createControlsWrapper().append(
-                                    that.createCheckbox({property: 'appendVcard', label: gt('Append vcard')}),
+                                    that.createCheckbox({property: 'appendVcard', label: gt('Append vCard')}),
                                     that.createCheckbox({ property: 'appendMailTextOnReply', label: gt('Insert the original email text to a reply')}).addClass('expertmode')
                                 )
 

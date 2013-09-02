@@ -45,7 +45,7 @@ define('io.ox/mail/autoforward/settings/register',
                     }).fail(function (error) {
                         var msg;
                         if (error.code === 'MAIL_FILTER-0015') {
-                            msg = gt('Unable to contact mailfilter backend.');
+                            msg = gt('Unable to load mail filter settings.');
                         }
                         $container.append(
                             $.fail(msg || gt("Couldn't load your auto forward."), function () {

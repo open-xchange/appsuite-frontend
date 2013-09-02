@@ -573,7 +573,7 @@ define('io.ox/mail/actions',
                     function success(data) {
 
                         if (!_.isArray(data) || data.length === 0) {
-                            notifications.yell('error', gt('Failed to add. Maybe the VCard attachment is invalid.'));
+                            notifications.yell('error', gt('Failed to add. Maybe the vCard attachment is invalid.'));
                             return;
                         }
 

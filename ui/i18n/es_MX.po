@@ -258,7 +258,7 @@ msgstr "Añadiendo suscripción. Esto puede tardar unos segundos..."
 
 #: apps/io.ox/mail/view-detail.js:1332
 msgid ""
-"Created private folder '%1$s' in %2$s and subscribed succesfully to shared "
+"Created private folder '%1$s' in %2$s and subscribed successfully to shared "
 "folder"
 msgstr ""
 "Se ha creado la carpeta privada '%1$s' en %2$s y se suscribió correctamente "
@@ -464,7 +464,7 @@ msgid "Compose"
 msgstr "Redactar"
 
 #: apps/io.ox/mail/settings/old_pane.js:71 apps/io.ox/mail/settings/pane.js:39
-msgid "Append vcard"
+msgid "Append vCard"
 msgstr "Añadir vcard"
 
 #: apps/io.ox/mail/settings/old_pane.js:72 apps/io.ox/mail/settings/pane.js:40
@@ -671,7 +671,7 @@ msgstr "Correo"
 #: apps/io.ox/calendar/week/perspective.js:51
 #: apps/io.ox/calendar/week/perspective.js:183
 #: apps/io.ox/mail/write/main.js:898
-msgid "An error occured. Please try again."
+msgid "An error occurred. Please try again."
 msgstr "Ha ocurrido un error. Por favor, inténtelo de nuevo."
 
 #: apps/io.ox/mail/write/main.js:1110
@@ -1025,7 +1025,7 @@ msgstr "Filtro de correo"
 #: apps/io.ox/mail/autoforward/settings/register.js:51
 #: apps/io.ox/mail/mailfilter/settings/register.js:40
 #: apps/io.ox/mail/vacationnotice/settings/register.js:69
-msgid "Unable to contact mailfilter backend."
+msgid "Unable to load mail filter settings."
 msgstr "No se puede contactar con el motor de filtrado de correos."
 
 #: apps/io.ox/mail/mailfilter/settings/register.js:43
@@ -1279,7 +1279,7 @@ msgid "Attachments have been saved"
 msgstr "Los adjuntos se han guardado"
 
 #: apps/io.ox/mail/actions.js:604
-msgid "Failed to add. Maybe the VCard attachment is invalid."
+msgid "Failed to add. Maybe the vCard attachment is invalid."
 msgstr "Falló la adición. Puede que el adjunto VCard no sea válido."
 
 #: apps/io.ox/mail/actions.js:665
@@ -2496,7 +2496,7 @@ msgid "Progress %1$s %"
 msgstr "Progreso %1$s %"
 
 #: apps/io.ox/tasks/view-detail.js:120 apps/io.ox/tasks/view-detail.js:268
-msgid "Attachments   "
+msgid "Attachments"
 msgstr "Adjuntos   "
 
 #: apps/io.ox/tasks/view-detail.js:134
@@ -2812,7 +2812,7 @@ msgid "Undone"
 msgstr "Sin completar"
 
 #: apps/io.ox/tasks/actions.js:162 apps/io.ox/tasks/actions.js:234
-msgid "A severe error occured!"
+msgid "A severe error occurred!"
 msgstr "Se ha producido un error grave"
 
 #: apps/io.ox/tasks/actions.js:164
@@ -4603,11 +4603,11 @@ msgid "Hide request body"
 msgstr "Ocultar el cuerpo de la petición"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:75
-msgid "Show strack trace"
+msgid "Show stack trace"
 msgstr "Mostrar el trazado de la pila"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:77
-msgid "Hide strack trace"
+msgid "Hide stack trace"
 msgstr "Ocultar el trazado de la pila"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:111
@@ -4690,7 +4690,7 @@ msgid "Language"
 msgstr "Idioma"
 
 #: apps/io.ox/core/settings/pane.js:142
-msgid "Timezone"
+msgid "Time zone"
 msgstr "Zona horaria"
 
 #: apps/io.ox/core/settings/pane.js:151
@@ -5249,7 +5249,7 @@ msgstr "No se pudieron cargar los adjuntos de este contacto."
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:186
 #: apps/io.ox/contacts/view-detail.js:240
-msgid "This list has no members yet"
+msgid "This list has no contacts yet"
 msgstr "Esta lista no tiene aún ningún miembro"
 
 #: apps/io.ox/contacts/view-detail.js:314
@@ -5523,16 +5523,16 @@ msgid "List name"
 msgstr "Nombre de lista"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:87
-msgid "Add member"
+msgid "Add contact"
 msgstr "Añadir miembro"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:130
-msgid "Members"
+msgid "Contacts"
 msgstr "Miembros"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:274
 msgid ""
-"To add participants manually, just provide a valid email address (e.g john."
+"To add contacts manually, just provide a valid email address (e.g john."
 "doe@example.com or \"John Doe\" <jd@example.com>)"
 msgstr ""
 "Para añadir participantes manualmente, simplemente indique una dirección de "

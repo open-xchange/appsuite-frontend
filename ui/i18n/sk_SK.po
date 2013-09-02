@@ -64,7 +64,7 @@ msgstr "Bez predmetu"
 #: apps/io.ox/calendar/week/perspective.js:51
 #: apps/io.ox/calendar/week/perspective.js:183
 #: apps/io.ox/mail/write/main.js:924
-msgid "An error occured. Please try again."
+msgid "An error occurred. Please try again."
 msgstr "Vyskytla sa chyba. Prosím, skúste to znova neskôr."
 
 #: apps/io.ox/mail/write/main.js:1079
@@ -1221,7 +1221,7 @@ msgstr "Prebieha prihlasovanie k odberu. Môže to trvať niekoľko sekúnd..."
 
 #: apps/io.ox/mail/view-detail.js:1342
 msgid ""
-"Created private folder '%1$s' in %2$s and subscribed succesfully to shared "
+"Created private folder '%1$s' in %2$s and subscribed successfully to shared "
 "folder"
 msgstr ""
 "Vytvorený súkromný priečinok „%1$s“ v %2$s a prihlásenie odoberania "
@@ -1369,7 +1369,7 @@ msgid "Use fixed-width font for text mails"
 msgstr "Používať proporcionálne písmo pre text emailov"
 
 #: apps/io.ox/mail/settings/old_pane.js:71 apps/io.ox/mail/settings/pane.js:39
-msgid "Append vcard"
+msgid "Append vCard"
 msgstr "Pripojiť vCard"
 
 #: apps/io.ox/mail/settings/old_pane.js:72 apps/io.ox/mail/settings/pane.js:40
@@ -1703,7 +1703,7 @@ msgstr "Filter pošty"
 #: apps/io.ox/mail/autoforward/settings/register.js:48
 #: apps/io.ox/mail/mailfilter/settings/register.js:40
 #: apps/io.ox/mail/vacationnotice/settings/register.js:66
-msgid "Unable to contact mailfilter backend."
+msgid "Unable to load mail filter settings."
 msgstr "Nepodarilo sa kontaktovať backend mailfilter."
 
 #: apps/io.ox/mail/mailfilter/settings/register.js:43
@@ -1956,7 +1956,7 @@ msgid "Attachments have been saved"
 msgstr "Prílohy boli boli uložené"
 
 #: apps/io.ox/mail/actions.js:571
-msgid "Failed to add. Maybe the VCard attachment is invalid."
+msgid "Failed to add. Maybe the vCard attachment is invalid."
 msgstr "Nepodarilo sa pridať. Možno je neplatná príloha vizitky vCard."
 
 #: apps/io.ox/mail/actions.js:632
@@ -3098,7 +3098,7 @@ msgid "Progress %1$s %"
 msgstr "Priebeh %1$s %"
 
 #: apps/io.ox/tasks/view-detail.js:120 apps/io.ox/tasks/view-detail.js:268
-msgid "Attachments   "
+msgid "Attachments"
 msgstr "Prílohy"
 
 #: apps/io.ox/tasks/view-detail.js:134
@@ -3424,7 +3424,7 @@ msgid "Undone"
 msgstr "Vrátené späť"
 
 #: apps/io.ox/tasks/actions.js:159 apps/io.ox/tasks/actions.js:231
-msgid "A severe error occured!"
+msgid "A severe error occurred!"
 msgstr "Vyskytla sa závažná chyba!"
 
 #: apps/io.ox/tasks/actions.js:161
@@ -4983,11 +4983,11 @@ msgid "Hide request body"
 msgstr "Skryť telo požiadavky"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:75
-msgid "Show strack trace"
+msgid "Show stack trace"
 msgstr "Zobraziť trasovanie zásobníka"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:77
-msgid "Hide strack trace"
+msgid "Hide stack trace"
 msgstr "Skryť trasovanie zásobníka"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:111
@@ -5071,7 +5071,7 @@ msgid "Language"
 msgstr "Jazyk"
 
 #: apps/io.ox/core/settings/pane.js:146
-msgid "Timezone"
+msgid "Time zone"
 msgstr "Časové pásmo"
 
 #: apps/io.ox/core/settings/pane.js:155
@@ -5482,7 +5482,7 @@ msgstr "Nepodarilo sa načítať prílohy tohto kontaktu."
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:186
 #: apps/io.ox/contacts/view-detail.js:240
-msgid "This list has no members yet"
+msgid "This list has no contacts yet"
 msgstr "Táto skupina zatiaľ nemá členov"
 
 #: apps/io.ox/contacts/view-detail.js:314
@@ -5770,16 +5770,16 @@ msgid "List name"
 msgstr "Názov zoznamu"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:87
-msgid "Add member"
+msgid "Add contact"
 msgstr "Pridať člena"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:130
-msgid "Members"
+msgid "Contacts"
 msgstr "Členovia"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:274
 msgid ""
-"To add participants manually, just provide a valid email address (e.g john."
+"To add contacts manually, just provide a valid email address (e.g john."
 "doe@example.com or \"John Doe\" <jd@example.com>)"
 msgstr ""
 "Ak chcete účastníkov pridať ručne, jednoducho zadajte platnú emailovú adresu "
