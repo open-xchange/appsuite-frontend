@@ -11,13 +11,13 @@
         "larunbata"
     ],
     "daysShort": [
-        "ig",
-        "al",
-        "as",
-        "az",
-        "og",
-        "or",
-        "lr"
+        "ig.",
+        "al.",
+        "ar.",
+        "az.",
+        "og.",
+        "or.",
+        "lr."
     ],
     "daysStandalone": [
         "ig.",
@@ -29,52 +29,53 @@
         "lr."
     ],
     "months": [
-        "urtarrila",
-        "otsaila",
-        "martxoa",
-        "apirila",
-        "maiatza",
-        "ekaina",
-        "uztaila",
-        "abuztua",
-        "iraila",
-        "urria",
-        "azaroa",
-        "abendua"
+        "urtarrilak",
+        "otsailak",
+        "martxoak",
+        "apirilak",
+        "maiatzak",
+        "ekainak",
+        "uztailak",
+        "abuztuak",
+        "irailak",
+        "urriak",
+        "azaroak",
+        "abenduak"
     ],
     "monthsShort": [
-        "urt",
-        "ots",
-        "mar",
-        "api",
-        "mai",
-        "eka",
-        "uzt",
-        "abu",
-        "ira",
-        "urr",
-        "aza",
-        "abe"
+        "urt.",
+        "ots.",
+        "mar.",
+        "api.",
+        "mai.",
+        "eka.",
+        "uzt.",
+        "abu.",
+        "ira.",
+        "urr.",
+        "aza.",
+        "abe."
     ],
     "formats": {
         "E": "E",
-        "yMd": "y-M-d",
-        "yMEd": "E, M/d/y",
-        "yMMMd": "MMM d, y",
-        "yMMMEd": "E, MMM d, y",
+        "yMd": "y/M/d",
+        "yMEd": "y/M/d, E",
+        "yMMMd": "y('e')'ko' MMM d",
+        "yMMMEd": "y('e')'ko' MMM d, E",
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
-        "Hmv": "HH:mm v",
-        "hmv": "h:mm a v",
-        "yMdHm": "y-M-d HH:mm",
-        "yMdHmv": "y-M-d HH:mm v",
-        "yMdhm": "y-M-d h:mm a",
-        "yMdhmv": "y-M-d h:mm a v",
-        "yMEdHm": "E, M/d/y HH:mm",
-        "yMEdHmv": "E, M/d/y HH:mm v",
-        "yMEdhm": "E, M/d/y h:mm a",
-        "yMEdhmv": "E, M/d/y h:mm a v"
+        "Md": "M/d",
+        "Hmv": "HH:mm (v)",
+        "hmv": "h:mm a (v)",
+        "yMdHm": "y/M/d HH:mm",
+        "yMdHmv": "y/M/d HH:mm (v)",
+        "yMdhm": "y/M/d h:mm a",
+        "yMdhmv": "y/M/d h:mm a (v)",
+        "yMEdHm": "y/M/d, E HH:mm",
+        "yMEdHmv": "y/M/d, E HH:mm (v)",
+        "yMEdhm": "y/M/d, E h:mm a",
+        "yMEdhmv": "y/M/d, E h:mm a (v)"
     },
     "date": "y MMM d",
     "time": "HH:mm",
@@ -82,7 +83,7 @@
     "intervals": {
         "fallback": "%1$s – %2$s",
         "hm": {
-            "a": ":h:mm a – h:mm a",
+            "a": "h:mm a – h:mm a",
             "h": "h:mm–h:mm a",
             "m": "h:mm–h:mm a"
         },
@@ -100,14 +101,14 @@
             "m": "HH:mm–HH:mm v"
         },
         "yMMMd": {
-            "d": "MMM d–d, y",
-            "m": "MMM d – MMM d, y",
-            "y": "MMM d, y – MMM d, y"
+            "d": "y('e')'ko' MMM d–d",
+            "m": "y('e')'ko' MMM d – MMM d",
+            "y": "y('e')'ko' MMM d – y('e')'ko' MMM d"
         },
         "yMMMEd": {
-            "d": "E, MMM d – E, MMM d, y",
-            "m": "E, MMM d – E, MMM d, y",
-            "y": "E, MMM d, y – E, MMM d, y"
+            "d": "y('e')'ko' MMM d, E – y('e')'ko' MMM d, E",
+            "m": "y('e')'ko' MMM d, E – MMM d, E",
+            "y": "y('e')'ko' MMM d, E – y('e')'ko' MMM d, E"
         }
     },
     "dayPeriods": {

@@ -11,22 +11,22 @@
         "sábado"
     ],
     "daysShort": [
-        "dom",
-        "lun",
-        "mar",
-        "mié",
-        "jue",
-        "vie",
+        "dom.",
+        "lun.",
+        "mar.",
+        "miér.",
+        "jue.",
+        "vier.",
         "sáb"
     ],
     "daysStandalone": [
-        "D",
-        "L",
-        "M",
-        "X",
-        "J",
-        "V",
-        "S"
+        "do.",
+        "lu.",
+        "ma.",
+        "mi.",
+        "ju.",
+        "vi.",
+        "sá."
     ],
     "months": [
         "enero",
@@ -43,28 +43,29 @@
         "diciembre"
     ],
     "monthsShort": [
-        "ene",
-        "feb",
-        "mar",
-        "abr",
-        "may",
-        "jun",
-        "jul",
-        "ago",
-        "sep",
-        "oct",
-        "nov",
-        "dic"
+        "ene.",
+        "febr.",
+        "mzo.",
+        "abr.",
+        "my.",
+        "jun.",
+        "jul.",
+        "ag.",
+        "set.",
+        "oct.",
+        "nov.",
+        "dic."
     ],
     "formats": {
         "E": "E",
         "yMd": "d/M/y",
         "yMEd": "E d/M/y",
-        "yMMMd": "d MMM y",
+        "yMMMd": "d 'de' MMM 'de' y",
         "yMMMEd": "EEE, d 'de' MMMM 'de' y",
         "hm": "hh:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "d/M",
         "Hmv": "HH:mm v",
         "hmv": "hh:mm a v",
         "yMdHm": "d/M/y HH:mm",
@@ -76,7 +77,7 @@
         "yMEdhm": "E d/M/y hh:mm a",
         "yMEdhmv": "E d/M/y hh:mm a v"
     },
-    "date": "dd/MM/yyyy",
+    "date": "dd/MM/y",
     "time": "HH:mm",
     "dateTimeFormat": "%2$s %1$s",
     "intervals": {
@@ -100,14 +101,14 @@
             "m": "HH:mm – HH:mm v"
         },
         "yMMMd": {
-            "d": "d–d MMM y",
-            "m": "d MMM – d MMM y",
-            "y": "d MMM y – d MMM y"
+            "d": "d–d 'de' MMM 'de' y",
+            "m": "d 'de' MMM – d 'de' MMM y",
+            "y": "d 'de' MMM 'de' y – d 'de' MMM 'de' y"
         },
         "yMMMEd": {
-            "d": "E d MMM – E d MMM y",
-            "m": "E d MMM – E d MMM y",
-            "y": "E d MMM y – E d MMM y"
+            "d": "E d 'de' MMM – E d 'de' MMM 'de' y",
+            "m": "E d 'de' MMM – E d 'de' MMM 'de' y",
+            "y": "E d 'de' MMM 'de' y – E d 'de' MMM 'de' y"
         }
     },
     "dayPeriods": {
@@ -115,9 +116,9 @@
         "pm": "p.m."
     },
     "eras": [
-        "a.C.",
-        "d.C."
+        "a. e. c.",
+        "e. c."
     ],
-    "dateTime": "dd/MM/yyyy HH:mm",
+    "dateTime": "dd/MM/y HH:mm",
     "h12": false
 }

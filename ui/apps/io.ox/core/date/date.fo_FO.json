@@ -65,6 +65,7 @@
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "M-d",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
         "yMdHm": "y-MM-dd HH:mm",
@@ -76,7 +77,7 @@
         "yMEdhm": "E, y-MM-dd h:mm a",
         "yMEdhmv": "E, y-MM-dd h:mm a v"
     },
-    "date": "dd-MM-yyyy",
+    "date": "dd-MM-y",
     "time": "HH:mm",
     "dateTimeFormat": "%2$s %1$s",
     "intervals": {
@@ -100,14 +101,14 @@
             "m": "HH:mm–HH:mm v"
         },
         "yMMMd": {
-            "d": "yyyy-MM-d – d",
-            "m": "yyyy-MM-dd – MM-d",
-            "y": "yyyy-MM-dd – yyyy-MM-dd"
+            "d": "y-MM-d – d",
+            "m": "y-MM-dd – MM-d",
+            "y": "y-MM-dd – y-MM-dd"
         },
         "yMMMEd": {
-            "d": "E, yyyy-MM-dd – E, yyyy-MM-dd",
-            "m": "E, yyyy-MM-dd – E, yyyy-MM-dd",
-            "y": "E, yyyy-MM-dd – E, yyyy-MM-dd"
+            "d": "E, y-MM-dd – E, y-MM-dd",
+            "m": "E, y-MM-dd – E, y-MM-dd",
+            "y": "E, y-MM-dd – E, y-MM-dd"
         }
     },
     "dayPeriods": {
@@ -115,9 +116,9 @@
         "pm": "um seinnapartur"
     },
     "eras": [
-        "f.Kr.",
-        "e.Kr."
+        "f.l.t.",
+        "l.t."
     ],
-    "dateTime": "dd-MM-yyyy HH:mm",
+    "dateTime": "dd-MM-y HH:mm",
     "h12": false
 }

@@ -6,18 +6,18 @@
         "सोमवार",
         "मंगलवार",
         "बुधवार",
-        "बृहस्पतिवार",
+        "गुरुवार",
         "शुक्रवार",
         "शनिवार"
     ],
     "daysShort": [
-        "रवि.",
-        "सोम.",
-        "मंगल.",
-        "बुध.",
-        "बृह.",
-        "शुक्र.",
-        "शनि."
+        "रवि",
+        "सोम",
+        "मंगल",
+        "बुध",
+        "गुरु",
+        "शुक्र",
+        "शनि"
     ],
     "daysStandalone": [
         "र",
@@ -30,31 +30,31 @@
     ],
     "months": [
         "जनवरी",
-        "फरवरी",
+        "फ़रवरी",
         "मार्च",
         "अप्रैल",
         "मई",
         "जून",
-        "जुलाई",
+        "जुला���",
         "अगस्त",
-        "सितम्बर",
-        "अक्तूबर",
-        "नवम्बर",
-        "दिसम्बर"
+        "सितंबर",
+        "अक्टूबर",
+        "नवंबर",
+        "दिसंबर"
     ],
     "monthsShort": [
-        "जनवरी",
-        "फरवरी",
+        "जन",
+        "फ़र",
         "मार्च",
-        "अप्रैल",
+        "अप्रै",
         "मई",
         "जून",
-        "जुलाई",
-        "अगस्त",
-        "सितम्बर",
-        "अक्तूबर",
-        "नवम्बर",
-        "दिसम्बर"
+        "जुला",
+        "अग",
+        "सितं",
+        "अक्टू",
+        "नवं",
+        "दिसं"
     ],
     "formats": {
         "E": "E",
@@ -65,20 +65,21 @@
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "d/M",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
-        "yMdHm": "d/M/y HH:mm",
-        "yMdHmv": "d/M/y HH:mm v",
-        "yMdhm": "d/M/y h:mm a",
-        "yMdhmv": "d/M/y h:mm a v",
-        "yMEdHm": "E, d/M/y HH:mm",
-        "yMEdHmv": "E, d/M/y HH:mm v",
-        "yMEdhm": "E, d/M/y h:mm a",
-        "yMEdhmv": "E, d/M/y h:mm a v"
+        "yMdHm": "d/M/y, HH:mm",
+        "yMdHmv": "d/M/y, HH:mm v",
+        "yMdhm": "d/M/y, h:mm a",
+        "yMdhmv": "d/M/y, h:mm a v",
+        "yMEdHm": "E, d/M/y, HH:mm",
+        "yMEdHmv": "E, d/M/y, HH:mm v",
+        "yMEdhm": "E, d/M/y, h:mm a",
+        "yMEdhmv": "E, d/M/y, h:mm a v"
     },
-    "date": "dd-MM-yyyy",
+    "date": "dd-MM-y",
     "time": "h:mm a",
-    "dateTimeFormat": "%2$s %1$s",
+    "dateTimeFormat": "%2$s, %1$s",
     "intervals": {
         "fallback": "%1$s – %2$s",
         "hm": {
@@ -115,9 +116,9 @@
         "pm": "अपराह्न"
     },
     "eras": [
-        "ईसापूर्व",
-        "सन"
+        "ईसा-पूर्व",
+        "ईस्वी"
     ],
-    "dateTime": "dd-MM-yyyy h:mm a",
+    "dateTime": "dd-MM-y, h:mm a",
     "h12": true
 }

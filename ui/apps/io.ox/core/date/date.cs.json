@@ -19,13 +19,13 @@
         "so"
     ],
     "daysStandalone": [
-        "Ne",
-        "Po",
-        "Út",
-        "St",
-        "Čt",
-        "Pá",
-        "So"
+        "ne",
+        "po",
+        "út",
+        "st",
+        "čt",
+        "pá",
+        "so"
     ],
     "months": [
         "ledna",
@@ -58,24 +58,25 @@
     "formats": {
         "E": "E",
         "yMd": "d. M. y",
-        "yMEd": "E, d. M. y",
+        "yMEd": "E d. M. y",
         "yMMMd": "d. M. y",
-        "yMMMEd": "E, d. M. y",
+        "yMMMEd": "E d. M. y",
         "hm": "h:mm a",
         "Hm": "H:mm",
         "v": "v",
+        "Md": "d. M.",
         "Hmv": "H:mm v",
         "hmv": "h:mm a v",
         "yMdHm": "d. M. y H:mm",
         "yMdHmv": "d. M. y H:mm v",
         "yMdhm": "d. M. y h:mm a",
         "yMdhmv": "d. M. y h:mm a v",
-        "yMEdHm": "E, d. M. y H:mm",
-        "yMEdHmv": "E, d. M. y H:mm v",
-        "yMEdhm": "E, d. M. y h:mm a",
-        "yMEdhmv": "E, d. M. y h:mm a v"
+        "yMEdHm": "E d. M. y H:mm",
+        "yMEdHmv": "E d. M. y H:mm v",
+        "yMEdhm": "E d. M. y h:mm a",
+        "yMEdhmv": "E d. M. y h:mm a v"
     },
-    "date": "d. M. yyyy",
+    "date": "d. M. y",
     "time": "H:mm",
     "dateTimeFormat": "%2$s %1$s",
     "intervals": {
@@ -90,7 +91,7 @@
             "m": "H:mm–H:mm"
         },
         "hmv": {
-            "a": "H:mm – H:mm v",
+            "a": "h:mm a – h:mm a v",
             "h": "h:mm–h:mm a v",
             "m": "h:mm–h:mm a v"
         },
@@ -104,9 +105,9 @@
             "y": "d. M. y – d. M. y"
         },
         "yMMMEd": {
-            "d": "E, d. M. – E, d. M. y",
-            "m": "E, d. M. – E, d. M. y",
-            "y": "E, d. M. y – E, d. M. y"
+            "d": "E d. M. – E d. M. y",
+            "m": "E d. M. – E d. M. y",
+            "y": "E d. M. y – E d. M. y"
         }
     },
     "dayPeriods": {
@@ -117,6 +118,6 @@
         "př. n. l.",
         "n. l."
     ],
-    "dateTime": "d. M. yyyy H:mm",
+    "dateTime": "d. M. y H:mm",
     "h12": false
 }

@@ -57,25 +57,26 @@
     ],
     "formats": {
         "E": "E",
-        "yMd": "y-M-d",
-        "yMEd": "E, yyyy-M-d",
+        "yMd": "y-MM-dd",
+        "yMEd": "E, y-M-d",
         "yMMMd": "y MMM d",
         "yMMMEd": "E, d. MMM y",
         "hm": "h:mm a",
         "Hm": "H:mm",
         "v": "v",
+        "Md": "d.M.",
         "Hmv": "H:mm v",
         "hmv": "h:mm a v",
-        "yMdHm": "y-M-d H:mm",
-        "yMdHmv": "y-M-d H:mm v",
-        "yMdhm": "y-M-d h:mm a",
-        "yMdhmv": "y-M-d h:mm a v",
-        "yMEdHm": "E, yyyy-M-d H:mm",
-        "yMEdHmv": "E, yyyy-M-d H:mm v",
-        "yMEdhm": "E, yyyy-M-d h:mm a",
-        "yMEdhmv": "E, yyyy-M-d h:mm a v"
+        "yMdHm": "y-MM-dd H:mm",
+        "yMdHmv": "y-MM-dd H:mm v",
+        "yMdhm": "y-MM-dd h:mm a",
+        "yMdhmv": "y-MM-dd h:mm a v",
+        "yMEdHm": "E, y-M-d H:mm",
+        "yMEdHmv": "E, y-M-d H:mm v",
+        "yMEdhm": "E, y-M-d h:mm a",
+        "yMEdhmv": "E, y-M-d h:mm a v"
     },
-    "date": "dd-MM-yyyy",
+    "date": "dd-MM-y",
     "time": "HH:mm",
     "dateTimeFormat": "%2$s %1$s",
     "intervals": {
@@ -117,6 +118,6 @@
         "av. Cr.",
         "s. Cr."
     ],
-    "dateTime": "dd-MM-yyyy HH:mm",
+    "dateTime": "dd-MM-y HH:mm",
     "h12": false
 }

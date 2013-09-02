@@ -65,6 +65,7 @@
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "M/d",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
         "yMdHm": "M/d/y, HH:mm",
@@ -83,24 +84,24 @@
         "fallback": "%1$s – %2$s",
         "hm": {
             "a": "h:mm a – h:mm a",
-            "h": "h:mm–h:mm a",
-            "m": "h:mm–h:mm a"
+            "h": "h:mm – h:mm a",
+            "m": "h:mm – h:mm a"
         },
         "Hm": {
-            "h": "HH:mm–HH:mm",
-            "m": "HH:mm–HH:mm"
+            "h": "HH:mm – HH:mm",
+            "m": "HH:mm – HH:mm"
         },
         "hmv": {
             "a": "h:mm a – h:mm a v",
-            "h": "h:mm–h:mm a v",
-            "m": "h:mm–h:mm a v"
+            "h": "h:mm – h:mm a v",
+            "m": "h:mm – h:mm a v"
         },
         "Hmv": {
-            "h": "HH:mm–HH:mm v",
-            "m": "HH:mm–HH:mm v"
+            "h": "HH:mm – HH:mm v",
+            "m": "HH:mm – HH:mm v"
         },
         "yMMMd": {
-            "d": "MMM d–d, y",
+            "d": "MMM d – d, y",
             "m": "MMM d – MMM d, y",
             "y": "MMM d, y – MMM d, y"
         },
@@ -116,8 +117,8 @@
         "pm": "PM"
     },
     "eras": [
-        "BC",
-        "AD"
+        "BCE",
+        "CE"
     ],
     "dateTime": "MMM d, y, h:mm a",
     "h12": true

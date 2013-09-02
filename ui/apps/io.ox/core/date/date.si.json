@@ -10,11 +10,11 @@
         "සෙනසුරාදා"
     ],
     "daysShort": [
-        "ඉරි",
-        "සඳු",
-        "අඟ",
-        "බදා",
-        "බ්‍රහ",
+        "ඉරිදා",
+        "සඳුදා",
+        "අඟහ",
+        "බදාදා",
+        "බ්‍රහස්",
         "සිකු",
         "සෙන"
     ],
@@ -64,6 +64,7 @@
         "hm": "a h.mm",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "M-d",
         "Hmv": "HH:mm v",
         "hmv": "a h.mm v",
         "yMdHm": "y-M-d HH:mm",
@@ -81,7 +82,7 @@
     "intervals": {
         "fallback": "%1$s – %2$s",
         "hm": {
-            "a": "a h:mm - a h:mm",
+            "a": "a h.mm - a h.mm",
             "h": "a h.mm - h.mm",
             "m": "a h.mm - h.mm"
         },
@@ -90,13 +91,13 @@
             "m": "HH:mm–HH:mm"
         },
         "hmv": {
-            "a": "a h.mm - a hhh.mm v",
+            "a": "a h.mm - a h.mm v",
             "h": "a h.mm - h.mm v",
-            "m": "a h:mm - h.mm v"
+            "m": "a h.mm - h.mm v"
         },
         "Hmv": {
             "h": "HH:mm–HH:mm v",
-            "m": "HHmm-HHmm v"
+            "m": "HH:mm–HH:mm v"
         },
         "yMMMd": {
             "d": "y MMM d - d",
@@ -114,8 +115,8 @@
         "pm": "ප.ව."
     },
     "eras": [
-        "ක්‍රි.පූ.",
-        "ක්‍රි.ව."
+        "පො.යු.පෙ",
+        "පො.යු"
     ],
     "dateTime": "y MMM d a h.mm",
     "h12": true

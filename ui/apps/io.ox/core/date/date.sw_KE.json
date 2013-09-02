@@ -65,6 +65,7 @@
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "d-M",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
         "yMdHm": "d/M/y HH:mm",
@@ -100,19 +101,19 @@
             "m": "HH:mm - HH:mm v"
         },
         "yMMMd": {
-            "d": "d - d MMM y",
-            "m": "d MMM - d MMM y",
-            "y": "d MMM y - d MMM y"
+            "d": "MMM d - d, y",
+            "m": "MMM d - d, y",
+            "y": "MMM d y - MMM d y"
         },
         "yMMMEd": {
-            "d": "E, d MMM - E, d MMM y",
-            "m": "E, d MMM - E, d MMM y",
-            "y": "E, d MMM y - E, d MMM y"
+            "d": "E, MMM d - E, MMM d y",
+            "m": "E, MMM d- E, MMM d y",
+            "y": "E, MMM d y - E, MMM d y"
         }
     },
     "dayPeriods": {
-        "am": "asubuhi",
-        "pm": "alasiri"
+        "am": "AM",
+        "pm": "PM"
     },
     "eras": [
         "KK",

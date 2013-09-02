@@ -6,7 +6,7 @@
         "Msombuluko",
         "Lwesibili",
         "Lwesithathu",
-        "uLwesine",
+        "Lwesine",
         "Lwesihlanu",
         "Mgqibelo"
     ],
@@ -65,6 +65,7 @@
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "M/d",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
         "yMdHm": "M/d/y HH:mm",
@@ -115,8 +116,8 @@
         "pm": "Ntambama"
     },
     "eras": [
-        "BC",
-        "AD"
+        "BCE",
+        "CE"
     ],
     "dateTime": "d MMM y h:mm a",
     "h12": true

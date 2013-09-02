@@ -64,6 +64,7 @@
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "d.M",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
         "yMdHm": "d.M.y HH:mm",
@@ -99,20 +100,20 @@
             "m": "HH:mm–HH:mm v"
         },
         "yMMMd": {
-            "d": "d – d MMM, y",
+            "d": "d-d MMM, y",
             "m": "dd MM - dd MM, y",
             "y": "dd MMM, y - d MMM, y"
         },
         "yMMMEd": {
-            "d": "E, d - E, d MMM y",
+            "d": "E, d MMM - E, d MMM, y",
             "m": "E, d MMM - E, d MMM, y",
             "y": "E, d MMM, y - E, d MMM, y"
         }
     },
     "dayPeriods": {
-        "am": "AM",
+        "am": "დილის",
         "noon": "შუადღე",
-        "pm": "PM"
+        "pm": "საღამოს"
     },
     "eras": [
         "ძვ. წ.",

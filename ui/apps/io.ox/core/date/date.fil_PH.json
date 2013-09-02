@@ -14,9 +14,9 @@
         "Lin",
         "Lun",
         "Mar",
-        "Mye",
+        "Miy",
         "Huw",
-        "Bye",
+        "Biy",
         "Sab"
     ],
     "daysStandalone": [
@@ -26,7 +26,7 @@
         "Mi",
         "Hu",
         "Bi",
-        "Sab"
+        "Sa"
     ],
     "months": [
         "Enero",
@@ -65,20 +65,21 @@
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "M/d",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
-        "yMdHm": "M/d/y HH:mm",
-        "yMdHmv": "M/d/y HH:mm v",
-        "yMdhm": "M/d/y h:mm a",
-        "yMdhmv": "M/d/y h:mm a v",
-        "yMEdHm": "E, M/d/y HH:mm",
-        "yMEdHmv": "E, M/d/y HH:mm v",
-        "yMEdhm": "E, M/d/y h:mm a",
-        "yMEdhmv": "E, M/d/y h:mm a v"
+        "yMdHm": "M/d/y, HH:mm",
+        "yMdHmv": "M/d/y, HH:mm v",
+        "yMdhm": "M/d/y, h:mm a",
+        "yMdhmv": "M/d/y, h:mm a v",
+        "yMEdHm": "E, M/d/y, HH:mm",
+        "yMEdHmv": "E, M/d/y, HH:mm v",
+        "yMEdhm": "E, M/d/y, h:mm a",
+        "yMEdhmv": "E, M/d/y, h:mm a v"
     },
     "date": "MMM d, y",
-    "time": "HH:mm",
-    "dateTimeFormat": "%2$s %1$s",
+    "time": "h:mm a",
+    "dateTimeFormat": "%2$s, %1$s",
     "intervals": {
         "fallback": "%1$s – %2$s",
         "hm": {
@@ -115,9 +116,9 @@
         "pm": "PM"
     },
     "eras": [
-        "BC",
-        "AD"
+        "BCE",
+        "CE"
     ],
-    "dateTime": "MMM d, y HH:mm",
-    "h12": false
+    "dateTime": "MMM d, y, h:mm a",
+    "h12": true
 }

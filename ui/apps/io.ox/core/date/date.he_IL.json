@@ -20,13 +20,13 @@
         "שבת"
     ],
     "daysStandalone": [
-        "א'",
-        "ב'",
-        "ג'",
-        "ד'",
-        "ה'",
-        "ו'",
-        "ש'"
+        "א׳",
+        "ב׳",
+        "ג׳",
+        "ד׳",
+        "ה׳",
+        "ו׳",
+        "ש׳"
     ],
     "months": [
         "ינואר",
@@ -58,25 +58,26 @@
     ],
     "formats": {
         "E": "E",
-        "yMd": "d.M.yyyy",
+        "yMd": "d.M.y",
         "yMEd": "E, d/M/y",
         "yMMMd": "d בMMM y",
         "yMMMEd": "E, d בMMM y",
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "d/M",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
-        "yMdHm": "d.M.yyyy, HH:mm",
-        "yMdHmv": "d.M.yyyy, HH:mm v",
-        "yMdhm": "d.M.yyyy, h:mm a",
-        "yMdhmv": "d.M.yyyy, h:mm a v",
+        "yMdHm": "d.M.y, HH:mm",
+        "yMdHmv": "d.M.y, HH:mm v",
+        "yMdhm": "d.M.y, h:mm a",
+        "yMdhmv": "d.M.y, h:mm a v",
         "yMEdHm": "E, d/M/y, HH:mm",
         "yMEdHmv": "E, d/M/y, HH:mm v",
         "yMEdhm": "E, d/M/y, h:mm a",
         "yMEdhmv": "E, d/M/y, h:mm a v"
     },
-    "date": "d בMMM yyyy",
+    "date": "d בMMM y",
     "time": "HH:mm",
     "dateTimeFormat": "%2$s, %1$s",
     "intervals": {
@@ -87,8 +88,8 @@
             "m": "h:mm–h:mm a"
         },
         "Hm": {
-            "h": "HH:mm–HH:mm",
-            "m": "HH:mm–HH:mm"
+            "h": "H:mm–H:mm",
+            "m": "H:mm–H:mm"
         },
         "hmv": {
             "a": "h:mm a – h:mm a v",
@@ -96,8 +97,8 @@
             "m": "h:mm–h:mm a v"
         },
         "Hmv": {
-            "h": "HH:mm–HH:mm v",
-            "m": "HH:mm–HH:mm v"
+            "h": "H:mm–H:mm v",
+            "m": "H:mm–H:mm v"
         },
         "yMMMd": {
             "d": "d–d MMM y",
@@ -115,9 +116,9 @@
         "pm": "אחה״צ"
     },
     "eras": [
-        "לפנה״ס",
-        "לסה״נ"
+        "BCE",
+        "CE"
     ],
-    "dateTime": "d בMMM yyyy, HH:mm",
+    "dateTime": "d בMMM y, HH:mm",
     "h12": false
 }

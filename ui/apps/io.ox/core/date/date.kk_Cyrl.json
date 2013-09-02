@@ -4,7 +4,7 @@
         "жексені",
         "дуйсенбі",
         "сейсенбі",
-        "сәренбі",
+        "сәрсенбі",
         "бейсенбі",
         "жұма",
         "сенбі"
@@ -16,7 +16,7 @@
         "ср.",
         "бс.",
         "жм.",
-        "сһ."
+        "сб."
     ],
     "daysStandalone": [
         "жс.",
@@ -25,7 +25,7 @@
         "ср.",
         "бс.",
         "жм.",
-        "сһ."
+        "сб."
     ],
     "months": [
         "қаңтар",
@@ -57,25 +57,26 @@
     ],
     "formats": {
         "E": "E",
-        "yMd": "y-M-d",
-        "yMEd": "E, y-M-d",
-        "yMMMd": "y MMM d",
-        "yMMMEd": "E, y MMM d",
+        "yMd": "dd-MM-y",
+        "yMEd": "E, dd-MM-y",
+        "yMMMd": "d MMM y",
+        "yMMMEd": "E, d MMM y",
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "dd-MM",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
-        "yMdHm": "y-M-d HH:mm",
-        "yMdHmv": "y-M-d HH:mm v",
-        "yMdhm": "y-M-d h:mm a",
-        "yMdhmv": "y-M-d h:mm a v",
-        "yMEdHm": "E, y-M-d HH:mm",
-        "yMEdHmv": "E, y-M-d HH:mm v",
-        "yMEdhm": "E, y-M-d h:mm a",
-        "yMEdhmv": "E, y-M-d h:mm a v"
+        "yMdHm": "dd-MM-y HH:mm",
+        "yMdHmv": "dd-MM-y HH:mm v",
+        "yMdhm": "dd-MM-y h:mm a",
+        "yMdhmv": "dd-MM-y h:mm a v",
+        "yMEdHm": "E, dd-MM-y HH:mm",
+        "yMEdHmv": "E, dd-MM-y HH:mm v",
+        "yMEdhm": "E, dd-MM-y h:mm a",
+        "yMEdhmv": "E, dd-MM-y h:mm a v"
     },
-    "date": "dd.MM.yyyy",
+    "date": "dd.MM.y",
     "time": "HH:mm",
     "dateTimeFormat": "%2$s %1$s",
     "intervals": {
@@ -110,13 +111,13 @@
         }
     },
     "dayPeriods": {
-        "am": "AM",
-        "pm": "PM"
+        "am": "түске дейін",
+        "pm": "түстен кейін"
     },
     "eras": [
-        "BCE",
-        "CE"
+        "б.з.д.",
+        "б.з."
     ],
-    "dateTime": "dd.MM.yyyy HH:mm",
+    "dateTime": "dd.MM.y HH:mm",
     "h12": false
 }
