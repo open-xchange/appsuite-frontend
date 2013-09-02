@@ -68,7 +68,7 @@ define('io.ox/tasks/actions',
                 popup.show();
                 popup.on('deleteTask', function () {
                     require(['io.ox/tasks/api'], function (api) {
-                        api.remove(data, false)
+                        api.remove(data)
                             .done(function (data) {
                                 notifications.yell('success', gt.ngettext('Task has been deleted!',
                                                                           'Tasks have been deleted!', numberOfTasks));
