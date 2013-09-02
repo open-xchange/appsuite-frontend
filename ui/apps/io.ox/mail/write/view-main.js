@@ -550,7 +550,7 @@ define("io.ox/mail/write/view-main",
                 dndInfo =  $('<div class="alert alert-info">').text(gt('You can drag and drop files from your computer here to add as attachment.'));
 
             //TODO: remove after feature is developed
-            ox.efl = false;
+            ox.efl = 'efl' in ox ? ox.efl : true;
             var $inputWrap = attachments.fileUploadWidget({
                     displayLabel: false,
                     displayButton: true,
