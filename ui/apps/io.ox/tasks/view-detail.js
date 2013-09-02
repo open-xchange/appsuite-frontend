@@ -117,7 +117,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
             if (api.uploadInProgress(_.ecid(data))) {
                 $('<div>').addClass('attachments-container')
                     .append(
-                        $('<span>').text(gt('Attachments \u00A0\u00A0')).addClass('attachments'),
+                        $('<span>').text(gt('Attachments') + ' \u00A0\u00A0').addClass('attachments'),
                         $('<div>').css({width: '70px', height: '12px', display: 'inline-block'}).busy())
                     .appendTo(node);
             } else if (task.number_of_attachments > 0) {
@@ -265,7 +265,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
             } else {
                 attachmentNode = $('<div>').addClass('attachments-container').appendTo(this);//else build new
             }
-            $('<span>').text(gt('Attachments \u00A0\u00A0')).addClass('attachments').appendTo(attachmentNode);
+            $('<span>').text(gt('Attachments') + ' \u00A0\u00A0').addClass('attachments').appendTo(attachmentNode);
             require(['io.ox/core/api/attachment'], function (api) {
                 api.getAll({folder_id: task.folder_id, id: task.id, module: 4}).done(function (data) {
                     _(data).each(function (a, index) {
