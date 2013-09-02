@@ -100,6 +100,7 @@ define('io.ox/contacts/distrib/create-dist-view',
                 contacts: true,
                 distributionlists: false,
                 users: false,
+                groups: false,
                 keepId: true
             });
 

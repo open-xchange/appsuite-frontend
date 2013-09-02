@@ -386,7 +386,10 @@
 
         setCookie: function (key, value, lifetime) {
             // yep, works this way:
-            var c = key + "=" + encodeURIComponent(value) + (lifetime ? '; expires=' + new Date(new Date().getTime() + lifetime).toGMTString() + '; path=/' : '');
+            var c = key + "=" + encodeURIComponent(value) +
+                (lifetime ? '; expires=' + new Date(new Date().getTime() + lifetime).toGMTString() : '') +
+                '; path=/' +
+                (location.protocol === 'https:' ? '; secure' : '');
             document.cookie = c;
         },
 

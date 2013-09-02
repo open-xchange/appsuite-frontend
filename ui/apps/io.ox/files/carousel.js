@@ -267,7 +267,12 @@ define('io.ox/files/carousel',
         show: function () {
             var win;
             if (this.config.attachmentMode) {
-                win = $('.window-container.io-ox-mail-window');
+                if ($('.window-container.io-ox-mail-window').length > 0) {
+                    win = $('.window-container.io-ox-mail-window');
+                } else if ($('.window-container.io-ox-portal-window').length > 0) {
+                    win = $('.window-container.io-ox-portal-window');
+                }
+
             } else if (this.config.selector) {
                 win = $(this.config.selector);
             } else {

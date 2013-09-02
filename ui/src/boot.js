@@ -904,7 +904,7 @@ $(window).load(function () {
                     if (_.getCookie('test') !== 'cookie') {
                         feedback('info', gt('Your browser\'s cookie functionality is disabled. Please turn it on.'));
                     }
-                    _.setCookie('test', null);
+                    _.setCookie('test', null, -1);
                 }
 
                 // show login dialog
@@ -939,7 +939,7 @@ $(window).load(function () {
     );
 
     // reload if files have change; need this during development
-    if (Modernizr.applicationcache && _.browser.webkit && ox.debug) {
+    if (Modernizr.applicationcache && _.browser.chrome && ox.debug && $('html').attr('manifest')) {
 
         (function () {
 

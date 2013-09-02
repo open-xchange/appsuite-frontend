@@ -26,20 +26,18 @@ define('io.ox/portal/widgets',
 
     // application object
     var availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),
-        collection = new Backbone.Collection([]);
+        collection = new Backbone.Collection([]),
+        widgetSet = settings.get("widgetSet", ""),
+        generation = Number(settings.get("generation", 0));
 
     collection.comparator = function (a, b) {
         return ext.indexSorter({ index: a.get('index') }, { index: b.get('index') });
     };
 
-    var widgetSet = settings.get("widgetSet", "");
-    var generation = Number(settings.get("generation", 0));
-
     var widgets = (function () {
 
-        var widgets = {};
-
-        var userValues = settings.get("settings" + widgetSet, {});
+        var widgets = {},
+            userValues = settings.get("settings" + widgetSet, {});
 
         // Load the users widgets
         _(settings.get("widgets/user", {})).each(function (widgetDef, id) {

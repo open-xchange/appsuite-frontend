@@ -75,6 +75,7 @@ define('io.ox/core/pubsub/subscriptions',
                                     popup.getBody().find('.control-group:not(:first)').addClass('error');
                                     showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(error.error));
                                     api.subscriptions.destroy(id);
+                                    self.model = self.model.clone();
                                     if (newFolder) {
                                         removeFolder(folder);
                                     }

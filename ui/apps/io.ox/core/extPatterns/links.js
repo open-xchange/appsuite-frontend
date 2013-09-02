@@ -44,6 +44,7 @@ define("io.ox/core/extPatterns/links",
                 $("<a>", { href: "#", tabindex: 1, "data-action": self.id })
                 .addClass(self.cssClasses || 'io-ox-action-link')
                 .attr({
+                    'data-section': self.section || 'default',
                     'data-prio': self.prio || 'lo',
                     'data-ref': self.ref,
                     'data-prio-mobile': self.prioMobile || 'none'
@@ -223,7 +224,19 @@ define("io.ox/core/extPatterns/links",
                                         return all.stayOnTop.map(wrapAsListItem);
                                     }
                                 } else {
-                                    return lo.map(wrapAsListItem);
+                                    // loop over all items and visually group by "section"
+                                    var items = [], currentSection = '';
+                                    lo.each(function () {
+                                        var node = $(this), section = node.attr('data-section');
+                                        // add divider?
+                                        if (currentSection !== '' && currentSection !== section) {
+                                            items.push($('<li class="divider" role="presentation">'));
+                                        }
+                                        currentSection = section;
+                                        // add item
+                                        items.push($('<li>').append(node));
+                                    });
+                                    return items;
                                 }
                             }())
                             )
