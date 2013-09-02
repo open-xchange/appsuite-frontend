@@ -966,7 +966,7 @@ define("io.ox/mail/write/view-main",
                 preview.appendTo(popup);
                 popup.append($('<div>').text(_.noI18n('\u00A0')));
             }
-        } else if (file.display_name) {
+        } else if (file.display_name || file.email1) {
             // if is vCard
             require(['io.ox/contacts/view-detail'], function (view) {
                 popup.append(view.draw(file));
