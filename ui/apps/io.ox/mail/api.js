@@ -486,15 +486,17 @@ define('io.ox/mail/api',
     /**
      * wrapper for factories remove to update counters
      * @param  {array} ids
-     * @param  {} local [description]
+     * @param  {object} options [see api factory]
      * @return {deferred} resolves as array
      */
-    api.remove = function (ids, local) {
-        return remove(ids, local).then(function (list) {
-            //update unread counter and folder item counter
-            folderAPI.reload(ids);
-            return list;
-        });
+    api.remove = function (ids, options) {
+        return remove(ids, options).then(
+            function success(list) {
+                //update unread counter and folder item counter
+                folderAPI.reload(ids);
+                return list;
+            }
+        );
     };
 
     /**

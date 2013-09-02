@@ -371,19 +371,38 @@ define('io.ox/core/api/factory',
             /**
              * remove ids from
              * @param  {array|object} ids
-             * @param  {boolean} local (only locally)
+             * @param  {Object} options (local: only locally, force: force delete)
              * @fires  api#refresh.all
              * @fires  api#delete (ids)
              * @fires  api#beforedelete (ids)
              * @fires  api#refresh:all:local
              * @return {deferred}
              */
-            remove: function (ids, local) {
+            remove: function (ids, options) {
                 // be robust
                 ids = ids || [];
                 ids = _.isArray(ids) ? ids : [ids];
+                options = _.extend({ local: false, force: false }, options || {});
                 var opt = $.extend({}, o.requests.remove, { timestamp: _.then() }),
                     data = http.simplify(ids);
+                // force?
+                if (options.force) {
+                    opt.harddelete = true;
+                }
+                // update folder
+                var update = function (result) {
+                    // remove affected folder from cache
+                    var folders = {};
+                    _(ids).each(function (o) { folders[o.folder_id] = o.folder_id; });
+                    return $.when.apply(
+                        $, _(folders).map(function (id) {
+                            return api.caches.all.grepRemove(id + DELIM);
+                        })
+                    )
+                    .then(function () {
+                        return $.Deferred()[result.error ? 'reject' : 'resolve'](result);
+                    });
+                };
                 // done
                 var done = function () {
                     api.trigger('refresh.all');
@@ -391,26 +410,19 @@ define('io.ox/core/api/factory',
                 };
                 api.trigger('beforedelete', ids);
                 // remove from caches first
-                return api.updateCaches(ids).pipe(function () {
+                return api.updateCaches(ids).then(function () {
                     // trigger visual refresh
                     api.trigger('refresh:all:local');
                     // delete on server?
-                    if (local !== true) {
+                    if (options.local !== true) {
                         return http.PUT({
                             module: o.module,
                             params: opt,
                             data: data,
                             appendColumns: false
                         })
-                        .pipe(function () {
-                            // remove affected folder from cache
-                            var folders = {};
-                            _(ids).each(function (o) { folders[o.folder_id] = o.folder_id; });
-                            return $.when.apply($, _(folders).map(function (id) {
-                                return api.caches.all.grepRemove(id + DELIM);
-                            }));
-                        })
-                        .done(done);
+                        .then(update, update)
+                        .always(done);
                     } else {
                         return done();
                     }

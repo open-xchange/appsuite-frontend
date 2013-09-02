@@ -54,29 +54,30 @@
         "септ.",
         "окт.",
         "ноем.",
-        "декем."
+        "дек."
     ],
     "formats": {
         "E": "E",
-        "yMd": "d-M-y",
-        "yMEd": "E, y-M-d",
-        "yMMMd": "y MMM d",
-        "yMMMEd": "E, y MMM d",
+        "yMd": "d.M.y",
+        "yMEd": "E, d.M.y",
+        "yMMMd": "d MMM y 'г'.",
+        "yMMMEd": "E, d MMM y 'г'.",
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "d.M",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
-        "yMdHm": "d-M-y HH:mm",
-        "yMdHmv": "d-M-y HH:mm v",
-        "yMdhm": "d-M-y h:mm a",
-        "yMdhmv": "d-M-y h:mm a v",
-        "yMEdHm": "E, y-M-d HH:mm",
-        "yMEdHmv": "E, y-M-d HH:mm v",
-        "yMEdhm": "E, y-M-d h:mm a",
-        "yMEdhmv": "E, y-M-d h:mm a v"
+        "yMdHm": "d.M.y HH:mm",
+        "yMdHmv": "d.M.y HH:mm v",
+        "yMdhm": "d.M.y h:mm a",
+        "yMdhmv": "d.M.y h:mm a v",
+        "yMEdHm": "E, d.M.y HH:mm",
+        "yMEdHmv": "E, d.M.y HH:mm v",
+        "yMEdhm": "E, d.M.y h:mm a",
+        "yMEdhmv": "E, d.M.y h:mm a v"
     },
-    "date": "dd.M.yyyy",
+    "date": "dd.M.y",
     "time": "HH:mm",
     "dateTimeFormat": "%2$s %1$s",
     "intervals": {
@@ -116,8 +117,8 @@
     },
     "eras": [
         "пр.н.е.",
-        "ае."
+        "н.е."
     ],
-    "dateTime": "dd.M.yyyy HH:mm",
+    "dateTime": "dd.M.y HH:mm",
     "h12": false
 }

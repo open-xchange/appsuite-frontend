@@ -57,23 +57,24 @@
     ],
     "formats": {
         "E": "E",
-        "yMd": "y-M-d",
-        "yMEd": "E, y-MM-d",
+        "yMd": "y-MM-dd",
+        "yMEd": "y-MM-dd, E",
         "yMMMd": "y MMM d",
-        "yMMMEd": "E, MMM d, y",
+        "yMMMEd": "y MMM d, E",
         "hm": "hh:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "MM-d",
         "Hmv": "HH:mm v",
         "hmv": "hh:mm a v",
-        "yMdHm": "y-M-d HH:mm",
-        "yMdHmv": "y-M-d HH:mm v",
-        "yMdhm": "y-M-d hh:mm a",
-        "yMdhmv": "y-M-d hh:mm a v",
-        "yMEdHm": "E, y-MM-d HH:mm",
-        "yMEdHmv": "E, y-MM-d HH:mm v",
-        "yMEdhm": "E, y-MM-d hh:mm a",
-        "yMEdhmv": "E, y-MM-d hh:mm a v"
+        "yMdHm": "y-MM-dd HH:mm",
+        "yMdHmv": "y-MM-dd HH:mm v",
+        "yMdhm": "y-MM-dd hh:mm a",
+        "yMdhmv": "y-MM-dd hh:mm a v",
+        "yMEdHm": "y-MM-dd, E HH:mm",
+        "yMEdHmv": "y-MM-dd, E HH:mm v",
+        "yMEdhm": "y-MM-dd, E hh:mm a",
+        "yMEdhmv": "y-MM-dd, E hh:mm a v"
     },
     "date": "y MMM d",
     "time": "HH:mm",
@@ -82,8 +83,8 @@
         "fallback": "%1$s – %2$s",
         "hm": {
             "a": "hh:mm a–hh:mm a",
-            "h": "h:mm–h:mm a",
-            "m": "h:mm–h:mm a"
+            "h": "hh:mm–hh:mm a",
+            "m": "hh:mm–hh:mm a"
         },
         "Hm": {
             "h": "HH:mm–HH:mm",
@@ -91,7 +92,7 @@
         },
         "hmv": {
             "a": "hh:mm a–hh:mm a v",
-            "h": "h:mm–h:mm a v",
+            "h": "hh:mm–hh:mm a v",
             "m": "h:mm–h:mm a v"
         },
         "Hmv": {
@@ -99,14 +100,14 @@
             "m": "HH:mm–HH:mm v"
         },
         "yMMMd": {
-            "d": "y 'm'. MMM d 'd'.–d 'd'.",
-            "m": "yyyy-MM-dd – MM-d",
-            "y": "yyyy-MM-dd – yyyy-MM-dd"
+            "d": "y MMM d–d",
+            "m": "y MMM d – MMM d",
+            "y": "y MMM d – y MMM d"
         },
         "yMMMEd": {
-            "d": "yyyy-MM-dd E. – yyyy-MM-dd E.",
-            "m": "yyyy-MM-dd E. – yyyy-MM-dd E.",
-            "y": "yyyy-MM-dd E. – yyyy-MM-dd E."
+            "d": "y MMM d, E – MMM d, E",
+            "m": "y MMM d, E. – MMM d, E.",
+            "y": "y MMM d, E. – y MMM d, E."
         }
     },
     "dayPeriods": {
@@ -114,8 +115,8 @@
         "pm": "popiet"
     },
     "eras": [
-        "pr. Kr.",
-        "po Kr."
+        "pr. m. e.",
+        "po m. e."
     ],
     "dateTime": "y MMM d HH:mm",
     "h12": false

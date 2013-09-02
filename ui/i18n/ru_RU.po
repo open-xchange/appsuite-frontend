@@ -62,7 +62,7 @@ msgstr "Без темы"
 #: apps/io.ox/calendar/week/perspective.js:51
 #: apps/io.ox/calendar/week/perspective.js:183
 #: apps/io.ox/mail/write/main.js:924
-msgid "An error occured. Please try again."
+msgid "An error occurred. Please try again."
 msgstr "Произошла ошибка. Повторите попытку."
 
 #: apps/io.ox/mail/write/main.js:1079
@@ -1218,7 +1218,7 @@ msgstr "Добавление подписки. Это может занять н
 
 #: apps/io.ox/mail/view-detail.js:1342
 msgid ""
-"Created private folder '%1$s' in %2$s and subscribed succesfully to shared "
+"Created private folder '%1$s' in %2$s and subscribed successfully to shared "
 "folder"
 msgstr "Личная папка «%1$s» создана в %2$s и подписана на общую папку"
 
@@ -1362,7 +1362,7 @@ msgid "Use fixed-width font for text mails"
 msgstr "Фиксированный шрифт для текстовых сообщений"
 
 #: apps/io.ox/mail/settings/old_pane.js:71 apps/io.ox/mail/settings/pane.js:39
-msgid "Append vcard"
+msgid "Append vCard"
 msgstr "Добавить vCard"
 
 #: apps/io.ox/mail/settings/old_pane.js:72 apps/io.ox/mail/settings/pane.js:40
@@ -1695,7 +1695,7 @@ msgstr "Фильтр почты"
 #: apps/io.ox/mail/autoforward/settings/register.js:48
 #: apps/io.ox/mail/mailfilter/settings/register.js:40
 #: apps/io.ox/mail/vacationnotice/settings/register.js:66
-msgid "Unable to contact mailfilter backend."
+msgid "Unable to load mail filter settings."
 msgstr "Не удалось связаться с механизмом mailfilter."
 
 #: apps/io.ox/mail/mailfilter/settings/register.js:43
@@ -1948,7 +1948,7 @@ msgid "Attachments have been saved"
 msgstr "Вложения сохранены"
 
 #: apps/io.ox/mail/actions.js:571
-msgid "Failed to add. Maybe the VCard attachment is invalid."
+msgid "Failed to add. Maybe the vCard attachment is invalid."
 msgstr "Не удалось добавить VCard. Возможно, недопустимое вложение VCard."
 
 #: apps/io.ox/mail/actions.js:632
@@ -3093,7 +3093,7 @@ msgid "Progress %1$s %"
 msgstr "Выполнено %1$s %"
 
 #: apps/io.ox/tasks/view-detail.js:120 apps/io.ox/tasks/view-detail.js:268
-msgid "Attachments   "
+msgid "Attachments"
 msgstr "Вложения   "
 
 #: apps/io.ox/tasks/view-detail.js:134
@@ -3418,7 +3418,7 @@ msgid "Undone"
 msgstr "Отменено"
 
 #: apps/io.ox/tasks/actions.js:159 apps/io.ox/tasks/actions.js:231
-msgid "A severe error occured!"
+msgid "A severe error occurred!"
 msgstr "Произошла критическая ошибка."
 
 #: apps/io.ox/tasks/actions.js:161
@@ -4970,11 +4970,11 @@ msgid "Hide request body"
 msgstr "Скрыть тело запроса"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:75
-msgid "Show strack trace"
+msgid "Show stack trace"
 msgstr "Показать трассировку стека"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:77
-msgid "Hide strack trace"
+msgid "Hide stack trace"
 msgstr "Скрыть трассировку стека"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:111
@@ -5058,7 +5058,7 @@ msgid "Language"
 msgstr "Язык"
 
 #: apps/io.ox/core/settings/pane.js:146
-msgid "Timezone"
+msgid "Time zone"
 msgstr "Часовой пояс"
 
 #: apps/io.ox/core/settings/pane.js:155
@@ -5469,7 +5469,7 @@ msgstr "Не удалось загрузить вложения для этог�
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:186
 #: apps/io.ox/contacts/view-detail.js:240
-msgid "This list has no members yet"
+msgid "This list has no contacts yet"
 msgstr "В списке нет участников"
 
 #: apps/io.ox/contacts/view-detail.js:314
@@ -5757,16 +5757,16 @@ msgid "List name"
 msgstr "Название списка"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:87
-msgid "Add member"
+msgid "Add contact"
 msgstr "Добавить участника"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:130
-msgid "Members"
+msgid "Contacts"
 msgstr "Участники"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:274
 msgid ""
-"To add participants manually, just provide a valid email address (e.g john."
+"To add contacts manually, just provide a valid email address (e.g john."
 "doe@example.com or \"John Doe\" <jd@example.com>)"
 msgstr ""
 "Чтобы добавить участника, введите его электронный адрес (например, john."

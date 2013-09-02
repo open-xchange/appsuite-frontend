@@ -1,0 +1,124 @@
+{
+    "daysInFirstWeek": 1,
+    "weekStart": 0,
+    "days": [
+        "Aŋpétuwakȟaŋ",
+        "Aŋpétuwaŋži",
+        "Aŋpétunuŋpa",
+        "Aŋpétuyamni",
+        "Aŋpétutopa",
+        "Aŋpétuzaptaŋ",
+        "Owáŋgyužažapi"
+    ],
+    "daysShort": [
+        "Aŋpétuwakȟaŋ",
+        "Aŋpétuwaŋži",
+        "Aŋpétunuŋpa",
+        "Aŋpétuyamni",
+        "Aŋpétutopa",
+        "Aŋpétuzaptaŋ",
+        "Owáŋgyužažapi"
+    ],
+    "daysStandalone": [
+        "Aŋpétuwakȟaŋ",
+        "Aŋpétuwaŋži",
+        "Aŋpétunuŋpa",
+        "Aŋpétuyamni",
+        "Aŋpétutopa",
+        "Aŋpétuzaptaŋ",
+        "Owáŋgyužažapi"
+    ],
+    "months": [
+        "Wiótheȟika Wí",
+        "Thiyóȟeyuŋka Wí",
+        "Ištáwičhayazaŋ Wí",
+        "Pȟežítȟo Wí",
+        "Čhaŋwápetȟo Wí",
+        "Wípazukȟa-wašté Wí",
+        "Čhaŋpȟásapa Wí",
+        "Wasútȟuŋ Wí",
+        "Čhaŋwápeǧi Wí",
+        "Čhaŋwápe-kasná Wí",
+        "Waníyetu Wí",
+        "Tȟahékapšuŋ Wí"
+    ],
+    "monthsShort": [
+        "Wiótheȟika Wí",
+        "Thiyóȟeyuŋka Wí",
+        "Ištáwičhayazaŋ Wí",
+        "Pȟežítȟo Wí",
+        "Čhaŋwápetȟo Wí",
+        "Wípazukȟa-wašté Wí",
+        "Čhaŋpȟásapa Wí",
+        "Wasútȟuŋ Wí",
+        "Čhaŋwápeǧi Wí",
+        "Čhaŋwápe-kasná Wí",
+        "Waníyetu Wí",
+        "Tȟahékapšuŋ Wí"
+    ],
+    "formats": {
+        "E": "E",
+        "yMd": "y-MM-dd",
+        "yMEd": "y-MM-dd, E",
+        "yMMMd": "y MMM d",
+        "yMMMEd": "y MMM d, E",
+        "hm": "h:mm a",
+        "Hm": "HH:mm",
+        "v": "v",
+        "Md": "MM-dd",
+        "Hmv": "HH:mm v",
+        "hmv": "h:mm a v",
+        "yMdHm": "y-MM-dd HH:mm",
+        "yMdHmv": "y-MM-dd HH:mm v",
+        "yMdhm": "y-MM-dd h:mm a",
+        "yMdhmv": "y-MM-dd h:mm a v",
+        "yMEdHm": "y-MM-dd, E HH:mm",
+        "yMEdHmv": "y-MM-dd, E HH:mm v",
+        "yMEdhm": "y-MM-dd, E h:mm a",
+        "yMEdhmv": "y-MM-dd, E h:mm a v"
+    },
+    "date": "MMM d, y",
+    "time": "h:mm a",
+    "dateTimeFormat": "%2$s %1$s",
+    "intervals": {
+        "fallback": "%1$s – %2$s",
+        "hm": {
+            "a": "h:mm a – h:mm a",
+            "h": "h:mm–h:mm a",
+            "m": "h:mm–h:mm a"
+        },
+        "Hm": {
+            "h": "HH:mm–HH:mm",
+            "m": "HH:mm–HH:mm"
+        },
+        "hmv": {
+            "a": "h:mm a – h:mm a v",
+            "h": "h:mm–h:mm a v",
+            "m": "h:mm–h:mm a v"
+        },
+        "Hmv": {
+            "h": "HH:mm–HH:mm v",
+            "m": "HH:mm–HH:mm v"
+        },
+        "yMMMd": {
+            "d": "y MMM d–d",
+            "m": "y MMM d – MMM d",
+            "y": "y MMM d – y MMM d"
+        },
+        "yMMMEd": {
+            "d": "y MMM d, E – MMM d, E",
+            "m": "y MMM d, E – MMM d, E",
+            "y": "y MMM d, E – y MMM d, E"
+        }
+    },
+    "dayPeriods": {
+        "am": "AM",
+        "pm": "PM"
+    },
+    "eras": [
+        "BCE",
+        "CE"
+    ],
+    "dateTime": "MMM d, y h:mm a",
+    "h12": true
+}

@@ -64,6 +64,7 @@
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "d/M",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
         "yMdHm": "d/M/y HH:mm",
@@ -114,7 +115,7 @@
         "pm": "অপরাহ্ণ"
     },
     "eras": [
-        "খৃষ্টপূর্ব",
+        "খ্রিস্টপূর্ব",
         "খৃষ্টাব্দ"
     ],
     "dateTime": "d MMM, y h:mm a",

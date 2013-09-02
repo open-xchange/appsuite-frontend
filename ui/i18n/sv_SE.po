@@ -212,7 +212,7 @@ msgstr "Lägger till prenumeration. Det kan ta en liten stund..."
 
 #: apps/io.ox/mail/view-detail.js:1333
 msgid ""
-"Created private folder '%1$s' in %2$s and subscribed succesfully to shared "
+"Created private folder '%1$s' in %2$s and subscribed successfully to shared "
 "folder"
 msgstr "Skapade privata mappen '%1$s' i %2$s och prenumererade på delad mapp"
 
@@ -279,7 +279,7 @@ msgstr "E-post"
 #: apps/io.ox/calendar/week/perspective.js:183
 #: apps/io.ox/mail/write/main.js:898 apps/io.ox/mail/write/main.js:900
 #| msgid "Connection was reset. Please try again."
-msgid "An error occured. Please try again."
+msgid "An error occurred. Please try again."
 msgstr "Ett fel inträffade. Försök igen."
 
 #: apps/io.ox/mail/write/main.js:1112
@@ -655,7 +655,7 @@ msgid "Attachments have been saved"
 msgstr "Bilagor har sparats"
 
 #: apps/io.ox/mail/actions.js:594
-msgid "Failed to add. Maybe the VCard attachment is invalid."
+msgid "Failed to add. Maybe the vCard attachment is invalid."
 msgstr "Kunde inte lägga till. Kanske är vCard-bilagan ogiltig."
 
 #: apps/io.ox/mail/actions.js:655
@@ -1542,7 +1542,7 @@ msgid "Use fixed-width font for text mails"
 msgstr "Använd teckensnitt med fast bredd för text-e-post"
 
 #: apps/io.ox/mail/settings/old_pane.js:71 apps/io.ox/mail/settings/pane.js:39
-msgid "Append vcard"
+msgid "Append vCard"
 msgstr "Lägg till vCard"
 
 #: apps/io.ox/mail/settings/old_pane.js:72 apps/io.ox/mail/settings/pane.js:40
@@ -1872,7 +1872,7 @@ msgstr "E-postfilter"
 #: apps/io.ox/mail/mailfilter/settings/register.js:40
 #: apps/io.ox/mail/vacationnotice/settings/register.js:69
 #| msgid "Unable to calculate first occurrence."
-msgid "Unable to contact mailfilter backend."
+msgid "Unable to load mail filter settings."
 msgstr "Kan inte få kontakt med mailfilter-bakgrundsprogrammet."
 
 #: apps/io.ox/mail/mailfilter/settings/register.js:43
@@ -2847,7 +2847,7 @@ msgid "Progress %1$s %"
 msgstr "Förlopp %1$s %"
 
 #: apps/io.ox/tasks/view-detail.js:120 apps/io.ox/tasks/view-detail.js:268
-msgid "Attachments   "
+msgid "Attachments"
 msgstr "Bilagor   "
 
 #: apps/io.ox/tasks/view-detail.js:134
@@ -3176,7 +3176,7 @@ msgstr "Ångrad"
 
 #: apps/io.ox/tasks/actions.js:162 apps/io.ox/tasks/actions.js:234
 #| msgid "An event error occurred: %1$s"
-msgid "A severe error occured!"
+msgid "A severe error occurred!"
 msgstr "Ett allvarligt fel inträffade!"
 
 #: apps/io.ox/tasks/actions.js:164
@@ -4934,11 +4934,11 @@ msgid "Hide request body"
 msgstr "Dölj sökningens kropp"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:75
-msgid "Show strack trace"
+msgid "Show stack trace"
 msgstr "Visa strack-spårning"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:77
-msgid "Hide strack trace"
+msgid "Hide stack trace"
 msgstr "Dölj strack-spårning"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:111
@@ -5023,7 +5023,7 @@ msgid "Language"
 msgstr "Språk"
 
 #: apps/io.ox/core/settings/pane.js:142
-msgid "Timezone"
+msgid "Time zone"
 msgstr "Tidszon"
 
 #: apps/io.ox/core/settings/pane.js:151
@@ -5561,7 +5561,7 @@ msgstr "Kunde inte ladda bilagor för den här kontakten."
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:186
 #: apps/io.ox/contacts/view-detail.js:240
-msgid "This list has no members yet"
+msgid "This list has no contacts yet"
 msgstr "Den här listan har inga medlemmar än"
 
 #: apps/io.ox/contacts/view-detail.js:314
@@ -5814,17 +5814,17 @@ msgid "List name"
 msgstr "Listnamn"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:87
-msgid "Add member"
+msgid "Add contact"
 msgstr "Lägg till medlem"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:130
 #| msgid "November"
-msgid "Members"
+msgid "Contacts"
 msgstr "Medlemmar"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:274
 msgid ""
-"To add participants manually, just provide a valid email address (e.g john."
+"To add contacts manually, just provide a valid email address (e.g john."
 "doe@example.com or \"John Doe\" <jd@example.com>)"
 msgstr ""
 "För att lägga till deltagare manuellt, ange en giltig e-postadress (t.ex. "

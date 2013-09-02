@@ -2,22 +2,22 @@
     "daysInFirstWeek": 4,
     "weekStart": 1,
     "days": [
-        "Domingo",
-        "Luns",
-        "Martes",
-        "Mércores",
-        "Xoves",
-        "Venres",
-        "Sábado"
+        "domingo",
+        "luns",
+        "martes",
+        "mércores",
+        "xoves",
+        "venres",
+        "sábado"
     ],
     "daysShort": [
-        "Dom",
-        "Lun",
-        "Mar",
-        "Mér",
-        "Xov",
-        "Ven",
-        "Sáb"
+        "dom",
+        "lun",
+        "mar",
+        "mér",
+        "xov",
+        "ven",
+        "sáb"
     ],
     "daysStandalone": [
         "Dom",
@@ -29,32 +29,32 @@
         "Sáb"
     ],
     "months": [
-        "Xaneiro",
-        "Febreiro",
-        "Marzo",
-        "Abril",
-        "Maio",
-        "Xuño",
-        "Xullo",
-        "Agosto",
-        "Setembro",
-        "Outubro",
-        "Novembro",
-        "Decembro"
+        "xaneiro",
+        "febreiro",
+        "marzo",
+        "abril",
+        "maio",
+        "xuño",
+        "xullo",
+        "agosto",
+        "setembro",
+        "outubro",
+        "novembro",
+        "decembro"
     ],
     "monthsShort": [
-        "Xan",
-        "Feb",
-        "Mar",
-        "Abr",
-        "Mai",
-        "Xuñ",
-        "Xul",
-        "Ago",
-        "Set",
-        "Out",
-        "Nov",
-        "Dec"
+        "xan",
+        "feb",
+        "mar",
+        "abr",
+        "mai",
+        "xuñ",
+        "xul",
+        "ago",
+        "set",
+        "out",
+        "nov",
+        "dec"
     ],
     "formats": {
         "E": "E",
@@ -65,6 +65,7 @@
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "d-M",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
         "yMdHm": "d/M/y HH:mm",
@@ -115,8 +116,8 @@
         "pm": "p.m."
     },
     "eras": [
-        "a.C.",
-        "d.C."
+        "BCE",
+        "CE"
     ],
     "dateTime": "d MMM, y HH:mm",
     "h12": false

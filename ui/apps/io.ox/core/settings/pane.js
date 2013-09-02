@@ -143,7 +143,7 @@ define('io.ox/core/settings/pane',
             id: 'timezones',
             index: 200,
             attribute: 'timezone',
-            label: gt("Timezone"),
+            label: gt("Time zone"),
             selectOptions: sorted
         }));
 

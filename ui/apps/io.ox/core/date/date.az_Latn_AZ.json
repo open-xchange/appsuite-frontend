@@ -29,18 +29,18 @@
         "Ş."
     ],
     "months": [
-        "Yanvar",
-        "Fevral",
-        "Mart",
-        "Aprel",
-        "May",
-        "İyun",
-        "İyul",
-        "Avqust",
-        "Sentyabr",
-        "Oktyabr",
-        "Noyabr",
-        "Dekabr"
+        "yanvar",
+        "fevral",
+        "mart",
+        "aprel",
+        "may",
+        "iyun",
+        "iyul",
+        "avqust",
+        "sentyabr",
+        "oktyabr",
+        "noyabr",
+        "dekabr"
     ],
     "monthsShort": [
         "yan",
@@ -58,25 +58,26 @@
     ],
     "formats": {
         "E": "E",
-        "yMd": "y-M-d",
-        "yMEd": "E, y-M-d",
-        "yMMMd": "d MMM, y",
-        "yMMMEd": "E, d, MMM, y",
+        "yMd": "dd.MM.y",
+        "yMEd": "dd.MM.y, E",
+        "yMMMd": "d MMM y",
+        "yMMMEd": "d MMM y, E",
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "dd.MM",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
-        "yMdHm": "y-M-d HH:mm",
-        "yMdHmv": "y-M-d HH:mm v",
-        "yMdhm": "y-M-d h:mm a",
-        "yMdhmv": "y-M-d h:mm a v",
-        "yMEdHm": "E, y-M-d HH:mm",
-        "yMEdHmv": "E, y-M-d HH:mm v",
-        "yMEdhm": "E, y-M-d h:mm a",
-        "yMEdhmv": "E, y-M-d h:mm a v"
+        "yMdHm": "dd.MM.y HH:mm",
+        "yMdHmv": "dd.MM.y HH:mm v",
+        "yMdhm": "dd.MM.y h:mm a",
+        "yMdhmv": "dd.MM.y h:mm a v",
+        "yMEdHm": "dd.MM.y, E HH:mm",
+        "yMEdHmv": "dd.MM.y, E HH:mm v",
+        "yMEdhm": "dd.MM.y, E h:mm a",
+        "yMEdhmv": "dd.MM.y, E h:mm a v"
     },
-    "date": "d MMM, y",
+    "date": "d MMM y",
     "time": "HH:mm",
     "dateTimeFormat": "%2$s %1$s",
     "intervals": {
@@ -100,14 +101,14 @@
             "m": "HH:mm–HH:mm v"
         },
         "yMMMd": {
-            "d": "yyyy-MM-d – d",
-            "m": "yyyy-MM-dd – MM-d",
-            "y": "yyyy-MM-dd – yyyy-MM-dd"
+            "d": "y MMM d–d",
+            "m": "d MMM y – d MMM",
+            "y": "d MMM y – d MMM y"
         },
         "yMMMEd": {
-            "d": "E, yyyy-MM-dd – E, yyyy-MM-dd",
-            "m": "E, yyyy-MM-dd – E, yyyy-MM-dd",
-            "y": "E, yyyy-MM-dd – E, yyyy-MM-dd"
+            "d": "d MMM y, E – d MMM, E",
+            "m": "d MMM y, E – d MMM, E",
+            "y": "d MMM y, E – d MMM y, E"
         }
     },
     "dayPeriods": {
@@ -118,6 +119,6 @@
         "e.ə.",
         "b.e."
     ],
-    "dateTime": "d MMM, y HH:mm",
+    "dateTime": "d MMM y HH:mm",
     "h12": false
 }

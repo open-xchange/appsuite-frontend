@@ -5,7 +5,7 @@
         "ರವಿವಾರ",
         "ಸೋಮವಾರ",
         "ಮಂಗಳವಾರ",
-        "ಬುಧವಾರ",
+        "ಬು���ವಾರ",
         "ಗುರುವಾರ",
         "ಶುಕ್ರವಾರ",
         "ಶನಿವಾರ"
@@ -20,7 +20,7 @@
         "ಶನಿ."
     ],
     "daysStandalone": [
-        "ಭಾನು",
+        "ರವಿ",
         "ಸೋಮ",
         "ಮಂಗಳ",
         "ಬುಧ",
@@ -29,11 +29,11 @@
         "ಶನಿ"
     ],
     "months": [
-        "ಜನವರೀ",
-        "ಫೆಬ್ರವರೀ",
+        "ಜನವರಿ",
+        "ಫೆಬ್ರವರಿ",
         "ಮಾರ್ಚ್",
-        "ಎಪ್ರಿಲ್",
-        "ಮೆ",
+        "ಏಪ್ರಿಲ್",
+        "ಮೇ",
         "ಜೂನ್",
         "ಜುಲೈ",
         "ಆಗಸ್ಟ್",
@@ -43,38 +43,39 @@
         "ಡಿಸೆಂಬರ್"
     ],
     "monthsShort": [
-        "ಜನವರಿ",
-        "ಫೆಬ್ರುವರಿ",
-        "ಮಾರ್ಚ್",
-        "ಏಪ್ರಿಲ್‌‌",
+        "ಜನ.",
+        "ಫೆಬ್ರು.",
+        "ಮಾ",
+        "ಏಪ್ರಿ.",
         "ಮೇ",
-        "ಜೂನ್",
-        "ಜುಲೈ",
-        "ಆಗಸ್ಟ್",
-        "ಸೆಪ್ಟೆಂಬರ್‌",
-        "ಅಕ್ಟೋಬರ್",
-        "ನವೆಂಬರ್",
-        "ಡಿಸೆಂಬರ್"
+        "ಜೂ",
+        "ಜು.",
+        "ಆಗ.",
+        "ಸೆಪ್ಟೆಂ.",
+        "ಅಕ್ಟೋ.",
+        "ನವೆಂ.",
+        "ಡಿಸೆಂ."
     ],
     "formats": {
         "E": "E",
         "yMd": "d/M/y",
-        "yMEd": "E, M/d/y",
+        "yMEd": "E, d/M/y",
         "yMMMd": "d, MMM, y",
-        "yMMMEd": "E, MMM d, y",
+        "yMMMEd": "d MMM, y E",
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "d/M",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
         "yMdHm": "d/M/y HH:mm",
         "yMdHmv": "d/M/y HH:mm v",
         "yMdhm": "d/M/y h:mm a",
         "yMdhmv": "d/M/y h:mm a v",
-        "yMEdHm": "E, M/d/y HH:mm",
-        "yMEdHmv": "E, M/d/y HH:mm v",
-        "yMEdhm": "E, M/d/y h:mm a",
-        "yMEdhmv": "E, M/d/y h:mm a v"
+        "yMEdHm": "E, d/M/y HH:mm",
+        "yMEdHmv": "E, d/M/y HH:mm v",
+        "yMEdhm": "E, d/M/y h:mm a",
+        "yMEdhmv": "E, d/M/y h:mm a v"
     },
     "date": "d MMM y",
     "time": "hh:mm a",
@@ -105,9 +106,9 @@
             "y": "d, MMM, y - d, MMM, y"
         },
         "yMMMEd": {
-            "d": "E,d MMM - E,d MMM, y",
-            "m": "E,d MMM - E,d MMM, y",
-            "y": "E,d MMM, y - E,d MMM, y"
+            "d": "d MMM,E - d MMM, y E",
+            "m": "d MMM, E - d MMM, y, E",
+            "y": "d MMM, y E - d MMM, y E"
         }
     },
     "dayPeriods": {
@@ -116,7 +117,7 @@
     },
     "eras": [
         "ಕ್ರಿ.ಪೂ",
-        "ಜಾಹೀ"
+        "ಸಾಮಾನ್ಯ ಯುಗ"
     ],
     "dateTime": "d MMM y hh:mm a",
     "h12": true

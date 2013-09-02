@@ -65,6 +65,7 @@
         "hm": "h:mm a",
         "Hm": "H:mm",
         "v": "v",
+        "Md": "M/d",
         "Hmv": "H:mm v",
         "hmv": "h:mm a v",
         "yMdHm": "M/d/y H:mm",

@@ -44,7 +44,7 @@ define('io.ox/settings/util',
                     var obj = e || { type: 'error' };
                     if (obj.code  === 'MAIL_FILTER-0015') {
                         //custom error message
-                        obj.message = gtcore('Unable to contact mailfilter backend.');
+                        obj.message = gtcore('Unable to load mail filter settings.');
                     } else if (e.error_params[0] === null || e.error_params[0] === '') {
                         // use received error message
                         obj.message = gt(e.error);

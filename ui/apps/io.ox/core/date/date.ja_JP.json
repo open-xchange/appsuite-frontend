@@ -65,6 +65,7 @@
         "hm": "aK:mm",
         "Hm": "H:mm",
         "v": "v",
+        "Md": "M/d",
         "Hmv": "H:mm v",
         "hmv": "aK:mm v",
         "yMdHm": "y/M/d H:mm",
@@ -76,7 +77,7 @@
         "yMEdhm": "y/M/d(E) aK:mm",
         "yMEdhmv": "y/M/d(E) aK:mm v"
     },
-    "date": "yyyy/MM/dd",
+    "date": "y/MM/dd",
     "time": "H:mm",
     "dateTimeFormat": "%2$s %1$s",
     "intervals": {
@@ -116,9 +117,9 @@
         "pm": "午後"
     },
     "eras": [
-        "紀元前",
+        "西暦紀元前",
         "西暦"
     ],
-    "dateTime": "yyyy/MM/dd H:mm",
+    "dateTime": "y/MM/dd H:mm",
     "h12": false
 }

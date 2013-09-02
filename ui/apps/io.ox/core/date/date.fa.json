@@ -16,7 +16,7 @@
         "چهارشنبه",
         "پنجشنبه",
         "جمعه",
-        "شنبه"
+        "شن��ه"
     ],
     "daysStandalone": [
         "۱ش",
@@ -64,16 +64,17 @@
         "hm": "h:mm a",
         "Hm": "H:mm",
         "v": "v",
-        "Hmv": "H:mm v",
-        "hmv": "h:mm a v",
+        "Md": "M/d",
+        "Hmv": "H:mm (v)",
+        "hmv": "h:mm a (v)",
         "yMdHm": "y/M/d،‏ H:mm",
-        "yMdHmv": "y/M/d،‏ H:mm v",
+        "yMdHmv": "y/M/d،‏ H:mm (v)",
         "yMdhm": "y/M/d،‏ h:mm a",
-        "yMdhmv": "y/M/d،‏ h:mm a v",
+        "yMdhmv": "y/M/d،‏ h:mm a (v)",
         "yMEdHm": "E y/M/d،‏ H:mm",
-        "yMEdHmv": "E y/M/d،‏ H:mm v",
+        "yMEdHmv": "E y/M/d،‏ H:mm (v)",
         "yMEdhm": "E y/M/d،‏ h:mm a",
-        "yMEdhmv": "E y/M/d،‏ h:mm a v"
+        "yMEdhmv": "E y/M/d،‏ h:mm a (v)"
     },
     "date": "d MMM y",
     "time": "H:mm",
@@ -90,13 +91,13 @@
             "m": "H:mm تا H:mm"
         },
         "hmv": {
-            "a": "h:mm a تا h:mm a (v)",
-            "h": "h:mm تا h:mm a (v)",
-            "m": "h:mm تا h:mm a (v)"
+            "a": "h:mm a تا h:mm a v",
+            "h": "h:mm تا h:mm a v",
+            "m": "h:mm تا h:mm a v"
         },
         "Hmv": {
-            "h": "H:mm تا H:mm (v)",
-            "m": "H:mm تا H:mm (v)"
+            "h": "H:mm تا H:mm v",
+            "m": "H:mm تا H:mm v"
         },
         "yMMMd": {
             "d": "d تا d MMM y",

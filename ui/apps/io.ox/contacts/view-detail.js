@@ -237,7 +237,7 @@ define("io.ox/contacts/view-detail",
             // if there are no members in the list
             if (list.length === 0) {
                 this.append(
-                    $('<div>').text(gt('This list has no members yet'))
+                    $('<div>').text(gt('This list has no contacts yet'))
                 );
                 return;
             }
@@ -430,7 +430,7 @@ define("io.ox/contacts/view-detail",
                             if (baton.data.birthday) {
                                 var birthday = new date.UTC(baton.data.birthday);//use utc time. birthdays must not be converted
                                 if (birthday.getYear() === 1) {//Year 0 is special for birthdays without year (backend changes this to 1...)
-                                    return birthday.format(date.DATE);//date without Year needed here, not implemented yet
+                                    return birthday.format(date.DATE_NOYEAR);
                                 } else {
                                     return birthday.format(date.DATE);
                                 }

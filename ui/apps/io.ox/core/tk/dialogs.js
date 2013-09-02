@@ -240,7 +240,7 @@ define("io.ox/core/tk/dialogs",
         };
 
         this.append = function (node) {
-            nodes.body.append(node);
+            nodes.body.append.apply(nodes.body, arguments);
             return this;
         };
 

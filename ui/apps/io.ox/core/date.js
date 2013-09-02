@@ -23,7 +23,7 @@ define.async('io.ox/core/date',
 
     var dateTimeFormats = ['', 'E', 'yMd', 'yMEd', 'Hm', 'yMEdHm', 'yMdHm',
                            'yMEdHm', 'v', 'yMEdHmv', 'yMdHmv', 'yMEdHmv', 'Hmv',
-                           'yMEdHmv', 'yMdHmv', 'yMEdHmv'];
+                           'yMEdHmv', 'yMdHmv', 'yMEdHmv', 'Md'];
 
     var AVG_YEAR = 31556952000; // average ms / year
 
@@ -49,6 +49,7 @@ define.async('io.ox/core/date',
         TIME_TIMEZONE:       12,
         DATE_TIME_TIMEZONE:  14,
         FULL_DATE:           15,
+        DATE_NOYEAR:         16,
 
         getFormat: function (format) {
             format = format || api.DATE_TIME;

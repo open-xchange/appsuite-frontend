@@ -178,7 +178,8 @@ function (date, ext) {
                     ['timezone implies time', date.DATE + date.TIMEZONE,
                                            '16.5.2012 12:34 CEST'],
                     ['day of week implies date', date.DAYOFWEEK + date.TIME,
-                                      'Mi., 16.5.2012 12:34']],
+                                      'Mi., 16.5.2012 12:34'],
+                    ['date without year', date.DATE_NOYEAR, '16.5.']],
                 function (item) {
                     it(item[0], function () {
                         expect(this.d.format(item[1])).toEqual(item[2]);

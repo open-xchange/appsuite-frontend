@@ -746,6 +746,7 @@ msgstr ""
 msgid "Save as draft"
 msgstr ""
 
+<<<<<<< HEAD
 #: apps/io.ox/calendar/acceptdeny.js:70 apps/io.ox/calendar/actions.js:138
 #: apps/io.ox/calendar/actions.js:208 apps/io.ox/calendar/actions.js:225
 #: apps/io.ox/calendar/actions.js:236 apps/io.ox/calendar/actions.js:248
@@ -839,6 +840,135 @@ msgstr ""
 #: apps/plugins/portal/userSettings/register.js:65
 #: apps/plugins/portal/userSettings/register.js:70
 msgid "Cancel"
+=======
+#: apps/io.ox/participants/views.js:160
+msgid "External contact"
+msgstr ""
+
+#: apps/io.ox/contacts/main.js:172 apps/io.ox/contacts/model.js:305
+#: apps/io.ox/contacts/view-detail.js:44 apps/io.ox/participants/views.js:169
+msgid "Distribution list"
+msgstr ""
+
+#: apps/io.ox/settings/accounts/settings/pane.js:38
+msgid "Do you really want to delete this account?"
+msgstr ""
+
+#: apps/io.ox/settings/accounts/settings/pane.js:39
+msgid "Delete account"
+msgstr ""
+
+#: apps/io.ox/calendar/actions.js:504 apps/io.ox/contacts/actions.js:640
+#: apps/io.ox/core/pubsub/settings/pane.js:215 apps/io.ox/files/actions.js:712
+#: apps/io.ox/mail/actions.js:992
+#: apps/io.ox/mail/mailfilter/settings/filter.js:120
+#: apps/io.ox/mail/settings/signatures/register.js:235
+#: apps/io.ox/portal/settings/pane.js:229
+#: apps/io.ox/settings/accounts/settings/pane.js:63
+#: apps/io.ox/tasks/actions.js:460
+msgid "Edit"
+msgstr ""
+
+#. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
+#. Really delete portal widget - in contrast to "just disable"
+#: apps/io.ox/calendar/actions.js:221 apps/io.ox/calendar/actions.js:536
+#: apps/io.ox/calendar/invitations/register.js:34
+#: apps/io.ox/contacts/actions.js:51 apps/io.ox/contacts/actions.js:648
+#: apps/io.ox/contacts/main.js:100 apps/io.ox/core/commons-folderview.js:259
+#: apps/io.ox/core/tk/folderviews.js:618 apps/io.ox/files/actions.js:278
+#: apps/io.ox/files/actions.js:628 apps/io.ox/files/actions.js:793
+#: apps/io.ox/mail/actions.js:76 apps/io.ox/mail/actions.js:1071
+#: apps/io.ox/mail/main.js:135
+#: apps/io.ox/mail/settings/signatures/register.js:238
+#: apps/io.ox/portal/settings/pane.js:344
+#: apps/io.ox/settings/accounts/settings/pane.js:66
+#: apps/io.ox/tasks/actions.js:63 apps/io.ox/tasks/actions.js:468
+#: apps/io.ox/tasks/main.js:93
+msgid "Delete"
+msgstr ""
+
+#: apps/io.ox/settings/accounts/settings/pane.js:78
+msgid "Add account"
+msgstr ""
+
+#: apps/io.ox/settings/accounts/settings/pane.js:88
+#: apps/io.ox/settings/main.js:239
+msgid "Mail and Social Accounts"
+msgstr ""
+
+#: apps/io.ox/settings/accounts/settings/pane.js:130
+msgid "Your primary mail account can not be deleted."
+msgstr ""
+
+#: apps/io.ox/core/tk/mobiscroll.js:33
+#: apps/io.ox/settings/accounts/settings/pane.js:131
+msgid "Ok"
+msgstr ""
+
+#: apps/io.ox/settings/main.js:136
+msgid "Expert mode"
+msgstr ""
+
+#: apps/io.ox/core/settings/pane.js:51 apps/io.ox/settings/main.js:233
+msgid "Basic settings"
+msgstr ""
+
+#. %s is the product name
+#: apps/io.ox/mail/settings/defaults.js:38
+msgid "Sent from %s via mobile"
+msgstr ""
+
+#: apps/io.ox/core/main.js:75 apps/io.ox/launchpad/main.js:29
+#: apps/io.ox/mail/settings/pane.js:32
+msgctxt "app"
+msgid "Mail"
+msgstr ""
+
+#: apps/io.ox/mail/settings/old_pane.js:42 apps/io.ox/mail/settings/pane.js:33
+msgid "Common"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:34
+msgid "Permanently remove deleted E-Mails"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:35
+msgid "Automatically collect contacts in the folder \"Collected addresses\" while sending"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:36
+msgid "Automatically collect contacts in the folder \"Collected addresses\" while reading"
+msgstr ""
+
+#: apps/io.ox/mail/settings/old_pane.js:49 apps/io.ox/mail/settings/pane.js:37
+msgid "Use fixed-width font for text mails"
+msgstr ""
+
+#: apps/io.ox/mail/settings/old_pane.js:79 apps/io.ox/mail/settings/pane.js:38
+#: apps/io.ox/mail/write/main.js:169
+msgid "Compose"
+msgstr ""
+
+#: apps/io.ox/mail/settings/old_pane.js:81 apps/io.ox/mail/settings/pane.js:39
+msgid "Append vCard"
+msgstr ""
+
+#: apps/io.ox/mail/settings/old_pane.js:82 apps/io.ox/mail/settings/pane.js:40
+msgid "Insert the original E-Mail text to a reply"
+msgstr ""
+
+#: apps/io.ox/mail/settings/old_pane.js:93 apps/io.ox/mail/settings/pane.js:41
+msgid "Forward E-Mails as:"
+msgstr ""
+
+#: apps/io.ox/mail/settings/old_pane.js:95 apps/io.ox/mail/settings/pane.js:42
+msgid "Inline"
+msgstr ""
+
+#: apps/io.ox/mail/settings/old_pane.js:96 apps/io.ox/mail/settings/pane.js:43
+msgid "Attachment"
+>>>>>>> release-7.4.0
 msgstr ""
 
 #: apps/io.ox/mail/write/view-main.js:50
@@ -1132,8 +1262,13 @@ msgstr ""
 
 #: apps/io.ox/mail/autoforward/settings/register.js:48
 #: apps/io.ox/mail/mailfilter/settings/register.js:40
+<<<<<<< HEAD
 #: apps/io.ox/mail/vacationnotice/settings/register.js:66
 msgid "Unable to contact mailfilter backend."
+=======
+#: apps/io.ox/mail/vacationnotice/settings/register.js:69
+msgid "Unable to load mail filter settings."
+>>>>>>> release-7.4.0
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/register.js:43
@@ -1434,11 +1569,16 @@ msgstr ""
 msgid "Reply All"
 msgstr ""
 
+<<<<<<< HEAD
 #. Translation should be as short a possible
 #. Instead of "Mark as unread" or "Mark unread" it's just "Unread"
 #. German, for example, should be "Ungelesen"
 #: apps/io.ox/mail/actions.js:1001
 msgid "Unread"
+=======
+#: apps/io.ox/mail/view-detail.js:1257
+msgid "Created private folder '%1$s' in %2$s and subscribed successfully to shared folder"
+>>>>>>> release-7.4.0
 msgstr ""
 
 #. Translation should be as short a possible
@@ -1840,8 +1980,14 @@ msgstr ""
 msgid "Items without a file can not be downloaded."
 msgstr ""
 
+<<<<<<< HEAD
 #: apps/io.ox/files/actions.js:193
 msgid "Items without a file can not be opened."
+=======
+#: apps/io.ox/calendar/week/perspective.js:51
+#: apps/io.ox/calendar/week/perspective.js:183 apps/io.ox/mail/write/main.js:883
+msgid "An error occurred. Please try again."
+>>>>>>> release-7.4.0
 msgstr ""
 
 #: apps/io.ox/files/actions.js:212
@@ -3227,12 +3373,21 @@ msgstr ""
 msgid "If you spot a free time, just select this area. To do this, move the cursor to the start time, hold the mouse button, and <b>drag the mouse</b> to the end time."
 msgstr ""
 
+<<<<<<< HEAD
 #: apps/io.ox/calendar/freebusy/templates.js:95
 msgid "You will automatically return to the appointment dialog. The selected start and end time as well as the current participant list will be applied."
 msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js:99
 msgid "How does this work?"
+=======
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:75
+msgid "Show stack trace"
+msgstr ""
+
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:77
+msgid "Hide stack trace"
+>>>>>>> release-7.4.0
 msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js:105 apps/io.ox/core/main.js:541
@@ -3337,8 +3492,13 @@ msgstr ""
 msgid "every week"
 msgstr ""
 
+<<<<<<< HEAD
 #: apps/io.ox/calendar/edit/recurrence-view.js:311
 msgid "The appointment is repeated on day <a href=\"#\" data-widget=\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every <span class=\"number-control\">2</span> months</a>. "
+=======
+#: apps/io.ox/core/settings/pane.js:132
+msgid "Time zone"
+>>>>>>> release-7.4.0
 msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:320
@@ -5760,6 +5920,7 @@ msgstr ""
 msgid "Employee type"
 msgstr ""
 
+<<<<<<< HEAD
 #: apps/io.ox/contacts/model.js:250
 msgid "Employee ID"
 msgstr ""
@@ -5774,6 +5935,23 @@ msgstr ""
 
 #: apps/io.ox/contacts/model.js:253
 msgid "Commercial Register"
+=======
+#: apps/io.ox/contacts/distrib/create-dist-view.js:87
+msgid "Add contact"
+msgstr ""
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:130
+msgid "Contacts"
+msgstr ""
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:186
+#: apps/io.ox/contacts/view-detail.js:240
+msgid "This list has no contacts yet"
+msgstr ""
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:274
+msgid "To add contacts manually, just provide a valid email address (e.g john.doe@example.com or \"John Doe\" <jd@example.com>)"
+>>>>>>> release-7.4.0
 msgstr ""
 
 #: apps/io.ox/contacts/model.js:254
@@ -6105,8 +6283,13 @@ msgstr ""
 msgid "Open external link"
 msgstr ""
 
+<<<<<<< HEAD
 #: apps/plugins/portal/tumblr/register.js:228
 msgid "Edit Tumblr feed"
+=======
+#: apps/io.ox/tasks/view-detail.js:120 apps/io.ox/tasks/view-detail.js:268
+msgid "Attachments"
+>>>>>>> release-7.4.0
 msgstr ""
 
 #: apps/plugins/portal/tumblr/register.js:231
@@ -6383,6 +6566,7 @@ msgstr ""
 msgid "Face"
 msgstr ""
 
+<<<<<<< HEAD
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 気持ち・装飾
@@ -6390,6 +6574,10 @@ msgstr ""
 #. Contains: Hearts, Gestures like thumbs up
 #: apps/moxiecode/tiny_mce/plugins/emoji/categories.js:61
 msgid "Feeling • Decoration"
+=======
+#: apps/io.ox/tasks/actions.js:162 apps/io.ox/tasks/actions.js:234
+msgid "A severe error occurred!"
+>>>>>>> release-7.4.0
 msgstr ""
 
 #. Emoji category

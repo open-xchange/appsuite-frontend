@@ -64,6 +64,7 @@
         "hm": "hh:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "dd.MM.",
         "Hmv": "HH:mm v",
         "hmv": "hh:mm a v",
         "yMdHm": "dd.MM.y. HH:mm",
