@@ -304,8 +304,8 @@ define('io.ox/mail/write/main',
                         view.form.find('input[type=file]').last()
                             .prop('file', file)
                             .trigger('change');
-                        view.showSection('attachments');
                     }
+                    view.showSection('attachments');
                 });
             }
             win.on('show', function () {
