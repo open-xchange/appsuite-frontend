@@ -48,7 +48,7 @@ define('io.ox/calendar/week/perspective',
                     });
                 },
                 function fail(e) {
-                    notifications.yell('error', gt('An error occured. Please try again.'));
+                    notifications.yell('error', gt('An error occurred. Please try again.'));
                     $('.appointment', self.main).removeClass('opac current');
                 }
             );
@@ -176,7 +176,7 @@ define('io.ox/calendar/week/perspective',
             api.getAll(obj, useCache).done(function (list) {
                 self.view.reset(obj.start, list);
             }).fail(function () {
-                notifications.yell('error', gt('An error occured. Please try again.'));
+                notifications.yell('error', gt('An error occurred. Please try again.'));
             });
         },
 

@@ -852,7 +852,7 @@ define('io.ox/mail/write/main',
                         });
                     },
                     function fail() {
-                        notifications.yell('error', gt('An error occured. Please try again.'));
+                        notifications.yell('error', gt('An error occurred. Please try again.'));
                         app.dirty(false).quit();
                         def.reject();
                     }
@@ -1001,7 +1001,7 @@ define('io.ox/mail/write/main',
                 mailAPI.send(mail.data, mail.files, view.form.find('.oldschool')).always(function (result) {
                     if (result.error && !result.warnings) {
                         win.idle().show();
-                        // TODO: check if backend just says "A severe error occured"
+                        // TODO: check if backend just says "A severe error occurred"
                         notifications.yell(result);
                         unblockReuse(mail.data.sendtype);
                     } else {

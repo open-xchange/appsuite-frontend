@@ -375,7 +375,7 @@ define("io.ox/contacts/view-detail",
                 // if there are no members in the list
                 if (list.length === 0) {
                     this.append(
-                        $('<div>').text(gt('This list has no members yet'))
+                        $('<div>').text(gt('This list has no contacts yet'))
                     );
                     return;
                 }

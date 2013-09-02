@@ -17,7 +17,7 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 
 #: html/core_body.html:60
-msgid "User name"
+msgid "Username"
 msgstr "Benutzername"
 
 #: apps/io.ox/core/relogin.js:51 apps/io.ox/mail/accounts/view-form.js:36
@@ -1026,7 +1026,7 @@ msgstr "Beruf"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:196
 #: apps/io.ox/contacts/view-detail.js:378
-msgid "This list has no members yet"
+msgid "This list has no contacts yet"
 msgstr "Diese Liste hat noch keine Mitglieder"
 
 #: apps/io.ox/contacts/view-detail.js:392
@@ -1276,7 +1276,7 @@ msgid "Change password"
 msgstr "Passwort ändern"
 
 #: apps/plugins/portal/userSettings/register.js:75
-msgid "Your passward has been changed"
+msgid "Your password has been changed"
 msgstr "Ihr Passwort wurde geändert"
 
 #: apps/plugins/portal/userSettings/register.js:95
@@ -1530,7 +1530,7 @@ msgid "Compose"
 msgstr "Verfassen"
 
 #: apps/io.ox/mail/settings/old_pane.js:81 apps/io.ox/mail/settings/pane.js:35
-msgid "Append vcard"
+msgid "Append vCard"
 msgstr "Visitenkarte anhängen"
 
 #: apps/io.ox/mail/settings/old_pane.js:82 apps/io.ox/mail/settings/pane.js:36
@@ -1845,7 +1845,7 @@ msgstr "Abonnement wird hinzugefügt. Dies kann eine Weile dauern..."
 
 #: apps/io.ox/mail/view-detail.js:1209
 msgid ""
-"Created private folder '%1$s' in %2$s and subscribed succesfully to shared "
+"Created private folder '%1$s' in %2$s and subscribed successfully to shared "
 "folder"
 msgstr ""
 "Privater Ordner '%1$s' wurde in %2$s angelegt und das Abonnement des "
@@ -2090,7 +2090,7 @@ msgstr "Ihre Abwesenheitsbenachrichtigung wurde gespeichert"
 
 #: apps/io.ox/mail/autoforward/settings/register.js:51
 #: apps/io.ox/mail/vacationnotice/settings/register.js:69
-msgid "Unable to contact mailfilter backend."
+msgid "Unable to load mail filter settings."
 msgstr "Auf Mailfilter-Backend konnte nicht zugegriffen werden"
 
 #: apps/io.ox/mail/vacationnotice/settings/register.js:72
@@ -2215,7 +2215,7 @@ msgstr "Mail"
 #: apps/io.ox/calendar/week/perspective.js:51
 #: apps/io.ox/calendar/week/perspective.js:179
 #: apps/io.ox/mail/write/main.js:801
-msgid "An error occured. Please try again."
+msgid "An error occurred. Please try again."
 msgstr "Es trat ein Fehler auf. Bitte versuchen Sie es später erneut."
 
 #: apps/io.ox/mail/write/main.js:969
@@ -2507,7 +2507,7 @@ msgid "View"
 msgstr "Ansicht"
 
 #: apps/io.ox/calendar/settings/pane.js:34
-msgid "Time range for the calender view"
+msgid "Time range for the calendar view"
 msgstr "Termine in einer der Kalenderansichten anzeigen"
 
 #: apps/io.ox/calendar/settings/pane.js:35
@@ -3609,11 +3609,11 @@ msgid "Hide request body"
 msgstr "Anfrage-Body ausblenden"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:75
-msgid "Show strack trace"
+msgid "Show stack trace"
 msgstr "Stack trace einblenden"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:77
-msgid "Hide strack trace"
+msgid "Hide stack trace"
 msgstr "Stack trace ausblenden"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:111
@@ -5126,7 +5126,7 @@ msgid "Links"
 msgstr "Verlinkungen"
 
 #: apps/io.ox/contacts/model.js:307
-msgid "Mark as distributionlist"
+msgid "Mark as Distribution List"
 msgstr "Als Verteilerliste markieren"
 
 #: apps/io.ox/contacts/model.js:308
@@ -5154,7 +5154,7 @@ msgid "Create list"
 msgstr "Liste anlegen"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:74
-msgid "Members"
+msgid "Contacts"
 msgstr "Mitglieder"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:79
@@ -5591,7 +5591,7 @@ msgid "in one week"
 msgstr "in einer Woche"
 
 #: apps/io.ox/tasks/util.js:256
-msgid "Over due"
+msgid "Overdue"
 msgstr "Überfällig"
 
 #: apps/io.ox/tasks/main.js:228
@@ -5641,7 +5641,7 @@ msgid "Undone"
 msgstr "Nicht erledigt"
 
 #: apps/io.ox/tasks/actions.js:164 apps/io.ox/tasks/actions.js:231
-msgid "A severe error occured!"
+msgid "A severe error occurred!"
 msgstr "Es trat ein schwerer Fehler auf."
 
 #: apps/io.ox/tasks/actions.js:166
