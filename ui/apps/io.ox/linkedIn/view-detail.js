@@ -43,8 +43,8 @@ define("io.ox/linkedIn/view-detail",
         );
 
         $nameNode
-            .append($("<div>").addClass("name").text(data.firstName + " " + data.lastName))
-            .append($("<div>").addClass("headline").text(data.headline));
+            .append($("<div>").addClass("name").text(data.firstName && data.lastName ? data.firstName + " " + data.lastName : ''))
+            .append($("<div>").addClass("headline").text(data.headline ? data.headline : ''));
 
         var $actionsNode = $("<div>").addClass("actions").appendTo($node);
         actionPoint.each(function (ext) {
