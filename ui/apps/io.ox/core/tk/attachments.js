@@ -345,11 +345,15 @@ define('io.ox/core/tk/attachments',
                 render: function () {
                     var self = this,
                         odd = true,
+                        nodes = $('<div>')
+                                .css('margin-bottom', '20px'),
                         row;
                     this.empty();
                     _(files).each(function (file) {
-                        $el.addClass('io-ox-core-tk-attachment-list').prepend(self.renderFile(file));
+                        nodes.append(self.renderFile(file));
                     });
+                    $el.addClass('io-ox-core-tk-attachment-list')
+                       .find('div.row-fluid:last').before(nodes);
                     return this;
                 },
 
