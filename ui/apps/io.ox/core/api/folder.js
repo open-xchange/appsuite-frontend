@@ -19,7 +19,8 @@ define('io.ox/core/api/folder',
      'io.ox/core/event',
      'io.ox/core/notifications',
      'io.ox/core/capabilities',
-     'gettext!io.ox/core'], function (http, cache, mailSettings, settings, account, Events, notifications, capabilities, gt) {
+     'io.ox/core/extensions',
+     'gettext!io.ox/core'], function (http, cache, mailSettings, settings, account, Events, notifications, capabilities, ext, gt) {
 
     'use strict';
 
@@ -35,7 +36,8 @@ define('io.ox/core/api/folder',
          */
         visible = function (folder) {
             var blacklist = settings.get('folder/blacklist') || {};
-            return folder !== undefined && blacklist[String(folder.data ? folder.data.id : folder.id)] === undefined;
+            var blacklistedFolder = blacklist[String(folder.data ? folder.data.id : folder.id)];
+            return folder !== undefined && (blacklistedFolder === undefined || blacklistedFolder === false);
         },
 
         // magic permission check
@@ -758,9 +760,9 @@ define('io.ox/core/api/folder',
                 // 256 = read own, 512 = read all, 8192 = admin
                 // hide folders where your only permission is to see the foldername (rights !== 1)
                 // return (rights & 256 || rights & 512 || rights & 8192) > 0;
-                return perm(rights, 7) > 0 ||
-                        (!isSystem && this.is('public', data) && data.folder_id !== '10') && rights !== 1;
-                        // please use parantheses properly OR OR AND or OR AND AND?
+                // 10: shared files folder
+                return perm(rights, 7) > 0 /*|| (!isSystem && this.is('public', data) && data.folder_id !== '10') // see bug 28379 and 23933 */&& rights !== 1;
+                // please use parantheses properly OR OR AND or OR AND AND?
             case 'create':
                 // can create objects?
                 return perm(rights, 0) > 1;
@@ -862,7 +864,11 @@ define('io.ox/core/api/folder',
                         // compare folder data. Might be different due to differences in get & list requests (sadly),
                         // so we cannot use _.isEqual(). Actually we are just interested in some fields:
                         // unread, title, subfolders, subscr_subflds
-                        var equalData = a.title === b.title && a.subfolders === b.subfolders && a.subscr_subflds === b.subscr_subflds;
+                        var equalData = a.title === b.title &&
+                                        a.subfolders === b.subfolders &&
+                                        a.subscr_subflds === b.subscr_subflds &&
+                                        a['com.openexchange.publish.publicationFlag'] === b['com.openexchange.publish.publicationFlag'] &&
+                                        a['com.openexchange.publish.subscriptionFlag'] === b['com.openexchange.publish.subscriptionFlag'];
                         api.trigger('update:total', id, b);
                         api.trigger('update:total:' + id, b);
                         api.trigger('update:unread', id, b);
@@ -1116,6 +1122,33 @@ define('io.ox/core/api/folder',
         subFolderCache: subFolderCache,
         visibleCache: visibleCache
     };
+
+    // filename validator
+    ext.point('io.ox/core/filename')
+        .extend({
+            index: 100,
+            id: 'empty',
+            validate: function (name, type) {
+                if (name === '') {
+                    return type === 'file' ?
+                        gt('File names must not be empty') :
+                        gt('Folder names must not be empty');
+                }
+                return true;
+            }
+        })
+        .extend({
+            index: 200,
+            id: 'slash',
+            validate: function (name, type) {
+                if (/\//.test(name)) {
+                    return type === 'file' ?
+                        gt('File names must not contain slashes') :
+                        gt('Folder names must not contain slashes');
+                }
+                return true;
+            }
+        });
 
     return api;
 });

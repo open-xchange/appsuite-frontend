@@ -61,7 +61,7 @@ define('io.ox/office/preview/model/model',
          * @param {PreviewApplication} app
          *  The application instance that requests the element.
          *
-         * @param {String|Number} key
+         * @param {String|Number|Object} key
          *  The key of the requested element.
          *
          * @param {Any} [options]
@@ -103,32 +103,38 @@ define('io.ox/office/preview/model/model',
     // cache singletons -------------------------------------------------------
 
     /**
-     * Creates an <img> element containing the SVG mark-up of the specified
-     * page.
+     * Creates an <img> element containing the specified page.
      *
-     * @param {Number} page
-     *  The one-based page number.
+     * @param {Object} key
+     *  The cache key containing the page number, image format, optional target
+     *  width, and optional target height of the image.
      *
-     * @param {Object} [options]
-     *  A map with options controlling the behavior of this method. The
-     *  following options are supported:
-     *  @param {String} [options.priority='medium']
-     *      Specifies with which priority the server will handle the image
-     *      request. Must be one of the strings 'low', 'medium' (default),
-     *      or 'high'.
+     * @param {Object} options
+     *  The options map passed to the cache, containing the priority.
      *
      * @returns {jQuery.Promise}
-     *  The Promise of a Deferred object that will be resolved with the
-     *  <img> element as jQuery object.
+     *  The Promise of a Deferred object that will be resolved with the <img>
+     *  element as jQuery object.
      */
-    function createImageNode(app, page, options) {
-        return app.createImageNode(app.getPreviewModuleUrl({
-            convert_format: 'html',
-            convert_action: 'getpage',
-            page_number: page,
-            convert_priority: Utils.getStringOption(options, 'priority', 'medium'),
-            returntype: 'file'
-        }), { timeout: 60000 });
+    function createImageNode(app, key, options) {
+
+        var // additional parameters inserted into the request URL of the image
+            urlParams = {
+                convert_format: 'html',
+                convert_action: 'getpage',
+                page_number: key.page,
+                target_format: key.format,
+                convert_priority: Utils.getStringOption(options, 'priority', 'medium'),
+                returntype: 'file'
+            };
+
+        // add width and height, if specified in the cache key
+        if ('width' in key) { urlParams.target_width = key.width; }
+        if ('height' in key) { urlParams.target_height = key.height; }
+        if ('zoom' in key) { urlParams.target_zoom = key.zoom; }
+
+        // request the image and create the <img> element (wrapped in a Deferred object)
+        return app.createImageNode(app.getPreviewModuleUrl(urlParams), { timeout: 60000 });
     }
 
     /**
@@ -180,7 +186,7 @@ define('io.ox/office/preview/model/model',
         staticImageCache = new Cache(createImageNode, destroyImageNode),
 
         // the page cache containing Deferred objects with SVG mark-up as strings
-        staticSvgCache = new Cache(loadSvgMarkup);
+        staticSvgMarkupCache = new Cache(loadSvgMarkup);
 
     // class PreviewModel =====================================================
 
@@ -225,22 +231,54 @@ define('io.ox/office/preview/model/model',
 
         /**
          * Returns the Promise of a Deferred object that will be resolved with
-         * the <img> element containing the SVG mark-up of the specified page.
+         * the <img> element containing the image representation of the
+         * specified document page.
          *
          * @param {Number} page
          *  The one-based index of the requested page.
          *
-         * @param {String} priority
-         *  Specifies with which priority the server will handle the image
-         *  request. Must be one of the strings 'low', 'medium', or 'high'.
+         * @param {Object} [options]
+         *  A map with options controlling the behavior of this method. The
+         *  following options are supported:
+         *  @param {String} [options.format='png']
+         *      The image format. Supported values are 'jpg', 'png', and 'svg'.
+         *  @param {Number} [options.width]
+         *      If specified, the requested width of the image, in pixels. If
+         *      the option 'options.height' is specified too, the resulting
+         *      width may be less than this value.
+         *  @param {Number} [options.height]
+         *      If specified, the requested height of the image, in pixels. If
+         *      the option 'options.width' is specified too, the resulting
+         *      height may be less than this value.
+         *  @param {Number} [options.zoom]
+         *      If specified, the requested zoom factor of the image, relative
+         *      to its original size; or, if either 'options.width' or
+         *      'options.height' have been specified, relative to that size.
+         *  @param {String} [options.priority='medium']
+         *      Specifies with which priority the server will handle the image
+         *      request. Must be one of the strings 'low', 'medium' (default),
+         *      or 'high'.
          *
          * @returns {jQuery.Promise}
          *  The Promise of a Deferred object that will be resolved with the
-         *  completed <img> element containing the SVG mark-up of the specified
-         *  page (as jQuery object), or rejected on error.
+         *  completed <img> element representing the the specified page (as
+         *  jQuery object), or rejected on error.
          */
-        this.loadPageAsImage = function (page, priority) {
-            return staticImageCache.getElement(app, page, { priority: priority }).then(function (imgNode) {
+        this.loadPageAsImage = function (page, options) {
+
+            var format = Utils.getStringOption(options, 'format', 'png'),
+                width = Utils.getIntegerOption(options, 'width'),
+                height = Utils.getIntegerOption(options, 'height'),
+                zoom = Utils.getNumberOption(options, 'zoom'),
+                priority = Utils.getStringOption(options, 'priority', 'medium'),
+                cacheKey = { page: page, format: format },
+                cacheOptions = { priority: priority };
+
+            if (_.isNumber(width) && (width > 0)) { cacheKey.width = width; }
+            if (_.isNumber(height) && (height > 0)) { cacheKey.height = height; }
+            if (_.isNumber(zoom) && (zoom !== 1)) { cacheKey.zoom = zoom; }
+
+            return staticImageCache.getElement(app, cacheKey, cacheOptions).then(function (imgNode) {
                 // clone the cached image on every access
                 return app.createImageNode(imgNode.attr('src'), { timeout: 15000 });
             });
@@ -261,8 +299,8 @@ define('io.ox/office/preview/model/model',
          *  The Promise of a Deferred object that will be resolved with the
          *  SVG mark-up of the specified page as string, or rejected on error.
          */
-        this.loadPageAsSvg = function (page, priority) {
-            return staticSvgCache.getElement(app, page, { priority: priority });
+        this.loadPageAsSvgMarkup = function (page, priority) {
+            return staticSvgMarkupCache.getElement(app, page, { priority: priority });
         };
 
     } // class PreviewModel

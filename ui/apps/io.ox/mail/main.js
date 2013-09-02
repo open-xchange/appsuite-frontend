@@ -372,9 +372,9 @@ define('io.ox/mail/main',
 
         ext.point('io.ox/mail/vgrid/toolbar').extend({
             id: 'dropdown',
-            index: 100,
+            index: 1000,
             draw: function () {
-                this.prepend(
+                this.append(
                     $('<div class="grid-options dropdown">')
                     .append(
                         $('<a href="#" tabindex="1" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').attr('aria-label', gt('Sort options'))
@@ -394,7 +394,7 @@ define('io.ox/mail/main',
         settings.on('change', handleSettingsChange);
         drawGridOptions();
 
-        commons.addGridToolbarFolder(app, grid);
+        commons.addGridToolbarFolder(app, grid, 'MAIL');
 
         grid.on('change:ids', function (e, all) {
             // get node & clear now
@@ -522,7 +522,7 @@ define('io.ox/mail/main',
             // add label template
             grid.addLabelTemplate(tmpl.thread);
             grid.requiresLabel = function (i, data, current) {
-                return openThreads[i] !== undefined;
+                return openThreads[i] !== undefined && grid.prop('sort') === 'thread';
             };
 
             function refresh(list, index) {

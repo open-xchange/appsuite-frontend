@@ -107,8 +107,10 @@ function (date, ext) {
         });
         describe('should parse', function () {
             beforeEach(function () {
-                var m = /should parse (.*) as (.*)\.$/.exec(this.getFullName());
-                this.parsedDate = D.parse(m[1], m[2]).getTime();
+                var m = /(.*) as (.*)$/.exec(this.description);
+                if (m[1] && m[2]) {
+                    this.parsedDate = D.parse(m[1], m[2]).getTime();
+                }
             });
 
             it('2012-01-01 as yyyy-MM-dd', function () {
@@ -129,6 +131,22 @@ function (date, ext) {
 
             it('12 nachm. as h a', function () {
                 expect(this.parsedDate).toEqual(D.utc(Date.UTC(1970, 0, 1, 12)));
+            });
+
+            describe('dates with 2-digit years like', function () {
+                it('13.08.13 as dd.MM.yyyy', function () {
+                    var parsedDate = new D(this.parsedDate).format('yyyyMMdd');
+
+                    expect(parsedDate).toEqual('20130813');
+                });
+
+                describe('from a birthday', function () {
+                    it('9.8.0000 as d.M.yyyy', function () {
+                        var parsedDate = new D(this.parsedDate).format('yyyyMMdd');
+
+                        expect(parsedDate).toEqual('00010809');
+                    });
+                });
             });
         });
         describe('Formatting', function () {
@@ -218,11 +236,11 @@ function (date, ext) {
             it('from a full date', function () {
                 expect(new D(2013, 7, 9).format('yyyyMMdd')).toEqual('20130809');
             });
-            xit('from the first century', function () {
-                expect(new D(13, 7, 9).format('yyyyMMdd')).toEqual('00130809');
-            });
-            xit('from a birthday', function () {
-                expect(new D(0, 7, 9).format('yyyyMMdd')).toEqual('00010809');
+            it('should interpret 2-digit years as 19xx', function () {
+                //this is, because the date class internally does this
+                //if you want to use our specification of how to treat these numbers,
+                //use date.parse method
+                expect(new D(13, 7, 9).format('yyyyMMdd')).toEqual('19130809');
             });
         });
     });

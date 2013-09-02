@@ -49,14 +49,15 @@ define('io.ox/core/main',
 
             $('#io-ox-core').hide();
 
-            var deferreds = ext.point('io.ox/core/logout').invoke('logout').compact().value();
+            var deferreds = ext.point('io.ox/core/logout').invoke('logout', this, new ext.Baton(opt)).compact().value();
 
             $.when.apply($, deferreds).then(
                 function logout() {
                     session.logout().always(function () {
                         // get logout locations
-                        var location = settings.get('customLocations/logout');
-                        _.url.redirect(location || (ox.logoutLocation + (opt.autologout ? '#autologout=true' : '')));
+                        var location = settings.get('customLocations/logout'),
+                            fallback = ox.serverConfig.logoutLocation || ox.logoutLocation;
+                        _.url.redirect(location || (fallback + (opt.autologout ? '#autologout=true' : '')));
                     });
                 },
                 function cancel() {
@@ -351,11 +352,9 @@ define('io.ox/core/main',
                             })
                             .show()
                             .done(function (action) {
-                                if (action === 'cancel') {
-                                    resetTimeout();
-                                    clearInterval(countdownTimer);
-                                    dialog = null;
-                                }
+                                resetTimeout();
+                                clearInterval(countdownTimer);
+                                dialog = null;
                                 if (action === 'force') {
                                     logout();
                                 }
@@ -720,7 +719,7 @@ define('io.ox/core/main',
         ext.point('io.ox/core/topbar/favorites').extend({
             id: 'default',
             draw: function () {
-                var favorites = appAPI.getFavorites();
+                var favorites = appAPI.getAllFavorites();
                 favorites.sort(function (a, b) {
                     return ext.indexSorter(a, b);
                 });
@@ -985,14 +984,14 @@ define('io.ox/core/main',
                         });
 
                     $('#io-ox-core').append(
-                        dialog = $('<div class="core-boot-dialog">').append(
+                        dialog = $('<div class="core-boot-dialog" tabindex="0">').append(
                             $('<div class="header">').append(
                                 $('<h3>').text(gt('Restore applications')),
                                 $('<div>').text(
                                     gt("The following applications can be restored. Just remove the restore point if you don't want it to be restored.")
                                 )
                             ),
-                            $('<div class="content">'),
+                            $('<ul class="content">'),
                             $('<div class="footer">').append(
                                 $('<button type="button" class="btn btn-primary">').text(gt('Continue'))
                             )
@@ -1003,8 +1002,10 @@ define('io.ox/core/main',
                     ox.ui.App.getSavePoints().done(function (list) {
                         _(list).each(function (item) {
                             this.append(
-                                $('<div class="alert alert-info alert-block">').append(
-                                    $('<button type="button" class="close" data-dismiss="alert">&times;</button>').data(item),
+                                $('<li class="restore-item">').append(
+                                    $('<a href="#" role="button" class="remove">').data(item).append(
+                                        $('<i class="icon-trash">')
+                                    ),
                                     item.icon ? $('<i class="' + item.icon + '">') : $(),
                                     $('<span>').text(gt.noI18n(item.description || item.module))
                                 )
@@ -1013,8 +1014,14 @@ define('io.ox/core/main',
                     });
 
                     dialog.on('click', '.footer .btn', def.resolve);
-                    dialog.on('click', '.content .close', function (e) {
-                        ox.ui.App.removeRestorePoint($(this).data('id')).done(function (list) {
+                    dialog.on('click', '.content .remove', function (e) {
+                        e.preventDefault();
+                        var node = $(this),
+                            id = node.data('id');
+                        // remove visually first
+                        node.closest('li').remove();
+                        // remove restore point
+                        ox.ui.App.removeRestorePoint(id).done(function (list) {
                             // continue if list is empty
                             if (list.length === 0) {
                                 _.url.hash({});
@@ -1025,7 +1032,9 @@ define('io.ox/core/main',
                     });
 
                     topbar.hide();
-                    $("#background_loader").idle().fadeOut();
+                    $("#background_loader").idle().fadeOut(function () {
+                        dialog.find('.btn-primary').focus();
+                    });
 
                     return def;
                 }

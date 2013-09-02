@@ -33,7 +33,7 @@ define('io.ox/office/framework/app/extensionregistry',
             text: {
                 module: 'io.ox/office/text',
                 requires: 'text',
-                editable: !Utils.ANDROID,
+                editable: !_.browser.Android,
                 extensions: {
                     docx: { format: 'ooxml' },
                     docm: { format: 'ooxml', macros: true },

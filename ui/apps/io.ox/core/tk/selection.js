@@ -420,8 +420,6 @@ define('io.ox/core/tk/selection',
         this.init = function (all) {
             // store current selection
             var tmp = this.get();
-            //storeOldIndex
-            var tmpIndex = _(observedItemsIndex).keys();
             // clear list
             clear();
             observedItems = new Array(all.length);
@@ -441,28 +439,6 @@ define('io.ox/core/tk/selection',
                 if (observedItemsIndex[cid] !== undefined) {
                     select(tmp[i]);
                     reselected = true;
-                }
-            }
-
-            //if thread was selected it might still be in there under a new id
-            if (!reselected && tmp.length === 1) { //only apply if a single thread was selected before
-                //look what's new
-                tmpIndex = _.difference(_(observedItemsIndex).keys(), tmpIndex);
-                var obj, run = true;
-                if (tmpIndex.length > 0) {
-                    if (observedItems[observedItemsIndex[tmpIndex[0]]].data.thread) {//check if this is a mailthread selection
-                        for (i = 0; i < tmpIndex.length && run; i++) {
-                            obj = observedItems[observedItemsIndex[tmpIndex[i]]].data.thread;
-                            for (var e = 0; e < obj.length; e++) {
-                                if (obj[e].id === tmp[0].id) {
-                                    select(observedItems[observedItemsIndex[tmpIndex[i]]].data);
-                                    //we found the thread, no need to continue
-                                    run = false;
-                                    break;
-                                }
-                            }
-                        }
-                    }
                 }
             }
             // reset index but ignore 'empty runs'
@@ -983,6 +959,13 @@ define('io.ox/core/tk/selection',
             function drag(e) {
                 // unbind
                 $(document).off('mousemove.dnd', drag);
+                // get data now
+                data = self.unique(self.unfold());
+                // empty?
+                if (data.length === 0) {
+                    var cid = source.attr('data-obj-id');
+                    data = cid ? [_.cid(cid)] : [];
+                }
                 // create helper
                 helper = $('<div class="drag-helper">').append(
                     $('<span class="badge badge-important">').text(data.length),
@@ -1042,12 +1025,7 @@ define('io.ox/core/tk/selection',
 
             function start(e) {
                 source = $(this);
-                data = self.unique(self.unfold());
-                // empty?
-                if (data.length === 0) {
-                    var cid = source.attr('data-obj-id');
-                    data = cid ? [_.cid(cid)] : [];
-                }
+                data = [];
                 // bind events
                 $('.dropzone').each(function () {
                     var node = $(this), selector = node.attr('data-dropzones');

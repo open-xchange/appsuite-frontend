@@ -229,6 +229,12 @@ define('io.ox/core/commons',
             if (win.state.visible) { on(); }
         },
 
+        /**
+         * [ description]
+         * @param  {Object}  app           application object
+         * @param  {Object}  grid          grid object
+         * @return void
+         */
         addGridToolbarFolder: function (app, grid) {
 
             function fnOpen(e) {
@@ -246,12 +252,15 @@ define('io.ox/core/commons',
                 }
             });
 
-            // right now, only mail folders support "total"
             var name = app.get('name'),
+                // right now, only mail folders supports "total" properly
+                countGridData = name !== 'io.ox/mail',
+                // only mail searches not across all folders
                 searchAcrossFolders = name !== 'io.ox/mail';
 
             function getInfoNode() {
-                return grid.getToolbar().find('.grid-info:visible');
+                var visible = app.getWindow && app.getWindow().state.visible;
+                return visible ? grid.getToolbar().find('.grid-info') : $();
             }
 
             function drawFolderInfo(folder_id) {
@@ -268,22 +277,20 @@ define('io.ox/core/commons',
                     $('<span class="folder-count">')
                 );
 
-                folderAPI.get({ folder: folder_id }).then(
-                    function success(data) {
+                folderAPI.get({ folder: folder_id }).then(function success(data) {
 
-                        var total = data.total,
-                            node = grid.getToolbar().find('[data-folder-id="' + folder_id + '"]');
+                    var total = countGridData ? grid.getIds().length : data.total,
+                        node = grid.getToolbar().find('[data-folder-id="' + folder_id + '"]');
 
-                        node.find('.folder-name').text(data.title);
+                    node.find('.folder-name').text(data.title);
 
-                        if (total > 0) {
-                            node.find('.folder-count').text('(' + total + ')');
-                        }
+                    if (total > 0) {
+                        node.find('.folder-count').text('(' + total + ')');
                     }
-                );
+                });
             }
 
-            grid.on('change:prop:folder change:mode', function (e, value) {
+            grid.on('change:prop:folder change:mode change:ids', function (e, value) {
 
                 var folder_id = grid.prop('folder'), mode = grid.getMode(), node;
                 if (mode === 'all') {
@@ -312,7 +319,8 @@ define('io.ox/core/commons',
 
             // unread counter for mail
             folderAPI.on('update:total', function (e, id, data) {
-                drawFolderInfo(id, data);
+                // check for current folder (otherwise we get cross-app results! see bug #28558)
+                if (id === app.folder.get()) drawFolderInfo(id);
             });
 
             ext.point(app.get('name') + '/vgrid/toolbar').invoke('draw', grid.getToolbar());
@@ -542,9 +550,10 @@ define('io.ox/core/commons',
             node = $('<div>').attr('data-cid', _([].concat(data)).map(_.cid).join(',')),
 
             update = function (e, changed) {
-
                 // id change?
-                if (changed && changed.former_id) data = changed;
+                if (changed && (changed.former_id || changed.id !== data.id)) {
+                    data = changed;
+                }
 
                 if ((getter = getter || (api ? api.get : null))) {
                     // fallback for create trigger
@@ -664,7 +673,7 @@ define('io.ox/core/commons',
             if (next.attr('tabindex')) {
                 next.focus();
             } else {
-                next.find('[tabindex]').first().focus();
+                next.find('[tabindex]:visible').first().focus();
             }
         }
     });

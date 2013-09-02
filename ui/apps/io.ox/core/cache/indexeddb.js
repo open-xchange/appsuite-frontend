@@ -395,7 +395,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                     var setupCompleted = null;
                     if (!meta) {
                         setupCompleted = initializeDB();
-                    } else if (ox.online && (meta.version !== ox.version || meta.cleanUp)) {
+                    } else if (ox.online && (meta.version !== ox.version || meta.cleanUp) && _.url.hash('keep-data') !== 'true') {
                         meta.cleanUp = true;
                         if (ox.debug === true) {
                             console.warn('IndexedDB: Clearing persistent caches due to UI update');

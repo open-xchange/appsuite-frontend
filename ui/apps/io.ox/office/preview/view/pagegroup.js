@@ -23,11 +23,20 @@ define('io.ox/office/preview/view/pagegroup',
     var // horizontal margin between group and scroll pane
         HOR_MARGIN = 13,
 
-        // fixed total width of a page button (two buttons in default side pane width)
+        // fixed total outer width and height of a page button
         BUTTON_WIDTH = 100,
+        BUTTON_HEIGHT = 130,
 
-        // fixed total height of a page button
-        BUTTON_HEIGHT = 130;
+        // maximum width and height available for the page node in a button
+        MAX_PAGE_WIDTH = BUTTON_WIDTH - 12,
+        MAX_PAGE_HEIGHT = BUTTON_HEIGHT - 33,
+
+        // default width for pages not yet loaded
+        DEF_PAGE_WIDTH = Math.floor(MAX_PAGE_HEIGHT * 0.71),
+        DEF_PAGE_HEIGHT = MAX_PAGE_HEIGHT,
+
+        // factor to enlarge the original image data
+        ZOOM_FACTOR = Utils.RETINA ? 4 : 2;
 
     // class PageGroup ========================================================
 
@@ -49,10 +58,7 @@ define('io.ox/office/preview/view/pagegroup',
             pageLoader = new PageLoader(app),
 
             // number of pages per row
-            columns = 0,
-
-            // current button width, in pixels
-            buttonWidth = 0;
+            columns = 0;
 
         // base constructor ---------------------------------------------------
 
@@ -65,39 +71,7 @@ define('io.ox/office/preview/view/pagegroup',
          */
         function updateHandler(page) {
             Utils.toggleButtons(Utils.getSelectedButtons(buttonNodes).removeAttr('tabindex'), false);
-            Utils.toggleButtons(buttonNodes.eq(page - 1).attr('tabindex', 1), true);
-        }
-
-        /**
-         * Updates the size of the specified page node, so that it will fit
-         * into the parent button node.
-         *
-         * @param {jQuery} pageNode
-         *  The page node, as jQuery object.
-         */
-        function updatePageSize(pageNode) {
-
-            var // the original size of the passed page
-                pageSize = pageLoader.getPageSize(pageNode),
-                // the child node in the page, containing the SVG
-                childNode = pageNode.children().first(),
-                // maximum width and height available for the page
-                maxWidth = buttonWidth - 12,
-                maxHeight = BUTTON_HEIGHT - 33,
-                // the zoom factor according to available size
-                widthFactor = 0, heightFactor = 0, zoomFactor = 0;
-
-            // calculate zoom factor for the page
-            widthFactor = Math.min(maxWidth / pageSize.width, 1);
-            heightFactor = Math.min(maxHeight / pageSize.height, 1);
-            zoomFactor = Math.min(widthFactor, heightFactor);
-            pageLoader.setZoomFactor(pageNode, zoomFactor);
-
-            // Firefox has serious performance issues when rendering/scrolling
-            // nodes with many SVG contents, convert to inline bitmaps instead
-            if (_.browser.Firefox && childNode.is('img') && !/^data:/.test(childNode.attr('src'))) {
-                pageLoader.convertImageToBitmap(childNode, pageSize);
-            }
+            Utils.toggleButtons(buttonNodes.eq(page - 1).attr('tabindex', 0), true);
         }
 
         /**
@@ -139,7 +113,7 @@ define('io.ox/office/preview/view/pagegroup',
                 // clear the page node if it is not visible anymore
                 if (!visible) {
                     app.destroyImageNodes(pageNode.children('img'));
-                    pageNode.empty();
+                    pageNode.empty().css({ width: DEF_PAGE_WIDTH, height: DEF_PAGE_HEIGHT });
                     return;
                 }
 
@@ -147,8 +121,13 @@ define('io.ox/office/preview/view/pagegroup',
                 if (pageNode.children().length > 0) { return; }
 
                 // load page and update node size with real page size
-                pageLoader.loadPage(pageNode, page, 'low').done(function () {
-                    updatePageSize(pageNode);
+                pageLoader.loadPage(pageNode, page, { format: 'png', width: ZOOM_FACTOR * MAX_PAGE_WIDTH, height: ZOOM_FACTOR * MAX_PAGE_HEIGHT, priority: 'low' })
+                .done(function (pageSize) {
+                    // remove explicit size from page node, set size at image node
+                    pageNode.css({ width: '', height: '' }).children('img').css({
+                        width: Math.floor(pageSize.width / ZOOM_FACTOR),
+                        height: Math.floor(pageSize.height / ZOOM_FACTOR)
+                    });
                 });
             });
         }
@@ -161,18 +140,20 @@ define('io.ox/office/preview/view/pagegroup',
 
             var // number of pages shown in the document
                 pageCount = app.getModel().getPageCount(),
+                // the HTML mark-up for page nodes embedded in the button nodes
+                pageMarkup = '<div class="page" style="width:' + DEF_PAGE_WIDTH + 'px;height:' + DEF_PAGE_HEIGHT + 'px;"></div>',
                 // the HTML mark-up for the button nodes
                 markup = '';
 
             // generate the HTML mark-up for all button nodes
             Utils.iterateRange(1, pageCount + 1, function (page) {
-                markup += Utils.createButtonMarkup('<div class="page"></div>', { focusable: true, label: _.noI18n(String(page)) });
+                markup += Utils.createButtonMarkup(pageMarkup, { focusable: true, label: _.noI18n(String(page)) });
             });
 
             // insert the buttons into the group
             self.setChildMarkup(markup);
             buttonNodes = self.getNode().children();
-            buttonNodes.removeAttr('tabindex');
+            buttonNodes.removeAttr('tabindex').css({ width: BUTTON_WIDTH, height: BUTTON_HEIGHT });
 
             // set one-based page index as button value
             buttonNodes.each(function (index) { Utils.setControlValue($(this), index + 1); });
@@ -188,10 +169,12 @@ define('io.ox/office/preview/view/pagegroup',
                 pageCount = app.getModel().getPageCount(),
                 // inner width available for button nodes
                 innerWidth = scrollableNode.outerWidth() - 2 * HOR_MARGIN - Utils.SCROLLBAR_WIDTH,
+                // calculate number of buttons available per row
+                newColumns = Math.max(1, Math.floor(innerWidth / BUTTON_WIDTH)),
                 // initialize button nodes on first call
                 initializeButtons = buttonNodes.length === 0,
                 // the focused button (needs to be restored after detach/append)
-                focusButton = Utils.getFocusedControl(buttonNodes);
+                focusButton = buttonNodes.filter(window.document.activeElement);
 
             // do nothing, if the side pane is not visible, or no pages are available
             if ((pageCount === 0) || !self.isReallyVisible()) { return; }
@@ -201,31 +184,22 @@ define('io.ox/office/preview/view/pagegroup',
                 createButtonNodes();
             }
 
-            // calculate number of pages available per row, and effective button width
-            columns = Math.max(1, Math.floor(innerWidth / BUTTON_WIDTH + 0.4));
-            buttonWidth = Math.floor(innerWidth / columns);
+            // update position of button nodes if number of columns changes
+            if (columns !== newColumns) {
+                columns = newColumns;
 
-            // update size of the own group node
-            self.getNode().width(innerWidth).height(Math.ceil(pageCount / columns) * BUTTON_HEIGHT);
+                // update size of the own group node
+                self.getNode().width(columns * BUTTON_WIDTH).height(Math.ceil(pageCount / columns) * BUTTON_HEIGHT);
 
-            // Update position and size of all button nodes. Detaching the
-            // button nodes while updating them reduces total processing time
-            // by 95% on touch devices!
-            buttonNodes.detach().each(function () {
+                // Update position of all button nodes. Detaching the button nodes while
+                // updating them reduces total processing time by 95% on touch devices!
+                buttonNodes.detach().each(function (index) {
+                    $(this).css({ left: (index % columns) * BUTTON_WIDTH, top: Math.floor(index / columns) * BUTTON_HEIGHT });
+                }).appendTo(self.getNode());
 
-                var // one-based page index
-                    page = Utils.getControlValue($(this)),
-                    // zero-based column index of the button
-                    col = (page - 1) % columns,
-                    // zero-based row index of the button
-                    row = Math.floor((page - 1) / columns);
-
-                $(this).css({ left: col * buttonWidth, top: row * BUTTON_HEIGHT, width: buttonWidth, height: BUTTON_HEIGHT });
-                updatePageSize($(this).children('.page'));
-            });
-            self.getNode().append(buttonNodes);
-            // restore focus after detach/append
-            focusButton.focus();
+                // restore focus after detach/append
+                focusButton.focus();
+            }
 
             // select active button on first call (after positioning the buttons)
             if (initializeButtons) {
@@ -266,6 +240,7 @@ define('io.ox/office/preview/view/pagegroup',
 
             switch (event.keyCode) {
             case KeyCodes.SPACE:
+            case KeyCodes.ENTER:
                 showPage(0);
                 return false;
             case KeyCodes.LEFT_ARROW:
@@ -329,6 +304,22 @@ define('io.ox/office/preview/view/pagegroup',
         });
 
     } // class PageGroup
+
+    // static methods ---------------------------------------------------------
+
+    /**
+     * Returns the total width required for the specified number of buttons
+     * shown in a single row.
+     *
+     * @param {Number} columns
+     *  The number of page buttons shown in a single row.
+     *
+     * @returns {Number}
+     *  The width in pixels needed to display the specified number of buttons.
+     */
+    PageGroup.getRequiredWidth = function (columns) {
+        return columns * BUTTON_WIDTH + 2 * HOR_MARGIN;
+    };
 
     // exports ================================================================
 

@@ -276,7 +276,7 @@ define('io.ox/contacts/distrib/create-dist-view',
     });
 
     /**
-    * remove allready used items
+    * remove already used items
     *
     * @return {object} data (list, hits)
     */

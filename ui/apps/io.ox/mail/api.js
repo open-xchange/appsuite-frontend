@@ -61,6 +61,24 @@ define('io.ox/mail/api',
 
             addThread: function (obj) {
                 var cid = getCID(obj);
+                if (threads[cid]) {
+                    if (threads[cid].length !== obj.thread.length) {//thread has changed
+                        api.trigger('threadChanged:' + cid.replace(/\s/g, '%20'), obj);//trigger event(folders may contain spaces. This would trigger 2 events)
+                    } else {
+                        var tempTracker  = threads[cid].map(function (temp) {
+                                return _.cid(temp);
+                            }),
+                            tempObj =  obj.thread.map(function (temp) {
+                                return _.cid(temp);
+                            });
+                        for (var i = 0; i < tempTracker.length; i++) {//thread has changed
+                            if (tempTracker[i] !== tempObj[i]) {
+                                api.trigger('threadChanged:' + cid.replace(/\s/g, '%20'), obj);//trigger event(folders may contain spaces. This would trigger 2 events)
+                                break;
+                            }
+                        }
+                    }
+                }
                 threads[cid] = obj.thread;
                 _(obj.thread).each(function (o) {
                     threadHash[_.cid(o)] = cid;
@@ -505,6 +523,12 @@ define('io.ox/mail/api',
             useCache = (cacheControl[cid] !== false);
         }
         return getAll.call(this, options, useCache, null, false)
+            .then(function (threads) {
+                for (var i = 0; i < threads.data.length; i++) {//reverse thread root elements
+                    _.extend(threads.data[i], threads.data[i].thread[threads.data[i].thread.length - 1]);
+                }
+                return threads;
+            })
             .done(function (response) {
                 _(response.data).each(tracker.addThread);
                 cacheControl[cid] = true;
@@ -1190,12 +1214,19 @@ define('io.ox/mail/api',
      * @return {deferred}
      */
     api.send = function (data, files, form) {
+
         var deferred,
             flatten = function (recipient) {
                 var name = $.trim(recipient[0] || '').replace(/^["']+|["']+$/g, ''),
-                    address = recipient[1],
-                    typesuffix = recipient[2] || '';
-                return name === '' ? address : '"' + name + '" <' + address + typesuffix + '>';
+                    address = String(recipient[1] || ''),
+                    typesuffix = recipient[2] || '',
+                    isMSISDN;
+                // don't send display name for MSISDN numbers
+                isMSISDN = typesuffix === '/TYPE=PLMN' || /\/TYPE=PLMN$/.test(address);
+                // always use angular brackets!
+                if (isMSISDN) return '<' + address + typesuffix + '>';
+                // otherise ... check if name is empty or name and address are identical
+                return name === '' || name === address ? address : '"' + name + '" <' + address + '>';
             };
 
         // clone data (to avoid side-effects)
@@ -1431,10 +1462,14 @@ define('io.ox/mail/api',
                 action: 'all',
                 folder: 'default0/INBOX',
                 columns: '610,600,601,611', //received_date, id, folder_id, flags
-                unseen: 'true',
-                deleted: 'true',
+                unseen: 'true', // only unseen mails are interesting here!
+                deleted: 'false', // any reason to see them?
                 sort: '610',
-                order: 'desc'
+                order: 'desc',
+                // not really sure if limit works as expected
+                // if I only fetch 10 mails and my inbox has some unread mails but the first 10 are seen
+                // I still get the unread mails
+                limit: 100
             }
         })
         .then(function (unseen) {

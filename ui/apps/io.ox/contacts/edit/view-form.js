@@ -386,19 +386,20 @@ define('io.ox/contacts/edit/view-form', [
             this.append(
                 $('<label class="input">').append(
                     $.txt(options.label), $('<br>'),
-                    new mini.InputView({ name: options.field, model: model }).render().$el
-                ),
-                $('<div class="inline-error">')
+                    new mini.InputView({ name: options.field, model: model }).render().$el,
+                    $('<div class="inline-error" aria-live="assertive">').hide()
+                )
             )
             .on({
                 invalid: function (e, message, error) {
                     $(this).addClass('error')
-                        .find('.inline-error').text(message).end()
-                        .find('input').focus();
+                        .find('.inline-error').text(message).show().end()
+                        .find('input').attr('aria-invalid', true).focus();
                 },
                 valid: function () {
                     $(this).removeClass('error')
-                        .find('.inline-error').text('');
+                        .find('.inline-error').text('').hide().end()
+                        .find('input').removeAttr('aria-invalid');
                 }
             });
         }
@@ -414,9 +415,11 @@ define('io.ox/contacts/edit/view-form', [
 
         function drawDate(options, model) {
             this.append(
-                $('<label class="input">').text(options.label),
-                // don't wrap the date control with a label (see bug #27559)
-                new mini.DateView({ name: options.field, model: model }).render().$el
+                $('<fieldset>').append(
+                    $('<legend class="simple">').text(options.label),
+                    // don't wrap the date control with a label (see bug #27559)
+                    new mini.DateView({ name: options.field, model: model }).render().$el
+                )
             );
         }
 
@@ -482,9 +485,14 @@ define('io.ox/contacts/edit/view-form', [
                 draw: function (baton) {
 
                     // a block has a fixed width and floats left
-                    var block = $('<div class="block">')
-                        .attr('data-id', id)
-                        .append($('<legend>').text(meta.i18n[id]));
+                    var guid = _.uniqueId('group-'),
+                        block = $('<div class="block" role="group">')
+                            .attr({ 'data-id': id, 'aria-labelledby': guid })
+                            .append(
+                                $('<h2 class="group">')
+                                .attr('id', guid)
+                                .text(meta.i18n[id])
+                            );
 
                     if (id === 'attachments') block.addClass('double-block');
                     if (id === 'userfields') block.addClass('double-block two-columns');

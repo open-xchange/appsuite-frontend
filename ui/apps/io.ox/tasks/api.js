@@ -312,6 +312,7 @@ define('io.ox/tasks/api',
             data: task,
             appendColumns: false
         }).then(function (obj) {
+            task.id = obj.id;
             response = obj;
             var cacheObj = _.copy(task, true),
             cacheKey = api.cid({folder: cacheObj.folder_id,
@@ -492,6 +493,7 @@ define('io.ox/tasks/api',
             data: options.data, // object with confirmation attribute
             appendColumns: false
         }).pipe(function (response) {
+            api.trigger("mark:task:confirmed", [{id: options.id, data: options.data}]);
             // update cache
             return api.removeFromCache(key);
         });

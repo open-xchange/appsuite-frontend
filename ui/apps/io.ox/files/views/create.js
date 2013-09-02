@@ -32,6 +32,7 @@ define('io.ox/files/views/create', [
                     dialog = new dialogs.CreateDialog({ width: 450, center: true}),
                     $form = $('<form>', { 'class': 'files-create', 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' }),
                     queue, description = '';
+                dialog.getContentNode().css('height', '300px'); // 400 is quite much
                 ext.point(POINT + '/form').invoke('draw', $form, baton);
                 ext.point(POINT + '/filelist').invoke();
 

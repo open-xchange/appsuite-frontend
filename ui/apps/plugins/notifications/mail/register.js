@@ -27,7 +27,7 @@ define('plugins/notifications/mail/register',
                 $('<legend class="section-title">').text(gt('New Mails')),
                 $('<div class="notifications">'),
                 $('<div class="open-app">').append(
-                    $('<a href="#" data-action="open-app" tabindex="1">').text(gt('Show Inbox'))
+                    $('<a href="#" data-action="open-app" tabindex="1">').text(gt('Show inbox'))
                 )
             );
         }

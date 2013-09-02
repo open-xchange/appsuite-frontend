@@ -25,15 +25,19 @@ define('io.ox/calendar/conflicts/conflictList',
                 function (dialogs, viewGrid, calAPI) {
                     _.map(conflicts, function (c) { c.conflict = true; });
                     conflictList.append(viewGrid.drawSimpleGrid(conflicts));
-                    new dialogs.SidePopup()
-                        .delegate(conflictList, ".vgrid-cell", function (popup, e, target) {
-                            calAPI.get(target.data("appointment")).done(function (data) {
+                    $(".vgrid-cell", conflictList).on('click', function (e) {
+                        calAPI.get($(this).data("appointment")).done(function (data) {
+                            // check if private
+                            if (!data.private_flag || ox.user_id === data.created_by) {
                                 require(["io.ox/calendar/view-detail"], function (view) {
-                                    popup.append(view.draw(data));
-                                    data = null;
+                                    new dialogs.SidePopup().show(e, function (popup) {
+                                        popup.append(view.draw(data));
+                                        data = null;
+                                    });
                                 });
-                            });
+                            }
                         });
+                    });
                 }
             );
             return conflictList;

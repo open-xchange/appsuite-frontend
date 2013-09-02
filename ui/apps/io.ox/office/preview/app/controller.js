@@ -41,10 +41,15 @@ define('io.ox/office/preview/app/controller',
             // all the little controller items
             items = {
 
+                'document/valid': {
+                    enable: function () { return model.getPageCount() > 0; }
+                },
+
                 // view -------------------------------------------------------
 
                 // toggle the main side pane
                 'app/view/sidepane': {
+                    parent: 'document/valid',
                     get: function () { return app.getView().isSidePaneVisible(); },
                     set: function (state) { app.getView().toggleSidePane(state); },
                     shortcut: { keyCode: 'F3', ctrlOrMeta: true, value: function (state) { return !state; } }
@@ -52,15 +57,12 @@ define('io.ox/office/preview/app/controller',
 
                 // start editing the document
                 'app/edit': {
+                    parent: 'document/valid',
                     enable: function () { return app.isDocumentEditable(); },
                     set: function () { app.editDocument(); }
                 },
 
                 // pages ------------------------------------------------------
-
-                'document/valid': {
-                    enable: function () { return model.getPageCount() > 0; }
-                },
 
                 'pages/first': {
                     parent: 'document/valid',

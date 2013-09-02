@@ -16,7 +16,7 @@ define('io.ox/mail/view-grid-template',
      'io.ox/mail/api',
      'io.ox/core/tk/vgrid',
      'io.ox/core/api/account',
-     'io.ox/mail/emoji/util',
+     'io.ox/core/emoji/util',
      'gettext!io.ox/core/mail',
      'less!io.ox/mail/style.less'], function (util, api, VGrid, account, emoji, gt) {
 

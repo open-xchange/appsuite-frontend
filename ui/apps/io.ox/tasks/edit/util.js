@@ -16,15 +16,32 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
     'use strict';
 
     var util = {
+        splitExtensionsByRow: function (extensions, rows, ignoreTabs) {
+            _(extensions).each(function (extension) {
+                if (!(extension.tab && ignoreTabs)) {//ignoreTabs if parameter is set(handled separately)
+                    if (extension.row) {//seperate extensions with rows
+                        if (!rows[extension.row]) {
+                            rows[extension.row] = [];
+                        }
+                        rows[extension.row].push(extension);
+                    } else {//all the rest
+                        if (!rows.rest) {//rest is used for extension points without row
+                            rows.rest = [];
+                        }
+                        rows.rest.push(extension);
+                    }
+                }
+            });
+        },
         buildLabel: function (text, id) {
             return $('<label>').text(text).addClass('task-edit-label').attr('for', id);
         },
         //build progressField and buttongroup
         buildProgress: function () {
             var progress = $('<input>').attr({type: 'text', id: 'task-edit-progress-field', tabindex: 1}).val('0')
-                .addClass('span6 progress-field');
+                .addClass('span6 progress-field'),
 
-            $('<div>').addClass('input-append').append(progress,
+                wrapper = $('<div>').addClass('input-append').append(progress,
                     $('<button type="button" tabindex="1">').attr('data-action', 'minus').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-minus'))
                     .on('click', function () {
                         var temp = parseInt(progress.val(), 10);
@@ -51,17 +68,12 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
                     })
                     );
 
-            return progress;
+            return {progress: progress, wrapper: wrapper};
         },
         buildExtensionRow: function (parent, extensions, baton) {
             var row = $('<div class="row-fluid task-edit-row">').appendTo(parent);
             for (var i = 0; i < extensions.length; i++) {
-                if (!extensions[i]) continue;
-                if (!(_.isArray(extensions[i]))) { //check for true extensionpoint
-                    extensions[i].invoke('draw', row, baton);
-                } else { //its a normal node
-                    $('<div>').addClass('span' + extensions[i][1]).append(extensions[i][0]).appendTo(row);
-                }
+                extensions[i].invoke('draw', row, baton);
             }
             //find labels and make them focus the inputfield
             row.find('label').each(function (label) {
@@ -101,23 +113,6 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
             if (fillGrid || fillGrid === undefined) {
                 row.children().children().not('label').addClass('span12');
             }
-        },
-
-        //Tabs
-        buildTabs: function (tabs, uid) {//uid is important so tabs dont change tabs in other apps
-            var table = $('<ul>').addClass('nav nav-tabs'),
-                content = $('<div>').addClass('row-fluid tab-content');
-            for (var i = 0; i < tabs.length; i++) {
-                $('<li>').css('width', '33%')
-                    .append($('<a>').addClass('tab-link').css('text-align', 'center')
-                        .attr({tabindex: 1, href: '#edit-task-tab' + [i] + uid, 'data-toggle': 'tab'}).text(tabs[i])).appendTo(table);
-            }
-            for (var i = 0; i < tabs.length; i++) {
-                $('<div>').attr('id', 'edit-task-tab' + [i] + uid).addClass('tab-pane').appendTo(content);
-            }
-            table.find('li :first').addClass('active');
-            content.find('div :first').addClass('active');
-            return {table: table, content: content};
         },
 
         buildConfirmationPopup: function (model, dialogs, isArray) {

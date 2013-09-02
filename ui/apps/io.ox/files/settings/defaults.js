@@ -21,7 +21,8 @@ function () {
     var settingsDefaults = {
             view: 'icons',
             videoEnabled: true,
-            audioEnabled: true
+            audioEnabled: true,
+            rootFolderId: 9
         };
 
     return settingsDefaults;

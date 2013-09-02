@@ -37,6 +37,7 @@ define('io.ox/core/relogin',
 
                 new dialogs.ModalDialog({ easyOut: false, async: true, width: 400, enter: 'relogin' })
                     .build(function () {
+                        this.getPopup().addClass('relogin');
                         this.getHeader().append(
                             $('<h4>').text(gt('Your session is expired')),
                             $('<div>').text(gt('Please sign in again to continue'))
@@ -51,7 +52,7 @@ define('io.ox/core/relogin',
                     .on('cancel', function () {
                         ox.trigger('relogin:cancel');
                         var location = settings.get('customLocations/logout');
-                        _.url.redirect(location || ox.logoutLocation);
+                        _.url.redirect(location || ox.serverConfig.logoutLocation || ox.logoutLocation);
                     })
                     .on('relogin', function () {
                         var self = this.busy();

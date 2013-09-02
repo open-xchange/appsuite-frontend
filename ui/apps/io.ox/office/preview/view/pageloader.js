@@ -36,26 +36,50 @@ define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], functi
      * Calculates the original size of the passed page image node.
      *
      * @param {jQuery} imageNode
-     *  The node whose size will be calculated.
+     *  The node whose size will be calculated. May be an <img> element linking
+     *  to an image, or an <svg> element containing parsed SVG mark-up.
+     *
+     * @param {Number} [zoom]
+     *  If specified, the zoom factor passed in the server request. Needed to
+     *  calculate the original page size from the physical size of the image.
      *
      * @returns {Object|Null}
      *  The size of the image node (in pixels), in the properties 'width' and
      *  'height'; or null if the size is not valid (zero).
      */
-    function calculateImageSize(imageNode) {
+    function calculateImageSize(imageNode, zoom) {
 
         var // the original parent node
             parentNode = imageNode.parent(),
             // the resulting size of the passed image node
             width = 0, height = 0;
 
-        // insert the image node into a temporary unrestricted node and get its size
-        tempNode.append(imageNode).appendTo('body');
-        width = imageNode.width();
-        height = imageNode.height();
-        // move image node back to its parent
-        parentNode.append(imageNode);
-        tempNode.remove();
+        // try to use the naturalWidth/naturalHeight attributes of <img> elements
+        if (imageNode.is('img')) {
+            // remove the 'max-width' attribute added by Bootstrap CSS
+            imageNode.css('max-width', 'none');
+            width = imageNode[0].naturalWidth || 0;
+            height = imageNode[0].naturalHeight || 0;
+        }
+
+        // naturalWidth/naturalHeight may not work for <img> elements linking to SVG
+        if ((width === 0) || (height === 0)) {
+
+            // insert the image node into a temporary unrestricted node and get its size
+            tempNode.append(imageNode).appendTo('body');
+            width = imageNode.width();
+            height = imageNode.height();
+
+            // move image node back to its parent
+            parentNode.append(imageNode);
+            tempNode.remove();
+        }
+
+        // zoom correction
+        if (_.isNumber(zoom) && (zoom > 0)) {
+            width /= zoom;
+            height /= zoom;
+        }
 
         return ((width > 0) && (height > 0)) ? { width: width, height: height } : null;
     }
@@ -77,43 +101,44 @@ define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], functi
 
         /**
          * Loads the specified page into the passed DOM node, after clearing
-         * all its old contents. Loads either SVG mark-up as text and inserts
-         * it into the passed DOM node, or an <img> element linking to an SVG
-         * file on the server, depending on the current browser.
-         *
-         * @param {jQuery} pageNode
-         *  The target node that will contain the loaded page.
-         *
-         * @param {Number} page
-         *  The one-based page index.
+         * all its old contents.
          *
          * @returns {jQuery.Promise}
          *  The Promise of a Deferred object waiting for the image data. Will
          *  be resolved with the original size of the page (as object with the
          *  properties 'width' and 'height', in pixels).
          */
-        function loadPageIntoNode(pageNode, page, priority) {
+        function loadPageIntoNode(pageNode, page, options) {
 
             var // the Deferred object waiting for the image
-                def = null;
+                def = null,
+                // the target image format
+                format = Utils.getStringOption(options, 'format', 'png');
 
             function resolveSize() {
-                var pageSize = calculateImageSize(pageNode.children().first());
+                var pageSize = calculateImageSize(pageNode.children().first(), Utils.getNumberOption(options, 'zoom'));
                 if (pageSize) { pageNode.data('page-size', pageSize); }
                 return pageSize || $.Deferred().reject();
             }
 
-            if (_.browser.Chrome) {
+            if (_.browser.Chrome && (format === 'svg')) {
+
                 // as SVG mark-up (Chrome does not show embedded images in <img> elements linked to an SVG file)
-                def = app.getModel().loadPageAsSvg(page, priority).then(function (svgMarkup) {
+                def = app.getModel().loadPageAsSvgMarkup(page, Utils.getStringOption(options, 'priority', 'medium')).then(function (svgMarkup) {
                     // do NOT use the jQuery.html() method for SVG mark-up!
                     pageNode[0].innerHTML = svgMarkup;
                     // resolve with original image size
                     return resolveSize();
                 });
             } else {
-                // preferred: as an image element linking to the SVG file (Safari cannot parse SVG mark-up)
-                def = app.getModel().loadPageAsImage(page, priority).then(function (imgNode) {
+
+                // Bug 25765: Safari cannot parse SVG mark-up, and cannot show images embedded in <img> elements linking to SVG
+                if (_.browser.Safari && (format === 'svg')) {
+                    options = Utils.extendOptions(options, { format: 'jpg', zoom: Utils.RETINA ? 2 : 1 });
+                }
+
+                // preferred: as an image element linking to the image file
+                def = app.getModel().loadPageAsImage(page, options).then(function (imgNode) {
                     pageNode.empty().append(imgNode);
                     // resolve with original image size (naturalWidth/naturalHeight with SVG does not work in IE10)
                     return resolveSize();
@@ -126,10 +151,12 @@ define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], functi
         /**
          * Registers a page node for deferred loading.
          */
-        function registerPageNode(pageNode, page, priority) {
+        function registerPageNode(pageNode, page, options) {
 
             var // the pending data to be inserted into the array
-                pageData = null;
+                pageData = null,
+                // the request priority
+                priority = Utils.getStringOption(options, 'priority', 'medium');
 
             // check if the page has been registered already
             if (page in map) { return map[page].def.promise(); }
@@ -138,7 +165,7 @@ define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], functi
             pageNode.empty().append($('<div>').addClass('abs').busy());
 
             // insert the page information into the pending array
-            pageData = { node: pageNode, page: page, priority: priority, def: $.Deferred() };
+            pageData = { node: pageNode, page: page, options: options, def: $.Deferred() };
             queue[priority].push(pageData);
             map[page] = pageData;
 
@@ -171,7 +198,7 @@ define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], functi
 
                 // load the page contents
                 runningRequests += 1;
-                loadPageIntoNode(pageData.node, pageData.page, pageData.priority)
+                loadPageIntoNode(pageData.node, pageData.page, pageData.options)
                 .always(function () {
                     runningRequests -= 1;
                     delete map[pageData.page];
@@ -188,7 +215,7 @@ define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], functi
             }, { delay: 20 });
 
             // forget reference to the timer, when all page requests are running
-            timer.done(function () { timer = null; });
+            timer.always(function () { timer = null; });
         }
 
         // methods ------------------------------------------------------------
@@ -224,9 +251,23 @@ define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], functi
          * @param {Number} page
          *  The one-based index of the page to be loaded.
          *
-         * @param {String} priority
-         *  The priority the page will be loaded with. Supported values are
-         *  'high', 'medium', and 'low'.
+         * @param {Object} [options]
+         *  A map with options controlling the behavior of this method. The
+         *  following options are supported:
+         *  @param {String} [options.format='png']
+         *      The image format. Supported values are 'jpg', 'png', and 'svg'.
+         *  @param {Number} [options.width]
+         *      If specified, the requested width of the image, in pixels. If
+         *      the option 'options.height' is specified too, the resulting
+         *      width may be less than this value.
+         *  @param {Number} [options.height]
+         *      If specified, the requested height of the image, in pixels. If
+         *      the option 'options.width' is specified too, the resulting
+         *      height may be less than this value.
+         *  @param {String} [options.priority='medium']
+         *      Specifies with which priority the server will handle the image
+         *      request. Must be one of the strings 'low', 'medium' (default),
+         *      or 'high'.
          *
          * @returns {jQuery.Promise}
          *  The Promise of a Deferred object that will be resolved when the
@@ -268,66 +309,34 @@ define('io.ox/office/preview/view/pageloader', ['io.ox/office/tk/utils'], functi
          * @param {HTMLElement|jQuery} pageNode
          *  The page node containing the SVG contents.
          *
-         * @param {Number} zoomFactor
-         *  The new zoom factor.
+         * @param {Number} pageZoom
+         *  The new zoom factor, as floating point number (the value 1
+         *  represents the original page size).
          *
          * @returns {PageLoader}
          *  A reference to this instance.
          */
-        this.setZoomFactor = function (pageNode, zoomFactor) {
+        this.setPageZoom = function (pageNode, pageZoom) {
 
             var // the original size of the page
                 pageSize = this.getPageSize(pageNode),
                 // the child node in the page, containing the SVG
                 childNode = $(pageNode).children().first(),
                 // the resulting width/height
-                width = Math.floor(pageSize.width * zoomFactor),
-                height = Math.ceil(pageSize.height * zoomFactor);
+                width = Math.floor(pageSize.width * pageZoom),
+                height = Math.ceil(pageSize.height * pageZoom);
 
             if (childNode.is('img')) {
                 // <img> element: resize with CSS width/height
                 childNode.width(width).height(height);
             } else {
                 // <svg> element (Chrome): scale with CSS zoom (supported in WebKit)
-                childNode.css('zoom', zoomFactor);
+                childNode.css('zoom', pageZoom);
             }
 
             // Chrome bug/problem: sometimes, the page node has width 0 (e.g., if browser zoom is
             // not 100%) regardless of existing SVG, must set its size explicitly to see anything...
-            $(pageNode).width(width).height(height).data('page-zoom', zoomFactor);
-
-            return this;
-        };
-
-        /**
-         * Converts the image data of the passed <img> element to an inline
-         * bitmap represented by a data URL.
-         *
-         * @param {HTMLImageElement|jQuery} imgNode
-         *  The <img> element.
-         *
-         * @param {Object} imageSize
-         *  The original image size, as pixels, in 'width' and 'height'
-         *  properties.
-         *
-         * @returns {PageLoader}
-         *  A reference to this instance.
-         */
-        this.convertImageToBitmap = function (imgNode, imageSize) {
-
-            var // the size of the canvas (maximum four times the current image size)
-                bitmapWidth = Math.min($(imgNode).width() * 4, imageSize.width),
-                bitmapHeight = Math.min($(imgNode).height() * 4, imageSize.height),
-                // the <canvas> element for SVG/bitmap conversion
-                canvas = $('<canvas>').attr({ width: bitmapWidth, height: bitmapHeight })[0];
-
-            try {
-                canvas.getContext('2d').drawImage(Utils.getDomNode(imgNode), 0, 0, imageSize.width, imageSize.height, 0, 0, bitmapWidth, bitmapHeight);
-                // currently, canvas.toDataURL() works in Firefox only, even with images from same origin
-                $(imgNode).attr('src', canvas.toDataURL());
-            } catch (ex) {
-                Utils.error('PageLoader.convertImageToBitmap(): exception caucht: ' + ex);
-            }
+            $(pageNode).width(width).height(height).data('page-zoom', pageZoom);
 
             return this;
         };

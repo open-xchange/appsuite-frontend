@@ -40,6 +40,10 @@ define('io.ox/office/framework/view/pane',
      * @param {BaseApplication} app
      *  The application containing this pane element.
      *
+     * @param {String} id
+     *  The identifier for this view pane. Must be unique across all view panes
+     *  in the application.
+     *
      * @param {Object} [options]
      *  A map of options to control the properties of the new view pane.
      *  The following options are supported:
@@ -87,7 +91,7 @@ define('io.ox/office/framework/view/pane',
      *      omitted, view components will be appended to the root node of this
      *      view pane.
      */
-    function Pane(app, options) {
+    function Pane(app, id, options) {
 
         var // self reference
             self = this,
@@ -365,6 +369,9 @@ define('io.ox/office/framework/view/pane',
         };
 
         // initialization -----------------------------------------------------
+
+        // create unique DOM identifier for Selenium testing
+        node.attr('id', app.getWindowId() + '-pane-' + id);
 
         // marker for touch devices
         node.toggleClass('touch', Modernizr.touch);

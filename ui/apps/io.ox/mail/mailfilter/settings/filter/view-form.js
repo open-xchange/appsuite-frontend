@@ -51,7 +51,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             'Cc': gt('CC'),
             'cleanHeader': gt('Header'),
             'envelope': gt('Envelope'),
-            'true': gt('All messages'),
             'size': gt('Size (bytes)')
         },
 
@@ -95,6 +94,21 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
         checkForMultipleTests = function (el) {
             return $(el).find('[data-test-id]');
+        },
+
+        checkForPosition = function (array, target) {
+            var position;
+            _.each(array, function (val, index) {
+                if (_.isEqual(val, target)) {
+                    position = index;
+                }
+            });
+            return position;
+        },
+
+        renderWarningForEmptyTests = function (node) {
+            var warning = $('<div>').addClass('alert alert-block').text(gt('This rule applies to all messages. Please add a condition to restrict this rule to specific messages.'));
+            node.append(warning);
         },
 
         prepareFolderForDisplay = function (folder) {
@@ -472,10 +486,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                         );
                     }
 
-                } else if (appliedTest.length !== 1 && test.id === 'true') {
-                    listTests.append($('<li>').addClass('filter-settings-view').attr({'data-test-id': num}).text(gt('All messages')).append(
-                            elements.drawDeleteButton('test')
-                    ));
                 } else if (test.id === 'envelope') {
 
                     listTests.append($('<li>').addClass('filter-settings-view').attr({'data-type': 'values', 'data-test-id': num}).text(headerTranslation[test.id]).append(
@@ -548,7 +558,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                         }
                     }
                     else {
-                        listActions.append($('<li>').addClass('filter-settings-view').attr('data-action-id', num).text(actionsTranslations[action.id]).append(
+                        var classSet = action.id === 'discard' ? 'filter-settings-view warning' : 'filter-settings-view';
+                        listActions.append($('<li>').addClass(classSet).attr('data-action-id', num).text(actionsTranslations[action.id]).append(
                                 elements.drawDeleteButton('action')
                         ));
                     }
@@ -556,11 +567,16 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 }
             });
 
-            var headlineTest = $('<legend>').addClass("sectiontitle expertmode").text(gt('Conditions')),
-                headlineActions = $('<legend>').addClass("sectiontitle expertmode").text(gt('Actions'));
+            var headlineTest = $('<legend>').addClass("sectiontitle expertmode conditions").text(gt('Conditions')),
+                headlineActions = $('<legend>').addClass("sectiontitle expertmode actions").text(gt('Actions')),
+                notification = $('<div>');
+
+            if (_.isEqual(appliedTest[0], {id : 'true'})) {
+                renderWarningForEmptyTests(notification);
+            }
 
             this.append(
-                headlineTest, listTests,
+                headlineTest, notification, listTests,
                 elements.drawOptionsExtern(gt('Add condition'), headerTranslation, {
                     test: 'create',
                     classes: 'no-positioning block',

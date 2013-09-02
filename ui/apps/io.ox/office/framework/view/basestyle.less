@@ -175,17 +175,11 @@ i[class^="icon-"], i[class^=" icon-"] {
             outline: none;
         }
 
-        /* the container element for hidden contents */
-        > .app-hidden-root {
-            bottom: auto;
-            height: auto;
-            overflow: visible;
-            line-height: normal;
-        }
-
         /* the container element for the application contents */
         > .app-content-root {
             background: @app-pane-fill-color;
+
+            &:focus, &:active { outline: none; }
 
             /* scrollable application pane, center container node horizontally into application pane */
             &.scrolling {
@@ -312,7 +306,7 @@ i[class^="icon-"], i[class^=" icon-"] {
     /* fade out caption for buttons and labels in disabled groups */
     &.disabled label, &.disabled .button, label.disabled, .button.disabled {
         > .caption, > span {
-            .opacity(50);
+            opacity: 0.5;
         }
     }
 
@@ -509,6 +503,15 @@ i[class^="icon-"], i[class^=" icon-"] {
                 }
             }
 
+            /* no borders around controls */
+            &.no-borders {
+                .box-shadow(none);
+
+                label, .button, .input-wrapper {
+                    border-color: transparent;
+                }
+            }
+
             /* default background for selected toggle/radio buttons */
             .button.selected {
                 background: fade(@selectedBackground, 30%);
@@ -566,10 +569,14 @@ i[class^="icon-"], i[class^=" icon-"] {
                 &.selected { .box-shadow-2(@selected-button-shadow-effect, @focus-glow-effect); }
             }
 
-            /* tiny 3D shadow effect and hover highlighting for enabled input fields */
-            &:not(.disabled):not(.focused) .input-wrapper:not(.disabled) {
+            /* tiny 3D shadow effect for enabled input fields */
+            &:not(.disabled):not(.focused):not(.no-borders) .input-wrapper:not(.disabled) {
                 .box-shadow(@textfield-shadow-effect);
-                &:hover { background: fade(white, 5%); }
+            }
+
+            /* hover highlighting for enabled input fields */
+            &:not(.disabled):not(.focused) .input-wrapper:not(.disabled):hover {
+                background: fade(white, 5%);
             }
 
             /* default focus border for all controls in focused text fields */
@@ -664,7 +671,7 @@ i[class^="icon-"], i[class^=" icon-"] {
                 /* do not fade out disabled headings (but stick to default mouse pointer) */
                 &.disabled .button, .button.disabled {
                     > .caption, > span {
-                        .opacity(100);
+                        opacity: 1;
                     }
                 }
             }
@@ -752,10 +759,10 @@ i[class^="icon-"], i[class^=" icon-"] {
 .view-pane:not(.touch) {
     &.hover-effect, &:not(.hover-effect) > .view-component.hover-effect {
         .transition(opacity 0.2s linear);
-        .opacity(70);
+        opacity: 0.7;
 
         &.focused, &:hover {
-            .opacity(100);
+            opacity: 1;
         }
     }
 }
@@ -1029,27 +1036,6 @@ i[class^="icon-"], i[class^=" icon-"] {
     } /* end of &.section-list */
 
 } /* end of &.dropdown-container */
-
-/* ========================================================================= */
-/* alert banners                                                             */
-/* ========================================================================= */
-
-.alert {
-    position: absolute;
-    z-index: 2000;
-    padding: 8px 14px;
-    .drop-shadow(7px);
-    cursor: default;
-
-    h4 { margin-bottom: 8px; }
-    p { margin: 0; }
-
-    button, .close {
-        position: static;
-        float: right;
-        margin: 0 0 5px 14px;
-    }
-}
 
 } /* end of .io-ox-office-main */
 

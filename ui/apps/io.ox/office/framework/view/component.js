@@ -49,6 +49,10 @@ define('io.ox/office/framework/view/component',
      * @param {BaseApplication} app
      *  The application containing this view component instance.
      *
+     * @param {String} id
+     *  The identifier for this view component. Must be unique across all view
+     *  components in the application.
+     *
      * @param {Object} [options]
      *  A map of options to control the properties of the new view component.
      *  The following options are supported:
@@ -75,7 +79,7 @@ define('io.ox/office/framework/view/component',
      *      context of this view component instance. If omitted, groups will be
      *      appended to the root node of this view component.
      */
-    function Component(app, options) {
+    function Component(app, id, options) {
 
         var // self reference
             self = this,
@@ -91,9 +95,6 @@ define('io.ox/office/framework/view/component',
 
             // all control groups, mapped by key
             groupsByKey = {},
-
-            // whether the pane will be focusable with keyboard
-            focusable = Utils.getBooleanOption(options, 'focusable', true),
 
             // handler called to insert a new group into this view component
             groupInserter = Utils.getFunctionOption(options, 'groupInserter');
@@ -123,7 +124,6 @@ define('io.ox/office/framework/view/component',
          */
         function groupLayoutHandler() {
             var newNodeSize = getNodeSize();
-            updateFocusable();
             if (!_.isEqual(nodeSize, newNodeSize)) {
                 nodeSize = newNodeSize;
                 self.trigger('component:layout');
@@ -184,14 +184,6 @@ define('io.ox/office/framework/view/component',
         }
 
         /**
-         * Updates the CSS marker class controlling whether this view component
-         * is focusable with special keyboard shortcuts.
-         */
-        function updateFocusable() {
-            node.toggleClass('f6-target', focusable && (getFocusableGroups().length > 0));
-        }
-
-        /**
          * Moves the focus to the previous or next enabled control in the view
          * component. Triggers a 'blur:key' event at the currently focused
          * control, and a 'focus:key' event at the new focused control.
@@ -206,7 +198,7 @@ define('io.ox/office/framework/view/component',
                 // extract all focusable controls from the groups
                 controls = _(focusableGroups).reduce(function (controls, group) { return controls.add(group.getFocusableControls()); }, $()),
                 // focused control
-                control = Utils.getFocusedControl(controls),
+                control = controls.filter(window.document.activeElement),
                 // index of focused control in all enabled controls
                 index = controls.index(control);
 
@@ -312,8 +304,11 @@ define('io.ox/office/framework/view/component',
                 self.trigger('group:change', key, value, options);
             });
 
-            // set the key as data attribute
-            group.getNode().attr('data-key', key);
+            // create unique DOM identifier for Selenium testing, set the key as data attribute
+            group.getNode().attr({
+                'id': node.attr('id') + '-group-' + key.replace(/[^a-zA-Z0-9]+/g, '-') + '-' + groupsByKey[key].length,
+                'data-key': key
+            });
 
             return this;
         };
@@ -371,7 +366,6 @@ define('io.ox/office/framework/view/component',
                 node.toggleClass(Utils.HIDDEN_CLASS, !visible);
                 this.trigger('component:show', visible);
                 nodeSize = getNodeSize();
-                updateFocusable();
             }
             return this;
         };
@@ -441,8 +435,14 @@ define('io.ox/office/framework/view/component',
 
         // initialization -----------------------------------------------------
 
+        // create unique DOM identifier for Selenium testing
+        node.attr('id', app.getWindowId() + '-component-' + id);
+
         // marker for touch devices
         node.toggleClass('touch', Modernizr.touch);
+
+        // whether the pane will be focusable with keyboard
+        node.toggleClass('f6-target', Utils.getBooleanOption(options, 'focusable', true));
 
         // hover effect for groups embedded in the view component
         node.toggleClass('hover-effect', Utils.getBooleanOption(options, 'hoverEffect', false));

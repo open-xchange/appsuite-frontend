@@ -14,7 +14,6 @@
 define('io.ox/tasks/edit/view',
     ['gettext!io.ox/tasks/edit',
      'io.ox/tasks/edit/view-template',
-     'io.ox/tasks/util',
      'io.ox/tasks/model',
      'io.ox/core/date',
      'io.ox/core/api/account',
@@ -24,7 +23,7 @@ define('io.ox/tasks/edit/view',
      'io.ox/backbone/views',
      'io.ox/backbone/forms',
      'io.ox/core/capabilities'
-    ], function (gt, template, reminderUtil, model, date, account, util, ext, notifications, views, forms, capabilities) {
+    ], function (gt, template, model, date, account, util, ext, notifications, views, forms, capabilities) {
 
     'use strict';
 
@@ -33,11 +32,7 @@ define('io.ox/tasks/edit/view',
         tagName: 'div',
         className: 'io-ox-tasks-edit task-edit-wrapper container-fluid default-content-padding',
         init: function () {
-            //needed to do it this way, otherwise data stays for next instance of view and causes errors
-            this.fields = {};
-            this.rows = [];
             this.collapsed = true;
-            this.on('dispose', this.close);
 
             //if recurrence is set make sure we have start and end date
             //this prevents errors on saving because recurrence needs both fields filled
@@ -56,329 +51,66 @@ define('io.ox/tasks/edit/view',
                 }
             });
         },
-        changeMode: function (mode) {
-            if (mode === 'edit') {
-                if (this.fields.headline) {
-                    this.fields.headline.text(gt('Edit task'));
-                }
-                if (this.fields.saveButton) {
-                    this.fields.saveButton.text(gt('Save'));
-                }
-            } else {
-                if (this.fields.headline) {
-                    this.fields.headline.text(gt('Create task'));
-                }
-                if (this.fields.saveButton) {
-                    this.fields.saveButton.text(gt('Create'));
-                }
-            }
-        },
         render: function (app) {
-            var self = this;
+            var self = this,
+                rows = {};
+            self.baton.app = app;
 
-            //row0 headlinetext cancel and savebutton
-
-            self.$el.append($('<div>').addClass('task-edit-headline row-fluid').append(this.getRow(0, app)));
-
-            if (_.device('smartphone')) {
-                // create new toolbar on bottom
-                ext.point('io.ox/tasks/edit/bottomToolbar').invoke('draw', this, {
-                    app: app,
-                    save: self.fields.saveButton,
-                    cancel: self.fields.cancel
-                });
-            }
-            //row 1 subject
-            util.buildExtensionRow(self.$el, this.getRow(1, app), self.baton);
-
-            //row 4 description
-            util.buildExtensionRow(self.$el, this.getRow(4), self.baton);
-
-            //expand link
-            var colLink = $('<a tabindex="1">').addClass('expand-link').attr('href', '#')
-                .on('click', function (e) {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    self.$el.find('.collapsed').toggle();
-                    self.collapsed = !self.collapsed;
-                    if (self.collapsed) {
-                        $(this).text(gt('Expand form'));
-                    } else {
-                        $(this).text(gt('Collapse form'));
-                    }
-                })
-                .appendTo(this.$el);
-            if (self.collapsed) {
-                colLink.text(gt('Expand form'));
-            } else {
-                colLink.text(gt('Collapse form'));
-            }
-
-            //row 2 start date due date
-            util.buildExtensionRow(self.$el, this.getRow(2), self.baton).addClass('collapsed');
-
-            //row 3 recurrence
-            if (_.device('!small')) {
-                util.buildExtensionRow(self.$el, this.getRow(3), self.baton).addClass('collapsed');
-            }
-
-            //row 5 reminder
-            util.buildExtensionRow(self.$el, this.getRow(5), self.baton).addClass('collapsed');
-
-            //row 6 status progress priority privateFlag
-            util.buildExtensionRow(self.$el, this.getRow(6), self.baton).addClass('collapsed');
-
-            //tabsection
-            var temp = util.buildTabs([gt('Participants'),
-                                       //#. %1$s is the number of currently attached attachments
-                                       //#, c-format
-                                       gt('Attachments (%1$s)', gt.noI18n(0)),
-                                       gt('Details')], '-' + self.cid),
-                tabs = temp.table,
-                participantsTab = temp.content.find('#edit-task-tab0'  + '-' + self.cid),
-                attachmentsTab = temp.content.find('#edit-task-tab1'  + '-' + self.cid),
-                detailsTab = temp.content.find('#edit-task-tab2'  + '-' + self.cid);
-            this.$el.append(tabs.addClass('collapsed'), temp.content.addClass('collapsed'));
-
-            //partitipants tab
-            util.buildExtensionRow(participantsTab, [this.getRow(0, app, 'participants')], self.baton);
-            util.buildExtensionRow(participantsTab, [this.getRow(1, app, 'participants')], self.baton);
-
-            //attachmentTab
-            var attachmentTabheader = tabs.find('a:eq(1)');
-            this.on('attachmentCounterRefresh', function (e, number) {
-                e.stopPropagation();
-                attachmentTabheader.text(
-                    //#. %1$s is the number of currently attached attachments
-                    //#, c-format
-                    gt('(%1$s) Attachments', gt.noI18n(number)));
-            });
-
-            this.getRow(0, app, 'attachments').invoke('draw', attachmentsTab, self.baton);
-            util.buildExtensionRow(attachmentsTab, [this.getRow(1, app, 'attachments')], self.baton);
-
+            //hide stuff
             if (!capabilities.has('infostore')) {
-                attachmentTabheader.hide();
-                attachmentsTab.hide();
+                ext.point('io.ox/tasks/edit/view/tabs').disable('attachments_tab');
             }
-
-            temp = tabs = null;
-
             // hide participants tab for PIM user
             if (!capabilities.has('delegate_tasks')) {
-                var node = self.$el;
-
-                //hide participant tab and tabcontent
-                node.find('.tab-link:eq(0)').hide();
-                participantsTab.hide();
-
-                //only details tab left?
-                if (!capabilities.has('infostore')) {
-                    //use display content and add sectiontitle
-                    detailsTab.addClass('collapsed');
-                    node.find('.nav-tabs')
-                        .replaceWith($('<legend class="sectiontitle collapsed">' + gt('Details') + '</legend>'));
-                } else {
-                    //switch to attachment as active tab
-                    node.find('.tab-link:eq(1)')
-                        .tab('show');
-                }
+                ext.point('io.ox/tasks/edit/view/tabs').disable('participants_tab');
             }
 
-            //detailstab
-            util.buildExtensionRow(detailsTab, this.getRow(0, app, 'details'), self.baton);
-            util.buildExtensionRow(detailsTab, this.getRow(1, app, 'details'), self.baton);
-            util.buildExtensionRow(detailsTab, this.getRow(2, app, 'details'), self.baton);
-            util.buildExtensionRow(detailsTab, this.getRow(3, app, 'details'), self.baton);
-            util.buildExtensionRow(detailsTab, this.getRow(4, app, 'details'), self.baton);
+            util.splitExtensionsByRow(this.point.list(), rows, true);
+            //draw the rows
+            _(rows).each(function (row, key) {
+                if (key !== 'rest') {//leave out all the rest, for now
+                    util.buildExtensionRow(self.$el, row, self.baton);
+                }
+            });
+            if (_.device('smartphone')) {
+                // create new toolbar on bottom
+                ext.point('io.ox/tasks/edit/bottomToolbar').invoke('draw', this, self.baton);
+            }
+            //now draw the rest
+            _(rows.rest).each(function (extension) {
+                extension.invoke('draw', this.$el, self.baton);
+            });
 
             //change title if available
             if (self.model.get('title')) {
                 app.setTitle(self.model.get('title'));
             }
-            return this.$el;
-        },
-        getRow: function (number, app, tab) {
-            var self = this,
-                temp = {};
-            if (this.rows.length > 0) {
-                var value;
-                switch (tab) {
-                case 'details':
-                    value = this.rows[7][number];
-                    break;
-                case 'participants':
-                    value = this.rows[8][number];
-                    break;
-                case 'attachments':
-                    value = this.rows[9][number];
-                    break;
-                default:
-                    value = this.rows[number];
-                    break;
-                }
-                return value;
-            } else {
-                //create non extensionPoint nodes
-                self.createNonExt(app);
-                //fill with empty rows
-                this.rows = [[], [], [], [], [], [], [], [[], [], [], [], []], [], []];
-                //get extension points
-                this.point.each(function (extension) {
-                    temp[extension.id] = extension;
-                });
-                //put extension points and non extensionpoints into right rows and order
-                //headline row 0
 
-                self.rows[0].push(self.fields.headline);
-                self.rows[0].push(self.fields.saveButton);
-                self.rows[0].push(self.fields.cancel);
-                //row 1
-                self.rows[1].push(temp.title);
-                //row 2
-                self.rows[2].push(temp.end_date);
-                self.rows[2].push(temp.start_date);
-                //row 3
-                self.rows[3].push(temp.recurrence);
-                //row 4
-                self.rows[4].push(temp.note);
-                //row 5
-                self.rows[5].push([[util.buildLabel(gt('Remind me'), this.fields.reminderDropdown.attr('id')), this.fields.reminderDropdown], 5]);
-                self.rows[5].push(temp.alarm);
-                //row 6
-                self.rows[6].push(temp.status);
-                self.rows[6].push([[util.buildLabel(gt('Progress in %'), this.fields.progress.attr('id')), this.fields.progress.parent()], 3]);
-                self.rows[6].push(temp.priority);
-                self.rows[6].push(temp.private_flag);
-                //detailtab
-                self.rows[7][0].push(temp.target_duration);
-                self.rows[7][0].push(temp.actual_duration);
-                self.rows[7][1].push(temp.target_costs);
-                self.rows[7][1].push(temp.actual_costs);
-                self.rows[7][1].push(temp.currency);
-                self.rows[7][2].push(temp.trip_meter);
-                self.rows[7][3].push(temp.billing_information);
-                self.rows[7][4].push(temp.companies);
-                //participantstab
-                self.rows[8].push(temp.participants_list);
-                self.rows[8].push(temp.add_participant);
-                //attachmentstab
-                self.rows[9].push(temp.attachment_list);
-                self.rows[9].push(temp.attachment_upload);
-                //delegate some events
-                self.$el.delegate('#task-edit-title', 'keyup', function () {
-                    var newTitle = _.noI18n($(this).val());
-                    if (!newTitle) {
-                        if (self.model.get('id')) {
-                            newTitle = gt('Edit task');
-                        } else {
-                            newTitle = gt('Create task');
-                        }
-                    }
-                    app.setTitle(newTitle);
-                });
-                return this.rows[number];
+            // Disable Save Button if title is empty on startup
+            if (!self.$el.find('#task-edit-title').val()) {
+                self.$el.find('.btn[data-action="save"]').attr('disabled', 'disabled');
             }
-        },
-        createNonExt: function (app) {
-            var saveBtnText = gt('Create'),
-                headlineText = gt('Create task'),
-                self = this;
-            if (this.model.attributes.id) {
-                saveBtnText = gt('Save');
-                headlineText = gt('Edit task');
+
+            // Toggle disabled state of save button
+            function fnToggleSave(isDirty) {
+                var node = self.$el.find('.btn[data-action="save"]');
+                if (_.device('smartphone')) node = self.$el.parent().parent().find('.btn[data-action="save"]');
+                if (isDirty) node.removeAttr('disabled'); else node.attr('disabled', 'disabled');
             }
-            //row 0
-            this.fields.headline = $('<h1>').addClass('clear-title title').text(headlineText);
-            this.fields.cancel = $('<button type="button" data-action="discard" class="btn cancel">')
-                .text(gt('Discard'))
-                .on('click', function () { app.quit(); });
-
-            this.fields.saveButton = $('<button type="button" data-action="save" class="btn btn-primary task-edit-save">')
-                .text(saveBtnText)
-                .on('click', function (e) {
-
-                    e.stopPropagation();
-                    app.getWindow().busy();
-
-                    //check if waiting for attachmenthandling is needed
-                    if (self.baton.attachmentList.attachmentsToAdd.length +
-                        self.baton.attachmentList.attachmentsToDelete.length > 0) {
-                        self.model.attributes.tempAttachmentIndicator = true; //temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
-                    }
-
-                    self.model.save().done(function () {
-                        app.markClean();
-                        app.quit();
-                    }).fail(function (response) {
-                        setTimeout(function () {
-                            app.getWindow().idle();
-                            notifications.yell('error', response.error);
-                        }, 300);
-                    });
-
-                });
-
-
-
-            //row 4
-            this.fields.reminderDropdown = $('<select tabindex="1">').attr('id', 'task-edit-reminder-select').addClass('span12')
-                .append($('<option>')
-                .text(''), reminderUtil.buildDropdownMenu())
-                .on('change', function (e) {
-                    if (self.fields.reminderDropdown.prop('selectedIndex') === 0) {
-                        self.model.set('alarm', null, {validate: true});
+            //delegate some events
+            self.$el.delegate('#task-edit-title', 'keyup blur', function () {
+                var newTitle = _.noI18n($(this).val());
+                if (!newTitle) {
+                    if (self.model.get('id')) {
+                        newTitle = gt('Edit task');
                     } else {
-                        var dates = reminderUtil.computePopupTime(new Date(),
-                                self.fields.reminderDropdown.val());
-                        self.model.set('alarm', dates.alarmDate.getTime(), {validate: true});
+                        newTitle = gt('Create task');
                     }
-                });
-
-            //row 5
-            this.fields.progress = util.buildProgress();
-            this.fields.progress.on('change', function () {
-                var value = parseInt(self.fields.progress.val(), 10);
-                if (value !== 'NaN' && value >= 0 && value <= 100) {
-                    if (self.fields.progress.val() === '') {
-                        self.fields.progress.val(0);
-                        self.model.set('status', 1, {validate: true});
-                    } else if (self.fields.progress.val() === '0' && self.model.get('status') === 2) {
-                        self.model.set('status', 1, {validate: true});
-                    } else if (self.fields.progress.val() === '100' && self.model.get('status') !== 3) {
-                        self.model.set('status', 3, {validate: true});
-                    } else if (self.model.get('status') === 3) {
-                        self.model.set('status', 2, {validate: true});
-                    } else if (self.model.get('status') === 1) {
-                        self.model.set('status', 2, {validate: true});
-                    }
-                    self.model.set('percent_completed', value, {validate: true});
-                } else {
-                    setTimeout(function () {notifications.yell('error', gt('Please enter value between 0 and 100.')); }, 300);
-                    self.model.trigger('change:percent_completed');
                 }
+                fnToggleSave($(this).val());
+                app.setTitle(newTitle);
             });
-            this.model.on('change:percent_completed', function () {
-                self.fields.progress.val(self.model.get('percent_completed'));
-            });
-            this.fields.progress.val(this.model.get('percent_completed'));
-
-            //row 6
-            this.fields.repeatLink = $('<a>')
-                .text(gt('Repeat'))
-                .addClass('repeat-link')
-                .attr('href', '#')
-                .on('click', function (e) {
-                    e.preventDefault();
-                    setTimeout(function () {
-                        notifications.yell('info', gt('Under construction'));
-                    }, 300);
-                });
-        },
-        close: function () {
-            //clean up to prevent strange sideeffects
-            this.fields = {};
-            this.rows = [];
+            return this.$el;
         }
 
     });

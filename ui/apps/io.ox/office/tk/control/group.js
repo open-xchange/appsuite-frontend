@@ -372,7 +372,7 @@ define('io.ox/office/tk/control/group',
          * method 'Group.registerFocusableContainerNode()'.
          */
         this.hasFocus = function () {
-            return Utils.containsFocusedControl(focusableNodes);
+            return Utils.containsFocus(focusableNodes);
         };
 
         /**

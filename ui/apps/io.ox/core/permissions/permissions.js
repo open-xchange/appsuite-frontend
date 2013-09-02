@@ -170,6 +170,7 @@ define('io.ox/core/permissions/permissions',
         addDropdown,
         addRoles,
         addRemoveButton,
+        preventAdminPermissions,
         isFolderAdmin = false;
 
     ext.point(POINT + '/detail').extend({
@@ -263,18 +264,29 @@ define('io.ox/core/permissions/permissions',
         }
     };
 
+    preventAdminPermissions = function (permission, baton) {
+        if (permission === 'admin') {
+            if (
+                // no admin choice for default folders (see Bug 27704)
+                (String(api.getDefaultFolder(baton.folder.module)) === baton.folder.id) ||
+                // See Bug 27704
+                (baton.folder.type === 5) ||
+                (baton.folder.type === 2 && baton.model.id === 0) ||
+                // Private Contacts folders can't have other users with admin permissions
+                (baton.folder.type === 1 && baton.folder.module === 'contacts')
+            ) {
+                return true;
+            }
+        }
+    };
+
     addDropdown = function (permission, baton) {
         var bits = baton.model.get('bits'),
             selected = api.Bitmask(bits).get(permission),
             admin = isFolderAdmin,
             menu, ul;
-        // folder fix
-        if (permission === 'folder' && selected === 0) selected = 1;
-        // no admin choice for default folders (see Bug 27704)
-        if (permission === 'admin' && String(api.getDefaultFolder(baton.folder.module)) === baton.folder.id) {
-            admin = false;
-        }
-        if (!admin) {
+
+        if (preventAdminPermissions(permission, baton)) {
             return $('<i>').text(menus[permission][selected]);
         }
         menu = $('<span class="dropdown">').append(
@@ -299,6 +311,7 @@ define('io.ox/core/permissions/permissions',
 
     addRoles = function (baton) {
         if (!isFolderAdmin) return $();
+        if (preventAdminPermissions('admin', baton)) return $();
         return $('<span class="dropdown preset">').append(
             $('<a href="#" data-type="permission" data-toggle="dropdown" aria-haspopup="true" tabindex="1">'),
             $('<ul class="dropdown-menu" role="menu">').append(
@@ -324,7 +337,9 @@ define('io.ox/core/permissions/permissions',
                     if (data.module === 'mail' && !(data.capabilities & Math.pow(2, 0))) {
                         isFolderAdmin = false;
                     }
-                    var options = {top: '40px', center: false, maximize: true, width: 800};
+
+
+                    var options = {top: 60, width: 800, center: false, maximize: true};
                     if (_.device('!desktop')) {
                         options = {top: '40px', center: false};
                     }
@@ -380,7 +395,9 @@ define('io.ox/core/permissions/permissions',
                         }
 
                         var node =  $('<div class="autocomplete-controls input-append">').append(
-                                $('<input type="text" class="add-participant permissions-participant-input-field">'),
+                                $('<input type="text" class="add-participant permissions-participant-input-field">').on('focus', function () {
+                                    autocomplete.trigger('update');
+                                }),
                                 $('<button type="button" class="btn" data-action="add">')
                                     .append($('<i class="icon-plus">'))
                             ),

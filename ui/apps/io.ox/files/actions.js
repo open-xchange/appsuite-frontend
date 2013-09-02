@@ -19,8 +19,9 @@ define('io.ox/files/actions',
      'io.ox/core/capabilities',
      'io.ox/core/notifications',
      'io.ox/core/util',
+     'io.ox/core/api/folder',
      'gettext!io.ox/files',
-     'settings!io.ox/files'], function (api, ext, links, actionPerformer, capabilities, notifications, util, gt, settings) {
+     'settings!io.ox/files'], function (api, ext, links, actionPerformer, capabilities, notifications, util, folderAPI, gt, settings) {
 
     'use strict';
 
@@ -47,7 +48,9 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/upload', {
         requires: function (e) {
-            return e.collection.has('create');
+            return e.baton.app.folder.getData().then(function (data) {
+                return folderAPI.can('create', data);
+            });
         },
         action: function (baton) {
             require(['io.ox/files/views/create'], function (create) {
@@ -63,7 +66,9 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/actions/publish', {
-        requires: 'one',
+        requires: function (e) {
+            return !(e.collection.has('one') && _.isEmpty(e.baton.data.filename));
+        },
         action: function (baton) {
             require(['io.ox/core/pubsub/publications'], function (publications) {
                 publications.buildPublishDialog(baton);
@@ -169,7 +174,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/open', {
         requires: function (e) {
-            return !(e.collection.has('one') && _.isEmpty(e.baton.data.filename));
+            return !(e.collection.has('one') && _.isEmpty(e.baton.data.filename)) && !e.collection.has('multiple');
         },
         multiple: function (list) {
             var onlyinvalid = false;
@@ -239,11 +244,10 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/actions/showlink', {
-
+        capabilities: '!alone',
         requires: function (e) {
             return e.collection.has('some');
         },
-
         multiple: function (list) {
 
             api.getList(list).done(function (list) {
@@ -342,6 +346,7 @@ define('io.ox/files/actions',
     };
 
     new Action('io.ox/files/actions/lock', {
+        capabilities: '!alone',
         requires: function (e) {
             var list = _.getArray(e.context);
             return e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/write') &&//hide in mail write preview
@@ -370,6 +375,7 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/actions/unlock', {
+        capabilities: '!alone',
         requires: function (e) {
             var list = _.getArray(e.context);
             return e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/write') &&//hide in mail write preview
@@ -403,79 +409,81 @@ define('io.ox/files/actions',
             return e.collection.has('one') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
         },
         action: function (baton) {
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                var $input = $('<input type="text" name="name" class="span12">'),
-                    dialog = null;
+
+            require(['io.ox/core/tk/dialogs', 'io.ox/files/util', 'io.ox/core/notifications'], function (dialogs, util, notifications) {
+
+                var filename = baton.data.filename || baton.data.title;
 
                 /**
                  * @return {promise}
                  */
-                function fnRename() {
-                    var name = $input.val(),
-                        update = {
+                function fnRename(name) {
+
+                    var update = {
                             id: baton.data.id,
                             folder_id: baton.data.folder_id
                         };
-                    //'title only' entries
+
+                    // 'title only' entries
                     if (!baton.data.filename && baton.data.title) {
                         update.title = name;
                     } else {
                         update.filename = name;
                     }
 
-                    return api.update(update).fail(require('io.ox/core/notifications').yell);
+                    return api.update(update).fail(notifications.yell);
                 }
 
                 /**
                  * user have to confirm if name doesn't contains a file extension
                  * @return {promise}
                  */
-                function process() {
-                    require(['io.ox/files/util'], function (util) {
-                        util.confirmDialog($input.val(), baton.data.filename || baton.data.title)
-                            .then(function () {
-                                return fnRename();
-                            }, function () {
-                                //store user input and call action again
-                                baton.data.filename_tmp = $input.val();
-                                actionPerformer.invoke('io.ox/files/actions/rename', null, baton);
-                            });
-                    });
+                function process($input) {
+
+                    var name = $.trim($input.val()), invalid = false;
+
+                    // check for valid filename
+                    ext.point('io.ox/core/filename')
+                        .invoke('validate', null, name, 'file')
+                        .find(function (result) {
+                            if (result !== true) {
+                                notifications.yell('warning', result);
+                                return (invalid = true);
+                            }
+                        });
+
+                    if (invalid) return $.Deferred().reject();
+
+                    return util.confirmDialog(name, filename)
+                        .then(
+                            function yes() {
+                                return fnRename(name);
+                            },
+                            function no() {
+                                setTimeout(function () { $input.focus(); }, 0);
+                            }
+                        );
                 }
 
-                $input.val(baton.data.filename_tmp || baton.data.filename || baton.data.title);
-                delete baton.data.filename_tmp;
-                var $form = $('<form>')
-                    .css('margin', '0 0 0 0')
+                new dialogs.ModalDialog({ enter: 'rename', async: true })
+                    .header(
+                        $('<h4>').text(gt('Rename'))
+                    )
                     .append(
                         $('<div class="row-fluid">').append(
-                            $input
+                            $('<input type="text" name="name" class="span12">')
                         )
-                    );
-
-                //'enter'
-                $form.on('submit', function (e) {
-                    e.preventDefault();
-                    dialog.close();
-                    process();
-                });
-
-                dialog = new dialogs.ModalDialog({enter: 'rename'})
-                    .header($('<h4>').text(gt('Rename')))
-                    .append(
-                        $form
                     )
                     .addPrimaryButton('rename', gt('Rename'))
-                    .addButton('cancel', gt('Cancel'));
-
-                dialog.show(function () {
-                    $input.get()[0].setSelectionRange(0, $input.val().lastIndexOf('.'));
-                })
-                .done(function (action) {
-                    if (action === 'rename') {
-                        process();
-                    }
-                });
+                    .addButton('cancel', gt('Cancel'))
+                    .on('rename', function (popup) {
+                        var $input = this.getContentNode().find('input[name="name"]');
+                        process($input).then(this.close, this.idle);
+                    })
+                    .show(function () {
+                        var $input = this.find('input[name="name"]').focus().val(filename);
+                        $input.get()[0].setSelectionRange(0, $input.val().lastIndexOf('.'));
+                    });
             });
         }
     });
@@ -747,134 +755,154 @@ define('io.ox/files/actions',
 
     // INLINE
 
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'editor',
-        index: 150,
-        prio: 'hi',
-        label: gt('Edit'),
-        ref: 'io.ox/files/actions/editor'
-    }));
+    var index = 100;
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'open',
-        index: 100,
+        index: index += 100,
         prio: 'hi',
         label: gt('Open'),
         ref: 'io.ox/files/actions/open'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'editor',
+        index: index += 100,
+        prio: 'hi',
+        label: gt('Edit'),
+        ref: 'io.ox/files/actions/editor'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'download',
-        index: 200,
+        index: index += 100,
         prio: 'hi',
         label: gt('Download'),
         ref: 'io.ox/files/actions/download'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'sendlink',
-        index: 300,
-        label: gt('Send as link'),
-        ref: 'io.ox/files/actions/sendlink'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'send',
-        index: 400,
-        label: gt('Send by mail'),
-        ref: 'io.ox/files/actions/send'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'publish',
-        index: 500,
-        prio: 'lo',
-        label: gt('Publish'),
-        ref: 'io.ox/files/actions/publish'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'showlink',
-        index: 600,
-        label: gt('Show link'),
-        ref: 'io.ox/files/actions/showlink'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'rename',
-        index: 700,
-        label: gt('Rename'),
-        ref: 'io.ox/files/actions/rename'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'edit-description',
-        index: 800,
-        label: gt('Edit description'),
-        ref: 'io.ox/files/actions/edit-description'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'move',
-        index: 900,
-        label: gt('Move'),
-        ref: 'io.ox/files/actions/move'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'copy',
-        index: 1000,
-        label: gt('Copy'),
-        ref: 'io.ox/files/actions/copy'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'delete',
-        index: 1100,
+        index: index += 100,
         prio: 'hi',
         label: gt('Delete'),
         ref: 'io.ox/files/actions/delete'
     }));
 
+    // low
+
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'lock',
-        index: 820,
+        id: 'publish',
+        index: index += 100,
         prio: 'lo',
-        label: gt('Lock'),
-        ref: 'io.ox/files/actions/lock'
+        label: gt('Share this file'),
+        ref: 'io.ox/files/actions/publish',
+        section: 'share'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'unlock',
-        index: 850,
-        prio: 'hi',
-        label: gt('Unlock'),
-        ref: 'io.ox/files/actions/unlock'
+        id: 'send',
+        index: index += 100,
+        prio: 'lo',
+        label: gt('Send by mail'),
+        ref: 'io.ox/files/actions/send',
+        section: 'share'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'sendlink',
+        index: index += 100,
+        prio: 'lo',
+        label: gt('Send as internal link'),
+        ref: 'io.ox/files/actions/sendlink',
+        section: 'share'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'showlink',
+        index: index += 100,
+        prio: 'lo',
+        label: gt('Show internal link'),
+        ref: 'io.ox/files/actions/showlink',
+        section: 'share'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'add-to-portal',
-        index: 1200,
+        index: index += 100,
         prio: 'lo',
         label: gt('Add to portal'),
-        ref: 'io.ox/files/actions/add-to-portal'
+        ref: 'io.ox/files/actions/add-to-portal',
+        section: 'share'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        index: 2000,
+        id: 'rename',
+        index: index += 100,
+        label: gt('Rename'),
+        ref: 'io.ox/files/actions/rename',
+        section: 'edit'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'edit-description',
+        index: index += 100,
+        label: gt('Edit description'),
+        ref: 'io.ox/files/actions/edit-description',
+        section: 'edit'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'move',
+        index: index += 100,
+        label: gt('Move'),
+        ref: 'io.ox/files/actions/move',
+        section: 'file-op'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'copy',
+        index: index += 100,
+        label: gt('Copy'),
+        ref: 'io.ox/files/actions/copy',
+        section: 'file-op'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'lock',
+        index: index += 100,
+        prio: 'lo',
+        label: gt('Lock'),
+        ref: 'io.ox/files/actions/lock',
+        section: 'file-op'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'unlock',
+        index: index += 100,
+        prio: 'hi',
+        label: gt('Unlock'),
+        ref: 'io.ox/files/actions/unlock',
+        section: 'file-op'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        index: index += 100,
         id: 'mediaplayer-audio',
         label: gt('Play audio files'),
-        ref: 'io.ox/files/actions/audioplayer'
+        ref: 'io.ox/files/actions/audioplayer',
+        section: 'media'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        index: 2100,
+        index: index += 100,
         id: 'mediaplayer-video',
         label: gt('Play video files'),
-        ref: 'io.ox/files/actions/videoplayer'
+        ref: 'io.ox/files/actions/videoplayer',
+        section: 'media'
     }));
-    // version links
 
+    // version links
 
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
         id: 'open',
@@ -939,6 +967,22 @@ define('io.ox/files/actions',
     });
 
     // Iconview Inline Links
+
+    new Action('io.ox/files/icons/share', {
+        requires: function (e) {
+            return e.baton.app.folder.getData().then(function (data) {
+                return capabilities.has('publication') && folderAPI.can('publish', data);
+            });
+        },
+        action: function (baton) {
+            require(['io.ox/core/pubsub/publications'], function (publications) {
+                baton.app.folder.getData().then(function (data) {
+                    baton = ext.Baton({ data: data });
+                    publications.buildPublishDialog(baton);
+                });
+            });
+        }
+    });
 
     new Action('io.ox/files/icons/slideshow', {
         requires: function (e) {
@@ -1046,13 +1090,30 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/icons/inline').extend(new links.Link({
         index: 100,
         prio: 'hi',
+        id: 'upload',
+        label: gt('Upload new file'),
+        ref: 'io.ox/files/actions/upload',
+        cssClasses: 'io-ox-action-link btn btn-primary'
+    }));
+
+    ext.point('io.ox/files/icons/inline').extend(new links.Link({
+        index: 200,
+        prio: 'hi',
+        id: 'share',
+        label: gt('Share this folder'),
+        ref: 'io.ox/files/icons/share'
+    }));
+
+    ext.point('io.ox/files/icons/inline').extend(new links.Link({
+        index: 300,
+        prio: 'hi',
         id: 'slideshow',
         label: gt('View Slideshow'),
         ref: 'io.ox/files/icons/slideshow'
     }));
 
     ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        index: 200,
+        index: 400,
         prio: 'hi',
         cssClasses: 'io-ox-action-link fullscreen',
         id: 'slideshow-fullscreen',
@@ -1062,14 +1123,14 @@ define('io.ox/files/actions',
 
 
     ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        index: 300,
+        index: 500,
         id: 'mediaplayer-audio',
         label: gt('Play audio files'),
         ref: 'io.ox/files/icons/audioplayer'
     }));
 
     ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        index: 400,
+        index: 500,
         id: 'mediaplayer-video',
         label: gt('Play video files'),
         ref: 'io.ox/files/icons/videoplayer'

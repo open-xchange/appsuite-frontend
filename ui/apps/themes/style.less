@@ -85,8 +85,12 @@
     left: 50%;
     margin: -163px 0px 0px (-250px - 26);
     z-index: 10000;
-    .box-shadow(0 0 20px -2px #888);
-    .border-radius(4px);
+
+    .box-shadow(0 0 50px 1px #aaa);
+
+    &:focus {
+        outline: 1px solid rgba(0, 136, 204, 0.5);
+    }
 
     .header {
         height: 110px;
@@ -95,7 +99,31 @@
     .content {
         height: 140px;
         overflow: auto;
-        i + span { margin-left: 14px; }
+        margin: 0;
+        .restore-item {
+            position: relative;
+            background-color: #eee;
+            padding: 14px;
+            margin-bottom: 7px;
+            i + span { margin-left: 14px; }
+            .remove {
+                position: absolute;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                width: 40px;
+                text-align: center;
+                color: #888;
+                line-height: 50px;
+            }
+            .remove:hover,
+            .remove:focus {
+                color: white;
+                background-color: #08c;
+                outline: 0;
+                text-decoration: none;
+            }
+        }
     }
     .footer {
         padding-top: 13px;
@@ -1162,8 +1190,9 @@ a.button {
         }
 
         .grid-options.dropdown {
-            display:inline-block;
-            float:right;
+            position: absolute;
+            right: 13px;
+            top: 0px;
         }
     }
 
@@ -1534,6 +1563,10 @@ input[type=search] {
         }
     }
 
+    &.relogin {
+        z-index: 65301;
+    }
+
     .content {
         overflow: auto;
     }
@@ -1660,6 +1693,11 @@ nav.io-ox-inline-links + header {
 .io-ox-inline-links > span.dropdown {
     color: @inlineLinkColor;
     text-decoration: none;
+}
+
+.io-ox-action-link {
+    &.btn-primary { color: white; font-weight: normal; }
+    &.btn-primary:hover { text-decoration: none; }
 }
 
 .io-ox-inline-links span.dropdown ul {
@@ -2445,11 +2483,11 @@ a.toolbar-action, .toolbar-action > a {
     border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25);
 }
 
-.btn-primary { .btn-custom(#08c); }
-.btn-inverse { .btn-custom(#222); }
-.btn-success { .btn-custom(#51a351); }
-.btn-warning { .btn-custom(#f89406); }
-.btn-danger  { .btn-custom(#bd362f); }
+.btn-primary { .btn-custom(@btnPrimaryBackground); }
+.btn-inverse { .btn-custom(@btnInverseBackgroundHighlight); }
+.btn-success { .btn-custom(@btnSuccessBackgroundHighlight); }
+.btn-warning { .btn-custom(@btnWarningBackgroundHighlight); }
+.btn-danger  { .btn-custom(@btnDangerBackgroundHighlight); }
 
 /** BOOTSTRAP FIXES **/
 
@@ -3013,3 +3051,16 @@ input.flat-input {
 
 /* fixes WBR handling in long character sequences, esp. for IE */
 wbr:after { content: "\00200B" }
+
+.legacy-chrome .animate-moveleft {
+    -webkit-transform: none;
+    -webkit-transition-property: none;
+    -webkit-transition-duration: none;
+    left:0;
+}
+.legacy-chrome .animate-moveright {
+    -webkit-transform: none;
+    -webkit-transition-property: none;
+    -webkit-transition-duration: none;
+    left:90%;
+}

@@ -268,9 +268,9 @@ define('io.ox/files/list/perspective',
 
         ext.point('io.ox/files/vgrid/toolbar').extend({
             id: 'dropdown',
-            index: 100,
+            index: 1000,
             draw: function () {
-                this.prepend(
+                this.append(
                     optDropdown = $('<div class="grid-options dropdown">')
                         .append(
                             $('<a href="#" tabindex="1" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').attr('aria-label', gt('Sort options'))

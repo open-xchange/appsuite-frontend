@@ -46,6 +46,13 @@ define('io.ox/calendar/week/perspective',
                     self.dialog.show(e, function (popup) {
                         popup.append(detailView.draw(data));
                     });
+                    if (self.setNewStart) {//if view should change week to the start of this appointment(used by deeplinks)
+                        self.setNewStart = false;//one time only
+                        self.app.refDate.setTime(data.start_date);
+                        if (self.view) {//if view is rendered already
+                            self.view.setStartDate(data.start_date);
+                        }
+                    }
                 },
                 function fail(e) {
                     notifications.yell('error', gt('An error occured. Please try again.'));
@@ -222,6 +229,7 @@ define('io.ox/calendar/week/perspective',
 
         /**
          * handle different views in this perspective
+         * triggered by desktop.js
          * @param  {object} app the application
          * @param  {object} opt options from perspective
          */
@@ -269,6 +277,7 @@ define('io.ox/calendar/week/perspective',
             var cid = _.url.hash('id'), e;
             if (cid) {
                 e = $.Event('click', { target: this.main });
+                this.setNewStart = true;//marker to make the view open in the correct week
                 this.showAppointment(e, _.cid(cid), { arrow: false });
             }
         },

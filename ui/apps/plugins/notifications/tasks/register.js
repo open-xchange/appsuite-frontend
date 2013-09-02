@@ -257,7 +257,7 @@ define('plugins/notifications/tasks/register',
                 reminderAPI.remindMeAgain(endDate.getTime(), model.get('reminder').id).pipe(function () {
                     return $.when(api.caches.get.remove(key), api.caches.list.remove(key));//update Caches
                 }).done(function () {
-                    api.trigger('update:' + key[0]);//update detailview
+                    api.trigger('update:' + _.ecid(key[0]));//update detailview
                 });
                 model.collection.remove(model);
             }
@@ -361,6 +361,12 @@ define('plugins/notifications/tasks/register',
                     notifications.collection.remove(notifications.collection._byId[id.id]);
                 });
                 reminderAPI.getReminders();//to delete stored reminders
+            }).on('mark:task:confirmed', function (e, ids) {
+                _(ids).each(function (id) {
+                    if (!id.data || id.data.confirmation === 2) {//remove reminders for declined tasks
+                        notifications.collection.remove(notifications.collection._byId[id.id]);
+                    }
+                });
             });
         }
     });

@@ -411,6 +411,11 @@ define('plugins/notifications/calendar/register',
             calAPI.on('delete:appointment', removeReminders)
                   .on('delete:appointment', function () {
                         reminderAPI.getReminders();
+                    })
+                  .on('mark:invite:confirmed', function (e, obj) {
+                        if (obj.data.confirmation === 2) {//remove reminders for declined appointments
+                            removeReminders(e, obj);
+                        }
                     });
             reminderAPI.getReminders();
         }

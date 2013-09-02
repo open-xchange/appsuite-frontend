@@ -191,7 +191,7 @@ define('io.ox/office/framework/app/baseapplication',
         function updateTitle() {
 
             var // the root node of the application window
-                windowNode = self.getWindowNode();
+                windowNode = self.getWindow().nodes.outer;
 
             // set title for application launcher
             self.setTitle(self.getShortFileName() || gt('unnamed'));
@@ -253,11 +253,11 @@ define('io.ox/office/framework/app/baseapplication',
                     self.trigger('docs:import:success', point);
                 })
                 .fail(function (result) {
-                    var title = Utils.getStringOption(result, 'title', gt('Load Error')),
+                    var cause = Utils.getStringOption(result, 'cause', 'unknown'),
                         message = Utils.getStringOption(result, 'message', gt('An error occurred while loading the document.')),
-                        cause = Utils.getStringOption(result, 'cause', 'unknown');
+                        headline = Utils.getStringOption(result, 'headline', gt('Load Error'));
                     if (cause !== 'timeout') {
-                        view.showError(title, message);
+                        view.yell('error', message, headline);
                     }
                     Utils.error('BaseApplication.launch(): Importing document "' + self.getFullFileName() + '" failed. Error code: "' + cause + '".');
                     self.trigger('docs:import:error', cause);
@@ -361,6 +361,17 @@ define('io.ox/office/framework/app/baseapplication',
         this.setUserSettingsValue = function (key, value) {
             Settings.set(this.getDocumentType() + '/' + key, value).save();
             return this;
+        };
+
+        /**
+         * Returns the unique DOM identifier of the outer root node of this
+         * application.
+         *
+         * @returns {String}
+         *  The unique window DOM identifier.
+         */
+        this.getWindowId = function () {
+            return this.getWindow().nodes.outer.attr('id');
         };
 
         // file descriptor ----------------------------------------------------
@@ -968,8 +979,9 @@ define('io.ox/office/framework/app/baseapplication',
          *  Deferred object is resolved or rejected. After resolving the
          *  Deferred object, the delay time will start, and the callback will
          *  be called again. Otherwise, after the Deferred object has been
-         *  rejected, execution will be stopped. All other return values will
-         *  be ignored, and the callback loop will continue.
+         *  rejected, execution will be stopped, and the Promise returned by
+         *  this method will be rejected too. All other return values will be
+         *  ignored, and the callback loop will continue.
          *
          * @param {Object} [options]
          *  A map with options controlling the behavior of this method. The
@@ -988,13 +1000,18 @@ define('io.ox/office/framework/app/baseapplication',
          *      If specified, the maximum number of cycles to be executed.
          *
          * @returns {jQuery.Promise}
-         *  The Promise of a Deferred object that will be resolved after the
-         *  callback function has been invoked the last time. This Promise
-         *  contains an additional method 'abort()' that can be called before
-         *  or while the callback loop is executed to stop the loop
-         *  immediately. In that case, the Promise will never be resolved. When
-         *  the application will be closed, it aborts all running callback
-         *  loops automatically (also, without resolving the Promise).
+         *  The Promise of a Deferred object that will be resolved or rejected
+         *  after the callback function has been invoked the last time. The
+         *  Promise will be resolved, if the callback function has returned the
+         *  Utils.BREAK object in the last iteration, or if the maximum number
+         *  of iterations (see option 'options.cycles') has been reached. It
+         *  will be rejected, if the callback function has returned a rejected
+         *  Deferred object or Promise. The returned Promise contains an
+         *  additional method 'abort()' that can be called before or while the
+         *  callback loop is executed to stop the loop immediately. In that
+         *  case, the Promise will never be resolved nor rejected. When the
+         *  application will be closed, it aborts all running callback loops
+         *  automatically (also, without resolving/rejecting the Promise).
          */
         this.repeatDelayed = function (callback, options) {
 
@@ -1022,7 +1039,7 @@ define('io.ox/office/framework/app/baseapplication',
 
                     // immediately break the loop if callback returns Utils.BREAK
                     if (result === Utils.BREAK) {
-                        def.resolve();
+                        def.resolve(Utils.BREAK);
                         return;
                     }
 
@@ -1041,8 +1058,8 @@ define('io.ox/office/framework/app/baseapplication',
                             }
                         }
                     })
-                    .fail(function () {
-                        def.resolve();
+                    .fail(function (response) {
+                        def.reject(response);
                     });
 
                 }, Utils.extendOptions(options, { delay: delay }));
@@ -1090,9 +1107,10 @@ define('io.ox/office/framework/app/baseapplication',
          *  resolved or rejected. After resolving the Deferred object, the
          *  delay time will start, and the callback will be called again for
          *  the chunk in the array. Otherwise, after the Deferred object has
-         *  been rejected, execution will be stopped. All other return values
-         *  will be ignored, and the callback loop will continue to the end of
-         *  the array.
+         *  been rejected, execution will be stopped, and the Promise returned
+         *  by this method will be rejected too. All other return values will
+         *  be ignored, and the callback loop will continue to the end of the
+         *  array.
          *
          * @param {Array|jQuery} dataArray
          *  A JavaScript array, or another array-like object that provides an
@@ -1118,16 +1136,16 @@ define('io.ox/office/framework/app/baseapplication',
          *
          * @returns {jQuery.Promise}
          *  The Promise of a Deferred object that will be resolved after all
-         *  array elements have been processed successfully; or rejected, if
-         *  the callback function returns Utils.BREAK or a rejected Deferred
-         *  object. The Promise will be notified about the progress (as a
-         *  floating-point value between 0.0 and 1.0). The Promise contains an
-         *  additional method 'abort()' that can be called before processing
-         *  all array elements has been finished to cancel the entire loop
-         *  immediately. In that case, the Promise will neither be resolved nor
-         *  rejected. When the application will be closed, it aborts all
-         *  running loops automatically (also, without resolving nor rejecting
-         *  the Promise).
+         *  array elements have been processed successfully or the callback
+         *  function returns Utils.BREAK; or rejected, if the callback function
+         *  returns a rejected Deferred object. The Promise will be notified
+         *  about the progress (as a floating-point value between 0.0 and 1.0).
+         *  The Promise contains an additional method 'abort()' that can be
+         *  called before processing all array elements has been finished to
+         *  cancel the entire loop immediately. In that case, the Promise will
+         *  neither be resolved nor rejected. When the application will be
+         *  closed, it aborts all running loops automatically (also, without
+         *  resolving/rejecting the Promise).
          */
         this.processArrayDelayed = function (callback, dataArray, options) {
 
@@ -1161,16 +1179,16 @@ define('io.ox/office/framework/app/baseapplication',
 
                 // immediately break the loop, if Utils.BREAK is returned
                 if (result === Utils.BREAK) {
-                    def.reject();
+                    def.resolve(Utils.BREAK);
                     // stop the loop timer
                     return Utils.BREAK;
                 }
 
                 // handle Deferred objects returned by the callback
                 return $.when(result)
-                .fail(function () {
+                .fail(function (response) {
                     // immediately break the loop, if returned Deferred has been rejected
-                    def.reject();
+                    def.reject(response);
                     // the Deferred returned by $.when(result) is rejected, so the
                     // background loop will be stopped automatically
                 })
@@ -1189,6 +1207,94 @@ define('io.ox/office/framework/app/baseapplication',
 
             // extend the promise with an 'abort()' method that aborts the timer
             return _.extend(def.promise(), { abort: function () { timer.abort(); } });
+        };
+
+        /**
+         * Creates a synchronized method wrapping a callback function that
+         * executes asynchronous code. The synchronized method buffers multiple
+         * fast invocations and executes the callback function successively,
+         * always waiting for the asynchronous code. In difference to debounced
+         * methods, invocations of a synchronized method will never be skipped,
+         * and each call of the asynchronous callback function receives its
+         * original arguments passed to the synchronized method.
+         *
+         * @param {Function} callback
+         *  A function that will be called every time the synchronized method
+         *  has been called. Receives all parameters that have been passed to
+         *  the synchronized method. If this function returns a pending
+         *  Deferred object or Promise, subsequent invocations of the
+         *  synchronized method will be postponed until the Deferred object or
+         *  Promise will be resolved or rejected. All other return values will
+         *  be interpreted as synchronous invocations of the callback function.
+         *
+         * @param {Object} [options]
+         *  A map with options controlling the behavior of the synchronized
+         *  method created by this method. The following options are supported:
+         *  @param {Object} [options.context]
+         *      The context that will be bound to 'this' in the passed callback
+         *      function.
+         *
+         * @returns {Function}
+         *  The debounced method that can be called multiple times, and that
+         *  executes the asynchronous callback function sequentially. Returns
+         *  the Promise of a Deferred object that will be resolved or rejected
+         *  after the callback function has been invoked. If the callback
+         *  function returns a Deferred object or Promise, the synchronized
+         *  method will wait for it, and will forward its state and response to
+         *  its Promise. Otherwise, the Promise will be resolved with the
+         *  return value of the callback function. When the application will be
+         *  closed, pending callbacks will not be executed anymore.
+         */
+        this.createSynchronizedMethod = function (callback, options) {
+
+            var // the context for the callback function
+                context = Utils.getOption(options, 'context'),
+                // arguments and returned Promise of pending calls of the method
+                pendingInvocations = [],
+                // Promise representing the callback function currently running
+                runningPromise = null,
+                // the background loop processing all pending invocations
+                timer = null;
+
+            // invokes the callback once with the passed set of arguments
+            function invokeCallback(invocationData) {
+                // create the Promise
+                runningPromise = $.when(callback.apply(context, invocationData.args));
+                // register callbacks after assignment to handle synchronous callbacks correctly
+                runningPromise
+                    .always(function () { runningPromise = null; })
+                    .done(function (response) { invocationData.def.resolve(response); })
+                    .fail(function (response) { invocationData.def.reject(response); });
+            }
+
+            // create and return the synchronized method
+            return function () {
+
+                var // all data about the current invocation (arguments and returned Deferred object)
+                    invocationData = { args: _.toArray(arguments), def: $.Deferred() };
+
+                // cache invocation data, if a callback function is currently running
+                if (runningPromise) {
+                    pendingInvocations.push(invocationData);
+                    // start timer that processes the array
+                    if (!timer) {
+                        timer = self.repeatDelayed(function () {
+                            if (runningPromise) { return runningPromise; }
+                            if (pendingInvocations.length === 0) { return Utils.BREAK; }
+                            invokeCallback(pendingInvocations.shift());
+                            return runningPromise;
+                        });
+                        // forget the timer after the last callback invocation
+                        timer.always(function () { timer = null; });
+                    }
+                } else {
+                    // invoke the callback function directly on first call
+                    invokeCallback(invocationData);
+                }
+
+                // return a Promise that will be resolved/rejected after invocation
+                return invocationData.def.promise();
+            };
         };
 
         /**
@@ -1380,44 +1486,22 @@ define('io.ox/office/framework/app/baseapplication',
             function resolveDownloadUrl() {
 
                 // propagate changed file to the files API
-                FilesAPI.propagate('change', file);
+                return FilesAPI.propagate('change', file).then(function () {
 
-                if (file.source === 'mail')
-                    // resolve with the download URL of a mail attachment
-                    return self.getServerModuleUrl('mail', {
-                        action: 'attachment',
-                        documentformat: format || 'native',
-                        mimetype: file.file_mimetype || '',
-                        filename: file.filename,
-                        folder: file.folder_id,
-                        id: file.id,
-                        attachment: file.attached,
-                        deliver: 'download',
-                        nocache: _.uniqueId() // needed to trick the browser cache (is not evaluated by the backend)
-                    });
-                else if (file.source === 'task')
-                    // resolve with the download URL of a task attachment
-                    return self.getServerModuleUrl('attachment', {
-                        action: 'document',
-                        documentformat: format || 'native',
-                        mimetype: file.file_mimetype || '',
-                        filename: file.filename,
-                        folder: file.folder_id,
-                        id: file.id,
-                        module: file.module,
-                        deliver: 'download',
-                        nocache: _.uniqueId() // needed to trick the browser cache (is not evaluated by the backend)
-                    });
-                else
-                    // resolve with the download URL of the document
                     return self.getFilterModuleUrl({
-                        action: 'getdocument',
-                        documentformat: format || 'native',
-                        filename: self.getFullFileName(),
-                        mimetype: file.file_mimetype || '',
-                        version: 0, // always use the latest version
-                        nocache: _.uniqueId() // needed to trick the browser cache (is not evaluated by the backend)
-                    });
+                                action: 'getdocument',
+                                documentformat: format || 'native',
+                                filename: self.getFullFileName(),
+                                mimetype: file.file_mimetype || '',
+                                version: 0, // always use the latest version
+                                nocache: _.uniqueId(), // needed to trick the browser cache (is not evaluated by the backend)
+                                source: file.source,// document source: file|mail|task
+                                folder: file.folder_id,
+                                id: file.id,
+                                module: file.module,
+                                attachment: file.attached
+                            });
+                });
             }
 
             // Bug 28251: call downloadFile() with a Promise that will be resolved
@@ -1548,6 +1632,7 @@ define('io.ox/office/framework/app/baseapplication',
 
             // set the window at the application instance
             self.setWindow(win);
+            updateTitle();
 
             // wait for unload events and execute quit handlers
             self.registerEventHandler(window, 'unload', unloadHandler);
@@ -1602,13 +1687,15 @@ define('io.ox/office/framework/app/baseapplication',
 
         // call all registered quit handlers
         this.setQuit(function () {
-            // return existing Deferred if a quit request is already running
-            if (currentQuitDef && (currentQuitDef.state() === 'pending')) {
-                return currentQuitDef.promise();
-            }
+
+            var // store original 'quit()' method (needs to be restored after resuming)
+                origQuitMethod = self.quit;
 
             // create the result deferred (rejecting means resume application)
             currentQuitDef = $.Deferred();
+
+            // override 'quit()' method to prevent repeated/recursive calls while in quit mode
+            self.quit = function () { return currentQuitDef.promise(); };
 
             // call all before-quit handlers, rejecting one will resume application
             callHandlers(beforeQuitHandlers)
@@ -1634,10 +1721,13 @@ define('io.ox/office/framework/app/baseapplication',
                 });
             })
             .fail(function () {
+                // resume to running state of application
+                self.quit = origQuitMethod;
                 currentQuitDef.reject();
+                currentQuitDef = null;
             });
 
-            return currentQuitDef.always(function () { currentQuitDef = null; }).promise();
+            return currentQuitDef.promise();
         });
 
         // prevent usage of these methods in derived classes
@@ -1653,9 +1743,6 @@ define('io.ox/office/framework/app/baseapplication',
             model.destroy();
             model = view = controller = null;
         });
-
-        // set application title to current file name
-        updateTitle();
 
     } // class BaseApplication
 

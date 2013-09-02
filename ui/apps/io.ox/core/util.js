@@ -54,7 +54,7 @@ define('io.ox/core/util', [/* only add light core deps, not stuff like account A
                 regDoubleDots = /\.\./,
                 regDomainIPAddress = /^\[(\d{1,3}\.){3}\d{1,3}\]$/,
                 regDomainIPv6 = /^\[IPv6(:\w{0,4}){0,8}\]$/i, // yep, vage
-                regDomain = /[a-z]$/i;
+                regDomain = /[a-z0-9]$/i;
 
             // email address validation is not trivial
             // this in not 100% RFC but a good check (https://tools.ietf.org/html/rfc3696#page-5)
@@ -114,7 +114,7 @@ function test(val, expected) {
 }
 test('name@domain.com', true);
 test('name@host', true);
-test('name@123', false);
+test('name@1337', true);
 test('name@[1.2.3.4]', true);
 test('name@[1.2.3.4.5]', false);
 test('name@[1.2.3.A]', false);

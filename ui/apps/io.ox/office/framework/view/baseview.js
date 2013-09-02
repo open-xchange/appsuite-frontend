@@ -13,6 +13,7 @@
 
 define('io.ox/office/framework/view/baseview',
     ['io.ox/core/event',
+     'io.ox/core/notifications',
      'io.ox/office/tk/utils',
      'io.ox/office/tk/keycodes',
      'io.ox/office/framework/view/pane',
@@ -20,7 +21,7 @@ define('io.ox/office/framework/view/baseview',
      'io.ox/office/framework/view/nodetracking',
      'less!io.ox/office/framework/view/basestyle.less',
      'less!io.ox/office/framework/view/docs-icons.less'
-    ], function (Events, Utils, KeyCodes, Pane, gt) {
+    ], function (Events, Notifications, Utils, KeyCodes, Pane, gt) {
 
     'use strict';
 
@@ -154,9 +155,6 @@ define('io.ox/office/framework/view/baseview',
             // whether refreshing the pane layout is currently locked
             layoutLocks = 0,
 
-            // alert banner currently shown
-            currentAlert = null,
-
             // the temporary container for all nodes while application is hidden
             tempNode = $('<div>').addClass(windowNodeClasses).appendTo(tempStorageNode),
 
@@ -167,7 +165,10 @@ define('io.ox/office/framework/view/baseview',
             contentFocusable = Utils.getBooleanOption(options, 'contentFocusable', false),
 
             // whether the application is hidden explicitly
-            viewHidden = false;
+            viewHidden = false,
+
+            // cached notification, shown when application becomes visible
+            lastNotification = null;
 
         // base constructor ---------------------------------------------------
 
@@ -184,9 +185,7 @@ define('io.ox/office/framework/view/baseview',
             var // the root node of the application pane
                 appPaneNode = appPane.getNode(),
                 // current offsets representing available space in the application window
-                offsets = { top: 0, bottom: 0, left: 0, right: 0 },
-                // margin for the alert banner, to keep a maximum width
-                alertMargin = 0;
+                offsets = { top: 0, bottom: 0, left: 0, right: 0 };
 
             function updatePane(pane) {
 
@@ -239,23 +238,25 @@ define('io.ox/office/framework/view/baseview',
             // skip margins for overlay panes
             _(offsets).each(function (offset, pos) { offsets[pos] += overlayMargin[pos]; });
 
-            // update alert banner
-            if (_.isObject(currentAlert)) {
-                if (app.getWindowNode().width() <= 640) {
-                    alertMargin = Math.max((app.getWindowNode().width() - 500) / 2, 10);
-                    // TODO: get size of existing overlay panes at top border
-                    currentAlert.css({ top: offsets.top + 56, left: alertMargin, right: alertMargin });
-                } else {
-                    alertMargin = Math.max((appPaneNode.width() - 500) / 2, 10);
-                    currentAlert.css({ top: offsets.top + 10, left: offsets.left + alertMargin, right: offsets.right + alertMargin });
-                }
-            }
-
             // update overlay view panes
             _(overlayPanes).each(updatePane);
 
             // notify listeners
             self.trigger('refresh:layout');
+        }
+
+        /**
+         * Shows the specified notification message. If the message is of type
+         * 'error', the message will be stored internally and automatically
+         * shown again, after the application has been hidden and shown.
+         *
+         * @param {Object} notification
+         *  The notification message data. Supports all options also supported
+         *  by the static method 'Notifications.yell()'.
+         */
+        function showNotification(notification) {
+            Notifications.yell(notification);
+            lastNotification = (notification.type === 'error') ? notification : null;
         }
 
         /**
@@ -268,12 +269,16 @@ define('io.ox/office/framework/view/baseview',
 
             // move all application nodes from temporary storage into view
             app.getWindowNode().append(tempNode.children());
-            refreshPaneLayout();
 
             // do not update GUI and grab focus while document is still being imported
             if (app.isImportFinished()) {
+                refreshPaneLayout();
                 app.getController().update();
                 self.grabFocus();
+                // show notification cached while view was hidden
+                if (lastNotification) {
+                    showNotification(lastNotification);
+                }
             }
         }
 
@@ -297,12 +302,14 @@ define('io.ox/office/framework/view/baseview',
          *  A reference to this instance.
          */
         this.grabFocus = function () {
-            if (_.isFunction(grabFocusHandler)) {
-                grabFocusHandler.call(this);
-            } else if (contentFocusable) {
-                contentRootNode.focus();
-            } else {
-                this.getAppPaneNode().find('[tabindex]').first().focus();
+            if (this.isVisible()) {
+                if (_.isFunction(grabFocusHandler)) {
+                    grabFocusHandler.call(this);
+                } else if (contentFocusable) {
+                    contentRootNode.focus();
+                } else {
+                    this.getAppPaneNode().find('[tabindex]').first().focus();
+                }
             }
             return this;
         };
@@ -558,8 +565,7 @@ define('io.ox/office/framework/view/baseview',
         };
 
         /**
-         * Adjusts the positions of all view pane nodes, and the current alert
-         * banner.
+         * Adjusts the positions of all view pane nodes.
          *
          * @returns {BaseView}
          *  A reference to this instance.
@@ -680,7 +686,7 @@ define('io.ox/office/framework/view/baseview',
                     });
 
                     // make the blocker focusable for keyboard input
-                    blockerNode.attr('tabindex', 1).focus();
+                    blockerNode.attr('tabindex', 0).focus();
 
                     // show the Cancel button after a delay
                     _.delay(function () { cancelNode.show().find('.btn').focus(); }, 5000);
@@ -710,195 +716,31 @@ define('io.ox/office/framework/view/baseview',
         };
 
         /**
-         * Returns whether an alert banner is currently visible.
-         *
-         * @returns {Boolean}
-         *  Whether an alert banner is visible.
-         */
-        this.hasAlert = function () {
-            return _.isObject(currentAlert);
-        };
-
-        /**
-         * Shows an alert banner at the top of the application window. An alert
-         * currently shown will be removed before.
-         *
-         * @param {String} title
-         *  The alert title.
-         *
-         * @param {String} message
-         *  The alert message text.
+         * Shows an alert banner, if the application is currently visible.
+         * Otherwise, the last alert banner will be cached until the
+         * application becomes visible again.
          *
          * @param {String} type
-         *  The type of the alert banner. Supported values are 'error',
-         *  'warning', and 'success'.
+         *  The type of the alert banner. Supported types are 'success',
+         *  'info', 'warning', and 'error'.
          *
-         * @param {Object} [options]
-         *  A map with additional options controlling the appearance and
-         *  behavior of the alert banner. The following options are supported:
-         *  @param {Boolean} [options.closeable=false]
-         *      If set to true, the alert banner can be closed with a close
-         *      button shown in the top-right corner of the banner.
-         *  @param {Number} [options.timeout=5000]
-         *      Can be specified together with 'options.closeable'. Specifies
-         *      the number of milliseconds until the alert banner will vanish
-         *      automatically. If not specified, the default of five seconds is
-         *      used. The value 0 will show a closeable alert banner that will
-         *      not vanish automatically.
-         *  @param {String} [options.buttonLabel]
-         *      If specified, a push button will be shown with the passed
-         *      caption label.
-         *  @param {Function|String} [options.buttonAction]
-         *      Must be specified together with the 'options.buttonLabel'
-         *      option. When the button has been pressed, the passed function
-         *      will be executed. If set to a string, the controller item with
-         *      the passed key will be executed instead.
+         * @param {String} message
+         *  The message text shown in the alert banner.
+         *
+         * @param {String} [headline]
+         *  An optional headline shown above the message text.
          *
          * @returns {BaseView}
          *  A reference to this instance.
          */
-        this.showAlert = function (title, message, type, options) {
-
-            var // whether the alert is closeable manually
-                closeable = Utils.getBooleanOption(options, 'closeable', false),
-                // auto-close timeout delay
-                delay = Utils.getIntegerOption(options, 'timeout', 5000, 0),
-                // the label of the push button to be shown in the alert banner
-                buttonLabel = Utils.getStringOption(options, 'buttonLabel'),
-                // the callback action for the push button
-                buttonAction = Utils.getFunctionOption(options, 'buttonAction'),
-                // the controller key for the push button
-                buttonKey = Utils.getStringOption(options, 'buttonAction'),
-                // create a new alert node
-                alert = $('<div>')
-                    .addClass('alert alert-' + type)
-                    .append($('<h4>').text(title), $('<p>').text(message))
-                    .data('pane-pos', 'top');
-
-            // Hides the alert with a specific animation.
-            function closeAlert() {
-                currentAlert = null;
-                alert.off('click').stop(true).fadeOut(function () { alert.remove(); });
+        this.yell = function (type, message, headline) {
+            var notification = { type: type, message: message, headline: headline };
+            if (this.isVisible()) {
+                showNotification(notification);
+            } else {
+                lastNotification = notification;
             }
-
-            // remove the alert banner currently shown, store reference to new alert
-            if (currentAlert) { currentAlert.stop(true).remove(); }
-            currentAlert = alert;
-
-            // make the alert banner closeable
-            if (closeable) {
-                // add closer symbol
-                alert.prepend($('<a>', { href: '#' }).text(_.noI18n('\xd7')).addClass('close').attr('tabindex', 1))
-                    .css('cursor', 'pointer')
-                    // alert can be closed by clicking anywhere in the banner
-                    .on('click', closeAlert);
-                // initialize auto-close
-                if (delay > 0) {
-                    alert.delay(delay).fadeOut(function () {
-                        currentAlert = null;
-                        alert.remove();
-                    });
-                }
-            }
-
-            // return focus to application pane when alert has been clicked (also if not closeable)
-            alert.on('click', function () { self.grabFocus(); });
-
-            // create a function that executes the specified controller item
-            if (_.isString(buttonKey)) {
-                buttonAction = function () { app.getController().change(buttonKey); };
-            }
-
-            // insert the push button into the alert banner
-            if (_.isString(buttonLabel) && _.isFunction(buttonAction)) {
-                alert.prepend(
-                    $.button({ label: buttonLabel })
-                        .addClass('btn-' + ((type === 'error') ? 'danger' : type) + ' btn-mini')
-                        .attr('tabindex', 1)
-                        .on('click', function () {
-                            closeAlert();
-                            buttonAction.call(self);
-                        })
-                );
-            }
-
-            // if the alert is closeable without timeout, or contains a button,
-            // add it to the global F6 focus traveling chain
-            if ((closeable && (delay === 0)) || (_.isString(buttonLabel) && _.isFunction(buttonAction))) {
-                alert.addClass('f6-target');
-            }
-
-            // insert and show the new alert banner
-            app.getWindowNode().append(alert);
-            refreshPaneLayout();
-
             return this;
-        };
-
-        /**
-         * Shows an error alert banner at the top of the application window. An
-         * alert currently shown will be removed before.
-         *
-         * @param {String} title
-         *  The alert title.
-         *
-         * @param {String} message
-         *  The alert message text.
-         *
-         * @param {Object} [options]
-         *  A map with additional options controlling the appearance and
-         *  behavior of the alert banner. See method Alert.showAlert() for
-         *  details.
-         *
-         * @returns {BaseView}
-         *  A reference to this instance.
-         */
-        this.showError = function (title, message, options) {
-            return this.showAlert(title, message, 'error', options);
-        };
-
-        /**
-         * Shows a warning alert banner at the top of the application window.
-         * An alert currently shown will be removed before.
-         *
-         * @param {String} title
-         *  The alert title.
-         *
-         * @param {String} message
-         *  The alert message text.
-         *
-         * @param {Object} [options]
-         *  A map with additional options controlling the appearance and
-         *  behavior of the alert banner. See method Alert.showAlert() for
-         *  details.
-         *
-         * @returns {BaseView}
-         *  A reference to this instance.
-         */
-        this.showWarning = function (title, message, options) {
-            return this.showAlert(title, message, 'warning', options);
-        };
-
-        /**
-         * Shows a success alert banner at the top of the application window.
-         * An alert currently shown will be removed before.
-         *
-         * @param {String} title
-         *  The alert title.
-         *
-         * @param {String} message
-         *  The alert message text.
-         *
-         * @param {Object} [options]
-         *  A map with additional options controlling the appearance and
-         *  behavior of the alert banner. See method Alert.showAlert() for
-         *  details.
-         *
-         * @returns {BaseView}
-         *  A reference to this instance.
-         */
-        this.showSuccess = function (title, message, options) {
-            return this.showAlert(title, message, 'success', options);
         };
 
         this.destroy = function () {
@@ -913,7 +755,7 @@ define('io.ox/office/framework/view/baseview',
         // initialization -----------------------------------------------------
 
         // create the application pane, and insert the container nodes
-        appPane = new Pane(app, { classes: 'app-pane', enableContextMenu: true });
+        appPane = new Pane(app, 'app', { classes: 'app-pane', enableContextMenu: true });
         appPane.getNode().append(hiddenRootNode, contentRootNode, appBusyNode.hide());
 
         // add the main application pane to the application window
@@ -930,7 +772,7 @@ define('io.ox/office/framework/view/baseview',
 
         // make the content root node focusable for global navigation with F6 key
         if (contentFocusable) {
-            contentRootNode.addClass('f6-target').attr('tabindex', 1);
+            contentRootNode.addClass('f6-target').attr('tabindex', 0);
         }
 
         // listen to browser window resize events when the application window is visible

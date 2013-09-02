@@ -103,7 +103,7 @@ define('io.ox/office/tk/dropdown/dropdown',
             menuButton = Utils.createButton((caretMode === 'only') ? {} : options).addClass('dropdown-button'),
 
             // the drop-down menu element containing the menu view component
-            menuNode = $('<div>').addClass('io-ox-office-main dropdown-container').attr('tabindex', -1),
+            menuNode = $('<div>').addClass('io-ox-office-main dropdown-container'),
 
             // current size of the drop-down menu (calculated when opening the menu)
             menuNodeSize = null,
@@ -385,7 +385,7 @@ define('io.ox/office/tk/dropdown/dropdown',
             window.clearInterval(refreshTimer);
 
             // move focus to drop-down button, if drop-down menu is focused
-            if (Utils.containsFocusedControl(menuNode)) {
+            if (Utils.containsFocus(menuNode)) {
                 menuButton.focus();
             }
 
@@ -535,7 +535,9 @@ define('io.ox/office/tk/dropdown/dropdown',
                 // the wrong element. Ignore all modifier keys here, even on
                 // non-MacOS systems where F6 traveling is triggered by Ctrl+F6
                 // (browsers will move the focus away anyway).
-                if (keydown) { hideMenu(); }
+                if (keydown) {
+                    hideMenu();
+                }
                 break;
             }
         }

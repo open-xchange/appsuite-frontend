@@ -1156,9 +1156,11 @@ define("io.ox/core/desktop",
                     active: false,
                     query: '',
                     previous: '',
+                    lastFocus: '',
 
                     open: function () {
                         if (!this.active) {
+                            this.lastFocus = $(document.activeElement);
                             self.trigger('search:open');
                             self.nodes.body.addClass('search-open');
                             self.nodes.searchField.focus();
@@ -1175,6 +1177,7 @@ define("io.ox/core/desktop",
                             self.nodes.searchField.val('');
                             self.trigger('search:cancel cancel-search');
                             this.query = this.previous = '';
+                            this.lastFocus.focus();
                         }
                         return this;
                     },
@@ -1294,6 +1297,7 @@ define("io.ox/core/desktop",
                 id: 'window-' + guid,
                 name: '',
                 search: false,
+                searchShortcut: false,
                 title: '',
                 toolbar: false,
                 width: 0
@@ -1383,8 +1387,8 @@ define("io.ox/core/desktop",
                     keydown: function (e) {
                         if (e.which === 27) {
                             win.search.close();
-                        } else if (e.which === 13 && $(this).val() === '') {
-                            win.search.clear();
+                        } else if (e.which === 13) {
+                            searchHandler.change(e);
                         }
                     },
 
@@ -1476,6 +1480,16 @@ define("io.ox/core/desktop",
                             return $('<i class="icon-search">').attr('aria-label', gt('Search'));
                         }
                     });
+
+                    if (opt.searchShortcut) {
+                        // look for ctrl/cmd + F
+                        win.nodes.outer.on('keydown', function (e) {
+                            if (e.which === 70 && e.metaKey) {
+                                e.preventDefault();
+                                win.search.toggle();
+                            }
+                        });
+                    }
                 }
 
                 // add fullscreen handler
@@ -1540,17 +1554,21 @@ define("io.ox/core/desktop",
         }
 
         function clear(blockerTimer) {
-            //launched is a deferred used for a delayed clear
+            clearTimeout(blockerTimer);
+            clearTimeout(buttonTimer);
+            blockerTimer = null;
+            buttonTimer = null;
+            setTimeout(function () {
+                if (blockerTimer === null) {
+                    ox.idle();
+                }
+            }, 0);
+        }
+
+        function clearViaLauncher(blockerTimer) {
+//            launched is a deferred used for a delayed clear
             launched.always(function () {
-                clearTimeout(blockerTimer);
-                clearTimeout(buttonTimer);
-                blockerTimer = null;
-                buttonTimer = null;
-                setTimeout(function () {
-                    if (blockerTimer === null) {
-                        ox.idle();
-                    }
-                }, 0);
+                clear(blockerTimer);
             });
         }
 
@@ -1566,7 +1584,7 @@ define("io.ox/core/desktop",
             }
             var blockertimer = startTimer();
 
-            require(req).always(clear(blockertimer)).then(
+            require(req).always(clearViaLauncher(blockertimer)).then(
                 def.resolve,
                 function fail() {
                     def.reject(false);

@@ -31,14 +31,13 @@
     .files-scrollable-pane {
 
         outline: none;
-        padding:13px;
+        padding: 30px 40px;
         width: 100%;
         min-height: 200px; // for busy animation
         .box-sizing(border-box);
 
         .inline-actions {
 
-            text-align: right;
             margin: 1em 1em 1em 0;
 
             a.fullscreen:before {content: "("; color:black;}
@@ -325,6 +324,9 @@ ul.breadcrumb li.prefix {
 /** small screens **/
 @media all and (max-width: 480px), all and (max-device-width: 480px) {
     .files-iconview  {
+        .files-scrollable-pane {
+            padding: 13px;
+        }
         .file-icon {
             width: 125px;
         }

@@ -182,15 +182,6 @@ define.async('io.ox/office/tk/utils',
     Utils.RETINA = _.device('retina');
 
     /**
-     * A Boolean flag specifying whether the browser is running on the Android
-     * operating system. This weak test replaces the broken '_.browser.Android'
-     * test, see bug 28239.
-     *
-     * @constant
-     */
-    Utils.ANDROID = window.navigator.userAgent.toLowerCase().indexOf('android') > -1;
-
-    /**
      * A Boolean flag specifying whether the Internet Explorer 9 is running.
      *
      * @constant
@@ -1138,11 +1129,9 @@ define.async('io.ox/office/tk/utils',
     // generic DOM/CSS helpers ------------------------------------------------
 
     /**
-     * A jQuery selector that returns true if the DOM node bound to the 'this'
-     * symbol is a text node. Can be used in all helper functions that expect a
-     * jQuery selector.
-     *
-     * @constant
+     * A jQuery function selector that returns true if the DOM node bound to
+     * the 'this' symbol is a text node. Can be used in all helper functions
+     * that expect a jQuery selector including functions.
      */
     Utils.JQ_TEXTNODE_SELECTOR = function () { return this.nodeType === 3; };
 
@@ -1246,6 +1235,22 @@ define.async('io.ox/office/tk/utils',
 
         // use the native Node.contains() method
         return outerNode.contains(innerNode);
+    };
+
+    /**
+     * Returns whether one of the descendant elements in the passed element
+     * contains the active (focused) element.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  A single DOM element, or a jQuery collection, whose descendants will be
+     *  checked for the active (focused) element.
+     *
+     * @returns {Boolean}
+     *  Whether one of the descendant elements in the passed element contains
+     *  the active (focused) element.
+     */
+    Utils.containsFocus = function (node) {
+        return $(node).find(window.document.activeElement).length > 0;
     };
 
     /**
@@ -2339,64 +2344,6 @@ define.async('io.ox/office/tk/utils',
         control.data('userdata', value);
     };
 
-    /**
-     * Returns whether the first form control in the passed jQuery collection
-     * is currently focused.
-     *
-     * @param {jQuery} control
-     *  A jQuery collection containing a form control.
-     *
-     * @returns {Boolean}
-     *  True, if the form control is focused.
-     */
-    Utils.isControlFocused = function (control) {
-        return control.first().is(':focus');
-    };
-
-    /**
-     * Returns the form control from the passed jQuery collection, if it is
-     * currently focused.
-     *
-     * @param {jQuery} controls
-     *  A jQuery collection containing form controls.
-     *
-     * @returns {jQuery}
-     *  The focused control, as new jQuery collection. Will be empty, if the
-     *  passed collection does not contain a focused control.
-     */
-    Utils.getFocusedControl = function (controls) {
-        return controls.filter(':focus');
-    };
-
-    /**
-     * Returns whether the passed jQuery collection contains a focused control.
-     *
-     * @param {jQuery} controls
-     *  A jQuery collection containing form controls.
-     *
-     * @returns {Boolean}
-     *  True, if one of the elements in the passed jQuery collection is
-     *  focused.
-     */
-    Utils.hasFocusedControl = function (controls) {
-        return Utils.getFocusedControl(controls).length !== 0;
-    };
-
-    /**
-     * Returns whether one of the elements in the passed jQuery collection
-     * contains a control that is focused.
-     *
-     * @param {jQuery} node
-     *  A jQuery collection with container elements that contain different form
-     *  controls.
-     *
-     * @returns {Boolean}
-     *  True, if one of the container elements contains a focused form control.
-     */
-    Utils.containsFocusedControl = function (node) {
-        return node.find(':focus').length !== 0;
-    };
-
     // control captions -------------------------------------------------------
 
     /**
@@ -2590,7 +2537,7 @@ define.async('io.ox/office/tk/utils',
      *  @param {Boolean} [focusable=false]
      *      If set to true, a CSS marker class will be added marking the button
      *      to be focusable.
-     *  @param {Number} [tabIndex=1]
+     *  @param {Number} [tabIndex=0]
      *      The tab index set as 'tabindex' attribute at the button element.
      *
      * @returns {String}
@@ -2603,12 +2550,12 @@ define.async('io.ox/office/tk/utils',
         var // whether the button will be focusable
             focusable = Utils.getBooleanOption(options, 'focusable', false),
             // the tab index
-            tabIndex = Utils.getIntegerOption(options, 'tabIndex', 1),
+            tabIndex = Utils.getIntegerOption(options, 'tabIndex', 0),
             // the HTML mark-up of the caption icon and label
             captionMarkup = Utils.createControlCaptionMarkup(options);
 
         innerMarkup = (innerMarkup || '') + captionMarkup;
-        return '<a class="' + Utils.BUTTON_CLASS + (focusable ? (' ' + Utils.FOCUSABLE_CLASS) : '') + '" href="#" tabindex="' + tabIndex + '">' + innerMarkup + '</a>';
+        return '<a class="' + Utils.BUTTON_CLASS + (focusable ? (' ' + Utils.FOCUSABLE_CLASS) : '') + '" tabindex="' + tabIndex + '">' + innerMarkup + '</a>';
     };
 
     /**
@@ -2619,7 +2566,7 @@ define.async('io.ox/office/tk/utils',
      *  all generic options supported by the method Utils.createControl(), and
      *  all caption options supported by the method Utils.setControlLabel().
      *  Additionally, the following options are supported:
-     *  @param {Number} [tabIndex=1]
+     *  @param {Number} [tabIndex=0]
      *      The tab index set as 'tabindex' attribute at the button element.
      *
      * @returns {jQuery}
@@ -2630,11 +2577,11 @@ define.async('io.ox/office/tk/utils',
     Utils.createButton = function (options) {
 
         var // the tab index
-            tabIndex = Utils.getIntegerOption(options, 'tabIndex', 1),
-            // Create the DOM anchor element representing the button (href='#' is
-            // essential for tab traveling). Do NOT use <button> elements, Firefox has
-            // problems with text clipping and correct padding of the <button> contents.
-            button = Utils.createControl('a', { href: '#', tabindex: tabIndex }, options).addClass(Utils.BUTTON_CLASS);
+            tabIndex = Utils.getIntegerOption(options, 'tabIndex', 0),
+            // Create the DOM anchor element representing the button. Do NOT use
+            // <button> elements, Firefox has problems with text clipping and
+            // correct padding of the <button> contents.
+            button = Utils.createControl('a', { tabindex: tabIndex }, options).addClass(Utils.BUTTON_CLASS);
 
         Utils.setControlCaption(button, options);
         return button;
@@ -2742,7 +2689,7 @@ define.async('io.ox/office/tk/utils',
      */
     Utils.createTextField = function (options) {
         var type = Modernizr.touch ? Utils.getStringOption(options, 'keyboard', 'text') : 'text',
-            textField = Utils.createControl('input', { type: type, tabindex: 1 }, options);
+            textField = Utils.createControl('input', { type: type, tabindex: 0 }, options);
         return textField.attr('placeholder', Utils.getStringOption(options, 'placeholder', ''));
     };
 
@@ -2795,9 +2742,7 @@ define.async('io.ox/office/tk/utils',
      *  omitted, sets a text cursor according to the passed start position.
      */
     Utils.setTextFieldSelection = function (textField, start, end) {
-        var node = Utils.getDomNode(textField);
-        node.selectionStart = start;
-        node.selectionEnd = _.isNumber(end) ? end : start;
+        Utils.getDomNode(textField).setSelectionRange(start, _.isNumber(end) ? end : start);
     };
 
     /**
@@ -2816,7 +2761,7 @@ define.async('io.ox/office/tk/utils',
         var node = Utils.getDomNode(textField), start = node.selectionStart;
         text = _.isString(text) ? text : '';
         node.value = node.value.substring(0, start) + text + node.value.substring(node.selectionEnd);
-        node.selectionStart = node.selectionEnd = start + text.length;
+        node.setSelectionRange(start + text.length, start + text.length);
     };
 
     // global timer -----------------------------------------------------------
@@ -2956,27 +2901,25 @@ define.async('io.ox/office/tk/utils',
 
     // global initialization ==================================================
 
-    // forward console output into a fixed DOM node on touch devices
+    // forward console output into a fixed DOM node
 /*
     (function () {
-        if (Config.isDebug() && Modernizr.touch) {
-            var ICONS = { info: 'icon-info-sign', warn: 'icon-warning-sign', error: 'icon-remove-sign' },
-                consoleNode = $('<div>', { id: 'io-ox-office-console' }).appendTo('body'),
-                outputNode = $('<div>').addClass('output').appendTo(consoleNode),
-                clearButton = $('<button>').text('Clear').appendTo(consoleNode);
-            clearButton.on('click', function () { outputNode.empty(); return false; });
-            consoleNode.on('click', function () { consoleNode.toggleClass('collapsed'); });
-            _(['log', 'info', 'warn', 'error']).each(function (methodName) {
-                var origMethod = _.bind(window.console[methodName], window.console);
-                window.console[methodName] = function (msg) {
-                    outputNode.append($('<p>').addClass(methodName).append(
-                        (methodName in ICONS) ? Utils.createIcon(ICONS[methodName]) : $(),
-                        $('<span>').text(msg)));
-                    outputNode.scrollTop(outputNode[0].scrollHeight);
-                    return origMethod(msg);
-                };
-            });
-        }
+        var ICONS = { info: 'icon-info-sign', warn: 'icon-warning-sign', error: 'icon-remove-sign' },
+            consoleNode = $('<div>', { id: 'io-ox-office-console' }).appendTo('body'),
+            outputNode = $('<div>').addClass('output').appendTo(consoleNode),
+            clearButton = $('<button>').text('Clear').appendTo(consoleNode);
+        clearButton.on('click', function () { outputNode.empty(); return false; });
+        consoleNode.on('click', function () { consoleNode.toggleClass('collapsed'); });
+        _(['log', 'info', 'warn', 'error']).each(function (methodName) {
+            var origMethod = _.bind(window.console[methodName], window.console);
+            window.console[methodName] = function (msg) {
+                outputNode.append($('<p>').addClass(methodName).append(
+                    (methodName in ICONS) ? Utils.createIcon(ICONS[methodName]) : $(),
+                    $('<span>').text(msg)));
+                outputNode.scrollTop(outputNode[0].scrollHeight);
+                return origMethod(msg);
+            };
+        });
     }());
 */
 

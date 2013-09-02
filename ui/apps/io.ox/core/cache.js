@@ -44,8 +44,38 @@ define('io.ox/core/cache',
 
     // listen for logout event
     ext.point('io.ox/core/logout').extend({
-        logout: function () {
-            return ox.cache.clear();
+        logout: function (baton) {
+            var clear = function () {
+                return ox.cache.clear();
+            };
+            if (baton.autologout && baton.autologout === true) {
+                return clear();
+            } else {
+                return ox.ui.App.canRestore().then(function (canRestore) {
+                    if (canRestore) {
+                        return ox.load(['io.ox/core/tk/dialogs', 'gettext!io.ox/core']).then(function (dialogs, gt) {
+                            var def = $.Deferred();
+                            new dialogs.ModalDialog()
+                                .text(gt('Unsaved documents will be lost. Do you want to logout now?'))
+                                .addPrimaryButton('Yes', gt('Yes'))
+                                .addButton('No', gt('No'))
+                                .show()
+                                .then(function (action) {
+                                    if (action === 'No') {
+                                        return def.reject();
+                                    } else {
+                                        return def.resolve();
+                                    }
+                                });
+                            return def;
+                        });
+                    } else {
+                        return clear();
+                    }
+                }, function () {
+                    return clear();
+                });
+            }
         }
     });
 

@@ -174,19 +174,19 @@ define('io.ox/office/tk/dropdown/items',
                 keydown = event.type === 'keydown',
                 keyup = event.type === 'keyup';
 
-            if (keydown && KeyCodes.matchKeyCode(event, 'TAB', { shift: null })) {
-                self.triggerChange(event.target, { preserveFocus: true });
-                return; // let TAB key bubble up
-            }
-
             // ignore all other key events in input fields
             if ($(event.target).is('input, textarea')) { return; }
 
             // handle generic keys
             switch (event.keyCode) {
             case KeyCodes.SPACE:
+            case KeyCodes.ENTER:
+                // Bug 28528: ENTER key must be handled explicitly, <a> elements
+                // without 'href' attribute do not trigger click events. The 'href'
+                // attribute has been removed from the buttons to prevent useless
+                // tooltips with the link address.
                 if (keyup && $(event.target).is(Utils.BUTTON_SELECTOR)) {
-                    self.triggerChange(event.target, { preserveFocus: true });
+                    self.triggerChange(event.target, { preserveFocus: event.keyCode === KeyCodes.SPACE });
                 }
                 return false;
             case KeyCodes.HOME:

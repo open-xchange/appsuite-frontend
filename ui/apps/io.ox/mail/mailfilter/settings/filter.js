@@ -21,7 +21,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'text!io.ox/mail/mailfilter/settings/tpl/listbox.html',
     'text!io.ox/mail/mailfilter/settings/tpl/filter_select.html',
     'io.ox/mail/mailfilter/settings/filter/view-form'
-], function (ext, api, mailfilterModel, dialogs, gt, settingsUtil, listboxtmpl, tmpl, AccountDetailView) {
+], function (ext, api, mailfilterModel, dialogs, gt, settingsUtil, listboxtmpl, tmpl, FilterDetailView) {
 
     'use strict';
 
@@ -31,17 +31,47 @@ define('io.ox/mail/mailfilter/settings/filter', [
     function renderDetailView(evt, data) {
         var myView,
             header = data.id === undefined ? gt('Create new rule') : gt('Edit rule'),
-            testArray, actionArray, rulename;
+            testArray, actionArray, rulename,
 
-        myView = new AccountDetailView({ model: data, listView: evt.data.listView });
+            checkForPosition = function (array, target) {
+                var position;
+                _.each(array, function (val, index) {
+                    if (_.isEqual(val, target)) {
+                        position = index;
+                    }
+                });
+                return position;
+            },
+
+            filterCondition = function (tests, condition) {
+                var position = checkForPosition(tests, condition);
+                if (position) {
+                    tests.splice(position, 1);
+                }
+                return tests;
+            };
+
+        myView = new FilterDetailView({ model: data, listView: evt.data.listView });
 
         testArray = _.copy(myView.model.get('test'), true);
         actionArray = _.copy(myView.model.get('actioncmds'), true);
         rulename = _.copy(myView.model.get('rulename'), true);
 
+        if (testArray.tests) {
+            testArray.tests = filterCondition(testArray.tests, {id: 'true'});
+
+            if (testArray.tests.length === 1) {
+                var includedTest = _.copy(testArray.tests[0]);
+                testArray = includedTest;
+            }
+            myView.model.set('test', testArray);
+        }
 
         myView.dialog = new dialogs.ModalDialog({
-            width: 685,
+            top: 60,
+            width: 800,
+            center: false,
+            maximize: true,
             async: true
         }).header($('<h4>').text(header));
 

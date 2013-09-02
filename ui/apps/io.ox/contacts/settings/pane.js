@@ -84,7 +84,7 @@ define('io.ox/contacts/settings/pane',
             button.on('click', function () {
                 require(["io.ox/core/tk/dialogs", "io.ox/core/settings/user"], function (dialogs, users) {
                     var dialog = new dialogs.ModalDialog({
-                            top: "40px",
+                            top: 60,
                             width: 900,
                             center: false,
                             maximize: true

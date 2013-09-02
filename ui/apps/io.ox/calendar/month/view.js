@@ -191,7 +191,6 @@ define('io.ox/calendar/month/view',
                     if (model.get('full_time')) {
                         startTSUTC = date.Local.utc(startTSUTC);
                         endTSUTC = date.Local.utc(endTSUTC);
-                        maxCount = 0;
                     }
 
                     var startDate = new date.Local(startTSUTC),
@@ -295,7 +294,7 @@ define('io.ox/calendar/month/view',
                 conf = 1,
                 confString = _.noI18n('%1$s'),
                 classes = '';
-            if (a.get('private_flag') && ox.user_id !== a.get('created_by')) {
+            if (a.get('private_flag') && ox.user_id !== a.get('created_by') && !folderAPI.is('private', folder)) {
                 classes = 'private disabled';
             } else {
                 conf = util.getConfirmationStatus(a.attributes, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);

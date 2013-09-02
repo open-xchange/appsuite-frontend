@@ -31,7 +31,7 @@ define('io.ox/office/preview/view/view',
     'use strict';
 
     var // predefined zoom factors
-        ZOOM_FACTORS = [25, 35, 50, 75, 100, 150, 200, 300, 400, 600, 800, 1200, 1600],
+        ZOOM_FACTORS = [25, 35, 50, 75, 100, 150, 200, 300, 400, 600, 800],
 
         // the speed of scroll animations
         ANIMATION_DELAY = 25;
@@ -203,7 +203,7 @@ define('io.ox/office/preview/view/view',
                 var move = callback.call(self, index);
                 scrollContentRootNode(move.x, move.y);
             }, { delay: ANIMATION_DELAY, cycles: frames })
-            .done(function () { scrollAnimation = null; });
+            .always(function () { scrollAnimation = null; });
         }
 
         /**
@@ -233,12 +233,10 @@ define('io.ox/office/preview/view/view',
 
             // do not load initialized page again
             if (pageNode.children().length === 0) {
-                pageLoader.loadPage(pageNode, page, priority)
+                pageLoader.loadPage(pageNode, page, { format: 'svg', priority: priority })
                 .done(function () {
                     loadedPageNodes[page] = pageNode;
-                    updatePageZoom(pageNode);
-                    // new pages may have moved into the visible area
-                    updateVisiblePages();
+                    refreshLayout(page);
                 })
                 .fail(function () {
                     pageNode.append($('<div>').addClass('error-message').text(gt('Sorry, this page is not available at the moment.')));
@@ -260,10 +258,9 @@ define('io.ox/office/preview/view/view',
         }
 
         /**
-         * Updates all pages that are currently visible in the application
-         * pane.
+         * Loads all pages that are currently visible in the application pane.
          */
-        function updateVisiblePages() {
+        function loadVisiblePages() {
 
             var // find the first page that is visible at the top border of the visible area
                 beginPage = _(pageNodes).sortedIndex(contentRootNode.scrollTop(), function (value) {
@@ -324,7 +321,7 @@ define('io.ox/office/preview/view/view',
          * Recalculates the size of the specified page node, according to the
          * original page size and the current zoom type.
          */
-        function updatePageZoom(pageNode) {
+        function calculatePageZoom(pageNode) {
 
             var // the original size of the current page
                 pageSize = pageLoader.getPageSize(pageNode),
@@ -342,15 +339,19 @@ define('io.ox/office/preview/view/view',
             pageZoomFactor = Utils.minMax(pageZoomFactor, self.getMinZoomFactor(), self.getMaxZoomFactor());
 
             // set the zoom factor at the page node
-            pageLoader.setZoomFactor(pageNode, pageZoomFactor / 100);
+            pageLoader.setPageZoom(pageNode, pageZoomFactor / 100);
         }
 
         /**
-         * Recalculates the size of the page nodes, according to the original
-         * page sizes and the current zoom type, and performs other adjustments
-         * after the global view layout has changed.
+         * Recalculates the size of the page nodes according to the original
+         * page sizes, the current zoom type, and the available space in the
+         * application pane; and restores the scroll position.
+         *
+         * @param {Number} [page]
+         *  If specified, the one-based index of a single page whose zoom will
+         *  be updated.
          */
-        function refreshLayout() {
+        function refreshLayout(page) {
 
             var // find the page that is visible at the vertical center of the visible area
                 centerPage = _(pageNodes).sortedIndex(contentRootNode.scrollTop(), function (value) {
@@ -392,16 +393,23 @@ define('io.ox/office/preview/view/view',
             availableSize.width = contentRootNode[0].clientWidth - 2 * contentMargin;
             availableSize.height = ((zoomType === 'page') ? contentRootNode.height() : contentRootNode[0].clientHeight) - 2 * contentMargin;
 
-            // Process all page nodes, update 'current zoom factor' for the
-            // selected page. Detaching the page nodes while updating them
-            // reduces total processing time by 95% on touch devices!
-            pageNodes.detach().each(function () { updatePageZoom($(this)); });
-            pageContainerNode.append(pageNodes);
+            // Process one or all page nodes. Detaching the page nodes while
+            // updating them reduces total processing time by 95% on touch devices!
+            if (_.isNumber(page)) {
+                calculatePageZoom(pageNodes.eq(page - 1));
+            } else {
+                pageNodes.detach().each(function () { calculatePageZoom($(this)); }).appendTo(pageContainerNode);
+            }
+
+            // update 'current zoom factor' for the selected page
             zoomFactor = pageLoader.getPageZoom(pageNodes[selectedPage - 1]) * 100;
 
             // restore the correct scroll position with the new page sizes
             centerPagePosition = Utils.getChildNodePositionInNode(contentRootNode, pageNodes[centerPage - 1]);
             contentRootNode.scrollTop(centerPagePosition.top + ((centerPageRatio < 0) ? centerPageRatio : Math.round(centerPagePosition.height * centerPageRatio)));
+
+            // try to load more pages that became visible after updating zoom
+            loadVisiblePages();
         }
 
         /**
@@ -447,7 +455,7 @@ define('io.ox/office/preview/view/view',
 
             // update visible pages once manually (no scroll event is triggered,
             // if the first page is shown which does not cause any scrolling).
-            updateVisiblePages();
+            loadVisiblePages();
         }
 
         /**
@@ -571,7 +579,7 @@ define('io.ox/office/preview/view/view',
          * @param {jQuery.Event} event
          *  The jQuery scroll event.
          */
-        var scrollHandler = app.createDebouncedMethod(cancelMorePagesTimer, updateVisiblePages, {
+        var scrollHandler = app.createDebouncedMethod(cancelMorePagesTimer, loadVisiblePages, {
             delay: Modernizr.touch ? 200 : 100,
             maxDelay: Modernizr.touch ? 1000 : 500
         });
@@ -585,12 +593,12 @@ define('io.ox/office/preview/view/view',
             contentRootNode = self.getContentRootNode();
 
             // create the side pane
-            self.addPane(sidePane = new SidePane(app, {
+            self.addPane(sidePane = new SidePane(app, 'sidepane', {
                 position: 'right',
                 size: Modernizr.touch ? 152 : SidePane.DEFAULT_WIDTH,
                 resizable: !Modernizr.touch,
                 minSize: SidePane.DEFAULT_WIDTH,
-                maxSize: 1.8 * SidePane.DEFAULT_WIDTH
+                maxSize: PageGroup.getRequiredWidth(4) + Utils.SCROLLBAR_WIDTH
             }));
 
             // create the page preview group
@@ -598,31 +606,23 @@ define('io.ox/office/preview/view/view',
 
             // initialize the side pane
             sidePane
-                .addViewComponent(new ToolBox(app, { fixed: 'top' })
+                .addViewComponent(new ToolBox(app, 'main', { fixed: 'top' })
                     .addGroup('app/view/sidepane', new Button(BaseControls.HIDE_SIDEPANE_OPTIONS))
                     .addRightTab()
                     .addGroup('app/edit', new PreviewControls.EditDocumentButton(app))
                     .addGap()
                     .addGroup('app/quit', new Button(BaseControls.QUIT_OPTIONS))
                 )
-                .addViewComponent(new Component(app)
+                .addViewComponent(new Component(app, 'thumbs')
                     .addGroup('pages/current', pageGroup)
                 );
 
             // create the top overlay pane
-            self.addPane(topOverlayPane = new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
-                .addViewComponent(new ToolBox(app)
-                    .addGroup('app/view/sidepane', new Button(BaseControls.SHOW_SIDEPANE_OPTIONS))
-                    .addGap()
-                    .addGroup('app/edit', new PreviewControls.EditDocumentButton(app))
-                    .addGap()
-                    .addGroup('app/quit', new Button(BaseControls.QUIT_OPTIONS))
-                )
-            );
+            self.addPane(topOverlayPane = new Pane(app, 'overlaytop', { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true }));
 
             // create the bottom overlay pane
-            self.addPane(bottomOverlayPane = new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
-                .addViewComponent(bottomToolBox = new ToolBox(app))
+            self.addPane(bottomOverlayPane = new Pane(app, 'overlaybottom', { position: 'bottom', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
+                .addViewComponent(bottomToolBox = new ToolBox(app, 'overlaypages'))
             );
 
             // initially, hide the side pane, and show the overlay tool bars
@@ -638,6 +638,8 @@ define('io.ox/office/preview/view/view',
 
             var // the bottom tool box in the side pane
                 sidePaneToolBox = null,
+                // the tool box in the top overlay pane
+                overlayPaneToolBox = new ToolBox(app, 'overlaymain'),
                 // the number of pages in the document
                 pageCount = model.getPageCount(),
                 // the HTML mark-up for the empty page nodes
@@ -646,7 +648,7 @@ define('io.ox/office/preview/view/view',
             if (pageCount >= 1) {
 
                 // initialize side pane depending on page count
-                sidePane.addViewComponent(sidePaneToolBox = new ToolBox(app, { fixed: 'bottom' }));
+                sidePane.addViewComponent(sidePaneToolBox = new ToolBox(app, 'pages', { fixed: 'bottom' }));
                 if (pageCount > 1) {
                     sidePaneToolBox
                         .addGroup('pages/previous', new Button(PreviewControls.PREV_OPTIONS))
@@ -661,8 +663,8 @@ define('io.ox/office/preview/view/view',
                     .addGroup('zoom/inc',  new Button(PreviewControls.ZOOMIN_OPTIONS));
 
                 // create the status overlay pane
-                self.addPane(new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true })
-                    .addViewComponent(new ToolBox(app).addPrivateGroup(statusLabel))
+                self.addPane(new Pane(app, 'statuslabel', { position: 'bottom', classes: 'inline right', overlay: true, transparent: true })
+                    .addViewComponent(new ToolBox(app, 'statuslabel').addPrivateGroup(statusLabel))
                 );
 
                 // initialize bottom overlay pane depending on page count
@@ -681,7 +683,7 @@ define('io.ox/office/preview/view/view',
                 app.getWindow().on({ beforehide: windowHideHandler, show: windowShowHandler });
 
                 // no layout refreshes without any pages
-                self.on('refresh:layout', refreshLayout);
+                self.on('refresh:layout', function () { refreshLayout(); });
 
                 // initialize touch-like tracking with mouse, attach the scroll event handler
                 contentRootNode
@@ -696,7 +698,18 @@ define('io.ox/office/preview/view/view',
                 });
                 self.insertContentNode(pageContainerNode.html(pageMarkup));
                 pageNodes = pageContainerNode.children();
+
+                // add controls to the top overlay pane
+                overlayPaneToolBox
+                    .addGroup('app/view/sidepane', new Button(BaseControls.SHOW_SIDEPANE_OPTIONS))
+                    .addGap()
+                    .addGroup('app/edit', new PreviewControls.EditDocumentButton(app))
+                    .addGap();
             }
+
+            // always add the quit button
+            overlayPaneToolBox.addGroup('app/quit', new Button(BaseControls.QUIT_OPTIONS));
+            topOverlayPane.addViewComponent(overlayPaneToolBox);
 
             // set focus to application pane, and update the view
             self.grabFocus();

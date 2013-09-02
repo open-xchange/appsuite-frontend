@@ -21,7 +21,7 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
         require(["io.ox/core/tk/dialogs", "io.ox/core/settings/user"], function (dialogs, users) {
             var usermodel,
                 dialog = new dialogs.ModalDialog({
-                    top: "40px",
+                    top: 60,
                     width: 900,
                     center: false,
                     maximize: true

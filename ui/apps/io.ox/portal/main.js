@@ -18,10 +18,11 @@ define('io.ox/portal/main',
      'io.ox/core/date',
      'io.ox/core/tk/dialogs',
      'io.ox/portal/widgets',
+     'io.ox/portal/settings/pane',
      'gettext!io.ox/portal',
      'settings!io.ox/portal',
      'less!io.ox/portal/style.less'
-    ], function (ext, userAPI, date, dialogs, widgets, gt, settings) {
+    ], function (ext, userAPI, date, dialogs, widgets, settingsPane, gt, settings) {
 
     'use strict';
 
@@ -58,28 +59,39 @@ define('io.ox/portal/main',
         id: 'header',
         index: 100,
         draw: function (baton) {
-            var $btn = $();
-            if (_.device('!small')) {
-                // please no button
-                $btn = $('<button type="button" class="btn btn-primary pull-right">')
-                    .attr('data-action', 'customize')
-                    .text(gt('Customize this page'))
-                    .on('click', openSettings);
-            }
-            this.append(
-                $('<div class="header">').append(
-                    // button
-                    $btn,
-                    // greeting
-                    $('<h1 class="greeting">').append(
-                        baton.$.greeting = $('<span class="greeting-phrase">'),
-                        $('<span class="signin">').text(
-                            //#. Portal. Logged in as user
-                            gt('Signed in as %1$s', ox.user)
-                        )
-                    )
+            var $btn,
+                $greeting;
+
+            this.append($btn = $('<div class="header">'));
+            // greeting
+            $greeting = $('<h1 class="greeting">').append(
+                baton.$.greeting = $('<span class="greeting-phrase">'),
+                $('<span class="signin">').text(
+                    //#. Portal. Logged in as user
+                    gt('Signed in as %1$s', ox.user)
                 )
             );
+
+            if (_.device('!small')) {
+                widgets.loadAllPlugins().done(function () {
+                    // add widgets
+                    ext.point('io.ox/portal/settings/detail/pane').map(function (point) {
+                        if (point && point.id === 'add') {
+                            point.invoke('draw', $btn);
+                        }
+                    });
+                    // please no button
+                    $btn.find('.controls')
+                        .prepend($('<button type="button" class="btn btn-primary pull-right">')
+                        .css({ marginLeft: '5px' })
+                        .attr('data-action', 'customize')
+                        .text(gt('Customize this page'))
+                        .on('click', openSettings));
+                    $btn.append($greeting);
+                });
+            } else {
+                $btn.append($greeting);
+            }
         }
     });
 
@@ -250,7 +262,7 @@ define('io.ox/portal/main',
 
     function setup(e) {
         var baton = e.data.baton;
-        ext.point(baton.point).invoke('performSetUp');
+        ext.point(baton.point).invoke('performSetUp', null, baton);
     }
 
     app.drawDefaultSetup = function (baton) {
@@ -308,11 +320,8 @@ define('io.ox/portal/main',
             });
     }
 
-    function getTitle(data, fallback) {
-        return data.title || (data.props ? (data.props.description || data.props.title) : '') || fallback || '';
-    }
-
     app.drawWidget = function (model, index) {
+
         var node = model.node,
             load = _.device('small') ? (node.offset().top < scrollPos) : true;
 
@@ -330,7 +339,7 @@ define('io.ox/portal/main',
             // set/update title
             var baton = ext.Baton({ model: model, point: 'io.ox/portal/widget/' + model.get('type') }),
                 point = ext.point(baton.point),
-                title = node.find('h2 .title').text(_.noI18n(getTitle(model.toJSON(), point.prop('title')))),
+                title = node.find('h2 .title').text(_.noI18n(widgets.getTitle(model.toJSON(), point.prop('title')))),
                 requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, true).value();
             // remember
             model.set('baton', baton, { validate: true, silent: true });
