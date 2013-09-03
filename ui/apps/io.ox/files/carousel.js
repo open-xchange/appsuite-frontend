@@ -71,7 +71,6 @@ define('io.ox/files/carousel',
         },
 
         init: function (config) {
-            console.log(this, config);
             this.inner.empty();
             this.container.empty().remove();
             this.config = $.extend({}, this.defaultconfig, config);
