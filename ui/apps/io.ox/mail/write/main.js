@@ -298,8 +298,9 @@ define('io.ox/mail/write/main',
             if (_.browser.IE === undefined || _.browser.IE > 9) {
                 var dropZone = upload.dnd.createDropZone({'type': 'single', actions: [{id: 'mailAttachment', label: gt('Drop the file anywhere to add attachment')}]});
                 dropZone.on('drop', function (e, file) {
-                    if (ox.efl)
-                        view.fileList.add(_.extend(file, { type: 'file' }));
+                    if (ox.efl) {
+                        view.fileList.add(_.extend(file, { group: 'file' }));
+                    }
                     else {
                         view.form.find('input[type=file]').last()
                             .prop('file', file)
@@ -533,6 +534,7 @@ define('io.ox/mail/write/main',
                                     attachment.atmsgref = data.msgref;
                                 }
                                 attachment.type = 'file';
+                                attachment.group = 'attachment';
                                 return attachment;
                             })
                             .value();
@@ -566,7 +568,7 @@ define('io.ox/mail/write/main',
         app.setNestedMessages = function (list) {
             if (ox.efl) {
                 var items = _(list || []).map(function (obj) {
-                    return { message: obj, name: obj.subject, content_type: 'message/rfc822', type: 'nested'};
+                    return { message: obj, name: obj.subject, content_type: 'message/rfc822', group: 'nested'};
                 });
                 if (items.length) {
                     view.fileList.add(items);
@@ -586,12 +588,12 @@ define('io.ox/mail/write/main',
             }
         };
 
-        app.addFiles = function (list, type) {
+        app.addFiles = function (list, group) {
             var found = false;
 
             if (ox.efl) {
                 var items = _.map(list || [], function (obj) {
-                    return $.extend({type: type || 'file'}, obj);
+                    return $.extend(obj, {group: group || 'file'});
                 });
                 if (items.length) {
                     view.fileList.add(items);
@@ -715,7 +717,7 @@ define('io.ox/mail/write/main',
             this.setSendType(data.sendtype);
             this.setHeaders(data.headers);
             // add files (from file storage)
-            this.addFiles(data.infostore_ids);
+            this.addFiles(data.infostore_ids, 'infostore');
             // add files (from contacts)
             this.addFiles(data.contacts_ids, 'vcard');
             // app title

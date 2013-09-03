@@ -162,10 +162,12 @@ define('io.ox/files/views/create', [
                         changeHandler = function (e) {
                             e.preventDefault();
                             if (!oldMode) {
-                                //use file list widget
+                                var list = [];
+                                //fileList to array of files
                                 _($input[0].files).each(function (file) {
-                                    baton.fileList.add(file);
+                                    list.push(_.extend(file, {group: 'file'}));
                                 });
+                                baton.fileList.add(list);
                                 $input.trigger('reset.fileupload');
                             }
                         };

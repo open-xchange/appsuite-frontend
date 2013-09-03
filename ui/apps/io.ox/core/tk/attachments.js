@@ -367,32 +367,42 @@ define('io.ox/core/tk/attachments',
                      */
                     var icon, name, size, info;
 
-                    // message?
-                    if (attachment.type === 'nested') {
-                        //attached mail
+                    switch (attachment.group) {
+                    
+                    //attached mail
+                    case 'nested':
                         info = $('<span>').addClass('filesize').text('');
                         icon = $('<i>').addClass('icon-paper-clip');
                         name = attachment.name || '\u00A0';
-                    } else if (attachment.type === 'file') {
-                        // file
+                        break;
+                    
+                    // file
+                    case 'file':
+                    case 'dndfile':
+                    case 'infostore':
+                    case 'unknown':
                         size = attachment.size;
                         size = size !== undefined ? gt.format('%1$s\u00A0 ', strings.fileSize(size)) : '';
                         info = $('<span>').addClass('filesize').text(size);
                         icon = $('<i>').addClass('icon-paper-clip');
                         name = attachment.name || '';
-                    } else if (attachment.type === 'vcard') {
-                        // vcard
+                        break;
+                    
+                    // vcard
+                    case 'vcard':
                         info = $('<span>').addClass('filesize').text(gt.noI18n('vCard\u00A0'));
                         icon = $('<i>').addClass('icon-list-alt');
                         //lazy way; use contactsUtil.getFullName(attachment) for the perfect solution
                         name = attachment.file.display_name || attachment.file.email1 || '';
-                    } else {
-                        // unknown
+                        break;
+                    //default
+                    default:
                         size = attachment.size;
                         size = size !== undefined ? gt.format('%1$s\u00A0 ', strings.fileSize(size)) : '';
                         info = $('<span>').addClass('filesize').text(size);
                         icon = $('<i>').addClass('icon-paper-clip');
                         name = attachment.name || '';
+                        break;
                     }
 
                     //item
@@ -458,7 +468,7 @@ define('io.ox/core/tk/attachments',
                                 file: (oldMode ? file.hiddenField : item),
                                 name: item.filename || item.name,
                                 size: item.file_size || item.size,
-                                type: item.type || 'unknown',
+                                group: item.group || 'unknown',
                                 cid: counter++
                             });
                         });
