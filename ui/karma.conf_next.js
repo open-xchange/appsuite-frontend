@@ -2,25 +2,19 @@
 // Generated on Fri Jun 28 2013 12:45:50 GMT+0200 (CEST)
 
 module.exports = function(config) {
-  var utils = require('./lib/build/fileutils');
   config.set({
 
     // base path, that will be used to resolve files and exclude
     basePath: '',
 
-
+    plugins: ['karma-*', require('./lib/karma-oxboot/index.js')],
     // frameworks to use
-    frameworks: ['jasmine', 'requirejs'],
+    frameworks: ['jasmine', 'oxboot'],
 
 
     // list of files / patterns to load in the browser
     files: [
-        'lib/node_modules/sinon/pkg/sinon.js',
         'spec/main-test.js',
-        'spec/disable_amd.js', // disable AMD test, to prevent jquery mobile from defining anonymous module
-        'spec/pre_boot.js',
-        utils.builddir + '/boot.js',
-        'spec/restore_amd.js',
         {pattern: 'spec/**/*_spec.js', included: false},
         {pattern: 'spec/shared/**/*.js'},
         {pattern: 'apps/**/*.js', included: false}

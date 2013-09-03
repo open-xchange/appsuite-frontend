@@ -18,12 +18,13 @@ define('shared/examples/for/api', [], function () {
         }, options);
 
         afterEach(function () {
-            this.server.restore();
+            this.server.autoRespond = true;
             this.handleExpectedFail(options.markedPending);
         });
 
         beforeEach(function () {
-            this.server = sinon.fakeServer.create();
+            this.server = ox.fakeServer;
+            this.server.autoRespond = false;
         });
 
         describe('a basic API class', function () {

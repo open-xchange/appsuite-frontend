@@ -1,6 +1,11 @@
-var tests = Object.keys(window.__karma__.files).filter(function (file) {
-    return /spec\.js$/.test(file);
-});
+var tests = [];
+for (var file in window.__karma__.files) {
+    if (window.__karma__.files.hasOwnProperty(file)) {
+        if (/spec\.js$/.test(file)) {
+            tests.push(file);
+        }
+    }
+};
 
 requirejs.config({
     // Karma serves files from '/base/apps'
@@ -12,38 +17,6 @@ requirejs.config({
     // start test run, once Require.js is done
     callback: window.__karma__.start
 });
-
-var root = location.pathname.replace(/\/[^\/]*$/, '');
-window.ox = {
-    abs: location.protocol + '//' + location.host,
-    apiRoot: root + '/api',
-    base: '',
-    context_id: 0,
-    debug: true,
-    language: 'de_DE',
-    logoutLocation: 'signin',
-    online: false,
-    revision: '1',
-    root: root,
-    secretCookie: false, // auto-login
-    serverConfig: {},
-    version: new Date(),
-    session: {
-        context_id: 0,
-        locale: "de_DE",
-        random: "44444444444444444444444444444444",
-        session: "13371337133713371337133713371337",
-        user: "jan.doe",
-        user_id: 1337
-    },
-    signin: true,
-    t0: new Date().getTime(), // for profiling
-            testTimeout: 1000,
-            ui: { session: {} },
-            user: '',
-            user_id: 0,
-            windowState: 'foreground'
-};
 
 if (jasmine) {
     /**

@@ -59,7 +59,8 @@ define(["io.ox/core/api/mailfilter",
 
 
          beforeEach(function () {
-             this.server = sinon.fakeServer.create();
+             this.server = ox.fakeServer;
+             this.server.autoRespond = false;
 
              this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
                  xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, JSON.stringify(listResult));
@@ -82,7 +83,7 @@ define(["io.ox/core/api/mailfilter",
              });
          });
          afterEach(function () {
-             this.server.restore();
+             this.server.autoRespond = true;
          });
 
         it('should return available filters', function () {
