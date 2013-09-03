@@ -35,7 +35,7 @@ define('io.ox/contacts/settings/pane',
         id: 'header',
         draw: function () {
             this.append(
-                $('<h1 class="no-margin">').text(gt('Address Book'))
+                $('<h1>').text(gt('Address Book'))
             );
         }
     });
@@ -59,7 +59,6 @@ define('io.ox/contacts/settings/pane',
                 };
 
             this.append(
-                $('<div class="settings sectiondelimiter">'),
                 $('<div class="control-group">').append(
                     $('<label for="displayformat" class="control-label">').text(gt('Display of names')),
                     $('<div class="controls">').append(

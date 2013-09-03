@@ -470,8 +470,7 @@ define('io.ox/backbone/forms',
             tagName: 'div',
             render: function () {
                 this.$el.append($('<div>').append(
-                      $('<div>').addClass('clear-title').text(options.label),
-                      $('<div>').addClass('settings sectiondelimiter')
+                      $('<h1>').text(options.label)
                   ));
             }
         }, options);
