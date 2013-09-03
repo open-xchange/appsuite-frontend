@@ -521,61 +521,92 @@ define('io.ox/mail/write/main',
 
         app.setAttachments = function (data) {
             // look for real attachments
-            var found = false;
-            _(data.attachments || []).each(function (attachment) {
-                if (attachment.disp === 'attachment') {
-                    // add as linked attachment
-                    if (data.msgref) {
-                        attachment.atmsgref = data.msgref;
-                    }
-                    attachment.type = 'file';
-                    found = true;
+            if (ox.efl) {
+                var items = _.chain(data.attachments || [])
+                            .filter(function (attachment) {
+                                //only real attachments
+                                return attachment.disp === 'attachment';
+                            })
+                            .map(function (attachment) {
+                                // add as linked attachment
+                                if (data.msgref) {
+                                    attachment.atmsgref = data.msgref;
+                                }
+                                attachment.type = 'file';
+                                return attachment;
+                            })
+                            .value();
+                //add to file list and show section
+                if (items.length) {
+                    view.fileList.add(items);
+                    view.showSection('attachments');
+                }
+            } else {
+                var found = false;
+                _(data.attachments || []).each(function (attachment) {
+                    if (attachment.disp === 'attachment') {
+                        // add as linked attachment
+                        if (data.msgref) {
+                            attachment.atmsgref = data.msgref;
+                        }
+                        attachment.type = 'file';
+                        found = true;
 
-                    if (ox.efl)
-                        view.fileList.add(_.extend(attachment, { type: 'attachment' }));
-                    else {
                         view.form.find('input[type=file]').last()
                             .prop('attachment', attachment)
                             .trigger('change');
                     }
+                });
+                if (found) {
+                    view.showSection('attachments');
                 }
-            });
-            if (found) {
-                view.showSection('attachments');
             }
         };
 
         app.setNestedMessages = function (list) {
-            var found = false;
-            _(list || []).each(function (obj) {
-                found = true;
-                if (ox.efl)
-                    view.fileList.add({ message: obj, name: obj.subject, content_type: 'message/rfc822', type: 'nested'});
-                else {
+            if (ox.efl) {
+                var items = _(list || []).map(function (obj) {
+                    return { message: obj, name: obj.subject, content_type: 'message/rfc822', type: 'nested'};
+                });
+                if (items.length) {
+                    view.fileList.add(items);
+                    view.showSection('attachments');
+                }
+            } else {
+                var found = false;
+                _(list || []).each(function (obj) {
+                    found = true;
                     view.form.find('input[type=file]').last()
                         .prop('nested', { message: obj, name: obj.subject, content_type: 'message/rfc822' })
                         .trigger('change');
+                });
+                if (found) {
+                    view.showSection('attachments');
                 }
-            });
-            if (found) {
-                view.showSection('attachments');
             }
         };
 
-        app.addFiles = function (list) {
+        app.addFiles = function (list, type) {
             var found = false;
-            _(list || []).each(function (obj) {
-                found = true;
-                if (ox.efl)
-                    view.fileList.add(_.extend(obj, { type: 'file' }));
-                else {
+
+            if (ox.efl) {
+                var items = _.map(list || [], function (obj) {
+                    return $.extend({type: type || 'file'}, obj);
+                });
+                if (items.length) {
+                    view.fileList.add(items);
+                    view.showSection('attachments');
+                }
+            } else {
+                _(list || []).each(function (obj) {
+                    found = true;
                     view.form.find('input[type=file]').last()
                         .prop('file', obj)
                         .trigger('change');
+                });
+                if (found) {
+                    view.showSection('attachments');
                 }
-            });
-            if (found) {
-                view.showSection('attachments');
             }
         };
 
@@ -686,7 +717,7 @@ define('io.ox/mail/write/main',
             // add files (from file storage)
             this.addFiles(data.infostore_ids);
             // add files (from contacts)
-            this.addFiles(data.contacts_ids);
+            this.addFiles(data.contacts_ids, 'vcard');
             // app title
             composeMode = mail.mode;
             var title = app.getDefaultWindowTitle();

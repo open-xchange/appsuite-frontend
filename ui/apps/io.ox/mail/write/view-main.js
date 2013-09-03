@@ -563,9 +563,7 @@ define("io.ox/mail/write/view-main",
                         //register rightside node
                         e.preventDefault();
                         if (_.browser.IE !== 9) {
-                            _($input[0].files).each(function (file) {
-                                self.baton.fileList.add(file);
-                            });
+                            self.baton.fileList.add($input[0].files);
                             $input.trigger('reset.fileupload');
                         } else {
                             //IE

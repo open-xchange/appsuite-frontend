@@ -365,28 +365,34 @@ define('io.ox/core/tk/attachments',
                      * Files, VCard, and Messages are very close here
                      * there's no real separation
                      */
-                    var icon, name, size, info,
-                        isMessage = 'message' in attachment.file || attachment.type === 'nested',
-                        isFile = ('size' in attachment && attachment.size) || ('file_size' in attachment && attachment.file_size);
+                    var icon, name, size, info;
 
                     // message?
-                    if (isMessage) {
+                    if (attachment.type === 'nested') {
+                        //attached mail
                         info = $('<span>').addClass('filesize').text('');
                         icon = $('<i>').addClass('icon-paper-clip');
                         name = attachment.name || '\u00A0';
-                    } else if (isFile) {
-                        // filesize
+                    } else if (attachment.type === 'file') {
+                        // file
                         size = attachment.size;
                         size = size !== undefined ? gt.format('%1$s\u00A0 ', strings.fileSize(size)) : '';
                         info = $('<span>').addClass('filesize').text(size);
                         icon = $('<i>').addClass('icon-paper-clip');
                         name = attachment.name || '';
-                    } else {
+                    } else if (attachment.type === 'vcard') {
                         // vcard
                         info = $('<span>').addClass('filesize').text(gt.noI18n('vCard\u00A0'));
                         icon = $('<i>').addClass('icon-list-alt');
                         //lazy way; use contactsUtil.getFullName(attachment) for the perfect solution
                         name = attachment.file.display_name || attachment.file.email1 || '';
+                    } else {
+                        // unknown
+                        size = attachment.size;
+                        size = size !== undefined ? gt.format('%1$s\u00A0 ', strings.fileSize(size)) : '';
+                        info = $('<span>').addClass('filesize').text(size);
+                        icon = $('<i>').addClass('icon-paper-clip');
+                        name = attachment.name || '';
                     }
 
                     //item
@@ -444,8 +450,21 @@ define('io.ox/core/tk/attachments',
                 },
 
                 add: function (file) {
-                    files.push({file: (oldMode ? file.hiddenField : file), cid: counter++, name: file.filename || file.name, size: file.file_size || file.size, type: file.type || 'file'});
-                    this.listChanged();
+                    var list = [].concat(file);
+                    if (list.length) {
+                        //add
+                        _.each(list, function (item) {
+                            files.push({
+                                file: (oldMode ? file.hiddenField : item),
+                                name: item.filename || item.name,
+                                size: item.file_size || item.size,
+                                type: item.type || 'unknown',
+                                cid: counter++
+                            });
+                        });
+                        //render
+                        this.listChanged();
+                    }
                 },
 
                 remove: function (attachment) {
