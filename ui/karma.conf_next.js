@@ -15,12 +15,12 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+        'lib/node_modules/sinon/pkg/sinon.js',
         'spec/main-test.js',
         'spec/disable_amd.js', // disable AMD test, to prevent jquery mobile from defining anonymous module
         'spec/pre_boot.js',
         utils.builddir + '/boot.js',
         'spec/restore_amd.js',
-        'lib/node_modules/sinon/pkg/sinon.js',
         {pattern: 'spec/**/*_spec.js', included: false},
         {pattern: 'spec/shared/**/*.js'},
         {pattern: 'apps/**/*.js', included: false}
