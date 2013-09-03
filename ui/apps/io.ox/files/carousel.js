@@ -71,6 +71,7 @@ define('io.ox/files/carousel',
         },
 
         init: function (config) {
+            console.log(this, config);
             this.inner.empty();
             this.container.empty().remove();
             this.config = $.extend({}, this.defaultconfig, config);
@@ -267,12 +268,7 @@ define('io.ox/files/carousel',
         show: function () {
             var win;
             if (this.config.attachmentMode) {
-                if ($('.window-container.io-ox-mail-window').length > 0) {
-                    win = $('.window-container.io-ox-mail-window');
-                } else if ($('.window-container.io-ox-portal-window').length > 0) {
-                    win = $('.window-container.io-ox-portal-window');
-                }
-
+                win = $('.window-container:visible');
             } else if (this.config.selector) {
                 win = $(this.config.selector);
             } else {
