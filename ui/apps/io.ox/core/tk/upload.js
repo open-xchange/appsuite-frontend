@@ -62,14 +62,21 @@ define('io.ox/core/tk/upload',
 
         _(options.actions || []).each(function (action) {
             var $actionNode = nodeGenerator();
-            $actionNode.append($('<div>').html(action.label).on({
+            $actionNode.append($('<div class="dropzone">').on({
                 dragenter: function (e) {
                     if (highlightedAction) highlightedAction.removeClass('io-ox-dropzone-hover');
                     highlightedAction = $actionNode;
                     $actionNode.addClass('io-ox-dropzone-hover');
                 },
                 dragleave: function (e) {
-                    $actionNode.removeClass('io-ox-dropzone-hover');
+                    // IE has no pointer-events: none
+                    if (!_.browser.IE) {
+                        $actionNode.removeClass('io-ox-dropzone-hover');
+                    } else {
+                        if (!$(e.target).hasClass('dropzone') && !$(e.target).hasClass('dndignore')) {
+                            $actionNode.removeClass('io-ox-dropzone-hover');
+                        }
+                    }
                 },
                 drop: function (e) {
 
@@ -114,7 +121,7 @@ define('io.ox/core/tk/upload',
                     removeOverlay(e);
                     return false; // Prevent regular event handling
                 }
-            }));
+            }).append($('<span class="dndignore">').html(action.label)));
         });
 
         var included = false;

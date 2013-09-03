@@ -436,8 +436,32 @@ define('io.ox/portal/main',
                 var id = $(this).closest('.widget').attr('data-widget-id'),
                     model = widgets.getModel(id);
                 if (model) {
-                    // disable widget
-                    model.set('enabled', false, { validate: true });
+                    // do we have custom data that might be lost?
+                    if (!_.isEmpty(model.get('props'))) {
+                        var dialog = new dialogs.ModalDialog()
+                        .header($("<h4>").text(gt('Delete widget')))
+                        .append($('<span>').text(gt('Do you really want to delete this widget?')))
+                        .addPrimaryButton('delete',
+                            //#. Really delete portal widget - in contrast to "just disable"
+                            gt('Delete')
+                        )
+                        .addButton('cancel', gt('Cancel'));
+                        if (model.get('enabled')) {
+                            dialog.addAlternativeButton('disable',
+                                //#. Just disable portal widget - in contrast to delete
+                                gt('Just disable widget')
+                            );
+                        }
+                        dialog.show().done(function (action) {
+                            if (action === 'delete') {
+                                model.collection.remove(model);
+                            } else if (action === 'disable') {
+                                model.set('enabled', false, { validate: true });
+                            }
+                        });
+                    } else {
+                        model.collection.remove(model);
+                    }
                 }
             });
 
