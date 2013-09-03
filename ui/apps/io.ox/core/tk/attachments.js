@@ -446,8 +446,14 @@ define('io.ox/core/tk/attachments',
                     $el.find('.file').parent().remove();
                 },
 
-                get: function () {
-                    return [].concat(files);
+                get: function (group) {
+                    var list = [].concat(files);
+                    if (group) {
+                        list = _.filter(list, function (item) {
+                            return item.group === group;
+                        });
+                    }
+                    return list;
                 },
 
                 getNode: function () {
