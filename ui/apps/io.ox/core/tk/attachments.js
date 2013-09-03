@@ -452,7 +452,9 @@ define('io.ox/core/tk/attachments',
                             return item.group === group;
                         });
                     }
-                    return list;
+                    return _.map(list, function (file) {
+                                return file.file;
+                            });
                 },
 
                 getNode: function () {

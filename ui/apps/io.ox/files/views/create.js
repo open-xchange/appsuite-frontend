@@ -52,9 +52,7 @@ define('io.ox/files/views/create', [
                     var $input = $form.find('input[type="file"]'),
                         folder = app.folder.get(),
                         //fileList = ($input.length > 0 ? $input[0].files : []) || [],
-                        files = _.map(baton.fileList.get(), function (file) {
-                            return file.file;
-                        });
+                        files = baton.fileList.get();
                     if (files.length) {
                         description = $form.find('textarea').val();
                         queue.offer(files);
