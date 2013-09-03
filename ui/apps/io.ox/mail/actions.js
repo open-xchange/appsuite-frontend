@@ -315,7 +315,10 @@ define('io.ox/mail/actions',
                     }
 
                     if (baton.target) {
-                        commit(baton.target);
+                        if (list[0].folder_id !== baton.target) {
+                            commit(baton.target);
+                        }
+
                     } else {
                         var dialog = new dialogs.ModalDialog()
                             .header($('<h4>').text(label))
