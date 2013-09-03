@@ -552,11 +552,11 @@ define("io.ox/mail/write/view-main",
             //TODO: remove after feature is developed
             ox.efl = 'efl' in ox ? ox.efl : true;
             var $inputWrap = attachments.fileUploadWidget({
+                    multi: true,
                     displayLabel: false,
                     displayButton: true,
                     buttontext: gt('Add Attachment'),
                     buttonicon: 'icon-paper-clip'
-
                 }),
                 $input = $inputWrap.find('input[type="file"]'),
                     changeHandler = function (e) {
@@ -608,7 +608,7 @@ define("io.ox/mail/write/view-main",
                 className: 'div',
                 preview: true,
                 index: 300,
-                $el: uploadSection.section,
+                $el: $('<div class="row-fluid">').insertBefore(uploadSection.section.find('div.row-fluid:last')),
                 registerTo: [self, this.baton]
             }, this.baton), {
                 rowClass: 'collapsed'

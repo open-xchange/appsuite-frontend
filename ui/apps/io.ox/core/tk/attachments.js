@@ -352,8 +352,7 @@ define('io.ox/core/tk/attachments',
                     _(files).each(function (file) {
                         nodes.append(self.renderFile(file));
                     });
-                    $el.addClass('io-ox-core-tk-attachment-list')
-                       .find('div.row-fluid:last').before(nodes);
+                    $el.addClass('io-ox-core-tk-attachment-list').prepend(nodes);
                     return this;
                 },
 
