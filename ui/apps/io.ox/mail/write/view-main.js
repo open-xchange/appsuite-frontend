@@ -563,7 +563,12 @@ define("io.ox/mail/write/view-main",
                         //register rightside node
                         e.preventDefault();
                         if (_.browser.IE !== 9) {
-                            self.baton.fileList.add($input[0].files);
+                            var list = [];
+                            //fileList to array of files
+                            _($input[0].files).each(function (file) {
+                                list.push(_.extend(file, {group: 'file'}));
+                            });
+                            self.baton.fileList.add(list);
                             $input.trigger('reset.fileupload');
                         } else {
                             //IE
