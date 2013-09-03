@@ -905,7 +905,7 @@ function setupKarma(options) {
         version.minor = Number(tmp[1]);
         version.bugfix = Number(tmp[2]);
 
-        return version.minor >= 9 && version.bugfix >= 3;
+        return version.minor > 9 || version.minor === 9 && version.bugfix >= 3;
     }
 
     karma.server.start(_.extend({
