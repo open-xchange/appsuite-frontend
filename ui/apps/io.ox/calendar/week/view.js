@@ -226,9 +226,24 @@ define('io.ox/calendar/week/view',
          */
         initSettings: function () {
             // init settings
+            var self = this;
             this.gridSize = 60 / settings.get('interval', this.gridSize);
             this.workStart = settings.get('startTime', this.workStart);
             this.workEnd = settings.get('endTime', this.workEnd);
+            settings.on('change', function (e, key, value) {
+                switch (key) {
+                case 'interval':
+                    self.gridSize = 60 / settings.get('interval', self.gridSize);
+                    break;
+                case 'startTime':
+                case 'endTime':
+                    self.workStart = settings.get('startTime', self.workStart);
+                    self.workEnd = settings.get('endTime', self.workEnd);
+                    break;
+                default:
+                    break;
+                }
+            });
         },
 
         /**
