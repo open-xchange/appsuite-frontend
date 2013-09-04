@@ -182,6 +182,7 @@ define('io.ox/core/tk/autocomplete',
 
             // handle search result
             cbSearchResult = function (query, data) {
+                    open();
                     var list = data.list;
                     if (list.length) {
                         // draw results
@@ -332,7 +333,6 @@ define('io.ox/core/tk/autocomplete',
                         lastValue = val;
                         scrollpane.empty();
                         popup.busy();
-                        open();
                         o.source(val)
                             .pipe(o.reduce)
                             .then(_.lfo(cbSearchResult, val), cbSearchResultFail);
