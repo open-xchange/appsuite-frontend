@@ -498,13 +498,13 @@ define('io.ox/calendar/week/view',
                     this.lasso = $('<div>')
                         .addClass('appointment lasso')
                         .css({
-                            height: this.cellHeight,
+                            height: this.gridHeight(),
                             minHeight: 0,
                             top: this.roundToGrid(mouseY, 'n')
                         })
                         .data({
-                            start: mouseY,
-                            stop: 0,
+                            start: this.roundToGrid(mouseY, 'n'),
+                            stop: this.roundToGrid(mouseY, 's'),
                             startDay: curDay,
                             lastDay: curDay,
                             helper: {}
