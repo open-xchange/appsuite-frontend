@@ -367,14 +367,14 @@ define('io.ox/core/tk/attachments',
                     var icon, name, size, info;
 
                     switch (attachment.group) {
-                    
+
                     //attached mail
                     case 'nested':
                         info = $('<span>').addClass('filesize').text('');
                         icon = $('<i>').addClass('icon-paper-clip');
                         name = attachment.name || '\u00A0';
                         break;
-                    
+
                     // file
                     case 'file':
                     case 'dndfile':
@@ -386,7 +386,7 @@ define('io.ox/core/tk/attachments',
                         icon = $('<i>').addClass('icon-paper-clip');
                         name = attachment.name || '';
                         break;
-                    
+
                     // vcard
                     case 'vcard':
                         info = $('<span>').addClass('filesize').text(gt.noI18n('vCard\u00A0'));
