@@ -394,9 +394,10 @@ define(['io.ox/core/extensions',
                 c.add({id: "100"}),
                 c.add({id: "102"})
             ).then(function () {
-                c.size().done(function (r) {
+                return c.size().done(function (r) {
                     expect(r).toBe(2);
                 });
+            }).then(function () {
                 // remove ids … (common use-case, values are numbers)
                 c.remove([100]).then(function () {
                     c.size().done(function (r) {
