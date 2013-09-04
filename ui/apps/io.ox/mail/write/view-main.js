@@ -573,12 +573,13 @@ define("io.ox/mail/write/view-main",
                         } else {
                             //IE
                             if ($input.val()) {
-                                var fileData = {
+                                var file = {
                                     name: $input.val().match(/[^\/\\]+$/),
                                     size: 0,
+                                    group: 'file',
                                     hiddenField: $input
                                 };
-                                self.baton.attachmentList.addFile(fileData);
+                                self.baton.fileList.add(file);
                                 //hide input field with file
                                 $input.addClass('add-attachment').hide();
                                 //create new input field
