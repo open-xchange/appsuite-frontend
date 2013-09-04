@@ -894,9 +894,9 @@ function checkExtensions(name, deps, f) {
 desc('Do a single run of all tests');
 function setupKarma(options) {
     var karma = require("karma"),
-        configFile = nextGen(karma) ? path.resolve('./karma.conf_next.js') : path.resolve('./karma.conf.js');
+        configFile = nextGen(karma) ? path.resolve('./karma.conf.js') : null;
 
-    console.log('Karma version:', karma.VERSION, nextGen(karma) ? '(up-to-date)' : '(deprecated)');
+    console.log('Karma version:', karma.VERSION, nextGen(karma) ? '(up-to-date)' : '(deprecated/broken!)');
     function nextGen(karma) {
         var version = {},
             tmp = karma.VERSION.split('.');
@@ -908,6 +908,10 @@ function setupKarma(options) {
         return version.minor > 9 || version.minor === 9 && version.bugfix >= 3;
     }
 
+    if (!configFile) {
+        console.error('Karma version < 0.9.3 is not supported any longer.');
+        return;
+    }
     karma.server.start(_.extend({
         configFile: configFile
     }, options));
