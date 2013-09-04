@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", "io.ox/core/capabilities", "io.ox/core/uuids", "io.ox/core/http", "io.ox/realtime/atmosphere"], function (ext, Event, caps, uuids, http) {
+define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", "io.ox/core/capabilities", "io.ox/core/uuids", "io.ox/core/http"], function (ext, Event, caps, uuids, http) {
     'use strict';
 
     if (!caps.has("rt")) {
@@ -24,34 +24,188 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     }
 
     var tabId = uuids.randomUUID();
-    var connecting = false;
-    var shouldReconnect = false;
-    var disconnected = true;
-    var tentativeConnect = false;
-    var online = true;
-    var socket = $.atmosphere;
-    var splits = document.location.toString().split('/');
-    var proto = splits[0];
-    var host = splits[2];
-    var url = proto + "//" + host + (_.url.hash("realtimePath") || "/realtime") + "/atmosphere/rt";
     var api = {};
-    var def = $.Deferred();
-    var BUFFERING = true;
-    var BUFFER_INTERVAL = 1000;
-    var INFINITY = 4;
     var seq = 0;
-    var request = null;
+
     var resendBuffer = {};
     var resendDeferreds = {};
     var serverSequenceThreshhold = 0;
     var initialReset = true;
-    var silenceCount = 0;
-    var loadDetectionTimer = null;
-    var highLoad = false;
-    var closeCount = 0;
     var ackBuffer = {};
+
     var rejectAll = false;
     var transmitting = false;
+    var purging = false;
+    var enroled = false;
+
+    var INFINITY = 10;
+
+    var mode = 'lazy';
+    var intervals = {
+        lazy: 10000, // When traffic is low, don't ask for data as often
+        eager: 1000, // When traffic is high, ask for data more frequently
+        lazyThreshhold: 5 * 60 * 1000 // Switch from eager to lazy mode when 5 minutes without a message have elapsed
+    };
+
+    var queue = {
+        stanzas: []
+    };
+
+
+    var lastDelivery = _.now();
+    var ticks = 0;
+
+    var actions = {};
+    var running = false;
+    function runActions() {
+        if (!enroled) {
+            return;
+        }
+        ticks++;
+        _(actions).each(function (action) {
+            action(ticks);
+        });
+        if (running) {
+            setTimeout(runActions, 1000);
+        }
+    }
+
+    function start() {
+        if (running) {
+            return;
+        }
+        console.log("start");
+        running = true;
+        setTimeout(runActions, 1000);
+    }
+
+    function stop() {
+        console.log("stop");
+        running = false;
+    }
+
+    
+    // Keep sending stanzas until buffer is empty
+    function purge() {
+        if (api.debug) {
+            console.log("Drain buffer");
+        }
+        purging = true;
+
+        if (transmitting) {
+            if (api.debug) {
+                console.log("Transmitting so skipping purge");
+            }
+            return;
+        }
+        if (!enroled) {
+            if (api.debug) {
+                console.log("Not enrolled, so skipping purge");
+            }
+
+            purging = false;
+            return;
+        }
+        
+        if (_.isEmpty(queue.stanzas) && _.isEmpty(ackBuffer)) {
+            if (api.debug) {
+                console.log("No stanzas enqueued, so skipping purge");
+            }
+            purging = false;
+
+            return;
+        }
+        // Send queue.stanzas
+        if (api.debug) {
+            console.log("SENDING", queue.stanzas);
+        }
+        var stanzas = queue.stanzas;
+        queue.stanzas = [];
+        // prepend ack stanza
+        if (!_.isEmpty(ackBuffer)) {
+            stanzas.unshift({
+                type: "ack",
+                seq: _(ackBuffer).keys()
+            });
+            ackBuffer = {};
+        }
+        if (api.debug) {
+            console.log("->", stanzas);
+        }
+        transmitting = true;
+        http.PUT({
+            module: 'rt',
+            params: {
+                action: 'send',
+                resource: tabId
+            },
+            data: stanzas,
+            noRetry: true
+        }).done(function (resp) {
+            transmitting = false;
+            handleResponse(resp);
+            if (!_.isEmpty(queue.stanzas) || !_.isEmpty(ackBuffer)) {
+                purge();
+            } else {
+                purging = false;
+            }
+        }).fail(function (resp) {
+            transmitting = false;
+            handleError(resp);
+            if (!_.isEmpty(queue.stanzas) || !_.isEmpty(ackBuffer)) {
+                purge();
+            } else {
+                purging = false;
+            }
+        });
+
+    }
+
+    actions.purge = function () {
+        if (!purging && !_.isEmpty(queue.stanzas)) {
+            purge();
+        }
+    };
+
+    // Periodically poll
+    actions.poll = function () {
+        var interval = _.now() - lastDelivery;
+        if (interval >= intervals[mode] && !purging) {
+            http.GET({
+                module: 'rt',
+                params: {
+                    action: 'poll',
+                    resource: tabId
+                }
+            }).done(handleResponse).fail(handleError);
+        }
+
+        if (interval >= intervals.lazyThreshhold) {
+            mode = 'lazy';
+        } else {
+            mode = 'eager';
+        }
+    };
+
+    // Periodically flush resend buffer
+    actions.flushResendBuffer = function (ticks) {
+        if (ticks % 5 !== 0) {
+            return;
+        }
+        if (purging) {
+            return;
+        }
+        _(resendBuffer).each(function (m) {
+            m.count++;
+            if (m.count < INFINITY) {
+                api.sendWithoutSequence(m.msg);
+            } else {
+                delete resendBuffer[Number(m.msg.seq)];
+                resendDeferreds[Number(m.msg.seq)].reject();
+                delete resendDeferreds[Number(m.msg.seq)];
+            }
+        });
+    };
 
     Event.extend(api);
 
@@ -217,6 +371,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                     console.log("Enqueueing receipt " + stanza.seq);
                 }
                 ackBuffer[Number(stanza.seq)] = 1;
+                purge();
             }
             if (serverSequenceThreshhold === -1 && stanza.seq > 0) {
                 serverSequenceThreshhold = stanza.seq - 1;
@@ -229,6 +384,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 if (stanza.seq > 0 && stanza.seq - serverSequenceThreshhold > 1) {
                     console.error("Received a sequence number that is too far out of order: Expected: " + serverSequenceThreshhold + 1 + ", but got: " + stanza.seq);
                     outOfOrder = true;
+                }
+                if (stanza.seq > 0 && stanza.seq <= serverSequenceThreshhold) {
+                    return; // Discard, as we have already seen this stanza
                 }
                 if (!outOfOrder) {
                     if (api.debug) {
@@ -246,203 +404,84 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         }
     }
 
-
-    function connect() {
-        if (connecting) {
-            return;
+    function handleError(error) {
+        if (error.code === "RT_STANZA-1006" || error.code === 'RT_STANZA-0006') {
+            resetSequence(0);
         }
-        connecting = true;
 
-        request = {
-            url: url + '?session=' + ox.session + "&resource=" + tabId,
-            contentType : "application/json",
-            logLevel : 'shutUp',
-            transport : 'long-polling',
-            fallbackTransport: 'long-polling',
-            timeout: 60000,
-            messageDelimiter: null,
-            maxRequest: 60
-        };
-
-
-        //------------------------------------------------------------------------------
-        //request callbacks
-        request.onOpen = function (response) {
-            connecting = false;
-            def.resolve(api);
-            if (disconnected) {
-                disconnected = false;
-                tentativeConnect = true;
-                if (subSocket) {
-                    subSocket.push("{\"type\": \"ping\", \"commit\": true }");
-                }
-                api.trigger("open");
-            }
-        };
-
-        var reconnectCount = 0;
-
-        request.onReconnect = function (request, response) {
-            reconnectCount++;
-            if (reconnectCount > 30 && !disconnected) {
-                reconnect();
-            }
-        };
-
-
-        request.onMessage = function (response) {
-            if (api.debug) {
-                console.log("On message called: ", response);
-            }
-
-            silenceCount = 0;
-            request.requestCount = 0;
-            closeCount = 0;
-            if (response.status !== 200 && response.status !== 408) { // 200 = OK, 408 == TIMEOUT, which is expected
-                if (!disconnected) {
-                    if (api.debug) {
-                        console.log("Triggering offline, because request failed with status: ", response.status);
-                    }
-                    goOffline();
-                    subSocket.close();
-                }
-                if (api.debug) {
-                    console.log("Got an error status, discarding message", response.status);
-                }
-                return;
-            }
-
-            if (tentativeConnect) {
-                if (api.debug) {
-                    console.log("Triggering Online because #onMessage was called");
-                }
-                if (!online) {
-                    api.trigger("online");
-                    online = true;
-                }
-                tentativeConnect = false;
-            }
-
-            var message = response.responseBody;
-            if (api.debug) {
-                console.log("Message received", response.responseBody);
-            }
-            var json = {};
-            try {
-                json = $.parseJSON(message);
-            } catch (e) {
-                console.log(response);
-                console.log('This doesn\'t look like valid JSON: ', message);
-                console.error(e, e.stack, response);
-                throw e;
-            }
-            if (_.isArray(json)) {
-                _(json).each(function (stanza) {
-                    if (api.debug) {
-                        console.log("<-", stanza);
-                    }
-                    stanza = new RealtimeStanza(stanza);
-                    received(stanza);
-                });
-            } else if (_.isObject(json)) { // json may be null
-                if (api.debug) {
-                    console.log("<-", json);
-                }
-                var stanza = new RealtimeStanza(json);
-                received(stanza);
-            }
-            drainAckBuffer();
-        };
-
-        request.onClose = function (response) {
-            if (api.debug) {
-                console.log("Closed");
-            }
-            if (shouldReconnect) {
-                shouldReconnect = false;
-                subSocket = connect();
-            } else {
-                if (closeCount > 5) {
-                    goOffline();
-                }
-                closeCount++;
-            }
-        };
-
-        request.onError = function (response) {
-            if (!disconnected) {
-                disconnected = true;
-                reconnect();
-            }
-        };
-
-        return socket.subscribe(request);
+        if (error.code === "RT_STANZA-1007") {
+            enroled = false;
+            enrol();
+        }
     }
 
-    function goOffline() {
-        // test connection with a ping
-        http.GET({module: 'system', params: {action: 'ping'}});
+    function handleResponse(resp) {
+        var result = null;
+        if (resp.acks) {
+            _(resp.acks).each(function (sequenceNumber) {
+                receivedAcknowledgement(sequenceNumber);
+            });
+        }
+
+        if (resp.stanzas) {
+            lastDelivery = _.now();
+            _(resp.stanzas).each(function (s) {
+                received(new RealtimeStanza(s));
+            });
+        }
+
+        if (resp.result) {
+            result = new RealtimeStanza(resp.result);
+        }
+
+        if (resp.error) {
+            handleError(resp.error);
+        }
+
+        return result;
     }
 
-    http.on("unreachable", function () {
-        if (!disconnected) {
-            disconnected = true;
-            subSocket.close();
-            socket.unsubscribe();
-            if (online) {
-                api.trigger("offline");
-                online = false;
-            }
-        }
-    });
 
-    http.on("reachable", function () {
-        if (!online && !connecting) {
-            reconnect();
+    function enrol() {
+        if (!running) {
+            return $.when();
         }
-    });
+        if (!enroled) {
+            return http.GET({
+                module: 'rt',
+                params: {
+                    action: 'enrol',
+                    resource: tabId
+                }
+            }).done(function (resp) {
+                enroled = true;
+                handleResponse(resp);
+            }).done(purge).fail(handleError);
+        }
+    }
 
     ox.on("relogin:required", function () {
-        if (api.debug) {
-            console.log("Closing socket, because I got a session expired error");
-        }
         flushAllBuffers();
-        transmitting = false;
-        subSocket.close();
-        socket.unsubscribe();
-        disconnected = true;
+        stop();
     });
 
     ox.on('relogin:success', function () {
-        connect();
-        resetSequence(0);
+        start();
     });
 
-    function reconnect() {
-        if (connecting) {
-            return;
-        }
-        shouldReconnect = true;
-        disconnected = true;
-        if (api.debug) {
-            console.log("Closing for reconnect");
-        }
-        subSocket.close();
-    }
-
-    var subSocket = connect();
-
-    disconnected = false;
     ox.on("change:session", function () {
-        subSocket = connect();
+        start();
     });
 
-    var queue = {
-        stanzas: [],
-        timer: null
-    };
+    ox.on("connection:down connection:offline", function () {
+        api.trigger("offline");
+        stop();
+    });
 
-    var reconnectBuffer = [];
+    ox.on("connetion:up connection:online", function () {
+        api.trigger("online");
+        start();
+    });
 
     function drainAckBuffer() {
         if (_(ackBuffer).isEmpty()) {
@@ -480,62 +519,12 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 resource: tabId
             },
             data: {type: 'ack', seq: seqExpression}
-        });
+        }).done(handleResponse).fail(handleError);
         ackBuffer = {};
 
     }
 
-    function drainBuffer() {
-        if (api.debug) {
-            console.log("Drain buffer");
-        }
-        if (transmitting) {
-            // Purge sequenced, but leave unsequenced
-            queue.stanzas = _(queue.stanzas).reject(function (s) { return !_.isUndefined(s.seq); });
-            if (api.debug) {
-                console.log("Transmitting, so waiting for opportunity to send later");
-            }
-            return;
-        }
-        transmitting = true;
-        request.requestCount = 0;
-        // Send queue.stanzas
-        if (api.debug) {
-            console.log("SENDING", queue.stanzas);
-        }
-        http.PUT({
-            module: 'rt',
-            params: {
-                action: 'send',
-                resource: tabId
-            },
-            data: queue.stanzas,
-            noRetry: true
-        }).done(function (resp) {
-            transmitting = false;
-            if (resp.acknowledgements) {
-                _(resp.acknowledgements).each(function (sequenceNumber) {
-                    receivedAcknowledgement(sequenceNumber);
-                });
-            }
-        }).fail(function (resp) {
-            transmitting = false;
-            if (resp.code === "RT_STANZA-1006") {
-                resetSequence(0);
-            }
-        });
-
-        if (api.debug) {
-            console.log("->", queue.stanzas);
-        }
-
-        queue.timer = false;
-        queue.stanzas = [];
-        if (api.interrupt) {
-            alert("INTERRUPT!");
-            api.interrupt = false;
-        }
-    }
+    
 
     api.internal = {
         setSequence: function (newSequence) {
@@ -557,22 +546,10 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 resource: tabId
             },
             data: options
-        }).done(function (responseStanza) {
-            var stanza = new RealtimeStanza(responseStanza);
-            if (stanza.get("", "error")) {
-                if (api.debug) {
-                    console.log("Received Stanza contained an error");
-                }
-                var error = stanza.get("", "error");
-                if (error.data && error.data.code === 6) {
-                    resetSequence(0);
-                }
-            }
-            return stanza;
+        }).pipe(function (resp) {
+            return handleResponse(resp);
         }).fail(function (resp) {
-            if (resp.code === "RT_STANZA-1006" || resp.code === 'RT_STANZA-0006') {
-                resetSequence(0);
-            }
+            handleError(resp);
         });
     };
 
@@ -586,9 +563,8 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     };
 
     api.sendWithoutSequence = function (options) {
-        var def = $.Deferred(),
-            bufferinterval = (_.isNumber(options.bufferinterval)) ? options.bufferinterval : BUFFER_INTERVAL;
-        if (rejectAll) {
+        var def = $.Deferred();
+        if (rejectAll || !running) {
             if (api.debug) {
                 console.log("Not connected, so rejecting all");
             }
@@ -614,99 +590,31 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 resendDeferreds[Number(options.seq)] = def;
             }
         }
-        if (disconnected) {
-            if (api.debug) {
-                console.log("Disconnected, so reconnecting and adding message to reconnect buffer");
-            }
-            subSocket = connect();
-            reconnectBuffer.push(options);
-            return def;
+        
+        if (api.debug) {
+            console.log("Adding to sender queue", queue);
         }
-        if (connecting) {
+        queue.stanzas.push(JSON.parse(JSON.stringify(options)));
+        if (!purging) {
             if (api.debug) {
-                console.log("Connecting, so adding message to reconnect buffer");
+                console.log("Start purge process");
             }
-            // Buffer messages until connect went through
-            reconnectBuffer.push(options);
-            return def;
+            purge();
         }
-        if (BUFFERING) {
-            if (api.debug) {
-                console.log("Adding to sender queue", queue);
-            }
-            queue.stanzas.push(JSON.parse(JSON.stringify(options)));
-            if (!queue.timer) {
-                queue.timer = true;
-                setTimeout(drainBuffer, bufferinterval);
-            }
-        } else {
-            request.requestCount = 0;
-            subSocket.push(JSON.stringify(options));
-            if (api.debug) {
-                console.log("->", options);
-            }
-        }
+
         return def;
-    };
-
-    api.on("open", function () {
-        _(reconnectBuffer).each(function (options) {
-            api.sendWithoutSequence(options);
-        });
-        reconnectBuffer = [];
-    });
-
-    api.inspectStatus = function () {
-        console.log("Resend Buffer", resendBuffer);
-        console.log("Resend Deferreds", resendDeferreds);
-        console.log("Connecting", connecting);
-        console.log("Disconnected", disconnected);
-        console.log("silenceCount", silenceCount);
     };
 
     api.resource = tabId;
 
-    setInterval(function () {
-        if (!connecting) {
-            if (!disconnected) {
-                subSocket.push("{\"type\": \"ping\", \"commit\": true }");
-            }
-        }
-    }, 30000);
+    start();
 
-    setInterval(function () {
-        if (silenceCount < 7 && !disconnected) {
-            if (highLoad) {
-                highLoad = false;
-                api.trigger("normalLoad");
-            }
-            _(resendBuffer).each(function (m) {
-                m.count++;
-                if (m.count < INFINITY) {
-                    api.sendWithoutSequence(m.msg);
-                } else {
-                    delete resendBuffer[Number(m.msg.seq)];
-                    resendDeferreds[Number(m.msg.seq)].reject();
-                    delete resendDeferreds[Number(m.msg.seq)];
-                }
-            });
-        }
-        if (silenceCount === 10 && !disconnected) {
-            api.trigger("highLoad");
-            console.warn("High Load detected");
-        }
-        if (silenceCount === 12) {
-            silenceCount = 0;
-            reconnect();
-        }
-        silenceCount++;
-        if (loadDetectionTimer && (new Date().getTime() - loadDetectionTimer > 15000)) {
-            api.trigger("highLoad");
-            console.warn("High Load detected");
-        }
-        loadDetectionTimer = new Date().getTime();
-
-    }, 5000);
+    var def = $.Deferred();
+    
+    enrol().done(function () {
+        def.resolve(api);
+    }).fail(def.reject);
 
     return def;
+
 });
