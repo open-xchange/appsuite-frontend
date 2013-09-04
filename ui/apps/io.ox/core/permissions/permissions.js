@@ -272,8 +272,8 @@ define('io.ox/core/permissions/permissions',
                 // See Bug 27704
                 (baton.folder.type === 5) ||
                 (baton.folder.type === 2 && baton.model.id === 0) ||
-                // Private Contacts folders can't have other users with admin permissions
-                (baton.folder.type === 1 && baton.folder.module === 'contacts')
+                // Private contacts and calendar folders can't have other users with admin permissions
+                (baton.folder.type === 1 && (baton.folder.module === 'contacts' || baton.folder.module === 'calendar'))
             ) {
                 return true;
             }
