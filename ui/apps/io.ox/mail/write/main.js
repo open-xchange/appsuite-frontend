@@ -1281,6 +1281,9 @@ define('io.ox/mail/write/main',
 
                     view.form.find('.section-item.file').remove();
                     $(_.initial(view.form.find(':input[name][type=file]'))).remove();
+                    if (ox.efl) {
+                        view.baton.fileList.clear();
+                    }
                     draftMail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
                     draftMail.vcard = old_vcard_flag;
                     app.setMail({ data: draftMail, mode: mail.mode, initial: false, replaceBody: 'no', format: format});
