@@ -797,7 +797,7 @@ define('io.ox/calendar/week/view',
                             style = '';
 
                         // draw across multiple days
-                        while (true && maxCount <= this.columns) {
+                        while (maxCount <= this.columns) {
                             var app = this.renderAppointment(model),
                                 sel = '[date="' + (startLocal.getDays() - this.startDate.getDays()) + '"]';
                             maxCount++;
@@ -1438,7 +1438,7 @@ define('io.ox/calendar/week/view',
                 e = calc(end);
             return {
                 top: s,
-                height: Math.max(Math.round(e - s), self.gridHeight()) - 1
+                height: Math.max(Math.round(e - s), self.minCellHeight) - 1
             };
         },
 
