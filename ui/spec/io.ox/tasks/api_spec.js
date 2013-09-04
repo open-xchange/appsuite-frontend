@@ -45,12 +45,13 @@ define(['shared/examples/for/api',
                 expect(result).toBeDeferred();
                 expect(result.state()).toBe('pending');
                 this.server.respond();
-                expect(result.state()).toBe('resolved');
+                expect(result).toResolve();
             });
             it('should trigger a create event', function () {
                 expect(api).toTrigger('create');
                 var result = api.create(options.testData);
                 this.server.respond();
+                expect(result).toResolve();
             });
         });
     });
