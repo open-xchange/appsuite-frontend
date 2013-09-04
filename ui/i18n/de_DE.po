@@ -65,7 +65,7 @@ msgstr "Kein Betreff"
 #: apps/io.ox/calendar/week/perspective.js:51
 #: apps/io.ox/calendar/week/perspective.js:183
 #: apps/io.ox/mail/write/main.js:924
-msgid "An error occured. Please try again."
+msgid "An error occurred. Please try again."
 msgstr "Es trat ein Fehler auf. Bitte versuchen Sie es später erneut."
 
 #: apps/io.ox/mail/write/main.js:1079
@@ -1216,7 +1216,7 @@ msgstr "Abonnement wird hinzugefügt. Dies kann eine Weile dauern..."
 
 #: apps/io.ox/mail/view-detail.js:1342
 msgid ""
-"Created private folder '%1$s' in %2$s and subscribed succesfully to shared "
+"Created private folder '%1$s' in %2$s and subscribed successfully to shared "
 "folder"
 msgstr ""
 "Privater Ordner '%1$s' wurde in %2$s angelegt und das Abonnement des "
@@ -1366,7 +1366,7 @@ msgid "Use fixed-width font for text mails"
 msgstr "Schrift mit fester Breite für Text-E-Mails verwenden"
 
 #: apps/io.ox/mail/settings/old_pane.js:71 apps/io.ox/mail/settings/pane.js:39
-msgid "Append vcard"
+msgid "Append vCard"
 msgstr "Visitenkarte anhängen"
 
 #: apps/io.ox/mail/settings/old_pane.js:72 apps/io.ox/mail/settings/pane.js:40
@@ -1697,7 +1697,7 @@ msgstr "Mailfilter"
 #: apps/io.ox/mail/autoforward/settings/register.js:48
 #: apps/io.ox/mail/mailfilter/settings/register.js:40
 #: apps/io.ox/mail/vacationnotice/settings/register.js:66
-msgid "Unable to contact mailfilter backend."
+msgid "Unable to load mail filter settings."
 msgstr "Auf Mailfilter-Backend konnte nicht zugegriffen werden"
 
 #: apps/io.ox/mail/mailfilter/settings/register.js:43
@@ -1949,7 +1949,7 @@ msgid "Attachments have been saved"
 msgstr "Anlagen wurden gespeichert"
 
 #: apps/io.ox/mail/actions.js:571
-msgid "Failed to add. Maybe the VCard attachment is invalid."
+msgid "Failed to add. Maybe the vCard attachment is invalid."
 msgstr ""
 "Hinzufügen ist fehlgeschlagen. Möglicherweise ist die vCard-Anlage ungültig."
 
@@ -3099,7 +3099,7 @@ msgid "Progress %1$s %"
 msgstr "Fortschritt %1$s %"
 
 #: apps/io.ox/tasks/view-detail.js:120 apps/io.ox/tasks/view-detail.js:268
-msgid "Attachments   "
+msgid "Attachments"
 msgstr "Anlagen "
 
 #: apps/io.ox/tasks/view-detail.js:134
@@ -3425,7 +3425,7 @@ msgid "Undone"
 msgstr "Nicht erledigt"
 
 #: apps/io.ox/tasks/actions.js:159 apps/io.ox/tasks/actions.js:231
-msgid "A severe error occured!"
+msgid "A severe error occurred!"
 msgstr "Es trat ein schwerer Fehler auf."
 
 #: apps/io.ox/tasks/actions.js:161
@@ -4996,11 +4996,11 @@ msgid "Hide request body"
 msgstr "Anfrage-Body ausblenden"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:75
-msgid "Show strack trace"
+msgid "Show stack trace"
 msgstr "Stack trace einblenden"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:77
-msgid "Hide strack trace"
+msgid "Hide stack trace"
 msgstr "Stack trace ausblenden"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:111
@@ -5087,7 +5087,7 @@ msgid "Language"
 msgstr "Sprache"
 
 #: apps/io.ox/core/settings/pane.js:146
-msgid "Timezone"
+msgid "Time zone"
 msgstr "Zeitzone"
 
 #: apps/io.ox/core/settings/pane.js:155
@@ -5485,7 +5485,7 @@ msgstr "Die Anlagen zu diesem Kontakt konnten nicht geladen werden."
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:186
 #: apps/io.ox/contacts/view-detail.js:240
-msgid "This list has no members yet"
+msgid "This list has no contacts yet"
 msgstr "Diese Liste hat noch keine Mitglieder"
 
 #: apps/io.ox/contacts/view-detail.js:314
@@ -5773,16 +5773,16 @@ msgid "List name"
 msgstr "Name der Liste"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:87
-msgid "Add member"
+msgid "Add contact"
 msgstr "Mitglied hinzufügen"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:130
-msgid "Members"
+msgid "Contacts"
 msgstr "Mitglieder"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:274
 msgid ""
-"To add participants manually, just provide a valid email address (e.g john."
+"To add contacts manually, just provide a valid email address (e.g john."
 "doe@example.com or \"John Doe\" <jd@example.com>)"
 msgstr ""
 "Zum manuellen HInzufügen von Teilnehmern geben Sie einfach eine gültige E-"

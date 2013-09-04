@@ -59,26 +59,49 @@ define('io.ox/mail/actions',
             var check = settings.get('removeDeletedPermanently') || _(list).any(function (o) {
                 return account.is('trash', o.folder_id);
             });
+
+            var question = gt.ngettext(
+                'Do you want to permanently delete this mail?',
+                'Do you want to permanently delete these mails?',
+                list.length
+            );
+
             if (check) {
-                var question = gt.ngettext(
-                    'Do you really want to permanently delete this mail?',
-                    'Do you really want to permanently delete these mails?',
-                    list.length
-                );
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
-                        .text(question)
-                        .addPrimaryButton("delete", gt('Delete'))
+                        .append(
+                            $('<div>').text(question)
+                        )
                         .addButton("cancel", gt('Cancel'))
-                        .show()
-                        .done(function (action) {
-                            if (action === 'delete') {
-                                api.remove(list);
-                            }
-                        });
+                        .on('delete', function () {
+                            api.remove(list).fail(notifications.yell);
+                        })
+                        .show();
                 });
             } else {
-                api.remove(list);
+                api.remove(list, { hurz: true }).fail(function (e) {
+                    // mail quota exceeded?
+                    if (e.code === 'MSG-0039') {
+                        require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                            new dialogs.ModalDialog()
+                                .header(
+                                    $('<h4>').text(gt('Mail quota exceeded'))
+                                )
+                                .append(
+                                    $('<div>').text(gt('Emails cannot be put into trash folder while your mail quota is exceeded.')),
+                                    $('<div>').text(question)
+                                )
+                                .addPrimaryButton("delete", gt('Delete'))
+                                .addButton("cancel", gt('Cancel'))
+                                .on('delete', function () {
+                                    api.remove(list, { force: true });
+                                })
+                                .show();
+                        });
+                    } else {
+                        notifications.yell(e);
+                    }
+                });
             }
         }
     });
@@ -292,7 +315,10 @@ define('io.ox/mail/actions',
                     }
 
                     if (baton.target) {
-                        commit(baton.target);
+                        if (list[0].folder_id !== baton.target) {
+                            commit(baton.target);
+                        }
+
                     } else {
                         var dialog = new dialogs.ModalDialog()
                             .header($('<h4>').text(label))
@@ -573,7 +599,7 @@ define('io.ox/mail/actions',
                     function success(data) {
 
                         if (!_.isArray(data) || data.length === 0) {
-                            notifications.yell('error', gt('Failed to add. Maybe the VCard attachment is invalid.'));
+                            notifications.yell('error', gt('Failed to add. Maybe the vCard attachment is invalid.'));
                             return;
                         }
 

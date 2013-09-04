@@ -64,7 +64,7 @@ msgstr "件名なし"
 #: apps/io.ox/calendar/week/perspective.js:51
 #: apps/io.ox/calendar/week/perspective.js:183
 #: apps/io.ox/mail/write/main.js:924
-msgid "An error occured. Please try again."
+msgid "An error occurred. Please try again."
 msgstr "エラーが発生しました。もう一度やり直してください。"
 
 #: apps/io.ox/mail/write/main.js:1079
@@ -1203,7 +1203,7 @@ msgstr "登録を追加しています。この処理には数秒かかる場合
 
 #: apps/io.ox/mail/view-detail.js:1342
 msgid ""
-"Created private folder '%1$s' in %2$s and subscribed succesfully to shared "
+"Created private folder '%1$s' in %2$s and subscribed successfully to shared "
 "folder"
 msgstr ""
 "プライベート フォルダ '%1$s' を %2$s に作成しました。共有フォルダが正しく登録"
@@ -1346,7 +1346,7 @@ msgid "Use fixed-width font for text mails"
 msgstr "テキスト メールに固定幅フォントを使用"
 
 #: apps/io.ox/mail/settings/old_pane.js:71 apps/io.ox/mail/settings/pane.js:39
-msgid "Append vcard"
+msgid "Append vCard"
 msgstr "vCard を添付"
 
 #: apps/io.ox/mail/settings/old_pane.js:72 apps/io.ox/mail/settings/pane.js:40
@@ -1670,7 +1670,7 @@ msgstr "メール フィルタ"
 #: apps/io.ox/mail/autoforward/settings/register.js:48
 #: apps/io.ox/mail/mailfilter/settings/register.js:40
 #: apps/io.ox/mail/vacationnotice/settings/register.js:66
-msgid "Unable to contact mailfilter backend."
+msgid "Unable to load mail filter settings."
 msgstr "メール フィルタ バックエンドに接続できません。"
 
 #: apps/io.ox/mail/mailfilter/settings/register.js:43
@@ -1921,7 +1921,7 @@ msgid "Attachments have been saved"
 msgstr "添付ファイルを保存しました。"
 
 #: apps/io.ox/mail/actions.js:571
-msgid "Failed to add. Maybe the VCard attachment is invalid."
+msgid "Failed to add. Maybe the vCard attachment is invalid."
 msgstr ""
 "追加できませんでした。添付されている vCard が無効である可能性があります。"
 
@@ -3374,7 +3374,7 @@ msgid "Undone"
 msgstr "未完了"
 
 #: apps/io.ox/tasks/actions.js:159 apps/io.ox/tasks/actions.js:231
-msgid "A severe error occured!"
+msgid "A severe error occurred!"
 msgstr "深刻なエラーが発生しました。"
 
 #: apps/io.ox/tasks/actions.js:161
@@ -4929,11 +4929,11 @@ msgid "Hide request body"
 msgstr "リクエストの本文を隠す"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:75
-msgid "Show strack trace"
+msgid "Show stack trace"
 msgstr "スタック トレースを表示"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:77
-msgid "Hide strack trace"
+msgid "Hide stack trace"
 msgstr "スタック トレースを隠す"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:111
@@ -5018,7 +5018,7 @@ msgid "Language"
 msgstr "言語"
 
 #: apps/io.ox/core/settings/pane.js:146
-msgid "Timezone"
+msgid "Time zone"
 msgstr "タイム ゾーン"
 
 #: apps/io.ox/core/settings/pane.js:155
@@ -5403,7 +5403,7 @@ msgstr "この連絡先の添付ファイルを読み込めませんでした。
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:186
 #: apps/io.ox/contacts/view-detail.js:240
-msgid "This list has no members yet"
+msgid "This list has no contacts yet"
 msgstr "このリストにはメンバが今のところ追加されていません。"
 
 #: apps/io.ox/contacts/view-detail.js:314
@@ -5691,16 +5691,16 @@ msgid "List name"
 msgstr "リスト名"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:87
-msgid "Add member"
+msgid "Add contact"
 msgstr "メンバを追加する"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:130
-msgid "Members"
+msgid "Contacts"
 msgstr "メンバ"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:274
 msgid ""
-"To add participants manually, just provide a valid email address (e.g john."
+"To add contacts manually, just provide a valid email address (e.g john."
 "doe@example.com or \"John Doe\" <jd@example.com>)"
 msgstr ""
 "出席者を手動で追加するには、有効なメール アドレスを入力してください (例: "

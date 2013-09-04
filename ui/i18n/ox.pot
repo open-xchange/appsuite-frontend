@@ -838,7 +838,7 @@ msgid "Compose"
 msgstr ""
 
 #: apps/io.ox/mail/settings/old_pane.js:81 apps/io.ox/mail/settings/pane.js:39
-msgid "Append vcard"
+msgid "Append vCard"
 msgstr ""
 
 #: apps/io.ox/mail/settings/old_pane.js:82 apps/io.ox/mail/settings/pane.js:40
@@ -1110,7 +1110,7 @@ msgstr ""
 #: apps/io.ox/mail/autoforward/settings/register.js:51
 #: apps/io.ox/mail/mailfilter/settings/register.js:40
 #: apps/io.ox/mail/vacationnotice/settings/register.js:69
-msgid "Unable to contact mailfilter backend."
+msgid "Unable to load mail filter settings."
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/register.js:43
@@ -1426,7 +1426,7 @@ msgid "Adding subscription. This may take some seconds..."
 msgstr ""
 
 #: apps/io.ox/mail/view-detail.js:1257
-msgid "Created private folder '%1$s' in %2$s and subscribed succesfully to shared folder"
+msgid "Created private folder '%1$s' in %2$s and subscribed successfully to shared folder"
 msgstr ""
 
 #: apps/io.ox/core/export/export.js:255 apps/io.ox/core/import/import.js:159
@@ -1825,7 +1825,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/week/perspective.js:51
 #: apps/io.ox/calendar/week/perspective.js:183 apps/io.ox/mail/write/main.js:883
-msgid "An error occured. Please try again."
+msgid "An error occurred. Please try again."
 msgstr ""
 
 #: apps/io.ox/mail/write/main.js:1095
@@ -3248,11 +3248,11 @@ msgid "Hide request body"
 msgstr ""
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:75
-msgid "Show strack trace"
+msgid "Show stack trace"
 msgstr ""
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:77
-msgid "Hide strack trace"
+msgid "Hide stack trace"
 msgstr ""
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:111
@@ -3336,7 +3336,7 @@ msgid "Language"
 msgstr ""
 
 #: apps/io.ox/core/settings/pane.js:132
-msgid "Timezone"
+msgid "Time zone"
 msgstr ""
 
 #: apps/io.ox/core/settings/pane.js:141
@@ -5269,20 +5269,20 @@ msgid "List name"
 msgstr ""
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:87
-msgid "Add member"
+msgid "Add contact"
 msgstr ""
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:130
-msgid "Members"
+msgid "Contacts"
 msgstr ""
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:186
 #: apps/io.ox/contacts/view-detail.js:240
-msgid "This list has no members yet"
+msgid "This list has no contacts yet"
 msgstr ""
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:274
-msgid "To add participants manually, just provide a valid email address (e.g john.doe@example.com or \"John Doe\" <jd@example.com>)"
+msgid "To add contacts manually, just provide a valid email address (e.g john.doe@example.com or \"John Doe\" <jd@example.com>)"
 msgstr ""
 
 #: apps/io.ox/contacts/view-detail.js:189
@@ -5633,7 +5633,7 @@ msgid "Progress %1$s %"
 msgstr ""
 
 #: apps/io.ox/tasks/view-detail.js:120 apps/io.ox/tasks/view-detail.js:268
-msgid "Attachments   "
+msgid "Attachments"
 msgstr ""
 
 #: apps/io.ox/tasks/view-detail.js:134
@@ -5922,7 +5922,7 @@ msgid "Undone"
 msgstr ""
 
 #: apps/io.ox/tasks/actions.js:162 apps/io.ox/tasks/actions.js:234
-msgid "A severe error occured!"
+msgid "A severe error occurred!"
 msgstr ""
 
 #: apps/io.ox/tasks/actions.js:164

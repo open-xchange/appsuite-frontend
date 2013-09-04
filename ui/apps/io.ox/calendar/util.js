@@ -209,7 +209,7 @@ define("io.ox/calendar/util",
                 {value: 120, format: 'hours'},
                 {value: 240, format: 'hours'},
                 {value: 360, format: 'hours'},
-                {value: 420, format: 'hours'},
+                {value: 480, format: 'hours'},
                 {value: 720, format: 'hours'},
 
                 {value: 1440, format: 'days'},

@@ -20,12 +20,12 @@
     ],
     "daysStandalone": [
         "Sv",
-        "P",
-        "O",
-        "T",
-        "C",
+        "Pr",
+        "Ot",
+        "Tr",
+        "Ce",
         "Pk",
-        "S"
+        "Se"
     ],
     "months": [
         "janvāris",
@@ -64,6 +64,7 @@
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "dd.MM.",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
         "yMdHm": "d.M.y. HH:mm",
@@ -106,7 +107,7 @@
         "yMMMEd": {
             "d": "E, y. 'gada' d. MMM – E, y. 'gada' d. MMM",
             "m": "E, y. 'gada' d. MMM – E, y. 'gada' d. MMM",
-            "y": "E, y. 'gada' d. MMM – E, y. 'gada' d. MMM"
+            "y": "E, y. 'gada' d. MMM – E, y. 'gada' d. MMM"
         }
     },
     "dayPeriods": {

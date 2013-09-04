@@ -10,13 +10,13 @@
         "sâmbătă"
     ],
     "daysShort": [
-        "Du",
-        "Lu",
-        "Ma",
-        "Mi",
-        "Jo",
-        "Vi",
-        "Sâ"
+        "Dum",
+        "Lun",
+        "Mar",
+        "Mie",
+        "Joi",
+        "Vin",
+        "Sâm"
     ],
     "daysStandalone": [
         "Du",
@@ -57,25 +57,26 @@
     ],
     "formats": {
         "E": "E",
-        "yMd": "dd.MM.yyyy",
-        "yMEd": "E, dd.MM.yyyy",
+        "yMd": "dd.MM.y",
+        "yMEd": "E, dd.MM.y",
         "yMMMd": "d MMM y",
         "yMMMEd": "E, d MMM y",
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "dd.MM",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
-        "yMdHm": "dd.MM.yyyy, HH:mm",
-        "yMdHmv": "dd.MM.yyyy, HH:mm v",
-        "yMdhm": "dd.MM.yyyy, h:mm a",
-        "yMdhmv": "dd.MM.yyyy, h:mm a v",
-        "yMEdHm": "E, dd.MM.yyyy, HH:mm",
-        "yMEdHmv": "E, dd.MM.yyyy, HH:mm v",
-        "yMEdhm": "E, dd.MM.yyyy, h:mm a",
-        "yMEdhmv": "E, dd.MM.yyyy, h:mm a v"
+        "yMdHm": "dd.MM.y, HH:mm",
+        "yMdHmv": "dd.MM.y, HH:mm v",
+        "yMdhm": "dd.MM.y, h:mm a",
+        "yMdhmv": "dd.MM.y, h:mm a v",
+        "yMEdHm": "E, dd.MM.y, HH:mm",
+        "yMEdHmv": "E, dd.MM.y, HH:mm v",
+        "yMEdhm": "E, dd.MM.y, h:mm a",
+        "yMEdhmv": "E, dd.MM.y, h:mm a v"
     },
-    "date": "dd.MM.yyyy",
+    "date": "d MMM y",
     "time": "HH:mm",
     "dateTimeFormat": "%2$s, %1$s",
     "intervals": {
@@ -110,13 +111,13 @@
         }
     },
     "dayPeriods": {
-        "am": "AM",
-        "pm": "PM"
+        "am": "a.m.",
+        "pm": "p.m."
     },
     "eras": [
-        "î.Hr.",
-        "d.Hr."
+        "î.e.n",
+        "e.n."
     ],
-    "dateTime": "dd.MM.yyyy, HH:mm",
+    "dateTime": "d MMM y, HH:mm",
     "h12": false
 }

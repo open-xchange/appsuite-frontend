@@ -425,7 +425,7 @@ msgstr "Click to reauthorise your account"
 #: apps/plugins/portal/linkedIn/register.js:111
 #: apps/plugins/portal/twitter/register.js:248
 msgid "You have reauthorized this %s account."
-msgstr "You have reauthorised this %s account."
+msgstr "You have re-authorised this %s account."
 
 #: apps/plugins/portal/facebook/register.js:101
 #: apps/plugins/portal/linkedIn/register.js:113
@@ -872,7 +872,7 @@ msgid "Compose"
 msgstr "Compose"
 
 #: apps/io.ox/mail/settings/old_pane.js:81 apps/io.ox/mail/settings/pane.js:39
-msgid "Append vcard"
+msgid "Append vCard"
 msgstr "Append vCard"
 
 #: apps/io.ox/mail/settings/old_pane.js:82 apps/io.ox/mail/settings/pane.js:40
@@ -1164,8 +1164,8 @@ msgstr "Enable"
 #: apps/io.ox/mail/autoforward/settings/register.js:51
 #: apps/io.ox/mail/mailfilter/settings/register.js:40
 #: apps/io.ox/mail/vacationnotice/settings/register.js:69
-msgid "Unable to contact mailfilter backend."
-msgstr "Unable to contact mailfilter backend."
+msgid "Unable to load mail filter settings."
+msgstr "Unable to load mail filter settings."
 
 #: apps/io.ox/mail/mailfilter/settings/register.js:43
 msgid "Couldn't load your mail filters."
@@ -1339,7 +1339,7 @@ msgstr "Pink"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:80
 #: apps/io.ox/mail/view-detail.js:946 apps/io.ox/portal/settings/pane.js:139
 msgid "Gray"
-msgstr "Gray"
+msgstr "Grey"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:182
 msgid "Mailfilter updated"
@@ -1482,7 +1482,7 @@ msgstr "Adding subscription. This may take a short while..."
 
 #: apps/io.ox/mail/view-detail.js:1257
 msgid ""
-"Created private folder '%1$s' in %2$s and subscribed succesfully to shared "
+"Created private folder '%1$s' in %2$s and subscribed successfully to shared "
 "folder"
 msgstr ""
 "Created private folder '%1$s' in %2$s and subscribed successfully to shared "
@@ -1758,7 +1758,7 @@ msgstr "Your vacation notice has been saved"
 
 #: apps/io.ox/mail/vacationnotice/settings/register.js:72
 msgid "Couldn't load your vacation notice."
-msgstr "Couldn't load your vacation notice."
+msgstr "Could not load your vacation notice."
 
 #: apps/io.ox/mail/vacationnotice/settings/register.js:90
 msgid "Could not save vacation notice"
@@ -1889,8 +1889,8 @@ msgstr "Email"
 #: apps/io.ox/calendar/week/perspective.js:51
 #: apps/io.ox/calendar/week/perspective.js:183
 #: apps/io.ox/mail/write/main.js:883
-msgid "An error occured. Please try again."
-msgstr "An error occured. Please try again."
+msgid "An error occurred. Please try again."
+msgstr "An error occurred. Please try again."
 
 #: apps/io.ox/mail/write/main.js:1095
 msgid "Mail has no recipient."
@@ -2007,14 +2007,14 @@ msgstr "Remove attachment"
 #: apps/io.ox/mail/write/view-main.js:1110
 #: apps/io.ox/mail/write/view-main.js:1111
 msgid "Phone (business)"
-msgstr "Phone (business)"
+msgstr "Phone (Business)"
 
 #: apps/io.ox/contacts/view-detail.js:460
 #: apps/io.ox/contacts/view-detail.js:461
 #: apps/io.ox/mail/write/view-main.js:1112
 #: apps/io.ox/mail/write/view-main.js:1113
 msgid "Phone (private)"
-msgstr "Phone (private)"
+msgstr "Phone (Private)"
 
 #: apps/io.ox/contacts/view-detail.js:456
 #: apps/io.ox/contacts/view-detail.js:457
@@ -2448,7 +2448,7 @@ msgstr "1 hour"
 
 #: apps/io.ox/calendar/settings/pane.js:81
 msgid "2 hour"
-msgstr "2 hour"
+msgstr "2 hours"
 
 #: apps/io.ox/calendar/settings/pane.js:82
 msgid "4 hour"
@@ -3431,12 +3431,12 @@ msgid "Hide request body"
 msgstr "Hide request body"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:75
-msgid "Show strack trace"
-msgstr "Show strack trace"
+msgid "Show stack trace"
+msgstr "Show stack trace"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:77
-msgid "Hide strack trace"
-msgstr "Hide strack trace"
+msgid "Hide stack trace"
+msgstr "Hide stack trace"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:111
 msgid "Host"
@@ -3527,7 +3527,7 @@ msgid "Language"
 msgstr "Language"
 
 #: apps/io.ox/core/settings/pane.js:132
-msgid "Timezone"
+msgid "Time zone"
 msgstr "Time zone"
 
 #: apps/io.ox/core/settings/pane.js:141
@@ -3690,7 +3690,7 @@ msgstr "Do you really want to delete folder \"%s\"?"
 
 #: apps/io.ox/core/tk/folderviews.js:644
 msgid "This is a standard folder, which can't be renamed."
-msgstr "This is a standard folder, which cannot be renamed."
+msgstr "This is a system folder, which cannot be renamed."
 
 #: apps/io.ox/core/tk/folderviews.js:653
 msgid "Rename folder"
@@ -4148,11 +4148,11 @@ msgstr[1] "You will be automatically logged out in %1$d seconds"
 
 #: apps/io.ox/core/main.js:309
 msgid "Automatic logout"
-msgstr "Automatic logout"
+msgstr "Automatic sign out"
 
 #: apps/io.ox/core/main.js:313
 msgid "Logout now"
-msgstr "Logout now"
+msgstr "Sign out now"
 
 #: apps/io.ox/core/main.js:507 apps/io.ox/core/pubsub/settings/pane.js:206
 msgid "Refresh"
@@ -4540,7 +4540,7 @@ msgstr "Your browser is slow and outdated."
 
 #: apps/io.ox/core/login-i18n.js:40
 msgid "You have been automatically logged out"
-msgstr "You have been automatically logged out"
+msgstr "You have been automatically signed out"
 
 #: apps/io.ox/core/login-i18n.js:41
 msgid ""
@@ -4601,7 +4601,7 @@ msgstr "Get free upgrade"
 
 #: apps/io.ox/core/relogin.js:56
 msgid "Relogin"
-msgstr "Relogin"
+msgstr "Sign in"
 
 #: apps/io.ox/core/relogin.js:85
 msgid "Please enter correct password"
@@ -4609,7 +4609,7 @@ msgstr "Please enter the correct password"
 
 #: apps/io.ox/core/relogin.js:88
 msgid "Failed to relogin"
-msgstr "Failed to relogin"
+msgstr "Failed to sign in"
 
 #: apps/io.ox/core/commons-folderview.js:75
 #: apps/io.ox/core/commons-folderview.js:76
@@ -5132,7 +5132,7 @@ msgstr "Something went wrong saving your changes."
 
 #: apps/io.ox/oauth/settings.js:62
 msgid "You have reauthorized this account."
-msgstr "You have reauthorised this account."
+msgstr "You have re-authorised this account."
 
 #: apps/io.ox/oauth/settings.js:62
 msgid "Something went wrong reauthorizing the account."
@@ -5228,7 +5228,7 @@ msgstr "Postcode"
 #: apps/io.ox/contacts/model.js:222 apps/io.ox/contacts/model.js:239
 #: apps/io.ox/contacts/model.js:252
 msgid "Town"
-msgstr "Town"
+msgstr "City/Town"
 
 #: apps/io.ox/contacts/model.js:223 apps/io.ox/contacts/model.js:240
 #: apps/io.ox/contacts/model.js:306
@@ -5343,7 +5343,7 @@ msgstr "Phone (car)"
 
 #: apps/io.ox/contacts/model.js:260
 msgid "Phone (company)"
-msgstr "Phone (company)"
+msgstr "Phone (Business)"
 
 #: apps/io.ox/contacts/model.js:261
 msgid "Phone (Home)"
@@ -5359,7 +5359,7 @@ msgstr "Fax (Home)"
 
 #: apps/io.ox/contacts/model.js:264 apps/io.ox/contacts/print.js:78
 msgid "Cell phone"
-msgstr "Cell phone"
+msgstr "Mobile phone"
 
 #: apps/io.ox/contacts/model.js:265
 msgid "Cell phone alt"
@@ -5367,11 +5367,11 @@ msgstr "Cell phone alt"
 
 #: apps/io.ox/contacts/model.js:266 apps/io.ox/contacts/view-detail.js:462
 msgid "Phone (other)"
-msgstr "Phone (other)"
+msgstr "Phone (Other)"
 
 #: apps/io.ox/contacts/model.js:267
 msgid "Fax (alt)"
-msgstr "Fax (alt)"
+msgstr "Fax (Alt)"
 
 #: apps/io.ox/contacts/model.js:268
 msgid "Email 1"
@@ -5551,24 +5551,24 @@ msgid "List name"
 msgstr "List name"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:87
-msgid "Add member"
-msgstr "Add member"
+msgid "Add contact"
+msgstr "Add contact"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:130
-msgid "Members"
-msgstr "Members"
+msgid "Contacts"
+msgstr "Contacts"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:186
 #: apps/io.ox/contacts/view-detail.js:240
-msgid "This list has no members yet"
-msgstr "This list has no members yet"
+msgid "This list has no contacts yet"
+msgstr "This list has no contacts yet"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:274
 msgid ""
-"To add participants manually, just provide a valid email address (e.g john."
+"To add contacts manually, just provide a valid email address (e.g john."
 "doe@example.com or \"John Doe\" <jd@example.com>)"
 msgstr ""
-"To add participants manually, just provide a valid email address (e.g.: john."
+"To add contacts manually, just provide a valid email address (e.g.: john."
 "doe@example.com or \"John Doe\" <jd@example.com>)"
 
 #: apps/io.ox/contacts/view-detail.js:189
@@ -5624,15 +5624,15 @@ msgstr "Phone numbers"
 
 #: apps/io.ox/contacts/view-detail.js:463
 msgid "Fax (business)"
-msgstr "Fax (business)"
+msgstr "Fax (Business)"
 
 #: apps/io.ox/contacts/view-detail.js:464
 msgid "Fax (private)"
-msgstr "Fax (private)"
+msgstr "Fax (Private)"
 
 #: apps/io.ox/contacts/view-detail.js:465
 msgid "Fax (other)"
-msgstr "Fax (other)"
+msgstr "Fax (Other)"
 
 #: apps/io.ox/contacts/view-detail.js:468
 msgid "Business Address"
@@ -5923,8 +5923,8 @@ msgid "Progress %1$s %"
 msgstr "Progress %1$s %"
 
 #: apps/io.ox/tasks/view-detail.js:120 apps/io.ox/tasks/view-detail.js:268
-msgid "Attachments   "
-msgstr "Attachments   "
+msgid "Attachments"
+msgstr "Attachments"
 
 #: apps/io.ox/tasks/view-detail.js:134
 msgid "Start date"
@@ -6212,8 +6212,8 @@ msgid "Undone"
 msgstr "Undone"
 
 #: apps/io.ox/tasks/actions.js:162 apps/io.ox/tasks/actions.js:234
-msgid "A severe error occured!"
-msgstr "A severe error occured!"
+msgid "A severe error occurred!"
+msgstr "A severe error occurred"
 
 #: apps/io.ox/tasks/actions.js:164
 msgid "Task was modified before, please reload"

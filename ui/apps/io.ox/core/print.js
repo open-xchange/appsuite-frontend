@@ -80,11 +80,12 @@ define('io.ox/core/print',
 
             if (_.device('desktop')) {
 
+                // need to open window now, otherwise get duplicate window for second print
+                win = this.openURL(ox.base + '/busy.html');
                 cont();
 
-                win = this.openURL(ox.base + '/busy.html');
-
             } else {
+
                 // use iframe in modal dialog on mobile devices
                 ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
 

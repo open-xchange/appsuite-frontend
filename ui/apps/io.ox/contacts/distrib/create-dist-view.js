@@ -84,7 +84,7 @@ define('io.ox/contacts/distrib/create-dist-view',
             var self = this;
 
             var pNode = $('<div class="autocomplete-controls input-append">').append(
-                    $('<input tabindex="1" type="text" class="add-participant">').attr('placeholder', gt('Add member') + ' ...'),
+                    $('<input tabindex="1" type="text" class="add-participant">').attr('placeholder', gt('Add contact') + ' ...'),
                     $('<button type="button" class="btn" data-action="add" tabindex="1">')
                         .append($('<i class="icon-plus">'))
                 ),
@@ -98,8 +98,10 @@ define('io.ox/contacts/distrib/create-dist-view',
                 parentSelector: '.create-distributionlist',
                 placement: 'bottom',
                 contacts: true,
+                resources: false,
                 distributionlists: false,
                 users: false,
+                groups: false,
                 keepId: true
             });
 
@@ -127,7 +129,7 @@ define('io.ox/contacts/distrib/create-dist-view',
             });
 
             this.$el.append(
-                $('<legend>').addClass('sectiontitle').text(gt('Members')),
+                $('<legend>').addClass('sectiontitle').text(gt('Contacts')),
                 this.itemList = $('<div>').addClass('item-list row-fluid'),
                 pNode
             );
@@ -183,7 +185,7 @@ define('io.ox/contacts/distrib/create-dist-view',
             node.append(
                 $('<div>').addClass('listed-item backstripes')
                 .attr({ 'data-mail': 'empty' })
-                .text(gt('This list has no members yet'))
+                .text(gt('This list has no contacts yet'))
             );
         },
 
@@ -271,7 +273,7 @@ define('io.ox/contacts/distrib/create-dist-view',
         id: 'notice',
         index: 400,
         render: function (baton) {
-            this.$el.append($('<div class="alert alert-info">').text(gt('To add participants manually, just provide a valid email address (e.g john.doe@example.com or "John Doe" <jd@example.com>)')));
+            this.$el.append($('<div class="alert alert-info">').text(gt('To add contacts manually, just provide a valid email address (e.g john.doe@example.com or "John Doe" <jd@example.com>)')));
         }
     });
 

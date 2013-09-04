@@ -72,9 +72,9 @@ define('io.ox/core/settings/errorlog/settings/pane',
             e.preventDefault();
             var node = $(e.target);
             if (node.data('visible')) {
-                node.data('visible', false).text(gt('Show strack trace')).next().hide();
+                node.data('visible', false).text(gt('Show stack trace')).next().hide();
             } else {
-                node.data('visible', true).text(gt('Hide strack trace')).next().show();
+                node.data('visible', true).text(gt('Hide stack trace')).next().show();
             }
         },
 

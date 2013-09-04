@@ -326,28 +326,40 @@ define('io.ox/calendar/api',
         // delete is a reserved word :( - but this will delete the
         // appointment on the server
         remove: function (o) {
+            var keys = [];
 
-            var key = (o.folder_id || o.folder) + '.' + o.id + '.' + (o.recurrence_position || 0);
+            o = _.isArray(o) ? o : [o];
 
-            return http.PUT({
-                module: 'calendar',
-                params: {
-                    action: 'delete',
-                    timestamp: _.now()
-                },
-                data: o
-            })
-            .done(function (resp) {
-                all_cache = {};
-                delete get_cache[key];
+            // pause http layer
+            http.pause();
+
+            _(o).each(function (obj) {
+                keys.push((obj.folder_id || obj.folder) + '.' + obj.id + '.' + (obj.recurrence_position || 0));
+                return http.PUT({
+                    module: 'calendar',
+                    params: {
+                        action: 'delete',
+                        timestamp: _.now()
+                    },
+                    data: obj
+                })
+                .done(function (resp) {
+                    all_cache = {};
+                    _(keys).each(function (key) {
+                        delete get_cache[key];
+                    });
+                    api.trigger('delete', obj);
+                    api.trigger('delete:' + _.ecid(obj), obj);
+                    //remove Reminders in Notification Area
+                    checkForNotification(obj, true);
+                }).fail(function () {
+                    all_cache = {};
+                    api.trigger('delete');
+                });
+            });
+
+            return http.resume().then(function (response) {
                 api.trigger('refresh.all');
-                api.trigger('delete', resp);
-                api.trigger('delete:' + _.ecid(o), o);
-                //remove Reminders in Notification Area
-                checkForNotification(o, true);
-            }).fail(function () {
-                all_cache = {};
-                api.trigger('delete');
             });
         },
 

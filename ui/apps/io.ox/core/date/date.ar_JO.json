@@ -43,40 +43,41 @@
         "كانون الأول"
     ],
     "monthsShort": [
-        "يناير",
-        "فبراير",
-        "مارس",
-        "أبريل",
-        "مايو",
-        "يونيو",
-        "يوليو",
-        "أغسطس",
-        "سبتمبر",
-        "أكتوبر",
-        "نوفمبر",
-        "ديسمبر"
+        "كانون الثاني",
+        "شباط",
+        "آذار",
+        "نيسان",
+        "أيار",
+        "حزيران",
+        "تموز",
+        "آب",
+        "أيلول",
+        "تشرين الأول",
+        "تشرين الثاني",
+        "كانون الأول"
     ],
     "formats": {
         "E": "E",
-        "yMd": "d‏/M‏/yyyy",
-        "yMEd": "E، d/‏M/‏yyyy",
+        "yMd": "d‏/M‏/y",
+        "yMEd": "E، d/‏M/‏y",
         "yMMMd": "d MMM، y",
         "yMMMEd": "E، d MMM، y",
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "d/‏M",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
-        "yMdHm": "d‏/M‏/yyyy HH:mm",
-        "yMdHmv": "d‏/M‏/yyyy HH:mm v",
-        "yMdhm": "d‏/M‏/yyyy h:mm a",
-        "yMdhmv": "d‏/M‏/yyyy h:mm a v",
-        "yMEdHm": "E، d/‏M/‏yyyy HH:mm",
-        "yMEdHmv": "E، d/‏M/‏yyyy HH:mm v",
-        "yMEdhm": "E، d/‏M/‏yyyy h:mm a",
-        "yMEdhmv": "E، d/‏M/‏yyyy h:mm a v"
+        "yMdHm": "d‏/M‏/y HH:mm",
+        "yMdHmv": "d‏/M‏/y HH:mm v",
+        "yMdhm": "d‏/M‏/y h:mm a",
+        "yMdhmv": "d‏/M‏/y h:mm a v",
+        "yMEdHm": "E، d/‏M/‏y HH:mm",
+        "yMEdHmv": "E، d/‏M/‏y HH:mm v",
+        "yMEdhm": "E، d/‏M/‏y h:mm a",
+        "yMEdhmv": "E، d/‏M/‏y h:mm a v"
     },
-    "date": "dd‏/MM‏/yyyy",
+    "date": "dd‏/MM‏/y",
     "time": "h:mm a",
     "dateTimeFormat": "%2$s %1$s",
     "intervals": {
@@ -101,11 +102,11 @@
         },
         "yMMMd": {
             "d": "d–d MMM، y",
-            "m": "d MMM – d MMM، yyyy",
+            "m": "d MMM – d MMM، y",
             "y": "d MMM، y – d MMM، y"
         },
         "yMMMEd": {
-            "d": "E، d – E، d MMM، yyyy",
+            "d": "E، d – E، d MMM، y",
             "m": "E، d MMM – E، d MMM، y",
             "y": "E، d MMM، y – E، d MMM، y"
         }
@@ -118,6 +119,6 @@
         "ق.م",
         "م"
     ],
-    "dateTime": "dd‏/MM‏/yyyy h:mm a",
+    "dateTime": "dd‏/MM‏/y h:mm a",
     "h12": true
 }

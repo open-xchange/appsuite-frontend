@@ -21,7 +21,7 @@
     "daysStandalone": [
         "Sāp",
         "Mōn",
-        "Tūs",
+        "Tus",
         "Pul",
         "Tuʻa",
         "Fal",
@@ -57,27 +57,28 @@
     ],
     "formats": {
         "E": "E",
-        "yMd": "d-M-y",
-        "yMEd": "E, d/M/yyyy",
+        "yMd": "d/M/y",
+        "yMEd": "E d/M/y",
         "yMMMd": "d MMM y",
         "yMMMEd": "E d MMM y",
         "hm": "h:mm a",
-        "Hm": "H:mm",
+        "Hm": "HH:mm",
         "v": "v",
-        "Hmv": "H:mm v",
+        "Md": "d/M",
+        "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
-        "yMdHm": "d-M-y H:mm",
-        "yMdHmv": "d-M-y H:mm v",
-        "yMdhm": "d-M-y h:mm a",
-        "yMdhmv": "d-M-y h:mm a v",
-        "yMEdHm": "E, d/M/yyyy H:mm",
-        "yMEdHmv": "E, d/M/yyyy H:mm v",
-        "yMEdhm": "E, d/M/yyyy h:mm a",
-        "yMEdhmv": "E, d/M/yyyy h:mm a v"
+        "yMdHm": "d/M/y, HH:mm",
+        "yMdHmv": "d/M/y, HH:mm v",
+        "yMdhm": "d/M/y, h:mm a",
+        "yMdhmv": "d/M/y, h:mm a v",
+        "yMEdHm": "E d/M/y, HH:mm",
+        "yMEdHmv": "E d/M/y, HH:mm v",
+        "yMEdhm": "E d/M/y, h:mm a",
+        "yMEdhmv": "E d/M/y, h:mm a v"
     },
     "date": "d MMM y",
-    "time": "HH:mm",
-    "dateTimeFormat": "%2$s %1$s",
+    "time": "h:mm a",
+    "dateTimeFormat": "%2$s, %1$s",
     "intervals": {
         "fallback": "%1$s – %2$s",
         "hm": {
@@ -99,14 +100,14 @@
             "m": "HH:mm–HH:mm v"
         },
         "yMMMd": {
-            "d": "MMM d-d, y",
+            "d": "d-d MMM y",
             "m": "d MMM - d MMM y",
             "y": "d MMM y - d MMM y"
         },
         "yMMMEd": {
-            "d": "E, d MMM - E, d MMM y",
-            "m": "E, d MMM - E, d MMM y",
-            "y": "E, d MMM y - E, d MMM y"
+            "d": "E d MMM - E d MMM y",
+            "m": "E d MMM - E d MMM y",
+            "y": "E d MMM y - E d MMM y"
         }
     },
     "dayPeriods": {
@@ -117,6 +118,6 @@
         "KM",
         "TS"
     ],
-    "dateTime": "d MMM y HH:mm",
-    "h12": false
+    "dateTime": "d MMM y, h:mm a",
+    "h12": true
 }

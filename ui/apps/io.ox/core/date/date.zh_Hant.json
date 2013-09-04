@@ -1,7 +1,7 @@
 {
     "daysInFirstWeek": null,
     "days": [
-        "星期日",
+        "���期日",
         "星期一",
         "星期二",
         "星期三",
@@ -62,20 +62,21 @@
         "yMMMd": "y年M月d日",
         "yMMMEd": "y年M月d日E",
         "hm": "ah:mm",
-        "Hm": "H:mm",
+        "Hm": "HH:mm",
         "v": "v",
-        "Hmv": "H:mm v",
+        "Md": "M/d",
+        "Hmv": "HH:mm v",
         "hmv": "ah:mm v",
-        "yMdHm": "y/M/d H:mm",
-        "yMdHmv": "y/M/d H:mm v",
+        "yMdHm": "y/M/d HH:mm",
+        "yMdHmv": "y/M/d HH:mm v",
         "yMdhm": "y/M/d ah:mm",
         "yMdhmv": "y/M/d ah:mm v",
-        "yMEdHm": "y/M/d（E） H:mm",
-        "yMEdHmv": "y/M/d（E） H:mm v",
+        "yMEdHm": "y/M/d（E） HH:mm",
+        "yMEdHmv": "y/M/d（E） HH:mm v",
         "yMEdhm": "y/M/d（E） ah:mm",
         "yMEdhmv": "y/M/d（E） ah:mm v"
     },
-    "date": "yyyy/M/d",
+    "date": "y年M月d日",
     "time": "ah:mm",
     "dateTimeFormat": "%2$s %1$s",
     "intervals": {
@@ -87,12 +88,12 @@
         },
         "Hm": {
             "h": "HH:mm–HH:mm",
-            "m": "HH:mm–HH:mm"
+            "m": "HH:mm至HH:mm"
         },
         "hmv": {
-            "a": "ah:mm至ah:mm [v]",
-            "h": "ah:mm至h:mm [v]",
-            "m": "ah:mm至h:mm [v]"
+            "a": "a h:mm 至a h:mm [v]",
+            "h": "a h:mm 至 h:mm [v]",
+            "m": "a h:mm 至 h:mm [v]"
         },
         "Hmv": {
             "h": "HH:mm–HH:mm [v]",
@@ -121,9 +122,9 @@
         "weeHours": "凌晨"
     },
     "eras": [
-        "西元前",
-        "西元"
+        "公元前",
+        "公元"
     ],
-    "dateTime": "yyyy/M/d ah:mm",
+    "dateTime": "y年M月d日 ah:mm",
     "h12": true
 }

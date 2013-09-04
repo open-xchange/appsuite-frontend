@@ -11,22 +11,22 @@
         "စနေ"
     ],
     "daysShort": [
-        "နွေ",
-        "လာ",
-        "ဂါ",
-        "ဟူး",
-        "တေး",
-        "ကြာ",
-        "နေ"
+        "တနင်္ဂနွေ",
+        "တနင်္လာ",
+        "အင်္ဂါ",
+        "ဗုဒ္ဓဟူး",
+        "ကြာသပတေး",
+        "သောကြာ",
+        "စနေ"
     ],
     "daysStandalone": [
-        "နွေ",
-        "လာ",
-        "ဂါ",
-        "ဟူး",
-        "တေး",
-        "ကြာ",
-        "နေ"
+        "တနင်္ဂနွေ",
+        "တနင်္လာ",
+        "အင်္ဂါ",
+        "ဗုဒ္ဓဟူး",
+        "ကြာသပတေး",
+        "သောကြာ",
+        "စနေ"
     ],
     "months": [
         "ဇန်နဝါရီ",
@@ -43,38 +43,39 @@
         "ဒီဇင်ဘာ"
     ],
     "monthsShort": [
-        "ဇန်",
-        "ဖေ",
+        "ဇန်နဝါရီ",
+        "ဖေဖော်ဝါရီ",
         "မတ်",
-        "ဧ",
+        "ဧပြီ",
         "မေ",
         "ဇွန်",
-        "ဇူ",
-        "ဩ",
-        "စက်",
-        "အောက်",
-        "နို",
-        "ဒီ"
+        "ဇူလိုင်",
+        "ဩဂုတ်",
+        "စက်တင်ဘာ",
+        "အောက်တိုဘာ",
+        "နိုဝင်ဘာ",
+        "ဒီဇင်ဘာ"
     ],
     "formats": {
         "E": "E",
-        "yMd": "y-M-d",
-        "yMEd": "E, yy/M/d",
+        "yMd": "y-MM-dd",
+        "yMEd": "E, y/M/d",
         "yMMMd": "y MMM d",
         "yMMMEd": "E, y MMM d",
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "M/d",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
-        "yMdHm": "y-M-d HH:mm",
-        "yMdHmv": "y-M-d HH:mm v",
-        "yMdhm": "y-M-d h:mm a",
-        "yMdhmv": "y-M-d h:mm a v",
-        "yMEdHm": "E, yy/M/d HH:mm",
-        "yMEdHmv": "E, yy/M/d HH:mm v",
-        "yMEdhm": "E, yy/M/d h:mm a",
-        "yMEdhmv": "E, yy/M/d h:mm a v"
+        "yMdHm": "y-MM-dd HH:mm",
+        "yMdHmv": "y-MM-dd HH:mm v",
+        "yMdhm": "y-MM-dd h:mm a",
+        "yMdhmv": "y-MM-dd h:mm a v",
+        "yMEdHm": "E, y/M/d HH:mm",
+        "yMEdHmv": "E, y/M/d HH:mm v",
+        "yMEdhm": "E, y/M/d h:mm a",
+        "yMEdhmv": "E, y/M/d h:mm a v"
     },
     "date": "y MMM d",
     "time": "HH:mm",
@@ -100,8 +101,8 @@
             "m": "HH:mm-HH:mm v"
         },
         "yMMMd": {
-            "m": "yyyy-MM-dd – MM-d",
-            "d": "yyyy-MM-d – d",
+            "d": "y MMM d–d",
+            "m": "y၊ MMM d – MMM d",
             "y": "y MMM d – y MMM d"
         },
         "yMMMEd": {
@@ -115,8 +116,8 @@
         "pm": "ညနေ"
     },
     "eras": [
-        "ဘီစီ",
-        "အေဒီ"
+        "ဘီစီအီး",
+        "စီအီး"
     ],
     "dateTime": "y MMM d HH:mm",
     "h12": false

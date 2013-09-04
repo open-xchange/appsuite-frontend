@@ -206,7 +206,7 @@ define("io.ox/core/desktop",
                                     .done(def.resolve)
                                     .fail(def.reject);
                             } else {
-                                def.reject();
+                                def.reject({error: gt('Could not get a default folder for this application.')});
                             }
                         });
                         return def;

@@ -38,13 +38,13 @@
         "សីហា",
         "កញ្ញា",
         "តុលា",
-        "វិច្ឆិកា",
+        "វិច្���ិកា",
         "ធ្នូ"
     ],
     "monthsShort": [
         "មករា",
         "កុម្ភៈ",
-        "មីនា",
+        "ម���នា",
         "មេសា",
         "ឧសភា",
         "មិថុនា",
@@ -58,26 +58,27 @@
     "formats": {
         "E": "E",
         "yMd": "d-M-y",
-        "yMEd": "E, d-M-y",
+        "yMEd": "E d-M-y",
         "yMMMd": "d MMM y",
-        "yMMMEd": "E, d MMM y",
+        "yMMMEd": "E d MMM y",
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "d-M",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
-        "yMdHm": "d-M-y, HH:mm",
-        "yMdHmv": "d-M-y, HH:mm v",
-        "yMdhm": "d-M-y, h:mm a",
-        "yMdhmv": "d-M-y, h:mm a v",
-        "yMEdHm": "E, d-M-y, HH:mm",
-        "yMEdHmv": "E, d-M-y, HH:mm v",
-        "yMEdhm": "E, d-M-y, h:mm a",
-        "yMEdhmv": "E, d-M-y, h:mm a v"
+        "yMdHm": "d-M-y HH:mm",
+        "yMdHmv": "d-M-y HH:mm v",
+        "yMdhm": "d-M-y h:mm a",
+        "yMdhmv": "d-M-y h:mm a v",
+        "yMEdHm": "E d-M-y HH:mm",
+        "yMEdHmv": "E d-M-y HH:mm v",
+        "yMEdhm": "E d-M-y h:mm a",
+        "yMEdhmv": "E d-M-y h:mm a v"
     },
     "date": "d MMM y",
     "time": "h:mm a",
-    "dateTimeFormat": "%2$s, %1$s",
+    "dateTimeFormat": "%2$s %1$s",
     "intervals": {
         "fallback": "%1$s - %2$s",
         "hm": {
@@ -87,7 +88,7 @@
         },
         "Hm": {
             "h": "H:mm-H:mm",
-            "m": "H:mm-H:mm"
+            "m": "HH:mm–HH:mm"
         },
         "hmv": {
             "a": "h:mm a – h:mm a v",
@@ -96,17 +97,17 @@
         },
         "Hmv": {
             "h": "H:mm-H:mm v",
-            "m": "H:mm-H:mm v"
+            "m": "HH:mm–HH:mm v"
         },
         "yMMMd": {
             "d": "d-d MMM y",
-            "m": "d MMM y – d MMM",
+            "m": "d MMM – d MMM y",
             "y": "d MMM y - d MMM y"
         },
         "yMMMEd": {
-            "d": "E, dd MMM y - E, dd MMM y",
-            "m": "E, dd MMM y - E, dd MMM y",
-            "y": "E, dd-MM-yyyy – E, dd MMM y"
+            "d": "E dd MMM y - E dd MMM y",
+            "m": "E dd MMM y - E dd MMM y",
+            "y": "E dd-MM-y – E dd MMM y"
         }
     },
     "dayPeriods": {
@@ -114,9 +115,9 @@
         "pm": "ល្ងាច"
     },
     "eras": [
-        "មុន គ.ស.",
+        "ក្រោយ គ.ស.",
         "គ.ស."
     ],
-    "dateTime": "d MMM y, h:mm a",
+    "dateTime": "d MMM y h:mm a",
     "h12": true
 }

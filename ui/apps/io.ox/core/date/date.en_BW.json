@@ -58,23 +58,24 @@
     ],
     "formats": {
         "E": "E",
-        "yMd": "dd/MM/yy",
-        "yMEd": "E, dd/MM/yy",
+        "yMd": "dd/MM/y",
+        "yMEd": "E, dd/MM/y",
         "yMMMd": "dd MMM y",
         "yMMMEd": "E dd MMM y",
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "dd/MM",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
-        "yMdHm": "dd/MM/yy, HH:mm",
-        "yMdHmv": "dd/MM/yy, HH:mm v",
-        "yMdhm": "dd/MM/yy, h:mm a",
-        "yMdhmv": "dd/MM/yy, h:mm a v",
-        "yMEdHm": "E, dd/MM/yy, HH:mm",
-        "yMEdHmv": "E, dd/MM/yy, HH:mm v",
-        "yMEdhm": "E, dd/MM/yy, h:mm a",
-        "yMEdhmv": "E, dd/MM/yy, h:mm a v"
+        "yMdHm": "dd/MM/y, HH:mm",
+        "yMdHmv": "dd/MM/y, HH:mm v",
+        "yMdhm": "dd/MM/y, h:mm a",
+        "yMdhmv": "dd/MM/y, h:mm a v",
+        "yMEdHm": "E, dd/MM/y, HH:mm",
+        "yMEdHmv": "E, dd/MM/y, HH:mm v",
+        "yMEdhm": "E, dd/MM/y, h:mm a",
+        "yMEdhmv": "E, dd/MM/y, h:mm a v"
     },
     "date": "MMM d, y",
     "time": "h:mm a",
@@ -87,8 +88,8 @@
             "m": "h:mm-h:mm a"
         },
         "Hm": {
-            "h": "HH:mm–HH:mm",
-            "m": "HH:mm–HH:mm"
+            "h": "HH:mm – HH:mm",
+            "m": "HH:mm – HH:mm"
         },
         "hmv": {
             "a": "h:mm a - h:mm a v",
@@ -96,8 +97,8 @@
             "m": "h:mm-h:mm a v"
         },
         "Hmv": {
-            "h": "HH:mm–HH:mm v",
-            "m": "HH:mm–HH:mm v"
+            "h": "HH:mm – HH:mm v",
+            "m": "HH:mm – HH:mm v"
         },
         "yMMMd": {
             "d": "dd-dd MMM y",
@@ -116,8 +117,8 @@
         "pm": "PM"
     },
     "eras": [
-        "BC",
-        "AD"
+        "BCE",
+        "CE"
     ],
     "dateTime": "MMM d, y, h:mm a",
     "h12": true

@@ -58,56 +58,57 @@
     ],
     "formats": {
         "E": "E",
-        "yMd": "dd.MM.yyyy",
-        "yMEd": "dd.MM.yyyy E",
+        "yMd": "dd.MM.y",
+        "yMEd": "dd.MM.y E",
         "yMMMd": "dd MMM y",
         "yMMMEd": "d MMM y E",
-        "hm": "h:mm a",
+        "hm": "a h:mm",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "dd/MM",
         "Hmv": "HH:mm v",
-        "hmv": "h:mm a v",
-        "yMdHm": "dd.MM.yyyy HH:mm",
-        "yMdHmv": "dd.MM.yyyy HH:mm v",
-        "yMdhm": "dd.MM.yyyy h:mm a",
-        "yMdhmv": "dd.MM.yyyy h:mm a v",
-        "yMEdHm": "dd.MM.yyyy E HH:mm",
-        "yMEdHmv": "dd.MM.yyyy E HH:mm v",
-        "yMEdhm": "dd.MM.yyyy E h:mm a",
-        "yMEdhmv": "dd.MM.yyyy E h:mm a v"
+        "hmv": "a h:mm v",
+        "yMdHm": "dd.MM.y HH:mm",
+        "yMdHmv": "dd.MM.y HH:mm v",
+        "yMdhm": "dd.MM.y a h:mm",
+        "yMdhmv": "dd.MM.y a h:mm v",
+        "yMEdHm": "dd.MM.y E HH:mm",
+        "yMEdHmv": "dd.MM.y E HH:mm v",
+        "yMEdhm": "dd.MM.y E a h:mm",
+        "yMEdhmv": "dd.MM.y E a h:mm v"
     },
     "date": "d MMM y",
     "time": "HH:mm",
     "dateTimeFormat": "%2$s %1$s",
     "intervals": {
-        "fallback": "%1$s - %2$s",
+        "fallback": "%1$s – %2$s",
         "hm": {
-            "a": "h:mm a - h:mm a",
-            "h": "h:mm-h:mm a",
-            "m": "h:mm-h:mm a"
+            "a": "a h:mm – a h:mm",
+            "h": "a h:mm–h:mm",
+            "m": "a h:mm–h:mm"
         },
         "Hm": {
-            "h": "HH:mm-HH:mm",
-            "m": "HH:mm-HH:mm"
+            "h": "HH:mm–HH:mm",
+            "m": "HH:mm–HH:mm"
         },
         "hmv": {
-            "a": "h:mm a - h:mm a v",
-            "h": "h:mm-h:mm a v",
-            "m": "h:mm-h:mm a v"
+            "a": "a h:mm – a h:mm v",
+            "h": "a h:mm–h:mm v",
+            "m": "a h:mm–h:mm v"
         },
         "Hmv": {
-            "h": "HH:mm-HH:mm v",
-            "m": "HH:mm-HH:mm v"
+            "h": "HH:mm–HH:mm v",
+            "m": "HH:mm–HH:mm v"
         },
         "yMMMd": {
-            "d": "d - d MMM y",
-            "m": "d MMM - d MMM y",
-            "y": "d MMM y - d MMM y"
+            "d": "d–d MMM y",
+            "m": "d MMM – d MMM y",
+            "y": "d MMM y – d MMM y"
         },
         "yMMMEd": {
-            "d": "d MMM y E - d MMM y E",
-            "m": "d MMM y E - d MMM y E",
-            "y": "d MMM y E - d MMM y E"
+            "d": "d MMM y E – d MMM y E",
+            "m": "d MMM y E – d MMM y E",
+            "y": "d MMM y E – d MMM y E"
         }
     },
     "dayPeriods": {
@@ -115,8 +116,8 @@
         "pm": "ÖS"
     },
     "eras": [
-        "MÖ",
-        "MS"
+        "İÖ",
+        "İS"
     ],
     "dateTime": "d MMM y HH:mm",
     "h12": false

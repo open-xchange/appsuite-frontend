@@ -64,6 +64,7 @@
         "hm": "hh:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "d/M",
         "Hmv": "HH:mm v",
         "hmv": "hh:mm a v",
         "yMdHm": "d/M/y HH:mm",
@@ -114,8 +115,8 @@
         "pm": "PM"
     },
     "eras": [
-        "aC",
-        "dC"
+        "BCE",
+        "CE"
     ],
     "dateTime": "dd/MMM/y HH:mm",
     "h12": false
