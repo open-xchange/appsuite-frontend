@@ -298,14 +298,7 @@ define('io.ox/mail/write/main',
             if (_.browser.IE === undefined || _.browser.IE > 9) {
                 var dropZone = upload.dnd.createDropZone({'type': 'single', actions: [{id: 'mailAttachment', label: gt('Drop the file anywhere to add attachment')}]});
                 dropZone.on('drop', function (e, file) {
-                    if (ox.efl) {
-                        view.fileList.add(_.extend(file, { group: 'file' }));
-                    }
-                    else {
-                        view.form.find('input[type=file]').last()
-                            .prop('file', file)
-                            .trigger('change');
-                    }
+                    view.fileList.add(_.extend(file, { group: 'file' }));
                     view.showSection('attachments');
                 });
             }
