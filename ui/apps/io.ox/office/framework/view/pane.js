@@ -376,6 +376,15 @@ define('io.ox/office/framework/view/pane',
         // marker for touch devices
         node.toggleClass('touch', Modernizr.touch);
 
+        // marker for browser types
+        // Be careful changing these as we have css rules depending
+        // on this.
+        node.toggleClass('msie', _.browser.IE !== undefined);
+        node.toggleClass('safari', _.browser.Safari !== undefined);
+        node.toggleClass('firefox', _.browser.Firefox !== undefined);
+        node.toggleClass('chrome', _.browser.Chrome !== undefined);
+        node.toggleClass('webkit', _.browser.WebKit !== undefined);
+
         // fixed size if specified
         if (size > 0) {
             paneSizeFunc(size);
