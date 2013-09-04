@@ -533,7 +533,7 @@ define('io.ox/mail/write/main',
                                 if (data.msgref) {
                                     attachment.atmsgref = data.msgref;
                                 }
-                                attachment.type = 'file';
+                                attachment.type = attachment.filename && attachment.filename.split('.').length > 1  ? attachment.filename.split('.').pop() : 'file';
                                 attachment.group = 'attachment';
                                 return attachment;
                             })
@@ -565,10 +565,19 @@ define('io.ox/mail/write/main',
             }
         };
 
-        app.setNestedMessages = function (list) {
+        app.setNestedMessages = function (data) {
+            var list = data.nested_msgs, parent;
+
+            //fixes preview: mail compose save of an forwarded mail with previewable attachment
+            if (data.folder_id && data.id) {
+                parent = {
+                    folder_id: data.folder_id,
+                    id: data.id
+                };
+            }
             if (ox.efl) {
                 var items = _(list || []).map(function (obj) {
-                    return { message: obj, name: obj.subject, content_type: 'message/rfc822', group: 'nested'};
+                    return _.extend(obj, { content_type: 'message/rfc822', parent: parent, group: 'nested'});
                 });
                 if (items.length) {
                     view.fileList.add(items);
@@ -710,7 +719,7 @@ define('io.ox/mail/write/main',
             this.setBCC(data.bcc);
             this.setReplyTo(data.headers && data.headers['Reply-To']);
             this.setAttachments(data);
-            this.setNestedMessages(data.nested_msgs);
+            this.setNestedMessages(data);
             this.setPriority(data.priority || 3);
             this.setAttachVCard(data.vcard !== undefined ? data.vcard : settings.get('vcard', false));
             this.setMsgRef(data.msgref);
@@ -1069,36 +1078,60 @@ define('io.ox/mail/write/main',
             // sendtype
             mail.sendtype = data.sendtype || mailAPI.SENDTYPE.NORMAL;
             // get files
-            view.form.find(':input[name][type=file]').each(function () {
-                // link to existing attachments (e.g. in forwards)
-                var attachment = $(this).prop('attachment'),
-                    // get file via property (DND) or files array and add to list
-                    file = $(this).prop('file'),
-                    // get nested messages
-                    nested = $(this).prop('nested');
-                if (attachment) {
-                    // add linked attachment
-                    mail.attachments.push(attachment);
-                } else if (nested) {
-                    // add nested message (usually multiple mail forward)
-                    mail.nested_msgs.push(nested.message);
-                } else if ('File' in window && file instanceof window.File) {
-                    // add dropped file
-                    files.push(file);
-                } else if (file && ('id' in file) && ('file_size' in file)) {
-                    // infostore id
-                    (mail.infostore_ids = (mail.infostore_ids || [])).push(file);
-                } else if (file && ('id' in file) && ('display_name' in file)) {
-                    // contacts id
-                    (mail.contacts_ids = (mail.contacts_ids || [])).push(file);
-                } else if (this.files && this.files.length) {
+
+            if (ox.efl) {
+                var fileList = view.baton.fileList;
+
+                // add linked attachment
+                mail.attachments = mail.attachments.concat(fileList.get('attachment'));
+                // add nested message (usually multiple mail forward)
+                mail.nested_msgs = mail.nested_msgs.concat(fileList.get('nested'));
+                //attached contact vcards
+                mail.contacts_ids = (mail.contacts_ids || []).concat(fileList.get('vcard'));
+                //attached inforstore files
+                mail.infostore_ids = (mail.infostore_ids || []).concat(fileList.get('infostore'));
+                //dnd and uploaded files
+                files = files.concat(fileList.get('file'));
+
+                //TODO: removeable?
+                /*if (this.files && this.files.length) {
                     // process normal upload
                     _(this.files).each(function (file) {
                         files.push(file);
                     });
-                }
-            });
-            //files = files.concat(view.baton.fileList.get());
+                }*/
+
+            } else {
+                view.form.find(':input[name][type=file]').each(function () {
+                    // link to existing attachments (e.g. in forwards)
+                    var attachment = $(this).prop('attachment'),
+                        // get file via property (DND) or files array and add to list
+                        file = $(this).prop('file'),
+                        // get nested messages
+                        nested = $(this).prop('nested');
+                    if (attachment) {
+                        // add linked attachment
+                        mail.attachments.push(attachment);
+                    } else if (nested) {
+                        // add nested message (usually multiple mail forward)
+                        mail.nested_msgs.push(nested.message);
+                    } else if ('File' in window && file instanceof window.File) {
+                        // add dropped file
+                        files.push(file);
+                    } else if (file && ('id' in file) && ('file_size' in file)) {
+                        // infostore id
+                        (mail.infostore_ids = (mail.infostore_ids || [])).push(file);
+                    } else if (file && ('id' in file) && ('display_name' in file)) {
+                        // contacts id
+                        (mail.contacts_ids = (mail.contacts_ids || [])).push(file);
+                    } else if (this.files && this.files.length) {
+                        // process normal upload
+                        _(this.files).each(function (file) {
+                            files.push(file);
+                        });
+                    }
+                });
+            }
             // return data, file references, mode, format
             return {
                 data: mail,

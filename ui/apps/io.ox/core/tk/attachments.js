@@ -26,15 +26,19 @@ define('io.ox/core/tk/attachments',
         'use strict';
         var oldMode = _.browser.IE < 10,
             supportsPreview = function (file) {
-                // is not local?
-                if (file.message) { // mail
-                    return new pre.Preview({ mimetype: 'message/rfc822' }).supportsPreview();
-                } else if (file.display_name) { // v-card
+                // nested mail
+                if (file.group === 'nested') {
+                    return new pre.Preview({ mimetype: 'message/rfc822', parent: file.parent }).supportsPreview();
+                // vcard
+                } else if (file.display_name) {
                     return true;
-                } else if (file.id && file.folder_id) { // infostore
+                // infostore
+                } else if (file.id && file.folder_id) {
                     return true;
-                } else if (file.atmsgref) { // forward mail attachment
-                    return true;
+                //simple type
+                } else if (file.group === 'attachment') {
+                    return (/(png|gif|jpe?g|bmp)$/i).test(file.type);
+                //local file via mimetype
                 } else {
                     return window.FileReader && (/^image\/(png|gif|jpe?g|bmp)$/i).test(file.type);
                 }
@@ -242,18 +246,19 @@ define('io.ox/core/tk/attachments',
                 previewAttachment: function (popup, e, target) {
                     e.preventDefault();
 
-                    var file = target.data('file'), message = file.message, app = target.data('app'),
+                    var file = target.data('file'), app = target.data('app'),
                         editor = (target.data('rightside') || $()).find('iframe').contents().find('body'),//get the editor in the iframe
                         preview, reader;
 
                     //close if editor is selected (causes overlapping, bug 27875)
                     editor.one('click', this.close);
 
-                    // nested message?
-                    if (message) {
+                    // nested message
+                    if (file.group === 'nested')  {
                         preview = new pre.Preview({
-                                data: { nested_message: message },
-                                mimetype: 'message/rfc822'
+                                data: { nested_message: file },
+                                mimetype: 'message/rfc822',
+                                parent: file.parent
                             }, {
                                 width: popup.parent().width(),
                                 height: 'auto'
@@ -262,13 +267,13 @@ define('io.ox/core/tk/attachments',
                             preview.appendTo(popup);
                             popup.append($('<div>').text(_.noI18n('\u00A0')));
                         }
+                    // refereneced contact vcard
                     } else if (file.display_name || file.email1) {
-                        // if is vCard
                         require(['io.ox/contacts/view-detail'], function (view) {
                             popup.append(view.draw(file));
                         });
-                    } else if (file.id && file.folder_id) { // infostore
-                        // if is infostore
+                    // infostore
+                    } else if (file.id && file.folder_id) {
                         require(['io.ox/files/api'], function (filesAPI) {
                             var prev = new pre.Preview({
                                 name: file.filename,
@@ -291,7 +296,8 @@ define('io.ox/core/tk/attachments',
                                 popup.append($('<div>').text('\u00A0'));
                             }
                         });
-                    } else if (file.atmsgref) { // forward mail attachment
+                    // attachments
+                    } else if (file.atmsgref) {
                         require(['io.ox/mail/api'], function (mailAPI) {
                             var pos = file.atmsgref.lastIndexOf('/');
                             file.parent = {
@@ -320,8 +326,8 @@ define('io.ox/core/tk/attachments',
                                 popup.append($('<div>').text('\u00A0'));
                             }
                         });
+                    // inject image as data-url
                     } else {
-                        // inject image as data-url
                         reader = new FileReader();
                         reader.onload = function (e) {
                             popup.css({ width: '100%', height: '100%' })
@@ -467,13 +473,14 @@ define('io.ox/core/tk/attachments',
                 },
 
                 add: function (file) {
+                    //TODO: duck checks vs. group property
                     var list = [].concat(file);
                     if (list.length) {
                         //add
                         _.each(list, function (item) {
                             files.push({
                                 file: (oldMode ? file.hiddenField : item),
-                                name: item.filename || item.name,
+                                name: item.filename || item.name || item.subject,
                                 size: item.file_size || item.size,
                                 group: item.group || 'unknown',
                                 cid: counter++
