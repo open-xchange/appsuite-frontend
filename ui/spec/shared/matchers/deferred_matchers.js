@@ -41,6 +41,9 @@ if (jasmine) {
             });
 
             this.actual.done(spy);
+            waitsFor(function () {
+                return actual.state() !== 'pending';
+            }, 'Deferred object never resolved', 1000);
             return true;
         },
         toReject: function () {
@@ -52,6 +55,9 @@ if (jasmine) {
             });
 
             this.actual.fail(spy);
+            waitsFor(function () {
+                return actual.state() !== 'pending';
+            }, 'Deferred object never rejected', 1000);
             return true;
         },
         toResolveWith: function (expected) {
