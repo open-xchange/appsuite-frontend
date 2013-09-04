@@ -7,15 +7,23 @@ for (var file in window.__karma__.files) {
     }
 };
 
-requirejs.config({
-    // Karma serves files from '/base/apps'
-    baseUrl: '/base/apps',
+require(['io.ox/core/extPatterns/stage'], function (Stage) {
+    new Stage('io.ox/core/stages', {
+        id: 'run_tests',
+        index: 99999,
+        run: function (baton) {
+            requirejs.config({
+                // Karma serves files from '/base/apps'
+                baseUrl: '/base/apps',
 
-    // ask Require.js to load these files (all our tests)
-    deps: tests,
+                // ask Require.js to load these files (all our tests)
+                deps: tests,
 
-    // start test run, once Require.js is done
-    callback: window.__karma__.start
+                // start test run, once Require.js is done
+                callback: window.__karma__.start
+            });
+        }
+    });
 });
 
 if (jasmine) {
