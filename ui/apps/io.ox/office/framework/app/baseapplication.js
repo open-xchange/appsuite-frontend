@@ -1557,6 +1557,22 @@ define('io.ox/office/framework/app/baseapplication',
         };
 
         /**
+         * Returns whether the application contains pending document changes
+         * not yet sent to the server. Intended to be overwritten on demand by
+         * sub classes.
+         *
+         * @attention
+         *  Do not rename this method. The OX core uses it to decide whether to
+         *  show a warning before the browser refreshes or closes the page.
+         *
+         * @returns {Boolean}
+         *  Whether the application contains pending document changes.
+         */
+        this.hasUnsavedChanges = function () {
+            return false;
+        };
+
+        /**
          * Will be called automatically from the OX core framework to create
          * and return a save point containing the current state of the
          * application.
@@ -1835,9 +1851,21 @@ define('io.ox/office/framework/app/baseapplication',
             return app;
         }
 
+        // Bug 28664: remove all save points before they are checked to decide whether to show the 'unsaved documents' dialog
+        ext.point('io.ox/core/logout').extend({
+            id: moduleName + '/logout/before',
+            index: 'first', // run before the save points are checked by the core
+            logout: function () {
+                _(ox.ui.App.get(moduleName)).each(function (app) {
+                    if (!app.hasUnsavedChanges()) { app.removeRestorePoint(); }
+                });
+            }
+        });
+
         // listen to user logout and notify all running applications
         ext.point('io.ox/core/logout').extend({
-            id: moduleName + '/logout',
+            id: moduleName + '/logout/quit',
+            index: 'last', // run after the dialog (not called if logout was rejected)
             logout: function () {
                 var deferreds = _(ox.ui.App.get(moduleName)).map(function (app) {
                     return app.executeQuitHandlers();
