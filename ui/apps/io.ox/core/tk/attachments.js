@@ -295,7 +295,7 @@ define('io.ox/core/tk/attachments',
                                     $('<div class="row-1">').text(_.noI18n(name)),
                                     $('<div class="row-2">').append(
                                         info,
-                                        showpreview ? util.createPreview(attachment.file, baton.app, baton.view.rightside) : $(),
+                                        showpreview ? util.createPreview(attachment.file, baton.view.rightside) : $(),
                                         $.txt('\u00A0')
                                     ),
                                      // remove

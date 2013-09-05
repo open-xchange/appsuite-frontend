@@ -130,12 +130,11 @@ define('io.ox/core/tk/attachmentsUtil',
                 e.preventDefault();
 
                 var file = target.data('file'),
-                    //app = target.data('app'),
                     data = get(file),  preview, reader;
 
                 //close if editor is selected (causes overlapping, bug 27875)
                 if (target.data('rightside')) {
-                    target.data('rightside')
+                    (target.data('rightside') || $())
                         .find('iframe').contents().find('body')
                         .one('click', this.close);
                 }
