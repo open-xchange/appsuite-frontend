@@ -686,6 +686,24 @@ define('io.ox/files/actions',
         }
     });
 
+    //guidance
+
+    new Action('io.ox/files/actions/guidance', {
+        action: function (baton) {
+            require(['io.ox/files/guidance/main'], function (guidance) {
+                guidance.sidePopup(baton.app, baton.e);
+            });
+        }
+    });
+
+    new Action('io.ox/files/actions/guidance-reload', {
+        action: function (baton) {
+            require(['io.ox/files/guidance/main'], function (guidance) {
+                guidance.reloadPopup(baton.app, baton.e);
+            });
+        }
+    });
+
     // groups
 
     new ActionGroup(POINT + '/links/toolbar', {
@@ -735,6 +753,21 @@ define('io.ox/files/actions',
         index: 200,
         label: gt('List'),
         ref: 'io.ox/files/actions/switch-to-list-view'
+    });
+
+    //guidance
+
+    new links.ActionGroup(POINT + '/links/toolbar', {
+        id: 'guidance',
+        index: 500,
+        icon: function () {
+            return $('<i class="icon-question-sign">');
+        }
+    });
+
+    new links.ActionLink(POINT + '/links/toolbar/guidance', {
+        label: gt('Guidance'),
+        ref: POINT + '/actions/guidance'
     });
 
     // PUBLISH

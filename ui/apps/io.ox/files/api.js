@@ -109,6 +109,7 @@ define('io.ox/files/api',
         'gif' : 'image/gif',
         'tif' : 'image/tiff',
         'tiff': 'image/tiff',
+        'bmp' : 'image/bmp',
         // audio
         'mp3' : 'audio/mpeg',
         'ogg' : 'audio/ogg',

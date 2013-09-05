@@ -97,19 +97,20 @@ define('io.ox/mail/guidance/main',
             index: INDEX += 100,
             draw: function (baton) {
 
-                var topics = [
-                    [gt.pgettext('help', 'The E-Mail Components'), 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.gui.html'],
-                    [gt.pgettext('help', 'Managing E-Mail messages'), 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.manage.html'],
-                    [gt.pgettext('help', 'External E-Mail Accounts'), 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.externalaccounts.html'],
-                    [gt.pgettext('help', 'E-Mail Settings'), 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.settings.html']
-                ];
+                var helpDir = 'help/' + ox.language + '/',
+                    topics = [
+                        [gt.pgettext('help', 'The E-Mail Components'), 'ox.appsuite.user.sect.email.gui.html'],
+                        [gt.pgettext('help', 'Managing E-Mail messages'), 'ox.appsuite.user.sect.email.manage.html'],
+                        [gt.pgettext('help', 'External E-Mail Accounts'), 'ox.appsuite.user.sect.email.externalaccounts.html'],
+                        [gt.pgettext('help', 'E-Mail Settings'), 'ox.appsuite.user.sect.email.settings.html']
+                    ];
 
                 this.append(
                     $('<h2>').text(gt('Related articles')),
                     $('<section>').append(
                         _(topics).map(function (pair) {
                             return $('<div>').append(
-                                $('<a>', { href: pair[1], target: 'help' }).text(pair[0])
+                                $('<a>', { href: helpDir + pair[1], target: 'help' }).text(pair[0])
                             );
                         })
                     )
@@ -121,35 +122,36 @@ define('io.ox/mail/guidance/main',
     // Upsell
 
     // biggeleben: disabled for 7.4
+    // petersen: enabled again. nevertheless
     // we need a proper way to detect if upsell is generally enabled for that user
 
-    // ext.point('io.ox/mail/guidance').extend({
-    //     id: 'upsell',
-    //     index: INDEX += 100,
-    //     draw: function (baton) {
+    ext.point('io.ox/mail/guidance').extend({
+        id: 'upsell',
+        index: INDEX += 100,
+        draw: function (baton) {
 
-    //         $('head').append(
-    //             $('<link href="http://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">')
-    //         );
+            $('head').append(
+                $('<link href="http://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">')
+            );
 
-    //         var node = $('<section>')
-    //             .css({
-    //                 fontFamily: '"Nunito", Arial, sans-serif',
-    //                 fontSize: '24px',
-    //                 lineHeight: '28px',
-    //                 padding: '14px',
-    //                 color: '#fff',
-    //                 backgroundColor: '#FF5F13', // kind of nato orange
-    //                 borderRadius: '5px',
-    //                 textShadow: '1px 1px 3px #000',
-    //                 maxWidth: '450px',
-    //                 whiteSpace: 'pre'
-    //             })
-    //             .text('Upgrade to premium.\nGet a 90-day free trial ...');
+            var node = $('<section>')
+                .css({
+                    fontFamily: '"Nunito", Arial, sans-serif',
+                    fontSize: '24px',
+                    lineHeight: '28px',
+                    padding: '14px',
+                    color: '#fff',
+                    backgroundColor: '#FF5F13', // kind of nato orange
+                    borderRadius: '5px',
+                    textShadow: '1px 1px 3px #000',
+                    maxWidth: '450px',
+                    whiteSpace: 'pre'
+                })
+                .text('Upgrade to premium.\nGet a 90-day free trial ...');
 
-    //         this.append(node);
-    //     }
-    // });
+            this.append(node);
+        }
+    });
 
     // Statistics
 
