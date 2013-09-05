@@ -39,6 +39,29 @@ define('io.ox/core/main',
 
     debug('core: Loaded');
 
+    _.stepwiseInvoke = function (list, method, context) {
+        if (!_.isArray(list)) return $.when();
+        var args = Array.prototype.slice.call(arguments, 3), done = $.Deferred(), tmp = [];
+        function store(result) {
+            tmp.push(result);
+        }
+        function tick() {
+            // are we done now?
+            if (list.length === 0) return done.resolve(tmp);
+            // get next item
+            var item = list.shift();
+            // has method?
+            if (item && _.isFunction(item[method])) {
+                // call method and expect a deferred object
+                var ret = item[method].apply(context, args);
+                if (ret && ret.promise) return ret.done(store).then(tick, done.reject);
+            }
+            tick();
+        }
+        tick();
+        return done.promise();
+    };
+
     var logout = function (opt) {
 
         opt = _.extend({
@@ -48,10 +71,8 @@ define('io.ox/core/main',
         $("#background_loader").fadeIn(DURATION, function () {
 
             $('#io-ox-core').hide();
-
-            var deferreds = ext.point('io.ox/core/logout').invoke('logout', this, new ext.Baton(opt)).compact().value();
-
-            $.when.apply($, deferreds).then(
+            var extensions = ext.point('io.ox/core/logout').list();
+            _.stepwiseInvoke(extensions, 'logout', this, new ext.Baton(opt)).then(
                 function logout() {
                     session.logout().always(function () {
                         // get logout locations
