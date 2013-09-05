@@ -166,6 +166,10 @@ define('io.ox/core/import/import',
                         notifications.yell('error', gt('Please select a file to import'));
                         popup.idle();
                         return;
+                    } else if (baton.nodes.select.val() === 'ICAL' && !(/\.ical$/i).test(file.val())) {
+                        notifications.yell('error', gt('Please select a valid iCal File to import'));
+                        popup.idle();
+                        return;
                     }
 
                     api.importFile({

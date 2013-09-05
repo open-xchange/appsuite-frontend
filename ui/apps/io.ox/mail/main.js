@@ -640,21 +640,32 @@ define('io.ox/mail/main',
             }), true);
         };
 
-        var showMail, drawMail, drawFail, drawThread;
+        var showMail, drawMail, drawFail, drawThread, currentThread = null;
 
-        showMail = function (obj) {
-            // be busy
-            right.idle().busy(true);
+        app.showMail = showMail = function (obj) {
+
             // which mode?
             if (grid.getMode() === "all" && grid.prop('sort') === 'thread' && !isInOpenThreadSummary(obj)) {
                 // get thread
                 var thread = api.getThread(obj),
-                    baton = ext.Baton({ data: thread, app: app });
+                    baton = ext.Baton({ data: thread, app: app }),
+                    update = false,
+                    tail = api.tracker.getTailCID(obj);
+                // not current thread?
+                if (thread.length > 1 && tail === currentThread) {
+                    update = true;
+                } else {
+                    currentThread = null;
+                }
+                // be busy
+                right.idle().busy(!update);
                 // get first mail first
                 api.get(api.reduce(thread[0]))
-                    .done(_.lfo(drawThread, baton))
+                    .done(_.lfo(drawThread, baton, update))
                     .fail(_.lfo(drawFail, obj));
             } else {
+                // be busy
+                right.idle().busy(true);
                 api.get(api.reduce(obj))
                     .done(_.lfo(drawMail))
                     .fail(_.lfo(drawFail, obj));
@@ -662,27 +673,39 @@ define('io.ox/mail/main',
         };
 
         showMail.cancel = function () {
+            currentThread = null;
             _.lfo(drawThread);
             _.lfo(drawMail);
             _.lfo(drawFail);
         };
 
-        drawThread = function (baton) {
-            viewDetail.drawThread.call(right.idle(), baton.set('options', {
+        drawThread = function (baton, update) {
+            // remember current thread
+            currentThread = api.tracker.getTailCID(_(baton.data).first());
+            baton.set('options', {
                 tabindex: '1',
                 failMessage: gt('Couldn\'t load that email.'),
                 retry: drawThread
-            }));
+            });
+            right.idle();
+            // update?
+            if (update) {
+                viewDetail.updateThread.call(right, baton);
+            } else {
+                viewDetail.drawThread.call(right, baton);
+            }
         };
 
         drawMail = function (data) {
             var baton = ext.Baton({ data: data, app: app }).set('options', { tabindex: '1' }),
                 mail = viewDetail.draw(baton);
+            currentThread = null;
             right.idle().empty().append(mail);
             right.closest('.scrollable').scrollTop(0);
         };
 
         drawFail = function (obj, e) {
+            currentThread = null;
             right.idle().empty().append(
                 // not found?
                 e && e.code === 'MSG-0032' ?
@@ -693,6 +716,17 @@ define('io.ox/mail/main',
                     })
             );
         };
+
+        // handle new mails in threads
+        api.on('threadChanged', function (e, obj) {
+            var selection = grid.selection.get(), first;
+            if (selection.length === 1 && api.tracker.getTailCID(selection[0]) === api.tracker.getTailCID(obj)) {
+                first = _(api.tracker.getThread(obj)).first();
+                if (_.cid(first) !== _.cid(selection[0])) {
+                    grid.selection.set(first);
+                }
+            }
+        });
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/mail', showMail, right, api);
         commons.wireGridAndWindow(grid, win);

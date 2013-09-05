@@ -72,6 +72,7 @@ define('io.ox/mail/actions',
                         .append(
                             $('<div>').text(question)
                         )
+                        .addPrimaryButton("delete", gt('Delete'))
                         .addButton("cancel", gt('Cancel'))
                         .on('delete', function () {
                             api.remove(list).fail(notifications.yell);

@@ -168,7 +168,10 @@ define('io.ox/office/framework/view/baseview',
             viewHidden = false,
 
             // cached notification, shown when application becomes visible
-            lastNotification = null;
+            lastNotification = null,
+
+            // the timer waiting to fade in the blocker element in busy mode
+            blockerFadeTimer = null;
 
         // base constructor ---------------------------------------------------
 
@@ -629,11 +632,19 @@ define('io.ox/office/framework/view/baseview',
          *      execute this callback function, and will leave the busy mode
          *      afterwards. Will be called in the context of this view
          *      instance.
+         *  @param {Number} [options.delay]
+         *      If set to a non-negative integer value, the busy blocker
+         *      element will be transparent initially, and will fade in after
+         *      the specified delay time in milliseconds. If omitted, the busy
+         *      blocker element will be shown immediately without fading in.
          *
          * @returns {BaseView}
          *  A reference to this instance.
          */
         this.enterBusy = function (options) {
+
+            // for safety against repeated calls: stops pending animations etc.
+            this.leaveBusy();
 
             // enter busy state, and extend the blocker element
             app.getWindow().busy(null, null, function () {
@@ -642,6 +653,8 @@ define('io.ox/office/framework/view/baseview',
                     initHandler = Utils.getFunctionOption(options, 'initHandler'),
                     // the cancel handler
                     cancelHandler = Utils.getFunctionOption(options, 'cancelHandler'),
+                    // the cancel handler
+                    delay = Utils.getIntegerOption(options, 'delay'),
                     // the window blocker element (bound to 'this')
                     blockerNode = this,
                     // the header container node
@@ -697,6 +710,16 @@ define('io.ox/office/framework/view/baseview',
                     initHandler.call(self, headerNode, footerNode, blockerNode);
                 }
 
+                // fade in the blocker if specified
+                if (_.isNumber(delay) && (delay >= 0)) {
+                    blockerNode.css('opacity', 0);
+                    blockerFadeTimer = app.repeatDelayed(function (index) {
+                        blockerNode.css('opacity', (index + 1) / 10);
+                    }, { delay: delay, repeatDelay: 50, cycles: 10 });
+                } else {
+                    blockerNode.css('opacity', '');
+                }
+
             });
 
             return this;
@@ -710,8 +733,14 @@ define('io.ox/office/framework/view/baseview',
          *  A reference to this instance.
          */
         this.leaveBusy = function () {
+
+            // stop timer that fades in the blocker element delayed
+            if (blockerFadeTimer) {
+                blockerFadeTimer.abort();
+                blockerFadeTimer = null;
+            }
+
             app.getWindow().idle();
-            this.grabFocus();
             return this;
         };
 
