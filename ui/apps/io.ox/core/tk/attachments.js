@@ -352,7 +352,7 @@ define('io.ox/core/tk/attachments',
                         //add
                         _.each(list, function (item) {
                             files.push({
-                                file: (oldMode ? file.hiddenField : item),
+                                file: (oldMode && item.hiddenField ? item.hiddenField : item),
                                 name: item.filename || item.name || item.subject,
                                 size: item.file_size || item.size,
                                 group: item.group || 'unknown',
@@ -368,8 +368,8 @@ define('io.ox/core/tk/attachments',
                     files = _.filter(files, function (att) {
                         return att.cid !== attachment.cid;
                     });
-                    //remove hidden input field from form
-                    if (oldMode) {
+                    //remove hidden input form field
+                    if (attachment.file instanceof $ && attachment.file[0].tagName === 'INPUT') {
                         attachment.file.remove();
                     }
                     this.listChanged();

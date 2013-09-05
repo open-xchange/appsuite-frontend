@@ -74,7 +74,7 @@ define('io.ox/core/tk/attachmentsUtil',
                         module: 'infostore',
                         group: 'reference'
                     };
-                } else if (file instanceof window.File) {
+                } else if (window.File && file instanceof window.File) {
                     //file (upload or dnd)
                     data = {
                         AAA: 5,

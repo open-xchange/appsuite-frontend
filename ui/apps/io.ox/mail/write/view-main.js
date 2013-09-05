@@ -574,9 +574,9 @@ define("io.ox/mail/write/view-main",
                             //IE
                             if ($input.val()) {
                                 var file = {
-                                    name: $input.val().match(/[^\/\\]+$/),
                                     size: 0,
                                     group: 'file',
+                                    name: $input.val().match(/[^\/\\]+$/).toString(),
                                     hiddenField: $input
                                 };
                                 self.baton.fileList.add(file);
@@ -615,7 +615,7 @@ define("io.ox/mail/write/view-main",
                 rowClass: 'collapsed'
             });
             // add preview side-popup
-            if (!!ox.efl)
+            if (!!!ox.efl)
                 new dialogs.SidePopup().delegate(this.sections.attachments, '.attachment-preview', previewAttachment);
 
 
