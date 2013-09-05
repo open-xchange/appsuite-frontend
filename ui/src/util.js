@@ -107,7 +107,8 @@
         Blackberry = (ua.indexOf('BB10') > -1 || ua.indexOf('RIM Tablet') > 1 || ua.indexOf('BlackBerry') > 1),
         WindowsPhone = ua.indexOf('Windows Phone') > -1,
         Android = (ua.indexOf('Android') > -1) ? ua.split('Android')[1].split(';')[0].trim() : undefined,
-        iOS = (navigator.userAgent.match(/(iPad|iPhone|iPod)/i)) ? ua.split('like')[0].split('OS')[1].trim().replace(/_/g,'.') : undefined;
+        iOS = (navigator.userAgent.match(/(iPad|iPhone|iPod)/i)) ? ua.split('like')[0].split('OS')[1].trim().replace(/_/g,'.') : undefined,
+        standalone = ("standalone" in window.navigator) && window.navigator.standalone;
 
     // add namespaces, just sugar
     _.browser = {
@@ -121,7 +122,7 @@
         WebKit: webkit,
         /** Safari */
         Safari: !Android && webkit && !chrome && !phantom ?
-            ua.split('Version/')[1].split(' Safari')[0] : undefined,
+            (standalone ? iOS : ua.split('Version/')[1].split(' Safari')[0]) : undefined,
         /** PhantomJS (needed for headless spec runner) */
         PhantomJS: webkit && phantom ?
             ua.split('PhantomJS/')[1].split(' ')[0] : undefined,
@@ -224,7 +225,7 @@
             misc[lang] = true;
             misc[lang.split('_')[0] + '_*'] = true;
             misc.touch = Modernizr.touch;
-            misc.standalone = ("standalone" in window.navigator) && window.navigator.standalone;
+            misc.standalone = standalone;
             misc.emoji = _.hasNativeEmoji();
             // no arguments?s
             if (arguments.length === 0) {
