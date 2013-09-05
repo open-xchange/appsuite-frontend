@@ -133,6 +133,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             console.log("->", stanzas);
         }
         transmitting = true;
+        console.log(stanzas);
         http.PUT({
             module: 'rt',
             params: {
@@ -426,6 +427,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         if (resp.stanzas) {
             lastDelivery = _.now();
             _(resp.stanzas).each(function (s) {
+                if (api.debug) {
+                    console.log("RECEIVED", s);
+                }
                 received(new RealtimeStanza(s));
             });
         }
