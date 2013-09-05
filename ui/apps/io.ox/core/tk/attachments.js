@@ -16,39 +16,16 @@ define('io.ox/core/tk/attachments',
         'io.ox/core/extensions',
         'io.ox/core/api/attachment',
         'io.ox/core/strings',
+        'io.ox/core/tk/attachmentsUtil',
         'io.ox/preview/main',
         'io.ox/core/tk/dialogs',
         'gettext!io.ox/core/tk/attachments',
         'io.ox/core/extPatterns/links',
         'less!io.ox/core/tk/attachments.less'
-    ], function (ext, attachmentAPI, strings, pre, dialogs, gt, links) {
+    ], function (ext, attachmentAPI, strings, util, pre, dialogs, gt, links) {
 
         'use strict';
-        var oldMode = _.browser.IE < 10,
-            supportsPreview = function (file) {
-                // nested mail
-                if (file.group === 'nested') {
-                    return new pre.Preview({ mimetype: 'message/rfc822', parent: file.parent }).supportsPreview();
-                // vcard
-                } else if (file.display_name) {
-                    return true;
-                // infostore
-                } else if (file.id && file.folder_id) {
-                    return true;
-                //simple type
-                } else if (file.group === 'attachment') {
-                    return (/(png|gif|jpe?g|bmp)$/i).test(file.type);
-                //local file via mimetype
-                } else {
-                    return window.FileReader && (/^image\/(png|gif|jpe?g|bmp)$/i).test(file.type);
-                }
-            },
-            createPreview = function (file, app, rightside) {
-                //rightside is needed for mail to let the popup check for events in the editor iframe
-                return $('<a href="#" class="attachment-preview">')
-                            .data({file: file, app: app, rightside: rightside })
-                            .text(gt('Preview'));
-            };
+        var oldMode = _.browser.IE < 10;
 
         function EditableAttachmentList(options) {
             var counter = 0;
@@ -240,112 +217,8 @@ define('io.ox/core/tk/attachments',
                 init: function () {
                     var self = this;
                     // add preview side-popup
-                    new dialogs.SidePopup().delegate($el, '.attachment-preview', this.previewAttachment);
-                },
+                    new dialogs.SidePopup().delegate($el, '.attachment-preview', util.preview);
 
-                previewAttachment: function (popup, e, target) {
-                    e.preventDefault();
-
-                    var file = target.data('file'), app = target.data('app'),
-                        editor = (target.data('rightside') || $()).find('iframe').contents().find('body'),//get the editor in the iframe
-                        preview, reader;
-
-                    //close if editor is selected (causes overlapping, bug 27875)
-                    editor.one('click', this.close);
-
-                    // nested message
-                    if (file.group === 'nested')  {
-                        preview = new pre.Preview({
-                                data: { nested_message: file },
-                                mimetype: 'message/rfc822',
-                                parent: file.parent
-                            }, {
-                                width: popup.parent().width(),
-                                height: 'auto'
-                            });
-                        if (preview.supportsPreview()) {
-                            preview.appendTo(popup);
-                            popup.append($('<div>').text(_.noI18n('\u00A0')));
-                        }
-                    // refereneced contact vcard
-                    } else if (file.display_name || file.email1) {
-                        require(['io.ox/contacts/view-detail'], function (view) {
-                            popup.append(view.draw(file));
-                        });
-                    // infostore
-                    } else if (file.id && file.folder_id) {
-                        require(['io.ox/files/api'], function (filesAPI) {
-                            var prev = new pre.Preview({
-                                name: file.filename,
-                                filename: file.filename,
-                                mimetype: file.file_mimetype,
-                                size: file.file_size,
-                                dataURL: filesAPI.getUrl(file, 'bare'),
-                                version: file.version,
-                                id: file.id,
-                                folder_id: file.folder_id
-                            }, {
-                                width: popup.parent().width(),
-                                height: 'auto'
-                            });
-                            if (prev.supportsPreview()) {
-                                popup.append(
-                                    $('<h4>').addClass('mail-attachment-preview').text(file.filename)
-                                );
-                                prev.appendTo(popup);
-                                popup.append($('<div>').text('\u00A0'));
-                            }
-                        });
-                    // attachments
-                    } else if (file.atmsgref) {
-                        require(['io.ox/mail/api'], function (mailAPI) {
-                            var pos = file.atmsgref.lastIndexOf('/');
-                            file.parent = {
-                                folder_id: file.atmsgref.substr(0, pos),
-                                id: file.atmsgref.substr(pos + 1)
-                            };
-                            var prev = new pre.Preview({
-                                data: file,
-                                filename: file.filename,
-                                source: 'mail',
-                                folder_id: file.parent.folder_id,
-                                id: file.parent.id,
-                                attached: file.id,
-                                parent: file.parent,
-                                mimetype: file.content_type,
-                                dataURL: mailAPI.getUrl(file, 'view')
-                            }, {
-                                width: popup.parent().width(),
-                                height: 'auto'
-                            });
-                            if (prev.supportsPreview()) {
-                                popup.append(
-                                    $('<h4>').addClass('mail-attachment-preview').text(file.filename)
-                                );
-                                prev.appendTo(popup);
-                                popup.append($('<div>').text('\u00A0'));
-                            }
-                        });
-                    // inject image as data-url
-                    } else {
-                        reader = new FileReader();
-                        reader.onload = function (e) {
-                            popup.css({ width: '100%', height: '100%' })
-                            .append(
-                                $('<div>')
-                                .css({
-                                    width: '100%',
-                                    height: '100%',
-                                    backgroundImage: 'url(' + e.target.result + ')',
-                                    backgroundRepeat: 'no-repeat',
-                                    backgroundPosition: 'center center',
-                                    backgroundSize: 'contain'
-                                })
-                            );
-                            reader = reader.onload = null;
-                        };
-                        reader.readAsDataURL(file);
-                    }
                 },
 
                 render: function () {
@@ -364,7 +237,7 @@ define('io.ox/core/tk/attachments',
 
                 renderFile: function (attachment) {
                     var self = this, node,
-                        showpreview = options.preview && supportsPreview(attachment.file) && baton.view && baton.view.rightside;
+                        showpreview = options.preview && util.hasPreview(attachment.file) && baton.view && baton.view.rightside;
 
                     /*
                      * Files, VCard, and Messages are very close here
@@ -422,7 +295,7 @@ define('io.ox/core/tk/attachments',
                                     $('<div class="row-1">').text(_.noI18n(name)),
                                     $('<div class="row-2">').append(
                                         info,
-                                        showpreview ? createPreview(attachment.file, baton.app, baton.view.rightside) : $(),
+                                        showpreview ? util.createPreview(attachment.file, baton.app, baton.view.rightside) : $(),
                                         $.txt('\u00A0')
                                     ),
                                      // remove
