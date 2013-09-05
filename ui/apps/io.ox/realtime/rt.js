@@ -391,7 +391,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 }
                 if (!outOfOrder) {
                     if (api.debug) {
-                        console.log("RECEIVED", stanza.seq);
+                        console.log("RECEIVED", stanza.seq, stanza);
                     }
                     api.trigger("receive", stanza);
                     api.trigger("receive:" + stanza.selector, stanza);
@@ -427,9 +427,6 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         if (resp.stanzas) {
             lastDelivery = _.now();
             _(resp.stanzas).each(function (s) {
-                if (api.debug) {
-                    console.log("RECEIVED", s);
-                }
                 received(new RealtimeStanza(s));
             });
         }
