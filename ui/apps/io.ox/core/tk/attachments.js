@@ -235,83 +235,12 @@ define('io.ox/core/tk/attachments',
                     return this;
                 },
 
-                renderFile: function (attachment) {
-                    var self = this, node,
-                        showpreview = options.preview && util.hasPreview(attachment.file) && baton.view && baton.view.rightside;
-
-                    /*
-                     * Files, VCard, and Messages are very close here
-                     * there's no real separation
-                     */
-                    var icon, name, size, info;
-
-                    switch (attachment.group) {
-
-                    //attached mail
-                    case 'nested':
-                        info = $('<span>').addClass('filesize').text('');
-                        icon = $('<i>').addClass('icon-paper-clip');
-                        name = attachment.name || '\u00A0';
-                        break;
-
-                    // file
-                    case 'file':
-                    case 'dndfile':
-                    case 'infostore':
-                    case 'unknown':
-                        size = attachment.size;
-                        size = size !== undefined ? gt.format('%1$s\u00A0 ', strings.fileSize(size)) : '';
-                        info = $('<span>').addClass('filesize').text(size);
-                        icon = $('<i>').addClass('icon-paper-clip');
-                        name = attachment.name || '';
-                        break;
-
-                    // vcard
-                    case 'vcard':
-                        info = $('<span>').addClass('filesize').text(gt.noI18n('vCard\u00A0'));
-                        icon = $('<i>').addClass('icon-list-alt');
-                        //lazy way; use contactsUtil.getFullName(attachment) for the perfect solution
-                        name = attachment.file.display_name || attachment.file.email1 || '';
-                        break;
-                    //default
-                    default:
-                        size = attachment.size;
-                        size = size !== undefined ? gt.format('%1$s\u00A0 ', strings.fileSize(size)) : '';
-                        info = $('<span>').addClass('filesize').text(size);
-                        icon = $('<i>').addClass('icon-paper-clip');
-                        name = attachment.name || '';
-                        break;
-                    }
-
-                    //item
-                    node = $('<div>')
-                        .addClass(this.itemClasses)
-                        .append(
-                            //file
-                            $('<div class="item file">')
-                                .addClass(this.fileClasses)
-                                .append(
-                                    icon,
-                                    $('<div class="row-1">').text(_.noI18n(name)),
-                                    $('<div class="row-2">').append(
-                                        info,
-                                        showpreview ? util.createPreview(attachment.file, baton.view.rightside) : $(),
-                                        $.txt('\u00A0')
-                                    ),
-                                     // remove
-                                    $('<a href="#" class="remove" tabindex="6">')
-                                    .attr('title', gt('Remove attachment'))
-                                    .append(
-                                        $('<i class="icon-trash">')
-                                    )
-                                    .on('click', function (e) {
-                                        e.preventDefault();
-                                        self.remove(attachment);
-                                    })
-                            )
-                    );
-
-                    return node;
+                renderFile: function (file) {
+                    var opt = {
+                        showpreview: options.preview && util.hasPreview(file) && baton.view && baton.view.rightside,
+                        rightside: baton.view.rightside
+                    };
+                    return util.node.call(this, file, options);
                 },
 
                 listChanged: function () {

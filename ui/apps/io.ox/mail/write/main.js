@@ -1070,21 +1070,23 @@ define('io.ox/mail/write/main',
             }
             // sendtype
             mail.sendtype = data.sendtype || mailAPI.SENDTYPE.NORMAL;
-            // get files
 
+            // get files
             if (ox.efl) {
                 var fileList = view.baton.fileList;
 
-                // add linked attachment
+                //attachments
                 mail.attachments = mail.attachments.concat(fileList.get('attachment'));
-                // add nested message (usually multiple mail forward)
+                //nested message (usually multiple mail forward)
                 mail.nested_msgs = mail.nested_msgs.concat(fileList.get('nested'));
-                //attached contact vcards
+                //referenced contacts (vcards)
                 mail.contacts_ids = (mail.contacts_ids || []).concat(fileList.get('vcard'));
-                //attached inforstore files
+                //referenced inforstore files
                 mail.infostore_ids = (mail.infostore_ids || []).concat(fileList.get('infostore'));
-                //dnd and uploaded files
+                //local files
                 files = files.concat(fileList.get('file'));
+                //local files (form input)
+                //files = files.concat(fileList.get('input'));
 
                 //TODO: removeable?
                 /*if (this.files && this.files.length) {

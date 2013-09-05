@@ -574,9 +574,8 @@ define("io.ox/mail/write/view-main",
                             //IE
                             if ($input.val()) {
                                 var file = {
-                                    size: 0,
-                                    group: 'file',
                                     name: $input.val().match(/[^\/\\]+$/).toString(),
+                                    group: 'input',
                                     hiddenField: $input
                                 };
                                 self.baton.fileList.add(file);

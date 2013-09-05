@@ -23,18 +23,7 @@ define('io.ox/core/tk/attachmentsUtil',
         'use strict';
 
 
-        var /**
-             * get details
-             * @param  {object} file (or wrapper object)
-             * @param  {string} key (optional)
-             * @return {any}
-             */
-            get = function (obj, key) {
-                var file = obj.file ? obj.file : obj,
-                    data = identify(file);
-                return key ? data[key] : data;
-            },
-
+        var self,
             /**
              * duck checks
              * @param  {object} file
@@ -43,51 +32,70 @@ define('io.ox/core/tk/attachmentsUtil',
             identify = function (file) {
                 var data;
                 if (file.disp && file.disp === 'attachment') {
-                    //mail attachment
+                    //mail attachment (server)
                     data = {
-                        AAA: 1,
                         type: file.type || file.content_type || '',
                         module: 'mail',
                         group: file.type ? 'file' : 'reference'
                     };
                 } else if (file.content_type && file.content_type === 'message/rfc822') {
-                    //forwarded mail
+                    //forwarded mail (local/server)
                     data = {
-                        AAA: 2,
                         type: 'eml',
                         module: 'mail',
                         group: 'reference'
                     };
                 } else if (file.display_name || file.email1) {
-                    //contacts vcard
+                    //contacts vcard (local)
                     data = {
-                        AAA: 4,
                         type: 'vcf',
                         module: 'contacts',
                         group: 'reference'
                     };
                 } else if (file.id && file.folder_id) {
-                    //infostore file
+                    //infostore file (local)
                     data = {
-                        AAA: 3,
                         type: file.type || file.content_type || '',
                         module: 'infostore',
                         group: 'reference'
                     };
                 } else if (window.File && file instanceof window.File) {
-                    //file (upload or dnd)
+                    //file (upload or dnd!) (local)
                     data = {
-                        AAA: 5,
                         type:  file.type || file.content_type || '',
                         module: 'mail',
                         group: 'file'
                     };
+                } else if (file instanceof $ && file[0].tagName === 'INPUT') {
+                    //file input as old mode for IE9 (local)
+                    data = {
+                        AAA: 6,
+                        type:  file.val().split('.').length > 1  ? file.val().split('.').pop() : '',
+                        module: 'mail',
+                        group: 'input'
+                    };
                 }
+
                 return data || {};
+            },
+            /**
+             * create preview node with attached file property
+             * @param  {object} file (or wrapper object)
+             * @param  {jquery} rightside (optional: needed for mail to let the popup check for events in the editor iframe)
+             * @return {jquery} textnode
+             */
+            //createPreview: function (file, app, rightside) {
+            createPreview = function (file, rightside) {
+                return !self.hasPreview(file) ? $() : $('<a href="#" class="attachment-preview">')
+                            .data({
+                                file: file,
+                                //app: app,
+                                rightside: rightside
+                            })
+                            .text(gt('Preview'));
             };
 
-
-        return {
+        self = {
             /**
              * get details
              * @param  {object} file (or wrapper object)
@@ -95,7 +103,9 @@ define('io.ox/core/tk/attachmentsUtil',
              * @return {any}
              */
             get: function (obj, key) {
-                return get(obj, key);
+                var file = obj.file ? obj.file : obj,
+                    data = identify(file);
+                return key ? data[key] : data;
             },
             /**
              * checks for preview support
@@ -103,10 +113,13 @@ define('io.ox/core/tk/attachmentsUtil',
              * @return {boolean}
              */
             hasPreview : function (file) {
-                var data = get(file);
+                var data = self.get(file);
                 // nested mail
                 if (data.type === 'eml') {
                     return new pre.Preview({ mimetype: 'message/rfc822', parent: file.parent }).supportsPreview();
+                // form input (IE9)
+                } else if (data.group === 'input') {
+                    return false;
                 // vcard
                 } else if (data.group === 'reference') {
                     return true;
@@ -118,22 +131,66 @@ define('io.ox/core/tk/attachmentsUtil',
                     return (/(png|gif|jpe?g|bmp)$/i).test(data.type);
                 }
             },
-
             /**
-             * create preview node with attached file property
-             * @param  {object} file (or wrapper object)
-             * @param  {jquery} rightside (optional: needed for mail to let the popup check for events in the editor iframe)
-             * @return {jquery} textnode
+             * returns node
+             * @param  {object} file wrapper object
+             * @param  {object} options
+             * @return {jquery} node
              */
-            //createPreview: function (file, app, rightside) {
-            createPreview: function (file, rightside) {
-                return $('<a href="#" class="attachment-preview">')
-                            .data({
-                                file: file,
-                                //app: app,
-                                rightside: rightside
-                            })
-                            .text(gt('Preview'));
+            node: function (obj, options) {
+                var caller = this,
+                    icon, info,
+                    opt = $.extend(options, {
+                            showpreview: true
+                        }),
+                    //normalisation
+                    name = obj.name || obj.filename || obj.subject || '\u00A0',
+                    size = obj.file_size || obj.size || 0;
+
+                //prepare data
+                size = size !== 0 ? gt.format('%1$s\u00A0 ', strings.fileSize(size)) : '';
+
+                if (obj.group !== 'vcard') {
+                    //default
+                    icon = $('<i>').addClass('icon-paper-clip');
+                    info = $('<span>').addClass('filesize').text(size);
+                } else {
+                    //vcard
+                    icon = $('<i>').addClass('icon-list-alt');
+                    info = $('<span>').addClass('filesize').text(gt.noI18n('vCard\u00A0'));
+                    //lazy way; use contactsUtil.getFullName(attachment) for the perfect solution
+                    name = obj.file.display_name || obj.file.email1 || '';
+                }
+
+                //create node
+                return $('<div>')
+                    .addClass(this.itemClasses)
+                    .append(
+                        //file
+                        $('<div class="item file">')
+                            .addClass(this.fileClasses)
+                            .append(
+                                icon,
+                                $('<div class="row-1">').text(_.noI18n(name)),
+                                $('<div class="row-2">').append(
+                                    info,
+                                    opt.showpreview  ? createPreview(obj.file, options.rightside) : $(),
+                                    $.txt('\u00A0')
+                                ),
+                                 // remove
+                                $('<a href="#" class="remove" tabindex="6">')
+                                .attr('title', gt('Remove attachment'))
+                                .append(
+                                    $('<i class="icon-trash">')
+                                )
+                                .on('click', function (e) {
+                                    e.preventDefault();
+                                    if (!('remove' in caller))
+                                        console.error('Caller should provide a remove function.');
+                                    caller.remove(obj);
+                                })
+                        )
+                );
             },
 
             /**
@@ -146,7 +203,7 @@ define('io.ox/core/tk/attachmentsUtil',
                 e.preventDefault();
 
                 var file = target.data('file'),
-                    data = get(file),  preview, reader;
+                    data = self.get(file),  preview, reader;
 
                 //close if editor is selected (causes overlapping, bug 27875)
                 if (target.data('rightside')) {
@@ -251,5 +308,6 @@ define('io.ox/core/tk/attachmentsUtil',
             }
 
         };
+        return self;
     }
 );
