@@ -88,10 +88,20 @@ define('io.ox/core/tk/attachmentsUtil',
 
 
         return {
+            /**
+             * get details
+             * @param  {object} file (or wrapper object)
+             * @param  {string} key (optional)
+             * @return {any}
+             */
             get: function (obj, key) {
                 return get(obj, key);
             },
-
+            /**
+             * checks for preview support
+             * @param  {object} file (or wrapper object)
+             * @return {boolean}
+             */
             hasPreview : function (file) {
                 var data = get(file);
                 // nested mail
@@ -111,7 +121,7 @@ define('io.ox/core/tk/attachmentsUtil',
 
             /**
              * create preview node with attached file property
-             * @param  {object} file
+             * @param  {object} file (or wrapper object)
              * @param  {jquery} rightside (optional: needed for mail to let the popup check for events in the editor iframe)
              * @return {jquery} textnode
              */
@@ -126,6 +136,12 @@ define('io.ox/core/tk/attachmentsUtil',
                             .text(gt('Preview'));
             },
 
+            /**
+             * preview handler
+             * @param  {object} popup
+             * @param  {object} e
+             * @param  {object} target
+             */
             preview: function (popup, e, target) {
                 e.preventDefault();
 
