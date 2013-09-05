@@ -339,7 +339,7 @@ define('io.ox/calendar/edit/template',
                         if (email !== null)
                             baton.list.push({email: email, id: item.get('user_id') || item.get('internal_userid') || item.get('id'), type: item.get('type')});
                     });
-                    $.data(node, 'baton', baton);
+                    $.data(pNode, 'baton', baton);
                 });
 
                 autocomplete.on('select', function (data) {

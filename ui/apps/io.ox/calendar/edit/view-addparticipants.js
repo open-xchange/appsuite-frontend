@@ -111,7 +111,7 @@ define('io.ox/calendar/edit/view-addparticipants',
                         hash = getHash();
                         list = filterDoubletes(hash);
                         //save Results
-                        lastSearchResults = list;
+                        lastSearchResults = data;
                         //return number of query hits and the filtered list
                         return { list: list, hits: data.length };
                     },
@@ -120,19 +120,21 @@ define('io.ox/calendar/edit/view-addparticipants',
                             switch (obj.type) {
                             case 'user':
                             case 'contact':
-                                if (obj.data.internal_userid && obj.data.email1 === obj.email) {
-                                    obj.data.type = 1; //user
-                                    if (!options.keepId) {
-                                        obj.data.id = obj.data.internal_userid;
+                                if (!obj.data.type) {//only change if no type is there or type 5 will be made to type 1 on the second run
+                                    if (obj.data.internal_userid && obj.data.email1 === obj.email) {
+                                        obj.data.type = 1; //user
+                                        if (!options.keepId) {
+                                            obj.data.id = obj.data.internal_userid;
+                                        }
+                                    } else if (obj.data.mark_as_distributionlist) {
+                                        obj.data.type = 6; //distlistunsergroup
+                                    } else {
+                                        obj.data.type = 5;
+                                        // h4ck
+                                        obj.data.email1 = obj.email;
+                                        //uses emailparam as flag, to support adding users with their 2nd/3rd emailaddress
+                                        obj.data.emailparam = obj.email;
                                     }
-                                } else if (obj.data.mark_as_distributionlist) {
-                                    obj.data.type = 6; //distlistunsergroup
-                                } else {
-                                    obj.data.type = 5;
-                                    // h4ck
-                                    obj.data.email1 = obj.email;
-                                    //uses emailparam as flag, to support adding users with their 2nd/3rd emailaddress
-                                    obj.data.emailparam = obj.email;
                                 }
                                 break;
                             case 'resource':
@@ -165,6 +167,9 @@ define('io.ox/calendar/edit/view-addparticipants',
             return self;
         },
         onClickAdd: function (e) {
+
+            // updating baton-data-node
+            this.trigger('update');
 
             var selectedItem = this.autoparticipants.getSelectedItem(),
                 self = this;
@@ -200,6 +205,17 @@ define('io.ox/calendar/edit/view-addparticipants',
                 this.$('.add-participant').val('');
                 return this.autoparticipants.trigger('selected', foundContact);
             }
+
+            var alreadyIn = $.data(self.$el, 'baton') || { list: []};
+            //look if it's not there already
+            _.each(list, function (elem, index) {
+                for (var i = 0; i < alreadyIn.list.length; i++) {
+                    if (elem[1] === alreadyIn.list[i].email) {
+                        list.splice(index, 1);
+                        break;
+                    }
+                }
+            });
 
             if (list.length === 0) {
                 node.focus();
