@@ -558,10 +558,10 @@ define('io.ox/mail/view-detail',
                                     );
                                 }
                             }
-                            else if (length >= 20 && /\S{20}/.test(text)) {
+                            else if (length >= 30 && /\S{30}/.test(text)) {
                                 // split long character sequences for better wrapping
                                 node.replaceWith(
-                                    $('<span>').html(coreUtil.breakableHTML(text))
+                                    $.parseHTML(coreUtil.breakableHTML(text))
                                 );
                             }
                         }

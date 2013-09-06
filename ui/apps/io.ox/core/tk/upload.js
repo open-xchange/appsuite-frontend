@@ -225,6 +225,14 @@ define('io.ox/core/tk/upload',
         };
 
         this.offer = function (file) {
+            var maxFileSize, quotaLimit, fileTitle;
+
+            //#. %1$s is the filename or title of the file
+            gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, maxFileSize);
+
+            //#. %1$s is the filename or title of the file
+            gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, quotaLimit);
+
             files.push.apply(files, [].concat(file)); // handles both arrays and single objects properly
             this.queueChanged();
         };

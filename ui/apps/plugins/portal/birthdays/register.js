@@ -145,7 +145,7 @@ define('plugins/portal/birthdays/register',
                                 api.getPicture(contact, { width: 48, height: 48, scaleType: 'cover' }).addClass('picture'),
                                 $('<div class="name">').text(_.noI18n(name)),
                                 $('<div>').append(
-                                    $('<span class="date">').text(_.noI18n(birthday.format(date.DATE))), $.txt(' '),
+                                    $('<span class="date">').text(_.noI18n(birthday.format(birthday.getYear() === 1 ? date.DATE_NOYEAR : date.DATE))), $.txt(' '),
                                     $('<span class="distance">').text(delta)
                                 )
                             )

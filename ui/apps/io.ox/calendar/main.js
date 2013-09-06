@@ -60,24 +60,23 @@ define("io.ox/calendar/main",
             });
 
         win.on('search:open', function () {
-            lastPerspective = win.currentPerspective;
-            ox.ui.Perspective.show(app, 'list');
-        });
-
-        win.on('search:close', function () {
-            if (lastPerspective) {
-                ox.ui.Perspective.show(app, lastPerspective);
-            }
-        });
-
-        win.on('change:perspective', function (e, name, long) {
-            // save current perspective to settings
-            settings.set('viewView', long).save();
-            if (name !== 'list') {
-                lastPerspective = null;
-                win.search.close();
-            }
-        });
+                lastPerspective = win.currentPerspective;
+                if (lastPerspective && lastPerspective !== 'list') {
+                    ox.ui.Perspective.show(app, 'list');
+                }
+            })
+            .on('search:close', function () {
+                if (lastPerspective && lastPerspective !== 'list') {
+                    ox.ui.Perspective.show(app, lastPerspective);
+                }
+            })
+            .on('change:perspective', function (e, name, long) {
+                // save current perspective to settings
+                settings.set('viewView', long).save();
+                if (name !== 'list') {
+                    win.search.close();
+                }
+            });
 
     });
 

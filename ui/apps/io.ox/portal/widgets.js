@@ -300,7 +300,7 @@ define('io.ox/portal/widgets',
 
         toJSON: function () {
             // get latest values
-            var widgets = {};
+            widgets = {};
             collection.each(function (model) {
                 if (!model.get('userWidget')) {
                     return;
