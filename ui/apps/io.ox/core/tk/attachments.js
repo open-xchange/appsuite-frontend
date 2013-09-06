@@ -204,7 +204,6 @@ define('io.ox/core/tk/attachments',
                 counter = 0,
                 files = [],
                 $el = (options.$el || $('<div>').addClass('row-fluid'));
-                       //.css('border', '1px solid red');
 
             if (options.registerTo) {
                 _.each([].concat(options.registerTo), function (obj) {
@@ -240,7 +239,7 @@ define('io.ox/core/tk/attachments',
                         showpreview: options.preview && util.hasPreview(file) && baton.view && baton.view.rightside,
                         rightside: baton.view.rightside
                     };
-                    return util.node.call(this, file, options);
+                    return util.node.call(this, file, opt);
                 },
 
                 listChanged: function () {
@@ -249,7 +248,7 @@ define('io.ox/core/tk/attachments',
                 },
 
                 empty: function () {
-                    //remove all items
+                    //remove all nodes
                     $el.find('.file').parent().remove();
                 },
 
@@ -275,7 +274,6 @@ define('io.ox/core/tk/attachments',
                 },
 
                 add: function (file) {
-                    //TODO: duck checks vs. group property
                     var list = [].concat(file);
                     if (list.length) {
                         //add

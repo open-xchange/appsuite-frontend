@@ -22,7 +22,6 @@ define('io.ox/core/tk/attachmentsUtil',
 
         'use strict';
 
-
         var self,
             /**
              * duck checks
@@ -82,7 +81,6 @@ define('io.ox/core/tk/attachmentsUtil',
              * @param  {jquery} rightside (optional: needed for mail to let the popup check for events in the editor iframe)
              * @return {jquery} textnode
              */
-            //createPreview: function (file, app, rightside) {
             createPreview = function (file, rightside) {
                 return !self.hasPreview(file) ? $() : $('<a href="#" class="attachment-preview">')
                             .data({
