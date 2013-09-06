@@ -38,7 +38,7 @@ define('plugins/notifications/mail/register',
         node.append(
             $('<div class="item" tabindex="1">').attr('data-cid', _.cid(data)).append(
                 $('<div class="title">').text(_.noI18n(util.getDisplayName(f[0]))),
-                $('<div class="subject">').text(_.noI18n(data.subject)),
+                $('<div class="subject">').text(_.noI18n(data.subject) || gt('No subject')).addClass(data.subject ? '' : 'empty'),
                 (_.device('smartphone') ? $() : $('<div class="content">').html(_.noI18n(api.beautifyMailText(data.attachments[0].content))))
             )
         );
