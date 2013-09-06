@@ -423,7 +423,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/spam', {
         capabilities: 'spam',
         requires: function (e) {
-            return !e.collection.isLarge() && api.getList(e.context).pipe(function (list) {
+            return e.collection.isLarge() || api.getList(e.context).pipe(function (list) {
                 var bool = e.collection.has('toplevel') &&
                     _(list).reduce(function (memo, data) {
                         return memo || (!account.is('spam', data.folder_id) && !util.isSpam(data));
@@ -439,7 +439,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/nospam', {
         capabilities: 'spam',
         requires: function (e) {
-            return !e.collection.isLarge() && api.getList(e.context).pipe(function (list) {
+            return e.collection.isLarge() || api.getList(e.context).pipe(function (list) {
                 var bool = e.collection.has('toplevel') &&
                     _(list).reduce(function (memo, data) {
                         return memo || account.is('spam', data.folder_id) || util.isSpam(data);
