@@ -280,6 +280,11 @@ define("io.ox/core/extPatterns/links",
         var node = $('<ul role="menu">').addClass('dropdown-menu').appendTo($parent);
         if (options.open === 'left') {
             node.addClass("pull-right").css({textAligh: 'left'});
+        } else {
+            $toggle.on(Modernizr.touch ? 'touchstart' : 'click', function (e) {
+                // fix dropdown position on-the-fly
+                node.addClass($parent.position().left < 100 ? '' : ' dropdown-right');
+            });
         }
         drawLinks(options, new Collection(baton.data), node, baton, args, true);
 
