@@ -580,10 +580,11 @@ define('io.ox/mail/main',
             });
 
             grid.selection.on('keyboard', function (evt, e, key) {
-                var sel = grid.selection.get(), cid, index;
+                var sel = grid.selection.get(), cid, cell, index;
                 if (sel.length === 1) {
                     cid = grid.selection.serialize(sel[0]);
-                    index = grid.selection.getIndex(cid) + 1;
+                    cell = grid.getContainer().find('[data-obj-id="' + cid + '"]');
+                    index = parseInt(cell.attr('data-index'), 10) + 1;
                     // cursor right? (open)
                     if (key === 39) {
                         open(index, cid);
