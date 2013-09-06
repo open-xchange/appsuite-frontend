@@ -562,7 +562,7 @@ define("io.ox/mail/write/view-main",
                     changeHandler = function (e) {
                         //register rightside node
                         e.preventDefault();
-                        if (_.browser.IE !== 9 && false) {
+                        if (_.browser.IE !== 9) {
                             var list = [];
                             //fileList to array of files
                             _($input[0].files).each(function (file) {
