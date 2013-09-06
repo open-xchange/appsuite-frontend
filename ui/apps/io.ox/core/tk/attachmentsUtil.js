@@ -46,36 +46,34 @@ define('io.ox/core/tk/attachmentsUtil',
                         group: 'reference'
                     };
                 } else if (file.display_name || file.email1) {
-                    //contacts vcard (local)
+                    //contacts vcard referene (local)
                     data = {
                         type: 'vcf',
                         module: 'contacts',
                         group: 'reference'
                     };
                 } else if (file.id && file.folder_id) {
-                    //infostore file (local)
+                    //infostore file reference(local)
                     data = {
                         type: file.type || file.content_type || '',
                         module: 'infostore',
                         group: 'reference'
                     };
+                } else if (file instanceof $ && file[0].tagName === 'INPUT') {
+                    //file input: old mode for IE9 (local)
+                    data = {
+                        type:  file.val().split('.').length > 1  ? file.val().split('.').pop() : '',
+                        module: 'mail',
+                        group: 'input'
+                    };
                 } else if (window.File && file instanceof window.File) {
-                    //file (upload or dnd!) (local)
+                    //file api elem: upload or dnd (local)
                     data = {
                         type:  file.type || file.content_type || '',
                         module: 'mail',
                         group: 'file'
                     };
-                } else if (file instanceof $ && file[0].tagName === 'INPUT') {
-                    //file input as old mode for IE9 (local)
-                    data = {
-                        AAA: 6,
-                        type:  file.val().split('.').length > 1  ? file.val().split('.').pop() : '',
-                        module: 'mail',
-                        group: 'input'
-                    };
                 }
-
                 return data || {};
             },
             /**
