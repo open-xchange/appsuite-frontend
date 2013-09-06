@@ -191,7 +191,7 @@
 
 .vgrid-cell .thread-summary-item {
     padding: 5px 13px 5px 13px;
-    border-bottom: 1px solid #fff;
+    border-top: 1px solid #fff;
     background-color: #eee;
     cursor: pointer;
 }
@@ -201,21 +201,27 @@
     font-weight: bold;
 }
 
-.vgrid-cell .thread-summary-item.selected,
-.vgrid-cell .thread-summary-item.selected:hover {
-    background-color: #08c;
-}
+.vgrid-cell {
 
-.vgrid-cell .thread-summary-item.selected * {
-    color: white !important;
+    .thread-summary-item.selected,
+    .thread-summary-item.selected:hover {
+        background-color: #ddd;
+    }
+
+    .vgrid .vgrid-scrollpane:focus & {
+        .thread-summary-item.selected,
+        .thread-summary-item.selected:hover {
+            background-color: @selectedBackground;
+        }
+
+        .thread-summary-item.selected * {
+            color: white !important;
+        }
+    }
 }
 
 .vgrid-cell .thread-summary-item:hover {
-    background-color: #ddd;
-}
-
-.vgrid-cell .thread-summary-item:last-child {
-    border-bottom: 0px none;
+    background-color: #ccc;
 }
 
 .vgrid-cell .thread-summary-pos {
