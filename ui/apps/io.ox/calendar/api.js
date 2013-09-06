@@ -340,7 +340,7 @@ define('io.ox/calendar/api',
                     module: 'calendar',
                     params: {
                         action: 'delete',
-                        timestamp: _.now()
+                        timestamp: _.then()
                     },
                     data: obj
                 })
