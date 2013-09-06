@@ -549,8 +549,6 @@ define("io.ox/mail/write/view-main",
             var uploadSection = this.createSection('attachments', gt('Attachments'), false, true),
                 dndInfo =  $('<div class="alert alert-info">').text(gt('You can drag and drop files from your computer here to add as attachment.'));
 
-            //TODO: remove after feature is developed
-            ox.efl = 'efl' in ox ? ox.efl : true;
             var $inputWrap = attachments.fileUploadWidget({
                     multi: true,
                     displayLabel: false,
@@ -596,7 +594,8 @@ define("io.ox/mail/write/view-main",
                     uploadSection.label,
                     uploadSection.section.append(
                         (_.device('!touch') && (!_.browser.IE || _.browser.IE > 9) ? dndInfo : ''),
-                        ox.efl ? $inputWrap : this.createUpload()
+                        //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
+                        _.browser.IE !== 9 ? $inputWrap : this.createUpload()
                     )
                 )
             );
@@ -614,7 +613,7 @@ define("io.ox/mail/write/view-main",
                 rowClass: 'collapsed'
             });
             // add preview side-popup
-            if (!!!ox.efl)
+            if (_.browser.IE <= 10)
                 new dialogs.SidePopup().delegate(this.sections.attachments, '.attachment-preview', previewAttachment);
 
 
