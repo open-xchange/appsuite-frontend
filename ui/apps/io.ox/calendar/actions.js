@@ -364,7 +364,6 @@ define('io.ox/calendar/actions',
 
                 function commit(target) {
                     if (type === "move" && vGrid) vGrid.busy();
-                    console.log('copyMove', type, api[type]);
                     api[type](list, target).then(
                         function () {
                             var response = type === 'move' ?
