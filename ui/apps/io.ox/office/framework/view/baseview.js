@@ -261,8 +261,15 @@ define('io.ox/office/framework/view/baseview',
          *  by the static method 'Notifications.yell()'.
          */
         function showNotification(notification) {
+            if (notification.type === 'error') {
+                // Bug 28554: no auto-close for error messages
+                _.extend(notification, { duration: -1 });
+                // remember error message, show again after switching applications
+                lastNotification = notification;
+            } else {
+                lastNotification = null;
+            }
             Notifications.yell(notification);
-            lastNotification = (notification.type === 'error') ? notification : null;
         }
 
         /**
