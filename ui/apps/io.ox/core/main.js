@@ -1117,13 +1117,10 @@ define('io.ox/core/main',
                     })
                     .each(function (details, index) {
                         //only load first app on small devices
-                        if (_.device('smartphone') && index > 0)
-                            return;
-
+                        if (_.device('smartphone') && index > 0) return;
                         // split app/call
                         var launch, method;
-
-                        debug('autoLaunching', details.app);
+                        debug('core: autoLaunching', details.app);
                         launch = ox.launch(details.app);
                         method = details.method;
                         // explicit call?

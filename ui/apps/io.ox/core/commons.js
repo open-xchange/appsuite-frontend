@@ -574,7 +574,7 @@ define('io.ox/core/commons',
 
             move = function (e, targetFolderId) {
                 if (data) data.folder_id = targetFolderId;
-                update();
+                if (update) update();
             },
 
             // we use redraw directly if we're in multiple mode
@@ -587,7 +587,9 @@ define('io.ox/core/commons',
                 if (node) node.trigger('view:remove').remove();
             },
 
-            checkFolder = function (e, folder, folderId, folderObj) {//checks if folder permissions etc. have changed, and triggers redraw. Important to update inline links
+            // checks if folder permissions etc. have changed, and triggers redraw.
+            // Important to update inline links
+            checkFolder = function (e, folder, folderId, folderObj) {
                 if (folder === e.data.folder.toString() && api) {
                     api.trigger('update:' + e.data.cid);
                 }
