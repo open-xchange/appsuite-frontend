@@ -26,7 +26,10 @@ define('io.ox/office/framework/view/baseview',
     'use strict';
 
     var // the global root element used to store DOM elements temporarily
-        tempStorageNode = $('<div>', { id: 'io-ox-office-temp' }).appendTo('body');
+        tempStorageNode = $('<div>', { id: 'io-ox-office-temp' }).appendTo('body'),
+
+        // a helper node to workaround selection problems in IE (bug 28515, bug 28711)
+        focusHelperNode = $('<div>', { contenteditable: true }).appendTo(tempStorageNode);
 
     // global functions =======================================================
 
@@ -832,6 +835,30 @@ define('io.ox/office/framework/view/baseview',
         });
 
     } // class BaseView
+
+    // static methods ---------------------------------------------------------
+
+    /**
+     * Clears the current browser selection ranges.
+     */
+    BaseView.clearBrowserSelection = function () {
+        try {
+            // Bug 28515, bug 28711: IE fails to clear the selection (and to
+            // modify it afterwards), if it currently points to a DOM node that
+            // is not visible anymore. This happens e.g. after clicking on the
+            // 'Show/hide side panel' button shown by all OX Documents
+            // applications, which hide themselves together with the side pane
+            // or overlay pane after activation. Workaround is to move focus to
+            // an editable DOM node which will cause IE to update the browser
+            // selection object. Using another focusable node (e.g. the body
+            // element) is not sufficient. Use try/catch anyway to be notified
+            // about other problems with the selection.
+            if (_.browser.IE) { focusHelperNode.focus(); }
+            window.getSelection().removeAllRanges();
+        } catch (ex) {
+            Utils.exception(ex);
+        }
+    };
 
     // exports ================================================================
 
