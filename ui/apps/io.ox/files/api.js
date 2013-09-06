@@ -501,7 +501,7 @@ define('io.ox/files/api',
     function handleExtendedResponse(file, response, options) {
         // extended response?
         if (_.isObject(response) && response.data !== true) {
-            var data = response.data;
+            var data = response.data || response;
             // id has changed?
             if (data.id !== file.id) {
                 data.former_id = file.id;
