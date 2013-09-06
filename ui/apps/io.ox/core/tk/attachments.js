@@ -25,7 +25,7 @@ define('io.ox/core/tk/attachments',
     ], function (ext, attachmentAPI, strings, util, pre, dialogs, gt, links) {
 
         'use strict';
-        var oldMode = _.browser.IE < 10;
+        var oldMode = _.browser.IE < 10 || true;
 
         function EditableAttachmentList(options) {
             var counter = 0;

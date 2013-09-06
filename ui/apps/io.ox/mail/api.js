@@ -1250,7 +1250,7 @@ define('io.ox/mail/api',
 
         api.trigger('beforesend', { data: data, files: files, form: form });
 
-        if (Modernizr.filereader && 'FormData' in window) {
+        if (Modernizr.filereader && 'FormData' in window && false) {
             deferred = handleSendXHR2(data, files, deferred);
         } else {
             deferred = handleSendTheGoodOldWay(data, form);
