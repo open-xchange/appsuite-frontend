@@ -1274,7 +1274,10 @@ define('io.ox/office/framework/app/baseapplication',
                     invocationData = { args: _.toArray(arguments), def: $.Deferred() };
 
                 // cache invocation data, if a callback function is currently running
-                if (runningPromise) {
+                // Bug 28593: also, if pending callbacks exist without running callback
+                // (race condition: running callback resolves -> 'runningPromise' reset
+                // -> this method called -> background loop starts the next callback)
+                if (runningPromise || (pendingInvocations.length > 0)) {
                     pendingInvocations.push(invocationData);
                     // start timer that processes the array
                     if (!timer) {
