@@ -419,16 +419,25 @@ define('io.ox/files/api',
 
         return http.UPLOAD({
                 module: 'files',
-                params: { action: 'update', timestamp: _.now(), id: options.id, filename: options.filename },
+                params: {
+                    action: 'update',
+                    extendedResponse: true,
+                    filename: options.filename,
+                    id: options.id,
+                    timestamp: _.now()
+                },
                 data: formData,
                 fixPost: true // TODO: temp. backend fix
             })
-            .pipe(function (data) {
-                var id = options.json.id || options.id,
-                    folder_id = String(options.json.folder_id),
-                    obj = { folder_id: folder_id, id: id };
-                return api.propagate('change', obj, options.silent);
-            }, failedUpload);
+            .then(
+                function success(response) {
+                    var id = options.json.id || options.id,
+                        folder_id = String(options.json.folder_id),
+                        file = { folder_id: folder_id, id: id };
+                    return handleExtendedResponse(file, response, options);
+                },
+                failedUpload
+            );
     };
 
     /**
@@ -460,38 +469,49 @@ define('io.ox/files/api',
         formData.append($('<input>', {'type': 'hidden', 'name': 'json', 'value': JSON.stringify(options.json)}));
 
         /*return http.UPLOAD({
-                module: 'files',
-                params: { action: 'update', timestamp: _.now(), id: options.id },
-                data: formData,
-                fixPost: true // TODO: temp. backend fix
-            });*/
+            module: 'files',
+            params: { action: 'update', timestamp: _.now(), id: options.id },
+            data: formData,
+            fixPost: true // TODO: temp. backend fix
+        });*/
         var tmpName = 'iframe_' + _.now(),
         frame = $('<iframe>', {'name': tmpName, 'id': tmpName, 'height': 1, 'width': 1 });
-
         $('#tmp').append(frame);
-        window.callback_update = function (data) {
-                var id = options.json.id || options.id,
-                    folder_id = String(options.json.folder_id),
-                    obj = { folder_id: folder_id, id: id };
-                $('#' + tmpName).remove();
-                deferred[(data && data.error ? 'reject' : 'resolve')](data);
-                window.callback_update = null;
-                return api.propagate('change', obj).pipe(function () {
-                    api.trigger('create.version', obj);
-                    return { folder_id: folder_id, id: id, timestamp: data.timestamp};
-                });
-            };
+
+        window.callback_update = function (response) {
+            var id = options.json.id || options.id,
+                folder_id = String(options.json.folder_id),
+                file = { folder_id: folder_id, id: id };
+            $('#' + tmpName).remove();
+            deferred[(response && response.error ? 'reject' : 'resolve')](response);
+            window.callback_update = null;
+            handleExtendedResponse(file, response);
+        };
 
         formData.attr({
             method: 'post',
             enctype: 'multipart/form-data',
-            action: ox.apiRoot + '/files?action=update&id=' + options.id + '&timestamp=' + options.timestamp + '&session=' + ox.session,
+            action: ox.apiRoot + '/files?action=update&extendedResponse=true&id=' + options.id + '&timestamp=' + options.timestamp + '&session=' + ox.session,
             target: tmpName
         });
         formData.submit();
         return deferred;
     };
 
+    function handleExtendedResponse(file, response, options) {
+        // extended response?
+        if (_.isObject(response) && response.data !== true) {
+            var data = response.data;
+            // id has changed?
+            if (data.id !== file.id) {
+                data.former_id = file.id;
+                api.trigger('change:id', data, data.former_id);
+                return api.propagate('rename', data);
+            }
+        }
+        options = options || {};
+        return api.propagate('change', file, options.silent);
+    }
 
     /**
      * updates file
@@ -521,17 +541,8 @@ define('io.ox/files/api',
                 data: updateData,
                 appendColumns: false
             })
-            .then(function (data) {
-                // missing extendedResponse support?
-                data = data || file;
-                // id has changed?
-                if (data.id !== file.id) {
-                    data.former_id = file.id;
-                    api.trigger('change:id', data, data.former_id);
-                    return api.propagate('rename', data);
-                }  else {
-                    return api.propagate('change', data);
-                }
+            .then(function (response) {
+                return handleExtendedResponse(file, response);
             });
     };
 
