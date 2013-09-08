@@ -369,7 +369,7 @@ define('io.ox/core/pubsub/settings/pane',
         });
 
         function getHint() {
-
+            filteredList = collection.forFolder(filter);
             var isEmpty = filteredList.length === 0,
                 isFiltered = !!filter.folder,
                 hasPublications = folderState.isPublished && type === 'publication',

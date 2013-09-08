@@ -258,7 +258,7 @@ define("io.ox/core/extPatterns/links",
         }
         var args = $.makeArray(arguments),
             $parent = $('<div>').addClass('dropdown')
-                .css({ display: 'inline-block', zIndex: (z = z > 0 ? z - 1 : 11000) })
+                .css('display', 'inline-block')
                 .appendTo(this),
             label = options.label || baton.label || '###',
             $toggle = $('<a href="#" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
@@ -270,6 +270,9 @@ define("io.ox/core/extPatterns/links",
                 )
                 .appendTo($parent);
 
+        if (options.zIndex !== undefined) {
+            $parent.css('zIndex', (z = z > 0 ? z - 1 : 11000));
+        }
         $toggle.addClass(options.classes);
 
         // TODO remove this whole "inline-js-spacing" solution
@@ -283,6 +286,11 @@ define("io.ox/core/extPatterns/links",
         var node = $('<ul role="menu">').addClass('dropdown-menu').appendTo($parent);
         if (options.open === 'left') {
             node.addClass("pull-right").css({textAligh: 'left'});
+        } else {
+            $toggle.on(Modernizr.touch ? 'touchstart' : 'click', function (e) {
+                // fix dropdown position on-the-fly
+                node.addClass($parent.position().left < 100 ? '' : ' dropdown-right');
+            });
         }
         drawLinks(options, new Collection(baton.data), node, baton, args, true);
 

@@ -172,7 +172,7 @@ define('io.ox/mail/util',
                             message = that.removeChannelSuffix(message);
                         });
                     } else if (_.isObject(mail)) {
-                        if (_.isArray(mail.from[0]) && mail.from[0][1])
+                        if (mail.from && _.isArray(mail.from[0]) && mail.from[0][1])
                             mail.from[0][1] = remove(mail.from[0][1]);
                         if (_.isArray(mail.to)) {
                             _.each(mail.to, function (recipient) {

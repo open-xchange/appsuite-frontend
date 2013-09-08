@@ -558,10 +558,10 @@ define('io.ox/mail/view-detail',
                                     );
                                 }
                             }
-                            else if (length >= 20 && /\S{20}/.test(text)) {
+                            else if (length >= 30 && /\S{30}/.test(text)) {
                                 // split long character sequences for better wrapping
                                 node.replaceWith(
-                                    $('<span>').html(coreUtil.breakableHTML(text))
+                                    $.parseHTML(coreUtil.breakableHTML(text))
                                 );
                             }
                         }
@@ -1046,8 +1046,12 @@ define('io.ox/mail/view-detail',
         id: 'fromlist',
         draw: function (baton) {
             var data = baton.data, list = util.serializeList(data, 'from'), node;
-            this.append($('<div class="from list">').append(list.removeAttr('style')));
-            if (ox.ui.App.get('io.ox/mail').length) {
+            this.append(
+                $('<div class="from list">').append(
+                    baton.data.from ? list.removeAttr('style') : $.txt('\u00A0')
+                )
+            );
+            if (baton.data.from && ox.ui.App.get('io.ox/mail').length) {
                 node = list.last();
                 node.after(
                     $('<i class="icon-search">').on('click', node.data('person'), searchSender)

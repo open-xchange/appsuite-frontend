@@ -630,7 +630,10 @@ define('io.ox/office/preview/view/view',
 
             // Bug 25924: sometimes, Firefox selects the entire page
             contentRootNode.on('focus', function () {
-                window.getSelection().removeAllRanges();
+                // Bug 28711: IE fails to clear the selection, if it currently
+                // points to a DOM node that is not visible anymore (e.g. the
+                // 'Show/hide side panel' button).
+                BaseView.clearBrowserSelection();
             });
         }
 

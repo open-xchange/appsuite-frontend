@@ -51,10 +51,8 @@ define('io.ox/files/views/create', [
                 function uploadFiles() {
                     var $input = $form.find('input[type="file"]'),
                         folder = app.folder.get(),
-                        fileList = ($input.length > 0 ? $input[0].files : []) || [],
-                        files = _.map(baton.fileList.get(), function (file) {
-                            return file.file;
-                        });
+                        //fileList = ($input.length > 0 ? $input[0].files : []) || [],
+                        files = baton.fileList.get();
                     if (files.length) {
                         description = $form.find('textarea').val();
                         queue.offer(files);
@@ -131,7 +129,7 @@ define('io.ox/files/views/create', [
                 //dialog
                 dialog.header($('<h4>').text(gt('Upload new files')));
                 dialog.getBody().append($('<div>').addClass('row-fluid').append($form));
-                dialog.getBody().append(baton.fileList.$el);
+                dialog.getBody().append(baton.fileList.getNode());
                 dialog
                     .addPrimaryButton('save', gt('Save'), 'save')
                     .addButton('cancel', gt('Cancel'), 'cancel')
@@ -162,10 +160,12 @@ define('io.ox/files/views/create', [
                         changeHandler = function (e) {
                             e.preventDefault();
                             if (!oldMode) {
-                                //use file list widget
+                                var list = [];
+                                //fileList to array of files
                                 _($input[0].files).each(function (file) {
-                                    baton.fileList.add(file);
+                                    list.push(_.extend(file, {group: 'file'}));
                                 });
+                                baton.fileList.add(list);
                                 $input.trigger('reset.fileupload');
                             }
                         };
@@ -185,10 +185,12 @@ define('io.ox/files/views/create', [
             });
 
         //referenced via baton.fileList
-        ext.point(POINT + '/filelist').extend(new attachments.SimpleEditableFileList({
+        ext.point(POINT + '/filelist').extend(new attachments.EditableFileList({
                     id: 'attachment_list',
                     itemClasses: 'span6',
                     fileClasses: 'background',
+                    preview: false,
+                    registerTo: baton,
                     index: 300
                 },
                 baton

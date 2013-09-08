@@ -323,7 +323,8 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
 
                 var o = {
                     duration: 0,
-                    html: false
+                    html: false,
+                    type: 'info'
                 };
 
                 // catch server error?
@@ -345,7 +346,8 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
 
                     active = false;
                     clearTimeout(timer);
-                    timer = setTimeout(remove, o.duration || durations[o.type] || 5000);
+
+                    timer = o.duration === -1 ? null : setTimeout(remove, o.duration || durations[o.type] || 5000);
 
                     var html = o.html ? o.message : _.escape(o.message).replace(/\n/g, '<br>'),
                         reuse = false,

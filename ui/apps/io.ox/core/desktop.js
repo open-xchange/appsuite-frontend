@@ -151,7 +151,7 @@ define("io.ox/core/desktop",
                                 api.get({ folder: id })
                                 .done(function (data) {
                                     // off
-                                    api.off('change:' + folder);
+                                    //api.off('change:' + folder);
                                     var appchange = _.url.hash('app') !== activeApp; //app has changed while folder was requested
                                     // remember
                                     folder = String(id);

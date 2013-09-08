@@ -1274,7 +1274,10 @@ define('io.ox/office/framework/app/baseapplication',
                     invocationData = { args: _.toArray(arguments), def: $.Deferred() };
 
                 // cache invocation data, if a callback function is currently running
-                if (runningPromise) {
+                // Bug 28593: also, if pending callbacks exist without running callback
+                // (race condition: running callback resolves -> 'runningPromise' reset
+                // -> this method called -> background loop starts the next callback)
+                if (runningPromise || (pendingInvocations.length > 0)) {
                     pendingInvocations.push(invocationData);
                     // start timer that processes the array
                     if (!timer) {
@@ -1487,20 +1490,23 @@ define('io.ox/office/framework/app/baseapplication',
 
                 // propagate changed file to the files API
                 return FilesAPI.propagate('change', file).then(function () {
+                    var options = {
+                            action: 'getdocument',
+                            documentformat: format || 'native',
+                            filename: self.getFullFileName(),
+                            mimetype: file.file_mimetype || '',
+                            version: 0, // always use the latest version
+                            nocache: _.uniqueId(), // needed to trick the browser cache (is not evaluated by the backend)
+                            source: file.source,// document source: file|mail|task
+                            folder: file.folder_id,
+                            id: file.id,
+                            module: file.module,
+                            attachment: file.attached
+                        };
 
-                    return self.getFilterModuleUrl({
-                                action: 'getdocument',
-                                documentformat: format || 'native',
-                                filename: self.getFullFileName(),
-                                mimetype: file.file_mimetype || '',
-                                version: 0, // always use the latest version
-                                nocache: _.uniqueId(), // needed to trick the browser cache (is not evaluated by the backend)
-                                source: file.source,// document source: file|mail|task
-                                folder: file.folder_id,
-                                id: file.id,
-                                module: file.module,
-                                attachment: file.attached
-                            });
+                    return (ExtensionRegistry.isEditable(options.filename) ?
+                                self.getFilterModuleUrl(options) :
+                                    self.getConverterModuleUrl(options));
                 });
             }
 
@@ -1554,6 +1560,22 @@ define('io.ox/office/framework/app/baseapplication',
             });
 
             return this;
+        };
+
+        /**
+         * Returns whether the application contains pending document changes
+         * not yet sent to the server. Intended to be overwritten on demand by
+         * sub classes.
+         *
+         * @attention
+         *  Do not rename this method. The OX core uses it to decide whether to
+         *  show a warning before the browser refreshes or closes the page.
+         *
+         * @returns {Boolean}
+         *  Whether the application contains pending document changes.
+         */
+        this.hasUnsavedChanges = function () {
+            return false;
         };
 
         /**
@@ -1835,9 +1857,21 @@ define('io.ox/office/framework/app/baseapplication',
             return app;
         }
 
+        // Bug 28664: remove all save points before they are checked to decide whether to show the 'unsaved documents' dialog
+        ext.point('io.ox/core/logout').extend({
+            id: moduleName + '/logout/before',
+            index: 'first', // run before the save points are checked by the core
+            logout: function () {
+                _(ox.ui.App.get(moduleName)).each(function (app) {
+                    if (!app.hasUnsavedChanges()) { app.removeRestorePoint(); }
+                });
+            }
+        });
+
         // listen to user logout and notify all running applications
         ext.point('io.ox/core/logout').extend({
-            id: moduleName + '/logout',
+            id: moduleName + '/logout/quit',
+            index: 'last', // run after the dialog (not called if logout was rejected)
             logout: function () {
                 var deferreds = _(ox.ui.App.get(moduleName)).map(function (app) {
                     return app.executeQuitHandlers();

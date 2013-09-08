@@ -12,7 +12,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettext!io.ox/core'], function (ext, gt) {
+define('plugins/portal/userSettings/register',
+    ['io.ox/core/extensions',
+     'io.ox/core/main',
+     'gettext!io.ox/core'], function (ext, main, gt) {
 
     'use strict';
 
@@ -63,10 +66,15 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
                     $('<label>').text(gt('New password')),
                     $('<input type="password" class="input-large new-password">'),
                     $('<label>').text(gt('Repeat new password')),
-                    $('<input type="password" class="input-large repeat-new-password">')
+                    $('<input type="password" class="input-large repeat-new-password">'),
+                    $('<div class="alert alert-block alert-info">')
+                    .css('margin', '14px 0px')
+                    .text(
+                        gt('If you change the password, you will be logged out. Please ensure that everything is closed and saved.')
+                    )
                 );
             })
-            .addPrimaryButton('change', gt('Change password'))
+            .addPrimaryButton('change', gt('Change password and logout'))
             .addButton('cancel', gt('Cancel'))
             .on('change', function (e, data, dialog) {
                 var node = dialog.getContentNode();
@@ -81,10 +89,10 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
                     }
                 })
                 .done(function () {
-                    notifications.yell('success', gt('Your password has been changed'));
                     node.find('input[type="password"]').val('');
                     dialog.close();
                     dialog = null;
+                    main.logout();
                 })
                 .fail(function (error) {
                     notifications.yell(error);

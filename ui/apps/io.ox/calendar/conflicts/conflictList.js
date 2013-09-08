@@ -30,7 +30,7 @@ define('io.ox/calendar/conflicts/conflictList',
                             // check if private
                             if (!data.private_flag || ox.user_id === data.created_by) {
                                 require(["io.ox/calendar/view-detail"], function (view) {
-                                    new dialogs.SidePopup().show(e, function (popup) {
+                                    new dialogs.SidePopup({ modal: true }).show(e, function (popup) {
                                         popup.append(view.draw(data));
                                         data = null;
                                     });

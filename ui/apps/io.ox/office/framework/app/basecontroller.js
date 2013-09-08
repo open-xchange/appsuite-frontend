@@ -87,6 +87,8 @@ define('io.ox/office/framework/app/basecontroller',
                 optionsHandler = Utils.getFunctionOption(definition, 'options', _.identity),
                 // handler for value setter
                 setHandler = Utils.getFunctionOption(definition, 'set'),
+                // whether to block the GUI while setter is running
+                busy = Utils.getBooleanOption(definition, 'busy', false),
                 // behavior for returning browser focus to application
                 focus = Utils.getStringOption(definition, 'focus', 'direct'),
                 // additional user data
@@ -169,10 +171,14 @@ define('io.ox/office/framework/app/basecontroller',
                     // convert result of the setter to a Deferred object
                     def = $.when(def);
 
-                    // disable this item if setter is still running
+                    // disable this item and show busy screen if setter is still running
                     if (def.state() === 'pending') {
-                        enabled = false;
-                        self.update();
+                        if (busy) {
+                            app.getView().enterBusy({ delay: 500 });
+                        } else {
+                            enabled = false;
+                            self.update();
+                        }
                     }
                 } else {
                     // item is disabled
@@ -193,14 +199,22 @@ define('io.ox/office/framework/app/basecontroller',
                 case 'never':
                     break;
                 default:
-                    Utils.warn('BaseController.Item.change(): unknown focus mode: ' + focus);
+                    Utils.warn('BaseController.Item.change(): unknown focus mode "' + focus + '" for item "' + key + '"');
                 }
 
                 // post processing after the setter is finished
-                def.always(function () {
-                    enabled = true;
+                if (def.state() === 'pending') {
+                    def.always(function () {
+                        if (busy) {
+                            app.getView().leaveBusy();
+                        } else {
+                            enabled = true;
+                        }
+                        self.update();
+                    });
+                } else {
                     self.update();
-                });
+                }
 
                 return this;
             };
@@ -423,10 +437,10 @@ define('io.ox/office/framework/app/basecontroller',
          *  @param {Function} [definition.set]
          *      Setter function changing the value of an item to the first
          *      parameter of the setter. Can be omitted for read-only items.
-         *      Defaults to an empty function. If the setter has been triggered
-         *      by a registered keyboard shortcut (see below), the 'keydown'
-         *      event object will be passed to the second parameter of the
-         *      setter function.
+         *      Defaults to an empty function. May return a Deferred object or
+         *      a Promise to indicate that the setter executes asynchronous
+         *      code. This has effect on the properties 'definition.busy' and
+         *      'definition.focus', see below.
          *  @param {Object|Array} [definition.shortcut]
          *      One or multiple keyboard shortcut definitions. If the window
          *      root node of the application receives a 'keydown' or 'keypress'
@@ -499,6 +513,11 @@ define('io.ox/office/framework/app/basecontroller',
          *          element, and the browser will execute its default action.
          *          If omitted or set to false, the event will be cancelled
          *          immediately after calling the setter function.
+         *  @param {Boolean} [definition.busy=false]
+         *      If set to true, the GUI of the application will be blocked and
+         *      a busy indicator will be shown while the setter of this item
+         *      is running (indicated by a pending Deferred object returned by
+         *      the setter). Does not have any effect for synchronous setters.
          *  @param {String} [definition.focus='direct']
          *      Determines how to return the browser focus to the application
          *      pane after executing the setter function of this item. The
