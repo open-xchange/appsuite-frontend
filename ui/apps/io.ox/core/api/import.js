@@ -22,10 +22,9 @@ define('io.ox/core/api/import',
         if ('FormData' in window) {
             var formData = new FormData();
             formData.append('file', data.file);
-
             return http.UPLOAD({
                 module: 'import',
-                params: { action: data.type, folder: data.folder },
+                params: { action: data.type, folder: data.folder, ignoreUIDs: data.ignoreUIDs },
                 data: formData,
                 fixPost: true
             });
@@ -34,7 +33,7 @@ define('io.ox/core/api/import',
                 module: 'import',
                 action: data.type,
                 form: data.form,
-                params: { folder: data.folder }
+                params: { folder: data.folder, ignoreUIDs: data.ignoreUIDs }
             });
         }
     }
