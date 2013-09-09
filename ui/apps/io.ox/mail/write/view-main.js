@@ -549,11 +549,12 @@ define("io.ox/mail/write/view-main",
             var uploadSection = this.createSection('attachments', gt('Attachments'), false, true),
                 dndInfo =  $('<div class="alert alert-info">').text(gt('You can drag and drop files from your computer here to add as attachment.'));
 
+            gt('Add Attachment'); // for next release
             var $inputWrap = attachments.fileUploadWidget({
                     multi: true,
                     displayLabel: false,
                     displayButton: true,
-                    buttontext: gt('Add Attachment'),
+                    buttontext: gt('Select file'),
                     buttonicon: 'icon-paper-clip'
                 }),
                 $input = $inputWrap.find('input[type="file"]'),
