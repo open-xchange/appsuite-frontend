@@ -52,13 +52,13 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                         .on('click', function (e) {
                             e.stopPropagation();
                             app.getWindow().busy();
-            
+
                             //check if waiting for attachmenthandling is needed
                             if (baton.attachmentList.attachmentsToAdd.length +
                                 baton.attachmentList.attachmentsToDelete.length > 0) {
                                 baton.model.attributes.tempAttachmentIndicator = true; //temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
                             }
-            
+
                             baton.model.save().done(function () {
                                 app.markClean();
                                 app.quit();
@@ -68,13 +68,13 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                                     notifications.yell('error', response.error);
                                 }, 300);
                             });
-            
+
                         }),
                     $('<button type="button" data-action="discard" class="btn cancel task-edit-cancel">')//cancel button
                         .text(gt('Discard'))
                         .on('click', function () { app.quit(); })
                     ));
-            
+
             baton.parentView.on('changeMode', function (e, mode) {
                 if (mode === 'edit') {
                     headline.text(gt('Edit task'));
@@ -86,7 +86,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
             });
         }
     });
-    
+
     // title
     point.extend(new forms.InputField({
         id: 'title',
@@ -112,7 +112,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
     }), {
         row: '2'
     });
-    
+
     //expand link
     point.basicExtend({
         id: 'expand_link',
@@ -138,7 +138,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
             );
         }
     });
-    
+
     // recurrence
     point.extend(new RecurrenceView({
         id: 'recurrence',
@@ -148,7 +148,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
     }), {
         row: '5'
     });
-    
+
     //reminder selection
     point.basicExtend({
         id: 'alarm_select',
@@ -234,7 +234,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
     }), {
         row: '7'
     });
-    
+
     point.basicExtend({
         id: 'progress',
         index: 1100,
@@ -317,7 +317,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
     }), {
         row: '7'
     });
-    
+
     //tabs section
     point.basicExtend({
         id: 'tab_section',
@@ -339,7 +339,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                 }
             });
             this.append(table = $('<ul>').addClass('nav nav-tabs collapsed'), contentNode = $('<div>').addClass('row-fluid tab-content collapsed'));
-            
+
             for (var i = 0; i < tabs.length; i++) {
                 temp = $('<li>').css('width', 100 / tabs.length + '%').appendTo(table);
                 tabs[i].invoke('draw', temp, baton, contentNode, content[tabs[i].id], i);
@@ -352,7 +352,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
             }
         }
     });
-    
+
     //tabs
     ext.point('io.ox/tasks/edit/view/tabs').extend({
         id: 'participants_tab',
@@ -361,7 +361,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         draw: function (baton, contentNode, content, tabindex) {
             var tabContent,
                 rows = {};
-            
+
             //tab
             this.append($('<a>').addClass('tab-link').css('text-align', 'center')
                 .attr({tabindex: tabindex, href: '#edit-task-tab' + tabindex + '-' + baton.parentView.cid, 'data-toggle': 'tab'}).text(gt('Participants')));
@@ -380,7 +380,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
             });
         }
     });
-    
+
     ext.point('io.ox/tasks/edit/view/tabs').extend({
         id: 'attachments_tab',
         index: 200,
@@ -417,7 +417,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
             });
         }
     });
-    
+
     ext.point('io.ox/tasks/edit/view/tabs').extend({
         id: 'details_tab',
         index: 300,
@@ -707,7 +707,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
             });
         }
     });
-    
+
     // Attachments
 
     point.extend(new attachments.EditableAttachmentList({
