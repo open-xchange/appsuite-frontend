@@ -894,7 +894,8 @@ function checkExtensions(name, deps, f) {
 desc('Do a single run of all tests');
 function setupKarma(options) {
     var karma = require("karma"),
-        configFile = nextGen(karma) ? path.resolve('./karma.conf.js') : null;
+        configFile = nextGen(karma) ? path.resolve('./karma.conf.js') : null,
+        customConfig = path.existsSync('./karma.local.js') ? require('./karma.local.js') : null;
 
     console.log('Karma version:', karma.VERSION, nextGen(karma) ? '(up-to-date)' : '(deprecated/broken!)');
     function nextGen(karma) {
@@ -914,7 +915,7 @@ function setupKarma(options) {
     }
     karma.server.start(_.extend({
         configFile: configFile
-    }, options));
+    }, options, customConfig));
 }
 task('test', [], function () {
     setupKarma({
