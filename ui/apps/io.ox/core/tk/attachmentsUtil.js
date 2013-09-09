@@ -69,7 +69,7 @@ define('io.ox/core/tk/attachmentsUtil',
                     //file api elem: upload or dnd (local)
                     data = {
                         type:  file.type || file.content_type || '',
-                        module: 'mail',
+                        module: 'any',
                         group: 'file'
                     };
                 }
