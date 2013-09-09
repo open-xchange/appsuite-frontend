@@ -31,8 +31,8 @@
 
     function runCode(name, code) {
         eval("//@ sourceURL=" + name + ".js\n" + code);
-
     }
+
 
     if (_.device('desktop') && !_.device("safari") && window.IDBVersionChangeEvent !== undefined && Modernizr.indexeddb && window.indexedDB) {
         // IndexedDB
@@ -43,6 +43,15 @@
             var request = window.indexedDB.open('appsuite.filecache', 1);
             var db = null;
 
+            function fail(e) {
+                if (ox.debug) {
+                    console.warn('Failed to initiliaze IndexedDB file cache', e);
+                }
+                window.indexedDB.deleteDatabase('appsuite.filecache'); // delete, so maybe this works next time
+                fileCache = dummyFileCache;
+                initialization.reject();
+            }
+
             request.onupgradeneeded = function (e) {
                 db = e.target.result;
                 db.createObjectStore('filecache', {keyPath: 'name'});
@@ -50,28 +59,29 @@
             };
 
             request.onsuccess = function (e) {
+                var tx, request;
                 db = e.target.result;
-                var tx = db.transaction(['filecache', 'version'], 'readwrite');
-                var request = tx.objectStore('version').get('version');
-                request.onsuccess = function (e) {
-                    if (!e.target.result || e.target.result.version !== ox.version) {
-                        // Clear the filecache
-                        tx.objectStore('filecache').clear().onsuccess = initialization.resolve;
-                        // Save the new version number
-                        tx.objectStore('version').put({name: 'version', version: ox.version});
-                        if (request.transaction) {
-                            request.transaction.oncomplete = initialization.resolve;
+                try {
+                    tx = db.transaction(['filecache', 'version'], 'readwrite');
+                    request = tx.objectStore('version').get('version');
+                    request.onerror = fail;
+                    request.onsuccess = function (e) {
+                        if (!e.target.result || e.target.result.version !== ox.version) {
+                            // Clear the filecache
+                            tx.objectStore('filecache').clear().onsuccess = initialization.resolve;
+                            // Save the new version number
+                            tx.objectStore('version').put({name: 'version', version: ox.version});
+                            if (request.transaction) {
+                                request.transaction.oncomplete = initialization.resolve;
+                            }
+                        } else {
+                            initialization.resolve();
                         }
-                    } else {
-                        initialization.resolve();
-                    }
-                };
-                request.onerror = function (e) {
-                    // console.log('request error innerlevel', e);
-                    // fallback
-                    fileCache = dummyFileCache;
-                    initialization.reject();
-                };
+                    };
+
+                } catch (e) {
+                    fail(e);
+                }
             };
 
             request.onerror = function (e) {
