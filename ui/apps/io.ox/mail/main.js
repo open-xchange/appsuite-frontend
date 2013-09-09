@@ -224,7 +224,9 @@ define('io.ox/mail/main',
             // reset "unread only"
             grid.prop('unread', false);
             // template changes for unified mail
-            var unified = folderAPI.is('unifiedfolder', folder);
+
+            var unified = account.parseAccountId(folder, true) === 0 ? false : folderAPI.is('unifiedfolder', folder);
+
             if (unified !== tmpl.unified) {
                 tmpl.unified = unified;
                 grid.updateTemplates();
