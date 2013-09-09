@@ -914,7 +914,8 @@ function setupKarma(options) {
         return;
     }
     karma.server.start(_.extend({
-        configFile: configFile
+        configFile: configFile,
+        builddir: utils.builddir
     }, options, customConfig));
 }
 task('test', [], function () {
