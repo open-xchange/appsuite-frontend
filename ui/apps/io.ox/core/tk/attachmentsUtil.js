@@ -136,10 +136,10 @@ define('io.ox/core/tk/attachmentsUtil',
             node: function (obj, options) {
                 var caller = this,
                     icon, info,
-                    opt = $.extend(options, {
+                    opt = $.extend({
                             showpreview: true,
                             rightside: $()
-                        }),
+                        }, options),
                     //normalisation
                     name = obj.name || obj.filename || obj.subject || '\u00A0',
                     size = obj.file_size || obj.size || 0;
