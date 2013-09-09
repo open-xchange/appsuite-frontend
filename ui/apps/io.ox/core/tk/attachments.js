@@ -237,7 +237,7 @@ define('io.ox/core/tk/attachments',
                 renderFile: function (file) {
                     var opt = {
                         showpreview: options.preview && util.hasPreview(file) && baton.view && baton.view.rightside,
-                        rightside: baton.view.rightside
+                        rightside: (baton.view ? baton.view.rightside : undefined)
                     };
                     return util.node.call(this, file, opt);
                 },

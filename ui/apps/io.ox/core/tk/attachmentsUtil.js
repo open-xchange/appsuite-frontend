@@ -137,7 +137,8 @@ define('io.ox/core/tk/attachmentsUtil',
                 var caller = this,
                     icon, info,
                     opt = $.extend(options, {
-                            showpreview: true
+                            showpreview: true,
+                            rightside: $()
                         }),
                     //normalisation
                     name = obj.name || obj.filename || obj.subject || '\u00A0',
@@ -170,7 +171,7 @@ define('io.ox/core/tk/attachmentsUtil',
                                 $('<div class="row-1">').text(_.noI18n(name)),
                                 $('<div class="row-2">').append(
                                     info,
-                                    opt.showpreview  ? createPreview(obj.file, options.rightside) : $(),
+                                    opt.showpreview  ? createPreview(obj.file, opt.rightside) : $(),
                                     $.txt('\u00A0')
                                 ),
                                  // remove
