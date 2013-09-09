@@ -225,16 +225,35 @@ define('io.ox/core/tk/upload',
         };
 
         this.offer = function (file) {
-            var maxFileSize, quotaLimit, fileTitle;
-
-            //#. %1$s is the filename or title of the file
-            gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, maxFileSize);
-
-            //#. %1$s is the filename or title of the file
-            gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, quotaLimit);
+            var maxFileSize, fileTitle, proceed = true, self = this;
 
             files.push.apply(files, [].concat(file)); // handles both arrays and single objects properly
-            this.queueChanged();
+            require(['settings!io.ox/core', 'io.ox/core/strings'], function (settings, strings) {
+                var properties = settings.get('properties');
+                if (properties) {
+                    var total = 0,
+                        maxSize = properties.maxUploadSize * 10; // Very interesting value from backend here?! (Bytes / 10)
+                    _.each(files, function (f) {
+                        fileTitle = f.name;
+                        total += f.size;
+                        if (f.size > maxSize) {
+                            proceed = false;
+                            notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, strings.fileSize(maxSize)));
+                            self.stop();
+                            return;
+                        }
+                        if (properties.quota !== -1) {
+                            if (total < properties.quota - properties.usage) {
+                                proceed = false;
+                                notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, strings.fileSize(properties.quota)));
+                                self.stop();
+                                return;
+                            }
+                        }
+                    });
+                }
+                if (proceed) self.queueChanged();
+            });
         };
 
         this.length = 0;
