@@ -889,6 +889,19 @@ function checkExtensions(name, deps, f) {
     function checkPoint(id) { return self.points[id[1]] = true; }
 }
 
+// start appserver
+desc('Start the appserver');
+task('appserver', [], function () {
+    var customConfig = path.existsSync('./local.conf.js') ? require('./local.conf.js').appserver : null,
+        server = require('./lib/appserver/server'),
+        config = _.extend({
+            prefixes: [utils.builddir + '/apps'],
+            manifests: [utils.builddir + '/manifests']
+        }, customConfig);
+
+    server.create(config);
+});
+
 // run tests
 
 desc('Do a single run of all tests');
