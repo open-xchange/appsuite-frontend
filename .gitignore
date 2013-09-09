@@ -1,7 +1,6 @@
 .DS_Store
 /open-xchange-gui?*
 ui/watch.sh
-ui/karma.local.js
 *.sublime-*
 *~
 *.swp

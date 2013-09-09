@@ -895,7 +895,7 @@ desc('Do a single run of all tests');
 function setupKarma(options) {
     var karma = require("karma"),
         configFile = nextGen(karma) ? path.resolve('./karma.conf.js') : null,
-        customConfig = path.existsSync('./karma.local.js') ? require('./karma.local.js') : null;
+        customConfig = path.existsSync('./local.conf.js') ? require('./local.conf.js').karma : null;
 
     console.log('Karma version:', karma.VERSION, nextGen(karma) ? '(up-to-date)' : '(deprecated/broken!)');
     function nextGen(karma) {
