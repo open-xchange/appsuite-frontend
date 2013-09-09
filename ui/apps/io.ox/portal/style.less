@@ -195,6 +195,7 @@
         line-height: 26px;
         height: 26px;
         z-index: 2;
+        cursor: move;
         .transition(color 0.3s linear);
         .ellipsis;
     }
@@ -466,7 +467,7 @@
         .content {
             position: static;
         }
-        .photo-stream, .photo-stream .content {
+        .photo-stream, .photo-stream .content, .preview, .preview .content {
             height: 320px;
         }
 
@@ -596,6 +597,8 @@
             margin-right: 2em;
             white-space: nowrap;
             text-align: left;
+            max-width: 100%;
+            .ellipsis;
         }
 
         .remove-widget {

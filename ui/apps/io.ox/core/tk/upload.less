@@ -32,7 +32,7 @@
         div {
             display:table-cell;
             vertical-align:middle;
-            b { pointer-events:none }
+            .dndignore { pointer-events:none }
             border: 1px dashed #aaa;
             background: #fff;
         }
@@ -52,11 +52,14 @@
     }
 }
 
+// css animation is not possible due to
+// https://code.google.com/p/chromium/issues/detail?id=265429
+
 // add directly to io-ox-core to get animation on dragleave
-.cssfilters #io-ox-core {
-    -webkit-filter: blur(0px);
-    .transition(-webkit-filter 0.2s ease-in);
-}
+// .cssfilters #io-ox-core {
+//     -webkit-filter: blur(0px);
+//     .transition(-webkit-filter 0.2s ease-in);
+// }
 
 // for those with CSS filter support
 .cssfilters .io-ox-dropzone-active {
@@ -66,4 +69,9 @@
     .io-ox-dropzone-multiple-overlay {
         background-color: rgba(255, 255, 255, 0.20);
     }
+}
+
+.no-cssfilters .io-ox-dropzone-active #io-ox-core {
+    background-color: rgba(255, 255, 255, 0.20);
+    filter:e("url(#overlay-effect)");
 }

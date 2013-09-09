@@ -72,6 +72,7 @@ define('io.ox/mail/actions',
                         .append(
                             $('<div>').text(question)
                         )
+                        .addPrimaryButton("delete", gt('Delete'))
                         .addButton("cancel", gt('Cancel'))
                         .on('delete', function () {
                             api.remove(list).fail(notifications.yell);
@@ -315,7 +316,10 @@ define('io.ox/mail/actions',
                     }
 
                     if (baton.target) {
-                        commit(baton.target);
+                        if (list[0].folder_id !== baton.target) {
+                            commit(baton.target);
+                        }
+
                     } else {
                         var dialog = new dialogs.ModalDialog()
                             .header($('<h4>').text(label))
@@ -419,7 +423,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/spam', {
         capabilities: 'spam',
         requires: function (e) {
-            return !e.collection.isLarge() && api.getList(e.context).pipe(function (list) {
+            return e.collection.isLarge() || api.getList(e.context).pipe(function (list) {
                 var bool = e.collection.has('toplevel') &&
                     _(list).reduce(function (memo, data) {
                         return memo || (!account.is('spam', data.folder_id) && !util.isSpam(data));
@@ -435,7 +439,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/nospam', {
         capabilities: 'spam',
         requires: function (e) {
-            return !e.collection.isLarge() && api.getList(e.context).pipe(function (list) {
+            return e.collection.isLarge() || api.getList(e.context).pipe(function (list) {
                 var bool = e.collection.has('toplevel') &&
                     _(list).reduce(function (memo, data) {
                         return memo || account.is('spam', data.folder_id) || util.isSpam(data);

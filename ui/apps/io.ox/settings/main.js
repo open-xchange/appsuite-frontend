@@ -155,7 +155,7 @@ define('io.ox/settings/main',
         right = vsplit.right.addClass('default-content-padding settings-detail-pane f6-target').attr('tabindex', 1).scrollable();
 
 
-        grid = new VGrid(left, { multiple: false, draggable: false, showToggle: false, toolbarPlacement: 'none' });
+        grid = new VGrid(left, { multiple: false, draggable: false, showToggle: false, toolbarPlacement: 'none', selectSmart: _.device('!smartphone') });
 
         // disable the Deserializer
         grid.setDeserialize(function (cid) {

@@ -14,6 +14,11 @@ define('io.ox/core/util', [/* only add light core deps, not stuff like account A
 
     'use strict';
 
+    var LENGTH = 30,
+        regSeqSoft = /(\S{30,})/g,
+        regSeqHard = /(\S{30})/g,
+        regHyphenation = /([^.,;:-=()]+[.,;:-=()])/;
+
     return {
 
         // remove unwanted quotes from display names
@@ -35,10 +40,21 @@ define('io.ox/core/util', [/* only add light core deps, not stuff like account A
         },
 
         // split long character sequences
-        breakableHTML: function (text, node) {
+        breakableHTML: function (text) {
             // inject zero width space and replace by <wbr>
-            var substrings = String(text || '').replace(/(\S{20})/g, '$1\u200B').split('\u200B');
-            return _(substrings).map(_.escape).join('<wbr/>');
+            var substrings = String(text || '').replace(regSeqSoft, function (match) {
+                // soft break long sequences
+                return _(match.split(regHyphenation))
+                    .map(function (str) {
+                        // hard break long sequences
+                        if (str.length === 0) return '';
+                        if (str.length < LENGTH) return str + '\u200B';
+                        return str.replace(regSeqHard, '$1\u200B');
+                    })
+                    .join('');
+            });
+            // split at \u200B, escape HTML and inject <wbr> tag
+            return _(substrings.split('\u200B')).map(_.escape).join('<wbr>');
         },
 
         breakableText: function (text) {
@@ -165,4 +181,22 @@ test('+49 0 1234 [567]', false);
 test('++49 0 1234567', false);
 test('+49_0_1234567', false);
 test('+49 0 1234567 \\ 23', false);
+*/
+
+/*
+function test(val, expected) {
+    var util = require('io.ox/core/util'),
+        actual = util.breakableHTML(val),
+        valid = actual === expected;
+    if (valid) console.log(val)
+    else console.error(val, 'actual', actual, 'expected', expected);
+}
+test('', '');
+test(' ', ' ');
+test('Hello World', 'Hello World');
+test('Hello<br>World', 'Hello&lt;br&gt;World');
+test('com.openexchange.session.contextId=1337', 'com.<wbr>openexchange.<wbr>session.<wbr>contextId=<wbr>1337<wbr>');
+test('com.openexchange 01234567890123456789 01234567890123456789', 'com.openexchange 01234567890123456789 01234567890123456789');
+test('com.openexchange.0123456789012345678901234567890123456789', 'com.<wbr>openexchange.<wbr>012345678901234567890123456789<wbr>0123456789');
+
 */

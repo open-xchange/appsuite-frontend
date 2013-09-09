@@ -188,6 +188,7 @@ define('io.ox/calendar/actions',
 
             var apiCalls = [];
 
+            // build array with full identifier for an appointment and collect API get calls
             _(list).each(function (obj) {
                 var o = {
                     id: obj.id,
@@ -210,24 +211,31 @@ define('io.ox/calendar/actions',
                 })
                 .then(function (appList) {
 
+                    // check if appointment list contains recurring appointments
                     var hasRec = _(appList).some(function (app) {
                         return app.recurrence_type > 0;
                     });
 
-                    ox.load(['io.ox/calendar/model', 'io.ox/core/tk/dialogs']).done(function (Model, dialogs) {
-                        // different warnings especially for events with
-                        // external users should handled here
+                    ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
 
                         var cont = function (series) {
-                            _(appList).each(function (obj) {
-                                var myModel = new Model.Appointment(obj);
-                                if (series) {
-                                    delete myModel.attributes.recurrence_position;
+                            var data = _(appList).chain().map(function (obj) {
+                                var options = {
+                                    id: obj.id,
+                                    folder: obj.folder_id || obj.folder
+                                };
+                                if (!series && obj.recurrence_position) {
+                                    _.extend(options, {recurrence_position: obj.recurrence_position});
                                 }
-                                myModel.destroy();
-                            });
+                                return options;
+                            }).uniq(function (obj) {
+                                return JSON.stringify(obj);
+                            }).value();
+                            api.remove(data);
                         };
 
+                        // different warnings especially for events with
+                        // recurrence_type > 0 should handled here
                         if (hasRec) {
                             new dialogs.ModalDialog()
                                 .text(gt('Do you want to delete the whole series or just one appointment within the series?'))

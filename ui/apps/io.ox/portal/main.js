@@ -147,25 +147,57 @@ define('io.ox/portal/main',
 
     app.settings = settings;
 
-    collection.on('remove', function (model, e) {
-        // remove DOM node
-        appBaton.$.widgets.find('[data-widget-cid="' + model.cid + '"]').remove();
-        // clean up
-        if (model.has('baton')) {
-            delete model.get('baton').model;
-            model.set('baton', null, {validate: true});
-            model.isDeleted = true;
-        }
-    });
-
-    collection.on('add', function (model) {
-        app.drawScaffold(model);
-        widgets.loadUsedPlugins().done(function () {
-            if (model.has('candidate') !== true) {
+    collection
+        .on('remove', function (model) {
+            // remove DOM node
+            appBaton.$.widgets.find('[data-widget-cid="' + model.cid + '"]').remove();
+            // clean up
+            if (model.has('baton')) {
+                delete model.get('baton').model;
+                model.set('baton', null, {validate: true});
+                model.isDeleted = true;
+            }
+        })
+        .on('add', function (model) {
+            app.drawScaffold(model, true);
+            widgets.loadUsedPlugins().done(function () {
+                if (model.has('candidate') !== true) {
+                    app.drawWidget(model);
+                    widgets.save(appBaton.$.widgets);
+                }
+            });
+        })
+        .on('change', function (model, e) {
+            if ('enabled' in model.changed) {
+                if (model.get('enabled')) {
+                    app.getWidgetNode(model).show();
+                    app.drawWidget(model);
+                } else {
+                    app.getWidgetNode(model).hide();
+                }
+            } else if ('color' in model.changed) {
+                setColor(app.getWidgetNode(model), model);
+            } else if (this.wasElementDeleted(model)) {
+                // element was removed, no need to refresh it.
+                return;
+            } else if ('unset' in e && 'candidate' in model.changed) {
+                // redraw fresh widget
+                app.refreshWidget(model);
+            } else if ('props' in model.changed && model.drawn) {
+                // redraw existing widget due to config change
+                app.refreshWidget(model);
+            } else {
                 app.drawWidget(model);
             }
+        })
+        .on('sort', function () {
+            this.sort({ silent: true });
+            // loop over collection for resorting DOM tree
+            this.each(function (model) {
+                // just re-append all in proper order
+                appBaton.$.widgets.append(app.getWidgetNode(model));
+            });
         });
-    });
 
     collection.wasElementDeleted = function (model) {
         var needle = model.cid,
@@ -173,38 +205,7 @@ define('io.ox/portal/main',
         return !_(haystack).some(function (suspiciousHay) {return suspiciousHay.cid === needle; });
     };
 
-    collection.on('change', function (model, e) {
-        if ('enabled' in model.changed) {
-            if (model.get('enabled')) {
-                app.getWidgetNode(model).show();
-                app.drawWidget(model);
-            } else {
-                app.getWidgetNode(model).hide();
-            }
-        } else if ('color' in model.changed) {
-            setColor(app.getWidgetNode(model), model);
-        } else if (this.wasElementDeleted(model)) {
-            // element was removed, no need to refresh it.
-            return;
-        } else if ('unset' in e && 'candidate' in model.changed) {
-            // redraw fresh widget
-            app.refreshWidget(model);
-        } else if ('props' in model.changed && model.drawn) {
-            // redraw existing widget due to config change
-            app.refreshWidget(model);
-        } else {
-            app.drawWidget(model);
-        }
-    });
 
-    collection.on('sort', function () {
-        collection.sort({ silent: true });
-        // loop over collection for resorting DOM tree
-        collection.each(function (model) {
-            // just re-append all in proper order
-            appBaton.$.widgets.append(app.getWidgetNode(model));
-        });
-    });
 
     app.getWidgetCollection = function () {
         return collection;
@@ -233,8 +234,9 @@ define('io.ox/portal/main',
         }
     }
 
-    app.drawScaffold = function (model) {
-        var baton = ext.Baton({ model: model, app: app }),
+    app.drawScaffold = function (model, add) {
+        add = add || false;
+        var baton = ext.Baton({ model: model, app: app, add: add }),
             node = $('<li>');
 
         if (_.device('small')) {
@@ -253,7 +255,7 @@ define('io.ox/portal/main',
             }
         }
 
-        appBaton.$.widgets.append(node);
+        appBaton.$.widgets[add ? 'prepend' : 'append'](node);
     };
 
     app.getWidgetNode = function (model) {
@@ -421,7 +423,9 @@ define('io.ox/portal/main',
 
         win.show(function () {
             // draw scaffolds now for responsiveness
-            collection.each(app.drawScaffold);
+            collection.each(function (model, index) {
+                app.drawScaffold(model, false);
+            });
 
             widgets.loadUsedPlugins().done(function (cleanCollection) {
                 cleanCollection.each(app.drawWidget);
@@ -436,8 +440,32 @@ define('io.ox/portal/main',
                 var id = $(this).closest('.widget').attr('data-widget-id'),
                     model = widgets.getModel(id);
                 if (model) {
-                    // disable widget
-                    model.set('enabled', false, { validate: true });
+                    // do we have custom data that might be lost?
+                    if (!_.isEmpty(model.get('props'))) {
+                        var dialog = new dialogs.ModalDialog()
+                        .header($("<h4>").text(gt('Delete widget')))
+                        .append($('<span>').text(gt('Do you really want to delete this widget?')))
+                        .addPrimaryButton('delete',
+                            //#. Really delete portal widget - in contrast to "just disable"
+                            gt('Delete')
+                        )
+                        .addButton('cancel', gt('Cancel'));
+                        if (model.get('enabled')) {
+                            dialog.addAlternativeButton('disable',
+                                //#. Just disable portal widget - in contrast to delete
+                                gt('Just disable widget')
+                            );
+                        }
+                        dialog.show().done(function (action) {
+                            if (action === 'delete') {
+                                model.collection.remove(model);
+                            } else if (action === 'disable') {
+                                model.set('enabled', false, { validate: true });
+                            }
+                        });
+                    } else {
+                        model.collection.remove(model);
+                    }
                 }
             });
 

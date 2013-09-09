@@ -91,13 +91,13 @@ define('io.ox/core/pubsub/publications',
             var self = this;
             //build popup
             var popup = new dialogs.ModalDialog({ async: true })
-                .addPrimaryButton('publish', gt('Publish'))
+                .addPrimaryButton('publish', gt('Share'))
                 .addButton('cancel', gt('Cancel'));
             //Header
             if (self.model.attributes.entity.folder) {
-                popup.getHeader().append($('<h4>').text(gt('Publish folder')));
+                popup.getHeader().append($('<h4>').text(gt('Share this folder')));
             } else {
-                popup.getHeader().append($('<h4>').text(gt('Publish item')));
+                popup.getHeader().append($('<h4>').text(gt('Share this file')));
             }
             //Body
             popup.getBody().addClass('form-horizontal publication-dialog max-height-250');
@@ -390,12 +390,12 @@ define('io.ox/core/pubsub/publications',
         draw: function (baton) {
             var fullNode = $('<div>').addClass('alert alert-info').append($('<b>').addClass('warning-label').text(gt('Attention')),
                         $('<div>').addClass('warning-text').text(
-                            gt('The published data will be accessible to everyone on the Internet. Please consider, which data you want to publish.')),
+                            gt('The shared data will be accessible to everyone on the Internet. Please consider, which data you want to share.')),
                         $('<br>'),
                         $('<b>').addClass('privacy-label').text(gt('Privacy Notice')),
                         $('<div>').addClass('privacy-text').text(
-                            gt('When using this publish feature, you as the current owner of the data are responsible for being careful with privacy rules and for complying with legal obligations (Copyright, Privacy Laws). ' +
-                               'Especially when publishing personal data you are the responsible party according to the Federal Data Protection Act (BDSG, Germany) or other Privacy Acts of your country. ' +
+                            gt('When using this feature, you as the current owner of the data are responsible for being careful with privacy rules and for complying with legal obligations (Copyright, Privacy Laws). ' +
+                               'Especially when sharing personal data you are the responsible party according to the Federal Data Protection Act (BDSG, Germany) or other Privacy Acts of your country. ' +
                                'According to European and other national regulations you as the responsible party are in charge of data economy, and must not publish or forward personal data without the person\'s consent. ' +
                                'Beyond legal obligations, we would like to encourage extreme care when dealing with personal data. Please consider carefully where you store and to whom you forward personal data. Please ensure appropriate access protection, e.g. by proper password protection.')));
 

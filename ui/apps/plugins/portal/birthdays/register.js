@@ -76,7 +76,7 @@ define('plugins/portal/birthdays/register',
                     var birthday = new date.UTC(contact.birthday),
                         name = util.getFullName(contact);
                     if (birthday.getYear() === 1) {//Year 0 is special for birthdays without year (backend changes this to 1...)
-                        birthday = birthday.format(date.DATE);//date without Year needed here, not implemented yet
+                        birthday = birthday.format(date.DATE_NOYEAR);
                     } else {
                         birthday = birthday.format(date.DATE);
                     }
@@ -145,7 +145,7 @@ define('plugins/portal/birthdays/register',
                                 api.getPicture(contact, { width: 48, height: 48, scaleType: 'cover' }).addClass('picture'),
                                 $('<div class="name">').text(_.noI18n(name)),
                                 $('<div>').append(
-                                    $('<span class="date">').text(_.noI18n(birthday.format(date.DATE))), $.txt(' '),
+                                    $('<span class="date">').text(_.noI18n(birthday.format(birthday.getYear() === 1 ? date.DATE_NOYEAR : date.DATE))), $.txt(' '),
                                     $('<span class="distance">').text(delta)
                                 )
                             )

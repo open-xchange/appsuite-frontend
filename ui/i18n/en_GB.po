@@ -5358,8 +5358,8 @@ msgid "Fax (Home)"
 msgstr "Fax (Home)"
 
 #: apps/io.ox/contacts/model.js:264 apps/io.ox/contacts/print.js:78
-msgid "Mobile phone"
-msgstr "Cell phone"
+msgid "Cell phone"
+msgstr "Mobile phone"
 
 #: apps/io.ox/contacts/model.js:265
 msgid "Cell phone alt"

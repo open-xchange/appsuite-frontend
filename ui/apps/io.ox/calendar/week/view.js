@@ -226,9 +226,24 @@ define('io.ox/calendar/week/view',
          */
         initSettings: function () {
             // init settings
+            var self = this;
             this.gridSize = 60 / settings.get('interval', this.gridSize);
             this.workStart = settings.get('startTime', this.workStart);
             this.workEnd = settings.get('endTime', this.workEnd);
+            settings.on('change', function (e, key, value) {
+                switch (key) {
+                case 'interval':
+                    self.gridSize = 60 / settings.get('interval', self.gridSize);
+                    break;
+                case 'startTime':
+                case 'endTime':
+                    self.workStart = settings.get('startTime', self.workStart);
+                    self.workEnd = settings.get('endTime', self.workEnd);
+                    break;
+                default:
+                    break;
+                }
+            });
         },
 
         /**
@@ -483,13 +498,13 @@ define('io.ox/calendar/week/view',
                     this.lasso = $('<div>')
                         .addClass('appointment lasso')
                         .css({
-                            height: this.cellHeight,
+                            height: this.gridHeight(),
                             minHeight: 0,
                             top: this.roundToGrid(mouseY, 'n')
                         })
                         .data({
-                            start: mouseY,
-                            stop: 0,
+                            start: this.roundToGrid(mouseY, 'n'),
+                            stop: this.roundToGrid(mouseY, 's'),
                             startDay: curDay,
                             lastDay: curDay,
                             helper: {}
@@ -797,7 +812,7 @@ define('io.ox/calendar/week/view',
                             style = '';
 
                         // draw across multiple days
-                        while (true && maxCount <= this.columns) {
+                        while (maxCount <= this.columns) {
                             var app = this.renderAppointment(model),
                                 sel = '[date="' + (startLocal.getDays() - this.startDate.getDays()) + '"]';
                             maxCount++;
@@ -1438,7 +1453,7 @@ define('io.ox/calendar/week/view',
                 e = calc(end);
             return {
                 top: s,
-                height: Math.max(Math.round(e - s), self.gridHeight()) - 1
+                height: Math.max(Math.round(e - s), self.minCellHeight) - 1
             };
         },
 

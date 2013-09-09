@@ -300,7 +300,7 @@ define('io.ox/portal/widgets',
 
         toJSON: function () {
             // get latest values
-            var widgets = {};
+            widgets = {};
             collection.each(function (model) {
                 if (!model.get('userWidget')) {
                     return;
@@ -354,7 +354,7 @@ define('io.ox/portal/widgets',
             widgetList.children().each(function (index) {
                 var node = $(this), id = node.attr('data-widget-id');
                 if (id in obj) {
-                    obj[id].index = index;
+                    obj[id].index = index + 1;
                 }
             });
             this.update(obj);
@@ -402,46 +402,45 @@ define('io.ox/portal/widgets',
         }
     };
 
-    collection.reset(
-        // fix "candidate=true" bug (maybe just a development issue)
-        _(api.getSettings())
-            .chain()
-            .map(function (obj) {
-                delete obj.candidate;
-                return obj;
-            })
-            .sortBy(function (obj) {
-                return obj.index;
-            })
-            .value()
-    );
+    collection
+        .reset(
+            // fix "candidate=true" bug (maybe just a development issue)
+            _(api.getSettings())
+                .chain()
+                .sortBy(function (obj) {
+                    return obj.index;
+                })
+                .map(function (obj) {
+                    delete obj.candidate;
+                    return obj;
+                })
+                .value()
+        )
+        .on('change', _.debounce(function () {
+            settings.set('widgets/user', api.toJSON()).set("settings" + widgetSet, api.extraSettingsToJSON()).saveAndYell();
+            // don’t handle positive case here, since this is called quite often
+        }, 100))
+        .on('remove', function (model) {
+            if (model.get("protectedWidget")) {
+                // Don't you dare!
+                return;
+            } else if (model.get('eagerWidget')) {
+                var blacklist = settings.get("widgets/deleted" + widgetSet + "/gen_" + generation, []);
+                blacklist.push(model.get('id'));
+                if (!settings.get("widgets/deleted")) {
+                    settings.set("widgets/deleted", {});
+                }
 
-    collection.on('change', _.debounce(function () {
-        settings.set('widgets/user', api.toJSON()).set("settings" + widgetSet, api.extraSettingsToJSON()).saveAndYell();
-        // don’t handle positive case here, since this is called quite often
-    }, 100));
+                if (!settings.get("widgets/deleted" + widgetSet)) {
+                    settings.set("widgets/deleted" + widgetSet, {});
+                }
 
-    collection.on('remove', function (model) {
-        if (model.get("protectedWidget")) {
-            // Don't you dare!
-            return;
-        } else if (model.get('eagerWidget')) {
-            var blacklist = settings.get("widgets/deleted" + widgetSet + "/gen_" + generation, []);
-            blacklist.push(model.get('id'));
-            if (!settings.get("widgets/deleted")) {
-                settings.set("widgets/deleted", {});
+                settings.set("widgets/deleted" + widgetSet + "/gen_" + generation, blacklist).saveAndYell();
+
+            } else if (model.get("userWidget")) {
+                settings.remove('widgets/user/' + model.get('id')).saveAndYell();
             }
-
-            if (!settings.get("widgets/deleted" + widgetSet)) {
-                settings.set("widgets/deleted" + widgetSet, {});
-            }
-
-            settings.set("widgets/deleted" + widgetSet + "/gen_" + generation, blacklist).saveAndYell();
-
-        } else if (model.get("userWidget")) {
-            settings.remove('widgets/user/' + model.get('id')).saveAndYell();
-        }
-    });
+        });
 
     return api;
 });

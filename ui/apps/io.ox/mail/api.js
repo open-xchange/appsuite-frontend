@@ -57,42 +57,46 @@ define('io.ox/mail/api',
             return _.isString(param) ? param : _.cid(param);
         };
 
+        var getTailCID = function (obj) {
+            if (!obj) return '';
+            if (obj.thread) return _.cid(_(obj.thread).last());
+            return threadHash[getCID(obj)];
+        };
+
         var self = {
 
+            getTailCID: getTailCID,
+
             addThread: function (obj) {
-                var cid = getCID(obj);
+
+                var cid = getTailCID(obj), changed = false;
+
                 if (threads[cid]) {
-                    if (threads[cid].length !== obj.thread.length) {//thread has changed
-                        api.trigger('threadChanged:' + cid.replace(/\s/g, '%20'), obj);//trigger event(folders may contain spaces. This would trigger 2 events)
-                    } else {
-                        var tempTracker  = threads[cid].map(function (temp) {
-                                return _.cid(temp);
-                            }),
-                            tempObj =  obj.thread.map(function (temp) {
-                                return _.cid(temp);
-                            });
-                        for (var i = 0; i < tempTracker.length; i++) {//thread has changed
-                            if (tempTracker[i] !== tempObj[i]) {
-                                api.trigger('threadChanged:' + cid.replace(/\s/g, '%20'), obj);//trigger event(folders may contain spaces. This would trigger 2 events)
-                                break;
-                            }
-                        }
-                    }
+                    // has changed?
+                    changed = !_.isEqual(threads[cid], obj.thread);
                 }
+
                 threads[cid] = obj.thread;
                 _(obj.thread).each(function (o) {
                     threadHash[_.cid(o)] = cid;
                 });
+
+                if (changed) {
+                    api.trigger('threadChanged threadChanged:' + _.ecid(obj), obj);
+                }
             },
 
             hasThread: function (obj) {
-                var cid = getCID(obj);
-                return cid in threads;
+                return self.getThread(obj).length > 1;
             },
 
             getThread: function (obj, copy) {
                 var cid = getCID(obj),
-                    thread = threads[cid] || [];
+                    tail = getTailCID(obj),
+                    thread = threads[tail] || [],
+                    first = _.cid(_(thread).first());
+                // is not first item?
+                if (cid !== first) return [];
                 return copy ? _.deepCopy(thread) : thread;
             },
 
@@ -102,8 +106,7 @@ define('io.ox/mail/api',
             },
 
             getThreadSize: function (obj) {
-                var cid = getCID(obj);
-                return cid in threads ? threads[cid].length : 0;
+                return self.getThread(obj).length;
             },
 
             getUnreadCount: function (obj) {
@@ -525,12 +528,6 @@ define('io.ox/mail/api',
             useCache = (cacheControl[cid] !== false);
         }
         return getAll.call(this, options, useCache, null, false)
-            .then(function (threads) {
-                for (var i = 0; i < threads.data.length; i++) {//reverse thread root elements
-                    _.extend(threads.data[i], threads.data[i].thread[threads.data[i].thread.length - 1]);
-                }
-                return threads;
-            })
             .done(function (response) {
                 _(response.data).each(tracker.addThread);
                 cacheControl[cid] = true;

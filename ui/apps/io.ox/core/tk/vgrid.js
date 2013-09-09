@@ -195,7 +195,8 @@ define('io.ox/core/tk/vgrid',
             toolbarPlacement: 'bottom',
             secondToolbar: false,
             swipeLeftHandler: false,
-            swipeRightHandler: false
+            swipeRightHandler: false,
+            selectSmart: true
         }, options || {});
 
         if (options.settings) {
@@ -236,7 +237,7 @@ define('io.ox/core/tk/vgrid',
             },
 
             updateSelectAll = function (list) {
-                var check = (list.length >= 1) && (list.length === all.length);
+                var check = (list.length >= 1) && (list.length >= all.length);//list can be larger if threads are expanded in the grid
 
                 ignoreCheckbox = true;
                 node.find('.select-all input').prop('checked', check);
@@ -1242,7 +1243,7 @@ define('io.ox/core/tk/vgrid',
         });
 
         scrollpane.on('focus', function () {
-            if (!options.multiple) {
+            if (!options.multiple && options.selectSmart) {
                 self.selection.selectSmart();
             }
         });
