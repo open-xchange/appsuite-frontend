@@ -457,19 +457,22 @@ define("io.ox/mail/write/view-main",
         showEmojiPalette: function () {
             var self = this;
             return function () {
-                var tab = _.device('tablet'),
+                var tab = _.device('smartphone'),
                     innerContainer = self.rightside.find('.editor-inner-container');
                 if (self.emojiview === undefined) {
                     ox.load(['io.ox/core/emoji/view']).done(function (EmojiView) {
                         self.emojiview = new EmojiView({ editor: self.textarea, subject: self.subject, onInsertEmoji: self.onInsertEmoji });
                         var emo = $('<div class="mceEmojiPane">');
+                        self.emojiview.setElement(emo);
                         if (tab) {
                             innerContainer.addClass('textarea-shift');
+                            // nasty, but position:fixed elements must be in a non-scrollable container to work
+                            // properly on iOS
+                            $(self.app.attributes.window.nodes.body).append(self.emojiview.$el);
+                        } else {
+                            $(self.rightside).append(self.emojiview.$el);
                         }
-                        self.emojiview.setElement(emo);
-                        // nasty, but position:fixed elements must be in a non-scrollable container to work
-                        // properly on iOS
-                        $(self.app.attributes.window.nodes.body).append(self.emojiview.$el);
+
                         self.emojiview.toggle();
                         self.spacer.show();
                         self.scrollEmoji();
