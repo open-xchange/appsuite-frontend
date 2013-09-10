@@ -276,11 +276,17 @@ define('io.ox/core/tk/attachments',
                 add: function (file) {
                     var proceed = true, self = this,
                         list = [].concat(file);
+
+
                     if (list.length) {
                         //check
                         require(['settings!io.ox/core', 'io.ox/core/notifications'], function (settings, notifications) {
+
                             var properties = settings.get('properties');
-                            if (properties && baton.app.app.attributes.name !== 'io.ox/mail/write') {
+                            if (baton.app && baton.app.app.attributes.name !== 'io.ox/mail/write') {
+                                proceed = false;
+                            }
+                            if (properties && proceed) {
                                 var total = 0,
                                     maxFileSize = properties.maxUploadSize * 10; // Very interesting value from backend here?! (Bytes / 10)
                                 _.each(list, function (item) {
@@ -322,6 +328,7 @@ define('io.ox/core/tk/attachments',
                                         cid: counter++
                                     });
                                 });
+                                proceed = true;
                             }
                             if (proceed) self.listChanged();
                         });
