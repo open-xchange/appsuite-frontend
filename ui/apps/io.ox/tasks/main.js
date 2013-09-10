@@ -270,6 +270,9 @@ define('io.ox/tasks/main',
                 dropdown.find('.icon-arrow-up').css('opacity', 1).end()
                     .find('.icon-arrow-down').css('opacity', 0.4);
             }
+            //update api property (used cid in api.updateAllCache, api.create)
+            api.options.requests.all.sort = props.sort !== 'state' ? props.sort : 202;
+            api.options.requests.all.order = props.order;
         }
         grid.selection.on('change', removeButton);
 

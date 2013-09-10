@@ -315,7 +315,7 @@ define('io.ox/tasks/api',
             task.id = obj.id;
             response = obj;
             var cacheObj = _.copy(task, true),
-            cacheKey = api.cid({folder: cacheObj.folder_id,
+                cacheKey = api.cid({folder: cacheObj.folder_id,
                                 sort: api.options.requests.all.sort,
                                 order: api.options.requests.all.order});
             cacheObj.id = obj.id;
