@@ -1065,6 +1065,21 @@ define('io.ox/core/api/folder',
             this.append(li);
         };
 
+        var draw = function (list, ul, options) {
+            var exclude = _(options.exclude);
+            _(list).each(function (o, i, list) {
+                if (!exclude.contains(o.id)) {
+                    add.call(ul, o, i, list, options);
+                }
+            });
+            if (options.leaf) {
+                ul.append(
+                    $('<li>').append($('<span class="divider">').text(gt.noI18n(' / ')), options.leaf)
+                );
+            }
+            ul = null;
+        };
+
         return function (id, options) {
             var ul;
             options = _.extend({ subfolder: true, last: true, exclude: [] }, options);
@@ -1086,23 +1101,20 @@ define('io.ox/core/api/folder',
             finally {
                 api.getPath({ folder: id }).then(
                     function success(list) {
-                        var exclude = _(options.exclude);
-                        _(list).each(function (o, i, list) {
-                            if (!exclude.contains(o.id)) {
-                                add.call(ul, o, i, list, options);
-                            }
-                        });
-                        if (options.leaf) {
-                            ul.append(
-                                $('<li>').append($('<span class="divider">').text(gt.noI18n(' / ')), options.leaf)
-                            );
-                        }
-                        ul = null;
+                        draw(list, ul, options);
                     },
                     function fail() {
-                        // cannot show breadcrumb, for example due to disabled GAB
-                        ul.remove();
-                        ul = null;
+                        api.get({ folder: id }).then(
+                            function (folder) {
+                                draw([folder], ul, options);
+                            },
+                            function () {
+                                // cannot show breadcrumb, for example due to disabled GAB
+
+                                ul.remove();
+                                ul = null;
+                            }
+                        );
                     }
                 );
             }
