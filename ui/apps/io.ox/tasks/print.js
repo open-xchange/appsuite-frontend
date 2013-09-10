@@ -36,7 +36,7 @@ define('io.ox/tasks/print',
             return '<b>' + states[data.status] + '</b>';
         }
     }
-    
+
     function getPriority(data) {
         if (data.priority) {
             return priorities[data.priority];
