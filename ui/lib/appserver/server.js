@@ -24,6 +24,7 @@ function create(options) {
     var appsLoadMiddleware = require('./middleware/appsload');
     var manifestsMiddleware = require('./middleware/manifests');
     var localFilesMiddleware = require('./middleware/localfiles');
+    var proxyMiddleware = require('./middleware/proxy');
 
     var verbose = options.verbose = (options.verbose || []).reduce(function (opt, val) {
         if (val === 'all') {
@@ -33,60 +34,21 @@ function create(options) {
         }
             return opt;
     }, {});
-    var prefixes;
-    var urlPath;
-
-    prefixes = options.prefixes = options.prefixes || [];
-    urlPath = options.urlPath = normalizePath(options.path || '/appsuite');
+    options.prefixes = options.prefixes || [];
+    options.urlPath = normalizePath(options.path || '/appsuite');
 
     if (options.server) {
         options.server = normalizePath(options.server);
-        var server = url.parse(options.server);
-        var protocol = server.protocol === 'https:' ? https : http;
     }
 
     var handler = connect()
         .use(appsLoadMiddleware.create(options))
         .use(manifestsMiddleware.create(options))
         .use(localFilesMiddleware.create(options))
-        .use(proxy);
+        .use(proxyMiddleware.create(options));
 
     http.createServer(handler)
         .listen(options.port || 8337);
-
-    function proxy(request, response) {
-        var URL = request.url;
-        if (!options.server) {
-            console.log('No --server specified to forward', URL);
-            response.writeHead(501, 'No --server specified',
-                { 'Content-Type': 'text/plain' });
-            response.end('No --server specified');
-            return;
-        }
-        if (URL.slice(0, urlPath.length) === urlPath) {
-            URL = URL.slice(urlPath.length);
-        }
-        URL = url.resolve(options.server, URL);
-        if (verbose.proxy) {
-            console.log(URL);
-            console.log();
-        }
-        var opt = url.parse(URL);
-        opt.method = request.method;
-        opt.headers = request.headers;
-        opt.headers.host = opt.host;
-        request.pipe(protocol.request(opt, function (res) {
-            var cookies = res.headers['set-cookie'];
-            if (cookies) {
-                if (typeof cookies === 'string') cookies = [cookies];
-                res.headers['set-cookie'] = cookies.map(function (s) {
-                    return s.replace(/;\s*secure/i, '');
-                });
-            }
-            response.writeHead(res.statusCode, res.headers);
-            res.pipe(response);
-        }));
-    }
 }
 
 module.exports = {
