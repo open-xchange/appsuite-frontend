@@ -20,6 +20,7 @@ function create(options) {
     var path = require('path');
     var escape = require('./common').escape;
     var normalizePath = require('./common').normalizePath;
+    var connect = require('connect');
 
     var verbose = (options.verbose || []).reduce(function (opt, val) {
         if (val === 'all') {
@@ -47,22 +48,36 @@ function create(options) {
         manifestsPath = urlPath + manifestsPath.slice(1);
     }
 
-    http.createServer(function (request, response) {
-        var URL = url.parse(request.url, true);
-        if (request.method === 'GET') {
-            if (URL.pathname.slice(0, appsLoadPath.length) === appsLoadPath) {
+    var handler = connect()
+        .use(function (request, response, next) {
+            var URL = url.parse(request.url, true);
+            if ((request.method === 'GET') &&
+                (URL.pathname.slice(0, appsLoadPath.length) === appsLoadPath)) {
+
                 return load(request, response);
-            } else if (URL.pathname === manifestsPath &&
-                       URL.query.action === 'config')
-            {
+            }
+            return next();
+        })
+        .use(function (request, response, next) {
+            var URL = url.parse(request.url, true);
+            if ((request.method === 'GET') &&
+                (URL.pathname === manifestsPath) &&
+                (URL.query.action === 'config')) {
+
                 return injectManifests(request, response);
             }
-        }
-        if (request.url.slice(-3) === '.js') {
-            return loadLocal(request, response) || proxy(request, response);
-        }
-        return proxy(request, response);
-    }).listen(options.port || 8337);
+            return next();
+        })
+        .use(function (request, response, next) {
+            if ((request.url.slice(-3) === '.js') && loadLocal(request, response)) {
+                return true;
+            }
+            return next();
+        })
+        .use(proxy);
+
+    http.createServer(handler)
+        .listen(options.port || 8337);
 
     function load(request, response) {
 
