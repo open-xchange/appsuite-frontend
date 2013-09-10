@@ -1566,8 +1566,8 @@ define('io.ox/calendar/week/view',
                 };
             var tmpl = templates[self.mode],
                 data = null;
-            if (folder.folder) {
-                data = {folder_id: folder.folder};
+            if (folder.id || folder.folder) {
+                data = {folder_id: folder.id || folder.folder};
             }
             ox.load(['io.ox/core/print']).done(function (print) {
                 print.open('printCalendar', data, {
