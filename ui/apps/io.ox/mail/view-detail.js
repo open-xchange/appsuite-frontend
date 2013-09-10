@@ -406,17 +406,15 @@ define('io.ox/mail/view-detail',
                 // last line of defense
                 content.find('script').remove();
 
+                // setting isColorQuoted
+                var colorQuoted = settings.get('isColorQuoted', true);
+                if (colorQuoted) content.addClass('colorQuoted');
+
                 if (isHTML) {
                     // HTML
                     if (!isLarge) {
                         // remove stupid tags
                         content.find('meta').remove();
-
-                        // setting isColorQuoted
-                        var colorQuoted = settings.get('isColorQuoted', true);
-                        if (colorQuoted) {
-                            content.addClass('colorQuoted');
-                        }
 
                         // transform outlook's pseudo blockquotes
                         content.find('div[style*="none none none solid"][style*="1.5pt"]').each(function () {
