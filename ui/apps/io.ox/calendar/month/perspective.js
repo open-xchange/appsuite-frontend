@@ -341,8 +341,12 @@ define('io.ox/calendar/month/perspective',
          */
         print: function () {
             var end = new date.Local(this.current.getYear(), this.current.getMonth() + 1, 1),
+                data = null,
                 self = this;
-            print.open('printCalendar', null, {
+            if (self.folder.id || self.folder.folder) {
+                data = {folder_id: self.folder.id || self.folder.folder};
+            }
+            print.open('printCalendar', data, {
                 template: 'cp_monthview_table_appsuite.tmpl',
                 start: self.current.local,
                 end: end.local
