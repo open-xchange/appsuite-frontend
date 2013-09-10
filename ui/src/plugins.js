@@ -33,7 +33,7 @@
         eval("//@ sourceURL=" + name + ".js\n" + code);
     }
 
-    if (_.device('desktop') && !_.device("safari") && window.IDBVersionChangeEvent !== undefined && Modernizr.indexeddb && window.indexedDB) {
+    if (_.device('desktop') && !_.device("Safari") && window.IDBVersionChangeEvent !== undefined && Modernizr.indexeddb && window.indexedDB) {
         // IndexedDB
         (function () {
 
