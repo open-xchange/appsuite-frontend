@@ -103,6 +103,7 @@ define('io.ox/calendar/week/view',
             this.dayLabel       = $('<div>').addClass('footer');
             this.kwInfo         = $('<div>').addClass('info');
             this.showAllCon     = $('<div>').addClass('showall');
+            this.weekCon        = $('<div>').addClass('week-container');
             this.showAllCheck   = $('<input/>').attr('type', 'checkbox').attr({ tabindex: 1 });
 
             this.mode = opt.mode || 'day';
@@ -239,6 +240,7 @@ define('io.ox/calendar/week/view',
                 case 'endTime':
                     self.workStart = settings.get('startTime', self.workStart);
                     self.workEnd = settings.get('endTime', self.workEnd);
+                    self.rerenderWorktime();
                     break;
                 default:
                     break;
@@ -609,7 +611,7 @@ define('io.ox/calendar/week/view',
             this.fulltimePane.css({ height: (this.options.showFulltime ? 21 : 1) + 'px'});
 
             // create days
-            var weekCon = $('<div>').addClass('week-container').append(this.timeline);
+            this.weekCon.append(this.timeline);
             for (var d = 0; d < this.columns; d++) {
 
                 var day = $('<div>')
@@ -628,7 +630,7 @@ define('io.ox/calendar/week/view',
                             .addClass('timeslot ' + (i > (this.workStart * this.fragmentation) && i <= (this.workEnd * this.fragmentation) ? 'in' : 'out'))
                     );
                 }
-                weekCon.append(day);
+                this.weekCon.append(day);
             }
 
             // create toolbar, view space and dayLabel
@@ -674,12 +676,23 @@ define('io.ox/calendar/week/view',
                     .addClass('week-view-container')
                     .append(
                         this.fulltimeCon.empty().append(this.fulltimePane),
-                        this.pane.empty().append(timeLabel, weekCon)
+                        this.pane.empty().append(timeLabel, self.weekCon)
                     )
             );
 
             this.renderDayLabel();
             this.pane.focus();
+            return this;
+        },
+
+        rerenderWorktime: function () {
+            var self = this;
+            this.weekCon.find('.day').each(function () {
+                $(this).find('.timeslot').removeClass('in out').each(function (i, el) {
+                    i++;
+                    $(el).addClass('timeslot ' + (i > (self.workStart * self.fragmentation) && i <= (self.workEnd * self.fragmentation) ? 'in' : 'out'));
+                });
+            });
             return this;
         },
 
