@@ -300,7 +300,7 @@ define('io.ox/core/tk/attachments',
                                             return;
                                         }
                                         if (properties.quota !== -1) {
-                                            if (total < properties.quota - properties.usage) {
+                                            if (total > properties.quota - properties.usage) {
                                                 proceed = false;
                                                 notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, strings.fileSize(properties.quota)));
                                                 return;
