@@ -12,6 +12,12 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
+function normalizePath(str) {
+    if (str.slice(-1) !== '/') str += '/';
+
+    return str;
+}
+
 function create(options) {
     var fs = require('fs');
     var http = require('http');
@@ -31,17 +37,14 @@ function create(options) {
     var manifests = options.manifests || [];
 
     var tzModule = 'io.ox/core/date/tz/zoneinfo/';
-    var tzPath = options.zoneinfo || '/usr/share/zoneinfo/';
-    if (tzPath.slice(-1) !== '/') tzPath += '/';
-    tzPath = [tzPath];
+    var tzPath = [normalizePath(options.zoneinfo || '/usr/share/zoneinfo/')];
 
     var appsLoadPath = '/api/apps/load/';
     var manifestsPath = '/api/apps/manifests';
-    var urlPath = options.path || '/appsuite';
-    if (urlPath.slice(-1) !== '/') urlPath += '/';
+    var urlPath = normalizePath(options.path || '/appsuite');
 
     if (options.server) {
-        if (options.server.slice(-1) != '/') options.server += '/';
+        options.server = normalizePath(options.server);
         var server = url.parse(options.server);
         var protocol = server.protocol === 'https:' ? https : http;
         appsLoadPath = urlPath + appsLoadPath.slice(1);
