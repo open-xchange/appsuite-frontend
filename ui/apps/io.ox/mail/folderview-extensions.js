@@ -109,7 +109,8 @@ define('io.ox/mail/folderview-extensions',
             //FIXME: implement it, once VGrid exposes it’s loading state
             _.delay(function (app, unread) {
                 if (unread === 0 && _(unhandledMails(app, folder)).isEmpty()) {
-                    link.addClass('disabled');
+                    link.off('click')
+                        .addClass('disabled');
                 }
             }, 500, baton.app, baton.data.unread);
 
