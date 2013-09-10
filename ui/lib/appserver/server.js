@@ -23,6 +23,7 @@ function create(options) {
     var connect = require('connect');
     var appsLoadMiddleware = require('./middleware/appsload');
     var manifestsMiddleware = require('./middleware/manifests');
+    var localFilesMiddleware = require('./middleware/localfiles');
 
     var verbose = options.verbose = (options.verbose || []).reduce(function (opt, val) {
         if (val === 'all') {
@@ -47,37 +48,11 @@ function create(options) {
     var handler = connect()
         .use(appsLoadMiddleware.create(options))
         .use(manifestsMiddleware.create(options))
-        .use(function (request, response, next) {
-            if ((request.url.slice(-3) === '.js') && loadLocal(request, response)) {
-                return true;
-            }
-            return next();
-        })
+        .use(localFilesMiddleware.create(options))
         .use(proxy);
 
     http.createServer(handler)
         .listen(options.port || 8337);
-
-    function loadLocal(request, response) {
-        var pathname = url.parse(request.url).pathname,
-            filename;
-        pathname = pathname.slice(pathname.indexOf('/apps/') + 6);
-        filename = prefixes.map(function (p) {
-            return p + pathname;
-        })
-        .filter(function (filename) {
-            return (path.existsSync(filename) && fs.statSync(filename).isFile());
-        })[0];
-        if (!filename) return false;
-
-        // set headers
-        if (verbose.local) console.log(filename);
-        response.setHeader('Content-Type', 'text/javascript;charset=UTF-8');
-        response.setHeader('Expires', '0');
-        response.write(fs.readFileSync(filename) + "\n/*:oxsep:*/\n");
-        response.end();
-        return true;
-    }
 
     function proxy(request, response) {
         var URL = request.url;
