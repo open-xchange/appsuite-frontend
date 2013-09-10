@@ -106,6 +106,18 @@ define('io.ox/core/import/import',
         }
     });
 
+    ext.point('io.ox/core/import/ignore_uuids').extend({
+        id: 'default',
+        draw: function (baton) {
+            this.append(
+                $('<label class="checkbox">').append(
+                    $('<input type="checkbox" name="ignore_uuids">'),
+                    gt('Ignore existing events. Helpful to import public holiday calendars, for example.')
+                )
+            );
+        }
+    });
+
     //buttons
     ext.point('io.ox/core/import/buttons').extend({
         id: 'default',
@@ -134,8 +146,11 @@ define('io.ox/core/import/import',
                         .invoke('draw', form, id, gt('Import into'));
                     ext.point('io.ox/core/import/select')
                         .invoke('draw', form, baton);
+                    ext.point('io.ox/core/import/ignore_uuids')
+                        .invoke('draw', form, baton);
                     ext.point('io.ox/core/import/file_upload')
                         .invoke('draw', form, baton);
+
                     //buttons
                     ext.point('io.ox/core/import/buttons')
                         .invoke('draw', this);
@@ -166,7 +181,7 @@ define('io.ox/core/import/import',
                         notifications.yell('error', gt('Please select a file to import'));
                         popup.idle();
                         return;
-                    } else if (baton.nodes.select.val() === 'ICAL' && !(/\.ical$/i).test(file.val())) {
+                    } else if (baton.nodes.select.val() === 'ICAL' && !(/\.(ical|ics)$/i).test(file.val())) {
                         notifications.yell('error', gt('Please select a valid iCal File to import'));
                         popup.idle();
                         return;
@@ -176,6 +191,7 @@ define('io.ox/core/import/import',
                         file: file[0].files ? file[0].files[0] : [],
                         form: form,
                         type: type,
+                        ignoreUIDs: popup.getContentNode().find('input[name="ignore_uuids"]').prop('checked'),
                         folder: id
                     })
                     .done(function (data) {

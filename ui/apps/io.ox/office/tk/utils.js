@@ -2905,7 +2905,7 @@ define.async('io.ox/office/tk/utils',
 /*
     (function () {
         var ICONS = { info: 'icon-info-sign', warn: 'icon-warning-sign', error: 'icon-remove-sign' },
-            consoleNode = $('<div>', { id: 'io-ox-office-console' }).appendTo('body'),
+            consoleNode = $('<div>', { id: 'io-ox-office-console' }).addClass('noI18n').appendTo('body'),
             outputNode = $('<div>').addClass('output').appendTo(consoleNode),
             clearButton = $('<button>').text('Clear').appendTo(consoleNode);
         clearButton.on('click', function () { outputNode.empty(); return false; });

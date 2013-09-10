@@ -69,7 +69,7 @@ define('io.ox/core/tk/attachmentsUtil',
                     //file api elem: upload or dnd (local)
                     data = {
                         type:  file.type || file.content_type || '',
-                        module: 'mail',
+                        module: 'any',
                         group: 'file'
                     };
                 }
@@ -136,9 +136,10 @@ define('io.ox/core/tk/attachmentsUtil',
             node: function (obj, options) {
                 var caller = this,
                     icon, info,
-                    opt = $.extend(options, {
-                            showpreview: true
-                        }),
+                    opt = $.extend({
+                            showpreview: true,
+                            rightside: $()
+                        }, options),
                     //normalisation
                     name = obj.name || obj.filename || obj.subject || '\u00A0',
                     size = obj.file_size || obj.size || 0;
@@ -170,7 +171,7 @@ define('io.ox/core/tk/attachmentsUtil',
                                 $('<div class="row-1">').text(_.noI18n(name)),
                                 $('<div class="row-2">').append(
                                     info,
-                                    opt.showpreview  ? createPreview(obj.file, options.rightside) : $(),
+                                    opt.showpreview  ? createPreview(obj.file, opt.rightside) : $(),
                                     $.txt('\u00A0')
                                 ),
                                  // remove

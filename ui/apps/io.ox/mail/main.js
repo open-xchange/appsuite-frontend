@@ -224,7 +224,9 @@ define('io.ox/mail/main',
             // reset "unread only"
             grid.prop('unread', false);
             // template changes for unified mail
-            var unified = folderAPI.is('unifiedfolder', folder);
+
+            var unified = account.parseAccountId(folder, true) === 0 ? false : folderAPI.is('unifiedfolder', folder);
+
             if (unified !== tmpl.unified) {
                 tmpl.unified = unified;
                 grid.updateTemplates();
@@ -238,14 +240,6 @@ define('io.ox/mail/main',
             unread: options.unread || settings.get('unread', false)
         };
 
-        //set to default sort
-        grid.on('beforechange:prop:folder', function () {
-            var invalid = sortSettings.sort === 'thread' && settings.get('threadView') === 'off';
-            grid.prop('sort', invalid ? '610' : sortSettings.sort)
-                .prop('order', sortSettings.order)
-                .prop('unread', sortSettings.unread);
-        });
-
         // remove delete button if needed
         grid.selection.on('change', removeButton);
 
@@ -256,15 +250,35 @@ define('io.ox/mail/main',
             var ul = grid.getToolbar().find('ul.dropdown-menu'),
                 threadView = settings.get('threadView'),
                 isInbox = account.is('inbox', grid.prop('folder')),
-                isOn = threadView === 'on' || (threadView === 'inbox' && isInbox);
+                isOn = threadView === 'on' || (threadView === 'inbox' && isInbox),
+                //set current or default values
+                target = {
+                    sort: grid.prop('sort') || sortSettings.sort,
+                    order: grid.prop('order') || sortSettings.order,
+                    unread: grid.prop('unread') || sortSettings.unread
+                };
+
+            //reset properties on folder change
+            if (type === 'folder') {
+                target = {
+                    sort: sortSettings.sort,
+                    order: sortSettings.order,
+                    unread: sortSettings.unread
+                };
+            }
 
             // some auto toggling
-            if (grid.prop('sort') === 'thread' && !isOn) {
-                grid.prop('sort', '610');
+            if (target.sort === 'thread' && !isOn) {
+                target.sort = '610';
             } //jump back only if thread was the original setting
-            else if (grid.prop('sort') === '610' && type === 'folder' && isOn && sortSettings.sort === 'thread') {
-                grid.prop('sort', 'thread');
+            else if (target.sort === '610' && type === 'folder' && isOn && sortSettings.sort === 'thread') {
+                target.sort = 'thread';
             }
+
+            //update grid
+            grid.prop('sort', target.sort)
+                .prop('order', target.order)
+                .prop('unread', target.unread);
 
             // draw list
             ul.empty().append(
@@ -392,7 +406,7 @@ define('io.ox/mail/main',
 
         grid.on('change:prop', drawGridOptions);
         settings.on('change', handleSettingsChange);
-        drawGridOptions();
+        drawGridOptions(undefined, 'inital');
 
         commons.addGridToolbarFolder(app, grid, 'MAIL');
 

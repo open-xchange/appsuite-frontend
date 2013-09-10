@@ -1529,7 +1529,7 @@ define('io.ox/mail/api',
             }
         });
         // loop over list and check occurence via hash
-        return _(list).filter(function (obj) {
+        list = _(list).filter(function (obj) {
             var cid = _.cid(obj), found = cid in hash, length = obj.thread ? obj.thread.length : 1, s, entire;
             // case #1: found in hash; no thread
             if (found && length <= 1) {
@@ -1560,6 +1560,13 @@ define('io.ox/mail/api',
             // otherwise
             return true;
         });
+
+        try {
+            return list;
+        } finally {
+            // avoid leaks
+            list = reverse = hash = null;
+        }
     };
 
     /**

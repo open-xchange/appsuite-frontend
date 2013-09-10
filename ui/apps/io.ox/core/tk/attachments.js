@@ -237,7 +237,7 @@ define('io.ox/core/tk/attachments',
                 renderFile: function (file) {
                     var opt = {
                         showpreview: options.preview && util.hasPreview(file) && baton.view && baton.view.rightside,
-                        rightside: baton.view.rightside
+                        rightside: (baton.view ? baton.view.rightside : undefined)
                     };
                     return util.node.call(this, file, opt);
                 },
@@ -274,20 +274,64 @@ define('io.ox/core/tk/attachments',
                 },
 
                 add: function (file) {
-                    var list = [].concat(file);
+                    var proceed = true, self = this,
+                        list = [].concat(file);
+
+
                     if (list.length) {
-                        //add
-                        _.each(list, function (item) {
-                            files.push({
-                                file: (oldMode && item.hiddenField ? item.hiddenField : item),
-                                name: item.filename || item.name || item.subject,
-                                size: item.file_size || item.size,
-                                group: item.group || 'unknown',
-                                cid: counter++
-                            });
+                        //check
+                        require(['settings!io.ox/core', 'io.ox/core/notifications'], function (settings, notifications) {
+
+                            var properties = settings.get('properties');
+                            if (baton.app && baton.app.app.attributes.name !== 'io.ox/mail/write') {
+                                proceed = false;
+                            }
+                            if (properties && proceed) {
+                                var total = 0,
+                                    maxFileSize = properties.maxUploadSize * 10; // Very interesting value from backend here?! (Bytes / 10)
+                                _.each(list, function (item) {
+                                    var fileTitle = item.filename || item.name || item.subject,
+                                        fileSize = item.file_size || item.size;
+                                    if (fileSize) {
+                                        total += fileSize;
+                                        if (fileSize > maxFileSize) {
+                                            proceed = false;
+                                            notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, strings.fileSize(maxFileSize)));
+                                            return;
+                                        }
+                                        if (properties.quota !== -1) {
+                                            if (total > properties.quota - properties.usage) {
+                                                proceed = false;
+                                                notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, strings.fileSize(properties.quota)));
+                                                return;
+                                            }
+                                        }
+                                    }
+                                    //add
+                                    if (proceed) {
+                                        files.push({
+                                            file: (oldMode && item.hiddenField ? item.hiddenField : item),
+                                            name: fileTitle,
+                                            size: fileSize,
+                                            group: item.group || 'unknown',
+                                            cid: counter++
+                                        });
+                                    }
+                                });
+                            } else {
+                                _.each(list, function (item) {
+                                    files.push({
+                                        file: (oldMode && item.hiddenField ? item.hiddenField : item),
+                                        name: item.filename || item.name || item.subject,
+                                        size: item.file_size || item.size,
+                                        group: item.group || 'unknown',
+                                        cid: counter++
+                                    });
+                                });
+                                proceed = true;
+                            }
+                            if (proceed) self.listChanged();
                         });
-                        //render
-                        this.listChanged();
                     }
                 },
 

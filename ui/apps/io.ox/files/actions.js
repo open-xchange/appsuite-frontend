@@ -132,7 +132,8 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/download', {
         requires: function (e) {
-            return !(e.collection.has('one') && _.isEmpty(e.baton.data.filename));
+            if (e.collection.has('multiple')) return true;
+            return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
         },
         multiple: function (list) {
             // loop over list, get full file object and trigger downloads
@@ -174,7 +175,8 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/open', {
         requires: function (e) {
-            return !(e.collection.has('one') && _.isEmpty(e.baton.data.filename)) && !e.collection.has('multiple');
+            if (e.collection.has('multiple')) return false;
+            return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
         },
         multiple: function (list) {
             var onlyinvalid = false;
@@ -1027,7 +1029,7 @@ define('io.ox/files/actions',
     function filterUnsupported(list) {
         return api.getList(list).then(function (data) {
                 return _(data).filter(function (obj) {
-                    return !_.isEmpty(obj.filename);
+                    return !_.isEmpty(obj.filename) || obj.file_size > 0;
                 });
             });
     }
