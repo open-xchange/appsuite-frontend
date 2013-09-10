@@ -99,26 +99,11 @@ define('io.ox/mail/folderview-extensions',
         id: 'mark-folder-read',
         index: 50,
         draw: function (baton) {
-            var folder = baton.data.id,
-                link;
-
-            //wait 0.5s to make sure folder has been changed
-            //it would be great to have a deferred object to
-            //resolve in VGrid, once it’s done loading,
-            //indicating the loading status.
-            //FIXME: implement it, once VGrid exposes it’s loading state
-            _.delay(function (app, unread) {
-                if (unread === 0 && _(unhandledMails(app, folder)).isEmpty()) {
-                    link.off('click')
-                        .addClass('disabled');
-                }
-            }, 500, baton.app, baton.data.unread);
-
             this.append(
                 $('<li>').append(
-                    link = $('<a href="#" data-action="markfolderread" tabindex="1" role="menuitem">')
-                    .text(gt('Mark all mails as read'))
-                    .on('click', { folder: baton.data.id, app: baton.app }, markMailFolderRead)
+                    $('<a href="#" data-action="markfolderread" tabindex="1" role="menuitem">')
+                        .text(gt('Mark all mails as read'))
+                        .on('click', { folder: baton.data.id, app: baton.app }, markMailFolderRead)
                 )
             );
         }
