@@ -47,21 +47,6 @@ function create(options) {
         manifestsPath = urlPath + manifestsPath.slice(1);
     }
 
-    function httpDate(d) {
-        function pad(n) { return n < 10 ? '0' + n : String(n); }
-        return [
-            ['Sun,', 'Mon,', 'Tue,', 'Wed,', 'Thu,', 'Fri,', 'Sat,'][d.getUTCDay()],
-            pad(d.getUTCDate()),
-            ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-             'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getUTCMonth()],
-            d.getUTCFullYear(),
-            [pad(d.getUTCHours()),
-             pad(d.getUTCMinutes()),
-             pad(d.getUTCSeconds())].join(':'),
-            'GMT'
-        ].join(' ');
-    }
-
     http.createServer(function (request, response) {
         var URL = url.parse(request.url, true);
         if (request.method === 'GET') {
