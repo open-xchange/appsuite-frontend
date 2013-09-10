@@ -22,6 +22,7 @@ function create(options) {
     var normalizePath = require('./common').normalizePath;
     var connect = require('connect');
     var appsLoadMiddleware = require('./middleware/appsload');
+    var manifestsMiddleware = require('./middleware/manifests');
 
     var verbose = options.verbose = (options.verbose || []).reduce(function (opt, val) {
         if (val === 'all') {
@@ -32,34 +33,20 @@ function create(options) {
             return opt;
     }, {});
     var prefixes;
-    var manifests;
     var urlPath;
 
     prefixes = options.prefixes = options.prefixes || [];
-    manifests = options.manifests = options.manifests || [];
-
     urlPath = options.urlPath = normalizePath(options.path || '/appsuite');
-    var manifestsPath = '/api/apps/manifests';
 
     if (options.server) {
         options.server = normalizePath(options.server);
         var server = url.parse(options.server);
         var protocol = server.protocol === 'https:' ? https : http;
-        manifestsPath = urlPath + manifestsPath.slice(1);
     }
 
     var handler = connect()
         .use(appsLoadMiddleware.create(options))
-        .use(function (request, response, next) {
-            var URL = url.parse(request.url, true);
-            if ((request.method === 'GET') &&
-                (URL.pathname === manifestsPath) &&
-                (URL.query.action === 'config')) {
-
-                return injectManifests(request, response);
-            }
-            return next();
-        })
+        .use(manifestsMiddleware.create(options))
         .use(function (request, response, next) {
             if ((request.url.slice(-3) === '.js') && loadLocal(request, response)) {
                 return true;
@@ -70,85 +57,6 @@ function create(options) {
 
     http.createServer(handler)
         .listen(options.port || 8337);
-
-    function lock() {
-        var counter = 1, cb;
-        var L = function (f) {
-            counter++;
-            return function () {
-                var retval = f.apply(this, arguments);
-                if (!--counter) cb();
-                return retval;
-            };
-        };
-        L.done = function (callback) {
-            cb = callback;
-            if (!--counter) cb();
-        };
-        return L;
-    };
-
-    function injectManifests(request, response) {
-        if (!options.server) {
-            console.error('Manifests require --server');
-            response.writeHead(501, 'Manifests require --server',
-                { 'Content-Type': 'text/plain' });
-            response.end('Manifests require --server');
-            return;
-        }
-        var URL = url.resolve(options.server, request.url.slice(urlPath.length));
-        var opt = url.parse(URL, true);
-        opt.headers = request.headers;
-        opt.headers.host = opt.host;
-        delete opt.headers['accept-encoding'];
-        protocol.request(opt, function (res) {
-            if (res.statusCode !== 200) {
-                response.writeHead(res.statusCode, res.headers);
-                res.pipe(response);
-                return;
-            }
-            var reply = [], map = {}, L = lock();
-            res.on('data', data).on('end', end);
-            function data(chunk) { reply.push(chunk); }
-            function end() {
-                reply = JSON.parse(reply.join(''));
-                if (reply.error) {
-                    response.end(JSON.stringify(reply, null, 4));
-                    return;
-                }
-                var list = reply.data.manifests;
-                for (var i in list) map[list[i].path] = list[i];
-                manifests.forEach(readDir);
-                L.done(sendReply);
-            }
-            function readDir(dir) {
-                fs.readdir(dir, L(function (err, files) {
-                    if (err) return console.error(err.message);
-                    files.forEach(function (file) {
-                        file = path.join(dir, file);
-                        if (verbose.local) console.log(file);
-                        fs.readFile(file, 'utf8', L(addManifest));
-                    });
-                }));
-            }
-            function addManifest(err, manifest) {
-                if (err) return console.error(err.message);
-                manifest = Function('return (' + manifest + ')')();
-                if (!(manifest instanceof Array)) manifest = [manifest];
-                for (var i in manifest) map[manifest[i].path] = manifest[i];
-            }
-            function sendReply() {
-                var list = reply.data.manifests = [];
-                for (var i in map) {
-                    if (opt.query.session || /signin/.test(map[i].namespace)) {
-                        list.push(map[i]);
-                    }
-                }
-                response.end(JSON.stringify(reply, null, 4));
-                if (verbose.local) console.log();
-            }
-        }).end();
-    }
 
     function loadLocal(request, response) {
         var pathname = url.parse(request.url).pathname,
