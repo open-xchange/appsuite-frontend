@@ -17,8 +17,9 @@ define('io.ox/calendar/settings/pane',
      'io.ox/calendar/settings/model',
      'dot!io.ox/calendar/settings/form.html',
      'io.ox/core/extensions',
+     'io.ox/core/notifications',
      'gettext!io.ox/calendar'
-    ], function (settings, date, calendarSettingsModel, tmpl, ext, gt) {
+    ], function (settings, date, calendarSettingsModel, tmpl, ext, notifications, gt) {
 
     'use strict';
 
@@ -46,6 +47,8 @@ define('io.ox/calendar/settings/pane',
             TITLE_NOTIFICATION_MAIL_HANDLING: gt("Incoming Notification Mails"),
             MARK_FULLTIME_APPOINTMENTS_AS_FREE: gt("Mark all day appointments as free")
         },
+
+        reloadMe = [],
 
         optionsInterval = _([5, 10, 15, 20, 30, 60]).map(gt.noI18n),
 
@@ -146,12 +149,22 @@ define('io.ox/calendar/settings/pane',
         id: 'calendarsettings',
         draw: function (data) {
             calendarViewSettings = new CalendarSettingsView({model: calendarSettings});
-            this.append($('<div>').addClass('section').append(
-                calendarViewSettings.render().el)
-            );
-        },
-        save: function () {
-            return calendarViewSettings.model.saveAndYell();
+            this.append($('<div>').addClass('section').append(calendarViewSettings.render().el));
+            settings.on('change', function (e, path, value) {
+                calendarSettings.saveAndYell().then(
+                    function success() {
+                        var showNotice = _(reloadMe).any(function (attr) {
+                            return attr === path;
+                        });
+                        if (showNotice) {
+                            notifications.yell(
+                                'success',
+                                gt("The setting has been saved and will become active when you enter the application the next time.")
+                            );
+                        }
+                    }
+                );
+            });
         }
     });
 });
