@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Lokalize 1.0\n"
 
 #: html/core_body.html:60
-msgid "User name"
+msgid "Username"
 msgstr "Имя пользователя"
 
 #: apps/io.ox/core/relogin.js:51 apps/io.ox/mail/accounts/view-form.js:36
@@ -522,7 +522,7 @@ msgid "Repeat new password"
 msgstr "Повторите пароль"
 
 #: apps/plugins/portal/userSettings/register.js:77
-msgid "Your passward has been changed"
+msgid "Your password has been changed"
 msgstr "Пароль изменен."
 
 #: apps/plugins/portal/userSettings/register.js:97
@@ -879,7 +879,7 @@ msgid "Compose"
 msgstr "Составить"
 
 #: apps/io.ox/mail/settings/old_pane.js:81 apps/io.ox/mail/settings/pane.js:35
-msgid "Append vcard"
+msgid "Append vCard"
 msgstr "Добавить vCard"
 
 #: apps/io.ox/mail/settings/old_pane.js:82 apps/io.ox/mail/settings/pane.js:36
@@ -1144,7 +1144,7 @@ msgstr "Включить"
 #: apps/io.ox/mail/autoforward/settings/register.js:51
 #: apps/io.ox/mail/mailfilter/settings/register.js:40
 #: apps/io.ox/mail/vacationnotice/settings/register.js:69
-msgid "Unable to contact mailfilter backend."
+msgid "Unable to load mail filter settings."
 msgstr "Не удалось связаться с механизмом mailfilter."
 
 #: apps/io.ox/mail/mailfilter/settings/register.js:43
@@ -1477,7 +1477,7 @@ msgstr "Добавление подписки. Это может занять н
 
 #: apps/io.ox/mail/view-detail.js:1230
 msgid ""
-"Created private folder '%1$s' in %2$s and subscribed succesfully to shared "
+"Created private folder '%1$s' in %2$s and subscribed successfully to shared "
 "folder"
 msgstr "Личная папка «%1$s» создана в %2$s и подписана на общую папку"
 
@@ -1901,7 +1901,7 @@ msgstr "Почта"
 #: apps/io.ox/calendar/week/perspective.js:51
 #: apps/io.ox/calendar/week/perspective.js:179
 #: apps/io.ox/mail/write/main.js:840 apps/io.ox/mail/write/main.js:858
-msgid "An error occured. Please try again."
+msgid "An error occurred. Please try again."
 msgstr "Произошла ошибка. Повторите попытку."
 
 #: apps/io.ox/mail/write/main.js:1013
@@ -2331,7 +2331,7 @@ msgid "View"
 msgstr "Просмотр"
 
 #: apps/io.ox/calendar/settings/pane.js:34
-msgid "Time range for the calender view"
+msgid "Time range for the calendar view"
 msgstr "Диапазон времени для календаря"
 
 #: apps/io.ox/calendar/settings/pane.js:35
@@ -3437,11 +3437,11 @@ msgid "Hide request body"
 msgstr "Скрыть тело запроса"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:75
-msgid "Show strack trace"
+msgid "Show stack trace"
 msgstr "Показать трассировку стека"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:77
-msgid "Hide strack trace"
+msgid "Hide stack trace"
 msgstr "Скрыть трассировку стека"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:111
@@ -5293,7 +5293,7 @@ msgid "Links"
 msgstr "Ссылки"
 
 #: apps/io.ox/contacts/model.js:307
-msgid "Mark as distributionlist"
+msgid "Mark as Distribution List"
 msgstr "Отметить как список рассылки"
 
 #: apps/io.ox/contacts/model.js:308
@@ -5325,13 +5325,13 @@ msgid "Add member"
 msgstr "Добавить участника"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:112
-msgid "Members"
+msgid "Contacts"
 msgstr "Участники"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:168
 #: apps/io.ox/contacts/distrib/create-dist-view.js:187
 #: apps/io.ox/contacts/view-detail.js:257
-msgid "This list has no members yet"
+msgid "This list has no contacts yet"
 msgstr "В списке нет участников"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:212
@@ -5939,7 +5939,7 @@ msgid "in one week"
 msgstr "через неделю"
 
 #: apps/io.ox/tasks/util.js:256
-msgid "Over due"
+msgid "Overdue"
 msgstr "Просрочено"
 
 #: apps/io.ox/tasks/main.js:228
@@ -5992,7 +5992,7 @@ msgid "Undone"
 msgstr "Отменено"
 
 #: apps/io.ox/tasks/actions.js:164 apps/io.ox/tasks/actions.js:236
-msgid "A severe error occured!"
+msgid "A severe error occurred!"
 msgstr "Произошла критическая ошибка."
 
 #: apps/io.ox/tasks/actions.js:166

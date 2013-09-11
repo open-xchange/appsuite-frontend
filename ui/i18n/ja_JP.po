@@ -18,7 +18,7 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 
 #: html/core_body.html:60
-msgid "User name"
+msgid "Username"
 msgstr "ユーザ名"
 
 #: apps/io.ox/core/relogin.js:51 apps/io.ox/mail/accounts/view-form.js:36
@@ -1221,7 +1221,7 @@ msgid "Default view"
 msgstr "既定のビュー"
 
 #: apps/io.ox/calendar/settings/pane.js:34
-msgid "Time range for the calender view"
+msgid "Time range for the calendar view"
 msgstr "予定表ビューの時間軸"
 
 #: apps/io.ox/calendar/settings/pane.js:35
@@ -1498,7 +1498,7 @@ msgstr "競合:"
 #: apps/io.ox/calendar/week/perspective.js:51
 #: apps/io.ox/calendar/week/perspective.js:179
 #: apps/io.ox/mail/write/main.js:855
-msgid "An error occured. Please try again."
+msgid "An error occurred. Please try again."
 msgstr "エラーが発生しました。もう一度やり直してください。"
 
 #: apps/io.ox/calendar/week/view.js:593
@@ -1603,7 +1603,7 @@ msgid "Create list"
 msgstr "リストを作成"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:74
-msgid "Members"
+msgid "Contacts"
 msgstr "メンバ"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:78
@@ -1619,7 +1619,7 @@ msgstr "メール アドレス"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:187
 #: apps/io.ox/contacts/view-detail.js:378
-msgid "This list has no members yet"
+msgid "This list has no contacts yet"
 msgstr "このリストにはメンバが今のところ追加されていません。"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:305
@@ -2058,7 +2058,7 @@ msgid "Links"
 msgstr "リンク"
 
 #: apps/io.ox/contacts/model.js:307
-msgid "Mark as distributionlist"
+msgid "Mark as Distribution List"
 msgstr "配布リストにする"
 
 #: apps/io.ox/contacts/model.js:308
@@ -2972,11 +2972,11 @@ msgid "Hide request body"
 msgstr "リクエスト ボディを隠す"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:75
-msgid "Show strack trace"
+msgid "Show stack trace"
 msgstr "スタック トレースを表示"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:77
-msgid "Hide strack trace"
+msgid "Hide stack trace"
 msgstr "スタック トレースを隠す"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:110
@@ -3955,7 +3955,7 @@ msgstr "自動転送が保存されました。"
 
 #: apps/io.ox/mail/autoforward/settings/register.js:51
 #: apps/io.ox/mail/vacationnotice/settings/register.js:69
-msgid "Unable to contact mailfilter backend."
+msgid "Unable to load mail filter settings."
 msgstr "メール フィルタ バックエンドに接続できません。"
 
 #: apps/io.ox/mail/autoforward/settings/register.js:54
@@ -4077,7 +4077,7 @@ msgid "Compose"
 msgstr "作成"
 
 #: apps/io.ox/mail/settings/old_pane.js:81 apps/io.ox/mail/settings/pane.js:39
-msgid "Append vcard"
+msgid "Append vCard"
 msgstr "vCard を添付"
 
 #: apps/io.ox/mail/settings/old_pane.js:82 apps/io.ox/mail/settings/pane.js:40
@@ -4410,7 +4410,7 @@ msgstr "登録アイテムを追加しています。この処理には数秒か
 
 #: apps/io.ox/mail/view-detail.js:1217
 msgid ""
-"Created private folder '%1$s' in %2$s and subscribed succesfully to shared "
+"Created private folder '%1$s' in %2$s and subscribed successfully to shared "
 "folder"
 msgstr ""
 "プライベート フォルダ '%1$s' を %2$s に作成しました。共有フォルダが正しく登録"
@@ -4814,7 +4814,7 @@ msgid "Done"
 msgstr "完了"
 
 #: apps/io.ox/tasks/actions.js:164 apps/io.ox/tasks/actions.js:231
-msgid "A severe error occured!"
+msgid "A severe error occurred!"
 msgstr "深刻なエラーが発生しました。"
 
 #: apps/io.ox/tasks/actions.js:166
@@ -5125,7 +5125,7 @@ msgid "in one week"
 msgstr "1 週間後"
 
 #: apps/io.ox/tasks/util.js:256
-msgid "Over due"
+msgid "Overdue"
 msgstr "期限切れ"
 
 #. %1$s due date of a task
@@ -5700,7 +5700,7 @@ msgid "Repeat new password"
 msgstr "新しいパスワード (再入力)"
 
 #: apps/plugins/portal/userSettings/register.js:77
-msgid "Your passward has been changed"
+msgid "Your password has been changed"
 msgstr "パスワードが変更されました。"
 
 #: apps/plugins/portal/userSettings/register.js:97
@@ -8475,7 +8475,7 @@ msgstr "マイ パスワード"
 #~ msgstr "ログイン"
 
 #~ msgid ""
-#~ "Login failed. Please check your user name and password and try again."
+#~ "Login failed. Please check your Username and password and try again."
 #~ msgstr ""
 #~ "ログインに失敗しました。ユーザ名とパスワードをチェックして、もう一度試して"
 #~ "ください。"

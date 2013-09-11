@@ -16,7 +16,7 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 
 #: html/core_body.html:60
-msgid "User name"
+msgid "Username"
 msgstr "Uživatelské jméno"
 
 #: apps/io.ox/core/relogin.js:51 apps/io.ox/mail/accounts/view-form.js:36
@@ -524,7 +524,7 @@ msgid "Repeat new password"
 msgstr "Zopakujte nové heslo"
 
 #: apps/plugins/portal/userSettings/register.js:77
-msgid "Your passward has been changed"
+msgid "Your password has been changed"
 msgstr "Vaše heslo bylo změněno"
 
 #: apps/plugins/portal/userSettings/register.js:97
@@ -883,7 +883,7 @@ msgid "Compose"
 msgstr "Psaní zpráv"
 
 #: apps/io.ox/mail/settings/old_pane.js:81 apps/io.ox/mail/settings/pane.js:35
-msgid "Append vcard"
+msgid "Append vCard"
 msgstr "Připojit vcard"
 
 #: apps/io.ox/mail/settings/old_pane.js:82 apps/io.ox/mail/settings/pane.js:36
@@ -1145,7 +1145,7 @@ msgstr "Povolit"
 #: apps/io.ox/mail/autoforward/settings/register.js:51
 #: apps/io.ox/mail/mailfilter/settings/register.js:40
 #: apps/io.ox/mail/vacationnotice/settings/register.js:69
-msgid "Unable to contact mailfilter backend."
+msgid "Unable to load mail filter settings."
 msgstr "Nepodařilo se navázat kontakt s nástrojem pro filtrování pošty."
 
 #: apps/io.ox/mail/mailfilter/settings/register.js:43
@@ -1478,7 +1478,7 @@ msgstr "Přidávám přihlášení k odběru. To může několik sekund trvat...
 
 #: apps/io.ox/mail/view-detail.js:1230
 msgid ""
-"Created private folder '%1$s' in %2$s and subscribed succesfully to shared "
+"Created private folder '%1$s' in %2$s and subscribed successfully to shared "
 "folder"
 msgstr ""
 "Soukromá složka ‚%1$s‘ v %2$s byla vytvořena a byl přihlášen odběr sdílené "
@@ -1905,7 +1905,7 @@ msgstr "Pošta"
 #: apps/io.ox/calendar/week/perspective.js:51
 #: apps/io.ox/calendar/week/perspective.js:179
 #: apps/io.ox/mail/write/main.js:840 apps/io.ox/mail/write/main.js:858
-msgid "An error occured. Please try again."
+msgid "An error occurred. Please try again."
 msgstr "Došlo k chybě. Zkuste to, prosím, znovu."
 
 #: apps/io.ox/mail/write/main.js:1013
@@ -2335,7 +2335,7 @@ msgid "View"
 msgstr "Zobrazit"
 
 #: apps/io.ox/calendar/settings/pane.js:34
-msgid "Time range for the calender view"
+msgid "Time range for the calendar view"
 msgstr "Časový rozsah pro kalendář"
 
 #: apps/io.ox/calendar/settings/pane.js:35
@@ -3439,11 +3439,11 @@ msgid "Hide request body"
 msgstr "Skrýt obsah požadavku"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:75
-msgid "Show strack trace"
+msgid "Show stack trace"
 msgstr "Zobrazit stopu strace"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:77
-msgid "Hide strack trace"
+msgid "Hide stack trace"
 msgstr "Skrýt stopu strace"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:111
@@ -5295,7 +5295,7 @@ msgid "Links"
 msgstr "Odkazy"
 
 #: apps/io.ox/contacts/model.js:307
-msgid "Mark as distributionlist"
+msgid "Mark as Distribution List"
 msgstr "Označit jako distribuční seznam"
 
 #: apps/io.ox/contacts/model.js:308
@@ -5327,13 +5327,13 @@ msgid "Add member"
 msgstr "Přidat člena"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:112
-msgid "Members"
+msgid "Contacts"
 msgstr "Členové"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:168
 #: apps/io.ox/contacts/distrib/create-dist-view.js:187
 #: apps/io.ox/contacts/view-detail.js:257
-msgid "This list has no members yet"
+msgid "This list has no contacts yet"
 msgstr "Tento seznam zatím nemá žádné členy"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:212
@@ -5938,7 +5938,7 @@ msgid "in one week"
 msgstr "za týden"
 
 #: apps/io.ox/tasks/util.js:256
-msgid "Over due"
+msgid "Overdue"
 msgstr "přetažené"
 
 #: apps/io.ox/tasks/main.js:228
@@ -5991,7 +5991,7 @@ msgid "Undone"
 msgstr "Vráceno"
 
 #: apps/io.ox/tasks/actions.js:164 apps/io.ox/tasks/actions.js:236
-msgid "A severe error occured!"
+msgid "A severe error occurred!"
 msgstr "Došlo k vážné chybě!"
 
 #: apps/io.ox/tasks/actions.js:166
@@ -8578,7 +8578,7 @@ msgstr "Dobrý večer"
 #~ msgstr "Přihlásit"
 
 #~ msgid ""
-#~ "Login failed. Please check your user name and password and try again."
+#~ "Login failed. Please check your Username and password and try again."
 #~ msgstr ""
 #~ "Přihlášení selhalo. Zkontrolujte, prosím, své uživatelské jméno a heslo a "
 #~ "zkuste to znovu."

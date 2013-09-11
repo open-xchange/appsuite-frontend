@@ -253,7 +253,7 @@ define('io.ox/tasks/util',
 
                     var now = new Date();
                     if (task.end_date !== undefined && task.end_date !== null && now.getTime() > task.end_date) {//no state for task over time, so manual check is needed
-                        task.status = gt('Over due');
+                        task.status = gt('Overdue');
                         task.badge = 'badge badge-important';
                     } else if (detail && task.status) {
                         switch (task.status) {
