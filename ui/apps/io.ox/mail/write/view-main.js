@@ -917,22 +917,7 @@ define("io.ox/mail/write/view-main",
     });
 
     var dummySignature = { displayname: gt('No signature') };
-    var addUpload, supportsPreview, previewAttachment, createPreview;
-
-    supportsPreview = function (file) {
-        // is not local?
-        if (file.message) { // mail
-            return new pre.Preview({ mimetype: 'message/rfc822' }).supportsPreview();
-        } else if (file.display_name) { // v-card
-            return true;
-        } else if (file.id && file.folder_id) { // infostore
-            return true;
-        } else if (file.atmsgref) { // forward mail attachment
-            return true;
-        } else {
-            return window.FileReader && (/^image\/(png|gif|jpe?g|bmp)$/i).test(file.type);
-        }
-    };
+    var addUpload, previewAttachment, createPreview;
 
     previewAttachment = function (popup, e, target) {
 
@@ -952,10 +937,6 @@ define("io.ox/mail/write/view-main",
                     width: popup.parent().width(),
                     height: 'auto'
                 });
-            if (preview.supportsPreview()) {
-                preview.appendTo(popup);
-                popup.append($('<div>').text(_.noI18n('\u00A0')));
-            }
         } else if (file.display_name || file.email1) {
             // if is vCard
             require(['io.ox/contacts/view-detail'], function (view) {
