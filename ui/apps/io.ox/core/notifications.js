@@ -145,8 +145,8 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             //close if count set to 0
             self.badgeView.on('lastItemDeleted', function () {
                 var overlay = $('#io-ox-notifications-overlay');
-                if (overlay.has('.mail-detail-decorator').length > 0) {
-                    overlay.on("mail-detail-closed", _.bind(self.slowClose, self));
+                if (overlay.children().length > 0) {//if there is an open popup, wait till this is closed
+                    overlay.prop('sidepopup').one('close', _.bind(self.slowClose, self));
                 } else {
                     self.hideList();
                 }

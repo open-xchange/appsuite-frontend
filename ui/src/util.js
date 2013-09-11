@@ -421,11 +421,20 @@
         },
 
         /**
-         * Returns local current time as timestamp in UTC!
+         * Returns local current time as timestamp
          * @returns {long} Timestamp
          */
         now: function () {
             return (new Date()).getTime();
+        },
+        
+        /**
+         *  Returns local current time as timestamp in UTC!
+         * @returns {long} Timestamp
+         */
+        utc: function () {
+            var t = new Date();
+            return t.getTime() - t.getTimezoneOffset() * 60000;
         },
 
         // return timestamp far away in the future
