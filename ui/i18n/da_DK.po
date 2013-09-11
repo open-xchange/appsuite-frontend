@@ -9,6 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Last-Translator: Nicky Thomassen <nicky@nt-data.dk>\n"
 "X-Poedit-Language: Danish\n"
 "### Used conventions: ### notification mail => e-mailunderretningdeclined          => afslåetmail              => e-mailportal            => portaltentatively       => forsøgsviscustom            => brugerdefineretcredentials       => loginoplysningersubscription      => abonnementpublication       => udgivelseitem              => elementcipher            => nøgle\n"
@@ -150,7 +151,7 @@ msgstr "Til"
 #: apps/io.ox/mail/view-detail.js:1084
 msgctxt "CC"
 msgid "Copy"
-msgid_plural "Copy"
+msgstr "Copy"
 
 #: apps/io.ox/mail/view-detail.js:1104
 #: apps/io.ox/mail/view-detail.js:1456
