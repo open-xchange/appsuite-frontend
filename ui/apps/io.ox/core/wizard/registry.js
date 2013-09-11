@@ -16,38 +16,48 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 	function Wizard(options) {
 		var state = 'stopped';
 		var batons = {};
-		var pages = {};
-		var nextEnabled = false;
+		var renderedPages = {};
 		var self = this;
+		var isBusy = false;
 		
 		this.options = options;
 		this.runOptions = null;
 
 		this.index = 0;
-		this.length = 0;
 
 		this.currentPage = null;
 		this.previousPage = null;
 		this.nextPage = null;
 		this.dialog = new dialogs.ModalDialog({easyOut: false});
-
+		
 		this.navButtons = $("<div/>").append(
-			$('<button class="btn prev">').text(gt("Previous").on("click", function () {
+			$('<button class="btn prev">').text(gt("Previous")).on("click", function () {
 				self.back();
-			})),
-			$('<button class="btn btn-primary next btn-disabled">').text(gt("Next").on("click", function () {
-				if (nextEnabled) {
-					self.next();
-				}
-			})),
-			$('<button class="btn btn-primary done btn-disabled">').text(gt("Done").on("click", function () {
-				if (nextEnabled) {
-					self.done();
-				}
-			}))
+			}),
+			$('<button class="btn btn-primary next btn-disabled">').text(gt("Next")).on("click", function () {
+				self.next();
+			}),
+			$('<button class="btn btn-primary done btn-disabled">').text(gt("Done")).on("click", function () {
+				self.done();
+			})
 		);
 
 		this.dialog.getContentControls().append(this.navButtons);
+
+		function isNextEnabled() {
+			return getBaton().buttons.nextEnabled;
+		}
+
+		function busy() {
+			isBusy = true;
+			self.dialog.busy();
+		}
+
+		function idle() {
+			isBusy = false;
+			self.dialog.idle();
+			self.updateButtonState();
+		}
 		
 
 		function getBaton(index) {
@@ -57,36 +67,10 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 			if (batons[index]) {
 				return batons[index];
 			}
-			var baton = ext.Baton.ensure(this.runOptions);
+			var baton = ext.Baton.ensure(self.runOptions);
 			baton.wizard = self;
 			baton.ready = $.Deferred();
-
 			batons[index] = baton;
-			return baton;
-		}
-
-		function callMethod(page, methodName, index) {
-			if (page[methodName] && _.isFunction(page[methodName])) {
-				return page[methodName](getBaton(index));
-			}
-			return null;
-		}
-
-		function triggerLoad(page, index) {
-			var baton = getBaton(index);
-			if (baton.ready.state() !== 'pending') {
-				return;
-			}
-
-			if (page.load) {
-				var def = page.load(baton);
-				if (def) {
-					def.done(baton.ready.resolve).fail(baton.ready.reject);
-				}
-				return baton.ready;
-			}
-
-			baton.ready.resolve();
 			baton.completed = false;
 
 			baton.buttons = {
@@ -102,6 +86,30 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 				baton.buttons.nextEnabled = false;
 				baton.wizard.updateButtonState();
 			};
+			return baton;
+		}
+
+		function callMethod(page, methodName, index) {
+			if (page[methodName] && _.isFunction(page[methodName])) {
+				return page[methodName](getBaton(index));
+			}
+			return null;
+		}
+
+		function triggerLoad(page, index) {
+			var baton = getBaton(index);
+			if (baton.ready.state() !== 'pending') {
+				return;
+			}
+			if (page.load) {
+				var def = page.load(baton);
+				if (def) {
+					def.done(baton.ready.resolve).fail(baton.ready.reject);
+				}
+				return baton.ready;
+			}
+
+			baton.ready.resolve();
 
 			return baton.ready;
 		}
@@ -136,7 +144,7 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 
 		function goToPage(pageNum) {
 			var pages = self.pages();
-
+			var length = pages.length;
 			if (pageNum >= length) {
 				self.close();
 				return;
@@ -153,38 +161,38 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 			self.previousPage = (pageNum > 1) ? pages[pageNum - 1] : null;
 			self.nextPage = ((pageNum + 1) < length) ? pages[pageNum + 1] : null;
 			self.currentPage = pages[pageNum];
+
+			// hide and show buttons as needed
+			if (self.previousPage) {
+				self.navButtons.find(".prev").show();
+			} else {
+				self.navButtons.find(".prev").hide();
+			}
+
+			if (self.nextPage) {
+				self.navButtons.find(".next").show();
+				self.navButtons.find(".done").hide();
+			} else {
+				self.navButtons.find(".next").hide();
+				self.navButtons.find(".done").show();
+			}
+
+			if (self.currentPage.metadata("hideButtons")) {
+				self.navButtons.find("button").hide();
+			}
+
 			self.index = pageNum;
-			self.dialog.busy();
+			busy();
 			triggerLoad(self.currentPage).done(function () {
-				this.getBody().find(".wizard-page").detach();
-				if (!pages[self.index]) {
+				self.dialog.getBody().find(".wizard-page").detach();
+				if (!renderedPages[self.index]) {
 					var $div = $('<div class="wizard-page"></div>');
-					self.currentPage.draw.apply($div, getBaton(self.index));
-					pages[self.index] = $div;
+					self.currentPage.draw.call($div, getBaton());
+					renderedPages[self.index] = $div;
 				}
-				this.getBody().append(pages[self.index]);
-				self.dialog.idle();
-				callMethod(self.currentPage, 'show', self.index);
-
-				// hide and show buttons as needed
-				if (self.previousPage) {
-					self.navButtons.find(".prev").show();
-				} else {
-					self.navButtons.find(".prev").hide();
-				}
-
-				if (self.nextPage) {
-					self.navButtons.find(".next").show();
-					self.navButtons.find(".done").hide();
-				} else {
-					self.navButtons.find(".next").hide();
-					self.navButtons.find(".done").show();
-				}
-
-				if (self.currentPage.metadata("hideButtons")) {
-					self.navButtons.find("button").hide();
-				}
-
+				self.dialog.getBody().append(renderedPages[self.index]);
+				idle();
+				callMethod(self.currentPage, 'activate', self.index);
 				self.updateButtonState();
 
 			}).fail(function (resp) {
@@ -205,19 +213,15 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 		}
 
 		this.updateButtonState = function () {
-			var baton = getBaton();
-			if (baton.buttons.nextEnabled) {
-				if (!nextEnabled) {
-					nextEnabled = true;
-					this.navButtons.find(".next").removeClass("btn-disabled");
-					this.navButtons.find(".done").removeClass("btn-disabled");
-				}
+			if (isBusy) {
+				return;
+			}
+			if (isNextEnabled()) {
+				this.navButtons.find(".next").removeAttr("disabled");
+				this.navButtons.find(".done").removeAttr("disabled");
 			} else {
-				if (nextEnabled) {
-					nextEnabled = false;
-					this.navButtons.find(".next").addClass("btn-disabled");
-					this.navButtons.find(".done").addClass("btn-disabled");
-				}
+				this.navButtons.find(".next").attr("disabled", "disabled");
+				this.navButtons.find(".done").attr("disabled", "disabled");
 			}
 		};
 
@@ -242,13 +246,14 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 				console.error("Cannot start wizard, when it is in state: ", state);
 				return;
 			}
-			this.runOptions = options;
+			this.runOptions = options || {};
 			goToPage(0);
 			this.dialog.show();
+			
 		};
 
 		this.next = function () {
-			if (!nextEnabled) {
+			if (!isNextEnabled()) {
 				return;
 			}
 			var def = null;
@@ -258,15 +263,15 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 					def = $.when();
 				}
 			}
-			this.dialog.busy();
+			busy();
 			def.done(function () {
-				this.dialog.idle();
+				idle();
 				goToPage(this.index + 1);
 			});
 		};
 
 		this.done = function () {
-			if (!nextEnabled) {
+			if (!isNextEnabled()) {
 				return;
 			}
 			var def = null;
@@ -276,10 +281,10 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 					def = $.when();
 				}
 			}
-			this.dialog.busy();
+			busy();
 			def.done(function () {
-				this.dialog.idle();
-				this.close();
+				idle();
+				self.close();
 			});
 		};
 
@@ -294,6 +299,9 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 			state = 'done';
 			this.dialog.close();
 		};
+
+		this.busy = busy;
+		this.idle = idle;
 
 	}
 
