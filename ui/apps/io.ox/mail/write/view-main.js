@@ -22,10 +22,8 @@ define("io.ox/mail/write/view-main",
      'io.ox/contacts/api',
      'io.ox/contacts/util',
      'io.ox/mail/util',
-     'io.ox/preview/main',
      'io.ox/core/api/user',
      'io.ox/core/capabilities',
-     'io.ox/core/tk/dialogs',
      'io.ox/core/tk/autocomplete',
      'io.ox/core/api/autocomplete',
      'io.ox/core/api/account',
@@ -37,7 +35,7 @@ define("io.ox/mail/write/view-main",
      'io.ox/core/tk/attachments',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, mailAPI, ViewClass, Model, contactsAPI, contactsUtil, mailUtil, pre, userAPI, capabilities, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, util, notifications, sender, attachments, settings, gt) {
+    ], function (ext, links, actions, mailAPI, ViewClass, Model, contactsAPI, contactsUtil, mailUtil, userAPI, capabilities, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, util, notifications, sender, attachments, settings, gt) {
 
     'use strict';
 
@@ -913,7 +911,6 @@ define("io.ox/mail/write/view-main",
     });
 
     var dummySignature = { displayname: gt('No signature') };
-    var addUpload;
 
     function round(num, digits) {
         // TODO: add localization (. vs ,)
