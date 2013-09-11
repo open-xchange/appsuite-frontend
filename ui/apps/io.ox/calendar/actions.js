@@ -231,7 +231,7 @@ define('io.ox/calendar/actions',
                             }).uniq(function (obj) {
                                 return JSON.stringify(obj);
                             }).value();
-                            api.remove(data);
+                            api.remove(data).fail(notifications.yell);
                         };
 
                         // different warnings especially for events with
