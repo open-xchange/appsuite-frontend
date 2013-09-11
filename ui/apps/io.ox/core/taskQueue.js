@@ -19,7 +19,7 @@ define: true
 
 define('io.ox/core/taskQueue', function () {
     "use strict";
-    
+
     /**
     * A task is a unit of work. A task is constructed form a task definition. The task definition must contain a method #perform which returns a deferred object.
     * A task is in one of four states 'initial', 'running', 'done' and 'invalidated'. Another task can be chained back to back to this task by calling the #chainTask method
@@ -30,12 +30,12 @@ define('io.ox/core/taskQueue', function () {
     function Task(taskDef) {
         var deferred = $.Deferred(),
             self = this;
-        
+
         _.extend(this, taskDef);
-        
+
         this.state = 'initial';
-        
-        
+
+
         this.start = function (runNext) {
             if (this.state === 'invalidated') {
                 return;
@@ -58,29 +58,29 @@ define('io.ox/core/taskQueue', function () {
                     self.nextTask.start(true);
                 }
             });
-            
+
             return deferred;
         };
-        
+
         this.invalidate = function () {
             this.state = 'invalidated';
         };
-        
+
         this.when = function () {
             return deferred;
         };
-        
+
         this.chainTask = function (taskDef) {
             return this.nextTask = new Task(taskDef);
         };
-        
+
         this.destroy = function () {
             this.invalidate();
             this.next = null;
             this.result = null;
         };
     }
-    
+
     /**
     * A Queue can be used to manage a queue of tasks that are supposed to be executed back to back. Use #enqueue with
     * a task definition to add to the queue. Once the queue has been started via #start every task that is enqueued will be started
@@ -93,10 +93,10 @@ define('io.ox/core/taskQueue', function () {
         var firstTask = null;
         var lastTask = null;
         var state = 'stopped';
-                
+
         this.enqueue = function (taskDef) {
             var triggerStart = state === 'running';
-            
+
             if (!taskDef.id) {
                 taskDef.id = nextId;
                 nextId = nextId + 1;
@@ -108,48 +108,48 @@ define('io.ox/core/taskQueue', function () {
                 triggerStart = state === 'running' && lastTask.state === 'done';
                 lastTask = lastTask.chainTask(taskDef);
             }
-            
+
             tasks[taskDef.id] = lastTask;
             if (triggerStart) {
                 lastTask.start(true);
             }
         };
-        
+
         this.fasttrack = function (taskId) {
             if (tasks[taskId]) {
                 return tasks[taskId].start();
             }
             throw "Unknown TaskId " + taskId;
         };
-        
+
         this.get = function (taskId) {
             return tasks[taskId];
         };
-        
+
         this.when = function (taskId) {
             if (tasks[taskId]) {
                 return tasks[taskId].when();
             }
             throw "Unknown TaskId " + taskId;
         };
-        
+
         this.start = function () {
             state = 'running';
             if (firstTask) {
                 firstTask.start(true);
             }
         };
-        
+
         this.destroy = function () {
             _(tasks).invoke("destroy");
         };
-        
+
         this.tasks = function () {
             return _(tasks);
         };
     }
-    
-        
+
+
     return {
         Task: Task,
         Queue: Queue

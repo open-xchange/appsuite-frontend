@@ -36,7 +36,7 @@ define('io.ox/office/preview/view/pagegroup',
         DEF_PAGE_HEIGHT = MAX_PAGE_HEIGHT,
 
         // factor to enlarge the original image data
-        ZOOM_FACTOR = Utils.RETINA ? 4 : 2;
+        ZOOM_FACTOR = Utils.RETINA ? 2 : 1;
 
     // class PageGroup ========================================================
 

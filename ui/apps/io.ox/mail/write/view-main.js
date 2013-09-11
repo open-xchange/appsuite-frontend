@@ -1309,39 +1309,47 @@ define("io.ox/mail/write/view-main",
     // are slightly different. it's easier just having two functions.
 
     function drawContact(id, node, data) {
+        var empty;
 
-        node.addClass('io-ox-mail-write-contact section-item').append(
-            // picture
-            contactsAPI.getPicture(data, contactPictureOptions).addClass('contact-image'),
-            // hidden field
-            $('<input>', { type: 'hidden', name: id, value: serialize(data) }),
-            // display name
-            contactsAPI.getDisplayName(data, { halo: false, stringify: 'getMailFullName', tagName: 'div' })
-                .addClass('recipient-name'),
-            // email address
-            $('<div>').append(
-                data.email ?
-                    $('<a href="#" class="halo-link">')
-                    .data({ email1: data.email })
-                    .text(_.noI18n(String(data.email).toLowerCase())) :
-                    $('<span>').text(_.noI18n(data.phone || ''))
-            ),
-            // remove
-            $('<a href="#" class="remove">')
-                .attr('title', gt('Remove from recipient list'))
-                .append(
-                    $('<i class="icon-trash">')
-                )
-                .on('click', { id: id }, function (e) {
-                    e.preventDefault();
-                    var list = $(this).parents().find('.recipient-list');
-                    $(this).parent().remove();
-                    // hide section if empty
-                    if (list.children().length === 0) {
-                        list.hide();
-                    }
-                })
-        );
+        //notice whitespace
+        _(['display_name', 'email', 'full_name']).each(function (key) {
+            empty = empty || data[key].trim() === '';
+        });
+
+        if (!empty) {
+            node.addClass('io-ox-mail-write-contact section-item').append(
+                // picture
+                contactsAPI.getPicture(data, contactPictureOptions).addClass('contact-image'),
+                // hidden field
+                $('<input>', { type: 'hidden', name: id, value: serialize(data) }),
+                // display name
+                contactsAPI.getDisplayName(data, { halo: false, stringify: 'getMailFullName', tagName: 'div' })
+                    .addClass('recipient-name'),
+                // email address
+                $('<div>').append(
+                    data.email ?
+                        $('<a href="#" class="halo-link">')
+                        .data({ email1: data.email })
+                        .text(_.noI18n(String(data.email).toLowerCase())) :
+                        $('<span>').text(_.noI18n(data.phone || ''))
+                ),
+                // remove
+                $('<a href="#" class="remove">')
+                    .attr('title', gt('Remove from recipient list'))
+                    .append(
+                        $('<i class="icon-trash">')
+                    )
+                    .on('click', { id: id }, function (e) {
+                        e.preventDefault();
+                        var list = $(this).parents().find('.recipient-list');
+                        $(this).parent().remove();
+                        // hide section if empty
+                        if (list.children().length === 0) {
+                            list.hide();
+                        }
+                    })
+            );
+        }
     }
 
     // helper

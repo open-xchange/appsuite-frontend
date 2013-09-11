@@ -11,16 +11,16 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/lessons/actions', ['io.ox/core/extensions', 'io.ox/core/extPatterns/links'], function (ext, links) {
-    
+
     "use strict";
-    
+
     new links.Action('io.ox/lessons/actions/toc', {
         id: 'toc',
         action: function (baton) {
             baton.app.tableOfContents();
         }
     });
-    
+
     new links.ActionGroup("io.ox/lessons/links/toolbar", {
         index: 100,
         id: 'default',
@@ -35,6 +35,6 @@ define('io.ox/lessons/actions', ['io.ox/core/extensions', 'io.ox/core/extPattern
         label: 'Table of contents',
         ref: 'io.ox/lessons/actions/toc'
     });
-    
-        
+
+
 });

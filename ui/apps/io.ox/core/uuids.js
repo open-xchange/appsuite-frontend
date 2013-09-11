@@ -28,5 +28,5 @@ define('io.ox/core/uuids', function () {
     return {
         randomUUID: guid
     };
-    
+
 });

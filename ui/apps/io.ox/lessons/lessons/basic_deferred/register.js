@@ -20,10 +20,10 @@ define('io.ox/lessons/lessons/basic_deferred/register', ['io.ox/core/extensions'
         section: "Basics",
         start: function (options) {
             var win = options.win;
-            
+
             require(["text!io.ox/lessons/lessons/basic_deferred/lesson.html"], function (html) {
                 var win = options.win;
-                
+
                 win.nodes.main.empty().append($(html));
                 TOC.setUp(win.nodes.main);
                 Editor.setUp(win.nodes.main, {
@@ -41,7 +41,7 @@ define('io.ox/lessons/lessons/basic_deferred/register', ['io.ox/core/extensions'
                         }
                     }
                 });
-                
+
                 win.idle();
             });
         }

@@ -347,7 +347,7 @@ $(window).load(function () {
                         feedback('error', 'No connection to server. Please ' +
                                  'check your internet connection and retry.');
                     } else {
-                        feedback('error', $.txt(_.formatError(error, '%1$s')));
+                        feedback('error', $.txt(_.formatError(error, '%1$s (%2$s)')));
                     }
                     // restore form
                     restore();

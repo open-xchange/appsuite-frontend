@@ -519,15 +519,29 @@
 
     blockquote {
         font-size: 13px;
-        border-left: none;
+        border-left: 1px solid #08c;
         padding-top: 0.5em;
         padding-bottom:0.5em;
         margin-top: 1em;
         margin-bottom: 1em;
     }
 
+    @colorQuotedWidth: 1px;
+
     .colorQuoted blockquote {
-        border-left: 1px solid #08c;
+        border-left: @colorQuotedWidth solid #08c;
+    }
+
+    .colorQuoted blockquote blockquote {
+        border-left: @colorQuotedWidth solid #EE0889; // pink
+    }
+
+    .colorQuoted blockquote blockquote blockquote {
+        border-left: @colorQuotedWidth solid #08C4FF; // cyan
+    }
+
+    .colorQuoted blockquote blockquote blockquote blockquote {
+        border-left: @colorQuotedWidth solid #aaa; // gray
     }
 
     blockquote p {

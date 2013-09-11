@@ -12,7 +12,7 @@
  */
 define('io.ox/lessons/editor', ['ace/ace', 'ace/mode/javascript', 'ace/mode/html'],  function (ace, JavaScript, HTML) {
     "use strict";
-    
+
     var Editor = {
         ace: ace,
         edit: function (el, options) {
@@ -26,21 +26,21 @@ define('io.ox/lessons/editor', ['ace/ace', 'ace/mode/javascript', 'ace/mode/html
                 border: "1px solid black"
             }).html(el.html()));
             el = div;
-        
+
             var placeholder;
-        
+
             el.after(placeholder = $("<div>&nbsp;</div>").css({
                 marginTop: el.height() + 14
             }));
-        
+
             if (options.run) {
                 placeholder.append($('<button class="btn btn-primary">').text("Try this").on("click", function () {
                     options.run(editor.getValue());
                 }));
             }
-        
+
             var editor = ace.edit(el[0]);
-        
+
             if (!options.language || options.language === "javascript" || options.language === "js") {
                 editor.getSession().setMode(new JavaScript.Mode());
             } else if (options.language === "html") {
@@ -48,7 +48,7 @@ define('io.ox/lessons/editor', ['ace/ace', 'ace/mode/javascript', 'ace/mode/html
             }
             editor.setTheme('ace/theme/eclipse');
             editor.setHighlightActiveLine(false);
-        
+
             return editor;
         },
         highlight: function (el, options) {
@@ -59,26 +59,26 @@ define('io.ox/lessons/editor', ['ace/ace', 'ace/mode/javascript', 'ace/mode/html
         setUp: function (node, options) {
             options = options || {};
             options.contexts = options.contexts || {};
-        
+
             // Highlight uneditable .code elements
             node.find(".code").each(function (index, element) {
                 Editor.highlight(element);
             });
-        
+
             // More interesting experiments
             function createExperiment(index, element) {
                 var experimentDiv = $("<div>").css({
                     marginTop: "10px"
                 });
-            
+
                 var log = $('<pre class="log">').css({
                     marginTop: "10px"
                 }).hide();
-            
+
                 var firstTime = true;
                 $(element).after(log);
                 $(element).after(experimentDiv);
-            
+
                 Editor.edit(element, {
                     padding: 45,
                     run: function (jsText) {
@@ -96,7 +96,7 @@ define('io.ox/lessons/editor', ['ace/ace', 'ace/mode/javascript', 'ace/mode/html
                             });
                             log.show();
                         }
-                    
+
                         var ctx;
                         if ($(element).data("context")) {
                             ctx = options.contexts[$(element).data("context")];
@@ -107,9 +107,9 @@ define('io.ox/lessons/editor', ['ace/ace', 'ace/mode/javascript', 'ace/mode/html
                         var runIt = function () {
                             eval(jsText);
                         };
-                    
+
                         runIt.apply(parentNode);
-                
+
                         if (firstTime && experimentDiv.find("*").length > 0) {
                             firstTime = false;
                             experimentDiv.addClass("well");
@@ -117,12 +117,12 @@ define('io.ox/lessons/editor', ['ace/ace', 'ace/mode/javascript', 'ace/mode/html
                     }
                 });
             }
-        
+
             // Node Experiments
             node.find(".node_experiment").each(createExperiment);
             node.find(".experiment").each(createExperiment);
         }
     };
     return Editor;
-    
+
 });

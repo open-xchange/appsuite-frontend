@@ -600,7 +600,7 @@ define('io.ox/mail/main',
                     cell = grid.getContainer().find('[data-obj-id="' + cid + '"]');
                     index = parseInt(cell.attr('data-index'), 10) + 1;
                     // got valid index?
-                    if (Number.isNaN(index)) return;
+                    if (!_.isNumber(index)) return;
                     // cursor right? (open)
                     if (key === 39) {
                         open(index, cid);

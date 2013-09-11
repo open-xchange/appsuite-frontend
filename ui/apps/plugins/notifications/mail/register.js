@@ -21,13 +21,17 @@ define('plugins/notifications/mail/register',
 
     'use strict';
 
+    var numMessages = 10;
+
     ext.point('io.ox/core/notifications/mail/header').extend({
-        draw: function () {
+        draw: function (baton) {
             this.append(
                 $('<legend class="section-title">').text(gt('New Mails')),
                 $('<div class="notifications">'),
                 $('<div class="open-app">').append(
-                    $('<a href="#" data-action="open-app" tabindex="1">').text(gt('Show inbox'))
+                    $('<a href="#" data-action="open-app" tabindex="1">').text(
+                        baton.more ? gt('Show all %1$d messages in inbox', baton.size) : gt('Show inbox')
+                    )
                 )
             );
         }
@@ -85,8 +89,8 @@ define('plugins/notifications/mail/register',
         },
 
         render: function () {
-            var i = 0, $i = Math.min(this.collection.size(), 3), baton;
-            baton = ext.Baton({ view: this });
+            var i = 0, size = this.collection.size(), $i = Math.min(size, numMessages), baton;
+            baton = ext.Baton({ view: this, size: size, more: size > $i });
             ext.point('io.ox/core/notifications/mail/header').invoke('draw', this.$el.empty(), baton);
 
             for (; i < $i; i++) {

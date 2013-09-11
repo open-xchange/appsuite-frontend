@@ -21,12 +21,12 @@ define('io.ox/lessons/lessons/basic_jquery/register', ['io.ox/core/extensions', 
         start: function (options) {
             require(["text!io.ox/lessons/lessons/basic_jquery/lesson.html"], function (html) {
                 var win = options.win;
-                
+
                 win.nodes.main.empty().append($(html));
-                
+
                 Editor.setUp(win.nodes.main);
                 TOC.setUp(win.nodes.main);
-                
+
                 // Selector experiments
                 win.nodes.main.find(".selector_experiment").each(function (index, element) {
                     var selectorField, runExperiment, editor, experimentDiv, firstTime, htmlCode;
@@ -77,10 +77,10 @@ define('io.ox/lessons/lessons/basic_jquery/register', ['io.ox/core/extensions', 
                     };
 
                 });
-                
+
                 win.idle();
             });
         }
-    
+
     });
 });

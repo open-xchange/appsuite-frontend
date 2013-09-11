@@ -64,7 +64,9 @@ define('io.ox/core/cache',
                                     if (action === 'No') {
                                         return def.reject();
                                     } else {
-                                        return def.resolve();
+                                        clear().then(function () {
+                                            def.resolve();
+                                        });
                                     }
                                 });
                             return def;
