@@ -74,13 +74,11 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         if (running) {
             return;
         }
-        console.log("start");
         running = true;
         setTimeout(runActions, 1000);
     }
 
     function stop() {
-        console.log("stop");
         running = false;
     }
 
@@ -133,7 +131,6 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             console.log("->", stanzas);
         }
         transmitting = true;
-        console.log(stanzas);
         http.PUT({
             module: 'rt',
             params: {

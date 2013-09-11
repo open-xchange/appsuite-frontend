@@ -41,7 +41,6 @@ define('io.ox/mail/api',
             threadHash = {},
 
             // track mails that are manually marked as unseen
-            explicitUnseen = {},
             unseen = {},
             colorLabel = {};
 
@@ -161,16 +160,22 @@ define('io.ox/mail/api',
 
             }()),
 
-            setUnseen: function (obj) {
+            setUnseen: function (obj, options) {
                 var cid = getCID(obj);
-                explicitUnseen[cid] = _.now();
                 unseen[cid] = true;
+                options = options || {};
+                if (!options.silent) {
+                    api.trigger('refresh.list');
+                }
             },
 
-            setSeen: function (obj) {
+            setSeen: function (obj, options) {
                 var cid = getCID(obj);
-                delete explicitUnseen[cid];
                 unseen[cid] = false;
+                options = options || {};
+                if (!options.silent) {
+                    api.trigger('refresh.list');
+                }
             },
 
             /**
@@ -217,32 +222,6 @@ define('io.ox/mail/api',
             setColorLabel: function (obj) {
                 var cid = getCID(obj);
                 colorLabel[cid] = parseInt(obj.color_label, 10) || 0;
-            },
-
-            applyAutoRead: function (obj) {
-
-                if (!_.isObject(obj)) return;
-
-                // looks like attachment?
-                if ('parent' in obj || 'msgref' in obj) return;
-
-                var cid = getCID(obj);
-                if (unseen[cid] === true) {
-                    unseen[cid] = false;
-                    delete explicitUnseen[cid];
-                    api.markRead(obj);
-                }
-            },
-
-            canAutoRead: function (obj) {
-                var cid = getCID(obj);
-                if (!(cid in unseen)) { //unseen list is not initialized if mailapp was not opened before
-                                        //this makes sure mails get removed correctly in notification area if this happens
-                    unseen[cid] = true;
-                    return true;
-                } else {
-                    return this.isUnseen(cid) && (!(cid in explicitUnseen) || explicitUnseen[cid] < (_.now() - DELAY));
-                }
             },
 
             clear: function () {
@@ -682,20 +661,22 @@ define('io.ox/mail/api',
                             co.data = co.data || co;
                             // update affected items
                             return $.when.apply($,
-                                _(co.data).map(function (obj) {
-                                    if (_.cid(obj) in hash) {
-                                        callback(obj);
-                                        // handles threadView: on || off
-                                        var elem = obj.thread || obj;
-                                        return $.when(
-                                            api.caches.list.merge(elem),
-                                            api.caches.get.merge(elem)
-                                        );
-                                    } else {
-                                        return DONE;
-                                    }
+                                _(co.data)
+                                .chain()
+                                .filter(function (obj) {
+                                    return _.cid(obj) in hash;
                                 })
-                            ).pipe(function () {
+                                .map(function (obj) {
+                                    callback(obj);
+                                    // handles threadView: on || off
+                                    var elem = obj.thread || obj;
+                                    return $.when(
+                                        api.caches.list.merge(elem),
+                                        api.caches.get.merge(elem)
+                                    );
+                                })
+                                .value()
+                            ).then(function () {
                                 return api.caches.all.add(folder_id, co);
                             });
                         } else {
@@ -819,7 +800,6 @@ define('io.ox/mail/api',
      * @return {deferred}
      */
     api.markUnread = function (list) {
-
         list = [].concat(list);
 
         var defs = _(list).chain()
@@ -834,7 +814,7 @@ define('io.ox/mail/api',
             return $.when(
                 // local update
                 tracker.update(list, function (obj) {
-                    tracker.setUnseen(obj);
+                    tracker.setUnseen(obj, { silent: true });
                     obj.flags = obj.flags & ~32;
                 })
                 .done(function () {
@@ -872,7 +852,7 @@ define('io.ox/mail/api',
             return $.when(
                 // local update
                 tracker.update(list, function (obj) {
-                    tracker.setSeen(obj);
+                    tracker.setSeen(obj, { silent: true });
                     obj.flags = obj.flags | 32;
                 })
                 .done(function () {

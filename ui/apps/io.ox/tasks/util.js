@@ -374,33 +374,43 @@ define('io.ox/tasks/util',
                 }
 
                 var resultArray = [],
-                    alphabetArray = [];
+                    dateArray = [],
+                    emptyDateArray = [];
 
                 for (var i = 0; i < tasks.length; i++) {
                     if (tasks[i].status === 3) {
                         resultArray.push(tasks[i]);
+                    } else if (tasks[i].end_date === null || tasks[i].end_date === undefined) {
+                        emptyDateArray.push(tasks[i]);
                     } else {
-                        alphabetArray.push(tasks[i]);
+                        dateArray.push(tasks[i]);
                     }
                 }
 
-                alphabetArray.sort(function (a, b) {
-                        if (a.end_date > b.end_date || a.end_date === null) {
-                            return 1;
-                        } else if (a.end_date < b.end_date || b.end_date === null) {
-                            return -1;
-                        } else if (a.title > b.title) {
-                            return 1;
-                        } else {
-                            return -1;
-                        }
-                    });
+                emptyDateArray.sort(function (a, b) {
+                    if (a.title > b.title) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                });
+
+                dateArray.sort(function (a, b) {
+                    if (a.end_date > b.end_date) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                });
+
                 if (order === 'desc') {
-                    resultArray.push(alphabetArray);
+                    resultArray.push(emptyDateArray.reverse(), dateArray.reverse());
+                    resultArray = _.flatten(resultArray);
                 } else {
-                    resultArray.unshift(alphabetArray);
+                    resultArray.unshift(dateArray, emptyDateArray);
+                    resultArray = _.flatten(resultArray);
                 }
-                return _.flatten(resultArray);
+                return resultArray;
             }
 
         };
