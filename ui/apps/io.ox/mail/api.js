@@ -682,20 +682,22 @@ define('io.ox/mail/api',
                             co.data = co.data || co;
                             // update affected items
                             return $.when.apply($,
-                                _(co.data).map(function (obj) {
-                                    if (_.cid(obj) in hash) {
-                                        callback(obj);
-                                        // handles threadView: on || off
-                                        var elem = obj.thread || obj;
-                                        return $.when(
-                                            api.caches.list.merge(elem),
-                                            api.caches.get.merge(elem)
-                                        );
-                                    } else {
-                                        return DONE;
-                                    }
+                                _(co.data)
+                                .chain()
+                                .filter(function (obj) {
+                                    return _.cid(obj) in hash;
                                 })
-                            ).pipe(function () {
+                                .map(function (obj) {
+                                    callback(obj);
+                                    // handles threadView: on || off
+                                    var elem = obj.thread || obj;
+                                    return $.when(
+                                        api.caches.list.merge(elem),
+                                        api.caches.get.merge(elem)
+                                    );
+                                })
+                                .value()
+                            ).then(function () {
                                 return api.caches.all.add(folder_id, co);
                             });
                         } else {
