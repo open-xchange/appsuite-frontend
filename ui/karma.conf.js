@@ -7,9 +7,13 @@ module.exports = function(config) {
     // base path, that will be used to resolve files and exclude
     basePath: '',
 
-    plugins: ['karma-*', require('./lib/karma-oxboot/index.js')],
+    plugins: [
+        'karma-*',
+        require('./lib/karma-oxboot/index.js'),
+        require('./lib/karma-ox-apploader/index.js')
+    ],
     // frameworks to use
-    frameworks: ['jasmine', 'oxboot'],
+    frameworks: ['jasmine', 'oxboot', 'ox-apploader'],
 
 
     // list of files / patterns to load in the browser
@@ -71,10 +75,7 @@ module.exports = function(config) {
     // if true, it capture browsers, run tests and exit
     singleRun: false,
 
-    proxies:  {
-        '/api/': 'http://localhost:8337/appsuite/api/',
-        '/apps/': 'http://localhost:8337/appsuite/apps/'
-    },
+    proxies:  {},
 
     junitReporter: {
         outputFile: 'tmp/test-results.xml'
