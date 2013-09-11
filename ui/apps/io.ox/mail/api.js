@@ -1485,6 +1485,8 @@ define('io.ox/mail/api',
             if (recent.length > 0) {
                 lastUnseenMail = recent[0].received_date;
                 api.newMailTitle(true);
+            } else {//if no new mail set lastUnseenMail to now, to prevent mark as unread to trigger new mail
+                lastUnseenMail = _.utc();
             }
 
             return {

@@ -125,7 +125,6 @@ define('plugins/notifications/mail/register',
                         var detailPopup = new dialogs.SidePopup({ arrow: false, side: 'right' })
                             .setTarget(overlay.empty())
                             .on('close', function () {
-                                overlay.trigger('mail-detail-closed');
                                 api.off('delete', cleanUp);
                                 if (_.device('smartphone') && overlay.children().length > 0) {
                                     overlay.addClass('active');
