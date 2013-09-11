@@ -515,8 +515,7 @@ define('io.ox/mail/write/main',
 
         app.setAttachments = function (data) {
             // look for real attachments
-            //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
-            if (_.browser.IE !== 9) {
+            if (true) {
                 var items = _.chain(data.attachments || [])
                             .filter(function (attachment) {
                                 //only real attachments
@@ -569,8 +568,7 @@ define('io.ox/mail/write/main',
                     id: data.id
                 };
             }
-            //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
-            if (_.browser.IE !== 9) {
+            if (true) {
                 var items = _(list || []).map(function (obj) {
                     return _.extend(obj, { content_type: 'message/rfc822', parent: parent, group: 'nested'});
                 });
@@ -595,8 +593,7 @@ define('io.ox/mail/write/main',
         app.addFiles = function (list, group) {
             var found = false;
 
-            //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
-            if (_.browser.IE !== 9) {
+            if (true) {
                 var items = _.map(list || [], function (obj) {
                     return $.extend(obj, {group: group || 'file'});
                 });
@@ -1075,8 +1072,7 @@ define('io.ox/mail/write/main',
             mail.sendtype = data.sendtype || mailAPI.SENDTYPE.NORMAL;
 
             // get files
-            //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
-            if (_.browser.IE !== 9) {
+            if (true) {
                 var fileList = view.baton.fileList;
 
                 //attachments
@@ -1313,8 +1309,7 @@ define('io.ox/mail/write/main',
 
                     view.form.find('.section-item.file').remove();
                     $(_.initial(view.form.find(':input[name][type=file]'))).remove();
-                    //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
-                    if (_.browser.IE !== 9) {
+                    if (true) {
                         view.baton.fileList.clear();
                     }
                     draftMail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;

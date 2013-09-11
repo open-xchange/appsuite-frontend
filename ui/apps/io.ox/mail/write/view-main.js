@@ -590,6 +590,10 @@ define("io.ox/mail/write/view-main",
                             }
                         }
                     };
+            $inputWrap.on('change.fileupload', function (e) {
+                //use bubbled event to add fileupload-new again (workaround to add multiple files with IE)
+                $(this).find('div[data-provides="fileupload"]').addClass('fileupload-new').removeClass('fileupload-exists');
+            });
             $input.on('change', changeHandler);
 
             this.scrollpane.append(
@@ -598,8 +602,7 @@ define("io.ox/mail/write/view-main",
                     uploadSection.label,
                     uploadSection.section.append(
                         (_.device('!touch') && (!_.browser.IE || _.browser.IE > 9) ? dndInfo : ''),
-                        //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
-                        _.browser.IE !== 9 ? $inputWrap : this.createUpload()
+                        $inputWrap
                     )
                 )
             );
