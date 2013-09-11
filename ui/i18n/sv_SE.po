@@ -2846,10 +2846,6 @@ msgstr "Påminnelsedatum %1$s"
 msgid "Progress %1$s %"
 msgstr "Förlopp %1$s %"
 
-#: apps/io.ox/tasks/view-detail.js:120 apps/io.ox/tasks/view-detail.js:268
-msgid "Attachments"
-msgstr "Bilagor   "
-
 #: apps/io.ox/tasks/view-detail.js:134
 #| msgid "No start date"
 msgid "Start date"
@@ -5004,10 +5000,6 @@ msgstr "Inga långsamma sökningar"
 msgid "No lost requests"
 msgstr "Inga förlorade sökningar"
 
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:324
-msgid "Show stack trace"
-msgstr "Visa strack-spårning"
-
 #: apps/io.ox/core/settings/pane.js:52
 msgid "The setting has been saved."
 msgstr "Inställningen har sparats"
@@ -5942,11 +5934,6 @@ msgstr "Kontakter har kopierats"
 #: apps/io.ox/contacts/actions.js:471
 msgid "This distribution list has been added to the portal"
 msgstr "Den här distributionslistan har lagts till i portalen"
-
-#: apps/io.ox/contacts/actions.js:605
-#| msgid "Contacts"
-msgid "Add contact"
-msgstr "Lägg till kontakt"
 
 #: apps/io.ox/contacts/actions.js:612
 msgid "Add distribution list"
