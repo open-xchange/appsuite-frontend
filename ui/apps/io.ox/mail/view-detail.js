@@ -645,23 +645,28 @@ define('io.ox/mail/view-detail',
                 node = $('<section class="mail-detail">'),
                 container = $.createViewContainer(data, api)
                     .addClass('mail-detail-decorator')
-                    .on('redraw', function (e, tmp) {
-                        copyThreadData(tmp, copy);
+                    .on('redraw', function (e, fresh) {
                         // mails can only change color_label and flags
                         var current = {
-                                color_label: container.find('.flag-dropdown-icon').attr('data-color'),
-                                flags: copy.flags
-                            },
-                            fresh = {
-                                color_label: tmp.color_label,
-                                flags: tmp.flags
-                            };
-                        // changed? - or just marked seen? or label changed?
-                        if (!_.isEqual(current, fresh)) {
-                            container.replaceWith(
-                                self.draw(ext.Baton({ data: tmp, app: baton.app, options: baton.options }))
-                            );
+                            color_label: parseInt(container.find('.flag-dropdown-icon').attr('data-color'), 10) || 0,
+                            unseen: node.hasClass('unread')
+                        };
+                        // flags changed?
+                        if (current.unseen !== util.isUnseen(fresh)) {
+                            // update class
+                            node.toggleClass('unread', util.isUnseen(fresh));
+                            // udpate inline links
+                            ext.point('io.ox/mail/detail').get('inline-links', function (extension) {
+                                var div = $('<div>'), baton = ext.Baton({ data: _.extend(copy, fresh) });
+                                extension.draw.call(div, baton);
+                                node.find('nav.io-ox-inline-links').replaceWith(div.find('nav'));
+                            });
                         }
+                        if (current.color_label !== fresh.color_label) {
+                            setLabel(node, fresh.color_label);
+                        }
+                        // update copy
+                        _.extend(copy, fresh);
                     });
 
             if (baton.options.tabindex) {
@@ -685,16 +690,9 @@ define('io.ox/mail/view-detail',
                     node.addClass('by-myself');
                 }
 
-                var isUnseen = api.tracker.isUnseen(data),
-                    canAutoRead = api.tracker.canAutoRead(data);
-
-                if (isUnseen) {
-                    if (canAutoRead) {
-                        data.flags = data.flags | 32;
-                        api.tracker.applyAutoRead(data);
-                    } else {
-                        node.addClass('unread');
-                    }
+                // make sure this mail is seen
+                if (api.tracker.isUnseen(baton.data)) {
+                    api.markRead(baton.data);
                 }
 
                 ext.point('io.ox/mail/detail').invoke('draw', node, baton);
@@ -765,8 +763,8 @@ define('io.ox/mail/view-detail',
                 var modifiedBaton, sentFolder, inboxMails;
 
                 modifiedBaton = deleteAction.data('baton');
-                if (!modifiedBaton || !modifiedBaton.data) {
-                    console.error('No baton found. Not supposed to happen.');
+                if ((!modifiedBaton || !modifiedBaton.data) && ox.debug) {
+                    console.warn('No baton found. Not supposed to happen.');
                     return;
                 }
                 sentFolder = settings.get('folder.sent');
@@ -1077,20 +1075,23 @@ define('io.ox/mail/view-detail',
     var colorLabelIconEmpty = 'icon-bookmark-empty',
         colorLabelIcon = 'icon-bookmark';
 
+    function setLabel(node, color) {
+        // set proper icon class
+        var className = 'flag-dropdown-icon ';
+        className += color === 0 ? colorLabelIconEmpty : colorLabelIcon;
+        className += ' flag_' + color;
+        node.find('.flag-dropdown-icon').attr({ 'class': className, 'data-color': color });
+    }
+
     function changeLabel(e) {
 
         e.preventDefault();
 
         var data = e.data.data,
             color = e.data.color,
-            node = $(this).closest('.flag-dropdown'),
-            className = 'flag-dropdown-icon ';
+            node = $(this).closest('.flag-dropdown');
 
-        // set proper icon class
-        className += color === 0 ? colorLabelIconEmpty : colorLabelIcon;
-        className += ' flag_' + color;
-
-        node.find('.flag-dropdown-icon').attr({ 'class': className, 'data-color': color });
+        setLabel(node, color);
         node.find('.dropdown-toggle').focus();
 
         return api.changeColor(data, color);
