@@ -515,53 +515,31 @@ define('io.ox/mail/write/main',
 
         app.setAttachments = function (data) {
             // look for real attachments
-            if (true) {
-                var items = _.chain(data.attachments || [])
-                            .filter(function (attachment) {
-                                //only real attachments
-                                return attachment.disp === 'attachment';
-                            })
-                            .map(function (attachment) {
-                                // add as linked attachment
-                                if (data.msgref) {
-                                    attachment.atmsgref = data.msgref;
-                                }
-                                attachment.type = attachment.filename && attachment.filename.split('.').length > 1  ? attachment.filename.split('.').pop() : 'file';
-                                attachment.group = 'attachment';
-                                return attachment;
-                            })
-                            .value();
-                //add to file list and show section
-                if (items.length) {
-                    view.fileList.add(items);
-                    //lazy fix focus problem of IE9
-                    view.showSection('attachments', _.browser.IE !== 9);
-                }
-            } else {
-                var found = false;
-                _(data.attachments || []).each(function (attachment) {
-                    if (attachment.disp === 'attachment') {
-                        // add as linked attachment
-                        if (data.msgref) {
-                            attachment.atmsgref = data.msgref;
-                        }
-                        attachment.type = 'file';
-                        found = true;
-
-                        view.form.find('input[type=file]').last()
-                            .prop('attachment', attachment)
-                            .trigger('change');
-                    }
-                });
-                if (found) {
-                    view.showSection('attachments');
-                }
+            var items = _.chain(data.attachments || [])
+                        .filter(function (attachment) {
+                            //only real attachments
+                            return attachment.disp === 'attachment';
+                        })
+                        .map(function (attachment) {
+                            // add as linked attachment
+                            if (data.msgref) {
+                                attachment.atmsgref = data.msgref;
+                            }
+                            attachment.type = attachment.filename && attachment.filename.split('.').length > 1  ? attachment.filename.split('.').pop() : 'file';
+                            attachment.group = 'attachment';
+                            return attachment;
+                        })
+                        .value();
+            //add to file list and show section
+            if (items.length) {
+                view.fileList.add(items);
+                //lazy fix focus problem of IE9
+                view.showSection('attachments', _.browser.IE !== 9);
             }
         };
 
         app.setNestedMessages = function (data) {
-            var list = data.nested_msgs, parent;
-
+            var list = data.nested_msgs, parent, items;
             //fixes preview: mail compose save of an forwarded mail with previewable attachment
             if (data.folder_id && data.id) {
                 parent = {
@@ -569,51 +547,25 @@ define('io.ox/mail/write/main',
                     id: data.id
                 };
             }
-            if (true) {
-                var items = _(list || []).map(function (obj) {
-                    return _.extend(obj, { content_type: 'message/rfc822', parent: parent, group: 'nested'});
-                });
-                if (items.length) {
-                    view.fileList.add(items);
-                    //lazy fix focus problem of IE9
-                    view.showSection('attachments', _.browser.IE !== 9);
-                }
-            } else {
-                var found = false;
-                _(list || []).each(function (obj) {
-                    found = true;
-                    view.form.find('input[type=file]').last()
-                        .prop('nested', { message: obj, name: obj.subject, content_type: 'message/rfc822' })
-                        .trigger('change');
-                });
-                if (found) {
-                    view.showSection('attachments');
-                }
+            items = _(list || []).map(function (obj) {
+                return _.extend(obj, { content_type: 'message/rfc822', parent: parent, group: 'nested'});
+            });
+            if (items.length) {
+                view.fileList.add(items);
+                //lazy fix focus problem of IE9
+                view.showSection('attachments', _.browser.IE !== 9);
             }
         };
 
         app.addFiles = function (list, group) {
-            var found = false;
-
-            if (true) {
-                var items = _.map(list || [], function (obj) {
-                    return $.extend(obj, {group: group || 'file'});
-                });
-                if (items.length) {
-                    view.fileList.add(items);
-                    //lazy fix focus problem of IE9
-                    view.showSection('attachments', _.browser.IE !== 9);
-                }
-            } else {
-                _(list || []).each(function (obj) {
-                    found = true;
-                    view.form.find('input[type=file]').last()
-                        .prop('file', obj)
-                        .trigger('change');
-                });
-                if (found) {
-                    view.showSection('attachments');
-                }
+            var found = false, items;
+            items = _.map(list || [], function (obj) {
+                return $.extend(obj, {group: group || 'file'});
+            });
+            if (items.length && view.fileList) {
+                view.fileList.add(items);
+                //lazy fix focus problem of IE9
+                view.showSection('attachments', _.browser.IE !== 9);
             }
         };
 
@@ -1011,6 +963,7 @@ define('io.ox/mail/write/main',
                 attachments,
                 mail,
                 files = [],
+                fileList = view.baton.fileList,
                 parse = function (list) {
                     return _(mailUtil.parseRecipients([].concat(list).join(', ')))
                         .map(function (recipient) {
@@ -1075,61 +1028,17 @@ define('io.ox/mail/write/main',
             mail.sendtype = data.sendtype || mailAPI.SENDTYPE.NORMAL;
 
             // get files
-            if (true) {
-                var fileList = view.baton.fileList;
+            //attachments
+            mail.attachments = mail.attachments.concat(fileList.get('attachment'));
+            //nested message (usually multiple mail forward)
+            mail.nested_msgs = mail.nested_msgs.concat(fileList.get('nested'));
+            //referenced contacts (vcards)
+            mail.contacts_ids = (mail.contacts_ids || []).concat(fileList.get('vcard'));
+            //referenced inforstore files
+            mail.infostore_ids = (mail.infostore_ids || []).concat(fileList.get('infostore'));
+            //local files
+            files = files.concat(fileList.get('file'));
 
-                //attachments
-                mail.attachments = mail.attachments.concat(fileList.get('attachment'));
-                //nested message (usually multiple mail forward)
-                mail.nested_msgs = mail.nested_msgs.concat(fileList.get('nested'));
-                //referenced contacts (vcards)
-                mail.contacts_ids = (mail.contacts_ids || []).concat(fileList.get('vcard'));
-                //referenced inforstore files
-                mail.infostore_ids = (mail.infostore_ids || []).concat(fileList.get('infostore'));
-                //local files
-                files = files.concat(fileList.get('file'));
-                //local files (form input)
-                //files = files.concat(fileList.get('input'));
-
-                //TODO: removeable?
-                /*if (this.files && this.files.length) {
-                    // process normal upload
-                    _(this.files).each(function (file) {
-                        files.push(file);
-                    });
-                }*/
-
-            } else {
-                view.form.find(':input[name][type=file]').each(function () {
-                    // link to existing attachments (e.g. in forwards)
-                    var attachment = $(this).prop('attachment'),
-                        // get file via property (DND) or files array and add to list
-                        file = $(this).prop('file'),
-                        // get nested messages
-                        nested = $(this).prop('nested');
-                    if (attachment) {
-                        // add linked attachment
-                        mail.attachments.push(attachment);
-                    } else if (nested) {
-                        // add nested message (usually multiple mail forward)
-                        mail.nested_msgs.push(nested.message);
-                    } else if ('File' in window && file instanceof window.File) {
-                        // add dropped file
-                        files.push(file);
-                    } else if (file && ('id' in file) && ('file_size' in file)) {
-                        // infostore id
-                        (mail.infostore_ids = (mail.infostore_ids || [])).push(file);
-                    } else if (file && ('id' in file) && ('display_name' in file)) {
-                        // contacts id
-                        (mail.contacts_ids = (mail.contacts_ids || [])).push(file);
-                    } else if (this.files && this.files.length) {
-                        // process normal upload
-                        _(this.files).each(function (file) {
-                            files.push(file);
-                        });
-                    }
-                });
-            }
             // return data, file references, mode, format
             return {
                 data: mail,
@@ -1312,9 +1221,7 @@ define('io.ox/mail/write/main',
 
                     view.form.find('.section-item.file').remove();
                     $(_.initial(view.form.find(':input[name][type=file]'))).remove();
-                    if (true) {
-                        view.baton.fileList.clear();
-                    }
+                    view.baton.fileList.clear();
                     draftMail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
                     draftMail.vcard = old_vcard_flag;
                     app.setMail({ data: draftMail, mode: mail.mode, initial: false, replaceBody: 'no', format: format});
