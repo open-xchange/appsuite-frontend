@@ -192,9 +192,7 @@ define("io.ox/mail/write/view-main",
 
         createUpload: (function () {
 
-            var change = function (e) {
-                handleFileSelect(e, this);
-            };
+            var change = function (e) {};
 
             return function () {
 
@@ -936,7 +934,7 @@ define("io.ox/mail/write/view-main",
     });
 
     var dummySignature = { displayname: gt('No signature') };
-    var handleFileSelect, addUpload, supportsPreview, previewAttachment, createPreview;
+    var addUpload, supportsPreview, previewAttachment, createPreview;
 
     supportsPreview = function (file) {
         // is not local?
@@ -1064,95 +1062,6 @@ define("io.ox/mail/write/view-main",
         var pow = Math.pow(10, digits);
         return Math.round(num * pow) / pow;
     }
-
-    handleFileSelect = function (e, view) {
-        // look for linked attachments or dropped files
-        var target = $(e.currentTarget),
-            item = target.prop('attachment') || target.prop('file') || target.prop('nested'),
-            list = item ? [item] : e.target.files;
-
-        // IE fallback
-        if (!list) {
-            var name = target.val();
-            list = [{
-                filename: name.split(/(\\|\/)/g).pop(),
-                size: 0
-            }];
-        }
-
-        if (list.length) {
-            var $section = view.sections.attachments,
-                $upload = $section.children().last();
-
-            // loop over all attachments
-            _(list).each(function (file) {
-
-                /*
-                 * Files, VCard, and Messages are very close here
-                 * there's no real separation
-                 */
-
-                var icon, name, size, info,
-                    isMessage = 'message' in file,
-                    isFile = 'size' in file || 'file_size' in file;
-
-                // message?
-                if (isMessage) {
-                    info = $('<span>').addClass('filesize').text('');
-                    icon = $('<i>').addClass('icon-paper-clip');
-                    name = file.message.subject || '\u00A0';
-                } else if (isFile) {
-                    // filesize
-                    size = file.size || file.file_size;
-                    size = size !== undefined ? gt.format('%1$s\u00A0 ', strings.fileSize(size)) : '';
-                    info = $('<span>').addClass('filesize').text(size);
-                    icon = $('<i>').addClass('icon-paper-clip');
-                    name = file.filename || file.name || '';
-                } else {
-                    // vcard
-                    info = $('<span>').addClass('filesize').text(gt.noI18n('vCard\u00A0'));
-                    icon = $('<i>').addClass('icon-list-alt');
-                    name = contactsUtil.getFullName(file);
-                }
-
-                // draw
-                $section.append(
-                    $('<div>').addClass('section-item file').append(
-                        // icon
-                        icon,
-                        // filename
-                        $('<div class="row-1">').text(_.noI18n(name)),
-                        // filesize / preview
-                        $('<div class="row-2">').append(
-                            info,
-                            // preview?
-                            supportsPreview(file) ? createPreview(file, view.app, view.rightside) : $(),
-                            // nbsp
-                            $.txt('\u00A0')
-                        ),
-                        // remove
-                        $('<a href="#" class="remove" tabindex="6">')
-                        .attr('title', gt('Remove attachment'))
-                        .append(
-                            $('<i class="icon-trash">')
-                        )
-                        .on('click', function (e) {
-                            e.preventDefault();
-                            //remove upload container and all file 'label divs'
-                            $upload.nextUntil('.upload', '.file').remove();
-                            $upload.replaceWith('');
-                        })
-                    )
-                );
-            });
-            // hide current upload field
-            $(e.target).closest('.section-item.upload').hide();
-        }
-
-        view.sections.attachments.append(
-            view.createUpload()
-        );
-    };
 
     function fnToggleSection(e) {
         var id = e.data.id,
