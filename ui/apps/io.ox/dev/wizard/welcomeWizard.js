@@ -56,15 +56,67 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
 			// can be used to enable or disable the next button. The wizard also has a pageInfo member object that we can use to store
 			// data that is available to every subsequent page. Note though, that that tightly couples pages together, so use this with care!
 			// We will use this for some fun, though.
+			baton.form = {};
 
-			
+			this.append(
+				$('<form>').append(
+					$("<fieldset>").append(
+						$('<label class="radio">').append(
+							baton.form.male = $('<input type="radio" name="genderRadio" value="male">'),
+							$.txt("Gentleman")
+						),
+						$('<label class="radio">').append(
+							baton.form.female = $('<input type="radio" name="genderRadio" value="male">'),
+							$.txt("Lady")
+						),
+					)
+				)
+			);
+
+			// We want to enable the navigation once the user picked his or her gender.
+			// And we'll capture that logic in one method that we call everytime we have
+			// reason to believe the state changed
+			baton.helpers = {
+				updateState: function () {
+					if (baton.form.male.attr("checked") === 'checked' || baton.form.female.attr("checked") === 'checked') {
+						// One of the two was picked, so enable the next button
+						baton.buttons.enableNext();
+					} else {
+						// No choice was made, so disable the button
+						baton.buttons.disableNext();
+					}
+				}
+			}
+			baton.form.male.on('click', baton.helpers.updateState);
+			baton.form.female.on('click', baton.helpers.updateState);
+				
+		},
+
+		activate: function (baton) {
+			// Whenever the page is entered, the activate method is called. 
+			// we just have to make sure the button state is correct
+			baton.helpers.updateState();
+		},
+
+		finish: function (baton) {
+			// When the page is left, the 'finish' method is called and we can do something
+			// with the entered value, in this case we'll remember it in the wizards data section for inter-page stuff
+
+			var gender = null;
+			if (baton.form.male.attr("checked") === 'checked') {
+				gender = 'male';
+			} else if (baton.form.female.attr("checked") === 'checked') {
+				gender = 'female';
+			}
+
+			baton.wizard.pageData.gender = gender;
 		}
 	})
 
 
 	point.extend({
 		id: 'completeUserInfo',
-		index: 200,
+		index: 300,
 		title: "Personal Information",
 		load: function (baton) {
 			// The load method is an optional method. It is called to load data that you need to set up the page
@@ -75,15 +127,19 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
 			// We will fetch the user data for our example. 
 			var def = $.Deferred();
 
-			require(["io.ox/core/api/user"], function (userAPI) {
-				// Alright, let's stick the user API into our baton, we'll need this later
-				baton.userAPI = userAPI;
+			require(["io.ox/core/api/user", "io.ox/backbone/basicModel", "io.ox/backbone/mini-views"], function (userAPI, Model, mini) {
+				// Alright, let's stick the APIs into our baton, we'll need these later
+				// This is also a nice little trick for loading APIs in the wizard framework.
+				baton.libraries = {
+					userAPI: userAPI,
+					mini: mini
+				};
 
 				// And let's load the current user
 
 				userAPI.getCurrentUser().done(function (user) {
-					baton.user = user;
-
+					// Let's turn this into a Backbone Model, so we can use this in our form later
+					baton.user = new Model(user);
 					// And we're done
 					def.resolve();
 				}).fail(def.reject);
@@ -93,16 +149,28 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
 		},
 
 		draw: function (baton) {
-			// Depending on the complexity of the form and its validation
-			// you will want to use a form with backbone model and view classes
-			// Also look for views in app suite you can maybe reuse for this, as they
-			// will usually take care of responsive design and accessibility, that you might have
-			// to tackle yourself otherwise.
-			// Again, for the sake of this being an example, we'll take the easy route. 
+			// Now, for fun, let's try and build a backbone backed form
+			// Depending on the complexity of the form, this is a good route to take
+			// I would, however, also suggest to scour the appsuite source code for
+			// reusable parts, as they will usually be internationalized, localized, 
+			// responsive to different devices and accessible. Depending on the use of this
+			// wizard, you'll have to take care of these aspects yourself. 
 
-			this.append($("<p>").text("So, who are you really, handsome?"));
+			// Firstly some fun, though. Why not have this wizard be flirtatious, since it's just
+			// getting to know the user. Personally, I think software would do well to be more flirtatious, but
+			// I'm just a lonely developer, so YMMV
+			if (baton.wizard.pageData.gender && baton.wizard.pageData.gender === 'male') {
+				this.append($("<p>").text("So, who are you, handsome?"));				
+			} else if (baton.wizard.pageData.gender && baton.wizard.pageData.gender === 'female') {
+				this.append($("<p>").text("So, who are you, beautiful?"));
+			} else {
+				this.append($("<p>").text("So, who are you, stranger?"));				
+			}
 
+			// Now, on to the serious business
+			var mini = baton.libraries.mini;
 
+			// TODO
 		}
 	});
 
