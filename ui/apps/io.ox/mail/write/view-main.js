@@ -190,23 +190,6 @@ define("io.ox/mail/write/view-main",
             return this.createLink(id, label).appendTo(this.scrollpane);
         },
 
-        createUpload: (function () {
-
-            var change = function (e) {};
-
-            return function () {
-
-                var inputOptions = Modernizr.filereader && 'FormData' in window ?
-                    { type: 'file', name: 'file_' + (this.fileCount++), multiple: 'multiple', tabindex: '7' } :
-                    { type: 'file', name: 'file_' + (this.fileCount++), tabindex: '7' };
-
-                return $('<div class="section-item upload">').append(
-                    $('<input>', inputOptions).on('change', $.proxy(change, this))
-                );
-            };
-
-        }()),
-
         createField: function (id) {
 
             var self = this, node = self.app.getWindowNode();
