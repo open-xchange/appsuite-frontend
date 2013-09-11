@@ -13,6 +13,9 @@
 define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/dialogs', 'gettext!io.ox/core/wizard'], function (ext, dialogs, gt) {
 	'use strict';
 
+	// TODO: Cancelable
+	// TODO: Page Titles
+
 	function Wizard(options) {
 		var state = 'stopped';
 		var batons = {};
@@ -29,6 +32,7 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 		this.previousPage = null;
 		this.nextPage = null;
 		this.dialog = new dialogs.ModalDialog({easyOut: false});
+		this.pageInfo = {};
 		
 		this.navButtons = $("<div/>").append(
 			$('<button class="btn prev">').text(gt("Previous")).on("click", function () {
