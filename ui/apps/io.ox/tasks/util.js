@@ -239,7 +239,7 @@ define('io.ox/tasks/util',
 
                 return appendString;
             },
-            
+
             //returns the same as buildDropdownMenu but returns an array of value string pairs
             buildOptionArray: function (time) {
                 if (!time) {
@@ -269,7 +269,7 @@ define('io.ox/tasks/util',
                     result.push(['d' + i, lookupDaytimeStrings[i]]);
                     i++;
                 }
-                
+
                 //weekdays
                 var circleIncomplete = true,
                     startday = time.getDay();
@@ -291,7 +291,7 @@ define('io.ox/tasks/util',
                         circleIncomplete = false;
                     }
                 }
-                
+
                 return result;
             },
 
