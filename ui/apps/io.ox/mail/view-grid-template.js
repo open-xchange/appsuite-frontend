@@ -108,7 +108,7 @@ define('io.ox/mail/view-grid-template',
                 );
                 fields.date.text(_.noI18n(util.getTime(data.received_date)));
                 fields.attachment.css('display', data.attachment ? '' : 'none');
-                var color = api.tracker.getColorLabel(data);
+                var color = 'threadSize' in data ? api.tracker.getThreadColorLabel(data) : api.tracker.getColorLabel(data);
                 fields.flag.get(0).className = 'flag flag_' + color + ' ' + (color === 0 ? colorLabelIconEmpty : colorLabelIcon);
                 if (fields.account) {
                     fields.account.text(util.getAccountName(data));
@@ -150,13 +150,17 @@ define('io.ox/mail/view-grid-template',
                     }
                     // draw labels
                     _(subset).each(function (data, index) {
+                        var color = api.tracker.getColorLabel(data),
+                            labelClassName = 'flag flag_' + color + ' ' + (color === 0 ? colorLabelIconEmpty : colorLabelIcon);
                         self.append(
                             $('<div class="thread-summary-item selectable">')
                             .addClass(util.isUnseen(data) ? 'unread' : undefined)
                             .attr('data-obj-id', _.cid(data))
                             .append(
-                                $('<div class="thread-summary-right">')
-                                    .addClass('date').text(_.noI18n(util.getTime(data.received_date))),
+                                $('<div class="thread-summary-right">').append(
+                                    $('<i class="' + labelClassName + '">'),
+                                    $('<span class="date">').text(_.noI18n(util.getTime(data.received_date)))
+                                ),
                                 $('<div class="thread-summary-left">').append(
                                     $('<span class="thread-summary-pos">').text(_.noI18n((length - index - 1))),
                                     $('<span class="thread-summary-from">').append(util.getFrom(data).removeClass('person'), $.txt(' ')),

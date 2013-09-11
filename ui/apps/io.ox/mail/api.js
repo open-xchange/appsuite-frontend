@@ -214,6 +214,17 @@ define('io.ox/mail/api',
                 }
             },
 
+            getThreadColorLabel: function (obj) {
+                var cid = getCID(obj), top = threads[threadHash[cid]];
+                if (top) {
+                    return _(top).reduce(function (memo, obj) {
+                        return memo || colorLabel[cid] || obj.color_label;
+                    }, 0);
+                } else {
+                    return self.getColorLabel(obj);
+                }
+            },
+
             getColorLabel: function (obj) {
                 var cid = getCID(obj);
                 return (cid in colorLabel ? colorLabel[cid] : obj.color_label) || 0; // fallback to 0 to avoid undefined
