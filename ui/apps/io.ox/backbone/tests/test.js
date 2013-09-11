@@ -11,12 +11,12 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define("io.ox/backbone/tests/test", [
-    
+
     "io.ox/backbone/tests/model",
     "io.ox/backbone/tests/validations",
     "io.ox/backbone/tests/views",
     "io.ox/backbone/tests/forms"
-    
+
 ], function () {
     "use strict";
 

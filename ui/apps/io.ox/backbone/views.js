@@ -253,12 +253,12 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                     } else if (self.transform) {
                         value = self.transform(value);
                     }
-                    
+
                     if (lastAttribute) {
                         self.$el.append($.txt(self.separator(lastAttribute)));
                     }
-                    
-                    
+
+
                     if (self.model.isSet(attribute)) {
                         self.$el.append($.txt(_.noI18n(value)));
                     } else if (self.initialValue) {

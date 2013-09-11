@@ -16,7 +16,7 @@ define('io.ox/lessons/lessons/basic_requirejs/register', ['io.ox/core/extensions
     gt('Hello');
     gt('Good morning');
     gt('Good evening');
-    
+
     ext.point("io.ox/lessons/lesson").extend({
         id: 'basic_requirejs',
         index: 300,

@@ -175,7 +175,7 @@ define('io.ox/core/api/reminder', ['io.ox/core/http',
             api.trigger('refresh.all');
         });
     };
-    
+
     var findReminders = function (e, objs) {
         //make sure we have an array
         objs = objs ? [].concat(objs) : [];
@@ -193,7 +193,7 @@ define('io.ox/core/api/reminder', ['io.ox/core/http',
             api.removeFromStorage(remindersToRemove);
         }
     };
-    
+
     //remove reminders for declined appointments or tasks. Makes no sense to show a reminder then
     calendarAPI.on('mark:invite:confirmed', findReminders);
     taskAPI.on('mark:task:confirmed', findReminders);
