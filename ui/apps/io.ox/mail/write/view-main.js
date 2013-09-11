@@ -600,10 +600,6 @@ define("io.ox/mail/write/view-main",
             }, this.baton), {
                 rowClass: 'collapsed'
             });
-            // add preview side-popup
-            if (_.browser.IE <= 10)
-                new dialogs.SidePopup().delegate(this.sections.attachments, '.attachment-preview', previewAttachment);
-
 
             // Signatures
             (function () {
