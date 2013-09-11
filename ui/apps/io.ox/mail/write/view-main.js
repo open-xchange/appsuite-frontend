@@ -913,11 +913,7 @@ define("io.ox/mail/write/view-main",
     });
 
     var dummySignature = { displayname: gt('No signature') };
-    var addUpload, createPreview;
-
-    createPreview = function (file, app, rightside) {//rightside is needed to let the popup check for events in the editor iframe
-        return $('<a href="#" class="attachment-preview">').data({file: file, app: app, rightside: rightside }).text(gt('Preview'));
-    };
+    var addUpload;
 
     function round(num, digits) {
         // TODO: add localization (. vs ,)
