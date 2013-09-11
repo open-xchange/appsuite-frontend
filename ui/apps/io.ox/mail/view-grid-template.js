@@ -108,8 +108,9 @@ define('io.ox/mail/view-grid-template',
                 );
                 fields.date.text(_.noI18n(util.getTime(data.received_date)));
                 fields.attachment.css('display', data.attachment ? '' : 'none');
-                var color = 'threadSize' in data ? api.tracker.getThreadColorLabel(data) : api.tracker.getColorLabel(data);
-                fields.flag.get(0).className = 'flag flag_' + color + ' ' + (color === 0 ? colorLabelIconEmpty : colorLabelIcon);
+                var color = api.tracker.getColorLabel(data);
+                //var color = 'threadSize' in data ? api.tracker.getThreadColorLabel(data) : api.tracker.getColorLabel(data);
+                fields.flag.get(0).className = that.getLabelClass(color);
                 if (fields.account) {
                     fields.account.text(util.getAccountName(data));
                 }
@@ -150,15 +151,14 @@ define('io.ox/mail/view-grid-template',
                     }
                     // draw labels
                     _(subset).each(function (data, index) {
-                        var color = api.tracker.getColorLabel(data),
-                            labelClassName = 'flag flag_' + color + ' ' + (color === 0 ? colorLabelIconEmpty : colorLabelIcon);
+                        var color = api.tracker.getColorLabel(data);
                         self.append(
                             $('<div class="thread-summary-item selectable">')
                             .addClass(util.isUnseen(data) ? 'unread' : undefined)
                             .attr('data-obj-id', _.cid(data))
                             .append(
                                 $('<div class="thread-summary-right">').append(
-                                    $('<i class="' + labelClassName + '">'),
+                                    //$('<i class="' + that.getLabelClass(color) + '">'),
                                     $('<span class="date">').text(_.noI18n(util.getTime(data.received_date)))
                                 ),
                                 $('<div class="thread-summary-left">').append(
@@ -171,6 +171,11 @@ define('io.ox/mail/view-grid-template',
                     });
                 });
             }
+        },
+
+        getLabelClass: function (color) {
+            color = color || 0;
+            return 'flag flag_' + color + ' ' + (color === 0 ? colorLabelIconEmpty : colorLabelIcon);
         },
 
         // simple grid-based list for portal & halo

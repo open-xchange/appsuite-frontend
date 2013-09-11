@@ -628,6 +628,16 @@ define('io.ox/mail/main',
                 });
             });
 
+            // api.on('refresh.color', function (e, list) {
+            //     var container = grid.getContainer();
+            //     console.log('refresh.color', list);
+            //     _(list).each(function (obj) {
+            //         var color = api.tracker.getColorLabel(obj);
+            //         container.find('.thread-summary-item[data-obj-id="' + _.cid(obj) + '"] .flag')
+            //             .attr('class', tmpl.getLabelClass(color));
+            //     });
+            // });
+
             api.on('refresh.seen', function (e, list) {
                 var container = grid.getContainer();
                 _(list).each(function (obj) {

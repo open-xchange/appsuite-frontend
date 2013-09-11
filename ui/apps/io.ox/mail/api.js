@@ -791,7 +791,6 @@ define('io.ox/mail/api',
     api.changeColor = function (list, label, local) {
 
         list = [].concat(list);
-
         label = String(label); // Bugfix: #24730
 
         return tracker.update(list, function (obj) {
@@ -801,7 +800,10 @@ define('io.ox/mail/api',
             .then(function () {
                 return local ? DONE : update(list, { color_label: label });
             })
-            .done(function () { api.trigger('refresh.list'); });
+            .done(function () {
+                api.trigger('refresh.color', list);
+                api.trigger('refresh.list');
+            });
     };
 
     /**
