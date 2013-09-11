@@ -534,7 +534,8 @@ define('io.ox/mail/write/main',
                 //add to file list and show section
                 if (items.length) {
                     view.fileList.add(items);
-                    view.showSection('attachments');
+                    //lazy fix focus problem of IE9
+                    view.showSection('attachments', _.browser.IE !== 9);
                 }
             } else {
                 var found = false;
@@ -574,7 +575,8 @@ define('io.ox/mail/write/main',
                 });
                 if (items.length) {
                     view.fileList.add(items);
-                    view.showSection('attachments');
+                    //lazy fix focus problem of IE9
+                    view.showSection('attachments', _.browser.IE !== 9);
                 }
             } else {
                 var found = false;
@@ -599,7 +601,8 @@ define('io.ox/mail/write/main',
                 });
                 if (items.length) {
                     view.fileList.add(items);
-                    view.showSection('attachments');
+                    //lazy fix focus problem of IE9
+                    view.showSection('attachments', _.browser.IE !== 9);
                 }
             } else {
                 _(list || []).each(function (obj) {
