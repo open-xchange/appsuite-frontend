@@ -16,7 +16,7 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 
 #: html/core_body.html:60
-msgid "User name"
+msgid "Username"
 msgstr "Nom d'utilisateur"
 
 #: apps/io.ox/core/relogin.js:51 apps/io.ox/mail/accounts/view-form.js:36
@@ -525,7 +525,7 @@ msgid "Repeat new password"
 msgstr "Répétez le nouveau mot de passe"
 
 #: apps/plugins/portal/userSettings/register.js:77
-msgid "Your passward has been changed"
+msgid "Your password has been changed"
 msgstr "Votre mot de passe a été changé"
 
 #: apps/plugins/portal/userSettings/register.js:97
@@ -890,7 +890,7 @@ msgid "Compose"
 msgstr "Rédiger"
 
 #: apps/io.ox/mail/settings/old_pane.js:81 apps/io.ox/mail/settings/pane.js:35
-msgid "Append vcard"
+msgid "Append vCard"
 msgstr "Ajouter une carte de visite"
 
 #: apps/io.ox/mail/settings/old_pane.js:82 apps/io.ox/mail/settings/pane.js:36
@@ -1157,7 +1157,7 @@ msgstr "Activer"
 #: apps/io.ox/mail/autoforward/settings/register.js:51
 #: apps/io.ox/mail/mailfilter/settings/register.js:40
 #: apps/io.ox/mail/vacationnotice/settings/register.js:69
-msgid "Unable to contact mailfilter backend."
+msgid "Unable to load mail filter settings."
 msgstr "Impossible de contacter le dispositif de filtrage de courrier."
 
 #: apps/io.ox/mail/mailfilter/settings/register.js:43
@@ -1490,7 +1490,7 @@ msgstr "Abonnement en cours. Cela peut prendre quelques secondes…"
 
 #: apps/io.ox/mail/view-detail.js:1230
 msgid ""
-"Created private folder '%1$s' in %2$s and subscribed succesfully to shared "
+"Created private folder '%1$s' in %2$s and subscribed successfully to shared "
 "folder"
 msgstr ""
 "Le dossier privé « %1$s » a été créé dans %2$s et vous avez été abonné avec "
@@ -1924,7 +1924,7 @@ msgstr "Courrier"
 #: apps/io.ox/calendar/week/perspective.js:51
 #: apps/io.ox/calendar/week/perspective.js:179
 #: apps/io.ox/mail/write/main.js:840 apps/io.ox/mail/write/main.js:858
-msgid "An error occured. Please try again."
+msgid "An error occurred. Please try again."
 msgstr "Une erreur s'est produite. Veuillez réessayer."
 
 #: apps/io.ox/mail/write/main.js:1013
@@ -2357,7 +2357,7 @@ msgid "View"
 msgstr "Vue"
 
 #: apps/io.ox/calendar/settings/pane.js:34
-msgid "Time range for the calender view"
+msgid "Time range for the calendar view"
 msgstr "Intervalle de temps pour la vue en agenda"
 
 #: apps/io.ox/calendar/settings/pane.js:35
@@ -3463,11 +3463,11 @@ msgid "Hide request body"
 msgstr "Masquer le corps de la requête"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:75
-msgid "Show strack trace"
+msgid "Show stack trace"
 msgstr "Afficher la trace d'erreurs"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:77
-msgid "Hide strack trace"
+msgid "Hide stack trace"
 msgstr "Masquer la trace d'erreurs"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:111
@@ -5317,7 +5317,7 @@ msgid "Links"
 msgstr "Liens"
 
 #: apps/io.ox/contacts/model.js:307
-msgid "Mark as distributionlist"
+msgid "Mark as Distribution List"
 msgstr "Marquer comme liste de diffusion"
 
 #: apps/io.ox/contacts/model.js:308
@@ -5349,13 +5349,13 @@ msgid "Add member"
 msgstr "Ajouter un membre"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:112
-msgid "Members"
+msgid "Contacts"
 msgstr "Membres"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:168
 #: apps/io.ox/contacts/distrib/create-dist-view.js:187
 #: apps/io.ox/contacts/view-detail.js:257
-msgid "This list has no members yet"
+msgid "This list has no contacts yet"
 msgstr "Cette liste n'a pas encore de membres"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:212
@@ -5962,7 +5962,7 @@ msgid "in one week"
 msgstr "dans une semaine"
 
 #: apps/io.ox/tasks/util.js:256
-msgid "Over due"
+msgid "Overdue"
 msgstr "Échu"
 
 #: apps/io.ox/tasks/main.js:228
@@ -6012,7 +6012,7 @@ msgid "Undone"
 msgstr "Défait"
 
 #: apps/io.ox/tasks/actions.js:164 apps/io.ox/tasks/actions.js:236
-msgid "A severe error occured!"
+msgid "A severe error occurred!"
 msgstr "Une erreur grave s'est produite."
 
 #: apps/io.ox/tasks/actions.js:166
@@ -8579,7 +8579,7 @@ msgstr "Bonsoir"
 #~ msgstr "Connexion"
 
 #~ msgid ""
-#~ "Login failed. Please check your user name and password and try again."
+#~ "Login failed. Please check your Username and password and try again."
 #~ msgstr ""
 #~ "La connexion a échoué. Veuillez vérifier votre nom d'utilisateur et votre "
 #~ "mot de passe, puis réessayer."

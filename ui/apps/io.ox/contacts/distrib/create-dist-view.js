@@ -71,7 +71,7 @@ define('io.ox/contacts/distrib/create-dist-view',
             var self = this;
 
             this.$el.append(
-                $('<legend>').addClass('sectiontitle').text(gt('Members')),
+                $('<legend>').addClass('sectiontitle').text(gt('Contacts')),
                 this.itemList = $('<div>').attr('id', _.uniqueId('box_')).addClass('item-list'),
 
                 $('<div>').attr('data-holder', 'data-holder').append(
@@ -184,7 +184,7 @@ define('io.ox/contacts/distrib/create-dist-view',
             node.append(
                 $('<div>').addClass('listet-item backstripes')
                 .attr({ 'data-mail': 'empty' })
-                .text(gt('This list has no members yet'))
+                .text(gt('This list has no contacts yet'))
             );
         },
 

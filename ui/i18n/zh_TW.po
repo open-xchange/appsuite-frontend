@@ -12,7 +12,7 @@ msgstr ""
 "X-Generator: Poedit 1.5.5\n"
 
 #: html/core_body.html:60
-msgid "User name"
+msgid "Username"
 msgstr "用戶名"
 
 #: apps/io.ox/core/relogin.js:51 apps/io.ox/mail/accounts/view-form.js:36
@@ -515,7 +515,7 @@ msgid "Repeat new password"
 msgstr "重複輸入新密碼"
 
 #: apps/plugins/portal/userSettings/register.js:77
-msgid "Your passward has been changed"
+msgid "Your password has been changed"
 msgstr "您的密碼已更改"
 
 #: apps/plugins/portal/userSettings/register.js:97
@@ -869,7 +869,7 @@ msgid "Compose"
 msgstr "撰寫"
 
 #: apps/io.ox/mail/settings/old_pane.js:81 apps/io.ox/mail/settings/pane.js:35
-msgid "Append vcard"
+msgid "Append vCard"
 msgstr "附加 vCard"
 
 #: apps/io.ox/mail/settings/old_pane.js:82 apps/io.ox/mail/settings/pane.js:36
@@ -1131,7 +1131,7 @@ msgstr "啟用"
 #: apps/io.ox/mail/autoforward/settings/register.js:51
 #: apps/io.ox/mail/mailfilter/settings/register.js:40
 #: apps/io.ox/mail/vacationnotice/settings/register.js:69
-msgid "Unable to contact mailfilter backend."
+msgid "Unable to load mail filter settings."
 msgstr "無法連絡後端郵件過濾器"
 
 #: apps/io.ox/mail/mailfilter/settings/register.js:43
@@ -1462,7 +1462,7 @@ msgstr "正在新增訂閱。這可能需要幾秒鐘..."
 
 #: apps/io.ox/mail/view-detail.js:1230
 msgid ""
-"Created private folder '%1$s' in %2$s and subscribed succesfully to shared "
+"Created private folder '%1$s' in %2$s and subscribed successfully to shared "
 "folder"
 msgstr "於 %2$s 建立了私人資料夾「%1$s」並成功訂閱"
 
@@ -1882,7 +1882,7 @@ msgstr "郵件"
 #: apps/io.ox/calendar/week/perspective.js:51
 #: apps/io.ox/calendar/week/perspective.js:179
 #: apps/io.ox/mail/write/main.js:840 apps/io.ox/mail/write/main.js:858
-msgid "An error occured. Please try again."
+msgid "An error occurred. Please try again."
 msgstr "發生錯誤。請稍後重試。"
 
 #: apps/io.ox/mail/write/main.js:1013
@@ -2311,7 +2311,7 @@ msgid "View"
 msgstr "視圖"
 
 #: apps/io.ox/calendar/settings/pane.js:34
-msgid "Time range for the calender view"
+msgid "Time range for the calendar view"
 msgstr "日曆視圖時間範圍"
 
 #: apps/io.ox/calendar/settings/pane.js:35
@@ -3395,11 +3395,11 @@ msgid "Hide request body"
 msgstr "隱藏請求內容"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:75
-msgid "Show strack trace"
+msgid "Show stack trace"
 msgstr "顯示堆疊追蹤"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:77
-msgid "Hide strack trace"
+msgid "Hide stack trace"
 msgstr "隱藏堆疊追蹤內容"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:111
@@ -5207,7 +5207,7 @@ msgid "Links"
 msgstr "鏈結"
 
 #: apps/io.ox/contacts/model.js:307
-msgid "Mark as distributionlist"
+msgid "Mark as Distribution List"
 msgstr "標示為通訊組列表"
 
 #: apps/io.ox/contacts/model.js:308
@@ -5239,13 +5239,13 @@ msgid "Add member"
 msgstr "新增號碼..."
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:112
-msgid "Members"
+msgid "Contacts"
 msgstr "成員"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:168
 #: apps/io.ox/contacts/distrib/create-dist-view.js:187
 #: apps/io.ox/contacts/view-detail.js:257
-msgid "This list has no members yet"
+msgid "This list has no contacts yet"
 msgstr "該組無成員"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:212
@@ -5846,7 +5846,7 @@ msgid "in one week"
 msgstr "1 周內"
 
 #: apps/io.ox/tasks/util.js:256
-msgid "Over due"
+msgid "Overdue"
 msgstr "過期"
 
 #: apps/io.ox/tasks/main.js:228
@@ -5896,7 +5896,7 @@ msgid "Undone"
 msgstr "已還原"
 
 #: apps/io.ox/tasks/actions.js:164 apps/io.ox/tasks/actions.js:236
-msgid "A severe error occured!"
+msgid "A severe error occurred!"
 msgstr "發生嚴重錯誤！"
 
 #: apps/io.ox/tasks/actions.js:166

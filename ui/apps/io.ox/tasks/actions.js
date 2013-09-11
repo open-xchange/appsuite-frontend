@@ -161,7 +161,7 @@ define('io.ox/tasks/actions',
                         notifications.yell('success', mods.label);
                     })
                     .fail(function (result) {
-                        var errorMsg = gt("A severe error occured!");
+                        var errorMsg = gt("A severe error occurred!");
                         if (result.code === "TSK-0007") {//task was modified before
                             errorMsg = gt("Task was modified before, please reload");
                         }
@@ -228,7 +228,7 @@ define('io.ox/tasks/actions',
                                 .fail(function (response) {
                                     node.show();
                                     node.parent().idle();
-                                    notifications.yell('error', gt('A severe error occured!'));
+                                    notifications.yell('error', gt('A severe error occurred!'));
                                 });
                             }
                         }
