@@ -89,6 +89,35 @@ define('io.ox/core/tk/attachmentsUtil',
                                 rightside: rightside
                             })
                             .text(gt('Preview'));
+            },
+            updatePopup = function (popup, content, type) {
+                if (type === 'text/plain') {
+                    //inject image as data-url
+                    popup.css({ width: '100%', height: '100%' })
+                            .append(
+                                $('<div>')
+                                .css({
+                                    width: '100%',
+                                    height: '100%'
+                                })
+                                .html(_.escape(content).replace(/\n/g, '<br>'))
+                            );
+
+                } else {
+                    //use content
+                    popup.css({ width: '100%', height: '100%' })
+                            .append(
+                                $('<div>')
+                                .css({
+                                    width: '100%',
+                                    height: '100%',
+                                    backgroundImage: 'url(' + content + ')',
+                                    backgroundRepeat: 'no-repeat',
+                                    backgroundPosition: 'center center',
+                                    backgroundSize: 'contain'
+                                })
+                            );
+                }
             };
 
         self = {
@@ -109,7 +138,10 @@ define('io.ox/core/tk/attachmentsUtil',
              * @return {boolean}
              */
             hasPreview : function (file) {
-                var data = self.get(file);
+                var data = self.get(file),
+                    isImage = (/^image\/(png|gif|jpe?g|bmp)$/i).test(data.type),
+                    isText = (/^text\/(plain)$/i).test(data.type);
+
                 // nested mail
                 if (data.type === 'eml') {
                     return new pre.Preview({ mimetype: 'message/rfc822', parent: file.parent }).supportsPreview();
@@ -119,12 +151,12 @@ define('io.ox/core/tk/attachmentsUtil',
                 // vcard
                 } else if (data.group === 'reference') {
                     return true;
-                //local file via mimetype
-                } else  if (window.FileReader && (/^image\/(png|gif|jpe?g|bmp)$/i).test(data.type)) {
-                    return true;
-                //stored file
+                //local file content via fileReader
+                } else  if (window.FileReader && (isImage || isText)) {
+                    return true
+;                //stored file
                 } else {
-                    return (/(png|gif|jpe?g|bmp)$/i).test(data.type);
+                    return (/(png|gif|jpe?g|bmp)$/i).test(data.type) || (/(txt)$/i).test(data.type);
                 }
             },
             /**
@@ -282,25 +314,21 @@ define('io.ox/core/tk/attachmentsUtil',
                             popup.append($('<div>').text('\u00A0'));
                         }
                     });
-                // inject image as data-url
+                //file reader
                 } else {
                     reader = new FileReader();
                     reader.onload = function (e) {
-                        popup.css({ width: '100%', height: '100%' })
-                        .append(
-                            $('<div>')
-                            .css({
-                                width: '100%',
-                                height: '100%',
-                                backgroundImage: 'url(' + e.target.result + ')',
-                                backgroundRepeat: 'no-repeat',
-                                backgroundPosition: 'center center',
-                                backgroundSize: 'contain'
-                            })
-                        );
-                        reader = reader.onload = null;
+                        try {
+                            return updatePopup(popup, e.target.result, file.type);
+                        } finally {
+                            reader = reader.onload = null;
+                        }
                     };
-                    reader.readAsDataURL(file);
+
+                    if (file.type === 'text/plain')
+                        reader.readAsText(file);
+                    else
+                        reader.readAsDataURL(file);
                 }
             }
 
