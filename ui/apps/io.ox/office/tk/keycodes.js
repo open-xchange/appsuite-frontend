@@ -86,9 +86,11 @@ define('io.ox/office/tk/keycodes', ['io.ox/office/tk/utils'], function (Utils) {
         Y:              89,
         Z:              90,
 
-        LEFT_WINDOWS:   91,
+        LEFT_WINDOWS:   91,     // Windows only
+        LEFT_COMMAND:   91,     // Mac only (but Firefox: 224 MOZ_COMMAND)
         RIGHT_WINDOWS:  92,
-        SELECT:         93,
+        SELECT:         93,     // Windows only
+        RIGHT_COMMAND:  93,     // Mac only (but Firefox: 224 MOZ_COMMAND)
 
         NUM_0:          96,     // attention: numpad keys totally broken in Opera
         NUM_1:          97,
@@ -123,8 +125,6 @@ define('io.ox/office/tk/keycodes', ['io.ox/office/tk/utils'], function (Utils) {
         NUM_LOCK:       144,
         SCROLL_LOCK:    145,
 
-        IME_INPUT:      229     // indicates an IME input session
-
 /* enable when needed
         MOZ_HASH:       163,    // Hash sign in Firefox, German keyboard (otherwise: 191 SLASH)
         MOZ_PLUS:       171,    // Plus sign in Firefox, German keyboard (otherwise: 187 EQUAL_SIGN)
@@ -141,8 +141,15 @@ define('io.ox/office/tk/keycodes', ['io.ox/office/tk/utils'], function (Utils) {
         BACKSLASH:      220,
         CLOSE_BRACKET:  221,
         APOSTROPH:      222,
-        OPEN_ANGLE:     226     // Open angle, German keyboard (but Firefox: 60 MOZ_OPEN_ANGLE)
 */
+
+        MOZ_COMMAND:    224,    // Mac/Firefox only (otherwise: 91 LEFT_COMMAND, 93 RIGHT_COMMAND)
+
+/* enable when needed
+        OPEN_ANGLE:     226,    // Open angle, German keyboard (but Firefox: 60 MOZ_OPEN_ANGLE)
+*/
+
+        IME_INPUT:      229     // indicates an IME input session
     };
 
     // methods ----------------------------------------------------------------

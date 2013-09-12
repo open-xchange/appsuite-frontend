@@ -35,7 +35,8 @@ define('io.ox/office/framework/view/nodetracking',
             touchmove: touchMoveHandler,
             touchend: touchEndHandler,
             touchcancel: cancelTracking,
-            keydown: keyDownHandler
+            keydown: keyDownHandler,
+            keyup: keyUpHandler
         },
 
         // the map of all events to be bound to the document after tracking has started
@@ -55,6 +56,9 @@ define('io.ox/office/framework/view/nodetracking',
 
         // the tracking position passed to the last event
         lastX = 0, lastY = 0,
+
+        // last states of all modifier keys
+        lastModifiers = null,
 
         // whether the mouse or touch point has been moved after tracking has started
         moved = false,
@@ -137,10 +141,18 @@ define('io.ox/office/framework/view/nodetracking',
     }
 
     /**
+     * Returns the current states of the modifier key flags from the passed
+     * event object.
+     */
+    function getModifiers(event) {
+        return { shift: !!event.shiftKey, alt: !!event.altKey, ctrl: !!event.ctrlKey, meta: !!event.metaKey };
+    }
+
+    /**
      * Initializes auto-repetition and auto-scrolling mode after tracking has
      * been started.
      */
-    function initAutoMode() {
+    function initAutoMode(event) {
 
         var // additional options for auto-repetition and auto-scrolling
             trackingOptions = trackingNode.data('tracking-options') || {},
@@ -247,6 +259,10 @@ define('io.ox/office/framework/view/nodetracking',
             }
         }
 
+        if (Utils.getBooleanOption(trackingOptions, 'trackModifiers', false)) {
+            lastModifiers = getModifiers(event);
+        }
+
         if (autoRepeat) {
             repeatDelayTimer = window.setTimeout(function () {
                 repeatDelayTimer = null;
@@ -265,6 +281,7 @@ define('io.ox/office/framework/view/nodetracking',
      * canceled.
      */
     function deinitAutoMode() {
+        lastModifiers = null;
         window.clearTimeout(repeatDelayTimer);
         window.clearInterval(repeatIntervalTimer);
         window.clearInterval(scrollIntervalTimer);
@@ -304,7 +321,7 @@ define('io.ox/office/framework/view/nodetracking',
         unregisterStartTrackingHandlers(trackingNode);
 
         // initialize auto-repetition and auto-scrolling
-        initAutoMode();
+        initAutoMode(event);
     }
 
     /**
@@ -348,9 +365,9 @@ define('io.ox/office/framework/view/nodetracking',
      * Triggers a 'tracking:move' event at the current tracking node, if the
      * tracking position has been changed since the last call of this method.
      */
-    function trackingMove(event, pageX, pageY) {
-        var moveX = pageX - lastX, moveY = pageY - lastY;
-        if (trackingNode && (moveX !== 0) || (moveY !== 0)) {
+    function trackingMove(event, pageX, pageY, force) {
+        var moveX = pageX - lastX, moveY = pageY - lastY, moved = (moveX !== 0) || (moveY !== 0);
+        if (trackingNode && (force || moved)) {
             // insert overlay node on first move event
             if (overlayNode.parent().length === 0) { $('body').append(overlayNode); }
             triggerEvent('tracking:move', event, { pageX: pageX, pageY: pageY, moveX: moveX, moveY: moveY, offsetX: pageX - startX, offsetY: pageY - startY });
@@ -439,12 +456,35 @@ define('io.ox/office/framework/view/nodetracking',
     }
 
     /**
+     * Generic handler for 'keydown' and 'keyup' browser events. Triggers a
+     * 'tracking:move' event at the current tracking node, if the state of a
+     * modifier key has changed (but only if the 'trackModifiers' option has
+     * been set at the tracking node).
+     */
+    function keyHandler(event) {
+        var newModifiers = getModifiers(event);
+        if (_.isObject(lastModifiers) && !_.isEqual(lastModifiers, newModifiers)) {
+            lastModifiers = newModifiers;
+            trackingMove(event, lastX, lastY, true);
+        }
+    }
+
+    /**
      * Event handler for 'keydown' browser events.
      */
     function keyDownHandler(event) {
         if (event.keyCode === KeyCodes.ESCAPE) {
             cancelTracking();
+        } else {
+            keyHandler(event);
         }
+    }
+
+    /**
+     * Event handler for 'keyup' browser events.
+     */
+    function keyUpHandler(event) {
+        keyHandler(event);
     }
 
     // methods ================================================================
@@ -569,6 +609,12 @@ define('io.ox/office/framework/view/nodetracking',
      *      events will be ignored. If set to 'touch', only touch events will
      *      be processed, and mouse events will be ignored. If set to 'all' or
      *      omitted, mouse and touch events will be processed.
+     *  @param {Boolean} [options.trackModifiers=false]
+     *      If set to true, the active tracking node will trigger additional
+     *      'tracking:move' events whenever the state of a modifier key (SHIFT,
+     *      ALT, CONTROL, or COMMAND) changes. The event properties 'shiftKey',
+     *      'altKey', 'ctrlKey', and 'metaKey' will contain the current state
+     *      of the modifier keys.
      *  @param {Boolean} [options.autoRepeat=false]
      *      If set to true, auto-repetition will be activated. The active
      *      tracking node will trigger 'tracking:repeat' events repeatedly as
