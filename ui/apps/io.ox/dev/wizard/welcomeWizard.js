@@ -30,8 +30,8 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
         title: "Welcome to App Suite", // be sure to internationalize this
         draw: function (baton) {
             // A regular #draw method, that you may know and love from other extension points
-            // Just append to 'this' to draw up what you need. One caveat though: Make sure to unlock the 'next' button
-            // So this step can be finished
+            // Just append to 'this' to draw what you need. One caveat though: Make sure to unlock the 'next' button
+            // so this step can be finished
 
             // Some text. Note that you want to take some more care here, to make this look
             // good and make sense. We'll firmly stay in example land here and not make a fuss about looks
@@ -53,7 +53,7 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
             // Every method of a page is always called with a baton that is unique to every page instance, so
             // we can set state information in it to our hearts content without bothering everyone else.
             // The baton holds some interesting objects, though. 'wizard' is the instance of the wizard object, 'buttons', like above
-            // can be used to enable or disable the next button. The wizard also has a pageInfo member object that we can use to store
+            // can be used to enable or disable the next button. The wizard also has a pageData member object that we can use to store
             // data that is available to every subsequent page. Note though, that that tightly couples pages together, so use this with care!
             // We will use this for some fun, though.
             baton.form = {};

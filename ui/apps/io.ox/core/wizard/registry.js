@@ -41,20 +41,20 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 		this.wizardIsRunning = null;
 		
 		this.navButtons = $("<div/>").append(
-			$('<button class="btn prev">').text(gt("Previous")).on("click", function () {
+			$('<button class="btn wizard-prev">').text(gt("Previous")).on("click", function () {
 				self.back();
 			}),
-			$('<button class="btn btn-primary next btn-disabled">').text(gt("Next")).on("click", function () {
+			$('<button class="btn btn-primary wizard-next btn-disabled">').text(gt("Next")).on("click", function () {
 				self.next();
 			}),
-			$('<button class="btn btn-primary done btn-disabled">').text(gt("Done")).on("click", function () {
+			$('<button class="btn btn-primary wizard-done btn-disabled">').text(gt("Done")).on("click", function () {
 				self.done();
 			})
 		);
 
 		if (options.closeable) {
 			this.navButtons.append(
-				$('<button class="btn close">').text(gt("Close")).on("click", function () {
+				$('<button class="btn wizard-close">').text(gt("Close")).on("click", function () {
 					self.close();
 				})
 			);
@@ -193,18 +193,20 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 
 			// hide and show buttons as needed
 			if (self.previousPage) {
-				self.navButtons.find(".prev").show();
+				self.navButtons.find(".wizard-prev").show();
 			} else {
-				self.navButtons.find(".prev").hide();
+				self.navButtons.find(".wizard-prev").hide();
 			}
 
 			if (self.nextPage) {
-				self.navButtons.find(".next").show();
-				self.navButtons.find(".done").hide();
+				self.navButtons.find(".wizard-next").show();
+				self.navButtons.find(".wizard-done").hide();
 			} else {
-				self.navButtons.find(".next").hide();
-				self.navButtons.find(".done").show();
+				self.navButtons.find(".wizard-next").hide();
+				self.navButtons.find(".wizard-done").show();
 			}
+
+			self.navButtons.find(".wizard-close").show();
 
 			if (self.currentPage.metadata("hideButtons", getBaton())) {
 				self.navButtons.find("button").hide();
