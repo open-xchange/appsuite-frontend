@@ -3,8 +3,9 @@ var createPattern = function(path) {
 };
 
 var oxBoot = function(files) {
-    var util = require('../build/fileutils'),
-        bootjs = createPattern(util.builddir + '/boot.js'),
+    var path = require('path'),
+        builddir = path.resolve(require('../build/fileutils').builddir),
+        bootjs = createPattern(builddir + '/boot.js'),
         ts = new Date().getTime();
     bootjs.watched = true;
     files.unshift(createPattern(__dirname + '/adapter.js'));
