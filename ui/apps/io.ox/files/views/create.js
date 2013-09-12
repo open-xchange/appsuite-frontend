@@ -29,7 +29,7 @@ define('io.ox/files/views/create', [
 
             show = function (app) {
                 var win = app.getWindow(),
-                    dialog = new dialogs.CreateDialog({ width: 450, center: true}),
+                    dialog = new dialogs.CreateDialog({ width: 450, center: true, async: true }),
                     $form = $('<form>', { 'class': 'files-create', 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' }),
                     queue, description = '';
                 dialog.getContentNode().css('height', '300px'); // 400 is quite much
@@ -57,6 +57,7 @@ define('io.ox/files/views/create', [
                         description = $form.find('textarea').val();
                         queue.offer(files);
                         baton.fileList.clear();
+                        dialog.close();
                     } else {
                         notifications.yell('error', gt('No file selected for upload.'));
                         dialog.idle();
@@ -77,14 +78,17 @@ define('io.ox/files/views/create', [
                                 description: $form.find('textarea').val()
                             },
                             folder: folder
-                        }).done(function (data) {
+                        })
+                        .done(function (data) {
                             api.propagate('new', data);
                             notifications.yell('success', gt('This file has been added'));
                             dialog.close();
-                        }).fail(function (e) {
+                        })
+                        .fail(function (e) {
                             if (e && e.data && e.data.custom) {
                                 notifications.yell(e.data.custom.type, e.data.custom.text);
                             }
+                            dialog.close();
                         });
                     } else {
                         notifications.yell('error', gt('No file selected for upload.'));
