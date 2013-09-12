@@ -72,7 +72,7 @@ define('io.ox/calendar/freebusy/main',
                             start_date: data.start_date,
                             participants: data.participants
                         }, {validate: true});
-                        // set end_date in a seperate call to avoid the appointmetn model applyAutoLengthMagic (Bug 27259)
+                        // set end_date in a seperate call to avoid the appointment model applyAutoLengthMagic (Bug 27259)
                         options.model.set({
                             end_date: data.end_date
                         }, {validate: true});

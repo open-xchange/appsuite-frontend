@@ -82,7 +82,7 @@ define('io.ox/calendar/freebusy/templates',
         },
 
         getAutoCompleteControls: function () {
-            return $('<div class="autocomplete-controls input-append pull-left">').append(
+            return $('<div class="abs autocomplete-controls input-append">').append(
                 $('<input type="text" class="add-participant" tabindex="1">').attr('placeholder', gt('Add participant') + ' ...'),
                 $('<button type="button" class="btn add-button" data-action="add" tabindex="-1">').append($('<i class="icon-plus">'))
             );

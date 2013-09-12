@@ -12,29 +12,29 @@
 
 @controlsHeight: 34px;
 @participantsWidth: 340px;
-@bottom: @controlsHeight + 13 * 2 + 1;
+@bottom: @controlsHeight + 3 * 2 + 1;
 
 .free-busy-controls {
 
     top: auto;
     background-color: whiteSmoke;
     border-top: 1px solid #ddd;
-    padding: 13px;
+    padding: 3px 13px 3px 13px;
     height: @controlsHeight;
-
-    .add-participant {
-        width: @participantsWidth - 82;
-    }
 
     .hint {
         line-height: 30px;
         position: relative;
-        left: 77px;
         cursor: help;
     }
 
     .popover {
+    	left: 13px !important;//needed to keep the popup inside the screen
         max-width: 380px;
+        
+        .arrow {
+        	left: 45px;
+        }
     }
 }
 
@@ -53,8 +53,20 @@
         font-weight: 200;
     }
 
-    .participants-view-scrollpane {
+    .autocomplete-controls{
         top: 64px;
+        width: @participantsWidth;
+        height: 30px;
+        left: 13px;
+        line-height: 30px;
+        
+        .add-participant {
+        	width: @participantsWidth - 75;
+    	}
+    }
+
+    .participants-view-scrollpane {
+        top: 103px;
         bottom: @bottom;
         padding: 0 13px 13px 13px;
         width: @participantsWidth;

@@ -397,7 +397,7 @@ define('io.ox/calendar/freebusy/controller',
                     distributionlists: true,
                     groups: true,
                     parentSelector: 'body',
-                    placement: 'top',
+                    placement: 'bottom',
                     resources: true
                 });
 
@@ -425,11 +425,11 @@ define('io.ox/calendar/freebusy/controller',
 
             this.$el.append(
                 templates.getHeadline(standalone),
+                this.autoCompleteControls,
                 templates.getParticipantsScrollpane().append(this.participantsView),
                 !standalone ? templates.getBackControl() : templates.getQuitControl(),
                 templates.getControls().append(
                     templates.getIntervalDropdown().on('click', 'li a', changeView),
-                    this.autoCompleteControls,
                     templates.getPopover(standalone)
                 )
             )
