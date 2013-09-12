@@ -37,6 +37,8 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 		this.nextPage = null;
 		this.dialog = new dialogs.ModalDialog({easyOut: !!options.closeable});
 		this.pageData = {};
+
+		this.wizardIsRunning = null;
 		
 		this.navButtons = $("<div/>").append(
 			$('<button class="btn prev">').text(gt("Previous")).on("click", function () {
@@ -278,7 +280,8 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 			}
 			this.runOptions = options || {};
 			goToPage(0);
-			this.dialog.show();
+			this.wizardIsRunning = this.dialog.show();
+			return this.wizardIsRunning;
 			
 		};
 
@@ -333,7 +336,7 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 		this.busy = busy;
 		this.idle = idle;
 		this.goToPage = goToPage;
-
+	
 	}
 
 
