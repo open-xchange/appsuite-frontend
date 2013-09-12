@@ -62,7 +62,7 @@ define('io.ox/mail/mailfilter/settings/model',
             },
             "actioncmds": [],
             "flags": [],
-            "active": false
+            "active": true
         };
     }
 
