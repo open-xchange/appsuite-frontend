@@ -13,9 +13,6 @@
 define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/dialogs', 'gettext!io.ox/core/wizard', 'less!io.ox/core/wizard/style.less'], function (ext, dialogs, gt) {
 	'use strict';
 
-	// TODO: Cancelable
-	// TODO: Page Titles
-
 	function Wizard(options) {
 		if (!options) {
 			console.error("Please specify options for the wizard. At minimum it needs an id!");
@@ -35,7 +32,7 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 		this.currentPage = null;
 		this.previousPage = null;
 		this.nextPage = null;
-		this.dialog = new dialogs.ModalDialog({easyOut: !!options.closeable});
+		this.dialog = null;
 		this.pageData = {};
 
 		this.wizardIsRunning = null;
@@ -60,7 +57,7 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 			);
 		}
 
-		this.dialog.getContentControls().append(this.navButtons);
+		
 
 		function isNextEnabled() {
 			return getBaton().buttons.nextEnabled;
@@ -280,6 +277,9 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 				console.error("Cannot start wizard, when it is in state: ", state);
 				return;
 			}
+			this.dialog = new dialogs.ModalDialog({easyOut: !!this.options.closeable});
+			this.dialog.getContentControls().append(this.navButtons);
+
 			this.runOptions = options || {};
 			goToPage(0);
 			this.wizardIsRunning = this.dialog.show();
