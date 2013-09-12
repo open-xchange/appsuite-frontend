@@ -12,6 +12,10 @@
 if (jasmine) {
 
     var typeMatchers = {
+        //simples
+        toBeBoolean: function () {
+            return this.actual === true || this.actual === false;
+        },
 
         //arrays
         toBeArray: function () {
@@ -24,6 +28,11 @@ if (jasmine) {
         //functions
         toBeFunction: function () {
             return this.actual instanceof Function;
+        },
+
+        //special
+        toBeModernizrString: function () {
+             return this.actual === '' ||  this.actual === 'maybe' ||  this.actual === 'probably';
         }
     };
 
