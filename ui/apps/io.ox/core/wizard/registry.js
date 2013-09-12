@@ -10,13 +10,17 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/dialogs', 'gettext!io.ox/core/wizard'], function (ext, dialogs, gt) {
+define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/dialogs', 'gettext!io.ox/core/wizard', 'less!io.ox/core/wizard/style.less'], function (ext, dialogs, gt) {
 	'use strict';
 
 	// TODO: Cancelable
 	// TODO: Page Titles
 
 	function Wizard(options) {
+		if (!options) {
+			console.error("Please specify options for the wizard. At minimum it needs an id!");
+			options = {id: 'defunct'};
+		}
 		var state = 'stopped';
 		var batons = {};
 		var renderedPages = {};
@@ -31,8 +35,8 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 		this.currentPage = null;
 		this.previousPage = null;
 		this.nextPage = null;
-		this.dialog = new dialogs.ModalDialog({easyOut: false});
-		this.pageInfo = {};
+		this.dialog = new dialogs.ModalDialog({easyOut: !!options.closeable});
+		this.pageData = {};
 		
 		this.navButtons = $("<div/>").append(
 			$('<button class="btn prev">').text(gt("Previous")).on("click", function () {
@@ -45,6 +49,14 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 				self.done();
 			})
 		);
+
+		if (options.closeable) {
+			this.navButtons.append(
+				$('<button class="btn close">').text(gt("Close")).on("click", function () {
+					self.close();
+				})
+			);
+		}
 
 		this.dialog.getContentControls().append(this.navButtons);
 
@@ -103,7 +115,7 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 		function triggerLoad(page, index) {
 			var baton = getBaton(index);
 			if (baton.ready.state() !== 'pending') {
-				return;
+				return baton.ready;
 			}
 			if (page.load) {
 				var def = page.load(baton);
@@ -149,6 +161,17 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 		function goToPage(pageNum) {
 			var pages = self.pages();
 			var length = pages.length;
+			if (!_.isNumber(pageNum)) {
+				// id?
+				var name = pageNum;
+				pageNum = _(pages).find(function (elem) {
+					return elem.id === pageNum;
+				});
+				if (_.isUndefined(pageNum)) {
+					console.error("Could not find page with id '" + name + "'");
+					pageNum = 0;
+				}
+			}
 			if (pageNum >= length) {
 				self.close();
 				return;
@@ -162,7 +185,7 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 				callMethod(self.currentPage, 'leave', self.index);
 			}
 
-			self.previousPage = (pageNum > 1) ? pages[pageNum - 1] : null;
+			self.previousPage = (pageNum > 0) ? pages[pageNum - 1] : null;
 			self.nextPage = ((pageNum + 1) < length) ? pages[pageNum + 1] : null;
 			self.currentPage = pages[pageNum];
 
@@ -181,7 +204,7 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 				self.navButtons.find(".done").show();
 			}
 
-			if (self.currentPage.metadata("hideButtons")) {
+			if (self.currentPage.metadata("hideButtons", getBaton())) {
 				self.navButtons.find("button").hide();
 			}
 
@@ -197,6 +220,8 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 				self.dialog.getBody().append(renderedPages[self.index]);
 				idle();
 				callMethod(self.currentPage, 'activate', self.index);
+				self.dialog.getHeader().find(".wizard-header").detach();
+				self.dialog.getHeader().append($('<h1 class="wizard-header" />').text(self.currentPage.metadata("title", getBaton())));
 				self.updateButtonState();
 
 			}).fail(function (resp) {
@@ -235,9 +260,10 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 
 		this.titles = function () {
 			var titles = [];
-
+			var i = 0;
 			_(this.pages()).each(function (page) {
-				titles.push(page.metadata("title"));
+				titles.push(page.metadata("title", getBaton(i)));
+				i++;
 			});
 		};
 
@@ -270,7 +296,7 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 			busy();
 			def.done(function () {
 				idle();
-				goToPage(this.index + 1);
+				goToPage(self.index + 1);
 			});
 		};
 
@@ -306,6 +332,7 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 
 		this.busy = busy;
 		this.idle = idle;
+		this.goToPage = goToPage;
 
 	}
 
