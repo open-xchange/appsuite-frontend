@@ -812,7 +812,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                     return null;
                 }
             }
-            var mydate = new date.Local(date.Local.utc(myValue)),
+            var mydate = new date.Local(myValue),
                 parsedDate;
 
             if (_.device('small')) {
@@ -833,7 +833,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                 return parsedDate.getTime();
             } else {
                 mydate.setYear(parsedDate.getYear(), parsedDate.getMonth(), parsedDate.getDate()).setSeconds(0, 0);
-                return date.Local.localTime(mydate.getTime());
+                return mydate.getTime();
             }
         }
     };
