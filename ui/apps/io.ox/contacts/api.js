@@ -143,7 +143,7 @@ define('io.ox/contacts/api',
                 action: 'advancedSearch',
                 columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607',
                 extendColumns: 'io.ox/contacts/api/list',
-                sort: '609', // magic sort field - ignores asc/desc
+                sort: '607', // magic sort field - ignores asc/desc
                 getData: function (query, opt) {
                     var queryFields = {
                             names: ("display_name first_name last_name yomiFirstName yomiLastName company yomiCompany " +
