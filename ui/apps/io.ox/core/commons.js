@@ -610,7 +610,6 @@ define('io.ox/core/commons',
             api.on('delete:' + ecid, remove);
             api.on('update:' + ecid, update);
             api.on('move:' + ecid, move);
-            api.on('create', update);
         }
 
         return node.one('dispose', function () {
@@ -625,7 +624,6 @@ define('io.ox/core/commons',
                     api.off('delete:' + ecid, remove);
                     api.off('update:' + ecid, update);
                     api.off('move:' + ecid, move);
-                    api.off('create', update);
                 }
                 api = update = data = node = getter = null;
             });

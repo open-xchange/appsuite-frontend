@@ -289,6 +289,11 @@ define('io.ox/tasks/main',
         win.nodes.outer.on('selection:drop', function (e, baton) {
             actions.invoke('io.ox/tasks/actions/move', null, baton);
         });
+        
+        //jump to newly created items
+        api.on('create', function (e, data) {
+            grid.selection.set(data);
+        });
 
         //ready for show
         commons.addFolderSupport(app, grid, 'tasks', options.folder)

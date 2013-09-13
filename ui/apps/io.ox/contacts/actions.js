@@ -481,6 +481,7 @@ define('io.ox/contacts/actions',
             return e.collection.has('one') && !e.context.folder_id && !e.context.id;
         },
         action: function (baton) {
+            var container = $(this).closest('.contact-detail.view');
             require(['io.ox/contacts/edit/main'], function (m) {
                 var def = $.Deferred(),
                     contact = baton.data;
@@ -492,7 +493,8 @@ define('io.ox/contacts/actions',
                 });
                 m.getApp(contact).launch(def);
                 def.done(function (data) {
-                    // baton.app.getGrid().selection.set(data);
+                    baton.data = data;
+                    container.triggerHandler('redraw', baton);
                 });
             });
         }

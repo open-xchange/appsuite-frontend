@@ -285,6 +285,11 @@ define('io.ox/calendar/list/perspective',
             self.updateGridOptions();
             grid.refresh(true);
         });
+        
+        //jump to newly created items
+        api.on('create', function (e, data) {
+            grid.selection.set(data);
+        });
 
         // to show an appointment without it being in the grid, needed for direct links
         app.on('show:appointment', showAppointment);
