@@ -1815,7 +1815,7 @@ msgstr "連絡先のデータを読み込めませんでした。"
 
 #: apps/io.ox/contacts/main.js:358
 msgid "Names and email addresses"
-msgstr "名前とメール アドレス"
+msgstr "名前とメールアドレス"
 
 #: apps/io.ox/contacts/main.js:358 apps/io.ox/contacts/view-detail.js:461
 msgid "Phone numbers"
