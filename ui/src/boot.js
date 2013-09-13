@@ -317,6 +317,31 @@ $(window).load(function () {
                         cont();
                     }
                 });
+            }, function () {
+                debug('boot.js: loadCore > load config failed, using default ...');
+                var def1 = require(['io.ox/core/main']),
+                    def2 = themes.set('default');
+
+                function cont() {
+                    debug('boot.js: loadCore def1 and def2 resolved');
+                    def1.then(
+                        function success(core) {
+                            // go!
+                            debug('boot.js: core.launch()');
+                            core.launch();
+                        },
+                        function fail(e) {
+                            console.error('Cannot launch core!', e);
+                        }
+                    );
+                }
+
+                function fail() {
+                    console.error('Could not load theme: ' + theme);
+                    gotoSignin('autologin=false');
+                }
+
+                $.when(def2, def1).then(cont, fail);
             });
         };
 
@@ -572,7 +597,7 @@ $(window).load(function () {
                 }
 
                 debug('boot.js: loadCoreFiles > loadPluginsFor(core) ...');
-                return manifests.manager.loadPluginsFor('core').done(gettext.enable);
+                return manifests.manager.loadPluginsFor('core').always(gettext.enable);
             }
 
             function continueWithoutAutoLogin() {
@@ -707,14 +732,15 @@ $(window).load(function () {
                             gotoCore(true);
                         } else {
                             debug('boot.js: autoLogin > loginSuccess > fetch user config ...');
-                            fetchUserSpecificServerConfig().done(function () {
+                            fetchUserSpecificServerConfig().then(function () {
                                 // apply session data (again) & page title
                                 session.set(data);
                                 document.title = _.noI18n(ox.serverConfig.pageTitle || '');
                                 debug('boot.js: autoLogin > loginSuccess > loadCoreFiles ...');
-                                loadCoreFiles().done(function () {
-                                    loadCore();
-                                });
+                                return loadCoreFiles();
+                            })
+                            .always(function () {
+                                loadCore();
                             });
                         }
                     },
