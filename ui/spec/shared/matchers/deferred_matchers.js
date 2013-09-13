@@ -14,23 +14,15 @@ if (jasmine) {
 
         toBeDeferred: function () {
             var def = this.actual;
-
-            expect(def.state).toBeDefined();
-            expect(def.done).toBeDefined();
-            expect(def.fail).toBeDefined();
-            expect(def.then).toBeDefined();
-            expect(def.progress).toBeDefined();
-            expect(def.promise).toBeDefined();
-
-            return this.spec.results();
+            expect(def.promise).toBeFunction();
+            return true;
         },
         toBePromise: function () {
             var def = this.actual;
             deferredMatchers.toBeDeferred.call(this);
             expect(def.reject).not.toBeDefined();
             expect(def.resolve).not.toBeDefined();
-
-            return this.spec.results();
+            return true;
         },
         toResolve: function () {
             var spy = sinon.spy(),
@@ -84,7 +76,7 @@ if (jasmine) {
                 });
             });
             this.isNot = false;
-            return this.spec.results();
+            return true;
         }
     };
 
