@@ -661,38 +661,44 @@ define('io.ox/mail/api',
      * @return {deferred}
      */
     api.updateAllCache = (function () {
-
         function update(folder_id, hash, callback) {
             // get proper keys (differ due to sort/order suffix)
-            return api.caches.all.grepKeys(folder_id + DELIM).pipe(function (keys) {
+            return api.caches.all.grepKeys(folder_id + DELIM).then(function (keys) {
                 return $.when.apply($, _(keys).map(function (folder_id) {
-                    return api.caches.all.get(folder_id).pipe(function (co) {
+                    return api.caches.all.get(folder_id).then(function (co) {
                         // handles threadView: on || off
-                        if (co) {
-                            co.data = co.data || co;
-                            // update affected items
-                            return $.when.apply($,
-                                _(co.data)
-                                .chain()
-                                .filter(function (obj) {
-                                    return _.cid(obj) in hash;
-                                })
-                                .map(function (obj) {
-                                    callback(obj);
-                                    // handles threadView: on || off
-                                    var elem = obj.thread || obj;
-                                    return $.when(
-                                        api.caches.list.merge(elem),
-                                        api.caches.get.merge(elem)
-                                    );
-                                })
-                                .value()
-                            ).then(function () {
-                                return api.caches.all.add(folder_id, co);
-                            });
+                        if (!co) return DONE;
+
+                        co.data = co.data || co;
+                        // update affected items
+                        var defs,
+                            list = _(co.data)
+                            .chain()
+                            .filter(function (obj) {
+                                return _.cid(obj) in hash;
+                            })
+                            .map(function (obj) {
+                                callback(obj);
+                                // handles threadView: on || off
+                                return obj.thread || obj;
+                            })
+                            .value();
+
+                        if (list.length < 100) {
+                            defs = [
+                                api.caches.list.merge(list),
+                                api.caches.get.merge(list)
+                            ];
                         } else {
-                            return DONE;
+                            // due to performace reasons kill caches on to many update requests
+                            defs = [
+                                api.caches.list.clear(),
+                                api.caches.get.clear()
+                            ];
                         }
+                        return $.when.apply($, defs).then(function () {
+                            return api.caches.all.add(folder_id, co);
+                        });
                     });
                 }));
             });
@@ -815,31 +821,21 @@ define('io.ox/mail/api',
     api.markUnread = function (list) {
         list = [].concat(list);
 
-        var defs = _(list).chain()
-            .map(function (obj) {
+        return $.when(
+            // local update
+            tracker.update(list, function (obj) {
+                tracker.setUnseen(obj, { silent: true });
                 obj.flags = obj.flags & ~32;
-                return [api.caches.get.merge(obj), api.caches.list.merge(obj)];
             })
-            .flatten()
-            .value();
-
-        return $.when.apply($, defs).then(function () {
-            return $.when(
-                // local update
-                tracker.update(list, function (obj) {
-                    tracker.setUnseen(obj, { silent: true });
-                    obj.flags = obj.flags & ~32;
-                })
-                .done(function () {
-                    api.trigger('refresh.list');
-                    api.trigger('refresh.unseen', list);
-                }),
-                // server update
-                update(list, { flags: api.FLAGS.SEEN, value: false }).done(function () {
-                    folderAPI.reload(list);
-                })
-            );
-        });
+            .done(function () {
+                api.trigger('refresh.list');
+                api.trigger('refresh.unseen', list);
+            }),
+            // server update
+            update(list, { flags: api.FLAGS.SEEN, value: false }).done(function () {
+                folderAPI.reload(list);
+            })
+        );
     };
 
     /**
@@ -850,35 +846,25 @@ define('io.ox/mail/api',
      * @return {deferred}
      */
     api.markRead = function (list) {
-
         list = [].concat(list);
 
-        var defs = _(list).chain()
-            .map(function (obj) {
+        return $.when(
+            // local update
+            tracker.update(list, function (obj) {
+                tracker.setSeen(obj, { silent: true });
                 obj.flags = obj.flags | 32;
-                return [api.caches.get.merge(obj), api.caches.list.merge(obj)];
             })
-            .flatten()
-            .value();
-
-        return $.when.apply($, defs).then(function () {
-            return $.when(
-                // local update
-                tracker.update(list, function (obj) {
-                    tracker.setSeen(obj, { silent: true });
-                    obj.flags = obj.flags | 32;
-                })
-                .done(function () {
-                    api.trigger('refresh.list');
-                    api.trigger('refresh.seen', list);
-                }),
-                // server update
-                update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
-                    folderAPI.reload(list);
-                    api.trigger('update:set-seen', list);//used by notification area
-                })
-            );
-        });
+            .done(function () {
+                api.trigger('refresh.list');
+                api.trigger('refresh.seen', list);
+            }),
+            // server update
+            update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
+                folderAPI.reload(list);
+                //used by notification area
+                api.trigger('update:set-seen', list);
+            })
+        );
     };
 
     api.markFolderRead = function (folder) {
