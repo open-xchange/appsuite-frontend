@@ -539,42 +539,6 @@ task('manifests', [manifestDir], function () {
 
 require('./lib/build/themes.js');
 
-// docs task
-
-// desc("Generates developer documentation");
-utils.topLevelTask("docs", [], utils.summary("docs"));
-
-var titles = [];
-function docFile(file, title) {
-    filename = "doc/" + file + ".html";
-    utils.concat(filename,
-        ["doc/lib/header.html", filename, "doc/lib/footer.html"]);
-    titles.push('<a href="' + file +'.html">' + title + '</a><br/>');
-}
-
-docFile("gettingStarted", "Getting Started");
-docFile("apache", "Apache Configuration");
-docFile("extensions", "Extension Points");
-docFile("libs", "External Libs");
-docFile("development_guide", "UI Development Style Guide");
-docFile("buildsystem", "Build System");
-docFile("manifests", "Module System");
-docFile("vgrid", "VGrid");
-docFile("portalplugin", "Portal Plugins ");
-docFile("actions_files", "Actions / Files App");
-docFile("i18n", "Internationalization");
-docFile("date", "Date and Time");
-
-var indexFiles = ["lib/header.html", "index.html",
-    { getData: function() { return titles.join("\n"); } }, "lib/footer.html"];
-indexFiles.dir = "doc";
-utils.concat("doc/index.html", indexFiles);
-
-utils.copy(utils.list("doc/lib", ["prettify.*", "default.css", "newwin.png"]),
-           { to: utils.dest("doc") });
-utils.copyFile("lib/jquery/jquery.min.js", utils.dest("doc/jquery.min.js"));
-utils.topLevelTask();
-
 // update-i18n task
 
 require("./lib/build/cldr.js");
