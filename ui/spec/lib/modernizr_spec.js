@@ -10,7 +10,7 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 define(function () {
-    describe('identifies supported features', function () {
+    describe('modernizr.js identifies supported features', function () {
         it('should return a boolean for touch feature detection', function () {
             expect(Modernizr.touch).toBeBoolean();
         });
