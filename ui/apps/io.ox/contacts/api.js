@@ -746,6 +746,7 @@ define('io.ox/contacts/api',
         }, options);
 
         var set, clear, cont,
+            display_name = data.display_name || '',
             node = $('<' + options.tagName + '>').text('\u00A0'),
             email = data.email;
 
@@ -778,7 +779,11 @@ define('io.ox/contacts/api',
             if (_.isString(data)) return set(data);
 
             if (data) {
-                set(util[options.stringify](data));
+                if (!_.isEmpty(data))
+                    set(util[options.stringify](data));
+                else
+                    //fallback
+                    set(display_name);
                 clear();
             }
         };

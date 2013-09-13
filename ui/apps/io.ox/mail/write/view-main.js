@@ -1309,13 +1309,20 @@ define("io.ox/mail/write/view-main",
     // are slightly different. it's easier just having two functions.
 
     function drawContact(id, node, data) {
-        var valid = _(['email', 'display_name', 'full_name']).find(function (key) {
+        var valid = _(['email', 'phone', 'display_name', 'full_name']).find(function (key) {
                 //just whitespace?
                 return (data[key] || '').trim() !== '';
             });
 
         //ignore 'whitespace only' data
         if (valid) {
+            //add parsed emailadress as display_name (if not set yet9
+            if ($.trim(data.display_name || data.display_name) === '' && !_.isUndefined(data.phone || data.email)) {
+                data = $.extend(data, {
+                    display_name: _.flatten(mailUtil.parseRecipients(data.phone || data.email))[0] || data.display_name || ''
+                });
+            }
+            //draw node
             node.addClass('io-ox-mail-write-contact section-item').append(
                 // picture
                 contactsAPI.getPicture(data, contactPictureOptions).addClass('contact-image'),
