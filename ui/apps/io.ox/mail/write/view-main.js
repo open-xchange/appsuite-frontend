@@ -1254,7 +1254,7 @@ define("io.ox/mail/write/view-main",
             }
 
             var obj = {
-                full_name: elem.full_name,
+                full_name: util.unescapeDisplayName(elem.full_name),
                 first_name: elem.first_name || '',
                 last_name: elem.last_name || '',
                 display_name: util.unescapeDisplayName(elem.display_name),
