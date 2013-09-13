@@ -184,8 +184,13 @@ define('io.ox/calendar/month/view',
                 if (util.getConfirmationStatus(model.attributes, myself) !== 2 || settings.get('showDeclinedAppointments', false)) {
 
                     var startTSUTC = Math.max(model.get('start_date'), this.weekStart),
-                        endTSUTC = Math.min(model.get('end_date'), this.weekEnd) - 1,
+                        endTSUTC = Math.min(model.get('end_date'), this.weekEnd),
                         maxCount = 7;
+
+                    // need -1 for rendering, but destroys zero time appointments
+                    if (endTSUTC > startTSUTC) {
+                        endTSUTC--;
+                    }
 
                     // fix full-time UTC timestamps
                     if (model.get('full_time')) {
