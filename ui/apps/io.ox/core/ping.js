@@ -19,6 +19,9 @@ define('io.ox/core/ping', ['io.ox/core/http', 'settings!io.ox/core'], function (
         intervalHandle = null;
 
     function ping() {
+        if (!ox.session || ox.session === 'unset') {
+            return;
+        }
         if (ox.online) http.ping();
     }
 
