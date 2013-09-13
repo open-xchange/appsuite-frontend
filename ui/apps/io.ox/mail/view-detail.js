@@ -763,8 +763,8 @@ define('io.ox/mail/view-detail',
                 var modifiedBaton, sentFolder, inboxMails;
 
                 modifiedBaton = deleteAction.data('baton');
-                if ((!modifiedBaton || !modifiedBaton.data) && ox.debug) {
-                    console.warn('No baton found. Not supposed to happen.');
+                if (!modifiedBaton || !modifiedBaton.data) {
+                    if (ox.debug) console.warn('No baton found. Not supposed to happen.');
                     return;
                 }
                 sentFolder = settings.get('folder.sent');
