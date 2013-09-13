@@ -366,8 +366,8 @@ define('io.ox/office/framework/view/nodetracking',
      * tracking position has been changed since the last call of this method.
      */
     function trackingMove(event, pageX, pageY, force) {
-        var moveX = pageX - lastX, moveY = pageY - lastY, moved = (moveX !== 0) || (moveY !== 0);
-        if (trackingNode && (force || moved)) {
+        var moveX = pageX - lastX, moveY = pageY - lastY;
+        if (trackingNode && (force || (moveX !== 0) || (moveY !== 0))) {
             // insert overlay node on first move event
             if (overlayNode.parent().length === 0) { $('body').append(overlayNode); }
             triggerEvent('tracking:move', event, { pageX: pageX, pageY: pageY, moveX: moveX, moveY: moveY, offsetX: pageX - startX, offsetY: pageY - startY });
