@@ -38,6 +38,13 @@ if (jasmine) {
             }, 'Deferred object never rejected', 1000);
             return true;
         },
+        toStayPending: function () {
+            var actual = this.actual;
+            waitsFor(function () {
+                return actual.state() === 'pending';
+            }, 'Deferred object not pending anymore', 1000);
+            return true;
+        },
         toResolveWith: function (expected) {
             var actual = this.actual,
                 isNot = this.isNot,
