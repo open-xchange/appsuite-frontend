@@ -288,7 +288,8 @@ define('io.ox/core/tk/attachments',
                             }
                             if (properties && proceed) {
                                 var total = 0,
-                                    maxFileSize = properties.maxUploadSize * 10; // Very interesting value from backend here?! (Bytes / 10)
+                                    maxFileSize = properties.infostoreMaxUploadSize,
+                                    quota = properties.infostoreQuota;
                                 _.each(list, function (item) {
                                     var fileTitle = item.filename || item.name || item.subject,
                                         fileSize = item.file_size || item.size;
@@ -299,10 +300,10 @@ define('io.ox/core/tk/attachments',
                                             notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, strings.fileSize(maxFileSize)));
                                             return;
                                         }
-                                        if (properties.quota !== -1) {
-                                            if (total > properties.quota - properties.usage) {
+                                        if (quota !== -1) {
+                                            if (total > quota - properties.infostoreUsage) {
                                                 proceed = false;
-                                                notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, strings.fileSize(properties.quota)));
+                                                notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, strings.fileSize(quota)));
                                                 return;
                                             }
                                         }
