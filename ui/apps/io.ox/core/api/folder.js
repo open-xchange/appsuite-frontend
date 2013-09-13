@@ -70,11 +70,10 @@ define('io.ox/core/api/folder',
                         timezone: 'UTC'
                     }
                 })
-                .done(function (data, timestamp) {
+                .then(function (data, timestamp) {
                     // add to cache
-                    cache.add(data.id, data);
-                })
-                .fail(function (error) {
+                    return cache.add(data.id, data);
+                }, function (error) {
                     if (error.categories === 'PERMISSION_DENIED') {
                         if (!opt.suppressYell)
                             notifications.yell(error);
