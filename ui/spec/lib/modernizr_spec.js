@@ -11,47 +11,47 @@
  */
 define(function () {
     describe('identifies supported features', function () {
-        it('should return a boolean for touch feature', function () {
+        it('should return a boolean for touch feature detection', function () {
             expect(Modernizr.touch).toBeBoolean();
         });
-        it('should return a boolean for localstorage feature detect', function () {
+        it('should return a boolean for localstorage feature detection', function () {
             //expect(Modernizr.localstorage).toBeBoolean();
             expect(Modernizr.localstorage).toBeBoolean();
         });
-        it('should return a boolean for indexeddb feature detect', function () {
+        it('should return a boolean for indexeddb feature detection', function () {
             expect(Modernizr.indexeddb).toBeBoolean();
         });
-        it('should return a boolean for csstransforms3d feature detect', function () {
+        it('should return a boolean for csstransforms3d feature detection', function () {
             expect(Modernizr.csstransforms3d).toBeBoolean();
         });
-        it('should return a boolean for inputtypes.number feature detect', function () {
+        it('should return a boolean for inputtypes.number feature detection', function () {
             expect(Modernizr.inputtypes.number).toBeBoolean();
         });
-        it('should return a boolean for draganddrop feature detect', function () {
+        it('should return a boolean for draganddrop feature detection', function () {
             expect(Modernizr.draganddrop).toBeBoolean();
         });
-        it('should return a boolean for filereader feature detect', function () {
+        it('should return a boolean for filereader feature detection', function () {
             expect(Modernizr.filereader).toBeBoolean();
         });
-        it('should return a boolean for draganddrop feature detect', function () {
+        it('should return a boolean for draganddrop feature detection', function () {
             expect(Modernizr.draganddrop).toBeBoolean();
         });
-        it('should return a boolean for backgroundsize feature detect', function () {
+        it('should return a boolean for backgroundsize feature detection', function () {
             expect(Modernizr.backgroundsize).toBeBoolean();
         });
-        it('should return a boolean for canvas feature detect', function () {
+        it('should return a boolean for canvas feature detection', function () {
             expect(Modernizr.canvas).toBeBoolean();
         });
-        it('should return "", "maybe" or "probably" for mp3 audio feature', function () {
+        it('should return "", "maybe" or "probably" for mp3 audio feature detection', function () {
             expect(Modernizr.audio.mp3).toBeModernizrString();
         });
-        it('should return a boolean for applicationcache feature detect', function () {
+        it('should return a boolean for applicationcache feature detection', function () {
             expect(Modernizr.applicationcache).toBeBoolean();
         });
-        it('should return a boolean for websqldatabase feature detect', function () {
+        it('should return a boolean for websqldatabase feature detection', function () {
             expect(Modernizr.websqldatabase).toBeBoolean();
         });
-        it('should return a mediaquery function', function () {
+        it('should provide a mediaquery function', function () {
             expect(Modernizr.mq).toBeFunction();
         });
     });
