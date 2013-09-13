@@ -32,7 +32,7 @@ if (jasmine) {
 
         //special
         toBeModernizrString: function () {
-            return this.actual === '' ||  this.actual === 'maybe' ||  this.actual === 'probably';
+            return !this.actual || this.actual === '' ||  this.actual === 'maybe' ||  this.actual === 'probably';
         }
     };
 
