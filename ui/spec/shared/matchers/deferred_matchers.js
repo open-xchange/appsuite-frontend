@@ -62,7 +62,8 @@ if (jasmine) {
         },
         toResolveWith: function (expected) {
             var actual = this.actual,
-                isNot = this.isNot;
+                isNot = this.isNot,
+                callback = expected instanceof Function ? _.bind(expected, this) : undefined;
 
             waitsFor(function () {
                 return actual.state() === 'resolved';
@@ -70,7 +71,12 @@ if (jasmine) {
 
             runs(function () {
                 actual.done(function (result) {
-                    if (isNot) {
+                    if (callback) {
+                        //to fail use expect() within callback body or return false
+                        expect(callback(result)).not.toEqual(false);
+                        //notice not useful usage of 'isNot'
+                        expect(isNot).not.toBeTruthy();
+                    } else if (isNot) {
                         expect(result).not.toEqual(expected);
                     } else {
                         expect(result).toEqual(expected);
