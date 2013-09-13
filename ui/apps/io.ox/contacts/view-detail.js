@@ -548,7 +548,7 @@ define("io.ox/contacts/view-detail",
                         // add callback?
                         baton.data.callbacks && 'extendDescription' in baton.data.callbacks ?
                             $('<a href="#">').text(gt('Copy to description'))
-                            .on('click', { description: str.replace(/[ \t]+/g, ' ') }, 'wurst' || baton.data.callbacks.extendDescription)
+                            .on('click', { description: $('<div>').html(str.replace(/[ \t]+/g, ' ').replace(/<br>/g, '\n')).text() }, baton.data.callbacks.extendDescription)
                             : []
                     )
                 );
