@@ -1021,7 +1021,7 @@ define("io.ox/mail/write/view-main",
             }
 
             var obj = {
-                full_name: elem.full_name,
+                full_name: util.unescapeDisplayName(elem.full_name),
                 first_name: elem.first_name || '',
                 last_name: elem.last_name || '',
                 display_name: util.unescapeDisplayName(elem.display_name),
@@ -1076,14 +1076,20 @@ define("io.ox/mail/write/view-main",
     // are slightly different. it's easier just having two functions.
 
     function drawContact(id, node, data) {
-        var empty;
+        var valid = _(['email', 'phone', 'display_name', 'full_name']).find(function (key) {
+                //just whitespace?
+                return (data[key] || '').trim() !== '';
+            });
 
-        //notice whitespace
-        _(['display_name', 'email', 'full_name']).each(function (key) {
-            empty = empty || data[key].trim() === '';
-        });
-
-        if (!empty) {
+        //ignore 'whitespace only' data
+        if (valid) {
+            //add parsed emailadress as display_name (if not set yet9
+            if ($.trim(data.display_name || data.display_name) === '' && !_.isUndefined(data.phone || data.email)) {
+                data = $.extend(data, {
+                    display_name: _.flatten(mailUtil.parseRecipients(data.phone || data.email))[0] || data.display_name || ''
+                });
+            }
+            //draw node
             node.addClass('io-ox-mail-write-contact section-item').append(
                 // picture
                 contactsAPI.getPicture(data, contactPictureOptions).addClass('contact-image'),

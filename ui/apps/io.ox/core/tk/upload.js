@@ -232,7 +232,8 @@ define('io.ox/core/tk/upload',
                 var properties = settings.get('properties');
                 if (properties) {
                     var total = 0,
-                        maxSize = properties.maxUploadSize * 10; // Very interesting value from backend here?! (Bytes / 10)
+                        maxSize = properties.infostoreMaxUploadSize,
+                        quota = properties.infostoreQuota;
                     _.each(files, function (f) {
                         fileTitle = f.name;
                         total += f.size;
@@ -242,10 +243,10 @@ define('io.ox/core/tk/upload',
                             self.stop();
                             return;
                         }
-                        if (properties.quota !== -1) {
-                            if (total > properties.quota - properties.usage) {
+                        if (quota !== -1) {
+                            if (total > quota - properties.infostoreUsage) {
                                 proceed = false;
-                                notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, strings.fileSize(properties.quota)));
+                                notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, strings.fileSize(quota)));
                                 self.stop();
                                 return;
                             }

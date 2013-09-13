@@ -21,7 +21,7 @@ define('io.ox/core/relogin',
 
     var queue = [], pending = false;
 
-    function relogin(e, request, deferred) {
+    function relogin(e, request, deferred, error) {
 
         if (!ox.online) return;
 
@@ -39,7 +39,11 @@ define('io.ox/core/relogin',
                     .build(function () {
                         this.getPopup().addClass('relogin');
                         this.getHeader().append(
-                            $('<h4>').text(gt('Your session is expired')),
+                            $('<h4>').text(
+                                error && error.code === 'SES-0205' ?
+                                    gt('Your IP address has changed') :
+                                    gt('Your session is expired')
+                            ),
                             $('<div>').text(gt('Please sign in again to continue'))
                         );
                         this.getContentNode().append(

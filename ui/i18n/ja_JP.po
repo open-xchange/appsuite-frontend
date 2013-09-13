@@ -1815,7 +1815,7 @@ msgstr "連絡先のデータを読み込めませんでした。"
 
 #: apps/io.ox/contacts/main.js:358
 msgid "Names and email addresses"
-msgstr "名前とメール アドレス"
+msgstr "名前とメールアドレス"
 
 #: apps/io.ox/contacts/main.js:358 apps/io.ox/contacts/view-detail.js:461
 msgid "Phone numbers"
@@ -1843,12 +1843,12 @@ msgstr "ミドル ネーム"
 
 #: apps/io.ox/contacts/model.js:226 apps/io.ox/contacts/view-detail.js:427
 msgid "Suffix"
-msgstr "敬称"
+msgstr "敬称（後）"
 
 #: apps/io.ox/contacts/model.js:227
 msgctxt "salutation"
 msgid "Title"
-msgstr "肩書き"
+msgstr "敬称（前）"
 
 #: apps/io.ox/contacts/model.js:228 apps/io.ox/contacts/model.js:245
 #: apps/io.ox/contacts/model.js:259
@@ -2256,7 +2256,7 @@ msgstr "%2$s %1$s"
 #: apps/io.ox/contacts/util.js:163
 msgctxt "mail address"
 msgid "%1$s %2$s"
-msgstr "%1$s %2$s"
+msgstr "%2$s %1$s"
 
 #: apps/io.ox/contacts/view-detail.js:47 apps/io.ox/participants/views.js:145
 msgid "Resource"
@@ -2517,7 +2517,7 @@ msgstr "<b>%1$d</b> 個の要素が選択されています。"
 
 #: apps/io.ox/core/commons.js:139
 msgid "No elements selected"
-msgstr "要素が選択されていません。"
+msgstr "項目が選択されていません。"
 
 #: apps/io.ox/core/commons.js:305
 msgid "Searched in all folders"
@@ -4962,7 +4962,7 @@ msgstr "スレッド ビュー"
 
 #: apps/io.ox/mail/settings/pane.js:59
 msgid "Enabled for inbox only"
-msgstr "受信トレイのみ"
+msgstr "受信フォルダのみ"
 
 #: apps/io.ox/mail/settings/pane.js:60
 msgid "Enabled for all mail folders"
@@ -5002,15 +5002,15 @@ msgstr "署名を編集"
 
 #: apps/io.ox/mail/settings/signatures/register.js:52
 msgid "Signature name"
-msgstr "署名の名前"
+msgstr "署名タイトル"
 
 #: apps/io.ox/mail/settings/signatures/register.js:57
 msgid "Signature text"
-msgstr "署名のテキスト"
+msgstr "署名内容"
 
 #: apps/io.ox/mail/settings/signatures/register.js:61
 msgid "Signature position"
-msgstr "署名の位置"
+msgstr "署名位置"
 
 #: apps/io.ox/mail/settings/signatures/register.js:63
 msgid "Above content"
@@ -6228,7 +6228,7 @@ msgstr "新規メール"
 
 #: apps/plugins/notifications/mail/register.js:30
 msgid "Show inbox"
-msgstr "受信トレイを表示"
+msgstr "受信フォルダを表示"
 
 #: apps/plugins/notifications/tasks/register.js:35
 msgid "Overdue Tasks"
@@ -10371,7 +10371,7 @@ msgstr "マイ パスワード"
 #~ msgstr "スーダン"
 
 #~ msgid "Suffix:"
-#~ msgstr "敬称:"
+#~ msgstr "敬称（後）:"
 
 #~ msgid "Sun"
 #~ msgstr "日曜日"

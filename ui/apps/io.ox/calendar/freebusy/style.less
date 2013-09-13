@@ -10,7 +10,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-@controlsHeight: 34px;
+@controlsHeight: 30px;
 @participantsWidth: 340px;
 @bottom: @controlsHeight + 3 * 2 + 1;
 
@@ -31,7 +31,7 @@
     .popover {
     	left: 13px !important;//needed to keep the popup inside the screen
         max-width: 380px;
-        
+
         .arrow {
         	left: 45px;
         }
@@ -54,19 +54,19 @@
     }
 
     .autocomplete-controls{
-        top: 64px;
+        top: 70px;
         width: @participantsWidth;
         height: 30px;
         left: 13px;
         line-height: 30px;
-        
+
         .add-participant {
         	width: @participantsWidth - 75;
     	}
     }
 
     .participants-view-scrollpane {
-        top: 103px;
+        top: 120px;
         bottom: @bottom;
         padding: 0 13px 13px 13px;
         width: @participantsWidth;
@@ -111,6 +111,7 @@
 
     .with-participant-color {
         padding-right: 20px;
+        margin-bottom: 1px;
     }
 
     .with-participant-color.removable {

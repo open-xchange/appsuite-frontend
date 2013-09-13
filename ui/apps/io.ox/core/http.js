@@ -592,7 +592,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
             if (isSessionError && !isAutoLogin) {
                 // login dialog
                 ox.session = '';
-                ox.trigger('relogin:required', o, deferred);
+                ox.trigger('relogin:required', o, deferred, response);
                 return;
             } else {
                 // genereal error
@@ -839,7 +839,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                         return (o.module === e[0] && (e[1] === '*' || o.params.action === e[1]));
                     });
                 if (!found) {
-                    ox.trigger('relogin:required', o, def);
+                    ox.trigger('relogin:required', o, def, {});
                     return def;
                 }
             }

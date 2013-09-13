@@ -353,8 +353,10 @@ define('io.ox/office/preview/view/view',
          */
         function refreshLayout(page) {
 
-            var // find the page that is visible at the vertical center of the visible area
-                centerPage = _(pageNodes).sortedIndex(contentRootNode.scrollTop(), function (value) {
+            var // half of the content root node height
+                contentCenter = contentRootNode.height() / 2,
+                // find the page covering the vertical center of the visible area
+                centerPage = _(pageNodes).sortedIndex(contentRootNode.scrollTop() + contentCenter, function (value) {
                     if (_.isNumber(value)) { return value; }
                     var pagePosition = Utils.getChildNodePositionInNode(contentRootNode, value);
                     return pagePosition.top + pagePosition.height - 1;
@@ -372,19 +374,8 @@ define('io.ox/office/preview/view/view',
             centerPage = Utils.minMax(centerPage, 1, model.getPageCount());
             centerPagePosition = Utils.getChildNodePositionInNode(contentRootNode, pageNodes[centerPage - 1], { visibleArea: true });
 
-            // Calculation of the page ratio
-            // -----------------------------
-            // (1) If 'centerPagePosition.top' is positive, currently the gap
-            // between two pages is on top of the screen. Keep the size of this
-            // gap constant independent from the page size (a negative integer
-            // value in 'centerPageRatio' indicates the page gap mode).
-            // (2) If 'centerPagePosition.top' is zero or negative, the upper
-            // part of the page is hidden, and the ratio between hidden and
-            // visible area of the page will be restored after changing the
-            // page size (a positive quotient in 'centerPageRatio' indicates
-            // this case).
-            centerPageRatio = (centerPagePosition.top > 0) ? -centerPagePosition.top :
-                (centerPagePosition.height > 0) ? (-centerPagePosition.top / centerPagePosition.height) : 0;
+            // calculate the page ratio (which part of the page is above the content center)
+            centerPageRatio = (centerPagePosition.height > 0) ? ((contentCenter - centerPagePosition.top) / centerPagePosition.height) : 0;
 
             // set the current content margin between application pane border and page nodes
             self.setContentMargin(contentMargin);
@@ -406,7 +397,7 @@ define('io.ox/office/preview/view/view',
 
             // restore the correct scroll position with the new page sizes
             centerPagePosition = Utils.getChildNodePositionInNode(contentRootNode, pageNodes[centerPage - 1]);
-            contentRootNode.scrollTop(centerPagePosition.top + ((centerPageRatio < 0) ? centerPageRatio : Math.round(centerPagePosition.height * centerPageRatio)));
+            contentRootNode.scrollTop(centerPagePosition.top + Math.round(centerPagePosition.height * centerPageRatio) - contentCenter);
 
             // try to load more pages that became visible after updating zoom
             loadVisiblePages();
@@ -450,12 +441,9 @@ define('io.ox/office/preview/view/view',
                 zoomType = 'page';
             }
 
-            // restore selected page
+            // first restore zoom, then the selected page (to keep it at the top screen border)
+            refreshLayout();
             self.showPage(Utils.getIntegerOption(point, 'page', 1, 1, model.getPageCount()));
-
-            // update visible pages once manually (no scroll event is triggered,
-            // if the first page is shown which does not cause any scrolling).
-            loadVisiblePages();
         }
 
         /**
@@ -535,36 +523,45 @@ define('io.ox/office/preview/view/view',
          */
         var gestureHandler = (function () {
 
+            var // the minimum/maximum scale according to current zoom factor
+                minScale = 1, maxScale = 1;
+
             // get the current relative scale factor from the passed event
             function getScale(event) {
                 var scale = event.originalEvent.scale;
                 // if current zoom type is 'zoom-to-something', do not change it
                 // while scaling factor from event is between 0.95 and 1.05
-                return (_.isNumber(zoomType) || (scale <= 0.95) || (scale >= 1.05)) ? scale : null;
+                return (_.isNumber(zoomType) || (scale <= 0.95) || (scale >= 1.05)) ? Utils.minMax(scale, minScale, maxScale) : 1;
             }
 
             // changes the temporary page scaling while zooming
             function changePageScale(scale) {
-                var cssScale = _.isNumber(scale) ? ('scale(' + scale + ')') : '';
-                Utils.setCssAttributeWithPrefixes(pageNodes, 'transform', cssScale);
+                var translate = (1 - scale) * ((contentRootNode.height() - pageContainerNode.height()) / 2 + contentRootNode.scrollTop());
+                Utils.setCssAttributeWithPrefixes(pageContainerNode, 'transform', 'translateY(' + Math.round(translate) + 'px) scale(' + scale + ')');
                 updateZoomStatus(scale);
             }
 
             // updates the zoom according to the current scale factor
-            function changeZoom(event) {
-                var scale = getScale(event);
-                changePageScale(null);
-                if (_.isNumber(scale)) { self.setZoomType(zoomFactor * scale); }
+            function changeZoom(scale) {
+                Utils.setCssAttributeWithPrefixes(pageContainerNode, 'transform', '');
+                if (scale !== 1) {
+                    updateZoomStatus(scale);
+                    self.setZoomType(zoomFactor * scale);
+                }
                 app.getController().update();
             }
 
             function gestureHandler(event) {
                 switch (event.type) {
+                case 'gesturestart':
+                    minScale = self.getMinZoomFactor() / zoomFactor;
+                    maxScale = self.getMaxZoomFactor() / zoomFactor;
+                    break;
                 case 'gesturechange':
                     changePageScale(getScale(event));
                     break;
                 case 'gestureend':
-                    changeZoom(event);
+                    changeZoom(getScale(event));
                     break;
                 }
                 return false;
