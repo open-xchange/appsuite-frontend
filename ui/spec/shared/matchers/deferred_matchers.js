@@ -25,28 +25,14 @@ if (jasmine) {
             return true;
         },
         toResolve: function () {
-            var spy = sinon.spy(),
-                actual = this.actual;
-
-            this.spec.after(function() {
-                expect(spy).toHaveBeenCalledOnce();
-            });
-
-            this.actual.done(spy);
+            var actual = this.actual;
             waitsFor(function () {
                 return actual.state() === 'resolved';
             }, 'Deferred object never resolved', 1000);
             return true;
         },
         toReject: function () {
-            var spy = sinon.spy(),
-                actual = this.actual;
-
-            this.spec.after(function() {
-                expect(spy).toHaveBeenCalledOnce();
-            });
-
-            this.actual.fail(spy);
+            var actual = this.actual;
             waitsFor(function () {
                 return actual.state() === 'rejected';
             }, 'Deferred object never rejected', 1000);
