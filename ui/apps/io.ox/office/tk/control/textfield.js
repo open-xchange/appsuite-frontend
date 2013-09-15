@@ -172,7 +172,7 @@ define('io.ox/office/tk/control/textfield',
                 break;
             case 'group:blur':
                 // Bug 27175: always commit value when losing focus
-                if (initialText !== fieldNode.val()) {
+                if (_.isString(initialText) && (initialText !== fieldNode.val())) {
                     // pass preserveFocus option to not interfere with current focus handling
                     self.triggerChange(fieldNode, { preserveFocus: true });
                 }
@@ -201,6 +201,8 @@ define('io.ox/office/tk/control/textfield',
             case KeyCodes.ENTER:
                 if (event.type === 'keyup') {
                     self.triggerChange(fieldNode);
+                    // prevent another trigger from group:blur handler
+                    initialText = null;
                 }
                 return false;
             case KeyCodes.ESCAPE:
