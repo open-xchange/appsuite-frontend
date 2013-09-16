@@ -788,7 +788,8 @@ define('io.ox/mail/main',
                 },
                 stop: function () {
                     win.idle();
-                }
+                },
+                type: 'importEML'
             });
         }
 
