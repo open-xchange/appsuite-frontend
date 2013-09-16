@@ -193,7 +193,8 @@ define('io.ox/core/tk/upload',
         delegate = _.extend({
             start: $.noop,
             stop: $.noop,
-            progress: function (file) { return $.when(); }
+            progress: function (file) { return $.when(); },
+            type: false
         }, delegate || {});
 
         Events.extend(this);
@@ -230,7 +231,7 @@ define('io.ox/core/tk/upload',
             files.push.apply(files, [].concat(file)); // handles both arrays and single objects properly
             require(['settings!io.ox/core', 'io.ox/core/strings'], function (settings, strings) {
                 var properties = settings.get('properties');
-                if (properties) {
+                if (properties && delegate.type !== 'importEML') {
                     var total = 0,
                         maxSize = properties.infostoreMaxUploadSize,
                         quota = properties.infostoreQuota;
