@@ -8,11 +8,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Last-Translator: Nicky Thomassen <nicky@nt-data.dk>\n"
+"PO-Revision-Date: 2013-09-15 13:24+0200\n"
+"Last-Translator: Jacob Sparre Andersen <jacob@bureau-cornavin.com>\n"
 "X-Poedit-Language: Danish\n"
-"### Used conventions: ### notification mail => e-mailunderretningdeclined          => afslåetmail              => e-mailportal            => portaltentatively       => forsøgsviscustom            => brugerdefineretcredentials       => loginoplysningersubscription      => abonnementpublication       => udgivelseitem              => elementcipher            => nøgle\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.4\n"
 
 #: apps/io.ox/mail/view-detail.js:371
 msgid "This mail has no content"
@@ -151,7 +151,9 @@ msgstr "Til"
 #: apps/io.ox/mail/view-detail.js:1084
 msgctxt "CC"
 msgid "Copy"
-msgstr "Copy"
+msgid_plural "Copy"
+msgstr[0] "Kopi"
+msgstr[1] "Kopier"
 
 #: apps/io.ox/mail/view-detail.js:1104
 #: apps/io.ox/mail/view-detail.js:1456
@@ -209,7 +211,8 @@ msgid "Show file"
 msgstr "Vis fil"
 
 #: apps/io.ox/mail/view-detail.js:1307
-msgid "Someone shared a folder with you. Would you like to subscribe those %1$s?"
+msgid ""
+"Someone shared a folder with you. Would you like to subscribe those %1$s?"
 msgstr "Der var en der delte en mappe med dig. Vil du gerne abonnere på %1$s?"
 
 #: apps/io.ox/mail/view-detail.js:1309
@@ -228,8 +231,12 @@ msgid "Adding subscription. This may take some seconds..."
 msgstr "Tilføjer abonnement. Dette kan tage nogle sekunder..."
 
 #: apps/io.ox/mail/view-detail.js:1333
-msgid "Created private folder '%1$s' in %2$s and subscribed succesfully to shared folder"
-msgstr "Oprettede privat mappe '%1$s' i %2$s og abonnerede med succes på den delte mappe"
+msgid ""
+"Created private folder '%1$s' in %2$s and subscribed succesfully to shared "
+"folder"
+msgstr ""
+"Oprettede privat mappe '%1$s' i %2$s og abonnerede med succes på den delte "
+"mappe"
 
 #: apps/io.ox/core/export/export.js:255
 #: apps/io.ox/core/import/import.js:159
@@ -251,7 +258,8 @@ msgid "Show images"
 msgstr "Vis billeder"
 
 #: apps/io.ox/mail/view-detail.js:1407
-msgid "External images have been blocked to protect you against potential spam!"
+msgid ""
+"External images have been blocked to protect you against potential spam!"
 msgstr "Eksterne billeder er blevet blokkeret, for at beskytte dig imod spam!"
 
 #: apps/io.ox/mail/view-detail.js:1476
@@ -975,7 +983,8 @@ msgstr[1] "Diser filer er ikke blevet slettet"
 
 #: apps/io.ox/files/actions.js:273
 msgid "This file has not been deleted, as it is locked by its owner."
-msgid_plural "These files have not been deleted, as they are locked by their owner."
+msgid_plural ""
+"These files have not been deleted, as they are locked by their owner."
 msgstr[0] "Denne fil er ikke blevet slettet, da den er låst af sin ejer."
 msgstr[1] "Disse filer er ikke blevet slettet, da de er låste af sin ejer."
 
@@ -1117,8 +1126,10 @@ msgid "Drop here to upload a <b class=\"dndignore\">new file</b>"
 msgstr "Slip her for at overføre en <b class=\"dndignore\">ny fil</b>"
 
 #: apps/io.ox/files/actions.js:892
-msgid "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
-msgstr "Slip her for at overføre en <b class=\"dndignore\">ny version</b> af \"%1$s\""
+msgid ""
+"Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
+msgstr ""
+"Slip her for at overføre en <b class=\"dndignore\">ny version</b> af \"%1$s\""
 
 #: apps/io.ox/files/actions.js:898
 msgid "Drop here to upload a <b class=\"dndignore\">new version</b>"
@@ -1301,7 +1312,9 @@ msgstr "Redigér aftale"
 
 #: apps/io.ox/calendar/actions.js:133
 #: apps/io.ox/calendar/week/perspective.js:118
-msgid "Do you want to edit the whole series or just one appointment within the series?"
+msgid ""
+"Do you want to edit the whole series or just one appointment within the "
+"series?"
 msgstr "Vil du redigere hele serien, eller kun én aftale i serien?"
 
 #. #-#-#-#-#-#-#-#-#-#
@@ -1312,7 +1325,9 @@ msgid "Series"
 msgstr "Serie"
 
 #: apps/io.ox/calendar/actions.js:205
-msgid "Do you want to delete the whole series or just one appointment within the series?"
+msgid ""
+"Do you want to delete the whole series or just one appointment within the "
+"series?"
 msgstr "Vil du slette hele serien, eller kun én aftale i serien?"
 
 #: apps/io.ox/calendar/actions.js:206
@@ -1634,12 +1649,18 @@ msgid "Permanently remove deleted emails?"
 msgstr "Fjern slettede e-mails permanent?"
 
 #: apps/io.ox/mail/settings/old_pane.js:38
-msgid "Automatically collect contacts in the folder \"Collected addresses\" while sending?"
-msgstr "Saml automatisk kontakter i mappen \"Indsamlede adresser\" imens der sendes?"
+msgid ""
+"Automatically collect contacts in the folder \"Collected addresses\" while "
+"sending?"
+msgstr ""
+"Saml automatisk kontakter i mappen \"Indsamlede adresser\" imens der sendes?"
 
 #: apps/io.ox/mail/settings/old_pane.js:39
-msgid "Automatically collect contacts in the folder \"Collected addresses\" while reading?"
-msgstr "Saml automatisk kontakter i mappen \"Indsamlede adresser\" imens der læses?"
+msgid ""
+"Automatically collect contacts in the folder \"Collected addresses\" while "
+"reading?"
+msgstr ""
+"Saml automatisk kontakter i mappen \"Indsamlede adresser\" imens der læses?"
 
 #: apps/io.ox/mail/settings/old_pane.js:40
 #: apps/io.ox/mail/settings/pane.js:37
@@ -1725,12 +1746,18 @@ msgid "Permanently remove deleted emails"
 msgstr "Fjen slettede e-mails permanent"
 
 #: apps/io.ox/mail/settings/pane.js:35
-msgid "Automatically collect contacts in the folder \"Collected addresses\" while sending"
-msgstr "Saml automatisk kontakter i mappen \"Indsamlede adresser\" imens der sendes"
+msgid ""
+"Automatically collect contacts in the folder \"Collected addresses\" while "
+"sending"
+msgstr ""
+"Saml automatisk kontakter i mappen \"Indsamlede adresser\" imens der sendes"
 
 #: apps/io.ox/mail/settings/pane.js:36
-msgid "Automatically collect contacts in the folder \"Collected addresses\" while reading"
-msgstr "Saml automatisk kontakter i mappen \"Indsamlede adresser\" imens der læses"
+msgid ""
+"Automatically collect contacts in the folder \"Collected addresses\" while "
+"reading"
+msgstr ""
+"Saml automatisk kontakter i mappen \"Indsamlede adresser\" imens der læses"
 
 #: apps/io.ox/mail/settings/pane.js:41
 msgid "Forward emails as"
@@ -1802,8 +1829,12 @@ msgstr "10 minutter"
 
 #: apps/io.ox/core/settings/pane.js:57
 #: apps/io.ox/mail/settings/pane.js:155
-msgid "The setting has been saved and will become active when you enter the application the next time."
-msgstr "Indstillingen er blevet gemt, og vil være aktiv næste gang du starter programmet."
+msgid ""
+"The setting has been saved and will become active when you enter the "
+"application the next time."
+msgstr ""
+"Indstillingen er blevet gemt, og vil være aktiv næste gang du starter "
+"programmet."
 
 #: apps/io.ox/mail/settings/pane.js:175
 msgid "Could not save settings"
@@ -2318,7 +2349,8 @@ msgstr "Prøver at konfigurere din e-mail konto automatisk"
 
 #: apps/io.ox/mail/accounts/settings.js:172
 msgid "There was no suitable server found for this mail/password combination"
-msgstr "Der blev ikke fundet en passende server for denne e-mail/kodeords kombination"
+msgstr ""
+"Der blev ikke fundet en passende server for denne e-mail/kodeords kombination"
 
 #: apps/io.ox/mail/accounts/settings.js:193
 msgid "Failed to connect."
@@ -2509,15 +2541,21 @@ msgid "No file selected for upload."
 msgstr "Ingen fil valgt for overførelse."
 
 #: apps/io.ox/files/util.js:34
-msgid "Please note, changing or removing the file extension will cause problems when viewing or editing."
-msgstr "Bemærk venligst at en ændring eller fjernelse af filtypen, giver problemer ved visning eller redigering."
+msgid ""
+"Please note, changing or removing the file extension will cause problems when "
+"viewing or editing."
+msgstr ""
+"Bemærk venligst at en ændring eller fjernelse af filtypen, giver problemer "
+"ved visning eller redigering."
 
 #: apps/io.ox/files/util.js:42
-msgid "Do you really want to remove the extension \".%1$s\" from your filename?"
+msgid ""
+"Do you really want to remove the extension \".%1$s\" from your filename?"
 msgstr "Vil du virkelig fjerne filtypen \".%1$s\" fra dit filnavn?"
 
 #: apps/io.ox/files/util.js:45
-msgid "Do you really want to change the file extension from  \".%1$s\" to \".%2$s\" ?"
+msgid ""
+"Do you really want to change the file extension from  \".%1$s\" to \".%2$s\" ?"
 msgstr "Vil du virkelig ændre filtypen fra \".%1$s\" til \".%2$s\" ?"
 
 #: apps/io.ox/files/util.js:50
@@ -3333,8 +3371,16 @@ msgid "Add account"
 msgstr "Tilføj konto"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:99
-msgid "For security reasons, all account passwords are encrypted with your primary account password. If you change your primary password, your external accounts might stop working. In this case, you can use your old password to recover all account passwords:"
-msgstr "Af sikkerhedshensyn er alle kodeord krypteret med din kontos primære kodeord. Ændrer du dit primære kodeord, kan dine eksterne konti stoppe med at virke. Hvis det sker, så kan du bruge dit gamle kodeord, til at gendanne dine kontis kodeord:"
+msgid ""
+"For security reasons, all account passwords are encrypted with your primary "
+"account password. If you change your primary password, your external accounts "
+"might stop working. In this case, you can use your old password to recover "
+"all account passwords:"
+msgstr ""
+"Af sikkerhedshensyn er alle kodeord krypteret med din kontos primære kodeord. "
+"Ændrer du dit primære kodeord, kan dine eksterne konti stoppe med at virke. "
+"Hvis det sker, så kan du bruge dit gamle kodeord, til at gendanne dine kontis "
+"kodeord:"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js:22
 #: apps/io.ox/settings/accounts/settings/pane.js:104
@@ -3356,11 +3402,16 @@ msgid "Basic settings"
 msgstr "Grundlæggende indstillinger"
 
 #: apps/io.ox/keychain/api.js:168
-msgid "The unrecoverable items have been cleaned up successfully. Please refresh this page to see the changes."
-msgstr "De elementer der ikke kunne gendannes er blevet ryddet op med succes. Opdatér venligst denne side for at se ændringerne."
+msgid ""
+"The unrecoverable items have been cleaned up successfully. Please refresh "
+"this page to see the changes."
+msgstr ""
+"De elementer der ikke kunne gendannes er blevet ryddet op med succes. Opdatér "
+"venligst denne side for at se ændringerne."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js:25
-msgid "Please provide the old password so the account passwords can be recovered."
+msgid ""
+"Please provide the old password so the account passwords can be recovered."
 msgstr "Giv venligst det gamle kodeord, så kontokodeordene kan gendannes."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js:27
@@ -3509,12 +3560,22 @@ msgid "Add participant"
 msgstr "Tilføj deltager"
 
 #: apps/io.ox/calendar/freebusy/templates.js:93
-msgid "If you spot a free time, just select this area. To do this, move the cursor to the start time, hold the mouse button, and <b>drag the mouse</b> to the end time."
-msgstr "Hvis du ser en ledig tid, så bare marker dette område. For at gøre det flyttes musen til starttiden, museknappen holdes nede, og <b>musen trækkes</b> til sluttiden."
+msgid ""
+"If you spot a free time, just select this area. To do this, move the cursor "
+"to the start time, hold the mouse button, and <b>drag the mouse</b> to the "
+"end time."
+msgstr ""
+"Hvis du ser en ledig tid, så bare marker dette område. For at gøre det "
+"flyttes musen til starttiden, museknappen holdes nede, og <b>musen trækkes</b>"
+" til sluttiden."
 
 #: apps/io.ox/calendar/freebusy/templates.js:95
-msgid "You will automatically return to the appointment dialog. The selected start and end time as well as the current participant list will be applied."
-msgstr "Du vil automatisk vende tilbage til aftalevinduet. Den valgte start- og sluttid, samt deltagerlisten, vil blive anvendt."
+msgid ""
+"You will automatically return to the appointment dialog. The selected start "
+"and end time as well as the current participant list will be applied."
+msgstr ""
+"Du vil automatisk vende tilbage til aftalevinduet. Den valgte start- og "
+"sluttid, samt deltagerlisten, vil blive anvendt."
 
 #: apps/io.ox/calendar/freebusy/templates.js:99
 msgid "How does this work?"
@@ -3538,14 +3599,22 @@ msgstr "Afslut"
 #. %1$s is a folder/calendar name
 #. %2$s is the folder owner
 #: apps/io.ox/calendar/freebusy/templates.js:133
-msgid "You are not allowed to create appointments in \"%1$s\" owned by %2$s. Appointments will therefore be created in your private calendar."
-msgstr "Du har ikke tilladelse til at lave aftaler i \"%1$s\" ejet af %2$s. Aftaler vil derfor blive lavet i din private kaldender."
+msgid ""
+"You are not allowed to create appointments in \"%1$s\" owned by %2$s. "
+"Appointments will therefore be created in your private calendar."
+msgstr ""
+"Du har ikke tilladelse til at lave aftaler i \"%1$s\" ejet af %2$s. Aftaler "
+"vil derfor blive lavet i din private kaldender."
 
 #. Warning dialog
 #. %1$s is a folder/calendar name
 #: apps/io.ox/calendar/freebusy/templates.js:137
-msgid "You are not allowed to create appointments in \"%1$s\". Appointments will therefore be created in your private calendar."
-msgstr "Du har ikke tilladelse til at lave aftaler i \"%1$s\". Aftaler vil derfor blive lavet i din private kaldender."
+msgid ""
+"You are not allowed to create appointments in \"%1$s\". Appointments will "
+"therefore be created in your private calendar."
+msgstr ""
+"Du har ikke tilladelse til at lave aftaler i \"%1$s\". Aftaler vil derfor "
+"blive lavet i din private kaldender."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:212
 #: apps/io.ox/calendar/edit/recurrence-view.js:279
@@ -3588,8 +3657,12 @@ msgid "Click on a sentence to choose when to repeat the appointment."
 msgstr "Klik på en sætning for at vælge hvornår aftalen skal gentages."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:253
-msgid "The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType\" data-widget=\"options\">weekly</a>."
-msgstr "Opgaven gentages <a href=\"#\" data-attribute=\"recurrenceType\" data-widget=\"options\">ugentligt</a>."
+msgid ""
+"The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType\" "
+"data-widget=\"options\">weekly</a>."
+msgstr ""
+"Opgaven gentages <a href=\"#\" data-attribute=\"recurrenceType\" "
+"data-widget=\"options\">ugentligt</a>."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:258
 msgid "daily"
@@ -3608,24 +3681,46 @@ msgid "yearly"
 msgstr "årsligt"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:267
-msgid "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval\">every <span class=\"number-control\">2</span> days</a>. "
-msgstr "Aftalen gentages <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval\">hver <span class=\"number-control\">anden</span> dag</a>. "
+msgid ""
+"The appointment is repeated <a href=\"#\"  data-widget=\"number\" "
+"data-attribute=\"interval\">every <span class=\"number-control\">2</span> "
+"days</a>. "
+msgstr ""
+"Aftalen gentages <a href=\"#\"  data-widget=\"number\" "
+"data-attribute=\"interval\">hver <span class=\"number-control\">anden</span> "
+"dag</a>. "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:274
 msgid "every day"
 msgstr "hver dag"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:288
-msgid "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval\">every <span class=\"number-control\">2</span> weeks</a> on <a href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">monday</a>. "
-msgstr "Aftalen gentages <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval\">hver <span class=\"number-control\">anden</span> uge</a> på <a href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">mandage</a>. "
+msgid ""
+"The appointment is repeated <a href=\"#\"  data-widget=\"number\" "
+"data-attribute=\"interval\">every <span class=\"number-control\">2</span> "
+"weeks</a> on <a href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">"
+"monday</a>. "
+msgstr ""
+"Aftalen gentages <a href=\"#\"  data-widget=\"number\" "
+"data-attribute=\"interval\">hver <span class=\"number-control\">anden</span> "
+"uge</a> på <a href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">"
+"mandage</a>. "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:296
 msgid "every week"
 msgstr "hver uge"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:311
-msgid "The appointment is repeated on day <a href=\"#\" data-widget=\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every <span class=\"number-control\">2</span> months</a>. "
-msgstr "Opgaven gentages den <a href=\"#\" data-widget=\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">tiende dag</span></a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">hver <span class=\"number-control\">anden</span> måned</a>. "
+msgid ""
+"The appointment is repeated on day <a href=\"#\" data-widget=\"number\" "
+"data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> <a "
+"href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every <span "
+"class=\"number-control\">2</span> months</a>. "
+msgstr ""
+"Opgaven gentages den <a href=\"#\" data-widget=\"number\" "
+"data-attribute=\"dayInMonth\"><span class=\"number-control\">tiende dag</span>"
+"</a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">hver <"
+"span class=\"number-control\">anden</span> måned</a>. "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:320
 #: apps/io.ox/calendar/edit/recurrence-view.js:382
@@ -3633,8 +3728,18 @@ msgid "every month"
 msgstr "hver måned"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:340
-msgid "The appointment is repeated the <a href=\"#\" data-widget=\"options\" data-attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options\" data-attribute=\"day\">wednesday</a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every <span class=\"number-control\">2</span> months</a>. "
-msgstr "Opgaven gentages hver <a href=\"#\" data-widget=\"options\" data-attribute=\"ordinal\">anden</a> <a href=\"#\" data-widget=\"options\" data-attribute=\"day\">onsdag</a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">hver <span class=\"number-control\">anden</span> måned</a>. "
+msgid ""
+"The appointment is repeated the <a href=\"#\" data-widget=\"options\" "
+"data-attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options\" "
+"data-attribute=\"day\">wednesday</a> <a href=\"#\" data-widget=\"number\" "
+"data-attribute=\"interval\">every <span class=\"number-control\">2</span> "
+"months</a>. "
+msgstr ""
+"Opgaven gentages hver <a href=\"#\" data-widget=\"options\" "
+"data-attribute=\"ordinal\">anden</a> <a href=\"#\" data-widget=\"options\" "
+"data-attribute=\"day\">onsdag</a> <a href=\"#\" data-widget=\"number\" "
+"data-attribute=\"interval\">hver <span class=\"number-control\">anden</span> "
+"måned</a>. "
 
 #. #-#-#-#-#-#-#-#-#-#
 #. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
@@ -3747,8 +3852,16 @@ msgid "day of the weekend"
 msgstr "wekkenddag"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:390
-msgid "The appointment is repeated every year on day <a href=\"#\" data-widget=\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> of <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">october</a>. "
-msgstr "Opgaven gentages hver år på den <a href=\"#\" data-widget=\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">tiende dag</span></a> i <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">oktober</a>. "
+msgid ""
+"The appointment is repeated every year on day <a href=\"#\" "
+"data-widget=\"number\" data-attribute=\"dayInMonth\"><span "
+"class=\"number-control\">10</span></a> of <a href=\"#\" "
+"data-widget=\"options\" data-attribute=\"month\">october</a>. "
+msgstr ""
+"Opgaven gentages hver år på den <a href=\"#\" data-widget=\"number\" "
+"data-attribute=\"dayInMonth\"><span class=\"number-control\">tiende dag</span>"
+"</a> i <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">"
+"oktober</a>. "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:402
 #: apps/io.ox/calendar/edit/recurrence-view.js:451
@@ -3811,8 +3924,16 @@ msgid "December"
 msgstr "December"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:418
-msgid "The appointment is repeated every <a href=\"#\" data-widget=\"options\" data-attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options\" data-attribute=\"day\">wednesday</a> in <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">october</a>. "
-msgstr "Opgaven gentages den <a href=\"#\" data-widget=\"options\" data-attribute=\"ordinal\">første</a> <a href=\"#\" data-widget=\"options\" data-attribute=\"day\">onsdag</a> i <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">oktober</a>. "
+msgid ""
+"The appointment is repeated every <a href=\"#\" data-widget=\"options\" "
+"data-attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options\" "
+"data-attribute=\"day\">wednesday</a> in <a href=\"#\" data-widget=\"options\" "
+"data-attribute=\"month\">october</a>. "
+msgstr ""
+"Opgaven gentages den <a href=\"#\" data-widget=\"options\" "
+"data-attribute=\"ordinal\">første</a> <a href=\"#\" data-widget=\"options\" "
+"data-attribute=\"day\">onsdag</a> i <a href=\"#\" data-widget=\"options\" "
+"data-attribute=\"month\">oktober</a>. "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:473
 #: apps/io.ox/calendar/edit/recurrence-view.js:487
@@ -3832,16 +3953,32 @@ msgid "ends"
 msgstr "slutter"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:482
-msgid "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">never ends</a>."
-msgstr "Serien <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">slutter aldrig</a>."
+msgid ""
+"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">"
+"never ends</a>."
+msgstr ""
+"Serien <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">"
+"slutter aldrig</a>."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:491
-msgid "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget=\"custom\">11/03/2013</a>."
-msgstr "Serien <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">slutter</a> d. <a href=\"#\" data-attribute=\"until\" data-widget=\"custom\">11/03/2013</a>."
+msgid ""
+"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">"
+"ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget=\"custom\">"
+"11/03/2013</a>."
+msgstr ""
+"Serien <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">"
+"slutter</a> d. <a href=\"#\" data-attribute=\"until\" data-widget=\"custom\">"
+"11/03/2013</a>."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:502
-msgid "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number\">after <span class=\"number-control\">2</span> appointments</a>."
-msgstr "Serien <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">ender</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number\">efter <span class=\"number-control\">2</span> aftaler</a>."
+msgid ""
+"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">"
+"ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number\">"
+"after <span class=\"number-control\">2</span> appointments</a>."
+msgstr ""
+"Serien <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">ender<"
+"/a> <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number\">efter "
+"<span class=\"number-control\">2</span> aftaler</a>."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:851
 msgid "Please choose a sentence below."
@@ -3920,8 +4057,12 @@ msgstr "%1$s (Forbehold)"
 
 #: apps/io.ox/calendar/month/perspective.js:129
 #: apps/io.ox/calendar/week/perspective.js:113
-msgid "By changing the date of this appointment you are creating an appointment exception to the series. Do you want to continue?"
-msgstr "Ved at ændre denne aftales dato, laver du en undtagelse til aftaleserien. Vil du fortsætte?"
+msgid ""
+"By changing the date of this appointment you are creating an appointment "
+"exception to the series. Do you want to continue?"
+msgstr ""
+"Ved at ændre denne aftales dato, laver du en undtagelse til aftaleserien. Vil "
+"du fortsætte?"
 
 #: apps/io.ox/calendar/settings/pane.js:28
 msgid "Time"
@@ -3980,8 +4121,12 @@ msgid "Show declined appointments"
 msgstr "Vis afslået aftaler"
 
 #: apps/io.ox/calendar/settings/pane.js:45
-msgid "Automatically delete a notification mail after it has been accepted or declined?"
-msgstr "Slet automatisk en e-mailunderretning efter at den er blevet accepteret eller afslået?"
+msgid ""
+"Automatically delete a notification mail after it has been accepted or "
+"declined?"
+msgstr ""
+"Slet automatisk en e-mailunderretning efter at den er blevet accepteret eller "
+"afslået?"
 
 #: apps/io.ox/calendar/settings/pane.js:46
 msgid "Incoming Notification Mails"
@@ -4204,8 +4349,12 @@ msgid "Modified"
 msgstr "Ændret"
 
 #: apps/io.ox/calendar/acceptdeny.js:55
-msgid "You are about to change your confirmation status. Please leave a comment for other participants."
-msgstr "Du er ved at ændre din bekræftelsesstatus. Efterlad venligst en kommentar til andre deltagere."
+msgid ""
+"You are about to change your confirmation status. Please leave a comment for "
+"other participants."
+msgstr ""
+"Du er ved at ændre din bekræftelsesstatus. Efterlad venligst en kommentar til "
+"andre deltagere."
 
 #: apps/io.ox/calendar/acceptdeny.js:59
 #: apps/io.ox/contacts/edit/view-form.js:112
@@ -4262,8 +4411,12 @@ msgid "Upgrade required"
 msgstr "Opgradering påkrævet"
 
 #: apps/io.ox/core/upsell.js:29
-msgid "This feature is not available. In order to use it, you need to upgrade your account now."
-msgstr "Denne funktion er ikke tilgængelig. For at kunne bruge den, er du nødt til at opgradere din konto nu."
+msgid ""
+"This feature is not available. In order to use it, you need to upgrade your "
+"account now."
+msgstr ""
+"Denne funktion er ikke tilgængelig. For at kunne bruge den, er du nødt til at "
+"opgradere din konto nu."
 
 #: apps/io.ox/core/upsell.js:31
 msgid "The first 90 days are free."
@@ -4357,8 +4510,16 @@ msgid "Approximate Duration for Subscriptions"
 msgstr "Cirka længde af abonnementer"
 
 #: apps/io.ox/core/pubsub/subscriptions.js:307
-msgid "Subscribing to items that are not delivered by another Open-Xchange Server (i.e. OXMF) may take some time. Example: Importing 100 contacts from Xing takes about 5 minutes. We are continually improving this functionality. Future releases will work significantly faster."
-msgstr "Abonnement på ting som ikke leveres af en anden Open-Xchange-server (som fx OXMF) kan tage et stykke tid. Eksempel: Importering af 100 kontakter fra Xing tager omkring 5 minutter. Vi arbejder løbende på at forbedre denne funktionalitet. Fremtidige udgivelser vil være betragteligt hurtigere."
+msgid ""
+"Subscribing to items that are not delivered by another Open-Xchange Server "
+"(i.e. OXMF) may take some time. Example: Importing 100 contacts from Xing "
+"takes about 5 minutes. We are continually improving this functionality. "
+"Future releases will work significantly faster."
+msgstr ""
+"Abonnement på ting som ikke leveres af en anden Open-Xchange-server (som fx "
+"OXMF) kan tage et stykke tid. Eksempel: Importering af 100 kontakter fra Xing "
+"tager omkring 5 minutter. Vi arbejder løbende på at forbedre denne "
+"funktionalitet. Fremtidige udgivelser vil være betragteligt hurtigere."
 
 #: apps/io.ox/core/pubsub/settings/register.js:25
 msgid "Publications and Subscriptions"
@@ -4387,8 +4548,13 @@ msgid "Link"
 msgstr "Link"
 
 #: apps/io.ox/core/pubsub/settings/pane.js:188
-msgid "Note: Refreshing this subscription will replace the calendar content with the external content. Changes you have made inside appsuite will be overwritten"
-msgstr "Note: Opdatering af dette abonnement vil erstatte kalenderens indhold med det eksterne indhold. Ændringer som du har lavet i app-suiten, vil blive overskrevet"
+msgid ""
+"Note: Refreshing this subscription will replace the calendar content with the "
+"external content. Changes you have made inside appsuite will be overwritten"
+msgstr ""
+"Note: Opdatering af dette abonnement vil erstatte kalenderens indhold med det "
+"eksterne indhold. Ændringer som du har lavet i app-suiten, vil blive "
+"overskrevet"
 
 #: apps/io.ox/core/main.js:515
 #: apps/io.ox/core/pubsub/settings/pane.js:206
@@ -4400,16 +4566,26 @@ msgid "Subscription refresh"
 msgstr "Opdater abonnement"
 
 #: apps/io.ox/core/pubsub/settings/pane.js:301
-msgid "A refresh takes some time, so please be patient, while the refresh runs in the background. Only one refresh per subscription and per session is allowed."
-msgstr "En opdatering tager tid, så vær venligst tålmodig, imens opdateringen kører i baggrunden. Kun én opdatering pr. abonnement og session er tilladt."
+msgid ""
+"A refresh takes some time, so please be patient, while the refresh runs in "
+"the background. Only one refresh per subscription and per session is allowed."
+msgstr ""
+"En opdatering tager tid, så vær venligst tålmodig, imens opdateringen kører i "
+"baggrunden. Kun én opdatering pr. abonnement og session er tilladt."
 
 #: apps/io.ox/core/pubsub/settings/pane.js:380
-msgid "This folder has publications but you are not allowed to view or edit them"
-msgstr "Denne mappe har udgivelser, men du har ikke tilladelse til at se eller redigere dem"
+msgid ""
+"This folder has publications but you are not allowed to view or edit them"
+msgstr ""
+"Denne mappe har udgivelser, men du har ikke tilladelse til at se eller "
+"redigere dem"
 
 #: apps/io.ox/core/pubsub/settings/pane.js:382
-msgid "This folder has subscriptions but you are not allowed to view or edit them"
-msgstr "Denne mappe har abonnementer, men du har ikke tilladelse til at se eller redigere dem"
+msgid ""
+"This folder has subscriptions but you are not allowed to view or edit them"
+msgstr ""
+"Denne mappe har abonnementer, men du har ikke tilladelse til at se eller "
+"redigere dem"
 
 #: apps/io.ox/core/pubsub/settings/pane.js:388
 msgid "This folder has no publications"
@@ -4484,16 +4660,42 @@ msgid "Attention"
 msgstr "Bemærk"
 
 #: apps/io.ox/core/pubsub/publications.js:360
-msgid "The published data will be accessible to everyone on the Internet. Please consider, which data you want to publish."
-msgstr "Alle på internettet vil have adgang til udgivet data. Overvej venligst hvilket data du vil udgive."
+msgid ""
+"The published data will be accessible to everyone on the Internet. Please "
+"consider, which data you want to publish."
+msgstr ""
+"Alle på internettet vil have adgang til udgivet data. Overvej venligst "
+"hvilket data du vil udgive."
 
 #: apps/io.ox/core/pubsub/publications.js:362
 msgid "Privacy Notice"
 msgstr "Persondatapolitik"
 
 #: apps/io.ox/core/pubsub/publications.js:364
-msgid "When using this publish feature, you as the current owner of the data are responsible for being careful with privacy rules and for complying with legal obligations (Copyright, Privacy Laws). Especially when publishing personal data you are the responsible party according to the Federal Data Protection Act (BDSG, Germany) or other Privacy Acts of your country. According to European and other national regulations you as the responsible party are in charge of data economy, and must not publish or forward personal data without the person's consent. Beyond legal obligations, we would like to encourage extreme care when dealing with personal data. Please consider carefully where you store and to whom you forward personal data. Please ensure appropriate access protection, e.g. by proper password protection."
-msgstr "Når du bruger denne udgivelsesfunktion, så er du, som nuværende administrator af data, ansvarlig for at beskytte privatlivets fred, og for at overholde gældende lov (fx copyright og databeskyttelse). Dette er især gældene når du udgiver personlige data, og lovgivningen skal altid følges for det land du er i. Det betyder, at du sandsynligvis ikke må udgive personlige data, uden en forugående skriftlig accept fra ejeren af de pågældende data. Udover det juridske ansvar i forbindelse med personlige data, så vil vi gerne opfordre til, at udvise forsigtighed når personlige data omgås, gemmes og videresendes. Sørg altid for at beskytte personlige data forsvarligt, fx ved at forhindre uautoriserede adgang. Dette kan gøres ved at bruge en stærk adgangskode."
+msgid ""
+"When using this publish feature, you as the current owner of the data are "
+"responsible for being careful with privacy rules and for complying with legal "
+"obligations (Copyright, Privacy Laws). Especially when publishing personal "
+"data you are the responsible party according to the Federal Data Protection "
+"Act (BDSG, Germany) or other Privacy Acts of your country. According to "
+"European and other national regulations you as the responsible party are in "
+"charge of data economy, and must not publish or forward personal data without "
+"the person's consent. Beyond legal obligations, we would like to encourage "
+"extreme care when dealing with personal data. Please consider carefully where "
+"you store and to whom you forward personal data. Please ensure appropriate "
+"access protection, e.g. by proper password protection."
+msgstr ""
+"Når du bruger denne udgivelsesfunktion, så er du, som nuværende administrator "
+"af data, ansvarlig for at beskytte privatlivets fred, og for at overholde "
+"gældende lov (fx copyright og databeskyttelse). Dette er især gældene når du "
+"udgiver personlige data, og lovgivningen skal altid følges for det land du er "
+"i. Det betyder, at du sandsynligvis ikke må udgive personlige data, uden en "
+"forugående skriftlig accept fra ejeren af de pågældende data. Udover det "
+"juridske ansvar i forbindelse med personlige data, så vil vi gerne opfordre "
+"til, at udvise forsigtighed når personlige data omgås, gemmes og "
+"videresendes. Sørg altid for at beskytte personlige data forsvarligt, fx ved "
+"at forhindre uautoriserede adgang. Dette kan gøres ved at bruge en stærk "
+"adgangskode."
 
 #: apps/io.ox/core/pubsub/publications.js:369
 msgid "Show legal information"
@@ -4708,12 +4910,20 @@ msgid "No notifications"
 msgstr "Ingen påmindelser"
 
 #: apps/io.ox/core/api/folder.js:403
-msgid "The settings for collecting contacts in this folder will become disabled when you enter the application the next time."
-msgstr "Indstillingerne for at samle kontakter i denne mappe, vil blive deaktiveret næste gang du går ind i programmet."
+msgid ""
+"The settings for collecting contacts in this folder will become disabled when "
+"you enter the application the next time."
+msgstr ""
+"Indstillingerne for at samle kontakter i denne mappe, vil blive deaktiveret "
+"næste gang du går ind i programmet."
 
 #: apps/io.ox/core/api/folder.js:590
-msgid "Could not save settings. There have to be at least one user with administration rights."
-msgstr "Indstillingerne kunne ikke gemmes. Der skal minimum være én bruger med administartorrettigheder."
+msgid ""
+"Could not save settings. There have to be at least one user with "
+"administration rights."
+msgstr ""
+"Indstillingerne kunne ikke gemmes. Der skal minimum være én bruger med "
+"administartorrettigheder."
 
 #: apps/io.ox/core/about/about.js:29
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:112
@@ -4746,8 +4956,16 @@ msgstr "Hent installationsfil (til Windows)"
 
 #: apps/io.ox/core/settings/downloads/pane.js:72
 #: apps/plugins/portal/updater/register.js:30
-msgid "The updater provides a simple installation wizard. Follow the instructions to install the application. The updater will inform you of any updates for the Connector for Microsoft Outlook and the Notifier. You can download the updates from within the updater."
-msgstr "Opdateren har en simpel installationsguide. Følg instruktionerne for at installere programmet. Opdateren vil informere dig om eventuelle opdateringer til Microsoft Outlooks Connector og Notifier. Du kan hente opdateringerne fra opdateren."
+msgid ""
+"The updater provides a simple installation wizard. Follow the instructions to "
+"install the application. The updater will inform you of any updates for the "
+"Connector for Microsoft Outlook and the Notifier. You can download the "
+"updates from within the updater."
+msgstr ""
+"Opdateren har en simpel installationsguide. Følg instruktionerne for at "
+"installere programmet. Opdateren vil informere dig om eventuelle opdateringer "
+"til Microsoft Outlooks Connector og Notifier. Du kan hente opdateringerne fra "
+"opdateren."
 
 #: apps/io.ox/core/settings/user.js:70
 msgid "Save changes"
@@ -4804,8 +5022,13 @@ msgid "Reload statistics"
 msgstr "Genindlæs statistikker"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:147
-msgid "The blue graph shows the distribution of request durations in percent. The gray graph shows a trivial network ping to recognize slow connections."
-msgstr "Den blå graf viser fordelingen af forespørgslers varighed i procent. Den grå graf viser et almindeligt netværksping, så langsomme forbindelser kan identificeres."
+msgid ""
+"The blue graph shows the distribution of request durations in percent. The "
+"gray graph shows a trivial network ping to recognize slow connections."
+msgstr ""
+"Den blå graf viser fordelingen af forespørgslers varighed i procent. Den grå "
+"graf viser et almindeligt netværksping, så langsomme forbindelser kan "
+"identificeres."
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:216
 msgid "Errors"
@@ -5049,8 +5272,12 @@ msgid "Search"
 msgstr "Søg"
 
 #: apps/io.ox/core/desktop.js:1614
-msgid "Failed to start application. Maybe you have connection problems. Please try again."
-msgstr "Start af programmet fejlede. Måske har du forbindelsesproblemer. Prøv venligst igen"
+msgid ""
+"Failed to start application. Maybe you have connection problems. Please try "
+"again."
+msgstr ""
+"Start af programmet fejlede. Måske har du forbindelsesproblemer. Prøv "
+"venligst igen"
 
 #. Reminder (objective case): in X weeks
 #. %d is the number of weeks
@@ -5256,8 +5483,11 @@ msgid "Languages"
 msgstr "Sprog"
 
 #: apps/io.ox/core/login-i18n.js:26
-msgid "No connection to server. Please check your internet connection and retry."
-msgstr "Ingen forbindelse til serveren. Tjek venligst din internetforbindelse og prøv igen."
+msgid ""
+"No connection to server. Please check your internet connection and retry."
+msgstr ""
+"Ingen forbindelse til serveren. Tjek venligst din internetforbindelse og prøv "
+"igen."
 
 #: apps/io.ox/core/login-i18n.js:28
 msgid "Please enter your credentials."
@@ -5302,8 +5532,12 @@ msgid "You have been automatically logged out"
 msgstr "Du er automatisk blevet logget ud"
 
 #: apps/io.ox/core/login-i18n.js:40
-msgid "Unsupported Preview - Certain functions disabled and stability not assured until general release later this year"
-msgstr "Ikke understøttet forhåndsvisning - Bestemte funktioner og stabilitet er ikke garanteret før udgivelsen senere i år"
+msgid ""
+"Unsupported Preview - Certain functions disabled and stability not assured "
+"until general release later this year"
+msgstr ""
+"Ikke understøttet forhåndsvisning - Bestemte funktioner og stabilitet er ikke "
+"garanteret før udgivelsen senere i år"
 
 #: apps/io.ox/core/login-i18n.js:42
 msgid "Offline mode"
@@ -5349,8 +5583,12 @@ msgid "Restore applications"
 msgstr "Gendan programmer"
 
 #: apps/io.ox/core/main.js:957
-msgid "The following applications can be restored. Just remove the restore point if you don't want it to be restored."
-msgstr "De følgende programmer kan gendannes. Bare fjen gendannelsespunktet hvis du ikke vil gendanne det."
+msgid ""
+"The following applications can be restored. Just remove the restore point if "
+"you don't want it to be restored."
+msgstr ""
+"De følgende programmer kan gendannes. Bare fjen gendannelsespunktet hvis du "
+"ikke vil gendanne det."
 
 #: apps/io.ox/core/main.js:961
 msgid "Continue"
@@ -5650,8 +5888,12 @@ msgid "Members"
 msgstr "Medlemmer"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:274
-msgid "To add participants manually, just provide a valid email address (e.g john.doe@example.com or \"John Doe\" <jd@example.com>)"
-msgstr "For at tilføje deltagere manuelt, skal der bare gives en gyldig e-mailadresse (fx john.doe@example.com eller \"John Doe\" <jd@example.com>)"
+msgid ""
+"To add participants manually, just provide a valid email address (e.g "
+"john.doe@example.com or \"John Doe\" <jd@example.com>)"
+msgstr ""
+"For at tilføje deltagere manuelt, skal der bare gives en gyldig e-mailadresse "
+"(fx john.doe@example.com eller \"John Doe\" <jd@example.com>)"
 
 #: apps/io.ox/contacts/print.js:75
 msgid "Phone list"
@@ -5675,7 +5917,8 @@ msgstr "Mobiltelefon"
 msgid "Note: One contact is not shown due to missing phone numbers"
 msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
 msgstr[0] "Bemærk: Én kontakt er ikke vist som følge af manglende telefonnumre"
-msgstr[1] "Bemærk: %1$d kontakter er ikke vist som følge af manglende telefonnumre"
+msgstr[1] ""
+"Bemærk: %1$d kontakter er ikke vist som følge af manglende telefonnumre"
 
 #: apps/io.ox/contacts/print.js:86
 msgid "This note will not be printed"
@@ -6016,8 +6259,12 @@ msgstr "Klik her for at afslutte hjælpecenteret"
 #. The words "Home Screen" may not be translated or should match the
 #. string used on an iPhone using the "add to homescreen" function for weblinks
 #: apps/plugins/mobile/addToHomescreen/register.js:73
-msgid "Install this web app on your %1$s: Tap %2$s and then %3$s'Add to Home Screen'%4$s"
-msgstr "Installér denne web-app på din %1$s: Tap %2$s og så %3$s'Tilføj til Home Screen'%4$s"
+msgid ""
+"Install this web app on your %1$s: Tap %2$s and then %3$s'Add to Home Screen'%"
+"4$s"
+msgstr ""
+"Installér denne web-app på din %1$s: Tap %2$s og så %3$s'Tilføj til Home "
+"Screen'%4$s"
 
 #: apps/plugins/notifications/mail/register.js:27
 msgid "New Mails"
@@ -6115,8 +6362,12 @@ msgid "Something went wrong reauthorizing the %s account."
 msgstr "Der gik noget galt med at re-godkende denne %s konto."
 
 #: apps/plugins/portal/linkedIn/register.js:120
-msgid "Sorry, we cannot help you here. Your provider needs to obtain a key from LinkedIn with the permission to do read messages."
-msgstr "Beklager, men vi kan ikke hjælpe dig her. Din udbyder skal skaffe en nøgle fra LinkedIn, med tilladelse til at læse beskeder."
+msgid ""
+"Sorry, we cannot help you here. Your provider needs to obtain a key from "
+"LinkedIn with the permission to do read messages."
+msgstr ""
+"Beklager, men vi kan ikke hjælpe dig her. Din udbyder skal skaffe en nøgle "
+"fra LinkedIn, med tilladelse til at læse beskeder."
 
 #: apps/plugins/portal/linkedIn/register.js:182
 msgid "You have no new messages"
@@ -6556,4 +6807,5 @@ msgstr "Almindelige Emojis"
 #: apps/moxiecode/tiny_mce/plugins/emoji/categories.js:127
 msgid "All Emoji"
 msgstr "Alle Emoji"
+
 
