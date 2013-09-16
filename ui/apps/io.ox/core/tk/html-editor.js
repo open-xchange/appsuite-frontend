@@ -302,8 +302,7 @@ define.async('io.ox/core/tk/html-editor',
             range.setEndAfter(container);
             // get parent node
             var p = container.parentNode;
-            // add range content before next sibling (or at the end of the parent
-            // node)
+            // add range content before next sibling (or at the end of the parent node)
             var contents = range.extractContents();
             // BR fix (remove unwanted newline)
             traverse(contents.firstChild);
@@ -311,10 +310,18 @@ define.async('io.ox/core/tk/html-editor',
             if ($(contents).text().length > 0) {
                 // insert this content only if it includes something visible
                 // Actually this allows to split a quote after the very last
-                // character
-                // without getting empty gray blocks below the split
+                // character without getting empty gray blocks below the split
                 p.insertBefore(contents, container.nextSibling);
             }
+            // fix ordered lists. Look for subsequent <ol>...</ol><ol>...
+            try {
+                var ol = $(p).children('ol + ol'), prev, start;
+                if (ol.length > 0) {
+                    prev = ol.prev();
+                    start = prev.children('li').length + 1;
+                    ol.attr('start', start);
+                }
+            } catch (e) { }
             // climb up
             container = p;
         }

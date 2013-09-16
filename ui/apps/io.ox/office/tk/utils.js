@@ -209,6 +209,8 @@ define.async('io.ox/office/tk/utils',
      * - Firefox and Chrome do not allow to extend the container node beyond
      *   the explicit size limits of a single node (see comment for the
      *   Utils.MAX_NODE_SIZE constant above).
+     *
+     * @constant
      */
     Utils.MAX_CONTAINER_WIDTH = _.browser.IE ? 10.7e7 : Utils.MAX_NODE_SIZE;
 
@@ -221,23 +223,25 @@ define.async('io.ox/office/tk/utils',
      * - Firefox and Chrome do not allow to extend the container node beyond
      *   the explicit size limits of a single node (see comment for the
      *   Utils.MAX_NODE_SIZE constant above).
+     *
+     * @constant
      */
     Utils.MAX_CONTAINER_HEIGHT = _.browser.IE ? 21.4e6 : Utils.MAX_NODE_SIZE;
 
     // generic JS object helpers ----------------------------------------------
 
     /**
-     * Returns a new object containing a single attribute with the specified
-     * value.
+     * Returns a new object containing a single property with the specified key
+     * and value.
      *
      * @param {String} key
-     *  The name of the attribute to be inserted into the returned object.
+     *  The name of the property to be inserted into the returned object.
      *
      * @param value
-     *  The value of the attribute to be inserted into the returned object.
+     *  The value of the property to be inserted into the returned object.
      *
      * @returns {Object}
-     *  A new object with a single attribute.
+     *  A new object with a single property.
      */
     Utils.makeSimpleObject = function (key, value) {
         var object = {};
@@ -278,10 +282,10 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
-     * Returns whether specific attributes of the passed objects are equal,
-     * while ignoring all other attributes. If an attribute is missing in both
+     * Returns whether specific properties of the passed objects are equal,
+     * while ignoring all other properties. If a property is missing in both
      * objects, it is considered to be equal. Uses the Underscore method
-     * _.isEqual() to compare the attribute values.
+     * _.isEqual() to compare the property values.
      *
      * @param {Object} object1
      *  The first object to be compared to the other.
@@ -289,25 +293,25 @@ define.async('io.ox/office/tk/utils',
      * @param {Object} object2
      *  The second object to be compared to the other.
      *
-     * @param {String[]} attributeNames
-     *  The names of all attributes of the objects that will be compared.
+     * @param {String[]} propertyNames
+     *  The names of all properties of the objects that will be compared.
      *
      * @param {Function} [comparator=_.isEqual]
-     *  A binary predicate function that returns true if the passed attribute
+     *  A binary predicate function that returns true if the passed property
      *  values are considered being equal. Will be called, if both objects
-     *  passed to this method contain a specific attribute, and receives the
-     *  attribute values from both objects.
+     *  passed to this method contain a specific property, and receives the
+     *  property values from both objects.
      *
      * @returns {Boolean}
-     *  Whether all specified attributes are equal in both objects.
+     *  Whether all specified properties are equal in both objects.
      */
-    Utils.hasEqualAttributes = function (object1, object2, attributeNames, comparator) {
+    Utils.hasEqualAttributes = function (object1, object2, propertyNames, comparator) {
 
-        // default to the _isEqual() method to compare attribute values
+        // default to the _isEqual() method to compare property values
         comparator = _.isFunction(comparator) ? comparator : _.isEqual;
 
-        // process all specified attributes
-        return _(attributeNames).all(function (attrName) {
+        // process all specified properties
+        return _(propertyNames).all(function (attrName) {
             var hasAttr1 = attrName in object1,
                 hasAttr2 = attrName in object2;
             return (hasAttr1 === hasAttr2) && (!hasAttr1 || comparator(object1[attrName], object2[attrName]));
@@ -856,40 +860,40 @@ define.async('io.ox/office/tk/utils',
     // options object ---------------------------------------------------------
 
     /**
-     * Extracts an attribute value from the passed object. If the attribute
-     * does not exist, returns the specified default value.
+     * Extracts a property value from the passed object. If the property does
+     * not exist, returns the specified default value.
      *
      * @param {Object|Undefined} options
-     *  An object containing some attribute values. May be undefined.
+     *  An object containing some properties. May be undefined.
      *
      * @param {String} name
-     *  The name of the attribute to be returned.
+     *  The name of the property to be returned.
      *
      * @param [def]
      *  The default value returned when the options parameter is not an object,
-     *  or if it does not contain the specified attribute.
+     *  or if it does not contain the specified property.
      *
      * @returns
-     *  The value of the specified attribute, or the default value.
+     *  The value of the specified property, or the default value.
      */
     Utils.getOption = function (options, name, def) {
         return (_.isObject(options) && (name in options)) ? options[name] : def;
     };
 
     /**
-     * Extracts a string attribute from the passed object. If the attribute
-     * does not exist, or is not a string, returns the specified default value.
+     * Extracts a string property from the passed object. If the property does
+     * not exist, or is not a string, returns the specified default value.
      *
      * @param {Object|Undefined} options
-     *  An object containing some attribute values. May be undefined.
+     *  An object containing some properties. May be undefined.
      *
      * @param {String} name
-     *  The name of the string attribute to be returned.
+     *  The name of the string property to be returned.
      *
      * @param [def]
      *  The default value returned when the options parameter is not an object,
-     *  or if it does not contain the specified attribute, or if the attribute
-     *  is not a string. May be any value (not only strings).
+     *  or if it does not contain the specified property, or if the property is
+     *  not a string. May be any value (not only strings).
      *
      * @param {Boolean} [nonEmpty=false]
      *  If set to true, only non-empty strings will be returned from the
@@ -897,7 +901,7 @@ define.async('io.ox/office/tk/utils',
      *  default value.
      *
      * @returns
-     *  The value of the specified attribute, or the default value.
+     *  The value of the specified property, or the default value.
      */
     Utils.getStringOption = function (options, name, def, nonEmpty) {
         var value = Utils.getOption(options, name);
@@ -905,23 +909,23 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
-     * Extracts a boolean attribute from the passed object. If the attribute
-     * does not exist, or is not a boolean value, returns the specified default
+     * Extracts a boolean property from the passed object. If the property does
+     * not exist, or is not a boolean value, returns the specified default
      * value.
      *
      * @param {Object|Undefined} options
-     *  An object containing some attribute values. May be undefined.
+     *  An object containing some properties. May be undefined.
      *
      * @param {String} name
-     *  The name of the boolean attribute to be returned.
+     *  The name of the boolean property to be returned.
      *
      * @param [def]
      *  The default value returned when the options parameter is not an object,
-     *  or if it does not contain the specified attribute, or if the attribute
-     *  is not a boolean value. May be any value (not only booleans).
+     *  or if it does not contain the specified property, or if the property is
+     *  not a boolean value. May be any value (not only booleans).
      *
      * @returns
-     *  The value of the specified attribute, or the default value.
+     *  The value of the specified property, or the default value.
      */
     Utils.getBooleanOption = function (options, name, def) {
         var value = Utils.getOption(options, name);
@@ -929,28 +933,28 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
-     * Extracts a floating-point attribute from the passed object. If the
-     * attribute does not exist, or is not a number, returns the specified
+     * Extracts a floating-point property from the passed object. If the
+     * property does not exist, or is not a number, returns the specified
      * default value.
      *
      * @param {Object|Undefined} options
-     *  An object containing some attribute values. May be undefined.
+     *  An object containing some properties. May be undefined.
      *
      * @param {String} name
-     *  The name of the floating-point attribute to be returned.
+     *  The name of the floating-point property to be returned.
      *
      * @param [def]
      *  The default value returned when the options parameter is not an object,
-     *  or if it does not contain the specified attribute, or if the attribute
-     *  is not a number. May be any value (not only numbers).
+     *  or if it does not contain the specified property, or if the property is
+     *  not a number. May be any value (not only numbers).
      *
      * @param [min]
      *  If specified and a number, set a lower bound for the returned value. Is
-     *  not used, if neither the attribute nor the passed default are numbers.
+     *  not used, if neither the property nor the passed default are numbers.
      *
      * @param [max]
      *  If specified and a number, set an upper bound for the returned value.
-     *  Is not used, if neither the attribute nor the passed default are
+     *  Is not used, if neither the property nor the passed default are
      *  numbers.
      *
      * @param [precision]
@@ -958,8 +962,7 @@ define.async('io.ox/office/tk/utils',
      *  multiple of this value. Must be positive.
      *
      * @returns
-     *  The value of the specified attribute, or the default value, rounded
-     *  down to an integer.
+     *  The value of the specified property, or the default value.
      */
     Utils.getNumberOption = function (options, name, def, min, max, precision) {
         var value = Utils.getOption(options, name);
@@ -973,55 +976,54 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
-     * Extracts an integer attribute from the passed object. If the attribute
+     * Extracts an integer property from the passed object. If the property
      * does not exist, or is not a number, returns the specified default value.
      *
      * @param {Object|Undefined} options
-     *  An object containing some attribute values. May be undefined.
+     *  An object containing some properties. May be undefined.
      *
      * @param {String} name
-     *  The name of the integer attribute to be returned.
+     *  The name of the integer property to be returned.
      *
      * @param [def]
      *  The default value returned when the options parameter is not an object,
-     *  or if it does not contain the specified attribute, or if the attribute
-     *  is not a number. May be any value (not only numbers).
+     *  or if it does not contain the specified property, or if the property is
+     *  not a number. May be any value (not only numbers).
      *
      * @param [min]
      *  If specified and a number, set a lower bound for the returned value. Is
-     *  not used, if neither the attribute nor the passed default are numbers.
+     *  not used, if neither the property nor the passed default are numbers.
      *
      * @param [max]
      *  If specified and a number, set an upper bound for the returned value.
-     *  Is not used, if neither the attribute nor the passed default are
+     *  Is not used, if neither the property nor the passed default are
      *  numbers.
      *
      * @returns
-     *  The value of the specified attribute, or the default value, rounded
-     *  down to an integer.
+     *  The value of the specified property, or the default value, rounded to
+     *  an integer.
      */
     Utils.getIntegerOption = function (options, name, def, min, max) {
         return Utils.getNumberOption(options, name, def, min, max, 1);
     };
 
     /**
-     * Extracts an object attribute from the passed object. If the attribute
-     * does not exist, or is not an object, returns the specified default
-     * value.
+     * Extracts an object property from the passed object. If the property does
+     * not exist, or is not an object, returns the specified default value.
      *
      * @param {Object|Undefined} options
-     *  An object containing some attribute values. May be undefined.
+     *  An object containing some properties. May be undefined.
      *
      * @param {String} name
-     *  The name of the attribute to be returned.
+     *  The name of the property to be returned.
      *
      * @param [def]
      *  The default value returned when the options parameter is not an object,
-     *  or if it does not contain the specified attribute, or if the attribute
-     *  is not an object. May be any value (not only objects).
+     *  or if it does not contain the specified property, or if the property is
+     *  not an object. May be any value (not only objects).
      *
      * @returns
-     *  The value of the specified attribute, or the default value.
+     *  The value of the specified property, or the default value.
      */
     Utils.getObjectOption = function (options, name, def) {
         var value = Utils.getOption(options, name);
@@ -1029,22 +1031,22 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
-     * Extracts a function from the passed object. If the attribute does not
+     * Extracts a function from the passed object. If the property does not
      * exist, or is not a function, returns the specified default value.
      *
      * @param {Object|Undefined} options
-     *  An object containing some attribute values. May be undefined.
+     *  An object containing some properties. May be undefined.
      *
      * @param {String} name
-     *  The name of the attribute to be returned.
+     *  The name of the property to be returned.
      *
      * @param [def]
      *  The default value returned when the options parameter is not an object,
-     *  or if it does not contain the specified attribute, or if the attribute
-     *  is not an object. May be any value (not only functions).
+     *  or if it does not contain the specified property, or if the property is
+     *  not an object. May be any value (not only functions).
      *
      * @returns
-     *  The value of the specified attribute, or the default value.
+     *  The value of the specified property, or the default value.
      */
     Utils.getFunctionOption = function (options, name, def) {
         var value = Utils.getOption(options, name);
@@ -1052,26 +1054,26 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
-     * Extracts a array from the passed object. If the attribute does not
-     * exist, or is not an array, returns the specified default value.
+     * Extracts a array from the passed object. If the property does not exist,
+     * or is not an array, returns the specified default value.
      *
      * @param {Object|Undefined} options
-     *  An object containing some attribute values. May be undefined.
+     *  An object containing some properties. May be undefined.
      *
      * @param {String} name
-     *  The name of the attribute to be returned.
+     *  The name of the property to be returned.
      *
      * @param [def]
      *  The default value returned when the options parameter is not an object,
-     *  or if it does not contain the specified attribute, or if the attribute
-     *  is not an array. May be any value.
+     *  or if it does not contain the specified property, or if the property is
+     *  not an array. May be any value.
      *
      * @param {Boolean} [nonEmpty=false]
      *  If set to true, only non-empty arrays will be returned from the options
      *  object. Empty arrays will be replaced with the specified default value.
      *
      * @returns
-     *  The value of the specified attribute, or the default value.
+     *  The value of the specified property, or the default value.
      */
     Utils.getArrayOption = function (options, name, def, nonEmpty) {
         var value = Utils.getOption(options, name);
@@ -1086,11 +1088,11 @@ define.async('io.ox/office/tk/utils',
      * objects {a:{b:1}} and {a:{c:2}} will result in {a:{b:1,c:2}}.
      *
      * @param {Object} [...]
-     *  Other objects whose attributes will be inserted into the former object.
-     *  Will overwrite existing attributes in the clone of the passed object.
+     *  Other objects whose properties will be inserted into the former object.
+     *  Will overwrite existing properties in the clone of the passed object.
      *
      * @returns {Object}
-     *  A new clone of the passed object, extended by the new attributes.
+     *  A new clone of the passed object, extended by the new properties.
      */
     Utils.extendOptions = function () {
 
@@ -1254,7 +1256,7 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
-     * Returns an integer attribute of the passed element.
+     * Returns an integer attribute value of the passed element.
      *
      * @param {HTMLElement|jQuery} node
      *  The DOM element whose attribute will be returned. If this object is a
@@ -2719,7 +2721,7 @@ define.async('io.ox/office/tk/utils',
      *  object is a jQuery collection, used the first DOM node it contains.
      *
      * @returns {Object}
-     *  An object with the attributes 'start' and 'end' containing the start
+     *  An object with the properties 'start' and 'end' containing the start
      *  and end character offset of the selection in the text field.
      */
     Utils.getTextFieldSelection = function (textField) {
