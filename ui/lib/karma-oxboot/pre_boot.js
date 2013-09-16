@@ -101,5 +101,17 @@ if (sinon) {
                                 JSON.stringify({data: {secretWorks: true}})
                             ]
                           );
+    //faking a few folders
+    fakeServer.respondWith('GET', /api\/folders\?action=get/, function (xhr) {
+        var fakeFolder = {'id=1': {
+                id: '1',
+                folder_id: '0'
+            }},
+            id = xhr.url.split('&').filter(function (str) {
+                return str.indexOf('id=') === 0;
+            })[0];
+
+        xhr.respond(200, {'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify({data: fakeFolder[id]}));
+    });
     fakeServer.autoRespond = true;
 }
