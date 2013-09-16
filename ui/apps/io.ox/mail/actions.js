@@ -80,7 +80,7 @@ define('io.ox/mail/actions',
                         .show();
                 });
             } else {
-                api.remove(list, { hurz: true }).fail(function (e) {
+                api.remove(list).fail(function (e) {
                     // mail quota exceeded?
                     if (e.code === 'MSG-0039') {
                         require(['io.ox/core/tk/dialogs'], function (dialogs) {

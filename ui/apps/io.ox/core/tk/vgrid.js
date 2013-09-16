@@ -761,9 +761,11 @@ define('io.ox/core/tk/vgrid',
 
                 if (!all.length) return;
 
-                var ids = getIds();
+                var list = self.selection.get();
+                var ids = list.length ? _(list).map(_.cid) : getIds();
 
                 if (ids.length) {
+
                     if (self.selection.contains(ids)) {
                         // if ids are given and still part of the selection
                         // we can restore that state
@@ -929,7 +931,7 @@ define('io.ox/core/tk/vgrid',
                 _.url.hash('id', id !== '' ? id : null);
                 // propagate DOM-based select event?
                 if (list.length >= 1) {
-                    node.trigger('select', list);
+                    node.trigger('select', [list]);
                 }
             })
             .on('select:first', function () {
