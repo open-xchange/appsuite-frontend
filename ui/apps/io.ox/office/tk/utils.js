@@ -319,6 +319,57 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
+     * Calls the passed iterator function for all elements of the passed array.
+     *
+     * @param {Array} array
+     *  The array whose elements will be iterated.
+     *
+     * @param {Function} iterator
+     *  The iterator function invoked for all elements in the array. Receives
+     *  the following parameters:
+     *  (1) {Any} element
+     *      The current array element.
+     *  (2) {Number} index
+     *      The index of the array element.
+     *  (3) {Array} array
+     *      The array passed to this method.
+     *  If the iterator returns the Utils.BREAK object, the iteration process
+     *  will be stopped immediately.
+     *
+     * @param {Object} [options]
+     *  A map with options controlling the behavior of this method. The
+     *  following options are supported:
+     *  @param {Object} [options.context]
+     *      If specified, the iterator will be called with this context (the
+     *      symbol 'this' will be bound to the context inside the iterator
+     *      function).
+     *  @param {Boolean} [options.reverse=false]
+     *      If set to true, the elements will be visited in reversed order.
+     *
+     * @returns {Utils.BREAK|Undefined}
+     *  A reference to the Utils.BREAK object, if the iterator has returned
+     *  Utils.BREAK to stop the iteration process, otherwise undefined.
+     */
+    Utils.iterateArray = function (array, iterator, options) {
+
+        var context = Utils.getOption(options, 'context');
+
+        if (Utils.getBooleanOption(options, 'reverse', false)) {
+            for (var index = array.length - 1; index >= 0; index -= 1) {
+                if (iterator.call(context, array[index], index, array) === Utils.BREAK) {
+                    return Utils.BREAK;
+                }
+            }
+        } else {
+            for (var index = 0; index < array.length; index += 1) {
+                if (iterator.call(context, array[index], index, array) === Utils.BREAK) {
+                    return Utils.BREAK;
+                }
+            }
+        }
+    };
+
+    /**
      * Finds the last element in the passed array, that passed a truth test.
      *
      * @param {Array} array
