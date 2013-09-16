@@ -217,7 +217,7 @@
         cursor: pointer;
     }
 
-    i[class^="icon-"] {
+    i[class^="icon-"].launcher-icon {
         color: @topbarIconColor;
         font-size: 20px;
         text-decoration: none;
@@ -271,6 +271,34 @@
 
     .icon-refresh.icon-spin {
         color: #fff;
+    }
+    
+    .launcher a.notifications-icon {
+
+        height: 40px;
+        display: inline-block;
+
+        .badge {
+            color: #aaa;
+            background-color: @notificationIconBackground;
+        }
+
+        .badge.active {
+            color: white;
+            background-color: @notificationIconBackgroundActive;
+        }
+
+        &:focus .badge, &:active .badge {
+            color: white;
+            background-color: darken(@linkColor, 10%);
+        }
+
+        .badge i {
+            /* avoid flicker */
+            width: 8px;
+            text-align: center;
+            display: inline-block;
+        }
     }
 
     .icon-refresh.icon-spin-paused {
