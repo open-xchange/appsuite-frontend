@@ -30,6 +30,7 @@ console.info('Node version:', process.version);
 console.info("Build path: " + utils.builddir);
 
 var pkgName = process.env['package'];
+var localConfigPath = path.join(process.cwd(), './local.conf.js');
 var ver = process.env.version;
 var rev = process.env.revision;
 
@@ -892,7 +893,7 @@ function checkExtensions(name, deps, f) {
 // start appserver
 desc('Start the appserver');
 task('appserver', [], function () {
-    var customConfig = path.existsSync('./local.conf.js') ? require('./local.conf.js').appserver : null,
+    var customConfig = path.existsSync(localConfigPath) ? require(localConfigPath).appserver : null,
         server = require('./lib/appserver/server'),
         config = _.extend({
             prefixes: [utils.builddir + '/apps'],
@@ -908,7 +909,7 @@ desc('Do a single run of all tests');
 function setupKarma(options) {
     var karma = require("karma"),
         configFile = nextGen(karma) ? path.resolve('./karma.conf.js') : null,
-        customConfig = path.existsSync('./local.conf.js') ? require('./local.conf.js').karma : null;
+        customConfig = path.existsSync(localConfigPath) ? require(localConfigPath).karma : null;
 
     console.log('Karma version:', karma.VERSION, nextGen(karma) ? '(up-to-date)' : '(deprecated/broken!)');
     function nextGen(karma) {
