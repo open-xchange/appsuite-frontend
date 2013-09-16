@@ -130,6 +130,12 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         if (api.debug) {
             console.log("->", stanzas);
         }
+        var timeout = 1000;
+        _(stanzas).each(function (stanza) {
+            if (stanza.timeout) {
+                timeout = Math.max(stanza.timeout, timeout);
+            }
+        });
         transmitting = true;
         http.PUT({
             module: 'rt',
@@ -138,7 +144,8 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 resource: tabId
             },
             data: stanzas,
-            noRetry: true
+            noRetry: true//,
+            //timeout: timeout
         }).done(function (resp) {
             transmitting = false;
             handleResponse(resp);
@@ -403,11 +410,11 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     }
 
     function handleError(error) {
-        if (error.code === "RT_STANZA-1006" || error.code === 'RT_STANZA-0006') {
+        if (error.code === "RT_STANZA-1006" || error.code === 'RT_STANZA-0006' || error.code === 1006 || error.code === 6) {
             resetSequence(0);
         }
 
-        if (error.code === "RT_STANZA-1007") {
+        if (error.code === "RT_STANZA-1007" || error.code === 1007) {
             enroled = false;
             enrol();
         }
