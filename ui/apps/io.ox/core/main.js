@@ -24,10 +24,11 @@ define('io.ox/core/main',
      'io.ox/core/upsell',
      'io.ox/core/capabilities',
      'io.ox/core/ping',
+     'io.ox/tours/main',
      'settings!io.ox/core',
      'gettext!io.ox/core',
      'io.ox/core/relogin',
-     'io.ox/core/bootstrap/basics'], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, ping, settings, gt) {
+     'io.ox/core/bootstrap/basics'], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, ping, tours, settings, gt) {
 
     "use strict";
 
@@ -607,6 +608,44 @@ define('io.ox/core/main',
         });
 
         ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'intro-tour',
+            index: 280,
+            draw: function () { //replaced by module
+                var node = this;
+
+                node.append(
+                    $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
+                    $('<li>', {'class': 'io-ox-specificHelp'}).append(
+                        $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(gt('Tour: Coming from OX6'))
+                        .on('click', function (e) {
+                            tours.runTour('io.ox/intro');
+                            e.preventDefault();
+                        })
+                    )
+                );
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'app-specific-tour',
+            index: 281,
+            draw: function () { //replaced by module
+                var node = this;
+                node.append(
+                    $('<li>', {'class': 'io-ox-specificHelp'}).append(
+                        $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(gt('Guided tour for this module'))
+                        .on('click', function (e) {
+                            var currentApp = ox.ui.App.getCurrentApp(),
+                                currentType = currentApp.attributes.name;
+                            tours.runTour(currentType);
+                            e.preventDefault();
+                        })
+                    )
+                );
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'settings',
             index: 300,
             draw: function () {
@@ -635,6 +674,7 @@ define('io.ox/core/main',
                         fullscreenButton.text(gt('Fullscreen'));
                     };
                     this.append(
+                        $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
                         $('<li>').append(
                             fullscreenButton = $('<a href="#" data-action="fullscreen" role="menuitem" tabindex="1">').text(gt('Fullscreen'))
                         )

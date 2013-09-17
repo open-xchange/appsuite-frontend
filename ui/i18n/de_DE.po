@@ -2818,7 +2818,7 @@ msgstr "Bitte aktualisieren Sie Ihren Browser."
 
 #: apps/io.ox/core/login-i18n.js:38
 msgid "For best results, please use "
-msgstr "Für beste Ergebniss, verwenden Sie bitte "
+msgstr "Für beste Ergebnisse, verwenden Sie bitte "
 
 #: apps/io.ox/core/login-i18n.js:39
 msgid "You have been automatically logged out"

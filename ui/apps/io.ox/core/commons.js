@@ -546,7 +546,7 @@ define('io.ox/core/commons',
     $.createViewContainer = function (baton, api, getter) {
 
         var data = baton instanceof ext.Baton ? baton.data : baton,
-            cid, ecid,
+            cid, ecid, pattern,
             node = $('<div>').attr('data-cid', _([].concat(data)).map(_.cid).join(',')),
 
             update = function (e, changed) {
@@ -610,6 +610,12 @@ define('io.ox/core/commons',
             api.on('delete:' + ecid, remove);
             api.on('update:' + ecid, update);
             api.on('move:' + ecid, move);
+            api.on('create', update);
+            //calendar: update element of a series if master changes
+            if (data.recurrence_position && data.recurrence_position > 0 && (data.recurrence_id === data.id)) {
+                pattern = (data.folder || data.folder_id) + '.' + data.id + '.';
+                api.on('update:series:' + _.ecid(pattern), update);
+            }
         }
 
         return node.one('dispose', function () {
@@ -624,8 +630,11 @@ define('io.ox/core/commons',
                     api.off('delete:' + ecid, remove);
                     api.off('update:' + ecid, update);
                     api.off('move:' + ecid, move);
+                    api.off('create', update);
+                    if (pattern)
+                        api.off('update:series:' + _.ecid(pattern));
                 }
-                api = update = data = node = getter = null;
+                api = update = data = node = getter = cid = ecid = pattern = null;
             });
     };
 
