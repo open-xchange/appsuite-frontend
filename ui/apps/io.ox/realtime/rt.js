@@ -53,6 +53,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
 
     var lastDelivery = _.now();
+    var lastCheck = _.now();
     var ticks = 0;
 
     var actions = {};
@@ -174,8 +175,10 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
     // Periodically poll
     actions.poll = function () {
+        var lastFetchInterval = _.now() - lastCheck;
         var interval = _.now() - lastDelivery;
-        if (interval >= intervals[mode] && !purging) {
+        if (lastFetchInterval >= intervals[mode] && !purging) {
+            lastCheck = _.now();
             http.GET({
                 module: 'rt',
                 params: {
@@ -428,7 +431,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             });
         }
 
-        if (resp.stanzas) {
+        if (resp.stanzas && !_.isEmpty(resp.stanzas)) {
             lastDelivery = _.now();
             _(resp.stanzas).each(function (s) {
                 received(new RealtimeStanza(s));
