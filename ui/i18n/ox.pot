@@ -182,7 +182,7 @@ msgid "No subject"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:50
-#: apps/io.ox/mail/main.js:320 apps/io.ox/mail/main.js:823
+#: apps/io.ox/mail/main.js:320 apps/io.ox/mail/main.js:824
 #: apps/io.ox/mail/print.js:69 apps/io.ox/mail/view-detail.js:1190
 #: apps/io.ox/mail/write/view-main.js:506
 msgid "To"
@@ -346,8 +346,8 @@ msgstr ""
 #: apps/io.ox/core/permissions/permissions.js:394
 #: apps/io.ox/core/tk/dialogs.js:522 apps/io.ox/core/tk/folderviews.js:755
 #: apps/io.ox/editor/main.js:125 apps/io.ox/editor/main.js:141
-#: apps/io.ox/files/actions.js:534 apps/io.ox/files/views/create.js:134
-#: apps/io.ox/files/views/create.js:138 apps/io.ox/mail/accounts/settings.js:42
+#: apps/io.ox/files/actions.js:534 apps/io.ox/files/views/create.js:138
+#: apps/io.ox/mail/accounts/settings.js:42
 #: apps/io.ox/mail/mailfilter/settings/filter.js:81
 #: apps/io.ox/mail/settings/signatures/register.js:69
 #: apps/io.ox/mail/write/view-main.js:58 apps/io.ox/oauth/settings.js:80
@@ -404,7 +404,6 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. Really delete portal widget - in contrast to "just disable"
@@ -712,16 +711,14 @@ msgstr ""
 #: apps/io.ox/core/main.js:368 apps/io.ox/core/permissions/permissions.js:353
 #: apps/io.ox/core/permissions/permissions.js:394 apps/io.ox/core/print.js:108
 #: apps/io.ox/core/pubsub/publications.js:95
-#: apps/io.ox/core/pubsub/subscriptions.js:47 apps/io.ox/core/relogin.js:51
-#: apps/io.ox/core/relogin.js:55 apps/io.ox/core/tk/attachments.js:577
+#: apps/io.ox/core/pubsub/subscriptions.js:47 apps/io.ox/core/relogin.js:55
 #: apps/io.ox/core/tk/attachments.js:578 apps/io.ox/core/tk/folderviews.js:613
 #: apps/io.ox/core/tk/folderviews.js:640 apps/io.ox/core/tk/folderviews.js:704
 #: apps/io.ox/core/tk/folderviews.js:756 apps/io.ox/core/tk/mobiscroll.js:34
 #: apps/io.ox/core/upsell.js:34 apps/io.ox/editor/main.js:291
 #: apps/io.ox/files/actions.js:322 apps/io.ox/files/actions.js:480
 #: apps/io.ox/files/actions.js:535 apps/io.ox/files/actions.js:584
-#: apps/io.ox/files/actions.js:678 apps/io.ox/files/views/create.js:135
-#: apps/io.ox/files/views/create.js:139
+#: apps/io.ox/files/actions.js:678 apps/io.ox/files/views/create.js:139
 #: apps/io.ox/keychain/secretRecoveryDialog.js:33
 #: apps/io.ox/mail/accounts/settings.js:43
 #: apps/io.ox/mail/accounts/settings.js:255
@@ -753,7 +750,7 @@ msgid "Hide"
 msgstr ""
 
 #: apps/io.ox/mail/actions.js:903 apps/io.ox/mail/main.js:287
-#: apps/io.ox/mail/main.js:320 apps/io.ox/mail/main.js:823
+#: apps/io.ox/mail/main.js:320 apps/io.ox/mail/main.js:824
 #: apps/io.ox/mail/vacationnotice/settings/model.js:137
 #: apps/io.ox/mail/write/view-main.js:265
 msgid "From"
@@ -850,11 +847,10 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/template.js:119 apps/io.ox/mail/actions.js:894
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:48
-#: apps/io.ox/mail/main.js:289 apps/io.ox/mail/main.js:823
+#: apps/io.ox/mail/main.js:289 apps/io.ox/mail/main.js:824
 #: apps/io.ox/mail/vacationnotice/settings/model.js:132
 #: apps/io.ox/mail/write/view-main.js:837
-#: apps/io.ox/tasks/edit/view-template.js:98 apps/io.ox/tasks/main.js:313
-#: apps/io.ox/tasks/main.js:318
+#: apps/io.ox/tasks/edit/view-template.js:98 apps/io.ox/tasks/main.js:318
 msgid "Subject"
 msgstr ""
 
@@ -947,15 +943,15 @@ msgid "Mail has been imported"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
-#: apps/io.ox/mail/main.js:823
+#: apps/io.ox/mail/main.js:824
 msgid "CC"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:823
+#: apps/io.ox/mail/main.js:824
 msgid "Mail text"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:875
+#: apps/io.ox/mail/main.js:876
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 
@@ -1383,8 +1379,7 @@ msgstr ""
 msgid "Slideshow"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:784 apps/io.ox/core/tk/attachments.js:415
-#: apps/io.ox/core/tk/attachments.js:416
+#: apps/io.ox/contacts/actions.js:784 apps/io.ox/core/tk/attachments.js:416
 #: apps/io.ox/core/tk/attachmentsUtil.js:91 apps/io.ox/mail/actions.js:1157
 #: apps/io.ox/tasks/actions.js:593
 msgid "Preview"
@@ -1395,8 +1390,7 @@ msgstr ""
 msgid "Open in browser"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:796 apps/io.ox/contacts/actions.js:798
-#: apps/io.ox/core/tk/attachments.js:429 apps/io.ox/core/tk/attachments.js:430
+#: apps/io.ox/contacts/actions.js:798 apps/io.ox/core/tk/attachments.js:430
 #: apps/io.ox/files/actions.js:782 apps/io.ox/files/actions.js:919
 #: apps/io.ox/mail/actions.js:1171
 #: apps/io.ox/office/framework/app/toolbaractions.js:123
@@ -1487,8 +1481,8 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#: apps/io.ox/core/login-i18n.js:21 apps/io.ox/core/relogin.js:46
-#: apps/io.ox/core/relogin.js:50 apps/io.ox/mail/accounts/view-form.js:38
+#: apps/io.ox/core/login-i18n.js:21 apps/io.ox/core/relogin.js:50
+#: apps/io.ox/mail/accounts/view-form.js:38
 #: apps/io.ox/mail/accounts/view-form.js:48
 msgid "Password"
 msgstr ""
@@ -1803,7 +1797,7 @@ msgid "Rename"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/template.js:203 apps/io.ox/files/actions.js:530
-#: apps/io.ox/files/views/create.js:181 apps/io.ox/files/views/create.js:185
+#: apps/io.ox/files/views/create.js:185
 #: apps/io.ox/tasks/edit/view-template.js:111
 #: apps/plugins/portal/flickr/register.js:221
 #: apps/plugins/portal/rss/register.js:170
@@ -2025,7 +2019,6 @@ msgstr ""
 
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
-#. #-#-#-#-#-#-#-#-#-#
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/calendar/month/perspective.js:130
 #: apps/io.ox/calendar/settings/pane.js:100
@@ -2067,7 +2060,6 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. folder permissions - Is Admin? NO
@@ -3524,7 +3516,6 @@ msgstr ""
 
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
-#. #-#-#-#-#-#-#-#-#-#
 #. Use singular in this context
 #: apps/io.ox/calendar/actions.js:136
 #: apps/io.ox/calendar/week/perspective.js:127
@@ -4623,8 +4614,7 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: apps/io.ox/core/commons.js:645 apps/io.ox/core/commons.js:647
-#: apps/io.ox/core/tk/autocomplete.js:236
+#: apps/io.ox/core/commons.js:645 apps/io.ox/core/tk/autocomplete.js:236
 msgid "Retry"
 msgstr ""
 
@@ -4646,11 +4636,11 @@ msgstr ""
 msgid "Mail was not imported, only .eml files are supported."
 msgstr ""
 
-#: apps/io.ox/core/tk/attachments.js:300 apps/io.ox/core/tk/upload.js:242
+#: apps/io.ox/core/tk/attachments.js:300 apps/io.ox/core/tk/upload.js:243
 msgid "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file size of %2$s"
 msgstr ""
 
-#: apps/io.ox/core/tk/attachments.js:306 apps/io.ox/core/tk/upload.js:249
+#: apps/io.ox/core/tk/attachments.js:306 apps/io.ox/core/tk/upload.js:250
 msgid "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of %2$s"
 msgstr ""
 
@@ -4916,13 +4906,11 @@ msgstr[1] ""
 msgid "Your IP address has changed"
 msgstr ""
 
-#: apps/io.ox/core/main.js:783 apps/io.ox/core/relogin.js:42
-#: apps/io.ox/core/relogin.js:45
+#: apps/io.ox/core/main.js:783 apps/io.ox/core/relogin.js:45
 msgid "Your session is expired"
 msgstr ""
 
-#: apps/io.ox/core/main.js:784 apps/io.ox/core/relogin.js:43
-#: apps/io.ox/core/relogin.js:47
+#: apps/io.ox/core/main.js:784 apps/io.ox/core/relogin.js:47
 msgid "Please sign in again to continue"
 msgstr ""
 
