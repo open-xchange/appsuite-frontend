@@ -720,7 +720,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
             var obj = {};
             obj.id = model.attributes.id || id;
             obj.folder_id = model.attributes.folder_id || model.attributes.folder;
-            api.removeFromCache(_.ecid(obj)).done(function () {
+            api.removeFromCache(_.cid(obj)).done(function () {
                 api.removeFromUploadList(_.ecid(obj));
             });
         }

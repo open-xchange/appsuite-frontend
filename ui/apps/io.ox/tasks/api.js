@@ -330,7 +330,7 @@ define('io.ox/tasks/api',
             });
         }).then(function (cache) {
             if (attachmentHandlingNeeded) {
-                api.addToUploadList(task.folder_id + '.' + response.id);//to make the detailview show the busy animation
+                api.addToUploadList(_.ecid(task));//to make the detailview show the busy animation
             }
             checkForNotifications([{id: response.id, folder_id: task.folder_id}], task);
             api.trigger('create', task);

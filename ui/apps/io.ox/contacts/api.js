@@ -280,7 +280,7 @@ define('io.ox/contacts/api',
                 )
                 .then(function () {
                     if (attachmentHandlingNeeded) {
-                        api.addToUploadList(d.folder_id + '.' + d.id); // to make the detailview show the busy animation
+                        api.addToUploadList(_.ecid(d)); // to make the detailview show the busy animation
                     }
                     api.trigger('create', { id: d.id, folder: d.folder_id });
                     api.trigger('refresh.all');
@@ -306,7 +306,7 @@ define('io.ox/contacts/api',
         if (_.isEmpty(o.data)) {
             if (attachmentHandlingNeeded) {
                 return $.when().pipe(function () {
-                    api.addToUploadList(o.folder + '.' + o.id);//to make the detailview show the busy animation
+                    api.addToUploadList(_.ecid(o));//to make the detailview show the busy animation
                     api.trigger('update:' + _.ecid(o));
                     return { folder_id: o.folder, id: o.id };
                 });
