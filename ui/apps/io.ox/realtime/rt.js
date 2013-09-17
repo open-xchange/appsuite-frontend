@@ -555,6 +555,12 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             return handleResponse(resp);
         }).fail(function (resp) {
             handleError(resp);
+            // Send a dummy message to consume the sequence number
+            api.send({
+                to: "devnull://sequenceDiscard",
+                seq: options.seq,
+                element: 'message'
+            });
         });
     };
 
@@ -562,8 +568,10 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         if (api.debug) {
             console.log("Send", options);
         }
-        options.seq = seq;
-        seq++;
+        if (!options.seq) {
+            options.seq = seq;
+            seq++;
+        }
         return api.sendWithoutSequence(options);
     };
 
