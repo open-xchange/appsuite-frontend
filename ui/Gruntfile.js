@@ -17,14 +17,31 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         watch: {
-            files: [],
-            tasks: []
+            all: {
+                files: ['<%= jshint.all.src %>'],
+                tasks: ['jshint'],
+                options: { nospawn: true }
+            }
         },
         clean: ['build/'],
+        jshint: {
+            all: {
+                src: ['Gruntfile.js', 'apps/**/*.js'],
+                options: {
+                    jshintrc: '.jshintrc',
+                    ignores: ['apps/io.ox/core/date.js'] // date.js has some funky include stuff we have to figure out
+                }
+            }
+        }
     });
 
+    grunt.event.on('watch', function (action, filepath) {
+        grunt.config(['jshint', 'all', 'src'], [filepath]);
+    });
+
+    grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
-    grunt.registerTask('default', []);
+    grunt.registerTask('default', ['jshint']);
 };
