@@ -33,9 +33,13 @@ module.exports = function (grunt) {
                 files: ['apps/themes/style.less'],
                 tasks: ['newer:recess:main']
             },
+            karma: {
+                files: ['spec/**/*_spec.js', 'build/core'],
+                tasks: ['newer:concat:specs', 'karma:unit:run']
+            },
             all: {
                 files: ['<%= jshint.all.src %>'],
-                tasks: ['newer:jshint:all'],
+                tasks: ['default'],
                 options: { nospawn: true }
             }
         },
@@ -249,6 +253,15 @@ module.exports = function (grunt) {
                     }
                 ]
             },
+            specs: {
+                files: [
+                    {
+                        src: ['spec/**/*.js'],
+                        expand: true,
+                        filter: 'isFile',
+                        dest: 'build/'
+                    }
+                ]
             }
         },
         uglify: {
@@ -278,6 +291,22 @@ module.exports = function (grunt) {
                     expand: true
                 }]
             }
+        },
+        karma: {
+            options: {
+                configFile: 'karma.conf.js',
+                builddir: 'build/'
+            },
+            unit: {
+                background: true,
+                autoWatch: false
+            },
+            //continuous integration mode: run tests once in PhantomJS browser.
+            continuous: {
+                singleRun: true,
+                browsers: ['PhantomJS'],
+                reporters: ['junit']
+            }
         }
     });
 
@@ -298,6 +327,10 @@ module.exports = function (grunt) {
 
     // Custom tasks
     grunt.registerTask('force_update', ['assemble:base', 'assemble:appcache']);
+
+    // Testing stuff
+    grunt.loadNpmTasks('grunt-karma');
+    grunt.registerTask('test', ['default', 'karma:unit:start', 'watch']);
 
     grunt.registerTask('default', ['lint', 'newer:assemble', 'newer:concat', 'newer:less', 'force_update', 'newer:uglify']);
 };
