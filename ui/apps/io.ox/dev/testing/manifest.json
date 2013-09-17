@@ -1,9 +1,0 @@
-{
-    title: "UI Test Suite",
-    company: "CompuGlobalHyperMegaNet",
-    icon: "default.png",
-    category: "Dev",
-    settings: false,
-    requires: "dev",
-    refreshable: true
-}
