@@ -39,6 +39,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var enroled = false;
 
     var INFINITY = 10;
+    var TIMEOUT = 2 * 60 * 1000;
 
     var mode = 'lazy';
     var intervals = {
@@ -131,12 +132,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         if (api.debug) {
             console.log("->", stanzas);
         }
-        var timeout = 1000;
-        _(stanzas).each(function (stanza) {
-            if (stanza.timeout) {
-                timeout = Math.max(stanza.timeout, timeout);
-            }
-        });
+        
         transmitting = true;
         http.PUT({
             module: 'rt',
@@ -145,8 +141,8 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 resource: tabId
             },
             data: stanzas,
-            noRetry: true//,
-            //timeout: timeout
+            noRetry: true,
+            timeout: TIMEOUT
         }).done(function (resp) {
             transmitting = false;
             handleResponse(resp);
@@ -184,7 +180,8 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 params: {
                     action: 'poll',
                     resource: tabId
-                }
+                },
+                timeout: TIMEOUT
             }).done(handleResponse).fail(handleError);
         }
 
@@ -324,6 +321,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 action: 'send',
                 resource: tabId
             },
+            timeout: TIMEOUT,
             data: {type: 'nextSequence', seq: newSequence}
         }).done(function () {
             rejectAll = false;
@@ -460,7 +458,8 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 params: {
                     action: 'enrol',
                     resource: tabId
-                }
+                },
+                timeout: TIMEOUT
             }).done(function (resp) {
                 enroled = true;
                 handleResponse(resp);
@@ -526,6 +525,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 action: 'send',
                 resource: tabId
             },
+            timeout: TIMEOUT,
             data: {type: 'ack', seq: seqExpression}
         }).done(handleResponse).fail(handleError);
         ackBuffer = {};
@@ -553,6 +553,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 action: 'query',
                 resource: tabId
             },
+            timeout: TIMEOUT,
             data: options
         }).pipe(function (resp) {
             return handleResponse(resp);
