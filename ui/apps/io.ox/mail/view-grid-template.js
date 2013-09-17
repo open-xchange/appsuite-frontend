@@ -86,7 +86,7 @@ define('io.ox/mail/view-grid-template',
             },
             set: function (data, fields, index) {
                 fields.priority.empty().append(util.getPriority(data));
-                var subject = $.trim(data.subject);
+                var subject = _.escape($.trim(data.subject));
                 if (subject !== '') {
                     fields.subject.removeClass('empty').empty().html(
                         emoji.processEmoji(subject)

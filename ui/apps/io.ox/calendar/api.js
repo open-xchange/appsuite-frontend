@@ -31,6 +31,23 @@ define('io.ox/calendar/api',
         DAY = HOUR * 24;
     // object to store appointments, that have attachments uploading atm
     var uploadInProgress = {},
+        //grepRemove equivalent
+        grepRemove = function (pattern, cache) {
+            var keys = Object.keys(cache),
+                cache = cache || {};
+
+            if (typeof pattern === 'string') {
+                pattern = new RegExp(_.escapeRegExp(pattern));
+            }
+
+            if (_.isRegExp(pattern)) {
+                _.each(keys, function (key) {
+                    if (pattern.test(key)) {
+                        delete cache[key];
+                    }
+                });
+            }
+        },
 
         checkForNotification = function (obj, removeAction) {
             if (removeAction) {
@@ -204,7 +221,7 @@ define('io.ox/calendar/api',
          * @return {deferred} returns current appointment object
          */
         update: function (o) {
-            var folder_id = o.folder_id || o.folder,
+            var folder_id = o.folder_id || o.folder, idprefix,
                 key = folder_id + '.' + o.id + '.' + (o.recurrence_position || 0),
                 attachmentHandlingNeeded = o.tempAttachmentIndicator;
             delete o.tempAttachmentIndicator;
@@ -245,6 +262,12 @@ define('io.ox/calendar/api',
                             if (attachmentHandlingNeeded) {
                                 //to make the detailview show the busy animation
                                 api.addToUploadList(_.ecid(data));
+                            }
+                            //series master changed?
+                            if (data.recurrence_type > 0 && !data.recurrence_position) {
+                                //id without specified recurrence_position
+                                idprefix = (o.folder || o.folder_id) + '.' + o.id + '.';
+                                grepRemove(idprefix, get_cache);
                             }
                             api.trigger('update', data);
                             api.trigger('update:' + _.ecid(o), data);

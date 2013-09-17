@@ -319,39 +319,56 @@ define('io.ox/core/api/factory',
                 // be robust
                 ids = ids || [];
                 ids = _.isArray(ids) ? ids : [ids];
+
                 // find affected mails in simple cache
-                var hash = {}, folders = {}, getKey = cache.defaultKeyGenerator;
+                var hash = {},
+                    folders = {},
+                    getKey = cache.defaultKeyGenerator,
+                    defs;
+
                 _(ids).each(function (o) {
                     hash[getKey(o)] = folders[o.folder_id] = true;
                 });
-                // loop over each folder and look for items to remove
-                var defs = _(folders).map(function (value, folder_id) {
-                    // grep keys
-                    var cache = api.caches.all;
-                    return cache.grepKeys(folder_id + DELIM).pipe(function (keys) {
-                        // loop
-                        return $.when.apply($, _(keys).map(function (key) {
-                            // now get cache entry
-                            return cache.get(key).pipe(function (data) {
-                                if (data) {
-                                    if ('data' in data) {
-                                        data.data = api.localRemove(data.data, hash, getKey);
+
+                if (ids.length < 100) {
+                    // loop over each folder and look for items to remove
+                    defs = _(folders).map(function (value, folder_id) {
+                        // grep keys
+                        var cache = api.caches.all;
+                        return cache.grepKeys(folder_id + DELIM).pipe(function (keys) {
+                            // loop
+                            return $.when.apply($, _(keys).map(function (key) {
+                                // now get cache entry
+                                return cache.get(key).pipe(function (data) {
+                                    if (data) {
+                                        if ('data' in data) {
+                                            data.data = api.localRemove(data.data, hash, getKey);
+                                        } else {
+                                            data = api.localRemove(data, hash, getKey);
+                                        }
+                                        return cache.add(key, data);
                                     } else {
-                                        data = api.localRemove(data, hash, getKey);
+                                        return $.when();
                                     }
-                                    return cache.add(key, data);
-                                } else {
-                                    return $.when();
-                                }
-                            });
-                        }));
+                                });
+                            }));
+                        });
                     });
-                });
-                // remove from object caches
-                if (ids.length) {
-                    defs.push(api.caches.list.remove(ids));
-                    defs.push(api.caches.get.remove(ids));
+                    // remove from object caches
+                    if (ids.length) {
+                        defs.push(api.caches.list.remove(ids));
+                        defs.push(api.caches.get.remove(ids));
+                    }
+                } else {
+                    // clear allcache due to performace
+                    defs = [api.caches.all.clear()];
+                    // remove from object caches
+                    if (ids.length) {
+                        defs.push(api.caches.list.clear());
+                        defs.push(api.caches.get.clear());
+                    }
                 }
+
                 // reset trash?
                 if (api.resetTrashFolders) {
                     defs.push(api.resetTrashFolders());
