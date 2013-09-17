@@ -474,7 +474,7 @@ define('io.ox/core/tk/folderviews',
         Selection.extend(this, container, { dropzone: true, dropType: 'folder' }) // not this.container!
             .setMultiple(false)
             .setSerializer(function (obj) {
-                return String(obj.id);
+                return obj ? String(obj.id) : '';
             });
 
         // add event hub
