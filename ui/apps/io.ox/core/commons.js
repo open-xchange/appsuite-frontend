@@ -634,7 +634,7 @@ define('io.ox/core/commons',
                     if (pattern)
                         api.off('update:series:' + _.ecid(pattern));
                 }
-                api = update = data = node = getter = null;
+                api = update = data = node = getter = cid = ecid = pattern = null;
             });
     };
 
