@@ -303,6 +303,12 @@ define('io.ox/calendar/model',
                     var startDate = new date.Local(model.get('start_date')),
                         endDate = new date.Local(model.get('end_date') + 1);
 
+                    // if cache dates are unuseable
+                    if (_end - _start === api.DAY) {
+                        _start = defStart.getTime();
+                        _end = defStart.getTime() + date.HOUR;
+                    }
+
                     _start = new date.Local(_start);
                     _end = new date.Local(_end);
 

@@ -999,8 +999,8 @@ define('io.ox/backbone/forms',
                         this.nodes.timeField.hide();
                         this.nodes.timezoneField.hide();
                     } else {
-                        this.nodes.timeField.show();
-                        this.nodes.timezoneField.show();
+                        this.nodes.timeField.css('display', '');
+                        this.nodes.timezoneField.css('display', '');
                     }
                 }
             },
