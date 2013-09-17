@@ -666,7 +666,7 @@ define('io.ox/core/tk/selection',
                 hash[cid] = node;
             });
 
-            _(_.isArray(list) ? list : [list]).each(function (elem) {
+            _(!list || _.isArray(list) ? list : [list]).each(function (elem) {
                 var cid = self.serialize(elem), item;
                 // existing node?
                 if (cid in hash) {
