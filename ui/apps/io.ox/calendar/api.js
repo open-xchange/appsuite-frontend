@@ -268,6 +268,7 @@ define('io.ox/calendar/api',
                                 //id without specified recurrence_position
                                 pattern = (o.folder || o.folder_id) + '.' + o.id + '.';
                                 grepRemove(pattern, get_cache);
+                                api.trigger('update:series:' + _.ecid(pattern), data);
                             }
                             api.trigger('update', data);
                             api.trigger('update:' + _.ecid(o), data);
