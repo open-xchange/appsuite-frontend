@@ -221,7 +221,7 @@ define('io.ox/calendar/api',
          * @return {deferred} returns current appointment object
          */
         update: function (o) {
-            var folder_id = o.folder_id || o.folder, idprefix,
+            var folder_id = o.folder_id || o.folder, pattern,
                 key = folder_id + '.' + o.id + '.' + (o.recurrence_position || 0),
                 attachmentHandlingNeeded = o.tempAttachmentIndicator;
             delete o.tempAttachmentIndicator;
@@ -266,8 +266,8 @@ define('io.ox/calendar/api',
                             //series master changed?
                             if (data.recurrence_type > 0 && !data.recurrence_position) {
                                 //id without specified recurrence_position
-                                idprefix = (o.folder || o.folder_id) + '.' + o.id + '.';
-                                grepRemove(idprefix, get_cache);
+                                pattern = (o.folder || o.folder_id) + '.' + o.id + '.';
+                                grepRemove(pattern, get_cache);
                             }
                             api.trigger('update', data);
                             api.trigger('update:' + _.ecid(o), data);
