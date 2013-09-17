@@ -512,7 +512,7 @@ define('io.ox/core/api/folder',
                     )
                     .pipe(function (getRequest) {
                         // return proper data
-                        var data = getRequest[0];
+                        var data = getRequest;
                         if (!options.silent) {
                             api.trigger('create', data);
                         }
