@@ -54,14 +54,17 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                         title: gt("Displaying the help or the settings"),
                         placement: "left",
                         target: function () { return $('.launcher .icon-cog:visible')[0]; },
-                        content: gt("To display the help or the settings, use the icons on the right side of the menu bar.")
+                        content: gt("To display the help or the settings, use the icons on the right side of the menu bar."),
+                        arrowOffset: 1,
+                        yOffset: -5
                     },
                     {
                         onShow: function () { notifications.showList(); },
                         title: gt("New objects icon"),
                         placement: "left",
                         target: function () { return $('#io-ox-notifications-icon:visible')[0]; },
-                        content: gt("The New objects icon shows the number of unread E-Mails or other notifications. If clicking the icon, the info area opens.")
+                        content: gt("The New objects icon shows the number of unread E-Mails or other notifications. If clicking the icon, the info area opens."),
+                        arrowOffset: -1
                     },
                     {
                         onShowDeferred: switchToAppFunc('io.ox/mail/main'),
@@ -75,7 +78,9 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                         title: gt("Creating new items"),
                         placement: "right",
                         target: function () { return $('.window-toolbar .icon-pencil:visible')[0]; },
-                        content: gt("To create a new E-Mail, click the Compose new E-Mail icon at the top.")
+                        content: gt("To create a new E-Mail, click the Compose new E-Mail icon at the top."),
+                        arrowOffset: 1,
+                        yOffset: -5
                     },
                     {
                         title: gt("Opening or closing the folder tree"),
@@ -111,7 +116,9 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                         title: gt("Further information"),
                         placement: "left",
                         target: function () { return $('.launcher .icon-cog:visible')[0]; },
-                        content: gt("Detailed guides for all modules are located in the help section of the settings.")
+                        content: gt("Detailed guides for all modules are located in the help section of the settings."),
+                        arrowOffset: 1,
+                        yOffset: -5
                     }]
                 },
                 'io.ox/portal' : {
@@ -161,6 +168,8 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                         placement: "right",
                         target: function () { return $('.window-toolbar .icon-pencil')[0]; },
                         content: gt("To compose a new E-Mail, click on the Compose new E-Mail icon at the top."),
+                        arrowOffset: 1,
+                        yOffset: -5,
                         multipage: true,
                         onNext: function () {
                             switchToApp('io.ox/mail/write/main', function () {
@@ -173,7 +182,9 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                         title: gt("Entering the recipient's name"),
                         placement: "right",
                         target: function () { return $('#writer_field_to:visible')[0]; },
-                        content: gt("Enter the recipient's name on the top left side. As soon as you typed the first letters, suggestions from the address books are displayed. To accept a recipient suggestion, click on it.")
+                        content: gt("Enter the recipient's name on the top left side. As soon as you typed the first letters, suggestions from the address books are displayed. To accept a recipient suggestion, click on it."),
+                        arrowOffset: 1,
+                        yOffset: -5
                     },
                     {
                         title: gt("Further functions"),
@@ -185,7 +196,9 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                         title: gt("Entering the subject"),
                         placement: "left",
                         target: function () { return $('.subject-wrapper:visible')[0]; },
-                        content: gt("Enter the subject on the right side of the recipient.")
+                        content: gt("Enter the subject on the right side of the recipient."),
+                        arrowOffset: 1,
+                        yOffset: -5
                     },
                     {
                         title: gt("Entering the E-Mail text"),
@@ -205,13 +218,16 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                                 window.hopscotch.nextStep();
                                 window.hopscotch.prevStep();
                             });
-                        }
+                        },
+                        arrowOffset: 1,
+                        yOffset: -5
                     },
                     {
                         title: gt("Sorting your E-Mails"),
                         placement: "top",
                         target: function () { return $('.vgrid-toolbar .icon-arrow-down:visible')[0]; },
-                        content: gt("The icon on the bottom right side helps you sort your E-Mails. Click the icon to get a list of sort criteria.")
+                        content: gt("The icon on the bottom right side helps you sort your E-Mails. Click the icon to get a list of sort criteria."),
+                        xOffset: -15
                     },
                     {
                         title: gt("Opening E-Mail threads"),
@@ -230,19 +246,24 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                         title: gt("Halo wiew"),
                         placement: "right",
                         target: function () { return $('.person-link.person-from:visible')[0]; },
-                        content: gt("To receive information about the sender or other recipients, open the Halo view by clicking on a name.")
+                        content: gt("To receive information about the sender or other recipients, open the Halo view by clicking on a name."),
+                        arrowOffset: 1,
+                        yOffset: -10
                     },
                     {
                         title: gt("Editing multiple E-Mails"),
                         placement: "top",
                         target: function () { return $('.vgrid-toolbar.bottom .icon-th-list:visible')[0]; },
-                        content: gt("In order to edit multiple E-Mails at once, enable the checkboxes on the left side of the E-Mails. If the checkboxes are not displayed, click the icon on the bottom left side.")
+                        content: gt("In order to edit multiple E-Mails at once, enable the checkboxes on the left side of the E-Mails. If the checkboxes are not displayed, click the icon on the bottom left side."),
+                        xOffset: -15
                     },
                     {
                         title: gt("Opening the E-Mail settings"),
                         placement: "left",
                         target: function () { return $('.launcher .icon-cog:visible')[0]; },
-                        content: gt("To open the E-Mail settings, click the Gearwheel icon on the upper right side of the menu bar. Select Settings. Click on E-Mail on the left side.")
+                        content: gt("To open the E-Mail settings, click the Gearwheel icon on the upper right side of the menu bar. Select Settings. Click on E-Mail on the left side."),
+                        arrowOffset: 1,
+                        yOffset: -5
                     }]
                 },
                 'io.ox/contacts': {
@@ -285,11 +306,6 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                                 window.hopscotch.nextStep();
                                 window.hopscotch.prevStep();
                             });
-                        },
-                        onShow: function () {
-                            if ($('.toolbar-button.dropdown.open .dropdown-menu').length === 1) {
-                                $('[data-ref="io.ox/calendar/links/toolbar/view"]').click();
-                            }
                         }
                     },
                     {
@@ -318,7 +334,7 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                     },
                     {
                         title: gt("Adding attachments"),
-                        placement: "right",
+                        placement: "top",
                         target: function () { return $('[data-extension-id="attachments_legend"]')[0]; },
                         content: gt("Further down you can add attachments to the appointment.")
                     },
@@ -337,13 +353,13 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                         }
                     },
                     {
-                        title: gt("Selecting a view"),
-                        placement: "right",
                         onShow: function () {
                             if ($('.toolbar-button.dropdown.open .dropdown-menu').length === 0) {
                                 $('[data-ref="io.ox/calendar/links/toolbar/view"]').click();
                             }
                         },
+                        title: gt("Selecting a view"),
+                        placement: "right",
                         target: function () { return $('[data-ref="io.ox/calendar/links/toolbar/view"]:visible')[0]; },
                         content: gt("To select one of the views like Day, Month or List, click the Eye icon in the toolbar.")
                     },
