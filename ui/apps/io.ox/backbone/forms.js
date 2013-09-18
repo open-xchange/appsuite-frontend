@@ -362,7 +362,7 @@ define('io.ox/backbone/forms',
                     .attr({ tabindex: 1 });
                 if (options.changeAppTitleOnKeyUp) {
                     this.nodes.inputField.on('keyup', $.proxy(function (e) {
-                        this.baton.app.setTitle(this.nodes.inputField.val());
+                        this.model.set(this.attribute, this.nodes.inputField.val());
                     }, this));
                 }
                 this.nodes.inputField.on('change', _.bind(this.updateModel, this));

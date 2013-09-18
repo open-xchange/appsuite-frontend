@@ -307,6 +307,13 @@ define('io.ox/calendar/edit/main',
                     self.setTitle(self.model.get('title'));
                 }
                 self.model.on('change:title', function (model, value, source) {
+                    if (!value) {
+                        if (model.get('id')) {
+                            value = gt('Edit appointment');
+                        } else {
+                            value = gt('Create appointment');
+                        }
+                    }
                     self.getWindow().setTitle(value);
                     self.setTitle(value);
                 });
