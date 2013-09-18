@@ -194,17 +194,17 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                     },
                     {
                         title: gt("Entering the subject"),
-                        placement: "left",
+                        placement: "bottom",
                         target: function () { return $('.subject-wrapper:visible')[0]; },
-                        content: gt("Enter the subject on the right side of the recipient."),
-                        arrowOffset: 1,
-                        yOffset: -5
+                        content: gt("Enter the subject on the right side of the recipient.")
                     },
                     {
                         title: gt("Entering the E-Mail text"),
-                        placement: "left",
+                        placement: "top",
                         target: function () { return $('.editor-outer-container:visible')[0]; },
-                        content: gt("Enter the E-Mail text below the subject. If the text format was set to HTMl in the options, you can format the E-Mail text. To do so select a text part and then click an icon in the formatting bar.")
+                        content: gt("Enter the E-Mail text below the subject. If the text format was set to HTMl in the options, you can format the E-Mail text. To do so select a text part and then click an icon in the formatting bar."),
+                        yOffset: 110,
+                        arrowOffset: 'center'
                     },
                     {
                         title: gt("Sending the E-Mail"),
