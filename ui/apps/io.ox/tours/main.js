@@ -121,6 +121,9 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                         yOffset: -5
                     }]
                 },
+
+
+
                 'io.ox/portal' : {
                     id: "Portal",
                     steps: [{
@@ -161,6 +164,9 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                         content: gt("To display a tile again or to display further information sources, click on Customize this page.")
                     }]
                 },
+
+
+
                 'io.ox/mail': {
                     id: "E-Mail",
                     steps: [{
@@ -266,13 +272,17 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                         yOffset: -5
                     }]
                 },
+
+
+
                 'io.ox/contacts': {
                     id: "Address book",
                     steps: [{
                         title: gt("Creating a new contact"),
                         placement: "right",
                         target: function () { return $('.window-toolbar .icon-plus:visible')[0]; },
-                        content: gt("To create a new contact, click the Add contact icon on top.")
+                        content: gt("To create a new contact, click the Add contact icon on top."),
+                        yOffset: -10
                     },
                     {
                         title: gt("Navigation bar"),
@@ -290,9 +300,13 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                         title: gt("Editing multiple contacts"),
                         placement: "top",
                         target: function () { return $('.vgrid-toolbar.bottom .icon-th-list:visible')[0]; },
-                        content: gt("To edit multiple contacts at once, enable the checkboxes on the left side of the contacts. If the checkboxes are not displayed, click the icon on the bottom left side.")
+                        content: gt("To edit multiple contacts at once, enable the checkboxes on the left side of the contacts. If the checkboxes are not displayed, click the icon on the bottom left side."),
+                        xOffset: -20
                     }]
                 },
+
+
+
                 'io.ox/calendar': {
                     id: "Calendar",
                     steps: [{
@@ -386,6 +400,9 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                         content: gt("The calendar views display a calendar sheet with the appointments.")
                     }]
                 },
+
+
+
                 'io.ox/files': {
                     id: "Files",
                     steps: [{
@@ -453,6 +470,9 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                         content: gt("To view further information, click on a file. The information are displayed in a pop-up window.")
                     }]
                 },
+
+
+
                 'io.ox/tasks': {
                     id: "Tasks",
                     steps: [{
@@ -470,7 +490,7 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                     },
                     {
                         title: gt("Entering the data"),
-                        placement: "left",
+                        placement: "bottom",
                         target: function () { return $('.io-ox-tasks-edit [data-extension-id="title"]')[0]; },
                         content: gt("Enter the subject, the start date, and a description.")
                     },
@@ -519,7 +539,7 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                     },
                     {
                         title: gt("Creating the task"),
-                        placement: "bottom",
+                        placement: "left",
                         target: function () { return $('.btn.task-edit-save')[0]; },
                         content: gt("To create the task, click on Create on the upper right side."),
                         multipage: true,
@@ -534,16 +554,21 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                     {
                         title: gt("Sorting your tasks"),
                         placement: "top",
-                        target: function () { return $('.vgrid-toolbar.bottom .icon-arrow-down')[0]; },
-                        content: gt("The icon at the bottom right side helps you sort your tasks. Click the icon to get a list of sort criteria.")
+                        target: function () { return $('.vgrid-toolbar.bottom .icon-arrow-down:visible')[0]; },
+                        content: gt("The icon at the bottom right side helps you sort your tasks. Click the icon to get a list of sort criteria."),
+                        xOffset: -10
                     },
                     {
                         title: gt("Editing multiple tasks"),
                         placement: "top",
-                        target: function () { return $('.vgrid-toolbar.bottom .icon-th-list')[0]; },
-                        content: gt("To edit multiple tasks at once, enable the checkboxes at the left side of the tasks. If the checkboxes are not displayed, click the icon at the bottom left side.")
+                        target: function () { return $('.vgrid-toolbar.bottom .icon-th-list:visible')[0]; },
+                        content: gt("To edit multiple tasks at once, enable the checkboxes at the left side of the tasks. If the checkboxes are not displayed, click the icon at the bottom left side."),
+                        xOffset: -10
                     }]
                 },
+
+
+
                 'io.ox/settings': {
                     id: "Settings",
                     steps: [{
