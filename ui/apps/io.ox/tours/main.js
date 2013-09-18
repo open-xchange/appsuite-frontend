@@ -243,7 +243,7 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                         content: gt("The number on the right side of the E-Mail subject corresponds to the number of E-Mails in a thread. To open the thread, click on the number.")
                     },
                     {
-                        title: gt("Halo wiew"),
+                        title: gt("Halo view"),
                         placement: "right",
                         target: function () { return $('.person-link.person-from:visible')[0]; },
                         content: gt("To receive information about the sender or other recipients, open the Halo view by clicking on a name."),
