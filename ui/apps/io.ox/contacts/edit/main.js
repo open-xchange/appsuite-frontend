@@ -162,7 +162,15 @@ define('io.ox/contacts/edit/main',
                         ext.point('io.ox/contacts/edit/main/model').invoke('customizeModel', contact, contact);
 
                         contact.on('change:display_name', function () {
-                            app.setTitle(contact.get('display_name'));
+                            var newTitle = contact.get('display_name');
+                            if (!newTitle) {
+                                if (contact.get('id')) {
+                                    newTitle = gt('Edit Contact');
+                                } else {
+                                    newTitle = gt('Create contact');
+                                }
+                            }
+                            app.setTitle(newTitle);
                         });
                     }
 
@@ -250,8 +258,9 @@ define('io.ox/contacts/edit/main',
                 contact.on('change:first_name change:last_name change:title',
                     function (model, value, options) {
                         if (model.changed.display_name) return;
-                        var dn = util.getFullName(model.toJSON());
-                        if (dn) model.set('display_name', dn);
+                        var mod = model.toJSON();
+                        delete mod.display_name;
+                        model.set('display_name', util.getFullName(mod));
                     });
             }
         });

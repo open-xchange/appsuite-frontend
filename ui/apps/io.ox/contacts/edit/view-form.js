@@ -252,10 +252,12 @@ define('io.ox/contacts/edit/view-form', [
             tagName: 'h1',
             className: 'name',
             setup: function (options) {
-                this.listenTo(this.model, 'change:first_name change:last_name change:title', this.render);
+                this.listenTo(this.model, 'change:display_name', this.render);
             },
             render: function () {
-                this.$el.text(util.getFullName(this.model.toJSON()) || '\u00A0');
+                var mod = this.model.toJSON();
+                delete mod.display_name;
+                this.$el.text(util.getFullName(mod) || '\u00A0');
                 //fix top margin if picture upload was removed
                 if (isMyContactData && !capabilities.has('gab'))
                     this.$el.css('margin-top', '0px');
@@ -383,10 +385,11 @@ define('io.ox/contacts/edit/view-form', [
         });
 
         function drawDefault(options, model) {
+            var input;
             this.append(
                 $('<label class="input">').append(
                     $.txt(options.label), $('<br>'),
-                    new mini.InputView({ name: options.field, model: model }).render().$el,
+                    input = new mini.InputView({ name: options.field, model: model }).render().$el,
                     $('<div class="inline-error" aria-live="assertive">').hide()
                 )
             )
@@ -402,6 +405,13 @@ define('io.ox/contacts/edit/view-form', [
                         .find('input').removeAttr('aria-invalid');
                 }
             });
+
+            // trigger change event on keyup for view updates
+            if (_.indexOf(['title', 'first_name', 'last_name'], options.field) >= 0) {
+                input.on('keyup', function () {
+                    model.set(options.field, _.noI18n($(this).val()));
+                });
+            }
         }
 
         function drawTextarea(options, model) {
