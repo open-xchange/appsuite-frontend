@@ -167,7 +167,6 @@ define('io.ox/tasks/edit/main',
             } else {
                 if (app.edit) {
                     require(['io.ox/tasks/api'], function (api) {
-                        api.trigger('update:' + _.ecid(taskModel.attributes));
                         clean();
                         model.factory.realm('edit').release();//old model no longer needed
                         def.resolve();

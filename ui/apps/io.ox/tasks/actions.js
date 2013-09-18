@@ -152,7 +152,6 @@ define('io.ox/tasks/actions',
                 mods.data.folder_id = data.folder_id || data.folder;
                 api.update(mods.data)
                     .done(function (result) {
-                        api.trigger('update:' + _.ecid(data));
                         notifications.yell('success', mods.label);
                     })
                     .fail(function (result) {
@@ -536,7 +535,6 @@ define('io.ox/tasks/actions',
                                         } else {
                                             modifications.start_date = modifications.end_date;
                                             api.update(modifications).done(function () {
-                                                api.trigger('update:' + _.ecid(modifications));
                                                 notifications.yell('success', gt('Changed due date'));
                                             });
                                         }
@@ -544,7 +542,6 @@ define('io.ox/tasks/actions',
                                 });
                             } else {
                                 api.update(modifications).done(function () {
-                                    api.trigger('update:' + _.ecid(modifications));
                                     notifications.yell('success', gt('Changed due date'));
                                 });
                             }

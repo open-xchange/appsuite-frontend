@@ -406,6 +406,7 @@ define('io.ox/tasks/api',
             }
             //trigger refresh, for vGrid etc
             api.trigger('refresh.all');
+            api.trigger('update:' + _.ecid({id: task.id, folder_id: useFolder}));
             refreshPortal();
         });
 
