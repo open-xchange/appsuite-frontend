@@ -135,6 +135,7 @@ msgstr ""
 
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/calendar/month/perspective.js:130
 #: apps/io.ox/calendar/settings/pane.js:100
@@ -144,6 +145,7 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
+#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. folder permissions - Is Admin? NO
@@ -466,6 +468,7 @@ msgid_plural "These files have not been deleted, as they are locked by their own
 msgstr[0] ""
 msgstr[1] ""
 
+#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. Really delete portal widget - in contrast to "just disable"
