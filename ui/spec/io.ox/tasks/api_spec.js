@@ -25,6 +25,18 @@ define(['shared/examples/for/api',
                 "private_flag": false,
                 "notification": true,
                 "title": "Test Title"
+            },
+            testDataUpdate: {
+                "id": 45,
+                "folder_id": 29,
+                "title": "Neuer Test Title"
+            },
+            tempTestData: {
+                "tempAttachmentIndicator": true,
+                "alarm": null,
+                "folder_id": 29,
+                "notification": true,
+                "title": "Temp Test Title"
             }
         }
         sharedExamplesFor(api, options);
@@ -50,6 +62,53 @@ define(['shared/examples/for/api',
             it('should trigger a create event', function () {
                 expect(api).toTrigger('create');
                 var result = api.create(options.testData);
+                this.server.respond();
+                expect(result).toResolve();
+            });
+            it('should remove temporary attributes', function () {
+                //make copy of testData
+                var testCopy = _.copy(options.tempTestData, true),
+                    result = api.create(testCopy);
+                expect(testCopy).not.hasKey("tempAttachmentIndicator");
+            });
+            it('should remove alarm if it\'s null', function () {
+                //make copy of testData
+                var testCopy = _.copy(options.tempTestData, true),
+                    result = api.create(testCopy);
+                expect(testCopy).not.hasKey("alarm");
+            });
+            it('should be added to \"Attachment upload in progress\" list if attachments are present', function () {
+              //make copy of testData
+                var testCopy = _.copy(options.tempTestData, true),
+                    result = api.create(testCopy);
+                this.server.respond();
+                expect(result).toResolve();
+                result.done(function () {
+                    expect(api.uploadInProgress(testCopy.folder_id + ':45')).toBeTruthy();
+                })
+            });
+        });
+        describe('updating a task', function () {
+            beforeEach(function () {
+                this.server = ox.fakeServer;
+                this.server.autoRespond = false;
+                this.server.respondWith('PUT', /api\/tasks\?action=update/, function (xhr) {
+                    xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"timestamp":1368791630910,"data":{}}');
+                });
+            });
+            afterEach(function () {
+                this.server.autoRespond = true;
+            });
+            it('should update a task', function () {
+                var result = api.update(options.testDataUpdate);
+                expect(result).toBeDeferred();
+                expect(result.state()).toBe('pending');
+                this.server.respond();
+                expect(result).toResolve();
+            });
+            it('should trigger an update event', function () {
+                expect(api).toTrigger('update:29:45');
+                var result = api.update(options.testDataUpdate);
                 this.server.respond();
                 expect(result).toResolve();
             });

@@ -343,6 +343,7 @@ define('io.ox/tasks/api',
      * @param  {object} task (id, folder_id, 'changed attributes')
      * @param  {string} newFolder (optional; target folder id)
      * @fires  api#refresh.all
+     * @fires  api#update:ecid
      * @return {[type]}
      */
     api.update = function (task, newFolder) {
