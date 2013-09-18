@@ -178,10 +178,16 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                         yOffset: -5,
                         multipage: true,
                         onNext: function () {
-                            switchToApp('io.ox/mail/write/main', function () {
+                            if ($('.launcher[data-app-name="io.ox/mail/write"]').length === 0) {
+                                switchToApp('io.ox/mail/write/main', function () {
+                                    window.hopscotch.nextStep();
+                                    window.hopscotch.prevStep();
+                                });
+                            } else {
+                                $('.launcher[data-app-name="io.ox/mail/write"]').first().click();
                                 window.hopscotch.nextStep();
                                 window.hopscotch.prevStep();
-                            });
+                            }
                         }
                     },
                     {
@@ -219,7 +225,6 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                         content: gt("To send the E-Mail, click on Send on the upper right side."),
                         multipage: true,
                         onNext: function () {
-                            $('a[data-action="discard"]:visible').click();
                             switchToApp('io.ox/mail/main', function () {
                                 window.hopscotch.nextStep();
                                 window.hopscotch.prevStep();
@@ -293,7 +298,7 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                     {
                         title: gt("Sending an E-Mail to a contact"),
                         placement: "bottom",
-                        target: function () { return $('.contact-detail [href^="mailto"]')[0]; },
+                        target: function () { return $('.contact-detail [href^="mailto"]:visible')[0]; },
                         content: gt("To send an E-Mail to the contact, click on an E-Mail address or on Send E-Mail at the top of the display area.")
                     },
                     {
@@ -312,54 +317,59 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                     steps: [{
                         title: gt("Creating a new appointment"),
                         placement: "right",
-                        target: function () { return $('[data-ref="io.ox/calendar/links/toolbar/default"]')[0]; },
+                        target: function () {
+                            if ($('.launcher[data-app-name="io.ox/calendar/edit"]').length === 0) {
+                                switchToApp('io.ox/calendar/edit/main', function () {
+                                    switchToApp('io.ox/calendar/main', function () {});
+                                });
+                            }
+                            return $('[data-ref="io.ox/calendar/links/toolbar/default"]')[0];
+                        },
                         content: gt("To create a new appointment, click the New appointment icon at the top."),
                         multipage: true,
                         onNext: function () {
-                            switchToApp('io.ox/calendar/edit/main', function () {
-                                window.hopscotch.nextStep();
-                                window.hopscotch.prevStep();
-                            });
+                            $('.launcher[data-app-name="io.ox/calendar/edit"]').first().click();
+                            window.hopscotch.nextStep();
+                            window.hopscotch.prevStep();
                         }
                     },
                     {
                         title: gt("Entering the data"),
                         placement: "bottom",
-                        target: function () { return $('[data-extension-id="title"]')[0]; },
+                        target: function () { return $('[data-extension-id="title"]:visible')[0]; },
                         content: gt("Enter the subject, the start and the end date of the appointment. Other details are optional.")
                     },
                     {
                         title: gt("Creating recurring appointments"),
                         placement: "top",
-                        target: function () { return $('[data-extension-id="recurrence"]')[0]; },
+                        target: function () { return $('[data-extension-id="recurrence"]:visible')[0]; },
                         content: gt("To create recurring appointments, enable Repeat. Functions for setting the recurrence parameters are shown.")
                     },
                     {
                         title: gt("Using the reminder functions"),
                         placement: "top",
-                        target: function () { return $('[data-extension-id="alarm"]')[0]; },
+                        target: function () { return $('[data-extension-id="alarm"]:visible')[0]; },
                         content: gt("To not miss the appointment, use the reminder functions.")
                     },
                     {
                         title: gt("Inviting other participants"),
                         placement: "top",
-                        target: function () { return $('.add-participant')[0]; },
+                        target: function () { return $('.add-participant:visible')[0]; },
                         content: gt("To invite other participants, enter their names in the field below Participants. To avoid appointment conflicts, click on Find a free time at the upper right side.")
                     },
                     {
                         title: gt("Adding attachments"),
                         placement: "top",
-                        target: function () { return $('[data-extension-id="attachments_legend"]')[0]; },
+                        target: function () { return $('[data-extension-id="attachments_legend"]:visible')[0]; },
                         content: gt("Further down you can add attachments to the appointment.")
                     },
                     {
                         title: gt("Creating the appointment"),
-                        placement: "right",
-                        target: function () { return $('[data-action="save"]')[0]; },
+                        placement: "left",
+                        target: function () { return $('[data-action="save"]:visible')[0]; },
                         content: gt("To create the appointment, click on Create at the upper right side."),
                         multipage: true,
                         onNext: function () {
-                            $('button[data-action="discard"]:visible').click();
                             switchToApp('io.ox/calendar/main', function () {
                                 window.hopscotch.nextStep();
                                 window.hopscotch.prevStep();
@@ -368,8 +378,8 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                     },
                     {
                         onShow: function () {
-                            if ($('.toolbar-button.dropdown.open .dropdown-menu').length === 0) {
-                                $('[data-ref="io.ox/calendar/links/toolbar/view"]').click();
+                            if ($('.toolbar-button.dropdown.open .dropdown-menu:visible').length === 0) {
+                                $('[data-ref="io.ox/calendar/links/toolbar/view"]:visible').click();
                             }
                         },
                         title: gt("Selecting a view"),
@@ -379,8 +389,8 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                     },
                     {
                         onShow: function () {
-                            if ($('.toolbar-button.dropdown.open .dropdown-menu').length === 0) {
-                                $('[data-ref="io.ox/calendar/links/toolbar/view"]').click();
+                            if ($('.toolbar-button.dropdown.open .dropdown-menu:visible').length === 0) {
+                                $('[data-ref="io.ox/calendar/links/toolbar/view"]:visible').click();
                             }
                         },
                         title: gt("The List view"),
@@ -390,8 +400,8 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                     },
                     {
                         onShow: function () {
-                            if ($('.toolbar-button.dropdown.open .dropdown-menu').length === 0) {
-                                $('[data-ref="io.ox/calendar/links/toolbar/view"]').click();
+                            if ($('.toolbar-button.dropdown.open .dropdown-menu:visible').length === 0) {
+                                $('[data-ref="io.ox/calendar/links/toolbar/view"]:visible').click();
                             }
                         },
                         title: gt("The calendar views"),
@@ -482,22 +492,28 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                         content: gt("To create a new task, click the Create new task icon at the top."),
                         multipage: true,
                         onNext: function () {
-                            switchToApp('io.ox/tasks/edit/main', function () {
+                            if ($('.launcher[data-app-name="io.ox/tasks/edit"]').length === 0) {
+                                switchToApp('io.ox/tasks/edit/main', function () {
+                                    window.hopscotch.nextStep();
+                                    window.hopscotch.prevStep();
+                                });
+                            } else {
+                                $('.launcher[data-app-name="io.ox/tasks/edit"]').first().click();
                                 window.hopscotch.nextStep();
                                 window.hopscotch.prevStep();
-                            });
+                            }
                         }
                     },
                     {
                         title: gt("Entering the data"),
                         placement: "bottom",
-                        target: function () { return $('.io-ox-tasks-edit [data-extension-id="title"]')[0]; },
+                        target: function () { return $('.io-ox-tasks-edit [data-extension-id="title"]:visible')[0]; },
                         content: gt("Enter the subject, the start date, and a description.")
                     },
                     {
                         title: gt("Adding further details"),
                         placement: "top",
-                        target: function () { return $('.io-ox-tasks-edit .expand-link')[0]; },
+                        target: function () { return $('.io-ox-tasks-edit .expand-link:visible')[0]; },
                         content: gt("To add further details, click on Expand form."),
                         onShow: function () {
                             if ($('[data-extension-id="start_date"]:visible').length === 0) {
@@ -508,43 +524,42 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                     {
                         title: gt("Creating recurring tasks"),
                         placement: "top",
-                        target: function () { return $('[data-extension-id="recurrence"]')[0]; },
+                        target: function () { return $('[data-extension-id="recurrence"]:visible')[0]; },
                         content: gt("To create recurring tasks, enable Repeat. Functions for setting the recurrence parameters are shown.")
                     },
                     {
                         title: gt("Using the reminder function"),
                         placement: "top",
-                        target: function () { return $('[for="task-edit-reminder-select"]')[0]; },
+                        target: function () { return $('[for="task-edit-reminder-select"]:visible')[0]; },
                         content: gt("To not miss the task, use the reminder function. ")
                     },
                     {
                         title: gt("Tracking the editing status"),
                         placement: "top",
-                        target: function () { return $('[for="task-edit-status-select"]')[0]; },
+                        target: function () { return $('[for="task-edit-status-select"]:visible')[0]; },
                         content: gt("To track the editing status, enter the current progress.")
                     },
                     {
                         title: gt("Inviting other participants"),
                         placement: "top",
-                        target: function () { return $('.add-participant.task-participant-input-field')[0]; },
+                        target: function () { return $('.add-participant.task-participant-input-field:visible')[0]; },
                         content: gt("To invite other participants, enter their names in the field below Participants. You can add documents as attachment to the task."),
-                        onShow: function () { $('.tab-link[tabindex="0"]').click(); }
+                        onShow: function () { $('.tab-link[tabindex="0"]:visible').click(); }
                     },
                     {
                         title: gt("Entering billing information"),
                         placement: "top",
-                        target: function () { return $('.task-edit-row [tabindex="2"]')[0]; },
+                        target: function () { return $('.task-edit-row [tabindex="2"]:visible')[0]; },
                         content: gt("In the Details section at the bottom right side you can enter billing information."),
-                        onShow: function () { $('.tab-link[tabindex="2"]').click(); }
+                        onShow: function () { $('.tab-link[tabindex="2"]:visible').click(); }
                     },
                     {
                         title: gt("Creating the task"),
                         placement: "left",
-                        target: function () { return $('.btn.task-edit-save')[0]; },
+                        target: function () { return $('.btn.task-edit-save:visible')[0]; },
                         content: gt("To create the task, click on Create on the upper right side."),
                         multipage: true,
                         onNext: function () {
-                            $('button[data-action="discard"]:visible').click();
                             switchToApp('io.ox/tasks/main', function () {
                                 window.hopscotch.nextStep();
                                 window.hopscotch.prevStep();
