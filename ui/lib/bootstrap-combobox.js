@@ -41,7 +41,7 @@ $(document).ready(function () {
                 .on('keyup',    $.proxy(this.keyup, this));
 
 
-            if ($.browser.webkit || $.browser.msie) {
+            if (_.browser.webkit || _.browser.msie) {
                 this.$element.on('keydown', $.proxy(this.keypress, this));
             }
             // bind to mousedown to intercept the blur event
