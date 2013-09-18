@@ -17,8 +17,9 @@ define('io.ox/core/tk/attachmentsUtil',
      'io.ox/core/tk/dialogs',
      'gettext!io.ox/core/tk/attachments',
      'io.ox/core/extPatterns/links',
+     'io.ox/core/capabilities',
      'less!io.ox/core/tk/attachments.less'
-    ], function (strings, pre, dialogs, gt, links) {
+    ], function (strings, pre, dialogs, gt, links, capabilities) {
 
         'use strict';
 
@@ -140,7 +141,15 @@ define('io.ox/core/tk/attachmentsUtil',
             hasPreview : function (file) {
                 var data = self.get(file),
                     isImage = (/^image\/(png|gif|jpe?g|bmp)$/i).test(data.type),
-                    isText = (/^text\/(plain)$/i).test(data.type);
+                    isText = (/^text\/(plain)$/i).test(data.type),
+                    isOffice = false;
+                if (capabilities.has('text')) {//if we have office support let's check those files too
+                    if (file.file) {
+                        isOffice = new pre.Preview({mimetype: file.file.content_type, filename: file.file.filename}).supportsPreview();
+                    } else {
+                        isOffice = new pre.Preview({mimetype: file.content_type, filename: file.filename}).supportsPreview();
+                    }
+                }
 
                 // nested mail
                 if (data.type === 'eml') {
@@ -153,8 +162,11 @@ define('io.ox/core/tk/attachmentsUtil',
                     return true;
                 //local file content via fileReader
                 } else  if (window.FileReader && (isImage || isText)) {
-                    return true
-;                //stored file
+                    return true;
+                //office
+                } else if (isOffice) {
+                    return true;
+                //stored file
                 } else {
                     return (/(png|gif|jpe?g|bmp)$/i).test(data.type) || (/(txt)$/i).test(data.type);
                 }
