@@ -105,7 +105,7 @@ define('io.ox/mail/view-detail',
             ':(': '&#x1F61E;'
         };
 
-        var regex = /(&quot)?([:;]-?[(|)D])/g;
+        var regex = /(&quot)?([:;]-?[(|)D])\W/g;
 
         return function (text) {
             if (settings.get('displayEmoticons')) {
@@ -121,6 +121,8 @@ define('io.ox/mail/view-detail',
         };
     }());
 
+    var isURL = /^https?:\S+$/i;
+
     var beautifyText = function (text) {
 
         text = $.trim(text)
@@ -135,8 +137,20 @@ define('io.ox/mail/view-detail',
             // add markup for email addresses
             .replace(regMailComplex, '<a href="mailto:$6">$2$3</a>');
 
-        text = insertEmoticons(text);
-        text = emoji.processEmoji(text);
+        // split source to safely ignore tags
+        text = _(text.split(/(<[^>]+>)/))
+            .map(function (line) {
+                // ignore tags
+                if (line[0] === '<') return line;
+                // ignore URLs
+                if (isURL.test(line)) return line;
+                // process plain text
+                line = insertEmoticons(line);
+                line = emoji.processEmoji(line);
+                return line;
+            })
+            .join('');
+
         text = markupQuotes(text);
 
         return text;
