@@ -166,7 +166,7 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                     steps: [{
                         title: gt("Composing a new E-Mail"),
                         placement: "right",
-                        target: function () { return $('.window-toolbar .icon-pencil')[0]; },
+                        target: function () { return $('[data-ref="io.ox/mail/links/toolbar/default"]:visible')[0]; },
                         content: gt("To compose a new E-Mail, click on the Compose new E-Mail icon at the top."),
                         arrowOffset: 1,
                         yOffset: -5,
@@ -283,7 +283,7 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                     {
                         title: gt("Sending an E-Mail to a contact"),
                         placement: "bottom",
-                        target: function () { return $('.contact-detail [href^="mailto"')[0]; },
+                        target: function () { return $('.contact-detail [href^="mailto"]')[0]; },
                         content: gt("To send an E-Mail to the contact, click on an E-Mail address or on Send E-Mail at the top of the display area.")
                     },
                     {
