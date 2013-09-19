@@ -111,14 +111,16 @@ define(['io.ox/mail/util',
             var name = 'pierce hawthorne',
                 email = 'pierce.hawthorne@greendalecommunitycollege.com';
             it('should return empty string if data is invalid or empty', function () {
+                var expect = chai.expect;
                 //not array
-                expect(util.getDisplayName(email)).toBeEmpty();
-                expect(util.getDisplayName('')).toBeEmpty();
-                expect(util.getDisplayName({})).toBeEmpty();
-                expect(util.getDisplayName(undefined)).toBeEmpty();
-                expect(util.getDisplayName(null)).toBeEmpty();
+                debugger;
+                expect(util.getDisplayName(email)).to.be.empty;
+                expect(util.getDisplayName('')).to.be.empty;
+                expect(util.getDisplayName({})).to.be.empty;
+                expect(util.getDisplayName(undefined)).to.be.empty;
+                expect(util.getDisplayName(null)).to.be.empty;
                 //invalid
-                expect(util.getDisplayName([])).toBeEmpty();
+                expect(util.getDisplayName([])).to.be.empty;
 
             });
             it('should return email if name is not set', function () {
@@ -172,7 +174,6 @@ define(['io.ox/mail/util',
         describe('getPriority', function () {
             it('should return a jquery node', function () {
                 var result;
-
                 result = util.getPriority(undefined);
                 expect(result).toBeJquery();
                 expect(result.is('span')).toBeTruthy();
@@ -183,93 +184,79 @@ define(['io.ox/mail/util',
         });
 
         describe('getAccountName', function () {
-            it('should return a string', function () {
-                var result;
-                //fallback
-                result = util.getAccountName(undefined);
-                expect(result).toEqual('N/A');
-                //not primary
-                result = util.getAccountName({id: '553', account_name: 'Pierce'});
-                expect(result).toEqual('Pierce');
-                //primary
-                result = util.getAccountName({id: 'default0'});
-                expect(result).toBeString();
+            var expect = chai.expect;
+            var account_name = 'Pierce Hawthorne';
+            it('should return a fallback string for invalid data', function () {
+                expect(util.getAccountName(undefined)).to.be.equal('N/A');
+            });
+            it('should return the account name for all ids others than primary', function () {
+                expect(util.getAccountName({id: '553', account_name: account_name})).to.be.equal(account_name);
+            });
+            it('should return not the account name for the id of the primary account', function () {
+                expect(util.getAccountName({id: 'default0', account_name: account_name}))
+                    .to.be.a('string').and
+                    .not.to.be.equal(account_name);
             });
         });
-
 
         describe('timestamp functions', function () {
-            it('should return a string', function () {
-                var result;
-                //invalid
-                result = util.getTime(undefined);
-                expect(result).toBeString();
-                result = util.getDateTime(undefined);
-                expect(result).toBeString();
-                result = util.getFullDate(undefined);
-                expect(result).toBeString();
-                result = util.getSmartTime(undefined);
-                expect(result).toBeString();
-                //valid
-                result = util.getTime(1379508350);
-                expect(result).toEqual('16.1.1970');
-                result = util.getDateTime(1379508350);
-                expect(result).toEqual('16.1.1970 23:11');
-                result = util.getFullDate(1379508350);
-                expect(result).toEqual('16.1.1970 23:11');
-                result = util.getSmartTime(new Date().getTime());
-                expect(result).toEqual('2 hours ago');
+            var expect = chai.expect;
+            it('should return "unknown" for invalid data', function () {
+                expect(util.getTime(undefined), 'getTime').to.be.equal('unknown');
+                expect(util.getDateTime(undefined), 'getDateTime').to.be.equal('unknown');
+                expect(util.getFullDate(undefined), 'getFullDate').to.be.equal('unknown');
+                expect(util.getSmartTime(undefined), 'getSmartTime').to.be.equal('unknown');
+            });
+            it('should return a date string for valid data', function () {
+                expect(util.getTime(1379508350), 'getTime').to.be.equal('16.1.1970');
+                expect(util.getDateTime(1379508350), 'getDateTime').to.be.equal('16.1.1970 23:11');
+                expect(util.getFullDate(1379508350), 'getFullDate').to.be.equal('16.1.1970 23:11');
+                expect(util.getSmartTime(new Date().getTime()), 'getSmartTime').to.be.equal('2 hours ago');
             });
         });
 
-        describe('check functions', function () {
-            it('should return "undefined", "false" or "0" for invalid data', function () {
-                var result;
+        describe('some of the check functions', function () {
+            //TODO: use chai-all plugin
+            var expect = chai.expect;
+            it('should return "undefined" for invalid data', function () {
                 //invalid: returns undefined
-                expect([
-                    util.isUnseen(undefined),
-                    util.isDeleted(undefined),
-                    util.isSpam(undefined),
-                    util.byMyself(undefined),
-                    util.getInitialDefaultSender(undefined),
-                    util.getInitialDefaultSender()
-                ]).eachToEqual(undefined);
-                //invalid: returns 0
-                expect([
-                    util.count(undefined)
-                ]).eachToEqual(0);
-                //invalid: returns false
-                expect([
-                    util.isAnswered(undefined),
-                    util.isForwarded(undefined),
-                    util.hasOtherRecipients(undefined),
-                ]).eachToEqual(false);
-                //invalid: returns empty array
-                result = util.getAttachments(undefined);
-                expect(result).toBeArray();
-                expect(result).toBeEmpty();
+                expect(util.isUnseen(undefined), 'isUnseen').is.undefined;
+                expect(util.isDeleted(undefined), 'isDeleted').is.undefined;
+                expect(util.isSpam(undefined), 'isSpam').is.undefined;
+                expect(util.byMyself(undefined), 'byMyself').is.undefined;
+                expect(util.getInitialDefaultSender(undefined), 'getInitialDefaultSender').is.undefined;
+            });
+            it('should return "false" for invalid data', function () {
+                expect(util.isAnswered(undefined), 'isAnswered').is.false;
+                expect(util.isForwarded(undefined), 'isForwarded').is.false;
+                expect(util.hasOtherRecipients(undefined), 'hasOtherRecipients').is.false;
+            });
+            it('should return "0" for invalid data', function () {
+                expect(util.count(undefined), 'count').to.be.a('number').and.to.be.equal(0);
+            });
+            it('should return an empty array for invalid data', function () {
+                expect(util.getAttachments(undefined), 'getInitialDefaultSender')
+                    .to.be.an('array').and
+                    .to.be.empty;
             });
             it('should return a boolean for valid data', function () {
-                var result;
-                result = util.count([{}, {}, {thread: [1, 2]}]);
-                expect(result).toEqual(4);
-                //valid: returns true
-                expect([
-                    util.isUnseen({flags: 16}),
-                    util.isDeleted({flags: 2}),
-                    util.isSpam({flags: 128}),
-                    util.isAnswered({flags: 1}),
-                    util.isForwarded({flags: 256}),
-                    util.hasOtherRecipients({to: [['', 'some address']], cc: '', bcc: ''})
-                ]).eachToEqual(true);
+                expect(util.isUnseen({flags: 16}), 'isUnseen').is.true;
+                expect(util.isDeleted({flags: 2}), 'isDeleted').is.true;
+                expect(util.isSpam({flags: 128}), 'isSpam').is.true;
+                expect(util.isAnswered({flags: 1}), 'isAnswered').is.true;
+                expect(util.isForwarded({flags: 256}), 'isForwarded').is.true;
+                expect(util.hasOtherRecipients({to: [['', 'some address']], cc: '', bcc: ''}), 'hasOtherRecipients').is.true;
                 //valid: returns false
-                expect([
-                    util.isUnseen({flags: 32}),
-                    util.isDeleted({flags: 1}),
-                    util.isSpam({flags: 64}),
-                    util.isAnswered({flags: 2}),
-                    util.isForwarded({flags: 128})
-                ]).eachToEqual(false);
+                expect(util.isUnseen({flags: 32}), 'isUnseen').is.false;
+                expect(util.isDeleted({flags: 1}), 'isDeleted').is.false;
+                expect(util.isSpam({flags: 64}), 'isSpam').is.false;
+                expect(util.isAnswered({flags: 2}), 'isAnswered').is.false;
+                expect(util.isForwarded({flags: 128}), 'isForwarded').is.false;
+            });
+            it('should return a number for valid data', function () {
+                expect(util.count([{}, {}, {thread: [1, 2]}]))
+                    .to.be.a('number').and
+                    .to.equal(4);
             });
         });
     });
