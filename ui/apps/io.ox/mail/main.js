@@ -872,7 +872,7 @@ define('io.ox/mail/main',
         // go!
         commons.addFolderSupport(app, grid, 'mail', options.folder)
             .fail(function (result) {
-                var errorMsg = result.error ? result.error + ' ' : '';
+                var errorMsg = (result && result.error) ? result.error + ' ' : '';
                 errorMsg += gt('Application may not work as expected until this problem is solved.');
                 notifications.yell('error', errorMsg);
             })

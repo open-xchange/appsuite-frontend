@@ -772,7 +772,7 @@ $(window).load(function () {
                 footer = '',
                 i = 0,
                 cl = $('#io-ox-current-language').parent(),
-                maxLang = 20;
+                maxLang = 30;
 
             debug('boot.js: initialize ...');
 
@@ -781,13 +781,16 @@ $(window).load(function () {
 
                 debug('boot.js: List languages', lang);
 
-                var langCount = _.size(lang);
                 node = $('#io-ox-language-list');
-                // Display native select box for languages if there are up to "maxLang" languages
-                var langSorted = _.toArray(_.invert(lang)).sort(function (a, b) {
-                    return lang[a] <= lang[b] ? -1 : +1;
-                });
-                if (langCount < maxLang) {
+
+                var langCount = _.size(lang),
+                    defaultLanguage = _.getCookie('language') || getBrowserLanguage(),
+                    // Display native select box for languages if there are up to "maxLang" languages
+                    langSorted = _.toArray(_.invert(lang)).sort(function (a, b) {
+                        return lang[a] <= lang[b] ? -1 : +1;
+                    });
+
+                if (langCount < maxLang && !_.url.hash('language-select')) {
                     for (id in langSorted) {
                         var link;
                         i++;
@@ -801,17 +804,27 @@ $(window).load(function () {
                         }
                     }
                 } else {
-                    var sel = $('<select>').change(function() {
-                        changeLanguage($(this).val());
-                        forcedLanguage = $(this).val();
-                    });
-                    for (id in langSorted) {
-                        sel.append(
-                            $('<option aria-label="' + lang[langSorted[id]] + '">').attr('value', id)
-                                .text(lang[langSorted[id]])
-                        );
-                    }
-                    $('#io-ox-language-list').append(sel);
+                    $('#io-ox-language-list').append(
+                        $('<select>').change(function(e) {
+                            var id = $(this).val();
+                            if (id !== '') {
+                                e.data = { id: id };
+                                fnChangeLanguage(e);
+                            }
+                        })
+                        .append(
+                            _(langSorted).map(function (value, id) {
+                                var option = $('<option>')
+                                    .attr({
+                                        'aria-label': lang[langSorted[id]],
+                                        'value': langSorted[id]
+                                    })
+                                    .text(lang[langSorted[id]]);
+                                return option;
+                            })
+                        )
+                        .val(defaultLanguage)
+                    );
                 }
             } else {
                 $("#io-ox-languages").remove();
