@@ -13,7 +13,7 @@ module.exports = function(config) {
         require('./lib/karma-ox-apploader/index.js')
     ],
     // frameworks to use
-    frameworks: ['jasmine', 'oxboot', 'ox-apploader'],
+    frameworks: ['jasmine', 'oxboot', 'ox-apploader', 'chai'],
 
 
     // list of files / patterns to load in the browser
