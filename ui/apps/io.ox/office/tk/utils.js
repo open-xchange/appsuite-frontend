@@ -2491,7 +2491,7 @@ define.async('io.ox/office/tk/utils',
      */
     Utils.setControlTooltip = function (control, tooltip, placement) {
         if (tooltip) {
-            control.first().attr('title', tooltip);
+            control.first().attr('title', tooltip);  //Marko comment: adds attribute to button, the same value as tooltip, that´s "Bold".
         } else {
             control.first().removeAttr('title');
         }
@@ -2545,7 +2545,7 @@ define.async('io.ox/office/tk/utils',
      *  will be represented by an <a> DOM element due to rendering bugs in
      *  FireFox with <button> elements.
      */
-    Utils.createButtonMarkup = function (innerMarkup, options) {
+    Utils.createButtonMarkup = function (innerMarkup, options) {       // Marko comment: returns HTML markup of the button. (For more, see comment above).
 
         var // whether the button will be focusable
             focusable = Utils.getBooleanOption(options, 'focusable', false),
@@ -2556,6 +2556,7 @@ define.async('io.ox/office/tk/utils',
 
         innerMarkup = (innerMarkup || '') + captionMarkup;
         return '<a class="' + Utils.BUTTON_CLASS + (focusable ? (' ' + Utils.FOCUSABLE_CLASS) : '') + '" tabindex="' + tabIndex + '">' + innerMarkup + '</a>';
+                        //Marko comment: creates <a> in all focusable (mouseover) buttons on SidePane.
     };
 
     /**
@@ -2572,7 +2573,7 @@ define.async('io.ox/office/tk/utils',
      * @returns {jQuery}
      *  A jQuery object containing the new button element. The button element
      *  will be represented by an <a> DOM element due to rendering bugs in
-     *  FireFox with <button> elements.
+     *  FireFox with <button> elements.‚
      */
     Utils.createButton = function (options) {
 
@@ -2581,7 +2582,31 @@ define.async('io.ox/office/tk/utils',
             // Create the DOM anchor element representing the button. Do NOT use
             // <button> elements, Firefox has problems with text clipping and
             // correct padding of the <button> contents.
-            button = Utils.createControl('a', { tabindex: tabIndex }, options).addClass(Utils.BUTTON_CLASS);
+
+            button = Utils.createControl('a', { tabindex: tabIndex, 'role': 'button', 'aria-pressed': 'false' }, options).addClass(Utils.BUTTON_CLASS);
+                                                   /* Marko add: attribute "role" for ARIA. Attribute must be placed into <a> to be recognized by AViewer,
+                                                                 not in it's <div> parent (file button.js, under "initialization").
+
+                                                                 Also, you must add a new attribute here, not in the function
+                                                                       above under "Utils.createButtonMarkup" (read @return comment)!!!!
+                                                   */
+
+        /*Start Marko
+        button.on('click', function (e) {
+               $(e.target).attr('aria-pressed': 'true');
+        });
+        */
+
+
+        /*Start Marko
+         * $( 'a' ).toggle(function() {
+            aria-pressed
+          }, function() {
+            alert( "Second handler for .toggle() called." );
+          });
+        End Marko
+        */
+
 
         Utils.setControlCaption(button, options);
         return button;

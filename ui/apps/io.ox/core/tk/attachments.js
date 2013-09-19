@@ -496,7 +496,7 @@ define('io.ox/core/tk/attachments',
                         $('<span>').addClass('btn btn-file').append(
                             $('<span>').addClass('fileupload-new').text(gt('Select file')),
                             $('<span>').addClass('fileupload-exists').text(gt('Change')),
-                            input = $('<input name="file" type="file">')
+                            input = $('<input name="file" type="file" role="button">')       //Marko add: attribute "role" for ARIA
                                 .prop({
                                     multiple: options.multi
                                 })

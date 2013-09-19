@@ -59,14 +59,14 @@ define('io.ox/office/tk/dialogs',
                 enter: Utils.getFunctionOption(options, 'enter', undefined)
             }),
             // the title text
-            title = Utils.getStringOption(options, 'title'),
+            title = Utils.getStringOption(options, 'title'),        //Marko: variable "title" is defined at "office-web/.../text/.../image.js"
             // the dummy input to catch the cursor
             focusCatcher = $('<input>').css({position: 'absolute', top: '-10000px', left: '-10000px', width: '1px', height: '1px'});
 
         // add title
-        if (_.isString(title)) {
-            dialog.header($('<h4>').text(title));
-        }
+        if (_.isString(title)) {    // Marko: variable "title" is defined at "office-web/.../text/.../image.js"
+            dialog.header($('<h4>').text(title).attr('id', 'dialog-title'));     // Marko add: attribute "id" for ARIA. It connects it with a "id" of a "pop-up dialog box" .
+        }                  // <div> in which this <h4> goes into is defined at "web/.../core/.../dialogs.js"
 
         // add dummy input to catch the cursor on dialog open
         dialog.getFooter().append(focusCatcher);
