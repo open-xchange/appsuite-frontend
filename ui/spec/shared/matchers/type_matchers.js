@@ -58,6 +58,14 @@ if (jasmine) {
                 var result = this.actual && this.actual.length === 0;
                 expect(this.isNot ? !result : result).toBeTruthy();
                 return true;
+            },
+
+            //speical: check list of results
+            eachToEqual: function (value) {
+                var list = _.filter([].concat(this.actual), function (test) {
+                    return test !== value;
+                });
+                return list.length === 0;
             }
         };
 
