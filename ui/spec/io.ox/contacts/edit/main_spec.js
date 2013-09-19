@@ -11,11 +11,18 @@
  */
 
 
-    define(["io.ox/contacts/main", "io.ox/core/main"], function (main, core) {
+    define(["io.ox/contacts/main", "io.ox/core/main", "io.ox/contacts/api"], function (main, core, api) {
 
     "use strict";
+    var testObject = {
+            first_name: 'Georg',
+            last_name: 'Tester',
+            email1: 'tester@test.de',
+            cellular_telephone1: '0815123456789',
+            folder_id: 1
+        },
 
-    var testObjectLong = {
+        testObjectLong = {
         first_name: 'Georg',
         last_name: 'Tester',
         display_name: 'Dr. Tester, Georg', // just to skip missing autocreate
@@ -103,13 +110,73 @@
         userfield18: 'userfield',
         userfield19: 'userfield',
         userfield20: 'userfield'
-    };
+    },
+
+    response = {
+        "timestamp": 1379403021960,
+        "data": {
+            "created_by": 0,
+            "creation_date": 1379493234602,
+            "display_name": "Dr. Tester, Georg",
+            "first_name": "Georg",
+            "folder_id": 1,
+            "id": 510778,
+            "last_modified": 1379493234602,
+            "last_modified_utc": 1379493234602,
+            "modified_by": 0,
+            "number_of_attachments": 0,
+            "number_of_images": 0,
+            "sort_name": "Tester",
+            "uid": "791190bd-37c0-444f-89b5-33113190c1cf"
+        }
+    },
+
+    result = {
+        "timestamp": 1379403021960,
+        "data": {
+            "id": 510778
+        }
+    },
+
+    TIMEOUT = ox.testTimeout;
+
+    // helpers
+    function Done() {
+        var f = function () {
+            return f.value;
+        };
+        f.value = false;
+        f.yep = function () {
+            f.value = true;
+        };
+        return f;
+    }
 
     /*
      * Suite: Contacts Test
      */
 
     describe("Contact edit", function () {
+
+        var app = null;
+
+        beforeEach(function () {
+            this.server = ox.fakeServer;
+            this.server.autoRespond = false;
+
+            this.server.respondWith('PUT', /api\/contacts\?action=new/, function (xhr) {
+                xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, JSON.stringify(result));
+            });
+
+            this.server.respondWith('GET', /api\/contacts\?action=get/, function (xhr) {
+                xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, JSON.stringify(response));
+            });
+
+        });
+
+        afterEach(function () {
+            this.server.autoRespond = true;
+        });
 
         it ('should provide a getApp function ', function () {
             expect(main.getApp).toBeTruthy();
@@ -118,6 +185,39 @@
         it ('should provide a launch function ', function () {
             var app = main.getApp();
             expect(app.launch).toBeTruthy();
+        });
+
+        it('opens contact app ', function () {
+
+            var loaded = new Done();
+
+            waitsFor(loaded, 'Could not load app', TIMEOUT);
+
+            main.getApp().launch().done(function () {
+                app = this;
+                app.folder.setDefault().done(function () {
+                    loaded.yep();
+                    expect(app).toBeTruthy();
+                });
+            });
+        });
+
+        it('creates a fresh obj', function () {
+
+            var flag, value;
+
+            api.on('create', function (e, obj)  {
+                value = obj.id;
+                flag = true;
+            });
+
+            runs(function() {
+                flag = false;
+                  api.create(testObject).done(function () {
+                      expect(value).toBe(response.data.id);
+                  });
+            });
+
         });
 
     });

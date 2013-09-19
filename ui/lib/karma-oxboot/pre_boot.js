@@ -10,7 +10,15 @@
 
 // setup ox object
 
-var root = location.pathname.replace(/\/[^\/]*$/, '');
+var root = location.pathname.replace(/\/[^\/]*$/, ''),
+    jslobIds = {
+        "io.ox/core": {
+            tree: {folder: {
+                contacts: 1
+            }}
+        }
+    };
+
 window.ox = {
     abs: location.protocol + '//' + location.host,
     apiRoot: root + '/api',
@@ -82,7 +90,7 @@ if (sinon) {
             fakeSettings.data.push({
                 id: id,
                 meta: {},
-                tree: {}
+                tree: _.has(jslobIds, id) ? jslobIds[id].tree : {}
             });
         });
         xhr.respond(200, {"Content-Type": "text/javascript;charset=UTF-8"}, JSON.stringify(fakeSettings));
@@ -105,7 +113,8 @@ if (sinon) {
     fakeServer.respondWith('GET', /api\/folders\?action=get/, function (xhr) {
         var fakeFolder = {'id=1': {
                 id: '1',
-                folder_id: '0'
+                folder_id: '0',
+                title: 'Contacts'
             }},
             id = xhr.url.split('&').filter(function (str) {
                 return str.indexOf('id=') === 0;
