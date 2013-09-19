@@ -14,34 +14,51 @@
 'use strict';
 
 module.exports = function (grunt) {
+
+    var srcFiles = ['Gruntfile.js', 'apps/**/*.js'],
+        jsonFiles = ['apps/**/*.json'];
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         watch: {
+            options: {
+                interrupt: true,
+                spawn: true
+            },
+            jsonlint: {
+                files: jsonFiles,
+                tasks: ['newer:jsonlint:manifests']
+            },
             all: {
                 files: ['<%= jshint.all.src %>'],
-                tasks: ['jshint'],
+                tasks: ['newer:jshint:all'],
                 options: { nospawn: true }
             }
         },
-        clean: ['build/'],
+        clean: ['build/', 'node_modules/grunt-newer/.cache'],
         jshint: {
             all: {
-                src: ['Gruntfile.js', 'apps/**/*.js'],
+                src: srcFiles,
                 options: {
                     jshintrc: '.jshintrc',
                     ignores: ['apps/io.ox/core/date.js'] // date.js has some funky include stuff we have to figure out
                 }
             }
+        },
+        jsonlint: {
+            manifests: {
+                src: jsonFiles
+            }
         }
     });
 
-    grunt.event.on('watch', function (action, filepath) {
-        grunt.config(['jshint', 'all', 'src'], [filepath]);
-    });
-
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-jsonlint');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-newer');
 
-    grunt.registerTask('default', ['jshint']);
+    grunt.registerTask('lint', ['newer:jshint:all', 'newer:jsonlint:manifests']);
+
+    grunt.registerTask('default', ['lint']);
 };
