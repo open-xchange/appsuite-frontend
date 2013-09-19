@@ -306,6 +306,12 @@ define('io.ox/tasks/api',
         if (task.alarm === null) {//task.alarm must not be null on creation, it's only used to delete an alarm on update actions
             delete task.alarm;    //leaving it in would throw a backend error
         }
+        
+        if (task.status === 3 || task.status === '3') {
+            task.date_completed = task.date_completed || _.now();//make sure we have date_completed
+        } else {
+            delete task.date_completed;//remove invalid date_completed
+        }
         return http.PUT({
             module: 'tasks',
             params: { action: 'new', timezone: 'UTC' },
@@ -376,7 +382,7 @@ define('io.ox/tasks/api',
         }
 
         if (task.status === 3 || task.status === '3') {
-            task.date_completed = _.now();
+            task.date_completed = task.date_completed || _.now();// make sure we have date_completed
         } else if (task.status !== 3 && task.status !== '3') {
             task.date_completed = null;
         }
@@ -400,11 +406,11 @@ define('io.ox/tasks/api',
             obj = {folder_id: useFolder, id: task.id};
             //notification check
             checkForNotifications([obj], task);
-            return obj;
-        }).done(function () {
             if (attachmentHandlingNeeded) {
                 api.addToUploadList(_.ecid(task));//to make the detailview show the busy animation
             }
+            return obj;
+        }).done(function () {
             //trigger refresh, for vGrid etc
             api.trigger('refresh.all');
             api.trigger('update:' + _.ecid({id: task.id, folder_id: useFolder}));
