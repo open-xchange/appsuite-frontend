@@ -226,62 +226,50 @@ define(['io.ox/mail/util',
             it('should return "undefined", "false" or "0" for invalid data', function () {
                 var result;
                 //invalid: returns undefined
-                result = util.count(undefined);
-                expect(result).toEqual(0);
-                result = util.isUnseen(undefined);
-                expect(result).toEqual(undefined);
-                result = util.isDeleted(undefined);
-                expect(result).toEqual(undefined);
-                result = util.isSpam(undefined);
-                expect(result).toEqual(undefined);
-                result = util.byMyself(undefined);
-                expect(result).toEqual(undefined);
-                result = util.getInitialDefaultSender(undefined);
-                expect(result).toEqual(undefined);
-                result = util.getInitialDefaultSender();
-                expect(result).toEqual(undefined);
+                expect([
+                    util.isUnseen(undefined),
+                    util.isDeleted(undefined),
+                    util.isSpam(undefined),
+                    util.byMyself(undefined),
+                    util.getInitialDefaultSender(undefined),
+                    util.getInitialDefaultSender()
+                ]).eachToEqual(undefined);
+                //invalid: returns 0
+                expect([
+                    util.count(undefined)
+                ]).eachToEqual(0);
                 //invalid: returns false
-                result = util.isAnswered(undefined);
-                expect(result).toEqual(false);
-                result = util.isForwarded(undefined);
-                expect(result).toEqual(false);
-                result = util.hasOtherRecipients(undefined);
-                expect(result).toEqual(false);
+                expect([
+                    util.isAnswered(undefined),
+                    util.isForwarded(undefined),
+                    util.hasOtherRecipients(undefined),
+                ]).eachToEqual(false);
+                //invalid: returns empty array
                 result = util.getAttachments(undefined);
                 expect(result).toBeArray();
+                expect(result).toBeEmpty();
             });
             it('should return a boolean for valid data', function () {
                 var result;
                 result = util.count([{}, {}, {thread: [1, 2]}]);
                 expect(result).toEqual(4);
-
-                result = util.isUnseen({flags: 16});
-                expect(result).toEqual(true);
-                result = util.isUnseen({flags: 32});
-                expect(result).toEqual(false);
-
-                result = util.isDeleted({flags: 2});
-                expect(result).toEqual(true);
-                result = util.isDeleted({flags: 1});
-                expect(result).toEqual(false);
-
-                result = util.isSpam({flags: 128});
-                expect(result).toEqual(true);
-                result = util.isSpam({flags: 64});
-                expect(result).toEqual(false);
-
-                result = util.isAnswered({flags: 1});
-                expect(result).toEqual(true);
-                result = util.isAnswered({flags: 2});
-                expect(result).toEqual(false);
-
-                result = util.isForwarded({flags: 256});
-                expect(result).toEqual(true);
-                result = util.isForwarded({flags: 128});
-                expect(result).toEqual(false);
-
-                result = util.hasOtherRecipients({to: [['', 'some address']], cc: '', bcc: ''});
-                expect(result).toEqual(true);
+                //valid: returns true
+                expect([
+                    util.isUnseen({flags: 16}),
+                    util.isDeleted({flags: 2}),
+                    util.isSpam({flags: 128}),
+                    util.isAnswered({flags: 1}),
+                    util.isForwarded({flags: 256}),
+                    util.hasOtherRecipients({to: [['', 'some address']], cc: '', bcc: ''})
+                ]).eachToEqual(true);
+                //valid: returns false
+                expect([
+                    util.isUnseen({flags: 32}),
+                    util.isDeleted({flags: 1}),
+                    util.isSpam({flags: 64}),
+                    util.isAnswered({flags: 2}),
+                    util.isForwarded({flags: 128})
+                ]).eachToEqual(false);
             });
         });
     });
