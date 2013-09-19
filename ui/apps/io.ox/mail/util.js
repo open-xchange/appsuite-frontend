@@ -41,6 +41,8 @@ define('io.ox/mail/util',
         },
 
         getDateFormated = function (timestamp, options) {
+            if (!_.isNumber(timestamp))
+                return gt('unknown');
             var opt = $.extend({ fulldate: true, filtertoday: true }, options || {}),
                 now = new date.Local(),
                 d = new date.Local(timestamp),
@@ -337,10 +339,10 @@ define('io.ox/mail/util',
 
         getPriority: function (data) {
             // normal?
-            if (data.priority === 3) return $();
+            if (data && data.priority === 3) return $();
             var i = '<i class="icon-exclamation"/>',
                 indicator = $('<span>').append(_.noI18n('\u00A0'), i, i, i);
-            if (data.priority < 3) {
+            if (data && data.priority < 3) {
                 return indicator.addClass('high').attr('title', gt('High priority'));
             } else {
                 return indicator.addClass('low').attr('title', gt('Low priority'));
@@ -349,8 +351,8 @@ define('io.ox/mail/util',
 
         getAccountName: function (data) {
             // primary account?
-            var id = window.unescape(data.id);
-            return (/^default0/).test(id) ? gt('Primary account') : (data.account_name || 'N/A');
+            var id = window.unescape(data ? data.id : '');
+            return (/^default0/).test(id) ? gt('Primary account') : (data ? data.account_name : 'N/A');
         },
 
         getTime: function (timestamp) {
@@ -362,11 +364,15 @@ define('io.ox/mail/util',
         },
 
         getFullDate: function (timestamp) {
+            if (!_.isNumber(timestamp))
+                return gt('unknown');
             var t = new date.Local(timestamp);
             return t.format(date.DATE_TIME);
         },
 
         getSmartTime: function (timestamp) {
+            if (!_.isNumber(timestamp))
+                return gt('unknown');
             var now = new Date(),
                 zone = now.getTimezoneOffset(),
                 time = now.getTime() - zone * 60 * 1000,
@@ -397,35 +403,37 @@ define('io.ox/mail/util',
         },
 
         isUnseen: function (data) {
-            return (data.flags & 32) !== 32;
+            return data && data.flags ? (data.flags & 32) !== 32 : undefined;
         },
 
         isDeleted: function (data) {
-            return (data.flags & 2) === 2;
+            return data && data.flags ? (data.flags & 2) === 2 : undefined;
         },
 
         isSpam: function (data) {
-            return (data.flags & 128) === 128;
+            return data && data.flags ? (data.flags & 128) === 128 : undefined;
         },
 
         isAnswered: function () {
-            return _.chain(arguments).flatten().compact().reduce(function (memo, data) {
+            return _.chain(arguments || []).flatten().compact().reduce(function (memo, data) {
                 return memo || (data.flags & 1) === 1;
             }, false).value();
         },
 
         isForwarded: function () {
-            return _.chain(arguments).flatten().compact().reduce(function (memo, data) {
+            return _.chain(arguments || []).flatten().compact().reduce(function (memo, data) {
                 return memo || (data.flags & 256) === 256;
             }, false).value();
         },
 
         byMyself: function (data) {
+            data = data || {};
             return data.from && data.from.length && String(data.from[0][1] || '').toLowerCase() in addresses;
         },
 
         hasOtherRecipients: function (data) {
-            var list = [].concat(data.to, data.cc, data.bcc);
+            data = data || {};
+            var list = [].concat(data.to || [], data.cc || [], data.bcc || []);
             return 0 < _(list).reduce(function (memo, arr) {
                 var email = String(arr[1] || '').toLowerCase();
                 return memo + (email && !(email in addresses) ? 1 : 0);
@@ -455,7 +463,7 @@ define('io.ox/mail/util',
             };
 
             return function (data) {
-
+                data = data || {};
                 var i, $i, obj, dat, attachments = [],
                 mail = { id: data.id, folder_id: data.folder_id };
 
