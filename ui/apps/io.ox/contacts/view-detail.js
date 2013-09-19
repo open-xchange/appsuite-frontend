@@ -263,14 +263,14 @@ define("io.ox/contacts/view-detail",
         var args = _(arguments).toArray(),
             rows = _(args.slice(1)).compact();
 
-        if (rows.length === 0) return [];
+        if (rows.length === 0) return $();
 
         return $('<div class="block">').append(
             [$('<legend>').text(args[0])].concat(rows)
         );
     }
 
-    function row(label, builder) {
+    function row(label, builder, id) {
 
         if (_.isFunction(label)) {
             builder = label;
@@ -281,16 +281,16 @@ define("io.ox/contacts/view-detail",
 
         if (!build) return null;
 
-        return $('<div>').append(
+        return $('<div>').attr('data-property', id).append(
             label ? $('<label>').text(label) : [],
             _.isString(build) ? $.txt(build) : build
         );
     }
 
-    function simple(label, value) {
-        value = $.trim(value);
+    function simple(label, data, id) {
+        var value = $.trim(data[id]);
         if (!value) return null;
-        return $('<div>').append(
+        return $('<div>').attr('data-property', id).append(
             $('<label>').text(label),
             $('<span>').text(value)
         );
@@ -308,9 +308,9 @@ define("io.ox/contacts/view-detail",
         });
     }
 
-    function mail(address, name) {
+    function mail(address, name, id) {
         if (!address) return null;
-        return $('<div>').append(
+        return $('<div>').attr('data-property', id).append(
             $('<label>').text(gt('Email')),
             $('<a>', { href: 'mailto:' + address })
                 .text(_.noI18n(address))
@@ -329,23 +329,25 @@ define("io.ox/contacts/view-detail",
             .value();
     }
 
-    function phone(label, number) {
-        number = $.trim(number);
+    function phone(label, data, id) {
+        var number = $.trim(data[id]);
         if (!number) return null;
-        return $('<div>').append(
+        return $('<div>').attr('data-property', id).append(
             $('<label>').text(label),
             $('<a>', { href: _.device('smartphone') ? 'tel:' + number: 'callto:' + number }).text(number)
         );
     }
 
-    function IM(number) {
+    function IM(number, id) {
 
         number = $.trim(number);
         if (!number) return null;
 
+        var node = $('<div>').attr('data-property', id), obj = {};
+
         if (/^skype:/.test(number)) {
             number = number.split('skype:')[1];
-            return $('<div>').append(
+            return node.append(
                 $('<label>').text('Skype'),
                 $('<a>', { href: 'callto:' + number + '?call' }).text(number)
             );
@@ -353,13 +355,14 @@ define("io.ox/contacts/view-detail",
 
         if (/^x-apple:/.test(number)) {
             number = number.split('x-apple:')[1];
-            return $('<div>').append(
+            return node.append(
                 $('<label>').text('iMessage'),
                 $('<a>', { href: 'imessage://' + number + '@me.com' }).text(number)
             );
         }
 
-        return simple(gt('Messenger'), number);
+        obj[id] = number;
+        return simple(gt('Messenger'), obj, id);
     }
 
     // data is full contact data
@@ -383,6 +386,7 @@ define("io.ox/contacts/view-detail",
 
         return $('<a class="google-maps" target="_blank">')
             .attr('href', 'http://www.google.com/maps?q=' + encodeURIComponent(text.replace('/\n/g', ', ')))
+            .attr('data-property', type)
             .append(
                 $.txt($.trim(text)),
                 $('<caption>').append(
@@ -409,24 +413,21 @@ define("io.ox/contacts/view-detail",
             }
         })
 
-        // Personal
         .extend({
             id: 'personal',
             index: 200,
             draw: function (baton) {
 
                 var data = baton.data,
-                    addresses = getMailAddresses(data),
                     fullname = util.getFullName(baton.data);
 
                 this.append(
-
                     block(gt('Personal'),
-                        simple(gt('Title'), data.title),
-                        simple(gt('Name'), fullname),
-                        simple(gt('Middle name'), data.second_name),
-                        simple(gt('Suffix'), data.suffix),
-                        simple(gt('Nickname'), data.nickname),
+                        simple(gt('Title'), data, 'title'),
+                        simple(gt('Name'), { fullname: fullname }, 'name'),
+                        simple(gt('Middle name'), data, 'second_name'),
+                        simple(gt('Suffix'), data, 'suffix'),
+                        simple(gt('Nickname'), data, 'nickname'),
                         row(gt('Birthday'), function () {
                             if (baton.data.birthday) {
                                 var birthday = new date.UTC(baton.data.birthday);//use utc time. birthdays must not be converted
@@ -436,83 +437,170 @@ define("io.ox/contacts/view-detail",
                                     return birthday.format(date.DATE);
                                 }
                             }
-                        }),
+                        }, 'birthday'),
                         row(gt('URL'), function () {
-                            if (baton.data.url)
+                            if (baton.data.url) {
                                 return $('<a>', { href: baton.data.url, target: '_blank' }).text(baton.data.url);
-                        })
-                    ),
+                            }
+                        }, 'URL')
+                    )
+                    .attr('data-block', 'personal')
+                );
+            }
+        })
 
+        .extend({
+            id: 'job',
+            index: 300,
+            draw: function (baton) {
+
+                var data = baton.data;
+
+                this.append(
                     block(gt('Job'),
-                        simple(gt('Position'), data.position),
-                        simple(gt('Department'), data.department),
-                        simple(gt('Profession'), data.profession),
-                        simple(gt('Company'), data.company),
-                        simple(gt('Room number'), data.room_number)
-                    ),
+                        simple(gt('Position'), data, 'position'),
+                        simple(gt('Department'), data, 'department'),
+                        simple(gt('Profession'), data, 'profession'),
+                        simple(gt('Company'), data, 'company'),
+                        simple(gt('Room number'), data, 'room_number')
+                    )
+                    .attr('data-block', 'job')
+                );
+            }
+        })
 
+        .extend({
+            id: 'messaging',
+            index: 400,
+            draw: function (baton) {
+
+                var data = baton.data,
+                    fullname = util.getFullName(baton.data),
+                    addresses = getMailAddresses(data);
+
+                this.append(
                     block(gt('Mail and Messaging'),
-                        mail(addresses[0], fullname),
-                        mail(addresses[1], fullname),
-                        mail(addresses[2], fullname),
-                        IM(data.instant_messenger1),
-                        IM(data.instant_messenger2)
-                    ),
+                        mail(addresses[0], fullname, 'email1'),
+                        mail(addresses[1], fullname, 'email2'),
+                        mail(addresses[2], fullname, 'email3'),
+                        IM(data.instant_messenger1, 'instant_messenger1'),
+                        IM(data.instant_messenger2, 'instant_messenger2')
+                    )
+                    .attr('data-block', 'messaging')
+                );
+            }
+        })
 
-                    block(gt('Phone numbers'),
-                        phone(gt('Mobile'), data.cellular_telephone1),
-                        phone(gt('Mobile'), data.cellular_telephone2),
-                        phone(gt('Phone (business)'), data.telephone_business1),
-                        phone(gt('Phone (business)'), data.telephone_business2),
-                        phone(gt('Phone (private)'), data.telephone_home1),
-                        phone(gt('Phone (private)'), data.telephone_home2),
-                        phone(gt('Phone (other)'), data.telephone_other),
-                        simple(gt('Fax (business)'), data.fax_business),
-                        simple(gt('Fax (private)'), data.fax_home),
-                        simple(gt('Fax (other)'), data.fax_other)
-                    ),
+        .extend({
+            id: 'phone',
+            index: 500,
+            draw: function (baton) {
 
+                var data = baton.data;
+
+                this.append(
+                    block(gt('Phone numbers'), 'phone',
+                        phone(gt('Mobile'), data, 'cellular_telephone1'),
+                        phone(gt('Mobile'), data, 'cellular_telephone2'),
+                        phone(gt('Phone (business)'), data, 'telephone_business1'),
+                        phone(gt('Phone (business)'), data, 'telephone_business2'),
+                        phone(gt('Phone (private)'), data, 'telephone_home1'),
+                        phone(gt('Phone (private)'), data, 'telephone_home2'),
+                        phone(gt('Phone (other)'), data, 'telephone_other'),
+                        simple(gt('Fax (business)'), data, 'fax_business'),
+                        simple(gt('Fax (private)'), data, 'fax_home'),
+                        simple(gt('Fax (other)'), data, 'fax_other')
+                    )
+                    .attr('data-block', 'phone')
+                );
+            }
+        })
+
+        .extend({
+            id: 'business-address',
+            index: 600,
+            draw: function (baton) {
+
+                var data = baton.data;
+
+                this.append(
                     block(gt('Business Address'),
                         address(data, 'business')
-                    ),
+                    )
+                    .attr('data-block', 'business-address')
+                );
+            }
+        })
 
+        .extend({
+            id: 'home-address',
+            index: 700,
+            draw: function (baton) {
+
+                var data = baton.data;
+
+                this.append(
                     block(gt('Home Address'),
                         address(data, 'home')
-                    ),
+                    )
+                    .attr('data-block', 'home-address')
+                );
+            }
+        })
 
+        .extend({
+            id: 'other-address',
+            index: 800,
+            draw: function (baton) {
+
+                var data = baton.data;
+
+                this.append(
                     block(gt('Other Address'),
                         address(data, 'other')
-                    ),
+                    )
+                    .attr('data-block', 'other-address')
+                );
+            }
+        })
 
+        .extend({
+            id: 'misc',
+            index: 900,
+            draw: function (baton) {
+
+                var data = baton.data;
+
+                this.append(
                     block(
                         //#. section name for contact fields in detail view
                         gt('Miscellaneous'),
                         // looks stupid but actually easier to read and not much shorter than any smart-ass solution
-                        simple(gt('Optional 01'), data.userfield01),
-                        simple(gt('Optional 02'), data.userfield02),
-                        simple(gt('Optional 03'), data.userfield03),
-                        simple(gt('Optional 04'), data.userfield04),
-                        simple(gt('Optional 05'), data.userfield05),
-                        simple(gt('Optional 06'), data.userfield06),
-                        simple(gt('Optional 07'), data.userfield07),
-                        simple(gt('Optional 08'), data.userfield08),
-                        simple(gt('Optional 09'), data.userfield09),
-                        simple(gt('Optional 10'), data.userfield10),
-                        simple(gt('Optional 11'), data.userfield11),
-                        simple(gt('Optional 12'), data.userfield12),
-                        simple(gt('Optional 13'), data.userfield13),
-                        simple(gt('Optional 14'), data.userfield14),
-                        simple(gt('Optional 15'), data.userfield15),
-                        simple(gt('Optional 16'), data.userfield16),
-                        simple(gt('Optional 17'), data.userfield17),
-                        simple(gt('Optional 18'), data.userfield18),
-                        simple(gt('Optional 19'), data.userfield19),
-                        simple(gt('Optional 20'), data.userfield20)
+                        simple(gt('Optional 01'), data, 'userfield01'),
+                        simple(gt('Optional 02'), data, 'userfield02'),
+                        simple(gt('Optional 03'), data, 'userfield03'),
+                        simple(gt('Optional 04'), data, 'userfield04'),
+                        simple(gt('Optional 05'), data, 'userfield05'),
+                        simple(gt('Optional 06'), data, 'userfield06'),
+                        simple(gt('Optional 07'), data, 'userfield07'),
+                        simple(gt('Optional 08'), data, 'userfield08'),
+                        simple(gt('Optional 09'), data, 'userfield09'),
+                        simple(gt('Optional 10'), data, 'userfield10'),
+                        simple(gt('Optional 11'), data, 'userfield11'),
+                        simple(gt('Optional 12'), data, 'userfield12'),
+                        simple(gt('Optional 13'), data, 'userfield13'),
+                        simple(gt('Optional 14'), data, 'userfield14'),
+                        simple(gt('Optional 15'), data, 'userfield15'),
+                        simple(gt('Optional 16'), data, 'userfield16'),
+                        simple(gt('Optional 17'), data, 'userfield17'),
+                        simple(gt('Optional 18'), data, 'userfield18'),
+                        simple(gt('Optional 19'), data, 'userfield19'),
+                        simple(gt('Optional 20'), data, 'userfield20')
                     )
+                    .attr('data-block', 'misc')
                 );
             }
         });
-
 
     // Resource description
     // only applies to resource because they have a "description" field.
