@@ -690,7 +690,7 @@
                 border-color: #ccc;
             }
         }
-        input[type=text], textarea, .text-editor {
+        input[type=text]:not(#writer_field_to, #writer_field_cc, #writer_field_bcc), textarea, .text-editor {//exclude to,cc and bcc fields or they will get too huge
             height: 200px;
 
             border-top: none;
