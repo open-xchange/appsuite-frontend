@@ -18,6 +18,7 @@ define.async('io.ox/office/tk/utils',
 
     'use strict';
 
+
     var // the Deferred object that will be resolved with the Utils class
         def = $.Deferred(),
 
@@ -2556,7 +2557,6 @@ define.async('io.ox/office/tk/utils',
 
         innerMarkup = (innerMarkup || '') + captionMarkup;
         return '<a class="' + Utils.BUTTON_CLASS + (focusable ? (' ' + Utils.FOCUSABLE_CLASS) : '') + '" tabindex="' + tabIndex + '">' + innerMarkup + '</a>';
-                        //Marko comment: creates <a> in all focusable (mouseover) buttons on SidePane.
     };
 
     /**
@@ -2582,32 +2582,14 @@ define.async('io.ox/office/tk/utils',
             // Create the DOM anchor element representing the button. Do NOT use
             // <button> elements, Firefox has problems with text clipping and
             // correct padding of the <button> contents.
+            button = Utils.createControl('a', { tabindex: tabIndex, 'role': 'button' }, options).addClass(Utils.BUTTON_CLASS);
+                                                                /* Marko add: attribute "role" for ARIA for all buttons.
+                                                                              You must add new attribute here, not in function
+                                                                              above under "Utils.createButtonMarkup" !
 
-            button = Utils.createControl('a', { tabindex: tabIndex, 'role': 'button', 'aria-pressed': 'false' }, options).addClass(Utils.BUTTON_CLASS);
-                                                   /* Marko add: attribute "role" for ARIA. Attribute must be placed into <a> to be recognized by AViewer,
-                                                                 not in it's <div> parent (file button.js, under "initialization").
-
-                                                                 Also, you must add a new attribute here, not in the function
-                                                                       above under "Utils.createButtonMarkup" (read @return comment)!!!!
-                                                   */
-
-        /*Start Marko
-        button.on('click', function (e) {
-               $(e.target).attr('aria-pressed': 'true');
-        });
-        */
-
-
-        /*Start Marko
-         * $( 'a' ).toggle(function() {
-            aria-pressed
-          }, function() {
-            alert( "Second handler for .toggle() called." );
-          });
-        End Marko
-        */
-
-
+                                                                              Attribute must be placed inside button <a> to be recognized by AViewer, not
+                                                                              in it's parent <div> at file button.js under "initialization".
+                                                                */
         Utils.setControlCaption(button, options);
         return button;
     };
