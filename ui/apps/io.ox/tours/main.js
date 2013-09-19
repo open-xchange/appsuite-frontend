@@ -32,7 +32,7 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                     if (name === 'io.ox/calendar/edit/main') {
                         that.create({});
                     } else if (name === 'io.ox/mail/write/main') {
-                        that.compose({});
+                        that.compose({ subject: '[Guided tours] Example e-mail'});
                     }
                     yielded();
                 });
@@ -225,6 +225,9 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                         content: gt("To send the E-Mail, click on Send on the upper right side."),
                         multipage: true,
                         onNext: function () {
+                            if ($('input[name="subject"]').val() === '[Guided tours] Example e-mail') {
+                                $('.btn[data-action="discard"]:visible').click();
+                            }
                             switchToApp('io.ox/mail/main', function () {
                                 window.hopscotch.nextStep();
                                 window.hopscotch.prevStep();
