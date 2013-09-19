@@ -17,8 +17,7 @@ define('io.ox/calendar/edit/view-addparticipants',
        'io.ox/mail/util',
        'io.ox/participants/model',
        'io.ox/participants/views',
-       'io.ox/core/notifications',
-       'gettext!io.ox/calendar/edit/main'], function (autocomplete, AutocompleteAPI, mailUtil, pModel, pViews, notifications, gt) {
+       'gettext!io.ox/calendar/edit/main'], function (autocomplete, AutocompleteAPI, mailUtil, pModel, pViews, gt) {
 
     'use strict';
 
@@ -27,9 +26,11 @@ define('io.ox/calendar/edit/view-addparticipants',
         events: {
             'click [data-action="add"]': 'onClickAdd'
         },
+
         initialize: function () {
             var self = this;
         },
+
         // TODO: should refactored to a controller
         render: function (opt) {
             var self = this,
@@ -64,93 +65,90 @@ define('io.ox/calendar/edit/view-addparticipants',
                     reduce: function (data) {
                         // updating baton-data-node
                         self.trigger('update');
-                        var baton = $.data(self.$el, 'baton') || {list: []},
-                            hash = {},
-                            list,
+                        var baton = self.$el.data('baton') || {list: []},
                             //get numeric type
-                            getType = function (obj) {
+                            fixType = function (obj) {
                                 switch (obj.type) {
                                 case 'user':
                                 case 1:
-                                    return 1;
+                                    obj.data.type = obj.type = obj.sort = 1;
+                                    break;
                                 case 'group':
                                 case 2:
-                                    return 2;
+                                    obj.data.type = obj.type = obj.sort = 2;
+                                    break;
                                 case 'resource':
                                 case 3:
-                                    return 3;
+                                    obj.data.type = obj.type = obj.sort = 3;
+                                    break;
                                 case 4:
-                                    return 4;
+                                    obj.data.type = obj.type = obj.sort = 4;
+                                    break;
                                 case 'contact':
                                 case 5:
-                                    return 5;
+                                    obj.data.external = true;
+                                    if (obj.data.internal_userid) {
+                                        obj.sort = 1;
+                                    } else if (obj.data.mark_as_distributionlist) {
+                                        obj.sort = 4; //distlistunsergroup
+                                    } else {
+                                        obj.sort = 5;
+                                    }
+                                    if (!obj.data.type) {//only change if no type is there or type 5 will be made to type 1 on the second run
+                                        if (obj.data.internal_userid && obj.data.email1 === obj.email) {
+                                            obj.data.type = 1; //user
+                                            obj.data.external = false;
+                                            if (!options.keepId) {
+                                                obj.data.id = obj.data.internal_userid;
+                                            }
+                                        } else if (obj.data.mark_as_distributionlist) {
+                                            obj.data.type = 6; //distlistunsergroup
+                                        } else {
+                                            obj.data.type = 5;
+                                            // h4ck
+                                            obj.data.email1 = obj.email;
+                                            //uses emailparam as flag, to support adding users with their 2nd/3rd emailaddress
+                                            obj.data.emailparam = obj.email;
+                                        }
+                                    }
+                                    obj.type = 5;
+                                    break;
                                 }
+                                return obj;
                             },
-                            //set hash for doublet check
-                            getHash = function () {
+                            // remove doublets from list
+                            filterDoubletes = function () {
                                 var hash = {};
                                 _(baton.list).each(function (obj) {
+                                    obj = fixType(obj);
                                     // handle contacts/external contacts
-                                    if ((getType(obj) === 1 || getType(obj) === 5) && obj.email) {
+                                    if ((obj.type === 1 || obj.type === 5) && obj.email) {
                                         hash[obj.email] = true;
                                     }
                                     hash[obj.type + '|' + obj.id] = true;
                                 });
-                                return hash;
-                            },
-                            // remove doublets from list
-                            filterDoubletes = function (hash) {
-                                return _(data).filter(function (recipient) {
-                                    var type = getType(recipient),
-                                        uniqueId = type === 1 ? !hash[type + '|' + recipient.data.internal_userid || ''] : !hash[type + '|' + recipient.data.id],
-                                        uniqueMail = recipient.email ? !hash[recipient.email] : true;
-                                    return uniqueId && uniqueMail;
-                                });
+                                return _.chain(data).filter(function (obj) {
+                                    obj = fixType(obj);
+                                    var uniqueId = obj.type === 1 ? !hash[obj.type + '|' + obj.data.internal_userid || ''] : !hash[obj.type + '|' + obj.data.id];
+                                    return uniqueId && (obj.email ? !hash[obj.email] : true);
+                                }).sortBy(function (obj) { return obj.sort; }).value();
                             };
 
-                        hash = getHash();
-                        list = filterDoubletes(hash);
                         //save Results
                         lastSearchResults = data;
                         //return number of query hits and the filtered list
-                        return { list: list, hits: data.length };
+                        return { list: filterDoubletes(), hits: data.length };
                     },
                     draw: function (obj) {
-                        if (obj && obj.data.constructor.toString().indexOf('Object') !== -1) {
-                            switch (obj.type) {
-                            case 'user':
-                            case 'contact':
-                                if (!obj.data.type) {//only change if no type is there or type 5 will be made to type 1 on the second run
-                                    if (obj.data.internal_userid && obj.data.email1 === obj.email) {
-                                        obj.data.type = 1; //user
-                                        if (!options.keepId) {
-                                            obj.data.id = obj.data.internal_userid;
-                                        }
-                                    } else if (obj.data.mark_as_distributionlist) {
-                                        obj.data.type = 6; //distlistunsergroup
-                                    } else {
-                                        obj.data.type = 5;
-                                        // h4ck
-                                        obj.data.email1 = obj.email;
-                                        //uses emailparam as flag, to support adding users with their 2nd/3rd emailaddress
-                                        obj.data.emailparam = obj.email;
-                                    }
-                                }
-                                break;
-                            case 'resource':
-                                obj.data.type = 3; //resource
-                                break;
-                            case 'group':
-                                obj.data.type = 2; //group
-                                break;
-                            }
-                            obj.data.image1_url = obj.data.image1_url || '';
-                            var pmodel = new pModel.Participant(obj.data);
-                            var pview = new pViews.ParticipantEntryView({model: pmodel, prefetched: true, closeButton: false, halo: false});
-                            var markup = pview.render().el;
-
-                            this.append(markup);
-                        }
+                        if (!_.isObject(obj)) return;
+                        obj.data.image1_url = obj.data.image1_url || '';
+                        var pview = new pViews.ParticipantEntryView({
+                                model: new pModel.Participant(obj.data),
+                                prefetched: true,
+                                closeButton: false,
+                                halo: false
+                            });
+                        this.append(pview.render().el);
                     },
                     click: function () {
                         self.autoparticipants.trigger('selected', self.autoparticipants.getSelectedItem());
@@ -166,6 +164,7 @@ define('io.ox/calendar/edit/view-addparticipants',
                 });
             return self;
         },
+
         onClickAdd: function (e) {
 
             // updating baton-data-node

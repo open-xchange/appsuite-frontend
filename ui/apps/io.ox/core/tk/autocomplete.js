@@ -39,7 +39,7 @@ define('io.ox/core/tk/autocomplete',
 
                 //get data
                 source: function (val) {
-                    return this.api.search(val).pipe(function (data) {
+                    return this.api.search(val).then(function (data) {
                         return o.placement === 'top' ? data.reverse() : data;
                     });
                 },
@@ -334,7 +334,7 @@ define('io.ox/core/tk/autocomplete',
                         scrollpane.empty();
                         popup.busy();
                         o.source(val)
-                            .pipe(o.reduce)
+                            .then(o.reduce)
                             .then(_.lfo(cbSearchResult, val), cbSearchResultFail);
                     }
                 } else {

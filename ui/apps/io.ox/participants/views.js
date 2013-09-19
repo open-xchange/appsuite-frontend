@@ -130,7 +130,7 @@ define('io.ox/participants/views',
             case 1:
                 // uses emailparam as flag, to support adding users with their 2nd/3rd emailaddress
                 mail = this.model.get('emailparam') ? this.model.get('emailparam') : this.model.getEmail();
-                this.setRows(mail);
+                this.setRows(mail, this.model.get('external') ? gt('External contact') : '');
                 if (this.options.halo) {
                     this.nodes.$mail
                         .attr({ href: '#', tabindex: '1' })
