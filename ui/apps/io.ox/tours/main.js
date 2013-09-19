@@ -251,7 +251,9 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                             }
                             return null;
                         },
-                        content: gt("The number on the right side of the E-Mail subject corresponds to the number of E-Mails in a thread. To open the thread, click on the number.")
+                        content: gt("The number on the right side of the E-Mail subject corresponds to the number of E-Mails in a thread. To open the thread, click on the number."),
+                        arrowOffset: 1,
+                        yOffset: -10
                     },
                     {
                         title: gt("Halo view"),
