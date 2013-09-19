@@ -440,7 +440,14 @@
             assert(langDef.state !== 'pending', _.printf(
                 'Invalid gettext dependency on %s (before login).', name));
             langDef.done(function () {
-                parentRequire([name + '.' + lang], ox.signin ? wrap : load, error);
+                // use specific language?
+                // example: gettext!io.ox/core!ja_JP
+                var index = name.indexOf('!'), language = lang;
+                if (index !== -1) {
+                    language = name.substr(index + 1);
+                    name = name.substr(0, index);
+                }
+                parentRequire([name + '.' + language], ox.signin ? wrap : load, error);
             });
             function wrap(f) {
                 var f2 = function () { return f.apply(this, arguments); };
