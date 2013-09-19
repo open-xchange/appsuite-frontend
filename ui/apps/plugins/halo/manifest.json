@@ -1,9 +1,9 @@
 [
     {
-        namespace: "core"
+        "namespace": "core"
     },
     {
-        namespace: "test",
-        path: "plugins/halo/test"
+        "namespace": "test",
+        "path": "plugins/halo/test"
     }
 ]

@@ -1,10 +1,10 @@
 {
-    title: "Mail",
-    company: "Open-Xchange",
-    icon: "mail.png",
-    category: "Basic",
-    settings: true,
-    requires: "webmail",
-    refreshable: true,
-    index: 200
+    "title": "Mail",
+    "company": "Open-Xchange",
+    "icon": "mail.png",
+    "category": "Basic",
+    "settings": true,
+    "requires": "webmail",
+    "refreshable": true,
+    "index": 200
 }
