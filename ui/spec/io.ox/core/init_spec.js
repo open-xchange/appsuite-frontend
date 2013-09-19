@@ -22,5 +22,8 @@ define([], function () {
         it('loads underscore', function () {
             expect(_).toBeDefined();
         });
+        it('loads chai', function () {
+            expect(chai).toBeDefined();
+        });
     });
 });
