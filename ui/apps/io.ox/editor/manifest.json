@@ -1,10 +1,10 @@
 {
-    title: "Editor",
-    company: "Open-Xchange",
-    icon: "default.png",
-    category: "Productivity",
-    settings: false,
-    requires: "infostore",
-    refreshable: true,
-    visible: false
+    "title": "Editor",
+    "company": "Open-Xchange",
+    "icon": "default.png",
+    "category": "Productivity",
+    "settings": false,
+    "requires": "infostore",
+    "refreshable": true,
+    "visible": false
 }
