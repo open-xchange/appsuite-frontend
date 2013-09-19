@@ -1,0 +1,29 @@
+CACHE MANIFEST
+# build: {{ version }}
+
+CACHE:
+# core
+{{ base }}/favicon.ico
+{{ base }}/boot.js
+{{ base }}/blank.html
+{{ base }}/offline.js
+# theme
+{{ base }}/apps/themes/login/login.css
+{{ base }}/apps/themes/login/font-awesome.css
+{{ base }}/apps/themes/login/busy.gif
+{{ base }}/apps/themes/login/fonts/OpenSans-Light-webfont.woff
+{{ base }}/apps/themes/login/fonts/OpenSans-Light-webfont.ttf
+{{ base }}/apps/themes/login/fonts/fontawesome-webfont.woff
+{{ base }}/apps/themes/style.less
+{{ base }}/apps/themes/definitions.less
+{{ base }}/apps/themes/default/style.less
+{{ base }}/apps/themes/default/definitions.less
+{{ base }}/apps/themes/default/dummypicture.png
+{{ base }}/apps/themes/default/logo-small.png
+
+
+NETWORK:
+*
+
+FALLBACK:
+{{ base }}/online.js {{ base }}/offline.js

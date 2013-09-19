@@ -16,7 +16,8 @@
 module.exports = function (grunt) {
 
     var srcFiles = ['Gruntfile.js', 'apps/**/*.js'],
-        jsonFiles = ['apps/**/*.json'];
+        jsonFiles = ['apps/**/*.json'],
+        local = grunt.file.exists('local.conf.json') ? grunt.file.readJSON('local.conf.json') : {};
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -36,6 +37,7 @@ module.exports = function (grunt) {
             }
         },
         clean: ['build/', 'node_modules/grunt-newer/.cache'],
+        local: local,
         jshint: {
             all: {
                 src: srcFiles,
@@ -49,9 +51,74 @@ module.exports = function (grunt) {
             manifests: {
                 src: jsonFiles
             }
+        },
+        assemble: {
+            options: {
+                version: '<%= pkg.version %>-<%= pkg.revision %>.<%= grunt.template.date(new Date(), "yyyymmdd.hhMMss") %>',
+                enable_debug: String(local.debug || false),
+                revision: '<%= pkg.revision %>',
+                base: 'v=<%= pkg.version %>-<%= pkg.revision %>.<%= grunt.template.date(new Date(), "yyyymmdd.hhMMss") %>'
+            },
+            base: {
+                options: {
+                    layout: false,
+                    ext: '',
+                    partials: ['html/core_*.html']
+                },
+                files: [
+                    {
+                        src: ['index.html', 'signin.html'],
+                        expand: true,
+                        cwd: 'html/',
+                        rename: function (dest, matchedSrcPath, options) {
+                            var map = {
+                                'index.html': 'core',
+                                'signin.html': 'signin'
+                            };
+                            return dest + map[matchedSrcPath];
+                        },
+                        dest: 'build/'
+                    }
+                ]
+            },
+            appcache: {
+                options: {
+                    layout: false,
+                    ext: '.appcache'
+                },
+                files: [
+                    {
+                        src: ['*.appcache.hbs'],
+                        expand: true,
+                        cwd: 'html/',
+                        ext: '.appcache',
+                        dest: 'build/'
+                    }
+                ]
+            }
+        },
+        concat: {
+            static: {
+                files: [
+                    {
+                        src: [".htaccess", "blank.html", "busy.html", "unsupported.html", "print.html", "favicon.ico"],
+                        expand: true,
+                        cwd: 'html/',
+                        dest: 'build/'
+                    },
+                    {
+                        src: ['o{n,ff}line.js'],
+                        expand: true,
+                        cwd: 'src/',
+                        dest: 'build/'
+                    }
+                ]
+            }
         }
     });
 
+    grunt.loadNpmTasks('assemble');
+    grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-jsonlint');
     grunt.loadNpmTasks('grunt-contrib-clean');
@@ -60,5 +127,5 @@ module.exports = function (grunt) {
 
     grunt.registerTask('lint', ['newer:jshint:all', 'newer:jsonlint:manifests']);
 
-    grunt.registerTask('default', ['lint']);
+    grunt.registerTask('default', ['lint', 'newer:assemble', 'newer:concat']);
 };

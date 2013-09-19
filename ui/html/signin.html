@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html manifest="signin.appcache">
 <head>
-//@include core_head.html
-<link rel="stylesheet" href="@base@/apps/io.ox/core/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="@base@/apps/themes/login/login-responsive.css">
+{{> core_head }}
+<link rel="stylesheet" href="{{ base }}/apps/io.ox/core/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="{{ base }}/apps/themes/login/login-responsive.css">
 <script>
   // signin page
   ox.signin = true;
@@ -15,7 +15,7 @@
 </script>
 </head>
 <body class="unselectable">
-//@include /core_body.html
+{{> core_body }}
 
 <noscript>
 <p class="noscript">This app uses JavaScript. Your browser either doesn't support JavaScript or you have it turned off. To use this app please use a JavaScript enabled browser.</p>
