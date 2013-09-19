@@ -118,7 +118,7 @@ define([
                     this.emoji.recent(pile_unicode);
                     expect(_(this.emoji.iconsForCategory('recently')).pluck('unicode')).toEqual(['\u2600', pile_unicode]);
 
-                    for (var i=0;i<10;i++) this.emoji.recent(pile_unicode);
+                    for (var i = 0; i < 10; i++) this.emoji.recent(pile_unicode);
                     expect(_(this.emoji.iconsForCategory('recently')).pluck('unicode')).toEqual([pile_unicode, '\u2600']);
                 });
             });

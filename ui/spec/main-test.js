@@ -5,7 +5,7 @@ for (var file in window.__karma__.files) {
             tests.push(file);
         }
     }
-};
+}
 
 require(['io.ox/core/extPatterns/stage'], function (Stage) {
     new Stage('io.ox/core/stages', {

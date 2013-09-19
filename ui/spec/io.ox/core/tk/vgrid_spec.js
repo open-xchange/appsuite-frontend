@@ -240,7 +240,7 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
                         checkboxes.each(function (index, checkbox) {
                             vgrid.focus();
                             $(checkbox).click();
-                            expect(selection.get().length).toBe(index+1);
+                            expect(selection.get().length).toBe(index + 1);
                             if (index < 14) {
                                 //expect it to be true, once all items are selected
                                 expect(selectAll.prop('checked')).toBeFalsy();

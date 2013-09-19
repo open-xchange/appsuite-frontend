@@ -15,15 +15,15 @@ define(['shared/examples/for/api',
 
     return describe('folder API', function () {
         var options = {
-            markedPending: {
-                'folder API a basic API class has some get methods should define a getAll method.': true,
-                'folder API a basic API class has some get methods should return a deferred object for getAll.': true,
-                'folder API a basic API class has some get methods should define a getList method.': true,
-                'folder API a basic API class has some get methods should return a deferred object for getList.': true,
-                'folder API default folders should know about the mail folder.': true,
-                'folder API default folders should provide the mail folder as default.': true
-            }
-        }
+                markedPending: {
+                    'folder API a basic API class has some get methods should define a getAll method.': true,
+                    'folder API a basic API class has some get methods should return a deferred object for getAll.': true,
+                    'folder API a basic API class has some get methods should define a getList method.': true,
+                    'folder API a basic API class has some get methods should return a deferred object for getList.': true,
+                    'folder API default folders should know about the mail folder.': true,
+                    'folder API default folders should provide the mail folder as default.': true
+                }
+            };
         sharedExamplesFor(api, options);
 
         describe('default folders', function () {

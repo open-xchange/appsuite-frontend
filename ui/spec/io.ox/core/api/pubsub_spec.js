@@ -16,7 +16,7 @@ define(
 
     var testData = {
         create: {
-            "entity": {"folder":"14657"}
+            'entity': {'folder': '14657'}
         }
     };
 

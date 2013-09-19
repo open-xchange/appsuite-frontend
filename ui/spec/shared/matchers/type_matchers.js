@@ -12,56 +12,56 @@
 if (jasmine) {
 
     var typeMatchers = {
-        //simples
-        toBeEmpty: function () {
-            //defined and empty
-            var val = this.actual,
-                emp = !(_.isNull(val) || _.isUndefined(val) || _.isNaN(val)) && _.isEmpty(val);
-            //return (this.isNot ? !empty : empty)
-            expect(emp).toBeTruthy();
-            return true;
-        },
+            //simples
+            toBeEmpty: function () {
+                //defined and empty
+                var val = this.actual,
+                    emp = !(_.isNull(val) || _.isUndefined(val) || _.isNaN(val)) && _.isEmpty(val);
+                //return (this.isNot ? !empty : empty)
+                expect(emp).toBeTruthy();
+                return true;
+            },
 
-        toBeString: function () {
-            return typeof this.actual === 'string';
-        },
+            toBeString: function () {
+                return typeof this.actual === 'string';
+            },
 
-        toBeBoolean: function () {
-            return this.actual === true || this.actual === false;
-        },
+            toBeBoolean: function () {
+                return this.actual === true || this.actual === false;
+            },
 
-        //arrays
-        toBeArray: function () {
-            return this.actual instanceof Array;
-        },
-        toBeArrayOfSize: function (size) {
-            return typeMatchers.toBeArray.call(this) && this.actual.length === size;
-        },
+            //arrays
+            toBeArray: function () {
+                return this.actual instanceof Array;
+            },
+            toBeArrayOfSize: function (size) {
+                return typeMatchers.toBeArray.call(this) && this.actual.length === size;
+            },
 
-        //functions
-        toBeFunction: function () {
-            return this.actual instanceof Function;
-        },
+            //functions
+            toBeFunction: function () {
+                return this.actual instanceof Function;
+            },
 
-        //special: Modernizr
-        toBeModernizrString: function () {
-            return !this.actual || this.actual === '' ||  this.actual === 'maybe' ||  this.actual === 'probably';
-        },
+            //special: Modernizr
+            toBeModernizrString: function () {
+                return !this.actual || this.actual === '' ||  this.actual === 'maybe' ||  this.actual === 'probably';
+            },
 
-        //special: jQuery
-        toBeJquery: function () {
-            var result = this.actual instanceof jQuery;
-            expect(this.isNot ? !result : result).toBeTruthy()
-            return true;
-        },
-        toBeEmptyJquery: function () {
-            var result = this.actual && this.actual.length === 0;
-            expect(this.isNot ? !result : result).toBeTruthy()
-            return true;
-        }
-    };
+            //special: jQuery
+            toBeJquery: function () {
+                var result = this.actual instanceof $;
+                expect(this.isNot ? !result : result).toBeTruthy();
+                return true;
+            },
+            toBeEmptyJquery: function () {
+                var result = this.actual && this.actual.length === 0;
+                expect(this.isNot ? !result : result).toBeTruthy();
+                return true;
+            }
+        };
 
     beforeEach(function () {
         this.addMatchers(typeMatchers);
     });
-};
+}

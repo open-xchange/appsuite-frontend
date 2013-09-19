@@ -11,80 +11,82 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define(["io.ox/core/api/mailfilter",
-        "shared/examples/for/api"], function (api, sharedExamplesFor) {
+define(['io.ox/core/api/mailfilter',
+        'shared/examples/for/api'], function (api, sharedExamplesFor) {
 
     'use strict';
 
-     describe('Mailfilter Api', function () {
+    describe('Mailfilter Api', function () {
 
 //         sharedExamplesFor(api);
 
-         var listResult = {
-             "data": [{
-                 "position": 0,
-                 "id": 0,
-                 "flags":["vacation"],
-                 "test": {"id":"true"},
-                 "actioncmds": [{
-                     "id": "vacation",
-                     "text": "Testtext",
-                     "days": "7",
-                     "subject": "Test",
-                     "addresses": ["test@test.open-xchange.com"]
-                 }],
-                 "rulename": "vacation notice",
-                 "active": false
-             },
-             {
-                 "position": 1,
-                 "id": 1,
-                 "flags": ["autoforward"],
-                 "test": {
-                     "headers": ["To"],
-                     "id": "header",
-                     "values": ["test@test.open-xchange.com"],
-                     "comparison": "contains"
-                 },
-                 "actioncmds": [{
-                     "to": "test2@test.open-xchange.com",
-                     "id": "redirect"
-                     },
-                     {"id": "keep"
-                 }],
-                 "rulename": "autoforward",
-                 "active": false
-             }]
-         };
+        var listResult = {
+                'data': [{
+                    'position': 0,
+                    'id': 0,
+                    'flags': ['vacation'],
+                    'test': {'id': 'true'},
+                    'actioncmds': [{
+                        'id': 'vacation',
+                        'text': 'Testtext',
+                        'days': '7',
+                        'subject': 'Test',
+                        'addresses': ['test@test.open-xchange.com']
+                    }],
+                    'rulename': 'vacation notice',
+                    'active': false
+                },
+                {
+                    'position': 1,
+                    'id': 1,
+                    'flags': ['autoforward'],
+                    'test': {
+                        'headers': ['To'],
+                        'id': 'header',
+                        'values': ['test@test.open-xchange.com'],
+                        'comparison': 'contains'
+                    },
+                    'actioncmds': [{
+                            'to': 'test2@test.open-xchange.com',
+                            'id': 'redirect'
+                        }, {
+                            'id': 'keep'
+                        }
+                    ],
+                    'rulename': 'autoforward',
+                    'active': false
+                }]
+            };
 
 
-         beforeEach(function () {
-             this.server = ox.fakeServer;
-             this.server.autoRespond = false;
+        beforeEach(function () {
+            this.server = ox.fakeServer;
+            this.server.autoRespond = false;
 
-             this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
-                 xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, JSON.stringify(listResult));
-             });
+            this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
+                xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, JSON.stringify(listResult));
+            });
 
-             this.server.respondWith('PUT', /api\/mailfilter\?action=delete/, function (xhr) {
-                 xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data":null}');
-             });
+            this.server.respondWith('PUT', /api\/mailfilter\?action=delete/, function (xhr) {
+                xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data":null}');
+            });
 
-             this.server.respondWith('PUT', /api\/mailfilter\?action=new/, function (xhr) {
-                 xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data":1}');
-             });
+            this.server.respondWith('PUT', /api\/mailfilter\?action=new/, function (xhr) {
+                xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data":1}');
+            });
 
-             this.server.respondWith('PUT', /api\/mailfilter\?action=update/, function (xhr) {
-                 xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data":null}');
-             });
+            this.server.respondWith('PUT', /api\/mailfilter\?action=update/, function (xhr) {
+                xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data":null}');
+            });
 
-             this.server.respondWith('PUT', /api\/mailfilter\?action=reorder/, function (xhr) {
-                 xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data":null}');
-             });
-         });
-         afterEach(function () {
-             this.server.autoRespond = true;
-         });
+            this.server.respondWith('PUT', /api\/mailfilter\?action=reorder/, function (xhr) {
+                xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data":null}');
+            });
+        });
+
+        afterEach(function () {
+            this.server.autoRespond = true;
+        });
 
         it('should return available filters', function () {
             var result = api.getRules();

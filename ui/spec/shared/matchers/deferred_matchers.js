@@ -76,4 +76,4 @@ if (jasmine) {
     beforeEach(function () {
         this.addMatchers(deferredMatchers);
     });
-};
+}

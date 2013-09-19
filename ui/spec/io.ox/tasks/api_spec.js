@@ -17,28 +17,29 @@ define(['shared/examples/for/api',
         var options = {
             markedPending: {},
             testData: {
-                "status": 1,
-                "priority": 2,
-                "percent_completed": 0,
-                "folder_id": 29,
-                "recurrence_type": 0,
-                "private_flag": false,
-                "notification": true,
-                "title": "Test Title"
+                'status': 1,
+                'priority': 2,
+                'percent_completed': 0,
+                'folder_id': 29,
+                'recurrence_type': 0,
+                'private_flag': false,
+                'notification': true,
+                'title': 'Test Title'
             },
             testDataUpdate: {
-                "id": 45,
-                "folder_id": 29,
-                "title": "Neuer Test Title"
+                'id': 45,
+                'folder_id': 29,
+                'title': 'Neuer Test Title'
             },
             tempTestData: {
-                "tempAttachmentIndicator": true,
-                "alarm": null,
-                "folder_id": 29,
-                "notification": true,
-                "title": "Temp Test Title"
+                'tempAttachmentIndicator': true,
+                'alarm': null,
+                'folder_id': 29,
+                'notification': true,
+                'title': 'Temp Test Title'
             }
-        }
+        };
+
         sharedExamplesFor(api, options);
 
         describe('creating a task', function () {
@@ -67,15 +68,15 @@ define(['shared/examples/for/api',
             });
             it('should remove temporary attributes', function () {
                 //make copy of testData
-                var testCopy = _.copy(options.tempTestData, true),
-                    result = api.create(testCopy);
-                expect(testCopy).not.hasKey("tempAttachmentIndicator");
+                var testCopy = _.copy(options.tempTestData, true);
+                api.create(testCopy);
+                expect(testCopy).not.hasKey('tempAttachmentIndicator');
             });
             it('should remove alarm if it\'s null', function () {
                 //make copy of testData
-                var testCopy = _.copy(options.tempTestData, true),
-                    result = api.create(testCopy);
-                expect(testCopy).not.hasKey("alarm");
+                var testCopy = _.copy(options.tempTestData, true);
+                api.create(testCopy);
+                expect(testCopy).not.hasKey('alarm');
             });
             it('should be added to \"Attachment upload in progress\" list if attachments are present', function () {
               //make copy of testData
@@ -85,7 +86,7 @@ define(['shared/examples/for/api',
                 expect(result).toResolve();
                 result.done(function () {
                     expect(api.uploadInProgress(testCopy.folder_id + ':45')).toBeTruthy();
-                })
+                });
             });
         });
         describe('updating a task', function () {

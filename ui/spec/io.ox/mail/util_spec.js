@@ -59,17 +59,25 @@ define(['io.ox/mail/util',
                     var suffix = util.getChannelSuffixes().msisdn,
                         mail = {
                             from: [
-                                ['017012345678','017012345678' + suffix]
+                                ['017012345678', '017012345678' + suffix]
                             ],
                             to: [
-                                ['017012345678','017012345678' + suffix],
-                                ['017012345678','017012345678' + suffix]
+                                ['017012345678', '017012345678' + suffix],
+                                ['017012345678', '017012345678' + suffix]
                             ]
                         };
                     expect(util.removeChannelSuffix('017012345678' + suffix + ',asdadjaldk,017012345678' + suffix + ',asduhadsasd'))
                     .toEqual('017012345678,asdadjaldk,017012345678,asduhadsasd');
                     expect(util.removeChannelSuffix(mail))
-                    .toEqual({from: [['017012345678','017012345678']],to: [['017012345678','017012345678'],['017012345678','017012345678']]})
+                    .toEqual({
+                            from: [
+                                ['017012345678', '017012345678']
+                            ],
+                            to: [
+                                ['017012345678', '017012345678'],
+                                ['017012345678', '017012345678']
+                            ]
+                        });
                 }
             });
             //FIXME: capability in utils is stored on lib load
@@ -78,11 +86,11 @@ define(['io.ox/mail/util',
                     var mail = {
                         from: [],
                         to: [
-                            ['017012345678','017012345678' + util.getChannelSuffixes().msisdn]
+                            ['017012345678', '017012345678' + util.getChannelSuffixes().msisdn]
                         ]
-                    }
+                    };
                     expect(util.removeChannelSuffix(mail))
-                        .toEqual({from: [], to: [['017012345678','017012345678']]});
+                        .toEqual({from: [], to: [['017012345678', '017012345678']]});
                 }
             });
         });
@@ -244,7 +252,7 @@ define(['io.ox/mail/util',
             });
             it('should return a boolean for valid data', function () {
                 var result;
-                result = util.count([{},{}, {thread: [1,2]}]);
+                result = util.count([{}, {}, {thread: [1, 2]}]);
                 expect(result).toEqual(4);
 
                 result = util.isUnseen({flags: 16});
