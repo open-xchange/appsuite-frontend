@@ -1548,7 +1548,7 @@ define('io.ox/office/framework/app/baseapplication',
                             id: file.id,
                             size: file.file_size,
                             file_size: file.file_size
-                        }]);
+                        }], 'infostore');
                     }
 
                     if (file.mailUID) {
