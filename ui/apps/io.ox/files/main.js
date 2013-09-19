@@ -16,10 +16,11 @@ define('io.ox/files/main',
     ['io.ox/core/commons',
      'gettext!io.ox/files',
      'settings!io.ox/files',
+     'io.ox/core/api/folder',
      'io.ox/core/extPatterns/actions',
      'io.ox/files/actions',
      'less!io.ox/files/style.less'
-    ], function (commons, gt, settings, actions) {
+    ], function (commons, gt, settings, folderAPI, actions) {
 
     'use strict';
 
@@ -49,6 +50,9 @@ define('io.ox/files/main',
         win.nodes.outer.on('selection:drop', function (e, baton) {
             actions.invoke('io.ox/files/actions/move', null, baton);
         });
+
+        // fix missing default folder
+        options.folder = options.folder || folderAPI.getDefaultFolder('infostore') || 9;
 
         // go!
         return commons.addFolderSupport(app, null, 'infostore', options.folder)
