@@ -15,7 +15,7 @@ define(function () {
         it('should return "", "maybe" or "probably" for mp3 audio feature detection', function () {
             expect(Modernizr.audio.mp3).to.satisfy(function (val) {
                 return !val || val === '' ||  val === 'maybe' ||  val === 'probably';
-            })
+            });
         });
         it('should provide a mediaquery function', function () {
             expect(Modernizr.mq).to.be.a('function');
