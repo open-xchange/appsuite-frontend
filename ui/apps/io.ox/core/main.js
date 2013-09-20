@@ -69,7 +69,7 @@ define('io.ox/core/main',
             autologout: false
         }, opt || {});
 
-        $('#background_loader').fadeIn(DURATION, function () {
+        $('#background-loader').fadeIn(DURATION, function () {
 
             $('#io-ox-core').hide();
             var extensions = ext.point('io.ox/core/logout').list();
@@ -88,7 +88,7 @@ define('io.ox/core/main',
                 },
                 function cancel() {
                     $('#io-ox-core').show();
-                    $('#background_loader').fadeOut(DURATION);
+                    $('#background-loader').fadeOut(DURATION);
                 }
             );
         });
@@ -1065,7 +1065,7 @@ define('io.ox/core/main',
 
                     var dialog,
                         def = $.Deferred().done(function () {
-                            $('#background_loader').busy().fadeIn();
+                            $('#background-loader').busy().fadeIn();
                             topbar.show();
                             dialog.remove();
                             dialog = null;
@@ -1120,7 +1120,7 @@ define('io.ox/core/main',
                     });
 
                     topbar.hide();
-                    $('#background_loader').idle().fadeOut(function () {
+                    $('#background-loader').idle().fadeOut(function () {
                         dialog.find('.btn-primary').focus();
                     });
 
@@ -1219,11 +1219,11 @@ define('io.ox/core/main',
 
                 if (baton.instantFadeOut) {
                     // instant fade out
-                    $('#background_loader').idle().hide();
+                    $('#background-loader').idle().hide();
                     return $.when();
                 } else {
                     var def = $.Deferred();
-                    $('#background_loader').idle().fadeOut(DURATION, def.resolve);
+                    $('#background-loader').idle().fadeOut(DURATION, def.resolve);
                     return def;
                 }
             }

@@ -87,7 +87,7 @@ body.down #io-ox-login-container .alert.alert-info {
     z-index: 65301;
 }
 
-#background_loader {
+#background-loader {
     position: absolute;
     top: 0px;
     right: 0px;
