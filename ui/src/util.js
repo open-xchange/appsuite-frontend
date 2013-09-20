@@ -427,7 +427,7 @@
         now: function () {
             return (new Date()).getTime();
         },
-        
+
         /**
          *  Returns local current time as timestamp in UTC!
          * @returns {long} Timestamp
@@ -484,7 +484,7 @@
         },
 
         /**
-         * "Lastest function only
+         * Lastest function only
          * Works with non-anonymous functions only
          */
         lfo: function () {
