@@ -12,7 +12,6 @@
 
 define(["io.ox/contacts/util"], function (util) {
 
-
     "use strict";
 
     var testPerson = {
