@@ -25,8 +25,11 @@ define('io.ox/files/util',
          * @return {promise} resolves if user confirms or dialogie needen
          */
         confirmDialog: function (formFilename, serverFilename) {
+                    //be robust
+                    serverFilename = serverFilename || '';
+
                     var def = $.Deferred(),
-                        name = formFilename,
+                        name = formFilename || '',
                         extServer = serverFilename.indexOf('.') >= 0 ? _.last(serverFilename.split('.')) :  '',
                         extForm = _.last(name.split('.')),
                         $hint = $('<div class="row-fluid muted inset">').append(
@@ -37,14 +40,14 @@ define('io.ox/files/util',
                         message;
 
                     //set message
-                    if (name.split('.').length === 1) {
-                        //file extensionext missing
+                    if (name !== '' && name.split('.').length === 1) {
+                        //file extension ext missing
                         message = gt('Do you really want to remove the extension ".%1$s" from your filename?', extServer);
                     } else if (extServer !== extForm && extServer !== '') {
                         //ext changed
                         message = gt('Do you really want to change the file extension from  ".%1$s" to ".%2$s" ?', extServer, extForm);
                     }
-                    //missing extension
+                    //confirmation needed
                     if (message) {
                         new dialogs.ModalDialog()
                             .header($('<h4>').text(gt('Confirmation')))
@@ -59,11 +62,13 @@ define('io.ox/files/util',
                                 else
                                     def.reject();
                             });
+                    } else if (name === '') {
+                        //usually prevented from ui
+                        def.reject();
                     } else {
                         def.resolve();
                     }
                     return def.promise();
                 }
-
     };
 });
