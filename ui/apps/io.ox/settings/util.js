@@ -20,6 +20,10 @@ define('io.ox/settings/util',
 
     return {
         yellOnReject: function (def, options) {
+            //be robust
+            if (!(def && def.promise && def.resolve))
+                def = new $.Deferred();
+
             var opt = $.extend({
                     details: true,
                     debug: false
@@ -41,19 +45,23 @@ define('io.ox/settings/util',
             //yell on error
             return def.fail(
                 function (e) {
-                    var obj = e || { type: 'error' };
+                    //try to add a suitable message (new property)
+                    var obj = $.extend({
+                                type: 'error',
+                                error: 'unknown',
+                                error_params: []
+                            }, e || {});
                     if (obj.code  === 'MAIL_FILTER-0015') {
-                        //custom error message
+                        //show custom error message
                         obj.message = gtcore('Unable to load mail filter settings.');
-                    } else if (e.error_params[0] === null || e.error_params[0] === '') {
-                        // use received error message
-                        obj.message = gt(e.error);
-                    } else if (opt.details) {
-                        console.error('DETAILS');
-                        _.each(e.error_params, function (error) {
-                            //list received error params
+                    } else if (opt.details && obj.error_params[0]) {
+                        //show detailed error messages
+                        _.each(obj.error_params, function (error) {
                             obj.message = (obj.message || '') + gt(error) + '\n';
                         });
+                    } else if (obj.erro) {
+                        // show main error message
+                        obj.message = gt(obj.error);
                     }
 
                     //notification.yell favors obj.message over obj.error
