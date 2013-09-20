@@ -15,7 +15,6 @@ define("io.ox/calendar/edit/recurrence-view",
      "io.ox/core/tk/config-sentence",
      "io.ox/core/date",
      "gettext!io.ox/calendar/edit/main",
-     "io.ox/core/tk/mobiscroll",
      "less!io.ox/calendar/edit/style.less"], function (model, ConfigSentence, dateAPI, gt) {
 
     "use strict";
@@ -143,14 +142,18 @@ define("io.ox/calendar/edit/recurrence-view",
                     }).val(renderDate());
 
                 if (_.device('small')) {
-                    $dateInput.mobiscroll({
-                        preset: 'date',
-                        onSelect: function () {
-                            updateValue();
-                        },
-                        onCancel: function () {
-                            updateValue();
-                        }
+                    require(["io.ox/core/tk/mobiscroll"], function () {
+                        var now = new dateAPI.Local();
+                        $dateInput.mobiscroll({
+                            preset: 'date',
+                            onSelect: function () {
+                                updateValue();
+                            },
+                            onCancel: function () {
+                                updateValue();
+                            },
+                            minDate: new Date(now.getYear(), now.getMonth(), now.getDate())
+                        }).mobiscroll('show');
                     });
                 } else {
                     $dateInput.datepicker({
@@ -161,15 +164,7 @@ define("io.ox/calendar/edit/recurrence-view",
                         todayHighlight: true,
                         todayBtn: true
                     });
-                }
-
-                $anchor.after($dateInput);
-                $anchor.hide();
-
-                if (_.device('small')) {
-                    $dateInput.mobiscroll('show');
-                } else {
-                    $dateInput.select();
+                    $anchor.hide().after($dateInput.select());
                 }
 
                 // On change
@@ -183,7 +178,7 @@ define("io.ox/calendar/edit/recurrence-view",
                     }
                     try {
                         if (_.device('small')) {
-                            // $dateInput.mobiscroll('destroy');
+                            $dateInput.mobiscroll('destroy');
                         } else {
                             $dateInput.datepicker('remove');
                         }
