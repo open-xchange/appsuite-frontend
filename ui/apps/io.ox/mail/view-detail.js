@@ -135,7 +135,12 @@ define('io.ox/mail/view-detail',
             // remove split block quotes
             .replace(/<\/blockquote>\s*(<br\/?>\s*)+<blockquote[^>]+>/g, '<br><br>')
             // add markup for email addresses
-            .replace(regMailComplex, '<a href="mailto:$6">$2$3</a>');
+            .replace(regMailComplexReplace, function () {
+                var args = _(arguments).toArray();
+                // need to ignore line breaks, i.e. <br> tags inside this pattern (see Bug 28960)
+                if (/<br\/?>/.test(args[0])) return args[0];
+                return '<a href="mailto:' + args[6] + '">' + args[2] + args[3] + '</a>';
+            });
 
         // split source to safely ignore tags
         text = _(text.split(/(<[^>]+>)/))
