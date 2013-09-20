@@ -166,9 +166,8 @@ define("io.ox/core/desktop",
                                             grid.busy().prop('folder', folder);
                                             if (win && win.search.active) {
                                                 win.search.close();
-                                            } else {
-                                                grid.refresh();
                                             }
+                                            grid.refresh();
                                             // load fresh folder & trigger update event
                                             api.reload(id);
                                         }
