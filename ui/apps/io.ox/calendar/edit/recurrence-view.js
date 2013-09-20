@@ -164,7 +164,8 @@ define("io.ox/calendar/edit/recurrence-view",
                         todayHighlight: true,
                         todayBtn: true
                     });
-                    $anchor.hide().after($dateInput.select());
+                    $anchor.after($dateInput).hide();
+                    $dateInput.select();
                 }
 
                 // On change
