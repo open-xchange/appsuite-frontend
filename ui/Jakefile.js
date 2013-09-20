@@ -303,8 +303,7 @@ utils.copy(utils.list("lib", ["jquery-ui.min.js"]),
 utils.concat("mobi.js", [utils.string("// NOJSHINT\n"),
                          "lib/mobiscroll/js/mobiscroll.core.js",
                          "lib/mobiscroll/js/mobiscroll.datetime.js",
-                         "lib/mobiscroll/js/mobiscroll.android-ics.js",
-                         "lib/mobiscroll/js/mobiscroll.ios.js"],
+                         "lib/mobiscroll/js/mobiscroll.ios7.js"],
     { to: utils.dest("apps/mobiscroll/js"), type:"source"});
 utils.copy(utils.list("lib/mobiscroll", ["css/*"]),
         { to: utils.dest("apps/mobiscroll/")});
