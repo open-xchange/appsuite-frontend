@@ -113,7 +113,6 @@ define(['io.ox/mail/util',
             it('should return empty string if data is invalid or empty', function () {
                 var expect = chai.expect;
                 //not array
-                debugger;
                 expect(util.getDisplayName(email)).to.be.empty;
                 expect(util.getDisplayName('')).to.be.empty;
                 expect(util.getDisplayName({})).to.be.empty;
