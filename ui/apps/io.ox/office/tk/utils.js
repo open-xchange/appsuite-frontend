@@ -2582,13 +2582,15 @@ define.async('io.ox/office/tk/utils',
             // Create the DOM anchor element representing the button. Do NOT use
             // <button> elements, Firefox has problems with text clipping and
             // correct padding of the <button> contents.
+
             button = Utils.createControl('a', { tabindex: tabIndex, 'role': 'button' }, options).addClass(Utils.BUTTON_CLASS);
-                                                                /* Marko add: attribute "role" for ARIA for all buttons.
+                                                              /* Marko added: attribute "role" for ARIA for all buttons.
                                                                               You must add new attribute here, not in function
                                                                               above under "Utils.createButtonMarkup" !
 
                                                                               Attribute must be placed inside button <a> to be recognized by AViewer, not
                                                                               in it's parent <div> at file button.js under "initialization".
+
                                                                 */
         Utils.setControlCaption(button, options);
         return button;
@@ -2633,7 +2635,12 @@ define.async('io.ox/office/tk/utils',
      *  selects or deselects all buttons.
      */
     Utils.toggleButtons = function (buttons, state) {
-        buttons.toggleClass(Utils.SELECTED_CLASS, state);
+        buttons.toggleClass(Utils.SELECTED_CLASS, state).attr('aria-pressed', state);
+                                                      /* Marko added: - attribute "aria-pressed" for ARIA.
+                                                                      - value "state" can be true/false, weather button is pressed or not.
+                                                                      - in the beginning (by default) all buttons are unpressed with "aria-pressed=false".
+                                                      */
+
     };
 
     /**
