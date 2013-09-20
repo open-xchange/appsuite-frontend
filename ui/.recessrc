@@ -1,0 +1,13 @@
+{
+     "compile": false,
+     "compress": false,
+     "noIDs": false,
+     "noJSPrefix": false,
+     "noOverqualifying": false,
+     "noUnderscores": true,
+     "noUniversalSelectors": false,
+     "prefixWhitespace": true,
+     "strictPropertyOrder": false,
+     "zeroUnits": true
+}
+

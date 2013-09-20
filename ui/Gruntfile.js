@@ -52,6 +52,12 @@ module.exports = function (grunt) {
                 src: jsonFiles
             }
         },
+        recess: {
+            main: {
+                options: grunt.file.readJSON('.recessrc'),
+                src: ['apps/themes/style.less']
+            }
+        },
         assemble: {
             options: {
                 version: '<%= pkg.version %>-<%= pkg.revision %>.<%= grunt.template.date(new Date(), "yyyymmdd.hhMMss") %>',
@@ -121,9 +127,11 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-jsonlint');
+    grunt.loadNpmTasks('grunt-recess');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-newer');
+    grunt.loadNpmTasks('grunt-devtools');
 
     grunt.registerTask('lint', ['newer:jshint:all', 'newer:jsonlint:manifests']);
 
