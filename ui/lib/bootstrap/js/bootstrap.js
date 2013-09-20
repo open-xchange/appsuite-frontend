@@ -740,7 +740,7 @@
     // Ignore ctrl click to make firefox mac users happy
     if (e && e.ctrlKey) { return; }
     // on phone close only on item select or close item in the list
-    if (phone && e && $(e.target).attr('id') === "background_loader") {
+    if (phone && e && $(e.target).attr('id') === "background-loader") {
       return;
     }
     if (phone) {

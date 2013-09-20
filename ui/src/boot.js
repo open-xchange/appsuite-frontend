@@ -152,7 +152,7 @@ $(window).load(function () {
     }
 
     // be busy
-    $('#background_loader').busy();
+    $('#background-loader').busy();
 
     $(window).on('online offline', function (e) {
         ox.trigger('connection:' + e.type);
@@ -180,7 +180,7 @@ $(window).load(function () {
             )
             .on('click', function (e) { e.preventDefault(); location.reload(); })
         );
-        $('#background_loader').idle().fadeOut(DURATION);
+        $('#background-loader').idle().fadeOut(DURATION);
         console.warn('Server is down.');
         serverDown = $.noop;
     }
@@ -237,7 +237,7 @@ $(window).load(function () {
         gotoCore = function (viaAutoLogin) {
             if (ox.signin === true) {
                 // show loader
-                $('#background_loader').fadeIn(DURATION, function () {
+                $('#background-loader').fadeIn(DURATION, function () {
                     var ref = _.url.hash('ref'),
                         location = '#?' + enc(_.rot(
                             'session=' + ox.session +
@@ -958,7 +958,7 @@ $(window).load(function () {
                 $('#io-ox-login-username').prop('disabled', false).focus().select();
 
                 debug('boot.js: Fade in ...');
-                $('#background_loader').idle().fadeOut(DURATION, cont);
+                $('#background-loader').idle().fadeOut(DURATION, cont);
             });
         };
 

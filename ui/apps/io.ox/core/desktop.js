@@ -1537,7 +1537,7 @@ define('io.ox/core/desktop',
     ox.load = (function () {
 
         var def,
-            $blocker = $('#background_loader'),
+            $blocker = $('#background-loader'),
             buttonTimer,
             launched;
 
@@ -1610,13 +1610,13 @@ define('io.ox/core/desktop',
 
     ox.busy = function (block) {
         // init screen blocker
-        $('#background_loader')[block ? 'busy' : 'idle']()
+        $('#background-loader')[block ? 'busy' : 'idle']()
             .show()
             .addClass('secure' + (block ? ' block' : ''));
     };
 
     ox.idle = function () {
-        $('#background_loader')
+        $('#background-loader')
             .removeClass('secure block')
             .hide()
             .idle()
@@ -1624,7 +1624,7 @@ define('io.ox/core/desktop',
     };
     // only disable, don't show night-rider
     ox.disable = function () {
-        $('#background_loader')
+        $('#background-loader')
             .addClass('busy block secure')
             .on('touchmove', function (e) {
                 e.preventDefault();
