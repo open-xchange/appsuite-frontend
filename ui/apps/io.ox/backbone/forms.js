@@ -18,9 +18,8 @@ define('io.ox/backbone/forms',
      'io.ox/core/date',
      'settings!io.ox/calendar',
      'gettext!io.ox/core',
-     'io.ox/core/tk/mobiscroll',
      'less!io.ox/backbone/forms.less'
-     ], function (ext, Events, date, settings, gt, mobiSettings) {
+     ], function (ext, Events, date, settings, gt) {
 
     "use strict";
 
@@ -679,47 +678,18 @@ define('io.ox/backbone/forms',
 
     function DatePicker(options) {
         var BinderUtils = {
-            convertDate: function (direction, value, attribute, model) {
-                var ret;
-                if (direction === 'ModelToView') {
-                    if (model.get('full_time')) {
-                        value = date.Local.utc(value);
-                        if (attribute === 'end_date') {
-                            value -= date.DAY;
-                        }
-                    }
-                    ret = BinderUtils._toDate(value, attribute, model);
-                } else {
-                    ret = BinderUtils._dateStrToDate(value, attribute, model);
-                    if (model.get('full_time') && attribute === 'end_date') {
-                        ret += date.DAY;
-                    }
-                }
-                return ret;
-            },
-
-            convertTime: function (direction, value, attribute, model) {
-                if (direction === 'ModelToView') {
-                    return BinderUtils._toTime(value, attribute, model);
-                } else {
-                    return BinderUtils._timeStrToDate(value, attribute, model);
-                }
-            },
-
-            numToString: function (direction, value, attribute, model) {
-                if (direction === 'ModelToView') {
-                    return value + '';
-                } else {
-                    return parseInt(value, 10);
-                }
-            },
-
             _toDate: function (value, attribute, model) {
                 if (value === undefined || value === null || value === '') {//dont use !value or 0 will result in false
                     return null;
                 }
                 if (!_.isNumber(value)) {
                     return value; //do nothing
+                }
+                if (model.get('full_time')) {
+                    value = date.Local.utc(value);
+                    if (attribute === 'end_date') {
+                        value -= date.DAY;
+                    }
                 }
                 var mydate = parseInt(value, 10);
                 if (_.isNull(mydate)) {
@@ -731,7 +701,6 @@ define('io.ox/backbone/forms',
                 } else {
                     return mydate.format(date.DATE);
                 }
-
             },
 
             _toTime: function (value, attribute) {
@@ -752,19 +721,12 @@ define('io.ox/backbone/forms',
                 if (isNaN(myValue)) {
                     return value;
                 }
-                var parsedDate = date.Local.parse(value.toUpperCase(), date.TIME),
-                    mydate = new date.Local(myValue);
-                // parsing error
+                var parsedDate = date.Local.parse(value.toUpperCase(), date.TIME);
                 if (_.isNull(parsedDate)) {
                     // trigger validate error
                     return undefined;
                 }
-
-                mydate.setHours(parsedDate.getHours());
-                mydate.setMinutes(parsedDate.getMinutes());
-                mydate.setSeconds(parsedDate.getSeconds());
-
-                return mydate.getTime();
+                return new date.Local(myValue).setHours(parsedDate.getHours(), parsedDate.getMinutes(), parsedDate.getSeconds()).getTime();
             },
 
             _dateStrToDate: function (value, attribute, model) {
@@ -787,15 +749,11 @@ define('io.ox/backbone/forms',
 
                 // fulltime utc workaround
                 if (model.get('full_time')) {
-                    return parsedDate.local;
+                    return attribute === 'end_date' ? parsedDate.local + date.DAY : parsedDate.local;
                 }
 
                 if (options.display !== "DATETIME" || !_.device('small') || model.get('full_time')) {
-                    var mydate = new date.Local(myValue);
-                    mydate.setDate(parsedDate.getDate());
-                    mydate.setMonth(parsedDate.getMonth());
-                    mydate.setYear(parsedDate.getYear());
-                    parsedDate = mydate;
+                    parsedDate = new date.Local(myValue).setYear(parsedDate.getYear(), parsedDate.getMonth(), parsedDate.getDate());
                 }
 
                 return parsedDate.getTime();
@@ -813,17 +771,18 @@ define('io.ox/backbone/forms',
             today: gt('Today')
         };
 
-        var modelEvents = {};
+        var mobileMode = _.device('small'),
+            modelEvents = {};
         modelEvents['change:' + options.attribute] = 'setValueInField';
         modelEvents['invalid:' + options.attribute] = 'showError';
         modelEvents.valid = 'removeError';
         modelEvents['change:full_time'] = 'onFullTimeChange';
-        var mobileMode = _.device('small');
         _.extend(this, {
             tagName: 'div',
             render: function () {
                 var self = this;
                 this.nodes = {};
+                this.mobileSet = {};
                 this.$el.append(
                     this.nodes.controlGroup = $('<div class="control-group">').append(
                         $('<label>').addClass(options.labelClassName || '').text(this.label),
@@ -876,21 +835,25 @@ define('io.ox/backbone/forms',
                         todayHighlight: true,
                         todayBtn: true
                     });
-                } else {//do funky mobiscroll stuff
-                    if (options.display === "DATETIME") {
-                        this.nodes.dayField.mobiscroll().datetime();
+                } else {
+                    require(['io.ox/core/tk/mobiscroll'], function (defaultSettings) {
+                        //do funky mobiscroll stuff
+                        if (options.display === "DATETIME") {
+                            self.nodes.dayField.mobiscroll().datetime();
 
-                    } else {
-                        this.nodes.dayField.mobiscroll().date();
-                    }
-
-                    this.nodes.dayField.val = function (value) {//repairing functionality
-                        if (arguments.length > 0) {
-                            this['0'].value = value;
                         } else {
-                            return this['0'].value;
+                            self.nodes.dayField.mobiscroll().date();
                         }
-                    };
+
+                        self.nodes.dayField.val = function (value) {//repairing functionality
+                            if (arguments.length > 0) {
+                                this['0'].value = value;
+                            } else {
+                                return this['0'].value;
+                            }
+                        };
+                        self.mobileSet = defaultSettings;
+                    });
                 }
 
                 if (!mobileMode && options.display === "DATETIME") {
@@ -943,20 +906,19 @@ define('io.ox/backbone/forms',
                 if (options.display === "DATETIME") {
                     this.nodes.timezoneField.text(gt.noI18n(date.Local.getTTInfoLocal(value || _.now()).abbr));
                 }
-
-                this.nodes.dayField.val(BinderUtils.convertDate('ModelToView', value, this.attribute, this.model));
+                this.nodes.dayField.val(BinderUtils._toDate(value, this.attribute, this.model));
 
                 if (!mobileMode && options.display === "DATETIME") {
-                    this.nodes.timeField.val(BinderUtils.convertTime('ModelToView', value, this.attribute, this.model));
+                    this.nodes.timeField.val(BinderUtils._toTime(value, this.attribute, this.model));
                 }
             },
 
             updateModelDate: function () {
-                this.model.set(this.attribute, BinderUtils.convertDate('ViewToModel', this.nodes.dayField.val(), this.attribute, this.model), { validate: true });
+                this.model.set(this.attribute, BinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model), { validate: true });
             },
 
             updateModelTime: function () {
-                var time = BinderUtils.convertTime('ViewToModel', this.nodes.timeField.val(), this.attribute, this.model);
+                var time = BinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model);
                 if (time && _.isNumber(time)) {
                     this.model.set(this.attribute, time, {validate: true});
                     this.model.trigger("valid");
@@ -984,14 +946,14 @@ define('io.ox/backbone/forms',
             },
 
             onFullTimeChange: function () {
-                if (_.device('small')) {
+                if (mobileMode) {
                     if (this.model.get('full_time')) {
                         this.nodes.dayField.mobiscroll('option', 'timeWheels', '');//remove the timewheels
                         this.nodes.dayField.mobiscroll('option', 'timeFormat', '');//remove the timeFormat
                         this.nodes.timezoneField.hide();
                     } else {
-                        this.nodes.dayField.mobiscroll('option', 'timeWheels', mobiSettings.timeWheels);//add the timewheels again
-                        this.nodes.dayField.mobiscroll('option', 'timeFormat', mobiSettings.timeFormat);//add the timeFormat again
+                        this.nodes.dayField.mobiscroll('option', 'timeWheels', this.mobileSet.timeWheels);//add the timewheels again
+                        this.nodes.dayField.mobiscroll('option', 'timeFormat', this.mobileSet.timeFormat);//add the timeFormat again
                         this.nodes.timezoneField.show();
                     }
                 } else {
