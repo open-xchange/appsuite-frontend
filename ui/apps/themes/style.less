@@ -40,7 +40,7 @@
 
 #io-ox-offline {
     position: absolute;
-    bottom: 0px;
+    bottom: 0;
     width: 240px;
     left: 50%;
     margin-left: -120px;
@@ -50,11 +50,11 @@
     text-align: center;
     color: #fff;
     border: 1px solid #FF7000;
-    border-width: 1px 1px 0px 1px;
+    border-width: 1px 1px 0 1px;
     cursor: default;
     z-index: 650000;
     .box-shadow(0 0 20px 0 rgba(0, 0, 0, 0.30));
-    .border-radius(5px 5px 0px 0px);
+    .border-radius(5px 5px 0 0);
     .vertical-gradient(#FF7000, #CA0101);
 }
 
@@ -88,7 +88,7 @@
     background-color: white;
     top: 45%;
     left: 50%;
-    margin: -163px 0px 0px (-250px - 26);
+    margin: -163px 0 0 (-250px - 26);
     z-index: 10000;
 
     .box-shadow(0 0 50px 1px #aaa);
@@ -178,7 +178,7 @@
     height: 22px;
     margin: 8px 13px 0 13px;
     float: right;
-    background-image: url(default/logo-small.png);
+    background-image: url('apps/themes/default/logo-small.png');
     background-repeat: no-repeat;
 }
 
@@ -190,7 +190,7 @@
 
     #io-ox-top-logo-small {
         background-size: 60px 22px;
-        background-image: url(default/logo-large.png);
+        background-image: url('apps/themes/default/logo-large.png');
     }
 }
 /* ------------------------------------- */
@@ -335,7 +335,7 @@
 
         &.closable i[class^="icon-"]  {
             font-size: 14px; // default font size (see Bug 27900)
-            top: 0px;
+            top: 0;
             margin-right: 7px;
             color: #ccc;
         }
@@ -372,7 +372,7 @@
                 width: 3em;
                 text-align: center;
                 outline: 0;
-                border: 0px none;
+                border: 0 none;
             }
 
             a {
@@ -544,7 +544,7 @@
     position: absolute;
     z-index: 30;
     top: 40px;
-    bottom: 0px;
+    bottom: 0;
 
     background-color: #222;
     border-top: 1px solid #000;
@@ -637,7 +637,6 @@
 
             .time {
                 float: right;
-                display: inline-block;
             }
 
             .location { color: #aaa; }
@@ -684,7 +683,7 @@
     width: 460px;
     background-color: rgba(255, 255, 255, 0.95);
     z-index: 65500;
-    box-shadow: 0px 0px 50px -1px rgba(0, 0, 0, 0.60);
+    box-shadow: 0 0 50px -1px rgba(0, 0, 0, 0.60);
     outline: 0;
     .border-radius(8px);
     .transition(top 0.20s ease-out);
@@ -771,16 +770,16 @@
 
 
 #io-ox-windowmanager-pane {
-    left: 0%;
+    left: 0;
     width: 100%;
 }
 
 .window-container {
     position: absolute;
-    top: 0px;
+    top: 0;
     width: 100%;
-    bottom: 0px;
-    left: 0px;
+    bottom: 0;
+    left: 0;
 }
 
 .window-container.simple-window {
@@ -790,7 +789,7 @@
 
 .window-container-center {
     position: relative;
-    margin: 0px auto 0px auto;
+    margin: 0 auto 0 auto;
     width: 100% !important; /* 90% */
     max-width: 100%;
     height: 100%;
@@ -864,10 +863,10 @@
     border-right: 1px solid @windowHeadBorderColor;
 
     position: absolute;
-    top: 0px;
+    top: 0;
     width: @windowHeadWidth;
-    bottom: 0px;
-    left: 0px;
+    bottom: 0;
+    left: 0;
     z-index: 20;
 
     .user-select(none);
@@ -880,10 +879,10 @@
 .window-sidepanel {
 
     position: absolute;
-    top: 0px;
-    bottom: 0px;
-    left: 0px;
-    width: 0px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 0;
     z-index: 2;
     overflow: hidden;
     display:none;
@@ -897,20 +896,20 @@
 .window-panel {
 
     position: absolute;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     z-index: 1;
 }
 
-.cell-70 { width: 70.0%; }
-.cell-50 { width: 50.0%; }
-.cell-40 { width: 40.0%; }
+.cell-70 { width: 70%; }
+.cell-50 { width: 50%; }
+.cell-40 { width: 40%; }
 .cell-33 { width: 33.3333333%; }
-.cell-30 { width: 30.0%; }
-.cell-25 { width: 25.0%; }
-.cell-20 { width: 20.0%; }
+.cell-30 { width: 30%; }
+.cell-25 { width: 25%; }
+.cell-20 { width: 20%; }
 
 .cell-left { text-align: left; }
 .cell-center { text-align: center; }
@@ -1098,9 +1097,9 @@ a.button {
 
 .window-body {
     position: absolute;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
+    top: 0;
+    right: 0;
+    bottom: 0;
     left: @windowHeadWidth;
     white-space: normal;
     z-index: 1;
@@ -1127,10 +1126,10 @@ a.button {
 
 .window-search {
     position: absolute;
-    top: 0px;
-    right: 0px;
+    top: 0;
+    right: 0;
     height: 50px;
-    left: 0px;
+    left: 0;
     /*z-index: 1;*/
     /*overflow: hidden;*/
     padding: 10px 13px;
@@ -1190,7 +1189,7 @@ a.button {
 }
 
 .window-content {
-    top: 0px;
+    top: 0;
     z-index: 2;
     background-color: @background;
     overflow: hidden;
@@ -1247,7 +1246,7 @@ a.button {
         right: 0;
         left: 0;
         line-height: 40px - 1;
-        padding: 0px 13px 0px 13px;
+        padding: 0 13px 0 13px;
         background-color: #fff;
         z-index: 2;
 
@@ -1283,7 +1282,7 @@ a.button {
         .grid-options.dropdown {
             position: absolute;
             right: 13px;
-            top: 0px;
+            top: 0;
         }
     }
 
@@ -1366,18 +1365,14 @@ a.button {
         background-color: mix(@textColor, @background, 1000%/255);
     }
 
-    &.odd {
-        /*background-color: mix(@textColor, @background, 1000%/255);*/
-    }
-
     &.vgrid-label {
         font-weight: bold;
         text-align: center;
         line-height: 1em;
         padding: 5px 13px 4px 13px;
-        background-color: mix(@textColor, @background, 100%/15);
         border-bottom: 1px solid mix(@textColor, @background, 300%/15);
         cursor: pointer;
+        background-color: mix(@textColor, @background, 100%/15);
         .vertical-gradient(@background, mix(@textColor, @background, 1500%/255));
 
         &.left {
@@ -1401,12 +1396,12 @@ a.button {
     }
 
     &.no-border {
-        border-bottom: 0px none;
+        border-bottom: 0 none;
     }
 
     &.tail {
 
-        border-bottom: 0px none;
+        border-bottom: 0 none;
         padding-top: 1em;
         padding-bottom: 1em;
 
@@ -1435,19 +1430,18 @@ a.button {
 
         label {
             display: inline;
-            margin-bottom: 0px; /* reset bootstrap */
         }
 
         input {
-            border: 0px none;
+            border: 0 none;
         }
 
     }
 
     .swipeDelete {
         position: absolute;
-        top: 0px;
-        right: 0px;
+        top: 0;
+        right: 0;
         padding: 0 10px 0 10px;
         line-height: 61px;
         height: 100%;
@@ -1470,9 +1464,9 @@ a.button {
 
 .leftside {
     position: absolute;
-    top: 0px;
-    bottom: 0px;
-    left: 0px;
+    top: 0;
+    bottom: 0;
+    left: 0;
     width: 330px;
     .box-sizing(border-box);
     background-color: @background;
@@ -1481,9 +1475,9 @@ a.button {
 .rightside {
     outline: none;
     position: absolute;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
+    top: 0;
+    right: 0;
+    bottom: 0;
     left: 330px;
     .box-sizing(border-box);
     background-color: @background;
@@ -1492,19 +1486,19 @@ a.button {
 
 .atb, .abs {
     position: absolute;
-    top: 0px;
-    bottom: 0px;
+    top: 0;
+    bottom: 0;
 }
 
 .abs {
-    left: 0px;
-    right: 0px;
+    left: 0;
+    right: 0;
 }
 
 .abs-lr {
     position: absolute;
-    left: 0px;
-    right: 0px;
+    left: 0;
+    right: 0;
 }
 
 /* ---- */
@@ -1577,30 +1571,12 @@ input.search-query::-ms-clear {
     display: none;
 }
 
-/*  removed because searchfield is now type=text */
-.no-searchfield .searchfield-wrapper {
-    width: 300px;
-    height: 17px;
-    line-height: 1em;
-    padding: 1px 10px 1px 10px;
-    background-color: white;
-    .border-radius(10px 10px 10px 10px);
-    border: 1px solid #bbb;
-    display: inline-block;
-    float: right;
-}
-
-
-.searchfield-wrapper {
-    margin: 6px 0 0 0;
-}
-
 input[type=search] {
     width: 220px;
     height: 17px;
     line-height: 1em;
-    padding: 0px;
-    border: 0px none #a00;
+    padding: 0;
+    border: 0 none #a00;
 }
 
 .search-options + ul {
@@ -1634,8 +1610,8 @@ input[type=search] {
     overflow: visible;
     background-color: white;
     z-index: 65001;
-    border: 0px none;
-    .box-shadow(0px 5px 25px -5px #000);
+    border: 0 none;
+    .box-shadow(0 5px 25px -5px #000);
     .border-radius(5px 5px 5px 5px);
 
     .modal-header {
@@ -1692,7 +1668,7 @@ input[type=search] {
 
     &:focus {
         outline: none;
-        .box-shadow(0px 5px 25px -5px darken(@linkColor, 20%));
+        .box-shadow(0 5px 25px -5px darken(@linkColor, 20%));
     }
 }
 
@@ -1911,14 +1887,14 @@ ul.io-ox-inline-links + header {
 
     &.right {
         left: 49.5%;
-        right: 0px;
-        .box-shadow(-10px 0px 50px -5px @shadowColor);
+        right: 0;
+        .box-shadow(-10px 0 50px -5px @shadowColor);
     }
 
     &.left {
-        left: 0px;
+        left: 0;
         right: 49.5%;
-        .box-shadow(10px 0px 50px -5px @shadowColor);
+        .box-shadow(10px 0 50px -5px @shadowColor);
     }
 
     .window-container-center > &.left {
@@ -1957,7 +1933,7 @@ ul.io-ox-inline-links + header {
 
 .io-ox-sidepopup-pane {
     top: 45px;
-    padding-top: 0px;
+    padding-top: 0;
     outline: 0;
 }
 
@@ -2004,14 +1980,14 @@ ul.io-ox-inline-links + header {
     .triangle {
         position: absolute;
         height: 0;
-        width: 0px;
+        width: 0;
         border: 20px solid transparent;
         top: -20px;
     }
 
     &.left {
 
-        left: 0px;
+        left: 0;
         right: 49.5%;
 
         .border {
@@ -2029,7 +2005,7 @@ ul.io-ox-inline-links + header {
     &.right {
 
         left: 49.5%;
-        right: 0px;
+        right: 0;
 
         .border {
             border-right-color: #eee;
@@ -2057,7 +2033,7 @@ input.nice-input {
 
 .boxshadow input.nice-input:focus {
     border-color: transparent;
-    .box-shadow(0px 0px 5px 1px @accent1);
+    .box-shadow(0 0 5px 1px @accent1);
 }
 
 /* auto complete */
@@ -2379,7 +2355,7 @@ input.nice-input {
     background: radial-gradient(ellipse at center, @c1 20%, @c2 100%);
 
     &.border-right {
-        border: 0px none;
+        border: 0 none;
     }
 
     .resizebar {
@@ -2434,10 +2410,6 @@ input.nice-input {
                         font-weight: 500;
                         text-shadow: none;
                     }
-                }
-
-                &.show-counter .folder-label {
-                    /* color: lighten(@linkColor, 20%); */
                 }
 
                 .shared-by {
@@ -2500,7 +2472,7 @@ input.nice-input {
     .foldertree-toolbar {
         top: auto;
         height: 40px - 1;
-        bottom: 0px;
+        bottom: 0;
         line-height: 40px - 1;
         border-top: 1px solid rgba(0, 0, 0, 0.20);
         background-color: rgba(0, 0, 0, 0.02);
@@ -2652,22 +2624,21 @@ a.toolbar-action, .toolbar-action > a {
 .participant-image {
     float: left;
     margin-right: 1em;
-    display: inline-block;
     .picture(54px, 54px); /* 54px allows 3 lines with 18px line-height */
 }
 
 .participant-image.contact-image,
 .participant-image.external-user-image {
-    background-image: url(default/dummypicture.png);
+    background-image: url('apps/themes/default/dummypicture.png');
 }
 
 .participant-image.group-image {
-    background-image: url(default/dummypicture_group.png);
-    background-position: 0px -4px;
+    background-image: url('apps/themes/default/dummypicture_group.png');
+    background-position: 0 -4px;
 }
 
 .participant-image.resource-image {
-    background-image: url(default/dummypicture_resource.png);
+    background-image: url('apps/themes/default/dummypicture_resource.png');
 }
 
 /** DRAG & DROP **/
@@ -2724,8 +2695,9 @@ a.toolbar-action, .toolbar-action > a {
 
 .btn {
     background-image: none;
+    background-color: #eee;
     text-shadow: none;
-    .btn-custom(#eee);
+    &:hover, &.hover { background-color: darken(#eee, 10%); }
     color: #555;
     border: 1px solid #ccc;
     border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25);
@@ -2782,7 +2754,7 @@ ul.dropdown-menu li a.disabled { color:#999; }
 /** Flat inputs **/
 
 input.flat-input {
-    border-width: 0px;
+    border-width: 0;
     .box-shadow(none);
     border-bottom-width: 1px;
     .border-radius(0);
@@ -2795,8 +2767,8 @@ input.flat-input {
 
 @media (max-width: 767px) {
     body {
-        padding-left: 0px !important;
-        padding-right: 0px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
     }
 }
 
@@ -2804,7 +2776,7 @@ input.flat-input {
 
     .io-ox-sidepopup.right, .io-ox-sidepopup.left {
         left: 0; right: 0;
-        border-left: 0px none; border-right: 0px none;
+        border-left: 0 none; border-right: 0 none;
         .box-shadow(none);
     }
 
@@ -2848,7 +2820,7 @@ input.flat-input {
 
         background-color: #f5f5f5;
         border-top: 1px solid #ddd;
-        border-right: 0px none;
+        border-right: 0 none;
 
         .toolbar-button { line-height: 44px; float: left; margin: 0;}
         .toolbar-button > a { height: 40px; }
@@ -2875,7 +2847,7 @@ input.flat-input {
     }
 
     .vsplit {
-        left: 0%; width: 200%; right: auto;
+        left: 0; width: 200%; right: auto;
         -webkit-animation-timing-function: ease-out;
         -webkit-animation-duration: 350ms;
         animation-timing-function: ease-out;
@@ -2913,7 +2885,7 @@ input.flat-input {
     .input-medium.search-query { width: 80px; }
 
     .foldertree-sidepanel {
-        left: 0px;
+        left: 0;
     }
 }
 
@@ -2956,7 +2928,7 @@ input.flat-input {
             line-height: 40px;
             border: 0;
             border-radius: 0;
-            margin: 0px;
+            margin: 0;
             height: 40px;
             width: 50%;
 
@@ -2964,7 +2936,7 @@ input.flat-input {
         button.btn {
             border: 0;
             border-radius: 0;
-            margin: 0px;
+            margin: 0;
             height: 40px;
             width: 50%;
         }
@@ -2973,12 +2945,12 @@ input.flat-input {
     // flat input fields
 
     textarea.flat, input.flat {
-        border-width: 0px;
+        border-width: 0;
         .box-shadow(none);
         border-bottom-width: 1px;
         .border-radius(0);
         &:focus {
-            border-width: 0px;
+            border-width: 0;
             .box-shadow(none);
             border-bottom-width: 1px;
             border-color: initial;
@@ -3009,7 +2981,7 @@ input.flat-input {
         margin: 0;
     }
     #io-ox-top-logo-small {
-        margin: 8px 0px 0 10px;
+        margin: 8px 0 0 10px;
     }
 
     .ios {
@@ -3031,7 +3003,7 @@ input.flat-input {
     }
 
     .foldertree-sidepanel {
-        left: 0px;
+        left: 0;
     }
     .io-ox-foldertree {
         .folder-arrow, .folder-arrow i {
@@ -3097,7 +3069,7 @@ input.flat-input {
         .overflow-y();
         position: fixed;
         top: auto;
-        bottom: 0px;
+        bottom: 0;
         left: 0 !important;
         right: 0;
         .border-radius(0);
@@ -3221,7 +3193,7 @@ input.flat-input {
         right: 0;
     }
     .window-search .margin-right {
-        margin: 0px;
+        margin: 0;
     }
 }
 
