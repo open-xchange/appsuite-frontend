@@ -658,6 +658,11 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
             if (!tour) {
                 return;
             }
+            tour.i18n = {
+                prevBtn: '<i class="icon-chevron-left">&nbsp;</i>',
+                nextBtn: '<i class="icon-chevron-right">&nbsp;</i>',
+                doneBtn: '<i class="icon-ok">&nbsp;</i>'
+            };
 
             //RESET
             hs.endTour(true);
