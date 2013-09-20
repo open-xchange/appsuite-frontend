@@ -46,6 +46,7 @@ define('io.ox/core/commons-folderview',
 
         // draw container
         ext.point(POINT + '/sidepanel').extend({
+            index: 100,
             draw: function (baton) {
                 this.prepend(
                     // sidepanel
@@ -57,6 +58,41 @@ define('io.ox/core/commons-folderview',
                         baton.$.toolbar = $('<div class="abs foldertree-toolbar">')
                     )
                 );
+            }
+        });
+
+        ext.point(POINT + '/sidepanel').extend({
+            id: 'context-menu',
+            index: 200,
+            draw: function (baton) {
+
+                var ul;
+
+                baton.$.sidepanel.append(
+                    $('<div class="context-dropdown dropdown" data-action="context-menu">').append(
+                        $('<a href="#" class="dropdown-toggle">'),
+                        $('<div class="abs context-dropdown-overlay">'),
+                        ul = $('<ul class="dropdown-menu" role="menu">')
+                    )
+                );
+
+                ext.point(POINT + '/sidepanel/context-menu').invoke('draw', ul, baton);
+
+                baton.$.sidepanel.on('click', '.folder-options-badge', function (e) {
+                    var dropdown = baton.$.sidepanel.find('.context-dropdown');
+                    setTimeout(function () {
+                        // show first to get proper dimensions
+                        dropdown.find('.dropdown-toggle').dropdown('toggle');
+                        // exceeds window?
+                        var top = e.pageY + 10,
+                            menu = dropdown.find('.dropdown-menu'),
+                            height = menu.outerHeight(),
+                            maxHeight = $(document).height();
+                        if ((top + height) > maxHeight) top = Math.max(10, maxHeight - height - 10);
+                        // update position
+                        menu.css({ top: top, left: e.pageX + 10 });
+                    }, 0);
+                });
             }
         });
 
@@ -101,32 +137,6 @@ define('io.ox/core/commons-folderview',
                     )
                 );
                 ext.point(POINT + '/sidepanel/toolbar/add').invoke('draw', ul, baton);
-            }
-        });
-
-        ext.point(POINT + '/sidepanel/toolbar').extend({
-            id: 'options',
-            index: 200,
-            draw: function (baton) {
-                var ul;
-                this.append(
-                    $('<div class="toolbar-action pull-left dropdown dropup" data-action="options">').append(
-                        $('<a href="#" class="dropdown-toggle">')
-                            .attr({
-                                'data-toggle': 'dropdown',
-                                tabindex: 1,
-                                role: 'menuitem',
-                                title: gt('Folder actions'),
-                                'aria-label': gt('Folder actions'),
-                                'aria-haspopup': true
-                            })
-                            .append($('<i class="icon-cog" aria-hidden="true" role="presentation">')),
-                        ul = $('<ul class="dropdown-menu" role="menu">').append(
-                            $('<li class="dropdown-header" role="presentation" aria-hidden="true">').text(_.noI18n(baton.data.title))
-                        )
-                    )
-                );
-                ext.point(POINT + '/sidepanel/toolbar/options').invoke('draw', ul, baton);
             }
         });
 
@@ -258,7 +268,17 @@ define('io.ox/core/commons-folderview',
             e.data.app.folderView.rename();
         }
 
-        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+        ext.point(POINT + '/sidepanel/context-menu').extend({
+            id: 'title',
+            index: 10,
+            draw: function (baton) {
+                this.append(
+                    $('<li class="dropdown-header" role="presentation" aria-hidden="true">').text(_.noI18n(baton.data.title))
+                );
+            }
+        });
+
+        ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'rename',
             index: 100,
             draw: function (baton) {
@@ -277,7 +297,7 @@ define('io.ox/core/commons-folderview',
             e.data.app.folderView.remove();
         }
 
-        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+        ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'delete',
             index: 500,
             draw: function (baton) {
@@ -302,7 +322,7 @@ define('io.ox/core/commons-folderview',
             });
         }
 
-        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+        ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'export',
             index: 250,
             draw: function (baton) {
@@ -327,7 +347,7 @@ define('io.ox/core/commons-folderview',
             });
         }
 
-        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+        ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'import',
             index: 245,
             draw: function (baton) {
@@ -355,7 +375,7 @@ define('io.ox/core/commons-folderview',
             });
         }
 
-        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+        ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'permissions',
             index: 300,
             draw: function (baton) {
@@ -429,7 +449,7 @@ define('io.ox/core/commons-folderview',
             });
         }
 
-        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+        ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'properties',
             index: 400,
             draw: function (baton) {
@@ -503,7 +523,7 @@ define('io.ox/core/commons-folderview',
             });
         }
 
-        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+        ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'move',
             index: 200,
             draw: function (baton) {
@@ -721,6 +741,9 @@ define('io.ox/core/commons-folderview',
                         baton.data = data;
                         // update toolbar
                         ext.point(POINT + '/sidepanel/toolbar').invoke('draw', baton.$.toolbar.empty(), baton);
+                        // update context menu
+                        var ul = baton.$.sidepanel.find('.context-dropdown ul');
+                        ext.point(POINT + '/sidepanel/context-menu').invoke('draw', ul.empty(), baton);
                         // reload tree node
                         tree.reloadNode(id);
                     });

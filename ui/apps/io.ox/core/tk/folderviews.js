@@ -29,7 +29,7 @@ define('io.ox/core/tk/folderviews',
     var OPEN = 'icon-chevron-right',
         CLOSE = 'icon-chevron-down',
 
-        tmplFolder = $('<div class="folder selectable">').append('<div class="folder-row">'),
+        tmplFolder = $('<div class="folder selectable">'),
         tmplSub = $('<div>').addClass('subfolders').hide(),
         MOBILEFOLDERPADDING = 15,
         DESKTOPFOLDERPADDING = 30,
@@ -410,9 +410,9 @@ define('io.ox/core/tk/folderviews',
                 updateArrow();
                 // add to DOM
                 if (checkbox && ((data.own_rights & 0x3f80 /* read access */) || data.subscribed /* to get rid of folder */)) {
-                    nodes.folder.find('.folder-row').append(nodes.arrow, nodes.label, nodes.counter, nodes.subscriber);
+                    nodes.folder.append(nodes.arrow, nodes.label, nodes.counter, nodes.subscriber);
                 } else {
-                    nodes.folder.find('.folder-row').append(nodes.arrow, nodes.label, nodes.counter);
+                    nodes.folder.append(nodes.arrow, nodes.label, nodes.counter);
                 }
                 // customize
                 self.customize();
@@ -958,8 +958,16 @@ define('io.ox/core/tk/folderviews',
             if (!isReadable) { this.addClass('unreadable'); }
             if (!isSelectable) { this.removeClass('selectable').addClass('unselectable'); }
 
+            // add options
+            if (this.find('.folder-options').length === 0) {
+                label.after(
+                    $('<span class="folder-options">').append('<span class="folder-options-badge"><i class="icon-cog"></i></span>')
+                );
+            }
+
             // set title
             label.text(_.noI18n(data.title));
+
             // set counter (mail only)
             if (options.type === 'mail') {
                 if (data.id === "default0/INBOX" && (!data.unread  || data.unread === 0)) {//remove new mail title if inbox new-mail counter is 0
@@ -991,7 +999,7 @@ define('io.ox/core/tk/folderviews',
         id: 'published',
         customize: function (data) {
             if (capabilities.has('publication') && api.is('published|subscribed', data)) {
-                this.find('.folder-label').append(
+                this.append(
                     $('<i class="icon-cloud-download folder-pubsub">').attr('title', gt('This folder has publications and/or subscriptions'))
                     .on('click', { folder: data }, openPubSubSettings)
                 );
@@ -1010,13 +1018,29 @@ define('io.ox/core/tk/folderviews',
         id: 'shared',
         customize: function (data) {
             if (api.is('unlocked', data)) {
-                this.find('.folder-label').append(
+                this.append(
                     $('<i class="icon-unlock folder-pubsub">').attr('title', gt('You share this folder with other users'))
                     .on('click', { folder: data.id }, openPermissions)
                 );
             }
         }
     });
+
+    ext.point('io.ox/foldertree/folder').extend({
+        index: 'last',
+        id: 'shared-by',
+        customize: function (data) {
+            // add owner for shared folders
+            if (api.is('shared', data)) {
+                this.append(
+                    $('<div class="shared-by">').append(
+                        userAPI.getLink(data.created_by, data['com.openexchange.folderstorage.displayName']).attr({ tabindex: -1 })
+                    )
+                );
+            }
+        }
+    });
+
 
     var sections = { 'private': gt('Private'), 'public': gt('Public'), 'shared': gt('Shared') };
 
@@ -1028,20 +1052,9 @@ define('io.ox/core/tk/folderviews',
 
         function drawFolder(data) {
 
-            var folder = tmplFolder.clone()
-                .append(
-                    $('<span>').addClass('folder-label')
-                )
-                .attr('data-obj-id', data.id);
+            var folder = tmplFolder.clone();
 
-            // add owner for shared folders
-            if (api.is('shared', data)) {
-                folder.append(
-                    $('<div>').addClass('shared-by').append(
-                        userAPI.getLink(data.created_by, data['com.openexchange.folderstorage.displayName']).attr({ tabindex: -1 })
-                    )
-                );
-            }
+            folder.append('<span class="folder-label">').attr('data-obj-id', data.id);
 
             // update selection
             self.selection.addToIndex(data.id);

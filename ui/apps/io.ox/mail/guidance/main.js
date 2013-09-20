@@ -85,7 +85,7 @@ define('io.ox/mail/guidance/main',
                 )
             );
 
-            ext.point('io.ox/mail/folderview/sidepanel/toolbar/options').invoke('draw', ul, baton);
+            ext.point('io.ox/mail/folderview/sidepanel/context-menu').invoke('draw', ul, baton);
         }
     });
 

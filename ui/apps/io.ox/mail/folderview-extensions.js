@@ -95,7 +95,7 @@ define('io.ox/mail/folderview-extensions',
             .value();
     }
 
-    ext.point(POINT + '/sidepanel/toolbar/options').extend({
+    ext.point(POINT + '/sidepanel/context-menu').extend({
         id: 'mark-folder-read',
         index: 50,
         draw: function (baton) {
@@ -119,7 +119,7 @@ define('io.ox/mail/folderview-extensions',
         });
     }
 
-    ext.point(POINT + '/sidepanel/toolbar/options').extend({
+    ext.point(POINT + '/sidepanel/context-menu').extend({
         id: 'expunge',
         index: 75,
         draw: function (baton) {
@@ -156,7 +156,7 @@ define('io.ox/mail/folderview-extensions',
         });
     }
 
-    ext.point(POINT + '/sidepanel/toolbar/options').extend({
+    ext.point(POINT + '/sidepanel/context-menu').extend({
         id: 'clear',
         index: 450,
         draw: function (baton) {

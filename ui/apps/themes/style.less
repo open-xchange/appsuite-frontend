@@ -2003,7 +2003,7 @@ input.nice-input {
         white-space: nowrap;
         width: 100%;
         .box-sizing(border-box);
-        display: table;
+        display: block;
 
         &.selectable, &.expandable {
             cursor: pointer;
@@ -2039,10 +2039,6 @@ input.nice-input {
                 color: @foldertreeFocusedLabelColor;
             }
         }
-    }
-
-    .folder-row {
-        display: block;
     }
 
     .subfolders.io-ox-busy {
@@ -2097,11 +2093,13 @@ input.nice-input {
         color: @linkOnDark !important;
     }
 
-    .folder-counter {
+    .folder-counter, .folder-options {
         display: inline-block;
+        margin-right: 7px;
     }
 
-    .folder-counter-badge {
+    .folder-counter-badge,
+    .folder-options-badge {
         color: #888;
         line-height: 26px;
         padding: 0 0.75em 0 0.75em;
@@ -2112,15 +2110,14 @@ input.nice-input {
     }
 
     .show-counter {
-
         .folder-counter-badge {
             display: inline-block;
         }
     }
 
-    .folder.selected .folder-counter-badge {
-        color: white;
-        background-color: #069;
+    .selected .folder-options-badge {
+        display: inline-block;
+        cursor: pointer;
     }
 
     .foldertree-links {
@@ -2150,10 +2147,6 @@ input.nice-input {
 
         .folder .shared-by {
             margin-top: -13px;
-        }
-
-        .folder-label {
-            display: block;
         }
     }
 }
@@ -2245,6 +2238,10 @@ input.nice-input {
                     color: @foldertreeBadgeColor;
                 }
 
+                .folder-options-badge {
+                    background-color: darken(@foldertreeSelectedBackground, 10%);
+                    color: darken(@foldertreeSelectedBackground, 20%);
+                }
             }
 
             &:focus .folder {
@@ -2253,7 +2250,8 @@ input.nice-input {
 
                     background-color: @foldertreeSelectedFocusBackground;
 
-                    .folder-counter-badge {
+                    .folder-counter-badge,
+                    .folder-options-badge {
                         background-color: @foldertreeBadgeFocusBackground;
                     }
 
@@ -2274,7 +2272,7 @@ input.nice-input {
                 padding: 1em;
             }
 
-            .folder-arrow, a {
+            .folder-arrow {
                 font-size: 13px;
                 color: @linkColor;
             }
@@ -2332,7 +2330,34 @@ a.toolbar-action, .toolbar-action > a {
     i { color: white; }
 }
 
+/* context menu */
 
+.context-dropdown {
+
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10000;
+    background-color: rgba(255, 255, 255, 0.01);
+    display: none;
+
+    .dropdown-toggle {
+        display: none;
+    }
+
+    &.open {
+        display: block;
+    }
+
+    .dropdown-menu {
+        position: absolute;
+        top: 100px;
+        left: 100px;
+        z-index: 2;
+    }
+}
 
 /* Guidance view */
 
