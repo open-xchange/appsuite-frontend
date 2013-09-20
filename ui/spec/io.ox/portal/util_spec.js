@@ -11,20 +11,24 @@
  */
 define(['io.ox/portal/util', 'settings!io.ox/portal'], function (util, settings) {
 
-    describe('Utilities for files:', function () {
+    describe('Utilities for portal:', function () {
         var expect = chai.expect;
         describe('getWidgets function', function () {
             it('should always return an array', function () {
                 expect(util.getWidgets(undefined)).to.be.an('array');
-                if (settings.get('widgets/user'))
-                    expect(util.getWidgets(undefined)).to.be.empty;
-                else
-                    expect(util.getWidgets(undefined)).to.be.not.empty;
+            });
+            it('should return an array of specific length depending on current settings value', function () {
+                var widgets = settings.get('widgets/user'),
+                    length = widgets.length || 0,
+                    result = util.getWidgets(undefined).length;
+                expect(result).to.equals(length);
             });
         });
         describe('getWidgetsByType function', function () {
             it('should always return an array', function () {
                 expect(util.getWidgetsByType(undefined)).to.be.an('array');
+            });
+            it('should return an empty array if type is not used in portal', function () {
                 expect(util.getWidgetsByType(undefined)).to.be.empty;
                 expect(util.getWidgetsByType('notExistingType')).to.be.empty;
             });
