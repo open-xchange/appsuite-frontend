@@ -211,7 +211,7 @@
         if (node) return node.text(css);
         return $('<style type="text/css">' + css + '</style>')
             .attr("data-require-src", name)
-            .insertAfter(selector);
+            .insertBefore(selector);
     }
 
     // Replace the load function of RequireJS with our own, which fetches
