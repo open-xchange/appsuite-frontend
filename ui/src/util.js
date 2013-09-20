@@ -490,7 +490,7 @@
         lfo: function () {
             // call counter
             var curry = slice.call(arguments),
-                fn = curry.shift(),
+                fn = curry.shift() || $.noop,
                 count = (fn.count = (fn.count || 0) + 1);
             // wrap
             return function () {
@@ -569,7 +569,7 @@
          */
         aprintf: function (str, formatCb, textCb) {
             var result = [], index = 0;
-            if (!textCb) textCb = formatCb;
+            if (!textCb) textCb = formatCb || $.noop;
             String(str).replace(
                 /%(([0-9]+)\$)?[A-Za-z]|((?:%%|[^%])+)/g,
                 function (match, pos, n, text) {
@@ -588,6 +588,7 @@
          * Format error
          */
         formatError: function (e, formatString) {
+            e = e || {};
             return _.printf(
                 formatString || "Error: %1$s (%2$s, %3$s)",
                 _.printf(e.error, e.error_params),
@@ -614,6 +615,7 @@
 
         // call function 'every' 1 hour or 5 seconds
         tick: function (num, type, fn) {
+            fn = fn || $.noop;
             var interval = 1000;
             if (type === "hour") {
                 interval *= 3600;
@@ -638,11 +640,13 @@
 
         makeExtendable: (function () {
             return function (parent) {
-                parent.extend = function (protoProps, classProps) {
-                    var child = inherits(this, protoProps, classProps);
-                    child.extend = this.extend;
-                    return child;
-                };
+                if (_.isObject(parent)) {
+                    parent.extend = function (protoProps, classProps) {
+                        var child = inherits(this, protoProps, classProps);
+                        child.extend = this.extend;
+                        return child;
+                    };
+                }
                 return parent;
             };
         }()),
@@ -743,7 +747,7 @@
     };
 
     _.escapeRegExp = function (s) {
-        return s.replace(/([|^$\\.*+?()[\]{}])/g, '\\$1');
+        return (s || '').replace(/([|^$\\.*+?()[\]{}])/g, '\\$1');
     };
 
     window.assert = function (value, message) {
@@ -759,7 +763,7 @@
      * @return The unescaped string with resolved entities.
      */
     _.unescapeHTML = function (html) {
-        return html.replace(/&(?:(\w+)|#x([0-9A-Fa-f]+)|#(\d+));/g,
+        return (html || '').replace(/&(?:(\w+)|#x([0-9A-Fa-f]+)|#(\d+));/g,
                             function (original, entity, hex, dec) {
                                 return entity ? _.unescapeHTML.entities[entity] || original :
                                        hex    ? String.fromCharCode(parseInt(hex, 16)) :
