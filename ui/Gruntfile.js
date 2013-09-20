@@ -30,6 +30,10 @@ module.exports = function (grunt) {
                 files: jsonFiles,
                 tasks: ['newer:jsonlint:manifests']
             },
+            lesslint: {
+                files: ['apps/themes/style.less'],
+                tasks: ['newer:recess:main']
+            },
             all: {
                 files: ['<%= jshint.all.src %>'],
                 tasks: ['newer:jshint:all'],
