@@ -120,11 +120,6 @@ $(window).load(function () {
         cleanUp = fnChangeLanguage = initialize = $.noop;
     };
 
-    // searchfield fix
-    if (!_.browser.Chrome) {
-        $('html').addClass('no-searchfield');
-    }
-
     // do we have a mouse?
     if (!Modernizr.touch) {
         $('html').addClass('mouse');
