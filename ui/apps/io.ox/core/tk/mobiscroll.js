@@ -15,8 +15,7 @@ define('io.ox/core/tk/mobiscroll', ['apps/mobiscroll/js/mobi.js',
                                     'gettext!io.ox/core',
                                     'io.ox/core/date',
                                     'css!mobiscroll/css/mobiscroll.core.css',
-                                    'css!mobiscroll/css/mobiscroll.android-ics.css',
-                                    'css!mobiscroll/css/mobiscroll.ios.css'], function (mobi, gt, date) {
+                                    'css!mobiscroll/css/mobiscroll.ios7.css'], function (mobi, gt, date) {
 
     'use strict';
 
@@ -41,13 +40,10 @@ define('io.ox/core/tk/mobiscroll', ['apps/mobiscroll/js/mobi.js',
             separator: ' ',
             display: 'bottom',
             endYear: new Date().getFullYear() + 100,
-            theme: 'android-ics light'
+            theme: 'ios7'
         };
         settings.timeWheels = settings.timeFormat.replace(/\W/g, '');
 
-        if (_.device('ios')) {
-            settings.theme = 'ios';
-        }
         $.mobiscroll.setDefaults(settings);
         set = true;
     }
