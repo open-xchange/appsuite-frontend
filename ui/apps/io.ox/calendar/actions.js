@@ -75,9 +75,7 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/sendmail', {
         capabilities: 'webmail',
         action: function (baton) {
-            var def = $.Deferred();
-            util.createArrayOfRecipients(baton.data.participants, def);
-            def.done(function (arrayOfRecipients) {
+            util.createArrayOfRecipients(baton.data.participants).done(function (arrayOfRecipients) {
                 ox.load(['io.ox/mail/write/main']).done(function (m) {
                     m.getApp().launch().done(function () {
                         this.compose({to: arrayOfRecipients, subject: baton.data.title});
@@ -90,13 +88,10 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/save-as-distlist', {
         capabilities: 'contacts',
         action: function (baton) {
-            var contactsFolder = coreSettings.get('folder/contacts'),
-                def = $.Deferred();
-            util.createDistlistArrayFromPartisipantList(baton.data.participants, def);
-            def.done(function (initdata) {
+            util.createDistlistArrayFromPartisipantList(baton.data.participants).done(function (initdata) {
                 ox.load(['io.ox/contacts/distrib/main']).done(function (m) {
                     m.getApp().launch().done(function () {
-                        this.create(contactsFolder, initdata);
+                        this.create(coreSettings.get('folder/contacts'), initdata);
                     });
                 });
             });

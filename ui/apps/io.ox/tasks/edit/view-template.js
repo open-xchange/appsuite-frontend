@@ -681,10 +681,8 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
 
                             if (data.mark_as_distributionlist) {
                                 _.each(data.distribution_list, function (val) {
-                                    var def = $.Deferred();
                                     if (val.folder_id === 6) {
-                                        calendarUtil.getUserIdByInternalId(val.id, def);
-                                        def.done(function (id) {
+                                        calendarUtil.getUserIdByInternalId(val.id).done(function (id) {
                                             userId = id;
                                             obj = {id: userId, type: 1 };
                                             collection.add(obj);

@@ -359,10 +359,8 @@ define('io.ox/calendar/edit/template',
 
                             if (data.mark_as_distributionlist) {
                                 _.each(data.distribution_list, function (val) {
-                                    var def = $.Deferred();
                                     if (val.folder_id === 6) {
-                                        util.getUserIdByInternalId(val.id, def);
-                                        def.done(function (id) {
+                                        util.getUserIdByInternalId(val.id).done(function (id) {
                                             userId = id;
                                             obj = {id: userId, type: 1 };
                                             collection.add(obj);
