@@ -62,6 +62,17 @@ define(function () {
             visible: false
         },
         {
+            path: 'io.ox/portal/main',
+            title: "Portal",
+            company: "Open-Xchange",
+            icon: "portal.png",
+            category: "Productivity",
+            settings: true,
+            requires: "!deniedPortal",
+            refreshable: true,
+            index: 100
+        },
+        {
             path: 'io.ox/mail/main',
             title: "Mail",
             company: "Open-Xchange",
@@ -71,17 +82,6 @@ define(function () {
             requires: "webmail",
             refreshable: true,
             index: 200
-        },
-        {
-            path: 'io.ox/tasks/main',
-            title: "Tasks",
-            company: "Open-Xchange",
-            icon: "tasks.png",
-            category: "Productivity",
-            settings: true,
-            requires: "tasks",
-            refreshable: true,
-            index: 1000
         },
         {
             path: 'io.ox/contacts/main',
@@ -106,6 +106,17 @@ define(function () {
             index: 800
         },
         {
+            path: 'io.ox/tasks/main',
+            title: "Tasks",
+            company: "Open-Xchange",
+            icon: "tasks.png",
+            category: "Productivity",
+            settings: true,
+            requires: "tasks",
+            refreshable: true,
+            index: 900
+        },
+        {
             path: 'io.ox/files/main',
             title: "Files",
             company: "Open-Xchange",
@@ -114,18 +125,7 @@ define(function () {
             settings: true,
             requires: "infostore",
             refreshable: true,
-            index: 900
-        },
-        {
-            path: 'io.ox/portal/main',
-            title: "Portal",
-            company: "Open-Xchange",
-            icon: "portal.png",
-            category: "Productivity",
-            settings: true,
-            requires: "!deniedPortal",
-            refreshable: true,
-            index: 100
+            index: 1000
         }
     ];
 });
