@@ -328,17 +328,17 @@ define('io.ox/core/tk/selection',
 
         fastSelect = function (id, node) {
             var key = self.serialize(id);
-            (node || getNode(key))
+            selectedItems[key] = id;
+            return (node || getNode(key))
                 .addClass(self.classSelected)
                 .find('input.reflect-selection')
-                .attr('checked', 'checked');
-            selectedItems[key] = id;
+                .attr('checked', 'checked')
+                .end();
         };
 
         select = function (id, silent) {
             if (id) {
-                fastSelect(id);
-
+                fastSelect(id).intoViewport(container);
                 last = id;
                 lastIndex = getIndex(id);
                 if (prev === empty) {
@@ -431,13 +431,21 @@ define('io.ox/core/tk/selection',
             observedItemsIndex = {};
             last = prev = empty;
 
+            // reset index but ignore 'empty runs'
+            if (all.length > 0) lastIndex = -1;
+
             // build index
-            var i = 0, $i = all.length, data, cid, index = lastIndex;
+            var i = 0, $i = all.length, data, cid, updateLast = true;
             for (; i < $i; i++) {
                 data = all[i];
                 cid = this.serialize(data);
                 observedItems[i] = { data: data, cid: cid };
                 observedItemsIndex[cid] = i;
+                if (cid in hash && updateLast) {
+                    lastValidIndex = lastIndex = i;
+                    last = cid;
+                    updateLast = false;
+                }
             }
 
             $('.selectable', container).each(function () {
@@ -453,9 +461,6 @@ define('io.ox/core/tk/selection',
             });
 
             selectedItems = hash;
-
-            // reset index but ignore 'empty runs'
-            if (all.length > 0) lastIndex = -1;
 
             // fire event?
             if (!_.isEqual(tmp, this.get())) changed();
@@ -656,10 +661,14 @@ define('io.ox/core/tk/selection',
             // previous
             var previous = this.get(),
                 self = this,
-                hash = {};
+                hash = {},
+                updateLast = true;
 
             // clear
             clear();
+
+            // reset last index
+            lastIndex = -1;
 
             $('.selectable', container).each(function () {
                 var node = $(this), cid = node.attr('data-obj-id');
@@ -678,12 +687,15 @@ define('io.ox/core/tk/selection',
                 } else {
                     selectedItems[cid] = elem;
                 }
+                // update last / lastIndex
+                if (updateLast) {
+                    lastIndex = getIndex(cid);
+                    last = cid;
+                    updateLast = false;
+                }
             });
 
             hash = null;
-
-            // reset last index
-            lastIndex = -1;
 
             // event?
             if (!_.isEqual(previous, this.get()) && silent !== true) changed();
