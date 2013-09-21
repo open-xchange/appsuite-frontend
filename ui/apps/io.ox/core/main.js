@@ -578,6 +578,22 @@ define('io.ox/core/main',
         });
 
         ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'settings',
+            index: 100,
+            draw: function () {
+                this.append(
+                    $('<li>').append(
+                        $('<a href="#" data-app-name="io.ox/settings" role="menuitem" tabindex="1">').text(gt('Settings'))
+                    )
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        ox.launch('io.ox/settings/main');
+                    })
+                );
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'app-specific-help',
             index: 200,
             draw: function () { //replaced by module
@@ -591,8 +607,8 @@ define('io.ox/core/main',
                     'io.ox/files': 'ox.appsuite.user.chap.files.html',
                     'io.ox/portal': 'ox.appsuite.user.sect.portal.customize.html'
                 };
-
                 node.append(
+                    $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
                     $('<li>', {'class': 'io-ox-specificHelp'}).append(
                         $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(gt('Help'))
                         .on('click', function (e) {
@@ -614,7 +630,6 @@ define('io.ox/core/main',
                 var node = this;
 
                 node.append(
-                    $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
                     $('<li>', {'class': 'io-ox-specificHelp'}).append(
                         $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(gt('Tour: Coming from OX6'))
                         .on('click', function (e) {
@@ -646,24 +661,8 @@ define('io.ox/core/main',
         });
 
         ext.point('io.ox/core/topbar/right/dropdown').extend({
-            id: 'settings',
-            index: 300,
-            draw: function () {
-                this.append(
-                    $('<li>').append(
-                        $('<a href="#" data-app-name="io.ox/settings" role="menuitem" tabindex="1">').text(gt('Settings'))
-                    )
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        ox.launch('io.ox/settings/main');
-                    })
-                );
-            }
-        });
-
-        ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'fullscreen',
-            index: 250,
+            index: 300,
             draw: function () {
                 if (BigScreen.enabled) {
                     var fullscreenButton;
@@ -689,7 +688,7 @@ define('io.ox/core/main',
 
         ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'about',
-            index: 300,
+            index: 400,
             draw: function () {
                 this.append(
                     $('<li>').append(
