@@ -84,13 +84,13 @@ define('io.ox/core/commons-folderview',
                         // show first to get proper dimensions
                         dropdown.find('.dropdown-toggle').dropdown('toggle');
                         // exceeds window?
-                        var top = e.pageY + 10,
+                        var top = e.pageY - 15,
                             menu = dropdown.find('.dropdown-menu'),
                             height = menu.outerHeight(),
                             maxHeight = $(document).height();
                         if ((top + height) > maxHeight) top = Math.max(10, maxHeight - height - 10);
                         // update position
-                        menu.css({ top: top, left: e.pageX + 10 });
+                        menu.css({ top: top, left: e.pageX + 15 });
                     }, 0);
                 });
             }
@@ -269,25 +269,17 @@ define('io.ox/core/commons-folderview',
         }
 
         ext.point(POINT + '/sidepanel/context-menu').extend({
-            id: 'title',
-            index: 10,
-            draw: function (baton) {
-                this.append(
-                    $('<li class="dropdown-header" role="presentation" aria-hidden="true">').text(_.noI18n(baton.data.title))
-                );
-            }
-        });
-
-        ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'rename',
             index: 100,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="rename" role="menuitem">').text(gt('Rename'));
-                this.append($('<li>').append(link));
                 if (api.can('rename', baton.data)) {
-                    link.attr('tabindex', 1).on('click', { app: baton.app }, renameFolder);
-                } else {
-                    link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
+                    this.append(
+                        $('<li>').append(
+                            $('<a href="#" tabindex="1" data-action="rename" role="menuitem">')
+                            .text(gt('Rename'))
+                            .on('click', { app: baton.app }, renameFolder)
+                        )
+                    );
                 }
             }
         });
@@ -301,15 +293,15 @@ define('io.ox/core/commons-folderview',
             id: 'delete',
             index: 500,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="delete" role="menuitem">').text(gt('Delete'));
-                this.append(
-                    (baton.options.type === 'mail' ? '' : $('<li class="divider" role="presentation" aria-hidden="true">')),
-                    $('<li>').append(link)
-                );
                 if (api.can('deleteFolder', baton.data)) {
-                    link.attr('tabindex', 1).on('click', { app: baton.app }, deleteFolder);
-                } else {
-                    link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
+                    this.append(
+                        (baton.options.type === 'mail' ? '' : $('<li class="divider" role="presentation" aria-hidden="true">')),
+                        $('<li>').append(
+                            $('<a href="#" tabindex="1" data-action="delete" role="menuitem">')
+                            .text(gt('Delete'))
+                            .on('click', { app: baton.app }, deleteFolder)
+                        )
+                    );
                 }
             }
         });
@@ -327,14 +319,14 @@ define('io.ox/core/commons-folderview',
             index: 250,
             draw: function (baton) {
                 if (_.device('!ios && !android')) {
-                    var link = $('<a href="#" data-action="export">').text(gt('Export'));
-                    this.append(
-                        $('<li>').append(link)
-                    );
                     if (api.can('export', baton.data)) {
-                        link.attr('tabindex', 1).on('click', { baton: baton }, exportData);
-                    } else {
-                        link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
+                        this.append(
+                            $('<li>').append(
+                                $('<a href="#" tabindex="1" data-action="export">')
+                                .text(gt('Export'))
+                                .on('click', { baton: baton }, exportData)
+                            )
+                        );
                     }
                 }
             }
@@ -352,14 +344,14 @@ define('io.ox/core/commons-folderview',
             index: 245,
             draw: function (baton) {
                 if (_.device('!ios && !android')) {
-                    var link = $('<a href="#" data-action="import">').text(gt('Import'));
-                    this.append(
-                        $('<li>').append(link)
-                    );
                     if (api.can('import', baton.data)) {
-                        link.attr('tabindex', 1).on('click', { baton: baton }, importData);
-                    } else {
-                        link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
+                        this.append(
+                            $('<li>').append(
+                                $('<a href="#" tabindex="1" data-action="import">')
+                                .text(gt('Import'))
+                                .on('click', { baton: baton }, importData)
+                            )
+                        );
                     }
                 }
             }
@@ -380,10 +372,13 @@ define('io.ox/core/commons-folderview',
             index: 300,
             draw: function (baton) {
                 if (capabilities.has('!alone') && capabilities.has('gab') && _.device('!smartphone')) {
-                    var link = $('<a href="#" data-action="permissions" tabindex="1" role="menuitem">').text(gt('Permissions'));
                     this.append(
                         $('<li class="divider" aria-hidden="true" role="presentation">'),
-                        $('<li>').append(link.on('click', { app: baton.app }, setFolderPermissions))
+                        $('<li>').append(
+                            $('<a href="#" tabindex="1" data-action="permissions" role="menuitem">')
+                            .text(gt('Permissions'))
+                            .on('click', { app: baton.app }, setFolderPermissions)
+                        )
                     );
                 }
             }
@@ -454,13 +449,19 @@ define('io.ox/core/commons-folderview',
             index: 400,
             draw: function (baton) {
                 if (_.device('!smartphone')) {
-                    var link = $('<a href="#" data-action="properties" tabindex="1" role="menuitem">').text(gt('Properties'));
                     if (!capabilities.has('gab')) {
                         //workaround: add divider if not set by permissions yet
-                        this.append($('<li class="divider" aria-hidden="true" role="presentation">'));
+                        this.append(
+                            $('<li class="divider" aria-hidden="true" role="presentation">')
+                        );
                     }
-                    this.append($('<li>').append(link));
-                    link.on('click', { baton: baton }, showFolderProperties);
+                    this.append(
+                        $('<li>').append(
+                            $('<a href="#" tabindex="1" data-action="properties" role="menuitem">')
+                            .text(gt('Properties'))
+                            .on('click', { baton: baton }, showFolderProperties)
+                        )
+                    );
                 }
             }
         });
@@ -531,12 +532,14 @@ define('io.ox/core/commons-folderview',
                 if (!/^(mail|infostore)$/.test(baton.options.type)) return;
                 if (_.device('smartphone')) return;
 
-                var link = $('<a href="#" data-action="delete" role="menuitem">').text(gt('Move'));
-                this.append($('<li>').append(link));
                 if (api.can('deleteFolder', baton.data)) {
-                    link.attr('tabindex', 1).on('click', { baton: baton }, moveFolder);
-                } else {
-                    link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
+                    this.append(
+                        $('<li>').append(
+                            $('<a href="#" tabindex="1" data-action="delete" role="menuitem">')
+                            .text(gt('Move'))
+                            .on('click', { baton: baton }, moveFolder)
+                        )
+                    );
                 }
             }
         });

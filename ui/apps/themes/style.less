@@ -2357,6 +2357,8 @@ a.toolbar-action, .toolbar-action > a {
         left: 100px;
         z-index: 2;
     }
+
+    .divider + .divider { display: none; }
 }
 
 /* Guidance view */
@@ -2898,6 +2900,9 @@ input.flat-input {
             background-color: #858585;
             border-radius: 1px;
             border-color: transparent;
+        }
+        .divider + .divider {
+            display: none;
         }
         .dropdown-header {
             display: none;

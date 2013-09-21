@@ -961,7 +961,11 @@ define('io.ox/core/tk/folderviews',
             // add options
             if (this.find('.folder-options').length === 0) {
                 label.after(
-                    $('<span class="folder-options">').append('<span class="folder-options-badge"><i class="icon-cog"></i></span>')
+                    $('<span class="folder-options">').append(
+                        $('<span class="folder-options-badge">')
+                        .attr('title', gt('Folder-specific actions'))
+                        .append($('<i class="icon-cog"></i></span>'))
+                    )
                 );
             }
 
