@@ -317,7 +317,7 @@ define('io.ox/mail/api',
         },
         // filter list request (special fix for nested messages; don't have folder; inline action checks fail)
         filter: function (obj) {
-            return obj.folder_id !== undefined;
+            return obj.folder_id !== undefined || obj.folder !== undefined;
         },
         pipe: {
             all: function (response, opt) {

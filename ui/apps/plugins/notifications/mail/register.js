@@ -42,38 +42,15 @@ define('plugins/notifications/mail/register',
         node.append(
             $('<div class="item" tabindex="1">').attr('data-cid', _.cid(data)).append(
                 $('<div class="title">').text(_.noI18n(util.getDisplayName(f[0]))),
-                $('<div class="subject">').text(_.noI18n(data.subject) || gt('No subject')).addClass(data.subject ? '' : 'empty'),
-                (_.device('smartphone') ? $() : $('<div class="content">').html(_.noI18n(api.beautifyMailText(data.attachments[0].content))))
+                $('<div class="subject">').text(_.noI18n(data.subject) || gt('No subject')).addClass(data.subject ? '' : 'empty')
+                // TODO: re-add teaser once we get this via getList(...)
             )
         );
     }
 
-    function showMail(obj, node, model) {
-
-        // fetch plain text mail; don't use cache
-        api.get(obj, false).done(function (data) {
-            //update model
-            model.set(data, {validate: true});
-            //draw
-            drawItem(node, data);
-        }).fail(function () {
-            node.append(
-                $.fail(gt('Couldn\'t load that email.'), function () {
-                    showMail(obj, node, model);
-                })
-            );
-        });
-    }
-
     ext.point('io.ox/core/notifications/mail/item').extend({
         draw: function (baton) {
-            //to avoid unnecessary requests check if the model is already complete, if not get it and fill in the missing data
-            if (baton.model.get('attachments')) {//attachments contains the actual text
-                drawItem(this, baton.model.attributes);
-            } else {//mail model not complete
-                var obj = _.extend(api.reduce(baton.model.toJSON()), { unseen: true, view: 'text' });
-                showMail(obj, this, baton.model);
-            }
+            drawItem(this, baton.data);
         }
     });
 
@@ -89,14 +66,28 @@ define('plugins/notifications/mail/register',
         },
 
         render: function () {
-            var i = 0, size = this.collection.size(), $i = Math.min(size, numMessages), baton;
-            baton = ext.Baton({ view: this, size: size, more: size > $i });
+
+            var i = 0, size = this.collection.size(),
+                $i = Math.min(size, numMessages),
+                baton,
+                mails = new Array($i),
+                view = this;
+
+            baton = ext.Baton({ view: view, size: size, more: size > $i });
             ext.point('io.ox/core/notifications/mail/header').invoke('draw', this.$el.empty(), baton);
 
-            for (; i < $i; i++) {
-                baton = ext.Baton({ model: this.collection.at(i), view: this });
-                ext.point('io.ox/core/notifications/mail/item').invoke('draw', this.$('.notifications'), baton);
+            // draw placeholders
+            for (i = 0; i < $i; i++) {
+                mails[i] = api.reduce(this.collection.at(i).toJSON());
             }
+
+            api.getList(mails).done(function (response) {
+                // draw placeholders
+                for (i = 0; i < $i; i++) {
+                    baton = ext.Baton({ data: response[i], view: view });
+                    ext.point('io.ox/core/notifications/mail/item').invoke('draw', view.$('.notifications'), baton);
+                }
+            });
 
             return this;
         },
