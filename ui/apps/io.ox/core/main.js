@@ -499,7 +499,7 @@ define("io.ox/core/main",
             id: 'notifications',
             index: 10000,
             draw: function () {
-                var el = $('<span class="badge">').hide();
+                var el = $('<span>').hide();
                 this.append(el);
                 // we don't need this right from the start,
                 // so let's delay this for responsiveness
@@ -517,7 +517,7 @@ define("io.ox/core/main",
             index: 2000,
             draw: function () {
                 this.append(
-                    addLauncher("right", $('<i class="icon-refresh">'), function () {
+                    addLauncher('right', $('<i class="icon-refresh launcher-icon">').attr('aria-label', gt('Refresh')), function () {
                         refresh();
                         return $.when();
                     })
@@ -621,9 +621,9 @@ define("io.ox/core/main",
             draw: function () {
                 var div, a, ul;
                 this.append(
-                    div = $('<div class="launcher right dropdown">').append(
-                        a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#">').append(
-                            $('<i class="icon-cog icon-white">')
+                    div = $('<div class="launcher right dropdown" role="presentation">').append(
+                        a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="menuitem" aria-haspopup="true" tabindex="1">').append(
+                            $('<i class="icon-cog icon-white launcher-icon" aria-hidden="true">')
                         ),
                         ul = $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">')
                     )

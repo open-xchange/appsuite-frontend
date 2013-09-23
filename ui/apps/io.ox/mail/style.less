@@ -38,6 +38,12 @@
 .vgrid-cell.mail .priority {
     font-weight: bold;
     float: right;
+    .icon-exclamation {
+        margin-left: 1px;
+    }
+    .icon-exclamation:before {
+        content: "\f06a";
+    }
     .high {
         color: @mailPriority;
     }
@@ -400,9 +406,14 @@
 
     .priority {
         font-weight: bold;
-        font-size: 80%;
         vertical-align: top;
         white-space: nowrap;
+        .icon-exclamation {
+            margin-left: 1px;
+        }
+        .icon-exclamation:before {
+            content: "\f06a";
+        }
         .high {
             color: @mailPriority;
         }
