@@ -928,7 +928,7 @@ define('io.ox/core/tk/folderviews',
         // inherit from folder tree
         FolderTree.call(this, container, opt);
         // add link container
-        $(container).append(this.links = $('<div>').addClass('foldertree-links'));
+        $(container).append(this.links = $('<div class="foldertree-links-deprecated">'));
         // add extension point support
         this.on('paint', function () {
             // paint links

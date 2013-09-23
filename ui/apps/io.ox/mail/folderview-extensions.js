@@ -31,12 +31,12 @@ define('io.ox/mail/folderview-extensions',
     }
 
     if (capabilities.has('multiple_mail_accounts')) {
-        ext.point(POINT + '/sidepanel/toolbar/add').extend({
+        ext.point(POINT + '/sidepanel/links').extend({
             id: 'add-account',
             index: 300,
             draw: function (baton) {
                 if (_.device('!smartphone')) {
-                    this.append($('<li>').append(
+                    this.append($('<div>').append(
                         $('<a href="#" data-action="add-mail-account" tabindex="1" role="menuitem">')
                         .text(gt('Add mail account'))
                         .on('click', addAccount)
@@ -51,14 +51,14 @@ define('io.ox/mail/folderview-extensions',
         e.data.app.folderView.subscribe(e.data);
     }
 
-    ext.point(POINT + '/sidepanel/toolbar/add').extend({
+    ext.point(POINT + '/sidepanel/links').extend({
         id: 'subscribe-folder',
         index: 400,
         draw: function (baton) {
             if (_.device('!smartphone')) {
-                this.append($('<li>').append(
+                this.append($('<div>').append(
                     $('<a href="#" data-action="subscribe" tabindex="1" role="menuitem">').text(gt('Subscribe IMAP folders'))
-                    .on('click', { app: baton.app, selection: baton.tree.selection }, subscribeIMAPFolder)
+                    .on('click', { app: baton.app }, subscribeIMAPFolder)
                 ));
             }
         }

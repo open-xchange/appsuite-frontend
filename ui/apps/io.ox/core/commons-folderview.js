@@ -48,16 +48,20 @@ define('io.ox/core/commons-folderview',
         ext.point(POINT + '/sidepanel').extend({
             index: 100,
             draw: function (baton) {
+                var container;
                 this.prepend(
                     // sidepanel
                     baton.$.sidepanel = $('<div class="abs border-right foldertree-sidepanel">')
                     .append(
                         // container
-                        baton.$.container = $('<div class="abs foldertree-container">'),
-                        // toolbar
-                        baton.$.toolbar = $('<div class="abs foldertree-toolbar">')
+                        $('<div class="abs foldertree-container">').append(
+                            baton.$.container = $('<div class="foldertree">'),
+                            baton.$.links = $('<div class="foldertree-links">')
+                        )
                     )
                 );
+
+                ext.point(POINT + '/sidepanel/links').invoke('draw', baton.$.links, baton);
             }
         });
 
@@ -115,31 +119,6 @@ define('io.ox/core/commons-folderview',
             }
         });
 
-        // toolbar
-        ext.point(POINT + '/sidepanel/toolbar').extend({
-            id: 'add',
-            index: 100,
-            draw: function (baton) {
-                var ul;
-                this.append(
-                    $('<div class="toolbar-action pull-left dropdown dropup" data-action="add">').append(
-                        $('<a href="#" class="dropdown-toggle">')
-                            .attr({
-                                'data-toggle': 'dropdown',
-                                tabindex: 1,
-                                role: 'menuitem',
-                                'aria-haspopup': true,
-                                title: gt('Add folder menu'),
-                                'aria-label': gt('Add folder menu')
-                            })
-                            .append($('<i class="icon-plus">')),
-                        ul = $('<ul class="dropdown-menu" role="menu">')
-                    )
-                );
-                ext.point(POINT + '/sidepanel/toolbar/add').invoke('draw', ul, baton);
-            }
-        });
-
         function addTopLevelFolder(e) {
             e.preventDefault();
             e.data.app.folderView.add('1', { module: 'mail' });
@@ -156,33 +135,33 @@ define('io.ox/core/commons-folderview',
         }
 
          // toolbar actions
-        ext.point(POINT + '/sidepanel/toolbar/add').extend({
+        ext.point(POINT + '/sidepanel/links').extend({
             id: 'add-toplevel-folder',
             index: 100,
             draw: function (baton) {
                 if (baton.options.type === 'mail') {
                     // only show for mail
-                    this.append($('<li>').append(
-                        $('<a href="#" data-action="add-toplevel-folder" tabindex="1" role="menuitem">').text(gt('Add new folder'))
+                    this.append($('<div>').append(
+                        $('<a href="#" data-action="add-toplevel-folder" tabindex="1" role="menuitem">').text(gt('New folder'))
                         .on('click', { app: baton.app }, addTopLevelFolder)
                     ));
                 }
             }
         });
 
-        ext.point(POINT + '/sidepanel/toolbar/add').extend({
+        ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'add-folder',
-            index: 200,
+            index: 90,
             draw: function (baton) {
                 // only mail and infostore show hierarchies
-                var label = /^(contacts|calendar|tasks)$/.test(baton.options.type) ? gt('Add private folder') : gt('Add subfolder'),
-                    link = $('<a href="#" data-action="add-subfolder" role="menuitem">').text(label);
+                var label = /^(contacts|calendar|tasks)$/.test(baton.options.type) ? gt('New private folder') : gt('New subfolder');
                 if (api.can('create', baton.data)) {
-                    link.attr('tabindex', 1).on('click', { app: baton.app, type: baton.options.type }, addSubFolder);
-                } else {
-                    link.attr('aria-disabled', true).addClass('disabled');
+                    this.append($('<li>').append(
+                        $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
+                        .text(label)
+                        .on('click', { app: baton.app, type: baton.options.type }, addSubFolder)
+                    ));
                 }
-                this.append($('<li>').append(link));
             }
         });
 
@@ -192,25 +171,27 @@ define('io.ox/core/commons-folderview',
             e.data.app.folderView.add('2', { module: e.data.module });
         }
 
-        ext.point(POINT + '/sidepanel/toolbar/add').extend({
+        ext.point(POINT + '/sidepanel/links').extend({
             id: 'add-public-folder',
             index: 200,
             draw: function (baton) {
 
                 var type = baton.options.type,
-                    link = $('<a href="#" data-action="add-public-folder" role="menuitem">').text(gt('Add public folder'));
+                    link = $('<a href="#" data-action="add-public-folder" role="menuitem">').text(gt('Add public folder')),
+                    div = $('<div>').append(link);
 
                 if (!capabilities.has('edit_public_folders')) return;
                 if (!(type === 'contacts' || type === 'calendar' || type === 'tasks')) return;
 
-                api.get({folder: 2}).then(function (public_folder) {
+                this.append(div);
+
+                api.get({ folder: 2 }).then(function (public_folder) {
                     if (api.can('create', public_folder)) {
                         link.attr('tabindex', 1).on('click', {app: baton.app, module: type}, createPublicFolder);
                     } else {
-                        link.attr('aria-disabled', true).addClass('disabled');
+                        div.remove();
                     }
                 });
-                this.append($('<li>').append(link));
             }
         });
 
@@ -221,15 +202,14 @@ define('io.ox/core/commons-folderview',
             });
         }
 
-        ext.point(POINT + '/sidepanel/toolbar/add').extend({
+        ext.point(POINT + '/sidepanel/links').extend({
             id: 'publications',
             index: 500,
             draw: function (baton) {
                 // do not draw if not available
                 if (capabilities.has('publication') && api.can('publish', baton.data)) {
                     this.append(
-                        $('<li class="divider" aria-hidden="true" role="presentation">'),
-                        $('<li>').append(
+                        $('<div>').append(
                             $('<a href="#" data-action="publications" role="menuitem" tabindex="1">')
                             .text(gt('Share this folder'))
                             .on('click', { baton: baton }, publish)
@@ -246,14 +226,14 @@ define('io.ox/core/commons-folderview',
             });
         }
 
-        ext.point(POINT + '/sidepanel/toolbar/add').extend({
+        ext.point(POINT + '/sidepanel/links').extend({
             id: 'subscribe',
             index: 600,
             draw: function (baton) {
                 // do not draw if not available
                 if (capabilities.has('subscription') && api.can('subscribe', baton.data)) {
                     this.append(
-                        $('<li>').append(
+                        $('<div>').append(
                             $('<a href="#" data-action="subscriptions" role="menuitem" tabindex="1">')
                             .text(gt('Subscription'))
                             .on('click', { baton: baton }, subscribe)
@@ -267,6 +247,8 @@ define('io.ox/core/commons-folderview',
             e.preventDefault();
             e.data.app.folderView.rename();
         }
+
+        // here
 
         ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'rename',
@@ -743,7 +725,7 @@ define('io.ox/core/commons-folderview',
                     api.get({ folder: id }).done(function (data) {
                         baton.data = data;
                         // update toolbar
-                        ext.point(POINT + '/sidepanel/toolbar').invoke('draw', baton.$.toolbar.empty(), baton);
+                        ext.point(POINT + '/sidepanel/links').invoke('draw', baton.$.links.empty(), baton);
                         // update context menu
                         var ul = baton.$.sidepanel.find('.context-dropdown ul');
                         ext.point(POINT + '/sidepanel/context-menu').invoke('draw', ul.empty(), baton);
