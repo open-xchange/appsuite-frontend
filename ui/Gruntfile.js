@@ -15,9 +15,7 @@
 
 module.exports = function (grunt) {
 
-    var srcFiles = ['Gruntfile.js', 'apps/**/*.js'],
-        jsonFiles = ['apps/**/*.json'],
-        local = grunt.file.exists('local.conf.json') ? grunt.file.readJSON('local.conf.json') : {};
+    var local = grunt.file.exists('local.conf.json') ? grunt.file.readJSON('local.conf.json') : {};
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -44,7 +42,7 @@ module.exports = function (grunt) {
         local: local,
         jshint: {
             all: {
-                src: srcFiles,
+                src: ['Gruntfile.js', 'apps/**/*.js'],
                 options: {
                     jshintrc: '.jshintrc',
                     ignores: ['apps/io.ox/core/date.js'] // date.js has some funky include stuff we have to figure out
@@ -53,7 +51,7 @@ module.exports = function (grunt) {
         },
         jsonlint: {
             manifests: {
-                src: jsonFiles
+                src: ['apps/**/*.json']
             }
         },
         recess: {
@@ -103,6 +101,49 @@ module.exports = function (grunt) {
                         cwd: 'html/',
                         ext: '.appcache',
                         dest: 'build/'
+                    }
+                ]
+            }
+        },
+        less: {
+            default: {
+                options: {
+                    compress: true,
+                    paths: 'apps',
+                    imports: {
+                        less: ['themes/definitions.less', 'themes/default/definitions.less']
+                    }
+                },
+                files: [
+                    {
+                        src: ['apps/themes/style.less'],
+                        expand: true,
+                        rename: function (dest) {
+                            return dest;
+                        },
+                        dest: 'build/apps/themes/default/less/common.css'
+                    },
+                    {
+                        src: ['apps/themes/default/style.less'],
+                        expand: true,
+                        rename: function (dest) {
+                            return dest;
+                        },
+                        dest: 'build/apps/themes/default/less/style.css'
+                    },
+                    {
+                        src: ['lib/bootstrap/less/bootstrap.less'],
+                        expand: true,
+                        rename: function (dest) {
+                            return dest;
+                        },
+                        dest: 'build/apps/io.ox/core/bootstrap/css/bootstrap.min.css'
+                    },
+                    {
+                        src: ['**/*.less', '!themes/**/*.less', '!themes/*.less'],
+                        expand: true,
+                        cwd: 'apps/',
+                        dest: 'build/apps/themes/default/less/'
                     }
                 ]
             }
