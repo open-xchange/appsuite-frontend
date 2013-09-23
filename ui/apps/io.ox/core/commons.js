@@ -136,7 +136,7 @@ define('io.ox/core/commons',
                         node.css('height', '100%').idle().empty().append(
                             $('<div class="io-ox-center">').append(
                                 $('<div class="io-ox-multi-selection">').append(
-                                    $('<div class="summary">').text(gt('No elements selected'))
+                                    $('<div class="summary empty">').text(gt('No elements selected'))
                                 )
                             )
                         );
