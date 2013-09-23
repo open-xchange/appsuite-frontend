@@ -153,7 +153,7 @@
         // Web SQL
         (function () {
             var initialization = $.Deferred();
-            var db = openDatabase("filecache", "1.0", "caches files for OX", 12 * 1024 * 1024);
+            var db = openDatabase("filecache", "1.0", "caches files for OX", 4 * 1024 * 1024);
             db.transaction(function (tx) {
                 tx.executeSql("CREATE TABLE IF NOT EXISTS version (version TEXT)");
                 tx.executeSql("SELECT 1 FROM version WHERE version = ?", [ox.version], function (tx, result) {
