@@ -628,7 +628,9 @@ define('io.ox/core/main',
             index: 280,
             draw: function () { //replaced by module
                 var node = this;
-
+                if (_.device('mobileOS') || _.device('touch')) {
+                    return;
+                }
                 node.append(
                     $('<li>', {'class': 'io-ox-specificHelp'}).append(
                         $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(gt('Tour: Coming from OX6'))
@@ -646,6 +648,9 @@ define('io.ox/core/main',
             index: 281,
             draw: function () { //replaced by module
                 var node = this;
+                if (_.device('mobileOS') || _.device('touch')) {
+                    return;
+                }
                 node.append(
                     $('<li>', {'class': 'io-ox-specificHelp'}).append(
                         $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(gt('Guided tour for this module'))

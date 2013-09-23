@@ -295,7 +295,7 @@ define('io.ox/core/tk/attachments',
                                         fileSize = item.file_size || item.size;
                                     if (fileSize) {
                                         total += fileSize;
-                                        if (fileSize > maxFileSize) {
+                                        if (maxFileSize !== 0 && fileSize > maxFileSize) {
                                             proceed = false;
                                             notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, strings.fileSize(maxFileSize)));
                                             return;

@@ -238,7 +238,7 @@ define('io.ox/core/tk/upload',
                     _.each(files, function (f) {
                         fileTitle = f.name;
                         total += f.size;
-                        if (f.size > maxSize) {
+                        if (maxSize !== 0 && f.size > maxSize) {
                             proceed = false;
                             notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, strings.fileSize(maxSize)));
                             self.stop();

@@ -32,7 +32,7 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                     if (name === 'io.ox/calendar/edit/main') {
                         that.create({});
                     } else if (name === 'io.ox/mail/write/main') {
-                        that.compose({});
+                        that.compose({ subject: '[Guided tours] Example e-mail'});
                     }
                     yielded();
                 });
@@ -135,7 +135,7 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                     },
                     {
                         title: gt("Reading the details"),
-                        placement: "right",
+                        placement: "bottom",
                         target: $('.widget .item:visible')[0],
                         content: gt("To read the details, click on an entry in a tile.")
                     },
@@ -155,13 +155,17 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                         title: gt("Closing a tile"),
                         placement: "bottom",
                         target: $('.widget .disable-widget .icon-remove:visible')[0],
-                        content: gt("If you no longer want to display a tile, click the cross on the upper right side.")
+                        content: gt("If you no longer want to display a tile, click the cross on the upper right side."),
+                        xOffset: -10,
+                        arrowOffset: 1
                     },
                     {
                         title: gt("Customizing"),
                         placement: "left",
                         target: $('.header [data-action="customize"]')[0],
-                        content: gt("To display a tile again or to display further information sources, click on Customize this page.")
+                        content: gt("To display a tile again or to display further information sources, click on Customize this page."),
+                        yOffset: -10,
+                        arrowOffset: 1
                     }]
                 },
 
@@ -225,6 +229,9 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                         content: gt("To send the E-Mail, click on Send on the upper right side."),
                         multipage: true,
                         onNext: function () {
+                            if ($('input[name="subject"]').val() === '[Guided tours] Example e-mail') {
+                                $('.btn[data-action="discard"]:visible').click();
+                            }
                             switchToApp('io.ox/mail/main', function () {
                                 window.hopscotch.nextStep();
                                 window.hopscotch.prevStep();
@@ -251,7 +258,9 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
                             }
                             return null;
                         },
-                        content: gt("The number on the right side of the E-Mail subject corresponds to the number of E-Mails in a thread. To open the thread, click on the number.")
+                        content: gt("The number on the right side of the E-Mail subject corresponds to the number of E-Mails in a thread. To open the thread, click on the number."),
+                        arrowOffset: 1,
+                        yOffset: -10
                     },
                     {
                         title: gt("Halo view"),
@@ -649,6 +658,11 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
             if (!tour) {
                 return;
             }
+            tour.i18n = {
+                prevBtn: '<i class="icon-chevron-left">&nbsp;</i>',
+                nextBtn: '<i class="icon-chevron-right">&nbsp;</i>',
+                doneBtn: '<i class="icon-ok">&nbsp;</i>'
+            };
 
             //RESET
             hs.endTour(true);
