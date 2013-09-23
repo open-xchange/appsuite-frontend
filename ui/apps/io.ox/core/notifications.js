@@ -33,7 +33,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
         render: function () {
             this.$el.attr({ href: '#', tabindex: '1' }).append(
                 $('<span class="badge">').append(
-                    $('<spann class="number">'), $.txt(' '),
+                    $('<span class="number">'), $.txt(' '),
                     $('<i class="icon-caret-right">')
                 )
             );
