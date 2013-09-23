@@ -148,6 +148,10 @@ define('io.ox/calendar/week/view',
                     .filter(function (obj) {
                         var os = obj.start_date,
                             oe = obj.end_date;
+                        if (obj.full_time) {
+                            os = date.Local.utc(os);
+                            oe = date.Local.utc(oe);
+                        }
                         return (os >= ws && os < we) || (oe > ws && oe < we) || (os <= ws && oe >= we);
                     })
                     .map(function (obj) {
