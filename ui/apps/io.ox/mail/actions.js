@@ -1059,7 +1059,7 @@ define('io.ox/mail/actions',
         index: INDEX + 1,
         prio: 'hi',
         id: 'nospam',
-        label: gt('No spam'),
+        label: gt('Not spam'),
         ref: 'io.ox/mail/actions/nospam'
     }));
 
