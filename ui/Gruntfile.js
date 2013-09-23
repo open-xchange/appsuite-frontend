@@ -195,6 +195,16 @@ module.exports = function (grunt) {
                         dest: 'build/boot.js'
                     }
                 ]
+            },
+            apps: {
+                files: [
+                    {
+                        src: ['apps/**/*.*', '!apps/**/*.less'],
+                        expand: true,
+                        filter: 'isFile',
+                        dest: 'build/'
+                    }
+                ]
             }
         }
     });
