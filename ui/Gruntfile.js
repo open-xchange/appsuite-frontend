@@ -221,5 +221,8 @@ module.exports = function (grunt) {
 
     grunt.registerTask('lint', ['newer:jshint:all', 'newer:jsonlint:manifests']);
 
-    grunt.registerTask('default', ['lint', 'newer:assemble', 'newer:concat']);
+    // Custom tasks
+    grunt.registerTask('force_update', ['assemble:base', 'assemble:appcache']);
+
+    grunt.registerTask('default', ['lint', 'newer:assemble', 'newer:concat', 'force_update']);
 };
