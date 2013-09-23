@@ -209,7 +209,7 @@ define('io.ox/mail/main',
         // tail click
         left.on('click', '.vgrid-cell.tail', function (e) {
             e.preventDefault();
-            grid.prop('sort', 610).refresh();
+            grid.prop('sort', '610').refresh();
         });
 
         // add template
