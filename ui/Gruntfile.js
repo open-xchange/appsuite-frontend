@@ -164,6 +164,37 @@ module.exports = function (grunt) {
                         dest: 'build/'
                     }
                 ]
+            },
+            bootjs: {
+                options: {
+                    banner: 'dependencies = {};\n'
+                },
+                files: [
+                    {
+                        src: ['lib/jquery.js',
+                             'lib/jquery.mobile.touch.min.js',
+                             'lib/underscore.js', // load this before require.js to keep global object
+                             'lib/require.js',
+                             'lib/require-fix.js',
+                             'lib/modernizr.js',
+                             'lib/bigscreen.js',
+                             'lib/placeholder.min.js',
+                             //add backbone and dot.js may be a AMD-variant would be better
+                             'lib/backbone.js',
+                             'lib/backbone.modelbinder.js',
+                             'lib/backbone.collectionbinder.js',
+                             'lib/backbone.validation.js',
+                             'lib/backbone.custom.js',
+                             'lib/doT.js',
+                             'lib/textarea-helper.js',
+                             'src/util.js',
+                             'src/plugins.js',
+                             'src/jquery.plugins.js',
+                             'apps/io.ox/core/gettext.js',
+                             'src/boot.js'],
+                        dest: 'build/boot.js'
+                    }
+                ]
             }
         }
     });
