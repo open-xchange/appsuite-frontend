@@ -536,19 +536,22 @@
          * format/printf
          */
         printf: function (str, params) {
+            str = _.isString(str) ? str : '';
             // is array?
             if (!_.isArray(params)) {
                 params = slice.call(arguments, 1);
             }
             var index = 0;
-            return String(str)
+            return str
                 .replace(
                     /%(([0-9]+)\$)?[A-Za-z]/g,
                     function (match, pos, n) {
                         if (pos) {
                             index = n - 1;
                         }
-                        return params[index++];
+                        //return params[index++];
+                        var val = params[index++]
+                        return val !== undefined ? val : 'unknown';
                     }
                 )
                 .replace(/%%/g, '%');
@@ -726,7 +729,8 @@
         toHash: function (array, prop) {
             var tmp = {};
             _(array).each(function (obj) {
-                tmp[obj[prop]] = obj;
+                if (prop && _.isString(prop))
+                    tmp[obj[prop]] = obj;
             });
             return tmp;
         },
