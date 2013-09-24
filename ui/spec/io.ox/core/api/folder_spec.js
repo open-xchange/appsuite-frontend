@@ -10,8 +10,67 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 define(['shared/examples/for/api',
-       'io.ox/core/api/folder'
-], function (sharedExamplesFor, api) {
+       'io.ox/core/api/folder',
+       'io.ox/core/http'
+], function (sharedExamplesFor, api, http) {
+    var setupFakeServer = _.once(function (server) {
+        //sends a default folder for get calls
+        server.respondWith('GET', /api\/folders\?action=get/, function (xhr) {
+            var sendObject = JSON.parse('{"' + decodeURI(xhr.url)
+                .replace('/api/folders?', '')
+                .replace(/"/g, '\\"').replace(/&/g, '","')
+                .replace(/=/g,'":"') + '"}'),
+                parentFolderIDs = {'2': '1',
+                    '3' : '2',
+                    '4' : '2',
+                    '5' : '2',
+                    '21' : '2'
+                };
+
+            xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
+                JSON.stringify({timestamp:1378223251586, data: {id: sendObject.id, folder_id: parentFolderIDs[sendObject.id]}})
+            );
+        });
+
+        //sends a list of subfolders
+        server.respondWith('GET', /api\/folders\?action=list/, function (xhr) {
+            xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
+                JSON.stringify({
+                    timestamp: 1368791630910,
+                    data: [
+                        {id: '3', folder_id: '2'},
+                        {id: '4', folder_id: '2'},
+                        {id: '5', folder_id: '2'}
+                    ]
+                })
+            );
+        });
+
+        //sends a path from a folder
+        server.respondWith('GET', /api\/folders\?action=path/, function (xhr) {
+            xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
+                JSON.stringify({"timestamp":9223372036854775807,
+                    "data":[
+                        ["3",0,0,0,0,0,"2",null,"Subfolder","infostore",2,true,0,null,null,true,2,null,null,null,null,true,true,8,null,false,false,"Name"],
+                        ["2",0,0,0,0,0,"1",null,"Folder","infostore",2,true,0,null,null,true,2,null,null,null,null,true,true,8,null,false,false,"Name"],
+                        ["1",0,0,0,0,0,"0",null,"Root","infostore",2,true,0,null,null,true,2,null,null,null,null,true,true,8,null,false,false,"Name"]]})
+            );
+        });
+
+        //sends the created folder
+        server.respondWith('PUT', /api\/folders\?action=(new|delete)/, function (xhr) {
+            xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
+                JSON.stringify({timestamp:1378223251586, data: '21'})
+            );
+        });
+
+        //responds with empty message to allVisible calls
+        server.respondWith(/api\/folders\?action=allVisible/, function (xhr) {
+            xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
+                JSON.stringify({timestamp:1378223251586, data: []})
+            );
+        });
+    });
 
     return describe('folder API', function () {
         var options = {
@@ -35,6 +94,194 @@ define(['shared/examples/for/api',
             it('should know about the mail folder', function () {
                 var folder_id = api.getDefaultFolder('mail');
                 expect(folder_id).toEqual('default0/INBOX');
+            });
+        });
+
+        describe('requests some folders from the server', function () {
+            beforeEach(function () {
+                //TODO: clear global cache (must also be possible in phantomJS)
+                var cache1 = api.caches.folderCache.clear(),
+                    cache2 = api.caches.subFolderCache.clear(),
+                    cache3 = api.caches.visibleCache.clear();
+
+                //wait for caches to be clear, then procceed
+                waitsFor(function () {
+                    return cache1.state() === 'resolved' && cache2.state() === 'resolved' && cache3.state() === 'resolved';
+                }, 'cache clear takes too long', 1000);
+                runs(function () {
+                    //make fake server only respond on demand
+                    this.server = ox.fakeServer;
+                    this.server.autoRespond = false;
+
+                    setupFakeServer(this.server);
+                });
+            });
+
+            afterEach(function () {
+                //make fake server respond automatically
+                this.server.autoRespond = true;
+            });
+
+            it('should return a folder with correct id', function() {
+                var result = api.get({folder: '2', cache: false});
+
+                result.done(function(data) {
+                    expect(data.id).toBe('2');
+                });
+
+                expect(result).toBeDeferred();
+                expect(result.state()).toBe('pending');
+                this.server.respond();
+                expect(result).toResolve();
+            });
+
+            it('should return a list of subfolders with correct parent ids', function () {
+                var result = api.getSubFolders({folder: '2'});
+
+                result.done(function (data) {
+                    _(data).each(function (folder) {
+                        expect(folder.folder_id).toBe('2');
+                    });
+                });
+
+                expect(result).toBeDeferred();
+                expect(result.state()).toBe('pending');
+
+                expect(this.server).toRespondUntilResolved(result);
+            });
+
+            it('should return a path of a folder with getPath', function () {
+                var result = api.getPath({folder: '3', cache: true}),
+                    parentID = '1';
+
+                result.done(function (data) {
+                    _(data).each(function (folder) {
+                        expect(folder.folder_id).toBe(parentID);
+                        parentID = folder.id;
+                    });
+
+                    expect(_(data).first().id).not.toBe('0');
+                });
+
+                expect(result).toBeDeferred();
+                expect(result.state()).toBe('pending');
+
+                expect(this.server).toRespondUntilResolved(result);
+            });
+
+            it('should trigger a create event', function () {
+                expect(api).toTrigger('create');
+                var result = api.create({folder: '2'});
+
+                //deferred should be pending
+                expect(result).toBeDeferred();
+                expect(result.state()).toBe('pending');
+
+                expect(this.server).toRespondUntilResolved(result);
+            });
+
+            it('should create a folder', function () {
+                var spy = sinon.spy(http, 'PUT'),
+                    result = api.create({folder: '2'}),
+                    param;
+
+                //deferred should be pending
+                expect(result).toBeDeferred();
+                expect(result.state()).toBe('pending');
+
+                //make server respond
+                expect(this.server).toRespondUntilResolved(result);
+
+                result.done(function () {
+                    //server response should resolve deferred
+                    expect(result.state()).toBe('resolved');
+                    expect(spy).toHaveBeenCalledOnce();
+
+                    //the http request should containt corrent values
+                    param = spy.getCall(0).args[0];
+                    expect(param.module).toBe('folders');
+                    expect(param.params.action).toBe('new');
+                    expect(param.params.folder_id).toBe('2');
+
+                    //restore http.PUT
+                    http.PUT.restore();
+                });
+            });
+
+            it('should trigger a delete event', function () {
+                expect(api).toTrigger('delete');
+                var result = api.remove({folder: '2'});
+
+                //deferred should be pending
+                expect(result).toBeDeferred();
+                expect(result.state()).toBe('pending');
+
+                expect(this.server).toRespondUntilResolved(result);
+            });
+
+            it('should remove a folder', function () {
+                var spy = sinon.spy(http, 'PUT'),
+                    result = api.remove({folder: '2'}),
+                    param;
+
+                //deferred should be pending
+                expect(result).toBeDeferred();
+                expect(result.state()).toBe('pending');
+
+                //make server respond
+                expect(this.server).toRespondUntilResolved(result);
+
+                result.done(function () {
+                    //server response should resolve deferred
+                    expect(result.state()).toBe('resolved');
+                    expect(spy).toHaveBeenCalledOnce();
+
+                    //the http request should containt corrent values
+                    param = spy.getCall(0).args[0];
+                    expect(param.module).toBe('folders');
+                    expect(param.params.action).toBe('delete');
+                    expect(param.params.folder_id).toBe('2');
+
+                    //restore http.PUT
+                    http.PUT.restore();
+                });
+            });
+
+            describe('to find out, if a folder', function () {
+                it('can read', function () {
+                    expect(api.can('read', {own_rights: 128})).toBe(true);
+                    expect(api.can('read', {own_rights: 127})).toBe(false);
+                });
+
+                it('can create', function () {
+                    expect(api.can('create', {own_rights: 2})).toBe(true);
+                    expect(api.can('create', {own_rights: 1})).toBe(false);
+                });
+
+                it('can write', function () {
+                    expect(api.can('write', {own_rights: 20000})).toBe(true);
+                    expect(api.can('write', {own_rights: 0})).toBe(false);
+                });
+
+                it('can delete', function () {
+                    expect(api.can('delete', {own_rights: 5000000})).toBe(true);
+                    expect(api.can('delete', {own_rights: 0})).toBe(false);
+                });
+
+                it('can rename', function () {
+                    expect(api.can('rename', {own_rights: 0x50000000})).toBe(true);
+                    expect(api.can('rename', {own_rights: 0})).toBe(false);
+                });
+
+                it('can create folder', function () {
+                    expect(api.can('createFolder', {own_rights: 0x10000000})).toBe(true);
+                    expect(api.can('createFolder', {own_rights: 0, permissions: 0})).toBe(false);
+                });
+
+                it('can delete folder', function () {
+                    expect(api.can('deleteFolder', {own_rights: 0x10000000})).toBe(true);
+                    expect(api.can('deleteFolder', {own_rights: 0})).toBe(false);
+                });
             });
         });
     });
