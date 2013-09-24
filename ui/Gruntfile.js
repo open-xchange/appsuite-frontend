@@ -199,7 +199,7 @@ module.exports = function (grunt) {
             apps: {
                 files: [
                     {
-                        src: ['apps/**/*.*', '!apps/**/*.less'],
+                        src: ['apps/**/*.js'],
                         expand: true,
                         filter: 'isFile',
                         dest: 'build/'
@@ -242,6 +242,7 @@ module.exports = function (grunt) {
     });
 
     grunt.loadNpmTasks('assemble');
+    grunt.loadNpmTasks('assemble-less');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-jsonlint');
@@ -257,5 +258,5 @@ module.exports = function (grunt) {
     // Custom tasks
     grunt.registerTask('force_update', ['assemble:base', 'assemble:appcache']);
 
-    grunt.registerTask('default', ['lint', 'newer:assemble', 'newer:concat', 'force_update']);
+    grunt.registerTask('default', ['lint', 'newer:assemble', 'newer:concat', 'newer:less', 'force_update']);
 };
