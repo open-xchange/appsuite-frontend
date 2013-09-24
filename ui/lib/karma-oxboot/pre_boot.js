@@ -43,7 +43,7 @@ window.ox = {
     },
     signin: false,
     t0: new Date().getTime(), // for profiling
-    testTimeout: 1000,
+    testTimeout: 10000,
     ui: { session: {} },
     user: '',
     user_id: 0,
