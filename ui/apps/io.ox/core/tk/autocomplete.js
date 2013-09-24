@@ -56,7 +56,7 @@ define('io.ox/core/tk/autocomplete',
                 // object related unique string
                 stringify: function (data) {
 
-                    if (data.type === 'resource' || data.type === 'group')
+                    if (data.type === 2 || data.type === 3)
                         return this.name(data.contact);
 
                     var name = this.name(data);
