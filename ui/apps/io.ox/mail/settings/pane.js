@@ -180,7 +180,7 @@ define('io.ox/mail/settings/pane',
     });
 
     function changeIMAPSubscription(e) {
-        ox.load(['io.ox/settings/accounts/settings/subscription']).done(function (subscription) {
+        ox.load(['io.ox/core/folder/imap-subscription']).done(function (subscription) {
             subscription.show();
         });
     }

@@ -28,9 +28,16 @@ define('io.ox/core/pubsub/subscriptions',
 
     var POINT = 'io.ox/core/pubsub/subscribe',
 
-    buildSubscribeDialog = function (baton) {
-        var model = new pubsub.Subscription({ folder: baton.data.id, entity: {folder: baton.data.id}, entityModule: baton.data.module }),
-            view = new SubscriptionView({model: model}).render(baton.app);
+    // needs id and module (e.g. contacts)
+    buildSubscribeDialog = function (options) {
+        options = options || {};
+        console.log('buildSubscribeDialog', options);
+        var model = new pubsub.Subscription({
+                folder: options.folder,
+                entity: { folder: options.folder },
+                entityModule: options.module
+            }),
+            view = new SubscriptionView({ model: model }).render(options.app);
     },
 
     SubscriptionView = Backbone.View.extend({

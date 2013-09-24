@@ -422,8 +422,11 @@ define("io.ox/core/extensions",
 
         // shallow copy (since batons also contain DOM nodes)
         clone: function (options) {
-            var clone = new Baton(options);
+            var clone = new Baton();
             _(this).each(function (obj, key) {
+                clone[key] = _.extend({}, obj);
+            });
+            _(options || {}).each(function (obj, key) {
                 clone[key] = _.extend({}, obj);
             });
             return clone;

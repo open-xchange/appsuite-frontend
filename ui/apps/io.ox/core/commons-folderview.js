@@ -121,31 +121,39 @@ define('io.ox/core/commons-folderview',
 
         function addTopLevelFolder(e) {
             e.preventDefault();
-            e.data.app.folderView.add('1', { module: 'mail' });
+            ox.load(['io.ox/core/folder/add']).done(function (add) {
+                add('1', { module: e.data.module });
+            });
         }
 
-        function addSubFolder(e) {
+        function addFolder(e) {
             e.preventDefault();
-            // set explicit folder?
-            if (/^(contacts|calendar|tasks)$/.test(e.data.type)) {
-                e.data.app.folderView.add(api.getDefaultFolder(e.data.type));
-            } else {
-                e.data.app.folderView.add();
-            }
+            ox.load(['io.ox/core/folder/add']).done(function (add) {
+                add(e.data.folder, { module: e.data.module });
+            });
         }
 
-         // toolbar actions
+        function addPublicFolder(e) {
+            e.preventDefault();
+            // public folder has the magic id 2
+            ox.load(['io.ox/core/folder/add']).done(function (add) {
+                add('2', { module: e.data.module });
+            });
+        }
+
+        // toolbar actions
         ext.point(POINT + '/sidepanel/links').extend({
             id: 'add-toplevel-folder',
             index: 100,
             draw: function (baton) {
-                if (baton.options.type === 'mail') {
-                    // only show for mail
-                    this.append($('<div>').append(
-                        $('<a href="#" data-action="add-toplevel-folder" tabindex="1" role="menuitem">').text(gt('New folder'))
-                        .on('click', { app: baton.app }, addTopLevelFolder)
-                    ));
-                }
+
+                if (baton.options.type !== 'mail') return;
+
+                // only show for mail
+                this.append($('<div>').append(
+                    $('<a href="#" data-action="add-toplevel-folder" tabindex="1" role="menuitem">').text(gt('New folder'))
+                    .on('click', addTopLevelFolder)
+                ));
             }
         });
 
@@ -153,44 +161,84 @@ define('io.ox/core/commons-folderview',
             id: 'add-folder',
             index: 90,
             draw: function (baton) {
+
+                if (/^(contacts|calendar|tasks)$/.test(baton.options.type)) return;
+                if (!api.can('create', baton.data)) return;
+
                 // only mail and infostore show hierarchies
-                var label = /^(contacts|calendar|tasks)$/.test(baton.options.type) ? gt('New private folder') : gt('New subfolder');
-                if (api.can('create', baton.data)) {
-                    this.append($('<li>').append(
-                        $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
-                        .text(label)
-                        .on('click', { app: baton.app, type: baton.options.type }, addSubFolder)
-                    ));
-                }
+                console.log('OK! add subfolder', baton);
+                this.append($('<li>').append(
+                    $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
+                    .text(gt('New subfolder'))
+                    .on('click', { app: baton.app, module: baton.options.type }, addFolder)
+                ));
             }
         });
 
-        function createPublicFolder(e) {
+        // flat folder view
+
+        ext.point('io.ox/foldertree/section/links').extend({
+            index: 100,
+            id: 'private',
+            draw: function (baton) {
+
+                if (baton.id !== 'private') return;
+
+                this.append($('<div>').append(
+                    $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
+                    .text(gt('New private folder'))
+                    .on('click', { folder: api.getDefaultFolder(baton.options.type), module: baton.options.type }, addFolder)
+                ));
+            }
+        });
+
+        function subscribe(e) {
             e.preventDefault();
-            // public folder has the magic id 2
-            e.data.app.folderView.add('2', { module: e.data.module });
+            require(['io.ox/core/pubsub/subscriptions'], function (subscriptions) {
+                console.log('YEAH', e.data);
+                subscriptions.buildSubscribeDialog(e.data);
+            });
         }
 
-        ext.point(POINT + '/sidepanel/links').extend({
-            id: 'add-public-folder',
+        ext.point('io.ox/foldertree/section/links').extend({
+            id: 'subscribe',
             index: 200,
             draw: function (baton) {
 
-                var type = baton.options.type,
-                    link = $('<a href="#" data-action="add-public-folder" role="menuitem">').text(gt('Add public folder')),
-                    div = $('<div>').append(link);
+                if (baton.id !== 'private') return;
+                if (!capabilities.has('subscription')) return;
 
+                this.append(
+                    $('<div>').append(
+                        $('<a href="#" data-action="subscriptions" role="menuitem" tabindex="1">')
+                        .text(gt('New subscription'))
+                        .on('click', { folder: api.getDefaultFolder(baton.options.type), module: baton.options.type, app: baton.app }, subscribe)
+                    )
+                );
+            }
+        });
+
+        ext.point('io.ox/foldertree/section/links').extend({
+            index: 300,
+            id: 'public',
+            draw: function (baton) {
+
+                // yep, show this below private section.
+                // cause there might be no public folders, and in this case
+                // the section would be hidden
+                if (baton.id !== 'private') return;
                 if (!capabilities.has('edit_public_folders')) return;
-                if (!(type === 'contacts' || type === 'calendar' || type === 'tasks')) return;
 
-                this.append(div);
+                var node = $('<div>');
+                this.append(node);
 
                 api.get({ folder: 2 }).then(function (public_folder) {
-                    if (api.can('create', public_folder)) {
-                        link.attr('tabindex', 1).on('click', {app: baton.app, module: type}, createPublicFolder);
-                    } else {
-                        div.remove();
-                    }
+                    if (!api.can('create', public_folder)) return;
+                    node.append(
+                        $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
+                        .text(gt('New public folder'))
+                        .on('click', { folder: '2', module: baton.options.type }, addFolder)
+                    );
                 });
             }
         });
@@ -202,42 +250,19 @@ define('io.ox/core/commons-folderview',
             });
         }
 
-        ext.point(POINT + '/sidepanel/links').extend({
+        ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'publications',
-            index: 500,
+            index: 100,
             draw: function (baton) {
                 // do not draw if not available
                 if (capabilities.has('publication') && api.can('publish', baton.data)) {
                     this.append(
-                        $('<div>').append(
+                        $('<li>').append(
                             $('<a href="#" data-action="publications" role="menuitem" tabindex="1">')
                             .text(gt('Share this folder'))
                             .on('click', { baton: baton }, publish)
-                        )
-                    );
-                }
-            }
-        });
-
-        function subscribe(e) {
-            e.preventDefault();
-            require(['io.ox/core/pubsub/subscriptions'], function (subscriptions) {
-                subscriptions.buildSubscribeDialog(e.data.baton);
-            });
-        }
-
-        ext.point(POINT + '/sidepanel/links').extend({
-            id: 'subscribe',
-            index: 600,
-            draw: function (baton) {
-                // do not draw if not available
-                if (capabilities.has('subscription') && api.can('subscribe', baton.data)) {
-                    this.append(
-                        $('<div>').append(
-                            $('<a href="#" data-action="subscriptions" role="menuitem" tabindex="1">')
-                            .text(gt('Subscription'))
-                            .on('click', { baton: baton }, subscribe)
-                        )
+                        ),
+                        $('<li class="divider">')
                     );
                 }
             }
@@ -709,7 +734,9 @@ define('io.ox/core/commons-folderview',
             open = _.isArray(open) ? open : [];
 
             // init tree before running toolbar extensions
+            console.log('initTree', options.view, app);
             var tree = baton.tree = app.folderView = new views[options.view](container, {
+                    app: app,
                     type: options.type,
                     rootFolderId: String(options.rootFolderId),
                     open: open,

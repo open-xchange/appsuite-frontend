@@ -499,7 +499,7 @@ define("io.ox/contacts/view-detail",
                 var data = baton.data;
 
                 this.append(
-                    block(gt('Phone numbers'), 'phone',
+                    block(gt('Phone numbers'),
                         phone(gt('Mobile'), data, 'cellular_telephone1'),
                         phone(gt('Mobile'), data, 'cellular_telephone2'),
                         phone(gt('Phone (business)'), data, 'telephone_business1'),

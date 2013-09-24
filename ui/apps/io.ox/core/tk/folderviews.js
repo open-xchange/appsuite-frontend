@@ -547,80 +547,6 @@ define('io.ox/core/tk/folderviews',
             }
         }
 
-        /**
-         * @param folder {string} (optional) folder id
-         * @param title {string} (optional) title
-         * @param opt {object} (optional) options object can contain only
-         * a module name, for now
-         */
-        this.addProcess = function (folder, title, opt) {
-
-            var opt = opt || {},
-                invalid = false;
-
-            // check for valid filename
-            ext.point('io.ox/core/filename')
-                .invoke('validate', null, title, 'folder')
-                .find(function (result) {
-                    if (result !== true) {
-                        notifications.yell('warning', result);
-                        return (invalid = true);
-                    }
-                });
-
-            if (invalid) return $.Deferred().reject();
-
-            // call API
-            return api.create({
-                folder: folder,
-                data: {
-                    title: $.trim(title),
-                    module: opt.module
-                }
-            });
-        };
-
-        /**
-         * @param folder {string} (optional) folder id
-         * @param opt {object} (optional) options object - will be forwarded
-         * to folder API
-         */
-        this.add = function (folder, opt) {
-            var self = this,
-            folder = folder || String(this.selection.get()),
-            opt = opt || {};
-            if (folder) {
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog({
-                        async: true,
-                        width: 400,
-                        enter: 'add'
-                    })
-                    .header(
-                        $('<h4>').text(folder === '1' ? gt('Add new folder') : gt('Add new subfolder'))
-                    )
-                    .build(function () {
-                        this.getContentNode().append(
-                            $('<div class="row-fluid">').append(
-                                folder !== '1' ? api.getBreadcrumb(folder, { subfolders: false }) : [],
-                                $('<input type="text" class="span12">')
-                                .attr('placeholder', gt('Folder name'))
-                            )
-                        );
-                    })
-                    .addPrimaryButton('add', gt('Add folder'))
-                    .addButton('cancel', gt('Cancel'))
-                    .on('add', function () {
-                        self.addProcess(folder, this.getContentNode().find('input').val(), opt)
-                            .then(this.close, this.idle);
-                    })
-                    .show(function () {
-                        this.find('input').val(gt('New folder')).focus().select();
-                    });
-                });
-            }
-        };
-
         this.removeProcess = function (folder) {
             api.remove({ folder: folder.id });
         };
@@ -971,8 +897,52 @@ define('io.ox/core/tk/folderviews',
         }
     });
 
-
     var sections = { 'private': gt('Private'), 'public': gt('Public'), 'shared': gt('Shared') };
+
+    ext.point('io.ox/foldertree/section').extend({
+        index: 100,
+        id: 'headline',
+        draw: function (baton) {
+            if (!baton.showHeadlines) return;
+            // headline if more than one section contains elements
+            this.append(
+                $('<div class="section-title">').text(sections[baton.id])
+            );
+        }
+    });
+
+    ext.point('io.ox/foldertree/section').extend({
+        index: 200,
+        id: 'folder-list',
+        draw: function (baton) {
+            // loop over folders
+            _(baton.data[baton.id]).each(function (data) {
+                ext.point('io.ox/foldertree/section/folder').invoke('draw', this, baton.clone({ data: data }));
+            }, this);
+        }
+    });
+
+    ext.point('io.ox/foldertree/section/folder').extend({
+        draw: function (baton) {
+            var folder = tmplFolder.clone();
+            folder.append('<span class="folder-label">').attr('data-obj-id', baton.data.id);
+            // update selection
+            baton.selection.addToIndex(baton.data.id);
+            // invoke extension points
+            ext.point('io.ox/foldertree/folder').invoke('customize', folder, baton.data, baton.options);
+            this.append(folder);
+        }
+    });
+
+    ext.point('io.ox/foldertree/section').extend({
+        index: 300,
+        id: 'links',
+        draw: function (baton) {
+            var links = $('<div class="folder-section-links">');
+            ext.point('io.ox/foldertree/section/links').invoke('draw', links, baton);
+            this.append(links);
+        }
+    });
 
     function FolderList(container, opt) {
 
@@ -980,22 +950,8 @@ define('io.ox/core/tk/folderviews',
 
         var self = this;
 
-        function drawFolder(data) {
-
-            var folder = tmplFolder.clone();
-
-            folder.append('<span class="folder-label">').attr('data-obj-id', data.id);
-
-            // update selection
-            self.selection.addToIndex(data.id);
-
-            // invoke extension points
-            ext.point('io.ox/foldertree/folder').invoke('customize', folder, data, opt);
-
-            return folder;
-        }
-
         function paint(options) {
+
             options = $.extend({
                 type: opt.type
             }, options || {});
@@ -1003,27 +959,26 @@ define('io.ox/core/tk/folderviews',
             self.busy();
 
             return api.getVisible(options).done(function (data) {
-                var id, section,
-                    showHeadlines = Object.keys(data).length > 1,
-                    drawSection = function (node, list) {
-                        // loop over folders
-                        _(list).each(function (data) {
-                            node.append(drawFolder(data));
-                        });
-                    };
+                var id,
+                    section,
+                    baton,
+                    showHeadlines = Object.keys(data).length > 1;
                 // idle
                 self.idle();
                 // loop over sections
                 for (id in sections) {
                     if (data[id]) {
-                        self.container.append(
-                            section = $('<div>').addClass('section')
-                            .append(
-                                //headline if more than one section contains elements
-                                showHeadlines ? $('<div>').addClass('section-title').text(sections[id]) : $()
-                            )
-                        );
-                        drawSection(section, data[id]);
+                        section = $('<div class="section">');
+                        baton = new ext.Baton({
+                            app: opt.app,
+                            id: id,
+                            data: data,
+                            showHeadlines: showHeadlines,
+                            selection: self.selection,
+                            options: opt
+                        });
+                        ext.point('io.ox/foldertree/section').invoke('draw', section, baton);
+                        self.container.append(section);
                     }
                 }
             })

@@ -2152,11 +2152,16 @@ input.nice-input {
     }
 }
 
-.foldertree-links {
+.foldertree-links,
+.folder-section-links {
+
     padding: 14px 0 14px 21px;
-    line-height: 34px; // height of a folder above
+    line-height: 28px;
     font-weight: 300;
+
+    &:empty { padding: 0; }
 }
+
 
 
 /* DARK VARIANT */

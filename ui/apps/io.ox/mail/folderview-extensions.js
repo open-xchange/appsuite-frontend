@@ -46,24 +46,6 @@ define('io.ox/mail/folderview-extensions',
         });
     }
 
-    function subscribeIMAPFolder(e) {
-        e.preventDefault();
-        e.data.app.folderView.subscribe(e.data);
-    }
-
-    ext.point(POINT + '/sidepanel/links').extend({
-        id: 'subscribe-folder',
-        index: 400,
-        draw: function (baton) {
-            if (_.device('!smartphone')) {
-                this.append($('<div>').append(
-                    $('<a href="#" data-action="subscribe" tabindex="1" role="menuitem">').text(gt('Subscribe IMAP folders'))
-                    .on('click', { app: baton.app }, subscribeIMAPFolder)
-                ));
-            }
-        }
-    });
-
     function markMailFolderRead(e) {
         var folder = e.data.folder;
 
