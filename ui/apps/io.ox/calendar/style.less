@@ -16,11 +16,12 @@
     .toolbar {
         height: @calendarToolbarHeight;
         text-align: center;
+        padding-top: @calendarToolbarTopPadding;
 
         .info {
             position: absolute;
             left: @weekviewTimeWith;
-            line-height: 38px;
+            line-height: @calendarToolbarHeight - @calendarToolbarTopPadding;
             font-family: @lightFontFamily;
             font-size: 20px;
         }
@@ -30,7 +31,7 @@
             position: absolute;
             display: inline;
             right: 20px;
-            top: 10px;
+            top: 20px;
 
             label {
                 display: inline;
@@ -46,11 +47,45 @@
 
         .pagination {
 
-            margin: 3px 0 0 58px;
+            margin:  0 0 0 @weekviewTimeWith;
 
             a {
                 line-height: 26px;
                 height: 34px;
+            }
+
+        }
+
+    }
+
+    .footer-container {
+
+        height: @weekviewFooterHeight;
+        left: 0;
+        right: 0;
+        width: 100%;
+        .overflow(hidden);
+
+        .footer {
+
+            position: absolute;
+            line-height: normal;
+            right: 0;
+            left: @weekviewTimeWith;
+            white-space: nowrap;
+            padding-top: 10px;
+
+            .weekday {
+
+                display: inline-block;
+                font-size: 13px;
+                text-align: left;
+                .ellipsis;
+
+                &.today {
+                    font-weight: bold;
+                }
+
             }
 
         }
@@ -63,6 +98,7 @@
         .toolbar {
 
             height: @calendarToolbarHeight + 15;
+            padding-top: 0;
 
             .info {
                 top: 9px;

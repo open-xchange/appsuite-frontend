@@ -280,12 +280,14 @@ define('io.ox/calendar/month/view',
         return $('<div>')
             .addClass('abs')
             .append(
-                $('<div>').addClass('daylabel').append(function () {
-                    _(days).each(function (day) {
-                        tmp.push($('<div>').addClass('weekday').text(gt.noI18n(day)));
-                    });
-                    return tmp;
-                }),
+                $('<div>').addClass('footer-container').append(
+                    $('<div>').addClass('footer').append(function () {
+                        _(days).each(function (day) {
+                            tmp.push($('<div>').addClass('weekday').text(gt.noI18n(day)));
+                        });
+                        return tmp;
+                    })
+                ),
                 $('<div class="scrollpane f6-target" tabindex="1">')
             );
     };

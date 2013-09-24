@@ -286,24 +286,24 @@ define('io.ox/calendar/month/perspective',
                             firstDay.get(0).scrollIntoView();
                             self.isScrolling = false;
                         } else {
-                            self.pane.animate({scrollTop : pos + self.scrollTop() + 1}, param.duration, function () {
+                            self.pane.animate({scrollTop : firstDay.position().top + self.scrollTop() + 1}, param.duration, function () {
                                 self.isScrolling = false;
                             });
                         }
                     };
 
                 if (firstDay.length > 0 && nextFirstDay.length > 0) {
-                    scrollToDate(firstDay.position().top);
+                    scrollToDate();
                 } else {
                     if (param.date.getTime() < self.current.getTime()) {
                         this.drawWeeks({up: true}).done(function () {
                             firstDay = $('#' + param.date.getYear() + '-' + param.date.getMonth() + '-1', self.pane);
-                            scrollToDate(firstDay.position().top);
+                            scrollToDate();
                         });
                     } else {
                         this.drawWeeks().done(function () {
                             firstDay = $('#' + param.date.getYear() + '-' + param.date.getMonth() + '-1', self.pane);
-                            scrollToDate(firstDay.position().top);
+                            scrollToDate();
                         });
                     }
                 }

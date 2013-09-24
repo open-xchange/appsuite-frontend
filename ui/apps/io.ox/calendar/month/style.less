@@ -17,22 +17,27 @@
         -webkit-tap-highlight-color: rgba(0,0,0,0);
     }
 
-    .daylabel {
+    .toolbar {
 
-        width: 100%;
-        height: 24px;
-        left: 0;
-        font-family: @lightFontFamily;
-        font-size: 13px;
-        line-height: 24px;
-        z-index: 3;
+        .info {
+            left: 20px;
+        }
+
+    }
+
+    .footer-container {
+
         border-bottom: 1px solid #ccc;
 
-        .weekday {
-            width: 100/8%;
-            display: inline-block;
-            text-align: center;
-            .ellipsis;
+        .footer {
+
+            left: 0;
+
+            .weekday {
+                width: 100/8%;
+                text-align: center;
+            }
+
         }
 
     }
@@ -40,7 +45,7 @@
     .scrollpane {
 
         position: absolute;
-        top: @calendarToolbarHeight + 27;
+        top: @calendarToolbarHeight + @weekviewFooterHeight;
         right: 0;
         bottom: 0;
         left: 0;

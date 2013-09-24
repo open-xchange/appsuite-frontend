@@ -11,7 +11,6 @@
  */
 
 @weekviewTimeWithSmall: @weekviewTimeWith - 13;
-@weekviewFooterHeight: 21px;
 
 .week-view {
 
@@ -30,39 +29,6 @@
         overflow: hidden;
         .transition(background-color 0.4s);
         .backface-visibility(hidden);
-    }
-
-    .footer-container {
-
-        height: @weekviewFooterHeight;
-        left: 0;
-        right: 0;
-        width: 100%;
-        .overflow(hidden);
-
-        .footer {
-
-            position: absolute;
-            line-height: @weekviewFooterHeight - 1;
-            right: 0;
-            left: @weekviewTimeWith;
-            white-space: nowrap;
-
-            .weekday {
-
-                display: inline-block;
-                font-size: 13px;
-                text-align: left;
-                .ellipsis;
-
-                &.today {
-                    font-weight: bold;
-                }
-
-            }
-
-        }
-
     }
 
     .week-view-container {
@@ -169,8 +135,12 @@
     /* Hide days in dayview */
     .dayview {
 
+        .toolbar {
+            padding-bottom: @calendarToolbarTopPadding;
+        }
+
         .week-view-container {
-            top: @calendarToolbarHeight;
+            top: @calendarToolbarHeight + @calendarToolbarTopPadding;
         }
 
         .footer-container {
