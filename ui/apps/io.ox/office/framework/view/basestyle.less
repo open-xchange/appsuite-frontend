@@ -32,15 +32,16 @@
 }
 
 /* hack for IE to expand nodes beyond the size limit of single nodes, see Utils.setContainerNodeSize() */
-.ie-node-size-container > div {
+.ie-node-size-helper > div {
     display: inline-block;
-    overflow: visible;
-    white-space: nowrap;
+    height: 0;
+}
 
-    > div {
-        display: inline-block;
-        height: 0;
-    }
+/* hack for IE to position nodes beyond the size limit of single nodes absolutely, see Utils.setPositionInContainerNode() */
+.ie-node-position-helper {
+    position: absolute;
+    left: 100%;
+    top: 100%;
 }
 
 /* ========================================================================= */
