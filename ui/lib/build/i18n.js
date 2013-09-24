@@ -249,35 +249,34 @@ exports.modules = {
 exports.potScanner = function(name, deps, f) {
     var self = this;
     
-    // find gettext dependency
-    var apiName, moduleName;
+    // find gettext dependencies
+    var apis = {};
     var depNames = _.pluck(deps[1], 1);
     for (var i = 0; i < depNames.length; i++) {
-        if (depNames[i].substring(0, 8) === "gettext!") {
-            apiName = f[2][i];
-            moduleName = depNames[i].substring(8);
-            break;
-        }
+        var match = /^gettext!([^!]+)(!.+)?$/.exec(depNames[i]);
+        if (match) apis[f[2][i]] = match[1];
     }
-    if (!apiName) return;
+    if (_.isEmpty(apis)) return;
     
     // find gettext calls
     // results are stored in pot and exports.potFiles
     var gtScope = f[3].scope;
     ast.scanner(ast.walker.call, function(scope) {
-        if (ast.getter.call(this) !== apiName) return;
+        var apiName = ast.getter.call(this);
+        if (!(apiName in apis)) return;
         if (scope.refs[apiName] !== gtScope) return;
         return addMessage(self.task.name, this, gtMethods.gettext, self.getSrc);
     }).scanner(ast.walker.method, function(scope) {
-        if (ast.getter.methodObj(this) !== apiName) return;
+        var apiName = ast.getter.methodObj(this);
+        if (!(apiName in apis)) return;
         if (scope.refs[apiName] !== gtScope) return;
         var method = gtMethods[ast.getter.methodName(this)];
         if (!method) return;
         return addMessage(self.task.name, this, method, self.getSrc);
     }).scan(f);
     
-    exports.modules.add(moduleName, this.getSrc(name[0].start.line + 1).name,
-                        this.task.name);
+    var source = this.getSrc(name[0].start.line + 1).name;
+    for (var i in apis) exports.modules.add(apis[i], source, this.task.name);
 };
 
 utils.fileType("lang.js").addHook("handler", function(name) {
