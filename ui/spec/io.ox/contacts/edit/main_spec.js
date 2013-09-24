@@ -195,10 +195,8 @@
 
             main.getApp().launch().done(function () {
                 app = this;
-                app.folder.setDefault().done(function () {
-                    loaded.yep();
-                    expect(app).toBeTruthy();
-                });
+                loaded.yep();
+                expect(app.get('state')).toBe('running');
             });
         });
 
