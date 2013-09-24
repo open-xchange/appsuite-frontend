@@ -590,6 +590,11 @@ define('io.ox/files/actions',
                                 rootFolderId: '9',
                                 open: settings.get('folderpopup/open', []),
                                 tabindex: 0,
+                                customize: function (data) {
+                                    if (type === 'move' && data.id === folderId) {
+                                        this.removeClass('selectable').addClass('disabled');
+                                    }
+                                },
                                 toggle: function (open) {
                                     settings.set('folderpopup/open', open).save();
                                 },
@@ -597,6 +602,7 @@ define('io.ox/files/actions',
                                     settings.set('folderpopup/last', id).save();
                                 }
                             });
+
                         dialog.show(function () {
                             tree.paint().done(function () {
                                 tree.select(id).done(function () {
@@ -607,9 +613,7 @@ define('io.ox/files/actions',
                         .done(function (action) {
                             if (action === 'ok') {
                                 var target = _(tree.selection.get()).first();
-                                if (target && target !== folderId) {
-                                    commit(target);
-                                }
+                                commit(target);
                             }
                             tree.destroy().done(function () {
                                 tree = dialog = null;
