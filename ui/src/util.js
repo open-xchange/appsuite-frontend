@@ -590,7 +590,7 @@
         formatError: function (e, formatString) {
             e = e || {};
             return _.printf(
-                formatString || "Error: %1$s (%2$s, %3$s)",
+                formatString || 'Error: %1$s (%2$s, %3$s)',
                 _.printf(e.error, e.error_params),
                 e.code,
                 e.error_id
