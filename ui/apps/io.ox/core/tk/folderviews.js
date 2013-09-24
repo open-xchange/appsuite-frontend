@@ -19,10 +19,9 @@ define('io.ox/core/tk/folderviews',
      'io.ox/core/event',
      'io.ox/core/notifications',
      'io.ox/core/http',
-     'io.ox/core/cache',
      'io.ox/core/capabilities',
      'gettext!io.ox/core'
-    ], function (Selection, api, userAPI, ext, Events, notifications, http, cache, capabilities, gt) {
+    ], function (Selection, api, userAPI, ext, Events, notifications, http, capabilities, gt) {
 
     'use strict';
 
@@ -711,79 +710,6 @@ define('io.ox/core/tk/folderviews',
                     });
                 });
             }
-        };
-
-        this.subscribe = function (data) {
-
-            var name = data.app.getName(),
-                POINT = name + '/folderview',
-                folderCache = new cache.SimpleCache('folder-all', false),
-                subFolderCache = new cache.SimpleCache('subfolder-all', false),
-                storage = {
-                folderCache: folderCache,
-                subFolderCache: subFolderCache
-            };
-
-            var options;
-            _(ext.point(POINT + '/options').all()).each(function (obj) {
-                options = _.extend(obj, options || {});
-            });
-
-            var container = $('<div>'),
-                tree = new ApplicationFolderTree(container, {
-                type: options.type,
-                tabindex: 0,
-                rootFolderId: options.rootFolderId,
-                checkbox: true,
-                all: true,
-                storage: storage
-            });
-
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                var pane = new dialogs.ModalDialog({
-                    width: 500,
-                    addclass: 'subscribe-imap-folder'
-                });
-                var changesArray = [];
-
-                pane.header(
-                    $('<h4>').text(gt('Subscribe IMAP folders'))
-                )
-                .build(function () {
-                    this.getContentNode().append(container);
-                })
-                .addPrimaryButton('save', gt('Save'))
-                .addButton('cancel', gt('Cancel'))
-                .show(function () {
-                    tree.paint().done(function () {
-                        tree.selection.updateIndex().selectFirst();
-                        pane.getBody().find('.io-ox-foldertree').focus();
-                    });
-                })
-                .done(function (action) {
-                    if (action === 'save') {
-                        _(changesArray).each(function (change) {
-                            api.update(change, storage);
-                        });
-                        tree.destroy().done(function () {
-                            tree = pane = null;
-                        });
-                    }
-                    if (action === 'cancel') {
-                        tree.destroy().done(function () {
-                            tree = pane = null;
-                        });
-                    }
-                });
-
-                tree.container.on('change', 'input[type="checkbox"]', function (e) {
-                    var folder = $(this).val(),
-                        checkboxStatus = $(this).is(':checked'),
-                        changes = { subscribed: checkboxStatus },
-                        tobBePushed = { folder: folder, changes: changes};
-                    changesArray.push(tobBePushed);
-                });
-            });
         };
     }
 

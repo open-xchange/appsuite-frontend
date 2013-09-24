@@ -179,4 +179,30 @@ define('io.ox/mail/settings/pane',
         }
     });
 
+    function changeIMAPSubscription(e) {
+        ox.load(['io.ox/settings/accounts/settings/subscription']).done(function (subscription) {
+            subscription.show();
+        });
+    }
+
+    ext.point('io.ox/mail/settings/detail').extend({
+        index: 400,
+        id: 'imap-subscription',
+        draw: function (data) {
+
+            if (_.device('smartphone')) return;
+
+            this.append(
+                $('<div class="settings sectiondelimiter expertmode">'),
+                $('<legend class="sectiontitle">').text(gt('IMAP folder subscription')),
+                $('<div class="sectioncontent">').append(
+                    $('<button type="button" class="btn btn-primary">')
+                    .text(gt('Change subscription'))
+                )
+            );
+
+            this.on('click', 'button', changeIMAPSubscription);
+        }
+    });
+
 });
