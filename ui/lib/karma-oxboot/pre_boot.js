@@ -111,7 +111,7 @@ if (sinon) {
                           );
     //faking a few folders
     fakeServer.respondWith('GET', /api\/folders\?action=get/, function (xhr) {
-        var fakeFolder = {'id=1': {
+        var fakeFolder = {'1': {
                 id: '1',
                 folder_id: '0',
                 title: 'Contacts'
@@ -119,8 +119,9 @@ if (sinon) {
             id = xhr.url.split('&').filter(function (str) {
                 return str.indexOf('id=') === 0;
             })[0];
+        id = id.substr(id.indexOf('=') + 1);
 
-        xhr.respond(200, {'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify({data: fakeFolder[id]}));
+        xhr.respond(200, {'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify({data: fakeFolder[id] || {id: id}}));
     });
     fakeServer.autoRespond = true;
 }
