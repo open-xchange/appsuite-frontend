@@ -2067,40 +2067,54 @@ input.nice-input {
 
     }
 
-    .folder-label {
+    .folder {
 
-        font-weight: 300;
-        display: inline-block;
-        margin: 0 1em 0 0;
+        .folder-label {
 
-        i {
-            color: @foldertreePassiveLabelColor;
+            font-weight: 300;
+            display: inline-block;
+            margin: 0 14px 0 0;
+
+            i {
+                color: @foldertreePassiveLabelColor;
+            }
+
         }
 
-    }
+        .folder-pubsub {
 
-    .folder-pubsub {
+            margin-right: 14px;
+            color: rgba(0, 0, 0, 0.30);
+            font-size: 20px;
+            line-height: 18px;
+            position: relative;
+            top: 3px;
 
-        margin-left: 0.7em;
-        color: @foldertreeBadgeBackground;
-        font-size: 20px;
-        line-height: 18px;
-        position: relative;
-        top: 3px;
-
-        &:hover {
-            color: @linkOnDark;
+            &:hover {
+                color: rgba(0, 0, 0, 0.50);
+            }
         }
 
-    }
+        &.selected .folder-pubsub:hover {
+            color: rgba(0, 0, 0, 0.50);
+        }
 
-    .folder.selected .folder-pubsub:hover {
-        color: @linkOnDark !important;
-    }
+        .folder-counter, .folder-options {
+            display: none;
+            margin-right: 14px;
+        }
 
-    .folder-counter, .folder-options {
-        display: inline-block;
-        margin-right: 7px;
+        &.show-counter {
+            .folder-counter {
+                display: inline-block;
+            }
+        }
+
+        &.selected {
+            .folder-options {
+                display: inline-block;
+            }
+        }
     }
 
     .folder-counter-badge,
@@ -2109,19 +2123,12 @@ input.nice-input {
         line-height: 26px;
         padding: 0 0.75em 0 0.75em;
         margin-top: 4px;
-        display: none;
+        display: inline-block;
         background-color: #f0f0f0;
         border-radius: 5px;
     }
 
-    .show-counter {
-        .folder-counter-badge {
-            display: inline-block;
-        }
-    }
-
-    .selected .folder-options-badge {
-        display: inline-block;
+    .folder-options-badge {
         cursor: pointer;
     }
 

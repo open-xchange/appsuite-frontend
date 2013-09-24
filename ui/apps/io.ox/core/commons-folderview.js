@@ -122,7 +122,7 @@ define('io.ox/core/commons-folderview',
         function addTopLevelFolder(e) {
             e.preventDefault();
             ox.load(['io.ox/core/folder/add']).done(function (add) {
-                add('1', { module: e.data.module });
+                add('1', 'mail');
             });
         }
 
@@ -166,12 +166,14 @@ define('io.ox/core/commons-folderview',
                 if (!api.can('create', baton.data)) return;
 
                 // only mail and infostore show hierarchies
-                console.log('OK! add subfolder', baton);
-                this.append($('<li>').append(
-                    $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
-                    .text(gt('New subfolder'))
-                    .on('click', { app: baton.app, module: baton.options.type }, addFolder)
-                ));
+                this.append(
+                    $('<li>').append(
+                        $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
+                        .text(gt('New subfolder'))
+                        .on('click', { app: baton.app, module: baton.options.type }, addFolder)
+                    ),
+                    $('<li class="divider">')
+                );
             }
         });
 
@@ -189,32 +191,6 @@ define('io.ox/core/commons-folderview',
                     .text(gt('New private folder'))
                     .on('click', { folder: api.getDefaultFolder(baton.options.type), module: baton.options.type }, addFolder)
                 ));
-            }
-        });
-
-        function subscribe(e) {
-            e.preventDefault();
-            require(['io.ox/core/pubsub/subscriptions'], function (subscriptions) {
-                console.log('YEAH', e.data);
-                subscriptions.buildSubscribeDialog(e.data);
-            });
-        }
-
-        ext.point('io.ox/foldertree/section/links').extend({
-            id: 'subscribe',
-            index: 200,
-            draw: function (baton) {
-
-                if (baton.id !== 'private') return;
-                if (!capabilities.has('subscription')) return;
-
-                this.append(
-                    $('<div>').append(
-                        $('<a href="#" data-action="subscriptions" role="menuitem" tabindex="1">')
-                        .text(gt('New subscription'))
-                        .on('click', { folder: api.getDefaultFolder(baton.options.type), module: baton.options.type, app: baton.app }, subscribe)
-                    )
-                );
             }
         });
 
@@ -254,17 +230,48 @@ define('io.ox/core/commons-folderview',
             id: 'publications',
             index: 100,
             draw: function (baton) {
-                // do not draw if not available
-                if (capabilities.has('publication') && api.can('publish', baton.data)) {
-                    this.append(
-                        $('<li>').append(
-                            $('<a href="#" data-action="publications" role="menuitem" tabindex="1">')
-                            .text(gt('Share this folder'))
-                            .on('click', { baton: baton }, publish)
-                        ),
-                        $('<li class="divider">')
-                    );
-                }
+
+                if (!capabilities.has('publication') || !api.can('publish', baton.data)) return;
+
+                this.append(
+                    $('<li>').append(
+                        $('<a href="#" data-action="publications" role="menuitem" tabindex="1">')
+                        .text(gt('Share this folder'))
+                        .on('click', { baton: baton }, publish)
+                    )
+                );
+            }
+        });
+
+        function subscribe(e) {
+            e.preventDefault();
+            require(['io.ox/core/pubsub/subscriptions'], function (subscriptions) {
+                subscriptions.buildSubscribeDialog(e.data);
+            });
+        }
+
+        ext.point(POINT + '/sidepanel/context-menu').extend({
+            id: 'subscribe',
+            index: 200,
+            draw: function (baton) {
+
+                if (!capabilities.has('subscription') || !api.can('subscribe', baton.data)) return;
+
+                this.append(
+                    $('<li>').append(
+                        $('<a href="#" data-action="subscriptions" role="menuitem" tabindex="1">')
+                        .text(gt('New subscription'))
+                        .on('click', { folder: baton.data.folder_id, module: baton.data.module, app: baton.app }, subscribe)
+                    )
+                );
+            }
+        });
+
+        ext.point(POINT + '/sidepanel/context-menu').extend({
+            id: 'pubsub-divider',
+            after: 'subscribe',
+            draw: function (baton) {
+                this.append($('<li class="divider">'));
             }
         });
 
@@ -734,7 +741,6 @@ define('io.ox/core/commons-folderview',
             open = _.isArray(open) ? open : [];
 
             // init tree before running toolbar extensions
-            console.log('initTree', options.view, app);
             var tree = baton.tree = app.folderView = new views[options.view](container, {
                     app: app,
                     type: options.type,

@@ -31,7 +31,6 @@ define('io.ox/core/pubsub/subscriptions',
     // needs id and module (e.g. contacts)
     buildSubscribeDialog = function (options) {
         options = options || {};
-        console.log('buildSubscribeDialog', options);
         var model = new pubsub.Subscription({
                 folder: options.folder,
                 entity: { folder: options.folder },

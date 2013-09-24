@@ -810,8 +810,8 @@ define('io.ox/core/tk/folderviews',
             if (!isReadable) { this.addClass('unreadable'); }
             if (!isSelectable) { this.removeClass('selectable').addClass('unselectable'); }
 
-            // add options
-            if (this.find('.folder-options').length === 0) {
+            // add options (only if 'app' is defined; should not appear in modal dialogs, for example)
+            if (options.app && this.find('.folder-options').length === 0) {
                 label.after(
                     $('<span class="folder-options">').append(
                         $('<span class="folder-options-badge">')
@@ -853,13 +853,17 @@ define('io.ox/core/tk/folderviews',
     ext.point('io.ox/foldertree/folder').extend({
         index: 200,
         id: 'published',
-        customize: function (data) {
-            if (capabilities.has('publication') && api.is('published|subscribed', data)) {
-                this.append(
-                    $('<i class="icon-cloud-download folder-pubsub">').attr('title', gt('This folder has publications and/or subscriptions'))
-                    .on('click', { folder: data }, openPubSubSettings)
-                );
-            }
+        customize: function (data, options) {
+
+            this.find('.icon-cloud-download.folder-pubsub').remove();
+
+            if (!options.app) return;
+            if (!capabilities.has('publication') || !api.is('published|subscribed', data)) return;
+
+            this.append(
+                $('<i class="icon-cloud-download folder-pubsub">').attr('title', gt('This folder has publications and/or subscriptions'))
+                .on('click', { folder: data }, openPubSubSettings)
+            );
         }
     });
 
@@ -872,13 +876,17 @@ define('io.ox/core/tk/folderviews',
     ext.point('io.ox/foldertree/folder').extend({
         index: 300,
         id: 'shared',
-        customize: function (data) {
-            if (api.is('unlocked', data)) {
-                this.append(
-                    $('<i class="icon-unlock folder-pubsub">').attr('title', gt('You share this folder with other users'))
-                    .on('click', { folder: data.id }, openPermissions)
-                );
-            }
+        customize: function (data, options) {
+
+            this.find('.icon-unlock.folder-pubsub').remove();
+
+            if (!options.app) return;
+            if (!api.is('unlocked', data)) return;
+
+            this.append(
+                $('<i class="icon-unlock folder-pubsub">').attr('title', gt('You share this folder with other users'))
+                .on('click', { folder: data.id }, openPermissions)
+            );
         }
     });
 
@@ -886,14 +894,15 @@ define('io.ox/core/tk/folderviews',
         index: 'last',
         id: 'shared-by',
         customize: function (data) {
+
             // add owner for shared folders
-            if (api.is('shared', data)) {
-                this.append(
-                    $('<div class="shared-by">').append(
-                        userAPI.getLink(data.created_by, data['com.openexchange.folderstorage.displayName']).attr({ tabindex: -1 })
-                    )
-                );
-            }
+            if (!api.is('shared', data)) return;
+
+            this.append(
+                $('<div class="shared-by">').append(
+                    userAPI.getLink(data.created_by, data['com.openexchange.folderstorage.displayName']).attr({ tabindex: -1 })
+                )
+            );
         }
     });
 
