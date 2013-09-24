@@ -64,7 +64,6 @@ define([], function () {
                 _.aprintf();
                 _.call();
                 _.cid();
-                _.clock();
                 _.copy();
                 _.deepClone();
                 _.ecid();
@@ -75,7 +74,6 @@ define([], function () {
                 _.formatError();
                 _.getArray();
                 _.getCookie();
-                _.inspect();
                 _.isSet();
                 _.lfo();
                 _.makeExtendable();
@@ -93,7 +91,10 @@ define([], function () {
                 _.toHash();
                 _.utc();
                 _.wait();
-                window.assert();
+                //disabled to avoid console log noise
+                //_.clock();
+                //_.inspect();
+                //window.assert();
             });
         });
 
