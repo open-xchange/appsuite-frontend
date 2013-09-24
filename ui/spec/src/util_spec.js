@@ -309,7 +309,7 @@ define([], function () {
             });
         });
 
-        describe('toHash', function () {
+        describe('_.toHash', function () {
             var list = [
                 {id: 'A1', value: 'V1'},
                 {id: 'A1', value: 'V2'},

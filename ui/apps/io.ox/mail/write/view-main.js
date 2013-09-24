@@ -12,10 +12,10 @@
  * @author Martin Holzhauer <martin.holzhauer@open-xchange.com>
  */
 
-define("io.ox/mail/write/view-main",
-    ["io.ox/core/extensions",
-     "io.ox/core/extPatterns/links",
-     "io.ox/mail/actions",
+define('io.ox/mail/write/view-main',
+    ['io.ox/core/extensions',
+     'io.ox/core/extPatterns/links',
+     'io.ox/mail/actions',
      'io.ox/mail/api',
      'io.ox/core/tk/view',
      'io.ox/core/tk/model',
@@ -55,7 +55,7 @@ define("io.ox/mail/write/view-main",
     ext.point(POINT + '/toolbar').extend(new links.Button({
         id: 'draft',
         index: 200,
-        label: gt('Save'), // is "Save as draft" but let's keep it short for small devices
+        label: gt('Save'), // is 'Save as draft' but let's keep it short for small devices
         cssClasses: 'btn',
         ref: POINT + '/actions/draft',
         tabIndex: '6'
@@ -84,7 +84,7 @@ define("io.ox/mail/write/view-main",
             ext.point(POINT + '/toolbar').disable('draft');
 
             // reorder button
-            ext.point(POINT + "/toolbar").replace({id: 'discard', index: 50});
+            ext.point(POINT + '/toolbar').replace({id: 'discard', index: 50});
 
             //invoke other buttons with new container
             ext.point(POINT + '/toolbar').invoke(
