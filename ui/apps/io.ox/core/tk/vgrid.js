@@ -762,10 +762,9 @@ define('io.ox/core/tk/vgrid',
                 if (!all.length) return;
 
                 var list = self.selection.get();
-                var ids = list.length ? _(list).map(_.cid) : getIds();
+                var ids = list.length ? _(list).map(self.selection.serialize) : getIds();
 
                 if (ids.length) {
-
                     if (self.selection.contains(ids)) {
                         // if ids are given and still part of the selection
                         // we can restore that state
