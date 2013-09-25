@@ -182,7 +182,8 @@ define('io.ox/core/tk/attachmentsUtil',
                     icon, info,
                     opt = $.extend({
                             showpreview: true,
-                            rightside: $()
+                            rightside: $(),
+                            labelmax: 30
                         }, options),
                     //normalisation
                     name = obj.name || obj.filename || obj.subject || '\u00A0',
