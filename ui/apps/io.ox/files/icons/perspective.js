@@ -94,10 +94,17 @@ define('io.ox/files/icons/perspective',
     }
 
     function cut(str, maxLen, cutPos) {
-        if (!cutPos) cutPos = 15;
-        if (!maxLen) maxLen = 70;
+        //be robust
         str = String(str || '');
+        maxLen = maxLen || 70;
+        cutPos = cutPos || 15;
+
         if (str.length > maxLen) {
+            //fix invalid cutPos
+            if (cutPos * 2 > maxLen - 1) {
+                //save space for ellipse char
+                cutPos = ((maxLen - 1) % 2 === 0 ? (maxLen - 1)  / 2 : (maxLen / 2) - 1) || 1;
+            }
             return str.substr(0, cutPos).trim() + '\u2026' + str.substr(str.length - cutPos).trim();
         } else {
             return str;
