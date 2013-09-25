@@ -122,7 +122,7 @@ define('io.ox/core/commons-folderview',
         function addTopLevelFolder(e) {
             e.preventDefault();
             ox.load(['io.ox/core/folder/add']).done(function (add) {
-                add('1', 'mail');
+                add('1', { module: 'mail' });
             });
         }
 
@@ -170,7 +170,7 @@ define('io.ox/core/commons-folderview',
                     $('<li>').append(
                         $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
                         .text(gt('New subfolder'))
-                        .on('click', { app: baton.app, module: baton.options.type }, addFolder)
+                        .on('click', { app: baton.app, folder: baton.data.id, module: baton.options.type }, addFolder)
                     ),
                     $('<li class="divider">')
                 );
