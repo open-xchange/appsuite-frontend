@@ -623,7 +623,7 @@
                     max: 70,
                     char: '\u2026',
                     charpos: 'end',
-                    length: 15
+                    length: undefined
                 }, options || {}),
                 space = opt.max - opt.char.length;
             if (str.length <= opt.max) {
@@ -632,7 +632,7 @@
                 return str.substr(0, opt.max - opt.char.length) + opt.char;
             } else {
                 //fix invalid length
-                if (opt.length * 2 > space) {
+                if (!opt.length || opt.length * 2 > space) {
                     //save space for ellipse char
                     opt.length = (space % 2 === 0 ? space  / 2 : (opt.max / 2) - 1) || 1;
                 }
