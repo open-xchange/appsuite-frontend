@@ -470,13 +470,23 @@ define('io.ox/core/main',
             }
         }
 
-        function addUserContent(model, launcher) {
+        function addUserContent(model, launcher, first) {
+
+            var quitApp = $('<i class="icon-remove">').on('click', function (e) {
+                e.stopImmediatePropagation();
+                model.getWindow().app.quit();
+            });
+
             if (model.get('userContent')) {
                 var cls = model.get('userContentClass') || '',
-                    icon = model.get('userContentIcon') || 'icon-pencil';
+                    icon = model.get('userContentIcon') || '';
                 launcher.addClass('user-content').addClass(cls).children().first().prepend($('<span>').append(
                     $('<i class="' + icon + '">'))
                 );
+                if (first) {
+                    launcher.find('a').addClass('special').after(quitApp);
+                }
+
             }
         }
 
@@ -496,7 +506,7 @@ define('io.ox/core/main',
             ext.point('io.ox/core/topbar/launcher').invoke('draw', node, ext.Baton({ model: model, name: name }));
 
             // is user-content?
-            addUserContent(model, node);
+            addUserContent(model, node, true);
 
             // add list item
             node = $('<li>').append(

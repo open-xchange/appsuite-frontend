@@ -240,11 +240,13 @@
     }
 
     .launcher {
-
+    
         max-width: 10em;
         cursor: pointer;
-        .ellipsis();
-
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        
         // IE10 needs this :link class otherwise :active is not removed
         & > a:link {
             color: @topbarLauncherColor;
@@ -262,7 +264,7 @@
             color: @topbarLauncherColor-hover;
             background-color: #08c;
         }
-
+        
         &.upsell {
 
             color: darken(@topbarLauncherColor, 20%);
@@ -280,12 +282,38 @@
             background-color: @topbarLauncherBackgroundActive;
             & > a { color: @topbarLauncherColorActive; }
         }
+        
+        &.user-content {
+            max-width: none;
+            text-overflow: clip;
+        
+            & > a {
+                max-width: 10em;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        
+             & > a.special {
+                float: left;
+                line-height: 16px;
+            }
+        }
 
         &.user-content i[class^="icon-"] {
             font-size: 14px; // default font size (see Bug 27900)
             top: 0px;
             margin-right: 7px;
             color: #ccc;
+        }
+        
+        &.user-content i.icon-remove {
+            padding: 13px 10px 10px;
+            margin: 0px;
+        }
+        
+        &.user-content i.icon-remove:hover {
+            color: @topbarLauncherColor-hover;
+            background-color: @topbarLauncherBackgroundHover;
         }
 
         &.active-app.user-content i[class^="icon-"] {
