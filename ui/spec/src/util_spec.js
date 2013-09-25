@@ -202,6 +202,44 @@ define([], function () {
             });
         });
 
+        describe('_.cut', function () {
+            var chr = '\u2026',
+                val = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonum';
+            it('should return a string', function () {
+                expect(_.cut(20)).to.be.a('string');
+            });
+            it('should use defaults', function () {
+                expect(_.cut(val))
+                    .to.equal('Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam non' + chr);
+            });
+            it('should trim', function () {
+                expect(_.cut('      ' + val, { max: 8})).to.equal('Lorem i' + chr);
+            });
+            it('should use length option', function () {
+                expect(_.cut(val, { max: 8})).to.equal('Lorem i' + chr);
+            });
+            it('should handle also short length options', function () {
+                expect(_.cut(val, { max: 0})).to.equal(chr);
+                expect(_.cut(val, { max: 1})).to.equal(chr);
+            });
+            it('should handle also invalid length options', function () {
+                expect(_.cut(val, { max: 10, length: 5, charpos: 'middel'})).to.equal('Lore' + chr + 'onum');
+                expect(_.cut(val, { max: 10, length: 10, charpos: 'middel'})).to.equal('Lore' + chr + 'onum');
+                expect(_.cut(val, { max: 10, length: 11, charpos: 'middel'})).to.equal('Lore' + chr + 'onum');
+            });
+            it('should use char option', function () {
+                expect(_.cut(val, { max: 10, char: '...'})).to.equal('Lorem i...');
+            });
+            it('should use charpos option', function () {
+                expect(_.cut(val, { max: 8, charpos: 'end'})).to.equal('Lorem i' + chr);
+                expect(_.cut(val, { max: 11, charpos: 'middel'})).to.equal('Lorem' + chr + 'nonum');
+                expect(_.cut(val, { max: 10, charpos: 'middel'})).to.equal('Lore' + chr + 'onum');
+            });
+            it('should use length option', function () {
+                expect(_.cut(val, { length: 5, charpos: 'middel'})).to.equal('Lorem' + chr + 'nonum');
+            });
+        });
+
         describe('_.ellipsis', function () {
             it('should return a string', function () {
                 expect(_.ellipsis(20)).to.be.a('string');
@@ -209,7 +247,7 @@ define([], function () {
             it('should return first argument if only val argument is set', function () {
                 expect(_.ellipsis('shorten or not')).to.equal('shorten or not');
             });
-            it('should fill up with zeros if fill argument is not set', function () {
+            it('should use length arg', function () {
                 expect(_.ellipsis('shorten or not', 11)).to.equal('shorten ...');
             });
         });
