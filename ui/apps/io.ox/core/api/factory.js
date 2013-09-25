@@ -209,6 +209,9 @@ define('io.ox/core/api/factory',
                     if (options.allColumns) {
                         params.columns = http.getAllColumns(o.module, true);
                     }
+                    if (options.unseen) {
+                        params.unseen = true;
+                    }
                     return http.fixList(ids, http.PUT({
                         module: o.module,
                         params: params,
@@ -234,7 +237,13 @@ define('io.ox/core/api/factory',
                     if (typeof ids[0] === 'number') {
                         ids = [{id: ids[0]}];
                     }
-                    return this.get(http.simplify(ids)[0])
+                    // fix mail unseen issue
+                    var getOptions = http.simplify(ids)[0];
+                    if (o.module === 'mail') {
+                        getOptions.unseen = true;
+                    }
+                    // go!
+                    return this.get(getOptions)
                         .pipe(function (data) { return [data]; })
                         .pipe(o.pipe.listPost)
                         .done(o.done.list || $.noop);
