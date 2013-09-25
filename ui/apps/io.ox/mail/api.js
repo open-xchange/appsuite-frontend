@@ -1655,6 +1655,10 @@ define('io.ox/mail/api',
         }
     });
 
+    api.on('delete', function (e, ids) {
+        api.refresh();
+    });
+
     /**
      * sets title to 'New Mail' or default
      * @param  {boolean} state
