@@ -787,6 +787,7 @@ define('io.ox/mail/api',
         .done(function () {
             notifications.yell('success', gt('The folder has been emptied.'));
             folderAPI.reload(folder_id);
+            folderAPI.sync();
         });
     };
 

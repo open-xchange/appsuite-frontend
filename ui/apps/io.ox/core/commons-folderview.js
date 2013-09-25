@@ -815,6 +815,7 @@ define('io.ox/core/commons-folderview',
 
                     api.on('delete', function (e, id) {
                         app.trigger('folder:delete', id);
+                        api.sync();
                     });
 
                     api.on('refresh', function () {
