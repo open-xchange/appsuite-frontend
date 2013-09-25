@@ -213,7 +213,7 @@ define('io.ox/core/tk/attachmentsUtil',
                             .addClass(this.fileClasses)
                             .append(
                                 icon,
-                                $('<div class="row-1">').text(_.noI18n(name)),
+                                $('<div class="row-1">').text(_.noI18n(_.ellipsis(name, {max: opt.labelmax, charpos: 'middel'}))),
                                 $('<div class="row-2">').append(
                                     info,
                                     opt.showpreview  ? createPreview(obj.file, opt.rightside) : $(),
