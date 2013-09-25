@@ -30,7 +30,11 @@ define('io.ox/portal/settings/pane',
         list = $('<ol class="widget-list">');
 
     collection
-        .on('remove', function () {
+        .on('remove', function (model) {
+            var id = model.get('id');
+            if (views[id]) {
+                views[id].remove();
+            }
             repopulateAddButton();
         })
         .on('add', function (model) {

@@ -71,7 +71,7 @@ define('io.ox/calendar/invitations/register',
         3: gt("You have tentatively accepted the appointment")
     };
 
-    var priority = ['update', 'ignore', 'decline', 'tentative', 'accept', 'declinecounter', 'accept_and_replace', 'accept_and_ignore_conflicts', 'accept_party_crasher', 'create', 'delete'];
+    var priority = ['update', 'ignore', 'accept', 'tentative', 'decline', 'declinecounter', 'accept_and_replace', 'accept_and_ignore_conflicts', 'accept_party_crasher', 'create', 'delete'];
 
 
     function discoverIMipAttachment(baton) {
@@ -545,11 +545,11 @@ define('io.ox/calendar/invitations/register',
                 )
             )
             .append(
-                $('<button type="button" class="btn btn-danger" data-action="2">').text(gt("Decline")),
+                $('<button type="button" class="btn btn-success" data-action="1">').text(gt("Accept")),
                 '&nbsp;',
                 $('<button type="button" class="btn btn-warning" data-action="3">').text(gt("Tentative")),
                 '&nbsp;',
-                $('<button type="button" class="btn btn-success" data-action="1">').text(gt("Accept"))
+                $('<button type="button" class="btn btn-danger" data-action="2">').text(gt("Decline"))
             )
             .on('click', 'button', function (e) {
 

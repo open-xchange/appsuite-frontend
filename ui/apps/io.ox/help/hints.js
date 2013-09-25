@@ -12,23 +12,23 @@
  */
 
 define("io.ox/help/hints", ["io.ox/core/tk/dialogs"], function (dialogs) {
-    
+
     "use strict";
-    
+
     // A hint consists of a short teaser text and, optionally, a longer explanation
     // Therefore, options include:
     // 'teaser': A mandatory short text to describe what this hint is about
     // 'explanation': A longer explanation
     // TODO: Allow explanations to be whole node structures with nice pictures and all...
     function Hint(options) {
-        
+
         var $hintNode = $('<span/>').addClass("hint");
         $hintNode.append($("<span>").text(options.teaser + " "));
-        
+
         if (options.explanation) {
             var $explanationLink = $("<a/>").text("What's that?");
             var pane = new dialogs.SlidingPane().text(options.explanation).addButton("okay", "Got it!").relativeTo($explanationLink);
-            
+
             var toggleExplanation = function () {
                 pane.toggle();
                 return false; // Prevent default
@@ -38,10 +38,10 @@ define("io.ox/help/hints", ["io.ox/core/tk/dialogs"], function (dialogs) {
             $hintNode.click(toggleExplanation);
             $hintNode.append($explanationLink);
         }
-        
+
         this.node = $hintNode;
     }
-    
+
     return {
         createHint: function (options) {
             return new Hint(options).node;

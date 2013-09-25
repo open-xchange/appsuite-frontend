@@ -470,8 +470,7 @@ define('io.ox/backbone/forms',
             tagName: 'div',
             render: function () {
                 this.$el.append($('<div>').append(
-                      $('<div>').addClass('clear-title').text(options.label),
-                      $('<div>').addClass('settings sectiondelimiter')
+                      $('<h1>').text(options.label)
                   ));
             }
         }, options);
@@ -814,28 +813,6 @@ define('io.ox/backbone/forms',
             today: gt('Today')
         };
 
-        var hours_typeahead = [],
-            filldate = new date.Local().setHours(0, 0, 0, 0),
-            interval = parseInt(settings.get('interval'), 10);
-        for (var i = 0; i < 1440; i += interval) {
-            hours_typeahead.push(filldate.format(date.TIME));
-            filldate.add(interval * date.MINUTE);
-        }
-
-        var comboboxHours = {
-            source: hours_typeahead,
-            items: hours_typeahead.length,
-            menu: '<ul class="typeahead dropdown-menu calendaredit"></ul>',
-            sorter: function (items) {
-                items = _(items).sortBy(function (item) {
-                    var pd = date.Local.parse(item, date.TIME);
-                    return pd.getTime();
-                });
-                return items;
-            },
-            autocompleteBehaviour: false
-        };
-
         var modelEvents = {};
         modelEvents['change:' + options.attribute] = 'setValueInField';
         modelEvents['invalid:' + options.attribute] = 'showError';
@@ -917,6 +894,28 @@ define('io.ox/backbone/forms',
                 }
 
                 if (!mobileMode && options.display === "DATETIME") {
+                    var hours_typeahead = [],
+                        filldate = new date.Local().setHours(0, 0, 0, 0),
+                        interval = parseInt(settings.get('interval'), 10);
+                    for (var i = 0; i < 1440; i += interval) {
+                        hours_typeahead.push(filldate.format(date.TIME));
+                        filldate.add(interval * date.MINUTE);
+                    }
+
+                    var comboboxHours = {
+                        source: hours_typeahead,
+                        items: hours_typeahead.length,
+                        menu: '<ul class="typeahead dropdown-menu calendaredit"></ul>',
+                        sorter: function (items) {
+                            items = _(items).sortBy(function (item) {
+                                var pd = date.Local.parse(item, date.TIME);
+                                return pd.getTime();
+                            });
+                            return items;
+                        },
+                        autocompleteBehaviour: false
+                    };
+
                     this.nodes.timeField.combobox(comboboxHours);
                     this.nodes.timeField.on("change", _.bind(this.updateModelTime, this));
                 }

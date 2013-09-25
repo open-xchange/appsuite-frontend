@@ -174,7 +174,9 @@ define('io.ox/contacts/edit/main',
                         })
                         .done(function (model) {
                             // fix "display_name only" contacts, e.g. in collected addresses folder
-                            if ($.trim(model.get('first_name')) === '' && $.trim(model.get('last_name')) === '') {
+                            var data = model.toJSON();
+                            if (($.trim(data.first_name) + $.trim(data.yomiFirstName) === '' &&
+                                $.trim(data.last_name) + $.trim(data.yomiLastName)) === '') {
                                 model.set('last_name', coreUtil.unescapeDisplayName(model.get('display_name')), { silent: true });
                             }
                             cont(model);

@@ -546,7 +546,7 @@ define('io.ox/core/commons',
     $.createViewContainer = function (baton, api, getter) {
 
         var data = baton instanceof ext.Baton ? baton.data : baton,
-            cid, ecid,
+            cid, ecid, pattern,
             node = $('<div>').attr('data-cid', _([].concat(data)).map(_.cid).join(',')),
 
             update = function (e, changed) {
@@ -574,7 +574,7 @@ define('io.ox/core/commons',
 
             move = function (e, targetFolderId) {
                 if (data) data.folder_id = targetFolderId;
-                update();
+                if (update) update();
             },
 
             // we use redraw directly if we're in multiple mode
@@ -587,7 +587,9 @@ define('io.ox/core/commons',
                 if (node) node.trigger('view:remove').remove();
             },
 
-            checkFolder = function (e, folder, folderId, folderObj) {//checks if folder permissions etc. have changed, and triggers redraw. Important to update inline links
+            // checks if folder permissions etc. have changed, and triggers redraw.
+            // Important to update inline links
+            checkFolder = function (e, folder, folderId, folderObj) {
                 if (folder === e.data.folder.toString() && api) {
                     api.trigger('update:' + e.data.cid);
                 }
@@ -609,6 +611,11 @@ define('io.ox/core/commons',
             api.on('update:' + ecid, update);
             api.on('move:' + ecid, move);
             api.on('create', update);
+            //calendar: update element of a series if master changes
+            if (data.recurrence_position && data.recurrence_position > 0 && (data.recurrence_id === data.id)) {
+                pattern = (data.folder || data.folder_id) + '.' + data.id + '.';
+                api.on('update:series:' + _.ecid(pattern), update);
+            }
         }
 
         return node.one('dispose', function () {
@@ -624,8 +631,10 @@ define('io.ox/core/commons',
                     api.off('update:' + ecid, update);
                     api.off('move:' + ecid, move);
                     api.off('create', update);
+                    if (pattern)
+                        api.off('update:series:' + _.ecid(pattern));
                 }
-                api = update = data = node = getter = null;
+                api = update = data = node = getter = cid = ecid = pattern = null;
             });
     };
 

@@ -67,6 +67,7 @@ define('io.ox/core/tk/selection',
             update,
             clear,
             isSelected,
+            fastSelect,
             select,
             selectOnly,
             deselect,
@@ -325,15 +326,19 @@ define('io.ox/core/tk/selection',
             return selectedItems[self.serialize(id)] !== undefined;
         };
 
+        fastSelect = function (id, node) {
+            var key = self.serialize(id);
+            (node || getNode(key))
+                .addClass(self.classSelected)
+                .find('input.reflect-selection')
+                .attr('checked', 'checked');
+            selectedItems[key] = id;
+        };
+
         select = function (id, silent) {
             if (id) {
-                var key = self.serialize(id);
-                getNode(key)
-                    .addClass(self.classSelected)
-                    .find('input.reflect-selection')
-                    .attr('checked', 'checked').end()
-                    .intoViewport(container);
-                selectedItems[key] = id;
+                fastSelect(id);
+
                 last = id;
                 lastIndex = getIndex(id);
                 if (prev === empty) {
@@ -341,7 +346,7 @@ define('io.ox/core/tk/selection',
                     lastValidIndex = lastIndex;
                 }
                 if (silent !== true) {
-                    self.trigger('select', key);
+                    self.trigger('select', self.serialize(id));
                 }
             }
         };
@@ -365,17 +370,15 @@ define('io.ox/core/tk/selection',
 
         update = function (updateIndex) {
 
-            if (container.is(':hidden')) {
-                return;
-            }
+            if (container.is(':hidden')) return;
+
             updateIndex = updateIndex || false;
+            if (updateIndex) self.clearIndex();
 
             // get nodes
             var nodes = $('.selectable:visible', container),
                 i = 0, $i = nodes.length, node = null;
-            if (updateIndex) {
-                self.clearIndex();
-            }
+
             for (; i < $i; i++) {
                 node = nodes.eq(i);
                 // is selected?
@@ -419,36 +422,43 @@ define('io.ox/core/tk/selection',
          */
         this.init = function (all) {
             // store current selection
-            var tmp = this.get();
+            var tmp = this.get(),
+                hash = _.clone(selectedItems);
+
             // clear list
             clear();
             observedItems = new Array(all.length);
             observedItemsIndex = {};
             last = prev = empty;
+
             // build index
-            var i = 0, $i = all.length, data, cid, reselected = false, index = lastIndex;
+            var i = 0, $i = all.length, data, cid, index = lastIndex;
             for (; i < $i; i++) {
                 data = all[i];
-                cid = self.serialize(data);
+                cid = this.serialize(data);
                 observedItems[i] = { data: data, cid: cid };
                 observedItemsIndex[cid] = i;
             }
-            // restore selection. check if each item exists
-            for (i = 0, $i = tmp.length; i < $i; i++) {
-                cid = self.serialize(tmp[i]);
-                if (observedItemsIndex[cid] !== undefined) {
-                    select(tmp[i]);
-                    reselected = true;
+
+            $('.selectable', container).each(function () {
+                var node = $(this),
+                    cid = node.attr('data-obj-id');
+                if (cid in hash) {
+                    $('input.reflect-selection', node).attr('checked', 'checked');
+                    node.addClass(self.classSelected);
+                } else {
+                    $('input.reflect-selection', node).removeAttr('checked');
+                    node.removeClass(self.classSelected);
                 }
-            }
+            });
+
+            selectedItems = hash;
+
             // reset index but ignore 'empty runs'
-            if (all.length > 0) {
-                lastIndex = -1;
-            }
+            if (all.length > 0) lastIndex = -1;
+
             // fire event?
-            if (!_.isEqual(tmp, self.get())) {
-                changed();
-            }
+            if (!_.isEqual(tmp, this.get())) changed();
             return this;
         };
 
@@ -642,25 +652,42 @@ define('io.ox/core/tk/selection',
          * Set selection
          */
         this.set = function (list, silent) {
+
             // previous
-            var previous = this.get(), current;
+            var previous = this.get(),
+                self = this,
+                hash = {};
+
             // clear
             clear();
-            // loop
-            _(_.isArray(list) ? list : [list]).each(function (elem) {
-                var item;
-                if (typeof elem === 'string' && bHasIndex && (item = observedItems[getIndex(elem)]) !== undefined) {
-                    select(item.data);
+
+            $('.selectable', container).each(function () {
+                var node = $(this), cid = node.attr('data-obj-id');
+                hash[cid] = node;
+            });
+
+            _(!list || _.isArray(list) ? list : [list]).each(function (elem) {
+                var cid = self.serialize(elem), item;
+                // existing node?
+                if (cid in hash) {
+                    if (typeof elem === 'string' && bHasIndex && (item = observedItems[getIndex(elem)]) !== undefined) {
+                        fastSelect(item.data, hash[cid]);
+                    } else {
+                        fastSelect(elem, hash[cid]);
+                    }
                 } else {
-                    select(elem);
+                    selectedItems[cid] = elem;
                 }
             });
+
+            hash = null;
+
             // reset last index
             lastIndex = -1;
+
             // event?
-            if (!_.isEqual(previous, this.get()) && silent !== true) {
-                changed();
-            }
+            if (!_.isEqual(previous, this.get()) && silent !== true) changed();
+
             return this;
         };
 
@@ -831,12 +858,15 @@ define('io.ox/core/tk/selection',
             container.off('mousedown mouseup contextmenu');
             selectedItems = observedItems = observedItemsIndex = last = null;
         };
+
         this.setMobileSelectMode = function (state) {
             mobileSelectMode = state;
         };
+
         this.getMobileSelectMode = function () {
             return mobileSelectMode;
         };
+
         // bind general click handler
         container.on('contextmenu', function (e) { e.preventDefault(); })
             .on('mousedown', '.selectable', mousedownHandler)

@@ -71,7 +71,7 @@ define('io.ox/calendar/print',
     function getString(list) {
         return _(list).map(function (obj) {
             return '<span class="person">' + _.escape(obj.display_name) + '</span>' +
-                (obj.comment !== '' ? ' <i class="comment">&quot;' + obj.comment + '&quot;</i>' : '');
+                (obj.comment !== '' ? ' <i class="comment">&quot;' + _.escape(obj.comment) + '&quot;</i>' : '');
         }).join('\u00A0\u00A0\u2022\u00A0 ');
     }
 

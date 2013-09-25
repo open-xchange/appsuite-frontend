@@ -422,6 +422,7 @@ define("io.ox/contacts/view-detail",
                 this.append(
 
                     block(gt('Personal'),
+                        simple(gt('Title'), data.title),
                         simple(gt('Name'), fullname),
                         simple(gt('Middle name'), data.second_name),
                         simple(gt('Suffix'), data.suffix),

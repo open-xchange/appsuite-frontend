@@ -24,10 +24,11 @@ define('io.ox/core/main',
      'io.ox/core/upsell',
      'io.ox/core/capabilities',
      'io.ox/core/ping',
+     'io.ox/tours/main',
      'settings!io.ox/core',
      'gettext!io.ox/core',
      'io.ox/core/relogin',
-     'io.ox/core/bootstrap/basics'], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, ping, settings, gt) {
+     'io.ox/core/bootstrap/basics'], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, ping, tours, settings, gt) {
 
     "use strict";
 
@@ -39,6 +40,29 @@ define('io.ox/core/main',
 
     debug('core: Loaded');
 
+    _.stepwiseInvoke = function (list, method, context) {
+        if (!_.isArray(list)) return $.when();
+        var args = Array.prototype.slice.call(arguments, 3), done = $.Deferred(), tmp = [];
+        function store(result) {
+            tmp.push(result);
+        }
+        function tick() {
+            // are we done now?
+            if (list.length === 0) return done.resolve(tmp);
+            // get next item
+            var item = list.shift();
+            // has method?
+            if (item && _.isFunction(item[method])) {
+                // call method and expect a deferred object
+                var ret = item[method].apply(context, args);
+                if (ret && ret.promise) return ret.done(store).then(tick, done.reject);
+            }
+            tick();
+        }
+        tick();
+        return done.promise();
+    };
+
     var logout = function (opt) {
 
         opt = _.extend({
@@ -48,10 +72,8 @@ define('io.ox/core/main',
         $("#background_loader").fadeIn(DURATION, function () {
 
             $('#io-ox-core').hide();
-
-            var deferreds = ext.point('io.ox/core/logout').invoke('logout', this, new ext.Baton(opt)).compact().value();
-
-            $.when.apply($, deferreds).then(
+            var extensions = ext.point('io.ox/core/logout').list();
+            _.stepwiseInvoke(extensions, 'logout', this, new ext.Baton(opt)).then(
                 function logout() {
                     session.logout().always(function () {
                         // get logout locations
@@ -586,6 +608,49 @@ define('io.ox/core/main',
         });
 
         ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'intro-tour',
+            index: 280,
+            draw: function () { //replaced by module
+                var node = this;
+                if (_.device('mobileOS') || _.device('touch')) {
+                    return;
+                }
+                node.append(
+                    $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
+                    $('<li>', {'class': 'io-ox-specificHelp'}).append(
+                        $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(gt('Tour: Coming from OX6'))
+                        .on('click', function (e) {
+                            tours.runTour('io.ox/intro');
+                            e.preventDefault();
+                        })
+                    )
+                );
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'app-specific-tour',
+            index: 281,
+            draw: function () { //replaced by module
+                var node = this;
+                if (_.device('mobileOS') || _.device('touch')) {
+                    return;
+                }
+                node.append(
+                    $('<li>', {'class': 'io-ox-specificHelp'}).append(
+                        $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(gt('Guided tour for this module'))
+                        .on('click', function (e) {
+                            var currentApp = ox.ui.App.getCurrentApp(),
+                                currentType = currentApp.attributes.name;
+                            tours.runTour(currentType);
+                            e.preventDefault();
+                        })
+                    )
+                );
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'settings',
             index: 300,
             draw: function () {
@@ -614,6 +679,7 @@ define('io.ox/core/main',
                         fullscreenButton.text(gt('Fullscreen'));
                     };
                     this.append(
+                        $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
                         $('<li>').append(
                             fullscreenButton = $('<a href="#" data-action="fullscreen" role="menuitem" tabindex="1">').text(gt('Fullscreen'))
                         )
@@ -1096,13 +1162,10 @@ define('io.ox/core/main',
                     })
                     .each(function (details, index) {
                         //only load first app on small devices
-                        if (_.device('smartphone') && index > 0)
-                            return;
-
+                        if (_.device('smartphone') && index > 0) return;
                         // split app/call
                         var launch, method;
-
-                        debug('autoLaunching', details.app);
+                        debug('core: autoLaunching', details.app);
                         launch = ox.launch(details.app);
                         method = details.method;
                         // explicit call?

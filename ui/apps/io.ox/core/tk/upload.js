@@ -62,14 +62,21 @@ define('io.ox/core/tk/upload',
 
         _(options.actions || []).each(function (action) {
             var $actionNode = nodeGenerator();
-            $actionNode.append($('<div>').html(action.label).on({
+            $actionNode.append($('<div class="dropzone">').on({
                 dragenter: function (e) {
                     if (highlightedAction) highlightedAction.removeClass('io-ox-dropzone-hover');
                     highlightedAction = $actionNode;
                     $actionNode.addClass('io-ox-dropzone-hover');
                 },
                 dragleave: function (e) {
-                    $actionNode.removeClass('io-ox-dropzone-hover');
+                    // IE has no pointer-events: none
+                    if (!_.browser.IE) {
+                        $actionNode.removeClass('io-ox-dropzone-hover');
+                    } else {
+                        if (!$(e.target).hasClass('dropzone') && !$(e.target).hasClass('dndignore')) {
+                            $actionNode.removeClass('io-ox-dropzone-hover');
+                        }
+                    }
                 },
                 drop: function (e) {
 
@@ -114,7 +121,7 @@ define('io.ox/core/tk/upload',
                     removeOverlay(e);
                     return false; // Prevent regular event handling
                 }
-            }));
+            }).append($('<span class="dndignore">').html(action.label)));
         });
 
         var included = false;
@@ -186,7 +193,8 @@ define('io.ox/core/tk/upload',
         delegate = _.extend({
             start: $.noop,
             stop: $.noop,
-            progress: function (file) { return $.when(); }
+            progress: function (file) { return $.when(); },
+            type: false
         }, delegate || {});
 
         Events.extend(this);
@@ -218,8 +226,36 @@ define('io.ox/core/tk/upload',
         };
 
         this.offer = function (file) {
+            var maxFileSize, fileTitle, proceed = true, self = this;
+
             files.push.apply(files, [].concat(file)); // handles both arrays and single objects properly
-            this.queueChanged();
+            require(['settings!io.ox/core', 'io.ox/core/strings'], function (settings, strings) {
+                var properties = settings.get('properties');
+                if (properties && delegate.type !== 'importEML') {
+                    var total = 0,
+                        maxSize = properties.infostoreMaxUploadSize,
+                        quota = properties.infostoreQuota;
+                    _.each(files, function (f) {
+                        fileTitle = f.name;
+                        total += f.size;
+                        if (maxSize !== 0 && f.size > maxSize) {
+                            proceed = false;
+                            notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, strings.fileSize(maxSize)));
+                            self.stop();
+                            return;
+                        }
+                        if (quota !== -1) {
+                            if (total > quota - properties.infostoreUsage) {
+                                proceed = false;
+                                notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, strings.fileSize(quota)));
+                                self.stop();
+                                return;
+                            }
+                        }
+                    });
+                }
+                if (proceed) self.queueChanged();
+            });
         };
 
         this.length = 0;

@@ -29,7 +29,7 @@ define('io.ox/files/views/create', [
 
             show = function (app) {
                 var win = app.getWindow(),
-                    dialog = new dialogs.CreateDialog({ width: 450, center: true}),
+                    dialog = new dialogs.CreateDialog({ width: 450, center: true, async: true }),
                     $form = $('<form>', { 'class': 'files-create', 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' }),
                     queue, description = '';
                 dialog.getContentNode().css('height', '300px'); // 400 is quite much
@@ -51,14 +51,13 @@ define('io.ox/files/views/create', [
                 function uploadFiles() {
                     var $input = $form.find('input[type="file"]'),
                         folder = app.folder.get(),
-                        fileList = ($input.length > 0 ? $input[0].files : []) || [],
-                        files = _.map(baton.fileList.get(), function (file) {
-                            return file.file;
-                        });
+                        //fileList = ($input.length > 0 ? $input[0].files : []) || [],
+                        files = baton.fileList.get();
                     if (files.length) {
                         description = $form.find('textarea').val();
                         queue.offer(files);
                         baton.fileList.clear();
+                        dialog.close();
                     } else {
                         notifications.yell('error', gt('No file selected for upload.'));
                         dialog.idle();
@@ -79,14 +78,17 @@ define('io.ox/files/views/create', [
                                 description: $form.find('textarea').val()
                             },
                             folder: folder
-                        }).done(function (data) {
+                        })
+                        .done(function (data) {
                             api.propagate('new', data);
                             notifications.yell('success', gt('This file has been added'));
                             dialog.close();
-                        }).fail(function (e) {
+                        })
+                        .fail(function (e) {
                             if (e && e.data && e.data.custom) {
                                 notifications.yell(e.data.custom.type, e.data.custom.text);
                             }
+                            dialog.close();
                         });
                     } else {
                         notifications.yell('error', gt('No file selected for upload.'));
@@ -131,7 +133,7 @@ define('io.ox/files/views/create', [
                 //dialog
                 dialog.header($('<h4>').text(gt('Upload new files')));
                 dialog.getBody().append($('<div>').addClass('row-fluid').append($form));
-                dialog.getBody().append(baton.fileList.$el);
+                dialog.getBody().append(baton.fileList.getNode());
                 dialog
                     .addPrimaryButton('save', gt('Save'), 'save')
                     .addButton('cancel', gt('Cancel'), 'cancel')
@@ -162,10 +164,12 @@ define('io.ox/files/views/create', [
                         changeHandler = function (e) {
                             e.preventDefault();
                             if (!oldMode) {
-                                //use file list widget
+                                var list = [];
+                                //fileList to array of files
                                 _($input[0].files).each(function (file) {
-                                    baton.fileList.add(file);
+                                    list.push(_.extend(file, {group: 'file'}));
                                 });
+                                baton.fileList.add(list);
                                 $input.trigger('reset.fileupload');
                             }
                         };
@@ -185,10 +189,12 @@ define('io.ox/files/views/create', [
             });
 
         //referenced via baton.fileList
-        ext.point(POINT + '/filelist').extend(new attachments.SimpleEditableFileList({
+        ext.point(POINT + '/filelist').extend(new attachments.EditableFileList({
                     id: 'attachment_list',
                     itemClasses: 'span6',
                     fileClasses: 'background',
+                    preview: false,
+                    registerTo: baton,
                     index: 300
                 },
                 baton

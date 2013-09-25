@@ -13,7 +13,7 @@
 define('io.ox/tasks/api',
         ['io.ox/core/http',
          'io.ox/core/api/factory',
-         'io.ox/core/api/folder'], function (http, apiFactory, folderAPI) {
+         'io.ox/core/api/folder', 'io.ox/tasks/util'], function (http, apiFactory, folderAPI, util) {
 
     'use strict';
 
@@ -315,13 +315,14 @@ define('io.ox/tasks/api',
             task.id = obj.id;
             response = obj;
             var cacheObj = _.copy(task, true),
-            cacheKey = api.cid({folder: cacheObj.folder_id,
+                cacheKey = api.cid({folder: cacheObj.folder_id,
                                 sort: api.options.requests.all.sort,
                                 order: api.options.requests.all.order});
             cacheObj.id = obj.id;
             return api.caches.all.get(cacheKey).then(function (cachevalue) {
                 if (cachevalue) {//only add if the key is there
                     cachevalue = cachevalue.concat(cacheObj);
+                    cachevalue = util.sortTasks(cachevalue);
                     return api.caches.all.add(cacheKey, cachevalue);
                 } else {//just leave it to the next all request, no need to do it here
                     return $.when();
@@ -332,7 +333,7 @@ define('io.ox/tasks/api',
                 api.addToUploadList(task.folder_id + '.' + response.id);//to make the detailview show the busy animation
             }
             checkForNotifications([{id: response.id, folder_id: task.folder_id}], task);
-            api.trigger('create', task);
+            //api.trigger('create', task);
             return response;
         });
     };

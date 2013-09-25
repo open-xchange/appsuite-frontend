@@ -99,7 +99,6 @@ define('io.ox/portal/settings/widgetview',
 
         removeWidget: function () {
             this.model.collection.remove(this.model);
-            this.remove();
         },
 
         onRemove: function (e) {

@@ -36,7 +36,7 @@ define("io.ox/lessons/main", ['io.ox/core/extensions', 'io.ox/lessons/actions', 
             title: "Lessons",
             toolbar: true
         });
-        
+
         win.nodes.main.css({
             overflow: 'auto'
         });
@@ -46,7 +46,7 @@ define("io.ox/lessons/main", ['io.ox/core/extensions', 'io.ox/lessons/actions', 
         win.show(function () {
             var state = app.getState();
             if (state && state.lesson) {
-                
+
                 var lesson = ext.point('io.ox/lessons/lesson').get(state.lesson, function (lesson) {
                     lesson.start({
                         app: app,
@@ -60,7 +60,7 @@ define("io.ox/lessons/main", ['io.ox/core/extensions', 'io.ox/lessons/actions', 
             }
         });
     });
-    
+
     app.tableOfContents = function () {
         app.setState({lesson: null});
         win.nodes.main.empty();
@@ -74,7 +74,7 @@ define("io.ox/lessons/main", ['io.ox/core/extensions', 'io.ox/lessons/actions', 
             margin: "20px"
         });
         win.nodes.main.css({overflow: 'auto'});
-        
+
         _(lessons).each(function (lessons, sectionName) {
             $all.append($("<h2>").text(sectionName));
             var $list = $("<div>").appendTo(win.nodes.main);
@@ -88,7 +88,7 @@ define("io.ox/lessons/main", ['io.ox/core/extensions', 'io.ox/lessons/actions', 
                 });
             });
         });
-        
+
     };
 
     return {

@@ -151,7 +151,7 @@ define("io.ox/core/desktop",
                                 api.get({ folder: id })
                                 .done(function (data) {
                                     // off
-                                    api.off('change:' + folder);
+                                    //api.off('change:' + folder);
                                     var appchange = _.url.hash('app') !== activeApp; //app has changed while folder was requested
                                     // remember
                                     folder = String(id);
@@ -206,7 +206,7 @@ define("io.ox/core/desktop",
                                     .done(def.resolve)
                                     .fail(def.reject);
                             } else {
-                                def.reject();
+                                def.reject({error: gt('Could not get a default folder for this application.')});
                             }
                         });
                         return def;

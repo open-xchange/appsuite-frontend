@@ -26,7 +26,10 @@ define('io.ox/office/framework/view/baseview',
     'use strict';
 
     var // the global root element used to store DOM elements temporarily
-        tempStorageNode = $('<div>', { id: 'io-ox-office-temp' }).appendTo('body');
+        tempStorageNode = $('<div>', { id: 'io-ox-office-temp' }).appendTo('body'),
+
+        // a helper node to workaround selection problems in IE (bug 28515, bug 28711)
+        focusHelperNode = $('<div>', { contenteditable: true }).appendTo(tempStorageNode);
 
     // global functions =======================================================
 
@@ -168,7 +171,10 @@ define('io.ox/office/framework/view/baseview',
             viewHidden = false,
 
             // cached notification, shown when application becomes visible
-            lastNotification = null;
+            lastNotification = null,
+
+            // the timer waiting to fade in the blocker element in busy mode
+            blockerFadeTimer = null;
 
         // base constructor ---------------------------------------------------
 
@@ -255,8 +261,15 @@ define('io.ox/office/framework/view/baseview',
          *  by the static method 'Notifications.yell()'.
          */
         function showNotification(notification) {
+            if (notification.type === 'error') {
+                // Bug 28554: no auto-close for error messages
+                _.extend(notification, { duration: -1 });
+                // remember error message, show again after switching applications
+                lastNotification = notification;
+            } else {
+                lastNotification = null;
+            }
             Notifications.yell(notification);
-            lastNotification = (notification.type === 'error') ? notification : null;
         }
 
         /**
@@ -629,11 +642,19 @@ define('io.ox/office/framework/view/baseview',
          *      execute this callback function, and will leave the busy mode
          *      afterwards. Will be called in the context of this view
          *      instance.
+         *  @param {Number} [options.delay]
+         *      If set to a non-negative integer value, the busy blocker
+         *      element will be transparent initially, and will fade in after
+         *      the specified delay time in milliseconds. If omitted, the busy
+         *      blocker element will be shown immediately without fading in.
          *
          * @returns {BaseView}
          *  A reference to this instance.
          */
         this.enterBusy = function (options) {
+
+            // for safety against repeated calls: stops pending animations etc.
+            this.leaveBusy();
 
             // enter busy state, and extend the blocker element
             app.getWindow().busy(null, null, function () {
@@ -642,6 +663,8 @@ define('io.ox/office/framework/view/baseview',
                     initHandler = Utils.getFunctionOption(options, 'initHandler'),
                     // the cancel handler
                     cancelHandler = Utils.getFunctionOption(options, 'cancelHandler'),
+                    // the cancel handler
+                    delay = Utils.getIntegerOption(options, 'delay'),
                     // the window blocker element (bound to 'this')
                     blockerNode = this,
                     // the header container node
@@ -697,6 +720,16 @@ define('io.ox/office/framework/view/baseview',
                     initHandler.call(self, headerNode, footerNode, blockerNode);
                 }
 
+                // fade in the blocker if specified
+                if (_.isNumber(delay) && (delay >= 0)) {
+                    blockerNode.css('opacity', 0);
+                    blockerFadeTimer = app.repeatDelayed(function (index) {
+                        blockerNode.css('opacity', (index + 1) / 10);
+                    }, { delay: delay, repeatDelay: 50, cycles: 10 });
+                } else {
+                    blockerNode.css('opacity', '');
+                }
+
             });
 
             return this;
@@ -710,8 +743,14 @@ define('io.ox/office/framework/view/baseview',
          *  A reference to this instance.
          */
         this.leaveBusy = function () {
+
+            // stop timer that fades in the blocker element delayed
+            if (blockerFadeTimer) {
+                blockerFadeTimer.abort();
+                blockerFadeTimer = null;
+            }
+
             app.getWindow().idle();
-            this.grabFocus();
             return this;
         };
 
@@ -803,6 +842,30 @@ define('io.ox/office/framework/view/baseview',
         });
 
     } // class BaseView
+
+    // static methods ---------------------------------------------------------
+
+    /**
+     * Clears the current browser selection ranges.
+     */
+    BaseView.clearBrowserSelection = function () {
+        try {
+            // Bug 28515, bug 28711: IE fails to clear the selection (and to
+            // modify it afterwards), if it currently points to a DOM node that
+            // is not visible anymore. This happens e.g. after clicking on the
+            // 'Show/hide side panel' button shown by all OX Documents
+            // applications, which hide themselves together with the side pane
+            // or overlay pane after activation. Workaround is to move focus to
+            // an editable DOM node which will cause IE to update the browser
+            // selection object. Using another focusable node (e.g. the body
+            // element) is not sufficient. Use try/catch anyway to be notified
+            // about other problems with the selection.
+            if (_.browser.IE) { focusHelperNode.focus(); }
+            window.getSelection().removeAllRanges();
+        } catch (ex) {
+            Utils.exception(ex);
+        }
+    };
 
     // exports ================================================================
 

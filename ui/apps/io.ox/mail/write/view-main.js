@@ -34,9 +34,10 @@ define("io.ox/mail/write/view-main",
      'io.ox/core/util',
      'io.ox/core/notifications',
      'io.ox/mail/sender',
+     'io.ox/core/tk/attachments',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, mailAPI, ViewClass, Model, contactsAPI, contactsUtil, mailUtil, pre, userAPI, capabilities, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, util, notifications, sender, settings, gt) {
+    ], function (ext, links, actions, mailAPI, ViewClass, Model, contactsAPI, contactsUtil, mailUtil, pre, userAPI, capabilities, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, util, notifications, sender, attachments, settings, gt) {
 
     'use strict';
 
@@ -105,9 +106,14 @@ define("io.ox/mail/write/view-main",
 
     var View = ViewClass.extend({
 
-        initialize: function () {
+        initialize: function (app, model) {
             var self = this;
             this.sections = {};
+            this.baton = ext.Baton({
+                app: app,
+                //files preview
+                view: this
+            });
         },
 
         focusSection: function (id) {
@@ -451,19 +457,22 @@ define("io.ox/mail/write/view-main",
         showEmojiPalette: function () {
             var self = this;
             return function () {
-                var tab = _.device('tablet'),
+                var tab = _.device('smartphone'),
                     innerContainer = self.rightside.find('.editor-inner-container');
                 if (self.emojiview === undefined) {
                     ox.load(['io.ox/core/emoji/view']).done(function (EmojiView) {
                         self.emojiview = new EmojiView({ editor: self.textarea, subject: self.subject, onInsertEmoji: self.onInsertEmoji });
                         var emo = $('<div class="mceEmojiPane">');
+                        self.emojiview.setElement(emo);
                         if (tab) {
                             innerContainer.addClass('textarea-shift');
+                            // nasty, but position:fixed elements must be in a non-scrollable container to work
+                            // properly on iOS
+                            $(self.app.attributes.window.nodes.body).append(self.emojiview.$el);
+                        } else {
+                            $(self.rightside).append(self.emojiview.$el);
                         }
-                        self.emojiview.setElement(emo);
-                        // nasty, but position:fixed elements must be in a non-scrollable container to work
-                        // properly on iOS
-                        $(self.app.attributes.window.nodes.body).append(self.emojiview.$el);
+
                         self.emojiview.toggle();
                         self.spacer.show();
                         self.scrollEmoji();
@@ -542,18 +551,74 @@ define("io.ox/mail/write/view-main",
             this.fileCount = 0;
             var uploadSection = this.createSection('attachments', gt('Attachments'), false, true),
                 dndInfo =  $('<div class="alert alert-info">').text(gt('You can drag and drop files from your computer here to add as attachment.'));
+
+            gt('Add Attachment'); // for next release
+            var $inputWrap = attachments.fileUploadWidget({
+                    multi: true,
+                    displayLabel: false,
+                    displayButton: true,
+                    buttontext: gt('Select file'),
+                    buttonicon: 'icon-paper-clip'
+                }),
+                $input = $inputWrap.find('input[type="file"]'),
+                    changeHandler = function (e) {
+                        //register rightside node
+                        e.preventDefault();
+                        if (_.browser.IE !== 9) {
+                            var list = [];
+                            //fileList to array of files
+                            _($input[0].files).each(function (file) {
+                                list.push(_.extend(file, {group: 'file'}));
+                            });
+                            self.baton.fileList.add(list);
+                            $input.trigger('reset.fileupload');
+                        } else {
+                            //IE
+                            if ($input.val()) {
+                                var file = {
+                                    name: $input.val().match(/[^\/\\]+$/).toString(),
+                                    group: 'input',
+                                    hiddenField: $input
+                                };
+                                self.baton.fileList.add(file);
+                                //hide input field with file
+                                $input.addClass('add-attachment').hide();
+                                //create new input field
+                                $input = $('<input>', { type: 'file', name: 'file' })
+                                        .on('change', changeHandler)
+                                        .appendTo($input.parent());
+                            }
+                        }
+                    };
+            $input.on('change', changeHandler);
+
             this.scrollpane.append(
                 $('<form class="oldschool">').append(
                     this.createLink('attachments', gt('Attachments')),
                     uploadSection.label,
                     uploadSection.section.append(
                         (_.device('!touch') && (!_.browser.IE || _.browser.IE > 9) ? dndInfo : ''),
-                        this.createUpload()
+                        //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
+                        _.browser.IE !== 9 ? $inputWrap : this.createUpload()
                     )
                 )
             );
+
+            ext.point(POINT + '/filelist').invoke();
+            //referenced via baton.fileList
+            ext.point(POINT + '/filelist').extend(new attachments.EditableFileList({
+                id: 'attachment_list',
+                className: 'div',
+                preview: true,
+                index: 300,
+                $el: $('<div class="row-fluid">').insertBefore(uploadSection.section.find('div.row-fluid:last')),
+                registerTo: [self, this.baton]
+            }, this.baton), {
+                rowClass: 'collapsed'
+            });
             // add preview side-popup
-            new dialogs.SidePopup().delegate(this.sections.attachments, '.attachment-preview', previewAttachment);
+            if (_.browser.IE <= 10)
+                new dialogs.SidePopup().delegate(this.sections.attachments, '.attachment-preview', previewAttachment);
 
 
             // Signatures
@@ -907,7 +972,7 @@ define("io.ox/mail/write/view-main",
                 preview.appendTo(popup);
                 popup.append($('<div>').text(_.noI18n('\u00A0')));
             }
-        } else if (file.display_name) {
+        } else if (file.display_name || file.email1) {
             // if is vCard
             require(['io.ox/contacts/view-detail'], function (view) {
                 popup.append(view.draw(file));
@@ -1189,7 +1254,7 @@ define("io.ox/mail/write/view-main",
             }
 
             var obj = {
-                full_name: elem.full_name,
+                full_name: util.unescapeDisplayName(elem.full_name),
                 first_name: elem.first_name || '',
                 last_name: elem.last_name || '',
                 display_name: util.unescapeDisplayName(elem.display_name),
@@ -1244,39 +1309,53 @@ define("io.ox/mail/write/view-main",
     // are slightly different. it's easier just having two functions.
 
     function drawContact(id, node, data) {
+        var valid = _(['email', 'phone', 'display_name', 'full_name']).find(function (key) {
+                //just whitespace?
+                return (data[key] || '').trim() !== '';
+            });
 
-        node.addClass('io-ox-mail-write-contact section-item').append(
-            // picture
-            contactsAPI.getPicture(data, contactPictureOptions).addClass('contact-image'),
-            // hidden field
-            $('<input>', { type: 'hidden', name: id, value: serialize(data) }),
-            // display name
-            contactsAPI.getDisplayName(data, { halo: false, stringify: 'getMailFullName', tagName: 'div' })
-                .addClass('recipient-name'),
-            // email address
-            $('<div>').append(
-                data.email ?
-                    $('<a href="#" class="halo-link">')
-                    .data({ email1: data.email })
-                    .text(_.noI18n(String(data.email).toLowerCase())) :
-                    $('<span>').text(_.noI18n(data.phone || ''))
-            ),
-            // remove
-            $('<a href="#" class="remove">')
-                .attr('title', gt('Remove from recipient list'))
-                .append(
-                    $('<i class="icon-trash">')
-                )
-                .on('click', { id: id }, function (e) {
-                    e.preventDefault();
-                    var list = $(this).parents().find('.recipient-list');
-                    $(this).parent().remove();
-                    // hide section if empty
-                    if (list.children().length === 0) {
-                        list.hide();
-                    }
-                })
-        );
+        //ignore 'whitespace only' data
+        if (valid) {
+            //add parsed emailadress as display_name (if not set yet9
+            if ($.trim(data.display_name || data.display_name) === '' && !_.isUndefined(data.phone || data.email)) {
+                data = $.extend(data, {
+                    display_name: _.flatten(mailUtil.parseRecipients(data.phone || data.email))[0] || data.display_name || ''
+                });
+            }
+            //draw node
+            node.addClass('io-ox-mail-write-contact section-item').append(
+                // picture
+                contactsAPI.getPicture(data, contactPictureOptions).addClass('contact-image'),
+                // hidden field
+                $('<input>', { type: 'hidden', name: id, value: serialize(data) }),
+                // display name
+                contactsAPI.getDisplayName(data, { halo: false, stringify: 'getMailFullName', tagName: 'div' })
+                    .addClass('recipient-name'),
+                // email address
+                $('<div>').append(
+                    data.email ?
+                        $('<a href="#" class="halo-link">')
+                        .data({ email1: data.email })
+                        .text(_.noI18n(String(data.email).toLowerCase())) :
+                        $('<span>').text(_.noI18n(data.phone || ''))
+                ),
+                // remove
+                $('<a href="#" class="remove">')
+                    .attr('title', gt('Remove from recipient list'))
+                    .append(
+                        $('<i class="icon-trash">')
+                    )
+                    .on('click', { id: id }, function (e) {
+                        e.preventDefault();
+                        var list = $(this).parents().find('.recipient-list');
+                        $(this).parent().remove();
+                        // hide section if empty
+                        if (list.children().length === 0) {
+                            list.hide();
+                        }
+                    })
+            );
+        }
     }
 
     // helper

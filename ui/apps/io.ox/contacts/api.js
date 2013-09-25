@@ -143,7 +143,7 @@ define('io.ox/contacts/api',
                 action: 'advancedSearch',
                 columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607',
                 extendColumns: 'io.ox/contacts/api/list',
-                sort: '609', // magic sort field - ignores asc/desc
+                sort: '607', // magic sort field - ignores asc/desc
                 getData: function (query, opt) {
                     var queryFields = {
                             names: ("display_name first_name last_name yomiFirstName yomiLastName company yomiCompany " +
@@ -746,6 +746,7 @@ define('io.ox/contacts/api',
         }, options);
 
         var set, clear, cont,
+            display_name = data.display_name || '',
             node = $('<' + options.tagName + '>').text('\u00A0'),
             email = data.email;
 
@@ -778,7 +779,11 @@ define('io.ox/contacts/api',
             if (_.isString(data)) return set(data);
 
             if (data) {
-                set(util[options.stringify](data));
+                if (!_.isEmpty(data))
+                    set(util[options.stringify](data));
+                else
+                    //fallback
+                    set(display_name);
                 clear();
             }
         };

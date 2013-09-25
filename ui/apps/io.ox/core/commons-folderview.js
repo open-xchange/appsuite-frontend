@@ -626,6 +626,7 @@ define('io.ox/core/commons-folderview',
             $(window).off('resize.folderview').on('resize.folderview', function (e) {
                 if (!visible) { fnHide(); } else { fnShow(true);  }
             });
+            $(window).off('orientationchange.folderview').on('orientationchange.folderview', fnHide);
         };
 
         fnResize = function () {

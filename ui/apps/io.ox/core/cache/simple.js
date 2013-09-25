@@ -18,34 +18,39 @@ define('io.ox/core/cache/simple', ["io.ox/core/extensions"], function (ext) {
     var storage = {},
         instances = {};
 
+    function resolve(val) {
+        // $.Deferred().resolve(); wrapped by setTimeout(..., 0)
+        return _.wait(0).then(function () { return val; });
+    }
+
     function SimpleStorage(id) {
         storage[id] = {};
         _.extend(this, {
             clear: function () {
                 storage[id] = {};
-                return $.Deferred().resolve();
+                return resolve();
             },
             get: function (key) {
                 var key = String(key);
-                return $.Deferred().resolve(
+                return resolve(
                     key in storage[id] ? JSON.parse(storage[id][key]) : null
                 );
             },
             set: function (key, data) {
                 // use stringify to work with copies
                 storage[id][String(key)] = JSON.stringify(data);
-                return $.Deferred().resolve(key);
+                return resolve(key);
             },
             remove: function (key) {
                 delete storage[id][String(key)];
-                return $.Deferred().resolve();
+                return resolve();
             },
             keys: function () {
                 var key, tmp = [];
                 for (key in storage[id]) {
                     tmp.push(key);
                 }
-                return $.Deferred().resolve(tmp);
+                return resolve(tmp);
             }
         });
     }

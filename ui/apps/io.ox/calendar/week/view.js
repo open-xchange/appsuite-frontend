@@ -103,6 +103,7 @@ define('io.ox/calendar/week/view',
             this.dayLabel       = $('<div>').addClass('footer');
             this.kwInfo         = $('<div>').addClass('info');
             this.showAllCon     = $('<div>').addClass('showall');
+            this.weekCon        = $('<div>').addClass('week-container');
             this.showAllCheck   = $('<input/>').attr('type', 'checkbox').attr({ tabindex: 1 });
 
             this.mode = opt.mode || 'day';
@@ -226,9 +227,25 @@ define('io.ox/calendar/week/view',
          */
         initSettings: function () {
             // init settings
+            var self = this;
             this.gridSize = 60 / settings.get('interval', this.gridSize);
             this.workStart = settings.get('startTime', this.workStart);
             this.workEnd = settings.get('endTime', this.workEnd);
+            settings.on('change', function (e, key, value) {
+                switch (key) {
+                case 'interval':
+                    self.gridSize = 60 / settings.get('interval', self.gridSize);
+                    break;
+                case 'startTime':
+                case 'endTime':
+                    self.workStart = settings.get('startTime', self.workStart);
+                    self.workEnd = settings.get('endTime', self.workEnd);
+                    self.rerenderWorktime();
+                    break;
+                default:
+                    break;
+                }
+            });
         },
 
         /**
@@ -483,13 +500,13 @@ define('io.ox/calendar/week/view',
                     this.lasso = $('<div>')
                         .addClass('appointment lasso')
                         .css({
-                            height: this.cellHeight,
+                            height: this.gridHeight(),
                             minHeight: 0,
                             top: this.roundToGrid(mouseY, 'n')
                         })
                         .data({
-                            start: mouseY,
-                            stop: 0,
+                            start: this.roundToGrid(mouseY, 'n'),
+                            stop: this.roundToGrid(mouseY, 's'),
                             startDay: curDay,
                             lastDay: curDay,
                             helper: {}
@@ -594,7 +611,7 @@ define('io.ox/calendar/week/view',
             this.fulltimePane.css({ height: (this.options.showFulltime ? 21 : 1) + 'px'});
 
             // create days
-            var weekCon = $('<div>').addClass('week-container').append(this.timeline);
+            this.weekCon.append(this.timeline);
             for (var d = 0; d < this.columns; d++) {
 
                 var day = $('<div>')
@@ -613,7 +630,7 @@ define('io.ox/calendar/week/view',
                             .addClass('timeslot ' + (i > (this.workStart * this.fragmentation) && i <= (this.workEnd * this.fragmentation) ? 'in' : 'out'))
                     );
                 }
-                weekCon.append(day);
+                this.weekCon.append(day);
             }
 
             // create toolbar, view space and dayLabel
@@ -659,12 +676,23 @@ define('io.ox/calendar/week/view',
                     .addClass('week-view-container')
                     .append(
                         this.fulltimeCon.empty().append(this.fulltimePane),
-                        this.pane.empty().append(timeLabel, weekCon)
+                        this.pane.empty().append(timeLabel, self.weekCon)
                     )
             );
 
             this.renderDayLabel();
             this.pane.focus();
+            return this;
+        },
+
+        rerenderWorktime: function () {
+            var self = this;
+            this.weekCon.find('.day').each(function () {
+                $(this).find('.timeslot').removeClass('in out').each(function (i, el) {
+                    i++;
+                    $(el).addClass('timeslot ' + (i > (self.workStart * self.fragmentation) && i <= (self.workEnd * self.fragmentation) ? 'in' : 'out'));
+                });
+            });
             return this;
         },
 
@@ -797,7 +825,7 @@ define('io.ox/calendar/week/view',
                             style = '';
 
                         // draw across multiple days
-                        while (true && maxCount <= this.columns) {
+                        while (maxCount <= this.columns) {
                             var app = this.renderAppointment(model),
                                 sel = '[date="' + (startLocal.getDays() - this.startDate.getDays()) + '"]';
                             maxCount++;
@@ -1438,7 +1466,7 @@ define('io.ox/calendar/week/view',
                 e = calc(end);
             return {
                 top: s,
-                height: Math.max(Math.round(e - s), self.gridHeight()) - 1
+                height: Math.max(Math.round(e - s), self.minCellHeight) - 1
             };
         },
 
@@ -1551,8 +1579,8 @@ define('io.ox/calendar/week/view',
                 };
             var tmpl = templates[self.mode],
                 data = null;
-            if (folder.folder) {
-                data = {folder_id: folder.folder};
+            if (folder.id || folder.folder) {
+                data = {folder_id: folder.id || folder.folder};
             }
             ox.load(['io.ox/core/print']).done(function (print) {
                 print.open('printCalendar', data, {

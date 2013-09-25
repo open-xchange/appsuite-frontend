@@ -18,5 +18,5 @@ define('io.ox/caldav/settings/defaults', function () {
 		url: "",
 		active: false
 	};
-	
+
 });

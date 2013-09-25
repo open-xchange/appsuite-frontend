@@ -20,16 +20,15 @@ define('io.ox/core/emoji/util',
     return {
 
         processEmoji: function (text) {
+
             var i = 0, asciiOnly = true;
-            for (i; i < text.length; i++) {
-                if (text.charCodeAt(i) > 255) {
-                    asciiOnly = false;
-                    break;
-                }
+
+            // check if there might be any emojis; pure ascii cannot contain them
+            for (var i = 0; asciiOnly && i < text.length; i++) {
+                if (text.charCodeAt(i) > 255) asciiOnly = false;
             }
-            if (asciiOnly) {
-                return text;
-            }
+
+            if (asciiOnly) return text;
 
             if (emoji) {
                 text = emoji.softbankToUnified(text);

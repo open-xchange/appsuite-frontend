@@ -353,7 +353,7 @@ define("io.ox/core/tk/dialogs",
                         dim[d] = o[id];
                     }
                     // apply document limits
-                    var max = $(document)[d]() - 50;
+                    var max = $(document)[d]();
                     if (dim[d] && dim[d] > max) {
                         dim[d] = max;
                     }
@@ -362,29 +362,48 @@ define("io.ox/core/tk/dialogs",
             };
 
             var fnSetMaxDimensions = function () {
-                var dim = fnSetDimensions();
-                nodes.popup.css({
-                    width: dim.width,
-                    top: o.top || 0
-                });
-                var height = $(window).height() - 170 - o.top;
-                nodes.body.css({
-                    'height': height,
-                    'max-height': height
-                });
+                if (nodes) {
+                    var dim = fnSetDimensions();
+                    nodes.popup.css({
+                        width: dim.width,
+                        top: o.top || 0
+                    });
+                    var height = $(window).height() - 170 - o.top;
+                    nodes.body.css({
+                        'height': height,
+                        'max-height': height
+                    });
+                }
             };
 
             var dim = fnSetDimensions();
 
             // apply dimensions, only on desktop and pad
             if (_.device('!small')) {
-                nodes.popup.css('width', dim.width + 'px');
+                var css = { width: dim.width + 'px' };
                 if (o.center) {
                     // center vertically
-                    nodes.popup.css({
-                        top: '50%',
-                        marginTop: 0 - (dim.height / 2 >> 0) + 'px'
-                    });
+                    css.top = '50%';
+                    var calcSize = function () {
+                        if (nodes) {
+                            var nodeHeight = nodes.popup.height(),
+                                winHeight = $(window).height();
+                            // adjust on very small windows
+                            if (winHeight < nodes.popup.height()) {
+                                nodeHeight = winHeight;
+                                css.overflow = 'auto';
+                                css.maxHeight = '100%';
+                            }
+                            css.marginTop = 0 - (nodeHeight / 2 >> 0) + 'px';
+                            nodes.popup.css(css);
+                        }
+                    };
+
+                    $(window)
+                        .off('resize.checkTop')
+                        .on('resize.checkTop', calcSize);
+                    calcSize();
+
                 } else {
                     // use fixed top position
                     nodes.popup.css('top', o.top || '0px');

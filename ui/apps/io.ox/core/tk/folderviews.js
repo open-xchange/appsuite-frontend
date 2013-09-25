@@ -474,7 +474,7 @@ define('io.ox/core/tk/folderviews',
         Selection.extend(this, container, { dropzone: true, dropType: 'folder' }) // not this.container!
             .setMultiple(false)
             .setSerializer(function (obj) {
-                return String(obj.id);
+                return obj ? String(obj.id) : '';
             });
 
         // add event hub
@@ -1061,6 +1061,7 @@ define('io.ox/core/tk/folderviews',
 
             return api.getVisible(options).done(function (data) {
                 var id, section,
+                    showHeadlines = Object.keys(data).length > 1,
                     drawSection = function (node, list) {
                         // loop over folders
                         _(list).each(function (data) {
@@ -1075,7 +1076,8 @@ define('io.ox/core/tk/folderviews',
                         self.container.append(
                             section = $('<div>').addClass('section')
                             .append(
-                                $('<div>').addClass('section-title').text(sections[id])
+                                //headline if more than one section contains elements
+                                showHeadlines ? $('<div>').addClass('section-title').text(sections[id]) : $()
                             )
                         );
                         drawSection(section, data[id]);

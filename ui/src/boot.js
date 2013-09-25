@@ -317,6 +317,31 @@ $(window).load(function () {
                         cont();
                     }
                 });
+            }, function () {
+                debug('boot.js: loadCore > load config failed, using default ...');
+                var def1 = require(['io.ox/core/main']),
+                    def2 = themes.set('default');
+
+                function cont() {
+                    debug('boot.js: loadCore def1 and def2 resolved');
+                    def1.then(
+                        function success(core) {
+                            // go!
+                            debug('boot.js: core.launch()');
+                            core.launch();
+                        },
+                        function fail(e) {
+                            console.error('Cannot launch core!', e);
+                        }
+                    );
+                }
+
+                function fail() {
+                    console.error('Could not load theme: ' + theme);
+                    gotoSignin('autologin=false');
+                }
+
+                $.when(def2, def1).then(cont, fail);
             });
         };
 
@@ -347,7 +372,7 @@ $(window).load(function () {
                         feedback('error', 'No connection to server. Please ' +
                                  'check your internet connection and retry.');
                     } else {
-                        feedback('error', $.txt(_.formatError(error, '%1$s')));
+                        feedback('error', $.txt(_.formatError(error, '%1$s (%2$s)')));
                     }
                     // restore form
                     restore();
@@ -572,7 +597,7 @@ $(window).load(function () {
                 }
 
                 debug('boot.js: loadCoreFiles > loadPluginsFor(core) ...');
-                return manifests.manager.loadPluginsFor('core').done(gettext.enable);
+                return manifests.manager.loadPluginsFor('core').always(gettext.enable);
             }
 
             function continueWithoutAutoLogin() {
@@ -707,14 +732,15 @@ $(window).load(function () {
                             gotoCore(true);
                         } else {
                             debug('boot.js: autoLogin > loginSuccess > fetch user config ...');
-                            fetchUserSpecificServerConfig().done(function () {
+                            fetchUserSpecificServerConfig().then(function () {
                                 // apply session data (again) & page title
                                 session.set(data);
                                 document.title = _.noI18n(ox.serverConfig.pageTitle || '');
                                 debug('boot.js: autoLogin > loginSuccess > loadCoreFiles ...');
-                                loadCoreFiles().done(function () {
-                                    loadCore();
-                                });
+                                return loadCoreFiles();
+                            })
+                            .always(function () {
+                                loadCore();
                             });
                         }
                     },
@@ -746,7 +772,7 @@ $(window).load(function () {
                 footer = '',
                 i = 0,
                 cl = $('#io-ox-current-language').parent(),
-                maxLang = 20;
+                maxLang = 30;
 
             debug('boot.js: initialize ...');
 
@@ -755,13 +781,16 @@ $(window).load(function () {
 
                 debug('boot.js: List languages', lang);
 
-                var langCount = _.size(lang);
                 node = $('#io-ox-language-list');
-                // Display native select box for languages if there are up to "maxLang" languages
-                var langSorted = _.toArray(_.invert(lang)).sort(function (a, b) {
-                    return lang[a] <= lang[b] ? -1 : +1;
-                });
-                if (langCount < maxLang) {
+
+                var langCount = _.size(lang),
+                    defaultLanguage = _.getCookie('language') || getBrowserLanguage(),
+                    // Display native select box for languages if there are up to "maxLang" languages
+                    langSorted = _.toArray(_.invert(lang)).sort(function (a, b) {
+                        return lang[a] <= lang[b] ? -1 : +1;
+                    });
+
+                if (langCount < maxLang && !_.url.hash('language-select')) {
                     for (id in langSorted) {
                         var link;
                         i++;
@@ -775,17 +804,27 @@ $(window).load(function () {
                         }
                     }
                 } else {
-                    var sel = $('<select>').change(function() {
-                        changeLanguage($(this).val());
-                        forcedLanguage = $(this).val();
-                    });
-                    for (id in langSorted) {
-                        sel.append(
-                            $('<option aria-label="' + lang[langSorted[id]] + '">').attr('value', id)
-                                .text(lang[langSorted[id]])
-                        );
-                    }
-                    $('#io-ox-language-list').append(sel);
+                    $('#io-ox-language-list').append(
+                        $('<select>').change(function(e) {
+                            var id = $(this).val();
+                            if (id !== '') {
+                                e.data = { id: id };
+                                fnChangeLanguage(e);
+                            }
+                        })
+                        .append(
+                            _(langSorted).map(function (value, id) {
+                                var option = $('<option>')
+                                    .attr({
+                                        'aria-label': lang[langSorted[id]],
+                                        'value': langSorted[id]
+                                    })
+                                    .text(lang[langSorted[id]]);
+                                return option;
+                            })
+                        )
+                        .val(defaultLanguage)
+                    );
                 }
             } else {
                 $("#io-ox-languages").remove();

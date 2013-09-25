@@ -18,7 +18,7 @@ define('io.ox/core/updates/updater', ['io.ox/core/extensions', 'settings!io.ox/c
             var def = $.Deferred();
             var updateTasks = ext.point('io.ox/core/updates').list();
             var states = settings.get('states');
-            
+
             if (_.isUndefined(states)) {
                 return $.when(); // Skip this round
             }
@@ -43,7 +43,7 @@ define('io.ox/core/updates/updater', ['io.ox/core/extensions', 'settings!io.ox/c
                         console.error(e, e.stack);
                         def.reject();
                     }
-                    
+
                 } else {
                     def.resolve();
                 }
@@ -56,5 +56,5 @@ define('io.ox/core/updates/updater', ['io.ox/core/extensions', 'settings!io.ox/c
             });
         }
     };
-    
+
 });

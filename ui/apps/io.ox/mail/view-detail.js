@@ -105,7 +105,7 @@ define('io.ox/mail/view-detail',
             ':(': '&#x1F61E;'
         };
 
-        var regex = /(&quot)?([:;]-?[(|)D])/g;
+        var regex = /(&quot)?([:;]-?[(|)D])\W/g;
 
         return function (text) {
             if (settings.get('displayEmoticons')) {
@@ -121,6 +121,8 @@ define('io.ox/mail/view-detail',
         };
     }());
 
+    var isURL = /^https?:\S+$/i;
+
     var beautifyText = function (text) {
 
         text = $.trim(text)
@@ -135,8 +137,20 @@ define('io.ox/mail/view-detail',
             // add markup for email addresses
             .replace(regMailComplex, '<a href="mailto:$6">$2$3</a>');
 
-        text = insertEmoticons(text);
-        text = emoji.processEmoji(text);
+        // split source to safely ignore tags
+        text = _(text.split(/(<[^>]+>)/))
+            .map(function (line) {
+                // ignore tags
+                if (line[0] === '<') return line;
+                // ignore URLs
+                if (isURL.test(line)) return line;
+                // process plain text
+                line = insertEmoticons(line);
+                line = emoji.processEmoji(line);
+                return line;
+            })
+            .join('');
+
         text = markupQuotes(text);
 
         return text;
@@ -406,17 +420,15 @@ define('io.ox/mail/view-detail',
                 // last line of defense
                 content.find('script').remove();
 
+                // setting isColorQuoted
+                var colorQuoted = settings.get('isColorQuoted', true);
+                if (colorQuoted) content.addClass('colorQuoted');
+
                 if (isHTML) {
                     // HTML
                     if (!isLarge) {
                         // remove stupid tags
                         content.find('meta').remove();
-
-                        // setting isColorQuoted
-                        var colorQuoted = settings.get('isColorQuoted', true);
-                        if (colorQuoted) {
-                            content.addClass('colorQuoted');
-                        }
 
                         // transform outlook's pseudo blockquotes
                         content.find('div[style*="none none none solid"][style*="1.5pt"]').each(function () {
@@ -558,10 +570,10 @@ define('io.ox/mail/view-detail',
                                     );
                                 }
                             }
-                            else if (length >= 20 && /\S{20}/.test(text)) {
+                            else if (length >= 30 && /\S{30}/.test(text)) {
                                 // split long character sequences for better wrapping
                                 node.replaceWith(
-                                    $('<span>').html(coreUtil.breakableHTML(text))
+                                    $.parseHTML(coreUtil.breakableHTML(text))
                                 );
                             }
                         }
@@ -647,23 +659,28 @@ define('io.ox/mail/view-detail',
                 node = $('<section class="mail-detail">'),
                 container = $.createViewContainer(data, api)
                     .addClass('mail-detail-decorator')
-                    .on('redraw', function (e, tmp) {
-                        copyThreadData(tmp, copy);
+                    .on('redraw', function (e, fresh) {
                         // mails can only change color_label and flags
                         var current = {
-                                color_label: container.find('.flag-dropdown-icon').attr('data-color'),
-                                flags: copy.flags
-                            },
-                            fresh = {
-                                color_label: tmp.color_label,
-                                flags: tmp.flags
-                            };
-                        // changed? - or just marked seen? or label changed?
-                        if (!_.isEqual(current, fresh)) {
-                            container.replaceWith(
-                                self.draw(ext.Baton({ data: tmp, app: baton.app, options: baton.options }))
-                            );
+                            color_label: parseInt(container.find('.flag-dropdown-icon').attr('data-color'), 10) || 0,
+                            unseen: node.hasClass('unread')
+                        };
+                        // flags changed?
+                        if (current.unseen !== util.isUnseen(fresh)) {
+                            // update class
+                            node.toggleClass('unread', util.isUnseen(fresh));
+                            // udpate inline links
+                            ext.point('io.ox/mail/detail').get('inline-links', function (extension) {
+                                var div = $('<div>'), baton = ext.Baton({ data: _.extend(copy, fresh) });
+                                extension.draw.call(div, baton);
+                                node.find('nav.io-ox-inline-links').replaceWith(div.find('nav'));
+                            });
                         }
+                        if (current.color_label !== fresh.color_label) {
+                            setLabel(node, fresh.color_label);
+                        }
+                        // update copy
+                        _.extend(copy, fresh);
                     });
 
             if (baton.options.tabindex) {
@@ -687,16 +704,9 @@ define('io.ox/mail/view-detail',
                     node.addClass('by-myself');
                 }
 
-                var isUnseen = api.tracker.isUnseen(data),
-                    canAutoRead = api.tracker.canAutoRead(data);
-
-                if (isUnseen) {
-                    if (canAutoRead) {
-                        data.flags = data.flags | 32;
-                        api.tracker.applyAutoRead(data);
-                    } else {
-                        node.addClass('unread');
-                    }
+                // make sure this mail is seen
+                if (api.tracker.isUnseen(baton.data)) {
+                    api.markRead(baton.data);
                 }
 
                 ext.point('io.ox/mail/detail').invoke('draw', node, baton);
@@ -768,7 +778,7 @@ define('io.ox/mail/view-detail',
 
                 modifiedBaton = deleteAction.data('baton');
                 if (!modifiedBaton || !modifiedBaton.data) {
-                    console.error('No baton found. Not supposed to happen.');
+                    if (ox.debug) console.warn('No baton found. Not supposed to happen.');
                     return;
                 }
                 sentFolder = settings.get('folder.sent');
@@ -779,53 +789,15 @@ define('io.ox/mail/view-detail',
                 deleteAction.data('baton', modifiedBaton);
             }
 
-            function updateThread(node, scrollpane, batonOld, data) {
-                var nodeTable  = {},
-                    top = scrollpane.scrollTop(),
-                    currentMail,
-                    currentMailOffset,
-                    nodes = node.find('.mail-detail');
-                //fill nodeTable
-                for (var i = 0; i < batonOld.data.length; i++) {//bring nodes and mails together;
-                    if ($(nodes[i]).parent().hasClass('mail-detail-decorator')) {
-                        nodes[i] = $(nodes[i]).parent().get(0);
-                    }
-                    nodeTable[_.cid(batonOld.data[i])] = nodes[i];
-                }
-                //remember current scrollposition
-                currentMail = $(nodes[0]);//select first
-                for (var i = 1; i < nodes.length && $(nodes[i]).position().top <= top; i++) {
-                    currentMail = $(nodes[i]);
-                }
-                currentMailOffset = top - currentMail.position().top;
-                node.find('.mail-detail.io-ox-busy,.mail-detail-decorator').detach();
-                for (var i = 0; i < data.thread.length; i++) {//draw new thread
-                    if (nodeTable[_.cid(data.thread[i])]) {
-                        node.append(nodeTable[_.cid(data.thread[i])]);
-                    } else {
-                        node.append(that.drawScaffold(
-                                ext.Baton({ data: data.thread[i], app: batonOld.app, options: batonOld.options }),
-                                that.autoResolveThreads).addClass('io-ox-busy').get(0)//no 200ms wait for busy animation because this changes our scroll position
-                            );
-                    }
-                }
-                nodes = node.find('.mail-detail');
-                scrollpane.off('scroll').on('scroll', { nodes: nodes, node: node }, _.debounce(autoResolve, 100));//update event parameters
-                //scroll to old position
-                scrollpane.scrollTop(currentMail.position().top + currentMailOffset);
-                batonOld.data = data.thread;//update baton
-            }
-
-            function drawThread(node, baton, pos, top, bottom, mails) {
+            function drawThread(node, baton, options, mails) {
 
                 var i, obj, frag = document.createDocumentFragment(),
                     scrollpane = node.closest('.scrollable').off('scroll'),
-                    nodes, inline, top, mail,
+                    nodes, inline, mail,
                     list = baton.data;
 
                 try {
-                    //prevent ugly event duplication
-                    api.off('threadChanged:' + _.cid(baton.data[baton.data.length - 1]).replace(/\s/g, '%20'));
+
                     // draw inline links for whole thread
                     if (list.length > 1) {
                         inline = $('<div class="thread-inline-actions">');
@@ -836,7 +808,6 @@ define('io.ox/mail/view-detail',
                         } else {
                             node.parent().parent().find('.rightside-inline-actions').empty().append(inline);
                         }
-
                         // replace delete action with one excluding the sent folder
                         scrubThreadDelete(inline.find('[data-action=delete]'));
                     }
@@ -845,9 +816,10 @@ define('io.ox/mail/view-detail',
                     for (i = 0; (obj = list[i]); i++) {
                         obj.threadPosition = i;
                         obj.threadSize = list.length;
-                        if (i >= top && i <= bottom) {
+                        if (i >= options.top && i <= options.bottom) {
                             mail = mails.shift();
                             copyThreadData(mail, obj);
+                            // draw mail
                             frag.appendChild(that.draw(
                                 ext.Baton({ data: mail, app: baton.app, options: baton.options })
                             ).get(0));
@@ -858,21 +830,18 @@ define('io.ox/mail/view-detail',
                             );
                         }
                     }
+                    options.children = null;
                     node.empty().get(0).appendChild(frag);
                     // get nodes
                     nodes = node.find('.mail-detail');
                     // set initial scroll position (37px not to see thread's inline links)
                     if (_.device('!smartphone')) {
-                        top = nodes.eq(pos).parent().position().top;
+                        options.top = nodes.eq(options.pos).parent().position().top;
                     }
-                    scrollpane.scrollTop(list.length === 1 ? 0 : top);
+                    scrollpane.scrollTop(list.length === 1 ? 0 : options.top);
                     scrollpane.on('scroll', { nodes: nodes, node: node }, _.debounce(autoResolve, 100));
                     scrollpane.one('scroll.now', { nodes: nodes, node: node }, autoResolve);
                     scrollpane.trigger('scroll.now'); // to be sure
-                    api.on('threadChanged:' + _.cid(baton.data[baton.data.length - 1]).replace(/\s/g, '%20'),
-                            { baton: baton, scrollpane: scrollpane, nodes: nodes, node: node}, function (e, data) {
-                        updateThread(e.data.node, e.data.scrollpane, e.data.baton, data);
-                    });
                     nodes = frag = node = scrollpane = list = mail = mails = null;
                 } catch (e) {
                     console.error('mail.drawThread', e.message, e);
@@ -885,7 +854,12 @@ define('io.ox/mail/view-detail',
                 // define next step now
                 var list = baton.data,
                     next = _.lfo(drawThread),
-                    node = this;
+                    node = this,
+                    options = {
+                        pos: 0,
+                        top: 0,
+                        bottom: 0
+                    };
 
                 // get list data, esp. to know unseen flag - we need this list for inline link checks anyway
                 api.getList(list).then(
@@ -917,8 +891,11 @@ define('io.ox/mail/view-detail',
                             }
                             $.when.apply($, defs).then(
                                 function () {
+                                    options.pos = pos;
+                                    options.top = top;
+                                    options.bottom = bottom;
                                     baton = ext.Baton({ data: list, app: baton.app, options: baton.options });
-                                    next(node, baton, pos, top, bottom, $.makeArray(arguments));
+                                    next(node, baton, options, $.makeArray(arguments));
                                 },
                                 function () {
                                     fail(node.empty(), baton);
@@ -933,6 +910,65 @@ define('io.ox/mail/view-detail',
                         fail(node.empty(), baton);
                     }
                 );
+            };
+        }()),
+
+        // redraw with new threadData without loosing scrollposition
+        updateThread: (function () {
+
+            function autoResolve(e) {
+                // check for data (due to debounce)
+                if (e.data) {
+                    // determine visible nodes
+                    var pane = $(this), node = e.data.node,
+                        top = pane.scrollTop(), bottom = top + node.parent().height();
+                    e.data.nodes.each(function () {
+                        var self = $(this), pos = self.position();
+                        if ((pos.top + 100) > top && pos.top < bottom) { // +100 due to min-height
+                            self.trigger('resolve');
+                        }
+                    });
+                }
+            }
+
+            return function (baton) {
+
+                var nodeTable  = {},
+                    node = this,
+                    data = baton.data,
+                    scrollpane = $(node).parent(),
+                    top = scrollpane.scrollTop(),
+                    currentMail,
+                    currentMailOffset,
+                    nodes = node.find('.mail-detail');
+                //fill nodeTable
+                for (var i = 0; i < nodes.length; i++) {//bring nodes and mails together;
+                    if ($(nodes[i]).parent().hasClass('mail-detail-decorator')) {
+                        nodes[i] = $(nodes[i]).parent().get(0);
+                    }
+                    nodeTable[_.ecid($(nodes[i]).attr('data-cid'))] = nodes[i];
+                }
+                //remember current scrollposition
+                currentMail = $(nodes[0]);//select first
+                for (var i = 1; i < nodes.length && $(nodes[i]).position().top <= top; i++) {
+                    currentMail = $(nodes[i]);
+                }
+                currentMailOffset = top - currentMail.position().top;
+                node.find('.mail-detail.io-ox-busy,.mail-detail-decorator').detach();
+                for (var i = 0; i < data.length; i++) {//draw new thread
+                    if (nodeTable[_.ecid(data[i])]) {
+                        node.append(nodeTable[_.ecid(data[i])]);
+                    } else {
+                        node.append(that.drawScaffold(
+                            ext.Baton({ data: data[i], app: baton.app, options: baton.options }),
+                            that.autoResolveThreads).addClass('io-ox-busy').get(0)//no 200ms wait for busy animation because this changes our scroll position
+                        );
+                    }
+                }
+                nodes = node.find('.mail-detail');
+                scrollpane.off('scroll').on('scroll', { nodes: nodes, node: node }, _.debounce(autoResolve, 100));//update event parameters
+                //scroll to old position
+                scrollpane.scrollTop(currentMail.position().top + currentMailOffset);
             };
         }())
     };
@@ -1020,8 +1056,12 @@ define('io.ox/mail/view-detail',
         id: 'fromlist',
         draw: function (baton) {
             var data = baton.data, list = util.serializeList(data, 'from'), node;
-            this.append($('<div class="from list">').append(list.removeAttr('style')));
-            if (ox.ui.App.get('io.ox/mail').length) {
+            this.append(
+                $('<div class="from list">').append(
+                    baton.data.from ? list.removeAttr('style') : $.txt('\u00A0')
+                )
+            );
+            if (baton.data.from && ox.ui.App.get('io.ox/mail').length) {
                 node = list.last();
                 node.after(
                     $('<i class="icon-search">').on('click', node.data('person'), searchSender)
@@ -1049,20 +1089,23 @@ define('io.ox/mail/view-detail',
     var colorLabelIconEmpty = 'icon-bookmark-empty',
         colorLabelIcon = 'icon-bookmark';
 
+    function setLabel(node, color) {
+        // set proper icon class
+        var className = 'flag-dropdown-icon ';
+        className += color === 0 ? colorLabelIconEmpty : colorLabelIcon;
+        className += ' flag_' + color;
+        node.find('.flag-dropdown-icon').attr({ 'class': className, 'data-color': color });
+    }
+
     function changeLabel(e) {
 
         e.preventDefault();
 
         var data = e.data.data,
             color = e.data.color,
-            node = $(this).closest('.flag-dropdown'),
-            className = 'flag-dropdown-icon ';
+            node = $(this).closest('.flag-dropdown');
 
-        // set proper icon class
-        className += color === 0 ? colorLabelIconEmpty : colorLabelIcon;
-        className += ' flag_' + color;
-
-        node.find('.flag-dropdown-icon').attr({ 'class': className, 'data-color': color });
+        setLabel(node, color);
         node.find('.dropdown-toggle').focus();
 
         return api.changeColor(data, color);

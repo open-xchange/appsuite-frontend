@@ -12,10 +12,10 @@
  */
 define("io.ox/dev/utils/live-coding-extension", ["io.ox/backbone/views"], function (views) {
     "use strict";
-    
+
     function LiveCodingExtension(options) {
         var self = this;
-        
+
         this.tick = function () {
             if (self.pending) {
                 return;
@@ -41,15 +41,15 @@ define("io.ox/dev/utils/live-coding-extension", ["io.ox/backbone/views"], functi
                 self.pending = false;
             });
         };
-        
+
         this.draw = function () {
             self.node = $('<div>');
             self.args = $.makeArray(arguments);
-            
+
             this.append(self.node);
             self.redrawDelegate();
         };
-        
+
         this.redrawDelegate = function () {
             if (self.node && self.args && self.delegate) {
                 self.node.fadeOut(function () {
@@ -63,12 +63,12 @@ define("io.ox/dev/utils/live-coding-extension", ["io.ox/backbone/views"], functi
                 });
             }
         };
-        
+
         _.extend(this, options);
-        
+
         setInterval(this.tick, options.inteval || 1000);
     }
-    
+
     function LiveCodingView(options) {
         if (!options.transformDelegate) {
             options.transformDelegate = function (delegate) {
@@ -78,10 +78,10 @@ define("io.ox/dev/utils/live-coding-extension", ["io.ox/backbone/views"], functi
         }
         _.extend(this, new LiveCodingExtension(options));
     }
-    
+
     return {
         Extension: LiveCodingExtension,
         View: LiveCodingView
     };
-    
+
 });

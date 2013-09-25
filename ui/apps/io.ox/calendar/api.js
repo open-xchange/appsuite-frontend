@@ -31,6 +31,23 @@ define('io.ox/calendar/api',
         DAY = HOUR * 24;
     // object to store appointments, that have attachments uploading atm
     var uploadInProgress = {},
+        //grepRemove equivalent
+        grepRemove = function (pattern, cache) {
+            var keys = Object.keys(cache),
+                cache = cache || {};
+
+            if (typeof pattern === 'string') {
+                pattern = new RegExp(_.escapeRegExp(pattern));
+            }
+
+            if (_.isRegExp(pattern)) {
+                _.each(keys, function (key) {
+                    if (pattern.test(key)) {
+                        delete cache[key];
+                    }
+                });
+            }
+        },
 
         checkForNotification = function (obj, removeAction) {
             if (removeAction) {
@@ -204,7 +221,7 @@ define('io.ox/calendar/api',
          * @return {deferred} returns current appointment object
          */
         update: function (o) {
-            var folder_id = o.folder_id || o.folder,
+            var folder_id = o.folder_id || o.folder, pattern,
                 key = folder_id + '.' + o.id + '.' + (o.recurrence_position || 0),
                 attachmentHandlingNeeded = o.tempAttachmentIndicator;
             delete o.tempAttachmentIndicator;
@@ -222,29 +239,36 @@ define('io.ox/calendar/api',
                     },
                     data: o
                 })
-                .pipe(function (obj) {
-                    checkForNotification(o);
-                    var getObj = {};
+                .then(function (obj) {
                     if (!_.isUndefined(obj.conflicts)) {
-                        var df = new $.Deferred();
-                        _(obj.conflicts).each(function (item) {
-                            item.folder_id = folder_id;
-                        });
-                        df.reject(obj);
-                        return df;
+                        return $.Deferred().reject(obj);
                     }
-                    getObj.id = obj.id || o.id;
-                    getObj.folder = folder_id;
+
+                    checkForNotification(o);
+
+                    var getObj = {
+                        id: obj.id || o.id,
+                        folder: folder_id
+                    };
+                    all_cache = {};
+
                     if (o.recurrence_position !== null && obj.id === o.id) {
                         getObj.recurrence_position = o.recurrence_position;
                     }
 
-                    all_cache = {};
                     delete get_cache[key];
                     return api.get(getObj)
-                        .pipe(function (data) {
+                        .then(function (data) {
                             if (attachmentHandlingNeeded) {
-                                api.addToUploadList(_.ecid(data));//to make the detailview show the busy animation
+                                //to make the detailview show the busy animation
+                                api.addToUploadList(_.ecid(data));
+                            }
+                            //series master changed?
+                            if (data.recurrence_type > 0 && !data.recurrence_position) {
+                                //id without specified recurrence_position
+                                pattern = (o.folder || o.folder_id) + '.' + o.id + '.';
+                                grepRemove(pattern, get_cache);
+                                api.trigger('update:series:' + _.ecid(pattern), data);
                             }
                             api.trigger('update', data);
                             api.trigger('update:' + _.ecid(o), data);
@@ -294,27 +318,28 @@ define('io.ox/calendar/api',
                 },
                 data: o
             })
-            .pipe(function (obj) {
-                checkForNotification(o);
-                var getObj = {};
+            .then(function (obj) {
                 if (!_.isUndefined(obj.conflicts)) {
-                    var df = new $.Deferred();
-                    _(obj.conflicts).each(function (item) {
-                        item.folder_id = o.folder_id;
-                    });
-                    df.reject(obj);
-                    return df;
+                    return $.Deferred().reject(obj);
                 }
-                getObj.id = obj.id;
-                getObj.folder = o.folder_id;
+
+                checkForNotification(o);
+
+                var getObj = {
+                    id: obj.id,
+                    folder: o.folder_id
+                };
+                all_cache = {};
+
                 if (o.recurrence_position !== null) {
                     getObj.recurrence_position = o.recurrence_position;
                 }
-                all_cache = {};
+
                 return api.get(getObj)
-                        .pipe(function (data) {
+                        .then(function (data) {
                             if (attachmentHandlingNeeded) {
-                                api.addToUploadList(_.ecid(data));//to make the detailview show the busy animation
+                                //to make the detailview show the busy animation
+                                api.addToUploadList(_.ecid(data));
                             }
                             api.trigger('create', data);
                             api.trigger('update:' + _.ecid(data), data);
@@ -326,28 +351,40 @@ define('io.ox/calendar/api',
         // delete is a reserved word :( - but this will delete the
         // appointment on the server
         remove: function (o) {
+            var keys = [];
 
-            var key = (o.folder_id || o.folder) + '.' + o.id + '.' + (o.recurrence_position || 0);
+            o = _.isArray(o) ? o : [o];
 
-            return http.PUT({
-                module: 'calendar',
-                params: {
-                    action: 'delete',
-                    timestamp: _.now()
-                },
-                data: o
-            })
-            .done(function (resp) {
-                all_cache = {};
-                delete get_cache[key];
+            // pause http layer
+            http.pause();
+
+            _(o).each(function (obj) {
+                keys.push((obj.folder_id || obj.folder) + '.' + obj.id + '.' + (obj.recurrence_position || 0));
+                return http.PUT({
+                    module: 'calendar',
+                    params: {
+                        action: 'delete',
+                        timestamp: _.then()
+                    },
+                    data: obj
+                })
+                .done(function (resp) {
+                    all_cache = {};
+                    _(keys).each(function (key) {
+                        delete get_cache[key];
+                    });
+                    api.trigger('delete', obj);
+                    api.trigger('delete:' + _.ecid(obj), obj);
+                    //remove Reminders in Notification Area
+                    checkForNotification(obj, true);
+                }).fail(function () {
+                    all_cache = {};
+                    api.trigger('delete');
+                });
+            });
+
+            return http.resume().then(function (response) {
                 api.trigger('refresh.all');
-                api.trigger('delete', resp);
-                api.trigger('delete:' + _.ecid(o), o);
-                //remove Reminders in Notification Area
-                checkForNotification(o, true);
-            }).fail(function () {
-                all_cache = {};
-                api.trigger('delete');
             });
         },
 

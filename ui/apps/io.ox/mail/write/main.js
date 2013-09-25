@@ -298,9 +298,7 @@ define('io.ox/mail/write/main',
             if (_.browser.IE === undefined || _.browser.IE > 9) {
                 var dropZone = upload.dnd.createDropZone({'type': 'single', actions: [{id: 'mailAttachment', label: gt('Drop the file anywhere to add attachment')}]});
                 dropZone.on('drop', function (e, file) {
-                    view.form.find('input[type=file]').last()
-                        .prop('file', file)
-                        .trigger('change');
+                    view.fileList.add(_.extend(file, { group: 'file' }));
                     view.showSection('attachments');
                 });
             }
@@ -517,48 +515,105 @@ define('io.ox/mail/write/main',
 
         app.setAttachments = function (data) {
             // look for real attachments
-            var found = false;
-            _(data.attachments || []).each(function (attachment) {
-                if (attachment.disp === 'attachment') {
-                    // add as linked attachment
-                    if (data.msgref) {
-                        attachment.atmsgref = data.msgref;
+            //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
+            if (_.browser.IE !== 9) {
+                var items = _.chain(data.attachments || [])
+                            .filter(function (attachment) {
+                                //only real attachments
+                                return attachment.disp === 'attachment';
+                            })
+                            .map(function (attachment) {
+                                // add as linked attachment
+                                if (data.msgref) {
+                                    attachment.atmsgref = data.msgref;
+                                }
+                                attachment.type = attachment.filename && attachment.filename.split('.').length > 1  ? attachment.filename.split('.').pop() : 'file';
+                                attachment.group = 'attachment';
+                                return attachment;
+                            })
+                            .value();
+                //add to file list and show section
+                if (items.length) {
+                    view.fileList.add(items);
+                    view.showSection('attachments');
+                }
+            } else {
+                var found = false;
+                _(data.attachments || []).each(function (attachment) {
+                    if (attachment.disp === 'attachment') {
+                        // add as linked attachment
+                        if (data.msgref) {
+                            attachment.atmsgref = data.msgref;
+                        }
+                        attachment.type = 'file';
+                        found = true;
+
+                        view.form.find('input[type=file]').last()
+                            .prop('attachment', attachment)
+                            .trigger('change');
                     }
-                    attachment.type = 'file';
+                });
+                if (found) {
+                    view.showSection('attachments');
+                }
+            }
+        };
+
+        app.setNestedMessages = function (data) {
+            var list = data.nested_msgs, parent;
+
+            //fixes preview: mail compose save of an forwarded mail with previewable attachment
+            if (data.folder_id && data.id) {
+                parent = {
+                    folder_id: data.folder_id,
+                    id: data.id
+                };
+            }
+            //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
+            if (_.browser.IE !== 9) {
+                var items = _(list || []).map(function (obj) {
+                    return _.extend(obj, { content_type: 'message/rfc822', parent: parent, group: 'nested'});
+                });
+                if (items.length) {
+                    view.fileList.add(items);
+                    view.showSection('attachments');
+                }
+            } else {
+                var found = false;
+                _(list || []).each(function (obj) {
                     found = true;
                     view.form.find('input[type=file]').last()
-                        .prop('attachment', attachment)
+                        .prop('nested', { message: obj, name: obj.subject, content_type: 'message/rfc822' })
                         .trigger('change');
+                });
+                if (found) {
+                    view.showSection('attachments');
                 }
-            });
-            if (found) {
-                view.showSection('attachments');
             }
         };
 
-        app.setNestedMessages = function (list) {
+        app.addFiles = function (list, group) {
             var found = false;
-            _(list || []).each(function (obj) {
-                found = true;
-                view.form.find('input[type=file]').last()
-                    .prop('nested', { message: obj, name: obj.subject, content_type: 'message/rfc822' })
-                    .trigger('change');
-            });
-            if (found) {
-                view.showSection('attachments');
-            }
-        };
 
-        app.addFiles = function (list) {
-            var found = false;
-            _(list || []).each(function (obj) {
-                found = true;
-                view.form.find('input[type=file]').last()
-                    .prop('file', obj)
-                    .trigger('change');
-            });
-            if (found) {
-                view.showSection('attachments');
+            //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
+            if (_.browser.IE !== 9) {
+                var items = _.map(list || [], function (obj) {
+                    return $.extend(obj, {group: group || 'file'});
+                });
+                if (items.length) {
+                    view.fileList.add(items);
+                    view.showSection('attachments');
+                }
+            } else {
+                _(list || []).each(function (obj) {
+                    found = true;
+                    view.form.find('input[type=file]').last()
+                        .prop('file', obj)
+                        .trigger('change');
+                });
+                if (found) {
+                    view.showSection('attachments');
+                }
             }
         };
 
@@ -660,16 +715,16 @@ define('io.ox/mail/write/main',
             this.setBCC(data.bcc);
             this.setReplyTo(data.headers && data.headers['Reply-To']);
             this.setAttachments(data);
-            this.setNestedMessages(data.nested_msgs);
+            this.setNestedMessages(data);
             this.setPriority(data.priority || 3);
             this.setAttachVCard(data.vcard !== undefined ? data.vcard : settings.get('vcard', false));
             this.setMsgRef(data.msgref);
             this.setSendType(data.sendtype);
             this.setHeaders(data.headers);
             // add files (from file storage)
-            this.addFiles(data.infostore_ids);
+            this.addFiles(data.infostore_ids, 'infostore');
             // add files (from contacts)
-            this.addFiles(data.contacts_ids);
+            this.addFiles(data.contacts_ids, 'vcard');
             // app title
             composeMode = mail.mode;
             var title = app.getDefaultWindowTitle();
@@ -1018,36 +1073,64 @@ define('io.ox/mail/write/main',
             }
             // sendtype
             mail.sendtype = data.sendtype || mailAPI.SENDTYPE.NORMAL;
+
             // get files
-            view.form.find(':input[name][type=file]').each(function () {
-                // link to existing attachments (e.g. in forwards)
-                var attachment = $(this).prop('attachment'),
-                    // get file via property (DND) or files array and add to list
-                    file = $(this).prop('file'),
-                    // get nested messages
-                    nested = $(this).prop('nested');
-                if (attachment) {
-                    // add linked attachment
-                    mail.attachments.push(attachment);
-                } else if (nested) {
-                    // add nested message (usually multiple mail forward)
-                    mail.nested_msgs.push(nested.message);
-                } else if ('File' in window && file instanceof window.File) {
-                    // add dropped file
-                    files.push(file);
-                } else if (file && ('id' in file) && ('file_size' in file)) {
-                    // infostore id
-                    (mail.infostore_ids = (mail.infostore_ids || [])).push(file);
-                } else if (file && ('id' in file) && ('display_name' in file)) {
-                    // contacts id
-                    (mail.contacts_ids = (mail.contacts_ids || [])).push(file);
-                } else if (this.files && this.files.length) {
+            //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
+            if (_.browser.IE !== 9) {
+                var fileList = view.baton.fileList;
+
+                //attachments
+                mail.attachments = mail.attachments.concat(fileList.get('attachment'));
+                //nested message (usually multiple mail forward)
+                mail.nested_msgs = mail.nested_msgs.concat(fileList.get('nested'));
+                //referenced contacts (vcards)
+                mail.contacts_ids = (mail.contacts_ids || []).concat(fileList.get('vcard'));
+                //referenced inforstore files
+                mail.infostore_ids = (mail.infostore_ids || []).concat(fileList.get('infostore'));
+                //local files
+                files = files.concat(fileList.get('file'));
+                //local files (form input)
+                //files = files.concat(fileList.get('input'));
+
+                //TODO: removeable?
+                /*if (this.files && this.files.length) {
                     // process normal upload
                     _(this.files).each(function (file) {
                         files.push(file);
                     });
-                }
-            });
+                }*/
+
+            } else {
+                view.form.find(':input[name][type=file]').each(function () {
+                    // link to existing attachments (e.g. in forwards)
+                    var attachment = $(this).prop('attachment'),
+                        // get file via property (DND) or files array and add to list
+                        file = $(this).prop('file'),
+                        // get nested messages
+                        nested = $(this).prop('nested');
+                    if (attachment) {
+                        // add linked attachment
+                        mail.attachments.push(attachment);
+                    } else if (nested) {
+                        // add nested message (usually multiple mail forward)
+                        mail.nested_msgs.push(nested.message);
+                    } else if ('File' in window && file instanceof window.File) {
+                        // add dropped file
+                        files.push(file);
+                    } else if (file && ('id' in file) && ('file_size' in file)) {
+                        // infostore id
+                        (mail.infostore_ids = (mail.infostore_ids || [])).push(file);
+                    } else if (file && ('id' in file) && ('display_name' in file)) {
+                        // contacts id
+                        (mail.contacts_ids = (mail.contacts_ids || [])).push(file);
+                    } else if (this.files && this.files.length) {
+                        // process normal upload
+                        _(this.files).each(function (file) {
+                            files.push(file);
+                        });
+                    }
+                });
+            }
             // return data, file references, mode, format
             return {
                 data: mail,
@@ -1230,6 +1313,10 @@ define('io.ox/mail/write/main',
 
                     view.form.find('.section-item.file').remove();
                     $(_.initial(view.form.find(':input[name][type=file]'))).remove();
+                    //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
+                    if (_.browser.IE !== 9) {
+                        view.baton.fileList.clear();
+                    }
                     draftMail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
                     draftMail.vcard = old_vcard_flag;
                     app.setMail({ data: draftMail, mode: mail.mode, initial: false, replaceBody: 'no', format: format});

@@ -21,13 +21,13 @@ define('io.ox/lessons/lessons/basic_extensions/register', ['io.ox/core/extension
         start: function (options) {
             require(["text!io.ox/lessons/lessons/basic_extensions/lesson.html"], function (html) {
                 var win = options.win;
-                
+
                 win.nodes.main.empty().append($(html));
                 TOC.setUp(win.nodes.main);
                 Editor.setUp(win.nodes.main);
-                
-                
-                
+
+
+
                 (function () {
                     var floatingDiv = $('<div class="well"/>').css({
                         position: 'fixed',
@@ -37,13 +37,13 @@ define('io.ox/lessons/lessons/basic_extensions/register', ['io.ox/core/extension
                     }),
                         point = ext.point("io.ox/lessons/floatingWidget");
                     win.nodes.main.find(".navigation").append(floatingDiv);
-                    
+
                     point.invoke("draw", floatingDiv);
                     point.on('extended', function () {
                         floatingDiv.empty();
                         point.invoke("draw", floatingDiv);
                     });
-                    
+
                 }());
             });
         }

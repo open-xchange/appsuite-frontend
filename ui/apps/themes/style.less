@@ -439,7 +439,7 @@
         padding: 0 12px;
 
         &:focus {
-            i { color: white; }
+            i { color: white; }
             background-color: @linkColor;
             outline-style: none;
         }
@@ -550,6 +550,11 @@
             .subject {
                 .ellipsis;
                 pointer-events: none;
+            }
+
+            .empty {
+                font-style: italic;
+                color: #aaa;
             }
 
             .content {

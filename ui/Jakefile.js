@@ -324,6 +324,11 @@ utils.copy(utils.list("lib", "ace/"), {to: utils.dest("apps")});
 utils.copy(utils.list("lib/node_modules/emoji/lib", ["emoji.js", "emoji.css", "emoji.png"]),
         { to: utils.dest("apps/3rd.party/emoji") });
 
+// Frameworks for guided tours
+
+utils.copy(utils.list("lib", "hopscotch/", ["hopscotch-0.1.js", "hopscotch-0.1.css", "sprite-*.png"]), {to: utils.dest("apps") });
+
+
 //online help
 
 if (path.existsSync('help')) {

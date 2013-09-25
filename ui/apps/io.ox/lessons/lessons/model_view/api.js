@@ -103,5 +103,5 @@ define("io.ox/lessons/lessons/model_view/api", ["io.ox/core/event"], function (E
     Events.extend(api);
 
     return api;
-    
+
 });
