@@ -1648,6 +1648,13 @@ define('io.ox/mail/api',
         });
     });
 
+    //If the folder api creates a new folder in mail, the mail api needs to be refreshed
+    folderAPI.on('create', function (e, data) {
+        if (data.module === 'mail') {
+            api.refresh();
+        }
+    });
+
     /**
      * sets title to 'New Mail' or default
      * @param  {boolean} state
