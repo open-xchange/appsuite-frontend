@@ -618,7 +618,7 @@ define('io.ox/mail/write/view-main',
                                     .replace(/\s\s+/g, ' ')
                                     // remove ASCII art
                                     .replace(/([\-=+*°._!?\/\^]{4,})/g, '');
-                                preview = preview.length > 150 ? preview.substr(0, 150) + ' ...' : preview;
+                                preview = _.ellipsis(preview, {max: 150});
                                 return memo.add(
                                     $('<div class="section-item pointer">')
                                     .addClass(index >= signatures.length ? 'signature-remove' : '')
