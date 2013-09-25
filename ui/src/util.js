@@ -616,7 +616,7 @@
          * @param  {number} options.length: if charpos 'middle' value defines length of head and tail part
          * @return {string}
          */
-        cut: function (str, options) {
+        ellipsis: function (str, options) {
             //be robust
             str = String(str || '').trim();
             var opt = _.extend({
@@ -638,11 +638,6 @@
                 }
                 return str.substr(0, opt.length).trim() + opt.char + str.substr(str.length - opt.length).trim();
             }
-        },
-
-        ellipsis: function (str, length) {
-            str = String(str || '');
-            return str.length > length ? str.substr(0, length - 4) + ' ...' : str;
         },
 
         // makes sure you have an array

@@ -482,7 +482,7 @@ define('io.ox/mail/util',
                             id: obj.id,
                             content_type: 'message/rfc822',
                             filename: obj.filename ||
-                                _.ellipsis((obj.subject || '').replace(/\s+/g, ' '), 50), // remove consecutive white-space
+                                _.ellipsis((obj.subject || '').replace(/\s+/g, ' '), {max: 50}), // remove consecutive white-space
                             title: obj.filename || obj.subject || '',
                             mail: mail,
                             parent: data.parent || mail,
