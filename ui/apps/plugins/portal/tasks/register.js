@@ -15,9 +15,8 @@ define("plugins/portal/tasks/register",
     ['io.ox/core/extensions',
      'io.ox/tasks/api',
      'gettext!plugins/portal',
-     'io.ox/core/strings',
      'io.ox/tasks/util'
-    ], function (ext, taskAPI, gt, strings, util) {
+    ], function (ext, taskAPI, gt, util) {
 
     "use strict";
 

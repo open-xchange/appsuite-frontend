@@ -14,13 +14,12 @@
 
 define('plugins/portal/mail/register',
     ['io.ox/core/extensions',
-     'io.ox/core/strings',
      'io.ox/mail/api',
      'io.ox/mail/util',
      'io.ox/core/date',
      'io.ox/core/api/account',
      'io.ox/portal/widgets',
-     'gettext!plugins/portal'], function (ext, strings, api, util, date, accountAPI, portalWidgets, gt) {
+     'gettext!plugins/portal'], function (ext, api, util, date, accountAPI, portalWidgets, gt) {
 
     'use strict';
 
