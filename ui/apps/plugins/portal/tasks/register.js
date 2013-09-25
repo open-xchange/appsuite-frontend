@@ -68,14 +68,14 @@ define("plugins/portal/tasks/register",
                 task = util.interpretTask(task);
                 content.append(
                     $('<div class="item">').data('item', task).append(
-                        $('<span class="bold">').text(gt.noI18n(strings.shorten(task.title, 50))), $.txt(' '),
+                        $('<span class="bold">').text(gt.noI18n(_.ellipsis(task.title, {max: 50}))), $.txt(' '),
                         task.end_date === '' ? $() :
                             $('<span class="accent">').text(
                                 //#. Due on date
                                 gt('Due on %1$s', _.noI18n(task.end_date))
                             ),
                         $.txt(' '),
-                        $('<span class="gray">').text(gt.noI18n(strings.shorten(task.note, 100)))
+                        $('<span class="gray">').text(gt.noI18n(_.ellipsis(task.note, {max: 100})))
                     )
                 );
             });

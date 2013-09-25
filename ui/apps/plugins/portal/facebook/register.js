@@ -79,7 +79,7 @@ define('plugins/portal/facebook/register',
                 $('<div class="paragraph">').text(gt('No wall posts yet.')));
         } else {
             _(wall).each(function (post) {
-                var message = strings.shorten(post.message || post.description || post.attachment.caption || '', 150);
+                var message = _.ellipsis(post.message || post.description || post.attachment.caption || '', {max: 150});
                 content.append(
                     $('<div class="paragraph">').append(
                         $('<span class="bold">').text(getProfile(profiles, post.actor_id).name + ': '),

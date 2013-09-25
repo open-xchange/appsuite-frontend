@@ -76,7 +76,7 @@ define('plugins/portal/mail/register',
                             .data('item', mail)
                             .append(
                                 $('<span class="bold">').text(_.noI18n(util.getDisplayName(mail.from[0]))), $.txt(' '),
-                                $('<span class="normal">').text(_.noI18n(strings.shorten(mail.subject, 50))), $.txt(' '),
+                                $('<span class="normal">').text(_.noI18n(_.ellipsis(mail.subject, {max: 50}))), $.txt(' '),
                                 $('<span class="accent">').text(_.noI18n(received))
                             );
                     })
@@ -146,9 +146,9 @@ define('plugins/portal/mail/register',
                     .data('item', data)
                     .append(
                         $('<span class="bold">').text(util.getDisplayName(data.from[0])), $.txt(' '),
-                        $('<span class="normal">').text(strings.shorten(data.subject, 100)), $.txt(' '),
+                        $('<span class="normal">').text(_.ellipsis(data.subject, {max: 100})), $.txt(' '),
                         $('<span class="accent">').text(received), $.txt(' '),
-                        $('<span class="gray">').text(strings.shorten(content, 600))
+                        $('<span class="gray">').text(_.ellipsis(content, {max: 600}))
                     )
                 )
             );

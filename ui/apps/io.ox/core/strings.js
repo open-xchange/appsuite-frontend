@@ -27,14 +27,6 @@ define('io.ox/core/strings', ['gettext!io.ox/core'], function (gt) {
 
     return {
 
-        shorten: function (string, maxlen) {
-            string = string !== undefined && string !== null ? string : '';
-            if (string.length > maxlen) {
-                return string.substring(0, maxlen - 3) + "...";
-            }
-            return string;
-        },
-
         shortenUri: function (uriString, maxlen) {
             uriString = uriString !== undefined && uriString !== null ? uriString : '';
             var string = uriString.replace(/^https?:\/\//, "");
