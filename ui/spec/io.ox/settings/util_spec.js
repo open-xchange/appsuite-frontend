@@ -42,7 +42,7 @@ define(['io.ox/settings/util'], function (util) {
                     util.yellOnReject(def);
                     def.reject(e);
                     text = $(document.body).find('.io-ox-alert-error').find('.message').find('div').text();
-                    expect(text).to.equal('Unable to load mail filter settings.');
+                    expect(text).not.to.equal('unknown');
                 });
 
                 describe('with the submitted main error message', function () {
