@@ -606,6 +606,40 @@
             return (diff > 0 ? new Array(diff + 1).join(fill || "0") : "") + str;
         },
 
+        /**
+         * shortens a string
+         * @param  {string} str
+         * @param  {object} options
+         * @param  {number} options.max: max length
+         * @param  {string} options.char: ellipsis char
+         * @param  {string} options.charpos: 'middle' or 'end'
+         * @param  {number} options.length: if charpos 'middle' value defines length of head and tail part
+         * @return {string}
+         */
+        cut: function (str, options) {
+            //be robust
+            str = String(str || '').trim();
+            var opt = _.extend({
+                    max: 70,
+                    char: '\u2026',
+                    charpos: 'end',
+                    length: 15
+                }, options || {}),
+                space = opt.max - opt.char.length;
+            if (str.length <= opt.max) {
+                return str;
+            } else if (opt.charpos === 'end') {
+                return str.substr(0, opt.max - opt.char.length) + opt.char;
+            } else {
+                //fix invalid length
+                if (opt.length * 2 > space) {
+                    //save space for ellipse char
+                    opt.length = (space % 2 === 0 ? space  / 2 : (opt.max / 2) - 1) || 1;
+                }
+                return str.substr(0, opt.length).trim() + opt.char + str.substr(str.length - opt.length).trim();
+            }
+        },
+
         ellipsis: function (str, length) {
             str = String(str || '');
             return str.length > length ? str.substr(0, length - 4) + ' ...' : str;
