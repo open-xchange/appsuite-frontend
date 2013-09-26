@@ -243,6 +243,7 @@ define('io.ox/core/main',
         function off() {
             if (count === 0 && timer === null) {
                 if (useSpinner) {
+                    refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('i');
                     refreshIcon.addClass('icon-spin-paused').removeClass('icon-spin');
                 } else {
                     $('#io-ox-refresh-icon').removeClass('io-ox-progress');
