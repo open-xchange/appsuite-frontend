@@ -320,7 +320,12 @@ define('io.ox/mail/main',
                 account.is('sent|drafts', props.folder) ? gt('To') : gt('From')
             );
             // unread
-            dropdown.find('.icon-envelope')[props.unread ? 'show' : 'hide']();
+            if (props.unread) {
+                // some browsers append style="display: block;" on this inline element. See bug 28956
+                dropdown.find('.icon-envelope').css('display', '');
+            } else {
+                dropdown.find('.icon-envelope').hide();
+            }
             // order
             var opacity = [1, 0.4][props.order === 'desc' ? 'slice' : 'reverse']();
             dropdown.find('.icon-arrow-down').css('opacity', opacity[0]).end()
