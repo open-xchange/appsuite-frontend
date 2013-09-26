@@ -188,12 +188,13 @@ define("io.ox/core/main",
         var count = 0,
             timer = null,
             useSpinner = _.device('webkit || firefox'),
-            duration = useSpinner ? 500 : 1500;
+            duration = useSpinner ? 500 : 1500,
+            refreshIcon = null;
 
         function off() {
             if (count === 0 && timer === null) {
                 if (useSpinner) {
-                    $('#io-ox-refresh-icon').find('i').addClass('icon-spin-paused').removeClass('icon-spin');
+                    refreshIcon.addClass('icon-spin-paused').removeClass('icon-spin');
                 } else {
                     $('#io-ox-refresh-icon').removeClass('io-ox-progress');
                 }
@@ -204,7 +205,8 @@ define("io.ox/core/main",
             if (count === 0) {
                 if (timer === null) {
                     if (useSpinner) {
-                        $('#io-ox-refresh-icon').find('i').addClass('icon-spin').removeClass('icon-spin-paused');
+                        refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('i');
+                        refreshIcon.addClass('icon-spin').removeClass('icon-spin-paused');
                     } else {
                         $('#io-ox-refresh-icon').addClass('io-ox-progress');
                     }
