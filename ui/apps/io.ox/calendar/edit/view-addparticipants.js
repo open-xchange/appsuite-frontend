@@ -22,13 +22,14 @@ define('io.ox/calendar/edit/view-addparticipants',
     'use strict';
 
     var lastSearchResults = [],//last results, used to identify internal Users
+        blackList = {},
         AddParticipantView = Backbone.View.extend({
         events: {
             'click [data-action="add"]': 'onClickAdd'
         },
 
-        initialize: function () {
-            var self = this;
+        initialize: function (opt) {
+            blackList = opt.blackList || {};
         },
 
         // TODO: should refactored to a controller
@@ -130,7 +131,7 @@ define('io.ox/calendar/edit/view-addparticipants',
                                 return _.chain(data).filter(function (obj) {
                                     obj = fixType(obj);
                                     var uniqueId = obj.type === 1 ? !hash[obj.type + '|' + obj.data.internal_userid || ''] : !hash[obj.type + '|' + obj.data.id];
-                                    return uniqueId && (obj.email ? !hash[obj.email] : true);
+                                    return uniqueId && (obj.email ? !hash[obj.email] : true) && !blackList[obj.email];
                                 }).sortBy(function (obj) { return obj.sort; }).value();
                             };
 

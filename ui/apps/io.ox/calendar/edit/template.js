@@ -15,19 +15,30 @@ define('io.ox/calendar/edit/template',
     ['io.ox/core/extensions',
      'gettext!io.ox/calendar/edit/main',
      'io.ox/calendar/util',
+     'io.ox/contacts/util',
      'io.ox/backbone/views',
      'io.ox/backbone/forms',
      'io.ox/core/tk/attachments',
      'io.ox/calendar/edit/recurrence-view',
      'io.ox/calendar/api',
      'io.ox/participants/views',
+     'settings!io.ox/calendar',
+     'io.ox/core/notifications',
      'io.ox/core/capabilities'
-    ], function (ext, gt, util, views, forms, attachments, RecurrenceView, api, pViews, capabilities) {
+    ], function (ext, gt, calendarUtil, contactUtil, views, forms, attachments, RecurrenceView, api, pViews, settings, notifications, capabilities) {
 
     'use strict';
 
     var point = views.point('io.ox/calendar/edit/section'),
         collapsed = false;
+
+    // create blacklist
+    var blackList = {},
+        blackListStr = settings.get('participantBlacklist') || '';
+
+    _(blackListStr.split(',')).each(function (item) {
+        blackList[item.trim()] = true;
+    });
 
     // subpoint for conflicts
     var pointConflicts = point.createSubpoint('conflicts', {
@@ -240,7 +251,7 @@ define('io.ox/calendar/edit/template',
             className: "span4",
             attribute: 'alarm',
             label: gt("Reminder"),
-            selectOptions: util.getReminderOptions()
+            selectOptions: calendarUtil.getReminderOptions()
         }), {
             rowClass: 'collapsed'
         });
@@ -311,20 +322,25 @@ define('io.ox/calendar/edit/template',
         index: 1500,
         rowClass: 'collapsed',
         draw: function (options) {
-            var node = this,
-            pNode;
-            node.append(
-                    pNode = $('<div class="input-append span6">').append(
-                        $('<input type="text" class="add-participant" tabindex="1">').attr("placeholder", gt("Add participant/resource")),
-                        $('<button type="button" class="btn" data-action="add" tabindex="1">')
-                            .append($('<i class="icon-plus">'))
-                    )
-                );
+            var pNode;
+            this.append(
+                pNode = $('<div class="input-append span6">').append(
+                    $('<input type="text" class="add-participant" tabindex="1">').attr("placeholder", gt("Add participant/resource")),
+                    $('<button type="button" class="btn" data-action="add" tabindex="1">')
+                        .append($('<i class="icon-plus">'))
+                )
+            );
 
             require(['io.ox/calendar/edit/view-addparticipants'], function (AddParticipantsView) {
 
                 var collection = options.model.getParticipants(),
-                    autocomplete = new AddParticipantsView({ el: pNode });
+                    autocomplete = new AddParticipantsView({ el: pNode, blackList: blackList });
+
+                collection.each(function (item) {
+                    if (blackList[item.getEmail()]) {
+                        collection.remove(item);
+                    }
+                });
 
                 if (!_.browser.Firefox) { pNode.addClass('input-append-fix'); }
 
@@ -333,7 +349,7 @@ define('io.ox/calendar/edit/template',
                 //add recipents to baton-data-node; used to filter sugestions list in view
                 autocomplete.on('update', function () {
                     var baton = {list: []};
-                    collection.any(function (item) {
+                    collection.each(function (item) {
                         //participant vs. organizer
                         var email = item.get('email1') || item.get('email2');
                         if (email !== null)
@@ -354,29 +370,34 @@ define('io.ox/calendar/edit/template',
                             return (item.id === data.id && item.get('type') === data.type);
                         }
                     });
+
                     if (!alreadyParticipant) {
-                        if (data.type !== 5) {
-
-                            if (data.mark_as_distributionlist) {
-                                _.each(data.distribution_list, function (val) {
-                                    if (val.folder_id === 6) {
-                                        util.getUserIdByInternalId(val.id).done(function (id) {
-                                            userId = id;
-                                            obj = {id: userId, type: 1 };
-                                            collection.add(obj);
-                                        });
-                                    } else {
-                                        obj = {type: 5, mail: val.mail, display_name: val.display_name};
-                                        collection.add(obj);
-                                    }
-                                });
-                            } else {
-                                collection.add(data);
-                            }
-
+                        if (blackList[contactUtil.getMail(data)]) {
+                            notifications.yell('warning', gt('This email address cannot be used for appointments'));
                         } else {
-                            obj = {type: data.type, mail: data.mail || data.email1, display_name: data.display_name, image1_url: data.image1_url || ''};
-                            collection.add(obj);
+                            if (data.type !== 5) {
+
+                                if (data.mark_as_distributionlist) {
+                                    _.each(data.distribution_list, function (val) {
+                                        if (val.folder_id === 6) {
+                                            calendarUtil.getUserIdByInternalId(val.id).done(function (id) {
+                                                userId = id;
+                                                obj = {id: userId, type: 1 };
+                                                collection.add(obj);
+                                            });
+                                        } else {
+                                            obj = {type: 5, mail: val.mail, display_name: val.display_name};
+                                            collection.add(obj);
+                                        }
+                                    });
+                                } else {
+                                    collection.add(data);
+                                }
+
+                            } else {
+                                obj = {type: data.type, mail: data.mail || data.email1, display_name: data.display_name, image1_url: data.image1_url || ''};
+                                collection.add(obj);
+                            }
                         }
                     }
                 });
