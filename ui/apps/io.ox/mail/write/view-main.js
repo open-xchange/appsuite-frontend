@@ -753,6 +753,7 @@ define('io.ox/mail/write/view-main',
                     var input = $(this),
                         scrollHeight = input[0].scrollHeight,
                         clientHeight = input[0].clientHeight,
+                        parentScrollpane = self.form.parent(),
                         paddingTop, paddingBottom, paddingHeight;
 
 
@@ -761,7 +762,11 @@ define('io.ox/mail/write/view-main',
                         paddingBottom = parseFloat(input.css("padding-bottom"));
                         paddingHeight = paddingTop + paddingBottom;
 
+                        var scroll = (scrollHeight - paddingHeight + 15) - input.height();
+
                         input.height(scrollHeight - paddingHeight + 15);
+                        //keep the scrollposition
+                        parentScrollpane.scrollTop(parentScrollpane.scrollTop() + scroll);
                     }
                 };
 
@@ -813,7 +818,21 @@ define('io.ox/mail/write/view-main',
                                     self.scrollEmoji();
                                 }
                             }
+                            if (_.device('android')) {//android needs special handling here
+                                setTimeout(function () {//use timeout because the onscreen keyboard resizes the window
+                                    self.form.parent().scrollTop(self.form.parent().height());
+                                }, 500);
+                            } else {
+                                self.spacer.show();//show spacer to prevent onscreen keyboard from overlapping
+                                self.form.parent().scrollTop(self.form.parent().scrollTop() + self.spacer.height());
+                            }
                         });
+                    if (_.device('!android')) {
+                        self.textarea.on('blur', function () {
+                            //hide spacer again after onscreen keyboard is closed
+                            self.spacer.hide();
+                        });
+                    }
                     // textarea only, no container overkill
                     return self.textarea;
                 }
