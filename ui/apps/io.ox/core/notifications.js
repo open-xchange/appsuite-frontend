@@ -287,7 +287,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                     clearTimeout(timer);
 
                     $('.io-ox-alert')
-                        .on('transitionEnd webkitTransitionEnd', function () {
+                        .on('transitionend webkitTransitionEnd', function () {
                             $(this).remove();
                         })
                         .removeClass('slide-in');
