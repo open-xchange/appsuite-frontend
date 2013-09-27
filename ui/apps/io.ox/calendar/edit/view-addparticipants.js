@@ -87,7 +87,6 @@ define('io.ox/calendar/edit/view-addparticipants',
                                     break;
                                 case 'contact':
                                 case 5:
-                                    obj.data.external = true;
                                     if (obj.data.internal_userid) {
                                         obj.sort = 1;
                                     } else if (obj.data.mark_as_distributionlist) {
@@ -96,6 +95,7 @@ define('io.ox/calendar/edit/view-addparticipants',
                                         obj.sort = 5;
                                     }
                                     if (!obj.data.type) {//only change if no type is there or type 5 will be made to type 1 on the second run
+                                        obj.data.external = true;
                                         if (obj.data.internal_userid && obj.data.email1 === obj.email) {
                                             obj.data.type = 1; //user
                                             obj.data.external = false;
