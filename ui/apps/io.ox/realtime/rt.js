@@ -310,10 +310,16 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         resendDeferreds = {};
         queue.stanzas = [];
         queue.timer = false;
+        if (api.debug) {
+            console.log("Flushing buffers and rejecting all sends");
+        }
         rejectAll = true;
     }
 
     function resetSequence(newSequence) {
+        if (api.debug) {
+            console.log("Resetting sequence to ", newSequence);
+        }
         flushAllBuffers();
         http.PUT({
             module: 'rt',
@@ -324,6 +330,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             timeout: TIMEOUT,
             data: {type: 'nextSequence', seq: newSequence}
         }).done(function () {
+            if (api.debug) {
+                console.log("Done resetting the sequence, no longer rejecting all sends.");
+            }
             rejectAll = false;
             resendBuffer = {};
             _(resendDeferreds).chain().values().each(function (def) {
@@ -354,6 +363,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             if (error.data && error.data.code === 1005) {
                 ox.trigger('relogin:required');
             } else if (error.data && error.data.code === 1006) {
+                if (api.debug) {
+                    console.log("Got error 1006, so resetting sequence");
+                }
                 resetSequence(-1);
             }
         } else if (stanza.get("atmosphere", "received")) {
@@ -367,6 +379,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             });
         } else if (stanza.get("atmosphere", "nextSequence")) {
             if (!initialReset) {
+                if (api.debug) {
+                    console.log("Got nextSequence stanza, so resetting sequence");
+                }
                 resetSequence(stanza.get("atmosphere", "nextSequence").data);
             } else {
                 initialReset = false;
@@ -404,6 +419,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                         serverSequenceThreshhold = stanza.seq;
                     }
                 } else {
+                    if (api.debug) {
+                        console.log("Out of order, so resetting sequence to 0");
+                    }
                     resetSequence(0);
                 }
             }
@@ -412,6 +430,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
     function handleError(error) {
         if (error.code === "RT_STANZA-1006" || error.code === 'RT_STANZA-0006' || error.code === 1006 || error.code === 6) {
+            if (api.debug) {
+                console.log("Got error 1006, so resetting sequence");
+            }
             resetSequence(0);
         }
 
