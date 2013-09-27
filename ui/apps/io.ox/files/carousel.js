@@ -98,7 +98,7 @@ define('io.ox/files/carousel',
             this.inner.get(0).appendChild(frag);
 
             // Prevent default on click behaviour of Bootstraps carousel
-            this.inner.on('click', function (e) { return false; });
+            this.inner.on('click', function () { return false; });
 
             this.show();
             this.eventHandler();
@@ -213,7 +213,7 @@ define('io.ox/files/carousel',
             });
         },
 
-        drawItem: function (file, index, isfirst) {
+        drawItem: function (file, index) {
 
             var item = this.inner.find('[data-index=' + index + ']'), self = this;
 

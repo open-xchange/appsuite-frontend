@@ -30,7 +30,7 @@ define('io.ox/files/settings/pane',
     var FilesSettingsView = Backbone.View.extend({
         tagName: 'div',
         _modelBinder: undefined,
-        initialize: function (options) {
+        initialize: function () {
             // create template
             this._modelBinder = new Backbone.ModelBinder();
 
@@ -52,8 +52,7 @@ define('io.ox/files/settings/pane',
     ext.point('io.ox/files/settings/detail').extend({
         index: 200,
         id: 'filessettings',
-        draw: function (data) {
-
+        draw: function () {
             filesViewSettings = new FilesSettingsView({model: filesSettings});
             var holder = $('<div>').css('max-width', '800px');
             this.append(holder.append(

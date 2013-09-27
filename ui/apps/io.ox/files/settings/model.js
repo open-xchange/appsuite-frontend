@@ -18,7 +18,7 @@ define('io.ox/files/settings/model',
     var filesSettingsModel = Backbone.Model.extend({
 
 
-        initialize: function (options) {
+        initialize: function () {
 
         },
 

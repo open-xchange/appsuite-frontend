@@ -26,7 +26,6 @@ define('io.ox/files/list/perspective',
     'use strict';
 
     var perspective = new ox.ui.Perspective('list');
-    var firstTime = false;
     perspective.render = function (app) {
 
         var win = app.getWindow(),
@@ -53,7 +52,7 @@ define('io.ox/files/list/perspective',
                     .append(name = $('<div>').addClass('name'));
                 return { name: name };
             },
-            set: function (data, fields, index) {
+            set: function (data, fields) {
                 var title = data.filename || data.title || '\u00A0';
                 fields.name.text(cut(title));
             }
@@ -120,7 +119,7 @@ define('io.ox/files/list/perspective',
 
         drawFail = function (obj) {
             right.idle().empty().append(
-                $.fail(gt("Couldn't load file data."), function () {
+                $.fail(gt('Couldn\'t load file data.'), function () {
                     showFile(obj);
                 })
             );
@@ -312,7 +311,7 @@ define('io.ox/files/list/perspective',
         grid.setAllRequest(function () {
             var prop = grid.prop();
 
-            return app.folder.getData().pipe(function (folder) {
+            return app.folder.getData().pipe(function () {
                 // set folder data to view and update
                 return api.getAll({
                     folder: prop.folder,
@@ -342,7 +341,7 @@ define('io.ox/files/list/perspective',
             grid.refresh();
         };
 
-        app.on('folder:change', function (e, id, folder) {
+        app.on('folder:change', function () {
             app.currentFile = null;
             if (_.browser.IE === undefined || _.browser.IE > 9) {
                 dropZone.remove();

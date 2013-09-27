@@ -28,13 +28,10 @@ define('io.ox/files/api',
     'use strict';
 
 
-    var DELAY = 1000 * 3; // 3 seconds
-
     var tracker = (function () {
 
         var fileLocks = {},
-        explicitFileLocks = {},
-        fileLockTimers = {};
+        explicitFileLocks = {};
 
         var getCID = function (param) {
             return _.isString(param) ? param : _.cid(param);
@@ -65,7 +62,6 @@ define('io.ox/files/api',
              * @return {string|false}
              */
             getLockTime: function (obj) {
-                var cid = getCID(obj);
                 if (obj.locked_until < _.now() + date.WEEK) {
                     return new date.Local(obj.locked_until).format(date.DATE_TIME);
                 } else {
@@ -91,7 +87,7 @@ define('io.ox/files/api',
             },
 
             // clear tracker and clear timeouts
-            clear: function (obj) {
+            clear: function () {
                 fileLocks = {};
                 explicitFileLocks = {};
             }
@@ -209,7 +205,7 @@ define('io.ox/files/api',
                 sort: '702',
                 order: 'asc',
                 omitFolder: true,
-                getData: function (query, options) {
+                getData: function (query) {
                     return { pattern: query };
                 }
             }
@@ -457,7 +453,6 @@ define('io.ox/files/api',
         }, options || {});
 
         var formData = options.form,
-            self = this,
             deferred = $.Deferred();
 
         if (options.json && !$.isEmptyObject(options.json)) {
@@ -868,7 +863,7 @@ define('io.ox/files/api',
      * @param  {array} list
      * @return {deferred}
      */
-    api.lock = function (list, targetFolderId) {
+    api.lock = function (list) {
         return lockToggle(list, 'lock');
     };
 

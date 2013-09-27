@@ -29,13 +29,12 @@ define('io.ox/files/mediaplayer',
     ['io.ox/core/commons',
      'gettext!io.ox/files',
      'io.ox/files/api',
-     'io.ox/core/api/folder',
      'apps/mediaelement/mediaelement-and-player.js',
      'io.ox/files/actions',
      'less!io.ox/files/mediaplayer.less',
      'css!mediaelement/mediaelementplayer.css',
      'apps/io.ox/core/tk/jquery-ui.min.js'
-    ], function (commons, gt, api, folderAPI) {
+    ], function (commons, gt, api) {
 
     'use strict';
 
@@ -143,9 +142,7 @@ define('io.ox/files/mediaplayer',
 
         drawTrackInfo: (function () {
 
-            var self = this;
-
-            function audioIconError(e) {
+            function audioIconError() {
                 this.trackdisplay.find('.album').empty().append($('<i class="icon-music"></i>'));
             }
 
@@ -216,18 +213,18 @@ define('io.ox/files/mediaplayer',
                     },
                     {
                         keys: [38], // UP
-                        action: function (player, media) {
+                        action: function () {
                             self.select('prev');
                         }
                     },
                     {
                         keys: [40], // DOWN
-                        action: function (player, media) {
+                        action: function () {
                             self.select('next');
                         }
                     }
                 ],
-                success: function (me, domObject) {
+                success: function (me) {
                     if (self.isMuted) {
                         me.setMuted(true);
                     }
@@ -242,7 +239,7 @@ define('io.ox/files/mediaplayer',
                         self.select('next');
 
                     }, false);
-                    me.addEventListener('volumechange', function (e) {
+                    me.addEventListener('volumechange', function () {
                         self.currentVolume = me.volume;
                         self.isMuted = me.muted;
                     }, false);
@@ -261,7 +258,7 @@ define('io.ox/files/mediaplayer',
             this.mediaelement = player[0].player;
         },
 
-        drawItem: function (file, i) {
+        drawItem: function (file) {
 
             var url = this.getURL(file),
                 item = $('<li>')
@@ -284,8 +281,6 @@ define('io.ox/files/mediaplayer',
         },
 
         show: function () {
-            var self = this,
-            inner;
             this.win.busy().nodes.outer.append(
                 this.container.append(
                     $('<div id="io-ox-mediaplayer" class="atb mediaplayer_inner" tabindex="1">').append(

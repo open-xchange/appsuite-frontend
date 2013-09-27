@@ -181,9 +181,8 @@ define('io.ox/files/list/view-detail',
         index: 600,
         draw: function (baton) {
             if (baton.openedBy === 'io.ox/mail/write') return;//no uploads in mail preview
-            var self = this, file = baton.data;
-
-            var $node,
+            var file = baton.data,
+            $node,
             $commentArea,
             $comment,
             $uploadButton,

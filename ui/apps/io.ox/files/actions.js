@@ -151,7 +151,7 @@ define('io.ox/files/actions',
                 }
                 //'description only' items
                 if (filtered.length === 0 || list.length !== filtered.length) {
-                    notifications.yell('info', gt("Items without a file can not be downloaded."));
+                    notifications.yell('info', gt('Items without a file can not be downloaded.'));
                 }
 
             });
@@ -179,7 +179,6 @@ define('io.ox/files/actions',
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
         },
         multiple: function (list) {
-            var onlyinvalid = false;
             filterUnsupported(list).done(function (filtered) {
                 // loop over list, get full file object and open new window
                 _(filtered).each(function (o) {
@@ -192,7 +191,7 @@ define('io.ox/files/actions',
                 });
                 //'description only' items
                 if (list.length === 0 || filtered.length !== list.length) {
-                    notifications.yell('info', gt("Items without a file can not be opened."));
+                    notifications.yell('info', gt('Items without a file can not be opened.'));
                 }
             });
         }
@@ -323,7 +322,7 @@ define('io.ox/files/actions',
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {
-                            api.remove(list).done(function (data) {
+                            api.remove(list).done(function () {
                                 api.propagate('delete', list[0]);
                                 notifications.yell('success', responseSuccess);
                             }).fail(function (e) {
@@ -368,7 +367,7 @@ define('io.ox/files/actions',
                     list.length
             );
 
-            api.lock(list).done(function (data) {
+            api.lock(list).done(function () {
                 notifications.yell('success', responseSuccess);
             }).fail(function () {
                 notifications.yell('error', responseFail);
@@ -397,7 +396,7 @@ define('io.ox/files/actions',
                     list.length
             );
 
-            api.unlock(list).done(function (data) {
+            api.unlock(list).done(function () {
                 notifications.yell('success', responseSuccess);
             }).fail(function () {
                 notifications.yell('error', responseFail);
@@ -478,7 +477,7 @@ define('io.ox/files/actions',
                     )
                     .addPrimaryButton('rename', gt('Rename'))
                     .addButton('cancel', gt('Cancel'))
-                    .on('rename', function (popup) {
+                    .on('rename', function () {
                         var $input = this.getContentNode().find('input[name="name"]');
                         process($input).then(this.close, this.idle);
                     })
@@ -560,7 +559,7 @@ define('io.ox/files/actions',
                 require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/api/folder'], function (dialogs, views, folderAPI) {
 
                     function commit(target) {
-                        if (type === "move" && vGrid) vGrid.busy();
+                        if (type === 'move' && vGrid) vGrid.busy();
                         api[type](list, target).then(
                             function (errors) {
                                 if (errors.length > 0) {
@@ -569,7 +568,7 @@ define('io.ox/files/actions',
                                     notifications.yell('success', success);
                                 }
                                 folderAPI.reload(target, list);
-                                if (type === "move" && vGrid) vGrid.idle();
+                                if (type === 'move' && vGrid) vGrid.idle();
                             },
                             notifications.yell
                         );
@@ -580,8 +579,8 @@ define('io.ox/files/actions',
                     } else {
                         var dialog = new dialogs.ModalDialog()
                             .header($('<h4>').text(label))
-                            .addPrimaryButton("ok", label)
-                            .addButton("cancel", gt("Cancel"));
+                            .addPrimaryButton('ok', label)
+                            .addButton('cancel', gt('Cancel'));
                         dialog.getBody().css({ height: '250px' });
                         var folderId = String(list[0].folder_id),
                             id = settings.get('folderpopup/last') || folderId,

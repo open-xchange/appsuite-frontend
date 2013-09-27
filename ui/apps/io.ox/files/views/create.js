@@ -50,7 +50,6 @@ define('io.ox/files/views/create', [
                  */
                 function uploadFiles() {
                     var $input = $form.find('input[type="file"]'),
-                        folder = app.folder.get(),
                         //fileList = ($input.length > 0 ? $input[0].files : []) || [],
                         files = baton.fileList.get();
                     if (files.length) {
@@ -137,7 +136,7 @@ define('io.ox/files/views/create', [
                 dialog
                     .addPrimaryButton('save', gt('Save'), 'save')
                     .addButton('cancel', gt('Cancel'), 'cancel')
-                    .on('save', function (e) {
+                    .on('save', function () {
                         if (oldMode)
                             uploadFilesIE9();
                         else

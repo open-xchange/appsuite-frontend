@@ -42,7 +42,7 @@ define('io.ox/files/mediasupport',
             if (!mediatype) return false;
             var str = this.supportedExtensions(mediatype);
             if (!str) return false;
-            if (str.indexOf("|") >= 0) {
+            if (str.indexOf('|') >= 0) {
                 return str.split('|');
             } else if (str) {
                 return [str];
