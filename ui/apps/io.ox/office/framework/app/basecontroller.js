@@ -13,59 +13,11 @@
 
 define('io.ox/office/framework/app/basecontroller',
     ['io.ox/core/event',
-     'io.ox/office/tk/utils'
-    ], function (Events, Utils) {
+     'io.ox/office/tk/utils',
+     'io.ox/office/tk/keycodes'
+    ], function (Events, Utils, KeyCodes) {
 
     'use strict';
-
-    // private global functions ===============================================
-
-    /**
-     * Returns whether the passed state of a control key (SHIFT, ALT, CTRL,
-     * etc.) matches the state contained in a keyboard shortcut definition.
-     *
-     * @param {Boolean} currentState
-     *  The current state of a control key, extracted from a keyboard event.
-     *
-     * @param {Boolean|Null} [expectedState]
-     *  The expected state of the control key to test against. If null, this
-     *  function returns always true. If omitted, the passed current state must
-     *  be false. Otherwise, the current state must be equal to the expected
-     *  state.
-     *
-     * @returns {Boolean}
-     *  Whether the current state of a control key matches the expected state.
-     */
-    function isMatchingControlKey(currentState, expectedState) {
-        return _.isNull(expectedState) || (currentState === (_.isBoolean(expectedState) && expectedState));
-    }
-
-    /**
-     * Returns whether the passed jQuery 'keydown' event matches the specified
-     * keyboard shortcut definition.
-     */
-    function isMatchingShortcut(event, definition) {
-
-        // 'shiftKey' option must always match
-        if ((event.keyCode !== definition.keyCode) || !isMatchingControlKey(event.shiftKey, definition.shiftKey)) {
-            return false;
-        }
-
-        // when 'altOrMetaKey' is set, ignore 'altKey' and 'metaKey' options
-        if (definition.altOrMetaKey === true) {
-            return (event.altKey !== event.metaKey) && isMatchingControlKey(event.ctrlKey, definition.ctrlKey);
-        }
-
-        // when 'ctrlOrMetaKey' is set, ignore 'ctrlKey' and 'metaKey' options
-        if (definition.ctrlOrMetaKey === true) {
-            return (event.ctrlKey !== event.metaKey) && isMatchingControlKey(event.altKey, definition.altKey);
-        }
-
-        // otherwise, options 'altKey', 'ctlKey' and 'metaKey' options must match
-        return isMatchingControlKey(event.altKey, definition.altKey) &&
-            isMatchingControlKey(event.ctrlKey, definition.ctrlKey) &&
-            isMatchingControlKey(event.metaKey, definition.metaKey);
-    }
 
     // class BaseController ===================================================
 
@@ -78,8 +30,14 @@ define('io.ox/office/framework/app/basecontroller',
      *
      * @param {BaseApplication} app
      *  The application that has created this controller instance.
+     *
+     * @param {Object} [options]
+     *  A map with options controlling the behavior of this controller. The
+     *  following options are supported:
+     *  @param {Number} [options.updateDelay=0]
+     *      The delay for the debounced Controller.update() method.
      */
-    function BaseController(app) {
+    function BaseController(app, options) {
 
         var // self reference
             self = this,
@@ -88,16 +46,14 @@ define('io.ox/office/framework/app/basecontroller',
             items = {
 
                 'app/quit': {
-                    set: function () {
-                        var def = $.Deferred();
-                        // quit in a timeout (otherwise this controller becomes invalid while still running)
-                        _.defer(function () {
-                            // failed quit means that application continues to run
-                            app.quit().fail(function () { def.resolve(); });
-                        });
-                        return def;
-                    },
-                    focus: 'wait' // application may resume
+                    // quit in a timeout (otherwise this controller becomes invalid while still running)
+                    set: function () { _.defer(function () { app.quit(); }); }
+                },
+
+                'document/print': {
+                    // enabled in read-only mode
+                    set: function () { app.print(); },
+                    shortcut: { keyCode: 'P', ctrlOrMeta: true }
                 }
             },
 
@@ -127,8 +83,12 @@ define('io.ox/office/framework/app/basecontroller',
                 enableHandler = Utils.getFunctionOption(definition, 'enable', true),
                 // handler for value getter (default to identity to forward parent value)
                 getHandler = Utils.getFunctionOption(definition, 'get', _.identity),
+                // handler for options getter (default to identity to forward parent value)
+                optionsHandler = Utils.getFunctionOption(definition, 'options', _.identity),
                 // handler for value setter
                 setHandler = Utils.getFunctionOption(definition, 'set'),
+                // whether to block the GUI while setter is running
+                busy = Utils.getBooleanOption(definition, 'busy', false),
                 // behavior for returning browser focus to application
                 focus = Utils.getStringOption(definition, 'focus', 'direct'),
                 // additional user data
@@ -168,17 +128,32 @@ define('io.ox/office/framework/app/basecontroller',
             };
 
             /**
+             * Returns the current value options of this item.
+             */
+            this.getOptions = function () {
+                var parentOptions = (parentKey in items) ? items[parentKey].getOptions() : undefined;
+                return getAndCacheResult('options', optionsHandler, parentOptions);
+            };
+
+            /**
              * Executes the setter function of this item (passing in the new
              * value), and moves the browser focus back to the application
              * pane.
              *
-             * @param value
+             * @param {Any} value
              *  The new value of the item.
+             *
+             * @param {Object} [options]
+             *  A map with options controlling the behavior of this method. The
+             *  following options are supported:
+             *  @param {Boolean} [options.preserveFocus=false]
+             *      If set to true, the browser focus will not be modified,
+             *      regardless of the focus mode configured for this item.
              *
              * @returns {Item}
              *  A reference to this item.
              */
-            this.change = function (value) {
+            this.change = function (value, options) {
 
                 var // the result Deferred object
                     def = null;
@@ -196,10 +171,14 @@ define('io.ox/office/framework/app/basecontroller',
                     // convert result of the setter to a Deferred object
                     def = $.when(def);
 
-                    // disable this item if setter is still running
+                    // disable this item and show busy screen if setter is still running
                     if (def.state() === 'pending') {
-                        enabled = false;
-                        self.update();
+                        if (busy) {
+                            app.getView().enterBusy({ delay: 500 });
+                        } else {
+                            enabled = false;
+                            self.update();
+                        }
                     }
                 } else {
                     // item is disabled
@@ -209,23 +188,33 @@ define('io.ox/office/framework/app/basecontroller',
                 // focus back to application
                 switch (focus) {
                 case 'direct':
-                    grabApplicationFocus();
+                    grabApplicationFocus(options);
                     break;
                 case 'wait':
-                    // execute in a timeout, needed for dialogs which are closed after resolve/reject
-                    def.always(function () { app.executeDelayed(grabApplicationFocus); });
+                    def.always(function () {
+                        // execute in a timeout, needed for dialogs which are closed *after* resolve/reject
+                        app.executeDelayed(function () { grabApplicationFocus(options); });
+                    });
                     break;
                 case 'never':
                     break;
                 default:
-                    Utils.warn('BaseController.Item.change(): unknown focus mode: ' + focus);
+                    Utils.warn('BaseController.Item.change(): unknown focus mode "' + focus + '" for item "' + key + '"');
                 }
 
                 // post processing after the setter is finished
-                def.always(function () {
-                    enabled = true;
+                if (def.state() === 'pending') {
+                    def.always(function () {
+                        if (busy) {
+                            app.getView().leaveBusy();
+                        } else {
+                            enabled = true;
+                        }
+                        self.update();
+                    });
+                } else {
                     self.update();
-                });
+                }
 
                 return this;
             };
@@ -270,37 +259,47 @@ define('io.ox/office/framework/app/basecontroller',
         /**
          * Moves the browser focus to the application pane.
          */
-        function grabApplicationFocus() {
-            app.getView().grabFocus();
+        function grabApplicationFocus(options) {
+            var source = Utils.getOption(options, 'source');
+            // Bug 28214: Focus back to application if source GUI element is hidden now.
+            // If the source GUI element is hidden now, IE has already changed the
+            // 'document.activeElement' property, so it cannot be used to detect visibility.
+            // Therefore, all group instances now insert the source DOM node into the value
+            // options when triggering the 'group:change' event.
+            if (!Utils.getBooleanOption(options, 'preserveFocus', false) || (source && !$(source).is(Utils.REALLY_VISIBLE_SELECTOR))) {
+                app.getView().grabFocus();
+            }
         }
 
         /**
          * Calls the set handler of the item with the registered key, and moves
          * the browser focus back to the application pane.
          */
-        function callSetHandler(key, value) {
+        function callSetHandler(key, value, options) {
             if (key in items) {
                 // do not clear cache if called recursively from another setter
                 if (runningSetters === 0) { clearResultCache(); }
-                items[key].change(value);
+                items[key].change(value, options);
             } else {
-                grabApplicationFocus();
+                grabApplicationFocus(options);
             }
         }
 
         /**
-         * The event handler function that will listen to 'change' and 'cancel'
-         * events in all registered view components.
+         * The event handler function that will listen to 'group:change' events
+         * in all registered view components.
          */
-        function componentEventHandler(event, key, value) {
-            switch (event.type) {
-            case 'change':
-                callSetHandler(key, value);
-                break;
-            case 'cancel':
-                grabApplicationFocus();
-                break;
-            }
+        function componentChangeHandler(event, key, value, options) {
+            callSetHandler(key, value, options);
+        }
+
+        /**
+         * The event handler function that will listen to 'group:cancel' events
+         * in all registered view components.
+         */
+        function componentCancelHandler(event, options) {
+            self.update();
+            grabApplicationFocus(options);
         }
 
         /**
@@ -312,7 +311,10 @@ define('io.ox/office/framework/app/basecontroller',
          *  found, propagation of the event will be stopped, and the browser
          *  default action will be suppressed.
          */
-        function keyHandler(event) {
+        function keyHandler(event, options) {
+
+            var // whether to stop propagation and prevent the default action
+                stopPropagation = false;
 
             // executes the item setter defined in the passed shortcut
             function callSetHandlerForShortcut(shortcut) {
@@ -321,10 +323,9 @@ define('io.ox/office/framework/app/basecontroller',
                     value = _.isFunction(shortcut.definition.value) ?
                         shortcut.definition.value(self.get(shortcut.key)) : shortcut.definition.value;
 
-                callSetHandler(shortcut.key, value, event);
+                callSetHandler(shortcut.key, value);
                 if (!Utils.getBooleanOption(shortcut.definition, 'propagate', false)) {
-                    event.stopPropagation();
-                    event.preventDefault();
+                    stopPropagation = true;
                 }
             }
 
@@ -333,8 +334,8 @@ define('io.ox/office/framework/app/basecontroller',
                 // process all shortcut definitions for the key code in the passed event
                 if (event.keyCode in keyShortcuts) {
                     _(keyShortcuts[event.keyCode]).each(function (shortcut) {
-                        // check if the additional control keys match the shortcut definition
-                        if (isMatchingShortcut(event, shortcut.definition)) {
+                        // check if the additional modifier keys match the shortcut definition
+                        if (KeyCodes.matchModifierKeys(event, shortcut.definition)) {
                             callSetHandlerForShortcut(shortcut);
                         }
                     });
@@ -347,6 +348,44 @@ define('io.ox/office/framework/app/basecontroller',
                 }
                 break;
             }
+
+            return stopPropagation ? false : undefined;
+        }
+
+        /**
+         * Initializes the key handlers for all registered keyboard shortcuts.
+         */
+        function initializeKeyHandler() {
+
+            var // the root node of the application pane
+                node = app.getView().getAppPaneNode();
+
+            // Bug 27528: IE does not allow to prevent default actions of some
+            // special key events (especially CTRL+P which always opens the Print
+            // dialog, regardless whether the keydown event has been canceled in
+            // the bubbling phase). The 'official' hack is to bind a keydown event
+            // handler with IE's ancient 'attachEvent()' method, and to suppress
+            // the default action by changing the key code in the event object.
+            // (add smiley-with-big-eyes here). Note that the 'addEventListener()'
+            // method does NOT work for this hack.
+            if (_.browser.IE) {
+                if (_.isFunction(node[0].attachEvent)) {
+                    node[0].attachEvent('onkeydown', function (event) {
+                        var result = keyHandler(event);
+                        // modify the key code to prevent the browser default action
+                        if (result === false) { event.keyCode = 0; }
+                        return result;
+                    });
+                } else {
+                    Utils.error('BaseController.initializeKeyHandler(): missing "attachEvent()" method for IE keydown hack (bug 27528)');
+                    node.on('keydown', keyHandler);
+                }
+            } else {
+                node.on('keydown', keyHandler);
+            }
+
+            // register 'keypress' event listener for shortcuts
+            node.on('keypress', keyHandler);
         }
 
         // methods ------------------------------------------------------------
@@ -388,19 +427,25 @@ define('io.ox/office/framework/app/basecontroller',
          *      the view components will not be changed. Defaults to a function
          *      that returns undefined; or, if a parent item has been
          *      registered, that returns its cached value directly.
+         *  @param {Function} [definition.options]
+         *      Getter function returning an additional map with options
+         *      depending on the current value of the item. If a parent item
+         *      has been specified (see above), the cached return value of its
+         *      options getter will be passed to this options getter. Defaults
+         *      to a function that returns undefined; or, if a parent item has
+         *      been registered, that returns its cached value directly.
          *  @param {Function} [definition.set]
          *      Setter function changing the value of an item to the first
          *      parameter of the setter. Can be omitted for read-only items.
-         *      Defaults to an empty function. If the setter has been triggered
-         *      by a registered keyboard shortcut (see below), the 'keydown'
-         *      event object will be passed to the second parameter of the
-         *      setter function.
+         *      Defaults to an empty function. May return a Deferred object or
+         *      a Promise to indicate that the setter executes asynchronous
+         *      code. This has effect on the properties 'definition.busy' and
+         *      'definition.focus', see below.
          *  @param {Object|Array} [definition.shortcut]
          *      One or multiple keyboard shortcut definitions. If the window
          *      root node of the application receives a 'keydown' or 'keypress'
          *      event that matches a shortcut definition, the setter function
-         *      of this item will be executed, and will receive the event
-         *      object in its second parameter. Can be as single shortcut
+         *      of this item will be executed. Can be as single shortcut
          *      definition, or an array of shortcut definitions. Each
          *      definition object supports the following attributes:
          *      - {Number|String} [shortcut.charCode]
@@ -408,50 +453,54 @@ define('io.ox/office/framework/app/basecontroller',
          *          against 'keypress' events, and the value represents the
          *          numeric code point of a Unicode character, or the Unicode
          *          character as a string.
-         *      - {Number} [shortcut.keyCode]
+         *      - {Number|String} [shortcut.keyCode]
          *          If specified, the shortcut definition will be matched
-         *          against 'keydown' events, and the value represents the raw
-         *          key code as defined in Utils.KeyCodes.
-         *      - {Boolean|Null} [shortcut.shiftKey=false]
+         *          against 'keydown' events, and the value represents the
+         *          numeric key code, or the upper-case name of a key code, as
+         *          defined in the static class KeyCodes. Be careful with digit
+         *          keys, for example, the number 9 matches the TAB key
+         *          (KeyCodes.TAB), but the string '9' matches the digit '9'
+         *          key (KeyCodes['9'] with the key code 57).
+         *      - {Boolean|Null} [shortcut.shift=false]
          *          If set to true, the SHIFT key must be pressed when the
          *          'keydown' events is received. If set to false (or omitted),
          *          the SHIFT key must not be pressed. If set to null, the
          *          current state of the SHIFT key will be ignored. Has no
          *          effect when evaluating 'keypress' events.
-         *      - {Boolean|Null} [shortcut.altKey=false]
+         *      - {Boolean|Null} [shortcut.alt=false]
          *          If set to true, the ALT key must be pressed when the
          *          'keydown' events is received. If set to false (or omitted),
          *          the ALT key must not be pressed. If set to null, the
          *          current state of the ALT key will be ignored. Has no effect
          *          when evaluating 'keypress' events.
-         *      - {Boolean|Null} [shortcut.ctrlKey=false]
+         *      - {Boolean|Null} [shortcut.ctrl=false]
          *          If set to true, the CTRL key must be pressed when the
          *          'keydown' events is received. If set to false (or omitted),
          *          the CTRL key must not be pressed. If set to null, the
          *          current state of the CTRL key will be ignored. Has no
          *          effect when evaluating 'keypress' events.
-         *      - {Boolean|Null} [shortcut.metaKey=false]
+         *      - {Boolean|Null} [shortcut.meta=false]
          *          If set to true, the META key must be pressed when the
          *          'keydown' events is received. If set to false (or omitted),
          *          the META key must not be pressed. If set to null, the
          *          current state of the META key will be ignored. Has no
          *          effect when evaluating 'keypress' events.
-         *      - {Boolean} [shortcut.altOrMetaKey]
+         *      - {Boolean} [shortcut.altOrMeta=false]
          *          Convenience option that if set to true, matches if either
          *          the ALT key, or the META key are pressed. Has the same
          *          effect as defining two separate shortcuts, one with the
-         *          'altKey' option set to true, and one with the 'metaKey'
-         *          option set to true, while keeping the other option false.
-         *          Must not be used in a shortcut definition where these
-         *          options are set explicitly.
-         *      - {Boolean} [shortcut.ctrlOrMetaKey=false]
+         *          'shortcut.alt' option set to true, and one with the
+         *          'shortcut.meta' option set to true, while keeping the other
+         *          option false. Must not be used in a shortcut definition
+         *          where these options are set explicitly.
+         *      - {Boolean} [shortcut.ctrlOrMeta=false]
          *          Convenience option that if set to true, matches if either
          *          the CTRL key, or the META key are pressed. Has the same
          *          effect as defining two separate shortcuts, one with the
-         *          'ctrlKey' option set to true, and one with the 'metaKey'
-         *          option set to true, while keeping the other option false.
-         *          Must not be used in a shortcut definition where these
-         *          options are set explicitly.
+         *          'shortcut.ctrl' option set to true, and one with the
+         *          'shortcut.meta' option set to true, while keeping the other
+         *          option false. Must not be used in a shortcut definition
+         *          where these options are set explicitly.
          *      - {Any|Function} [shortcut.value]
          *          The value that will be passed to the setter function of
          *          this item. If multiple shortcuts are defined for an item,
@@ -461,11 +510,14 @@ define('io.ox/office/framework/app/basecontroller',
          *          return value will be passed to the setter function.
          *      - {Boolean} [shortcut.propagate=false]
          *          If set to true, the event will propagate up to the DOM root
-         *          element, and the browser will execute its default action
-         *          (but the setter function called by this shortcut receives
-         *          the event any may decide to cancel propagation manually).
+         *          element, and the browser will execute its default action.
          *          If omitted or set to false, the event will be cancelled
          *          immediately after calling the setter function.
+         *  @param {Boolean} [definition.busy=false]
+         *      If set to true, the GUI of the application will be blocked and
+         *      a busy indicator will be shown while the setter of this item
+         *      is running (indicated by a pending Deferred object returned by
+         *      the setter). Does not have any effect for synchronous setters.
          *  @param {String} [definition.focus='direct']
          *      Determines how to return the browser focus to the application
          *      pane after executing the setter function of this item. The
@@ -492,12 +544,18 @@ define('io.ox/office/framework/app/basecontroller',
                 items[key] = new Item(key, definition);
                 if (_.isObject(definition.shortcut)) {
                     _.chain(definition.shortcut).getArray().each(function (shortcut) {
-                        var keyCode = Utils.getIntegerOption(shortcut, 'keyCode', -1),
-                            charCode = Utils.getIntegerOption(shortcut, 'charCode') || Utils.getStringOption(shortcut, 'charCode', '').charCodeAt(0);
-                        if (keyCode > 0) {
+                        var keyCode = Utils.getOption(shortcut, 'keyCode'),
+                            charCode = Utils.getOption(shortcut, 'charCode');
+                        if (_.isString(keyCode)) {
+                            keyCode = KeyCodes[keyCode] || 0;
+                        }
+                        if (_.isNumber(keyCode) && (keyCode > 0)) {
                             (keyShortcuts[keyCode] || (keyShortcuts[keyCode] = [])).push({ key: key, definition: shortcut });
                         }
-                        if (charCode > 0) {
+                        if (_.isString(charCode)) {
+                            charCode = charCode.charCodeAt(0);
+                        }
+                        if (_.isNumber(charCode) && (charCode > 0)) {
                             (charShortcuts[charCode] || (charShortcuts[charCode] = [])).push({ key: key, definition: shortcut });
                         }
                     });
@@ -529,16 +587,19 @@ define('io.ox/office/framework/app/basecontroller',
          * form controls used to display item values and trigger item actions.
          *
          * @param {Component} component
-         *  The view component to be registered. Must trigger 'change' events
-         *  passing the item key and value as parameters, if a control has been
-         *  activated in the user interface; or 'cancel' events to return to
-         *  the application without doing anything.
+         *  The view component to be registered. Must trigger 'group:change'
+         *  events passing the item key and value as parameters, if a control
+         *  has been activated in the user interface; or 'group:cancel' events
+         *  to return to the application without doing anything.
          *
          * @returns {BaseController}
          *  A reference to this controller instance.
          */
         this.registerViewComponent = function (component) {
-            component.on('change cancel', componentEventHandler);
+            component.on({
+                'group:change': componentChangeHandler,
+                'group:cancel': componentCancelHandler
+            });
             return this;
         };
 
@@ -555,7 +616,9 @@ define('io.ox/office/framework/app/basecontroller',
          */
         this.update = (function () {
 
-            var // pending controller items to be updated
+            var // the update delay time
+                updateDelay = Utils.getIntegerOption(options, 'updateDelay', 0, 0),
+                // pending controller items to be updated
                 pendingItems = {};
 
             // direct callback: called every time when BaseController.update() has been called
@@ -576,6 +639,7 @@ define('io.ox/office/framework/app/basecontroller',
                 _(pendingItems || items).each(function (item) {
                     item.isEnabled();
                     item.get();
+                    item.getOptions();
                 });
                 pendingItems = {};
 
@@ -584,7 +648,7 @@ define('io.ox/office/framework/app/basecontroller',
             }
 
             // create and return the debounced BaseController.update() method
-            return app.createDebouncedMethod(registerKey, triggerUpdate, { delay: 100, maxDelay: 1000 });
+            return app.createDebouncedMethod(registerKey, triggerUpdate, { delay: updateDelay, maxDelay: updateDelay * 5 });
 
         }()); // BaseController.update()
 
@@ -605,20 +669,44 @@ define('io.ox/office/framework/app/basecontroller',
         };
 
         /**
+         * Returns the current value options of the specified item.
+         *
+         * @param {String} key
+         *  The key of the item.
+         *
+         * @returns {Object|Undefined}
+         *  The current value options of the item, or undefined, if the item
+         *  does not exist.
+         */
+        this.getOptions = function (key) {
+            // do not clear the cache if currently running in a set handler
+            if (runningSetters === 0) { clearResultCache(); }
+            return (key in items) ? items[key].getOptions() : undefined;
+        };
+
+        /**
          * Triggers a controller item manually. Executes the setter function of
          * the item associated to the specified key, passing in the new value.
          *
          * @param {String} key
          *  The key of the item to be changed.
          *
-         * @param value
+         * @param {Any} value
          *  The new value of the item.
+         *
+         * @param {Object} [options]
+         *  A map with options controlling the behavior of this method. The
+         *  following options are supported:
+         *  @param {Boolean} [options.preserveFocus=false]
+         *      If set to true, the browser focus will not be modified after
+         *      executing the item, regardless of the focus mode configured for
+         *      that item.
          *
          * @returns {BaseController}
          *  A reference to this controller.
          */
-        this.change = function (key, value) {
-            callSetHandler(key, value);
+        this.change = function (key, value, options) {
+            callSetHandler(key, value, options);
             return this;
         };
 
@@ -633,7 +721,7 @@ define('io.ox/office/framework/app/basecontroller',
         this.registerDefinitions(items);
 
         // register keyboard event listener for shortcuts
-        app.getView().getAppPaneNode().on('keydown keypress', keyHandler);
+        app.on('docs:init', initializeKeyHandler);
 
         // update once after import (successful and failed)
         app.on('docs:import:after', function () { self.update(); });

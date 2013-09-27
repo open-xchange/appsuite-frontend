@@ -13,7 +13,7 @@
 define('io.ox/tasks/api',
         ['io.ox/core/http',
          'io.ox/core/api/factory',
-         'io.ox/core/api/folder'], function (http, apiFactory, folderApi) {
+         'io.ox/core/api/folder', 'io.ox/tasks/util'], function (http, apiFactory, folderAPI, util) {
 
     'use strict';
 
@@ -39,8 +39,8 @@ define('io.ox/tasks/api',
             //      move operation (change due date for example)
             if (modifications.folder_id && modifications.folder_id !== ids[0].folder_id) {//move operation! Every notifications needs to be reseted or they will link to unavailable tasks
                 api.getTasks();
-                require(['io.ox/core/api/reminder'], function (reminderApi) {
-                    reminderApi.getReminders();
+                require(['io.ox/core/api/reminder'], function (reminderAPI) {
+                    reminderAPI.getReminders();
                 });
                 return;
             }
@@ -80,8 +80,8 @@ define('io.ox/tasks/api',
             }
 
             if (modifications.alarm || modifications.alarm === null) {//reminders need updates because alarm changed is set or unset
-                require(['io.ox/core/api/reminder'], function (reminderApi) {
-                    reminderApi.getReminders();
+                require(['io.ox/core/api/reminder'], function (reminderAPI) {
+                    reminderAPI.getReminders();
                 });
             }
             //check overdue
@@ -108,7 +108,7 @@ define('io.ox/tasks/api',
                 });
             }
         },
-        
+
         /**
          * applies task modifications to all cache
          * @private
@@ -151,7 +151,7 @@ define('io.ox/tasks/api',
                                 found = true;
                             }
                         });
-                        
+
                     });
                     if (found) {
                         return api.caches.all.add(cacheKey, cachevalue);
@@ -243,7 +243,7 @@ define('io.ox/tasks/api',
                     folder = obj.folder_id;
                 } else {
                     console.log('no folderAttribute for cache Keygen found, using default');
-                    folder = folderApi.getDefaultFolder('tasks');
+                    folder = folderAPI.getDefaultFolder('tasks');
                 }
             }
 
@@ -251,7 +251,7 @@ define('io.ox/tasks/api',
         },
         requests: {
             all: {
-                folder: folderApi.getDefaultFolder('tasks'),
+                folder: folderAPI.getDefaultFolder('tasks'),
                 columns: '1,20,101,200,202,203,220,300,301',
                 extendColumns: 'io.ox/tasks/api/all',
                 sort: '202',
@@ -312,15 +312,17 @@ define('io.ox/tasks/api',
             data: task,
             appendColumns: false
         }).then(function (obj) {
+            task.id = obj.id;
             response = obj;
             var cacheObj = _.copy(task, true),
-            cacheKey = api.cid({folder: cacheObj.folder_id,
+                cacheKey = api.cid({folder: cacheObj.folder_id,
                                 sort: api.options.requests.all.sort,
                                 order: api.options.requests.all.order});
             cacheObj.id = obj.id;
             return api.caches.all.get(cacheKey).then(function (cachevalue) {
                 if (cachevalue) {//only add if the key is there
                     cachevalue = cachevalue.concat(cacheObj);
+                    cachevalue = util.sortTasks(cachevalue);
                     return api.caches.all.add(cacheKey, cachevalue);
                 } else {//just leave it to the next all request, no need to do it here
                     return $.when();
@@ -331,7 +333,7 @@ define('io.ox/tasks/api',
                 api.addToUploadList(task.folder_id + '.' + response.id);//to make the detailview show the busy animation
             }
             checkForNotifications([{id: response.id, folder_id: task.folder_id}], task);
-            api.trigger('create', task);
+            //api.trigger('create', task);
             return response;
         });
     };
@@ -354,7 +356,7 @@ define('io.ox/tasks/api',
             task.folder_id = arguments[3];
             task.id = arguments[1];
         }
-        
+
         //repair broken folder attribute
         if (task.folder) {
             task.folder_id = task.folder;
@@ -384,7 +386,7 @@ define('io.ox/tasks/api',
             params: {action: 'update',
                 folder: useFolder,
                 id: task.id,
-                timestamp: _.now(),
+                timestamp: _.then(),
                 timezone: 'UTC'
             },
             data: task,
@@ -400,7 +402,7 @@ define('io.ox/tasks/api',
             return obj;
         }).done(function () {
             if (attachmentHandlingNeeded) {
-                api.addToUploadList(encodeURIComponent(_.cid(task)));//to make the detailview show the busy animation
+                api.addToUploadList(_.ecid(task));//to make the detailview show the busy animation
             }
             //trigger refresh, for vGrid etc
             api.trigger('refresh.all');
@@ -434,7 +436,7 @@ define('io.ox/tasks/api',
                     action: 'update',
                     id: obj.id,
                     folder: obj.folder_id,
-                    timestamp: _.now(),
+                    timestamp: _.then(),
                     timezone: 'UTC'
                 },
                 data: modifications,
@@ -492,6 +494,7 @@ define('io.ox/tasks/api',
             data: options.data, // object with confirmation attribute
             appendColumns: false
         }).pipe(function (response) {
+            api.trigger("mark:task:confirmed", [{id: options.id, data: options.data}]);
             // update cache
             return api.removeFromCache(key);
         });
@@ -501,7 +504,7 @@ define('io.ox/tasks/api',
      * @return {string} default folder for tasks
      */
     api.getDefaultFolder = function () {
-        return folderApi.getDefaultFolder('tasks');
+        return folderAPI.getDefaultFolder('tasks');
     };
 
     /**

@@ -42,6 +42,14 @@ define('io.ox/mail/autoforward/settings/filter', [
                     autoForward = new ForwardEdit({model: factory.create(autoForwardData)});
 
                     $node.append(autoForward.render().$el);
+                    $node.one('dispose', function () {
+                        if (_.isEmpty(autoForward.model.changed) && $(document.activeElement).is(':input')) {
+                            $(document.activeElement).blur();//make the active element lose focus to get the changes of the field a user was editing
+                            if (!_.isEmpty(autoForward.model.changed)) {//unsaved changes (grid changed while input field was still selected with unsaved changes)
+                                autoForward.model.save();
+                            }
+                        }
+                    });
 
                     deferred.resolve(autoForward.model);
 
@@ -67,7 +75,14 @@ define('io.ox/mail/autoforward/settings/filter', [
                        // set active state
                     }
                     $node.append(autoForward.render().$el);
-
+                    $node.one('dispose', function () {
+                        if (_.isEmpty(autoForward.model.changed) && $(document.activeElement).is(':input')) {
+                            $(document.activeElement).blur();//make the active element lose focus to get the changes of the field a user was editing
+                            if (!_.isEmpty(autoForward.model.changed)) {//unsaved changes (grid changed while input field was still selected with unsaved changes)
+                                autoForward.model.save();
+                            }
+                        }
+                    });
                     deferred.resolve(autoForward.model);
 
                 }

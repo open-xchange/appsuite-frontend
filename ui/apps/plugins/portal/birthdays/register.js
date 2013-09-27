@@ -48,7 +48,7 @@ define('plugins/portal/birthdays/register',
             var aDay = 24 * 60 * 60 * 1000,
                 start = _.now() - aDay, // yes, one could try to calculate 00:00Z this day, but hey...
                 end = start + WEEKS * aDay * 7;
-            return api.birthdays({start: start, end: end, right_hand_limit: 14}).done(function (data) {
+            return api.birthdays({ start: start, end: end, right_hand_limit: 25 }).done(function (data) {
                 baton.data = data;
             });
         },
@@ -57,7 +57,14 @@ define('plugins/portal/birthdays/register',
 
             var $list = $('<div class="content">'),
                 hash = {},
-                contacts = baton.data;
+                contacts = baton.data,
+                numOfItems = _.device('small') ? 5 : 15;
+
+            // ignore broken birthdays
+            contacts = _(contacts).filter(function (contact) {
+                // null, undefined, empty string, 0 (yep 1.1.1970).
+                return !!contact.birthday;
+            });
 
             if (contacts.length === 0) {
                 $list.append(
@@ -65,9 +72,15 @@ define('plugins/portal/birthdays/register',
                 );
             } else {
                 $list.addClass('pointer');
-                _(contacts).each(function (contact) {
-                    var birthday = new date.Local(date.Local.utc(contact.birthday)).format(date.DATE),
+                _(contacts.slice(0, numOfItems)).each(function (contact) {
+                    var birthday = new date.UTC(contact.birthday),
                         name = util.getFullName(contact);
+                    if (birthday.getYear() === 1) {//Year 0 is special for birthdays without year (backend changes this to 1...)
+                        birthday = birthday.format(date.DATE_NOYEAR);
+                    } else {
+                        birthday = birthday.format(date.DATE);
+                    }
+                        
                     if (!isDuplicate(name, hash)) {
                         $list.append(
                             $('<div class="line">').append(
@@ -97,13 +110,15 @@ define('plugins/portal/birthdays/register',
                 );
             } else {
                 // add buy-a-gift
-                var url = settings.get('customLocations/buy-a-gift', 'http://www.amazon.de/');
-                $list.append(
-                    $('<div class="buy-a-gift">').append(
-                        $('<i class="icon-gift">'), $.txt(' '),
-                        $('<a>', { href: url, target: '_blank' }).text(gt('Buy a gift'))
-                    )
-                );
+                var url = $.trim(settings.get('customLocations/buy-a-gift', 'http://www.amazon.com/'));
+                if (url !== 'none' && url !== '') {
+                    $list.append(
+                        $('<div class="buy-a-gift">').append(
+                            $('<i class="icon-gift">'), $.txt(' '),
+                            $('<a>', { href: url, target: '_blank' }).text(gt('Buy a gift'))
+                        )
+                    );
+                }
                 // loop
                 _(baton.data).each(function (contact) {
                     var utc = date.Local.utc(contact.birthday), birthday, next, now, days, delta,
@@ -130,7 +145,7 @@ define('plugins/portal/birthdays/register',
                                 api.getPicture(contact, { width: 48, height: 48, scaleType: 'cover' }).addClass('picture'),
                                 $('<div class="name">').text(_.noI18n(name)),
                                 $('<div>').append(
-                                    $('<span class="date">').text(_.noI18n(birthday.format(date.DATE))), $.txt(' '),
+                                    $('<span class="date">').text(_.noI18n(birthday.format(birthday.getYear() === 1 ? date.DATE_NOYEAR : date.DATE))), $.txt(' '),
                                     $('<span class="distance">').text(delta)
                                 )
                             )

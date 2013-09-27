@@ -263,7 +263,7 @@ function processLanguage(lang) {
 
             function getFormats() {
                 var formats = {};
-                _.each(['E', 'yMd', 'yMEd', 'yMMMd', 'yMMMEd', 'hm', 'Hm', 'v'],
+                _.each(['E', 'yMd', 'yMEd', 'yMMMd', 'yMMMEd', 'hm', 'Hm', 'v', 'Md'],
                     function (fmt) {
                         var f = ldml.get(gregorian + "dateTimeFormats/" +
                             "availableFormats/dateFormatItem[@id='" + fmt +

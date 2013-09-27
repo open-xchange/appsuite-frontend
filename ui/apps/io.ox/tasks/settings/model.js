@@ -23,8 +23,11 @@ define('io.ox/tasks/settings/model',
         },
 
         save: function () {
-//            console.log(this.attributes);
             settings.save(this.attributes);
+        },
+
+        saveAndYell: function () {
+            settings.saveAndYell(this.attributes);
         },
 
         destroy: function () {

@@ -10,12 +10,14 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
+
 define.async("io.ox/mail/accounts/keychain",
-             ["io.ox/core/extensions",
-             "io.ox/core/api/account",
-             "io.ox/core/api/user",
-             "io.ox/core/capabilities",
-             "io.ox/core/event"], function (ext, accountAPI, userAPI, capabilities, Events) {
+    ["io.ox/core/extensions",
+     "io.ox/core/api/account",
+     "io.ox/core/api/user",
+     "io.ox/core/capabilities",
+     "io.ox/core/event",
+     'gettext!io.ox/core'], function (ext, accountAPI, userAPI, capabilities, Events, gt) {
 
     "use strict";
 
@@ -92,7 +94,8 @@ define.async("io.ox/mail/accounts/keychain",
 
     extension = {
         id: "mail",
-        displayName: "Mail Account",
+        // displayName appears in drop-down menu
+        displayName: gt('Mail account'),
         actionName: "mailaccount",
         canAdd: function () {
             return capabilities.has('multiple_mail_accounts');

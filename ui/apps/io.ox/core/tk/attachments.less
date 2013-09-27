@@ -1,22 +1,181 @@
-.io-ox-core-tk-attachment {
-    background-color: whiteSmoke;
-    display: inline-block;
-    width: 200px;
-    margin-right: 10px;
-}
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
 
-.io-ox-core-tk-attachment .delete {
-    font-size: 1.5em;
-    padding-left: 12px;
-}
+.io-ox-core-tk-attachment-list {
 
-.io-ox-core-tk-attachment .delete:hover {
-    color: white;
-    background-color: red;
-}
+    /* SimpleEditableList */
+    .item {
 
-.io-ox-core-tk-attachment {
-    i.icon-paper-clip {
-        font-size: 20px;
+        position: relative;
+        line-height: 1.5em;
+        margin-bottom: 2px;
+        padding: 4px 2.5em 4px 5px;
+        background-color: white;
+
+        /* depending on pane background*/
+
+        &.background {
+            background-color: #f5f5f5;
+        }
+
+        &.pointer {
+            cursor: pointer;
+        }
+
+        div {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        > i {
+            position: absolute;
+            font-size: 20px;
+            top: 15px;
+            left: 11px;
+        }
+
+        .remove {
+            display: inline-block;
+            position: absolute;
+            top: 1px;
+            right: 1px;
+            bottom: 1px;
+            width: 2em;
+            line-height: 1em;
+            background-color: #f5f5f5;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        .remove:hover {
+            background-color: #a00;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .remove [class^="icon-"] {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            margin-top: -0.5em;
+            text-align: center;
+        }
+
+        .group-label {
+            display: block;
+            font-style: italic;
+            margin-right: 1em;
+        }
+
+        &.signature-remove a {
+            color: #800;
+        }
+
+        .signature-preview {
+            font-style: italic;
+            color: #888;
+            white-space: normal;
+        }
+
+        &.upload {
+            background-color: #f5f5f5;
+            padding-right: 5px;
+        }
+
+        &.file {
+            position: relative;
+            height: 3em;
+            line-height: 1.5em;
+        }
+
+        .filesize {
+            color: #aaa;
+        }
+
+        .row-1 {
+            position: absolute;
+            left: 40px;
+            right: 30px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .row-2 {
+            position: absolute;
+            left: 40px;
+            right: 30px;
+            top: 23px;
+        }
+
+    }
+
+    .span6:nth-child(odd) { margin-left: 0; }
+
+    /* EditableAttachmentList */
+    .io-ox-core-tk-attachment {
+
+        position: relative;
+        height: 3em;
+        line-height: 1.5em;
+        margin-bottom: 2px;
+        padding: 4px 2.5em 4px 5px;
+        background-color: #f5f5f5;
+
+        i {
+            position: absolute;
+            font-size: 20px;
+            top: 15px;
+            left: 11px;
+        }
+
+        div {
+            position: absolute;
+            left: 40px;
+            right: 30px;
+            .ellipsis();
+
+            &.row-2 {
+                top: 23px;
+                span.filesize { color: #aaa; }
+            }
+        }
+
+        .remove {
+            display: inline-block;
+            position: absolute;
+            top: 1px;
+            right: 1px;
+            bottom: 1px;
+            width: 2em;
+            line-height: 1em;
+            background-color: #f5f5f5;
+            color: #aaa;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #a00;
+                color: #fff;
+                text-decoration: none;
+            }
+
+            i {
+                top: 50%;
+                left: 0;
+                right: 0;
+                margin-top: -0.5em;
+                text-align: center;
+            }
+        }
     }
 }

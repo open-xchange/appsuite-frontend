@@ -1,7 +1,3 @@
-* 2013-08-15 - viktor.pracht@open-xchange.com
-
-  - Fixed bug #28323 : Race condition in io.ox/core/date
-
 * 2013-06-13 - stefan.preuss@open-xchange.com
 
   - Fixed bug #27079 : TinyMCE background color-picker shows the same color two times

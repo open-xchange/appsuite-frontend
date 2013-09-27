@@ -30,18 +30,11 @@ define('io.ox/calendar/edit/main',
         controller = _.extend(app, {
 
             start: function () {
+                var self = this;
                 if (_.browser.IE === undefined || _.browser.IE > 9) {
                     this.dropZone = new dnd.UploadZone({
                         ref: "io.ox/calendar/edit/dnd/actions"
                     }, this);
-                }
-
-                var state = this.getState();
-
-                if ('folder' in state && 'id' in state) {
-                    return api.get({ folder: state.folder, id: state.id }).done(function (data) {
-                        this.edit(data);
-                    });
                 }
             },
 
@@ -99,20 +92,24 @@ define('io.ox/calendar/edit/main',
                 notifications.yell('success', gt('Description has been copied'));
             },
 
-            edit: function (data, options) {
-
-                app.cid = 'io.ox/calendar:edit.' + _.cid(data);
+            edit: function (data, opt) {
 
                 var self = this;
-                options = _.extend({}, options);
+
+                data = data || {};
+                opt = _.extend({
+                    mode: 'edit'
+                }, opt);
+
+                app.cid = 'io.ox/calendar:' + opt.mode + '.' + _.cid(data);
 
                 function cont(data) {
                     app.model = self.model = appointmentModel.factory.create(data);
                     appointmentModel.applyAutoLengthMagic(self.model);
                     appointmentModel.fullTimeChangeBindings(self.model);
-                    appointmentModel.setDefaultParticipants(self.model, {create: false}).done(function () {
+                    appointmentModel.setDefaultParticipants(self.model, { create: opt.mode === 'create' }).done(function () {
 
-                        var baton = { model: self.model, mode: data.id ? 'edit' : 'create', app: self, callbacks: {} };
+                        var baton = { model: self.model, mode: opt.mode, app: self, callbacks: {} };
                         baton.callbacks.extendDescription = app.extendDescription;
                         app.view = self.view = new MainView(baton);
 
@@ -123,18 +120,59 @@ define('io.ox/calendar/edit/main',
                             });
                         }
 
-                        self.model.on('backendError', function (response) {
-                            try {
-                                self.getWindow().idle();
-                            } catch (e) {
-                                if (response.code === 'UPL-0005') {//uploadsize to big
-                                    api.removeFromUploadList(encodeURIComponent(_.cid(this.attributes)));//remove busy animation
+                        self.model
+                            .on('backendError', function (response) {
+                                try {
+                                    self.getWindow().idle();
+                                } catch (e) {
+                                    if (response.code === 'UPL-0005') {//uploadsize to big
+                                        api.removeFromUploadList(_.ecid(this.attributes));//remove busy animation
+                                    }
+                                    notifications.yell('error', response.error);
                                 }
-                                notifications.yell('error', response.error);
-                            }
-                        });
+                            })
+                            .on('conflicts', function (con) {
+                                var hardConflict = false;
+                                // look for hard conflicts
+                                _(con).each(function (conflict) {
+                                    if (conflict.hard_conflict) {
+                                        hardConflict = true;
+                                        return;
+                                    }
+                                });
 
-                        self.setTitle(gt('Edit appointment'));
+                                ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/conflicts/conflictList']).done(function (dialogs, conflictView) {
+                                    var dialog = new dialogs.ModalDialog({
+                                            top: "20%",
+                                            center: false,
+                                            container: self.getWindowNode()
+                                        })
+                                        .append(conflictView.drawList(con).addClass('additional-info'));
+                                    if (hardConflict) {
+                                        dialog.prepend(
+                                            $('<div class="alert alert-info hard-conflict">')
+                                                .text(gt('Conflicts with resources cannot be ignored'))
+                                        );
+                                    } else {
+                                        dialog.addDangerButton('ignore', gt('Ignore conflicts'));
+                                    }
+                                    dialog.addButton('cancel', gt('Cancel'))
+                                        .show()
+                                        .done(function (action) {
+                                            if (action === 'cancel') {
+                                                return;
+                                            }
+                                            if (action === 'ignore') {
+                                                self.model.set('ignore_conflicts', true, { validate: true });
+                                                self.model.save().done(function () {
+                                                    self.onSave();
+                                                });
+                                            }
+                                        });
+                                });
+                            });
+
+                        self.setTitle(opt.mode === 'create' ? gt('Create appointment') : gt('Edit appointment'));
 
                         // create app window
                         var win = ox.ui.createWindow({
@@ -143,6 +181,7 @@ define('io.ox/calendar/edit/main',
                         });
 
                         self.setWindow(win);
+
                         if (app.dropZone) {
                             win.on('show', function () {
                                 app.dropZone.include();
@@ -152,130 +191,80 @@ define('io.ox/calendar/edit/main',
                                 app.dropZone.remove();
                             });
                         }
-                        if (options.action === 'appointment') {
-                            // ensure to create a change exception
-                            self.model.touch('recurrence_position');
-                            self.model.set('recurrence_type', 0, {validate: true});
-                        }
 
-                        if (options.action === 'series') {
+                        if (opt.mode === 'edit') {
 
-                            // fields for recurrences
-                            var fields = ['recurrence_date_position',
-                                'change_exceptions',
-                                'delete_exceptions',
-                                'recurrence_type',
-                                'days',
-                                'day_in_month',
-                                'month',
-                                'interval',
-                                'until',
-                                'occurrences'];
-                            var x = 0;
-                            // ensure theses fields will be send to backend to edit the whole series
-                            for (; x < fields.length; x++) {
-                                self.model.touch(fields[x]);
+                            if (opt.action === 'appointment') {
+                                // ensure to create a change exception
+                                self.model.touch('recurrence_position');
+                                self.model.set('recurrence_type', 0, { validate: true });
                             }
 
-                        }
-                        // init alarm
-                        if (!self.model.get('alarm')) {
-                            self.model.set('alarm', -1, {silent: true, validate: true});
+                            if (opt.action === 'series') {
+
+                                // fields for recurrences
+                                var fields = ['recurrence_date_position',
+                                    'change_exceptions',
+                                    'delete_exceptions',
+                                    'recurrence_type',
+                                    'days',
+                                    'day_in_month',
+                                    'month',
+                                    'interval',
+                                    'until',
+                                    'occurrences'];
+                                var x = 0;
+                                // ensure theses fields will be send to backend to edit the whole series
+                                for (; x < fields.length; x++) {
+                                    self.model.touch(fields[x]);
+                                }
+                            }
+
+                            // init alarm
+                            if (!self.model.get('alarm')) {
+                                self.model.set('alarm', -1, { silent: true, validate: true });
+                            }
+
+                        } else {
+
+                            self.model.set('alarm', settings.get('defaultReminder', 15), { validate: true });
+                            if (self.model.get('full_time') === true) {
+                                self.model.set('shown_as', settings.get('markFulltimeAppointmentsAsFree', false) ? 4 : 1, { validate: true });
+                            }
+
                         }
 
                         self.considerSaved = true;
                         self.model.on('change', function () {
                             self.considerSaved = false;
                         });
+
                         $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                         self.getWindow().show(_.bind(self.onShowWindow, self));
                     });
                 }
 
-                if (data) {
+                // check mode
+                if (opt.mode === 'edit' && data.id) {
                     // hash support
                     self.setState({ folder: data.folder_id, id: data.id });
                     cont(data);
+                } else {
+                    if (!data.folder_id) {
+                        require(['io.ox/core/api/folder']).done(function (api) {
+                            data.folder_id = api.getDefaultFolder('calendar');
+                            cont(data);
+                        });
+                    } else {
+                        cont(data);
+                    }
                 }
             },
 
             considerSaved: false,
 
             create: function (data) {
-                var self = this,
-                    data = data || {};
-
-                function cont(data) {
-                    app.model = self.model = appointmentModel.factory.create(data);
-                    appointmentModel.applyAutoLengthMagic(self.model);
-                    appointmentModel.fullTimeChangeBindings(self.model);
-                    appointmentModel.setDefaultParticipants(self.model, { create: true }).done(function () {
-
-                        var baton = { model: self.model, app: self, callbacks: {} };
-                        baton.callbacks.extendDescription = app.extendDescription;
-                        app.view = self.view = new MainView(baton);
-
-                        //window.busy breaks oldschool upload, iframe needs to be enabled until all files are uploaded
-                        if (_.browser.IE === undefined || _.browser.IE > 9) {
-                            self.model.on('create:start update:start', function () {
-                                self.getWindow().busy();
-                            });
-                        }
-
-                        self.model.on('backendError', function (response) {
-                            try {
-                                self.getWindow().idle();
-                            } catch (e) {
-                                if (response.code === 'UPL-0005') {//uploadsize to big
-                                    api.removeFromUploadList(encodeURIComponent(_.cid(this.attributes)));//remove busy animation
-                                }
-                                notifications.yell('error', response.error);
-                            }
-                        });
-
-                        self.setTitle(gt('Create appointment'));
-
-                        // create app window
-                        var win = ox.ui.createWindow({
-                            name: 'io.ox/calendar/edit',
-                            title: 'Create Appointment',
-                            chromeless: true
-                        });
-
-                        self.setWindow(win);
-
-                        if (app.dropZone) {
-                            win.on('show', function () {
-                                app.dropZone.include();
-                            });
-
-                            win.on('hide', function () {
-                                app.dropZone.remove();
-                            });
-                        }
-
-                        self.model.set('alarm', settings.get('defaultReminder', 15), {validate: true});
-                        if (self.model.get('full_time') === true) {
-                            self.model.set('shown_as', settings.get('markFulltimeAppointmentsAsFree', false) ? 4 : 1, {validate: true});
-                        }
-                        self.considerSaved = true;
-                        self.model.on('change', function () {
-                            self.considerSaved = false;
-                        });
-
-                        $(self.getWindow().nodes.main[0]).append(self.view.render().el);
-                        self.getWindow().show(_.bind(self.onShowWindow, self));
-                    });
-                }
-
-                if (!data.folder_id) {
-                    require(['io.ox/core/api/folder']).done(function (api) {
-                        data.folder_id = api.getDefaultFolder('calendar');
-                        cont(data);
-                    });
-                } else {
-                    cont(data);
-                }
+                this.edit(data, { mode: 'create'});
             },
 
             getDirtyStatus : function () {
@@ -286,6 +275,32 @@ define('io.ox/calendar/edit/main',
             },
 
             onShowWindow: function () {
+
+                var array = [],
+                    signatureSequenz = ['keyup', 'focus'];
+
+                function stopPointerEvents(e) {
+
+                    if (e.type === 'focus') {
+                        array.push('focus');
+                    }
+
+                    if (e.type === 'keyup') {
+                        array.push('keyup');
+                    }
+
+                    if (array.length === 2) {
+                        if (_.isEmpty(_.difference(signatureSequenz, array))) {
+                            e.data.list.css('pointer-events', 'none');
+                        }
+                        array = [];
+                    }
+
+                    self.getWindow().nodes.main.find('.control-group').on('mousemove', function () {
+                        e.data.list.css('pointer-events', 'auto');
+                    });
+                }
+
                 var self = this;
                 if (self.model.get('title')) {
                     self.getWindow().setTitle(self.model.get('title'));
@@ -297,6 +312,12 @@ define('io.ox/calendar/edit/main',
                 });
                 $(self.getWindow().nodes.main).find('input')[0].focus(); // focus first input element
                 $(self.getWindow().nodes.main[0]).addClass('scrollable'); // make window scrollable
+
+                var controlsBlock = $(self.getWindow().nodes.main).find('.controls'),
+                    list = controlsBlock.find('ul'),
+                    input = controlsBlock.find('input');
+
+                input.on('keyup focus', {list: list}, stopPointerEvents);
             },
 
             onSave: function () {
@@ -318,14 +339,10 @@ define('io.ox/calendar/edit/main',
             },
 
             failRestore: function (point) {
-                var df = $.Deferred();
-                if (_.isUndefined(point.id)) {
-                    this.create(point);
-                } else {
-                    this.edit(point);
-                }
-                df.resolve();
-                return df;
+                this.edit(point, {
+                    mode: _.isUndefined(point.id) ? 'create' : 'edit'
+                });
+                return $.when();
             }
         });
 

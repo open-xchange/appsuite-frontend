@@ -18,8 +18,9 @@ define('plugins/notifications/calendar/register',
      'io.ox/calendar/util',
      'io.ox/core/extensions',
      'io.ox/core/api/user',
+     'io.ox/core/tk/reminder-util',
      'gettext!plugins/notifications'
-    ], function (calApi, reminderApi, util, ext, userApi, gt) {
+    ], function (calAPI, reminderAPI, util, ext, userAPI, reminderUtil, gt) {
 
     'use strict';
 
@@ -44,14 +45,17 @@ define('plugins/notifications/calendar/register',
     ext.point('io.ox/core/notifications/invites/item').extend({
         draw: function (baton) {
             var model = baton.model;
-            this.attr('data-cid', model.get('cid')).append(
+            this.attr({
+                'data-cid': model.get('cid'),
+                'tabindex': 1
+            }).append(
                 $('<div class="time">').text(model.get('time')),
                 $('<div class="date">').text(model.get('date')),
                 $('<div class="title">').text(model.get('title')),
                 $('<div class="location">').text(model.get('location')),
                 $('<div class="organizer">').text(model.get('blue')),
                 $('<div class="actions">').append(
-                    $('<button class="btn btn-inverse" data-action="accept_decline">').text(gt('Accept / Decline'))
+                    $('<button type="button" tabindex="1" class="btn btn-inverse" data-action="accept_decline">').text(gt('Accept / Decline'))
                 )
             );
         }
@@ -59,31 +63,13 @@ define('plugins/notifications/calendar/register',
 
     ext.point('io.ox/core/notifications/reminder/item').extend({
         draw: function (baton) {
-            var model = baton.model;
-            this.attr('data-cid', model.get('cid')).append(
-                $('<div class="time">').text(model.get('time')),
-                $('<div class="date">').text(model.get('date')),
-                $('<div class="title">').text(model.get('title')),
-                $('<div class="location">').text(model.get('location')),
-                $('<div class="actions">').append(
-                    $('<div>').addClass('dropdown').css({float: 'left'}).append(
-                        $('<a href="#" data-action="reminderbutton">').attr('data-toggle', 'dropdown').text(gt('Remind me again')).append(
-                            $('<i>').addClass('icon-chevron-down').css({color: 'white', paddingLeft: '5px', textDecoration: 'none'})
-                        ),
-                        $('<ul>').addClass('dropdown-menu dropdown-left').css({minWidth: 'auto'}).append(function () {
-                            var minutes = [5, 10, 15, 45],
-                                ret = '';
-                            for (var i = 0; i < minutes.length; i++) {
-                                ret += '<li><a ref="#" data-action="reminder" data-value="' + minutes[i] + '">' +
-                                    gt.format(gt.npgettext('in', '%d minute', '%d minutes', minutes[i]), minutes[i]) +
-                                    '</a></li>';
-                            }
-                            return ret;
-                        })
-                    ).delegate(),
-                    $('<button class="btn btn-inverse" data-action="accept">').text(gt('OK'))
-                )
-            );
+            //build selectoptions
+            var minutes = [5, 10, 15, 45],
+                options = [];
+            for (var i = 0; i < minutes.length; i++) {
+                options.push([minutes[i], gt.format(gt.npgettext('in', 'in %d minute', 'in %d minutes', minutes[i]), minutes[i])]);
+            }
+            reminderUtil.draw(this, baton.model, options);
         }
     });
 
@@ -93,6 +79,7 @@ define('plugins/notifications/calendar/register',
 
         events: {
             'click': 'onClickItem',
+            'keydown': 'onClickItem',
             'click [data-action="accept_decline"]': 'onClickChangeStatus'
         },
 
@@ -103,7 +90,11 @@ define('plugins/notifications/calendar/register',
         },
 
         onClickItem: function (e) {
-
+            if ($(e.target).is('a') || $(e.target).is('i') || $(e.target).is('button')) {
+                //ignore chevron and dropdownlinks
+                return;
+            }
+            if ((e.type !== 'click') && (e.which !== 13)) { return; }
             var obj = this.model.get('data'),
                 overlay = $('#io-ox-notifications-overlay'),
                 sidepopup = overlay.prop('sidepopup'),
@@ -113,13 +104,24 @@ define('plugins/notifications/calendar/register',
                 sidepopup.close();
             } else {
                 // fetch proper appointment first
-                calApi.get(obj).done(function (data) {
+                calAPI.get(obj).done(function (data) {
                     require(['io.ox/core/tk/dialogs', 'io.ox/calendar/view-detail'], function (dialogs, view) {
                         // open SidePopup without array
                         new dialogs.SidePopup({ arrow: false, side: 'right' })
                             .setTarget(overlay.empty())
+                            .on('close', function () {
+                                if (_.device('smartphone') && overlay.children().length > 0) {
+                                    overlay.addClass('active');
+                                } else if (_.device('smartphone')) {
+                                    overlay.removeClass('active');
+                                    $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
+                                }
+                            })
                             .show(e, function (popup) {
                                 popup.append(view.draw(data));
+                                if (_.device('smartphone')) {
+                                    $('#io-ox-notifications').removeClass('active');
+                                }
                             });
                     });
                 });
@@ -146,7 +148,10 @@ define('plugins/notifications/calendar/register',
 
         events: {
             'click': 'onClickItem',
-            'click [data-action="accept"]': 'onClickOk'
+            'keydown': 'onClickItem',
+            'change [data-action="selector"]': 'onClickReminder',
+            'click [data-action="selector"]': 'onClickReminder',
+            'click [data-action="ok"]': 'onClickOk'
         },
 
         render: function () {
@@ -157,9 +162,11 @@ define('plugins/notifications/calendar/register',
         },
 
         onClickItem: function (e) {
-            if ($(e.target).is('a')) {
+            if ($(e.target).is('a') || $(e.target).is('i') || $(e.target).is('button')) {
+                //ignore chevron and dropdownlinks
                 return;
             }
+            if ((e.type !== 'click') && (e.which !== 13)) { return; }
             var obj = this.model.get('remdata'),
                 overlay = $('#io-ox-notifications-overlay'),
                 sidepopup = overlay.prop('sidepopup'),
@@ -174,39 +181,53 @@ define('plugins/notifications/calendar/register',
                     // open SidePopup without array
                     new dialogs.SidePopup({ arrow: false, side: 'right' })
                         .setTarget(overlay.empty())
+                        .on('close', function () {
+                            if (_.device('smartphone') && overlay.children().length > 0) {
+                                overlay.addClass('active');
+                            } else if (_.device('smartphone')) {
+                                overlay.removeClass('active');
+                                $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
+                            }
+                        })
                         .show(e, function (popup) {
                             popup.append(view.draw(data));
+                            if (_.device('smartphone')) {
+                                $('#io-ox-notifications').removeClass('active');
+                            }
                         });
                 });
             }
         },
 
         onClickReminder: function (e) {
+            e.stopPropagation();
             var self = this,
-                min = $(e.target).data('value'),
+                min = $(e.target).data('value') || $(e.target).val(),
                 reminder = self.model;
-            self.collection.remove(self.model);
-            self.collection.hidden.push(self.model.get('cid'));
-            setTimeout(function () {
-                //get updated data
-                calApi.get(reminder.get('caldata')).done(function (calObj) {
-                    self.collection.hidden = _.without(self.collection.hidden, reminder.get('cid'));
-                    //fill in new data
-                    reminder.set('caldata', calObj);
-                    reminder.set('title', calObj.title);
-                    reminder.set('location', calObj.location);
-                    reminder.set('time', util.getTimeInterval(calObj));
-                    self.collection.add(reminder);
-                });
-                
-            }, min * 60000);
+            if (min !== '0') {//0 means 'pick a time here' was selected. Do nothing.
+                self.collection.remove(self.model);
+                self.collection.hidden.push(self.model.get('cid'));
+                setTimeout(function () {
+                    //get updated data
+                    calAPI.get(reminder.get('caldata')).done(function (calObj) {
+                        self.collection.hidden = _.without(self.collection.hidden, reminder.get('cid'));
+                        //fill in new data
+                        reminder.set('caldata', calObj);
+                        reminder.set('title', calObj.title);
+                        reminder.set('location', calObj.location);
+                        reminder.set('time', util.getTimeInterval(calObj));
+                        self.collection.add(reminder);
+                    });
+
+                }, min * 60000);
+            }
         },
 
         onClickOk: function (e) {
             // stopPropagation could be prevented by another markup structure
             e.stopPropagation();
             var self = this;
-            reminderApi.deleteReminder(self.model.get('remdata').id).done(function () {
+            reminderAPI.deleteReminder(self.model.get('remdata').id).done(function () {
                 self.collection.remove(self.model);
             });
         }
@@ -271,7 +292,7 @@ define('plugins/notifications/calendar/register',
             var InviteNotifications = controller.get('io.ox/calendar', InviteNotificationsView),
                 ReminderNotifications = controller.get('io.ox/calendarreminder', ReminderNotificationsView);
             ReminderNotifications.collection.hidden = [];
-            calApi
+            calAPI
                 .on('new-invites', function (e, invites) {
                     var tmp = [];
 
@@ -287,7 +308,7 @@ define('plugins/notifications/calendar/register',
                             };
                             // TODO: ignore organizerId until we know better
                             var def = $.Deferred();
-                            userApi.get({ id: invite.organizerId || invite.created_by })
+                            userAPI.get({ id: invite.organizerId || invite.created_by })
                                 .done(function (user) {
                                     inObj.organizer = user.display_name;
                                     tmp.push(inObj);
@@ -337,7 +358,7 @@ define('plugins/notifications/calendar/register',
                 });
             }
 
-            reminderApi
+            reminderAPI
                 .on('add:calendar:reminder', function (e, reminder) {
 
                     var tmp = [],
@@ -350,7 +371,7 @@ define('plugins/notifications/calendar/register',
                             folder: remObj.folder,
                             recurrence_position: remObj.recurrence_position
                         };
-                        calApi.get(obj).done(function (data) {
+                        calAPI.get(obj).done(function (data) {
 
                             var inObj = {
                                 cid: _.cid(remObj),
@@ -371,7 +392,7 @@ define('plugins/notifications/calendar/register',
                                         ReminderNotifications.collection.remove(reminderModel);
                                     }
                                 });
-                                
+
                                 // do not add user suppressed ('remind me later') reminders
                                 if (ReminderNotifications.collection.hidden.length === 0 || _.indexOf(ReminderNotifications.collection.hidden, _.cid(remObj)) === -1) {
                                     ReminderNotifications.collection.add(new Backbone.Model(inObj));
@@ -387,11 +408,16 @@ define('plugins/notifications/calendar/register',
                         });
                     });
                 });
-            calApi.on('delete:appointment', removeReminders)
+            calAPI.on('delete:appointment', removeReminders)
                   .on('delete:appointment', function () {
-                        reminderApi.getReminders();
+                        reminderAPI.getReminders();
+                    })
+                  .on('mark:invite:confirmed', function (e, obj) {
+                        if (obj.data.confirmation === 2) {//remove reminders for declined appointments
+                            removeReminders(e, obj);
+                        }
                     });
-            reminderApi.getReminders();
+            reminderAPI.getReminders();
         }
     });
     return true;

@@ -48,9 +48,15 @@ define('io.ox/calendar/freebusy/controller',
                 // folder data
                 folderData = {},
                 // shared navigation date
-                refDate = new date.Local();
+                refDate;
 
             this.promise = state.promise();
+
+            if (options.baton && options.baton.app) {
+                refDate = options.baton.app.refDate;
+            } else {
+                refDate = new date.Local(options.start_date || _.now());
+            }
 
             // create container node
             this.$el = templates.getMainContainer().on('dispose', function () {
@@ -91,7 +97,7 @@ define('io.ox/calendar/freebusy/controller',
                 } else {
                     this.updateAppointment(data);
                 }
-                
+
             };
 
             this.postprocess = function () {
@@ -265,7 +271,6 @@ define('io.ox/calendar/freebusy/controller',
                     mode: mode,
                     refDate: refDate,
                     showFulltime: false,
-                    startDate: options.start_date,
                     todayClass: ''
                 });
 
@@ -331,9 +336,9 @@ define('io.ox/calendar/freebusy/controller',
                 var cid = model.cid;
                 self.participantsView.find('[data-cid="' + cid + '"]').remove();
             }
-            
+
             function resolveParticipants(data) { //resolves groups to it's users and adds them
-                
+
                 if (_.isArray(data.distribution_list)) {
                     // resolve distribution lits
                     _(data.distribution_list).each(function (data) {
@@ -392,7 +397,7 @@ define('io.ox/calendar/freebusy/controller',
                     distributionlists: true,
                     groups: true,
                     parentSelector: 'body',
-                    placement: 'top',
+                    placement: 'bottom',
                     resources: true
                 });
 
@@ -420,11 +425,11 @@ define('io.ox/calendar/freebusy/controller',
 
             this.$el.append(
                 templates.getHeadline(standalone),
+                this.autoCompleteControls,
                 templates.getParticipantsScrollpane().append(this.participantsView),
                 !standalone ? templates.getBackControl() : templates.getQuitControl(),
                 templates.getControls().append(
                     templates.getIntervalDropdown().on('click', 'li a', changeView),
-                    this.autoCompleteControls,
                     templates.getPopover(standalone)
                 )
             )
@@ -435,6 +440,14 @@ define('io.ox/calendar/freebusy/controller',
 
             var freebusy = new that.FreeBusy(options);
             options.$el.append(freebusy.$el);
+
+            var pagination = freebusy.$el.find('.pagination'),
+                infoDateWidth = freebusy.$el.find('.info').outerWidth(),
+                widthPagination = pagination.outerWidth();
+
+            if (widthPagination <= '370') {
+                pagination.css('margin-left', infoDateWidth);
+            }
 
             folderAPI.get({ folder: options.folder }).always(function (data) {
                 // pass folder data over to view (needs this for permission checks)

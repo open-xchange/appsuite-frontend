@@ -17,23 +17,18 @@ define('io.ox/tasks/actions',
      'io.ox/core/extPatterns/links',
      'gettext!io.ox/tasks',
      'io.ox/core/notifications',
-     'io.ox/core/print',
-     'io.ox/core/config',
-     'io.ox/core/capabilities',
-     'io.ox/office/preview/fileActions'], function (ext, util, links, gt, notifications, print, configApi, capabilities, previewfileactions) {
+     'io.ox/core/print'
+    ], function (ext, util, links, gt, notifications, print) {
 
     'use strict';
 
     //  actions
     var Action = links.Action, Button = links.Button,
-        ActionGroup = links.ActionGroup, ActionLink = links.ActionLink,
-        isPreviewable = function (e) {
-            return capabilities.has('document_preview') && e.collection.has('one') && previewfileactions.SupportedExtensions.test(e.context.filename);
-        };
+        ActionGroup = links.ActionGroup, ActionLink = links.ActionLink;
 
     new Action('io.ox/tasks/actions/create', {
         requires: function (e) {
-            return e.collection.has('create') && _.device('!small');
+            return e.collection.has('create');// && _.device('!small');
         },
         action: function (baton) {
             ox.load(['io.ox/tasks/edit/main']).done(function (edit) {
@@ -44,7 +39,7 @@ define('io.ox/tasks/actions',
 
     new Action('io.ox/tasks/actions/edit', {
         requires: function (e) {
-            return (_.device('!small') && e.collection.has('one'));
+            return e.collection.has('one');
         },
         action: function (baton) {
             ox.load(['io.ox/tasks/edit/main']).done(function (m) {
@@ -73,7 +68,7 @@ define('io.ox/tasks/actions',
                 popup.show();
                 popup.on('deleteTask', function () {
                     require(['io.ox/tasks/api'], function (api) {
-                        api.remove(data, false)
+                        api.remove(data)
                             .done(function (data) {
                                 notifications.yell('success', gt.ngettext('Task has been deleted!',
                                                                           'Tasks have been deleted!', numberOfTasks));
@@ -144,7 +139,7 @@ define('io.ox/tasks/actions',
                     .done(function (result) {
                         _(data).each(function (item) {
                             //update detailview
-                            api.trigger('update:' + encodeURIComponent(item.folder_id + '.' + item.id));
+                            api.trigger('update:' + _.ecid(item));
                         });
 
                         notifications.yell('success', mods.label);
@@ -157,7 +152,7 @@ define('io.ox/tasks/actions',
                 mods.data.folder_id = data.folder_id || data.folder;
                 api.update(mods.data)
                     .done(function (result) {
-                        api.trigger('update:' + encodeURIComponent(data.folder_id + '.' + data.id));
+                        api.trigger('update:' + _.ecid(data));
                         notifications.yell('success', mods.label);
                     })
                     .fail(function (result) {
@@ -197,17 +192,22 @@ define('io.ox/tasks/actions',
                 } else {
 
                     //build popup
-                    var popup = new dialogs.ModalDialog({ easyOut: true })
+                    var popup = new dialogs.ModalDialog()
                         .header($('<h4>').text(gt('Move')))
                         .addPrimaryButton('ok', gt('Move'))
                         .addButton('cancel', gt('Cancel'));
                     popup.getBody().css({ height: '250px' });
-                    var tree = new views.FolderList(popup.getBody(), { type: 'tasks' }),
+                    var tree = new views.FolderList(popup.getBody(), {
+                            type: 'tasks',
+                            tabindex: 0
+                        }),
                         id = String(task.folder || task.folder_id);
                     //go
                     popup.show(function () {
                         tree.paint().done(function () {
-                            tree.select(id);
+                            tree.select(id).done(function () {
+                                popup.getBody().focus();
+                            });
                         });
                     })
                     .done(function (action) {
@@ -246,7 +246,7 @@ define('io.ox/tasks/actions',
         requires: function (args) {
             var result = false;
             if (args.baton.data.participants) {
-                var userId = configApi.get('identifier');
+                var userId = ox.user_id;
                 _(args.baton.data.participants).each(function (participant) {
                     if (participant.id === userId) {
                         result = true;
@@ -272,8 +272,7 @@ define('io.ox/tasks/actions',
                                             confirmmessage: message}
                         }).done(function () {
                             //update detailview
-                            api.trigger("update:" + data.folder_id + '.' + data.id);
-                            api.trigger("mark:task:confirmed", [{id: data.id}]);
+                            api.trigger("update:" + _.ecid({id: data.id, folder_id: data.folder_id}));
                         });
                     }
                 });
@@ -326,6 +325,30 @@ define('io.ox/tasks/actions',
     });
 
     //attachment actions
+    new links.Action('io.ox/tasks/actions/slideshow-attachment', {
+        id: 'slideshow',
+        requires: function (e) {
+            return e.collection.has('multiple') && _(e.context).reduce(function (memo, obj) {
+                return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
+            }, false);
+        },
+        multiple: function (list, baton) {
+            require(['io.ox/core/api/attachment', 'io.ox/files/carousel'], function (attachmentAPI, slideshow) {
+                var files = _(list).map(function (file) {
+                    return {
+                        url: attachmentAPI.getUrl(file, 'open'),
+                        filename: file.filename
+                    };
+                });
+                slideshow.init({
+                    baton: {allIds: files},
+                    attachmentMode: false,
+                    selector: '.window-container.io-ox-tasks-window'
+                });
+            });
+        }
+    });
+
     new Action('io.ox/tasks/actions/preview-attachment', {
         id: 'preview',
         requires: function (e) {
@@ -345,11 +368,11 @@ define('io.ox/tasks/actions',
         multiple: function (list, baton) {
             ox.load(['io.ox/core/tk/dialogs',
                      'io.ox/preview/main',
-                     'io.ox/core/api/attachment']).done(function (dialogs, p, attachmentApi) {
+                     'io.ox/core/api/attachment']).done(function (dialogs, p, attachmentAPI) {
                 //build Sidepopup
                 new dialogs.SidePopup().show(baton.e, function (popup) {
                     _(list).each(function (data, index) {
-                        data.dataURL = attachmentApi.getUrl(data, 'view');
+                        data.dataURL = attachmentAPI.getUrl(data, 'view');
                         var pre = new p.Preview(data, {
                             width: popup.parent().width(),
                             height: 'auto'
@@ -372,34 +395,13 @@ define('io.ox/tasks/actions',
 
     new Action('io.ox/tasks/actions/open-attachment', {
         id: 'open',
-        requires: function (e) {
-            return !isPreviewable(e);
-        },
+        requires: 'some',
         multiple: function (list) {
-            ox.load(['io.ox/core/api/attachment']).done(function (attachmentApi) {
+            ox.load(['io.ox/core/api/attachment']).done(function (attachmentAPI) {
                 _(list).each(function (data) {
-                    var url = attachmentApi.getUrl(data, 'open');
+                    var url = attachmentAPI.getUrl(data, 'open');
                     window.open(url);
                 });
-            });
-        }
-    });
-
-    new Action('io.ox/tasks/actions/open', {
-        requires: function (e) {
-            return isPreviewable(e);
-        },
-        action: function (o) {
-            var file = {};
-            file.id = o.data.id;
-            file.filename = o.data.filename;
-            file.folder_id = o.data.folder;
-            file.source = 'task';
-            file.module = o.data.module;
-            file.attached = o.data.attached;
-            ox.launch('io.ox/office/preview/main', {
-                action: 'load',
-                file: file
             });
         }
     });
@@ -408,9 +410,9 @@ define('io.ox/tasks/actions',
         id: 'download',
         requires: 'some',
         multiple: function (list) {
-            ox.load(['io.ox/core/api/attachment']).done(function (attachmentApi) {
+            ox.load(['io.ox/core/api/attachment']).done(function (attachmentAPI) {
                 _(list).each(function (data) {
-                    var url = attachmentApi.getUrl(data, 'download');
+                    var url = attachmentAPI.getUrl(data, 'download');
                     window.open(url);
                 });
             });
@@ -422,10 +424,10 @@ define('io.ox/tasks/actions',
         capabilities: 'infostore',
         requires: 'some',
         multiple: function (list) {
-            ox.load(['io.ox/core/api/attachment']).done(function (attachmentApi) {
+            ox.load(['io.ox/core/api/attachment']).done(function (attachmentAPI) {
                 //cannot be converted to multiple request because of backend bug (module overides params.module)
                 _(list).each(function (data) {
-                    attachmentApi.save(data);
+                    attachmentAPI.save(data);
                 });
                 setTimeout(function () {notifications.yell('success', gt('Attachments have been saved!')); }, 300);
             });
@@ -493,14 +495,15 @@ define('io.ox/tasks/actions',
         prio: 'lo',
         ref: 'io.ox/tasks/actions/placeholder',
         draw: function (baton) {
+            if (_.device('smartphone')) return;
             var data = baton.data;
             this.append(
                 $('<span class="dropdown io-ox-action-link">').append(
                     // link
-                    $('<a href="#" data-toggle="dropdown">')
+                    $('<a href="#" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
                     .text(gt('Change due date')).append($('<b class="caret">')).dropdown(),
                     // drop down
-                    $('<ul class="dropdown-menu dropdown-right">').append(
+                    $('<ul class="dropdown-menu dropdown-right" role="menu">').append(
                         util.buildDropdownMenu(new Date(), true)
                     )
                     .delegate('li a', 'click', {task: data}, function (e) {
@@ -533,7 +536,7 @@ define('io.ox/tasks/actions',
                                         } else {
                                             modifications.start_date = modifications.end_date;
                                             api.update(modifications).done(function () {
-                                                api.trigger('update:' + encodeURIComponent(modifications.folder_id + '.' + modifications.id));
+                                                api.trigger('update:' + _.ecid(modifications));
                                                 notifications.yell('success', gt('Changed due date'));
                                             });
                                         }
@@ -541,7 +544,7 @@ define('io.ox/tasks/actions',
                                 });
                             } else {
                                 api.update(modifications).done(function () {
-                                    api.trigger('update:' + encodeURIComponent(modifications.folder_id + '.' + modifications.id));
+                                    api.trigger('update:' + _.ecid(modifications));
                                     notifications.yell('success', gt('Changed due date'));
                                 });
                             }
@@ -578,6 +581,13 @@ define('io.ox/tasks/actions',
 
     // Attachments
     ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
+        id: 'slideshow',
+        index: 100,
+        label: gt('Slideshow'),
+        ref: 'io.ox/tasks/actions/slideshow-attachment'
+    }));
+
+    ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
         id: 'preview',
         index: 100,
         label: gt('Preview'),
@@ -585,16 +595,9 @@ define('io.ox/tasks/actions',
     }));
 
     ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
-        id: 'open1',
-        index: 250,
-        label: gt('Open'),
-        ref: 'io.ox/tasks/actions/open'
-    }));
-
-    ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
         id: 'open',
         index: 200,
-        label: gt('Open in new tab'),
+        label: gt('Open in browser'),
         ref: 'io.ox/tasks/actions/open-attachment'
     }));
 

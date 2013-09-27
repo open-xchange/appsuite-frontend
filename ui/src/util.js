@@ -89,7 +89,7 @@
      // supported browsers
     _.browserSupport = {
         'Chrome'    : 20,
-        'Safari'    : 5,
+        'Safari'    : 6,
         'Firefox'   : 10,
         'IE'        : 9,
         'Android'   : 4.1,
@@ -101,12 +101,14 @@
         isOpera = Object.prototype.toString.call(window.opera) === "[object Opera]",
         webkit = ua.indexOf('AppleWebKit/') > -1,
         chrome = ua.indexOf('Chrome/') > -1,
+        phantom = ua.indexOf('PhantomJS/') > -1,
         MacOS = ua.indexOf('Macintosh') > -1,
         Windows = ua.indexOf('Windows') > -1,
         Blackberry = (ua.indexOf('BB10') > -1 || ua.indexOf('RIM Tablet') > 1 || ua.indexOf('BlackBerry') > 1),
         WindowsPhone = ua.indexOf('Windows Phone') > -1,
         Android = (ua.indexOf('Android') > -1) ? ua.split('Android')[1].split(';')[0].trim() : undefined,
-        iOS = (navigator.userAgent.match(/(iPad|iPhone|iPod)/i)) ? ua.split('like')[0].split('OS')[1].trim().replace(/_/g,'.') : undefined;
+        iOS = (navigator.userAgent.match(/(iPad|iPhone|iPod)/i)) ? ua.split('like')[0].split('OS')[1].trim().replace(/_/g,'.') : undefined,
+        standalone = ("standalone" in window.navigator) && window.navigator.standalone;
 
     // add namespaces, just sugar
     _.browser = {
@@ -119,14 +121,17 @@
         /** is WebKit? */
         WebKit: webkit,
         /** Safari */
-        Safari: !iOS && !Android && webkit && !chrome ?
-            ua.split('Version/')[1].split(' Safari')[0] : undefined,
+        Safari: !Android && webkit && !chrome && !phantom ?
+            (standalone ? iOS : ua.split('Version/')[1].split(' Safari')[0]) : undefined,
+        /** PhantomJS (needed for headless spec runner) */
+        PhantomJS: webkit && phantom ?
+            ua.split('PhantomJS/')[1].split(' ')[0] : undefined,
         /** Chrome */
         Chrome: webkit && chrome ?
             ua.split('Chrome/')[1].split(' ')[0].split('.')[0] : undefined,
         /** is Firefox? */
-        Firefox: (ua.indexOf('Gecko') > -1 && ua.indexOf('KHTML') === -1) ?
-            ua.split('Firefox/')[1].split('.')[0] : undefined,
+        Firefox: (ua.indexOf('Gecko') > -1 && ua.indexOf('Firefox') > -1 && ua.indexOf('KHTML') === -1) ?
+            ua.split(/Firefox(\/| )/)[2].split('.')[0] : undefined,
         /** OS **/
         Blackberry: Blackberry,
         WindowsPhone: (WindowsPhone && (ua.indexOf('IEMobile/10.0') > -1 )) ? true : undefined, // no version here yet
@@ -144,7 +149,7 @@
         // '7.2.3' will be 7.2
         // '6.0.1' will be 6
         if (_.isString(value)) {
-            value = parseFloat(value, 10);
+            value = value === '' ? true : parseFloat(value, 10);
             _.browser[key] = value;
         }
         key = key.toLowerCase();
@@ -163,9 +168,18 @@
     };
 
     var display = {};
+    function queryScreen() {
+        _(queries).each(function (query, key) {
+            display[key] = Modernizr.mq(query);
+        });
+    };
 
-    _(queries).each(function (query, key) {
-        display[key] = Modernizr.mq(query);
+    queryScreen();
+
+    // update device information live
+    $(window).on('resize.queryScreen', function (e) {
+        // disabled due to sideeffects
+         //queryScreen();
     });
 
     var mobileOS = !!(_.browser.ios || _.browser.android || _.browser.blackberry || _.browser.windowsphone);
@@ -189,7 +203,21 @@
             if (display.medium) return 'medium';
             return 'large';
         },
+        /**used to recheck the device properties
+         *fix for a bug where device was checked too early (desktop was detected as small)
+         *USE WITH CAUTION!
+         *if _.device values are changed it might cause sideEffects
+         */
+        recheckDevice: function () {
+            queryScreen();
 
+            mobileOS = !!(_.browser.ios || _.browser.android || _.browser.blackberry || _.browser.windowsphone);
+            // define devices as combination of screensize and OS
+            display.smartphone = display.small && mobileOS;
+            display.tablet = display.medium && mobileOS; // maybe to fuzzy...
+            display.desktop = !mobileOS;
+            _.displayInfo = display;
+        },
         // combination of browser & display
         device: function (condition, debug) {
             // add support for language checks
@@ -197,6 +225,7 @@
             misc[lang] = true;
             misc[lang.split('_')[0] + '_*'] = true;
             misc.touch = Modernizr.touch;
+            misc.standalone = standalone;
             misc.emoji = _.hasNativeEmoji();
             // no arguments?s
             if (arguments.length === 0) {
@@ -358,7 +387,8 @@
 
         setCookie: function (key, value, lifetime) {
             // yep, works this way:
-            var c = key + "=" + encodeURIComponent(value) + (lifetime ? '; expires=' + new Date(new Date().getTime() + lifetime).toGMTString() + '; path=/' : '');
+            var c = key + "=" + encodeURIComponent(value) +
+                (lifetime ? '; expires=' + new Date(new Date().getTime() + lifetime).toGMTString() : '') + '; path=/';
             document.cookie = c;
         },
 
@@ -396,6 +426,11 @@
          */
         now: function () {
             return (new Date()).getTime();
+        },
+
+        // return timestamp far away in the future
+        then: function () {
+            return 2116800000000;
         },
 
         /**
@@ -660,6 +695,12 @@
             };
         }()),
 
+        // escape cid - usefull for evant handlers
+        ecid: function (o) {
+            var cid = typeof o === 'string' ? o : _.cid(o);
+            return encodeURIComponent(cid).replace(/\./g, ':');
+        },
+
         // if someone has a better name ...
         isSet: function (o) {
             return o !== null && o !== undefined && o !== '';
@@ -701,11 +742,6 @@
         console.error(message || 'Assertion failed!');
         if (console.trace) console.trace();
     };
-    try {
-        if (assert(true) === 0) delete window.assert; // Available only in debug builds
-    } catch (e) {
-        // do nothing if delete fails (this happens on IE8 -_-)
-    }
 
     /**
      * Converts HTML entities to Unicode characters.

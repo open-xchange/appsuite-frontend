@@ -65,6 +65,7 @@
         "hm": "hh:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "d. M.",
         "Hmv": "HH:mm v",
         "hmv": "hh:mm a v",
         "yMdHm": "d. M. y. HH:mm",
@@ -76,7 +77,7 @@
         "yMEdhm": "E, d. M. y. hh:mm a",
         "yMEdhmv": "E, d. M. y. hh:mm a v"
     },
-    "date": "d. M. y.",
+    "date": "d. MMM y.",
     "time": "HH:mm",
     "dateTimeFormat": "%2$s %1$s",
     "intervals": {
@@ -116,9 +117,9 @@
         "pm": "PM"
     },
     "eras": [
-        "p. n. e.",
-        "A. D."
+        "pr. n. e.",
+        "n.e."
     ],
-    "dateTime": "d. M. y. HH:mm",
+    "dateTime": "d. MMM y. HH:mm",
     "h12": false
 }

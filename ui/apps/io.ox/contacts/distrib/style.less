@@ -1,125 +1,122 @@
+.create-distributionlist {
 
-.create-distributionlist .section-group.header {
-    padding-top: 10px;
-    min-height: 60px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+
+    .title-controls .btn {
+        float:right;
+    }
+    .title-controls .btn-primary { margin-left: 13px; }
+
+    label.control-label {
+        font-size: 13px;
+        color: #888;
+
+        span { white-space: nowrap; }
+    }
+
+    div.section {
+        display: block;
+        clear: both;
+        padding: 20px;
+    }
+
+    h1.title {
+        font-size: 20px;
+        float: left;
+    }
+
+    .item-list-header {
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .sectiontitle {
+        font-size: 13px;
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+        font-weight: normal;
+        margin: 20px 0 15px 0;
+        color: #888;
+    }
+
+    .item-list {
+
+        overflow-x: hidden;
+        overflow-y: auto;
+        margin-bottom: 20px;
+
+        .listed-item {
+
+            &:nth-child(odd) { margin-left:0; }
+            margin-bottom:2px;
+            position: relative;
+            float:left;
+
+            .person-name {
+                font-weight: bold;
+            }
+
+            .person-mail {
+                padding-right: 30px;
+            }
+
+            .remove {
+                display: block;
+                position: absolute;
+                top: 0px;
+                right: 0px;
+                bottom: 0px;
+                width: 30px;
+                line-height: 1em;
+                background-color: #f5f5f5;
+                cursor: pointer;
+                color: #ccc;
+                outline: 0;
+
+                &:hover, &:focus {
+                    background-color: #a00;
+                    color: #fff;
+                    text-decoration: none
+                };
+
+                .icon {
+                    position: absolute;
+                    top: 50%;
+                    left: 0;
+                    right: 0;
+                    margin-top: -0.5em;
+                    text-align: center;
+                }
+            }
+
+            &.backstripes[data-mail="empty"] {
+                text-align: center;
+                line-height: 3em;
+            }
+        }
+    }
+
+    .alert { margin-top: 1em; }
+
+    .add-participant { width: 340px; }
+
+    .contact-image {
+        float: left;
+        display: inline-block;
+        margin: 0 1em 0 5px;
+        .picture(48px, 48px);
+    }
+
+    @media (max-width: 767px) {
+        .title-controls .btn-primary { margin-bottom: 5px; }
+    }
+
+    @media (min-width: 767px) {
+        .alert { max-width: 340px; }
+    }
+
 }
 
-.create-distributionlist .section-group.header .input {
-    float: left;
-    width: auto;
-}
 
-.create-distributionlist .section.last {
-    border: none;
-}
-
-.create-distributionlist .sectiontitle {
-    font-size: 13px;
-    margin: 20px 0 15px 0;
-    color: #888;
-    font-weight: 300;
-    border-bottom: 1px solid #E5E5E5;
-}
-
-.create-distributionlist .item-list-header {
-    margin-bottom: 20px;
-    overflow: hidden;
-}
-
-.create-distributionlist .controls .btn {
-    float: right;
-    margin-left: 13px;
-}
-
-.create-distributionlist .item-list {
-    /*height: 200px;*/
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-
-.create-distributionlist label {
-    color: #888;
-    font-weight: 300;
-    display: block;
-}
-
-.create-distributionlist input {
-    width: 310px;
-}
-
-.create-distributionlist .item-list .listet-item {
-    width: 700px;
-    float: left;
-    margin-bottom: 3px;
-}
-
-.create-distributionlist .item-list .listet-item .person-link.ellipsis {
-    width: 260px;
-    margin-top: 12px;
-    float: left;
-}
-
-.create-distributionlist .item-list .listet-item .person-selected-mail {
-    width: 240px;
-    margin-top: 12px;
-    margin-left: 20px;
-    float: left;
-}
-
-.create-distributionlist .fieldset {
-    width: 240px;
-    margin-top: 12px;
-    float: left;
-}
-
-.create-distributionlist .fieldset.name {
-    width: 290px;
-    margin-left: 0px;
-    margin-right: 25px;
-    margin-bottom: 200px;
-}
-
-.create-distributionlist .fieldset.mail{
-    margin-left:  20px;
-    margin-bottom: 200px;
-    width: 230px;
-}
-
-.create-distributionlist .contact-image,
-.create-distributionlist-contact-image {
-    height: 3em;
-    width: 3em;
-    margin: 0 1em 0 5px;
-    display: inline-block;
-    background-size: cover;
-    background-repeat: no-repeat;
-    float: left;
-}
-
-.create-distributionlist-contact-image {
-    margin-left: 0;
-}
-
-.create-distributionlist .item-list .listet-item a.close {
-    margin-top: 8px;
-    margin-right: 4px;
-    float: right;
-    display: inline-block;
-    height: 16px;
-    width: 16px
-}
-
-.create-distributionlist .btn.btn-inverse {
-    float: right;
-    margin-top: 37px;
-    margin-right: 0px;
-}
-
-.create-distributionlist .alert {
-    margin-top: 18px;
-}
-
-.listet-item.backstripes[data-mail="empty"] {
-    text-align: center;
-    line-height: 3em;
-}

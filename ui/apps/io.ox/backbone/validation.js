@@ -10,12 +10,21 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/backbone/validation", ["io.ox/core/extensions", 'gettext!io.ox/backbone/validation'], function (ext, gt) {
+define("io.ox/backbone/validation",
+    ["io.ox/core/extensions",
+     "io.ox/core/util",
+     'settings!io.ox/core',
+     'gettext!io.ox/backbone/validation'], function (ext, util, settings, gt) {
+
     "use strict";
 
     // var regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
-    var regEmail = /\@/; // See also io.ox/mail/accounts/model.js
+    var regEmail = /\@\S/; // See also io.ox/mail/accounts/model.js
+
+    var emptycheck  = function (value) {
+        return (_.isUndefined(value) || value === null || value === '');
+    };
 
     var formats = {
         string: function (val) {
@@ -26,8 +35,10 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions", 'gettext!io.ox/bac
             return true;
         },
         number: function (val) {
-            var regex = /^\d+$/;
-            return regex.test(val) ||
+            var isValid = (emptycheck(val)) || //empty value is valid (if not, add the mandatory flag)
+                          (!isNaN(parseFloat(val, 10)) &&  //check if its a number
+                          (parseFloat(val, 10).toString().length === val.toString().length));//check if parseFloat did not cut the value (1ad2 would be made to 1 without error)
+            return isValid ||
                 'Please enter a valid number';
         },
         array: function (val) {
@@ -56,12 +67,19 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions", 'gettext!io.ox/bac
             return _.now() > val || gt('Please enter a date in the past');
         },
         email: function (val) {
-            var result = (regEmail.test(val) || val === '');
-            return result || gt('Please enter a valid email address');
-
+            return util.isValidMailAddress(val) || gt('Please enter a valid email address');
+        },
+        phone: function (val) {
+            return settings.get('features/validatePhoneNumbers', false) === false ||
+                util.isValidPhoneNumber(val) ||
+                gt('Please enter a valid phone number. Allowed characters are: %1$s', '0-9 , . - ( ) # + ; /');
         },
         url: function (val) {
             return true;
+        },
+        object: function (val) {
+            return _.isObject(val) ||
+                gt('Please enter a valid object');
         }
     };
 
@@ -112,7 +130,7 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions", 'gettext!io.ox/bac
                         validate: function (attributes, errors) {
                             var value = attributes[attribute];
 
-                            if (_.isUndefined(value) || value === null || value === '') {
+                            if (emptycheck(value)) {
                                 errors.add(attribute, gt('Please enter a value'));
                             }
                         }

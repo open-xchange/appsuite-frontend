@@ -1,13 +1,13 @@
 {
     "daysInFirstWeek": null,
     "days": [
-        "ഞായറാഴ്ച",
-        "തിങ്കളാഴ്ച",
+        "ഞായറാഴ്‌ച",
+        "തിങ്കളാഴ്‌ച",
         "ചൊവ്വാഴ്ച",
-        "ബുധനാഴ്ച",
-        "വ്യാഴാഴ്ച",
-        "വെള്ളിയാഴ്ച",
-        "ശനിയാഴ്ച"
+        "ബുധനാഴ്‌ച",
+        "വ്യാഴാഴ്‌ച",
+        "വെള്ളിയാഴ്‌ച",
+        "ശനിയാഴ്‌ച"
     ],
     "daysShort": [
         "ഞായർ",
@@ -37,7 +37,7 @@
         "ജൂലൈ",
         "ആഗസ്റ്റ്",
         "സെപ്റ്റംബർ",
-        "ഒക്ടോബർ",
+        "ഒക്‌ടോബർ",
         "നവംബർ",
         "ഡിസംബർ"
     ],
@@ -58,22 +58,23 @@
     "formats": {
         "E": "E",
         "yMd": "d/M/y",
-        "yMEd": "d-M-yyyy, E",
+        "yMEd": "d-M-y, E",
         "yMMMd": "y MMM d",
         "yMMMEd": "y MMM d, E",
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "d/M",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
         "yMdHm": "d/M/y HH:mm",
         "yMdHmv": "d/M/y HH:mm v",
         "yMdhm": "d/M/y h:mm a",
         "yMdhmv": "d/M/y h:mm a v",
-        "yMEdHm": "d-M-yyyy, E HH:mm",
-        "yMEdHmv": "d-M-yyyy, E HH:mm v",
-        "yMEdhm": "d-M-yyyy, E h:mm a",
-        "yMEdhmv": "d-M-yyyy, E h:mm a v"
+        "yMEdHm": "d-M-y, E HH:mm",
+        "yMEdHmv": "d-M-y, E HH:mm v",
+        "yMEdhm": "d-M-y, E h:mm a",
+        "yMEdhmv": "d-M-y, E h:mm a v"
     },
     "date": "y, MMM d",
     "time": "h:mm a",
@@ -104,7 +105,7 @@
             "y": "y MMM d - y MMM d"
         },
         "yMMMEd": {
-            "d": "y, MMM d, E - d, E",
+            "d": "y MMM d, E – MMM d, E",
             "m": "y MMM d, E - MMM d, E",
             "y": "y MMM d, E - y MMM d, E"
         }
@@ -114,8 +115,8 @@
         "pm": "PM"
     },
     "eras": [
-        "ക്രി.മൂ",
-        "ക്രി.പി."
+        "ബിസിഇ",
+        "സിഇ"
     ],
     "dateTime": "y, MMM d h:mm a",
     "h12": true

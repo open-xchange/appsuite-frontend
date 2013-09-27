@@ -16,7 +16,6 @@ define('io.ox/mail/main',
      'io.ox/mail/api',
      'io.ox/core/extensions',
      'io.ox/core/commons',
-     'io.ox/core/config',
      'io.ox/core/tk/vgrid',
      'io.ox/mail/view-detail',
      'io.ox/mail/view-grid-template',
@@ -24,6 +23,7 @@ define('io.ox/mail/main',
      'io.ox/core/tk/upload',
      'io.ox/core/extPatterns/dnd',
      'io.ox/core/extPatterns/actions',
+     'io.ox/core/tk/dropdown-options',
      'io.ox/core/notifications',
      'io.ox/core/api/folder',
      'io.ox/core/api/account',
@@ -31,11 +31,11 @@ define('io.ox/mail/main',
      'io.ox/mail/actions',
      'less!io.ox/mail/style.less',
      'io.ox/mail/folderview-extensions'
-    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt, upload, dnd, actions, notifications, folderAPI, account, settings) {
+    ], function (util, api, ext, commons, VGrid, viewDetail, tmpl, gt, upload, dnd, actions, dropdownOptions, notifications, folderAPI, account, settings) {
 
     'use strict';
 
-    var draftFolderId = config.get('modules.mail.defaultFolder.drafts'),
+    var draftFolderId = settings.get('defaultFolder/drafts'),
 
         hToolbarOptions = function (e) {
             e.preventDefault();
@@ -122,7 +122,7 @@ define('io.ox/mail/main',
                 showSwipeButton = false;
             }
         };
-
+        // mobile stuff
         ext.point('io.ox/mail/swipeDelete').extend({
             index: 666,
             id: 'deleteButton',
@@ -132,20 +132,27 @@ define('io.ox/mail/main',
                     removeButton();
                 }
                 this.append(
-                    $('<div class="btn btn-danger mail swipeDelete fadein">')
+                    $('<div class="mail cell-button swipeDelete fadein fast">')
                         .text(gt('Delete'))
                         .on('mousedown', function (e) {
                             // we have to use mousedown as the selection listens to this, too
                             // otherwise we are to late to get the event
+                            e.stopImmediatePropagation();
+                        }).on('tap', function (e) {
                             e.preventDefault();
-                            actions.invoke('io.ox/mail/actions/delete', null, baton);
                             removeButton();
                             showSwipeButton = false;
+                            actions.invoke('io.ox/mail/actions/delete', null, baton);
                         })
                 );
                 showSwipeButton = true;
             }
         });
+
+        // reenable PDF downnloading for smartphone
+        if (_.device('ios')) {
+            ext.point('io.ox/mail/actions/open-attachment').disable('disable_action');
+        }
 
         // grid
         var originalOptions = ext.point('io.ox/mail/vgrid/options').options(),
@@ -193,7 +200,7 @@ define('io.ox/mail/main',
             if (count < this.option('max')) return $();
             // show tail
             return $('<div class="vgrid-cell tail">').append(
-                $('<a href="#">').text(gt('Show all mails. Note: Mails are no longer grouped by conversation.'))
+                $('<a href="#" tabindex="-1">').text(gt('Show all mails. Note: Mails are no longer grouped by conversation.'))
             );
         };
 
@@ -217,7 +224,9 @@ define('io.ox/mail/main',
             // reset "unread only"
             grid.prop('unread', false);
             // template changes for unified mail
-            var unified = folderAPI.is('unifiedfolder', folder);
+
+            var unified = account.parseAccountId(folder, true) === 0 ? false : folderAPI.is('unifiedfolder', folder);
+
             if (unified !== tmpl.unified) {
                 tmpl.unified = unified;
                 grid.updateTemplates();
@@ -225,22 +234,11 @@ define('io.ox/mail/main',
         });
 
         //get sorting settings with fallback for extpoint
-        var sortSettings = {};
-        sortSettings.sort = options.sort || settings.get('vgrid/sort', 'thread');
-        sortSettings.order = options.desc || settings.get('vgrid/order', 'desc');
-        sortSettings.unread = options.unread || settings.get('unread', false);
-
-        //check if folder actually supports threadview
-        if (sortSettings.sort === 'thread' && options.threadView === false) {
-            sortSettings.sort = '610';
-        }
-
-        //set to default sort
-        grid.on('beforechange:prop:folder', function () {
-            grid.prop('sort', sortSettings.sort)
-                .prop('order', sortSettings.order)
-                .prop('unread', sortSettings.unread);
-        });
+        var sortSettings = {
+            sort: options.sort || settings.get('vgrid/sort', 'thread'),
+            order: options.desc || settings.get('vgrid/order', 'desc'),
+            unread: options.unread || settings.get('unread', false)
+        };
 
         // remove delete button if needed
         grid.selection.on('change', removeButton);
@@ -252,15 +250,35 @@ define('io.ox/mail/main',
             var ul = grid.getToolbar().find('ul.dropdown-menu'),
                 threadView = settings.get('threadView'),
                 isInbox = account.is('inbox', grid.prop('folder')),
-                isOn = threadView === 'on' || (threadView === 'inbox' && isInbox);
+                isOn = threadView === 'on' || (threadView === 'inbox' && isInbox),
+                //set current or default values
+                target = {
+                    sort: grid.prop('sort') || sortSettings.sort,
+                    order: grid.prop('order') || sortSettings.order,
+                    unread: grid.prop('unread') || sortSettings.unread
+                };
+
+            //reset properties on folder change
+            if (type === 'folder') {
+                target = {
+                    sort: sortSettings.sort,
+                    order: sortSettings.order,
+                    unread: sortSettings.unread
+                };
+            }
 
             // some auto toggling
-            if (grid.prop('sort') === 'thread' && !isOn) {
-                grid.prop('sort', '610');
+            if (target.sort === 'thread' && !isOn) {
+                target.sort = '610';
             } //jump back only if thread was the original setting
-            else if (grid.prop('sort') === '610' && type === 'folder' && isOn && isInbox && settings.get('vgrid/sort', 'thread') === 'thread') {
-                grid.prop('sort', 'thread');
+            else if (target.sort === '610' && type === 'folder' && isOn && sortSettings.sort === 'thread') {
+                target.sort = 'thread';
             }
+
+            //update grid
+            grid.prop('sort', target.sort)
+                .prop('order', target.order)
+                .prop('unread', target.unread);
 
             // draw list
             ul.empty().append(
@@ -281,10 +299,15 @@ define('io.ox/mail/main',
 
         function updateGridOptions() {
             var dropdown = grid.getToolbar().find('.grid-options'),
+                dataMenu = dropdown.data('menu'),
                 list = dropdown.find('ul'),
                 props = grid.prop();
-            // uncheck all
-            list.find('i').attr('class', 'icon-none');
+            // mobile menu fix, check if smartphone and menu was opened at least once
+            if (_.device('smartphone') && dataMenu) {
+                list = dataMenu;
+            }
+            // uncheck all, except the mobile-menu close row
+            list.find('i:not(.icon-chevron-down)').attr('class', 'icon-none');
             // sort
             list.find(
                     '[data-option="' + props.sort + '"], ' +
@@ -294,7 +317,7 @@ define('io.ox/mail/main',
                 .find('i').attr('class', 'icon-ok');
             // sent folder?
             list.find('[data-option="from-to"] span').text(
-                account.is('sent', props.folder) ? gt('To') : gt('From')
+                account.is('sent|drafts', props.folder) ? gt('To') : gt('From')
             );
             // unread
             dropdown.find('.icon-envelope')[props.unread ? 'show' : 'hide']();
@@ -363,19 +386,18 @@ define('io.ox/mail/main',
 
         ext.point('io.ox/mail/vgrid/toolbar').extend({
             id: 'dropdown',
-            index: 100,
+            index: 1000,
             draw: function () {
-                this.prepend(
-                    $('<div>').addClass('grid-options dropdown').css({ display: 'inline-block', 'float': 'right' })
+                this.append(
+                    $('<div class="grid-options dropdown">')
                     .append(
-                        $('<a>', { href: '#' })
-                        .attr('data-toggle', 'dropdown')
+                        $('<a href="#" tabindex="1" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').attr('aria-label', gt('Sort options'))
                         .append(
                             $('<i class="icon-envelope">').css('marginRight', '0.5em').hide(),
                             $('<i class="icon-arrow-down">'), $('<i class="icon-arrow-up">')
                         )
                         .dropdown(),
-                        $('<ul>').addClass("dropdown-menu")
+                        $('<ul class="dropdown-menu" role="menu">')
                         .on('click', 'a', { grid: grid }, hToolbarOptions)
                     )
                 );
@@ -384,9 +406,9 @@ define('io.ox/mail/main',
 
         grid.on('change:prop', drawGridOptions);
         settings.on('change', handleSettingsChange);
-        drawGridOptions();
+        drawGridOptions(undefined, 'inital');
 
-        commons.addGridToolbarFolder(app, grid);
+        commons.addGridToolbarFolder(app, grid, 'MAIL');
 
         grid.on('change:ids', function (e, all) {
             // get node & clear now
@@ -514,7 +536,7 @@ define('io.ox/mail/main',
             // add label template
             grid.addLabelTemplate(tmpl.thread);
             grid.requiresLabel = function (i, data, current) {
-                return openThreads[i] !== undefined;
+                return openThreads[i] !== undefined && grid.prop('sort') === 'thread';
             };
 
             function refresh(list, index) {
@@ -562,20 +584,23 @@ define('io.ox/mail/main',
                     close(index, cid);
                 }
             }
-
-            grid.getContainer().on('click', '.thread-size', function () {
+            //use mousedown to prevent selection change
+            grid.getContainer().on('mousedown', '.thread-size, .touch-helper', function (e) {
+                e.preventDefault();//prevent selection change (needed on mobile);
                 var cell = $(this).closest('.vgrid-cell'),
                     index = parseInt(cell.attr('data-index'), 10) + 1,
                     cid = cell.attr('data-obj-id');
                 toggle(index, cid);
             });
 
-            grid.selection.on('keyboard', function (evt, e) {
-                var sel = grid.selection.get(), cid, index, key;
+            grid.selection.on('keyboard', function (evt, e, key) {
+                var sel = grid.selection.get(), cid, cell, index;
                 if (sel.length === 1) {
                     cid = grid.selection.serialize(sel[0]);
-                    index = grid.selection.getIndex(cid);
-                    key = e.which;
+                    cell = grid.getContainer().find('[data-obj-id="' + cid + '"]');
+                    index = parseInt(cell.attr('data-index'), 10) + 1;
+                    // got valid index?
+                    if (!_.isNumber(index)) return;
                     // cursor right? (open)
                     if (key === 39) {
                         open(index, cid);
@@ -603,6 +628,30 @@ define('io.ox/mail/main',
                 });
             });
 
+            // api.on('refresh.color', function (e, list) {
+            //     var container = grid.getContainer();
+            //     console.log('refresh.color', list);
+            //     _(list).each(function (obj) {
+            //         var color = api.tracker.getColorLabel(obj);
+            //         container.find('.thread-summary-item[data-obj-id="' + _.cid(obj) + '"] .flag')
+            //             .attr('class', tmpl.getLabelClass(color));
+            //     });
+            // });
+
+            api.on('refresh.seen', function (e, list) {
+                var container = grid.getContainer();
+                _(list).each(function (obj) {
+                    container.find('.thread-summary-item[data-obj-id="' + _.cid(obj) + '"]').removeClass('unread');
+                });
+            });
+
+            api.on('refresh.unseen', function (e, list) {
+                var container = grid.getContainer();
+                _(list).each(function (obj) {
+                    container.find('.thread-summary-item[data-obj-id="' + _.cid(obj) + '"]').addClass('unread');
+                });
+            });
+
             isInOpenThreadSummary = function (obj) {
                 var cid = _.cid(obj),
                     index = grid.selection.getIndex(cid) + 1;
@@ -618,21 +667,32 @@ define('io.ox/mail/main',
             }), true);
         };
 
-        var showMail, drawMail, drawFail, drawThread;
+        var showMail, drawMail, drawFail, drawThread, currentThread = null;
 
-        showMail = function (obj) {
-            // be busy
-            right.idle().busy(true);
+        app.showMail = showMail = function (obj) {
+
             // which mode?
             if (grid.getMode() === "all" && grid.prop('sort') === 'thread' && !isInOpenThreadSummary(obj)) {
                 // get thread
                 var thread = api.getThread(obj),
-                    baton = ext.Baton({ data: thread, app: app });
+                    baton = ext.Baton({ data: thread, app: app }),
+                    update = false,
+                    tail = api.tracker.getTailCID(obj);
+                // not current thread?
+                if (thread.length > 1 && tail === currentThread) {
+                    update = true;
+                } else {
+                    currentThread = null;
+                }
+                // be busy
+                right.idle().busy(!update);
                 // get first mail first
                 api.get(api.reduce(thread[0]))
-                    .done(_.lfo(drawThread, baton))
+                    .done(_.lfo(drawThread, baton, update))
                     .fail(_.lfo(drawFail, obj));
             } else {
+                // be busy
+                right.idle().busy(true);
                 api.get(api.reduce(obj))
                     .done(_.lfo(drawMail))
                     .fail(_.lfo(drawFail, obj));
@@ -640,25 +700,39 @@ define('io.ox/mail/main',
         };
 
         showMail.cancel = function () {
+            currentThread = null;
             _.lfo(drawThread);
             _.lfo(drawMail);
             _.lfo(drawFail);
         };
 
-        drawThread = function (baton) {
-            viewDetail.drawThread.call(right.idle(), baton.set('options', {
+        drawThread = function (baton, update) {
+            // remember current thread
+            currentThread = api.tracker.getTailCID(_(baton.data).first());
+            baton.set('options', {
+                tabindex: '1',
                 failMessage: gt('Couldn\'t load that email.'),
                 retry: drawThread
-            }));
+            });
+            right.idle();
+            // update?
+            if (update) {
+                viewDetail.updateThread.call(right, baton);
+            } else {
+                viewDetail.drawThread.call(right, baton);
+            }
         };
 
         drawMail = function (data) {
-            var baton = ext.Baton({ data: data, app: app }),
+            var baton = ext.Baton({ data: data, app: app }).set('options', { tabindex: '1' }),
                 mail = viewDetail.draw(baton);
+            currentThread = null;
             right.idle().empty().append(mail);
+            right.closest('.scrollable').scrollTop(0);
         };
 
         drawFail = function (obj, e) {
+            currentThread = null;
             right.idle().empty().append(
                 // not found?
                 e && e.code === 'MSG-0032' ?
@@ -669,6 +743,17 @@ define('io.ox/mail/main',
                     })
             );
         };
+
+        // handle new mails in threads
+        api.on('threadChanged', function (e, obj) {
+            var selection = grid.selection.get(), first;
+            if (selection.length === 1 && api.tracker.getTailCID(selection[0]) === api.tracker.getTailCID(obj)) {
+                first = _(api.tracker.getThread(obj)).first();
+                if (_.cid(first) !== _.cid(selection[0])) {
+                    grid.selection.set(first);
+                }
+            }
+        });
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/mail', showMail, right, api);
         commons.wireGridAndWindow(grid, win);
@@ -682,8 +767,10 @@ define('io.ox/mail/main',
         });
 
         // Uploads
-        app.queues = {
-            'importEML': upload.createQueue({
+        app.queues = {};
+
+        if (settings.get('features/importEML') !== false) {
+            app.queues.importEML = upload.createQueue({
                 start: function () {
                     win.busy();
                 },
@@ -701,14 +788,16 @@ define('io.ox/mail/main',
                 },
                 stop: function () {
                     win.idle();
-                }
-            })
-        };
+                },
+                type: 'importEML'
+            });
+        }
 
-        // drop zone
-        var dropZone = new dnd.UploadZone({ ref: "io.ox/mail/dnd/actions" }, app);
-        win.on("show", dropZone.include).on('hide', dropZone.remove);
-
+        if (!_.isEmpty(app.queues)) {
+            // drop zone
+            var dropZone = new dnd.UploadZone({ ref: "io.ox/mail/dnd/actions" }, app);
+            win.on("show", dropZone.include).on('hide', dropZone.remove);
+        }
 
         //if viewSetting ins changed redraw detailviews and grid
         api.on('viewChanged', function () {
@@ -733,18 +822,32 @@ define('io.ox/mail/main',
             });
 
             var translations = { from: gt('From'), to: gt('To'), cc: gt('CC'), subject: gt('Subject'), text: gt('Mail text') },
-                defaults = ext.point('io.ox/mail/search/defaults').options();
+                checkboxes = ext.point('io.ox/mail/search/checkboxes').options(),
+                defaults = ext.point('io.ox/mail/search/defaults').options(),
+                data = {}, button;
 
-            win.nodes.search.find('.input-append').append(
-                _(ext.point('io.ox/mail/search/checkboxes').options()).map(function (flag, name) {
-                    return flag === true ?
-                        $('<label class="checkbox margin-right">').append(
-                            $('<input type="checkbox" value="on">').attr({ name: name, checked: defaults[name] ? 'checked' : null }),
-                            $.txt(translations[name])
-                        ) :
-                        $();
-                })
-            );
+            //normalise data
+            _(checkboxes).each(function (flag, name) {
+                if (flag === true) {
+                    data[name] = {
+                        name: name,
+                        label: translations[name] || name,
+                        checked: defaults[name] || false
+                    };
+                }
+            });
+            //add dropdown button
+            button = $('<button type="button" data-action="search-options" class="btn fixed-btn search-options" aria-hidden="true">')
+                    .append('<i class="icon-gear">');
+            win.nodes.search.find('.search-query-container').after(button);
+
+            //add dropdown menue
+            var dropdown = dropdownOptions({
+                id: 'mail.search',
+                anchor: button,
+                defaults: data,
+                settings: settings
+            });
 
         }());
 
@@ -753,9 +856,27 @@ define('io.ox/mail/main',
             actions.invoke('io.ox/mail/actions/move', null, baton);
         });
 
+        win.on('show:initial', grid.focus);
+
+        // Push mail
+        if (require("io.ox/core/capabilities").has("rt lab:pushMail")) {
+            require(["io.ox/realtime/events"], function (rtEvents) {
+                rtEvents.on("mail:new", function (data) {
+                    //if (data.folder === "default0/INBOX") {
+                    api.refresh();
+                    //}
+                });
+            });
+        }
+
         // go!
         commons.addFolderSupport(app, grid, 'mail', options.folder)
-            .pipe(commons.showWindow(win, grid));
+            .fail(function (result) {
+                var errorMsg = (result && result.error) ? result.error + ' ' : '';
+                errorMsg += gt('Application may not work as expected until this problem is solved.');
+                notifications.yell('error', errorMsg);
+            })
+            .always(commons.showWindow(win, grid));
     });
 
     return {

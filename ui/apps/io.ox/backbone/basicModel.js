@@ -14,6 +14,7 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
     "use strict";
 
     function ValidationErrors() {
+
         this.errors = {};
 
         this.add = function (attribute, error) {
@@ -36,32 +37,37 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
     }
 
     var BasicModel = Backbone.Model.extend({
+
         initialize: function (obj) {
+
             var self = this;
             this._valid = true;
             this.attributeValidity = {};
             this.id = obj.id;
 
-            this.on("change:id", function () {
-                self.id = self.get("id");
+            this.on('change:id', function () {
+                self.id = self.get('id');
             });
 
             if (this.init) {
                 this.init();
             }
-            this.url = "invalidURL";
+
+            // model might already have a prop or function 'url'
+            this.url = this.url || 'invalidURL';
         },
+
         point: function (subpath) {
             if (/^\//.test(subpath)) {
                 subpath = subpath.substring(1);
             }
             return ext.point(this.ref + subpath);
         },
+
         validate: function (attributes, evt, options) {
             options = options || {};
             var self = this,
                 errors = new ValidationErrors();
-
             attributes = attributes || this.toJSON();
             this.point("validation").invoke("validate", errors, attributes, errors, this);
             if (options.isSave) {
@@ -114,10 +120,7 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
                 action = 'destroy';
             }
             if ((action === 'update' || action === 'create')) {
-                this.validate(this.toJSON(), null, {
-                    isSave: true
-                });
-                if (!this.isValid()) {
+                if (!this.isValid({isSave: true})) {//isValid actually calls the validate function, no need to do this manually
                     return $.Deferred().reject({error: gt('Invalid data'), model: this});
                 }
             }
@@ -157,8 +160,8 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
                 return self.has(attribute) && self.get(attribute) !== '';
             });
         },
-        isValid: function () {
-            this.validate(this.toJSON());
+        isValid: function (options) {
+            this.validate(this.toJSON(), null, options);
             return this._valid;
         },
         hasValidAttributes: function () {

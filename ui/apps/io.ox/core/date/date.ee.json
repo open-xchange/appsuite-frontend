@@ -64,6 +64,7 @@
         "hm": "a 'ga' h:mm",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "M/d",
         "Hmv": "HH:mm v",
         "hmv": "a 'ga' h:mm v",
         "yMdHm": "HH:mm M/d/y",

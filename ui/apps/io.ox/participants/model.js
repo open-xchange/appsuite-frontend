@@ -16,7 +16,9 @@ define('io.ox/participants/model',
          'io.ox/core/api/group',
          'io.ox/core/api/resource',
          'io.ox/contacts/api',
-         'io.ox/contacts/util'], function (userAPI, groupAPI, resourceAPI, contactAPI, util) {
+         'io.ox/contacts/util',
+         'io.ox/core/util'
+         ], function (userAPI, groupAPI, resourceAPI, contactAPI, util, coreUtil) {
 
     'use strict';
     // TODO: Bulk Loading
@@ -31,9 +33,8 @@ define('io.ox/participants/model',
         TYPE_DISTLIST_USER_GROUP: 6,
 
         defaults: {
-            display_name: '...',
-            email1: '',
-            image1_url: ''
+            display_name: '',
+            email1: ''
         },
 
         initialize: function () {
@@ -43,14 +44,14 @@ define('io.ox/participants/model',
                 this.set({
                     id: this.get('internal_userid'),
                     type: this.TYPE_USER
-                }, {validate: true});
+                });
             }
             else if (this.get('entity')) {
                 this.cid = 'entity_' + parseInt(this.get('entity'), 10);
                 this.set({
                     id: parseInt(this.get('entity'), 10),
                     type: this.TYPE_USER
-                }, {validate: true});
+                });
             }
             else {
                 switch (this.get('type')) {
@@ -68,7 +69,7 @@ define('io.ox/participants/model',
                     break;
                 case this.TYPE_EXTERNAL_USER:
                     this.cid = 'external_' + this.getEmail();
-                    this.set('id', this.getEmail(), {validate: true});
+                    this.set('id', this.getEmail());
                     break;
                 case this.TYPE_DISTLIST_USER_GROUP:
                     this.cid = 'distlist_' + this.get('id');
@@ -83,33 +84,57 @@ define('io.ox/participants/model',
         },
 
         fetch: function (options) {
-            var self = this,
-                df = new $.Deferred();
+
+            var self = this, df = new $.Deferred();
+
+            function setUser(data) {
+                self.set(data);
+                self.trigger('change', self);
+                df.resolve();
+            }
+
+            function setExternalContact(data) {
+                self.set({
+                    display_name: data.display_name,
+                    email1: self.get('mail') || self.get('email1'),
+                    image1_url: data.image1_url,
+                    type: data.internal_userid ? self.TYPE_USER : self.TYPE_EXTERNAL_USER,
+                    id: data.internal_userid ? data.internal_userid : self.get('id')
+                });
+                self.id = self.get('id');
+                self.trigger('change');
+            }
+
             switch (self.get('type')) {
             case self.TYPE_USER:
-                //fetch user contact
-                userAPI.get({id: self.get('id')}).done(function (user) {
-                    self.set(user, {validate: true});
-                    self.trigger('change', self);
-                    df.resolve();
-                }).fail(function () {
-                    if (!self.get('display_name')) {
-                        self.set('display_name', self.get('mail'), {validate: true});
-                    }
-                    df.resolve();
-                });
+                // fetch user contact
+                if (self.has('display_name') && self.has('image1_url')) {
+                    setUser(self.toJSON());
+                } else {
+                    userAPI.get({ id: self.get('id') }).then(
+                        function (data) {
+                            setUser(data);
+                        },
+                        function () {
+                            if (!self.get('display_name')) {
+                                self.set('display_name', self.get('mail'));
+                            }
+                            df.resolve();
+                        }
+                    );
+                }
                 break;
             case self.TYPE_USER_GROUP:
                 //fetch user group
                 groupAPI.get({id: self.get('id')}).done(function (group) {
-                    self.set(group, {validate: true});
+                    self.set(group);
                     self.trigger('change', self);
                     df.resolve();
                 });
                 break;
             case self.TYPE_RESOURCE:
                 resourceAPI.get({id: self.get('id')}).done(function (resource) {
-                    self.set(resource, {validate: true});
+                    self.set(resource);
                     self.trigger('change', self);
                     df.resolve();
                 });
@@ -120,34 +145,34 @@ define('io.ox/participants/model',
                 df.resolve();
                 break;
             case self.TYPE_EXTERNAL_USER:
-                contactAPI.getByEmailadress(self.get('mail') || self.get('email1')).done(function (data) {
-                    if (data && data.display_name) {
-                        self.set({
-                            display_name: data.display_name,
-                            email1: self.get('mail') || self.get('email1'),
-                            image1_url: data.image1_url,
-                            type: data.internal_userid ? self.TYPE_USER : self.TYPE_EXTERNAL_USER,
-                            id: data.internal_userid ? data.internal_userid : self.get('id')
-                        }, {validate: true});
-                        self.id = self.get('id');
-                        self.trigger('change');
-                    } else {
-                        self.set({display_name: (self.get('display_name') || '').replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''), email1: self.get('mail') || self.get('email1')}, {validate: true});
-                    }
-                    self.trigger('change', self);
-                    df.resolve();
-                });
+                // has
+                if (self.has('display_name') && self.has('image1_url')) {
+                    setExternalContact(self.toJSON());
+                } else {
+                    contactAPI.getByEmailadress(self.get('mail') || self.get('email1')).done(function (data) {
+                        if (data && data.display_name) {
+                            setExternalContact(data);
+                        } else {
+                            self.set({
+                                display_name: coreUtil.unescapeDisplayName(self.get('display_name')),
+                                email1: self.get('mail') || self.get('email1')
+                            });
+                        }
+                        self.trigger('change', self);
+                        df.resolve();
+                    });
+                }
                 break;
             case self.TYPE_DISTLIST_USER_GROUP:
                 //fetch user group
-                contactAPI.get({id: self.get('id'), folder_id: self.get('folder_id')}).done(function (group) {
-                    self.set(group, {validate: true});
+                contactAPI.get({ id: self.get('id'), folder_id: self.get('folder_id') }).done(function (group) {
+                    self.set(group);
                     self.trigger('change', self);
                     df.resolve();
                 });
                 break;
             default:
-                self.set({display_name: 'unknown'}, {validate: true});
+                self.set({ display_name: 'unknown' });
                 self.trigger('change', self);
                 df.resolve();
                 break;
@@ -157,7 +182,7 @@ define('io.ox/participants/model',
         },
 
         getDisplayName: function () {
-            return util.getFullName(this.toJSON());
+            return util.getMailFullName(this.toJSON());
         },
         getEmail: function () {
             return util.getMail(this.toJSON());
@@ -166,7 +191,7 @@ define('io.ox/participants/model',
             return util.getImage(this.toJSON(), { scaleType: 'cover', width: 54, height: 54 });
         },
         markAsUnremovable: function () {
-            this.set('ui_removable', false, {validate: true});
+            this.set('ui_removable', false);
         }
 
     });

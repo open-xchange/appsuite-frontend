@@ -15,7 +15,9 @@ define('io.ox/mail/folderview-extensions',
     ['io.ox/core/extensions',
      'io.ox/core/api/folder',
      'io.ox/mail/api',
-     'gettext!io.ox/mail'], function (ext, folderAPI, mailAPI, gt) {
+     'io.ox/core/notifications',
+     'io.ox/core/capabilities',
+     'gettext!io.ox/mail'], function (ext, folderAPI, mailAPI, notifications, capabilities, gt) {
 
     'use strict';
 
@@ -28,15 +30,21 @@ define('io.ox/mail/folderview-extensions',
         });
     }
 
-    ext.point(POINT + '/sidepanel/toolbar/add').extend({
-        id: 'add-account',
-        index: 300,
-        draw: function (baton) {
-            this.append($('<li>').append(
-                $('<a href="#" data-action="add-mail-account">').text(gt('Add mail account')).on('click', addAccount)
-            ));
-        }
-    });
+    if (capabilities.has('multiple_mail_accounts')) {
+        ext.point(POINT + '/sidepanel/toolbar/add').extend({
+            id: 'add-account',
+            index: 300,
+            draw: function (baton) {
+                if (_.device('!smartphone')) {
+                    this.append($('<li>').append(
+                        $('<a href="#" data-action="add-mail-account" tabindex="1" role="menuitem">')
+                        .text(gt('Add mail account'))
+                        .on('click', addAccount)
+                    ));
+                }
+            }
+        });
+    }
 
     function subscribeIMAPFolder(e) {
         e.preventDefault();
@@ -47,51 +55,80 @@ define('io.ox/mail/folderview-extensions',
         id: 'subscribe-folder',
         index: 400,
         draw: function (baton) {
-            this.append($('<li>').append(
-                $('<a href="#" data-action="subscribe">').text(gt('Subscribe IMAP folders'))
-                .on('click', { app: baton.app, selection: baton.tree.selection }, subscribeIMAPFolder)
-            ));
+            if (_.device('!smartphone')) {
+                this.append($('<li>').append(
+                    $('<a href="#" data-action="subscribe" tabindex="1" role="menuitem">').text(gt('Subscribe IMAP folders'))
+                    .on('click', { app: baton.app, selection: baton.tree.selection }, subscribeIMAPFolder)
+                ));
+            }
         }
     });
 
     function markMailFolderRead(e) {
-        e.preventDefault();
-        var item = {folder: e.data.app.folder.get()};
+        var folder = e.data.folder;
 
-        mailAPI.markRead(item).done(function () {
+        e.preventDefault();
+
+        $.when(
+            mailAPI.markFolderRead(folder),
+            mailAPI.markRead(unhandledMails(e.data.app, folder))
+          ).done(function () {
             // TODO: unify events?
-            mailAPI.trigger('update:set-seen', item); //remove notifications in notification area
-            folderAPI.trigger('update:unread', item);
+            mailAPI.trigger('update:set-seen', {}); //remove notifications in notification area
+            folderAPI.trigger('update:unread', { folder_id: folder });
         });
+    }
+
+    function unhandledMails(app, folder) {
+        if (app.folder.get() !== folder) {
+            console.warn('unhandledMails: folders not in sync, yet, assuming unread mails');
+            return {unread: true};
+        }
+
+        return _.chain(app.getGrid().getIds() || [])
+            .pluck('thread')
+            .compact()
+            .flatten(true)
+            .filter(function notInFolderAndUnseen(mail) {
+                return mail.folder_id !== folder && (mail.flags & mailAPI.FLAGS.SEEN) === 0;
+            })
+            .value();
     }
 
     ext.point(POINT + '/sidepanel/toolbar/options').extend({
         id: 'mark-folder-read',
         index: 50,
         draw: function (baton) {
-            this.append($('<li>').append(
-                $('<a href="#" data-action="markfolderread">').text(gt('Mark all mails as read'))
-                .on('click', { app: baton.app }, markMailFolderRead)
-            ));
+            this.append(
+                $('<li>').append(
+                    $('<a href="#" data-action="markfolderread" tabindex="1" role="menuitem">')
+                        .text(gt('Mark all mails as read'))
+                        .on('click', { folder: baton.data.id, app: baton.app }, markMailFolderRead)
+                )
+            );
         }
     });
 
     function expungeFolder(e) {
         e.preventDefault();
-        var baton = e.data.baton,
-        id = _(baton.app.folderView.selection.get()).first();
-        mailAPI.expunge(id);
+        // get current folder id
+        var folder = e.data.folder;
+        notifications.yell('busy', gt('Cleaning up... This may take a few seconds.'));
+        mailAPI.expunge(folder).done(function () {
+            notifications.yell('success', gt('The folder has been cleaned up.'));
+        });
     }
 
     ext.point(POINT + '/sidepanel/toolbar/options').extend({
         id: 'expunge',
         index: 75,
         draw: function (baton) {
-            var link = $('<a href="#" data-action="expunge">').text(gt('Clean up'));
+            var link = $('<a href="#" data-action="expunge" role="menuitem">').text(gt('Clean up'));
             this.append($('<li>').append(link));
             if (folderAPI.can('delete', baton.data)) {
-                link.on('click', { baton: baton }, expungeFolder);
-            } else {link.addClass('disabled').on('click', $.preventDefault);
+                link.attr('tabindex', 1).on('click', { folder: baton.data.id }, expungeFolder);
+            } else {
+                link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
             }
             this.append($('<li class="divider">'));
         }
@@ -99,6 +136,7 @@ define('io.ox/mail/folderview-extensions',
 
     function clearFolder(e) {
         e.preventDefault();
+
         var baton = e.data.baton,
         id = _(baton.app.folderView.selection.get()).first();
         $.when(
@@ -107,7 +145,7 @@ define('io.ox/mail/folderview-extensions',
         ).done(function (folder, dialogs) {
             new dialogs.ModalDialog()
                 .text(gt('Do you really want to empty folder "%s"?', folder.title))
-                .addPrimaryButton('delete', gt('Empty'))
+                .addPrimaryButton('delete', gt('Empty folder'))
                 .addButton('cancel', gt('Cancel'))
                 .show()
                 .done(function (action) {
@@ -122,15 +160,14 @@ define('io.ox/mail/folderview-extensions',
         id: 'clear',
         index: 450,
         draw: function (baton) {
-            var link = $('<a href="#" data-action="clearfolder">').text(gt('Empty folder'));
+            var link = $('<a href="#" data-action="clearfolder" role="menuitem">').text(gt('Empty folder'));
             this.append($('<li class="divider">'), $('<li>').append(link));
             if (folderAPI.can('delete', baton.data)) {
-                link.on('click', { baton: baton }, clearFolder);
+                link.attr('tabindex', 1).on('click', { baton: baton }, clearFolder);
             } else {
-                link.addClass('disabled').on('click', $.preventDefault);
+                link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
             }
         }
     });
-
 
 });

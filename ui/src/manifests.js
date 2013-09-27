@@ -1,8 +1,16 @@
 define(function () {
     return [
         {
-            namespace: ['core'],
-            path: 'plugins/upsell/simple-wizard/register'
+            requires: "contacts",
+            path: "io.ox/contacts/edit/main",
+            category: "Basic",
+            refreshable: true
+        },
+        {
+            namespace: ['io.ox/settings/main'],
+            path: 'io.ox/mail/mailfilter/settings/register',
+            requires: 'mailfilter',
+            device: '!small'
         },
         // {
         //     namespace: ['io.ox/settings/main'],
@@ -16,9 +24,31 @@ define(function () {
         //     namespace: ['io.ox/settings/main'],
         //     path: 'io.ox/core/pubsub/settings/register'
         // },
+        // {
+        //     namespace: ['io.ox/portal/widgets'],
+        //     path: 'plugins/owm/portal'
+        // },
         {
-            namespace: ['io.ox/portal/widgets'],
-            path: 'plugins/owm/portal'
+            path: 'io.ox/mail/write/main',
+            title: "Compose email",
+            company: "Open-Xchange",
+            icon: "mail.png",
+            category: "Basic",
+            settings: false,
+            visible: false,
+            requires: "webmail",
+            refreshable: true
+        },
+        {
+            path: 'io.ox/editor/main',
+            title: "Editor",
+            company: "Open-Xchange",
+            icon: "default.png",
+            category: "Productivity",
+            settings: false,
+            requires: "infostore",
+            refreshable: true,
+            visible: false
         },
         {
             path: 'io.ox/editor/main',

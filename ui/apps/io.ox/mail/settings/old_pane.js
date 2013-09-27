@@ -18,39 +18,29 @@ define('io.ox/mail/settings/old_pane',
         'io.ox/core/tk/view',
         'io.ox/core/tk/model',
         'gettext!io.ox/mail',
-        'settings!io.ox/mail', 'io.ox/core/api/account'],
-
-function (ext, View, Model, gt, settings, api) {
+        'settings!io.ox/mail', 'io.ox/core/api/account'], function (ext, View, Model, gt, settings, api) {
 
     'use strict';
 
-
-
-
-
-
     var MailSettingsModel = Model.extend({
     });
-
 
     ext.point('io.ox/mail/settings/detail/section').extend({
         index: 200,
         id: 'section_common',
         draw: function (options) {
             this.append(
-
-                    this.createSectionTitle({ text: gt('Common')}).addClass('expertmode'),
-                    this.createControlGroup().append(
-                        this.createControlGroupLabel(),
-                        this.createControlsWrapper().append(
-                            this.createCheckbox({property: 'removeDeletedPermanently', label: gt('Permanently remove deleted E-Mails?')}).addClass('expertmode'),
-                            this.createCheckbox({property: 'contactCollectOnMailTransport', label: gt('Automatically collect contacts in the folder "Collected addresses" while sending?')}).addClass('expertmode'),
-                            this.createCheckbox({property: 'contactCollectOnMailAccess', label: gt('Automatically collect contacts in the folder "Collected addresses" while reading?')}).addClass('expertmode'),
-                            this.createCheckbox({property: 'useFixedWidthFont', label: gt('Use fixed-width font for text mails')}).addClass('expertmode')
-                        )
-                    ),
-                    this.createSectionDelimiter().addClass('expertmode')
-
+                this.createSectionTitle({ text: gt('Common')}).addClass('expertmode'),
+                this.createControlGroup().append(
+                    this.createControlGroupLabel(),
+                    this.createControlsWrapper().append(
+                        this.createCheckbox({property: 'removeDeletedPermanently', label: gt('Permanently remove deleted emails?')}).addClass('expertmode'),
+                        this.createCheckbox({property: 'contactCollectOnMailTransport', label: gt('Automatically collect contacts in the folder "Collected addresses" while sending?')}).addClass('expertmode'),
+                        this.createCheckbox({property: 'contactCollectOnMailAccess', label: gt('Automatically collect contacts in the folder "Collected addresses" while reading?')}).addClass('expertmode'),
+                        this.createCheckbox({property: 'useFixedWidthFont', label: gt('Use fixed-width font for text mails')}).addClass('expertmode')
+                    )
+                ),
+                this.createSectionDelimiter().addClass('expertmode')
             );
         }
     });
@@ -79,7 +69,7 @@ function (ext, View, Model, gt, settings, api) {
                                 that.createControlGroupLabel({text: gt('Compose')}),
                                 that.createControlsWrapper().append(
                                     that.createCheckbox({property: 'appendVcard', label: gt('Append vCard')}),
-                                    that.createCheckbox({ property: 'appendMailTextOnReply', label: gt('Insert the original E-Mail text to a reply')}).addClass('expertmode')
+                                    that.createCheckbox({ property: 'appendMailTextOnReply', label: gt('Insert the original email text to a reply')}).addClass('expertmode')
                                 )
 
                             ),
@@ -90,7 +80,7 @@ function (ext, View, Model, gt, settings, api) {
 
 
                             that.createControlGroup().addClass('expertmode').append(
-                                    that.createControlGroupLabel({text: gt('Forward E-Mails as:')}),
+                                    that.createControlGroupLabel({text: gt('Forward emails as:')}),
                                     that.createControlsWrapper().append(
                                         that.createRadioButton({property: 'forwardMessageAs', label: gt('Inline'), value: 'Inline'}),
                                         that.createRadioButton({property: 'forwardMessageAs', label: gt('Attachment'), value: 'Attachment'})
@@ -102,7 +92,7 @@ function (ext, View, Model, gt, settings, api) {
                             that.createSectionDelimiter(),
 
                             that.createControlGroup().append(
-                                that.createControlGroupLabel({text: gt('Format E-Mails as:')}),
+                                that.createControlGroupLabel({text: gt('Format emails as:')}),
                                 that.createControlsWrapper().append(
                                     that.createRadioButton({property: 'messageFormat', label: gt('HTML'), value: 'html'}),
                                     that.createRadioButton({property: 'messageFormat', label: gt('Plain text'), value: 'text' }),
@@ -128,7 +118,7 @@ function (ext, View, Model, gt, settings, api) {
                                 )
                             ),
                             that.createControlGroup().addClass('expertmode').append(
-                                that.createControlGroupLabel({text: gt('Auto-save Email drafts?'), 'for': 'auto'}),
+                                that.createControlGroupLabel({text: gt('Auto-save email drafts?'), 'for': 'auto'}),
                                 that.createControlsWrapper().append(
                                     that.createSelectbox({property: 'autoSafeDraftsAfter', id: 'last', classes: 'input-xlarge', items: {'Disabled': 'disabled', '1 Minute': '1_minute', '3 Minutes': '3_minutes', '5 Minutes': '5_minutes', '10 Minutes': '10_minutes' }})
                                 )
@@ -158,9 +148,9 @@ function (ext, View, Model, gt, settings, api) {
                             this.createControlGroup().addClass('expertmode').append(
                                  this.createControlGroupLabel(),
                                  this.createControlsWrapper().append(
-                                     this.createCheckbox({property: 'allowHtmlMessages', label: gt('Allow html formatted E-Mails')}),
+                                     this.createCheckbox({property: 'allowHtmlMessages', label: gt('Allow html formatted emails')}),
                                      this.createCheckbox({property: 'allowHtmlImages', label: gt('Block pre-loading of externally linked images')}),
-                                     this.createCheckbox({property: 'displayEmoticons', label: gt('Display emoticons as graphics in text E-Mails')}),
+                                     this.createCheckbox({property: 'displayEmoticons', label: gt('Display emoticons as graphics in text emails')}),
                                      this.createCheckbox({property: 'isColorQuoted', label: gt('Color quoted lines')})
                                  )
                             ),

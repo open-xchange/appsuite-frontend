@@ -12,9 +12,7 @@
  */
 
 define('io.ox/calendar/conflicts/conflictList',
-    ['io.ox/core/extensions',
-     'io.ox/calendar/api',
-     'gettext!io.ox/calendar/conflicts/conflicts'], function (ext, calAPI, gt) {
+    ['gettext!io.ox/calendar/conflicts/conflicts'], function (gt) {
 
     'use strict';
 
@@ -23,19 +21,23 @@ define('io.ox/calendar/conflicts/conflictList',
             var conflictList = $('<div>').append(
                 $('<h4 class="text-error">').text(gt('Conflicts detected'))
             );
-            require(["io.ox/core/tk/dialogs", "io.ox/calendar/view-grid-template"],
-                function (dialogs, viewGrid) {
+            ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/view-grid-template', 'io.ox/calendar/api']).done(
+                function (dialogs, viewGrid, calAPI) {
                     _.map(conflicts, function (c) { c.conflict = true; });
                     conflictList.append(viewGrid.drawSimpleGrid(conflicts));
-                    new dialogs.SidePopup()
-                        .delegate(conflictList, ".vgrid-cell", function (popup, e, target) {
-                            calAPI.get(target.data("appointment")).done(function (data) {
+                    $(".vgrid-cell", conflictList).on('click', function (e) {
+                        calAPI.get($(this).data("appointment")).done(function (data) {
+                            // check if private
+                            if (!data.private_flag || ox.user_id === data.created_by) {
                                 require(["io.ox/calendar/view-detail"], function (view) {
-                                    popup.append(view.draw(data));
-                                    data = null;
+                                    new dialogs.SidePopup({ modal: true }).show(e, function (popup) {
+                                        popup.append(view.draw(data));
+                                        data = null;
+                                    });
                                 });
-                            });
+                            }
                         });
+                    });
                 }
             );
             return conflictList;

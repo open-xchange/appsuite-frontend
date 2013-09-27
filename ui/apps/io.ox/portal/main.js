@@ -16,18 +16,15 @@ define('io.ox/portal/main',
     ['io.ox/core/extensions',
      'io.ox/core/api/user',
      'io.ox/core/date',
-     'io.ox/core/manifests',
      'io.ox/core/tk/dialogs',
      'io.ox/portal/widgets',
+     'io.ox/portal/settings/pane',
      'gettext!io.ox/portal',
      'settings!io.ox/portal',
-     'less!io.ox/portal/style.less',
-     'apps/io.ox/core/tk/jquery-ui.min.js'
-    ], function (ext, userAPI, date, manifests, dialogs, widgets, gt, settings) {
+     'less!io.ox/portal/style.less'
+    ], function (ext, userAPI, date, dialogs, widgets, settingsPane, gt, settings) {
 
     'use strict';
-
-    var READY = $.when();
 
     // time-based greeting phrase
     function getGreetingPhrase(name) {
@@ -62,31 +59,39 @@ define('io.ox/portal/main',
         id: 'header',
         index: 100,
         draw: function (baton) {
-            var $btn = $();
-            if (_.device('!small')) {
-                // please no button
-                $btn = $('<button class="btn btn-primary pull-right">')
-                    .attr('data-action', 'customize')
-                    .text(gt('Customize this page'))
-                    .on('click', openSettings);
-            }
-            this.append(
-                $('<div class="header">').append(
-                    // button
-                    $btn,
-                    // greeting
-                    $('<h1 class="greeting">').append(
-                        baton.$.greeting = $('<span class="greeting-phrase">'),
-                        $('<span class="signin">').append(
-                            $('<i class="icon-user">'), $.txt(' '),
-                            $.txt(
-                                //#. Portal. Logged in as user
-                                gt('Signed in as %1$s', ox.user)
-                            )
-                        )
-                    )
+            var $btn,
+                $greeting;
+
+            this.append($btn = $('<div class="header">'));
+            // greeting
+            $greeting = $('<h1 class="greeting">').append(
+                baton.$.greeting = $('<span class="greeting-phrase">'),
+                $('<span class="signin">').text(
+                    //#. Portal. Logged in as user
+                    gt('Signed in as %1$s', ox.user)
                 )
             );
+
+            if (_.device('!small')) {
+                widgets.loadAllPlugins().done(function () {
+                    // add widgets
+                    ext.point('io.ox/portal/settings/detail/pane').map(function (point) {
+                        if (point && point.id === 'add') {
+                            point.invoke('draw', $btn);
+                        }
+                    });
+                    // please no button
+                    $btn.find('.controls')
+                        .prepend($('<button type="button" class="btn btn-primary pull-right">')
+                        .css({ marginLeft: '5px' })
+                        .attr('data-action', 'customize')
+                        .text(gt('Customize this page'))
+                        .on('click', openSettings));
+                    $btn.append($greeting);
+                });
+            } else {
+                $btn.append($greeting);
+            }
         }
     });
 
@@ -105,28 +110,27 @@ define('io.ox/portal/main',
     ext.point('io.ox/portal/widget-scaffold').extend({
         draw: function (baton) {
 
-            var data = baton.model.toJSON(),
-                decoration = this.find('.decoration').length ? this.find('.decoration') : this;
-
-            this.attr({
-                'data-widget-cid': baton.model.cid,
-                'data-widget-id': baton.model.get('id'),
-                'data-widget-type': baton.model.get('type')
-            })
-            .addClass('widget' + (baton.model.get('inverse') ? ' inverse' : ''));
-
-            // border decoration
-            decoration
-                .addClass('pending')
+            this
+                .attr({
+                    'data-widget-cid': baton.model.cid,
+                    'data-widget-id': baton.model.get('id'),
+                    'data-widget-type': baton.model.get('type')
+                })
+                .addClass('widget' + (baton.model.get('inverse') ? ' inverse' : ''))
                 .append(
-                    $('<h2>').append(
-                        // add remove icon
-                        baton.model.get('protectedWidget') ? [] :
-                            $('<a href="#" class="disable-widget"><i class="icon-remove"/></a>')
-                            .attr('title', gt('Disable widget')),
-                        // title span
-                        $('<span class="title">').text('\u00A0')
-                    )
+                    // border decoration
+                    $('<div>')
+                        .addClass('decoration pending')
+                        .append(
+                            $('<h2>').append(
+                                // add remove icon
+                                baton.model.get('protectedWidget') ? [] :
+                                    $('<a href="#" class="disable-widget"><i class="icon-remove"/></a>')
+                                    .attr('title', gt('Disable widget')),
+                                // title span
+                                $('<span class="title">').text('\u00A0')
+                            )
+                        )
                 );
 
             setColor(this, baton.model);
@@ -136,30 +140,64 @@ define('io.ox/portal/main',
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/portal', title: 'Portal' }),
         win,
+        scrollPos = window.innerHeight,
         appBaton = ext.Baton({ app: app }),
         sidepopup = new dialogs.SidePopup(),
-        availablePlugins = widgets.getAvailablePlugins(),
         collection = widgets.getCollection();
 
     app.settings = settings;
 
-    collection.on('remove', function (model, e) {
-        // remove DOM node
-        appBaton.$.widgets.find('[data-widget-cid="' + model.cid + '"]').remove();
-        // clean up
-        if (model.has('baton')) {
-            delete model.get('baton').model;
-            model.set('baton', null, {validate: true});
-            model.isDeleted = true;
-        }
-    });
-
-    collection.on('add', function (model) {
-        app.drawScaffold(model);
-        widgets.loadUsedPlugins().done(function () {
-            app.drawWidget(model);
+    collection
+        .on('remove', function (model) {
+            // remove DOM node
+            appBaton.$.widgets.find('[data-widget-cid="' + model.cid + '"]').remove();
+            // clean up
+            if (model.has('baton')) {
+                delete model.get('baton').model;
+                model.set('baton', null, {validate: true});
+                model.isDeleted = true;
+            }
+        })
+        .on('add', function (model) {
+            app.drawScaffold(model, true);
+            widgets.loadUsedPlugins().done(function () {
+                if (model.has('candidate') !== true) {
+                    app.drawWidget(model);
+                    widgets.save(appBaton.$.widgets);
+                }
+            });
+        })
+        .on('change', function (model, e) {
+            if ('enabled' in model.changed) {
+                if (model.get('enabled')) {
+                    app.getWidgetNode(model).show();
+                    app.drawWidget(model);
+                } else {
+                    app.getWidgetNode(model).hide();
+                }
+            } else if ('color' in model.changed) {
+                setColor(app.getWidgetNode(model), model);
+            } else if (this.wasElementDeleted(model)) {
+                // element was removed, no need to refresh it.
+                return;
+            } else if ('unset' in e && 'candidate' in model.changed) {
+                // redraw fresh widget
+                app.refreshWidget(model);
+            } else if ('props' in model.changed && model.drawn) {
+                // redraw existing widget due to config change
+                app.refreshWidget(model);
+            } else {
+                app.drawWidget(model);
+            }
+        })
+        .on('sort', function () {
+            this.sort({ silent: true });
+            // loop over collection for resorting DOM tree
+            this.each(function (model) {
+                // just re-append all in proper order
+                appBaton.$.widgets.append(app.getWidgetNode(model));
+            });
         });
-    });
 
     collection.wasElementDeleted = function (model) {
         var needle = model.cid,
@@ -167,38 +205,7 @@ define('io.ox/portal/main',
         return !_(haystack).some(function (suspiciousHay) {return suspiciousHay.cid === needle; });
     };
 
-    collection.on('change', function (model, e) {
-        if ('enabled' in model.changed) {
-            if (model.get('enabled')) {
-                app.getWidgetNode(model).show();
-                app.drawWidget(model);
-            } else {
-                app.getWidgetNode(model).hide();
-            }
-        } else if ('color' in model.changed) {
-            setColor(app.getWidgetNode(model), model);
-        } else if (this.wasElementDeleted(model)) {
-            // element was removed, no need to refresh it.
-            return;
-        } else if ('unset' in e && 'candidate' in model.changed) {
-            // redraw fresh widget
-            app.refreshWidget(model);
-        } else if ('props' in model.changed && model.drawn) {
-            // redraw existing widget due to config change
-            app.refreshWidget(model);
-        } else {
-            app.drawWidget(model);
-        }
-    });
 
-    collection.on('sort', function () {
-        collection.sort({ silent: true });
-        // loop over collection for resorting DOM tree
-        collection.each(function (model) {
-            // just re-append all in proper order
-            appBaton.$.widgets.append(app.getWidgetNode(model));
-        });
-    });
 
     app.getWidgetCollection = function () {
         return collection;
@@ -227,22 +234,28 @@ define('io.ox/portal/main',
         }
     }
 
-    app.drawScaffold = function (model) {
+    app.drawScaffold = function (model, add) {
+        add = add || false;
+        var baton = ext.Baton({ model: model, app: app, add: add }),
+            node = $('<li>');
 
-        var baton = ext.Baton({ model: model, app: app }),
-            decoration = $('<div>').addClass('decoration'),
-            node = $('<li>').append(decoration);
+        if (_.device('small')) {
+            node.css('minHeight', 300);
+        }
+        model.node = node;
         ext.point('io.ox/portal/widget-scaffold').invoke('draw', node, baton);
 
-        if (model.get('enabled') === true && !widgets.visible(model.get('type'))) {
-            // hide due to missing capabilites
+        if (model.get('enabled') === false) {
             node.hide();
-            return;
+        } else {
+            if (!widgets.visible(model.get('type'))) {
+                // hide due to missing capabilites
+                node.hide();
+                return;
+            }
         }
 
-        if (model.get('enabled') === false) node.hide();
-
-        appBaton.$.widgets.append(node);
+        appBaton.$.widgets[add ? 'prepend' : 'append'](node);
     };
 
     app.getWidgetNode = function (model) {
@@ -251,11 +264,11 @@ define('io.ox/portal/main',
 
     function setup(e) {
         var baton = e.data.baton;
-        ext.point(baton.point).invoke('performSetUp');
+        ext.point(baton.point).invoke('performSetUp', null, baton);
     }
 
     app.drawDefaultSetup = function (baton) {
-        this.getWidgetNode(baton.model)
+        baton.model.node
             .addClass('requires-setup')
             .append(
                 $('<div class="content">').text(gt('Click here to add your account'))
@@ -264,7 +277,7 @@ define('io.ox/portal/main',
     };
 
     function ensureDeferreds(ret) {
-        return ret && ret.promise ? ret : READY;
+        return ret && ret.promise ? ret : $.when();
     }
 
     function reduceBool(memo, bool) {
@@ -311,48 +324,49 @@ define('io.ox/portal/main',
 
     app.drawWidget = function (model, index) {
 
-        index = index || 0;
+        var node = model.node,
+            load = _.device('small') ? (node.offset().top < scrollPos) : true;
 
-        var type = model.get('type'),
-            node = app.getWidgetNode(model),
-            delay = (index / 2 >> 0) * 500,
-            baton = ext.Baton({ model: model, point: 'io.ox/portal/widget/' + type }),
-            point = ext.point(baton.point),
-            requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, true).value(),
-            title;
-
-        if (model.get('enabled') === true && !widgets.visible(model.get('type'))) {
-            // hide due to missing capabilites
-            node.hide();
-            return;
-        }
-
-        // set/update title
-        title = node.find('h2 .title').text(_.noI18n(widgets.getTitle(model.toJSON(), point.prop('title'))));
-
-        if (!model.drawn) {
+        if (!model.drawn && load) {
 
             model.drawn = true;
+            index = index || 0;
 
+            if (model.get('enabled') === true && !widgets.visible(model.get('type'))) {
+                // hide due to missing capabilites
+                node.hide();
+                return;
+            }
+
+            // set/update title
+            var baton = ext.Baton({ model: model, point: 'io.ox/portal/widget/' + model.get('type') }),
+                point = ext.point(baton.point),
+                title = node.find('h2 .title').text(_.noI18n(widgets.getTitle(model.toJSON(), point.prop('title')))),
+                requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, true).value();
             // remember
-            model.set('baton', baton, {validate: true});
+            model.set('baton', baton, { validate: true, silent: true });
 
             // setup?
             if (requiresSetUp) {
                 node.find('.decoration').removeClass('pending');
-                app.drawDefaultSetup(baton, node);
+                app.drawDefaultSetup(baton);
             } else {
                 // add link?
                 if (point.prop('action') !== undefined) {
-                    title.addClass('action-link').on('click', { baton: baton }, runAction);
+                    title.addClass('action-link').css('cursor', 'pointer').on('click', { baton: baton }, runAction);
                 }
                 // simple delay approach
                 _.delay(function () {
                     // initialize first
                     point.invoke('initialize', node, baton);
                     // load & preview
-                    loadAndPreview(point, node, baton);
-                }, delay);
+                    node.busy();
+                    loadAndPreview(point, node, baton).done(function () {
+                        node.removeAttr('style');
+                    }).always(function () {
+                        node.idle();
+                    });
+                }, (index / 2 >> 0) * 100);
             }
         }
     };
@@ -364,7 +378,7 @@ define('io.ox/portal/main',
             index = index || 0;
 
             var type = model.get('type'),
-                node = app.getWidgetNode(model),
+                node = model.node,
                 delay = (index / 2 >> 0) * 1000,
                 baton = model.get('baton'),
                 point = ext.point(baton.point);
@@ -396,18 +410,26 @@ define('io.ox/portal/main',
         // get window
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/portal',
-            chromeless: true
+            chromeless: true,
+            simple: _.device('small')
         }));
 
-        ext.point('io.ox/portal/sections').invoke('draw', win.nodes.main.addClass('io-ox-portal'), appBaton);
+        win.nodes.main.addClass('io-ox-portal f6-target').attr('tabindex', '1');
+
+        ext.point('io.ox/portal/sections').invoke('draw', win.nodes.main, appBaton);
 
         app.updateTitle();
         _.tick(1, 'hour', app.updateTitle);
 
         win.show(function () {
-
             // draw scaffolds now for responsiveness
-            collection.each(app.drawScaffold);
+            collection.each(function (model, index) {
+                app.drawScaffold(model, false);
+            });
+
+            widgets.loadUsedPlugins().done(function (cleanCollection) {
+                cleanCollection.each(app.drawWidget);
+            });
 
             // add side popup
             sidepopup.delegate(appBaton.$.widgets, '.item, .content.pointer, .action.pointer', openSidePopup);
@@ -418,8 +440,32 @@ define('io.ox/portal/main',
                 var id = $(this).closest('.widget').attr('data-widget-id'),
                     model = widgets.getModel(id);
                 if (model) {
-                    // disable widget
-                    model.set('enabled', false, { validate: true });
+                    // do we have custom data that might be lost?
+                    if (!_.isEmpty(model.get('props'))) {
+                        var dialog = new dialogs.ModalDialog()
+                        .header($("<h4>").text(gt('Delete widget')))
+                        .append($('<span>').text(gt('Do you really want to delete this widget?')))
+                        .addPrimaryButton('delete',
+                            //#. Really delete portal widget - in contrast to "just disable"
+                            gt('Delete')
+                        )
+                        .addButton('cancel', gt('Cancel'));
+                        if (model.get('enabled')) {
+                            dialog.addAlternativeButton('disable',
+                                //#. Just disable portal widget - in contrast to delete
+                                gt('Just disable widget')
+                            );
+                        }
+                        dialog.show().done(function (action) {
+                            if (action === 'delete') {
+                                model.collection.remove(model);
+                            } else if (action === 'disable') {
+                                model.set('enabled', false, { validate: true });
+                            }
+                        });
+                    } else {
+                        model.collection.remove(model);
+                    }
                 }
             });
 
@@ -427,25 +473,32 @@ define('io.ox/portal/main',
             // (will cause errors on android chrome)
             // TODO: avoid device specific inline css fixes
             if (_.browser.iOS) {
-                $('.io-ox-portal').css('-webkit-overflow-scrolling', 'touch');
+                win.nodes.main.css('-webkit-overflow-scrolling', 'touch');
             }
 
             // make sortable, but not for Touch devices
             if (!Modernizr.touch) {
-                appBaton.$.widgets.sortable({
-                    containment: win.nodes.main,
-                    scroll: true,
-                    delay: 150,
-                    stop: function (e, ui) {
-                        widgets.save(appBaton.$.widgets);
-                    }
+                require(['apps/io.ox/core/tk/jquery-ui.min.js']).done(function () {
+                    appBaton.$.widgets.sortable({
+                        containment: win.nodes.main,
+                        scroll: true,
+                        delay: 150,
+                        update: function (e, ui) {
+                            widgets.save(appBaton.$.widgets);
+                        }
+                    });
                 });
             }
-
-            widgets.loadUsedPlugins().done(function () {
-                widgets.getEnabled().each(app.drawWidget);
-            });
         });
+
+        var lazyLayout = _.debounce(function (e) {
+            scrollPos = $(this).scrollTop() + this.innerHeight;
+            widgets.loadUsedPlugins().done(function (cleanCollection) {
+                cleanCollection.each(app.drawWidget);
+            });
+        }, 300);
+
+        $(window).on('scrollstop resize', lazyLayout);
     });
 
     return {

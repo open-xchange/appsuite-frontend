@@ -1,22 +1,41 @@
-
 .picture-uploader {
-    width: 100px;
-    height: 100px;
-    display: inline-block;
-    float: left;
-    background-position: right top;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-clip: content-box;
-}
 
-.picture-uploader .close {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    opacity: 0.6;
-    width: 24px;
-    height: 24px;
-    text-align: center;
-    background-color: #fff;
+    & {
+        cursor: pointer;
+        position: relative;
+        z-index: 1;
+        width: 100px;
+        height: 100px;
+        display: inline-block;
+        float: left;
+        background-position: right top;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-clip: content-box;
+
+        &.focussed {
+            border-color: @linkColor;
+        }
+    }
+
+    .add-img-text {
+        font-size: 14px;
+        margin-top: 28px;
+        height: 100%;
+        text-align: center;
+        color: #888;
+        z-index: 2;
+    }
+
+    .close {
+        z-index: 3;
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        opacity: 0.6;
+        width: 24px;
+        height: 24px;
+        text-align: center;
+        background-color: #fff;
+    }
 }

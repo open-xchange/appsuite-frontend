@@ -14,10 +14,13 @@
 /* Grid */
 
 .io-ox-settings-main {
+
     .window-controls label {
         display: inline-block;
         margin-bottom: 0;
     }
+
+
 }
 
 .vgrid-cell.settings {
@@ -95,112 +98,41 @@
         width: 440px;
     }
 
-    .listbox {
-
-        max-width: 540px;
-        overflow-x: hidden;
-        overflow-y: auto;
-        position: relative;
-        border: 1px solid #D9D9D9;
-        margin-bottom: 10px;
-        .border-radius(3px 3px 3px 3px);
-
-
-        &.ui-sortable {
-            border: 0px none;
-        }
-
-        .listbox-item {
-            background-color: #eee;
-            margin-bottom: 1px;
-            color: @enabledColor;
-        }
-
-        .listbox-item button {
-            float: right;
-            margin-left: 13px;
-        }
-
-        &.ui-sortable .enabled .listbox-item {
-        }
-
-        &:focus {
-          border-color: hsl(214, 91%, 65%);
-          z-index: 2;
+    .io-ox-accounts-settings {
+        max-width: 700px;
+        .controls {
+            padding: 13px;
+            height: 30px;
+            margin-bottom: 13px;
         }
         .hint {
             margin: 14px 0;
             padding: 14px;
             max-width: 500px;
         }
+    }
 
-        .selectable[selected] {
-            background-color: @selectedBackground;
-            background-image: -webkit-gradient(
-                linear,
-                left top,
-                left bottom,
-                color-stop(0, lighten(@selectedBackground, 20%)),
-                color-stop(1, darken(@selectedBackground, 5%))
-            );
-            background-image: -o-linear-gradient(top, lighten(@selectedBackground, 20%) 0%, darken(@selectedBackground, 5%) 100%) !important;
-            background-image: -moz-linear-gradient(
-                center top,
-                lighten(@selectedBackground, 20%) 0%,
-                darken(@selectedBackground, 5%) 100%
-            );
-            filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr="lighten(@selectedBackground, 20%)~", endColorstr="darken(@selectedBackground, 5%)~")";
-            border-bottom-color: black;
-            color: #fff;
-        }
+    .settings-list {
+        margin: 0;
+        list-style-type: none;
 
-        & > .spacer {
-            border: 0;
-            display: block;
-            overflow: hidden;
-            visibility: hidden;
-            margin: 0;
-            .box-sizing(border-box);
-        }
-
-        .sortable-item {
+        li {
+            background-color: #f5f5f5;
             padding: 13px;
-            color: #000;
-            background-color: #eee;
-            .box-sizing(border-box);
-        }
+            margin: 0 0 7px 0;
+            text-align: left;
 
-        .disabled .sortable-item {
-            color: #999;
-            background-color: #ddd;
-            font-weight: 300;
-        }
+            &.default {
+                .list-title { font-weight: bold; }
+            }
 
-        .sortable-item:hover { background-color: #ccc; }
-        .disabled .sortable-item:hover { background-color: #ddd; }
-
-        .requires-enabled { display: none; }
-        .enabled .editable-item .requires-enabled { display: inline-block; }
-
-        .sortable-item div {
-            line-height: 2em;
-        }
-
-        .sortable-item span.right {
-            float:right;
-        }
-
-        .deletable-item {
-            height:  16px;
-            padding: 12px 5px;
-            cursor: pointer;
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-        }
-
-        .deletable-item div {
-            width: auto;
+            .list-title {
+                margin-right: 2em;
+            }
+            a {
+                cursor: pointer;
+                &.action { margin-right: 2em; }
+            }
         }
     }
 
@@ -260,7 +192,15 @@
     text-align: center;
 }
 
+.io-ox-dialog-popup {
+    .add-mail-account-address, .add-mail-account-password {
+        display:block;
+        max-width:355px;
+    }
+}
+
 .settings-detail-pane legend.sectiontitle {
+    font-family: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
     display: block;
     width: 100%;
     padding: 0;
@@ -273,12 +213,89 @@
 }
 
 
-@media screen and (max-width: 480px) {
+@media (max-width: 480px), (max-device-width: 480px)  {
+
+    .io-ox-settings-window {
+        .vgrid-cell {
+            font-size: 15px;
+        }
+    }
 
     .settings-detail-pane {
         h1:first-child, h1.pane-headline:first-child {
-            margin: 0 0 1em 0;
+            margin: 0 0 0 0;
         }
+
+        h1 + .sectiondelimiter {
+            border: none;
+            margin-top: 0px;
+        }
+
+        .io-ox-mail-settings {
+
+            .form-horizontal .control-group>label {
+                float: none;
+                width: 160px;
+             }
+
+             .form-inline .controls {
+                text-align: left;
+                width: auto;
+             }
+
+             .form-inline .controls span {
+                display: inherit;
+                line-height: 29px;
+             }
+
+
+             .form-inline .controls input {
+                width: 70px;
+                float: left;
+             }
+
+             .form-inline .controls input + span {
+                display: inline-block;
+                padding-left: 5px;
+                float: none;
+             }
+
+             legend+.control-group {
+                margin-top: 0px;
+             }
+
+        }
+
+        .io-ox-accounts-settings {
+
+            .controls {
+                padding-left: 0px;
+            }
+
+            .controls .btn-group.pull-right {
+                float: none;
+            }
+
+        }
+
+        .io-ox-calendar-settings {
+
+            .form-horizontal .control-group>label {
+                float: none;
+                width: 160px;
+             }
+
+        }
+
+        .io-ox-tasks-settings {
+
+            .form-horizontal .control-group>label {
+                float: none;
+                width: 160px;
+             }
+
+        }
+
         .form-horizontal {
 
             .control-group > label {
@@ -288,6 +305,14 @@
             .controls, .help-inline {
                 margin-left: 5px;
             }
+
+           .control-group label.control-label {
+                float: none;
+                width: auto;
+             }
+
         }
+
     }
+
 }

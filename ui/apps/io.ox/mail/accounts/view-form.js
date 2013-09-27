@@ -14,9 +14,11 @@
 define('io.ox/mail/accounts/view-form',
     ['io.ox/core/tk/view',
      'io.ox/core/notifications',
+     'io.ox/core/api/account',
      'text!io.ox/mail/accounts/account_detail.html',
+      'settings!io.ox/mail',
      'gettext!io.ox/settings/settings'
-    ], function (View, notifications, tmpl, gt) {
+    ], function (View, notifications, AccountAPI, tmpl, settings, gt) {
 
     'use strict';
 
@@ -25,7 +27,7 @@ define('io.ox/mail/accounts/view-form',
             TITLE_ACCOUNT_SETTINGS: gt('Account Settings'),
             ACCOUNT_NAME: gt('Account Name:'),
             PERSONAL: gt('Your name:'),
-            EMAIL_ADDRESS: gt('E-Mail Address:'),
+            EMAIL_ADDRESS: gt('Email Address:'),
             UNIFIED_MAIL: gt('Use Unified Mail for this account'),
             SERVER_SETTINGS: gt('Server Settings'),
             SERVER_TYPE: gt('Server Type:'),
@@ -45,7 +47,7 @@ define('io.ox/mail/accounts/view-form',
             LOGIN_OUT: gt('Login'),
             PASSWORD_OUT: gt('Password'),
             TITLE_FOLDER_SETTINGS: gt('Folder Settings'),
-            FOLDER_SEND: gt('Send folder'),
+            FOLDER_SENT: gt('Sent folder'),
             FOLDER_TRASH: gt('Trash folder'),
             FOLDER_DRAFTS: gt('Drafts folder'),
             FOLDER_SPAM: gt('Spam folder'),
@@ -65,6 +67,20 @@ define('io.ox/mail/accounts/view-form',
             }
         },
 
+        oldModel,
+
+        validationCheck = function (data) {
+
+            data = _.extend({
+                unified_inbox_enabled: false,
+                transport_credentials: false
+            }, data);
+
+            data.name = data.personal = data.primary_address;
+
+            return AccountAPI.validate(data);
+        },
+
         AccountDetailView = Backbone.View.extend({
             tagName: "div",
             _modelBinder: undefined,
@@ -76,15 +92,21 @@ define('io.ox/mail/accounts/view-form',
                 //check if login and mailaddress are synced
                 this.inSync = false;
 
+                oldModel = _.copy(this.model.attributes, true);
+
                 Backbone.Validation.bind(this, {selector: 'data-property', forceUpdate: true});//forceUpdate needed otherwise model is always valid even if inputfields contain wrong values
             },
             render: function () {
-                var self = this;
-                window.account = self.model; //FIXME: WTF?
+                var self = this,
+                    //convention with backend
+                    hidePrimaryAccountDetails = _.isNull(self.model.attributes.mail_server);
                 self.$el.empty().append(self.template({
                     strings: staticStrings,
                     optionsServer: optionsServerType,
-                    optionsRefreshRate: optionsRefreshRatePop
+                    optionsRefreshRate: optionsRefreshRatePop,
+                    settings: {
+                        hideAccountDetails: self.model.attributes.id === 0 && hidePrimaryAccountDetails
+                    }
                 }));
                 var pop3nodes = self.$el.find('.control-group.pop3');
 
@@ -153,39 +175,78 @@ define('io.ox/mail/accounts/view-form',
                 'save': 'onSave',
                 'click .folderselect': 'onFolderSelect'
             },
-            onSave: function () {
-                var self = this;
 
-                if (!self.model.isNew()) {
-                    // updating account, since we save on close of the dialog,
-                    // dialog is already gone, tell the user that something is happening
-                    notifications.yell('info', gt('Updating account data. This might take a few seconds.'));
+            onSave: function () {
+                var self = this,
+                    list = ['name', 'personal', 'unified_inbox_enabled'],
+                    differences = returnDifferences(this.model.attributes, oldModel);
+
+                function returnDifferences(a, b) {
+                    var array = [];
+                    _.each(a, function (single, key) {
+                        if (b[key] !== single) {
+                            array.push(key);
+                        }
+                    });
+                    return array;
                 }
-                this.model.save()
-                .done(function (data) {
-                    self.dialog.close();
-                    if (self.collection) {
-                        self.collection.add([data]);
+
+                function needToValidate(list, differences) {
+                    var result = false;
+                    _.each(differences, function (value) {
+                        if (_.indexOf(list, value) === -1) {
+                            result = true;
+                        }
+                    });
+                    return result;
+                }
+
+                function saveAccount() {
+                    if (!self.model.isNew()) {
+                        // updating account, since we save on close of the dialog,
+                        // dialog is already gone, tell the user that something is happening
+                        notifications.yell('busy', gt('Updating account data. This might take a few seconds.'));
                     }
-                    if (self.model.isNew()) {
-                        self.succes();
-                    } else {
-                        notifications.yell('success', gt('Account updated'));
-                    }
-                })
-                .fail(function (data) {
-                    if (data.code === "ACC-0004" && data.error_params[0].substring(8, 13) === 'login') {//string comparison is ugly, maybe backend has a translated version of this
-                        notifications.yell('error', gt('Login must not be empty.'));
-                    } else if (data.code === "SVL-0002") {
-                        notifications.yell('error',
-                                           //#. %1$s the missing request parameter
-                                           //#, c-format
-                                           gt("Please enter the following data: %1$s", _.noI18n(data.error_params[0])));
-                    } else {
-                        notifications.yell('error', _.noI18n(data.error));
-                    }
-                    self.dialog.idle();
-                });
+                    self.model.save()
+                    .done(function (data) {
+                        self.dialog.close();
+                        if (self.collection) {
+                            self.collection.add([data]);
+                        }
+                        if (self.model.isNew()) {
+                            self.succes();
+                        } else {
+                            notifications.yell('success', gt('Account updated'));
+                        }
+                    })
+                    .fail(function (data) {
+                        if (data.code === "ACC-0004" && data.error_params[0].substring(8, 13) === 'login') {//string comparison is ugly, maybe backend has a translated version of this
+                            notifications.yell('error', gt('Login must not be empty.'));
+                        } else if (data.code === "SVL-0002") {
+                            notifications.yell('error',
+                               //#. %1$s the missing request parameter
+                               //#, c-format
+                               gt("Please enter the following data: %1$s", _.noI18n(data.error_params[0])));
+                        } else {
+                            notifications.yell('error', _.noI18n(data.error));
+                        }
+                        self.dialog.idle();
+                    });
+                }
+
+                if (needToValidate(list, differences)) {
+                    validationCheck(this.model.attributes).done(function (response) {
+                        if (response) {
+                            saveAccount();
+                        } else {
+                            notifications.yell('error', gt('This account cannot be validated'));
+                            self.dialog.idle();
+                        }
+                    });
+                } else {
+                    saveAccount();
+                }
+
             },
 
             onFolderSelect: function (e) {
@@ -200,18 +261,22 @@ define('io.ox/mail/accounts/view-form',
                     require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
 
                         var label = gt('Select folder'),
-                            dialog = new dialogs.ModalDialog({ easyOut: true })
+                            dialog = new dialogs.ModalDialog()
                             .header($('<h4>').text(label))
                             .addPrimaryButton("select", label)
                             .addButton("cancel", gt("Cancel"));
                         dialog.getBody().css({ height: '250px' });
                         var tree = new views.FolderTree(dialog.getBody(), {
                                 type: 'mail',
+                                tabindex: 0,
                                 rootFolderId: 'default' + self.model.get('id')
                             });
                         dialog.show(function () {
                             tree.paint().done(function () {
-                                tree.select(id);
+                                tree.select(id).done(function () {
+                                    tree.selection.updateIndex();
+                                    dialog.getBody().focus();
+                                });
                             });
                         })
                         .done(function (action) {

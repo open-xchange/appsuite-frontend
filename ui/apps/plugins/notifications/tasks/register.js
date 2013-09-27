@@ -17,8 +17,9 @@ define('plugins/notifications/tasks/register',
      'io.ox/tasks/api',
      'io.ox/core/api/reminder',
      'io.ox/tasks/util',
+     'io.ox/core/tk/reminder-util',
      'less!plugins/notifications/tasks/style.less'
-    ], function (ext, gt, api, reminderApi, util) {
+    ], function (ext, gt, api, reminderAPI, util, reminderUtil) {
 
     'use strict';
 
@@ -39,7 +40,7 @@ define('plugins/notifications/tasks/register',
 
     function drawItem(node, model) {
         node.append(
-            $('<div class="taskNotification item">')
+            $('<div class="taskNotification item" tabindex="1">')
             .attr('data-cid', model.get('cid'))
             .attr('model-cid', model.cid)
             .append(
@@ -47,7 +48,7 @@ define('plugins/notifications/tasks/register',
                 $('<span class="end_date">').text(_.noI18n(model.get('end_date'))),
                 $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge')),
                 $('<div class="actions">').append(
-                    $('<button class="btn btn-inverse" data-action="done">').text(gt('Done'))
+                    $('<button type="button" tabindex="1" class="btn btn-inverse" data-action="done">').text(gt('Done'))
                 )
             )
         );
@@ -66,7 +67,8 @@ define('plugins/notifications/tasks/register',
 
         events: {
             'click [data-action="done"]': 'setStatus',
-            'click .item': 'openTask'
+            'click .item': 'openTask',
+            'keydown .item': 'openTask'
         },
 
         render: function () {
@@ -94,14 +96,18 @@ define('plugins/notifications/tasks/register',
                         percent_completed: 100,
                         date_completed: _.now() })
                 .done(function (result) {
-                    api.trigger('update:' + encodeURIComponent(cid), result);
+                    api.trigger('update:' + _.ecid(obj), result);
                 });
             model = this.collection.get(item.attr('model-cid'));
             this.collection.remove(model);
         },
 
         openTask: function (e) {
-
+            if ($(e.target).is('a') || $(e.target).is('i') || $(e.target).is('button')) {
+                //ignore chevron and dropdownlinks
+                return;
+            }
+            if ((e.type !== 'click') && (e.which !== 13)) { return; }
             var cid = $(e.currentTarget).attr('data-cid'),
                 overlay = $('#io-ox-notifications-overlay'),
                 sidepopup = overlay.prop('sidepopup');
@@ -116,12 +122,24 @@ define('plugins/notifications/tasks/register',
                         // open SidePopup without arrow
                         new dialogs.SidePopup({ arrow: false, side: 'right' })
                             .setTarget(overlay)
+                            .on('close', function () {
+                                if (_.device('smartphone') && overlay.children().length > 0) {
+                                    overlay.addClass('active');
+                                } else if (_.device('smartphone')) {
+                                    overlay.removeClass('active');
+                                    $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
+                                }
+                            })
                             .show(e, function (popup) {
                                 popup.append(viewDetail.draw(taskData));
+                                if (_.device('smartphone')) {
+                                    $('#io-ox-notifications').removeClass('active');
+                                }
                             });
                     });
                 });
             }
+
         }
     });
 
@@ -196,22 +214,7 @@ define('plugins/notifications/tasks/register',
 
     ext.point('io.ox/core/notifications/task-reminder/item').extend({
         draw: function (baton) {
-            var model = baton.model,
-                selectionBox;
-
-            this.attr('data-cid', model.get('cid')).attr('model-cid', model.cid)
-            .append(
-                $('<div class="title">').text(_.noI18n(model.get('title'))),
-                $('<span class="end_date">').text(_.noI18n(model.get('end_date'))),
-                $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge')),
-                $('<div class="task-actions">').append(
-                    selectionBox = $('<select class="dateselect" data-action="selector">').append(util.buildDropdownMenu(new Date())),
-                    $('<button class="btn btn-inverse taskremindbtn" data-action="remindAgain">').text(gt('Remind me again')),
-                    $('<button class="btn btn-inverse taskRemindOkBtn" data-action="ok">').text(gt('OK'))
-
-                )
-            );
-            selectionBox.val('15');//set to 15minutes as default
+            reminderUtil.draw(this, baton.model, util.buildOptionArray(new Date()));
         }
     });
 
@@ -221,46 +224,51 @@ define('plugins/notifications/tasks/register',
 
         events: {
             'click [data-action="ok"]': 'deleteReminder',
-            'click [data-action="remindAgain"]': 'remindAgain',
-            'click [data-action="selector"]': 'selectClicked',
-            'click': 'onClickItem'
+            'change [data-action="selector"]': 'remindAgain',
+            'click [data-action="selector"]': 'remindAgain',
+            'click': 'onClickItem',
+            'keydown': 'onClickItem'
         },
 
         render: function () {
             var baton = ext.Baton({ model: this.model, view: this });
             ext.point('io.ox/core/notifications/task-reminder/item').invoke('draw', this.$el, baton);
+            $('.dropdown-menu', this.$el).on('click', 'a', $.proxy(this.remindAgain, this));
             return this;
         },
 
         deleteReminder: function (e) {
             e.stopPropagation();
-            reminderApi.deleteReminder(this.model.get('reminder').id);
+            reminderAPI.deleteReminder(this.model.get('reminder').id);
             this.model.collection.remove(this.model);
         },
 
-        selectClicked: function (e) {
-            e.stopPropagation();
-        },
-
         remindAgain: function (e) {
+            e.stopPropagation();
             var endDate = new Date(),
                 dates,
                 reminder,
                 model = this.model,
+                time = ($(e.target).data('value') || $(e.target).val()).toString(),
                 key = [model.get('folder_id') + '.' + model.get('id')];
-
-            dates = util.computePopupTime(endDate, this.$el.find('.dateselect').val());
-            endDate = dates.alarmDate;
-            reminderApi.remindMeAgain(endDate.getTime(), model.get('reminder').id).pipe(function () {
-                return $.when(api.caches.get.remove(key), api.caches.list.remove(key));//update Caches
-            }).done(function () {
-                api.trigger('update:' + key[0]);//update detailview
-            });
-            e.stopPropagation();
-            model.collection.remove(model);
+            if (time !== '0') {//0 means 'pick a time here' was selected. Do nothing.
+                dates = util.computePopupTime(endDate, time);
+                endDate = dates.alarmDate;
+                reminderAPI.remindMeAgain(endDate.getTime(), model.get('reminder').id).pipe(function () {
+                    return $.when(api.caches.get.remove(key), api.caches.list.remove(key));//update Caches
+                }).done(function () {
+                    api.trigger('update:' + _.ecid(key[0]));//update detailview
+                });
+                model.collection.remove(model);
+            }
         },
 
         onClickItem: function (e) {
+            if ($(e.target).is('a') || $(e.target).is('i') || $(e.target).is('button')) {
+                //ignore chevron and dropdownlinks
+                return;
+            }
+            if ((e.type !== 'click') && (e.which !== 13)) { return; }
 
             var overlay = $('#io-ox-notifications-overlay'),
                 obj = {
@@ -280,8 +288,19 @@ define('plugins/notifications/tasks/register',
                         // open SidePopup without arrow
                         new dialogs.SidePopup({ arrow: false, side: 'right' })
                             .setTarget(overlay)
+                            .on('close', function () {
+                                if (_.device('smartphone') && overlay.children().length > 0) {
+                                    overlay.addClass('active');
+                                } else if (_.device('smartphone')) {
+                                    overlay.removeClass('active');
+                                    $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
+                                }
+                            })
                             .show(e, function (popup) {
                                 popup.append(viewDetail.draw(taskData));
+                                if (_.device('smartphone')) {
+                                    $('#io-ox-notifications').removeClass('active');
+                                }
                             });
                     });
                 });
@@ -315,7 +334,7 @@ define('plugins/notifications/tasks/register',
         register: function (controller) {
             var notifications = controller.get('io.ox/tasksreminder', NotificationsReminderView);
 
-            reminderApi.on('add:tasks:reminder', function (e, reminders) {
+            reminderAPI.on('add:tasks:reminder', function (e, reminders) {
                 var taskIds = [];
                 _(reminders).each(function (reminder) {
                     taskIds.push({id: reminder.target_id,
@@ -341,7 +360,13 @@ define('plugins/notifications/tasks/register',
                 _(ids).each(function (id) {
                     notifications.collection.remove(notifications.collection._byId[id.id]);
                 });
-                reminderApi.getReminders();//to delete stored reminders
+                reminderAPI.getReminders();//to delete stored reminders
+            }).on('mark:task:confirmed', function (e, ids) {
+                _(ids).each(function (id) {
+                    if (!id.data || id.data.confirmation === 2) {//remove reminders for declined tasks
+                        notifications.collection.remove(notifications.collection._byId[id.id]);
+                    }
+                });
             });
         }
     });
@@ -371,7 +396,7 @@ define('plugins/notifications/tasks/register',
                 $('<span class="end_date">').text(_.noI18n(task.end_date)),
                 $('<span class="status">').text(task.status).addClass(task.badge),
                 $('<div class="actions">').append(
-                    $('<button class="btn btn-inverse" data-action="change_state">').text(gt('Accept/Decline'))
+                    $('<button type="button" class="btn btn-inverse" data-action="change_state">').text(gt('Accept/Decline'))
                 )
             );
             task = null;
@@ -384,6 +409,7 @@ define('plugins/notifications/tasks/register',
 
         events: {
             'click': 'onClickItem',
+            'keydown': 'onClickItem',
             'click [data-action="change_state"]': 'onChangeState'
             //'dispose': 'close'
         },
@@ -395,6 +421,11 @@ define('plugins/notifications/tasks/register',
         },
 
         onClickItem: function (e) {
+            if ($(e.target).is('a') || $(e.target).is('i') || $(e.target).is('button')) {
+                //ignore chevron and dropdownlinks
+                return;
+            }
+            if ((e.type !== 'click') && (e.which !== 13)) { return; }
 
             var overlay = $('#io-ox-notifications-overlay'),
                 obj = {
@@ -414,8 +445,19 @@ define('plugins/notifications/tasks/register',
                         // open SidePopup without arrow
                         new dialogs.SidePopup({ arrow: false, side: 'right' })
                             .setTarget(overlay)
+                            .on('close', function () {
+                                if (_.device('smartphone') && overlay.children().length > 0) {
+                                    overlay.addClass('active');
+                                } else if (_.device('smartphone')) {
+                                    overlay.removeClass('active');
+                                    $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
+                                }
+                            })
                             .show(e, function (popup) {
                                 popup.append(viewDetail.draw(taskData));
+                                if (_.device('smartphone')) {
+                                    $('#io-ox-notifications').removeClass('active');
+                                }
                             });
                     });
                 });
@@ -439,7 +481,8 @@ define('plugins/notifications/tasks/register',
                                             confirmmessage: message}
                         }).done(function () {
                             //update detailview
-                            api.trigger('update:' + model.get('folder_id') + '.' + model.get('id'));
+                            var data = model.toJSON();
+                            api.trigger('update:' + _.ecid(data));
                             model.collection.remove(model);
                         });
                     }

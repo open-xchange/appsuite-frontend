@@ -8,7 +8,7 @@
         "ਬੁਧਵਾਰ",
         "ਵੀਰਵਾਰ",
         "ਸ਼ੁੱਕਰਵਾਰ",
-        "ਸ਼ਨੀਚਰਵਾਰ"
+        "ਸ਼ਨੀਵਾਰ"
     ],
     "daysShort": [
         "ਐਤ.",
@@ -16,7 +16,7 @@
         "ਮੰਗਲ.",
         "ਬੁਧ.",
         "ਵੀਰ.",
-        "ਸ਼ੁਕਰ.",
+        "ਸ਼ੁੱਕਰ.",
         "ਸ਼ਨੀ."
     ],
     "daysStandalone": [
@@ -25,7 +25,7 @@
         "ਮੰਗਲ.",
         "ਬੁਧ.",
         "ਵੀਰ.",
-        "ਸ਼ੁਕਰ.",
+        "ਸ਼ੁੱਕਰ.",
         "ਸ਼ਨੀ."
     ],
     "months": [
@@ -58,23 +58,24 @@
     ],
     "formats": {
         "E": "E",
-        "yMd": "y-M-d",
-        "yMEd": "E, y-M-d",
-        "yMMMd": "y MMM d",
-        "yMMMEd": "E, y MMM d",
+        "yMd": "d/M/y",
+        "yMEd": "E, d/M/y",
+        "yMMMd": "d MMM y",
+        "yMMMEd": "E, d MMM y",
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "d/M",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
-        "yMdHm": "y-M-d HH:mm",
-        "yMdHmv": "y-M-d HH:mm v",
-        "yMdhm": "y-M-d h:mm a",
-        "yMdhmv": "y-M-d h:mm a v",
-        "yMEdHm": "E, y-M-d HH:mm",
-        "yMEdHmv": "E, y-M-d HH:mm v",
-        "yMEdhm": "E, y-M-d h:mm a",
-        "yMEdhmv": "E, y-M-d h:mm a v"
+        "yMdHm": "d/M/y HH:mm",
+        "yMdHmv": "d/M/y HH:mm v",
+        "yMdhm": "d/M/y h:mm a",
+        "yMdhmv": "d/M/y h:mm a v",
+        "yMEdHm": "E, d/M/y HH:mm",
+        "yMEdHmv": "E, d/M/y HH:mm v",
+        "yMEdhm": "E, d/M/y h:mm a",
+        "yMEdhmv": "E, d/M/y h:mm a v"
     },
     "date": "d MMM y",
     "time": "h:mm a",
@@ -100,23 +101,23 @@
             "m": "HH:mm–HH:mm v"
         },
         "yMMMd": {
-            "d": "yyyy-MM-d – d",
-            "m": "yyyy-MM-dd – MM-d",
-            "y": "yyyy-MM-dd – yyyy-MM-dd"
+            "d": "d–d MMM y",
+            "m": "d MMM – d MMM y",
+            "y": "d MMM y – d MMM y"
         },
         "yMMMEd": {
-            "d": "E, yyyy-MM-dd – E, yyyy-MM-dd",
-            "m": "E, yyyy-MM-dd – E, yyyy-MM-dd",
-            "y": "E, yyyy-MM-dd – E, yyyy-MM-dd"
+            "d": "E, d MMM – E, d MMM y",
+            "m": "E, d MMM – E, d MMM y",
+            "y": "E, d MMM y – E, d MMM y"
         }
     },
     "dayPeriods": {
-        "am": "ਪੂਰਵ ਦੁਪਹਿਰ",
-        "pm": "ਬਾਅਦ ਦੁਪਹਿਰ"
+        "am": "AM",
+        "pm": "PM"
     },
     "eras": [
-        "ਈ. ਪੂ.",
-        "ਸਾਲ"
+        "ਈ. ਪੂ. ਯੁ.",
+        "ਈ.ਯੁ."
     ],
     "dateTime": "d MMM y h:mm a",
     "h12": true

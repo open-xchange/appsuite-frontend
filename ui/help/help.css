@@ -12,16 +12,20 @@
 .oxhelp-next-title {
 }
 
-.chapter {
+.oxhelp-content {
 	padding-bottom: 15px;
-	padding-top: 65px; //min 40px recommend + 15px like at the bottom
-}
-.oxhelp-navigation-top .navbar-fixed-top .navbar-inner, .chapter, .oxhelp-navigation-bottom {
+	padding-top: 50px; /* min 40px recommend bc. of fixed toolbar */
 	padding-left: 30px;
 }
+
+.oxhelp-navigation-top .navbar-fixed-top .navbar-inner, .oxhelp-navigation-bottom {
+	padding-left: 30px;
+}
+
 .oxhelp-navigation-bottom .pagination {
 	margin: 0;
 }
+
 .oxhelp-navigation-top .navbar .nav > li > a:first-child {
 	padding-left: 0;
 }

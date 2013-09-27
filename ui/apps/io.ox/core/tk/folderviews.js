@@ -17,13 +17,12 @@ define('io.ox/core/tk/folderviews',
      'io.ox/core/api/user',
      'io.ox/core/extensions',
      'io.ox/core/event',
-     'io.ox/core/config',
      'io.ox/core/notifications',
      'io.ox/core/http',
      'io.ox/core/cache',
      'io.ox/core/capabilities',
      'gettext!io.ox/core'
-    ], function (Selection, api, userAPI, ext, Events, config, notifications, http, cache, capabilities, gt) {
+    ], function (Selection, api, userAPI, ext, Events, notifications, http, cache, capabilities, gt) {
 
     'use strict';
 
@@ -47,6 +46,7 @@ define('io.ox/core/tk/folderviews',
         var ready = api.get({ folder: id, storage: storage }),
             nodes = {},
             children = null,
+            childrenLoaded,
             painted = false,
             detached = true,
             loading = null,
@@ -77,7 +77,7 @@ define('io.ox/core/tk/folderviews',
 
             drawChildren = function (reload, method) {
 
-                if (loading) return $.Deferred().resolve([]);
+                if (loading && loading.state() === 'pending') return loading;
 
                 // remove potential fail messages from previous refreshes
                 nodes.sub.find('.io-ox-fail').parent().remove();
@@ -143,6 +143,9 @@ define('io.ox/core/tk/folderviews',
             updateArrow = function () {
                 var className = hasChildren() ? (isOpen() ? CLOSE : OPEN) : 'icon-none';
                 nodes.arrow.find('i').attr('class', className);
+                if (childrenLoaded && !children) {
+                    hideArrow();
+                }
             },
 
             hideArrow = function () {
@@ -150,7 +153,9 @@ define('io.ox/core/tk/folderviews',
             },
 
             openNode = function () {
-                if (!hasChildren() || open) { return $.when(); }
+                if (!hasChildren() || open) {
+                    return $.when();
+                }
                 open = true;
                 nodes.sub.show();
                 updateArrow();
@@ -164,6 +169,18 @@ define('io.ox/core/tk/folderviews',
                 nodes.sub.hide();
                 updateArrow();
                 tree.toggle();
+                return $.when();
+            },
+
+            toggleNode = function () {
+                if (!open) {
+                    return openNode().then(function () {
+                        return tree.repaint();
+                    });
+                } else {
+                    closeNode();
+                    return tree.repaint();
+                }
             },
 
             // open/close tree node
@@ -178,7 +195,7 @@ define('io.ox/core/tk/folderviews',
                     if (isArrow || (isLabel && isUnselectable)) {
                         // avoid selection; allow for unreadable
                         e.preventDefault();
-                        if (!open) { openNode(); } else { closeNode(); }
+                        toggleNode();
                     }
                 }
             };
@@ -192,6 +209,7 @@ define('io.ox/core/tk/folderviews',
         // open & close
         this.open = openNode;
         this.close = closeNode;
+        this.toggle = toggleNode;
 
         this.isOpen = function () {
             return hasChildren() && (open === true || (tree.options.skipRoot && tree.options.rootFolderId === id));
@@ -259,10 +277,12 @@ define('io.ox/core/tk/folderviews',
                         hash[node.id] = node;
                     });
                 }
+                childrenLoaded = false;
                 // we assume that folder API takes care of clearing caches for periodic refreshes
                 // get sub folders
                 return api.getSubFolders({ folder: id, all: all, storage: storage }).then(function (data) {
                     // create new children array
+                    http.pause();
                     children = _.chain(data)
                         .filter(function (folder) {
                             // ignore system folders without sub folders, e.g. 'Shared folders'
@@ -276,10 +296,14 @@ define('io.ox/core/tk/folderviews',
                                 return node;
                             } else {
                                 // new node
+
                                 return new TreeNode(tree, folder.id, nodes.sub, skip() ? level : level + 1, checkbox, all, storage);
                             }
                         })
                         .value();
+                    http.resume();
+                    childrenLoaded = true;
+
                     // destroy remaining and thus deprecated tree nodes
                     _(hash).each(function (child) {
                         child.destroy();
@@ -372,7 +396,7 @@ define('io.ox/core/tk/folderviews',
                     nodes.arrow = $('<div class="folder-arrow"><i class="icon-chevron-right"></i></div>');
                     nodes.label = $('<div class="folder-label">');
                     nodes.counter = $('<div class="folder-counter">').append('<span class="folder-counter-badge">');
-                    nodes.subscriber = $('<input>').attr({ 'type': 'checkbox', 'name': 'folder', 'value': data.id }).css('float', 'right');
+                    nodes.subscriber = $('<input>').attr({ 'type': 'checkbox', 'name': 'folder', tabindex: -1, 'value': data.id }).css('float', 'right');
                     if (data.subscribed) {
                         nodes.subscriber.attr('checked', 'checked');
                     }
@@ -406,6 +430,10 @@ define('io.ox/core/tk/folderviews',
             });
         };
 
+        this.getNodes = function () {
+            return nodes;
+        };
+
         this.customize = function () {
             // invoke extension points
             ext.point('io.ox/foldertree/folder').invoke('customize', nodes.folder, data, tree.options);
@@ -427,7 +455,8 @@ define('io.ox/core/tk/folderviews',
             type: null,
             open: [],
             toggle: $.noop,
-            select: $.noop
+            select: $.noop,
+            tabindex: 1
         }, opt);
 
         this.internal = { destroy: $.noop };
@@ -436,7 +465,8 @@ define('io.ox/core/tk/folderviews',
         var self = this;
 
         $(container)
-            .addClass('io-ox-foldertree')
+            .addClass('io-ox-foldertree f6-target')
+            .attr({ tabindex: this.options.tabindex, role: 'tree', 'aria-label': gt('Folder view') })
             // add tree container
             .append(this.container = $('<div class="folder-root">'));
 
@@ -444,11 +474,13 @@ define('io.ox/core/tk/folderviews',
         Selection.extend(this, container, { dropzone: true, dropType: 'folder' }) // not this.container!
             .setMultiple(false)
             .setSerializer(function (obj) {
-                return String(obj.id);
+                return obj ? String(obj.id) : '';
             });
 
         // add event hub
         Events.extend(this);
+
+        this.selection.keyboard(container, true);
 
         this.paint = function () {
             var p = this.paint;
@@ -457,7 +489,7 @@ define('io.ox/core/tk/folderviews',
                 this.selection.clearIndex();
                 p.running = this.internal.paint.call(this) || $.when();
                 p.running.always(function () {
-                    self.selection.update();
+                    self.selection.updateIndex();
                     self.trigger('paint');
                     p.running = null;
                 });
@@ -474,7 +506,7 @@ define('io.ox/core/tk/folderviews',
                 this.selection.clearIndex();
                 p.running = (this.internal.repaint || this.internal.paint).call(this) || $.when();
                 p.running.always(function () {
-                    self.selection.update();
+                    self.selection.updateIndex();
                     self.trigger('repaint');
                     p.running = null;
                 });
@@ -523,13 +555,27 @@ define('io.ox/core/tk/folderviews',
          * a module name, for now
          */
         this.addProcess = function (folder, title, opt) {
-            var self = this,
-            opt = opt || {};
+
+            var opt = opt || {},
+                invalid = false;
+
+            // check for valid filename
+            ext.point('io.ox/core/filename')
+                .invoke('validate', null, title, 'folder')
+                .find(function (result) {
+                    if (result !== true) {
+                        notifications.yell('warning', result);
+                        return (invalid = true);
+                    }
+                });
+
+            if (invalid) return $.Deferred().reject();
+
             // call API
             return api.create({
                 folder: folder,
                 data: {
-                    title: $.trim(title) || gt('New folder'),
+                    title: $.trim(title),
                     module: opt.module
                 }
             });
@@ -548,8 +594,8 @@ define('io.ox/core/tk/folderviews',
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog({
                         async: true,
-                        easyOut: true,
-                        width: 400
+                        width: 400,
+                        enter: 'add'
                     })
                     .header(
                         $('<h4>').text(folder === '1' ? gt('Add new folder') : gt('Add new subfolder'))
@@ -558,23 +604,19 @@ define('io.ox/core/tk/folderviews',
                         this.getContentNode().append(
                             $('<div class="row-fluid">').append(
                                 folder !== '1' ? api.getBreadcrumb(folder, { subfolders: false }) : [],
-                                $('<input>', { type: 'text' })
+                                $('<input type="text" class="span12">')
                                 .attr('placeholder', gt('Folder name'))
-                                .addClass('span12')
-                                .on('keypress', { popup: this, action: 'add' }, fnKeyPress)
                             )
                         );
                     })
                     .addPrimaryButton('add', gt('Add folder'))
                     .addButton('cancel', gt('Cancel'))
                     .on('add', function () {
-                        var popup = this;
-                        self.addProcess(folder, this.getContentNode().find('input').val(), opt).always(function () {
-                            popup.close();
-                        });
+                        self.addProcess(folder, this.getContentNode().find('input').val(), opt)
+                            .then(this.close, this.idle);
                     })
                     .show(function () {
-                        this.find('input').focus();
+                        this.find('input').val(gt('New folder')).focus().select();
                     });
                 });
             }
@@ -607,6 +649,21 @@ define('io.ox/core/tk/folderviews',
         };
 
         this.renameProcess = function (folder, changes) {
+
+            var invalid = false;
+
+            // check for valid folder name
+            ext.point('io.ox/core/filename')
+                .invoke('validate', null, changes.title, 'folder')
+                .find(function (result) {
+                    if (result !== true) {
+                        notifications.yell('warning', result);
+                        return (invalid = true);
+                    }
+                });
+
+            if (invalid) return $.Deferred().reject();
+
             return api.update({ folder: folder, changes: changes });
         };
 
@@ -647,7 +704,7 @@ define('io.ox/core/tk/folderviews',
                     .addButton('cancel', gt('Cancel'))
                     .on('rename', function () {
                         self.renameProcess(folder.id, { title: this.getContentNode().find('input').val() })
-                            .always(this.close);
+                            .then(this.close, this.idle);
                     })
                     .show(function () {
                         this.find('input').focus();
@@ -675,6 +732,7 @@ define('io.ox/core/tk/folderviews',
             var container = $('<div>'),
                 tree = new ApplicationFolderTree(container, {
                 type: options.type,
+                tabindex: 0,
                 rootFolderId: options.rootFolderId,
                 checkbox: true,
                 all: true,
@@ -684,8 +742,7 @@ define('io.ox/core/tk/folderviews',
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 var pane = new dialogs.ModalDialog({
                     width: 500,
-                    addclass: 'subscribe-imap-folder',
-                    easyOut: true
+                    addclass: 'subscribe-imap-folder'
                 });
                 var changesArray = [];
 
@@ -698,7 +755,10 @@ define('io.ox/core/tk/folderviews',
                 .addPrimaryButton('save', gt('Save'))
                 .addButton('cancel', gt('Cancel'))
                 .show(function () {
-                    tree.paint();
+                    tree.paint().done(function () {
+                        tree.selection.updateIndex().selectFirst();
+                        pane.getBody().find('.io-ox-foldertree').focus();
+                    });
                 })
                 .done(function (action) {
                     if (action === 'save') {
@@ -716,7 +776,7 @@ define('io.ox/core/tk/folderviews',
                     }
                 });
 
-                tree.container.on('change', 'input', function () {
+                tree.container.on('change', 'input[type="checkbox"]', function (e) {
                     var folder = $(this).val(),
                         checkboxStatus = $(this).is(':checked'),
                         changes = { subscribed: checkboxStatus },
@@ -789,6 +849,48 @@ define('io.ox/core/tk/folderviews',
         this.selection.on('change', function (e, selection) {
             var id = _(selection).first();
             if (id) { self.options.select(id); }
+        })
+        .on('keyboard', function (event, origEvent, key) {
+            var id = this.get(),
+                treeNode = self.getNode(id);
+            switch (key) {
+            case 39:
+                origEvent.preventDefault();
+                // cursor right
+                if (treeNode && !treeNode.isOpen()) {
+                    treeNode.open().done(function () {
+                        self.repaint();
+                    });
+                }
+                return false;
+            case 37:
+                // cursor left
+                origEvent.preventDefault();
+                if (treeNode && treeNode.isOpen()) {
+                    treeNode.close().done(function () {
+                        self.repaint();
+                    });
+                }
+                return false;
+            case 32:
+                // space
+                // disable space on checkbox option
+                if (opt.checkbox) {
+                    origEvent.preventDefault();
+                    var chkbox = treeNode.getNodes().subscriber;
+                    // toggle checkbox
+                    chkbox
+                        .prop('checked', !chkbox.prop('checked'))
+                        .trigger('change');
+                    return false;
+                }
+                treeNode.toggle();
+                return false;
+            case 13:
+                // enter
+                treeNode.toggle();
+                return false;
+            }
         });
 
         function deferredEach(list, done) {
@@ -936,7 +1038,7 @@ define('io.ox/core/tk/folderviews',
             if (api.is('shared', data)) {
                 folder.append(
                     $('<div>').addClass('shared-by').append(
-                        userAPI.getLink(data.created_by, data['com.openexchange.folderstorage.displayName'])
+                        userAPI.getLink(data.created_by, data['com.openexchange.folderstorage.displayName']).attr({ tabindex: -1 })
                     )
                 );
             }
@@ -959,6 +1061,7 @@ define('io.ox/core/tk/folderviews',
 
             return api.getVisible(options).done(function (data) {
                 var id, section,
+                    showHeadlines = Object.keys(data).length > 1,
                     drawSection = function (node, list) {
                         // loop over folders
                         _(list).each(function (data) {
@@ -973,15 +1076,13 @@ define('io.ox/core/tk/folderviews',
                         self.container.append(
                             section = $('<div>').addClass('section')
                             .append(
-                                $('<div>').addClass('section-title').text(sections[id])
+                                //headline if more than one section contains elements
+                                showHeadlines ? $('<div>').addClass('section-title').text(sections[id]) : $()
                             )
                         );
                         drawSection(section, data[id]);
                     }
                 }
-            })
-            .done(function () {
-                self.selection.update();
             })
             .fail(function (error) {
                 self.container.append(

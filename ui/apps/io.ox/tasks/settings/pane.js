@@ -21,10 +21,11 @@ define('io.ox/tasks/settings/pane',
     var tasksSettings =  settings.createModel(tasksSettingsModel),
         staticStrings =  {
         TITLE_TASKS: gt.pgettext('app', 'Tasks'),
-        TITLE_NOTIFICATIONS_FOR_TASKS: gt('E-Mail notification for task'),
-        TITLE_NOTIFICATIONS_FOR_ACCEPTDECLINED: gt('E-Mail notification for Accept/Declined'),
-        NOTIFICATIONS_FOR_ACCEPTDECLINEDCREATOR: gt('E-Mail notification for task creator?'),
-        NOTIFICATIONS_FOR_ACCEPTDECLINEDPARTICIPANT: gt('E-Mail notification for task participant?')
+        TITLE_NOTIFICATIONS_FOR_TASKS: gt('Email notification for task'),
+        NOTIFICATIONS_FOR_NEWCHANGEDDELETED: gt('Email notification for New, Changed, Deleted?'),
+        TITLE_NOTIFICATIONS_FOR_ACCEPTDECLINED: gt('Email notification for Accept/Declined'),
+        NOTIFICATIONS_FOR_ACCEPTDECLINEDCREATOR: gt('Email notification for task creator?'),
+        NOTIFICATIONS_FOR_ACCEPTDECLINEDPARTICIPANT: gt('Email notification for task participant?')
     },
         optionsYes = {label: gt('Yes'), value: true},
         optionsNo = {label: gt('No'), value: false},
@@ -78,7 +79,7 @@ define('io.ox/tasks/settings/pane',
         },
 
         save: function () {
-            tasksViewSettings.model.save();
+            tasksViewSettings.model.saveAndYell();
         }
     });
 

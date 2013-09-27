@@ -7,16 +7,26 @@
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
+ * @author Julian Bäume <julian.baeume@open-xchange.com>
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 define(['io.ox/mail/util',
         'io.ox/core/capabilities'], function (util, capabilities) {
 
-    return describe('mail util', function () {
-
+    describe('Utilities for mail:', function () {
         //guarantee same number of arguments for wrapper functions
-        describe('has some msisdn methods', function () {
-            it('correctly identifying channel "email" or "phone"', function () {
+        describe('has some msisdn methods and', function () {
+
+            beforeEach(function () {
+                cap = sinon.stub(capabilities, 'has');
+                cap.withArgs('msisdn').returns(true);
+            });
+
+            afterEach(function () {
+                capabilities.has.restore();
+            });
+
+            it('should correctly identify channel "email" or "phone"', function () {
 
                 //without considering activated capability
                 expect(util.getChannel('/TYPE=PLMN')).toEqual('phone');
@@ -38,30 +48,49 @@ define(['io.ox/mail/util',
                     expect(util.getChannel('(01701) 23456-78')).toEqual('email');
                 }
             });
-            it('correctly removing inalid chars from phone numbers', function () {
+            it('should correctly remove inalid chars from phone numbers', function () {
                 expect(util.cleanupPhone('+17012345678')).toEqual('+17012345678');
                 expect(util.cleanupPhone('(01701) 23456-78')).toEqual('017012345678');
                 expect(util.cleanupPhone('01701/2345678')).toEqual('017012345678');
             });
-            it('correctly removing "/TYPE=PLMN" typesuffix from data', function () {
+            xit('should correctly remove "/TYPE=PLMN" typesuffix from data', function () {
                 var mail = {
-                    from: [
+                        from: [
                             ['017012345678','017012345678/TYPE=PLMN']
-                    ],
-                    to: [
+                        ],
+                        to: [
                             ['017012345678','017012345678/TYPE=PLMN'],
                             ['017012345678','017012345678/TYPE=PLMN']
-                    ]
-                };
+                        ]
+                    };
 
                 expect(util.removeTypeSuffix('017012345678/TYPE=PLMN,asdadjaldk,017012345678/TYPE=PLMN,asduhadsasd'))
-                    .toEqual('017012345678,asdadjaldk,017012345678,asduhadsasd');
+                .toEqual('017012345678,asdadjaldk,017012345678,asduhadsasd');
                 expect(util.removeTypeSuffix(mail))
-                    .toEqual({from: [['017012345678','017012345678']],to: [['017012345678','017012345678'],['017012345678','017012345678']]})
-
+                .toEqual({from: [['017012345678','017012345678']],to: [['017012345678','017012345678'],['017012345678','017012345678']]})
             });
-
+            xit('should handle empty from fields', function () {
+                var mail = {
+                    from: [],
+                    to: [
+                        ['017012345678','017012345678/TYPE=PLMN']
+                    ]
+                }
+                expect(util.removeChannelSuffix(mail))
+                    .toEqual({from: [], to: [['017012345678','017012345678']]});
+            });
         });
 
+        describe('parse recepient', function () {
+            it('should work with plain mail address strings', function () {
+                var result = util.parseRecipient('julian.baeume@open-xchange.com');
+                expect(result).toEqual(['julian.baeume', 'julian.baeume@open-xchange.com']);
+            });
+
+            it('should work with display name and mail address strings', function () {
+                var result = util.parseRecipient('"Julian Bäume" <julian.baeume@open-xchange.com>');
+                expect(result).toEqual(['Julian Bäume', 'julian.baeume@open-xchange.com']);
+            });
+        });
     });
 });

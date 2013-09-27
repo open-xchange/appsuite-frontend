@@ -58,27 +58,28 @@
     ],
     "formats": {
         "E": "E",
-        "yMd": "d.M.yyyy",
-        "yMEd": "E d.M.yyyy",
+        "yMd": "d.M.y",
+        "yMEd": "E d.M.y",
         "yMMMd": "d. MMM y",
         "yMMMEd": "E d. MMM y",
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "d.M.",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
-        "yMdHm": "d.M.yyyy HH:mm",
-        "yMdHmv": "d.M.yyyy HH:mm v",
-        "yMdhm": "d.M.yyyy h:mm a",
-        "yMdhmv": "d.M.yyyy h:mm a v",
-        "yMEdHm": "E d.M.yyyy HH:mm",
-        "yMEdHmv": "E d.M.yyyy HH:mm v",
-        "yMEdhm": "E d.M.yyyy h:mm a",
-        "yMEdhmv": "E d.M.yyyy h:mm a v"
+        "yMdHm": "d.M.y, HH:mm",
+        "yMdHmv": "d.M.y, HH:mm v",
+        "yMdhm": "d.M.y, h:mm a",
+        "yMdhmv": "d.M.y, h:mm a v",
+        "yMEdHm": "E d.M.y, HH:mm",
+        "yMEdHmv": "E d.M.y, HH:mm v",
+        "yMEdhm": "E d.M.y, h:mm a",
+        "yMEdhmv": "E d.M.y, h:mm a v"
     },
     "date": "d. MMM y",
     "time": "HH:mm",
-    "dateTimeFormat": "%2$s %1$s",
+    "dateTimeFormat": "%2$s, %1$s",
     "intervals": {
         "fallback": "%1$s – %2$s",
         "hm": {
@@ -115,9 +116,9 @@
         "pm": "ettermiddag"
     },
     "eras": [
-        "f.Kr.",
-        "e.Kr."
+        "f.v.t.",
+        "v.t."
     ],
-    "dateTime": "d. MMM y HH:mm",
+    "dateTime": "d. MMM y, HH:mm",
     "h12": false
 }

@@ -16,7 +16,8 @@ define('io.ox/tasks/model', ['io.ox/tasks/api',
                              'io.ox/backbone/validation',
                              'io.ox/core/extensions',
                              'io.ox/participants/model',
-                             'gettext!io.ox/tasks'], function (api, ModelFactory, Validations, ext, pModel, gt) {
+                             'io.ox/core/date',
+                             'gettext!io.ox/tasks'], function (api, ModelFactory, Validations, ext, pModel, date, gt) {
 
     'use strict';
 
@@ -43,7 +44,7 @@ define('io.ox/tasks/model', ['io.ox/tasks/api',
                     var changeParticipantsUpdate = false;
                     var participants = this._participants = new pModel.Participants(this.get('participants'));
                     participants.invoke('fetch');
-    
+
                     function resetList(participant) {
                         if (changeParticipantsUpdate) {
                             return;
@@ -52,9 +53,9 @@ define('io.ox/tasks/model', ['io.ox/tasks/api',
                         self.set('participants', participants.toJSON());
                         resetListUpdate = false;
                     }
-    
+
                     participants.on('add remove reset', resetList);
-    
+
                     this.on('change:participants', function () {
                         if (resetListUpdate) {
                             return;
@@ -64,12 +65,12 @@ define('io.ox/tasks/model', ['io.ox/tasks/api',
                         participants.invoke('fetch');
                         changeParticipantsUpdate = false;
                     });
-    
+
                     return participants;
                 }
             }
         });
-    
+
     Validations.validationFor('io.ox/tasks/model', {
         start_date: {format: 'date'},
         end_date: {format: 'date'},
@@ -94,9 +95,28 @@ define('io.ox/tasks/model', ['io.ox/tasks/api',
     ext.point('io.ox/tasks/model/validation').extend({
         id: 'start-date-before-end-date',
         validate: function (attributes) {
-            if (attributes.start_date && attributes.end_date && attributes.end_date < attributes.start_date) {
-                this.add('start_date', gt('The start date must be before the end date.'));
+            if (attributes.start_date && attributes.end_date && attributes.end_date <= attributes.start_date) {
+                //this.add('start_date', gt('The start date must be before the end date.')); // see Bug 27742
                 this.add('end_date', gt('The start date must be before the end date.'));
+            }
+        }
+    });
+
+    var MAX = 9999999999.99;
+
+    ext.point('io.ox/tasks/model/validation').extend({
+        id: 'Actual-costs-out-of-limits',
+        validate: function (attributes) {
+            if (attributes.actual_costs && (attributes.actual_costs < -MAX || attributes.actual_costs > MAX)) {
+                this.add('actual_costs', gt('Costs must be between -%1$d and %1$d.', MAX, MAX));
+            }
+        }
+    });
+    ext.point('io.ox/tasks/model/validation').extend({
+        id: 'target-costs-out-of-limits',
+        validate: function (attributes) {
+            if (attributes.target_costs && (attributes.target_costs < -MAX || attributes.target_costs > MAX)) {
+                this.add('target_costs', gt('Costs must be between -%1$d and %1$d.', MAX, MAX));
             }
         }
     });
@@ -109,7 +129,7 @@ define('io.ox/tasks/model', ['io.ox/tasks/api',
             }
         }
     });
-    
+
     ext.point('io.ox/tasks/model/validation').extend({
         id: 'recurrence-needs-start-date',
         validate: function (attributes) {
@@ -118,7 +138,7 @@ define('io.ox/tasks/model', ['io.ox/tasks/api',
             }
         }
     });
-    
+
     ext.point('io.ox/tasks/model/validation').extend({
         id: 'recurrence-needs-end-date',
         validate: function (attributes) {

@@ -1,15 +1,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>9.6. Mit WebDAV auf Dateien zugreifen</title>
+<title>8.6. Mit WebDAV auf Dateien zugreifen</title>
 <link rel="stylesheet" type="text/css" href="../help.css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.78.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="OX App Suite">
-<link rel="up" href="ox.appsuite.user.chap.files.html" title="Kapitel 9. Dateien">
-<link rel="prev" href="ox.appsuite.user.sect.files.manage.multiple.html" title="9.5.12. Mehrere Dateien gemeinsam bearbeiten">
-<link rel="next" href="ox.appsuite.user.sect.files.webdav.linux.html" title="9.6.1. WebDAV einrichten in Linux">
+<link rel="up" href="ox.appsuite.user.chap.files.html" title="Kapitel 8. Dateien">
+<link rel="prev" href="ox.appsuite.user.sect.files.manage.multiple.html" title="8.5.12. Mehrere Dateien gemeinsam bearbeiten">
+<link rel="next" href="ox.appsuite.user.sect.files.webdav.linux.html" title="8.6.1. WebDAV einrichten in Linux">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
-<link rel="stylesheet" type="text/css" href="http://www.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css"/> 
+<link rel="stylesheet" type="text/css" href="../../apps/io.ox/core/bootstrap/css/bootstrap.min.css"​/> 
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -22,48 +23,46 @@
 <div class="oxhelp-content">
   <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="ox.appsuite.user.sect.files.webdav"></a>9.6. Mit WebDAV auf Dateien zugreifen</h2></div></div></div>
-<a class="indexterm" name="idm140514499926624"></a><a class="indexterm" name="idm140514499925232"></a><a class="indexterm" name="idm140514499923840"></a><div class="concept">
-<a name="ox.appsuite.user.concept.files.webdav"></a><p>Mit Hilfe von WebDAV greifen Sie auf Dateien der App
-        <span class="phrase">
+<a name="ox.appsuite.user.sect.files.webdav"></a>8.6. Mit WebDAV auf Dateien zugreifen</h2></div></div></div>
+<a class="indexterm" name="idm139715933110992"></a><a class="indexterm" name="idm139715933109600"></a><a class="indexterm" name="idm139715933108208"></a><div class="concept">
+<a name="ox.appsuite.user.concept.files.webdav"></a><p>Mit Hilfe von WebDAV greifen Sie auf Dateien der App <span class="phrase">
         <span class="guilabel"><strong>Dateien</strong></span>
       </span>
       
       
-       genauso zu wie auf lokale Dateien Ihrer Festplatte. Im Vergleich zum Zugriff über die Groupware GUI
-      bietet WebDAV Vorteile und Nachteile:</p>
+       genauso zu wie auf lokale Dateien Ihrer Festplatte. Im Vergleich zum Zugriff über die Groupware GUI bietet WebDAV
+      Vorteile und Nachteile:</p>
 <div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: disc; ">
-<li class="listitem"><p>Vorteil ist der schnelle, direkten Zugriff mit Hilfe eines Datei-Browsers wie zum Beispiel dem Windows
-            Explorer. Sie müssen nicht in der Groupware GUI angemeldet sein.</p></li>
-<li class="listitem"><p>Der Nachteil ist, dass Sie nur die aktuelle Dokumentversion sehen. Die Versionshistorie oder
-            Zusatzinformationen wie Kommentare werden nicht angezeigt.</p></li>
+<li class="listitem"><p>Vorteil ist der schnelle, direkten Zugriff mit Hilfe eines Datei-Browsers wie zum Beispiel dem Windows Explorer.
+            Sie müssen nicht in der Groupware GUI angemeldet sein.</p></li>
+<li class="listitem"><p>Der Nachteil ist, dass Sie nur die aktuelle Dokumentversion sehen. Die Versionshistorie oder Zusatzinformationen
+            wie Kommentare werden nicht angezeigt.</p></li>
 </ul></div>
 <p>
-      <span class="phrase"><strong>Achtung:</strong></span> Wenn Sie mit WebDAV eine Datei löschen, gehen alle Versionen
-      verloren, nicht nur die aktuelle Version. Um eine bestimmte Version zu löschen, verwenden Sie ausschließlich die
-      Methoden, die in <a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.delete" title="So löschen Sie eine bestimmte Version:">So löschen Sie eine bestimmte Version:</a> beschrieben sind. </p>
+      
+      <span class="phrase"><strong>Achtung:</strong></span> Wenn Sie mit WebDAV eine Datei löschen, gehen alle Versionen verloren, nicht
+      nur die aktuelle Version.</p>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.files.webdav.setup"></a><p>Bevor Sie mit einem Datei-Browser wie dem
-      Windows Explorer auf die Dateien der App <span class="phrase">
+<a name="ox.appsuite.user.concept.files.webdav.setup"></a><p>Bevor Sie mit einem Datei-Browser wie dem Windows
+      Explorer auf die Dateien der App <span class="phrase">
         <span class="guilabel"><strong>Dateien</strong></span>
       </span>
       
       
-       zugreifen können, müssen Sie den WebDAV Zugriff einrichten. Die Vorgehensweise ist unterschiedlich, je
-      nach Systemsoftware:</p>
+       zugreifen können, müssen Sie den WebDAV Zugriff einrichten. Die Vorgehensweise ist unterschiedlich, je nach Systemsoftware:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>
-            <a class="xref" href="ox.appsuite.user.sect.files.webdav.linux.html" title="9.6.1. WebDAV einrichten in Linux">WebDAV einrichten in Linux</a>
+            <a class="xref" href="ox.appsuite.user.sect.files.webdav.linux.html" title="8.6.1. WebDAV einrichten in Linux">WebDAV einrichten in Linux</a>
           </p></li>
 <li class="listitem"><p>
-            <a class="xref" href="ox.appsuite.user.sect.files.webdav.winxp.html" title="9.6.2. WebDAV einrichten in Windows XP">WebDAV einrichten in Windows XP</a>
+            <a class="xref" href="ox.appsuite.user.sect.files.webdav.winxp.html" title="8.6.2. WebDAV einrichten in Windows XP">WebDAV einrichten in Windows XP</a>
           </p></li>
 <li class="listitem"><p>
-            <a class="xref" href="ox.appsuite.user.sect.files.webdav.winvista.html" title="9.6.3. WebDAV einrichten in Windows Vista">WebDAV einrichten in Windows Vista</a>
+            <a class="xref" href="ox.appsuite.user.sect.files.webdav.winvista.html" title="8.6.3. WebDAV einrichten in Windows Vista">WebDAV einrichten in Windows Vista</a>
           </p></li>
 <li class="listitem"><p>
-            <a class="xref" href="ox.appsuite.user.sect.files.webdav.win7.html" title="9.6.4. WebDAV einrichten in Windows 7">WebDAV einrichten in Windows 7</a>
+            <a class="xref" href="ox.appsuite.user.sect.files.webdav.win7.html" title="8.6.4. WebDAV einrichten in Windows 7">WebDAV einrichten in Windows 7</a>
           </p></li>
 </ul></div>
 <p>

@@ -63,10 +63,13 @@ define('io.ox/core/tk/selection',
             clickHandler,
             mouseupHandler,
             mousedownHandler,
+            touchstartHandler,
             update,
             clear,
             isSelected,
+            fastSelect,
             select,
+            selectOnly,
             deselect,
             toggle,
             isCheckbox,
@@ -82,7 +85,8 @@ define('io.ox/core/tk/selection',
             lastIndex = -1, // trick for smooth updates
             lastValidIndex = 0,
             fnKey,
-            hasMultiple;
+            hasMultiple,
+            mobileSelectMode;
 
         isCheckbox = function (e) {
             var closest = $(e.target).closest(editableSelector),
@@ -120,9 +124,16 @@ define('io.ox/core/tk/selection',
                 self.trigger('empty');
             }
         };
-
+        // mobile action, used on smartphone instead of "changed"
+        selectOnly = function () {
+            var list = self.get();
+            self.trigger('_m_change', list);
+            if (list.length === 0) {
+                self.trigger('empty');
+            }
+        };
         // apply selection
-        apply = function (id, e) {
+        apply = function (id, e, touchstart) {
             // range?
             if (isRange(e)) {
                 // range selection
@@ -136,8 +147,20 @@ define('io.ox/core/tk/selection',
                 last = prev = id;
                 lastValidIndex = getIndex(id);
             }
-            // event
-            changed();
+            if (!touchstart) {
+                // event
+                changed();
+            } else {
+                // check if select mode
+                // check if checkbox tap
+                // else call apply again without touchstart
+                if (isCheckbox(e) || mobileSelectMode) {
+                    e.preventDefault();
+                    selectOnly();
+                } else {
+                    apply(id, e);
+                }
+            }
         };
 
         selectFirst = function (e) {
@@ -229,24 +252,30 @@ define('io.ox/core/tk/selection',
                 node = $(this);
                 key = node.attr('data-obj-id');
                 id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
-                // exists?
-                if (id !== undefined && !isCheckbox(e)) {
-                    // explicit multiple?
-                    if (isMultiple(e)) {
-                        apply(id, e);
-                        return;
-                    }
-                    // selected?
-                    if (isSelected(id)) {
-                        // but one of many?
-                        if (hasMultiple()) {
-                            node.addClass('pending-select');
+                // adding timeouts to avoid strange effect that occurs across different browsers.
+                // if we do too much inside these event handlers, the mousedown and mouseup events
+                // do not trigger a click. this still happens if timeout interval if too short,
+                // for example, 10 msecs. (see Bug 27794 - Sorting menu remains open)
+                setTimeout(function () {
+                    // exists?
+                    if (id !== undefined && !isCheckbox(e)) {
+                        // explicit multiple?
+                        if (isMultiple(e)) {
+                            apply(id, e);
+                            return;
                         }
-                    } else {
-                        clear();
-                        apply(id, e);
+                        // selected?
+                        if (isSelected(id)) {
+                            // but one of many?
+                            if (hasMultiple()) {
+                                node.addClass('pending-select');
+                            }
+                        } else {
+                            clear();
+                            apply(id, e);
+                        }
                     }
-                }
+                }, 50);
             }
         };
 
@@ -256,16 +285,32 @@ define('io.ox/core/tk/selection',
                 node = $(this);
                 key = node.attr('data-obj-id');
                 id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
-                // exists?
-                if (id !== undefined) {
-                    if (node.hasClass('pending-select')) {
-                        clear();
-                        apply(id, e);
+                // see above (mousedownHandler)
+                setTimeout(function () {
+                    // exists?
+                    if (id !== undefined) {
+                        if (node.hasClass('pending-select')) {
+                            clear();
+                            apply(id, e);
+                        }
                     }
-                }
+                    // remove helper classes
+                    container.find('.pending-select').removeClass('pending-select');
+                }, 50);
             }
-            // remove helper classes
-            container.find('.pending-select').removeClass('pending-select');
+        };
+
+        touchstartHandler = function (e) {
+            var node, key, id,
+                cancelAction = $(e.target).hasClass('cell-button') || $(e.target).hasClass('folder-label');
+
+            // check if the touchstart was triggerd from a inline button or folder tree
+            if (/*!e.isDefaultPrevented() && !cancelAction*/ mobileSelectMode) {
+                node = $(this);
+                key = node.attr('data-obj-id');
+                id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
+                apply(id, e, true);
+            }
         };
 
         getIndex = function (id) {
@@ -273,23 +318,27 @@ define('io.ox/core/tk/selection',
         };
 
         getNode = function (id) {
-            // Why we do the replacement regex stuff: Bug #24543
-            return $('.selectable[data-obj-id="' + self.serialize(id).replace(/\\\./, '\\\\.') + '"]', container);
+            // Why we do the replacement regex stuff: Bug #24543 / #26915
+            return $('.selectable[data-obj-id="' + self.serialize(id).replace(/\\\./g, '\\\\.') + '"]', container);
         };
 
         isSelected = function (id) {
             return selectedItems[self.serialize(id)] !== undefined;
         };
 
+        fastSelect = function (id, node) {
+            var key = self.serialize(id);
+            (node || getNode(key))
+                .addClass(self.classSelected)
+                .find('input.reflect-selection')
+                .attr('checked', 'checked');
+            selectedItems[key] = id;
+        };
+
         select = function (id, silent) {
             if (id) {
-                var key = self.serialize(id);
-                getNode(key)
-                    .addClass(self.classSelected)
-                    .find('input.reflect-selection')
-                    .attr('checked', 'checked').end()
-                    .intoViewport(container);
-                selectedItems[key] = id;
+                fastSelect(id);
+
                 last = id;
                 lastIndex = getIndex(id);
                 if (prev === empty) {
@@ -297,7 +346,7 @@ define('io.ox/core/tk/selection',
                     lastValidIndex = lastIndex;
                 }
                 if (silent !== true) {
-                    self.trigger('select', key);
+                    self.trigger('select', self.serialize(id));
                 }
             }
         };
@@ -319,14 +368,25 @@ define('io.ox/core/tk/selection',
             }
         };
 
-        update = function () {
+        update = function (updateIndex) {
+
+            if (container.is(':hidden')) return;
+
+            updateIndex = updateIndex || false;
+            if (updateIndex) self.clearIndex();
+
             // get nodes
-            var nodes = $('.selectable', container),
+            var nodes = $('.selectable:visible', container),
                 i = 0, $i = nodes.length, node = null;
+
             for (; i < $i; i++) {
                 node = nodes.eq(i);
                 // is selected?
-                if (isSelected(node.attr('data-obj-id'))) {
+                var objID = node.attr('data-obj-id');
+                if (updateIndex) {
+                    self.addToIndex(objID);
+                }
+                if (isSelected(objID)) {
                     $('input.reflect-selection', node).attr('checked', 'checked');
                     node.addClass(self.classSelected);
                 } else {
@@ -362,36 +422,43 @@ define('io.ox/core/tk/selection',
          */
         this.init = function (all) {
             // store current selection
-            var tmp = this.get();
+            var tmp = this.get(),
+                hash = _.clone(selectedItems);
+
             // clear list
             clear();
             observedItems = new Array(all.length);
             observedItemsIndex = {};
             last = prev = empty;
+
             // build index
-            var i = 0, $i = all.length, data, cid, reselected = false, index = lastIndex;
+            var i = 0, $i = all.length, data, cid, index = lastIndex;
             for (; i < $i; i++) {
                 data = all[i];
-                cid = self.serialize(data);
+                cid = this.serialize(data);
                 observedItems[i] = { data: data, cid: cid };
                 observedItemsIndex[cid] = i;
             }
-            // restore selection. check if each item exists
-            for (i = 0, $i = tmp.length; i < $i; i++) {
-                cid = self.serialize(tmp[i]);
-                if (observedItemsIndex[cid] !== undefined) {
-                    select(tmp[i]);
-                    reselected = true;
+
+            $('.selectable', container).each(function () {
+                var node = $(this),
+                    cid = node.attr('data-obj-id');
+                if (cid in hash) {
+                    $('input.reflect-selection', node).attr('checked', 'checked');
+                    node.addClass(self.classSelected);
+                } else {
+                    $('input.reflect-selection', node).removeAttr('checked');
+                    node.removeClass(self.classSelected);
                 }
-            }
+            });
+
+            selectedItems = hash;
+
             // reset index but ignore 'empty runs'
-            if (all.length > 0) {
-                lastIndex = -1;
-            }
+            if (all.length > 0) lastIndex = -1;
+
             // fire event?
-            if (!_.isEqual(tmp, self.get())) {
-                changed();
-            }
+            if (!_.isEqual(tmp, this.get())) changed();
             return this;
         };
 
@@ -445,6 +512,11 @@ define('io.ox/core/tk/selection',
          */
         this.update = function () {
             update();
+            return this;
+        };
+
+        this.updateIndex = function () {
+            update(true);
             return this;
         };
 
@@ -580,25 +652,42 @@ define('io.ox/core/tk/selection',
          * Set selection
          */
         this.set = function (list, silent) {
+
             // previous
-            var previous = this.get(), current;
+            var previous = this.get(),
+                self = this,
+                hash = {};
+
             // clear
             clear();
-            // loop
-            _(_.isArray(list) ? list : [list]).each(function (elem) {
-                var item;
-                if (typeof elem === 'string' && bHasIndex && (item = observedItems[getIndex(elem)]) !== undefined) {
-                    select(item.data);
+
+            $('.selectable', container).each(function () {
+                var node = $(this), cid = node.attr('data-obj-id');
+                hash[cid] = node;
+            });
+
+            _(!list || _.isArray(list) ? list : [list]).each(function (elem) {
+                var cid = self.serialize(elem), item;
+                // existing node?
+                if (cid in hash) {
+                    if (typeof elem === 'string' && bHasIndex && (item = observedItems[getIndex(elem)]) !== undefined) {
+                        fastSelect(item.data, hash[cid]);
+                    } else {
+                        fastSelect(elem, hash[cid]);
+                    }
                 } else {
-                    select(elem);
+                    selectedItems[cid] = elem;
                 }
             });
+
+            hash = null;
+
             // reset last index
             lastIndex = -1;
+
             // event?
-            if (!_.isEqual(previous, this.get()) && silent !== true) {
-                changed();
-            }
+            if (!_.isEqual(previous, this.get()) && silent !== true) changed();
+
             return this;
         };
 
@@ -666,7 +755,11 @@ define('io.ox/core/tk/selection',
                     }
                 }
                 this.update();
-                changed();
+                if (mobileSelectMode) {
+                    selectOnly();
+                } else {
+                    changed();
+                }
             }
         };
 
@@ -678,6 +771,13 @@ define('io.ox/core/tk/selection',
             prev = obj;
             lastValidIndex = getIndex(obj);
             return this;
+        };
+
+        this.selectIndex = function (index) {
+            var item = observedItems[lastValidIndex];
+            if (item !== undefined) {
+                this.select(item.data);
+            }
         };
 
         this.selectLastIndex = function () {
@@ -722,9 +822,9 @@ define('io.ox/core/tk/selection',
         /**
          * Keyboard support
          */
-        this.keyboard = function (flag) {
+        this.keyboard = function (con, flag) {
             // keyboard support (use keydown! IE does not react on keypress with cursor keys)
-            $(document)[flag ? 'on' : 'off']('keydown', fnKey);
+            $(con)[flag ? 'on' : 'off']('keydown', fnKey);
             return this;
         };
 
@@ -737,7 +837,11 @@ define('io.ox/core/tk/selection',
                 this.clear();
                 this.set(tmp);
             } else {
-                changed();
+                if (mobileSelectMode) {
+                    selectOnly();
+                } else {
+                    changed();
+                }
             }
         };
 
@@ -755,11 +859,20 @@ define('io.ox/core/tk/selection',
             selectedItems = observedItems = observedItemsIndex = last = null;
         };
 
+        this.setMobileSelectMode = function (state) {
+            mobileSelectMode = state;
+        };
+
+        this.getMobileSelectMode = function () {
+            return mobileSelectMode;
+        };
+
         // bind general click handler
         container.on('contextmenu', function (e) { e.preventDefault(); })
             .on('mousedown', '.selectable', mousedownHandler)
             .on('mouseup', '.selectable', mouseupHandler)
-            .on('click', '.selectable', clickHandler);
+            .on('click', '.selectable', clickHandler)
+            .on('touchstart', '.selectable', touchstartHandler);
 
         /*
         * DND
@@ -876,6 +989,13 @@ define('io.ox/core/tk/selection',
             function drag(e) {
                 // unbind
                 $(document).off('mousemove.dnd', drag);
+                // get data now
+                data = self.unique(self.unfold());
+                // empty?
+                if (data.length === 0) {
+                    var cid = source.attr('data-obj-id');
+                    data = cid ? [_.cid(cid)] : [];
+                }
                 // create helper
                 helper = $('<div class="drag-helper">').append(
                     $('<span class="badge badge-important">').text(data.length),
@@ -935,7 +1055,7 @@ define('io.ox/core/tk/selection',
 
             function start(e) {
                 source = $(this);
-                data = self.unique(self.unfold());
+                data = [];
                 // bind events
                 $('.dropzone').each(function () {
                     var node = $(this), selector = node.attr('data-dropzones');
@@ -944,12 +1064,15 @@ define('io.ox/core/tk/selection',
                 $(document)
                     .on('mousemove.dnd', { x: e.pageX, y: e.pageY }, resist)
                     .on('mouseup.dnd', stop);
-                // prevent text selection
+                // prevent text selection and kills the focus
+                if (!_.browser.IE) { // Not needed in IE - See #27981
+                    container.focus();
+                }
                 e.preventDefault();
             }
 
             // drag & drop
-            if (!Modernizr.touch) {
+            if (_.device('!touch')) {
                 // draggable?
                 if (options.draggable) {
                     container.on('mousedown.dnd', '.selectable', start);

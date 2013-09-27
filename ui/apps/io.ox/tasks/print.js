@@ -23,7 +23,7 @@ define('io.ox/tasks/print',
 
     function getDate(data, prop) {
         var t = data[prop];
-        return _.isNumber(t) ? new date.Local(date.Local.utc(t)).format(date.DATETIME) : '';
+        return _.isNumber(t) ? new date.Local(t).format(date.DATETIME) : ''; // setting right format and timezone
     }
 
     var states = { 1: gt('Not started'), 2: gt('In progress'), 3: gt('Done'), 4: gt('Waiting'), 5: gt('Deferred') },
@@ -95,7 +95,7 @@ define('io.ox/tasks/print',
                     billing_information: gt('Billing information'),
                     companies: gt('Companies'),
                     date_completed: gt('Date completed'),
-                    alarm: gt('Remind date'),
+                    alarm: gt('Reminder date'),
                     priority: gt('Priority'),
                     recurrence: gt('This task recurs')
                 },

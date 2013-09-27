@@ -1,13 +1,13 @@
 {
     "daysInFirstWeek": null,
     "days": [
-        "Chủ nhật",
-        "Thứ hai",
-        "Thứ ba",
-        "Thứ tư",
-        "Thứ năm",
-        "Thứ sáu",
-        "Thứ bảy"
+        "Chủ Nhật",
+        "Thứ Hai",
+        "Thứ Ba",
+        "Thứ Tư",
+        "Thứ Năm",
+        "Thứ Sáu",
+        "Thứ Bảy"
     ],
     "daysShort": [
         "CN",
@@ -28,18 +28,18 @@
         "T7"
     ],
     "months": [
-        "tháng một",
-        "tháng hai",
-        "tháng ba",
-        "tháng tư",
-        "tháng năm",
-        "tháng sáu",
-        "tháng bảy",
-        "tháng tám",
-        "tháng chín",
-        "tháng mười",
-        "tháng mười một",
-        "tháng mười hai"
+        "tháng 1",
+        "tháng 2",
+        "tháng 3",
+        "tháng 4",
+        "tháng 5",
+        "tháng 6",
+        "tháng 7",
+        "tháng 8",
+        "tháng 9",
+        "tháng 10",
+        "tháng 11",
+        "tháng 12"
     ],
     "monthsShort": [
         "thg 1",
@@ -58,24 +58,25 @@
     "formats": {
         "E": "E",
         "yMd": "d/M/y",
-        "yMEd": "E, d-M-yyyy",
-        "yMMMd": "d MMM, y",
-        "yMMMEd": "E, d MMM y",
+        "yMEd": "E, dd-M-y",
+        "yMMMd": "dd MMM, y",
+        "yMMMEd": "E, dd MMM y",
         "hm": "h:mm a",
         "Hm": "H:mm",
         "v": "v",
+        "Md": "dd-M",
         "Hmv": "H:mm v",
         "hmv": "h:mm a v",
         "yMdHm": "H:mm d/M/y",
         "yMdHmv": "H:mm v d/M/y",
         "yMdhm": "h:mm a d/M/y",
         "yMdhmv": "h:mm a v d/M/y",
-        "yMEdHm": "H:mm E, d-M-yyyy",
-        "yMEdHmv": "H:mm v E, d-M-yyyy",
-        "yMEdhm": "h:mm a E, d-M-yyyy",
-        "yMEdhmv": "h:mm a v E, d-M-yyyy"
+        "yMEdHm": "H:mm E, dd-M-y",
+        "yMEdHmv": "H:mm v E, dd-M-y",
+        "yMEdhm": "h:mm a E, dd-M-y",
+        "yMEdhmv": "h:mm a v E, dd-M-y"
     },
-    "date": "dd-MM-yyyy",
+    "date": "dd-MM-y",
     "time": "HH:mm",
     "dateTimeFormat": "%1$s %2$s",
     "intervals": {
@@ -105,8 +106,8 @@
         },
         "yMMMEd": {
             "d": "EEEE, 'ngày' dd MMM - EEEE, 'ngày' dd MMM 'năm' y",
-            "m": "E, d 'tháng' M - E, d 'tháng' M, y",
-            "y": "E, d 'tháng' M, y - E, d 'tháng' M, y"
+            "m": "E, dd 'tháng' M - E, dd 'tháng' M, y",
+            "y": "E, dd 'tháng' M, y - E, dd 'tháng' M, y"
         }
     },
     "dayPeriods": {
@@ -117,6 +118,6 @@
         "tr. CN",
         "sau CN"
     ],
-    "dateTime": "HH:mm dd-MM-yyyy",
+    "dateTime": "HH:mm dd-MM-y",
     "h12": false
 }

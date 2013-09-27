@@ -116,8 +116,8 @@ define('io.ox/office/tk/io',
         if (_.isFunction(resultFilter)) {
             // convert passed filter to a function that returns a Deferred object based on the filter
             resultFilter = IO.createDeferredFilter(resultFilter);
-            // filter the result of the original request
-            request = request.then(resultFilter);
+            // filter the result of the original request, add the abort() method to the promise
+            return _(request.then(resultFilter).promise()).extend({ abort: function () { request.abort(); } });
         }
 
         return request.promise();

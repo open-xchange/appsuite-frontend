@@ -12,13 +12,13 @@
  */
 define("io.ox/keychain/model", ["io.ox/core/extensions"], function (ext) {
     "use strict";
-    
+
     var Account = Backbone.Model.extend();
     var Accounts = Backbone.Collection.extend({
         model: Account
     });
-    
-    
+
+
     function wrap(thing) {
         if (arguments.length > 1) {
             return _(arguments).map(wrap);
@@ -28,20 +28,20 @@ define("io.ox/keychain/model", ["io.ox/core/extensions"], function (ext) {
             accounts.add(thing);
             return accounts;
         }
-        
+
         ext.point("io.ox/keychain/model").each(function (extension) {
             if (extension.accountType === thing.accountType) {
                 return extension.invoke("wrap", extension, thing);
             }
         });
-        
+
         return new Account(thing);
     }
-    
+
     return {
         Account: Account,
         Accounts: Accounts,
         wrap: wrap
     };
-    
+
 });

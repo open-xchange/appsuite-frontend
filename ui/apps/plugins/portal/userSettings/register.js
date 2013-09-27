@@ -12,33 +12,43 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettext!io.ox/core'], function (ext, gt) {
+define('plugins/portal/userSettings/register',
+    ['io.ox/core/extensions',
+     'io.ox/core/main',
+     'gettext!io.ox/core'], function (ext, main, gt) {
 
     'use strict';
 
     function changeUserData(e) {
 
-        require(['io.ox/core/tk/dialogs', 'io.ox/core/settings/user'], function (dialogs, userEdit) {
+        require(["io.ox/core/tk/dialogs", "io.ox/core/settings/user"], function (dialogs, users) {
+            var usermodel,
+                dialog = new dialogs.ModalDialog({
+                    top: 60,
+                    width: 900,
+                    center: false,
+                    maximize: true
+                })
+                .addPrimaryButton("save", gt('Save'))
+                .addButton('discard', gt("Discard"));
 
-            var popup = new dialogs.SidePopup({ easyOut: true }),
-                $node = $('<div>');
+            var $node = dialog.getContentNode();
 
-            userEdit.editCurrentUser($node).done(function (user) {
-                user.on('update', function () {
-                    require("io.ox/core/notifications").yell("success", gt("Your data has been saved"));
-                    popup.close();
-                });
+            users.editCurrentUser($node).done(function (model) {
+                usermodel = model;
             }).fail(function () {
                 $node.append(
                     $.fail(gt("Couldn't load your contact data."), function () {
-                        userEdit.editCurrentUser($node);
+                        users.editCurrentUser($node).done(function () {
+                            $node.find('[data-action="discard"]').hide();
+                        });
                     })
                 );
             });
-
-            popup.show(e, function (pane) {
-                pane.append($node);
-                pane.closest('.io-ox-sidepopup').find('.io-ox-sidepopup-close').hide();
+            dialog.show().done(function (action) {
+                if (action === 'save') {
+                    usermodel.save();
+                }
             });
         });
     }
@@ -47,7 +57,7 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
 
         require(['io.ox/core/tk/dialogs', 'io.ox/core/http', 'io.ox/core/notifications'], function (dialogs, http, notifications) {
 
-            new dialogs.ModalDialog({ easyOut: true, async: true, width: 400 })
+            new dialogs.ModalDialog({ async: true, width: 400 })
             .header($('<h4>').text(gt('Change password')))
             .build(function () {
                 this.getContentNode().append(
@@ -56,10 +66,15 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
                     $('<label>').text(gt('New password')),
                     $('<input type="password" class="input-large new-password">'),
                     $('<label>').text(gt('Repeat new password')),
-                    $('<input type="password" class="input-large repeat-new-password">')
+                    $('<input type="password" class="input-large repeat-new-password">'),
+                    $('<div class="alert alert-block alert-info">')
+                    .css('margin', '14px 0px')
+                    .text(
+                        gt('If you change the password, you will be logged out. Please ensure that everything is closed and saved.')
+                    )
                 );
             })
-            .addPrimaryButton('change', gt('Change password'))
+            .addPrimaryButton('change', gt('Change password and logout'))
             .addButton('cancel', gt('Cancel'))
             .on('change', function (e, data, dialog) {
                 var node = dialog.getContentNode();
@@ -74,10 +89,10 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
                     }
                 })
                 .done(function () {
-                    notifications.yell('success', gt('Your password has been changed'));
                     node.find('input[type="password"]').val('');
                     dialog.close();
                     dialog = null;
+                    main.logout();
                 })
                 .fail(function (error) {
                     notifications.yell(error);

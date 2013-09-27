@@ -11,92 +11,96 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-//grid
+// grid
 
-.vgrid-cell.tasks .end_date {
-    color: #777;
-    margin-left: 0.5em;
-    font-weight: 300;
-    display: inline-block;
-    float: right;
-}
-
-.vgrid-cell.tasks .status {
-    margin-left: 0.5em;
-    float: right;
-    index: 2;
-    padding-bottom: 1px;
-}
-
-.vgrid-cell.tasks .priority,
-.io-ox-task-preview .priority {
-    font-size: 16;
-    font-weight: bold;
-    padding: 0 0.5em 0 0.5em;
-    display: inline-block;
-    float: right;
-    position: relative;
-    overflow:visible;
-
-}
-
-.vgrid-cell.tasks .priority i.icon-star {
-    display: inline-block;
-}
-
-.vgrid-cell.tasks .title {
-    color: black;
-    font-weight: 500;
-    //display: inline;
-}
-
-.vgrid-cell.tasks .private-flag {
-    float: left;
-    font-size: 18px;
-    margin-right: 3px;
-    color: #aaa;
-}
-
-.vgrid-cell.tasks .second-row {
-    margin-top: 5px;
-    height: 17px;
-}
-
-.vgrid-cell.tasks .participants {
-    line-height: 1em;
-    margin-right: 1em;
-    float: left;
-}
-
-.vgrid-cell.tasks .progress {
-    width: 100px;
-    height: 13px;
-    margin: 0 1em 0 0;
-}
 .vgrid-cell.tasks {
-    /* swipe delete button */
-    .swipeDelete {
-        position: absolute;
-        top: 13px;
-        right: 10px;
+
+    .vgrid-cell-checkbox {
+        padding-top: 10px;
+    }
+
+    .end_date {
+        color: #777;
+        margin-left: 0.5em;
+        font-weight: 300;
+        display: inline-block;
+        float: right;
+    }
+
+    .status {
+        margin-left: 0.5em;
+        float: right;
+        index: 2;
+        padding-bottom: 1px;
+    }
+    .priority {
+        font-size: 16;
+        font-weight: bold;
+        padding: 0 0.5em 0 0.5em;
+        display: inline-block;
+        float: right;
+        position: relative;
+        overflow:visible;
+
+        i.icon-star {
+            display: inline-block;
+        }
+    }
+
+    .title {
+        color: black;
+        font-weight: 500;
+    }
+
+    .private-flag {
+        float: left;
+        font-size: 18px;
+        margin-right: 3px;
+        color: #aaa;
+    }
+
+    .second-row {
+        margin-top: 5px;
+        height: 17px;
+    }
+
+    .participants {
+        line-height: 1em;
+        margin-right: 1em;
+        float: left;
+    }
+
+    .progress {
+        width: 100px;
+        height: 13px;
+        margin: 0 1em 0 0;
     }
 }
+
 //detailview
 
 .tasks-detailview {
 
-    .io-ox-inline-links {
+    .io-ox-inline-links:first-child {
         margin: 0 0 26px 0;
-        text-align: left;
     }
 
     header {
-        margin-bottom: 26px;
+       margin-bottom: 26px;
+    }
+
+    //clearfix
+    header:after {
+        content: "\00A0";
+        display: block;
+        clear: both;
+        visibility: hidden;
+        line-height: 0;
+        height: 0;
     }
 
     .info-panel {
         margin-left: 2em;
-        margin-bottom: 1em;
         display: inline;
         float: right;
     }
@@ -120,14 +124,25 @@
 
     .attachments-container {
         margin-top: 0.8em;
+        margin-bottom: 0.5em;
+        font-weight: 300;
+        .dropdown {
+            margin-right: 1em;
+        }
+
     }
     .attachment-item{
         color: #333;
+        word-break: break-all;
     }
     .task-details {
         margin: 1em 0 1em 0;
     }
+    .detail-item {
+        display: inline-block;
+    }
     .detail-label{
+        cursor: default;
         color: #aaa;
         display: inline-block;
         margin-right: 0.5em;
@@ -153,22 +168,59 @@
         padding-right: 10px;
     }
 
-    .task-participants-table {
-        border-spacing: 3px;
-        border-collapse: separate;
-        left: -3px;
-        position: relative;
-    }
-
     .participants-table-colorsquare {
         width: 13px;
         height: 13px;
+        display: inline-block;
+        margin-right: 5px;
     }
+    .participants-table-confirmmessage {
+        padding-left: 10px;
+    }
+    .task-participant {
+        padding-bottom: 5px;
+    }
+}
+/* Mobile */
+@media all and (max-width: 480px), all and (max-device-width: 480px) {
 
-    /* Mobile */
-    @media all and (max-width: 480px) {
+    .tasks-detailview {
+        header {
+            margin-bottom: 13px;
+        }
+        .detail-item {
+            display: block;
+            margin-bottom: 1.0em;
+        }
+        .detail-label {
+            display: block;
+            margin-bottom: 0px;
+        }
+        .detail-value {
+            display: block;
+        }
+        .io-ox-inline-links:first-child {
+            margin: 0 0 0 0;
+        }
+        .task-details {
+            margin: 1em 0 0em 0;
+        }
+        .participants-table-confirmmessage {
+            padding-left: 0px;
+            display: block;
+        }
+        .attachments-container .dropdown {
+            margin-top: 5px;
+        }
         .info-panel {
             width: 100%; //to push the title under the info panel, prevents long titles to be ripped apart
         }
+    }
+
+    div.io-ox-tasks-edit.task-edit-wrapper.container-fluid.default-content-padding {
+        padding-bottom:40px;
+    }
+    .task-detail-container {
+        padding: 13px 13px 0px 13px;
     }
 }

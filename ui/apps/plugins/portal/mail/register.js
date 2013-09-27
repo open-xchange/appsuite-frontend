@@ -14,13 +14,13 @@
 
 define('plugins/portal/mail/register',
     ['io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
      'io.ox/core/strings',
      'io.ox/mail/api',
      'io.ox/mail/util',
      'io.ox/core/date',
      'io.ox/core/api/account',
-     'gettext!plugins/portal'], function (ext, links, strings, api, util, date, accountAPI, gt) {
+     'io.ox/portal/widgets',
+     'gettext!plugins/portal'], function (ext, strings, api, util, date, accountAPI, portalWidgets, gt) {
 
     'use strict';
 
@@ -48,9 +48,9 @@ define('plugins/portal/mail/register',
 
         load: function (baton) {
             return accountAPI.getUnifiedMailboxName().then(function (mailboxName) {
-                var folderName = mailboxName ? mailboxName + "/INBOX" : api.getDefaultFolder();
-                return api.getAll({ folder:  folderName }, false).pipe(function (mails) {
-                    return api.getList(mails.slice(0, 20)).done(function (data) {
+                var folderName = mailboxName ? mailboxName + '/INBOX' : api.getDefaultFolder();
+                return api.getAll({ folder:  folderName, limit: 10 }, false).pipe(function (mails) {
+                    return api.getList(mails.slice(0, 10)).done(function (data) {
                         baton.data = data;
                     });
                 });
@@ -66,9 +66,11 @@ define('plugins/portal/mail/register',
                 return !util.isDeleted(obj);
             });
 
+            var numOfItems = _.device('small') ? 5 : 15;
+
             if (list && list.length) {
                 $content.append(
-                    _(list).map(function (mail) {
+                    _(list.slice(0, numOfItems)).map(function (mail) {
                         var received = new date.Local(mail.received_date).format(date.DATE);
                         return $('<div class="item">')
                             .data('item', mail)
@@ -111,9 +113,20 @@ define('plugins/portal/mail/register',
         // called right after initialize. Should return a deferred object when done
         load: function (baton) {
             var props = baton.model.get('props') || {};
-            return api.get({ folder: props.folder_id, id: props.id, view: 'text' }).done(function (data) {
-                baton.data = data;
-            });
+            return api.get({ folder: props.folder_id, id: props.id, view: 'text' }).then(
+                function success(data) {
+                    baton.data = data;
+                    api.on('delete', function (event, elements) {
+                        if (_(elements).any(function (element) { return (element.id === props.id && element.folder_id === props.folder_id); })) {
+                            var widgetCol = portalWidgets.getCollection();
+                            widgetCol.remove(baton.model);
+                        }
+                    });
+                },
+                function fail(e) {
+                    return e.code === 'MSG-0032' ? 'remove' : e;
+                }
+            );
         },
 
         preview: function (baton) {

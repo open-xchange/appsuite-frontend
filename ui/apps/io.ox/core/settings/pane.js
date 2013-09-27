@@ -19,10 +19,12 @@ define('io.ox/core/settings/pane',
          'io.ox/core/http',
          'io.ox/core/api/apps',
          'io.ox/core/capabilities',
+         'io.ox/core/notifications',
          'plugins/portal/userSettings/register',
          'settings!io.ox/core',
+         'settings!io.ox/core/settingOptions',
          'gettext!io.ox/core'],
-         function (ext, BasicModel, views, forms, http, appAPI, capabilities, userSettings, settings, gt) {
+         function (ext, BasicModel, views, forms, http, appAPI, capabilities, notifications, userSettings, settings, settingOptions, gt) {
 
     'use strict';
 
@@ -36,16 +38,34 @@ define('io.ox/core/settings/pane',
         draw: function () {
             var model = settings.createModel(BasicModel);
             model.on('change', function (model, e) {
-                settings.save();
-                var showNotice = _(reloadMe).any(function (attr) {
-                    return model.changed[attr];
-                });
 
-                if (model.changed.autoOpenNotification) {//AutonOpenNotification updates directly
-                    require("io.ox/core/notifications").yell("success", gt("The setting has been saved."));
-                } else if (showNotice) {
-                    require("io.ox/core/notifications").yell("success", gt("The setting has been saved and will become active when you enter the application the next time."));
-                }
+                settings.saveAndYell().then(
+                    function success() {
+
+                        var showNotice = _(reloadMe).any(function (attr) {
+                            return model.changed[attr];
+                        });
+
+                        // if (model.changed.autoOpenNotification) {//AutonOpenNotification updates directly
+                        //     notifications.yell(
+                        //         'success',
+                        //         gt("The setting has been saved.")
+                        //     );
+                        // } else if (showNotice) {
+                        //     notifications.yell(
+                        //         'success',
+                        //         gt("The setting has been saved and will become active when you enter the application the next time.")
+                        //     );
+                        // }
+
+                        if (showNotice) {
+                            notifications.yell(
+                                'success',
+                                gt("The setting has been saved and will become active when you enter the application the next time.")
+                            );
+                        }
+                    }
+                );
             });
             this.addClass('settings-container').append(
                 $('<h1>').text(gt("Basic settings"))
@@ -84,24 +104,23 @@ define('io.ox/core/settings/pane',
         }
     }));
 
-    http.GET({
-        module: 'jslob',
-        params: {
-            action: 'get',
-            id: 'io.ox/core/settingOptions'
-        }
-    }).done(function (settingOptions) {
+    (function () {
         // Timezones
-        var available = settingOptions.tree.availableTimeZones,
+        var available = settingOptions.get("availableTimeZones"),
             technicalNames = _(available).keys(),
             userTZ = settings.get('timezone', 'UTC'),
             sorted = {};
 
-        // Sort the technical names by the alphabetic position of their values
+        // Sort the technical names by the GMT offset
         technicalNames.sort(function (a, b) {
             var va = available[a],
-                vb = available[b];
-            return va === vb ? 0 : va < vb ? -1 : 1;
+                vb = available[b],
+                diff = Number(va.substr(4, 3)) - Number(vb.substr(4, 3));
+            if (diff === 0 || _.isNaN(diff)) {
+                return (vb === va) ? 0 : (va < vb) ? -1 : 1;
+            } else {
+                return diff;
+            }
         });
 
         // filter double entries and sum up results in 'sorted' array
@@ -124,16 +143,16 @@ define('io.ox/core/settings/pane',
             id: 'timezones',
             index: 200,
             attribute: 'timezone',
-            label: gt("Timezone"),
+            label: gt("Time zone"),
             selectOptions: sorted
         }));
 
         // Themes
-        var availableThemes = settingOptions.tree.themes;
+        var availableThemes = settingOptions.get("themes");
 
         //  until we get translated themes from backend
-        if (settingOptions.tree.themes['default']) {
-            settingOptions.tree.themes['default'] = gt('Default Theme');
+        if (availableThemes['default']) {
+            availableThemes['default'] = gt('Default Theme');
         }
 
 
@@ -147,7 +166,7 @@ define('io.ox/core/settings/pane',
             }));
         }
 
-    });
+    }());
 
     (function () {
         if (settings.isConfigurable('refreshInterval')) {
@@ -173,10 +192,10 @@ define('io.ox/core/settings/pane',
     // Auto Start App
 
     (function () {
-        if (settings.isConfigurable('autoStart')) {
+        if (settings.isConfigurable('autoStart') && _.device('!smartphone')) {
             var options = {};
             _(appAPI.getFavorites()).each(function (app) {
-                options[app.path] = gt(app.title);
+                options[app.path] = gt.pgettext('app', app.title);
             });
 
             options.none = gt('None');
@@ -241,7 +260,7 @@ define('io.ox/core/settings/pane',
     //     index: 200000,
     //     draw: function () {
     //         this.append(
-    //             $('<button class="btn">').text(gt("Clear cache")).on("click", function (e) {
+    //             $('<button type="button" class="btn">').text(gt("Clear cache")).on("click", function (e) {
     //                 e.preventDefault();
     //                 require(["io.ox/core/cache"], function () {
     //                     ox.cache.clear();

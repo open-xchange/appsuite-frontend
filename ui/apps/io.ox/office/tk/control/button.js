@@ -13,13 +13,11 @@
 
 define('io.ox/office/tk/control/button',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/keycodes',
      'io.ox/office/tk/control/group'
-    ], function (Utils, Group) {
+    ], function (Utils, KeyCodes, Group) {
 
     'use strict';
-
-    var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes;
 
     // class Button ===========================================================
 
@@ -42,7 +40,10 @@ define('io.ox/office/tk/control/button',
      */
     function Button(options) {
 
-        var // create the button
+        var // self reference
+            self = this,
+
+            // create the button
             button = Utils.createButton(options),
 
             // toggle button or push button
@@ -88,7 +89,9 @@ define('io.ox/office/tk/control/button',
             switch (event.keyCode) {
             case KeyCodes.SPACE:
             case KeyCodes.ENTER:
-                if (keyup) { button.click(); }
+                if (keyup) {
+                    self.triggerChange(event.target, { preserveFocus: event.keyCode === KeyCodes.SPACE });
+                }
                 return false;
             }
         }

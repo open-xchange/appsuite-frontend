@@ -21,13 +21,17 @@ define('plugins/notifications/mail/register',
 
     'use strict';
 
+    var numMessages = 10;
+
     ext.point('io.ox/core/notifications/mail/header').extend({
-        draw: function () {
+        draw: function (baton) {
             this.append(
                 $('<legend class="section-title">').text(gt('New Mails')),
                 $('<div class="notifications">'),
                 $('<div class="open-app">').append(
-                    $('<a href="#" data-action="open-app">').text(gt('Show Inbox'))
+                    $('<a href="#" data-action="open-app" tabindex="1">').text(
+                        baton.more ? gt('Show all %1$d messages in inbox', baton.size) : gt('Show inbox')
+                    )
                 )
             );
         }
@@ -36,40 +40,17 @@ define('plugins/notifications/mail/register',
     function drawItem(node, data) {
         var f = data.from || [['', '']];
         node.append(
-            $('<div class="item">').attr('data-cid', _.cid(data)).append(
+            $('<div class="item" tabindex="1">').attr('data-cid', _.cid(data)).append(
                 $('<div class="title">').text(_.noI18n(util.getDisplayName(f[0]))),
-                $('<div class="subject">').text(_.noI18n(data.subject)),
-                $('<div class="content">').html(_.noI18n(api.beautifyMailText(data.attachments[0].content)))
+                $('<div class="subject">').text(_.noI18n(data.subject) || gt('No subject')).addClass(data.subject ? '' : 'empty')
+                // TODO: re-add teaser once we get this via getList(...)
             )
         );
     }
 
-    function showMail(obj, node, model) {
-
-        // fetch plain text mail; don't use cache
-        api.get(obj, false).done(function (data) {
-            //update model
-            model.set(data, {validate: true});
-            //draw
-            drawItem(node, data);
-        }).fail(function () {
-            node.append(
-                $.fail(gt('Couldn\'t load that email.'), function () {
-                    showMail(obj, node, model);
-                })
-            );
-        });
-    }
-
     ext.point('io.ox/core/notifications/mail/item').extend({
         draw: function (baton) {
-            //to avoid unnecessary requests check if the model is already complete, if not get it and fill in the missing data
-            if (baton.model.get('attachments')) {//attachments contains the actual text
-                drawItem(this, baton.model.attributes);
-            } else {//mail model not complete
-                var obj = _.extend(api.reduce(baton.model.toJSON()), { unseen: true, view: 'text' });
-                showMail(obj, this, baton.model);
-            }
+            drawItem(this, baton.data);
         }
     });
 
@@ -80,23 +61,39 @@ define('plugins/notifications/mail/register',
         events: {
             'click [data-action="open-app"]': 'openApp',
             'click .item': 'openMail',
+            'keydown .item': 'openMail',
             'dispose .item': 'removeNotification' //seems to be unused
         },
 
         render: function () {
-            var i = 0, $i = Math.min(this.collection.size(), 3), baton;
-            baton = ext.Baton({ view: this });
+
+            var i = 0, size = this.collection.size(),
+                $i = Math.min(size, numMessages),
+                baton,
+                mails = new Array($i),
+                view = this;
+
+            baton = ext.Baton({ view: view, size: size, more: size > $i });
             ext.point('io.ox/core/notifications/mail/header').invoke('draw', this.$el.empty(), baton);
 
-            for (; i < $i; i++) {
-                baton = ext.Baton({ model: this.collection.at(i), view: this });
-                ext.point('io.ox/core/notifications/mail/item').invoke('draw', this.$('.notifications'), baton);
+            // draw placeholders
+            for (i = 0; i < $i; i++) {
+                mails[i] = api.reduce(this.collection.at(i).toJSON());
             }
+
+            api.getList(mails).done(function (response) {
+                // draw placeholders
+                for (i = 0; i < $i; i++) {
+                    baton = ext.Baton({ data: response[i], view: view });
+                    ext.point('io.ox/core/notifications/mail/item').invoke('draw', view.$('.notifications'), baton);
+                }
+            });
 
             return this;
         },
 
         openMail: function (e) {
+            if ((e.type !== 'click') && (e.which !== 13)) { return; }
             var cid = $(e.currentTarget).data('cid'),
                 overlay = $('#io-ox-notifications-overlay'),
                 sidepopup = overlay.prop('sidepopup'),
@@ -118,12 +115,21 @@ define('plugins/notifications/mail/register',
                         // open SidePopup without array
                         var detailPopup = new dialogs.SidePopup({ arrow: false, side: 'right' })
                             .setTarget(overlay.empty())
-                            .on("close", function () {
-                                overlay.trigger("mail-detail-closed");
+                            .on('close', function () {
+                                overlay.trigger('mail-detail-closed');
                                 api.off('delete', cleanUp);
+                                if (_.device('smartphone') && overlay.children().length > 0) {
+                                    overlay.addClass('active');
+                                } else if (_.device('smartphone')) {
+                                    overlay.removeClass('active');
+                                    $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
+                                }
                             })
                             .show(e, function (popup) {
                                 popup.append(view.draw(data));
+                                if (_.device('smartphone')) {
+                                    $('#io-ox-notifications').removeClass('active');
+                                }
                                 api.on('delete', {popup: detailPopup}, cleanUp);//if mail gets deleted we must close the sidepopup or it will show a blank page
                             });
                     });
@@ -206,15 +212,20 @@ define('plugins/notifications/mail/register',
             }
 
             api.on('new-mail', function (e, mails, unseenMails) {
-                if (!_.isArray(mails)) {
-                    mails = [].concat(mails);
-                }
-                addMails(e, mails, unseenMails);
-                if (notifications.collection.length === 0) {//all mails read. remove new Mail title
+
+                if (!_.isArray(mails)) mails = [].concat(mails);
+
+                // diabolic testers might run this with some 10K of unread mails
+                // this is irrelevant for practise, so we just consider the first 100 messages
+                // that's still a lot to read / the number if not correct but we should get rid of it anyway
+                addMails(e, mails.slice(0, 100), unseenMails);
+
+                if (notifications.collection.length === 0) { // all mails read. remove new Mail title
                     api.newMailTitle(false);
                 }
                 notifications.collection.trigger('reset');
             });
+
             api.on('move', function (e, mails, newFolder) {
                 if (!_.isArray(mails)) {
                     mails = [].concat(mails);

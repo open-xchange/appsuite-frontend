@@ -10,31 +10,31 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-@controlsHeight: 34px;
+@controlsHeight: 30px;
 @participantsWidth: 340px;
-@bottom: @controlsHeight + 13 * 2 + 1;
+@bottom: @controlsHeight + 3 * 2 + 1;
 
 .free-busy-controls {
 
     top: auto;
     background-color: whiteSmoke;
     border-top: 1px solid #ddd;
-    padding: 13px;
+    padding: 3px 13px 3px 13px;
     height: @controlsHeight;
-
-    .add-participant {
-        width: @participantsWidth - 82;
-    }
 
     .hint {
         line-height: 30px;
         position: relative;
-        left: 77px;
         cursor: help;
     }
 
     .popover {
+    	left: 13px !important;//needed to keep the popup inside the screen
         max-width: 380px;
+
+        .arrow {
+        	left: 45px;
+        }
     }
 }
 
@@ -53,8 +53,20 @@
         font-weight: 200;
     }
 
+    .autocomplete-controls{
+        top: 70px;
+        width: @participantsWidth;
+        height: 30px;
+        left: 13px;
+        line-height: 30px;
+
+        .add-participant {
+        	width: @participantsWidth - 75;
+    	}
+    }
+
     .participants-view-scrollpane {
-        top: 64px;
+        top: 120px;
         bottom: @bottom;
         padding: 0 13px 13px 13px;
         width: @participantsWidth;
@@ -74,7 +86,7 @@
         top: 20px;
         right: 13px;
         z-index: 20;
-        i { margin-left: 0.5em; }
+        i { margin-left: 0.5em; text-decoration:none; color:#000; }
     }
 
     .view-dropdown {
@@ -83,6 +95,10 @@
             top: auto;
             bottom: 110%;
         }
+    }
+
+    .participants-view .participant-wrapper .participant-email {
+        display:block;
     }
 
     .participants-view:after {
@@ -95,6 +111,7 @@
 
     .with-participant-color {
         padding-right: 20px;
+        margin-bottom: 1px;
     }
 
     .with-participant-color.removable {

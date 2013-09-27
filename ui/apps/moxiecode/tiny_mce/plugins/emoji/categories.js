@@ -33,9 +33,15 @@ define('moxiecode/tiny_mce/plugins/emoji/categories',
         translations: {
 
             // collections
-            unified: gt('Unified'),
-            softbank: gt('SoftBank'),
-            japan_carrier: gt('Japanese Carrier'),
+            unified:
+                //#. Emoji collection. Unified/standard icons. "Standard" might work for other languages.
+                gt('Unified'),
+            softbank:
+                //#. Emoji collection. SoftBank-specific icons. "SoftBank" in other languages, too.
+                gt('SoftBank'),
+            japan_carrier:
+                //#. Emoji collection. Emoji icons that work across Japanese (telecom) carriers.
+                gt('Japanese Carrier'),
 
             // recently used
             recently: gt('Recently used'),
@@ -44,44 +50,53 @@ define('moxiecode/tiny_mce/plugins/emoji/categories',
             Face:
                 //#. Emoji category
                 //#. Japanese: 顔
+                //#. Contains: All kinds of smilies
                 gt('Face'),
             Feeling_Decoration:
                 //#. Emoji category
                 //#. Japanese should include "Katakana Middle Dot". Unicode: 30FB
                 //#. Japanese: 気持ち・装飾
                 //#. Other languages can use simple bullet. Unicode: 2022
+                //#. Contains: Hearts, Gestures like thumbs up
                 gt('Feeling • Decoration'),
             Weather_Season:
                 //#. Emoji category
                 //#. Japanese should include "Katakana Middle Dot". Unicode: 30FB
                 //#. Japanese: 天気・季節
                 //#. Other languages can use simple bullet. Unicode: 2022
+                //#. Contains: Sun, rain, flowers
                 gt('Weather • Season'),
             Character:
                 //#. Emoji category
                 //#. Japanese: キャラクター
+                //#. Contains: Cartoon characters, animals
                 gt('Character'),
             Food:
                 //#. Emoji category
                 //#. Japanese: 食べ物
+                //#. Contains: Cup of coffee, cake, fruits
                 gt('Food'),
             Life:
                 //#. Emoji category
                 //#. Japanese: 日常
+                //#. Rather "everyday life". Contains: Cars, trucks, plane, buildings, flags
                 gt('Life'),
             Tool:
                 //#. Emoji category
                 //#. Japanese: ツール
+                //#. Contains: Phones, tv, clocks
                 gt('Tool'),
             Hobby:
                 //#. Emoji category
                 //#. Japanese: 趣味
+                //#. Contains: Tennis, golf, football, pool
                 gt('Hobby'),
             Letters_Symbols:
                 //#. Emoji category
                 //#. Japanese should include "Katakana Middle Dot". Unicode: 30FB
                 //#. Japanese: 文字・記号
                 //#. Other languages can use simple bullet. Unicode: 2022
+                //#. Contains: Arrows, numbers, symbols like play and fast-forward, copyright symbol
                 gt('Letters • Symbols'),
 
             // unified

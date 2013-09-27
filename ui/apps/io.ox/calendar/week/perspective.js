@@ -46,6 +46,13 @@ define('io.ox/calendar/week/perspective',
                     self.dialog.show(e, function (popup) {
                         popup.append(detailView.draw(data));
                     });
+                    if (self.setNewStart) {//if view should change week to the start of this appointment(used by deeplinks)
+                        self.setNewStart = false;//one time only
+                        self.app.refDate.setTime(data.start_date);
+                        if (self.view) {//if view is rendered already
+                            self.view.setStartDate(data.start_date);
+                        }
+                    }
                 },
                 function fail(e) {
                     notifications.yell('error', gt('An error occurred. Please try again.'));
@@ -69,7 +76,11 @@ define('io.ox/calendar/week/perspective',
                 obj = clean(obj);
                 api.update(obj).fail(function (con) {
                     if (con.conflicts) {
-                        new dialogs.ModalDialog({ easyOut: true, top: "20%", center: false })
+                        new dialogs.ModalDialog({
+                                top: "20%",
+                                center: false,
+                                container: self.main
+                            })
                             .append(conflictView.drawList(con.conflicts).addClass('additional-info'))
                             .addDangerButton('ignore', gt('Ignore conflicts'))
                             .addButton('cancel', gt('Cancel'))
@@ -211,11 +222,14 @@ define('io.ox/calendar/week/perspective',
                 self.view.folder(data);
                 // save folder data to view and update
                 self.getAppointments(useCache);
+                // refocus pane on update
+                self.view.pane.focus();
             });
         },
 
         /**
          * handle different views in this perspective
+         * triggered by desktop.js
          * @param  {object} app the application
          * @param  {object} opt options from perspective
          */
@@ -251,6 +265,8 @@ define('io.ox/calendar/week/perspective',
                 this.view.$el.show();
             }
 
+            this.view.pane.focus();
+
             // renew data
             this.refresh();
         },
@@ -261,6 +277,7 @@ define('io.ox/calendar/week/perspective',
             var cid = _.url.hash('id'), e;
             if (cid) {
                 e = $.Event('click', { target: this.main });
+                this.setNewStart = true;//marker to make the view open in the correct week
                 this.showAppointment(e, _.cid(cid), { arrow: false });
             }
         },
@@ -301,15 +318,19 @@ define('io.ox/calendar/week/perspective',
                 });
 
             // watch for folder change
-            this.app.on('folder:change', refresh)
-                .on('folder:delete', reload)
-                .getWindow()
+            this.app
+                .on('folder:change', refresh)
+                .on('folder:delete', reload);
+            this.app.getWindow()
                 .on('beforehide', $.proxy(this.save, this))
                 .on('show', $.proxy(this.restore, this))
                 .on('show', refresh)
                 .on('change:perspective', function () {
-                    self.view.unbindKeys();
                     self.dialog.close();
+                });
+            this.main
+                .on('keydown', function (e) {
+                    self.view.fnKey(e);
                 });
 
             this.followDeepLink();

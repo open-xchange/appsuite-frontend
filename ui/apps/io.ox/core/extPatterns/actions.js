@@ -99,20 +99,42 @@ define("io.ox/core/extPatterns/actions",
     };
 
     var processActions = function (ref, collection, baton) {
+
+        // allow extensions to cancel actions
+        var stopped = false, stopPropagation = function () {
+            stopped = true;
+        };
+
         // combine actions
-        return $.when.apply($,
-            ext.point(ref).map(function (action) {
-                // get return value
-                var ret = _.isFunction(action.requires) ?
-                        action.requires({ collection: collection, context: baton.data, baton: baton }) : true;
+        var defs = ext.point(ref).map(function (action) {
+
+                var ret = true;
+
+                if (stopped) {
+                    return $.Deferred().resolve(false);
+                }
+
+                if (_.isFunction(action.requires)) {
+                    ret = action.requires({
+                        baton: baton,
+                        collection: collection,
+                        context: baton.data,
+                        extension: action,
+                        point: ref,
+                        stopPropagation: stopPropagation
+                    });
+                }
+
                 // is not deferred?
                 if (ret !== undefined && !ret.promise) {
                     ret = $.Deferred().resolve(ret);
                 }
+
                 return ret;
             })
-            .value()
-        );
+            .value();
+
+        return $.when.apply($, defs);
     };
 
     var customClick = function (e) {
@@ -161,7 +183,7 @@ define("io.ox/core/extPatterns/actions",
         collection.getProperties().then(
             function () {
                 // get links (check for requirements)
-                var links = ext.point(ref).map(function (link) {
+                var links = ext.point(ref).map(function (link, index) {
                     // defer decision
                     var def = $.Deferred();
                     // store capabilities
@@ -185,8 +207,7 @@ define("io.ox/core/extPatterns/actions",
                     return def;
                 });
                 // wait for all links
-                $.when.apply($, links.value())
-                .done(function () {
+                $.when.apply($, links.value()).done(function () {
                     linksResolved.resolve(
                         _.chain(arguments).filter(function (o) { return o.state; }).pluck('link').value()
                     );

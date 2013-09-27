@@ -98,7 +98,7 @@
 @btnBorder:                         #bbb;
 
 @btnPrimaryBackground:              @linkColor;
-@btnPrimaryBackgroundHighlight:     spin(@btnPrimaryBackground, 20%);
+@btnPrimaryBackgroundHighlight:     darken(@btnPrimaryBackground, 10%);
 
 @btnInfoBackground:                 #5bc0de;
 @btnInfoBackgroundHighlight:        #2f96b4;
@@ -247,36 +247,49 @@
 @selectedBackground: #39A9E1;
 @selectedColor: #F0FAFF;
 
+@windowHeadColor: #FFF;
+@windowHeadBorderColor: #eee;
 @windowHeadTop: #252525;
 @windowHeadBottom: #202020;
 
 @badgeColor: @white;
-@badgeBackground: #555;
+@badgeBackground: #aaa; // used by folder tree for unread messages, for example
+
+@notificationIconBackground: #666;
+@notificationIconBackgroundActive: #08c; // alt. bright orange: #FF4700
 
 @notificationIconBackground: #666;
 @notificationIconBackgroundActive: #08c; // alt. bright orange: #FF4700
 
 // Foldertree
-@foldertreeSidepanelBackground: #333;
+@foldertreeSidepanelBackground: #EBEBEB;
 @foldertreeSectionTitleColor: #888;
-@foldertreeActiveLabelColor: #ccc;
+@foldertreeSelectedLabelColor: #333;
+@foldertreeFocusedLabelColor: #fff;
+@foldertreeActiveLabelColor: #333;
 @foldertreePassiveLabelColor: #888;
-@foldertreeHoverBackground: #555;
-@foldertreeSelectedBackground: #2A2A2A;
+@foldertreeHoverBackground: rgba(0, 0, 0, 0.05);
+@foldertreeSelectedBackground: rgba(0, 0, 0, 0.10);
+@foldertreeSelectedFocusBackground: #08c;
 @foldertreeBadgeBackground: @badgeBackground;
+@foldertreeBadgeFocusBackground: #006597;
 @foldertreeBadgeColor: @badgeColor;
 
 @windowTitleColor: #fff;
-@toolbarLinkColor: lighten(@toolbar, 20%);
 
-@topbarBackground: #252525;
+@toolbarButtonAccent: lighten(@linkColor, 0%);
+@toolbarButtonColor: #bbb;
+@toolbarLinkColor: lighten(@toolbar, 25%);
+@toolbarFocusColor: #08c;
+
+@topbarBackground: #333;
 @topbarBackgroundAlt: lighten(@topbarBackground, 10%);
 
-@topbarLauncherColor: #aaa;
+@topbarLauncherColor: #bbb;
 @topbarLauncherColor-hover: #fff;
 @topbarLauncherColorActive: #fff;
-@topbarLauncherBackgroundHover: #111;
-@topbarLauncherBackgroundActive: #222;
+@topbarLauncherBackgroundHover: #333;
+@topbarLauncherBackgroundActive: #333;
 @topbarIconColor: #fff;
 
 @inlineLinkBorderColor: #eee;
@@ -310,10 +323,13 @@
 @calendarToolbarHeight: 41px;
 @weekviewTimeWith: 58px;
 
+// Contact pictures
+@contact-picture-radius: 50%;
+
 // Dimensions
 @windowHeadWidth: 50px;
 @windowContentShift: 250px;
-@small-folderTreeShift: 100%;
+@small-folderTreeShift: 90%;
 
 // Mixins
 .box-sizing(@boxmodel: content-box) {
@@ -383,6 +399,15 @@
     -moz-animation-name: @name;
     -ms-animation-name: @name;
     animation-name: @name;
+}
+
+.picture(@width: 64px, @height: 64px) {
+    width: @width;
+    height: @height;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    .border-radius(@contact-picture-radius);
 }
 
 .ellipsis {

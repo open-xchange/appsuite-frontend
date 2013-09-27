@@ -11,22 +11,22 @@
         "laugardagur"
     ],
     "daysShort": [
-        "sun",
-        "mán",
-        "þri",
-        "mið",
-        "fim",
-        "fös",
-        "lau"
+        "sun.",
+        "mán.",
+        "þri.",
+        "mið.",
+        "fim.",
+        "fös.",
+        "lau."
     ],
     "daysStandalone": [
-        "su",
-        "má",
-        "þr",
-        "mi",
-        "fi",
-        "fö",
-        "la"
+        "su.",
+        "má.",
+        "þr.",
+        "mi.",
+        "fi.",
+        "fö.",
+        "la."
     ],
     "months": [
         "janúar",
@@ -43,42 +43,43 @@
         "desember"
     ],
     "monthsShort": [
-        "jan",
-        "feb",
-        "mar",
-        "apr",
+        "jan.",
+        "feb.",
+        "mar.",
+        "apr.",
         "maí",
-        "jún",
-        "júl",
-        "ágú",
-        "sep",
-        "okt",
-        "nóv",
-        "des"
+        "jún.",
+        "júl.",
+        "ágú.",
+        "sep.",
+        "okt.",
+        "nóv.",
+        "des."
     ],
     "formats": {
         "E": "E",
-        "yMd": "d/M/y",
-        "yMEd": "E d/M/y",
-        "yMMMd": "d MMM, y",
-        "yMMMEd": "E d. MMM y",
+        "yMd": "d.M.y",
+        "yMEd": "E, d.M.y",
+        "yMMMd": "d. MMM y",
+        "yMMMEd": "E, d. MMM y",
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "d.M.",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
-        "yMdHm": "d/M/y HH:mm",
-        "yMdHmv": "d/M/y HH:mm v",
-        "yMdhm": "d/M/y h:mm a",
-        "yMdhmv": "d/M/y h:mm a v",
-        "yMEdHm": "E d/M/y HH:mm",
-        "yMEdHmv": "E d/M/y HH:mm v",
-        "yMEdhm": "E d/M/y h:mm a",
-        "yMEdhmv": "E d/M/y h:mm a v"
+        "yMdHm": "d.M.y, HH:mm",
+        "yMdHmv": "d.M.y, HH:mm v",
+        "yMdhm": "d.M.y, h:mm a",
+        "yMdhmv": "d.M.y, h:mm a v",
+        "yMEdHm": "E, d.M.y, HH:mm",
+        "yMEdHmv": "E, d.M.y, HH:mm v",
+        "yMEdhm": "E, d.M.y, h:mm a",
+        "yMEdhmv": "E, d.M.y, h:mm a v"
     },
-    "date": "d.M.yyyy",
+    "date": "d. MMM y",
     "time": "HH:mm",
-    "dateTimeFormat": "%2$s %1$s",
+    "dateTimeFormat": "%2$s, %1$s",
     "intervals": {
         "fallback": "%1$s – %2$s",
         "hm": {
@@ -115,9 +116,9 @@
         "pm": "e.h."
     },
     "eras": [
-        "f.Kr.",
-        "e.Kr."
+        "f.l.t.",
+        "l.t."
     ],
-    "dateTime": "d.M.yyyy HH:mm",
+    "dateTime": "d. MMM y, HH:mm",
     "h12": false
 }

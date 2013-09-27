@@ -15,83 +15,91 @@ define('io.ox/contacts/model',
       ['io.ox/backbone/modelFactory',
        'io.ox/backbone/validation',
        'io.ox/contacts/api',
+       'io.ox/settings/util',
        'gettext!io.ox/contacts'
-       ], function (ModelFactory, Validators, api, gt) {
+       ], function (ModelFactory, Validators, api, settingsUtil, gt) {
 
     'use strict';
 
     function buildFactory(ref, api) {
-        var factory = new ModelFactory({
-            api: api,
-            ref: ref,
+        var isMyContactData = ref === 'io.ox/core/user/model',
+            factory = new ModelFactory({
+                api: api,
+                ref: ref,
 
-            model: {
+                model: {
 
-                addMember: function (member) {
+                    addMember: function (member) {
 
-                    var currentDistListArray = this.get('distribution_list');
+                        var currentDistListArray = this.get('distribution_list');
 
-                    if (currentDistListArray === undefined) {
-                        this.set('distribution_list', [member], {validate: true});
-                    } else {
-                        currentDistListArray.push(member);
-                        this.set('distribution_list', currentDistListArray, {validate: true});
+                        if (currentDistListArray === undefined) {
+                            this.set('distribution_list', [member], {validate: true});
+                        } else {
+                            currentDistListArray.push(member);
+                            this.set('distribution_list', currentDistListArray, {validate: true});
+                        }
+
+                        this.trigger('change');
+                        this.trigger('change:distribution_list');
+                    },
+
+                    removeMember: function (mail, name) {
+
+                        var currentDistlist = this.get('distribution_list');
+
+                        _(currentDistlist).each(function (val, key) {
+                            if (val.mail === mail && val.display_name === name) {
+                                currentDistlist.splice(key, 1);
+                            }
+                        });
+
+                        this.set('distribution_list', currentDistlist);
+
+                        this.trigger('change');
+                        this.trigger('change:distribution_list');
+
                     }
-
-                    this.trigger("change");
-                    this.trigger("change:distribution_list");
                 },
 
-                removeMember: function (mail, name) {
+                update: function (model) {
+                    // Some special handling for profile pictures
+                    var data = model.changedSinceLoading(),
+                        file = data.pictureFile,
+                        //consistent usage for settings yell handling
+                        yell = !isMyContactData ? _.identity : settingsUtil.yellOnReject;
+                    if (file) {
+                        delete data.pictureFile;
+                        return yell(
+                                api.editNewImage({id: model.id, folder_id: model.get('folder_id') }, data, file)
+                            );
+                    } else {
+                        return yell(
+                            api.update({id: model.id, folder: model.get('folder_id'), data: data})
+                        );
+                    }
+                },
 
-                    var currentDistlist = this.get('distribution_list');
+                updateEvents: ['edit'],
 
-                    _(currentDistlist).each(function (val, key) {
-                        if (val.mail === mail && val.display_name === name) {
-                            currentDistlist.splice(key, 1);
-                        }
-                    });
+                create: function (model) {
+                    // Some special handling for profile pictures
+                    var json, file;
+                    if (model.attributes.pictureFile) {
+                        file = model.get('pictureFile');
+                        json = model.toJSON();
+                        delete json.pictureFile;
+                    } else {
+                        json = model.toJSON();
+                    }
 
-                    this.set('distribution_list', currentDistlist);
+                    return api.create(json, file);
+                },
 
-                    this.trigger("change");
-                    this.trigger("change:distribution_list");
-
+                destroy: function (model) {
+                    return api.remove({id: model.id, folder_id: model.get('folder_id')});
                 }
-            },
-
-            update: function (model) {
-                // Some special handling for profile pictures
-                var data = model.changedSinceLoading(),
-                    file = data.pictureFile;
-                if (file) {
-                    delete data.pictureFile;
-                    return api.editNewImage({id: model.id, folder_id: model.get('folder_id') }, data, file);
-                } else {
-                    return api.update({id: model.id, folder: model.get('folder_id'), data: data});
-                }
-            },
-
-            updateEvents: ['edit'],
-
-            create: function (model) {
-                // Some special handling for profile pictures
-                var json, file;
-                if (model.attributes.pictureFile) {
-                    file = model.get("pictureFile");
-                    json = model.toJSON();
-                    delete json.pictureFile;
-                } else {
-                    json = model.toJSON();
-                }
-
-                return api.create(json, file);
-            },
-
-            destroy: function (model) {
-                return api.remove({id: model.id, folder_id: model.get('folder_id')});
-            }
-        });
+            });
 
         Validators.validationFor(ref, {
             display_name: { format: 'string' },
@@ -135,33 +143,33 @@ define('io.ox/contacts/model',
             city_other: { format: 'string'},
             postal_code_other: { format: 'string'},
             country_other: { format: 'string'},
-            telephone_business1: { format: 'string'},
-            telephone_business2: { format: 'string'},
-            fax_business: { format: 'string'},
-            telephone_callback: { format: 'string'},
-            telephone_car: { format: 'string'},
-            telephone_company: { format: 'string'},
-            telephone_home1: { format: 'string'},
-            telephone_home2: { format: 'string'},
-            fax_home: { format: 'string'},
-            cellular_telephone1: { format: 'string'},
-            cellular_telephone2: { format: 'string'},
-            telephone_other: { format: 'string'},
-            fax_other: { format: 'string'},
+            telephone_business1: { format: 'phone'},
+            telephone_business2: { format: 'phone'},
+            fax_business: { format: 'phone'},
+            telephone_callback: { format: 'phone'},
+            telephone_car: { format: 'phone'},
+            telephone_company: { format: 'phone'},
+            telephone_home1: { format: 'phone'},
+            telephone_home2: { format: 'phone'},
+            fax_home: { format: 'phone'},
+            cellular_telephone1: { format: 'phone'},
+            cellular_telephone2: { format: 'phone'},
+            telephone_other: { format: 'phone'},
+            fax_other: { format: 'phone'},
             email1: { format: 'email'},
             email2: { format: 'email'},
             email3: { format: 'email'},
             url: { format: 'url'},
-            telephone_isdn: { format: 'string'},
-            telephone_pager: { format: 'string'},
-            telephone_primary: { format: 'string'},
-            telephone_radio: { format: 'string'},
-            telephone_telex: { format: 'string'},
-            telephone_ttytdd: { format: 'string'},
+            telephone_isdn: { format: 'phone'},
+            telephone_pager: { format: 'phone'},
+            telephone_primary: { format: 'phone'},
+            telephone_radio: { format: 'phone'},
+            telephone_telex: { format: 'phone'},
+            telephone_ttytdd: { format: 'phone'},
             instant_messenger1: { format: 'string'},
             instant_messenger2: { format: 'string'},
-            telephone_ip: { format: 'string'},
-            telephone_assistant: { format: 'string'},
+            telephone_ip: { format: 'phone'},
+            telephone_assistant: { format: 'phone'},
             company: { format: 'string'},
             image1: { format: 'string'},
             userfield01: { format: 'string'},
@@ -260,7 +268,7 @@ define('io.ox/contacts/model',
         telephone_company: gt('Phone (company)'),
         telephone_home1: gt('Phone (Home)'),
         telephone_home2: gt('Phone (Home alt)'),
-        fax_home: gt('Fax'),
+        fax_home: gt('Fax (Home)'),
         cellular_telephone1: gt('Cell phone'),
         cellular_telephone2: gt('Cell phone alt'),
         telephone_other: gt('Phone (other)'),
@@ -304,12 +312,12 @@ define('io.ox/contacts/model',
         links: gt('Links'),
         distribution_list: gt('Distribution list'),
         state_other: gt('State'),
-        mark_as_distributionlist: gt('Mark as Distribution List'),
+        mark_as_distributionlist: gt('Mark as distributionlist'),
         default_address: gt('Default address'),
         addressHome: gt('Address Home'),
         addressBusiness: gt('Address Business'),
         addressOther: gt('Address Other'),
-        private_flag: gt('Private'),
+        private_flag: gt('This contact is private and cannot be shared'),
         // don't think we show this anywhere so we don't use gt here not to nerf translators
         number_of_links: 'Number of links',
         number_of_images: 'Number of images',

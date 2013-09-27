@@ -21,13 +21,7 @@ define('io.ox/core/relogin',
 
     var queue = [], pending = false;
 
-    function fnKeyPress(e) {
-        if (e.which === 13) {
-            e.data.popup.invoke(e.data.action);
-        }
-    }
-
-    function relogin(e, request, deferred) {
+    function relogin(e, request, deferred, error) {
 
         if (!ox.online) return;
 
@@ -41,16 +35,20 @@ define('io.ox/core/relogin',
 
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
 
-                new dialogs.ModalDialog({ easyOut: false, async: true, width: 400 })
+                new dialogs.ModalDialog({ easyOut: false, async: true, width: 400, enter: 'relogin' })
                     .build(function () {
+                        this.getPopup().addClass('relogin');
                         this.getHeader().append(
-                            $('<h4>').text(gt('Your session is expired')),
+                            $('<h4>').text(
+                                error && error.code === 'SES-0205' ?
+                                    gt('Your IP address has changed') :
+                                    gt('Your session is expired')
+                            ),
                             $('<div>').text(gt('Please sign in again to continue'))
                         );
                         this.getContentNode().append(
                             $('<label>').text(gt('Password')),
                             $('<input type="password" name"relogin-password" class="input-xlarge">')
-                            .on('keypress', { popup: this, action: 'relogin' }, fnKeyPress)
                         );
                     })
                     .addPrimaryButton('relogin', gt('Relogin'))
@@ -58,7 +56,7 @@ define('io.ox/core/relogin',
                     .on('cancel', function () {
                         ox.trigger('relogin:cancel');
                         var location = settings.get('customLocations/logout');
-                        _.url.redirect(location || ox.logoutLocation);
+                        _.url.redirect(location || ox.serverConfig.logoutLocation || ox.logoutLocation);
                     })
                     .on('relogin', function () {
                         var self = this.busy();
@@ -71,9 +69,11 @@ define('io.ox/core/relogin',
                                 // process queue
                                 var i = 0, item, http = require('io.ox/core/http');
                                 for (; (item = queue[i]); i++) {
-                                    http.retry(item.request)
-                                        .done(item.deferred.resolve)
-                                        .fail(item.deferred.fail);
+                                    if (!item.request.noRetry) {
+                                        http.retry(item.request)
+                                            .done(item.deferred.resolve)
+                                            .fail(item.deferred.fail);
+                                    }
                                 }
                                 // set flag
                                 pending = false;

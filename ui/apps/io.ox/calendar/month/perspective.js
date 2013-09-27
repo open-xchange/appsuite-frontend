@@ -33,7 +33,7 @@ define('io.ox/calendar/month/perspective',
         showAll: $(),       // show all folders check-box
         showAllCon: $(),    // container
         tops: {},           // scrollTop positions of the shown weeks
-        fisrtWeek: 0,       // timestamp of the first week
+        firstWeek: 0,       // timestamp of the first week
         lastWeek: 0,        // timestamp of the last week
         updateLoad: 8,      // amount of weeks to be loaded on scroll events
         initLoad: 2,        // amount of initial called updates
@@ -101,7 +101,11 @@ define('io.ox/calendar/month/perspective',
             var apiUpdate = function (obj) {
                 api.update(obj).fail(function (con) {
                     if (con.conflicts) {
-                        new dialogs.ModalDialog()
+                        new dialogs.ModalDialog({
+                                top: "20%",
+                                center: false,
+                                container: self.main
+                            })
                             .append(conflictView.drawList(con.conflicts))
                             .addDangerButton('ignore', gt('Ignore conflicts'))
                             .addButton('cancel', gt('Cancel'))
@@ -275,6 +279,7 @@ define('io.ox/calendar/month/perspective',
                 }
 
                 var firstDay = $('#' + param.date.getYear() + '-' + param.date.getMonth() + '-1', self.pane),
+                    nextFirstDay = $('#' + param.date.getYear() + '-' + (param.date.getMonth() + 1) + '-1', self.pane),
                     scrollToDate = function (pos) {
                         // scroll to position
                         if (param.duration === 0) {
@@ -287,7 +292,7 @@ define('io.ox/calendar/month/perspective',
                         }
                     };
 
-                if (firstDay.length > 0) {
+                if (firstDay.length > 0 && nextFirstDay.length > 0) {
                     scrollToDate(firstDay.position().top);
                 } else {
                     if (param.date.getTime() < self.current.getTime()) {
@@ -296,7 +301,10 @@ define('io.ox/calendar/month/perspective',
                             scrollToDate(firstDay.position().top);
                         });
                     } else {
-                        self.isScrolling = false;
+                        this.drawWeeks().done(function () {
+                            firstDay = $('#' + param.date.getYear() + '-' + param.date.getMonth() + '-1', self.pane);
+                            scrollToDate(firstDay.position().top);
+                        });
                     }
                 }
             }
@@ -323,7 +331,9 @@ define('io.ox/calendar/month/perspective',
          */
         restore: function () {
             // goto current date position
-            this.gotoMonth();
+            if (this.folder) {
+                this.gotoMonth();
+            }
         },
 
         /**
@@ -331,8 +341,12 @@ define('io.ox/calendar/month/perspective',
          */
         print: function () {
             var end = new date.Local(this.current.getYear(), this.current.getMonth() + 1, 1),
+                data = null,
                 self = this;
-            print.open('printCalendar', null, {
+            if (self.folder.id || self.folder.folder) {
+                data = {folder_id: self.folder.id || self.folder.folder};
+            }
+            print.open('printCalendar', data, {
                 template: 'cp_monthview_table_appsuite.tmpl',
                 start: self.current.local,
                 end: end.local
@@ -379,7 +393,7 @@ define('io.ox/calendar/month/perspective',
                                     .addClass('checkbox')
                                     .text(gt('show all'))
                                     .prepend(
-                                        this.showAll = $('<input type="checkbox">')
+                                        this.showAll = $('<input type="checkbox" tabindex="1">')
                                             .prop('checked', settings.get('showAllPrivateAppointments', false))
                                             .on('change', $.proxy(function (e) {
                                                 settings.set('showAllPrivateAppointments', this.showAll.prop('checked')).save();
@@ -427,12 +441,14 @@ define('io.ox/calendar/month/perspective',
             );
 
             this.pane
-            .on('scroll', $.proxy(function (e) {
-                    if (e.target.offsetHeight + e.target.scrollTop >= e.target.scrollHeight - this.scrollOffset) {
-                        this.drawWeeks();
-                    }
-                    if (this.scrollTop() <= this.scrollOffset) {
-                        this.drawWeeks({up: true});
+                .on('scroll', $.proxy(function (e) {
+                    if (!this.isScrolling) {
+                        if (e.target.offsetHeight + e.target.scrollTop >= e.target.scrollHeight - this.scrollOffset) {
+                            this.drawWeeks();
+                        }
+                        if (this.scrollTop() <= this.scrollOffset) {
+                            this.drawWeeks({up: true});
+                        }
                     }
                 }, this))
                 .on('scrollstop', $.proxy(function (e) {
@@ -465,6 +481,29 @@ define('io.ox/calendar/month/perspective',
                     $('[id^="' + self.current.getYear() + '-' + self.current.getMonth() + '-"]', self.pane).toggleClass('out');
                     self.gotoMonth();
                 });
+            });
+
+            this.main
+                .on('keydown', function (e) {
+                switch (e.which) {
+                case 37: // left
+                    self.gotoMonth({
+                        duration: _.device('desktop') ? 400 : 0,
+                        date: 'prev'
+                    });
+                    break;
+                case 39: // right
+                    self.gotoMonth({
+                        duration: _.device('desktop') ? 400 : 0,
+                        date: 'next'
+                    });
+                    break;
+                case 13: // enter
+                    $(e.target).click();
+                    break;
+                default:
+                    break;
+                }
             });
 
             // define default sidepopup dialog

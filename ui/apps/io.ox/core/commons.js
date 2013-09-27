@@ -68,9 +68,52 @@ define('io.ox/core/commons',
             };
         }()),
 
+        mobileMultiSelection: (function () {
+            var points = {};
+
+            // counter is always shown
+            ext.point('io.ox/core/commons/mobile/multiselect').extend({
+                id: 'selectCounter',
+                index: '100',
+                draw: function (data) {
+                    this.append(
+                        $('<div class="toolbar-button select-counter">')
+                            .text(data.count)
+                    );
+                }
+            });
+
+            function draw(id, selection, grid) {
+                var node = $('<div>');
+
+                ext.point('io.ox/core/commons/mobile/multiselect').invoke('draw', node, {count: selection.length});
+
+                (points[id] || (points[id] = ext.point(id + '/mobileMultiSelect/toolbar')))
+                    .invoke('draw', node, {data: selection, grid: grid});
+                return node;
+            }
+
+            return function (id, node, selection, api, grid) {
+                var buttons = $('.window-toolbar .toolbar-button'),
+                    toolbar = $('.window-toolbar'),
+                    container = $('<div id="multi-select-toolbar">');
+                if (selection.length > 0) {
+
+                    buttons.hide();
+                    $('#multi-select-toolbar').remove();
+                    toolbar.append(container.append(draw(id, selection, grid)));
+                } else {
+                    // selection empty
+                    $('#multi-select-toolbar').remove();
+                    buttons.show();
+                }
+            };
+        }()),
+
         wireGridAndSelectionChange: function (grid, id, draw, node, api) {
             var last = '';
             grid.selection.on('change', function (e, selection) {
+
                 var len = selection.length,
                     // work with reduced string-based set
                     flat = JSON.stringify(_([].concat(selection)).map(function (o) {
@@ -79,20 +122,50 @@ define('io.ox/core/commons',
                 // has anything changed?
                 if (flat !== last) {
                     if (len === 1) {
+                        // single selection
                         node.css('height', '');
                         draw(selection[0]);
                     } else if (len > 1) {
+                        // multi selection
                         if (draw.cancel) draw.cancel();
                         node.css('height', '100%');
-                        commons.multiSelection(id, node, this.unique(this.unfold()), api, grid);//grid is needed to apply busy animations correctly
+                        commons.multiSelection(id, node, this.unique(this.unfold()), api, grid); //grid is needed to apply busy animations correctly
                     } else {
+                        // empty
                         if (draw.cancel) draw.cancel();
-                        node.css('height', '').idle().empty();
+                        node.css('height', '100%').idle().empty().append(
+                            $('<div class="io-ox-center">').append(
+                                $('<div class="io-ox-multi-selection">').append(
+                                    $('<div class="summary">').text(gt('No elements selected'))
+                                )
+                            )
+                        );
+                        if (_.device('small')) {//don't stay in empty detail view
+                            var vsplit = node.closest('.vsplit');
+                            if (!vsplit.hasClass('vsplit-reverse')) {//only click if in detail view to prevent infinite loop
+                                vsplit.find('.rightside-navbar a').trigger('click');//trigger back button
+                            }
+                        }
                     }
                     // remember current selection
                     last = flat;
                 }
             });
+
+            grid.selection.on('_m_change', function (e, selection) {
+                var len = selection.length;
+                commons.mobileMultiSelection(id, node, this.unique(this.unfold()), api, grid);
+            });
+
+            // look for id change
+            if (api) {
+                api.on('change:id', function (e, data, former_id) {
+                    var list = grid.selection.get();
+                    if (list.length && list[0].id === former_id) {
+                        grid.selection.set({ id: data.id, folder_id: data.folder_id });
+                    }
+                });
+            }
         },
 
         /**
@@ -109,7 +182,14 @@ define('io.ox/core/commons',
             });
             // clean up selection index on delete
             api.on('beforedelete', function (e, ids) {
+
                 grid.selection.removeFromIndex(ids);
+
+                var list = grid.selection.get(), index;
+                if (list.length === 1 && !_.device('small')) {//don't jump to next item on mobile devices (jump back to grid view to be consistent)
+                    index = grid.selection.getIndex(list[0]);
+                    grid.selection.clear(true).selectIndex(index + 1);
+                }
             });
         },
 
@@ -118,7 +198,7 @@ define('io.ox/core/commons',
          */
         wireGridAndWindow: function (grid, win) {
             var top = 0, on = function () {
-                    grid.selection.keyboard(true);
+                    grid.keyboard(true);
                     if (grid.selection.get().length) {
                         // only retrigger if selection is not empty; hash gets broken if caches are empty
                         // TODO: figure out why this was important
@@ -131,7 +211,7 @@ define('io.ox/core/commons',
             win.on('show idle', on)
                 // hide
                 .on('hide busy', function () {
-                    grid.selection.keyboard(false);
+                    grid.keyboard(false);
                 })
                 .on('beforeshow', function () {
                     if (top !== null) { grid.scrollTop(top); }
@@ -149,6 +229,12 @@ define('io.ox/core/commons',
             if (win.state.visible) { on(); }
         },
 
+        /**
+         * [ description]
+         * @param  {Object}  app           application object
+         * @param  {Object}  grid          grid object
+         * @return void
+         */
         addGridToolbarFolder: function (app, grid) {
 
             function fnOpen(e) {
@@ -161,18 +247,20 @@ define('io.ox/core/commons',
                 index: 200,
                 draw: function () {
                     this.append(
-                        $('<div class="grid-info">')
-                        .on('click', '.folder-name', fnOpen)
+                        $('<div class="grid-info">').on('click', '.folder-name', fnOpen)
                     );
                 }
             });
 
-            // right now, only mail folders support "total"
             var name = app.get('name'),
+                // right now, only mail folders supports "total" properly
+                countGridData = name !== 'io.ox/mail',
+                // only mail searches not across all folders
                 searchAcrossFolders = name !== 'io.ox/mail';
 
             function getInfoNode() {
-                return grid.getToolbar().find('.grid-info');
+                var visible = app.getWindow && app.getWindow().state.visible;
+                return visible ? grid.getToolbar().find('.grid-info') : $();
             }
 
             function drawFolderInfo(folder_id) {
@@ -186,12 +274,12 @@ define('io.ox/core/commons',
                 .append(
                     $('<a href="#" class="folder-name" data-action="open-folderview" tabindex="1">'),
                     $.txt(' '),
-                    $('<span class="folder-count">').attr('data-folder-id', folder_id)
+                    $('<span class="folder-count">')
                 );
 
-                folderAPI.get({ folder: folder_id }).done(function (data) {
+                folderAPI.get({ folder: folder_id }).then(function success(data) {
 
-                    var total = data.total,
+                    var total = countGridData ? grid.getIds().length : data.total,
                         node = grid.getToolbar().find('[data-folder-id="' + folder_id + '"]');
 
                     node.find('.folder-name').text(data.title);
@@ -202,10 +290,9 @@ define('io.ox/core/commons',
                 });
             }
 
-            grid.on('change:prop:folder change:mode', function (e, value) {
+            grid.on('change:prop:folder change:mode change:ids', function (e, value) {
 
                 var folder_id = grid.prop('folder'), mode = grid.getMode(), node;
-
                 if (mode === 'all') {
                     // non-search; show foldername
                     drawFolderInfo(folder_id);
@@ -232,14 +319,20 @@ define('io.ox/core/commons',
 
             // unread counter for mail
             folderAPI.on('update:total', function (e, id, data) {
-                drawFolderInfo(id, data);
+                // check for current folder (otherwise we get cross-app results! see bug #28558)
+                if (id === app.folder.get()) drawFolderInfo(id);
             });
 
             ext.point(app.get('name') + '/vgrid/toolbar').invoke('draw', grid.getToolbar());
 
             // try to set initial value
-            var id = app.folder.get();
-            drawFolderInfo(id);
+            $.when(
+                app.folder.initialized,
+                app.getWindow().shown
+            )
+            .done(function (result) {
+                drawFolderInfo(result[0]);
+            });
         },
 
         /**
@@ -260,6 +353,7 @@ define('io.ox/core/commons',
         wireGridAndRefresh: function (grid, api, win) {
             var refreshAll = function (e) {
                     grid.refresh(true);
+                    if (_.device('smartphone')) grid.selection.retrigger();
                 },
                 refreshList = function () {
                     grid.repaint();
@@ -307,7 +401,7 @@ define('io.ox/core/commons',
             });
             // on cancel search
             win.on('search:clear cancel-search', function () {
-                grid.setMode('all');
+                if (grid.getMode() !== 'all') grid.setMode('all');
             });
         },
 
@@ -384,21 +478,34 @@ define('io.ox/core/commons',
         addFolderView: folderview.add,
 
         vsplit: (function () {
+            var selectionInProgress = false;
 
             var click = function (e) {
                 e.preventDefault();
+                if (selectionInProgress) {//prevent execution of selection to prevent window from flipping back
+                    selectionInProgress = false;
+                }
+                $(this).parent().find('.rightside-inline-actions').empty();
                 $(this).closest('.vsplit').addClass('vsplit-reverse').removeClass('vsplit-slide');
                 if (e.data.app) {
+                    if (_.device('small')) {
+                        e.data.app.getGrid().selection.trigger('changeMobile');
+                    }
                     e.data.app.getGrid().selection.clear();
                 }
             };
 
             var select = function (e) {
                 var node = $(this);
+                selectionInProgress = true;
                 setTimeout(function () {
-                    node.closest('.vsplit').addClass('vsplit-slide').removeClass('vsplit-reverse');
+                    if (selectionInProgress) {//if still valid
+                        node.closest('.vsplit').addClass('vsplit-slide').removeClass('vsplit-reverse');
+                        selectionInProgress = false;
+                    }
                 }, 100);
             };
+
 
             return function (parent, app) {
                 var sides = {};
@@ -407,7 +514,8 @@ define('io.ox/core/commons',
                     sides.left = $('<div class="leftside">').on('select', select),
                     // navigation
                     $('<div class="rightside-navbar">').append(
-                        $('<a href="#" class="btn">').append(
+                        $('<div class="rightside-inline-actions">'),
+                        $('<a href="#" class="btn" tabindex="-1">').append(
                             $('<i class="icon-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
                         ).on('click', { app: app }, click)
                     ),
@@ -438,15 +546,21 @@ define('io.ox/core/commons',
     $.createViewContainer = function (baton, api, getter) {
 
         var data = baton instanceof ext.Baton ? baton.data : baton,
-            cid,
+            cid, ecid, pattern,
             node = $('<div>').attr('data-cid', _([].concat(data)).map(_.cid).join(',')),
 
-            update = function () {
+            update = function (e, changed) {
+                // id change?
+                if (changed && (changed.former_id || changed.id !== data.id)) {
+                    data = changed;
+                }
+
                 if ((getter = getter || (api ? api.get : null))) {
                     // fallback for create trigger
                     if (!data.id) {
                         data.id = arguments[1].id;
                     }
+                    // get fresh object
                     getter(api.reduce(data)).done(function (data) {
                         if (baton instanceof ext.Baton) {
                             baton.data = data;
@@ -460,7 +574,7 @@ define('io.ox/core/commons',
 
             move = function (e, targetFolderId) {
                 if (data) data.folder_id = targetFolderId;
-                update();
+                if (update) update();
             },
 
             // we use redraw directly if we're in multiple mode
@@ -473,7 +587,9 @@ define('io.ox/core/commons',
                 if (node) node.trigger('view:remove').remove();
             },
 
-            checkFolder = function (e, folder, folderId, folderObj) {//checks if folder permissions etc. have changed, and triggers redraw. Important to update inline links
+            // checks if folder permissions etc. have changed, and triggers redraw.
+            // Important to update inline links
+            checkFolder = function (e, folder, folderId, folderObj) {
                 if (folder === e.data.folder.toString() && api) {
                     api.trigger('update:' + e.data.cid);
                 }
@@ -489,12 +605,17 @@ define('io.ox/core/commons',
         } else {
             // single item
             cid = _.cid(data);
-            cid = encodeURIComponent(cid);
+            ecid = _.ecid(data);
             folderAPI.on('update',  { cid: cid, folder: data.folder_id }, checkFolder);
-            api.on('delete:' + cid, remove);
-            api.on('update:' + cid, update);
-            api.on('move:' + cid, move);
+            api.on('delete:' + ecid, remove);
+            api.on('update:' + ecid, update);
+            api.on('move:' + ecid, move);
             api.on('create', update);
+            //calendar: update element of a series if master changes
+            if (data.recurrence_position && data.recurrence_position > 0 && (data.recurrence_id === data.id)) {
+                pattern = (data.folder || data.folder_id) + '.' + data.id + '.';
+                api.on('update:series:' + _.ecid(pattern), update);
+            }
         }
 
         return node.one('dispose', function () {
@@ -504,14 +625,16 @@ define('io.ox/core/commons',
                     api.off('update', redraw);
                 } else {
                     cid = _.cid(data);
-                    cid = encodeURIComponent(cid);
+                    ecid = _.ecid(data);
                     folderAPI.off('update', checkFolder);
-                    api.off('delete:' + cid, remove);
-                    api.off('update:' + cid, update);
-                    api.off('move:' + cid, move);
+                    api.off('delete:' + ecid, remove);
+                    api.off('update:' + ecid, update);
+                    api.off('move:' + ecid, move);
                     api.off('create', update);
+                    if (pattern)
+                        api.off('update:series:' + _.ecid(pattern));
                 }
-                api = update = data = node = getter = null;
+                api = update = data = node = getter = cid = ecid = pattern = null;
             });
     };
 
@@ -538,6 +661,31 @@ define('io.ox/core/commons',
         }
         return tmp.center();
     };
+
+    // Accessibility F6 jump
+    var macos = _.device('macos');
+    $(document).on('keydown.f6', function (e) {
+
+        if (e.which === 117 && (macos || e.ctrlKey)) {
+
+            e.preventDefault();
+
+            var items = $('#io-ox-core .f6-target:visible'),
+                closest = $(document.activeElement).closest('.f6-target'),
+                index = (items.index(closest) || 0) + (e.shiftKey ? -1 : +1),
+                next;
+
+            if (index >= items.length) index = 0;
+            if (index < 0) index = items.length - 1;
+            next = items.eq(index);
+
+            if (next.attr('tabindex')) {
+                next.focus();
+            } else {
+                next.find('[tabindex]:visible').first().focus();
+            }
+        }
+    });
 
     return commons;
 });

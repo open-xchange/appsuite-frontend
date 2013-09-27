@@ -65,6 +65,7 @@
         "hm": "h:mm a",
         "Hm": "H:mm",
         "v": "v",
+        "Md": "dd.MM",
         "Hmv": "H:mm v",
         "hmv": "h:mm a v",
         "yMdHm": "dd.MM.y, H:mm",
@@ -115,7 +116,7 @@
         "pm": "после полудня"
     },
     "eras": [
-        "до н.э.",
+        "до н. э.",
         "н.э."
     ],
     "dateTime": "d MMM y, HH:mm",

@@ -179,7 +179,7 @@ define("io.ox/core/gettext", [], function () {
         enabled = true;
         enableDef.resolve();
     };
-    
+
     gt.enabled = enableDef.promise();
 
     return gt;

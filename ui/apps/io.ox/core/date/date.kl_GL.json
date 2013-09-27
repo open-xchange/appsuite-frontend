@@ -65,6 +65,7 @@
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "d/M",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
         "yMdHm": "y-MM-dd HH:mm",
@@ -100,14 +101,14 @@
             "m": "HH:mm–HH:mm v"
         },
         "yMMMd": {
-            "d": "yyyy-MM-d – d",
-            "m": "yyyy-MM-dd – MM-d",
-            "y": "yyyy-MM-dd – yyyy-MM-dd"
+            "d": "y-MM-d – d",
+            "m": "y-MM-dd – MM-d",
+            "y": "y-MM-dd – y-MM-dd"
         },
         "yMMMEd": {
-            "d": "E, yyyy-MM-dd – E, yyyy-MM-dd",
-            "m": "E, yyyy-MM-dd – E, yyyy-MM-dd",
-            "y": "E, yyyy-MM-dd – E, yyyy-MM-dd"
+            "d": "E, y-MM-dd – E, y-MM-dd",
+            "m": "E, y-MM-dd – E, y-MM-dd",
+            "y": "E, y-MM-dd – E, y-MM-dd"
         }
     },
     "dayPeriods": {
@@ -115,8 +116,8 @@
         "pm": "ulloqeqqata-kingorna"
     },
     "eras": [
-        "Kr.in.si.",
-        "Kr.in.king."
+        "f.v.t.",
+        "v.t."
     ],
     "dateTime": "MMM dd, y h:mm a",
     "h12": true

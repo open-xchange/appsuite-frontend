@@ -17,10 +17,13 @@
 define('io.ox/files/api',
     ['io.ox/core/http',
      'io.ox/core/api/factory',
-     'io.ox/core/config',
+     'io.ox/core/api/folder',
+     'settings!io.ox/core',
      'io.ox/core/cache',
-     'io.ox/core/date'
-    ], function (http, apiFactory, config, cache, date) {
+     'io.ox/core/date',
+     'io.ox/files/mediasupport',
+     'gettext!io.ox/files'
+    ], function (http, apiFactory, folderAPI, coreConfig, cache, date, mediasupport, gt) {
 
     'use strict';
 
@@ -109,9 +112,12 @@ define('io.ox/files/api',
         // audio
         'mp3' : 'audio/mpeg',
         'ogg' : 'audio/ogg',
+        'opus': 'audio/ogg',
         'aac' : 'audio/aac',
         'm4a' : 'audio/mp4',
         'm4b' : 'audio/mp4',
+        'wav' : 'audio/wav',
+
         // video
         'mp4' : 'video/mp4',
         'm4v' : 'video/mp4',
@@ -119,7 +125,7 @@ define('io.ox/files/api',
         'ogm' : 'video/ogg',
         'webm': 'video/webm',
         // open office
-        'odc':  'application/vnd.oasis.opendocument.chart',
+        'odc': 'application/vnd.oasis.opendocument.chart',
         'odb': 'application/vnd.oasis.opendocument.database',
         'odf': 'application/vnd.oasis.opendocument.formula',
         'odg': 'application/vnd.oasis.opendocument.graphics',
@@ -152,6 +158,11 @@ define('io.ox/files/api',
         'pps': 'application/vnd.ms-powerpoint'
     };
 
+    var translate_mime = {
+        'application/vnd.ms-word': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'audio/mp3': 'audio/mpeg'
+    };
+
     var regFixContentType = /^application\/(force-download|binary|x-download|octet-stream|vnd|vnd.ms-word.document.12|odt|x-pdf)$/i;
 
     var fixContentType = function (data) {
@@ -161,14 +172,14 @@ define('io.ox/files/api',
                 if (ext in mime_types) {
                     data.file_mimetype = mime_types[ext];
                 }
-            } else if (data.file_mimetype === 'audio/mp3') {
-                data.file_mimetype = 'audio/mpeg'; // might be superstition
+            } else if (translate_mime[data.file_mimetype]) {
+                data.file_mimetype = translate_mime[data.file_mimetype];
             }
         }
         return data;
     };
 
-    var allColumns = '20,1,5,700,702,703,705,707,3';
+    var allColumns = '20,23,1,5,700,702,703,705,707,3';
 
     // generate basic API
     var api = apiFactory({
@@ -176,15 +187,15 @@ define('io.ox/files/api',
         requests: {
             all: {
                 action: 'all',
-                folder: config.get('folder.infostore'),
+                folder: coreConfig.get('folder/infostore'),
                 columns: allColumns,
                 extendColumns: 'io.ox/files/api/all',
-                sort: '700',
+                sort: '702',
                 order: 'asc'
             },
             list: {
                 action: 'list',
-                columns: '20,1,5,700,702,703,704,707,3',
+                columns: '20,23,1,5,700,702,703,704,707,3',
                 extendColumns: 'io.ox/files/api/list'
             },
             get: {
@@ -194,7 +205,7 @@ define('io.ox/files/api',
                 action: 'search',
                 columns: allColumns, // should be the same as all-request
                 extendColumns: 'io.ox/files/api/all',
-                sort: '700',
+                sort: '702',
                 order: 'asc',
                 omitFolder: true,
                 getData: function (query, options) {
@@ -258,7 +269,7 @@ define('io.ox/files/api',
 
         var params = {
             action: 'updates',
-            columns: '20,1,700,702,703,706',
+            columns: '20,23,1,700,702,703,706',
             folder: options.folder,
             timestamp: options.timestamp,
             ignore: 'deleted'
@@ -275,6 +286,38 @@ define('io.ox/files/api',
     api.caches.versions = new cache.SimpleCache('files-versions', true);
 
     /**
+     * map error codes and text phrases for user feedback
+     * @param  {event} e
+     * @return {event}
+     */
+    var failedUpload = function (e) {
+        e.data = e.data || {};
+        //customized error messages
+        if (e && e.code && (e.code === 'UPL-0005' || e.code === 'IFO-1700')) {
+            e.data.custom = {
+                type: 'error',
+                text: gt(e.error, e.error_params[0], e.error_params[1])
+            };
+        } else if (e && e.code && e.code === 'IFO-0100' && e.problematic && e.problematic[0] && e.problematic[0].id === 700) {
+            e.data.custom = {
+                type: 'error',
+                text: gt('The provided filename exceeds the allowed length.')
+            };
+        } else if (e && e.code && e.code === 'FLS-0024') {
+            e.data.custom = {
+                type: 'error',
+                text: gt('The allowed quota is reached.')
+            };
+        } else {
+            e.data.custom = {
+                type: 'error',
+                text: gt('This file has not been added') + "\n" + e.error
+            };
+        }
+        return e;
+    };
+
+    /**
      * upload a new file and store it
      * @param  {object} options
      *         'folder' - The folder ID to upload the file to. This is optional and defaults to the standard files folder
@@ -287,7 +330,7 @@ define('io.ox/files/api',
 
         // alright, let's simulate a multipart formdata form
         options = $.extend({
-            folder: config.get('folder.infostore')
+            folder: coreConfig.get('folder/infostore')
         }, options || {});
 
         function fixOptions() {
@@ -327,7 +370,7 @@ define('io.ox/files/api',
                     data: formData,
                     fixPost: true
                 })
-                .pipe(success);
+                .pipe(success, failedUpload);
 
         } else {
 
@@ -339,7 +382,7 @@ define('io.ox/files/api',
             return http.FORM({
                 form: options.form,
                 data: options.json
-            }).pipe(success);
+            }).pipe(success, failedUpload);
         }
     };
 
@@ -355,7 +398,7 @@ define('io.ox/files/api',
     api.uploadNewVersion = function (options) {
         // Alright, let's simulate a multipart formdata form
         options = $.extend({
-            folder: config.get('folder.infostore')
+            folder: coreConfig.get('folder/infostore')
         }, options || {});
 
         var formData = new FormData();
@@ -376,16 +419,25 @@ define('io.ox/files/api',
 
         return http.UPLOAD({
                 module: 'files',
-                params: { action: 'update', timestamp: _.now(), id: options.id, filename: options.filename },
+                params: {
+                    action: 'update',
+                    extendedResponse: true,
+                    filename: options.filename,
+                    id: options.id,
+                    timestamp: _.now()
+                },
                 data: formData,
                 fixPost: true // TODO: temp. backend fix
             })
-            .pipe(function (data) {
-                var id = options.json.id || options.id,
-                    folder_id = String(options.json.folder_id),
-                    obj = { folder_id: folder_id, id: id };
-                return api.propagate('change', obj, options.silent);
-            });
+            .then(
+                function success(response) {
+                    var id = options.json.id || options.id,
+                        folder_id = String(options.json.folder_id),
+                        file = { folder_id: folder_id, id: id };
+                    return handleExtendedResponse(file, response, options);
+                },
+                failedUpload
+            );
     };
 
     /**
@@ -400,7 +452,7 @@ define('io.ox/files/api',
     api.uploadNewVersionOldSchool = function (options) {
         // Alright, let's simulate a multipart formdata form
         options = $.extend({
-            folder: config.get('folder.infostore')
+            folder: coreConfig.get('folder/infostore')
         }, options || {});
 
         var formData = options.form,
@@ -417,38 +469,49 @@ define('io.ox/files/api',
         formData.append($('<input>', {'type': 'hidden', 'name': 'json', 'value': JSON.stringify(options.json)}));
 
         /*return http.UPLOAD({
-                module: 'files',
-                params: { action: 'update', timestamp: _.now(), id: options.id },
-                data: formData,
-                fixPost: true // TODO: temp. backend fix
-            });*/
+            module: 'files',
+            params: { action: 'update', timestamp: _.now(), id: options.id },
+            data: formData,
+            fixPost: true // TODO: temp. backend fix
+        });*/
         var tmpName = 'iframe_' + _.now(),
         frame = $('<iframe>', {'name': tmpName, 'id': tmpName, 'height': 1, 'width': 1 });
-
         $('#tmp').append(frame);
-        window.callback_update = function (data) {
-                var id = options.json.id || options.id,
-                    folder_id = String(options.json.folder_id),
-                    obj = { folder_id: folder_id, id: id };
-                $('#' + tmpName).remove();
-                deferred[(data && data.error ? 'reject' : 'resolve')](data);
-                window.callback_update = null;
-                return api.propagate('change', obj).pipe(function () {
-                    api.trigger('create.version', obj);
-                    return { folder_id: folder_id, id: id, timestamp: data.timestamp};
-                });
-            };
+
+        window.callback_update = function (response) {
+            var id = options.json.id || options.id,
+                folder_id = String(options.json.folder_id),
+                file = { folder_id: folder_id, id: id };
+            $('#' + tmpName).remove();
+            deferred[(response && response.error ? 'reject' : 'resolve')](response);
+            window.callback_update = null;
+            handleExtendedResponse(file, response);
+        };
 
         formData.attr({
             method: 'post',
             enctype: 'multipart/form-data',
-            action: ox.apiRoot + '/files?action=update&id=' + options.id + '&timestamp=' + options.timestamp + '&session=' + ox.session,
+            action: ox.apiRoot + '/files?action=update&extendedResponse=true&id=' + options.id + '&timestamp=' + options.timestamp + '&session=' + ox.session,
             target: tmpName
         });
         formData.submit();
         return deferred;
     };
 
+    function handleExtendedResponse(file, response, options) {
+        // extended response?
+        if (_.isObject(response) && response.data !== true) {
+            var data = response.data || response;
+            // id has changed?
+            if (data.id !== file.id) {
+                data.former_id = file.id;
+                api.trigger('change:id', data, data.former_id);
+                return api.propagate('rename', data);
+            }
+        }
+        options = options || {};
+        return api.propagate('change', file, options.silent);
+    }
 
     /**
      * updates file
@@ -458,26 +521,28 @@ define('io.ox/files/api',
      * @return {deferred}
      */
     api.update = function (file, makeCurrent) {
-        var obj = { id: file.id, folder: file.folder_id },
-            updateData = file;
+
+        var updateData = file;
 
         if (makeCurrent) {
             //if there is only version, the request works.
             //if the other fields are present theres a backend error
             updateData = { version: file.version };
         }
+
         return http.PUT({
                 module: 'files',
                 params: {
                     action: 'update',
+                    extendedResponse: true,
                     id: file.id,
-                    timestamp: _.now()
+                    timestamp: _.then()
                 },
                 data: updateData,
                 appendColumns: false
             })
-            .pipe(function () {
-                return api.propagate('change', obj);
+            .then(function (response) {
+                return handleExtendedResponse(file, response);
             });
     };
 
@@ -487,7 +552,7 @@ define('io.ox/files/api',
     api.create = function (options) {
 
         options = $.extend({
-            folder: config.get('folder.infostore')
+            folder: coreConfig.get('folder/infostore')
         }, options || {});
 
         if (!options.json.folder_id) {
@@ -524,22 +589,23 @@ define('io.ox/files/api',
      */
     api.propagate = function (type, obj, silent, noRefreshAll) {
 
-        var id, fid, all, list, get, versions, caches = api.caches, ready = $.when();
+        var id, former_id, fid, all, list, get, versions, caches = api.caches, ready = $.when();
 
         if (type && _.isObject(obj)) {
 
             fid = String(obj.folder_id || obj.folder);
             id = String(obj.id);
+            former_id = String(obj.former_id);
             obj = { folder_id: fid, id: id };
 
-            if (/^(new|change|delete)$/.test(type) && fid) {
+            if (/^(new|change|rename|delete)$/.test(type) && fid) {
                 // if we have a new file or an existing file was deleted, we have to clear the proper folder cache.
                 all = caches.all.grepRemove(fid + api.DELIM);
             } else {
                 all = ready;
             }
 
-            if (/^(change|delete)$/.test(type) && fid && id) {
+            if (/^(change|rename|delete)$/.test(type) && fid && id) {
                 // just changing a file does not affect the file list.
                 // However, in case of a change or delete, we have to remove the file from item caches
                 list = caches.list.remove(obj);
@@ -553,13 +619,23 @@ define('io.ox/files/api',
                 if (!silent) {
                     if (type === 'change') {
                         return api.get(obj).done(function (data) {
-                            api.trigger('update update:' + encodeURIComponent(_.cid(data)), data);
+                            api.trigger('update update:' + _.ecid(data), data);
                             if (!noRefreshAll) api.trigger('refresh.all');
                         });
-                    } else {
+                    }
+                    else if (type === 'rename') {
+                        return api.get(obj).done(function (data) {
+                            var cid = encodeURIComponent(_.cid({ folder_id: data.folder_id, id: former_id }));
+                            data.former_id = former_id;
+                            api.trigger('update:' + cid, data);
+                            if (!noRefreshAll) api.trigger('refresh.all');
+                        });
+                    }
+                    else {
                         if (!noRefreshAll) api.trigger('refresh.all');
                     }
                 }
+                folderAPI.reload(fid);
                 return ready;
             });
         } else {
@@ -623,6 +699,12 @@ define('io.ox/files/api',
             return url + query + '&delivery=view' + thumbnail + '&format=preview_image&content_type=image/jpeg';
         case 'cover':
             return ox.apiRoot + '/image/file/mp3Cover?' + 'folder=' + file.folder_id + '&id=' + file.id + thumbnail + '&content_type=image/jpeg';
+        case 'zip':
+            return url + '?' + $.param({
+                action: 'zipdocuments',
+                body: JSON.stringify(_.map(file, function (o) { return { id: o.id, folder_id: o.folder_id }; })),
+                session: ox.session // required here!
+            });
         default:
             return url + query;
         }
@@ -655,6 +737,7 @@ define('io.ox/files/api',
     };
 
     var copymove = function (list, action, targetFolderId) {
+        var errors = [];//object to store errors inside the multiple
         // allow single object and arrays
         list = _.isArray(list) ? list : [list];
         // pause http layer
@@ -667,10 +750,13 @@ define('io.ox/files/api',
                     action: action || 'update',
                     id: o.id,
                     folder: o.folder_id || o.folder,
-                    timestamp: o.timestamp || _.now() // mandatory for 'update'
+                    timestamp: o.timestamp || _.then() // mandatory for 'update'
                 },
                 data: { folder_id: targetFolderId },
                 appendColumns: false
+            }).then(function () {
+            }, function (errorObj) {
+                errors.push(errorObj);
             });
         });
         // resume & trigger refresh
@@ -685,6 +771,8 @@ define('io.ox/files/api',
                         );
                     })
                 );
+            }).then(function () {
+                return errors;//return errors inside multiple
             })
             .done(function () {
                 api.trigger('refresh.all');
@@ -718,26 +806,7 @@ define('io.ox/files/api',
      * @return {boolean}
      */
     api.checkMediaFile = function (type, filename) {
-
-        /*  NOTE: See comments in mediaplayer.js */
-
-        var pattern;
-        if (type === 'video') {
-            if (!Modernizr.video) { return false; }
-            if (_.browser.Chrome) {          pattern = '\\.(mp4|m4v|ogv|webm)'; }
-            else if (_.browser.Safari) {     pattern = '\\.(mp4|m4v|mpe?g)'; }
-            else if (_.browser.IE) {         pattern = '\\.(mp4|m4v)'; }
-            else if (_.browser.Firefox) {    pattern = '\\.(ogv|webm)'; }
-            else { return false; }
-        } else {
-            if (!Modernizr.audio) { return false; }
-            if (_.browser.Chrome) {          pattern = '\\.(mp3|wav|m4a|m4b|mp4|ogg)'; }
-            else if (_.browser.Safari) {     pattern = '\\.(mp3|wav|m4a|m4b|aac)'; }
-            else if (_.browser.IE) {         pattern = '\\.(mp3|wav|m4a|m4b)'; }
-            else if (_.browser.Firefox) {    pattern = '\\.(mp3|wav|ogg)'; }
-            else { return false; }
-        }
-        return (new RegExp(pattern, 'i')).test(filename);
+        return mediasupport.checkFile(type, filename);
     };
 
     var lockToggle = function (list, action) {

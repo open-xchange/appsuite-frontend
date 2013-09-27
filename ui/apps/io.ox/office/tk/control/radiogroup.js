@@ -13,8 +13,9 @@
 
 define('io.ox/office/tk/control/radiogroup',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/keycodes',
      'io.ox/office/tk/control/group'
-    ], function (Utils, Group) {
+    ], function (Utils, KeyCodes, Group) {
 
     'use strict';
 
@@ -49,6 +50,9 @@ define('io.ox/office/tk/control/radiogroup',
         var // self reference
             self = this,
 
+            // all existing option buttons (cached for performance)
+            optionButtons = $(),
+
             // fall-back value for toggle click
             toggleValue = Utils.getOption(options, 'toggleValue'),
 
@@ -62,13 +66,6 @@ define('io.ox/office/tk/control/radiogroup',
         // private methods ----------------------------------------------------
 
         /**
-         * Returns all option buttons as jQuery collection.
-         */
-        function getOptionButtons() {
-            return self.getNode().children(Utils.BUTTON_SELECTOR);
-        }
-
-        /**
          * Activates an option button in this radio group.
          *
          * @param value
@@ -76,7 +73,7 @@ define('io.ox/office/tk/control/radiogroup',
          *  does not activate any button (ambiguous state).
          */
         function updateHandler(value) {
-            Utils.selectOptionButton(getOptionButtons(), value, equality);
+            Utils.selectOptionButton(optionButtons, value, equality);
         }
 
         /**
@@ -88,7 +85,39 @@ define('io.ox/office/tk/control/radiogroup',
             return toggleClick ? toggleValue : Utils.getControlValue(button);
         }
 
+        /**
+         * Keyboard handler for the entire radio group.
+         */
+        function keyHandler(event) {
+
+            var // distinguish between event types
+                keyup = event.type === 'keyup';
+
+            switch (event.keyCode) {
+            case KeyCodes.SPACE:
+            case KeyCodes.ENTER:
+                // Bug 28528: ENTER key must be handled explicitly, <a> elements
+                // without 'href' attribute do not trigger click events. The 'href'
+                // attribute has been removed from the buttons to prevent useless
+                // tooltips with the link address.
+                if (keyup) {
+                    self.triggerChange(event.target, { preserveFocus: event.keyCode === KeyCodes.SPACE });
+                }
+                return false;
+            }
+        }
+
         // methods ------------------------------------------------------------
+
+        /**
+         * Returns all option buttons as jQuery collection.
+         *
+         * @returns {jQuery}
+         *  The collection with all existing option buttons.
+         */
+        this.getOptionButtons = function () {
+            return optionButtons;
+        };
 
         /**
          * Removes all option buttons from this radio group.
@@ -97,7 +126,8 @@ define('io.ox/office/tk/control/radiogroup',
          *  A reference to this instance.
          */
         this.clearOptionButtons = function () {
-            getOptionButtons().remove();
+            optionButtons.remove();
+            optionButtons = $();
             return this;
         };
 
@@ -128,6 +158,7 @@ define('io.ox/office/tk/control/radiogroup',
                 button = Utils.createButton(buttonOptions);
 
             // insert the button, add tool tip
+            optionButtons = optionButtons.add(button);
             this.addFocusableControl(button);
             Utils.setControlTooltip(button, Utils.getStringOption(options, 'tooltip'), 'bottom');
             return this;
@@ -138,6 +169,9 @@ define('io.ox/office/tk/control/radiogroup',
         // register event handlers
         this.registerUpdateHandler(updateHandler)
             .registerChangeHandler('click', { selector: Utils.BUTTON_SELECTOR, valueResolver: clickHandler });
+        // add event handlers
+        this.getNode()
+            .on('keydown keypress keyup', keyHandler);
 
     } // class RadioGroup
 

@@ -58,25 +58,26 @@
     ],
     "formats": {
         "E": "E",
-        "yMd": "d.M.yyyy",
+        "yMd": "d.M.y",
         "yMEd": "E d. M. y",
-        "yMMMd": "d.M.yyyy",
+        "yMMMd": "d.M.y",
         "yMMMEd": "E, d. MMM y",
         "hm": "h:mm a",
         "Hm": "H:mm",
         "v": "v",
+        "Md": "d.M.",
         "Hmv": "H:mm v",
         "hmv": "h:mm a v",
-        "yMdHm": "d.M.yyyy H:mm",
-        "yMdHmv": "d.M.yyyy H:mm v",
-        "yMdhm": "d.M.yyyy h:mm a",
-        "yMdhmv": "d.M.yyyy h:mm a v",
+        "yMdHm": "d.M.y H:mm",
+        "yMdHmv": "d.M.y H:mm v",
+        "yMdhm": "d.M.y h:mm a",
+        "yMdhmv": "d.M.y h:mm a v",
         "yMEdHm": "E d. M. y H:mm",
         "yMEdHmv": "E d. M. y H:mm v",
         "yMEdhm": "E d. M. y h:mm a",
         "yMEdhmv": "E d. M. y h:mm a v"
     },
-    "date": "d.M.yyyy",
+    "date": "d.M.y",
     "time": "H:mm",
     "dateTimeFormat": "%2$s %1$s",
     "intervals": {
@@ -111,13 +112,13 @@
         }
     },
     "dayPeriods": {
-        "am": "dopoludnia",
-        "pm": "popoludní"
+        "am": "AM",
+        "pm": "PM"
     },
     "eras": [
         "pred n.l.",
         "n.l."
     ],
-    "dateTime": "d.M.yyyy H:mm",
+    "dateTime": "d.M.y H:mm",
     "h12": false
 }

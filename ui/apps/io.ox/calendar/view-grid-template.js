@@ -15,10 +15,11 @@ define("io.ox/calendar/view-grid-template",
     ["io.ox/calendar/util",
      "io.ox/core/tk/vgrid",
      "io.ox/core/extensions",
+     "io.ox/core/api/folder",
      "gettext!io.ox/calendar",
      "io.ox/core/api/user",
      "io.ox/core/api/resource",
-     "less!io.ox/calendar/style.less"], function (util, VGrid, ext, gt, userAPI, resourceAPI) {
+     "less!io.ox/calendar/style.less"], function (util, VGrid, ext, folderAPI, gt, userAPI, resourceAPI) {
 
     "use strict";
     var fnClickPerson = function (e) {
@@ -34,18 +35,17 @@ define("io.ox/calendar/view-grid-template",
         main: {
             build: function () {
                 var title, location, time, date, shown_as, conflicts, isPrivate;
-                this.addClass("calendar")
-                    .append(time = $("<div>").addClass("time"))
-                    .append(date = $("<div>").addClass("date"))
-                    .append(isPrivate = $('<i class="icon-lock private-flag">').hide())
-                    .append(title = $("<div>").addClass("title"))
-                    .append(
-                        $('<div class="location-row">').append(
-                            shown_as = $('<span class="shown_as label label-info">&nbsp;</span>'),
-                            location = $('<span class="location">')
-                        )
-                    )
-                    .append(conflicts = $("<div>").addClass("conflicts").hide());
+                this.addClass("calendar").append(
+                    time = $("<div>").addClass("time"),
+                    date = $("<div>").addClass("date"),
+                    isPrivate = $('<i class="icon-lock private-flag">').hide(),
+                    title = $("<div>").addClass("title"),
+                    $('<div class="location-row">').append(
+                        shown_as = $('<span class="shown_as label label-info">&nbsp;</span>'),
+                        location = $('<span class="location">')
+                    ),
+                    conflicts = $("<div>").addClass("conflicts").hide()
+                );
 
                 return {
                     title: title,
@@ -58,7 +58,12 @@ define("io.ox/calendar/view-grid-template",
                 };
             },
             set: function (data, fields, index) {
-                this.addClass(util.getConfirmationClass(util.getConfirmationStatus(data)) + (data.hard_conflict ? ' hardconflict' : ''));
+                var folder = folderAPI.get({ folder: data.folder_id }),
+                    self = this;
+                folder.done(function (folder) {
+                    var conf = util.getConfirmationStatus(data, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
+                    self.addClass(util.getConfirmationClass(conf) + (data.hard_conflict ? ' hardconflict' : ''));
+                });
                 fields.title
                     .text(data.title ? gt.noI18n(data.title || '\u00A0') : gt('Private'));
                 if (data.conflict) {
@@ -70,7 +75,7 @@ define("io.ox/calendar/view-grid-template",
                         );
                 }
                 fields.location.text(gt.noI18n(data.location || '\u00A0'));
-                util.addTimezoneLabel(fields.time.empty(), data);
+                fields.time.text(util.getTimeInterval(data));
                 fields.date.text(gt.noI18n(util.getDateInterval(data)));
                 fields.shown_as.get(0).className = "shown_as label " + util.getShownAsLabel(data);
                 if (data.participants && data.conflict) {
@@ -79,7 +84,12 @@ define("io.ox/calendar/view-grid-template",
                         .text(gt('Conflicts:'))
                         .append(conflicts);
 
-                    _(data.participants).each(function (participant, index, list) {
+                    _.chain(data.participants)
+                    .filter(function (part) {
+                        // participants who declined the appointment cannot conflit
+                        return part.confirmation !== 2;
+                    })
+                    .each(function (participant, index, list) {
                         // check for resources
                         if (participant.type === 3) {
                             resourceAPI.get({id: participant.id}).done(function (resource) {
@@ -96,7 +106,7 @@ define("io.ox/calendar/view-grid-template",
                             conflicts.append(
                                 $('<a>')
                                     .append(userAPI.getTextNode(participant.id))
-                                    .addClass('person-link')
+                                    .addClass('person-link ' + util.getConfirmationClass(participant.confirmation))
                                     .css('margin-left', '4px')
                                     .on('click', { internal_userid: participant.id }, fnClickPerson)
                             );
@@ -162,28 +172,8 @@ define("io.ox/calendar/view-grid-template",
             });
 
             return $div;
-        },
-
-        // simple click handler used by several simple grids
-        hOpenDetailPopup: function (e) {
-
-            var data = e.data || $(this).data("appointment");
-
-            require(["io.ox/calendar/view-detail", "io.ox/core/tk/dialogs"],
-                function (view, dialogs) {
-                    new dialogs.ModalDialog({
-                            width: 600,
-                            easyOut: true
-                        })
-                        .append(view.draw(data))
-                        .addButton("close", "Close")
-                        .show();
-                    data = null;
-                }
-            );
-
-            return false;
         }
+
     };
 
     return that;

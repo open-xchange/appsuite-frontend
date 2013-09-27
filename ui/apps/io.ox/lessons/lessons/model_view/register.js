@@ -29,7 +29,7 @@ define('io.ox/lessons/lessons/model_view/register', ['io.ox/core/extensions', 'i
             }
         }
     });
-    
+
     ext.point("io.ox/lessons/lesson").extend({
         id: 'model_view',
         index: 500,

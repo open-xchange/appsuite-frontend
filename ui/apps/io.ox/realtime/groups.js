@@ -86,7 +86,7 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
         this.leave = function (options) {
             checkState();
             if (!heartbeat) {
-                return;
+                return $.when(); // Already left
             }
             options = options || {};
             clearInterval(heartbeat);

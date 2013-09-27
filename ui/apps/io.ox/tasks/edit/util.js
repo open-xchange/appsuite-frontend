@@ -16,16 +16,33 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
     'use strict';
 
     var util = {
+        splitExtensionsByRow: function (extensions, rows, ignoreTabs) {
+            _(extensions).each(function (extension) {
+                if (!(extension.tab && ignoreTabs)) {//ignoreTabs if parameter is set(handled separately)
+                    if (extension.row) {//seperate extensions with rows
+                        if (!rows[extension.row]) {
+                            rows[extension.row] = [];
+                        }
+                        rows[extension.row].push(extension);
+                    } else {//all the rest
+                        if (!rows.rest) {//rest is used for extension points without row
+                            rows.rest = [];
+                        }
+                        rows.rest.push(extension);
+                    }
+                }
+            });
+        },
         buildLabel: function (text, id) {
             return $('<label>').text(text).addClass('task-edit-label').attr('for', id);
         },
         //build progressField and buttongroup
         buildProgress: function () {
-            var progress = $('<input>').attr({type: 'text', id: 'task-edit-progress-field'}).val('0')
-                .addClass('span6 progress-field');
+            var progress = $('<input>').attr({type: 'text', id: 'task-edit-progress-field', tabindex: 1}).val('0')
+                .addClass('span6 progress-field'),
 
-            $('<div>').addClass('input-append').append(progress,
-                    $('<button>').attr('data-action', 'minus').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-minus'))
+                wrapper = $('<div>').addClass('input-append').append(progress,
+                    $('<button type="button" tabindex="1">').attr('data-action', 'minus').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-minus'))
                     .on('click', function () {
                         var temp = parseInt(progress.val(), 10);
                         temp -= 25;
@@ -37,7 +54,7 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
                             progress.trigger('change');
                         }
                     }),
-                    $('<button>').attr('data-action', 'plus').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-plus'))
+                    $('<button type="button" tabindex="1">').attr('data-action', 'plus').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-plus'))
                     .on('click', function () {
                         var temp = parseInt(progress.val(), 10);
                         temp += 25;
@@ -51,16 +68,12 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
                     })
                     );
 
-            return progress;
+            return {progress: progress, wrapper: wrapper};
         },
         buildExtensionRow: function (parent, extensions, baton) {
-            var row = $('<div>').addClass('row-fluid task-edit-row').appendTo(parent);
+            var row = $('<div class="row-fluid task-edit-row">').appendTo(parent);
             for (var i = 0; i < extensions.length; i++) {
-                if (!(_.isArray(extensions[i]))) { //check for true extensionpoint
-                    extensions[i].invoke('draw', row, baton);
-                } else { //its a normal node
-                    $('<div>').addClass('span' + extensions[i][1]).append(extensions[i][0]).appendTo(row);
-                }
+                extensions[i].invoke('draw', row, baton);
             }
             //find labels and make them focus the inputfield
             row.find('label').each(function (label) {
@@ -102,42 +115,6 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
             }
         },
 
-        //Tabs
-        buildTabs: function (tabs, uid) {//uid is important so tabs dont change tabs in other apps
-            var table = $('<ul>').addClass('nav nav-tabs'),
-                content = $('<div>').addClass('tab-content');
-            for (var i = 0; i < tabs.length; i++) {
-                $('<li>').css('width', '33%')
-                    .append($('<a>').addClass('tab-link').css('text-align', 'center')
-                        .attr({href: '#edit-task-tab' + [i] + uid, 'data-toggle': 'tab'}).text(tabs[i])).appendTo(table);
-            }
-            for (var i = 0; i < tabs.length; i++) {
-                $('<div>').attr('id', 'edit-task-tab' + [i] + uid).addClass('tab-pane').appendTo(content);
-            }
-            table.find('li :first').addClass('active');
-            content.find('div :first').addClass('active');
-            return {table: table, content: content};
-        },
-
-        buildAttachmentNode: function (node, attachments) {
-            var tempNodes = [];
-            node.empty();
-            for (var i = 0; i < attachments.length; i++) {
-                tempNodes.push([$('<i>').addClass('icon-remove task-remove-attachment').attr('lnr', i),
-                                $('<i>').addClass('icon-paper-clip'),
-                                $('<div>').text(_.noI18n(attachments[i].name)).addClass('task-attachment-name'),
-                                $('<div>').text(_.noI18n(strings.fileSize(attachments[i].size))).addClass('task-attachment-filesize')]);
-            }
-            //check if we have an odd number of attachments
-            if (tempNodes.length !== 0 && tempNodes.length % 2 !== 0) {
-                tempNodes.push({});
-            }
-
-            for (var i = 0; i < tempNodes.length; i += 2) {
-                this.buildRow(node, [tempNodes[i], tempNodes[i + 1]], [6, 6], false);
-            }
-        },
-        
         buildConfirmationPopup: function (model, dialogs, isArray) {
             //build popup
             var popup = new dialogs.ModalDialog()
@@ -148,7 +125,7 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
                 note,
                 message,
                 state;
-                
+
             if (isArray) {//if model is actually an array with attributes it should work too but needs parameter or script stops working without notice...strange
                 title = model.title || '\u2014';
                 note  = model.note || '\u2014';
@@ -156,7 +133,7 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
                 title = model.get("title") || '\u2014';
                 note  = model.get("note") || '\u2014';
             }
-                
+
             body.append($("<h4>").text(_.noI18n(title)),
                         $('<div>').text(_.noI18n(note)).css({color: '#888', 'margin-bottom': '5px'}));
             util.buildRow(body, [[util.buildLabel(gt("Confirmation status", "confStateInput")),

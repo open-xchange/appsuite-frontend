@@ -43,7 +43,7 @@ define('io.ox/files/carousel',
         inner:          $('<div class="abs carousel-inner">'),
         prevControl:    $('<a class="carousel-control left">').text(gt.noI18n('‹')).attr('data-slide', 'prev'),
         nextControl:    $('<a class="carousel-control right">').text(gt.noI18n('›')).attr('data-slide', 'next'),
-        closeControl:   $('<button class="btn btn-primary closecarousel">').text(gt('Close')),
+        closeControl:   $('<button type="button" class="btn btn-primary closecarousel">').text(gt('Close')),
 
        /**
         * The config parameter used to initialize a carousel.
@@ -62,7 +62,8 @@ define('io.ox/files/carousel',
         * method is used to get the URL for the file.
         *
         */
-        config: {
+        config: {},
+        defaultconfig: {
             fullScreen: false,
             baton: null,
             step: 3,
@@ -72,11 +73,13 @@ define('io.ox/files/carousel',
         init: function (config) {
             this.inner.empty();
             this.container.empty().remove();
-            $.extend(this.config, config);
+            this.config = $.extend({}, this.defaultconfig, config);
 
             this.app = config.baton.app;
             if (config.attachmentMode) {
                 this.win = $('.window-container.io-ox-mail-window');
+            } else if (config.selector) {
+                this.win = $(config.selector);
             } else {
                 this.win = this.app.getWindow();
             }
@@ -212,7 +215,13 @@ define('io.ox/files/carousel',
 
         drawItem: function (file, index, isfirst) {
 
-            var item = this.inner.find('[data-index=' + index + ']');
+            var item = this.inner.find('[data-index=' + index + ']'), self = this;
+
+            function hChangeFolder(folder_id) {
+                self.app.folder.set(folder_id);
+                self.close();
+                self = null;
+            }
 
             if (this.firstStart) {
                 item.addClass('active');
@@ -226,7 +235,7 @@ define('io.ox/files/carousel',
                             .on('error', this.imgError) /* error doesn't seem to bubble */,
                         $('<div class="carousel-caption">').append(
                             $('<h4>').text(gt.noI18n(file.filename)),
-                            folderAPI.getBreadcrumb(file.folder_id, { handler: this.app.folder.set, subfolder: false, last: false })
+                            folderAPI.getBreadcrumb(file.folder_id, { handler: hChangeFolder, subfolder: false, last: false })
                         )
                     );
                 } else {
@@ -241,7 +250,6 @@ define('io.ox/files/carousel',
 
         prevItem: function () {
             if (this.prevControl.is(':visible')) {
-                console.log('prevItem');
                 if (!this.pos.sliding && this.pos.cur > 0) {
                     this.container.carousel('prev');
                 }
@@ -250,7 +258,6 @@ define('io.ox/files/carousel',
 
         nextItem: function () {
             if (this.nextControl.is(':visible')) {
-                console.log('nextItem');
                 if (!this.pos.sliding && this.pos.cur < (this.list.length - 1)) {
                     this.container.carousel('next');
                 }
@@ -260,7 +267,9 @@ define('io.ox/files/carousel',
         show: function () {
             var win;
             if (this.config.attachmentMode) {
-                win = $('.window-container.io-ox-mail-window');
+                win = $('.window-container:visible');
+            } else if (this.config.selector) {
+                win = $(this.config.selector);
             } else {
                 win = this.win.nodes.outer;
             }

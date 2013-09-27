@@ -20,21 +20,28 @@ define('io.ox/contacts/edit/view-form', [
     'io.ox/contacts/widgets/pictureUpload',
     'io.ox/core/tk/attachments',
     'io.ox/contacts/api',
+    'io.ox/contacts/util',
     'gettext!io.ox/contacts',
     'io.ox/core/capabilities',
+    'io.ox/core/extensions',
+    'io.ox/core/date',
+    'io.ox/backbone/mini-views',
+    'io.ox/backbone/mini-views/attachments',
     'less!io.ox/contacts/edit/style.less'
-], function (model, views, forms, actions, links, PictureUpload, attachments, api, gt, capabilities) {
+], function (model, views, forms, actions, links, PictureUpload, attachments, api, util, gt, capabilities, ext, date, mini, attachmentViews) {
 
     "use strict";
 
-    var dateField, city;
-
     var meta = {
         sections: {
-            personal: ['title', 'first_name', 'last_name', 'display_name',
+            personal: ['title', 'first_name', 'last_name', /*'display_name',*/ // yep, end-users don't understand it
                          'second_name', 'suffix', 'nickname', 'birthday',
                          'marital_status', 'number_of_children', 'spouse_name',
                          'anniversary', 'url'],
+            job: ['profession', 'position', 'department', 'company', 'room_number',
+                    'employee_type', 'number_of_employees', 'sales_volume', 'tax_id',
+                    'commercial_register', 'branches', 'business_category', 'info',
+                    'manager_name', 'assistant_name'],
             messaging: ['email1', 'email2', 'email3', 'instant_messenger1', 'instant_messenger2'],
             phone:  ['cellular_telephone1', 'cellular_telephone2',
                       'telephone_business1', 'telephone_business2',
@@ -52,36 +59,47 @@ define('io.ox/contacts/edit/view-form', [
                                'country_business'],
             other_address: ['street_other', 'postal_code_other', 'city_other',
                             'state_other', 'country_other'],
-            job: ['profession', 'position', 'department', 'company', 'room_number',
-                    'employee_type', 'number_of_employees', 'sales_volume', 'tax_id',
-                    'commercial_register', 'branches', 'business_category', 'info',
-                    'manager_name', 'assistant_name'],
+
+            comment: ['note'],
+
             userfields: ['userfield01', 'userfield02', 'userfield03', 'userfield04', 'userfield05',
                         'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10',
                         'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15',
                         'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20'],
-            comment: ['note'],
-            misc: ['private_flag'],
-            attachments: ['attachments_list', 'attachments_buttons']
+            attachments: ['attachments_list']
         },
 
-        rare: ['nickname', 'marital_status', 'number_of_children', 'spouse_name', 'url', 'anniversary',
-               // phone
-               'telephone_company', 'fax_home', 'fax_other',
+        rare: ['nickname', 'marital_status', 'number_of_children', 'spouse_name', 'anniversary',
+               // phones
+               'telephone_company', 'fax_other',
                'telephone_car', 'telephone_isdn', 'telephone_pager', 'telephone_primary',
                'telephone_radio', 'telephone_telex', 'telephone_ttytdd', 'telephone_assistant',
                'telephone_callback', 'telephone_ip',
                // job
                'number_of_employees', 'sales_volume', 'tax_id', 'commercial_register', 'branches',
-               'business_category', 'info', 'manager_name', 'assistant_name', 'employee_type',
+               'business_category', 'info', 'manager_name', 'assistant_name', 'employee_type'
                // optional
-               'userfield04', 'userfield05',
-               'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10',
-               'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15',
-               'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20'
+               // 'userfield04', 'userfield05',
+               // 'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10',
+               // 'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15',
+               // 'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20'
                ],
 
-        alwaysVisible: ['first_name', 'last_name', 'display_name', 'email1', 'cellular_telephone1'],
+        alwaysVisible: [
+            'title', 'first_name', 'last_name', 'birthday',
+            'position', 'department', 'company',
+            'email1', 'email2', 'instant_messenger1',
+            'cellular_telephone1', 'telephone_home1',
+            'street_home', 'postal_code_home', 'city_home', 'state_home', 'country_home',
+            'note',
+            'attachments_list'
+        ],
+
+        input_type: {
+            'email1': 'email',
+            'email2': 'email',
+            'email3': 'email'
+        },
 
         i18n: {
             personal: gt('Personal information'),
@@ -93,112 +111,7 @@ define('io.ox/contacts/edit/view-form', [
             job: gt('Job description'),
             comment: gt('Comment'),
             userfields: gt('User fields'),
-            misc: //#. section name for contact inputfields that does not fit somewhere else
-                  gt('Miscellaneous'),
             attachments: gt('Attachments')
-        },
-
-        special: {
-            note: function (options) {
-                options.point.extend(new forms.ControlGroup({
-                    id: options.field,
-                    index: options.index,
-                    label: model.fields[options.field],
-                    control: '<textarea rows="12" class="span6" name="' + options.field + '">',
-                    rare: options.isRare,
-                    attribute: options.field
-                }), {
-                    hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
-                        return !model.isSet(options.field);
-                    }
-                });
-            },
-
-            birthday: dateField,
-            anniversary: dateField,
-            private_flag: function (options) {
-                options.point.extend(new forms.CheckBoxField({
-                    id: options.field,
-                    index: options.index,
-                    label: model.fields[options.field],
-                    labelClassName: 'private-flag',
-                    rare: options.isRare,
-                    attribute: options.field
-                }), {
-                    hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
-                        return (model.attributes.private_flag === undefined || model.attributes.private_flag === false);
-                    }
-                });
-            },
-            attachments_list: function (options) {
-                options.point.extend(new attachments.EditableAttachmentList({
-                    id: options.field,
-                    registerAs: 'attachmentList',
-                    className: 'div',
-                    index: options.index,
-                    module: 7,
-                    finishedCallback: function (model, id) {
-                        var attr = model.attributes;
-                        api.get({ id: id, folder: attr.folder_id }, false)
-                            .pipe(function (data) {
-                                return $.when(
-                                    api.caches.get.add(data),
-                                    api.caches.all.grepRemove(attr.folder_id + api.DELIM),
-                                    api.caches.list.remove({ id: attr.id, folder: attr.folder_id }),
-                                    api.clearFetchCache()
-                                )
-                                .done(function () {
-                                    api.removeFromUploadList(encodeURIComponent(_.cid(data)));//to make the detailview remove the busy animation
-                                    api.trigger('refresh.list');
-                                });
-                            });
-                    }
-                }), {
-                    hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
-                        return (model.attributes.number_of_attachments === undefined || model.attributes.number_of_attachments === 0);
-                    }
-                });
-            },
-            attachments_buttons: function (options) {
-                options.point.extend({
-                    id: options.field,
-                    index: options.index,
-                    render: function (baton) {
-                        var baton = this.baton,
-                            $node = $('<form>').appendTo(this.$el).attr('id', 'attachmentsForm'),
-                            $inputWrap = attachments.fileUploadWidget({displayButton: false, multi: true}),
-                            $input = $inputWrap.find('input[type="file"]')
-                                .on('change', function (e) {
-                            e.preventDefault();
-                            if (_.browser.IE !== 9) {
-                                _($input[0].files).each(function (fileData) {
-                                    baton.attachmentList.addFile(fileData);
-                                });
-                                $input.trigger('reset.fileupload');
-                            } else {
-                                if ($input.val()) {
-                                    var fileData = {
-                                        name: $input.val().match(/[^\/\\]+$/),
-                                        size: 0,
-                                        hiddenField: $input
-                                    };
-                                    baton.attachmentList.addFile(fileData);
-                                    $input.addClass('add-attachment').hide();
-                                    $input = $('<input>', { type: 'file' }).appendTo($input.parent());
-                                }
-                            }
-                        }).on('focus', function () {
-                            $input.attr('tabindex', '1');
-                        });
-
-                        $node.append($('<div>').addClass('contact_attachments_buttons').append($inputWrap));
-                    }
-                }, {
-                    hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
-                        return (model.attributes.number_of_attachments === undefined || model.attributes.number_of_attachments === 0);
-                    }
-                });
-            }
         }
     };
 
@@ -206,6 +119,10 @@ define('io.ox/contacts/edit/view-form', [
     if (!capabilities.has('infostore')) {
         delete meta.sections.attachments;
         delete meta.i18n.attachments;
+    }
+
+    if (capabilities.has('gab')) {
+        meta.sections.personal.push('private_flag');
     }
 
     _.each(['home', 'business', 'other'], function (type) {
@@ -218,113 +135,184 @@ define('io.ox/contacts/edit/view-form', [
             //#. %4$s is the state
             //#. %5$s is the country
             gt('%1$s\n%2$s %3$s\n%4$s\n%5$s'),
-            function (i) { return fields[i]; }, $.noop));
+            function (i) { return fields[i]; }, $.noop)
+        );
     });
 
-    function dateField(options) {
-        options.point.extend(new forms.DateControlGroup({
-            id: options.field,
-            index: options.index,
-            label: model.fields[options.field],
-            attribute: options.field,
-            rare: options.isRare
-        }), {
-            hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
-                return !model.isSet(options.field);
-            }
-        });
-    }
-
     function createContactEdit(ref) {
-        if (ref === 'io.ox/core/user') {// Remove attachment handling if view is used with user data instead of contact data
+        var isMyContactData = ref === 'io.ox/core/user';
+
+        if (isMyContactData) { // Remove attachment handling if view is used with user data instead of contact data
             delete meta.sections.attachments;
             delete meta.i18n.attachments;
         }
-        var point = views.point(ref + '/edit/view'),
+
+        var point = views.point(ref + '/edit'),
+
             ContactEditView = point.createView({
                 tagName: 'div',
-                className: 'edit-contact'
+                className: 'edit-contact compact container-fluid'
             });
 
         point.extend(new PictureUpload({
-            id: ref + '/edit/view/picture',
+            id: ref + '/edit/picture',
             index: 100,
             customizeNode: function () {
-                this.$el.css({
-                    display: 'inline-block',
-                    height: "100px"
-                }).addClass("span2 header-pic");
+                //access to global address book?
+                if (isMyContactData && !capabilities.has('gab')) {
+                    this.$el = $('');
+                } else {
+                    this.$el
+                        .css({ display: 'inline-block' })
+                        .addClass("contact-picture-upload f6-target");
+                }
             }
-        }));
-
-        point.extend(new views.AttributeView({
-            id: ref + '/edit/view/display_name_header',
-            index: 150,
-            tagName: 'div',
-            className: 'clear-title',
-            attribute: 'display_name'
-        }));
-
-        point.extend(new views.AttributeView({
-            id: ref + '/edit/view/profession_header',
-            index: 170,
-            tagName: 'div',
-            className: 'clear-title job',
-            attribute: ['company', 'position', 'profession']
-        }));
-
-        point.basicExtend({
-            id: ref + '/edit/view/headerBreak',
-            index: 200,
-            draw: function () {
-                this.append($('<div>').css({clear: 'both'}));
-            }
-        });
-
-        // Show backend errors
-        point.extend(new forms.ErrorAlert({
-            id: ref + '/edit/view/backendErrors',
-            className: 'span7',
-            index: 250,
-            customizeNode: function () {
-                this.$el.css({
-                    marginTop: '15px'
-                });
-            }
-        }));
-
-        // Actions
-        point.basicExtend(new links.InlineLinks({
-            index: 300,
-            id: 'inline-actions',
-            ref: ref + '/edit/view/inline',
-            classes: 'form-horizontal',
-            customizeNode: function ($node) {
-                $node.addClass("controls");
-                $node.css({marginBottom: '20px', clear: 'both'});
-            }
-        }));
-
-        views.ext.point(ref + "/edit/view/inline").extend(new links.Button({
-            id: "discard",
-            index: 100,
-            label: gt("Discard"),
-            ref: ref + "/actions/edit/discard",
-            cssClasses: "btn control",
-            tabIndex: 11,
-            tagtype: "button"
         }));
 
         // Save
-        views.ext.point(ref + "/edit/view/inline").extend(new links.Button({
-            id: "save",
+        if (!isMyContactData) {
+            point.basicExtend(new links.Button({
+                id: "save",
+                index: 110,
+                label: gt("Save"),
+                ref: ref + "/actions/edit/save",
+                cssClasses: "btn btn-primary control f6-target",
+                tabIndex: 2,
+                tagtype: "button"
+            }));
+
+            point.basicExtend(new links.Button({
+                id: "discard",
+                index: 120,
+                label: gt("Discard"),
+                ref: ref + "/actions/edit/discard",
+                cssClasses: "btn control",
+                tabIndex: 3,
+                tagtype: "button"
+            }));
+        }
+
+        /*
+         * extension point for mobile toolbar on the bottom of the page
+         */
+        ext.point('io.ox/contacts/edit/bottomToolbar').extend({
+            id: 'toolbar',
             index: 100,
-            label: gt("Save"),
-            ref: ref + "/actions/edit/save",
-            cssClasses: "btn btn-primary control",
-            tabIndex: 10,
-            tagtype: "button"
-        }));
+            draw: function (baton) {
+                var node = $(this.attributes.window.nodes.body),
+                    toolbar = $('<div class="app-bottom-toolbar">');
+                // due to the very strange usage of extension points in contacts module
+                // we have to do move the buttons the old-school way
+                toolbar.append(node.find('[data-action="save"], [data-action="discard"]'));
+                node.append(toolbar);
+            }
+
+        });
+
+        function toggle(e) {
+
+            e.preventDefault();
+
+            var node = $(this).closest('.edit-contact');
+
+            // update "has-content" class
+            node.find('.field input[type="text"]').each(function () {
+                var input = $(this),
+                    field = input.closest('.field'),
+                    hasContent = $.trim(input.val()) !== '';
+                field.toggleClass('has-content', hasContent);
+            });
+
+            node.toggleClass('compact');
+
+            var isCompact = node.hasClass('compact'),
+                label = isCompact ? gt('Extended view') : gt('Compact view'),
+                icon = isCompact ? 'icon-expand-alt' : 'icon-collapse-alt';
+
+            // update hidden
+            node.find('.block').each(function () {
+                var block = $(this),
+                    hidden = isCompact && block.children('p.has-content, p.always').length === 0;
+                block.removeClass('odd even hidden');
+                if (hidden) block.addClass('hidden');
+            });
+
+            // update odd/even
+            node.find('.block:not(.hidden)').each(function (index) {
+                var block = $(this);
+                block.addClass(index % 2 ? 'even' : 'odd');
+            });
+
+            node.find('.toggle-compact')
+                .find('i').attr('class', icon).end()
+                .find('a').text(label);
+        }
+
+        var FullnameView = mini.AbstractView.extend({
+            tagName: 'h1',
+            className: 'name',
+            setup: function (options) {
+                this.listenTo(this.model, 'change:first_name change:last_name change:title', this.render);
+            },
+            render: function () {
+                this.$el.text(util.getFullName(this.model.toJSON()) || '\u00A0');
+                //fix top margin if picture upload was removed
+                if (isMyContactData && !capabilities.has('gab'))
+                    this.$el.css('margin-top', '0px');
+                return this;
+            }
+        });
+
+        var JobView = mini.AbstractView.extend({
+            tagName: 'h2',
+            className: 'job',
+            setup: function (options) {
+                this.listenTo(this.model, 'change:position change:department change:company', this.render);
+            },
+            render: function () {
+                this.$el.text(util.getJob(this.model.toJSON()) || '\u00A0');
+                return this;
+            }
+        });
+
+        point.basicExtend({
+            id: 'summary',
+            index: 150,
+            draw: function (baton) {
+
+                this.append(
+                    new FullnameView({ model: baton.model }).render().$el,
+                    new JobView({ model: baton.model }).render().$el,
+                    $('<nav class="toggle-compact">').append(
+                        $('<a href="#" tabindex="1">').click(toggle).text(gt('Extended view')),
+                        $.txt(' '),
+                        $('<i class="icon-expand-alt">')
+                    )
+                    //$('<div class="clear">')
+                );
+            }
+        });
+
+        point.basicExtend({
+            id: 'final',
+            index: 'last',
+            draw: function (baton) {
+                var link;
+                this.append(
+                    $('<nav class="toggle-compact clear">').append(
+                        link = $('<a href="#" tabindex="1">').click(toggle).text(gt('Extended view')),
+                        $.txt(' '),
+                        $('<i class="icon-expand-alt">')
+                    )
+                );
+
+                var inputs = this.find('.field').not('.rare,[data-field="attachments_list"]').not('.has-content');//check if all non rare non attachment fields are filled
+
+                if (inputs.length === 0) {//if all fields are filled the link must be compact view, not extend view
+                    link.trigger('click');//only one button must trigger this
+                }
+            }
+        });
 
         // attachment Drag & Drop
         views.ext.point('io.ox/contacts/edit/dnd/actions').extend({
@@ -332,8 +320,10 @@ define('io.ox/contacts/edit/view-form', [
             index: 100,
             label: gt('Drop here to upload a <b class="dndignore">new attachment</b>'),
             multiple: function (files, view) {
+                // get attachmentList view
+                var attachmentList = view.baton.parentView.$el.find('.attachment-list').data('view');
                 _(files).each(function (fileData) {
-                    view.baton.attachmentList.addFile(fileData);
+                    attachmentList.addFile(fileData);
                 });
             }
         });
@@ -341,17 +331,25 @@ define('io.ox/contacts/edit/view-form', [
         // Edit Actions
         new actions.Action(ref + '/actions/edit/save', {
             id: 'save',
-            action: function (options, baton) {
-                //check if attachments are changed
-                if (options.attachmentList && (options.attachmentList.attachmentsToDelete.length > 0 || options.attachmentList.attachmentsToAdd.length > 0)) {
-                    options.model.attributes.tempAttachmentIndicator = true;//temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
+            action: function (baton) {
+
+                // check if attachments are changed
+                var view = baton.parentView.$el.find('.attachment-list').data('view');
+                if (view && view.isDirty()) {
+                    // set temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
+                    view.model.set('tempAttachmentIndicator', true);
                 }
-                options.parentView.trigger('save:start');
-                options.model.save().done(function () {
-                    options.parentView.trigger('save:success');
-                }).fail(function () {
-                    options.parentView.trigger('save:fail');
-                });
+
+                baton.parentView.trigger('save:start');
+
+                baton.model.save().then(
+                    function success() {
+                        baton.parentView.trigger('save:success');
+                    },
+                    function fail(e) {
+                        baton.parentView.trigger('save:fail', e);
+                    }
+                );
             }
         });
 
@@ -362,70 +360,195 @@ define('io.ox/contacts/edit/view-form', [
                     //invoked by sidepopup (portal); uses event of hidden sidebar-close button
                     $('.io-ox-sidepopup').find('[data-action="close"]').trigger('click');
                 }
-                else
-                    options.parentView.$el.find('[data-action="discard"]').trigger('controller:quit');
+                else {
+                    var button;
+                    if (_.device('small')) {
+                        // really not so nice...
+                        button = options.parentView.$el.parent().parent().parent().find('[data-action="discard"]');
+                    } else {
+                        button = options.parentView.$el.find('[data-action="discard"]');
+                    }
+                    button.trigger('controller:quit');
+                }
             }
         });
 
         new actions.Action(ref + '/actions/edit/reset-image', {
             id: 'imagereset',
             action: function (baton) {
-                baton.model.set("image1", '', {validate: true});
+                baton.model.set("image1", '', { validate: true });
                 var imageUrl =  ox.base + '/apps/themes/default/dummypicture.png';
                 baton.parentView.$el.find('.picture-uploader').css('background-image', 'url(' + imageUrl + ')');
             }
         });
 
-        var index = 400;
-
-        _(meta.sections).each(function (fields, id) {
-            var uid = ref + '/edit/' + id,
-                section = {};
-            point.extend(new forms.Section({
-                id: id,
-                index: index,
-                title: meta.i18n[id],
-                ref: uid
-            }));
-
-            section.point = views.point(uid);
-            index += 100;
-
-            var fieldIndex = 100;
-            _(fields).each(function (field) {
-
-                var isAlwaysVisible = _(meta.alwaysVisible).indexOf(field) > -1,
-                    isRare = _(meta.rare).indexOf(field) > -1;
-
-                if (meta.special[field]) {
-                    meta.special[field]({
-                        point: section.point,
-                        uid: id,
-                        field: field,
-                        index: fieldIndex,
-                        isAlwaysVisible: isAlwaysVisible,
-                        isRare: isRare
-                    });
-                } else {
-                    section.point.extend(new forms.ControlGroup({
-                        id: field,
-                        index: fieldIndex,
-                        label: model.fields[field],
-                        control: '<input type="text" class="input-xlarge" name="' + field + '">',
-                        rare: isRare,
-                        attribute: field
-                    }), {
-                        hidden: isAlwaysVisible ? false : isRare ? true : function (model) {
-                            return !model.isSet(field);
-                        }
-                    });
+        function drawDefault(options, model) {
+            this.append(
+                $('<label class="input">').append(
+                    $.txt(options.label), $('<br>'),
+                    new mini.InputView({ name: options.field, model: model }).render().$el,
+                    $('<div class="inline-error" aria-live="assertive">').hide()
+                )
+            )
+            .on({
+                invalid: function (e, message, error) {
+                    $(this).addClass('error')
+                        .find('.inline-error').text(message).show().end()
+                        .find('input').attr('aria-invalid', true).focus();
+                },
+                valid: function () {
+                    $(this).removeClass('error')
+                        .find('.inline-error').text('').hide().end()
+                        .find('input').removeAttr('aria-invalid');
                 }
+            });
+        }
 
-                fieldIndex += 100;
+        function drawTextarea(options, model) {
+            this.append(
+                $('<label>').append(
+                    $.txt('\u00A0'), $('<br>'),
+                    new mini.TextView({ name: options.field, model: model }).render().$el
+                )
+            );
+        }
+
+        function drawDate(options, model) {
+            this.append(
+                $('<fieldset>').append(
+                    $('<legend class="simple">').text(options.label),
+                    // don't wrap the date control with a label (see bug #27559)
+                    new mini.DateView({ name: options.field, model: model }).render().$el
+                )
+            );
+        }
+
+        function drawCheckbox(options, model) {
+            this.append(
+                $('<label class="checkbox">').append(
+                    new mini.CheckboxView({ name: options.field, model: model }).render().$el,
+                    $.txt(' '),
+                    $.txt(options.label)
+                )
+            );
+        }
+
+        function propagateAttachmentChange(model, id) {
+
+            var folder_id = model.get('folder_id'), id = model.get('id') || id;
+
+            return api.get({ id: id, folder: folder_id }, false)
+                .then(function (data) {
+                    return $.when(
+                        api.caches.get.add(data),
+                        api.caches.all.grepRemove(folder_id + api.DELIM),
+                        api.caches.list.remove({ id: id, folder: folder_id }),
+                        api.clearFetchCache()
+                    )
+                    .done(function () {
+                        // to make the detailview remove the busy animation:
+                        api.removeFromUploadList(_.ecid(data));
+                        api.trigger('refresh.list');
+                    });
+                });
+        }
+
+        function drawAttachments(options, model, baton) {
+            this.append(
+                baton.$.form = $('<form>').append(
+                    new attachmentViews.ListView({
+                        model: model,
+                        module: 7,
+                        changeCallback: propagateAttachmentChange
+                    }).render().$el,
+                    new attachmentViews.UploadView({ model: model }).render().$el
+                )
+            );
+        }
+
+        var index = 400,
+            draw = {
+                birthday: drawDate,
+                anniversary: drawDate,
+                note: drawTextarea,
+                private_flag: drawCheckbox,
+                attachments_list: drawAttachments
+            };
+
+        // loop over all sections (personal, messaging, phone etc.)
+        // to get list of relevant fields per section
+        _(meta.sections).each(function (fields, id) {
+            // create new "block" extension
+            ext.point(ref + '/edit').extend({
+                id: id,
+                index: index += 100,
+                draw: function (baton) {
+
+                    // a block has a fixed width and floats left
+                    var guid = _.uniqueId('group-'),
+                        block = $('<div class="block" role="group">')
+                            .attr({ 'data-id': id, 'aria-labelledby': guid })
+                            .append(
+                                $('<h2 class="group">')
+                                .attr('id', guid)
+                                .text(meta.i18n[id])
+                            );
+
+                    if (id === 'attachments') block.addClass('double-block');
+                    if (id === 'userfields') block.addClass('double-block two-columns');
+
+                    // draw fields inside block
+                    ext.point(ref + '/edit/' + id).invoke('draw', block, baton);
+
+                    this.append(block);
+
+                    // hide block if block contains no paragraph with content
+                    if (block.children('p.has-content, p.always').length === 0) {
+                        block.addClass('hidden');
+                    } else {
+                        var position = this.find('.block:not(.hidden)').length;
+                        block.addClass(position % 2 ? 'odd' : 'even');
+                    }
+                }
             });
 
-        });
+            // create extensions for each field
+            _(fields).each(function (field, index) {
 
+                ext.point(ref + '/edit/' + id).extend({
+                    id: field,
+                    index: 100 + index * 100,
+                    draw: function (baton) {
+
+                        var value = baton.model.get(field),
+                            isAlwaysVisible = _(meta.alwaysVisible).indexOf(field) > -1,
+                            isRare = _(meta.rare).indexOf(field) > -1,
+                            hasContent = !!value,
+                            paragraph,
+                            options = {
+                                index: index,
+                                field: field,
+                                label: model.fields[field],
+                                value: value
+                            };
+
+                        paragraph = $('<p>')
+                            .attr('data-field', field)
+                            .addClass(
+                                'field' +
+                                (isAlwaysVisible ? ' always' : '') +
+                                (hasContent ? ' has-content' : '') +
+                                (isRare ? ' rare' : '')
+                            );
+
+                        // call requires "draw" method
+                        (draw[field] || drawDefault).call(paragraph, options, baton.model, baton);
+
+                        this.append(paragraph);
+                    }
+                });
+            });
+        });
         return ContactEditView;
     }
 

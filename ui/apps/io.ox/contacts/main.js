@@ -19,7 +19,7 @@ define("io.ox/contacts/main",
      "io.ox/core/tk/vgrid",
      "io.ox/help/hints",
      "io.ox/contacts/view-detail",
-     "io.ox/core/config",
+     'io.ox/core/tk/dropdown-options',
      "io.ox/core/extensions",
      "io.ox/core/extPatterns/actions",
      "io.ox/core/commons",
@@ -27,7 +27,7 @@ define("io.ox/contacts/main",
      "settings!io.ox/contacts",
      "io.ox/core/api/folder",
      "less!io.ox/contacts/style.less"
-    ], function (util, api, VGrid, hints, viewDetail, config, ext, actions, commons, gt, settings, folderAPI) {
+    ], function (util, api, VGrid, hints, viewDetail, dropdownOptions, ext, actions, commons, gt, settings, folderAPI) {
 
     "use strict";
 
@@ -49,6 +49,7 @@ define("io.ox/contacts/main",
 
     // launcher
     app.setLauncher(function (options) {
+
         var showSwipeButton = false,
             hasDeletePermission;
         // get window
@@ -60,16 +61,35 @@ define("io.ox/contacts/main",
         app.setWindow(win);
         app.settings = settings;
 
+        function thumbClick(e) {
+            var text = $(this).data('text');
+            if (text) grid.scrollToLabelText(text, /* silent? */ _.device('small'));
+        }
+
+        function thumbMove(e) {
+            e.preventDefault();
+            if (e.originalEvent && e.originalEvent.targetTouches) {
+                var touches = e.originalEvent.targetTouches[0],
+                    x = touches.clientX,
+                    y = touches.clientY,
+                    element = document.elementFromPoint(x, y),
+                    text = $(element).data('text');
+                if (text) grid.scrollToLabelText(text, /* silent? */ _.device('small'));
+            }
+        }
+
         var vsplit = commons.vsplit(win.nodes.main, app);
         left = vsplit.left;
-        right = vsplit.right.addClass('default-content-padding').scrollable();
+        right = vsplit.right.addClass('default-content-padding f6-target').attr('tabindex', 1).scrollable();
 
         // left panel
         left.append(
             // grid container
             gridContainer = $('<div class="abs border-left border-right contact-grid-container">'),
             // thumb index
-            thumbs = $('<div class="atb contact-grid-index border-right">')
+            thumbs = $('<div class="atb contact-grid-index">')
+                .on('click', '.thumb-index', thumbClick)
+                .on('touchmove', thumbMove)
         );
 
         // folder tree
@@ -84,21 +104,22 @@ define("io.ox/contacts/main",
                     removeButton();
                 }
                 this.append(
-                    $('<div class="btn btn-danger swipeDelete fadein">')
+                    $('<div class="mail cell-button swipeDelete fadein fast">')
                         .text(gt('Delete'))
                         .on('mousedown', function (e) {
                             // we have to use mousedown as the selection listens to this, too
                             // otherwise we are to late to get the event
+                            e.stopImmediatePropagation();
+                        }).on('tap', function (e) {
                             e.preventDefault();
-
-                            actions.invoke('io.ox/contacts/actions/delete', null, baton);
                             removeButton();
+                            showSwipeButton = false;
+                            actions.invoke('io.ox/contacts/actions/delete', null, baton);
                         })
                 );
                 showSwipeButton = true;
             }
         });
-
 
         // swipe handler
         var swipeRightHandler = function (e, id, cell) {
@@ -123,7 +144,8 @@ define("io.ox/contacts/main",
         // grid
         grid = new VGrid(gridContainer, {
             settings: settings,
-            swipeRightHandler: swipeRightHandler
+            swipeRightHandler: swipeRightHandler,
+            showToggle: true//_.device('smartphone') ? false: true
         });
 
         // helper to remove button from grid
@@ -169,6 +191,8 @@ define("io.ox/contacts/main",
                         // nothing is written down, add some text, so user isn’t confused
                         fields.name.addClass('bright-text').append(gt("Empty name and description found."));
                         fields.description.append(gt("Edit to set a name."));
+                    } else {
+                        fields.name.removeClass('bright-text');
                     }
                 }
             }
@@ -176,7 +200,7 @@ define("io.ox/contacts/main",
 
         // The label function can be overwritten by an extension.
         var getLabel = function (data) {
-            return (data.sort_name || '#').slice(0, 1).toUpperCase();
+            return (data.sort_name || '').slice(0, 1).toUpperCase();
         };
         ext.point('io.ox/contacts/getLabel').each(function (extension) {
             if (extension.getLabel) getLabel = extension.getLabel;
@@ -195,6 +219,9 @@ define("io.ox/contacts/main",
         grid.requiresLabel = function (i, data, current) {
             if (!data) { return false; }
             var prefix = getLabel(data);
+            prefix = prefix.replace(/[ÄÀÁÂÃÄÅ]/g, 'A')
+                .replace(/[ÖÒÓÔÕÖ]/g, 'O')
+                .replace(/[ÜÙÚÛÜ]/g, 'U');
             return (i === 0 || prefix !== current) ? prefix : false;
         };
 
@@ -261,11 +288,10 @@ define("io.ox/contacts/main",
         }
 
         Thumb.prototype.draw = function (baton) {
-            var node = $('<div>')
-                .addClass('thumb-index border-bottom')
+            var node = $('<div class="thumb-index">')
                 .text(this.label || _.noI18n(this.text));
             if (this.enabled(baton)) {
-                node.on('click', { text: this.text }, grid.scrollToLabelText);
+                node.data('text', this.text);
             } else {
                 node.addClass('thumb-index-disabled');
             }
@@ -288,9 +314,8 @@ define("io.ox/contacts/main",
         grid.on('change:ids', function () {
             hasDeletePermission = undefined;
             removeButton();
-            if (_.device('!small')) {
-                ext.point('io.ox/contacts/thumbIndex')
-                .invoke('draw', thumbs, baton);
+            if (true || _.device('!small')) {
+                ext.point('io.ox/contacts/thumbIndex').invoke('draw', thumbs, baton);
             }
         });
 
@@ -298,13 +323,15 @@ define("io.ox/contacts/main",
             index: 100,
             id: 'draw',
             draw: function () {
+
                 // get labels
                 baton.labels = grid.getLabels().textIndex || {};
+
                 // update thumb listf
-                ext.point('io.ox/contacts/thumbIndex')
-                    .invoke('getIndex', thumbs, baton);
+                ext.point('io.ox/contacts/thumbIndex').invoke('getIndex', thumbs, baton);
 
                 thumbs.empty();
+
                 _(baton.data).each(function (thumb) {
                     thumbs.append(thumb.draw(baton));
                 });
@@ -328,30 +355,49 @@ define("io.ox/contacts/main",
             addresses: true
         });
 
+        var translations = { names: gt('Names and email addresses'), phones: gt('Phone numbers'), addresses: gt('Addresses')},
+            checkboxes = ext.point('io.ox/contacts/search/checkboxes').options(),
+            defaults = ext.point('io.ox/contacts/search/defaults').options(),
+            data = {}, button;
 
-        win.nodes.search.find('.input-append').append(
-            _(ext.point('io.ox/contacts/search/checkboxes').options()).map(function (flag, name) {
-                var defaults = ext.point('io.ox/contacts/search/defaults').options();
-                return flag === true ?
-                    $('<label class="checkbox margin-right">').append(
-                        $('<input type="checkbox" value="on">').attr({ name: name, checked: defaults[name] ? 'checked' : null }),
-                        $.txt({ names: gt('Names and e-mail addresses'), phones: gt('Phone numbers'), addresses: gt('Addresses')}[name])
-                    ) :
-                    $();
-            })
-        );
+        //normalise data
+        _(checkboxes).each(function (flag, name) {
+            if (flag === true) {
+                data[name] = {
+                    name: name,
+                    label: translations[name] || name,
+                    checked: defaults[name] || false
+                };
+            }
+        });
 
+        //add dropdown button
+        button = $('<button type="button" data-action="search-options" class="btn fixed-btn search-options" aria-hidden="true">')
+                .append('<i class="icon-gear">');
+        win.nodes.search.find('.search-query-container').after(button);
+
+        //add dropdown menue
+        var dropdown = dropdownOptions({
+            id: 'contacts.search',
+            anchor: button,
+            defaults: data,
+            settings: settings
+        });
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, right);
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(grid, api, win);
-        commons.addGridToolbarFolder(app, grid);
+        commons.addGridToolbarFolder(app, grid, 'CONTACTS');
 
         api.on('update:image', function (evt, updated) {
             if (updated.folder === app.currentContact.folder_id && updated.id === app.currentContact.id) {
                 showContact(app.currentContact);
             }
+        });
+
+        api.on('create update delete refresh.all', function () {
+            folderAPI.reload(app.folder.get());
         });
 
         app.getGrid = function () {

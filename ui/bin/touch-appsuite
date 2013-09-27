@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+# This script updates all timestamps in the HTML files of OX App Suite.
+#
+# This file is licensed under a Creative Commons License.
+#
+# http://creativecommons.org/licenses/by-nc-sa/2.5/
+#
+# Copyright (C) Open-Xchange Inc., 2013
+# Mail: info@open-xchange.com
+
+## cd ##
+
+if [ ! -f core ]; then
+    echo "HTML files not found in $(pwd)" >&2
+    exit 1
+fi
+
+VERSION=$(sed -n \
+    '/v=/{s/^.*v=\([0-9A-Za-z._-]*\)\.[0-9]\{8\}\.[0-9]\{6\}.*$/\1/p;q}' \
+    core.appcache)
+
+NOW=$(date -u +%Y%m%d.%H%M%S)
+
+for f in core signin core.appcache signin.appcache; do
+    sed -i "s/${VERSION}"'\.[0-9]\{8\}\.[0-9]\{6\}/'"${VERSION}.${NOW}/g" "$f"
+done

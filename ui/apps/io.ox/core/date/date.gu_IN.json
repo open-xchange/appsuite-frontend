@@ -59,22 +59,23 @@
     "formats": {
         "E": "E",
         "yMd": "d/M/y",
-        "yMEd": "E, M/d/y",
-        "yMMMd": "d, MMM y",
-        "yMMMEd": "E, MMM d, y",
-        "hm": "hh:mm a",
+        "yMEd": "E, d/M/y",
+        "yMMMd": "d MMM, y",
+        "yMMMEd": "E, d MMM, y",
+        "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "d/M",
         "Hmv": "HH:mm v",
-        "hmv": "hh:mm a v",
+        "hmv": "h:mm a v",
         "yMdHm": "d/M/y HH:mm",
         "yMdHmv": "d/M/y HH:mm v",
-        "yMdhm": "d/M/y hh:mm a",
-        "yMdhmv": "d/M/y hh:mm a v",
-        "yMEdHm": "E, M/d/y HH:mm",
-        "yMEdHmv": "E, M/d/y HH:mm v",
-        "yMEdhm": "E, M/d/y hh:mm a",
-        "yMEdhmv": "E, M/d/y hh:mm a v"
+        "yMdhm": "d/M/y h:mm a",
+        "yMdhmv": "d/M/y h:mm a v",
+        "yMEdHm": "E, d/M/y HH:mm",
+        "yMEdHmv": "E, d/M/y HH:mm v",
+        "yMEdhm": "E, d/M/y h:mm a",
+        "yMEdhmv": "E, d/M/y h:mm a v"
     },
     "date": "d MMM, y",
     "time": "hh:mm a",
@@ -100,14 +101,14 @@
             "m": "HH:mm–HH:mm v"
         },
         "yMMMd": {
-            "d": "d-d MMM,y",
-            "m": "d MMM-d MMM y",
-            "y": "d MMM,y-d MMM,y"
+            "d": "d–d MMM, y",
+            "m": "d MMM – d MMM, y",
+            "y": "d MMM, y – d MMM, y"
         },
         "yMMMEd": {
-            "d": "E, d MMM-E, d MMM y",
-            "m": "E,d MMM-E,d MMM y",
-            "y": "E, d MMM y-E, d MMM y"
+            "d": "E, d MMM – E, d MMM, y",
+            "m": "E, d MMM – E, d MMM, y",
+            "y": "E, d MMM, y – E, d MMM, y"
         }
     },
     "dayPeriods": {
@@ -115,8 +116,8 @@
         "pm": "PM"
     },
     "eras": [
-        "ઈલુના જન્મ પહેસાં",
-        "ઇસવીસન"
+        "સામાન્ય યુગ પહેલા",
+        "સામાન્ય યુગ"
     ],
     "dateTime": "d MMM, y hh:mm a",
     "h12": true

@@ -15,7 +15,7 @@ files = [
   'lib/underscore.js',
   'lib/require.js',
   'spec/main-test.js',
-  'lib/jquery.min.js',
+  'lib/jquery.js',
   'lib/require-fix.js',
   {pattern: 'spec/**/*_spec.js', included: false},
   {pattern: 'spec/shared/**/*.js'},
@@ -66,7 +66,7 @@ autoWatch = true;
 // - Safari (only Mac)
 // - PhantomJS
 // - IE (only Windows)
-browsers = [];
+browsers = ['PhantomJS'];
 
 
 // If browser does not capture in given timeout [ms], kill it
@@ -78,7 +78,8 @@ captureTimeout = 60000;
 singleRun = false;
 
 proxies =  {
-    '/api/apps/load/': 'http://localhost:8337/apps/load/'
+    '/api/': 'http://localhost:8337/appsuite/api/',
+    '/apps/': 'http://localhost:8337/appsuite/apps/'
 }
 
 // plugins to load

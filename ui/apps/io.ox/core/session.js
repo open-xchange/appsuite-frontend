@@ -69,8 +69,8 @@ function (http, manifests) {
                     ox.secretCookie = true;
                     return data;
                 },
-                function () {
-                    if (!_.url.hash('serverToken')) return;
+                function (data) {
+                    if (!_.url.hash('serverToken')) return data || {};
                     return http.POST({
                         module: 'login',
                         jsessionid: _.url.hash('jsessionid'),

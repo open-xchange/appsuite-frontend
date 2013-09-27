@@ -37,7 +37,7 @@ window.ox = {
     windowState: 'foreground'
 };
 
-require(['io.ox/core/gettext'], function (gettext) {
+require(['gettext'], function (gettext) {
     gettext.setLanguage(ox.language);
 });
 

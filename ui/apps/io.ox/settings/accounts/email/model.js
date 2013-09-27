@@ -13,7 +13,7 @@
 define('io.ox/settings/accounts/email/model',
       ['io.ox/core/tk/model',
        'io.ox/core/api/account'
-       ], function (Model, AccountApi) {
+       ], function (Model, AccountAPI) {
 
     'use strict';
 

@@ -1,19 +1,51 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
 @fluidGridColumnWidth:    6.382978723%;
 @fluidGridGutterWidth:    2.127659574%;
 
 #fluidGridSystem {
+
   // Setup the mixins to be used
   .columns(@fluidGridGutterWidth, @fluidGridColumnWidth, @columns) {
     width: 1% * (@fluidGridColumnWidth * @columns) + (@fluidGridGutterWidth * (@columns - 1));
     margin-left: @fluidGridGutterWidth;
   }
+
 }
-div.io-ox-calendar-edit {
+
+.io-ox-calendar-edit {
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
 
+
+    .btn {
+        &.save {
+            float: right;
+            margin-left: 13px;
+        }
+        &.discard {
+            float: right;
+        }
+    }
+    .app-bottom-toolbar {
+        .btn {
+            float: none;
+            margin: 0;
+        }
+    }
     label.desc {
         font-size: 13px;
         color: #888;
@@ -51,13 +83,6 @@ div.io-ox-calendar-edit {
 
     .input-extra-small {
         width: 25px;
-    }
-
-    a.save {
-        width:94%;
-        padding: 4px;
-        position: relative;
-        top: 20px;
     }
 
     input.startsat-date, input.endsat-date {
@@ -110,50 +135,21 @@ div.io-ox-calendar-edit {
     }
 
     div.edit-appointment-participant {
-        /*    clear: both;*/
+
         position: relative;
         line-height: 1.5em;
         background-color: white;
         margin-bottom: 2px;
         padding: 4px 0px 4px 0px;
-        /*background-color: #feb;*/
-    }
 
-    div.edit-appointment-participant.odd {
-        margin-left: 0px;
-    }
-
-    div.edit-appointment-participant.even {
-        #fluidGridSystem > .columns(@fluidGridGutterWidth, @fluidGridColumnWidth, 6);
-    }
-
-
-    div.recurrence {
-        display: none;
-    }
-
-    div.recurrence {
-        background: whitesmoke;
-        padding: 20px;
-
-        div.recurrence_details {
-            display: none;
+        .odd {
+            margin-left: 0px;
         }
-        input[type=text].short {
-            width: 20px;
-        }
-        select {
 
+        .even {
+            #fluidGridSystem > .columns(@fluidGridGutterWidth, @fluidGridColumnWidth, 6);
         }
-        select.months {
-            width: 100px;
-        }
-        select.days {
-            width: 100px;
-        }
-        select.sequence {
-            width: 80px;
-        }
+
     }
 
     .sectiontitle {
@@ -188,13 +184,15 @@ div.io-ox-calendar-edit {
     }
 
     .autocomplete-popup .autocomplete-item {
+
         padding: 0px 5px 5px 1px;
         line-height: 1.5em;
         cursor: pointer;
-    }
 
-    .autocomplete-popup .autocomplete-item.selected {
-        background-color: #EEE;
+        &.selected {
+            background-color: #EEE;
+        }
+
     }
 
     .notify-participants {
@@ -226,77 +224,55 @@ div.io-ox-calendar-edit {
     .margin-right {
         margin-right: 5px;
     }
-}
 
-.typeahead.calendaredit {
-    height: 200px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    min-width: 70px;
-    max-width: 70px;
-}
+        .hard-conflict {
+        margin: 1em 0 0 0;
+    }
 
-.typeahead.calendaredit a {
-    text-align: right;
-    padding: 3px 15px 3px 3px;
-}
+    .filename {
+        word-wrap: break-word;
+        word-break: break-all;
+    }
 
+    .attachment-edit-row {
+        margin-bottom: 9px;
+    }
+
+    .io-ox-core-tk-attachment {
+
+        .delete {
+            width: 25px;
+            font-size: 19px;
+            padding-left: 12px;
+            cursor: pointer;
+        }
+
+        .attachment-icon {
+            padding-left: 15px;
+            width: 45px;
+        }
+
+    }
+
+    .typeahead.calendaredit {
+
+        height: 200px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        min-width: 85px;
+
+        a {
+            text-align: right;
+            padding: 3px 15px 3px 3px;
+        }
+
+    }
+
+}
 
 .io-ox-calendar-edit-sidepanel {
   padding: 13px;
   background-color: whiteSmoke;
-}
-
-div.edit-appointment-participants {
-    margin-bottom: 5px;
-}
-
-div.edit-appointment-participant .contact-image {
-    height: 3em;
-    width: 3em;
-    margin-right: 1em;
-    display: inline-block;
-    background-size: cover;
-    background-repeat: no-repeat;
-    float: left;
-}
-
-div.edit-appointment-participant .remove {
-    display: inline-block;
-    position: absolute;
-    top: 1px;
-    right: 1px;
-    bottom: 1px;
-    width: 36px;
-    line-height: 1em;
-    background-color: white;
-    color: #CCC;
-    cursor: pointer;
-}
-
-div.edit-appointment-participant .remove i.icon-remove {
-    pointer-events: none;
-}
-
-div.edit-appointment-participant .remove:hover {
-    background-color: #a00;
-    color: #fff;
-    text-decoration: none;
-}
-
-div.edit-appointment-participant .icon {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    margin-top: -0.5em;
-    text-align: center;
-}
-
-div.edit-appointment-participant div {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .edit-appointment input[type="text"].discreet:focus {
@@ -315,65 +291,102 @@ div.edit-appointment-participant div {
     -webkit-appearance: none;
 }
 
-.io-ox-recurrence-view-active {
-    background-color: #eee;
-    padding-right: 10px;
-}
-
 .io-ox-recurrence-view {
-    padding-top: 10px;
-    padding-bottom: 10px;
+    background-color: #eee;
+    padding: 10px;
+    margin: 7px 0 20px 0;
+    min-height: 140px;
+
+    .recurrence-detail-toggle .icon-remove {
+        color: #888;
+    }
+
+    * {
+        .box-sizing(border-box);
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+    }
+
+    span.dropdown { position:static; }
+    span.dropdown.open { position:relative; }
 
     .inset {
-        padding-left: 18px;
+        padding-left: 5px;
+        height: 20px;
     }
-    /* Mobile */
-    @media all and (max-width: 480px) {
-        .inset {
-            width: 94% //to keep everything inside the box
+
+    input[type="text"] {
+        min-width: 25px;
+        padding: 0 2px;
+    }
+}
+
+/* Mobile */
+@media all and (max-width: 480px), all and (max-device-width: 480px) {
+
+    .io-ox-calendar-edit {
+
+        margin-top: 0px;
+        padding: 0 13px;
+
+        .header {
+            margin-bottom: 9px;
         }
-    }
-}
 
-.io-ox-recurrence-type-choice a:hover {
-    text-decoration: none;
-    outline: 0;
-}
-
-.io-ox-recurrence-type-choice li {
-    cursor: pointer;
-}
-
-.io-ox-recurrence-day-picker li {
-    list-style-type: none;
-    cursor: pointer;
-}
-
-.io-ox-calendar-edit {
-
-    .hard-conflict {
-        margin: 1em 0 0 0;
-    }
-
-    .filename {
-        word-wrap: break-word;
-        word-break: break-all;
-    }
-
-    .attachment-edit-row {
-        margin-bottom: 9px;
-    }
-
-    .io-ox-core-tk-attachment {
-        .delete {
-            width: 25px;
-            font-size: 19px;
-            padding-left: 12px;
-            cursor: pointer;
+        h1.title {
+            float: none;
         }
-        .attachment-icon {
-            padding-left: 15px;
-            width: 45px;
+
+        .sectiontitle {
+            margin: 0;
         }
+
+        .dateinput .span6 {
+
+            width: 50%;
+            float: left;
+
+            &[data-extension-id="end-date"] .control-group {
+                float: right;
+            }
+
+            .input-small {
+                width: 9em;
+            }
+
+        }
+
+        .actionToggle {
+            display: block;
+            margin: 10px 0;
+            &.spacer {
+                padding-bottom: 40px;
+            }
+        }
+
+        .collapsed {
+            display: none;
+        }
+
+        .control-group {
+            margin-bottom: 0;
+        }
+
+        textarea.note {
+            min-height: 0px;
+        }
+
+        .io-ox-recurrence-view {
+
+            .inset {
+                height: auto;
+            }
+
+        }
+
+        .fileupload .uneditable-input {
+            width: 185px;
+        }
+
     }
+
 }

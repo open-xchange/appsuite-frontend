@@ -195,6 +195,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
             "410" : "recurrence_start"
         },
         "files" : {
+            "23" : "meta",
             "700" : "title",
             "701" : "url",
             "702" : "filename",
@@ -243,6 +244,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
             "5" : "last_modified",
             "6" : "last_modified_utc",
             "20" : "folder_id",
+            "23" : "meta",
             "300" : "title",
             "301" : "module",
             "302" : "type",
@@ -259,6 +261,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
             "314" : "subscribed",
             "315" : "subscr_subflds",
             "316" : "standard_folder_type",
+            "317" : "supported_capabilities",
             "3010" : "com.openexchange.publish.publicationFlag",
             "3020" : "com.openexchange.subscribe.subscriptionFlag",
             "3030" : "com.openexchange.folderstorage.displayName"
@@ -368,6 +371,16 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
         return (/^(0|4\d\d|5\d\d)$/).test(status);
     };
 
+    var isUnreachable = function (xhr) {
+        if (!xhr) {
+            return false;
+        }
+        if (xhr.status === 0) {
+            return true;
+        }
+        return (/^(5\d\d)$/).test(xhr.status);
+    };
+
     // error log
     var log = {
 
@@ -394,7 +407,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
     // statistics
     (function () {
 
-        var list = [], n = 0, loss = 0;
+        var list = [], ping = [], n = 0, loss = 0;
 
         log.took = function (t) {
             list.push(t);
@@ -403,6 +416,10 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
 
         log.loss = function () {
             loss++;
+        };
+
+        log.ping = function (t) {
+            ping.push(t);
         };
 
         log.statistics = {
@@ -424,6 +441,10 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
 
             loss: function () {
                 return Math.round(loss / n * 100) / 100;
+            },
+
+            ping: function () {
+                return ping;
             }
         };
     }());
@@ -568,10 +589,10 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
             var isSessionError = (/^SES\-/i).test(response.code),
                 isServerConfig = o.module === 'apps/manifests' && o.data && /^config$/.test(o.data.action),
                 isAutoLogin = o.module === "login" && o.data && /^(autologin|store|tokens)$/.test(o.data.action);
-            if (isSessionError && !isAutoLogin && !isServerConfig) {
+            if (isSessionError && !isAutoLogin) {
                 // login dialog
                 ox.session = '';
-                ox.trigger('relogin:required', o, deferred);
+                ox.trigger('relogin:required', o, deferred, response);
                 return;
             } else {
                 // genereal error
@@ -602,11 +623,17 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                                     o.data = JSON.parse(o.data);
                                     module = o.data[i].module;
                                 }
-                                tmp = sanitize(response[i].data, module, o.data[i].columns);
-                                data.push({ data: tmp, timestamp: timestamp });
-                                // handle warnings within multiple
-                                if (response[i].error !== undefined) {
-                                    console.warn('http.js: warning inside multiple');
+
+                                // handle errors within multiple
+                                if (response[i].error !== undefined && response[i].category !== 13) {
+                                    data.push({ error: response[i], timestamp: timestamp });
+                                } else {
+                                    //handle warnings within multiple
+                                    if (response[i].category === 13) {
+                                        console.warn('http.js: warning inside multiple');
+                                    }
+                                    tmp = sanitize(response[i].data, module, o.data[i].columns);
+                                    data.push({ data: tmp, timestamp: timestamp });
                                 }
                             } else {
                                 // error
@@ -693,6 +720,13 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                 var status = (xhr && xhr.status) || 200;
                 if (isLoss(status)) log.loss();
 
+                if (isUnreachable(xhr)) {
+                    that.trigger("unreachable");
+                    ox.trigger('connection:down');
+                } else {
+                    that.trigger("reachable");
+                    ox.trigger('connection:up');
+                }
                 error = _.extend({ status: status, took: took }, error);
                 log.add(error, r.o);
             });
@@ -708,6 +742,10 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                     }
                 })
                 .done(function (response) {
+
+                    that.trigger("reachable");
+                    ox.trigger('connection:up');
+
                     // slow?
                     var took = _.now() - t0;
                     log.took(took);
@@ -801,7 +839,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                         return (o.module === e[0] && (e[1] === '*' || o.params.action === e[1]));
                     });
                 if (!found) {
-                    ox.trigger('relogin:required', o, def);
+                    ox.trigger('relogin:required', o, def, {});
                     return def;
                 }
             }
@@ -824,7 +862,8 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                     data: o.data,
                     dataType: o.dataType,
                     processData: o.processData,
-                    contentType: o.contentType !== undefined ? o.contentType : "application/x-www-form-urlencoded"
+                    contentType: o.contentType !== undefined ? o.contentType : "application/x-www-form-urlencoded",
+                    beforeSend: o.beforeSend
                 }
             };
             // use timeout?
@@ -931,7 +970,8 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                 def = $.Deferred(),
                 data = JSON.stringify(options.data),
                 url = ox.apiRoot + '/' + options.module + '?action=' + options.action + '&session=' + ox.session,
-                form = options.form;
+                form = options.form,
+                blank = $.Deferred();
 
             $('#tmp').append(
                 $('<iframe>', { name: name, id: name, height: 1, width: 1, src: ox.base + '/blank.html' })
@@ -968,8 +1008,9 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                 encoding: 'multipart/form-data',
                 action: url + '&' + _.serialize(options.params),
                 target: name
-            })
-            .submit();
+            });
+
+            form.submit();
 
             return def;
         },
@@ -1113,6 +1154,8 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                         for (i = 0, $l = q.length; i < $l; i++) {
                             if (data[i].data && data[i].timestamp) {
                                 q[i].deferred.resolve(data[i].data, data[i].timestamp);
+                            } else if (data[i].error) {
+                                q[i].deferred.reject(data[i].error);
                             } else {
                                 q[i].deferred.resolve(data[i]);
                             }
@@ -1135,6 +1178,23 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                 def.resolve([]);
             }
             return def;
+        },
+
+        // send server ping
+        ping: function () {
+            var t0 = _.now();
+            return this.GET({
+                module: 'system',
+                params: {
+                    action: 'ping',
+                    timestamp: _.now()
+                }
+            })
+            .then(function () {
+                var took = _.now() - t0;
+                log.ping(took);
+                return took;
+            });
         },
 
         /**

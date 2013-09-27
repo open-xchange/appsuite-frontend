@@ -45,9 +45,11 @@ define('io.ox/files/mediaplayer',
         win: null,
         mediaelement: null,
         currentFile: null,
+        currentVolume: 0.8,
+        isMuted: false,
         features: ['playpause', 'progress', 'current', 'volume'],
 
-        container: $('<div class="abs mediaplayer_container">'),
+        container: $('<div class="abs mediaplayer_container" tabindex="-1">'),
         trackdisplay: $('<div class="mediaplayer_track css-table"><div class="css-table-row">' +
                 '<div class="css-table-cell album"></div><div class="css-table-cell"><div class="track"></div></div>' +
                 '</div></div>'),
@@ -64,6 +66,7 @@ define('io.ox/files/mediaplayer',
             _.extend(this.config, config);
             this.app = config.baton.app;
             this.win = this.app.getWindow();
+            this.lastActiveElement = $(document.activeElement);
 
             this.restore();
             this.list = this.filterMediaList(config.baton.allIds, config.videoSupport);
@@ -71,7 +74,7 @@ define('io.ox/files/mediaplayer',
             if (this.config.videoSupport) {
                 this.features = ['playpause', 'progress', 'current', 'volume', 'fullscreen'];
             }
-
+            $('#io-ox-mediaplayer').remove();
 
             if (this.list.length > 0) {
                 this.show();
@@ -117,7 +120,7 @@ define('io.ox/files/mediaplayer',
                 .off('click')
                 .on('click', $.proxy(this.minimize, this));
 
-            $(document).keyup(function (e) {
+            this.container.on('keydown', function (e) {
                 // close on ESC unless in fullscreen mode
                 // note: macos' native fullscreen mode does not close on ESC (same for Chrome & Firefox)
                 if (e.keyCode === 27 && BigScreen.element === null && !MediaElementPlayer.fullscreen) self.close();
@@ -179,8 +182,11 @@ define('io.ox/files/mediaplayer',
                 audioWidth: $(window).width() <= 700 ? 294 : 480,
                 videoWidth: $(window).width() <= 700 ? 294 : 480,
                 plugins: plugins,
+                pluginPath: 'apps/mediaelement/',
                 enableAutosize: false,
+                autosizeProgress: false,
                 timerRate: 250,
+                startVolume: self.currentVolume,
                 features: this.features,
                 pauseOtherPlayers: true,
                 keyActions: [
@@ -222,16 +228,30 @@ define('io.ox/files/mediaplayer',
                     }
                 ],
                 success: function (me, domObject) {
-
+                    if (self.isMuted) {
+                        me.setMuted(true);
+                    }
+                    me.setVolume(self.currentVolume);
+                    $('.mediaplayer_container .mejs-time-rail').css({
+                        width: ($(window).width() <= 700 ? '140px' : '330px')
+                    });
                     self.mediaelement = me;
                     me.addEventListener('ended', function () {
+                        self.currentVolume = me.volume;
+                        self.isMuted = me.muted;
                         self.select('next');
 
                     }, false);
-
+                    me.addEventListener('volumechange', function (e) {
+                        self.currentVolume = me.volume;
+                        self.isMuted = me.muted;
+                    }, false);
                     if (!_.browser.Firefox) {
                         me.addEventListener('canplay', function () {
-                            // Player is ready
+                            me.setVolume(self.currentVolume);
+                            if (self.isMuted) {
+                                me.setMuted(true);
+                            }
                             me.play();
                         }, false);
                         me.play();
@@ -264,13 +284,14 @@ define('io.ox/files/mediaplayer',
         },
 
         show: function () {
-            var self = this;
+            var self = this,
+            inner;
             this.win.busy().nodes.outer.append(
                 this.container.append(
-                    $('<div class="atb mediaplayer_inner">').append(
+                    $('<div id="io-ox-mediaplayer" class="atb mediaplayer_inner" tabindex="1">').append(
                         $('<div class="mediaplayer_buttons pull-right">').append(
-                            $('<button class="btn btn-inverse minimizemediaplayer">').text(gt('Minimize')),
-                            $('<button class="btn btn-primary closemediaplayer">')
+                            $('<button type="button" class="btn btn-inverse minimizemediaplayer" tabindex="1">').text(gt('Minimize')),
+                            $('<button type="button" class="btn btn-primary closemediaplayer" tabindex="1">')
                                 .text(gt('Close'))
                                 .one('click', $.proxy(this.close, this))
                         ),
@@ -298,29 +319,39 @@ define('io.ox/files/mediaplayer',
             this.drawItems();
             if (_.device('!touch')) { this.playlist.sortable({ axis: 'y', distance: 30 }); }
             this.play(this.list[0]);
+            _.defer(function () { $('#io-ox-mediaplayer').focus(); });
         },
 
         minimize: function () {
-            $('#io-ox-topbar > .minimizedmediaplayer').remove();
-            $('#io-ox-topbar').append(
-                $('<div class="launcher right minimizedmediaplayer">').append(
+            var minimizedPlayerLauncher;
+            $('#io-ox-topbar > div.launchers-secondary > .minimizedmediaplayer').remove();
+            $('#io-ox-topbar > div.launchers-secondary').prepend(
+                minimizedPlayerLauncher = $('<div class="launcher minimizedmediaplayer" tabindex="1">').append(
                     $('<i>').addClass('icon-play icon-white')
                 ).one('click', function () {
                     ox.launch('io.ox/files/main');
                     $('.mediaplayer_container').show();
                     $(this).remove();
                 })
+                .on('keydown', function (e) {
+                    if ((e.keyCode || e.which) === 13) { // enter
+                        ox.launch('io.ox/files/main');
+                        $('.mediaplayer_container').show();
+                        $(this).remove();
+                    }
+                })
             );
             this.container.hide();
+            minimizedPlayerLauncher.focus();
         },
 
         restore: function () {
-            if ($('#io-ox-topbar > .minimizedmediaplayer').length > 0) {
-                $('#io-ox-topbar > .minimizedmediaplayer').remove();
+            if ($('#io-ox-topbar > div.launchers-secondary > .minimizedmediaplayer').length > 0) {
+                $('#io-ox-topbar > div.launchers-secondary > .minimizedmediaplayer').remove();
                 this.list = [];
                 this.container.show();
+                _.defer(function () { $('#io-ox-mediaplayer').focus(); });
             }
-
         },
 
         close: function () {
@@ -330,9 +361,11 @@ define('io.ox/files/mediaplayer',
                         player.pause();
                     });
                 }
+                $('#io-ox-mediaplayer').remove();
                 this.container.remove();
                 this.list = [];
                 this.currentFile = null;
+                this.lastActiveElement.focus();
             }
         }
     };

@@ -13,14 +13,12 @@
 
 define('io.ox/office/tk/dropdown/list',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/keycodes',
      'io.ox/office/tk/control/group',
      'io.ox/office/tk/dropdown/items'
-    ], function (Utils, Group, Items) {
+    ], function (Utils, KeyCodes, Group, Items) {
 
     'use strict';
-
-    var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes;
 
     // class List =============================================================
 
@@ -53,7 +51,7 @@ define('io.ox/office/tk/dropdown/list',
         // private methods ----------------------------------------------------
 
         /**
-         * Handles 'menuopen' events.
+         * Handles 'menu:open' events.
          */
         function menuOpenHandler() {
             this.getMenuNode().css('min-width', this.getNode().outerWidth() + 'px');
@@ -62,34 +60,37 @@ define('io.ox/office/tk/dropdown/list',
         /**
          * Handles key events in the open drop-down list menu element.
          */
-        function listKeyHandler(event) {
+        function menuKeyHandler(event) {
 
             var // distinguish between event types (ignore keypress events)
                 keydown = event.type === 'keydown',
-                // all list items (button elements)
-                buttons = self.getItems(),
+                // all focusable controls in the list
+                controls = self.getFocusableMenuControls(),
                 // index of the focused list item
-                index = buttons.index(event.target);
+                index = controls.index(event.target),
+                // whether focus can be moved
+                valid = (index >= 0) && (controls.length > 1);
 
             switch (event.keyCode) {
             case KeyCodes.UP_ARROW:
-                if (index <= 0) { break; } // let key bubble up to hide the menu
-                if (keydown) { buttons.eq(index - 1).focus(); }
+                if (keydown && valid) {
+                    controls.eq((index - 1 + controls.length) % controls.length).focus();
+                }
                 return false;
             case KeyCodes.DOWN_ARROW:
-                if (keydown && (index >= 0) && (index + 1 < buttons.length)) { buttons.eq(index + 1).focus(); }
+                if (keydown && valid) {
+                    controls.eq((index + 1) % controls.length).focus();
+                }
                 return false;
             case KeyCodes.PAGE_UP:
-                if (keydown) { buttons.eq(Math.max(0, index - List.PAGE_SIZE)).focus(); }
+                if (keydown && valid) {
+                    controls.eq(Math.max(0, index - List.PAGE_SIZE)).focus();
+                }
                 return false;
             case KeyCodes.PAGE_DOWN:
-                if (keydown) { buttons.eq(Math.min(buttons.length - 1, index + List.PAGE_SIZE)).focus(); }
-                return false;
-            case KeyCodes.HOME:
-                if (keydown) { buttons.first().focus(); }
-                return false;
-            case KeyCodes.END:
-                if (keydown) { buttons.last().focus(); }
+                if (keydown && valid) {
+                    controls.eq(Math.min(controls.length - 1, index + List.PAGE_SIZE)).focus();
+                }
                 return false;
             }
         }
@@ -97,11 +98,11 @@ define('io.ox/office/tk/dropdown/list',
         // initialization -----------------------------------------------------
 
         // additional formatting for vertical list items
-        this.getItemGroup().getNode().addClass('list');
+        this.getMenuNode().addClass('layout-list');
 
         // register event handlers
-        this.on('menuopen', menuOpenHandler);
-        this.getItemGroup().getNode().on('keydown keypress keyup', listKeyHandler);
+        this.on('menu:open', menuOpenHandler);
+        this.getMenuNode().on('keydown keypress keyup', menuKeyHandler);
 
     } // class List
 

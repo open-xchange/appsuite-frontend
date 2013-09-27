@@ -1,11 +1,2 @@
 #!/bin/sh
-
-if command -v nodejs > /dev/null; then NODEJS=nodejs; else NODEJS=node; fi
-
-if [ -n "$1" ]
-then
-    $NODEJS lib/appsserver.js "$@"
-else
-    if [ -f ./local.conf ]; then . ./local.conf; fi
-    $NODEJS lib/appsserver.js $builddir
-fi
+"$(dirname "$(readlink "$0" || echo "$0")")/bin/appserver" "$@"

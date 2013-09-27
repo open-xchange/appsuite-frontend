@@ -65,6 +65,7 @@
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "d-M",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
         "yMdHm": "d-M-y HH:mm",
@@ -116,8 +117,8 @@
         "pm": "PM"
     },
     "eras": [
-        "v.Chr.",
-        "n.Chr."
+        "v.g.j.",
+        "g.j."
     ],
     "dateTime": "d-MMM-y HH:mm",
     "h12": false

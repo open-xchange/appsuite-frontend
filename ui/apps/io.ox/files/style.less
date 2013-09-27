@@ -30,14 +30,14 @@
 
     .files-scrollable-pane {
 
-        padding:13px;
+        outline: none;
+        padding: 30px 40px;
         width: 100%;
         min-height: 200px; // for busy animation
         .box-sizing(border-box);
 
         .inline-actions {
 
-            text-align: right;
             margin: 1em 1em 1em 0;
 
             a.fullscreen:before {content: "("; color:black;}
@@ -71,11 +71,20 @@
     }
 
     .file-icon {
+        text-decoration:none;
+        &:focus {
+            outline: none;
+            .img-polaroid {
+                .box-shadow(0 1px 5px rgba(0, 0, 0, 0.4) inset);
+                border-color: #333;
+            }
+        }
 
         width: @outerWidth;
         height: @innerHeight + 59;
         margin: 0 18px 13px 0; // 18px allows 4 columns on IPhone
         cursor: pointer;
+        text-decoration: none;
 
         .wrap {
 
@@ -86,7 +95,9 @@
             vertical-align: bottom;
 
             img {
-                max-height: @innerHeight; // till backend fix
+                // till backend fix
+                max-height: 90px;
+                max-width: 128px;
             }
 
             .lazy {
@@ -163,6 +174,7 @@
 
         .createdby,
         .creationdate,
+        .last_modified,
         .size {
             white-space:nowrap;
         }
@@ -177,6 +189,7 @@
     .title {
         margin-bottom: 0.5em;
         word-wrap: break-word;
+        outline:0;
     }
 
     .description {
@@ -187,10 +200,11 @@
     }
 
     .preview {
+
         width: 100%;
         margin: 26px 0;
 
-        .plaintext {
+        .preview-plaintext {
             font-family: monospace;
             font-size: 13px;
             width: 100%;
@@ -263,9 +277,8 @@
         text-decoration: none;
     }
 
-    .io-ox-inline-links {
+    .io-ox-inline-links:first-child {
         margin: 0 0 26px 0;
-        text-align: left;
     }
 
     .modal-header {
@@ -286,7 +299,12 @@
 .vgrid-cell.file {
 
     display: table-row;
-    padding: 0 13px 0 13px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+
+    .vgrid-cell-checkbox {
+        padding-top: 9px;
+    }
 
     .name {
         display: table-cell;
@@ -302,14 +320,55 @@ ul.breadcrumb li.prefix {
     white-space: nowrap;
 }
 
-.direct-link {
-    word-break: break-all;
-}
+.files-create { margin:0; }
 /** small screens **/
-@media all and (max-width: 480px) {
+@media all and (max-width: 480px), all and (max-device-width: 480px) {
     .files-iconview  {
+        .files-scrollable-pane {
+            padding: 13px;
+        }
         .file-icon {
             width: 125px;
+        }
+    }
+    body > .io-ox-dialog-wrapper .io-ox-dialog-popup {
+        top: 40px;
+        margin-top: 0;
+        width: auto;
+        overflow-y: auto;
+        bottom: 40px;
+        height: 100%;
+        max-height: 100%;
+        .modal-body {
+            max-height: auto;
+            .row-fluid textarea.span12 { max-height:100px; }
+            .fileupload .uneditable-input { width: 130px; }
+        }
+        .modal-footer {
+            bottom: 0;
+            position: fixed;
+            left: 0;
+            right: 0;
+            padding:0;
+
+            .row-fluid {
+                [class*="span"] {
+                    margin-left: 0;
+                    float:left;
+                }
+                .btn {
+                    border: 0;
+                    border-radius: 0;
+                    margin: 0px;
+                    height: 40px;
+                    width: 100%;
+                    padding: 0;
+                    line-height: 40px;
+                }
+                .span3 {
+                    width:50%;
+                }
+            }
         }
     }
 }

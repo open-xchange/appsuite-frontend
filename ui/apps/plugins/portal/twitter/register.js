@@ -25,7 +25,7 @@ define('plugins/portal/twitter/register',
     'use strict';
 
     var extensionId = 'twitter';
-    var loadEntriesPerPage = 20;
+    var loadEntriesPerPage = 10;
     var offset = 0;
     var $tweets = $('<div>').addClass('twitter');
     var $busyIndicator = $('<div>').html('&nbsp;');
@@ -394,9 +394,11 @@ define('plugins/portal/twitter/register',
             if (error.code !== "OAUTH-0006") return; // let the default handling do the job
 
             $(this).empty().append(
-                $('<h2>').append(
-                    $('<a href="#" class="disable-widget"><i class="icon-remove"/></a>'),
-                    $('<span class="title">').text(gt('Twitter'))
+                $('<div class="decoration">').append(
+                    $('<h2>').append(
+                        $('<a href="#" class="disable-widget"><i class="icon-remove"/></a>'),
+                        $('<span class="title">').text(gt('Twitter'))
+                    )
                 ),
                 $('<div class="content">').text(gt('Click here to add your account'))
                 .on('click', {}, function () {

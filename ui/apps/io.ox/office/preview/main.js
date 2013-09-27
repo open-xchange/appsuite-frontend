@@ -9,30 +9,43 @@
  * Mail: info@open-xchange.com
  *
  * @author Kai Ahrens <kai.ahrens@open-xchange.com>
+ * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
 define('io.ox/office/preview/main',
     ['io.ox/office/tk/utils',
      'io.ox/office/framework/app/baseapplication',
-     'io.ox/office/preview/model',
-     'io.ox/office/preview/view',
-     'io.ox/office/preview/controller',
-     'gettext!io.ox/office/main',
-     'less!io.ox/office/preview/style.less'
-    ], function (Utils, BaseApplication, PreviewModel, PreviewView, PreviewController, gt) {
+     'io.ox/office/framework/app/toolbaractions',
+     'io.ox/office/framework/app/extensionregistry',
+     'io.ox/office/preview/model/model',
+     'io.ox/office/preview/view/view',
+     'io.ox/office/preview/app/controller',
+     'gettext!io.ox/office/main'
+    ], function (Utils, BaseApplication, ToolBarActions, ExtensionRegistry, PreviewModel, PreviewView, PreviewController, gt) {
 
     'use strict';
+
+    var // the module name of this application
+        MODULE_NAME = 'io.ox/office/preview';
 
     // class PreviewApplication ===============================================
 
     /**
-     * The Preview application used to view any Office documents.
+     * The OX Preview application used to view a wide range of document types.
      *
      * @constructor
      *
      * @extends BaseApplication
+     *
+     * @param {Object} [appOptions]
+     *  A map of static application options, that have been passed to the
+     *  static method BaseApplication.createLauncher().
+     *
+     * @param {Object} [launchOptions]
+     *  A map of options to control the properties of the application. Supports
+     *  all options supported by the base class BaseApplication.
      */
-    var PreviewApplication = BaseApplication.extend({ constructor: function (launchOptions) {
+    var PreviewApplication = BaseApplication.extend({ constructor: function (appOptions, launchOptions) {
 
         var // self reference
             self = this,
@@ -42,9 +55,7 @@ define('io.ox/office/preview/main',
 
         // base constructor ---------------------------------------------------
 
-        BaseApplication.call(this, PreviewModel, PreviewView, PreviewController, importDocument, launchOptions, {
-            chromeless: true
-        });
+        BaseApplication.call(this, PreviewModel, PreviewView, PreviewController, importDocument, appOptions, launchOptions);
 
         // private methods ----------------------------------------------------
 
@@ -65,21 +76,8 @@ define('io.ox/office/preview/main',
             // disable drop events
             self.getWindowNode().on('drop dragstart dragover', false);
 
-            // insert own content into the busy blocker element
-            self.getView().enterBusy(function (header, footer) {
-
-                // add file name to header area
-                header.append($('<div>').addClass('filename clear-title').text(self.getFullFileName()));
-
-                // show Cancel button after a short delay
-                self.executeDelayed(function () {
-                    footer.append($('<div>').append(
-                        $.button({ label: gt('Cancel') })
-                            .addClass('btn-warning')
-                            .on('click', function () { self.quit(); })
-                    ));
-                }, { delay: 3000 });
-            });
+            // show the busy blocker element
+            self.getView().enterBusy({ showFileName: true, cancelHandler: function () { self.quit(); } });
 
             // load the file
             return self.sendConverterRequest({
@@ -87,18 +85,22 @@ define('io.ox/office/preview/main',
                     action: 'convertdocument',
                     convert_format: 'html',
                     convert_action: 'beginconvert'
-                },
-                resultFilter: function (data) {
-                    // check required entries, returning undefined will reject this request
-                    return (_.isNumber(data.JobID) && (data.JobID > 0) && _.isNumber(data.PageCount) && (data.PageCount > 0)) ? data : undefined;
                 }
             })
-            .done(function (data) {
+            .then(function (data) {
 
-                // show a page of the document
+                var def = $.Deferred(),
+                    loadError = !_.isString(data.JobID) || (data.JobID.length <= 0) || !_.isNumber(data.PageCount) || (data.PageCount <= 0);
+
+                if (loadError && Utils.getStringOption(data, 'cause', '') === 'passwordProtected') {
+                    data = _.extend({}, data, { message: gt('The document is protected by a password.') });
+                }
+
+                return loadError ? def.reject(data) : def.resolve(data);
+            })
+            .done(function (data) {
                 jobId = data.JobID;
                 self.getModel().setPageCount(data.PageCount);
-                self.getView().restoreFromSavePoint(point);
             })
             .promise();
         }
@@ -108,34 +110,78 @@ define('io.ox/office/preview/main',
          * will be really closed.
          */
         function quitHandler() {
-            self.sendPreviewRequest({ params: { convert_action: 'endconvert' } });
+            return self.sendPreviewRequest({ params: { convert_action: 'endconvert' } });
         }
 
         // methods ------------------------------------------------------------
 
         this.sendPreviewRequest = function (options) {
-            return _.isNumber(jobId) ? this.sendConverterRequest(Utils.extendOptions({
+            return _.isString(jobId) ? this.sendConverterRequest(Utils.extendOptions({
                 params: { action: 'convertdocument', job_id: jobId }
             }, options)) : $.Deferred().reject();
         };
 
         this.getPreviewModuleUrl = function (options) {
-            return _.isNumber(jobId) ? this.getConverterModuleUrl(Utils.extendOptions({
+            return _.isString(jobId) ? this.getConverterModuleUrl(Utils.extendOptions({
                 action: 'convertdocument',
                 job_id: jobId
             }, options)) : undefined;
         };
 
+        /**
+         * Returns whether the current document can be edited with one of the
+         * OX Document edit applications.
+         */
+        this.isDocumentEditable = function () {
+            // TODO: edit mail attachments and task attachments
+            return _.isString(jobId) && (!('source' in this.getFileDescriptor())) && ExtensionRegistry.isEditable(this.getFullFileName());
+        };
+
+        /**
+         * Launches the appropriate OX Document edit applications for the
+         * current document.
+         */
+        this.editDocument = function () {
+
+            var // the file descriptor of the current document
+                file = this.getFileDescriptor(),
+                // the configuration of the file extension of the current document
+                extensionSettings = this.isDocumentEditable() ? ExtensionRegistry.getExtensionSettings(this.getFullFileName()) : null,
+                // the edit application module identifier
+                editModule = Utils.getStringOption(extensionSettings, 'module', '');
+
+            // TODO: edit mail attachments and task attachments
+            if (editModule.length > 0) {
+
+                // launch the correct edit application
+                if (ExtensionRegistry.isNative(this.getFullFileName())) {
+                    ox.launch(editModule + '/main', { action: 'load', file: file });
+                } else if (ExtensionRegistry.isConvertible(this.getFullFileName())) {
+                    ox.launch(editModule + '/main', { action: 'convert', folderId: file.folder_id, templateFile: file, preserveFileName: true });
+                } else {
+                    Utils.error('PreviewApplication.editDocument(): unknown document type');
+                    return;
+                }
+
+                // close this application
+                _.defer(function () { self.quit(); });
+            }
+        };
+
         // initialization -----------------------------------------------------
 
-        // fail-save handler returns data needed to restore the application after browser refresh
-        this.registerQuitHandler(quitHandler)
-            .registerFailSaveHandler(function () { return self.getView().getSavePoint(); });
+        this.registerQuitHandler(quitHandler);
 
     }}); // class PreviewApplication
 
+    // static initialization ==================================================
+
+    ToolBarActions.createDownloadIcon(MODULE_NAME);
+    ToolBarActions.createPrintIcon(MODULE_NAME);
+    ToolBarActions.createMailIcon(MODULE_NAME);
+
     // exports ================================================================
 
-    return BaseApplication.createLauncher('io.ox/office/preview', PreviewApplication);
+    return BaseApplication.createLauncher(MODULE_NAME, PreviewApplication);
 
 });

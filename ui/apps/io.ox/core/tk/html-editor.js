@@ -12,7 +12,7 @@
  */
 
 define.async('io.ox/core/tk/html-editor',
-    ['moxiecode/tiny_mce/plugins/emoji/main',
+    ['io.ox/core/emoji/util',
      'io.ox/core/capabilities',
      'settings!io.ox/core',
      'io.ox/core/extensions'
@@ -49,7 +49,7 @@ define.async('io.ox/core/tk/html-editor',
             .replace(/([^=])"([\w\- ]+)"/g, '$1\u201C$2\u201D')
             // beautify dashes
             .replace(/(\w\s)-(\s\w)/g, '$1\u2013$2');
-        o.content = emoji.unifiedToImageTag(o.content);
+        o.content = emoji.processEmoji(o.content);
     }
 
     // simplify DOM tree
@@ -302,8 +302,7 @@ define.async('io.ox/core/tk/html-editor',
             range.setEndAfter(container);
             // get parent node
             var p = container.parentNode;
-            // add range content before next sibling (or at the end of the parent
-            // node)
+            // add range content before next sibling (or at the end of the parent node)
             var contents = range.extractContents();
             // BR fix (remove unwanted newline)
             traverse(contents.firstChild);
@@ -311,10 +310,18 @@ define.async('io.ox/core/tk/html-editor',
             if ($(contents).text().length > 0) {
                 // insert this content only if it includes something visible
                 // Actually this allows to split a quote after the very last
-                // character
-                // without getting empty gray blocks below the split
+                // character without getting empty gray blocks below the split
                 p.insertBefore(contents, container.nextSibling);
             }
+            // fix ordered lists. Look for subsequent <ol>...</ol><ol>...
+            try {
+                var ol = $(p).children('ol + ol'), prev, start;
+                if (ol.length > 0) {
+                    prev = ol.prev();
+                    start = prev.children('li').length + 1;
+                    ol.attr('start', start);
+                }
+            } catch (e) { }
             // climb up
             container = p;
         }
@@ -380,17 +387,23 @@ define.async('io.ox/core/tk/html-editor',
     function Editor(textarea) {
 
         var def = $.Deferred(), ed,
-            toolbar1, toolbar2, toolbar3;
+            toolbar1, toolbar2, toolbar3, advanced,
+            width = $(document).width();
 
         // toolbar default
         toolbar1 = 'undo,redo,|,bold,italic,underline,strikethrough' +
             ',|,emoji,|,bullist,numlist,outdent,indent' +
-            ',|,justifyleft,justifycenter,justifyright' +
-            //',|,formatselect,fontselect,fontsizeselect' +
+            ',|,justifyleft,justifycenter,justifyright';
+        advanced = 'formatselect,fontselect,fontsizeselect' +
             ',|,forecolor,backcolor';
-
         toolbar2 = '';
         toolbar3 = '';
+
+        if (width > 1110) { // yep, need a bit more than 1024, incl. emoji
+            toolbar1 += ',|,' + advanced;
+        } else {
+            toolbar2 = advanced;
+        }
 
         // consider custom configurations
         toolbar1 = settings.get('tinyMCE/theme_advanced_buttons1', toolbar1);
@@ -411,6 +424,7 @@ define.async('io.ox/core/tk/html-editor',
             plugins: 'autolink,paste,emoji',
             relative_urls: false,
             remove_script_host: false,
+            object_resizing: 0,
             script_url: ox.base + '/apps/moxiecode/tiny_mce/tiny_mce.js',
             skin: 'ox',
             theme: 'advanced',
@@ -453,8 +467,6 @@ define.async('io.ox/core/tk/html-editor',
 
             // colors
             theme_advanced_more_colors: false,
-            //theme_advanced_text_colors: '000000,555555,AAAAAA,0088CC,AA0000',
-            //theme_advanced_background_colors: 'FFFFFF,FFFF00,00FFFF,00FF00,00FFFF,FFBE33',
             theme_advanced_default_foreground_color: '#000000',
             theme_advanced_default_background_color: '#FFFFFF',
 
@@ -518,7 +530,7 @@ define.async('io.ox/core/tk/html-editor',
             },
 
             set = function (str) {
-                ed.setContent(emoji.unifiedToImageTag(str) + '');
+                ed.setContent(emoji.processEmoji(str) + '');
             },
 
             clear = function () {
@@ -534,7 +546,7 @@ define.async('io.ox/core/tk/html-editor',
             // trim white-space and clean up pseudo XHTML
             // remove empty paragraphs at the end
             get = function () {
-                return trimOut(ed.getContent())
+                return trimOut(emoji.imageTagsToUnified(ed.getContent()))
                     .replace(/<(\w+)[ ]?\/>/g, '<$1>')
                     .replace(/(<p>(<br>)?<\/p>)+$/, '');
             };
@@ -573,7 +585,8 @@ define.async('io.ox/core/tk/html-editor',
                 // transform the emoji img tags to unicode before getContent call
                 ed.selection.select(this, true);
                 content = emoji.imageTagsToUnified(ed.selection.getContent());
-                text = $('<div>').html(content).text();
+                // preserve simple line breaks and get text content
+                text = $('<div>').html(content.replace(/<br>/g, '\n')).text();
                 switch (this.tagName) {
                 case 'BLOCKQUOTE':
                     tmp += quote(text) + '\n\n';
@@ -674,12 +687,9 @@ define.async('io.ox/core/tk/html-editor',
             this.replaceContent(str, '');
         };
 
-        this.removeBySelector = function (selector) {
-            $(selector, ed.getDoc()).remove();
-        };
-
-        this.removeClassBySelector = function (selector, name) {
-            $(selector, ed.getDoc()).removeClass(name);
+        // allow jQuery access
+        this.find = function (selector) {
+            return $(ed.getDoc()).find(selector);
         };
 
         this.replaceContent = function (str, rep) {

@@ -41,7 +41,9 @@ define('io.ox/mail/accounts/settings',
         )
         .addPrimaryButton("save", gt('Save'))
         .addButton("cancel", gt('Cancel'))
-        .show();
+        .show(function () {
+            this.find('input[type=text]:first').focus();
+        });
 
         myView.dialog.on('save', function () {
             myModel.validate();
@@ -78,7 +80,7 @@ define('io.ox/mail/accounts/settings',
         draw: function (baton) {
             this.append(
                 $('<label>').text(gt('Your mail address')).append(
-                    $('<input type="text" class="input-large add-mail-account-address">')
+                    $('<input type="text" class="span6 add-mail-account-address">')
                 )
             );
         }
@@ -90,12 +92,7 @@ define('io.ox/mail/accounts/settings',
         draw: function (baton) {
             this.append(
                 $('<label>').text(gt('Your password')).append(
-                    $('<input type="password" class="input-large add-mail-account-password">')
-                    .on('keyup', function (e) {
-                        if (e.which === 13) {
-                            $(this).closest('.io-ox-dialog-popup').find('.modal-footer .btn-primary').trigger('click');
-                        }
-                    })
+                    $('<input type="password" class="span6 add-mail-account-password">')
                 )
             );
         }
@@ -169,7 +166,7 @@ define('io.ox/mail/accounts/settings',
             var deferedValidation = $.Deferred(),
                 deferedSave = $.Deferred();
 
-            myModel.validationCheck(data).then(
+            myModel.validationCheck(data, {ignoreInvalidTransport: true}).then(
                 function success(response) {
                     if (response === false) {
                         var message = gt('There was no suitable server found for this mail/password combination');
@@ -244,8 +241,8 @@ define('io.ox/mail/accounts/settings',
 
                 new dialogs.ModalDialog({
                     width: 400,
-                    easyOut: true,
-                    async: true
+                    async: true,
+                    enter: 'add'
                 })
                 .header(
                     $('<h4>').text(gt('Add mail account'))
@@ -284,7 +281,7 @@ define('io.ox/mail/accounts/settings',
                     createExtpointForNewAccount(args);
                 })
                 .show(function () {
-                    this.find('input[type=text]').focus();
+                    this.find('input[type=text]:first').focus();
                 });
 
             });
@@ -300,7 +297,6 @@ define('io.ox/mail/accounts/settings',
                 var self = this,
                     successDialogbox = new dialogs.ModalDialog({
                         width: 400,
-                        easyOut: true,
                         async: true
                     });
                 successDialogbox.header()
@@ -324,7 +320,6 @@ define('io.ox/mail/accounts/settings',
                 var self = this,
                     failDialogbox = new dialogs.ModalDialog({
                         width: 400,
-                        easyOut: true,
                         async: true
                     });
                 failDialogbox.header()

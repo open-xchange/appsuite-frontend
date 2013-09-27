@@ -14,9 +14,8 @@
 define('io.ox/office/framework/view/sidepane',
     ['io.ox/office/tk/utils',
      'io.ox/office/framework/view/pane',
-     'io.ox/office/framework/view/toolbox',
-     'gettext!io.ox/office/main'
-    ], function (Utils, Pane, ToolBox, gt) {
+     'io.ox/office/framework/view/toolbox'
+    ], function (Utils, Pane, ToolBox) {
 
     'use strict';
 
@@ -29,6 +28,12 @@ define('io.ox/office/framework/view/sidepane',
      * always be visible. The inner area between the fixed areas will be
      * scrollable.
      *
+     * Triggers the following events:
+     * - 'refresh:layout': After the view containing this side pane has
+     *      triggered a 'refresh:layout' event by itself, and this side pane
+     *      has updated the position and size of the fixed and scrollable
+     *      sections containing the tool boxes.
+     *
      * @constructor
      *
      * @extends Pane
@@ -36,7 +41,15 @@ define('io.ox/office/framework/view/sidepane',
      * @param {BaseApplication} app
      *  The application containing this side pane.
      *
+     * @param {String} id
+     *  The identifier for this view pane. Must be unique across all view panes
+     *  in the application.
+     *
      * @param {Object} [options]
+     *  A map of options to control the properties of the side pane. Supports
+     *  all options supported by the base class Pane. The 'options.position'
+     *  option will be restricted to the values 'left' and 'right'. The option
+     *  'options.componentInserter' is not supported anymore.
      *  A map of options to control the properties of the side pane. The
      *  following options are supported:
      *  @param {String} [options.position='right']
@@ -54,7 +67,7 @@ define('io.ox/office/framework/view/sidepane',
      *      have changed), after expanding or collapsing a tool box, or when
      *      the size of the browser window has been changed.
      */
-    function SidePane(app, options) {
+    function SidePane(app, id, options) {
 
         var // self reference
             self = this,
@@ -66,19 +79,18 @@ define('io.ox/office/framework/view/sidepane',
             scrollableNode = $('<div>').addClass('scrollable-toolboxes'),
 
             // container node for the upper fixed tool boxes in the side pane
-            fixedBottomNode = $('<div>').addClass('fixed-toolboxes bottom'),
-
-            // refresh layout of the side pane after changes of tool boxes
-            refreshHandler = Utils.getFunctionOption(options, 'refreshHandler', $.noop);
+            fixedBottomNode = $('<div>').addClass('fixed-toolboxes bottom');
 
         // base constructor ---------------------------------------------------
 
-        Pane.call(this, app, {
+        Pane.call(this, app, id, Utils.extendOptions({
+            // default options, can be overridden by passed options
+            size: SidePane.DEFAULT_WIDTH
+        }, options, {
+            // fixed options, will override passed options
             position: (Utils.getStringOption(options, 'position') === 'left') ? 'left' : 'right',
-            classes: 'side-pane',
-            insertHandler: insertHandler,
             componentInserter: toolBoxInserter
-        });
+        }));
 
         // private methods ----------------------------------------------------
 
@@ -86,31 +98,15 @@ define('io.ox/office/framework/view/sidepane',
          * Updates the side pane according to the current browser window size.
          */
         function refreshLayout() {
-            if (!self.isVisible()) { return; }
+            if (!self.isReallyVisible()) { return; }
 
             // update top/bottom positions of scrollable container in case the fixed tool boxes have changed
             scrollableNode.css({ top: fixedTopNode.height() - 1, bottom: fixedBottomNode.height() - 1 });
             // toggle visibility of border lines above/below container node
-            scrollableNode.toggleClass('scrollable', scrollableNode[0].clientHeight < scrollableNode[0].scrollHeight);
+            scrollableNode.toggleClass('scrolling', scrollableNode[0].clientHeight < scrollableNode[0].scrollHeight);
 
-            // call refresh handler passed to constructor
-            refreshHandler.call(self);
-        }
-
-        /**
-         * Will be called after the side pane has been inserted into the
-         * application window, used for delayed initialization with valid pane
-         * node geometry.
-         */
-        function insertHandler() {
-
-            // call insert handler passed to constructor
-            Utils.getFunctionOption(options, 'insertHandler', $.noop).call(self);
-
-            // update side pane after controller updates (tool box visibility may have
-            // changed), and after the size of the browser window has been changed
-            app.getController().on('update', refreshLayout);
-            app.registerWindowResizeHandler(refreshLayout);
+            // notify listeners
+            self.trigger('refresh:layout');
         }
 
         /**
@@ -147,6 +143,10 @@ define('io.ox/office/framework/view/sidepane',
          * Creates a tool box in this side pane, and registers it for automatic
          * visibility handling.
          *
+         * @param {String} id
+         *  The identifier for the new tool box. Must be unique across all view
+         *  components in the application.
+         *
          * @param {Object} [options]
          *  A map of options to control the properties of the new tool box.
          *  Supports all options supported by the constructor of the class
@@ -166,10 +166,10 @@ define('io.ox/office/framework/view/sidepane',
          * @returns {ToolBox}
          *  The new tool box instance.
          */
-        this.createToolBox = function (options) {
+        this.createToolBox = function (id, options) {
 
             var // the new tool box instance
-                toolBox = new ToolBox(app, options),
+                toolBox = new ToolBox(app, id, options),
                 // the controller item controlling the visibility of the tool box
                 visibleKey = Utils.getStringOption(options, 'visible');
 
@@ -195,9 +195,21 @@ define('io.ox/office/framework/view/sidepane',
         // initialization -----------------------------------------------------
 
         // insert the container nodes for fixed and scrollable tool boxes
-        this.getNode().append(fixedTopNode, scrollableNode, fixedBottomNode);
+        this.getNode().addClass('side-pane').append(fixedTopNode, scrollableNode, fixedBottomNode);
+
+        // update side pane after controller updates (tool box visibility
+        // may have changed), and after the view has refreshed the panes
+        app.getController().on('update', refreshLayout);
+        app.getView().on('refresh:layout', refreshLayout);
 
     } // class SidePane
+
+    // constants ==============================================================
+
+    /**
+     * Default width of side panes, in pixels.
+     */
+    SidePane.DEFAULT_WIDTH = 249;
 
     // exports ================================================================
 

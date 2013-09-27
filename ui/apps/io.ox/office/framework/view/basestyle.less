@@ -11,55 +11,14 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
+@import "../../tk/definitions";
+
+/* restrict all definitions to office applications */
+.io-ox-office-main {
+
 /* ========================================================================= */
-/* generic mix-in classes                                                    */
+/* browser fixes and workarounds                                             */
 /* ========================================================================= */
-
-.opacity(@opacity) {
-    opacity: @opacity / 100;
-    filter: ~"alpha(opacity=@{opacity})";
-}
-
-.border-top-left-radius(@radius) {
-    -webkit-border-top-left-radius: @radius;
-    -moz-border-radius-topleft: @radius;
-    border-top-left-radius: @radius;
-}
-
-.border-bottom-left-radius(@radius) {
-    -webkit-border-bottom-left-radius: @radius;
-    -moz-border-radius-bottomleft: @radius;
-    border-bottom-left-radius: @radius;
-}
-
-.border-top-right-radius(@radius) {
-    -webkit-border-top-right-radius: @radius;
-    -moz-border-radius-topright: @radius;
-    border-top-right-radius: @radius;
-}
-
-.border-bottom-right-radius(@radius) {
-    -webkit-border-bottom-right-radius: @radius;
-    -moz-border-radius-bottomright: @radius;
-    border-bottom-right-radius: @radius;
-}
-
-.box-shadow-2(@shadow1, @shadow2) {
-    -webkit-box-shadow: @shadow1, @shadow2;
-    -moz-box-shadow: @shadow1, @shadow2;
-    -ms-box-shadow: @shadow1, @shadow2;
-    box-shadow: @shadow1, @shadow2;
-}
-
-/* shadow for hovering elements */
-.drop-shadow(@size: 5px) {
-    .box-shadow(0 @size 2 * @size fade(black, 20%));
-}
-
-/* shadow for alert banners */
-.alert-shadow() {
-    .box-shadow(0 5px 15px -5px black);
-}
 
 .clearfix {
     &:before, &:after {
@@ -72,8 +31,17 @@
     }
 }
 
-/* restrict all definitions to office applications */
-.io-ox-office-main {
+/* hack for IE to expand nodes beyond the size limit of single nodes, see Utils.setContainerNodeSize() */
+.ie-node-size-container > div {
+    display: inline-block;
+    overflow: visible;
+    white-space: nowrap;
+
+    > div {
+        display: inline-block;
+        height: 0;
+    }
+}
 
 /* ========================================================================= */
 /* icons                                                                     */
@@ -87,33 +55,78 @@ i[class^="docs-"] {
 
     background-image: url(docs-icons-desktop-black.png);
     &.retina { background-image: url(docs-icons-retina-black.png); }
+
+    &.docs-caret { width: 9px; }
 }
 
 /* give standard Bootstrap icons a minimum width */
 i[class^="icon-"], i[class^=" icon-"] {
-    min-width: 16px;
+    display: inline-block;
+    min-width: 18px;
     font-size: 16px;
     text-align: center;
-}
-
-i.docs-caret {
-    width: 9px;
 }
 
 /* ========================================================================= */
 /* view panes                                                                */
 /* ========================================================================= */
 
-/* background color for panes */
-@pane-fill-color: #333333;
-
-/* background color for panes */
-@app-pane-fill-color: #e5e5e5;
-
 > .view-pane {
     position: absolute;
     background: @pane-fill-color;
     line-height: 0;
+
+    > .resizer {
+        position: absolute;
+        z-index: 10;
+
+        > .handle {
+            position: absolute;
+            .box-sizing(border-box);
+            background-color: fade(white, 20%);
+            border-left: 1px solid fade(white, 10%);
+            border-top: 1px solid fade(white, 10%);
+            border-right: 1px solid fade(black, 25%);
+            border-bottom: 1px solid fade(black, 25%);
+        }
+
+        &.top, &.bottom {
+            left: 0;
+            right: 0;
+            height: 12px;
+            cursor: ns-resize;
+
+            > .handle {
+                left: 50%;
+                width: 120px;
+                height: 3px;
+                margin-left: -60px;
+                &.h1 { top: 2px; }
+                &.h2 { top: 7px; }
+            }
+        }
+
+        &.left, &.right {
+            top: 0;
+            bottom: 0;
+            width: 12px;
+            cursor: ew-resize;
+
+            > .handle {
+                top: 50%;
+                width: 3px;
+                height: 120px;
+                margin-top: -60px;
+                &.h1 { left: 2px; }
+                &.h2 { left: 7px; }
+            }
+        }
+
+        &.top { bottom: 0; }
+        &.bottom { top: 0; }
+        &.left { right: 0; }
+        &.right { left: 0; }
+    }
 
     /* side panes */
     &.side-pane {
@@ -125,7 +138,7 @@ i.docs-caret {
             right: 0;
             height: auto;
             overflow: hidden;
-    
+
             &.top { top: 0; }
             &.bottom { bottom: 0; }
         }
@@ -141,7 +154,7 @@ i.docs-caret {
             border-top: 1px solid transparent;
             border-bottom: 1px solid transparent;
 
-            &.scrollable {
+            &.scrolling {
                 border-top-color: #181818;
                 border-bottom-color: #181818;
             }
@@ -150,10 +163,12 @@ i.docs-caret {
 
     /* the application pane in the middle between all view panes */
     &.app-pane {
-        .box-sizing(content-box);
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
         margin: 0;
         padding: 0;
-        background: @app-pane-fill-color;
 
         /* prevent dotted focus rectangle around the control */
         &, &:focus, &:active {
@@ -161,30 +176,22 @@ i.docs-caret {
         }
 
         /* the container element for the application contents */
-        > .app-container {
-            position: absolute;
-            display: block;
-            top: 0; bottom: 0;
-            left: 0; right: 0;
-        }
+        > .app-content-root {
+            background: @app-pane-fill-color;
 
-        /* scrollable application pane, center container node horizontally into application pane */
-        &.scrollable {
-            .overflow(auto);
-            text-align: center;
+            &:focus, &:active { outline: none; }
 
-            /* the container element for the application contents */
-            > .app-container {
-                position: relative;
-                display: inline-block;
-                width: auto;
-                height: auto;
+            /* scrollable application pane, center container node horizontally into application pane */
+            &.scrolling {
+                .overflow(auto);
+                text-align: center;
 
-                /* generic design of a 'page': white background with box shadow */
-                > .page {
+                /* the child container element for the application contents in the scrollable node */
+                > .app-content {
                     position: relative;
-                    background: white;
-                    .box-shadow(0 0 8px fade(black, 20%));
+                    display: inline-block;
+                    width: auto;
+                    height: auto;
                 }
             }
         }
@@ -202,21 +209,37 @@ i.docs-caret {
 /* control groups                                                            */
 /* ========================================================================= */
 
-/* glow effect for focused controls, use as argument for shadow mix-in classes */
-@focus-glow-effect: 0 0 8px 2px fade(@selectedBackground, 60%);
+/* horizontal padding in control elements */
+@control-padding: 8px;
 
-// prevent system pop-up when tapping and holding button on iPad/iPhone
-// (also for buttons outside .group elements)
+/* horizontal padding in text input elements */
+@input-padding: 4px;
+
+/* space between control caption elements */
+@caption-spacing: 6px;
+
+/* prevent system pop-up when tapping and holding button on iPad/iPhone (also for buttons outside .group elements) */
 .button {
     -webkit-touch-callout: none;
 }
 
-.group {
-    /* horizontal padding in control elements */
-    @control-padding: 8px;
-    /* space between control caption elements */
-    @caption-spacing: 6px;
+.spin-field-settings(@height) {
+    > div {
+        display: inline-block;
+        height: @height;
 
+        .spin-button {
+            display: block;
+            margin-left: 0;
+            height: (@height / 2 + 0.5px);
+            line-height: (@height / 2 - 1.5px);
+            i[class^="docs-"] { position: relative; top: (@height / 4 - 10px); }
+            &.down { margin-top: -1px; }
+        }
+    }
+}
+
+.group {
     position: relative;
     .box-sizing(border-box);
 
@@ -226,9 +249,8 @@ i.docs-caret {
     }
 
     /* disabled groups ('important' to overrule display modes from other rules) */
-    &.disabled {
-        /* override mouse pointer for any embedded elements */
-        &, * { cursor: default !important; }
+    &.disabled, &.disabled *, & .disabled {
+        cursor: default !important;
     }
 
     /* common control settings --------------------------------------------- */
@@ -245,7 +267,6 @@ i.docs-caret {
         .border-radius(0);
         .box-shadow(none);
         .transition(none);
-        white-space: nowrap;
         font-size: 13px;
         font-weight: normal;
         color: @textColor;
@@ -262,19 +283,22 @@ i.docs-caret {
     label, .button {
         padding-left: @control-padding;
         padding-right: @control-padding;
-
-        span {
-            display: inline-block;
-            vertical-align: top;
-        }
+        white-space: nowrap;
 
         > .caption {
+            display: inline-block;
             .box-sizing(border-box);
-            width: 100%;
+            max-width: 100%;
             overflow: hidden;
+            vertical-align: top;
 
-            > span + span {
-                margin-left: @caption-spacing;
+            > span {
+                display: inline-block;
+                vertical-align: top;
+
+                + span {
+                    margin-left: @caption-spacing;
+                }
             }
         }
     }
@@ -282,7 +306,7 @@ i.docs-caret {
     /* fade out caption for buttons and labels in disabled groups */
     &.disabled label, &.disabled .button, label.disabled, .button.disabled {
         > .caption, > span {
-            .opacity(50);
+            opacity: 0.5;
         }
     }
 
@@ -303,10 +327,14 @@ i.docs-caret {
     .button {
         text-align: left;
 
-        &.dropdown-button {
-            padding-right: 7px + @control-padding;
+        &:hover {
+            text-decoration: none;
+        }
 
-            > .caption > span:last-child {
+        &.dropdown-button.caret-visible {
+            padding-right: (7px + @control-padding);
+
+            > .caption {
                 margin-right: @caption-spacing;
             }
 
@@ -320,16 +348,26 @@ i.docs-caret {
 
     /* text fields --------------------------------------------------------- */
 
-    input {
+    .input-wrapper {
+        display: inline-block;
+        .box-sizing(border-box);
         width: 150px;
-        padding-left: 4px;
-        padding-right: 4px;
-        line-height: normal;
+        padding: 0 @input-padding;
+        vertical-align: top;
         cursor: text;
 
-        &.readonly {
-            cursor: default;
+        > input {
+            width: 100%;
+            height: 100%;
+            /* bug 28206: IE hides cursor in right-aligned text fields */
+            padding-right: 1px;
+            line-height: normal;
+            .input-placeholder-color(#ccc);
         }
+    }
+
+    &.text-field {
+        white-space: nowrap;
     }
 
 } /* end of .group */
@@ -356,7 +394,7 @@ i.docs-caret {
         /* default spacing between controls */
         @control-spacing: 9px;
         /* standard height of controls */
-        @control-height: 36px;
+        @control-height: 37px;
         /* border radius for controls */
         @border-radius: 5px;
         /* height of the heading label */
@@ -371,22 +409,38 @@ i.docs-caret {
 
         display: block;
         .box-sizing(content-box);
-        padding: @control-spacing @toolbox-padding 0;
+        padding: @control-spacing @toolbox-padding;
         /* size the tool box according to its floated children */
         overflow: hidden;
 
         > .group-line {
             display: block;
-            margin-bottom: @control-spacing;
+            white-space: nowrap;
             .clearfix();
 
-            > .tab-left { float: left; }
-            > .tab-right { float: right; }
+            &:not(:last-child) {
+                margin-bottom: @control-spacing;
+            }
+
+            > .tab-left {
+                float: left;
+                white-space: nowrap;
+            }
+
+            > .tab-right {
+                float: right;
+                white-space: nowrap;
+            }
 
             .group-container {
                 display: inline-block;
                 .border-radius(@border-radius);
                 vertical-align: top;
+                white-space: nowrap;
+
+                &.hidden {
+                    display: none !important;
+                }
             }
         }
 
@@ -394,11 +448,14 @@ i.docs-caret {
             display: inline-block;
             background: @pane-fill-color;
             .box-shadow(2px 2px 6px fade(white, 10%));
+            .ipad-safari-overflow-fix();
+            vertical-align: top;
 
             + .group {
                 margin-left: -1px;
             }
 
+            /* round corners for first control in a group container */
             &:first-child {
                 &, > *:first-child {
                     .border-top-left-radius(@border-radius);
@@ -406,25 +463,33 @@ i.docs-caret {
                 }
             }
 
+            /* round corners for last control in a group container */
             &:last-child {
                 &, > *:last-child {
                     .border-top-right-radius(@border-radius);
                     .border-bottom-right-radius(@border-radius);
                 }
+                &.spin-field .spin-button {
+                    &.up { .border-top-right-radius(@border-radius); }
+                    &.down { .border-bottom-right-radius(@border-radius); }
+                }
             }
 
-            label, .button, input {
+            label, .button, .input-wrapper {
                 height: @control-height;
                 border: 1px solid #181818;
-                color: white;
 
-                + label, + .button, + input {
+                + label, + .button, + .input-wrapper {
                     margin-left: -1px;
                 }
             }
 
+            label, .button, input {
+                color: white;
+            }
+
             label, .button {
-                line-height: @control-height - 2px;
+                line-height: (@control-height - 2px);
 
                 /* adjustments for icons */
                 span > i[class^="docs-"] {
@@ -438,124 +503,154 @@ i.docs-caret {
                 }
             }
 
-            /* selected toggle/radio buttons */
+            /* no borders around controls */
+            &.no-borders {
+                .box-shadow(none);
+
+                label, .button, .input-wrapper {
+                    border-color: transparent;
+                }
+            }
+
+            /* default background for selected toggle/radio buttons */
             .button.selected {
+                background: fade(@selectedBackground, 30%);
+            }
+
+            /* background for enabled toggle/radio buttons */
+            &:not(.disabled) .button:not(.disabled).selected {
                 background: fade(@selectedBackground, 50%);
             }
 
             /* color of place holder in text fields */
             input {
-                .placeholder-color() { color: lighten(@pane-fill-color, 15%); }
-                &::-webkit-input-placeholder { .placeholder-color(); }
-                &:-moz-placeholder { .placeholder-color(); }
-                &::-moz-placeholder { .placeholder-color(); }
-                &:-ms-input-placeholder { .placeholder-color(); }
+                .input-placeholder-color(lighten(@pane-fill-color, 15%));
             }
 
             /* fade out text fields in disabled groups */
-            &.disabled input, input.disabled {
+            &.disabled .input-wrapper > input, .input-wrapper.disabled > input {
                 color: fade(white, 50%);
             }
 
-            /* keyboard/mouse effects (not for disabled buttons/text fields or groups) */
-            &:not(.disabled) {
+            /* tiny 3D shadow effect for enabled buttons */
+            &:not(.disabled) .button:not(.disabled) {
+                &:not(.selected) { .box-shadow(@button-shadow-effect); }
+                &.selected { .box-shadow(@selected-button-shadow-effect); }
+            }
 
-                /* raise hovered/focused control to make all borders visible */
-                .button, input {
-                    &:not(.disabled) {
-                        &:hover:not(:focus), &:active:not(:focus) { z-index: 2; }
-                        &:focus { z-index: 4; }
-                    }
-                }
+            /* raise focused control to make all borders visible */
+            &.focused {
+                z-index: 1;
+                :focus { z-index: 2; }
+            }
 
-                .button:not(.disabled) {
-                    .box-shadow(@button-shadow-effect);
-
+            /* hover/active highlighting for enabled buttons (not for opened drop-down menu) */
+            &:not(.disabled):not(.dropdown-open) .button:not(.disabled) {
+                &:not(.selected) {
                     &:hover { background: fade(white, 5%); }
                     &:active { background: fade(black, 5%); }
+                }
+                &.selected {
+                    &:hover { background: fade(@selectedBackground, 60%); }
+                    &:active { background: fade(@selectedBackground, 40%); }
+                }
+            }
 
-                    &:focus:not(:active) {
-                        .box-shadow-2(@button-shadow-effect, @focus-glow-effect);
-                        border-color: @selectedBackground;
+            /* focus border for focused buttons (not for opened drop-down menu) */
+            &:not(.dropdown-open) .button:focus:not(:active) {
+                border-color: @disabled-focus-border-color;
+            }
+
+            /* focus border for enabled focused buttons (not for opened drop-down menu) */
+            &:not(.dropdown-open):not(.disabled) .button:not(.disabled):focus:not(:active) {
+                border-color: @focus-border-color;
+
+                &:not(.selected) { .box-shadow-2(@button-shadow-effect, @focus-glow-effect); }
+                &.selected { .box-shadow-2(@selected-button-shadow-effect, @focus-glow-effect); }
+            }
+
+            /* tiny 3D shadow effect for enabled input fields */
+            &:not(.disabled):not(.focused):not(.no-borders) .input-wrapper:not(.disabled) {
+                .box-shadow(@textfield-shadow-effect);
+            }
+
+            /* hover highlighting for enabled input fields */
+            &:not(.disabled):not(.focused) .input-wrapper:not(.disabled):hover {
+                background: fade(white, 5%);
+            }
+
+            /* default focus border for all controls in focused text fields */
+            &.text-field.focused {
+                .button, .input-wrapper {
+                    border-color: @disabled-focus-border-color;
+                }
+            }
+
+            /* additions for focused text fields */
+            &.text-field:not(.disabled).focused {
+                .box-shadow(@focus-glow-effect);
+
+                /* white background and focus border when focused */
+                .button, .input-wrapper {
+                    background: white !important;
+                    border-color: @focus-border-color;
+                }
+
+                .button, input {
+                    color: @textColor;
+                }
+
+                /* remove hover/active effects of standard buttons */
+                .button:hover, .button:active {
+                    background-color: white !important;
+                }
+
+                /* black icons */
+                .button i[class^="docs-"] {
+                    background-image: url(docs-icons-desktop-black.png);
+                    &.retina { background-image: url(docs-icons-retina-black.png); }
+                }
+
+                input {
+                    .input-placeholder-color(#ccc);
+                }
+            }
+
+            /* additional settings for spin fields */
+            &.spin-field {
+                .spin-field-settings(@control-height);
+                > div { margin-left: -1px; }
+            }
+
+            /* border and glow effect for buttons with open drop-down menus (but not combo fields) */
+            &.dropdown-open:not(.combo-field) {
+                z-index: 5;
+                .box-shadow(@dropdown-glow-effect);
+
+                .button {
+                    border-color: @dropdown-border-color;
+
+                    &:not(.selected) {
+                        background-color: fade(white, 30%);
+                        &:hover { background-color: fade(white, 35%); }
                     }
 
-                    /* selected toggle/radio buttons */
                     &.selected {
-                        .box-shadow(@selected-button-shadow-effect);
-
-                        &:hover { background: fade(@selectedBackground, 60%); }
-                        &:active { background: fade(@selectedBackground, 40%); }
-
-                        &:focus:not(:active) {
-                            .box-shadow-2(@selected-button-shadow-effect, @focus-glow-effect);
-                        }
-                    }
-                }
-
-                /* text fields without white background as long as not focused */
-                input:not(.disabled) {
-
-                    &:not(:focus) {
-                        .box-shadow(@textfield-shadow-effect);
-                        &:hover { background: fade(white, 5%); }
-                    }
-
-                    &:focus, &:active {
-                        background: white;
-                        .box-shadow(@focus-glow-effect);
-                        border-color: @selectedBackground;
-                        color: @textColor;
-
-                        /* color of place holder in text fields */
-                        .placeholder-color() { color: #ccc; }
-                        &::-webkit-input-placeholder { .placeholder-color(); }
-                        &:-moz-placeholder { .placeholder-color(); }
-                        &::-moz-placeholder { .placeholder-color(); }
-                        &:-ms-input-placeholder { .placeholder-color(); }
-                    }
-                }
-
-                /* effects for all elements in combo fields */
-                &.combo-field.focused {
-                    .box-shadow(@focus-glow-effect);
-
-                    > input, > .button.dropdown-button {
-                        &, &:hover, &:focus, &:active {
-                            background: white;
-                            border-color: @selectedBackground;
-                            .box-shadow(none);
-                            color: @textColor;
-
-                            /* black drop-down caret */
-                            i[class^="docs-"] {
-                                background-image: url(docs-icons-desktop-black.png);
-                                &.retina { background-image: url(docs-icons-retina-black.png); }
-                            }
-                        }
-                    }
-
-                    > input {
-                        &, &:hover, &:focus, &:active {
-                            border-right-color: transparent;
-                        }
-                    }
-
-                    > .button.dropdown-button {
-                        &, &:hover, &:focus, &:active {
-                            border-left-color: transparent;
-                        }
+                        background-color: fade(lighten(@selectedBackground, 20%), 60%);
+                        &:hover { background-color: fade(lighten(@selectedBackground, 20%), 65%); }
                     }
                 }
             }
+
         } /* end of .group */
 
         /* add specific design properties for the heading button */
         &.collapsing {
-            padding-top: @heading-height + 1.5 * @control-spacing;
+            padding-top: (@heading-height + 1.5 * @control-spacing);
 
             .group.heading {
                 position: absolute;
-                top: @control-spacing * 0.5;
+                top: (@control-spacing / 2);
                 left: -1px;
                 right: -1px;
                 background: fade(white, 10%);
@@ -566,7 +661,7 @@ i.docs-caret {
                     width: 100%;
                     height: @heading-height;
                     .border-radius(0);
-                    line-height: @heading-height - 2px;
+                    line-height: (@heading-height - 2px);
                     font-size: 12px;
                     font-weight: bold;
                     color: white;
@@ -576,7 +671,7 @@ i.docs-caret {
                 /* do not fade out disabled headings (but stick to default mouse pointer) */
                 &.disabled .button, .button.disabled {
                     > .caption, > span {
-                        .opacity(100);
+                        opacity: 1;
                     }
                 }
             }
@@ -587,23 +682,63 @@ i.docs-caret {
             }
         }
 
+        /* the label displaying the current status of the application */
+        .group.status-label {
+
+            > label {
+                height: auto;
+                padding-top: 2px;
+                padding-bottom: 2px;
+                line-height: normal;
+                border: 1px solid fade(black, 20%);
+                .box-shadow(5px 10px 10px -10px white inset);
+                font-size: 11px;
+                font-weight: bold;
+            }
+
+            &[data-type="info"] > label {
+                background-color: #ccc;
+                color: #555;
+            }
+            &[data-type="success"] > label {
+                background-color: #aea;
+                color: #575;
+            }
+            &[data-type="warning"] > label {
+                background-color: #ee9;
+                color: #774;
+            }
+            &[data-type="error"] > label {
+                background-color: #eaa;
+                color: #755;
+            }
+        }
+
     } /* end of &.toolbox */
 
 } /* end of .view-component */
 
 /* inline style view panes */
 .view-pane.inline {
+    white-space: nowrap;
     text-align: left;
 
     &.right {
         text-align: right;
     }
 
-    > .view-component.toolbox {
+    > .view-component {
         display: inline-block;
+        white-space: nowrap;
 
-        &:not(:last-child) { padding-right: 4px; }
-        &:not(:first-child) { padding-left: 4px; }
+        &.toolbox {
+            padding: 8px 4px;
+        }
+
+        > .group {
+            display: inline-block;
+            white-space: nowrap;
+        }
     }
 }
 
@@ -614,15 +749,21 @@ i.docs-caret {
     > .view-component.toolbox {
         overflow: visible;
 
-        .group {
+        .group-container {
             .drop-shadow();
         }
     }
+}
 
-    /* half-transparent hover effect */
-    &.hover-effect {
+/* half-transparent hover effect for entire view panes and single view components */
+.view-pane:not(.touch) {
+    &.hover-effect, &:not(.hover-effect) > .view-component.hover-effect {
         .transition(opacity 0.2s linear);
-        &:not(:hover) { .opacity(70); }
+        opacity: 0.7;
+
+        &.focused, &:hover {
+            opacity: 1;
+        }
     }
 }
 
@@ -644,145 +785,258 @@ i.docs-caret {
     font-size: 0;
     line-height: 0;
 
-    > .group.item-buttons {
+    /* drop-down menus with list items divided in sections ================= */
 
-        > label {
+    &.section-list {
+
+        /* border color for separator lines and controls */
+        @default-border-color: @app-pane-fill-color;
+        /* border color for disabled focused controls */
+        @disabled-focus-border-color: lighten(@selectedBackground, 15%);
+
+        /* floating all elements left to make menus work correctly in IE9 (bug 26537) */
+        > * {
             display: block;
             width: 100%;
+            float: left;
+            clear: left;
+        }
+
+        /* the separator line between menu sections */
+        > .section-separator {
+            height: 1px;
+            margin: 5px 0;
+            background: @default-border-color;
+        }
+
+        /* the heading label above a menu section */
+        > label.section-heading {
             height: auto;
+            margin: 0;
             padding-top: 7px;
-            padding-bottom: 7px;
+            padding-bottom: 5px;
             font-size: 10px;
             line-height: normal;
             font-weight: bold;
+            text-align: center;
         }
 
-        > .item-section {
-            display: block;
-            width: 100%;
+        /* the root node of the menu section contents */
+        > .section-container {
             .box-sizing(border-box);
 
             &:first-child { margin-top: 5px; }
             &:last-child { margin-bottom: 5px; }
+
+            > .group.item-group .button {
+                display: block;
+                width: 100%;
+                text-align: left;
+            }
         }
 
-        .button {
-            display: block;
-            width: 100%;
-            text-align: left;
-        }
+        /* vertical list layout */
+        &.layout-list > .section-container {
 
-        /* list drop-downs */
-        &.list {
-        }
+            > .group.text-field {
+                margin-left: @control-padding;
+                margin-right: @control-padding;
+            }
 
-        /* grid drop-downs */
-        &.grid {
-            > .item-section {
-                padding: 0 5px;
+            &.inline {
+                white-space: nowrap;
 
-                > table {
-                    width: 100%;
+                > .group {
+                    display: inline-block;
+                    vertical-align: top;
 
-                    > tbody > tr > td {
-                        padding: 0;
+                    &.text-field {
+                        &:not(:first-child) { margin-left: 0; }
+                        &:not(:last-child) { margin-right: 0; }
                     }
                 }
             }
         }
 
-        /* default design: selected, hover, focus with background color */
-        &.design-default {
+        /* grid layout */
+        &.layout-grid > .section-container {
+            padding: 0 5px;
 
-            /* standard height of controls */
-            @item-height: 30px;
+            > .group.item-group > table {
+                width: 100%;
 
-            .button {
-                height: @item-height;
-                border: 1px solid transparent;
-                line-height: @item-height - 2px;
-
-                &.selected {
-                    background: fade(@selectedBackground, 60%);
+                > tbody > tr > td {
+                    padding: 0;
+                    /* Hack for IE9: without this attribute, IE9 will clip all
+                       contents of the cells which hides the focus highlighting */
+                    border-collapse: separate;
                 }
             }
+        }
 
+        /* default design: selected, hover, focus with background color */
+        &.design-default > .section-container > .group {
+
+            /* standard height of controls */
+            @item-height: 31px;
+
+            /* embedded labels and buttons (list items) */
+            label, .button {
+                height: @item-height;
+                border: 1px solid transparent;
+                line-height: (@item-height - 2px);
+            }
+
+            /* default background for selected items */
+            .button.selected {
+                background: fade(@selectedBackground, 40%);
+            }
+
+            /* background for enabled selected items */
+            &:not(.disabled) .button:not(.disabled).selected {
+                background: fade(@selectedBackground, 60%);
+            }
+
+            /* hover/active highlighting for enabled buttons */
             &:not(.disabled) .button:not(.disabled) {
-
-                &:hover { background: fade(black, 5%); }
-                &:active { background: fade(black, 10%); }
-
-                &:focus:not(:active) {
-                    border-color: @selectedBackground;
-                    .box-shadow(@focus-glow-effect);
+                &:not(.selected) {
+                    &:hover { background: fade(black, 5%); }
+                    &:active { background: fade(black, 10%); }
                 }
-
                 &.selected {
                     &:hover { background: fade(@selectedBackground, 70%); }
                     &:active { background: fade(@selectedBackground, 80%); }
                 }
             }
+
+            /* default border for focused buttons */
+            .button:focus:not(:active) {
+                border-color: @disabled-focus-border-color;
+            }
+
+            /* focus border and glow effect for enabled focused buttons */
+            &:not(.disabled) .button:not(.disabled):focus:not(:active) {
+                border-color: @focus-border-color;
+                .box-shadow(@focus-glow-effect);
+            }
+
+            /* permanent borders for text fields */
+            &.text-field {
+                .border-radius(5px);
+
+                .button, .input-wrapper {
+                    border: 1px solid @default-border-color;
+                }
+
+                .input-wrapper {
+                    height: @item-height;
+                    .border-radius(5px);
+                }
+            }
+
+            /* additional hover highlighting for text fields */
+            &.text-field:not(.disabled):not(.focused):hover {
+                .button, .input-wrapper {
+                    border-color: darken(@default-border-color, 5%);
+                }
+            }
+
+            /* focus border for all controls in disabled text fields */
+            &.text-field.disabled.focused {
+                .button, .input-wrapper {
+                    border-color: @disabled-focus-border-color;
+                }
+            }
+
+            /* focus border for all controls in enabled text fields */
+            &.text-field:not(.disabled).focused {
+                .box-shadow(@focus-glow-effect);
+
+                .button, .input-wrapper {
+                    border-color: @focus-border-color;
+                }
+            }
+
+            /* additional settings for spin fields */
+            &.spin-field {
+                .spin-field-settings(@item-height);
+
+                > .input-wrapper {
+                    .border-top-right-radius(0);
+                    .border-bottom-right-radius(0);
+                }
+
+                > div {
+                    margin-left: -1px;
+                    .spin-button {
+                        &.up { .border-top-right-radius(5px); }
+                        &.down { .border-bottom-right-radius(5px); }
+                    }
+                }
+            }
         }
 
         /* framed design: selected, hover, focus with borders (preserve contents) */
-        &.design-framed {
+        &.design-framed > .section-container > .group {
 
             /* standard height of controls in drop-down lists, framed design */
-            @item-height: 42px;
+            @item-height: 43px;
             /* border width of buttons in framed design mode */
             @item-border-width: 3px;
+            /* shadow effects for selected buttons */
+            @shadow-effect-1: 0 5px 10px fade(black, 20%);
+            @shadow-effect-2: 0 2px 4px fade(black, 20%) inset;
+            /* focus border for disabled buttons, as shadow effect resulting in a single line */
+            @disabled-focus-border-effect: 0 0 0 1px @disabled-focus-border-color;
 
+            /* embedded buttons (list items) */
             .button {
                 height: @item-height;
                 padding-left: 12px;
                 padding-right: 12px;
                 border: @item-border-width solid transparent;
                 .border-radius(5px);
-                line-height: @item-height - 2 * @item-border-width;
+                line-height: (@item-height - 2 * @item-border-width);
 
                 &.selected {
                     border-color: @selectedBackground;
-                    .drop-shadow();
+                    .box-shadow-2(@shadow-effect-1, @shadow-effect-2);
+                    background-color: fade(@selectedBackground, 15%);
                 }
             }
 
+            /* hover/active highlighting for enabled buttons */
             &:not(.disabled) .button:not(.disabled) {
-
-                &:hover:not(:focus) { border-color: fade(black, 10%); }
-                &:active:not(:focus) { border-color: fade(black, 10%); }
-                &:focus { border-color: fade(@selectedBackground, 60%); }
-
+                &:not(.selected) {
+                    &:hover { border-color: fade(black, 10%); }
+                    &:active { border-color: fade(black, 15%); }
+                }
                 &.selected {
-                    &:hover:not(:focus) { border-color: darken(@selectedBackground, 5%); }
-                    &:active:not(:focus) { border-color: darken(@selectedBackground, 10%); }
-                    &:focus { border-color: darken(@selectedBackground, 20%); }
+                    &:hover { border-color: darken(@selectedBackground, 5%); }
+                    &:active { border-color: darken(@selectedBackground, 10%); }
+                }
+            }
+
+            /* default border for focused buttons */
+            .button:focus:not(:active) {
+                .box-shadow(@disabled-focus-border-effect);
+            }
+
+            /* focus border and glow effect for enabled focused buttons */
+            &:not(.disabled) .button:not(.disabled):focus:not(:active) {
+                &:not(.selected) {
+                    .box-shadow-2(@focus-border-effect, @focus-glow-effect);
+                }
+                &.selected {
+                    border-color: lighten(@selectedBackground, 10%);
+                    .box-shadow-4(@shadow-effect-1, @shadow-effect-2, @focus-border-effect, @focus-glow-effect);
                 }
             }
         }
-    }
+
+    } /* end of &.section-list */
 
 } /* end of &.dropdown-container */
-
-/* ========================================================================= */
-/* alert banners                                                             */
-/* ========================================================================= */
-
-.alert {
-    position: absolute;
-    z-index: 2000;
-    padding: 8px 14px;
-    .alert-shadow();
-    cursor: default;
-
-    h4 { margin-bottom: 8px; }
-    p { margin: 0; }
-
-    button, .close {
-        position: static;
-        float: right;
-        margin: 0 0 5px 14px;
-    }
-}
 
 } /* end of .io-ox-office-main */
 
@@ -791,6 +1045,10 @@ i.docs-caret {
 /* ========================================================================= */
 
 .io-ox-office-blocker {
+
+    &:focus, &:active {
+        outline: none;
+    }
 
     .header {
         top: 0;
@@ -814,7 +1072,7 @@ i.docs-caret {
                 max-width: 500px;
                 margin: 0 auto;
                 padding: 0;
-                .alert-shadow();
+                .drop-shadow(7px);
                 cursor: default;
 
                 > div {
@@ -844,4 +1102,63 @@ i.docs-caret {
     left: 0;
     right: 0;
     overflow: hidden;
+}
+
+#io-ox-office-console {
+    position: fixed;
+    top: 10px;
+    bottom: 10px;
+    left: 10px;
+    width: 40%;
+    z-index: 60000;
+    overflow: hidden;
+    background-color: fade(white, 90%);
+    border: 1px solid @textColor;
+    .border-radius(5px);
+    .drop-shadow();
+
+    > * {
+        position: absolute;
+        left: 0;
+        right: 0;
+    }
+
+    > .output {
+        top: 0;
+        bottom: 39px;
+        overflow: auto;
+        > p {
+            min-height: 12px;
+            margin: 0;
+            padding: 1px 5px;
+            border-bottom: 1px solid #ccc;
+            font-family: monospace;
+            font-size: 10px;
+            line-height: 12px;
+            color: @textColor;
+            word-wrap: break-word;
+            > i { margin-right: 4px; }
+            &.info { background-color: fade(blue, 5%); > i { color: blue; } }
+            &.warn { background-color: fade(yellow, 5%); > i { color: #f90; } }
+            &.error { background-color: fade(red, 5%); > i { color: red; } }
+        }
+    }
+
+    > button {
+        bottom: 0;
+        height: 40px;
+        border: none;
+        border-top: 1px solid @textColor;
+    }
+
+    &.collapsed {
+        top: 50%;
+        left: -20px;
+        width: 40px;
+        height: 40px;
+        margin-top: -10px;
+        .border-radius(50%);
+        background-color: fade(yellow, 50%);
+        > * { display: none; }
+    }
 }

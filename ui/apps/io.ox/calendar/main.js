@@ -13,11 +13,11 @@
 
 define("io.ox/calendar/main",
     ["io.ox/core/date",
-     "io.ox/core/config",
+     "settings!io.ox/core",
      "io.ox/core/commons",
      "settings!io.ox/calendar",
      "io.ox/calendar/actions",
-     "less!io.ox/calendar/style.less"], function (date, config, commons, settings) {
+     "less!io.ox/calendar/style.less"], function (date, coreConfig, commons, settings) {
 
     "use strict";
 
@@ -53,29 +53,30 @@ define("io.ox/calendar/main",
         commons.addFolderView(app, { type: 'calendar', view: 'FolderList' });
 
         // go!
-        commons.addFolderSupport(app, null, 'calendar', options.folder || config.get('folder.calendar'))
+        commons.addFolderSupport(app, null, 'calendar', options.folder || coreConfig.get('folder/calendar'))
             .pipe(commons.showWindow(win))
             .done(function () {
                 ox.ui.Perspective.show(app, options.perspective || _.url.hash('perspective') || lastPerspective);
             });
 
         win.on('search:open', function () {
-            lastPerspective = win.currentPerspective;
-            ox.ui.Perspective.show(app, 'list');
-        });
-
-        win.on('search:close', function () {
-            if (lastPerspective) {
-                ox.ui.Perspective.show(app, lastPerspective);
-            }
-        });
-
-        win.on('change:perspective', function (e, name) {
-            if (name !== 'list') {
-                lastPerspective = null;
-                win.search.close();
-            }
-        });
+                lastPerspective = win.currentPerspective;
+                if (lastPerspective && lastPerspective !== 'list') {
+                    ox.ui.Perspective.show(app, 'list');
+                }
+            })
+            .on('search:close', function () {
+                if (lastPerspective && lastPerspective !== 'list') {
+                    ox.ui.Perspective.show(app, lastPerspective);
+                }
+            })
+            .on('change:perspective', function (e, name, long) {
+                // save current perspective to settings
+                settings.set('viewView', long).save();
+                if (name !== 'list') {
+                    win.search.close();
+                }
+            });
 
     });
 

@@ -29,6 +29,13 @@ define('plugins/portal/files/register',
             return api.get({ folder: props.folder_id, id: props.id }).then(
                 function success(data) {
                     baton.data = data;
+                    api.on('delete', function (event, elements) {
+                        var filename = baton.data.filename;
+                        if (_(elements).any(function (element) { return element.filename === filename; })) {
+                            var widgetCol = portalWidgets.getCollection();
+                            widgetCol.remove(baton.model);
+                        }
+                    });
                 },
                 function fail(e) {
                     return e.code === 'IFO-0300' ? 'remove' : e;
@@ -37,11 +44,15 @@ define('plugins/portal/files/register',
         },
 
         preview: function (baton) {
-            var content = $('<div class="content pointer">'),
-                data, options, url,
-                widgetCol = portalWidgets.getCollection();
 
-            if ((/(png|jpe?g|gif|bmp)$/i).test(baton.data.filename)) {
+            var content = $('<div class="content pointer">'),
+                data, options, url;
+
+            if (_.isEmpty(baton.data.filename)) {
+                //old 'description only files'
+                data = { folder_id: baton.data.folder_id, id: baton.data.id };
+                content.html(_.escape(baton.data.description).replace(/\n/g, '<br>'));
+            } else if ((/(png|jpe?g|gif|bmp)$/i).test(baton.data.filename)) {
                 data = { folder_id: baton.data.folder_id, id: baton.data.id };
                 options = { width: 300, height: 300, scaleType: 'cover' };
                 url = api.getUrl(data, 'view') + '&' + $.param(options);
@@ -76,14 +87,6 @@ define('plugins/portal/files/register',
         draw: function (baton) {
 
             var popup = this.busy();
-
-            api.on('delete', function (event, elements) {
-                var filename = baton.data.filename;
-                if (_(elements).any(function (element) { return element.filename === filename; })) {
-                    var widgetCol = portalWidgets.getCollection();
-                    widgetCol.remove(baton.model);
-                }
-            });
 
             require(['io.ox/files/list/view-detail'], function (view) {
                 var obj = api.reduce(baton.data);

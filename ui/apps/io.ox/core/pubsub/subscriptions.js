@@ -22,7 +22,7 @@ define('io.ox/core/pubsub/subscriptions',
      'gettext!io.ox/core/pubsub',
      'settings!io.ox/core'
     ],
-    function (ext, pubsub, api, folderApi, notifications, dialogs, keychainApi, gt) {
+    function (ext, pubsub, api, folderAPI, notifications, dialogs, keychainAPI, gt) {
 
     'use strict';
 
@@ -52,7 +52,7 @@ define('io.ox/core/pubsub/subscriptions',
                 var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, services: data, popup: popup, newFolder: true });
 
                 function removeFolder(id) {
-                    return folderApi.remove({ folder: id });
+                    return folderAPI.remove({ folder: id });
                 }
 
                 function saveModel(newFolder) {
@@ -75,6 +75,7 @@ define('io.ox/core/pubsub/subscriptions',
                                     popup.getBody().find('.control-group:not(:first)').addClass('error');
                                     showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(error.error));
                                     api.subscriptions.destroy(id);
+                                    self.model = self.model.clone();
                                     if (newFolder) {
                                         removeFolder(folder);
                                     }
@@ -113,7 +114,9 @@ define('io.ox/core/pubsub/subscriptions',
 
                 popup.getBody().addClass('form-horizontal max-height-200');
                 ext.point(POINT + '/dialog').invoke('draw', popup.getBody(), baton);
-                popup.show();
+                popup.show(function () {
+                    popup.getBody().find('select.service-value').focus();
+                });
                 popup.on('subscribe', function (action) {
 
                     popup.busy();
@@ -137,7 +140,7 @@ define('io.ox/core/pubsub/subscriptions',
 
                         // add new folders under module's default folder!
                         var folder = require('settings!io.ox/core').get('folder/' + self.model.get('entityModule'));
-                        folderApi.create({
+                        folderAPI.create({
                             folder: folder,
                             data: {
                                 title: service.displayName || gt('New Folder'),
@@ -164,7 +167,7 @@ define('io.ox/core/pubsub/subscriptions',
         node.prepend($('<div class="alert alert-error alert-block">').append(
             $('<strong>').text(label),
             $.txt(' ' + msg),
-            $('<button data-dismiss="alert" class="btn close">').text('x'))
+            $('<button type="button" data-dismiss="alert" class="btn close">').text('x'))
         );
 
     }
@@ -186,16 +189,16 @@ define('io.ox/core/pubsub/subscriptions',
 
         function oauth() {
             var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
-            return keychainApi.createInteractively(service.displayName.toLowerCase(), win);
+            return keychainAPI.createInteractively(service.displayName.toLowerCase(), win);
         }
 
         _.each(service.formDescription, function (fd) {
             var controls;
             if (fd.widget === 'oauthAccount') {
-                var accounts = _.where(keychainApi.getAll(), { serviceId: fd.options.type });
+                var accounts = _.where(keychainAPI.getAll(), { serviceId: fd.options.type });
                 if (accounts.length === 1) {
                     setSource(accounts[0].id);
-                    controls = $('<button>').addClass('btn disabled').text(accounts[0].displayName);
+                    controls = $('<button type="button" class="btn disabled">').text(accounts[0].displayName);
                 } else if (accounts.length > 1) {
                     controls = $('<select name="' + fd.name + '">').on('change', function () {
                         setSource($(this).val());
@@ -208,7 +211,7 @@ define('io.ox/core/pubsub/subscriptions',
                     // set initially to first account in list
                     setSource(accounts[0].id);
                 } else {
-                    controls = $('<button>').addClass('btn').text(gt('Add new account')).on('click', function () {
+                    controls = $('<button type="button" class="btn">').text(gt('Add new account')).on('click', function () {
                         oauth().done(function (data) {
                             buildForm(node, baton);
                         });

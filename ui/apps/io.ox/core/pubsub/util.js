@@ -13,10 +13,10 @@
 
 define('io.ox/core/pubsub/util',
     ['io.ox/core/api/pubsub',
-     'io.ox/core/config',
+     'settings!io.ox/core',
      'io.ox/core/api/folder',
      'io.ox/core/pubsub/model',
-     'gettext!io.ox/mail'], function (api, config, folderApi, model, gt) {
+     'gettext!io.ox/mail'], function (api, coreConfig, folderAPI, model, gt) {
 
     'use strict';
 
@@ -97,10 +97,10 @@ define('io.ox/core/pubsub/util',
          * @return {deferred} subscription id and number of items
          */
         autoSubscribe: function (module, name, url, options) {
-            var parent = config.get('folder.' + module),
+            var parent = coreConfig.get('folder/' + module),
                 folder = '';
             //create folder
-            return folderApi.create({
+            return folderAPI.create({
                 folder: parent,
                 data: {
                     title: name || gt('New folder'),

@@ -25,7 +25,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
         onChange: function () {
             var count = this.model.get('count');
             this.$el.find('.badge').toggleClass('empty', count === 0);
-            this.$el.find('.number').text(count >= 100 ? '99+' : count);
+            this.$el.find('.number').text(_.noI18n(count >= 100 ? '99+' : count));
         },
         onToggle: function (open) {
             this.$el.find('.badge i').attr('class', open ? 'icon-caret-down' : 'icon-caret-right');
@@ -58,25 +58,6 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
         }
     });
 
-    var FaviconBadge = Backbone.Model.extend({
-        initialize: function (options) {
-            this.on('change', _.bind(this.onChange, this));
-        },
-        onChange: function () {
-            window.Tinycon.setBubble(this.get('count'));
-        },
-        setNotifier: function (b) {
-            if (b && this.get('count')) {
-                window.Tinycon.setBubble(this.get('count'));
-            } else {
-                window.Tinycon.setBubble(0);
-            }
-        },
-        setCount: function (count) {
-            this.set('count', count);
-        }
-    });
-
     var NotificationsView = Backbone.View.extend({
         tagName: 'div',
         id: 'io-ox-notifications-display',
@@ -86,7 +67,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
         },
         render: function (notifications) {
             var self = this,
-                empty = true;//check if notification area is empty
+                empty = true; //check if notification area is empty
             self.$el.empty();
 
             if (_.size(self.subviews) < _.size(notifications)) { //make sure views are created one time only to avoid zombies
@@ -112,20 +93,6 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
         }
     });
 
-
-    var NotificationModel = Backbone.Model.extend({
-        defaults: {
-            'thumbnail': '',
-            'title': '',
-            'content': ''
-        }
-    });
-    var NotificationCollection = Backbone.Collection.extend({
-        model: NotificationModel,
-        initialize: function (options) {
-        }
-    });
-
     var NotificationController = function () {
         this.notifications = {};
         this.oldMailCount = 0;//special variable needed to check for autoopen on new mail
@@ -134,7 +101,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
 
     NotificationController.prototype = {
 
-        attach: function (el, addLauncher) {
+        attach: function (addLauncher) {
             //view
             var self = this;
 
@@ -143,7 +110,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             this.notificationsView = new NotificationsView();
 
             $('#io-ox-core').prepend(
-                $('<div id="io-ox-notifications" class="scrollable">'),
+                $('<div id="io-ox-notifications" tabindex="-1">'),
                 $('<div id="io-ox-notifications-overlay" class="abs notifications-overlay">').click(function (e) {
                     if (e.target === this) {
                         self.hideList();
@@ -170,7 +137,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                 }
             }
 
-            changeAutoOpen();
+            if (_.device('!smartphone')) { changeAutoOpen(); }
             settings.on('change:autoOpenNotification', function (e, value) {
                 changeAutoOpen(value);
             });
@@ -205,13 +172,12 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
         get: function (key, listview) {
             if (_.isUndefined(this.notifications[key])) {
                 var module = {};
-                module.collection = new NotificationCollection([]);
                 module.ListView = listview;
-                module.collection.on('add', _.bind(this.onAddNotification, this));
-                module.collection.on('remove', _.bind(this.onRemoveNotification, this));
-                module.collection.on('reset', _.bind(this.onResetNotifications, this));
+                module.collection = new Backbone.Collection();
+                module.collection
+                    .on('add reset', _.bind(this.updateNotification, this))
+                    .on('remove', _.bind(this.update, this));
                 this.notifications[key] = module;
-                //$('#io-ox-notifications').empty().append(this.notificationsView.render(this.notifications).el);
             }
             return this.notifications[key];
         },
@@ -219,16 +185,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             $('#io-ox-notifications-overlay').off("mail-detail-closed");
             this.hideList();
         },
-        onAddNotification: function () {
-            _.each(this.badges, function (badgeView) {
-                badgeView.setNotifier(true);
-            });
-            this.update();
-        },
-        onRemoveNotification: function () {
-            this.update();
-        },
-        onResetNotifications: function () {
+        updateNotification: function () {
             _.each(this.badges, function (badgeView) {
                 badgeView.setNotifier(true);
             });
@@ -264,21 +221,21 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             //their app
             if ($('#io-ox-notifications').hasClass('active')) {
                 this.hideList();
+                if (_.device('smartphone')) { $('#io-ox-notifications-overlay').empty().removeClass('active'); }
             } else {
                 this.showList();
             }
         },
         showList: function () {
-            // just for the moment as reminder view blocks whole screen
-            // will reenable the view later with new design
-            if (_.device('small')) {
-                return;
+            if (_.device('smartphone')) {
+                $('[data-app-name="io.ox/portal"]:visible').addClass('notifications-open');
             }
+            $('#io-ox-notifications').find('[tabindex="1"]').focus();
             $('#io-ox-notifications').addClass('active');
             $('#io-ox-notifications-overlay').addClass('active');
             this.badgeView.onToggle(true);
             $(document).on('keydown.notification', $.proxy(function (e) {
-                if (e.which === 27) {
+                if (e.which === 27) { // escapekey
                     $(document).off('keydown.notification');
                     this.hideList();
                 }
@@ -288,67 +245,96 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             _.each(this.badges, function (badgeView) {
                 badgeView.setNotifier(false);
             });
-            
             this.badgeView.onToggle(false);
             $('#io-ox-notifications').removeClass('active');
-            $('#io-ox-notifications-overlay').empty().removeClass('active');
+            if (_.device('!smartphone')) {
+                $('#io-ox-notifications-overlay').empty().removeClass('active');
+            } else {
+                $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
+            }
         },
 
         // type = info | warning | error | success
         yell: (function () {
 
-            var validType = /^(info|warning|error|success)$/,
+
+            //$('#io-ox-core').prepend($('<div id="io-ox-notifications-popups">'));
+
+            var validType = /^(busy|error|info|success|warning)$/,
                 active = false,
-                container = null,
                 timer = null,
-                TIMEOUT = 10000,
+                isSmartphone = _.device('smartphone'),
 
-                clear = function () {
-                    if (timer !== null) {
-                        clearTimeout(timer);
-                        timer = null;
-                    }
+                durations = {
+                    busy: 10000,
+                    error: 30000,
+                    info: 10000,
+                    success: 4000,
+                    warning: 10000
                 },
 
-                fader = function () {
-                    clear();
-                    $('body').off('click tap', fader);
+                icons = {
+                    busy: 'icon-refresh icon-spin',
+                    error: 'icon-exclamation',
+                    info: 'icon-exclamation',
+                    success: 'icon-ok',
+                    warning: 'icon-exclamation'
+                },
+
+                remove = function () {
+
                     active = false;
-                    var node = container.children().first();
-                    node.fadeOut(function () {
-                        node.remove();
-                        node = null;
-                    });
+                    clearTimeout(timer);
+
+                    $('.io-ox-alert')
+                        .on('transitionEnd webkitTransitionEnd', function () {
+                            $(this).remove();
+                        })
+                        .removeClass('slide-in');
                 },
 
-                documentClick = function (e) {
+                click = function (e) {
+
+                    if (!active) return;
+
+                    if (isSmartphone) return remove();
+
+                    var target = $(e.target), alert = target.closest('.io-ox-alert');
+
                     // click on notification?
-                    if (e && $(e.target).closest('#io-ox-notifications-popups').length) return;
-                    // otherwise: fade out
-                    fader();
+                    if (alert.length) {
+                        // don't close on plain links
+                        if (target.is('a') && !target.hasClass('close')) return;
+                        // close if clicked on close icon or if clicked on success notifications
+                        if (target.hasClass('close') || alert.hasClass('io-ox-alert-success')) {
+                            e.preventDefault();
+                            remove();
+                        }
+                    } else {
+                        remove();
+                    }
                 };
+
+            $(document).on('click tap', click);
 
             return function (type, message) {
 
-                // we have a container?
-                if (container === null) {
-                    $('#io-ox-core').prepend(
-                        container = $('<div id="io-ox-notifications-popups">')
-                    );
-                }
+                if (type === 'close') return remove();
 
-                if (type === 'close') return fader();
-
-                var o = {};
+                var o = {
+                    duration: 0,
+                    html: false,
+                    type: 'info'
+                };
 
                 // catch server error?
                 if (_.isObject(type)) {
                     if ('error' in type) {
                         o.type = 'error';
-                        o.message = type.error;
+                        o.message = type.message || type.error;
                         o.headline = gt('Error');
                     } else {
-                        o = type;
+                        o = _.extend(o, type);
                     }
                 } else {
                     o.type = type || 'info';
@@ -357,27 +343,49 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
 
                 // add message
                 if (validType.test(o.type)) {
+
+                    active = false;
+                    clearTimeout(timer);
+
+                    timer = o.duration === -1 ? null : setTimeout(remove, o.duration || durations[o.type] || 5000);
+
+                    var html = o.html ? o.message : _.escape(o.message).replace(/\n/g, '<br>'),
+                        reuse = false,
+                        className = 'io-ox-alert io-ox-alert-' + o.type,
+                        wordbreak = html.indexOf('http') >= 0 ? 'break-all' : 'normal';
+
+                    // reuse existing alert?
+                    var node = $('.io-ox-alert.slide-in');
+
+                    if (node.length) {
+                        node.empty();
+                        reuse = true;
+                        className += ' slide-in';
+                    } else {
+                        node = $('<div role="alert" tabindex="-1">');
+                    }
+
+                    node.attr('class', className).append(
+                        $('<div class="icon">').append(
+                            $('<i>').addClass(icons[o.type] || 'icon-none')
+                        ),
+                        $('<div class="message user-select-text">').append(
+                            o.headline ? $('<h2 class="headline">').text(o.headline) : [],
+                            $('<div>').css('word-break', wordbreak).html(html)
+                        ),
+                        $('<a href="#" class="close" tabindex="1">').html('&times')
+                    );
+
+                    if (!reuse) $('body').append(node);
+
                     // put at end of stack not to run into opening click
                     setTimeout(function () {
-                        container.empty().append(
-                            $('<div class="alert alert-' + o.type + ' alert-block user-select-text">')
-                            .append(
-                                $('<a href="#" class="close">&times;</a>').click(fader),
-                                o.headline ? $('<b>').text(o.headline) : $(),
-                                $('<div>').html(_.escape(o.message).replace(/\n/g, '<br>'))
-                            )
-                        );
-                        if (!active) {
-                            $('body').on('click tap', documentClick);
-                        }
                         active = true;
-                        clear();
-                        timer = setTimeout(fader, (o.type === 'error' ? 2 : 1) * TIMEOUT);
-                    }, 100);
+                        if (!reuse) node.addClass('slide-in');
+                    }, 300);
                 }
             };
         }())
     };
-
     return new NotificationController();
 });

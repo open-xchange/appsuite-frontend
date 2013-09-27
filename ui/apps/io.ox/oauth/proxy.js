@@ -13,7 +13,7 @@
  */
 define('io.ox/oauth/proxy', ["io.ox/core/http"], function (http) {
     "use strict";
-    
+
     var that = {
         request: function (options) {
             var params = {};
@@ -21,7 +21,7 @@ define('io.ox/oauth/proxy', ["io.ox/core/http"], function (http) {
                 params.api = options.api;
                 delete options.api;
             }
-            
+
             if (options.account) {
                 params.account = options.account;
                 delete options.account;
@@ -33,7 +33,7 @@ define('io.ox/oauth/proxy', ["io.ox/core/http"], function (http) {
             });
         }
     };
-    
-    
+
+
     return that;
 });

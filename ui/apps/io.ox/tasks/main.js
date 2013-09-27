@@ -71,7 +71,7 @@ define('io.ox/tasks/main',
 
         var vsplit = commons.vsplit(win.nodes.main, app);
         left = vsplit.left.addClass('border-right');
-        right = vsplit.right.addClass('default-content-padding').scrollable();
+        right = vsplit.right.addClass('default-content-padding f6-target task-detail-container').attr('tabindex', 1).scrollable();
 
         var removeButton = function () {
             if (showSwipeButton) {
@@ -86,17 +86,22 @@ define('io.ox/tasks/main',
             id: 'deleteButton',
             draw: function (baton) {
                 // remove old buttons first
-                removeButton();
+                if (showSwipeButton) {
+                    removeButton();
+                }
 
                 this.append(
-                    $('<div class="btn btn-danger swipeDelete fadein">')
+                    $('<div class="cell-button swipeDelete fadein fast">')
                         .text(gt('Delete'))
                         .on('mousedown', function (e) {
                             // we have to use mousedown as the selection listens to this, too
                             // otherwise we are to late to get the event
+                            e.stopImmediatePropagation();
+                        }).on('tap', function (e) {
                             e.preventDefault();
-                            actions.invoke('io.ox/tasks/actions/delete', null, baton);
                             removeButton();
+                            showSwipeButton = false;
+                            actions.invoke('io.ox/tasks/actions/delete', null, baton);
                         })
                 );
                 showSwipeButton = true;
@@ -265,10 +270,11 @@ define('io.ox/tasks/main',
                 dropdown.find('.icon-arrow-up').css('opacity', 1).end()
                     .find('.icon-arrow-down').css('opacity', 0.4);
             }
+            //update api property (used cid in api.updateAllCache, api.create)
+            api.options.requests.all.sort = props.sort !== 'state' ? props.sort : 202;
+            api.options.requests.all.order = props.order;
         }
-        grid.selection.on('change', function () {
-            removeButton();
-        });
+        grid.selection.on('change', removeButton);
 
         grid.on('change:prop', function () {
             updateGridOptions();
@@ -292,26 +298,25 @@ define('io.ox/tasks/main',
     //extension points
     ext.point('io.ox/tasks/vgrid/toolbar').extend({
         id: 'dropdown',
-        index: 100,
+        index: 'last',
         draw: function () {
-            this.prepend(
-                $('<div>').addClass('grid-options dropdown').css({ display: 'inline-block', 'float': 'right' })
+            this.append(
+                $('<div class="grid-options dropdown">')
                 .append(
-                    $('<a>', { href: '#' })
-                    .attr('data-toggle', 'dropdown')
+                    $('<a href="#" tabindex="1" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').attr('aria-label', gt('Sort options'))
                     .append($('<i class="icon-arrow-down">'), $('<i class="icon-arrow-up">'))
                     .dropdown(),
-                    $('<ul>').addClass('dropdown-menu')
+                    $('<ul class="dropdown-menu" role="menu">')
                     .append(
-                        $('<li>').append($("<a data-option='state'>").text(gt('Status')).prepend($('<i>'))), // state becomes Bundesland :)
-                        $('<li>').append($("<a data-option='202'>").text(gt('Due date')).prepend($('<i>'))),
-                        $('<li>').append($("<a data-option='200'>").text(gt('Subject')).prepend($('<i>'))),
-                        $('<li>').append($("<a data-option='309'>").text(gt('Priority')).prepend($('<i>'))),
+                        $('<li>').append($('<a href="#" data-option="state">').text(gt('Status')).prepend($('<i>'))), // state becomes Bundesland :)
+                        $('<li>').append($('<a href="#" data-option="202">').text(gt('Due date')).prepend($('<i>'))),
+                        $('<li>').append($('<a href="#" data-option="200">').text(gt('Subject')).prepend($('<i>'))),
+                        $('<li>').append($('<a href="#" data-option="309">').text(gt('Priority')).prepend($('<i>'))),
                         $('<li class="divider">'),
-                        $('<li>').append($("<a data-option='asc'>").text(gt('Ascending')).prepend($('<i>'))),
-                        $('<li>').append($("<a data-option='desc'>").text(gt('Descending')).prepend($('<i>'))),
+                        $('<li>').append($('<a href="#" data-option="asc">').text(gt('Ascending')).prepend($('<i>'))),
+                        $('<li>').append($('<a href="#" data-option="desc">').text(gt('Descending')).prepend($('<i>'))),
                         $('<li class="divider">'),
-                        $('<li>').append($("<a data-option='done'>").text(gt('Show done tasks')).prepend($('<i>')))
+                        $('<li>').append($('<a href="#" data-option="done">').text(gt('Show done tasks')).prepend($('<i>')))
                     ).on('click', 'a', { grid: grid }, taskToolbarOptions)
                 )
             );

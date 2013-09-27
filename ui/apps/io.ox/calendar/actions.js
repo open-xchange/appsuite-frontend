@@ -15,11 +15,12 @@ define('io.ox/calendar/actions',
      'io.ox/core/extPatterns/links',
      'io.ox/calendar/api',
      'io.ox/calendar/util',
-     'gettext!io.ox/calendar/actions',
-     'io.ox/core/config',
      'io.ox/core/notifications',
-     'io.ox/core/print'
-    ], function (ext, links, api, util, gt, config, notifications, print) {
+     'io.ox/core/print',
+     'settings!io.ox/core',
+     'settings!io.ox/contacts',
+     'gettext!io.ox/calendar'
+    ], function (ext, links, api, util, notifications, print, coreSettings, settings, gt) {
 
     'use strict';
 
@@ -89,7 +90,7 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/save-as-distlist', {
         capabilities: 'contacts',
         action: function (baton) {
-            var contactsFolder = config.get('folder.contacts'),
+            var contactsFolder = coreSettings.get('folder/contacts'),
                 def = $.Deferred();
             util.createDistlistArrayFromPartisipantList(baton.data.participants, def);
             def.done(function (initdata) {
@@ -105,7 +106,15 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/edit', {
         id: 'edit',
         requires: function (e) {
-            return e.collection.has('one') && e.collection.has('create') && _.device('!small');
+            var exists = e.baton && e.baton.data ? e.baton.data.id !== undefined : true;
+            var allowed = e.collection.has('one') && e.collection.has('create');
+            if (allowed) {
+                //if you have no permission to edit you don't have a folder id (see calendar/freebusy response)
+                if (!e.baton.data.folder_id) {//you need to have a folder id to edit
+                    allowed = false;
+                }
+            }
+            return allowed && exists;
         },
         action: function (baton) {
             var params = baton.data,
@@ -135,6 +144,9 @@ define('io.ox/calendar/actions',
                                 }
                                 if (action === 'series') {
                                     // edit the series, discard recurrence position
+                                    if (params.recurrence_id) {
+                                        o.id = params.recurrence_id;
+                                    }
                                     delete o.recurrence_position;
                                 }
 
@@ -171,24 +183,60 @@ define('io.ox/calendar/actions',
 
     new Action('io.ox/calendar/detail/actions/delete', {
         id: 'delete',
-        requires: 'one delete',
-        action: function (baton) {
-            var params = baton.data,
-                o = {
-                id: params.id,
-                folder: params.folder_id
-            };
-            if (!_.isUndefined(params.recurrence_position)) {
-                o.recurrence_position = params.recurrence_position;
-            }
+        requires: 'delete',
+        multiple: function (list) {
 
-            api.get(o).done(function (data) {
-                ox.load(['io.ox/calendar/model']).done(function (Model) {
-                    // different warnings especially for events with
-                    // external users should handled here
-                    var myModel = new Model.Appointment(data);
-                    if (data.recurrence_type > 0) {
-                        ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
+            var apiCalls = [];
+
+            // build array with full identifier for an appointment and collect API get calls
+            _(list).each(function (obj) {
+                var o = {
+                    id: obj.id,
+                    folder: obj.folder_id
+                };
+                if (!_.isUndefined(obj.recurrence_position)) {
+                    o.recurrence_position = obj.recurrence_position;
+                }
+
+                apiCalls.push(api.get(o));
+            });
+
+            $.when.apply($, apiCalls)
+                .pipe(function () {
+                    return _.chain(arguments)
+                        .flatten(true)
+                        .filter(function (app) {
+                            return _.isObject(app);
+                        }).value();
+                })
+                .then(function (appList) {
+
+                    // check if appointment list contains recurring appointments
+                    var hasRec = _(appList).some(function (app) {
+                        return app.recurrence_type > 0;
+                    });
+
+                    ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
+
+                        var cont = function (series) {
+                            var data = _(appList).chain().map(function (obj) {
+                                var options = {
+                                    id: obj.id,
+                                    folder: obj.folder_id || obj.folder
+                                };
+                                if (!series && obj.recurrence_position) {
+                                    _.extend(options, {recurrence_position: obj.recurrence_position});
+                                }
+                                return options;
+                            }).uniq(function (obj) {
+                                return JSON.stringify(obj);
+                            }).value();
+                            api.remove(data).fail(notifications.yell);
+                        };
+
+                        // different warnings especially for events with
+                        // recurrence_type > 0 should handled here
+                        if (hasRec) {
                             new dialogs.ModalDialog()
                                 .text(gt('Do you want to delete the whole series or just one appointment within the series?'))
                                 .addPrimaryButton('appointment', gt('Delete appointment'))
@@ -199,14 +247,9 @@ define('io.ox/calendar/actions',
                                     if (action === 'cancel') {
                                         return;
                                     }
-                                    if (action === 'series') {
-                                        delete myModel.attributes.recurrence_position;
-                                    }
-                                    myModel.destroy();
+                                    cont(action === 'series');
                                 });
-                        });
-                    } else {
-                        ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
+                        } else {
                             new dialogs.ModalDialog()
                                 .text(gt('Do you want to delete this appointment?'))
                                 .addPrimaryButton('ok', gt('Delete'))
@@ -216,13 +259,11 @@ define('io.ox/calendar/actions',
                                     if (action === 'cancel') {
                                         return;
                                     }
-                                    myModel.destroy();
+                                    cont();
                                 });
-                        });
-                    }
-
+                        }
+                    });
                 });
-            });
         }
     });
 
@@ -230,7 +271,7 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/create', {
         id: 'create',
         requires: function (e) {
-            return e.collection.has('one') && e.collection.has('create') && _.device('!small');
+            return e.collection.has('one') && e.collection.has('create');
         },
         action: function (baton, obj) {
             // FIXME: if this action is invoked by the menu button, both
@@ -252,7 +293,18 @@ define('io.ox/calendar/actions',
 
     new Action('io.ox/calendar/detail/actions/changestatus', {
         id: 'change_status',
-        requires: 'one modify',
+        requires: function (e) {
+            var app = e.baton.data,
+                iamUser = false;
+            if (app.users) {
+                for (var i = 0; i < app.users.length; i++) {
+                    if (app.users[i].id === ox.user_id) {
+                        iamUser = true;
+                    }
+                }
+            }
+            return iamUser && e.collection.has('one');
+        },
         action: function (baton) {
             // load & call
             ox.load(['io.ox/calendar/acceptdeny']).done(function (acceptdeny) {
@@ -286,7 +338,7 @@ define('io.ox/calendar/actions',
         id: 'print',
         requires: function (e) {
             var win = e.baton.window;
-            if (win && win.getPerspective) {
+            if (_.device('!small') && win && win.getPerspective) {
                 var pers = win.getPerspective();
                 return pers && pers.name !== 'list';
             } else {
@@ -302,41 +354,69 @@ define('io.ox/calendar/actions',
         }
     });
 
-    var copyMove = function (type, apiAction, title) {
-        return function (list) {
-            ox.load(['io.ox/calendar/api', 'io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews']).done(function (api, dialogs, views) {
-                var dialog = new dialogs.ModalDialog({ easyOut: true })
-                    .header($('<h4>').text(title))
-                    .addPrimaryButton('ok', gt('Move'))
-                    .addButton('cancel', gt('Cancel'));
-                dialog.getBody().css('height', '250px');
-                var item = _(list).first(),
-                    id = String(item.folder_id || item.folder),
-                    tree = new views.FolderList(dialog.getBody(), { type: type });
-                dialog.show(function () {
-                    tree.paint().done(function () {
-                        tree.select(id);
-                    });
-                })
-                .done(function (action) {
-                    if (action === 'ok') {
-                        var target = _(tree.selection.get()).first();
-                        if (target && target !== id) {
-                            // use proper action
-                            api[apiAction](list, target)
-                                .done(function () {
-                                    var response = apiAction === 'move' ?
-                                        gt.ngettext('Appointment has been moved', 'Appointments have been moved', list.length) :
-                                        gt.ngettext('Appointment has been copied', 'Appointments have been copied', list.length);
-                                    notifications.yell('success', response);
-                                })
-                                .fail(notifications.yell);
+    var copyMove = function (type, title) {
+
+        return function (list, baton) {
+
+            var vGrid = baton.grid || (baton.app && baton.app.getGrid());
+
+            ox.load(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/api/folder']).done(function (dialogs, views, folderAPI) {
+
+                function commit(target) {
+                    if (type === "move" && vGrid) vGrid.busy();
+                    api[type](list, target).then(
+                        function () {
+                            var response = type === 'move' ?
+                                gt.ngettext('Appointment has been moved', 'Appointments have been moved', list.length) :
+                                gt.ngettext('Appointment has been copied', 'Appointments have been copied', list.length);
+                            notifications.yell('success', response);
+                            folderAPI.reload(target, list);
+                            if (type === "move" && vGrid) vGrid.idle();
+                        },
+                        notifications.yell
+                    );
+                }
+
+                if (baton.target) {
+                    commit(baton.target);
+                } else {
+                    var dialog = new dialogs.ModalDialog()
+                        .header($('<h4>').text(title))
+                        .addPrimaryButton('ok', gt('Move'))
+                        .addButton('cancel', gt('Cancel'));
+                    dialog.getBody().css('height', '250px');
+                    var folderId = String(list[0].folder_id),
+                        id = settings.get('folderpopup/last') || folderId,
+                        tree = new views.FolderList(dialog.getBody(), {
+                            type: 'calendar',
+                            open: settings.get('folderpopup/open', []),
+                            tabindex: 0,
+                            toggle: function (open) {
+                                settings.set('folderpopup/open', open).save();
+                            },
+                            select: function (id) {
+                                settings.set('folderpopup/last', id).save();
+                            }
+                        });
+                    dialog.show(function () {
+                        tree.paint().done(function () {
+                            tree.select(id).done(function () {
+                                dialog.getBody().focus();
+                            });
+                        });
+                    })
+                    .done(function (action) {
+                        if (action === 'ok') {
+                            var target = _(tree.selection.get()).first();
+                            if (target && (type === 'copy' || target !== folderId)) {
+                                commit(target);
+                            }
                         }
-                    }
-                    tree.destroy().done(function () {
-                        tree = dialog = null;
+                        tree.destroy().done(function () {
+                            tree = dialog = null;
+                        });
                     });
-                });
+                }
             });
         };
     };
@@ -344,7 +424,7 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/move', {
         id: 'move',
         requires: 'some delete',
-        multiple: copyMove('calendar', 'move', gt('Move'))
+        multiple: copyMove('move', gt('Move'))
     });
 
     new Action('io.ox/calendar/actions/freebusy', {
@@ -354,6 +434,7 @@ define('io.ox/calendar/actions',
         },
         action: function (baton, obj) {
             ox.launch('io.ox/calendar/freebusy/main', {
+                baton: baton,
                 folder: baton.app.folder.get(),
                 participants: [{ id: ox.user_id, type: 1 }]
             });
@@ -502,7 +583,8 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/detail/actions-participantrelated').extend(new links.InlineLinks({
         index: 100,
         id: 'inline-links-participant',
-        ref: 'io.ox/calendar/links/inline-participants'
+        ref: 'io.ox/calendar/links/inline-participants',
+        classes: 'io-ox-inline-links embedded'
     }));
 
     ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
@@ -512,7 +594,6 @@ define('io.ox/calendar/actions',
         label: gt('Send mail to all participants'),
         ref: 'io.ox/calendar/detail/actions/sendmail'
     }));
-
 
     ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
         index: 100,

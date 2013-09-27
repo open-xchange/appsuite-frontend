@@ -83,7 +83,6 @@ sh build.sh skipLess=1 builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
 cp -r "%{buildroot}%{docroot}/apps" "%{buildroot}$APPSUITE"
 
 mv "%{buildroot}%{docroot}/share" "%{buildroot}$APPSUITE"
-chmod +x "%{buildroot}$APPSUITE/share/update-themes.sh"
 
 find "%{buildroot}$APPSUITE" -type d \
     | sed -e 's,%{buildroot},%dir ,' > tmp/files
@@ -96,6 +95,11 @@ find "%{buildroot}$APPSUITE" \( -type f -o -type l \) \
 cp -r tmp/l10n/apps "%{buildroot}$APPSUITE"
 mkdir -p "%{buildroot}/opt/open-xchange/etc/languages/appsuite/"
 cp i18n/*.properties "%{buildroot}/opt/open-xchange/etc/languages/appsuite/"
+
+mkdir -p "%{buildroot}/opt/open-xchange/sbin"
+sed -e "s:## cd ##:cd %{docroot}:" bin/touch-appsuite > \
+    "%{buildroot}/opt/open-xchange/sbin/touch-appsuite"
+chmod +x "%{buildroot}/opt/open-xchange/sbin/touch-appsuite"
 
 mkdir -p "%{buildroot}/opt/open-xchange-appsuite-dev"
 cp -r bin lib Jakefile.js "%{buildroot}/opt/open-xchange-appsuite-dev/"
@@ -129,7 +133,10 @@ UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
 %doc readme.txt
 %dir %{docroot}
 %{docroot}
-%exclude %{docroot}/help
+%exclude %{docroot}/help/*_*
+%dir /opt/open-xchange
+%dir /opt/open-xchange/sbin
+/opt/open-xchange/sbin/touch-appsuite
 
 %files manifest -f tmp/files
 %defattr(-,root,root)

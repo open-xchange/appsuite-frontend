@@ -20,7 +20,7 @@ define('io.ox/lessons/lessons/basic_apps/register', ['io.ox/core/extensions'], f
         section: 'Basics',
         start: function (options) {
             var win = options.win;
-            
+
             win.nodes.main.empty().append($("<h1>").text("Basic Apps"));
         }
     });

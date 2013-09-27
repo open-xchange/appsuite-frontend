@@ -18,5 +18,9 @@ define([], function () {
         it('loads jQuery', function () {
             expect($).toBeDefined();
         });
+
+        it('loads underscore', function () {
+            expect(_).toBeDefined();
+        });
     });
 });

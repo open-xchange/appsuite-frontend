@@ -1,3 +1,4 @@
 {
-    namespace: "signin"
+    "namespace": "io.ox/portal/main",
+    "device": "iOS"
 }

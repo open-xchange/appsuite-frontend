@@ -72,21 +72,6 @@ define('io.ox/office/tk/control/radiolist',
      *          the label of the drop-down button.
      *      The keyword 'all' is equivalent to 'icon label labelCss'. The
      *      keyword 'none' is equivalent to the empty string.
-     *  @param {Function} [options.updateCaptionHandler]
-     *      A function that will be called after a list item has been
-     *      activated, and the caption of the drop-down button has been updated
-     *      according to the 'options.updateCaptionMode' option. Receives the
-     *      following parameters:
-     *      (1) {jQuery} captionButton
-     *          The caption button (the split button in split mode, otherwise
-     *          the drop-down button) to be updated,
-     *      (2) {Any} value
-     *          The value of the selected/activated list item, or passed to the
-     *          Group.update() method,
-     *      (3) {jQuery} [optionButton]
-     *          The button element of the activated list item (may be empty, if
-     *          no list item is active).
-     *      Will be called in the context of this radio group instance.
      *  @param {Function} [options.equality=_.isEqual]
      *      A comparison function that returns whether an arbitrary value
      *      should be considered being equal to the value of a list item in the
@@ -113,9 +98,6 @@ define('io.ox/office/tk/control/radiolist',
             // which parts of a list item caption will be copied to the menu button
             updateCaptionMode = Utils.getStringOption(options, 'updateCaptionMode', 'all'),
 
-            // custom update handler for the caption of the menu button
-            updateCaptionHandler = Utils.getFunctionOption(options, 'updateCaptionHandler'),
-
             // comparator for list item values
             equality = Utils.getFunctionOption(options, 'equality'),
 
@@ -131,7 +113,7 @@ define('io.ox/office/tk/control/radiolist',
         // base constructors --------------------------------------------------
 
         BaseClass.call(this, Utils.extendOptions(options, { value: splitValue }));
-        DropDownClass.call(this, Utils.extendOptions({ itemValueResolver: itemClickHandler }, options, { plainCaret: hasSplitButton }));
+        DropDownClass.call(this, Utils.extendOptions({ itemValueResolver: itemClickHandler }, options, hasSplitButton ? { caret: 'only' } : undefined));
 
         // private methods ----------------------------------------------------
 
@@ -145,7 +127,7 @@ define('io.ox/office/tk/control/radiolist',
         }
 
         /**
-         * Handles 'menuopen' events.
+         * Handles 'menu:open' events.
          */
         function menuOpenHandler() {
             scrollToListItem(Utils.getSelectedButtons(self.getItems()));
@@ -154,18 +136,18 @@ define('io.ox/office/tk/control/radiolist',
         /**
          * Activates an option button in this radio group.
          *
-         * @param value
+         * @param {Any} value
          *  The value associated to the button to be activated. If set to null,
          *  does not activate any button (ambiguous state).
          */
-        function itemUpdateHandler(value) {
+        function itemUpdateHandler(value, valueOptions) {
 
             var // the target caption button
                 captionButton = self.getCaptionButton(),
                 // activate an option button
-                optionButton = Utils.selectOptionButton(self.getItems(), value, equality),
+                selectedButtons = Utils.selectOptionButton(self.getItems(), value, equality),
                 // the options used to create the list item button
-                buttonOptions = optionButton.data('options') || {},
+                buttonOptions = selectedButtons.data('options') || {},
                 // the options used to set the caption of the drop-down menu button
                 captionOptions = _.clone(options),
                 // whether the drop-down button will be highlighted
@@ -176,7 +158,7 @@ define('io.ox/office/tk/control/radiolist',
                 if (_.isFunction(updateHighlightHandler)) {
                     isHighlighted = updateHighlightHandler.call(self, value);
                 } else {
-                    isHighlighted = highlight && (optionButton.length > 0);
+                    isHighlighted = highlight && (selectedButtons.length > 0);
                 }
             }
             Utils.toggleButtons(self.getMenuButton().add(captionButton), isHighlighted);
@@ -191,10 +173,10 @@ define('io.ox/office/tk/control/radiolist',
                 Utils.setControlCaption(captionButton, captionOptions);
             }
 
-            // call custom update handler
-            if (_.isFunction(updateCaptionHandler)) {
-                updateCaptionHandler.call(self, captionButton, value, optionButton);
-            }
+            // update the data-value attribute of the group from all selected items
+            self.getNode().attr('data-value', selectedButtons.map(function () {
+                return $(this).attr('data-value');
+            }).get().join(','));
         }
 
         /**
@@ -227,7 +209,7 @@ define('io.ox/office/tk/control/radiolist',
          *  A reference to this instance.
          */
         this.clearOptionButtons = function () {
-            this.clearItemGroup();
+            this.clearMenuSections();
             return this;
         };
 
@@ -272,8 +254,8 @@ define('io.ox/office/tk/control/radiolist',
         }
 
         // register event handlers
-        this.on('menuopen', menuOpenHandler)
-            .registerUpdateHandler(itemUpdateHandler);
+        this.on('menu:open', menuOpenHandler);
+        this.registerUpdateHandler(itemUpdateHandler);
 
     } // class RadioList
 

@@ -1,0 +1,147 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2012
+ * Mail: info@open-xchange.com
+ *
+ * @author Daniel Rentz <daniel.rentz@open-xchange.com>
+ */
+
+define('io.ox/office/preview/app/controller',
+    ['io.ox/office/tk/utils',
+     'io.ox/office/framework/app/basecontroller'
+    ], function (Utils, BaseController) {
+
+    'use strict';
+
+    // class PreviewController ================================================
+
+    /**
+     * The controller of the OX Preview application.
+     *
+     * @constructor
+     *
+     * @extends BaseController
+     *
+     * @param {PreviewApplication} app
+     *  The OX Preview application that has created this controller instance.
+     */
+    function PreviewController(app) {
+
+        var // the model instance
+            model = null,
+
+            // the view instance
+            view = null,
+
+            // all the little controller items
+            items = {
+
+                'document/valid': {
+                    enable: function () { return model.getPageCount() > 0; }
+                },
+
+                // view -------------------------------------------------------
+
+                // toggle the main side pane
+                'app/view/sidepane': {
+                    parent: 'document/valid',
+                    get: function () { return app.getView().isSidePaneVisible(); },
+                    set: function (state) { app.getView().toggleSidePane(state); },
+                    shortcut: { keyCode: 'F3', ctrlOrMeta: true, value: function (state) { return !state; } }
+                },
+
+                // start editing the document
+                'app/edit': {
+                    parent: 'document/valid',
+                    enable: function () { return app.isDocumentEditable(); },
+                    set: function () { app.editDocument(); }
+                },
+
+                // pages ------------------------------------------------------
+
+                'pages/first': {
+                    parent: 'document/valid',
+                    enable: function () { return view.getPage() > 1; },
+                    set: function () { view.showPage('first'); }
+                },
+
+                'pages/previous': {
+                    parent: 'document/valid',
+                    enable: function () { return view.getPage() > 1; },
+                    set: function () { view.showPage('previous'); },
+                    shortcut: { keyCode: 'PAGE_UP', altOrMeta: true }
+                },
+
+                'pages/next': {
+                    parent: 'document/valid',
+                    enable: function () { return view.getPage() < model.getPageCount(); },
+                    set: function () { view.showPage('next'); },
+                    shortcut: { keyCode: 'PAGE_DOWN', altOrMeta: true }
+                },
+
+                'pages/last': {
+                    parent: 'document/valid',
+                    enable: function () { return view.getPage() < model.getPageCount(); },
+                    set: function () { view.showPage('last'); }
+                },
+
+                'pages/current': {
+                    parent: 'document/valid',
+                    enable: function () { return model.getPageCount() > 1; },
+                    get: function () { return view.getPage(); },
+                    set: function (page) { view.showPage(page); }
+                },
+
+                // zoom -------------------------------------------------------
+
+                'zoom/dec': {
+                    parent: 'document/valid',
+                    enable: function () { return view.getZoomFactor() > view.getMinZoomFactor(); },
+                    set: function () { view.decreaseZoomLevel(); },
+                    shortcut: { charCode: '-' }
+                },
+
+                'zoom/inc': {
+                    parent: 'document/valid',
+                    enable: function () { return view.getZoomFactor() < view.getMaxZoomFactor(); },
+                    set: function () { view.increaseZoomLevel(); },
+                    shortcut: { charCode: '+' }
+                },
+
+                'zoom/type': {
+                    parent: 'document/valid',
+                    get: function () { return view.getZoomType(); },
+                    set: function (zoomType) { view.setZoomType(zoomType); }
+                }
+
+            };
+
+        // base constructor ---------------------------------------------------
+
+        BaseController.call(this, app, { updateDelay: 20, updateMaxDelay: 200 });
+
+        // initialization -----------------------------------------------------
+
+        // register item definitions
+        this.registerDefinitions(items);
+
+        // initialization after construction
+        app.on('docs:init', function () {
+            // model and view are not available at construction time
+            model = app.getModel();
+            view = app.getView();
+        });
+
+    } // class PreviewController
+
+    // exports ================================================================
+
+    // derive this class from class BaseController
+    return BaseController.extend({ constructor: PreviewController });
+
+});

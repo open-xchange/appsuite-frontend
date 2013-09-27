@@ -16,9 +16,10 @@ define('io.ox/office/framework/app/baseapplication',
      'io.ox/files/api',
      'io.ox/office/tk/utils',
      'io.ox/office/tk/io',
+     'io.ox/office/framework/app/extensionregistry',
      'settings!io.ox/office',
      'gettext!io.ox/office/main'
-    ], function (ext, FilesAPI, Utils, IO, Settings, gt) {
+    ], function (ext, FilesAPI, Utils, IO, ExtensionRegistry, Settings, gt) {
 
     'use strict';
 
@@ -36,94 +37,6 @@ define('io.ox/office/framework/app/baseapplication',
      */
     function getDocumentType(moduleName) {
         return moduleName.substr(moduleName.lastIndexOf('/') + 1);
-    }
-
-    /**
-     * Tries to find a running application which is working on a file described
-     * in the passed options object.
-     *
-     * @param {String} moduleName
-     *  The application type identifier.
-     *
-     * @param {Object} [launchOptions]
-     *  A map of options that may contain a file descriptor in 'options.file'.
-     *  If existing, compares it with the file descriptors of all running
-     *  applications with the specified module identifier (returned by their
-     *  getFileDescriptor() method).
-     *
-     * @returns {ox.ui.App}
-     *  A running application of the specified type with a matching file
-     *  descriptor.
-     */
-    function getRunningApplication(moduleName, launchOptions) {
-
-        var // get file descriptor from options
-            file = Utils.getObjectOption(launchOptions, 'file', null),
-
-            // find running editor application
-            runningApps = file ? ox.ui.App.get(moduleName).filter(function (app) {
-
-                var // file descriptor of current running application
-                    appFile = app.getFileDescriptor();
-
-                // TODO: check file version too?
-                if (file.source) { //mail or task attachment
-                    return _.isObject(appFile) &&
-                    (file.source === appFile.source) &&
-                    (file.id === appFile.id) &&
-                    (file.attached === appFile.attached) &&
-                    (file.folder_id === appFile.folder_id);
-                } else {
-                    return _.isObject(appFile) &&
-                    (file.id === appFile.id) &&
-                    (file.folder_id === appFile.folder_id);
-                }
-
-            }) : [];
-        if (runningApps.length > 1) {
-            Utils.warn('ApplicationLauncher.getRunningApplication(): found multiple applications for the same file.');
-        }
-        return (runningApps.length > 0) ? runningApps[0] : null;
-    }
-
-    /**
-     * Creates a new application object of the specified type, and performs
-     * basic initialization steps.
-     *
-     * @param {String} moduleName
-     *  The application type identifier.
-     *
-     * @param {Function} ApplicationClass
-     *  The constructor function of the application mix-in class that will
-     *  extend the core application object. Receives the passed launch options
-     *  as first parameter.
-     *
-     * @param {Object} [launchOptions]
-     *  A map of options passed to the core launcher (the ox.launch() method)
-     *  that determine the actions to perform during application launch. The
-     *
-     * @param {Object} [appOptions]
-     *  A map of options that control the creation of the ox.ui.App base class.
-     *
-     * @returns {ox.ui.App}
-     *  The new application object.
-     */
-    function createApplication(moduleName, ApplicationClass, launchOptions, appOptions) {
-
-        var // the icon shown in the top bar launcher
-            icon = Utils.getStringOption(appOptions, 'icon', ''),
-            // the base application object
-            app = ox.ui.createApp({
-                name: moduleName,
-                userContent: icon.length > 0,
-                userContentIcon: icon,
-                userContentClass: getDocumentType(moduleName) + '-launcher'
-            });
-
-        // mix-in constructor for additional application methods
-        ApplicationClass.call(app, launchOptions);
-
-        return app;
     }
 
     // class BaseApplication ==================================================
@@ -193,6 +106,10 @@ define('io.ox/office/framework/app/baseapplication',
      *  Must return a Deferred object that will be resolved or rejected after
      *  the document has been loaded.
      *
+     * @param {Object} [appOptions]
+     *  A map of static application options, that have been passed to the
+     *  static method BaseApplication.createLauncher().
+     *
      * @param {Object} [launchOptions]
      *  A map of options passed to the core launcher (the ox.launch() method)
      *  that determine the actions to perform during application launch. The
@@ -209,25 +126,27 @@ define('io.ox/office/framework/app/baseapplication',
      *      the Files application.
      *
      * @param {Object} [options]
-     *  A map of options to control the properties of the application. The
+     *  A map of options to control the behavior of the application. The
      *  following options are supported:
-     *  @param {Boolean} [options.search=false]
-     *      If set to true, the application will show and use the global search
-     *      tool bar.
-     *  @param {Boolean} [options.chromeless=true]
-     *      If set to true, the application window will not contain the main
-     *      tool bar attached to the left or bottom border.
-     *  @param {Boolean} [options.detachable=true]
-     *      If set to false, the application window will not be detached from
-     *      the DOM while it is hidden.
+     *  @param {Function} [options.flushHandler]
+     *      A function that will be called before the document will be accessed
+     *      at its source location, e.g. before downloading it, printing it, or
+     *      sending it as e-mail. Will be called in the context of this
+     *      application. May return a Deferred object. In this case, the
+     *      application will wait until this Deferred object has been resolved
+     *      or rejected. In the latter case, all subsequent actions will be
+     *      skipped.
      */
-    function BaseApplication(ModelClass, ViewClass, ControllerClass, importHandler, launchOptions, options) {
+    function BaseApplication(ModelClass, ViewClass, ControllerClass, importHandler, appOptions, launchOptions, options) {
 
         var // self reference
             self = this,
 
             // file descriptor of the document edited by this application
             file = Utils.getObjectOption(launchOptions, 'file', null),
+
+            // callback to flush the document before accessing its source
+            flushHandler = Utils.getFunctionOption(options, 'flushHandler', $.noop),
 
             // all registered before-quit handlers
             beforeQuitHandlers = [],
@@ -250,6 +169,9 @@ define('io.ox/office/framework/app/baseapplication',
             // the controller instance as single connection point between model and view
             controller = null,
 
+            // all AJAX requests currently running
+            runningRequests = [],
+
             // browser timeouts for delayed callbacks
             delayTimeouts = [],
 
@@ -267,7 +189,22 @@ define('io.ox/office/framework/app/baseapplication',
          *  A reference to this application instance.
          */
         function updateTitle() {
-            self.setTitle(self.getShortFileName() || gt('Unnamed'));
+
+            var // the root node of the application window
+                windowNode = self.getWindow().nodes.outer;
+
+            // set title for application launcher
+            self.setTitle(self.getShortFileName() || gt('unnamed'));
+
+            // add data from file descriptor to application root node, for Selenium testing
+            if (file) {
+                if (file.folder_id) { windowNode.attr('data-file-folder', file.folder_id); }
+                if (file.id) { windowNode.attr('data-file-id', file.id); }
+                if (file.filename) { windowNode.attr('data-file-name', file.filename); }
+                if (file.version) { windowNode.attr('data-file-version', file.version); }
+                if (file.source) { windowNode.attr('data-file-source', file.source); }
+                if (file.attachment) { windowNode.attr('data-file-attachment', file.attachment); }
+            }
         }
 
         /**
@@ -283,6 +220,7 @@ define('io.ox/office/framework/app/baseapplication',
          * Hides the busy indicator, and restores the entire view into.
          */
         function afterImport() {
+            updateTitle();
             view.show();
             self.getWindow().idle();
         }
@@ -300,25 +238,26 @@ define('io.ox/office/framework/app/baseapplication',
          */
         function importDocument(point) {
 
-            // notify listeners
-            self.trigger('docs:import:before');
+            // prepare for importing
+            beforeImport();
+            self.trigger('docs:import:before', point);
 
             // call the import handler
             return importHandler.call(self, point)
                 .always(function () {
+                    imported = true;
                     afterImport();
-                    self.trigger('docs:import:after');
+                    self.trigger('docs:import:after', point);
                 })
                 .done(function () {
-                    imported = true;
-                    self.trigger('docs:import:success');
+                    self.trigger('docs:import:success', point);
                 })
                 .fail(function (result) {
-                    var title = Utils.getStringOption(result, 'title', gt('Load Error')),
+                    var cause = Utils.getStringOption(result, 'cause', 'unknown'),
                         message = Utils.getStringOption(result, 'message', gt('An error occurred while loading the document.')),
-                        cause = Utils.getStringOption(result, 'cause', 'unknown');
+                        headline = Utils.getStringOption(result, 'headline', gt('Load Error'));
                     if (cause !== 'timeout') {
-                        view.showError(title, message);
+                        view.yell('error', message, headline);
                     }
                     Utils.error('BaseApplication.launch(): Importing document "' + self.getFullFileName() + '" failed. Error code: "' + cause + '".');
                     self.trigger('docs:import:error', cause);
@@ -337,6 +276,14 @@ define('io.ox/office/framework/app/baseapplication',
 
             // accumulate all results into a single Deferred object
             return $.when.apply($, results);
+        }
+
+        /**
+         * Handler for 'unload' events from the browser triggered when
+         * reloading or closing the entire page.
+         */
+        function unloadHandler() {
+            self.executeQuitHandlers();
         }
 
         // public methods -----------------------------------------------------
@@ -414,6 +361,17 @@ define('io.ox/office/framework/app/baseapplication',
         this.setUserSettingsValue = function (key, value) {
             Settings.set(this.getDocumentType() + '/' + key, value).save();
             return this;
+        };
+
+        /**
+         * Returns the unique DOM identifier of the outer root node of this
+         * application.
+         *
+         * @returns {String}
+         *  The unique window DOM identifier.
+         */
+        this.getWindowId = function () {
+            return this.getWindow().nodes.outer.attr('id');
         };
 
         // file descriptor ----------------------------------------------------
@@ -509,15 +467,14 @@ define('io.ox/office/framework/app/baseapplication',
         };
 
         /**
-         * Returns the full file name of the current file (with file
-         * extension).
+         * Returns the full file name of the current file, with file extension.
          *
          * @returns {String|Null}
          *  The file name of the current file descriptor; or null, if no file
          *  descriptor exists.
          */
         this.getFullFileName = function () {
-            return (file && _.isString(file.filename)) ? file.filename : null;
+            return Utils.getStringOption(file, 'filename', null);
         };
 
         /**
@@ -529,13 +486,8 @@ define('io.ox/office/framework/app/baseapplication',
          *  file descriptor exists.
          */
         this.getShortFileName = function () {
-
-            var // the current full file name
-                fileName = this.getFullFileName(),
-                // start position of the extension
-                extensionPos = _.isString(fileName) ? fileName.lastIndexOf('.') : -1;
-
-            return (extensionPos > 0) ? fileName.substring(0, extensionPos) : fileName;
+            var fileName = this.getFullFileName();
+            return _.isString(fileName) ? ExtensionRegistry.getBaseName(fileName) : null;
         };
 
         /**
@@ -547,19 +499,14 @@ define('io.ox/office/framework/app/baseapplication',
          *  file descriptor exists.
          */
         this.getFileExtension = function () {
-
-            var // the current full file name
-                fileName = this.getFullFileName(),
-                // start position of the extension
-                extensionPos = _.isString(fileName) ? fileName.lastIndexOf('.') : -1;
-
-            return (extensionPos >= 0) ? fileName.substring(extensionPos + 1) : null;
+            var fileName = this.getFullFileName();
+            return _.isString(fileName) ? ExtensionRegistry.getExtension(fileName) : null;
         };
 
         /**
-         * Return whether importing the document has been completed. Will be
-         * false before this application triggers the 'docs:import:success'
-         * event, and true afterwards.
+         * Return whether importing the document has been completed regardless
+         * whether it was successful. Will be false before this application
+         * triggers the 'docs:import:after' event, and true afterwards.
          *
          * @returns {Boolean}
          *  Whether importing the document has been completed.
@@ -596,6 +543,9 @@ define('io.ox/office/framework/app/baseapplication',
          */
         this.sendRequest = function (options) {
 
+            var // the AJAX request, as jQuery Deferred object
+                request = null;
+
             // build a default map with the application UID, and add the passed options
             options = Utils.extendOptions({
                 params: {
@@ -604,7 +554,15 @@ define('io.ox/office/framework/app/baseapplication',
             }, options);
 
             // send the request
-            return IO.sendRequest(options);
+            request = IO.sendRequest(options);
+
+            // store the request in the internal buffer, remove it when it resolves
+            runningRequests.push(request);
+            request.always(function () {
+                runningRequests = _(runningRequests).without(request);
+            });
+
+            return request;
         };
 
         /**
@@ -722,6 +680,91 @@ define('io.ox/office/framework/app/baseapplication',
             return this.getServerModuleUrl(BaseApplication.CONVERTER_MODULE_NAME, options);
         };
 
+        /**
+         * Creates an <img> element, sets the passed URL, and returns a
+         * Deferred object waiting that the image has been loaded. If the
+         * browser does not trigger the appropriate events after the specified
+         * timeout, the Deferred object will be rejected automatically. If the
+         * application has been shut down before the image has been loaded, the
+         * pending Deferred object will neither be resolved nor rejected.
+         *
+         * @param {String} url
+         *  The image URL.
+         *
+         * @param {Object} [options]
+         *  A map with options controlling the behavior of this method. The
+         *  following options are supported:
+         *  @param {Number} [options.timeout=10000]
+         *      The time before the Deferred will be rejected without response
+         *      from the image node.
+         *
+         * @returns {jQuery.Promise}
+         *  The Promise of a Deferred object that will be resolved with the
+         *  image element (as jQuery object), when the 'load' event has been
+         *  received from the image node; or rejected, if the 'error' event has
+         *  been received from the image, or after the specified timeout delay
+         *  without response.
+         */
+        this.createImageNode = function (url, options) {
+
+            var // the result Deferred object
+                def = $.Deferred(),
+                // the image node
+                imgNode = $('<img>', { src: url }),
+                // the duration of the failure timeout
+                timeout = Utils.getIntegerOption(options, 'timeout', 10000, 0),
+                // the timer for the failure timeout
+                timer = null;
+
+            function loadHandler() {
+                // do not resolve if application is already shutting down
+                if (delayTimeouts) { def.resolve(imgNode); }
+            }
+
+            function errorHandler() {
+                // do not reject if application is already shutting down
+                if (delayTimeouts) { def.reject(); }
+            }
+
+            // wait that the image is loaded
+            imgNode.one({ load: loadHandler, error: errorHandler });
+
+            // timeout if server hangs, or browser fails to send any events because
+            // of internal errors (e.g.: SVG parse errors in Internet Explorer)
+            timer = this.executeDelayed(function () { def.reject(); }, { delay: timeout });
+
+            return def.always(function () {
+                timer.abort();
+                imgNode.off({ load: loadHandler, error: errorHandler });
+            }).promise();
+        };
+
+        /**
+         * Safely destroys the passed image nodes. On platforms with restricted
+         * memory (especially iPad and iPhone), allocating too many images may
+         * result in an immediate browser crash. Simply removing image nodes
+         * from the DOM does not free the image resource data allocated by the
+         * browser. The suggested workaround is to replace the 'src' attribute
+         * of the image node with a local small image which will result in
+         * releasing the original image data by the internal resource manager.
+         * To be really sure that the garbage collector does not destroy the
+         * DOM node instance before the resource manager releases the image
+         * data, a reference to the node will be kept in memory for additional
+         * 60 seconds.
+         *
+         * @param {HTMLElement|jQuery} imgNodes
+         *  The image elements, either as single DOM node, or as jQuery
+         *  collection with one or multiple image elements.
+         */
+        this.destroyImageNodes = function (imgNodes) {
+            imgNodes = $(imgNodes);
+            if (imgNodes.length > 0) {
+                view.insertTemporaryNode(imgNodes);
+                $(imgNodes).off().attr('src', 'data:image/gif;base64,R0lGODdhAgACAIAAAAAAAP///ywAAAAAAgACAAACAoRRADs=');
+                _.delay(function () { imgNodes.remove(); imgNodes = null; }, 60000);
+            }
+        };
+
         // application setup --------------------------------------------------
 
         /**
@@ -746,9 +789,9 @@ define('io.ox/office/framework/app/baseapplication',
         /**
          * Registers a quit handler function that will be executed before the
          * application will be destroyed. This may happen if the application
-         * has been closed normally, if the user logs out from the entire app
-         * suite, or before the browser window or browser tab will be closed or
-         * refreshed. If the quit handlers return a Deferred object, closing
+         * has been closed normally, if the user logs out from the entire
+         * AppSuite, or before the browser window or browser tab will be closed
+         * or refreshed. If the quit handlers return a Deferred object, closing
          * the application, and logging out will be deferred until the Deferred
          * objects have been resolved or rejected.
          *
@@ -819,24 +862,27 @@ define('io.ox/office/framework/app/baseapplication',
 
         /**
          * Executes all registered quit handlers and returns a Deferred object
-         * that will be resolved or rejected according to the rasults of the
+         * that will be resolved or rejected according to the results of the
          * handlers.
          *
          * @internal
          *  Not for external use. Only used from the implementation of the
-         *  'io.ox/core/logout' extension point.
+         *  'io.ox/core/logout' extension point and the window's 'unload' event
+         *  handler.
          */
         this.executeQuitHandlers = function () {
+            // Bug 28044: unbind the 'unload' event handler immediately, otherwise
+            // logging out may trigger quit handlers twice (from logout and unload)
+            $(window).off('unload', unloadHandler);
             return callHandlers(quitHandlers);
         };
 
         // timeouts -----------------------------------------------------------
 
         /**
-         * Executes the passed callback function once or repeatedly in a
-         * browser timeout. If the application will be closed before the
-         * callback function has been started, or while the callback function
-         * will be repeated, it will not be executed anymore.
+         * Invokes the passed callback function once in a browser timeout. If
+         * the application will be closed before the callback function has been
+         * started, it will not be called anymore.
          *
          * @param {Function} callback
          *  The callback function that will be executed in a browser timeout
@@ -845,46 +891,35 @@ define('io.ox/office/framework/app/baseapplication',
          * @param {Object} [options]
          *  A map with options controlling the behavior of this method. The
          *  following options are supported:
+         *  @param {Object} [options.context]
+         *      The context that will be bound to 'this' in the passed callback
+         *      function.
          *  @param {Number} [options.delay=0]
          *      The time (in milliseconds) the execution of the passed callback
          *      function will be delayed.
-         *  @param {Boolean} [options.repeat=false]
-         *      If set to true, the return value of the callback function will
-         *      be evaluated to decide whether to repeat its execution. If the
-         *      callback function returns the Boolean value true, or a Deferred
-         *      object that will be resolved with the Boolean value true, a new
-         *      timeout will be started and the callback function will be
-         *      executed again, as long as it returns true.
-         *  @param {Number} [options.repeatDelay=options.delay]
-         *      The time (in milliseconds) the repeated execution of the passed
-         *      callback function will be delayed. If omitted, the specified
-         *      initial delay time (option 'options.delay') will be used.
          *
          * @returns {jQuery.Promise}
          *  The Promise of a Deferred object that will be resolved after the
          *  callback function has been executed. If the callback function
          *  returns a simple value or object, the Deferred object will be
          *  resolved with that value. If the callback function returns a
-         *  Deferred object by itself, its state and result value will be
-         *  forwarded to the Promise returned by this method. If the callback
-         *  function will be executed repeatedly, the Promise will not be
-         *  resolved before the last execution cycle. If the Deferred object
-         *  returned by the callback function is rejected, repeated execution
-         *  will be stopped, and the returned Promise will be rejected too. The
+         *  Deferred object or a Promise by itself, its state and result value
+         *  will be forwarded to the Promise returned by this method. The
          *  Promise contains an additional method 'abort()' that can be called
-         *  before the timeout has been fired to cancel the pending or repeated
-         *  execution of the callback function. In that case, the Promise will
-         *  neither be resolved nor rejected. When the application will be
-         *  closed, it aborts all pending callback functions automatically.
+         *  before the timeout has been fired to cancel the pending execution
+         *  of the callback function. In that case, the Promise will neither be
+         *  resolved nor rejected. When the application will be closed, it
+         *  aborts all pending callback functions automatically (also, without
+         *  resolving the Promise).
          */
         this.executeDelayed = function (callback, options) {
 
             var // the current browser timeout identifier
                 timeout = null,
+                // the context for the callback function
+                context = Utils.getOption(options, 'context'),
                 // the delay time for the next execution of the callback
                 delay = Utils.getIntegerOption(options, 'delay', 0, 0),
-                // whether to repeat execution of the callback function
-                repeat = Utils.getBooleanOption(options, 'repeat', false),
                 // the result Deferred object
                 def = $.Deferred(),
                 // the Promise of the Deferred object
@@ -895,8 +930,8 @@ define('io.ox/office/framework/app/baseapplication',
                 timeout = null;
             }
 
-            // creates and registers a browser timeout that executes the callback
-            function createTimeout() {
+            // do not call from other unregistered pending timeouts when application closes
+            if (delayTimeouts) {
 
                 // create a new browser timeout
                 timeout = window.setTimeout(function () {
@@ -905,29 +940,15 @@ define('io.ox/office/framework/app/baseapplication',
                     unregisterTimeout();
 
                     // execute the callback function, react on its result
-                    $.when(callback())
-                    .done(function (result) {
-                        if (repeat && (result === true)) {
-                            createTimeout();
-                        } else {
-                            def.resolve(result);
-                        }
-                    })
-                    .fail(function (result) {
-                        def.reject(result);
-                    });
+                    $.when(callback.call(context))
+                    .done(function (result) { def.resolve(result); })
+                    .fail(function (result) { def.reject(result); });
 
                 }, delay);
 
                 // register the browser timeout
                 delayTimeouts.push(timeout);
             }
-
-            // do not call from other unregistered pending timeouts when application closes
-            if (delayTimeouts) { createTimeout(); }
-
-            // switch to repetition delay time
-            delay = Utils.getIntegerOption(options, 'repeatDelay', delay, 0);
 
             // add an abort() method to the Promise
             promise.abort = function () {
@@ -942,21 +963,156 @@ define('io.ox/office/framework/app/baseapplication',
         };
 
         /**
-         * Executes the passed callback function repeatedly for small chunks of
-         * the passed data array in a browser timeout loop.
+         * Invokes the passed callback function repeatedly in a browser timeout
+         * loop. If the application will be closed before the callback function
+         * has been started, or while the callback function will be repeated,
+         * it will not be called anymore.
          *
          * @param {Function} callback
-         *  The callback function that will be executed in a browser timeout
-         *  after the delay time. Receives a chunk of the passed data array as
-         *  first parameter, and the absolute index of the first element of the
-         *  chunk in the complete array as second parameter. If the callback
-         *  function returns a Deferred object (or a Promise), repeated
-         *  execution will be delayed until the Deferred object will be
-         *  resolved or rejected. In case the Deferred object will be rejected,
-         *  repeated execution will be cancelled, and the Deferred object
-         *  returned by this method will be rejected immediately.
+         *  The callback function that will be invoked repeatedly in a browser
+         *  timeout loop after the initial delay time. Receives the zero-based
+         *  index of the execution cycle as first parameter. The return value
+         *  of the function will be used to decide whether to continue the
+         *  repeated execution. If the function returns Utils.BREAK, execution
+         *  will be stopped. If the function returns a Deferred object, or the
+         *  Promise of a Deferred object, looping will be deferred until the
+         *  Deferred object is resolved or rejected. After resolving the
+         *  Deferred object, the delay time will start, and the callback will
+         *  be called again. Otherwise, after the Deferred object has been
+         *  rejected, execution will be stopped, and the Promise returned by
+         *  this method will be rejected too. All other return values will be
+         *  ignored, and the callback loop will continue.
          *
-         * @param {Object[]|jQuery} dataArray
+         * @param {Object} [options]
+         *  A map with options controlling the behavior of this method. The
+         *  following options are supported:
+         *  @param {Object} [options.context]
+         *      The context that will be bound to 'this' in the passed callback
+         *      function.
+         *  @param {Number} [options.delay=0]
+         *      The time (in milliseconds) the execution of the passed callback
+         *      function will be delayed.
+         *  @param {Number} [options.repeatDelay=options.delay]
+         *      The time (in milliseconds) the repeated execution of the passed
+         *      callback function will be delayed. If omitted, the specified
+         *      initial delay time (option 'options.delay') will be used.
+         *  @param {Number} [options.cycles]
+         *      If specified, the maximum number of cycles to be executed.
+         *
+         * @returns {jQuery.Promise}
+         *  The Promise of a Deferred object that will be resolved or rejected
+         *  after the callback function has been invoked the last time. The
+         *  Promise will be resolved, if the callback function has returned the
+         *  Utils.BREAK object in the last iteration, or if the maximum number
+         *  of iterations (see option 'options.cycles') has been reached. It
+         *  will be rejected, if the callback function has returned a rejected
+         *  Deferred object or Promise. The returned Promise contains an
+         *  additional method 'abort()' that can be called before or while the
+         *  callback loop is executed to stop the loop immediately. In that
+         *  case, the Promise will never be resolved nor rejected. When the
+         *  application will be closed, it aborts all running callback loops
+         *  automatically (also, without resolving/rejecting the Promise).
+         */
+        this.repeatDelayed = function (callback, options) {
+
+            var // the current timeout before invoking the callback
+                timer = null,
+                // the context for the callback function
+                context = Utils.getOption(options, 'context'),
+                // the delay time for the next execution of the callback
+                delay = Utils.getIntegerOption(options, 'delay', 0, 0),
+                // the number of cycles to be executed
+                cycles = Utils.getIntegerOption(options, 'cycles'),
+                // the index of the next cycle
+                index = 0,
+                // the result Deferred object
+                def = $.Deferred();
+
+            // creates and registers a browser timeout that executes the callback
+            function createTimer() {
+
+                // create a new browser timeout
+                timer = self.executeDelayed(function () {
+
+                    var // the result of the callback
+                        result = callback.call(context, index);
+
+                    // immediately break the loop if callback returns Utils.BREAK
+                    if (result === Utils.BREAK) {
+                        def.resolve(Utils.BREAK);
+                        return;
+                    }
+
+                    // wait for the result (may be a Deferred object)
+                    $.when(result)
+                    .done(function () {
+                        // do not create a new timeout or resolve the Deferred
+                        // object if execution has been aborted while the
+                        // asynchronous code was running
+                        if (timer) {
+                            index += 1;
+                            if (!_.isNumber(cycles) || (index < cycles)) {
+                                createTimer();
+                            } else {
+                                def.resolve();
+                            }
+                        }
+                    })
+                    .fail(function (response) {
+                        def.reject(response);
+                    });
+
+                }, Utils.extendOptions(options, { delay: delay }));
+            }
+
+            // create initial timer, switch to repetition delay time
+            createTimer();
+            delay = Utils.getIntegerOption(options, 'repeatDelay', delay, 0);
+
+            // add an abort() method to the Promise
+            return _.extend(def.promise(), { abort: function () {
+                timer.abort();
+                timer = null;
+            } });
+        };
+
+        /**
+         * Invokes the passed callback function repeatedly for small chunks of
+         * the passed data array in a browser timeout loop. If the application
+         * will be closed before the callback function has been started, or
+         * while the callback function will be repeated, it will not be called
+         * anymore.
+         *
+         * @param {Function} callback
+         *  The callback function that will be invoked repeatedly in a browser
+         *  timeout loop after the initial delay time. Receives the following
+         *  parameters:
+         *  (1) {Array|jQuery} chunk
+         *      The current chunk of the data array passed in the 'dataArray'
+         *      method parameter. The actual type  depends on the return type
+         *      of the slice() method of the passed data array (e.g., the
+         *      slice() method of jQuery collections returns a new jQuery
+         *      collection).
+         *  (2) {Number} index
+         *      The absolute index of the first element of the chunk in the
+         *      complete array.
+         *  (3) {Array|jQuery} dataArray
+         *      The entire data array as passed in the 'dataArray' method
+         *      parameter.
+         *  The return value of the function will be used to decide whether to
+         *  continue the repeated execution to the end of the array. If the
+         *  function returns Utils.BREAK, execution will be stopped. If the
+         *  function returns a Deferred object, or the Promise of a Deferred
+         *  object, looping will be deferred until the Deferred object is
+         *  resolved or rejected. After resolving the Deferred object, the
+         *  delay time will start, and the callback will be called again for
+         *  the chunk in the array. Otherwise, after the Deferred object has
+         *  been rejected, execution will be stopped, and the Promise returned
+         *  by this method will be rejected too. All other return values will
+         *  be ignored, and the callback loop will continue to the end of the
+         *  array.
+         *
+         * @param {Array|jQuery} dataArray
          *  A JavaScript array, or another array-like object that provides an
          *  attribute 'length' and a method 'slice(begin, end)', e.g. a jQuery
          *  collection.
@@ -964,6 +1120,9 @@ define('io.ox/office/framework/app/baseapplication',
          * @param {Object} [options]
          *  A map with options controlling the behavior of this method. The
          *  following options are supported:
+         *  @param {Object} [options.context]
+         *      The context that will be bound to 'this' in the passed callback
+         *      function.
          *  @param {Number} [options.chunkLength=10]
          *      The number of elements that will be extracted from the passed
          *      data array and will be passed to the callback function.
@@ -977,14 +1136,16 @@ define('io.ox/office/framework/app/baseapplication',
          *
          * @returns {jQuery.Promise}
          *  The Promise of a Deferred object that will be resolved after all
-         *  array elements have been processed; or rejected, if the callback
-         *  function returns and rejects a Deferred object. The Promise will be
-         *  notified about the progress (floating-point value between 0.0 and
-         *  1.0). The Promise contains an additional method 'abort()' that can
-         *  be called before processing all array elements has been finished to
+         *  array elements have been processed successfully or the callback
+         *  function returns Utils.BREAK; or rejected, if the callback function
+         *  returns a rejected Deferred object. The Promise will be notified
+         *  about the progress (as a floating-point value between 0.0 and 1.0).
+         *  The Promise contains an additional method 'abort()' that can be
+         *  called before processing all array elements has been finished to
          *  cancel the entire loop immediately. In that case, the Promise will
          *  neither be resolved nor rejected. When the application will be
-         *  closed, it aborts all running loops automatically.
+         *  closed, it aborts all running loops automatically (also, without
+         *  resolving/rejecting the Promise).
          */
         this.processArrayDelayed = function (callback, dataArray, options) {
 
@@ -992,35 +1153,151 @@ define('io.ox/office/framework/app/baseapplication',
                 def = $.Deferred(),
                 // the timer executing the callback function for the array chunks
                 timer = null,
+                // the context for the callback function
+                context = Utils.getOption(options, 'context'),
                 // the length of a single chunk in the array
                 chunkLength = Utils.getIntegerOption(options, 'chunkLength', 10, 1),
                 // current array index
                 index = 0;
 
             // check passed data array
-            if (dataArray.length === 0) { return $.when(); }
+            if (dataArray.length === 0) {
+                return _.extend($.when(), { abort: $.noop });
+            }
 
-            // start a repeated timer, pass the delay times passed to this method
-            timer = self.executeDelayed(function () {
+            // start a background loop, pass the delay times passed to this method
+            timer = self.repeatDelayed(function () {
+
+                var // the result of the callback
+                    result = null;
 
                 // notify listeners about the progress
                 def.notify(index / dataArray.length);
 
                 // execute the callback, return whether to repeat execution
-                return $.when(callback(dataArray.slice(index, index + chunkLength), index))
-                    .then(function () {
-                        index += chunkLength;
-                        // repeat execution, if index has not reached end of array yet
-                        return index < dataArray.length;
-                    });
+                result = callback.call(context, dataArray.slice(index, index + chunkLength), index, dataArray);
 
-            }, Utils.extendOptions(options, { repeat: true }));
+                // immediately break the loop, if Utils.BREAK is returned
+                if (result === Utils.BREAK) {
+                    def.resolve(Utils.BREAK);
+                    // stop the loop timer
+                    return Utils.BREAK;
+                }
 
-            // listen to the timer result, and resolve/reject the own Deferred object
-            timer.done(function () { def.notify(1).resolve(); }).fail(function () { def.reject(); });
+                // handle Deferred objects returned by the callback
+                return $.when(result)
+                .fail(function (response) {
+                    // immediately break the loop, if returned Deferred has been rejected
+                    def.reject(response);
+                    // the Deferred returned by $.when(result) is rejected, so the
+                    // background loop will be stopped automatically
+                })
+                .then(function () {
+                    // prepare next iteration
+                    index += chunkLength;
+                    // keep the background loop running inside the array
+                    if (index < dataArray.length) { return; }
+                    // loop has been finished successfully
+                    def.notify(1).resolve();
+                    // returning a rejected Deferred stops the loop timer
+                    return $.Deferred().reject();
+                });
+
+            }, options);
 
             // extend the promise with an 'abort()' method that aborts the timer
             return _.extend(def.promise(), { abort: function () { timer.abort(); } });
+        };
+
+        /**
+         * Creates a synchronized method wrapping a callback function that
+         * executes asynchronous code. The synchronized method buffers multiple
+         * fast invocations and executes the callback function successively,
+         * always waiting for the asynchronous code. In difference to debounced
+         * methods, invocations of a synchronized method will never be skipped,
+         * and each call of the asynchronous callback function receives its
+         * original arguments passed to the synchronized method.
+         *
+         * @param {Function} callback
+         *  A function that will be called every time the synchronized method
+         *  has been called. Receives all parameters that have been passed to
+         *  the synchronized method. If this function returns a pending
+         *  Deferred object or Promise, subsequent invocations of the
+         *  synchronized method will be postponed until the Deferred object or
+         *  Promise will be resolved or rejected. All other return values will
+         *  be interpreted as synchronous invocations of the callback function.
+         *
+         * @param {Object} [options]
+         *  A map with options controlling the behavior of the synchronized
+         *  method created by this method. The following options are supported:
+         *  @param {Object} [options.context]
+         *      The context that will be bound to 'this' in the passed callback
+         *      function.
+         *
+         * @returns {Function}
+         *  The debounced method that can be called multiple times, and that
+         *  executes the asynchronous callback function sequentially. Returns
+         *  the Promise of a Deferred object that will be resolved or rejected
+         *  after the callback function has been invoked. If the callback
+         *  function returns a Deferred object or Promise, the synchronized
+         *  method will wait for it, and will forward its state and response to
+         *  its Promise. Otherwise, the Promise will be resolved with the
+         *  return value of the callback function. When the application will be
+         *  closed, pending callbacks will not be executed anymore.
+         */
+        this.createSynchronizedMethod = function (callback, options) {
+
+            var // the context for the callback function
+                context = Utils.getOption(options, 'context'),
+                // arguments and returned Promise of pending calls of the method
+                pendingInvocations = [],
+                // Promise representing the callback function currently running
+                runningPromise = null,
+                // the background loop processing all pending invocations
+                timer = null;
+
+            // invokes the callback once with the passed set of arguments
+            function invokeCallback(invocationData) {
+                // create the Promise
+                runningPromise = $.when(callback.apply(context, invocationData.args));
+                // register callbacks after assignment to handle synchronous callbacks correctly
+                runningPromise
+                    .always(function () { runningPromise = null; })
+                    .done(function (response) { invocationData.def.resolve(response); })
+                    .fail(function (response) { invocationData.def.reject(response); });
+            }
+
+            // create and return the synchronized method
+            return function () {
+
+                var // all data about the current invocation (arguments and returned Deferred object)
+                    invocationData = { args: _.toArray(arguments), def: $.Deferred() };
+
+                // cache invocation data, if a callback function is currently running
+                // Bug 28593: also, if pending callbacks exist without running callback
+                // (race condition: running callback resolves -> 'runningPromise' reset
+                // -> this method called -> background loop starts the next callback)
+                if (runningPromise || (pendingInvocations.length > 0)) {
+                    pendingInvocations.push(invocationData);
+                    // start timer that processes the array
+                    if (!timer) {
+                        timer = self.repeatDelayed(function () {
+                            if (runningPromise) { return runningPromise; }
+                            if (pendingInvocations.length === 0) { return Utils.BREAK; }
+                            invokeCallback(pendingInvocations.shift());
+                            return runningPromise;
+                        });
+                        // forget the timer after the last callback invocation
+                        timer.always(function () { timer = null; });
+                    }
+                } else {
+                    // invoke the callback function directly on first call
+                    invokeCallback(invocationData);
+                }
+
+                // return a Promise that will be resolved/rejected after invocation
+                return invocationData.def.promise();
+            };
         };
 
         /**
@@ -1041,13 +1318,13 @@ define('io.ox/office/framework/app/baseapplication',
          * @param {Object} [options]
          *  A map with options controlling the behavior of the debounced method
          *  created by this method. Supports all options also supported by the
-         *  method BaseApplication.executeDelayed(). Especially, delayed and
-         *  repeated execution of the deferred callback function is supported.
-         *  Note that the delay time will restart after each call of the
-         *  debounced method, causing the execution of the deferred callback to
-         *  be postponed until the debounced method has not been called again
-         *  during the delay (this is the behavior of the _.debounce() method).
-         *  Additionally, supports the following options:
+         *  method BaseApplication.executeDelayed(). If a context is specified
+         *  with the option 'options.context', it will be used for both
+         *  callback functions. Note that the delay time will restart after
+         *  each call of the debounced method, causing the execution of the
+         *  deferred callback to be postponed until the debounced method has
+         *  not been called again during the delay (this is the behavior of the
+         *  _.debounce() method). Additionally, supports the following options:
          *  @param {Number} [options.maxDelay]
          *      If specified, a delay time used as a hard limit to execute the
          *      deferred callback after the first call of the debounced method,
@@ -1057,12 +1334,14 @@ define('io.ox/office/framework/app/baseapplication',
          * @returns {Function}
          *  The debounced method that can be called multiple times, and that
          *  executes the deferred callback function once after execution of the
-         *  current script endsPasses all arguments to the direct callback
+         *  current script ends. Passes all arguments to the direct callback
          *  function, and returns its result.
          */
         this.createDebouncedMethod = function (directCallback, deferredCallback, options) {
 
-            var // whether to not restart the timer on repeated calls with delay time
+            var // the context for the callback functions
+                context = Utils.getOption(options, 'context'),
+                // whether to not restart the timer on repeated calls with delay time
                 maxDelay = Utils.getIntegerOption(options, 'maxDelay', 0),
                 // the current timer used to execute the callback
                 debounceTimer = null,
@@ -1073,8 +1352,7 @@ define('io.ox/office/framework/app/baseapplication',
 
             // callback for a delay timer, executing the deferred callback
             function timerCallback() {
-                // execute the callback and return its result (for repeated execution)
-                return deferredCallback();
+                deferredCallback.call(context);
             }
 
             // aborts and clears all timers
@@ -1096,7 +1374,7 @@ define('io.ox/office/framework/app/baseapplication',
 
                 // create a new timeout executing the callback function
                 if (!debounceTimer) {
-                    debounceTimer = self.executeDelayed(timerCallback, options).always(clearTimers);
+                    debounceTimer = self.executeDelayed(timerCallback, options).done(clearTimers);
                 }
 
                 // reset the first-call flag, but set it back in a direct
@@ -1107,7 +1385,7 @@ define('io.ox/office/framework/app/baseapplication',
 
                 // on first call, create a timer for the maximum delay
                 if (!maxTimer && (maxDelay > 0)) {
-                    maxTimer = self.executeDelayed(timerCallback, Utils.extendOptions(options, { delay: maxDelay })).always(clearTimers);
+                    maxTimer = self.executeDelayed(timerCallback, Utils.extendOptions(options, { delay: maxDelay })).done(clearTimers);
                 }
             }
 
@@ -1118,7 +1396,7 @@ define('io.ox/office/framework/app/baseapplication',
                 createTimers();
 
                 // call the direct callback with the passed arguments
-                return directCallback.apply(undefined, _.toArray(arguments));
+                return directCallback.apply(context, _.toArray(arguments));
             };
         };
 
@@ -1191,6 +1469,116 @@ define('io.ox/office/framework/app/baseapplication',
         };
 
         /**
+         * Downloads the document file currently opened by this application.
+         *
+         * @param {String} [format='native']
+         *  The requested file format. The default format 'native' will return
+         *  the document in its native file format.
+         *
+         * @returns {jQuery.Promise}
+         *  The Promise of a Deferred object that will be resolved if the
+         *  document file has been downloaded successfully, or rejected
+         *  otherwise.
+         */
+        this.download = function (format) {
+
+            var // the Promise that will be resolved with the download URL
+                downloadPromise = this.hasFileDescriptor() ? $.when(flushHandler.call(this)).then(resolveDownloadUrl) : $.Deferred().reject();
+
+            // callback for Deferred.then() to resolve the Deferred object with the download URL
+            function resolveDownloadUrl() {
+
+                // propagate changed file to the files API
+                return FilesAPI.propagate('change', file).then(function () {
+                    var options = {
+                            action: 'getdocument',
+                            documentformat: format || 'native',
+                            filename: self.getFullFileName(),
+                            mimetype: file.file_mimetype || '',
+                            version: 0, // always use the latest version
+                            nocache: _.uniqueId(), // needed to trick the browser cache (is not evaluated by the backend)
+                            source: file.source,// document source: file|mail|task
+                            folder: file.folder_id,
+                            id: file.id,
+                            module: file.module,
+                            attachment: file.attached
+                        };
+
+                    return (ExtensionRegistry.isEditable(options.filename) ?
+                                self.getFilterModuleUrl(options) :
+                                    self.getConverterModuleUrl(options));
+                });
+            }
+
+            // Bug 28251: call downloadFile() with a Promise that will be resolved
+            // with the download URL to prevent the pop-up blocker of the browser
+            return this.downloadFile(downloadPromise);
+        };
+
+        /**
+         * Prints the document file currently opened by this application.
+         *
+         * @returns {jQuery.Promise}
+         *  The Promise of a Deferred object that will be resolved if the
+         *  document file has been printed successfully, or rejected otherwise.
+         */
+        this.print = function () {
+            return this.download('pdf');
+        };
+
+        /**
+         * Creates a new mail message with the current document attached
+         *
+         * @returns {BaseApplication}
+         *  A reference to this instance.
+         */
+        this.sendMail = function () {
+
+            var // the Promise with the result of the flush callback handler
+                flushPromise = this.hasFileDescriptor() ? $.when(flushHandler.call(this)) : $.Deferred().reject();
+
+            // launch Mail application if flushing was successful
+            flushPromise.done(function () {
+                ox.launch('io.ox/mail/write/main').done(function () {
+
+                    function attachFile(composeResult)  {
+                        composeResult.app.addFiles([{
+                            filename: file.filename,
+                            folder_id: file.folder_id,
+                            id: file.id,
+                            size: file.file_size,
+                            file_size: file.file_size
+                        }], 'infostore');
+                    }
+
+                    if (file.mailUID) {
+                        this.replyall({ id: file.mailUID, folder: file.mailFolder }).done(attachFile);
+                    } else {
+                        this.compose().done(attachFile);
+                    }
+                });
+            });
+
+            return this;
+        };
+
+        /**
+         * Returns whether the application contains pending document changes
+         * not yet sent to the server. Intended to be overwritten on demand by
+         * sub classes.
+         *
+         * @attention
+         *  Do not rename this method. The OX core uses it to decide whether to
+         *  show a warning before the browser refreshes or closes the page.
+         *
+         * @returns {Boolean}
+         *  Whether the application contains pending document changes.
+         */
+        this.hasUnsavedChanges = function () {
+            return false;
+        };
+
+        /**
          * Will be called automatically from the OX core framework to create
          * and return a save point containing the current state of the
          * application.
@@ -1207,17 +1595,21 @@ define('io.ox/office/framework/app/baseapplication',
             var // create the new save point with basic information
                 savePoint = {
                     module: this.getName(),
-                    point: { file: _.clone(file) }
+                    icon: Utils.getStringOption(appOptions, 'icon'),
+                    description: this.getFullFileName(),
+                    point: { file: this.getFileDescriptor() }
                 };
 
-            // OX Files inserts reference to application object into file descriptor,
-            // remove it to be able to serialize without cyclic references
-            delete savePoint.point.file.app;
+            if (savePoint.point.file) {
+                // OX Files inserts reference to application object into file descriptor,
+                // remove it to be able to serialize without cyclic references
+                delete savePoint.point.file.app;
 
-            // call all fail-save handlers and add their data to the save point
-            _(failSaveHandlers).each(function (failSaveHandler) {
-                _(savePoint.point).extend(failSaveHandler.call(this));
-            }, this);
+                // call all fail-save handlers and add their data to the save point
+                _(failSaveHandlers).each(function (failSaveHandler) {
+                    _(savePoint.point).extend(failSaveHandler.call(this));
+                }, this);
+            }
 
             return savePoint;
         };
@@ -1241,6 +1633,7 @@ define('io.ox/office/framework/app/baseapplication',
 
             // check existence of file descriptor, import the document
             if (this.hasFileDescriptor()) {
+                updateTitle();
                 importDocument(point);
             }
         };
@@ -1255,18 +1648,16 @@ define('io.ox/office/framework/app/baseapplication',
                 // create the application window
                 win = ox.ui.createWindow({
                     name: self.getName(),
-                    search: Utils.getBooleanOption(options, 'search', false),
-                    chromeless: Utils.getBooleanOption(options, 'chromeless', false)
+                    search: Utils.getBooleanOption(appOptions, 'search', false),
+                    chromeless: Utils.getBooleanOption(appOptions, 'chromeless', false)
                 });
-
-            // do not detach window if specified
-            win.detachable = Utils.getBooleanOption(options, 'detachable', true);
 
             // set the window at the application instance
             self.setWindow(win);
+            updateTitle();
 
             // wait for unload events and execute quit handlers
-            self.registerEventHandler(window, 'unload', function () { callHandlers(quitHandlers); });
+            self.registerEventHandler(window, 'unload', unloadHandler);
 
             // create the MVC instances
             model = new ModelClass(self);
@@ -1304,9 +1695,6 @@ define('io.ox/office/framework/app/baseapplication',
             // in order to get the 'open' event of the window at all, it must be shown (also without file)
             win.show(function () {
 
-                // prepare for importing
-                beforeImport();
-
                 // Import the document, if launch options have been passed. No launch
                 // options are available in fail-restore, this situation will be handled
                 // by the failRestore() method above. Always resolve the result Deferred
@@ -1321,13 +1709,15 @@ define('io.ox/office/framework/app/baseapplication',
 
         // call all registered quit handlers
         this.setQuit(function () {
-            // return existing Deferred if a quit request is already running
-            if (currentQuitDef && (currentQuitDef.state() === 'pending')) {
-                return currentQuitDef.promise();
-            }
+
+            var // store original 'quit()' method (needs to be restored after resuming)
+                origQuitMethod = self.quit;
 
             // create the result deferred (rejecting means resume application)
             currentQuitDef = $.Deferred();
+
+            // override 'quit()' method to prevent repeated/recursive calls while in quit mode
+            self.quit = function () { return currentQuitDef.promise(); };
 
             // call all before-quit handlers, rejecting one will resume application
             callHandlers(beforeQuitHandlers)
@@ -1336,6 +1726,9 @@ define('io.ox/office/framework/app/baseapplication',
                 // execute quit handlers, simply defer without caring about the result
                 callHandlers(quitHandlers)
                 .always(function () {
+
+                    // cancel all AJAX requests still running (prevent JS errors from done/fail callbacks)
+                    _(runningRequests).invoke('abort');
 
                     // cancel all running timeouts
                     _(delayTimeouts).each(function (timeout) {
@@ -1350,10 +1743,13 @@ define('io.ox/office/framework/app/baseapplication',
                 });
             })
             .fail(function () {
+                // resume to running state of application
+                self.quit = origQuitMethod;
                 currentQuitDef.reject();
+                currentQuitDef = null;
             });
 
-            return currentQuitDef.always(function () { currentQuitDef = null; }).promise();
+            return currentQuitDef.promise();
         });
 
         // prevent usage of these methods in derived classes
@@ -1369,9 +1765,6 @@ define('io.ox/office/framework/app/baseapplication',
             model.destroy();
             model = view = controller = null;
         });
-
-        // set application title to current file name
-        updateTitle();
 
     } // class BaseApplication
 
@@ -1410,29 +1803,75 @@ define('io.ox/office/framework/app/baseapplication',
      *  @param {String} [appOptions.icon]
      *      If specified, the CSS class name of a Bootstrap icon that will be
      *      shown in the top level launcher tab next to the application title.
+     *  @param {Boolean} [options.search=false]
+     *      Whether the application window will contain and support the global
+     *      search tool bar.
+     *  @param {Boolean} [options.chromeless=false]
+     *      Whether to hide the main window tool bar attached to the left or
+     *      bottom border.
      *
      * @returns {Object}
      *  The launcher object expected by the ox.launch() method.
      */
     BaseApplication.createLauncher = function (moduleName, ApplicationClass, appOptions) {
 
+        var // the icon shown in the top bar launcher
+            icon = Utils.getStringOption(appOptions, 'icon', '');
+
         // executed when a new application will be launched via ox.launch()
         function launchApp(launchOptions) {
 
-            var // try to find a running application
-                app = getRunningApplication(moduleName, launchOptions);
+            var // get file descriptor from options
+                file = Utils.getObjectOption(launchOptions, 'file', null),
+                // find running application for the specified document
+                runningApps = file ? ox.ui.App.get(moduleName).filter(isRunningApplication) : [],
+                // the new application instance
+                app = null;
+
+            // returns whether the passed application instance works on the exact
+            // document file contained in the launch options
+            function isRunningApplication(app) {
+                var appFile = app.getFileDescriptor();
+                return _.isObject(appFile) && Utils.hasEqualAttributes(file, appFile, ['source', 'folder_id', 'id', 'attached']);
+            }
+
+            // return running application if existing
+            if (runningApps.length > 1) {
+                Utils.warn('BaseApplication.launchApp(): found multiple applications for the same file.');
+            }
+            if (runningApps.length > 0) {
+                return runningApps[0];
+            }
 
             // no running application: create and initialize a new application object
-            if (!_.isObject(app)) {
-                app = createApplication(moduleName, ApplicationClass, launchOptions, appOptions);
-            }
+            app = ox.ui.createApp({
+                name: moduleName,
+                userContent: icon.length > 0,
+                userContentIcon: icon,
+                userContentClass: getDocumentType(moduleName) + '-launcher'
+            });
+
+            // call mix-in constructor
+            ApplicationClass.call(app, appOptions, launchOptions);
 
             return app;
         }
 
+        // Bug 28664: remove all save points before they are checked to decide whether to show the 'unsaved documents' dialog
+        ext.point('io.ox/core/logout').extend({
+            id: moduleName + '/logout/before',
+            index: 'first', // run before the save points are checked by the core
+            logout: function () {
+                _(ox.ui.App.get(moduleName)).each(function (app) {
+                    if (!app.hasUnsavedChanges()) { app.removeRestorePoint(); }
+                });
+            }
+        });
+
         // listen to user logout and notify all running applications
         ext.point('io.ox/core/logout').extend({
-            id: moduleName + '/logout',
+            id: moduleName + '/logout/quit',
+            index: 'last', // run after the dialog (not called if logout was rejected)
             logout: function () {
                 var deferreds = _(ox.ui.App.get(moduleName)).map(function (app) {
                     return app.executeQuitHandlers();

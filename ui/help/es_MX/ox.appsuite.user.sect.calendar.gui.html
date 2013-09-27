@@ -1,15 +1,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>8.1. Los componentes de Calendario</title>
+<title>7.1. Los componentes de Calendario</title>
 <link rel="stylesheet" type="text/css" href="../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="index.html" title="OX App Suite">
-<link rel="up" href="ox.appsuite.user.chap.calendar.html" title="Capítulo 8. Calendario">
-<link rel="prev" href="ox.appsuite.user.chap.calendar.html" title="Capítulo 8. Calendario">
-<link rel="next" href="ox.appsuite.user.sect.calendar.view.html" title="8.2. Visualización de citas">
+<link rel="up" href="ox.appsuite.user.chap.calendar.html" title="Capítulo 7. Calendario">
+<link rel="prev" href="ox.appsuite.user.chap.calendar.html" title="Capítulo 7. Calendario">
+<link rel="next" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. Visualización de citas">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Aviso Legal">
-<link rel="stylesheet" type="text/css" href="http://www.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css"/> 
+<link rel="stylesheet" type="text/css" href="../../apps/io.ox/core/bootstrap/css/bootstrap.min.css"​/> 
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -22,8 +23,8 @@
 <div class="oxhelp-content">
   <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="ox.appsuite.user.sect.calendar.gui"></a>8.1. Los componentes de <span class="phrase"> <span class="guilabel"><strong>Calendario</strong></span> </span> </h2></div></div></div>
-<a class="indexterm" name="idm139915883287520"></a><div class="reference">
+<a name="ox.appsuite.user.sect.calendar.gui"></a>7.1. Los componentes de <span class="phrase"> <span class="guilabel"><strong>Calendario</strong></span> </span> </h2></div></div></div>
+<a class="indexterm" name="idm140123666868368"></a><div class="reference">
 <a name="ox.appsuite.user.reference.calendar.gui.hint"></a><p>Se puede encontrar una introducción al uso de la interfaz en <a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html" title="3.1. El interfaz de usuario">El interfaz de usuario</a>.</p>
 </div>
 <div class="reference">
@@ -33,6 +34,8 @@
 <p>Icono <span class="guibutton"><strong>Nueva cita</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.toolbar.create"></a><img src="images/appsuite_user_icon_toolbar_add.png"></span>. Crea una <a class="link" href="ox.appsuite.user.sect.calendar.add.create.html#ox.appsuite.user.concept.calendar.new">nueva cita</a>.</p>
 <p><span class="phrase"><strong>Nota:</strong></span> Esta función sólo se activa si tiene abierto un calendario en el que tenga los permisos adecuados para crear objetos.</p>
 </li>
+<li class="listitem"><p>Icono <span class="guibutton"><strong>Cambiar carpeta</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.toolbar.folder"></a><img src="images/appsuite_user_icon_toolbar_folder.png"></span>. Abre o cierra el <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.foldertree" title="Árbol de carpetas">Árbol de carpetas</a>.</p></li>
+<li class="listitem"><p>Icono <span class="guibutton"><strong>Cambiar búsqueda</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.toolbar.search"></a><img src="images/appsuite_user_icon_toolbar_search.png"></span>. Abre un campo de texto para <a class="link" href="ox.appsuite.user.sect.dataorganisation.search.html#ox.appsuite.user.concept.search">buscar</a> citas que coincidan con un determinado asunto.</p></li>
 <li class="listitem">
 <p>Icono <span class="guibutton"><strong>Vista</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.toolbar.view"></a><img src="images/appsuite_user_icon_toolbar_view.png"></span>. Selecciona una de las siguientes vistas para el área de visualización: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
@@ -46,16 +49,15 @@
 <p>
             </p>
 </li>
-<li class="listitem"><p>Icono <span class="guibutton"><strong>Cambiar carpeta</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.toolbar.folder"></a><img src="images/appsuite_user_icon_toolbar_folder.png"></span>. Abre o cierra el <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.foldertree" title="Árbol de carpetas">Árbol de carpetas</a>.</p></li>
-<li class="listitem"><p>Icono <span class="guibutton"><strong>Cambiar búsqueda</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.toolbar.search"></a><img src="images/appsuite_user_icon_toolbar_search.png"></span>. Abre un campo de texto para <a class="link" href="ox.appsuite.user.sect.dataorganisation.search.html#ox.appsuite.user.concept.search">buscar</a> citas que coincidan con un determinado asunto.</p></li>
+<li class="listitem"><p>Icono <span class="guibutton"><strong>Planificación</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.toolbar.schedule"></a><img src="images/appsuite_user_icon_toolbar_schedule.png"></span>. Abre la vista de planificación para programar <a class="link" href="ox.appsuite.user.sect.calendar.add.create.html#ox.appsuite.user.concept.calendar.new">citas con múltiples participantes</a>.</p></li>
+<li class="listitem"><p>Icono <span class="guibutton"><strong>Imprimir</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.toolbar.print"></a><img src="images/appsuite_user_icon_toolbar_print.png"></span>. Abre la vista previa de impresión para <a class="link" href="ox.appsuite.user.sect.calendar.add.create.html#ox.appsuite.user.concept.calendar.new">imprimir una hoja de calendario</a>.</p></li>
 </ul></div>
 </div>
 <div class="reference">
 <a name="ox.appsuite.user.reference.calendar.gui.foldertree"></a><p><b>Árbol de carpetas </b>Muestra las carpetas de calendario. Permite la <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.concept.folder.navigate">navegación por la estructura de carpetas</a>. Para abrir un árbol de carpetas, presione el icono <span class="guibutton"><strong>Cambiar carpeta</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.foldertree.folder"></a><img src="images/appsuite_user_icon_toolbar_folder.png"></span> de la barra de herramientas. Están disponibles las siguientes funciones: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Si presiona sobre una carpeta, se mostrarán las citas contenidas en ella.</p></li>
-<li class="listitem"><p>Los iconos <span class="guibutton"><strong>Añadir carpeta</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.foldertree.addfolder"></a><img src="images/appsuite_user_icon_foldertree_create.png"></span> y <span class="guibutton"><strong>Editar carpeta</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.foldertree.editfolder"></a><img src="images/appsuite_user_icon_foldertree_edit.png"></span>, situados debajo de las carpetas, ofrecen funciones para <a class="link" href="ox.appsuite.user.chap.dataorganisation.html#ox.appsuite.user.concept.dataorganisation">Organizar datos</a>.</p></li>
-<li class="listitem"><p>El icono <span class="guibutton"><strong>Cerrar</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.foldertree.close"></a><img src="images/appsuite_user_icon_foldertree_close.png"></span> cierra el árbol de carpetas.</p></li>
+<li class="listitem"><p>Los iconos <span class="guibutton"><strong>Menú añadir carpeta</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.foldertree.addfolder"></a><img src="images/appsuite_user_icon_foldertree_create.png"></span> y <span class="guibutton"><strong>Acciones de carpeta</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.foldertree.editfolder"></a><img src="images/appsuite_user_icon_foldertree_edit.png"></span>, situados debajo de las carpetas, ofrecen funciones para <a class="link" href="ox.appsuite.user.chap.dataorganisation.html#ox.appsuite.user.concept.dataorganisation">Organizar datos</a>.</p></li>
 </ul></div>
 <p>
       </p>
@@ -95,7 +97,7 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.calendar.gui.contentlist"></a><p><b>Área de visualización en la vista <span class="guilabel"><strong>Lista</strong></span> </b>Muestra los datos de la cita y las funciones disponibles: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Botones: <a class="link" href="ox.appsuite.user.sect.calendar.manage.edit.html#ox.appsuite.user.concept.calendar.edit"> <span class="guibutton"><strong>Editar</strong></span> </a>, <a class="link" href="ox.appsuite.user.sect.calendar.manage.changestatus.html#ox.appsuite.user.concept.calendar.changestatus"> <span class="guibutton"><strong>Cambiar estado</strong></span> </a>, <a class="link" href="ox.appsuite.user.sect.calendar.manage.move.html#ox.appsuite.user.concept.calendar.move"> <span class="guibutton"><strong>Mover</strong></span> </a>, <a class="link" href="ox.appsuite.user.sect.calendar.manage.delete.html#ox.appsuite.user.concept.calendar.delete"> <span class="guibutton"><strong>Borrar</strong></span> </a> </p></li>
+<li class="listitem"><p>Botones: <a class="link" href="ox.appsuite.user.sect.calendar.manage.edit.html#ox.appsuite.user.concept.calendar.edit"> <span class="guibutton"><strong>Editar</strong></span> </a>, <a class="link" href="ox.appsuite.user.sect.calendar.manage.changestatus.html#ox.appsuite.user.concept.calendar.changestatus"> <span class="guibutton"><strong>Cambiar estado</strong></span> </a>, <a class="link" href="ox.appsuite.user.sect.calendar.manage.move.html#ox.appsuite.user.concept.calendar.move"> <span class="guibutton"><strong>Mover</strong></span> </a>, <a class="link" href="ox.appsuite.user.sect.calendar.manage.print.html#ox.appsuite.user.concept.calendar.print"> <span class="guibutton"><strong>Imprimir</strong></span> </a>, <a class="link" href="ox.appsuite.user.sect.calendar.manage.delete.html#ox.appsuite.user.concept.calendar.delete"> <span class="guibutton"><strong>Eliminar</strong></span> </a> </p></li>
 <li class="listitem"><p>Fecha, el tipo de repetición (para citas periódicas), hora y zona horaria</p></li>
 <li class="listitem"><p>Asunto</p></li>
 <li class="listitem"><p>Ubicación de la cita, si fue indicada</p></li>

@@ -16,7 +16,7 @@ define("io.ox/mail/accounts/model",
      "io.ox/keychain/model",
      "io.ox/core/api/account",
      'io.ox/core/api/folder',
-     'gettext!io.ox/mail/accounts/settings'], function (ext, keychainModel, AccountApi, folderAPI, gt) {
+     'gettext!io.ox/mail/accounts/settings'], function (ext, keychainModel, AccountAPI, folderAPI, gt) {
 
     "use strict";
 
@@ -84,7 +84,7 @@ define("io.ox/mail/accounts/model",
 
         },
 
-        validationCheck: function (data) {
+        validationCheck: function (data, options) {
 
             data = _.extend({
                 unified_inbox_enabled: false,
@@ -93,7 +93,7 @@ define("io.ox/mail/accounts/model",
 
             data.name = data.personal = data.primary_address;
 
-            return AccountApi.validate(data);
+            return AccountAPI.validate(data, options);
         },
 
         save: function (obj, defered) {
@@ -120,7 +120,7 @@ define("io.ox/mail/accounts/model",
                             unified_inbox_enabled: that.attributes.unified_inbox_enabled
                         };
                 }
-                return AccountApi.update(mods).done(function (response) {
+                return AccountAPI.update(mods).done(function (response) {
                     folderAPI.folderCache.remove('default' + that.attributes.id);
                     return defered.resolve(response);
                 }).fail(function (response) {
@@ -140,7 +140,7 @@ define("io.ox/mail/accounts/model",
                     this.attributes = obj;
                     this.attributes.spam_handler = "NoSpamHandler";
                 }
-                return AccountApi.create(this.attributes).done(function (response) {
+                return AccountAPI.create(this.attributes).done(function (response) {
                     return defered.resolve(response);
                 }).fail(function (response) {
                     return defered.reject(response);
@@ -150,7 +150,7 @@ define("io.ox/mail/accounts/model",
         },
 
         destroy: function (options) {
-            AccountApi.remove([this.attributes.id]);
+            AccountAPI.remove([this.attributes.id]);
             var model = this;
         }
 

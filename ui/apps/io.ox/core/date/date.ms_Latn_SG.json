@@ -50,7 +50,7 @@
         "Mei",
         "Jun",
         "Jul",
-        "Ogos",
+        "Ogo",
         "Sep",
         "Okt",
         "Nov",
@@ -65,6 +65,7 @@
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "d-M",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
         "yMdHm": "d/M/y HH:mm",
@@ -76,7 +77,7 @@
         "yMEdhm": "E, d/M/y h:mm a",
         "yMEdhmv": "E, d/M/y h:mm a v"
     },
-    "date": "dd/MM/yyyy",
+    "date": "d MMM y",
     "time": "h:mm a",
     "dateTimeFormat": "%2$s %1$s",
     "intervals": {
@@ -118,6 +119,6 @@
         "S.M.",
         "TM"
     ],
-    "dateTime": "dd/MM/yyyy h:mm a",
+    "dateTime": "d MMM y h:mm a",
     "h12": true
 }

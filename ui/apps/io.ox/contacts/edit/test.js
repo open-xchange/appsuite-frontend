@@ -14,9 +14,9 @@ define('io.ox/contacts/edit/test',
     ['io.ox/core/extensions',
      'io.ox/contacts/main',
      'io.ox/contacts/api',
-     'io.ox/core/config',
+     'settings!io.ox/core',
      'io.ox/core/date'
-    ], function (ext, contacts, api, config, date) {
+    ], function (ext, contacts, api, coreConfig, date) {
 
     "use strict";
 
@@ -31,7 +31,7 @@ define('io.ox/contacts/edit/test',
         testObjectLong = {
             first_name: 'Georg',
             last_name: 'Tester',
-            display_name: 'Tester, Georg', // just to skip missing autocreate
+            display_name: 'Dr. Tester, Georg', // just to skip missing autocreate
             company: 'OX',
             department: 'OX-dev',
             position: 'small cog in a big wheel',
@@ -133,7 +133,7 @@ define('io.ox/contacts/edit/test',
     }
 
  // get the current folder
-    var fId = config.get("folder.contacts");
+    var fId = coreConfig.get("folder/contacts");
     testObject.folder_id = fId;
 
     var testFactory = {
@@ -271,6 +271,7 @@ define('io.ox/contacts/edit/test',
 
                         j.expect(buttonSave).toBeTruthy();
                         buttonSave.trigger('click');
+                        api.trigger('refresh.all');
                     });
 
                 });
@@ -309,7 +310,7 @@ define('io.ox/contacts/edit/test',
                         j.runs(function () {
                             j.expect(dataObj.first_name).toEqual(testObjectLong.first_name);
                             j.expect(dataObj.last_name).toEqual(testObjectLong.last_name);
-                            j.expect(dataObj.display_name).toEqual('Tester, Georg');
+                            j.expect(dataObj.display_name).toEqual(testObjectLong.display_name);
                             j.expect(dataObj.company).toEqual(testObjectLong.company);
                             j.expect(dataObj.department).toEqual(testObjectLong.department);
                             j.expect(dataObj.position).toEqual(testObjectLong.position);

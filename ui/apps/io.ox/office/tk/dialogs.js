@@ -25,8 +25,8 @@ define('io.ox/office/tk/dialogs',
      * Adds OK and Cancel buttons to the passed dialog.
      */
     function addDialogButtons(dialog, options) {
-        dialog.addButton('cancel', Utils.getStringOption(options, 'cancelLabel', gt('Cancel')))
-            .addPrimaryButton('ok', Utils.getStringOption(options, 'okLabel', gt('OK')));
+        dialog.addPrimaryButton('ok', Utils.getStringOption(options, 'okLabel', gt('OK')))
+            .addButton('cancel', Utils.getStringOption(options, 'cancelLabel', gt('Cancel')));
     }
 
     // static class Dialogs ===================================================
@@ -54,16 +54,39 @@ define('io.ox/office/tk/dialogs',
         var // create the dialog instance
             dialog = new CoreDialogs.ModalDialog({
                 width: Utils.getIntegerOption(options, 'width', 400),
-                easyOut: true,
-                async: Utils.getBooleanOption(options, 'async', false)
+                async: Utils.getBooleanOption(options, 'async', false),
+                tabTrap: true,
+                enter: Utils.getFunctionOption(options, 'enter', undefined)
             }),
             // the title text
-            title = Utils.getStringOption(options, 'title');
+            title = Utils.getStringOption(options, 'title'),
+            // the dummy input to catch the cursor
+            focusCatcher = $('<input>').css({position: 'absolute', top: '-10000px', left: '-10000px', width: '1px', height: '1px'});
 
         // add title
         if (_.isString(title)) {
             dialog.header($('<h4>').text(title));
         }
+
+        // add dummy input to catch the cursor on dialog open
+        dialog.getFooter().append(focusCatcher);
+
+        // set focus to dummy input
+        dialog.getPopup().on('show', function () {
+            focusCatcher.focus();
+        });
+
+        // remove dummy input
+        dialog.getPopup().on('shown', function () {
+            focusCatcher.remove();
+        });
+
+        // The dialog is opened with nodes.popup.show() instead of nodes.popup.modal('show')
+        // which prevents the 'show' and 'shown' events being triggered.
+        // We call tab('show') to trigger the events.
+        dialog.on('show', function () {
+            dialog.getPopup().tab('show');
+        });
 
         return dialog;
     };
@@ -269,6 +292,34 @@ define('io.ox/office/tk/dialogs',
         });
 
         return def.promise();
+    };
+
+    /**
+     * Default ENTER handler for dialogs.
+     * Must be set via 'enter' options at the
+     * dialog.
+     * Checks if the primary button is not disabled
+     * and invoke the stored function on controls
+     * which have the defaultEnter attribute set.
+     *
+     * @returns {Boolean}
+     *  TRUE if the event should be processed by
+     *  bubbling, otherwise FALSE.
+     */
+    Dialogs.defaultKeyEnterHandler = function () {
+        var button = null, focus = $(document.activeElement);
+
+        // handler for the ENTER key on the dialog
+        if (this.getFooter().children(':focus').length === 0 && focus.attr('defaultEnter')) {
+            button = this.getFooter().find('[disabled!="disabled"][data-action].btn-primary').first();
+            if (button.length) {
+                this.invoke(button.attr('data-action'));
+                return false;
+            }
+        }
+
+        // let the event bubble
+        return true;
     };
 
     // exports ================================================================

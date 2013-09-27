@@ -64,12 +64,19 @@ define('io.ox/editor/main',
 
             this.app = options.app;
 
+            this.data = {
+                saved: {
+                    filename: null
+                }
+            };
             this.model.on('change:title', this.updateTitle, this);
             this.model.on('change:content', this.updateContent, this);
         },
 
         updateTitle: function () {
-            this.$el.find('input.title').val(this.model.get('title'));
+            // old value
+            this.data.saved.filename = this.model.get('filename');
+            this.$el.find('input.title').val(this.model.get('filename'));
         },
 
         updateContent: function () {
@@ -80,7 +87,7 @@ define('io.ox/editor/main',
             var filename = this.getFilename(),
                 title = this.getTitle();
             this.model.set({
-                title: title || filename,
+                title: filename,
                 filename: filename,
                 content: this.getContent()
             });
@@ -92,7 +99,7 @@ define('io.ox/editor/main',
 
         getFilename: function () {
             var title = this.getTitle(),
-                filename = String(title || this.getContent().substr(0, 20).split('.')[0] || 'unnamed').toLowerCase();
+                filename = String(title || this.getContent().substr(0, 20).split('.')[0] || 'unnamed');
             // has file extension?
             if (!/\.\w{1,4}$/.test(filename)) {
                 filename += '.txt';
@@ -131,8 +138,8 @@ define('io.ox/editor/main',
                         // save & close buttons
 
                         $('<div class="button-wrap">').append(
-                            $('<button class="save btn btn-primary" tabindex="3">').text(gt('Save')),
-                            $('<button class="quit btn" tabindex="4">').text(gt('Close'))
+                            $('<button type="button" class="save btn btn-primary" tabindex="3">').text(gt('Save')),
+                            $('<button type="button" class="quit btn" tabindex="4">').text(gt('Close'))
                         )
 
                     ),
@@ -190,6 +197,7 @@ define('io.ox/editor/main',
                 title: '',
                 content: ''
             });
+            _.extend(previous, { filename: 'unnamed.txt', title: 'unnamed.txt' });
             win.show(function () {
                 app.setState({ folder: opt.folder });
                 view.focus();
@@ -197,41 +205,48 @@ define('io.ox/editor/main',
         };
 
         app.save = function () {
-            // vars
-            var blob, data;
-            // generate blob
-            view.updateModel();
-            data = model.toJSON();
-            blob = new window.Blob([data.content], { type: 'text/plain' });
-            delete data.content;
-            view.busy();
-            // create or update?
-            if (model.has('id')) {
-                // update
-                return api.uploadNewVersion({ id: data.id, folder: data.folder_id, file: blob, filename: data.filename })
-                    .done(function () {
-                        previous = model.toJSON();
-                    })
-                    .always(function () { view.idle(); })
-                    .fail(notifications.yell)
-                    .fail(function (error) {
-                        // file no longer exists
-                        if (error.code === 'IFO-0300') model.unset('id');
-                    });
-            } else {
-                // create
-                return api.uploadFile({ folder: data.folder_id, file: blob, filename: data.filename })
-                    .done(function (data) {
+            require(['io.ox/files/util'], function (util) {
+                var blob, data;
+                return util.confirmDialog(app.view.getFilename(), app.view.data.saved.filename)
+                    .then(function () {
+                        // generate blob
+                        view.updateModel();
+                        data = model.toJSON();
+                        blob = new window.Blob([data.content], { type: 'text/plain' });
                         delete data.content;
-                        app.setState({ folder: data.folder_id, id: data.id });
-                        model.set(data);
-                        previous = model.toJSON();
-                        view.idle();
-                        api.trigger('refresh.all');
-                    })
-                    .always(function () { view.idle(); })
-                    .fail(notifications.yell);
-            }
+                        view.busy();
+
+                        // create or update?
+                        if (model.has('id')) {
+                            // update
+                            return api.uploadNewVersion({ id: data.id, folder: data.folder_id, file: blob, filename: data.filename })
+                                .done(function () {
+                                    previous = model.toJSON();
+                                })
+                                .always(function () { view.idle(); })
+                                .fail(notifications.yell)
+                                .fail(function (error) {
+                                    // file no longer exists
+                                    if (error.code === 'IFO-0300') model.unset('id');
+                                });
+                        } else {
+                            // create
+                            return api.uploadFile({ folder: data.folder_id, file: blob, filename: data.filename })
+                                .done(function (data) {
+                                    delete data.content;
+                                    app.setState({ folder: data.folder_id, id: data.id });
+                                    model.set(data);
+                                    previous = model.toJSON();
+                                    view.idle();
+                                    api.trigger('refresh.all');
+                                })
+                                .always(function () { view.idle(); })
+                                .fail(notifications.yell);
+                        }
+                    }, function () {
+                        view.idle.apply(app.view);
+                    });
+            });
         };
 
         app.load = function (o) {

@@ -11,61 +11,219 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-
-
 .icon-plus-sign, .icon-minus-sign {
     margin-right: 5px;
 }
 
 .edit-contact {
 
-    .form-horizontal input.span3.control {
-    width: 206px;
+    @step: 60px;
+
+    max-width: 12 * @step;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+
+    .settings-detail-pane & {
+        margin: 0;
+        padding: 0;
     }
 
-    .btn {
-        margin-right: 13px;
+    .btn.control {
+        float: right;
+        margin-left: 14px;
     }
 
-    .contact_attachments_buttons .btn {
-        margin-left: -1px;
+    .picture-upload-view {
+
+        position: relative;
+
+        form {
+            position: absolute;
+            z-index: 1;
+        }
+
+        input[type=file] {
+            position:absolute;
+            top: 24px;
+            width: 90px;
+            height: 90px;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .picture-uploader {
+            z-index: 0;
+        }
+    }
+
+    .contact-picture-upload {
+
+        float: left;
+        margin: 0 30px 10px 0;
+        position: relative;
+
+        .picture-uploader {
+            width: 80px;
+            height: 80px;
+        }
+
+        .add-img-text {
+            font-size: 12px;
+            line-height: 12px;
+        }
+    }
+
+    h1.name {
+        font-family: @lightFontFamily;
+        font-weight: 300;
+        font-size: 24px;
+        line-height: 32px;
+        margin: 0;
+    }
+
+    h2.job {
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 20px;
+        margin: 0 0 14px 0;
+        color: #888;
+    }
+
+    nav {
+        text-align: right;
+        margin: 28px 0;
+    }
+
+    .clear {
+        clear: both;
+    }
+
+    .block {
+        width: @step * 6;
+        margin: 0 0 28px 0;
+        float: left;
+    }
+
+    .block.even {
+        width: @step * 6 - 30;
+    }
+
+    .block.odd {
+        width: @step * 6;
+        margin-right: 30px;
+        clear: both;
+    }
+
+    .block.double-block {
+        width: 100%;
+        max-width: @step * 12;
+        margin-right: 0;
+        clear: both;
+    }
+
+    .block.two-columns {
+        p.field {
+            float: left;
+            &:nth-child(even) {
+                margin-right: 60px;
+            }
+            &:nth-child(odd) {
+                margin-right: 0;
+            }
+        }
+    }
+
+    h2.group {
+        font-size: 18px;
+        line-height: 24px;
+        font-weight: 300;
+        margin-bottom: 14px;
+        display: block;
+        border-bottom: 0;
+        color: #DF5119; /* burning orange */
+    }
+
+    & p.field.rare {
+        display: none;
+    }
+
+    &.compact p.field {
+        display: none;
+    }
+
+    & p.field.always {
+        display: block;
+    }
+
+    &.compact p.field.has-content {
+        display: block;
+    }
+
+    legend.simple,
+    label.input {
+        font-size: 12px;
+        line-height: 20px;
+        color: #777;
+        margin: 0;
+        padding: 0;
+        border-bottom: 0px none;
+    }
+
+    .input-xlarge {
+        width: 315px;
+        margin: 0 0 7px 0;
+    }
+
+    textarea {
+        height: 221px;
+        resize: none;
     }
 
     .attachment-edit-row {
         margin-bottom: 9px;
     }
 
-    .io-ox-core-tk-attachment {
-        .delete {
-            width: 25px;
-            font-size: 19px;
-            padding-left: 12px;
-            cursor: pointer;
+    label.private-flag input {
+        position: absolute;
+        float: none;
+    }
+
+    select.date { width: 70px; }
+    select.month { width: 140px; }
+    select.year { width: 100px; }
+
+    .native-date-picker select {
+        margin-right: 10px;
+        &:last-child { margin-right: 0; }
+    }
+
+    .inline-error { display: none; }
+
+    .field.error {
+        label, input, .inline-error {
+            color: #B94A48;
         }
-        .attachment-icon {
-            padding-left: 15px;
-            width: 45px;
+        input {
+            border-color: #B94A48;
+        }
+        input:focus {
+            .box-shadow(0 0 6px #D59392);
+        }
+        .inline-error {
+            margin-bottom: 14px;
+            display: block;
         }
     }
 
-    .form-horizontal .control-group {
-        margin-bottom: 10px;
-    }
-
-    .form-horizontal .private-flag {
-        margin-left: 180px;
-    }
-
-    .form-horizontal.controls {
-        margin-left: 180px;
-    }
-
-    .sectionheader {
+    .btn-group {
+        margin-bottom: 20px;
         margin-top: 20px;
-    }
 
-    .sectionheader.collapsed {
-        margin-top: 20px;
+        .btn {
+            margin-left: 13px;
+            float: right;
+        }
     }
 
     button[data-action="imagereset"] {
@@ -73,58 +231,113 @@
         margin-left: 15px;
     }
 
-    select[name="day"], select[name="month"], select[name="year"] {
-        height: 30px;
-        margin-right: 15px;
-        &:last-child {
-           margin-right: 0;
+    .attachment-list {
+
+        .attachment {
+
+            position: relative;
+            margin-bottom: 7px;
+            padding: 7px 50px 7px 50px;
+            background-color: #F5F5F5;
+
+            width: 330px;
+            float: left;
+            margin-right: 0px;
+            .box-sizing(border-box);
+
+            &:nth-child(odd) {
+                margin-right: 60px;
+            }
+
+            i.icon-paper-clip {
+                position: absolute;
+                font-size: 24px;
+                color: rgba(0, 0, 0, 0.20);
+                top: 15px;
+                left: 15px;
+            }
+
+            .filesize {
+                font-size: 13px;
+                color: #aaa;
+            }
+
+            .remove {
+                position: absolute;
+                top: 0px;
+                right: 0px;
+                bottom:  0px;
+                width: 2em;
+                font-size: 18px;
+                background-color: #f0f0f0;
+                border-left: 1px solid white;
+                color: #bbb;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: #a00;
+                    color: #fff;
+                    text-decoration: none;
+                }
+
+                i.icon-trash {
+                    position: absolute;
+                    top: 50%;
+                    left: 0;
+                    right: 0;
+                    margin-top: -0.5em;
+                    text-align: center;
+                }
+            }
+
+            .row-1, .row-2 {
+                .ellipsis();
+            }
         }
     }
 
-    select[name="day"] {
-        width: 60px;
+    .contact_attachments_buttons {
+        clear: both;
     }
 
-    select[name="month"] {
-        width: 125px;
-    }
+    @media (max-width: 480px), (max-device-width: 480px) {
 
-    select[name="year"] {
-        width: 69px;
-    }
+        margin-top: 5px;
 
-    .sectionheader .offset2 {
-        margin-left: 200px;
-    }
-
-    .clear-title.job {
-        font-size: 1.25em;
-        color: #888;
-    }
-
-    .span2.header-pic {
-        width: 160px;
-    }
-
-    .picture-uploader {
-        width: 100px;
-        height: 100px;
-        display: inline-block;
-        float: left;
-        background-position: right top;
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-clip: content-box;
-    }
-
-    .picture-uploader .close {
-        position: absolute;
-        top: 4px;
-        right: 4px;
-        opacity: 0.6;
-        width: 24px;
-        height: 24px;
-        text-align: center;
-        background-color: #fff;
+        nav {
+            margin: 10px 0;
+        }
+        .btn-primary {
+            margin-bottom: 7px;
+        }
+        .toggle-compact {
+            clear: both;
+            text-align: left;
+        }
+        .block, .block.even, .block.odd {
+            width: 300px;
+            margin-right: 0px;
+        }
+        .input-xlarge {
+            width: 300px;
+        }
+        .block.double-block {
+            width: 300px;
+        }
+        .block.two-columns p.field {
+            &:nth-child(even) {
+                margin-right: 0px;
+            }
+        }
+        .attachment-list .attachment {
+            width: 300px;
+            margin-right: 0px;
+        }
+        select.date { width: 60px; }
+        select.month { width: 130px; }
+        select.year {
+            width: 90px;
+            margin-right: 0;
+        }
     }
 }

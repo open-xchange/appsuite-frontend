@@ -16,6 +16,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
 
     var SCHEMA = 1,
         QUEUE_DELAY = 5000,
+        MAX_LENGTH = 1024 * 1024, // 1MB
         instances = {},
         moduleDefined = $.Deferred(),
         db,
@@ -37,19 +38,19 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
     function IndexeddbStorage(id) {
 
         var fluent = {},
+            removed = {},
             queue,
             myDB,
             dbOpened = $.Deferred(); // OP(opened);
 
-        OP(db.transaction("databases", "readwrite").objectStore("databases").put({ name: id })).done(function (db) {
-            var opened =  window.indexedDB.open(id, SCHEMA);
-            opened.onupgradeneeded = function (e) {
-                // Set up object stores
-                myDB = e.target.result;
-                myDB.createObjectStore("cache", { keyPath: "key" });
-            };
-            OP(opened).then(dbOpened.resolve, dbOpened.reject);
-        });
+
+        var opened =  window.indexedDB.open('appsuite.cache', SCHEMA);
+        opened.onupgradeneeded = function (e) {
+            // Set up object stores
+            myDB = e.target.result;
+            myDB.createObjectStore("cache", { keyPath: "key" });
+        };
+        OP(opened).then(dbOpened.resolve, dbOpened.reject);
 
         function operation(fn, readwrite) {
             return dbOpened.then(function (db) {
@@ -83,6 +84,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                         key;
                     // loop
                     _(queue.hash).each(function (data, key) {
+                        key = String(id + '//' + key);
                         store.put({ key: key, data: data });
                     });
                     queue.hash = {};
@@ -106,6 +108,9 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         _.extend(this, {
 
             clear: function () {
+                _(fluent).each(function (obj, key) {
+                    removed[key] = true;
+                });
                 fluent = {};
                 queue.clear();
                 return readwrite(function (tx) {
@@ -118,6 +123,9 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                     return $.Deferred().resolve(null);
                 }
                 key = String(key);
+                if (key in removed) {
+                    return $.Deferred().resolve(null);
+                }
                 if (key in fluent) {
                     try {
                         return $.Deferred().resolve(JSON.parse(fluent[key]));
@@ -127,7 +135,18 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                     }
                 }
                 return read(function (cache) {
-                    return OP(cache.get(key)).then(function found(obj) {
+                    key = String(id + '//' + key);
+
+                    return OP(cache.get(key))
+                    .then(function (obj) {
+                        if (_.isUndefined(obj) || _.isNull(obj)) {
+                            return obj;
+                        }
+                        key = key.substr(String(id + '//').length);
+                        obj.key = key;
+                        return obj;
+                    })
+                    .then(function found(obj) {
                         if (!_.isUndefined(obj) && !_.isNull(obj)) {
                             try {
                                 var data = JSON.parse(obj.data);
@@ -150,16 +169,15 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 try {
                     data = JSON.stringify(data);
                     fluent[key] = data;
+                    delete removed[key];
                 } catch (e) {
                     console.error('Could not serialize', id, key, data);
                 }
                 // don't wait for this
-                queue.add(key, data);
-                // clear();
-                // readwrite(function (cache) {
-                //     return OP(cache.put({ key: key, data: data }));
-                // });
-                // go back to work
+                // don't store too large items
+                if (data.length <= MAX_LENGTH) {
+                    queue.add(key, data);
+                }
                 return $.Deferred().resolve(key);
             },
 
@@ -167,9 +185,11 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 key = String(key);
                 if (fluent[key]) {
                     delete fluent[key];
+                    removed[key] = true;
                 }
                 queue.remove(key);
                 return readwrite(function (cache) {
+                    key = String(id + '//' + key);
                     return OP(cache['delete'](key), 'delete');
                 });
             },
@@ -188,7 +208,15 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                     }).fail(def.reject);
 
                     return def;
-                }).then(function (keys) {
+                })
+                .then(function (keys) {
+                    return keys.filter(function (key) {
+                        return key.indexOf(String(id + '//')) === 0;
+                    }).map(function (key) {
+                        return key.substr(String(id + '//').length);
+                    });
+                })
+                .then(function (keys) {
                     //merge keys from fluent cache
                     return _(keys).chain().union(_(fluent).keys()).uniq().value();
                 });
@@ -229,15 +257,25 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
     // Adapter for IndexedDB operations to the familiar deferreds
     function OP(request, type) {
         var def = $.Deferred();
-        request.onerror = function (e) { def.reject(e); };
-        request.onblocked = function (e) { def.reject(e); };
+        request.onerror = function (e) {
+            if (ox.debug === true) {
+                console.warn('IndexedDB: error request', request, type, e);
+            }
+            def.reject(e);
+        };
+        request.onblocked = function (e) {
+            if (ox.debug === true) {
+                console.warn('IndexedDB: blocked request', request, type, e);
+            }
+            def.reject(e);
+        };
         // stupid stupid workaround for stupid stupid runtime bug / or API is hard to understand
         // clear seems to return far too early; maybe browser bug.
         // Occurred during folder tree debugging. test code:
         // api = require('io.ox/core/api/folder'); api.caches.subFolderCache.clear().done(function () { api.caches.subFolderCache.keys().done(_.inspect); });
         if ((type === 'clear' || type === 'delete') && request.transaction) {
             request.transaction.oncomplete = function (e) {
-                def.resolve();
+                def.resolve(e);
             };
         } else {
             request.onsuccess = function (e) { def.resolve(e.target.result); };
@@ -308,29 +346,20 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
 
     function destroyDB() {
         // Drop all databases
-        var def = $.Deferred();
-        var deletes = [];
+        var def = $.Deferred(),
+            clear_instances = _(instances).chain()
+                .values()
+                .map(function (db) {
+                    return db.clear();
+                });
 
-        ITER(db.transaction("databases").objectStore("databases").openCursor())
-            .step(function (cursor) {
-                if (instances[cursor.key]) {
-                    instances[cursor.key].close();
-                }
-                deletes.push(OP(window.indexedDB.deleteDatabase(cursor.key), 'deleteDatabase'));
-            })
-            .end(function () {
-                $.when.apply($, deletes).then(
-                    function () {
-                        instances = {};
-                        OP(db.transaction("databases", "readwrite").objectStore("databases").clear(), 'clear')
-                        .always(function () {
-                            initializeDB().then(def.resolve, def.reject);
-                        });
-                    },
-                    def.reject
-                );
-            })
-            .fail(def.reject);
+        $.when.apply($, clear_instances).then(function () {
+            instances = {};
+            OP(window.indexedDB.deleteDatabase('cache'), 'deleteDatabase').then(
+                def.resolve,
+                def.reject
+            );
+        });
 
         return def;
     }
@@ -343,7 +372,6 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         opened.onupgradeneeded = function (e) {
             // Set up object stores
             var db = e.target.result;
-            db.createObjectStore("databases", {keyPath: "name"});
             db.createObjectStore("meta", {keyPath: "id"});
         };
 
@@ -367,9 +395,8 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                     var setupCompleted = null;
                     if (!meta) {
                         setupCompleted = initializeDB();
-                    } else if (ox.online && (meta.version !== ox.version || meta.cleanUp)) {
+                    } else if (ox.online && (meta.version !== ox.version || meta.cleanUp) && _.url.hash('keep-data') !== 'true') {
                         meta.cleanUp = true;
-                        OP(db.transaction("meta", "readwrite").objectStore("meta").put(meta));
                         if (ox.debug === true) {
                             console.warn('IndexedDB: Clearing persistent caches due to UI update');
                         }

@@ -20,7 +20,8 @@ define("io.ox/core/desktop",
      "io.ox/core/cache",
      "io.ox/core/notifications",
      "io.ox/core/upsell",
-     "gettext!io.ox/core"], function (Events, ext, links, cache, notifications, upsell, gt) {
+     "io.ox/core/adaptiveLoader",
+     "gettext!io.ox/core"], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, gt) {
 
     "use strict";
 
@@ -79,7 +80,11 @@ define("io.ox/core/desktop",
         launch: function () {
             var self = this, id = (this.get('name') || this.id) + '/main', requires = this.get('requires');
             if (upsell.has(requires)) {
-                return ox.launch(id).done(function () { self.quit(); });
+                //resolve/reject clears busy animation
+                var def = $.Deferred();
+                return ox.launch(id, { launched: def.promise() })
+                         .then(function () { self.quit(); })
+                         .always(def.resolve);
             } else {
                 upsell.trigger({ type: 'app', id: id, missing: upsell.missing(requires) });
             }
@@ -119,9 +124,11 @@ define("io.ox/core/desktop",
             // add folder management
             this.folder = (function () {
 
-                var folder = null, that, win = null, grid = null, type;
+                var folder = null, that, win = null, grid = null, type, initialized = $.Deferred();
 
                 that = {
+
+                    initialized: initialized.promise(),
 
                     unset: function () {
                         // unset
@@ -134,39 +141,46 @@ define("io.ox/core/desktop",
                         if (grid) {
                             grid.clear();
                         }
-
                     },
 
                     set: function (id) {
                         var def = $.Deferred();
                         if (id !== undefined && id !== null && String(id) !== folder) {
+                            var activeApp = _.url.hash('app');
                             require(['io.ox/core/api/folder'], function (api) {
                                 api.get({ folder: id })
                                 .done(function (data) {
                                     // off
-                                    api.off('change:' + folder);
+                                    //api.off('change:' + folder);
+                                    var appchange = _.url.hash('app') !== activeApp; //app has changed while folder was requested
                                     // remember
                                     folder = String(id);
-                                    // update window title & toolbar?
-                                    if (win) {
-                                        win.setTitle(_.noI18n(data.title));
-                                        win.updateToolbar();
-                                    }
-                                    // update grid?
-                                    if (grid && grid.prop('folder') !== folder) {
-                                        grid.busy().prop('folder', folder);
-                                        if (win && win.search.active) {
-                                            win.search.close();
-                                        } else {
-                                            grid.refresh();
+                                    if (!appchange) {//only change if the app did not change
+                                        // update window title & toolbar?
+                                        if (win) {
+                                            win.setTitle(_.noI18n(data.title));
+                                            win.updateToolbar();
                                         }
-                                        // load fresh folder & trigger update event
-                                        api.reload(id);
+                                        // update grid?
+                                        if (grid && grid.prop('folder') !== folder) {
+                                            grid.busy().prop('folder', folder);
+                                            if (win && win.search.active) {
+                                                win.search.close();
+                                            } else {
+                                                grid.refresh();
+                                            }
+                                            // load fresh folder & trigger update event
+                                            api.reload(id);
+                                        }
+                                        // update hash
+                                        _.url.hash('folder', folder);
+                                        self.trigger('folder:change', folder, data);
                                     }
-                                    // update hash
-                                    _.url.hash('folder', folder);
-                                    self.trigger('folder:change', folder, data);
-                                    def.resolve(data);
+                                    def.resolve(data, appchange);
+
+                                    if (initialized.state() !== 'resolved') {
+                                        initialized.resolve(folder, data);
+                                    }
                                 })
                                 .fail(def.reject);
                             });
@@ -183,16 +197,16 @@ define("io.ox/core/desktop",
 
                     setDefault: function () {
                         var def = new $.Deferred();
-                        require(['io.ox/core/config'], function (config) {
+                        require(['settings!io.ox/core', 'settings!io.ox/mail'], function (coreConfig, mailConfig) {
                             var defaultFolder = type === 'mail' ?
-                                    config.get('mail.folder.inbox') :
-                                    config.get('folder.' + type);
+                                    mailConfig.get('folder/inbox') :
+                                    coreConfig.get('folder/' + type);
                             if (defaultFolder) {
                                 that.set(defaultFolder)
                                     .done(def.resolve)
                                     .fail(def.reject);
                             } else {
-                                def.reject();
+                                def.reject({error: gt('Could not get a default folder for this application.')});
                             }
                         });
                         return def;
@@ -203,6 +217,9 @@ define("io.ox/core/desktop",
                     },
 
                     getData: function () {
+
+                        if (folder === null) return $.Deferred.resolve({});
+
                         return require(['io.ox/core/api/folder']).pipe(function (api) {
                             return api.get({ folder: folder });
                         });
@@ -325,7 +342,9 @@ define("io.ox/core/desktop",
 
         launch: function (options) {
 
-            var deferred = $.when(), self = this;
+            var deferred = $.when(),
+                self = this,
+                isDisabled = ox.manifests.isDisabled(this.getName() + '/main');
 
             // update hash
             if (this.get('name') !== _.url.hash('app')) {
@@ -337,11 +356,21 @@ define("io.ox/core/desktop",
 
             if (this.get('state') === 'ready') {
                 this.set('state', 'initializing');
-                (deferred = this.get('launch').call(this, options || {}) || $.when())
+                if (isDisabled) {
+                    deferred = $.Deferred().reject();
+                } else {
+                    deferred = this.get('launch').call(this, options || {}) || $.when();
+                }
+                deferred
                 .done(function () {
                     ox.ui.apps.add(self);
                     self.set('state', 'running');
                     self.trigger('launch', self);
+                })
+                .fail(function () {
+                    ox.launch(
+                        require('settings!io.ox/core').get('autoStart')
+                    );
                 });
             } else if (this.has('window')) {
                 // toggle app window
@@ -362,8 +391,11 @@ define("io.ox/core/desktop",
                 if (force && self.destroy) {
                     self.destroy();
                 }
-                // update hash
-                _.url.hash({ app: null, folder: null, perspective: null, id: null });
+                // update hash but don't delete information of other apps that might already be open at this point (async close when sending a mail for exsample);
+                if (!_.url.hash('app') || self.getName() === _.url.hash('app').split(':', 1)[0]) {
+                    //we are still in the app to close so we can clear the URL
+                    _.url.hash({ app: null, folder: null, perspective: null, id: null });
+                }
                 // don't save
                 clearInterval(self.get('saveRestorePointTimer'));
                 self.removeRestorePoint();
@@ -463,7 +495,9 @@ define("io.ox/core/desktop",
             this.getSavePoints().done(function (data) {
                 $.when.apply($,
                     _(data).map(function (obj) {
-                        return ox.load([obj.module + '/main']).pipe(function (m) {
+                        adaptiveLoader.stop();
+                        var requirements = adaptiveLoader.startAndEnhance(obj.module, [obj.module + "/main"]);
+                        return ox.load(requirements).pipe(function (m) {
                             return m.getApp().launch().done(function () {
                                 // update unique id
                                 obj.id = this.get('uniqueID');
@@ -502,6 +536,14 @@ define("io.ox/core/desktop",
                 return true;
             }
             return false;
+        },
+
+        getCurrentApp: function () {
+            return currentWindow !== null ? currentWindow.app : null;
+        },
+
+        getCurrentWindow: function () {
+            return currentWindow;
         }
     });
 
@@ -574,6 +616,7 @@ define("io.ox/core/desktop",
     }());
 
     ox.ui.Perspective = (function () {
+
         var Perspective = function (name) {
             // init
             this.main = $();
@@ -583,19 +626,18 @@ define("io.ox/core/desktop",
             this.save = $.noop;
             this.restore = $.noop;
             this.afterShow = $.noop;
+            this.afterHide = $.noop;
 
             this.show = function (app, opt) {
-                var win = app.getWindow();
 
-                if (opt.perspective === win.currentPerspective) {
-                    return;
-                }
+                var win = app.getWindow();
+                if (opt.perspective === win.currentPerspective) return;
 
                 this.main = win.addPerspective(this);
 
                 // trigger change event
                 if (win.currentPerspective !== 'main') {
-                    win.trigger('change:perspective', name);
+                    win.trigger('change:perspective', name, opt.perspective);
                 } else {
                     win.trigger('change:initialPerspective', name);
                 }
@@ -615,21 +657,44 @@ define("io.ox/core/desktop",
                 win.updateToolbar();
                 this.afterShow(app, opt);
             };
+
+            this.hide = function () {
+                this.main.hide();
+                this.afterHide();
+            };
         };
 
-        Perspective.show = function (app, p) {
-            return require([app.get('name') + '/' + p.split(":")[0] + '/perspective'], function (newPers) {
-                var oldPers = app.getWindow().getPerspective();
+        function handlePerspectiveChange(app, p, newPers) {
 
-                if (oldPers && _.isFunction(oldPers.save)) {
-                    oldPers.save();
-                }
+            var oldPers = app.getWindow().getPerspective();
 
+            if (oldPers && _.isFunction(oldPers.save)) {
+                oldPers.save();
+            }
+
+            if (newPers) {
                 newPers.show(app, { perspective: p });
-
-                if (newPers && _.isFunction(newPers.restore)) {
+                if (_.isFunction(newPers.restore)) {
                     newPers.restore();
                 }
+            }
+        }
+
+        Perspective.show = function (app, p) {
+
+            if (p === 'main') {
+                var win = app.getWindow(),
+                    perspective = win.getPerspective();
+                if (perspective) {
+                    perspective.hide();
+                }
+                win.currentPerspective = 'main';
+                win.nodes.main.show();
+                return $.when();
+            }
+
+            return require([app.get('name') + '/' + p.split(":")[0] + '/perspective'], function (newPers) {
+                handlePerspectiveChange(app, p, newPers);
             });
         };
 
@@ -712,6 +777,15 @@ define("io.ox/core/desktop",
                         break;
                     }
                 }
+                //remove the window from cache if it's there
+                appCache.get('windows').done(function (winCache) {
+                    var index = _.indexOf(winCache, win.name);
+
+                    if (index > -1) {
+                        winCache.splice(index, 1);
+                        appCache.add('windows', winCache || []);
+                    }
+                });
             }
 
             var isEmpty = numOpen() === 0;
@@ -788,13 +862,14 @@ define("io.ox/core/desktop",
                 this.search = { query: '', active: false };
                 this.state = { visible: false, running: false, open: false };
                 this.app = null;
-                this.detachable = true;
+                this.detachable = false;
+                this.simple = false;
 
                 var quitOnClose = false,
-                    // perspectives
                     perspectives = {},
                     self = this,
-                    firstShow = true;
+                    firstShow = true,
+                    shown = $.Deferred();
 
                 this.updateToolbar = function () {
                     var folder = this.app && this.app.folder ? this.app.folder.get() : null,
@@ -840,29 +915,45 @@ define("io.ox/core/desktop",
                     id: 'default',
                     draw: function () {
                         return this.body.append(
-                            // default perspective
-                            this.main = $('<div class="abs window-content">'),
                             // search area
-                            this.search = $('<div class="window-search">')
+                            this.search = $('<div class="window-search">'),
+                            // default perspective
+                            this.main = $('<div class="abs window-content">')
                         );
                     }
                 });
 
+                this.shown = shown.promise();
+
                 this.show = function (cont) {
+                    var appchange = false;
+                    //use the url app string before the first ':' to exclude parameter additions (see how mail write adds the current mode here)
+                    if (currentWindow && _.url.hash('app') && self.name !== _.url.hash('app').split(':', 1)[0]) {
+                        appchange = true;
+                    }
                     // get node and its parent node
                     var node = this.nodes.outer, parent = node.parent();
                     // if not current window or if detached (via funny race conditions)
-                    if (self && (currentWindow !== this || parent.length === 0)) {
+                    if (!appchange && self && (currentWindow !== this || parent.length === 0)) {
                         // show
                         if (firstShow) {
                             node.data("index", guid - 1).css("left", ((guid - 1) * 101) + "%");
                         }
                         if (node.parent().length === 0) {
-                            node.appendTo(pane);
+                            if (this.simple) {
+                                node.insertAfter('#io-ox-topbar');
+                                $('body').css('overflowY', 'auto');
+                            } else {
+                                node.appendTo(pane);
+                            }
                         }
                         ox.ui.windowManager.trigger("window.beforeshow", self);
                         this.trigger("beforeshow");
                         this.updateToolbar();
+                        //set current appname in url, was lost on returning from edit app
+                        if (!_.url.hash('app') || self.app.getName() !== _.url.hash('app').split(':', 1)[0]) {//just get everything before the first ':' to exclude parameter additions
+                            _.url.hash('app', self.app.getName());
+                        }
                         node.show();
                         scrollTo(node, function () {
                             if (self === null) return;
@@ -886,6 +977,8 @@ define("io.ox/core/desktop",
                             }
 
                             if (firstShow) {
+                                shown.resolve();
+                                self.trigger("show:initial"); // alias for open
                                 self.trigger("open");
                                 self.state.running = true;
                                 ox.ui.windowManager.trigger("window.open", self);
@@ -904,8 +997,9 @@ define("io.ox/core/desktop",
                     // detach if there are no iframes
                     this.trigger("beforehide");
                     // TODO: decide on whether or not to detach nodes
-                    if (false && this.detachable && this.nodes.outer.find("iframe").length === 0) {
+                    if (this.simple || (this.detachable && this.nodes.outer.find("iframe").length === 0)) {
                         this.nodes.outer.detach();
+                        $('body').css('overflowY', '');
                     } else {
                         this.nodes.outer.hide();
                     }
@@ -1062,9 +1156,11 @@ define("io.ox/core/desktop",
                     active: false,
                     query: '',
                     previous: '',
+                    lastFocus: '',
 
                     open: function () {
                         if (!this.active) {
+                            this.lastFocus = $(document.activeElement);
                             self.trigger('search:open');
                             self.nodes.body.addClass('search-open');
                             self.nodes.searchField.focus();
@@ -1081,6 +1177,7 @@ define("io.ox/core/desktop",
                             self.nodes.searchField.val('');
                             self.trigger('search:cancel cancel-search');
                             this.query = this.previous = '';
+                            this.lastFocus.focus();
                         }
                         return this;
                     },
@@ -1099,10 +1196,13 @@ define("io.ox/core/desktop",
                     },
 
                     getOptions: function () {
-                        var tmp = {};
-                        _(self.nodes.search.find('form').serializeArray()).each(function (element) {
-                            tmp[element.name] = $.trim(element.value);
-                        });
+                        var tmp = {}, data = self.nodes.search.find('.search-options').data();
+                        if (data && data.options) {
+                            _.each(data.options, function (item) {
+                                if (item.checked !== undefined)
+                                    tmp[item.name] = item.checked ? 'on' : 'off';
+                            });
+                        }
                         return tmp;
                     },
 
@@ -1147,9 +1247,11 @@ define("io.ox/core/desktop",
                 };
 
                 this.addPerspective = function (pers) {
-                    var id = pers.name;
+                    var id = pers.name, node;
                     if (this.nodes[id] === undefined) {
-                        var node = $('<div class="abs window-content">').hide().appendTo(this.nodes.body);
+                        this.nodes.body.append(
+                            node = $('<div class="abs window-content">').hide()
+                        );
                         perspectives[id] = pers;
                         return this.nodes[id] = node;
                     } else {
@@ -1163,12 +1265,10 @@ define("io.ox/core/desktop",
                 };
 
                 this.setPerspective = function (pers) {
-                    var id = pers.name;
-                    if (id !== this.currentPerspective.split(':')[0]) {
-                        if (perspectives[id] !== undefined) {
-                            this.nodes[this.currentPerspective.split(':')[0]].hide();
-                            this.nodes[this.currentPerspective.split(':')[0] = id].show();
-                        }
+                    var id = pers.name, current = this.currentPerspective.split(':')[0];
+                    if (id !== current && id in perspectives) {
+                        if (current in perspectives) perspectives[current].hide();
+                        this.nodes[this.currentPerspective = id].show();
                     }
                     return this;
                 };
@@ -1197,6 +1297,7 @@ define("io.ox/core/desktop",
                 id: 'window-' + guid,
                 name: '',
                 search: false,
+                searchShortcut: false,
                 title: '',
                 toolbar: false,
                 width: 0
@@ -1215,11 +1316,23 @@ define("io.ox/core/desktop",
 
             // window container
             win.nodes.outer = $('<div class="window-container">')
-                .attr({
-                    id: opt.id,
-                    "data-window-nr": guid
-                })
-                .append(
+                .attr({ id: opt.id, "data-window-nr": guid });
+
+            // create very simple window?
+            if (opt.simple) {
+                win.simple = true;
+                win.nodes.outer.addClass('simple-window').append(
+                    win.nodes.main = $('<div class="window-content" tabindex="-1">')
+                );
+                win.nodes.blocker = $();
+                win.nodes.sidepanel = $();
+                win.nodes.head = $();
+                win.nodes.body = $();
+                win.nodes.search = $();
+
+            } else {
+
+                win.nodes.outer.append(
                     $('<div class="window-container-center">')
                     .data({ width: width + unit })
                     .css({ width: width + unit })
@@ -1233,6 +1346,8 @@ define("io.ox/core/desktop",
                         ),
                         // window HEAD
                         win.nodes.head = $('<div class="window-head">'),
+                        // window SIDEPANEL
+                        win.nodes.sidepanel = $('<div class="window-sidepanel collapsed">'),
                         // window BODY
                         win.nodes.body = $('<div class="window-body">')
                     )
@@ -1242,17 +1357,18 @@ define("io.ox/core/desktop",
                     })
                 );
 
-            // classic window header?
-            if (opt.classic) win.nodes.outer.addClass('classic');
+                // classic window header?
+                if (opt.classic) win.nodes.outer.addClass('classic');
 
-            // add default css class
-            if (opt.name) {
-                win.nodes.outer.addClass(opt.name.replace(/[.\/]/g, '-') + '-window');
+                // add default css class
+                if (opt.name) {
+                    win.nodes.outer.addClass(opt.name.replace(/[.\/]/g, '-') + '-window');
+                }
+
+                // draw window head
+                ext.point(opt.name + '/window-head').invoke('draw', win.nodes);
+                ext.point(opt.name + '/window-body').invoke('draw', win.nodes);
             }
-
-            // draw window head
-            ext.point(opt.name + '/window-head').invoke('draw', win.nodes);
-            ext.point(opt.name + '/window-body').invoke('draw', win.nodes);
 
             // add event hub
             Events.extend(win);
@@ -1261,7 +1377,7 @@ define("io.ox/core/desktop",
             if (opt.search) {
                 // search
                 var triggerSearch = function (query) {
-                        win.trigger("search", query);
+                        win.trigger('search', query);
                     };
 
                 var searchId = 'search_' + _.now(); // acccessibility
@@ -1269,11 +1385,10 @@ define("io.ox/core/desktop",
                 var searchHandler = {
 
                     keydown: function (e) {
-                        e.stopPropagation();
                         if (e.which === 27) {
                             win.search.close();
-                        } else if (e.which === 13 && $(this).val() === '') {
-                            win.search.clear();
+                        } else if (e.which === 13) {
+                            searchHandler.change(e);
                         }
                     },
 
@@ -1284,8 +1399,11 @@ define("io.ox/core/desktop",
                     change: function (e) {
                         e.stopPropagation();
                         win.search.query = win.search.getQuery();
+                        win.search.options = JSON.stringify(win.search.getOptions());
+                        var changed = win.search.query !== win.search.previous || win.search.options !== win.search.optionsprev;
                         // trigger search?
-                        if (win.search.query !== '' && win.search.query !== win.search.previous) {
+                        if (win.search.query !== '' && changed) {
+                            win.search.optionsprev = win.search.options;
                             triggerSearch(win.search.previous = win.search.query);
                         }
                         else if (win.search.query === '') {
@@ -1298,13 +1416,14 @@ define("io.ox/core/desktop",
                     $('<div class="input-append">').append(
                         $('<label>', { 'for': searchId }).addClass('search-query-container').append(
                             // search field
-                            win.nodes.searchField = $('<input type="text" class="search-query">')
+                            win.nodes.searchField = $('<input type="text" class="span6 search-query">')
                             .attr({
                                 name: 'query',
                                 autocomplete: 'off',
                                 tabindex: '1',
                                 placeholder: gt('Search') + ' ...',
-                                id: searchId
+                                id: searchId,
+                                'aria-label': gt('Search')
                             })
                             .on(searchHandler)
                             .placeholder(),
@@ -1312,17 +1431,15 @@ define("io.ox/core/desktop",
                             $('<i class="icon-remove clear-query">')
                             .on('click', searchHandler.clear)
                         ),
-                        $('<button type="submit" data-action="search" class="btn margin-right"><i class="icon-search"></i></button>')
-                        .on('click', searchHandler.change)
+                        $('<button type="submit" data-action="search" class="btn margin-right" aria-hidden="true">')
+                            .on('click', searchHandler.change)
+                            .append('<i class="icon-search">')
+
                     ),
                     //abort button
-                    $('<a href="#" data-action="remove">×</a>')
-                        .addClass('close')
-                        .addClass('close-big')
-                        .on('click', function fnCancel(e) {
-                                e.preventDefault();
-                                win.search.stop();
-                            })
+                    $('<a href="#" data-action="remove" tabindex="1">×</a>')
+                    .addClass('close close-big')
+                    .on('click', function (e) { e.preventDefault(); win.search.stop(); })
                 )
                 .on('change', 'input', function () { win.search.previous = ''; })
                 .on('submit', false)
@@ -1360,9 +1477,19 @@ define("io.ox/core/desktop",
                         id: 'search',
                         index: 300,
                         icon: function () {
-                            return $('<i class="icon-search">');
+                            return $('<i class="icon-search">').attr('aria-label', gt('Search'));
                         }
                     });
+
+                    if (opt.searchShortcut) {
+                        // look for ctrl/cmd + F
+                        win.nodes.outer.on('keydown', function (e) {
+                            if (e.which === 70 && e.metaKey) {
+                                e.preventDefault();
+                                win.search.toggle();
+                            }
+                        });
+                    }
                 }
 
                 // add fullscreen handler
@@ -1404,28 +1531,29 @@ define("io.ox/core/desktop",
         var def,
             $blocker = $('#background_loader'),
             buttonTimer,
-            blockerTimer;
+            launched;
 
         function startTimer() {
-            blockerTimer = setTimeout(function () {
+            var blockerTimer = setTimeout(function () {
                 // visualize screen blocker
                 ox.busy(true);
                 buttonTimer = setTimeout(function () {
                     // add button to abort
                     if (!$blocker[0].firstChild) {
-                        var button = $('<button>').addClass('btn btn-primary').text(gt('Cancel')).fadeIn();
+                        var button = $('<button type="button" class="btn btn-primary">').text(gt('Cancel')).fadeIn();
                         button.on('click', function () {
                             def.reject(true);
-                            clear();
+                            clear(blockerTimer);
                         });
                         $blocker
                             .append(button);
                     }
                 }, 5000);
             }, 1000);
+            return blockerTimer;
         }
 
-        function clear() {
+        function clear(blockerTimer) {
             clearTimeout(blockerTimer);
             clearTimeout(buttonTimer);
             blockerTimer = null;
@@ -1437,18 +1565,26 @@ define("io.ox/core/desktop",
             }, 0);
         }
 
-        return function (req) {
-            assert(arguments.length <= 1, 'ox.load does not support more than one param.');
+        function clearViaLauncher(blockerTimer) {
+//            launched is a deferred used for a delayed clear
+            launched.always(function () {
+                clear(blockerTimer);
+            });
+        }
+
+        return function (req, data) {
+            assert(arguments.length <= 1 || arguments.length === 2 && !_.isFunction(data), 'ox.load does not support callback params.');
 
             def = $.Deferred();
+            launched = data && data.launched ? data.launched : $.Deferred().resolve();
 
             // block UI
             if (!$blocker.hasClass('secure')) {
                 ox.busy();
             }
-            startTimer();
+            var blockertimer = startTimer();
 
-            require(req).always(clear).then(
+            require(req).always(clearViaLauncher(blockertimer)).then(
                 def.resolve,
                 function fail() {
                     def.reject(false);
@@ -1478,12 +1614,24 @@ define("io.ox/core/desktop",
             .idle()
             .empty();
     };
+    // only disable, don't show night-rider
+    ox.disable = function () {
+        $('#background_loader')
+            .addClass('busy block secure')
+            .on('touchmove', function (e) {
+                e.preventDefault();
+                return false;
+            })
+            .show();
+    };
 
     // simple launch
     ox.launch = function (id, data) {
         var def = $.Deferred();
         if (_.isString(id)) {
-            require([id]).then(
+            adaptiveLoader.stop();
+            var requirements = adaptiveLoader.startAndEnhance(id.replace(/\/main$/, ''), [id]);
+            ox.load(requirements, data).then(
                 function (m) {
                     m.getApp(data).launch(data).done(function () {
                         def.resolveWith(this, arguments);
@@ -1499,6 +1647,12 @@ define("io.ox/core/desktop",
         }
         return def;
     };
+
+    ox.ui.apps.on("resume", function (app) {
+        adaptiveLoader.stop();
+        adaptiveLoader.listen(app.get("name"));
+    });
+
 
     return {};
 

@@ -69,8 +69,20 @@ define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups', 'io.ox/core/event
             });
         };
 
-        this.requestLog = function (text) {
+        this.requestLog = function () {
             return this.group.send({
+                element: "message",
+                payloads: [
+                    {
+                        element: "action",
+                        data: "getLog"
+                    }
+                ]
+            });
+        };
+
+        this.requestLogByQuery = function () {
+            return this.group.query({
                 element: "message",
                 payloads: [
                     {
@@ -110,6 +122,10 @@ define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups', 'io.ox/core/event
 
         this.group.on("online", function () {
             console.log("Online!");
+        });
+
+        this.group.on("reset", function () {
+            console.log("Reset!");
         });
 
     }

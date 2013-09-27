@@ -17,8 +17,9 @@ define('io.ox/calendar/settings/pane',
      'io.ox/calendar/settings/model',
      'dot!io.ox/calendar/settings/form.html',
      'io.ox/core/extensions',
+     'io.ox/core/notifications',
      'gettext!io.ox/calendar'
-    ], function (settings, date, calendarSettingsModel, tmpl, ext, gt) {
+    ], function (settings, date, calendarSettingsModel, tmpl, ext, notifications, gt) {
 
     'use strict';
 
@@ -31,21 +32,23 @@ define('io.ox/calendar/settings/pane',
             WORKING_TIME_END: gt('End of working time'),
             TITLE_VIEW: gt('Default calendar view'),
             VIEW: gt('Default view'),
-            TR_CALENDAR_VIEW: gt('Time range for the calendar view'),
+            TR_CALENDAR_VIEW: gt('Time range for the calender view'),
             TR_TEAM_VIEW: gt('Time range for the team view'),
             TR_LIST_VIEW: gt('Time range for the list view'),
             TITLE_NEW_APPOINTMENT: gt('New appointment'),
             TIME_FOR_REMINDER: gt('Default time for reminder'),
-            TITLE_NOTIFICATIONS_FOR_APPOINTMENT: gt('E-Mail notification for appointment'),
-            NOTIFICATIONS_FOR_APPOINTMENTS: gt('E-Mail notification for New, Changed, Deleted?'),
-            TITLE_NOTIFICATIONS_FOR_ACCEPTDECLINED: gt('E-Mail notification for Accept/Declined'),
-            NOTIFICATIONS_FOR_ACCEPTDECLINEDCREATOR: gt('E-Mail notification for appointment creator?'),
-            NOTIFICATIONS_FOR_ACCEPTDECLINEDPARTICIPANT: gt('E-Mail notification for appointment participant?'),
+            TITLE_NOTIFICATIONS_FOR_APPOINTMENT: gt('Email notification for appointment'),
+            NOTIFICATIONS_FOR_APPOINTMENTS: gt('Email notification for New, Changed, Deleted?'),
+            TITLE_NOTIFICATIONS_FOR_ACCEPTDECLINED: gt('Email notification for Accept/Declined'),
+            NOTIFICATIONS_FOR_ACCEPTDECLINEDCREATOR: gt('Email notification for appointment creator?'),
+            NOTIFICATIONS_FOR_ACCEPTDECLINEDPARTICIPANT: gt('Email notification for appointment participant?'),
             SHOW_DECLINED_APPOINTMENTS: gt('Show declined appointments'),
             NOTIFICATION_MAILS_ARE_DELETED: gt('Automatically delete a notification mail after it has been accepted or declined?'),
             TITLE_NOTIFICATION_MAIL_HANDLING: gt("Incoming Notification Mails"),
             MARK_FULLTIME_APPOINTMENTS_AS_FREE: gt("Mark all day appointments as free")
         },
+
+        reloadMe = [],
 
         optionsInterval = _([5, 10, 15, 20, 30, 60]).map(gt.noI18n),
 
@@ -146,12 +149,22 @@ define('io.ox/calendar/settings/pane',
         id: 'calendarsettings',
         draw: function (data) {
             calendarViewSettings = new CalendarSettingsView({model: calendarSettings});
-            this.append($('<div>').addClass('section').append(
-                calendarViewSettings.render().el)
-            );
-        },
-        save: function () {
-            return calendarViewSettings.model.save();
+            this.append($('<div>').addClass('section').append(calendarViewSettings.render().el));
+            settings.on('change', function (e, path, value) {
+                calendarSettings.saveAndYell().then(
+                    function success() {
+                        var showNotice = _(reloadMe).any(function (attr) {
+                            return attr === path;
+                        });
+                        if (showNotice) {
+                            notifications.yell(
+                                'success',
+                                gt("The setting has been saved and will become active when you enter the application the next time.")
+                            );
+                        }
+                    }
+                );
+            });
         }
     });
 });

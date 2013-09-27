@@ -11,7 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
+define('io.ox/contacts/util',
+    ['io.ox/core/util',
+     'settings!io.ox/contacts',
+     'gettext!io.ox/contacts'], function (util, settings, gt) {
 
     'use strict';
 
@@ -29,7 +32,12 @@ define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
         return { format: _.noI18n('%' + index + '$s'), params: params };
     }
 
-    return {
+    // vanity fix
+    function getTitle(field) {
+        return (/^(dr\.?|prof\.?)/i).test(field) ? field : '';
+    }
+
+    var that = {
 
         getImage: function (obj, options) {
             if (obj.mark_as_distributionlist) {
@@ -63,39 +71,53 @@ define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
          * parameters to gettext.format to obtain the full name.
          */
         getFullNameFormat: function (obj) {
-            // vanity fix
-            function fix(field) {
-                return (/^(dr\.?|prof\.?)/i).test(field) ? field : '';
-            }
             // combine title, last_name, and first_name
             if (obj.last_name && obj.first_name) {
-                var title = fix(obj.title);
-                return title ? {
-                    format:
+
+                var title = getTitle(obj.title),
+                    preference = settings.get('fullNameFormat', 'auto'),
+                    format,
+                    params = [_.noI18n(obj.first_name), _.noI18n(obj.last_name)];
+
+                if (title) params.push(_.noI18n(title));
+
+                if (preference === 'firstname lastname') {
+                    format = title ? '%3$s %1$s %2$s' : '%1$s %2$s';
+                }
+                else if (preference === 'lastname, firstname') {
+                    format = title ? '%3$s %2$s, %1$s' : '%2$s, %1$s';
+                }
+                else {
+                    // auto/fallback
+                    format = title ?
                         //#. Name with title
                         //#. %1$s is the first name
                         //#. %2$s is the last name
                         //#. %3$s is the title
-                        gt('%3$s %2$s, %1$s'),
-                    params: [_.noI18n(obj.first_name), _.noI18n(obj.last_name),
-                             _.noI18n(title)]
-                } : {
-                    format:
+                        gt('%3$s %2$s, %1$s') :
                         //#. Name without title
                         //#. %1$s is the first name
                         //#. %2$s is the last name
-                        gt('%2$s, %1$s'),
-                    params: [_.noI18n(obj.first_name), _.noI18n(obj.last_name)]
-                };
+                        gt('%2$s, %1$s');
+                }
+
+                return { format: format, params: params };
             }
 
-            // use existing display name?
-            if (obj.display_name) {
-                return single(4, String(obj.display_name).replace(/"|'/g, ''));
-            }
-            // fallback
+            // we need last_name and first_name ahead of display_name,
+            // for example, to keep furigana support
+
+            // fallback #1: just last_name
             if (obj.last_name) return single(2, obj.last_name);
+
+            // fallback #2: just first_name
             if (obj.first_name) return single(1, obj.first_name);
+
+            // fallback #3: use existing display name?
+            if (obj.display_name) {
+                return single(4, util.unescapeDisplayName(obj.display_name));
+            }
+
             return { format: _.noI18n(''), params: [] };
         },
 
@@ -107,7 +129,7 @@ define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
         getDisplayName: function (obj) {
             // use existing display name?
             if (obj.display_name) {
-                return String(obj.display_name).replace(/"|'/g, '');
+                return util.unescapeDisplayName(obj.display_name);
             }
             // combine last_name, and first_name
             if (obj.last_name && obj.first_name) {
@@ -145,16 +167,18 @@ define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
 
             // use existing display name?
             if (obj.display_name) {
-                return single(4, String(obj.display_name).replace(/"|'/g, ''));
+                return single(4, util.unescapeDisplayName(obj.display_name));
             }
+
             // fallback
             if (obj.last_name) { return single(2, obj.last_name); }
             if (obj.first_name) { return single(1, obj.first_name); }
+
             return { format: _.noI18n(''), params: [] };
         },
 
         getMailFullName: function (obj) {
-            var fmt = this.getMailFullNameFormat(obj);
+            var fmt = that.getMailFullNameFormat(obj);
             return gt.format(fmt.format, fmt.params);
         },
 
@@ -228,4 +252,6 @@ define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
             return field;
         }
     };
+
+    return that;
 });

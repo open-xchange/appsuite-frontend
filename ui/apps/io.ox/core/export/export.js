@@ -17,10 +17,9 @@ define('io.ox/core/export/export',
     'io.ox/core/api/export',
     'io.ox/core/api/folder',
     'io.ox/core/notifications',
-    'io.ox/core/config',
     'io.ox/formats/vcard',
     'gettext!io.ox/core',
-    'less!io.ox/core/export/style.less'], function (ext, dialogs, api, folderApi, notifications, config, vcard, gt) {
+    'less!io.ox/core/export/style.less'], function (ext, dialogs, api, folderAPI, notifications, vcard, gt) {
 
     'use strict';
 
@@ -31,7 +30,7 @@ define('io.ox/core/export/export',
         id: 'default',
         draw: function (id, title) {
             this.append(
-                folderApi.getBreadcrumb(id, { subfolders: false, prefix: gt(title) })
+                folderAPI.getBreadcrumb(id, { subfolders: false, prefix: gt(title) })
             );
         }
     });
@@ -102,109 +101,6 @@ define('io.ox/core/export/export',
     });
 
     /**
-     * @description format: hcard
-     */
-    ext.point('io.ox/core/export/export/format').extend({
-        id: 'hcard',
-        index: 300,
-        draw: function (baton) {
-            if (baton.module === 'contacts') {
-                baton.format.hcard = {
-                    getDeferred: function () {
-                        var def = new $.Deferred(),
-                            /**
-                             * appends busy node
-                             * @param  {object} window
-                             * @return {object} window
-                             */
-                            busy = function (win) {
-                                $(win.document.body)
-                                    .append(
-                                        $('<div>')
-                                        .addClass('busy')
-                                        .css('background-image', 'url(v=' + ox.base + '/apps/io.ox/settings/busy.gif)')
-                                        .css('width', '100%')
-                                        .css('height', '100%')
-                                        .css('background-repeat', 'no-repeat')
-                                        .css('background-position', 'center center')
-                                    );
-                                return win;
-                            },
-                            /**
-                             * removes busy node
-                             * @param  {object} window
-                             * @return {object} window
-                             */
-                            idle = function (win) {
-                                $(win.document.body)
-                                    .find('.busy')
-                                    .remove();
-                                return win;
-                            },
-                            /**
-                             * create, focus, return new window
-                             * @return {object} window
-                             */
-                            getWindow = function () {
-                                var win,
-                                    w = 650,
-                                    h = 800,
-                                    l = 50,
-                                    t = 50;
-                                //center
-                                w = Math.min($(document).width() * 80 / 100, w) || w;
-                                h = Math.min($(document).height() * 90 / 100, h) || h;
-                                l = ($(document).width() / 2) - (w / 2) || l;
-                                t = ($(document).height() / 2) - (h / 2) || t;
-                                //open popup
-                                win = window.open('about:blank', '_blank', "scrollbars=1, resizable=1, copyhistory=no, width=" + w + ",height=" + h);
-                                //popupblocker
-                                if (!win) {
-                                    var popupblocker = 'The window could not be opened. Most likely it has been blocked by a pop-up or advertisement blocker. Please check your browser settings and make sure pop-ups are allowed for this domain.';
-                                    notifications.yell('error', gt(popupblocker));
-                                }
-                                //onready
-                                $(win).ready(function () {
-                                    busy(win);
-                                    win.moveTo(l, t);
-                                    win.focus();
-                                    win.document.title = gt('hCard Export');
-                                });
-                                return win;
-                            },
-                            win = getWindow();
-
-                        //get content
-                        api.getVCARD(baton.id, false)
-                            .fail(function (e) {
-                                if (e)
-                                    def.reject(e);
-                                else
-                                    def.reject({error: gt('folder does not contain any data')});
-                            })
-                            .pipe(
-                                function (data) {
-                                    var hcard = vcard.getHCard(data);
-                                    $(win).ready(function () {
-                                        idle(win);
-                                        win.document.write(hcard);
-                                        // IE9 has problems focusing the window for the first time
-                                        win.document.title = gt('hCard Export');
-                                        setTimeout(function () {
-                                            win.focus();
-                                        }, 0);
-                                    });
-                                    def.resolve();
-                                });
-                        return def;
-                    }
-                };
-                return $('<option value="hcard">hCard</option>');
-            }
-        }
-    });
-
-    /**
      * @description format: ical
      */
     ext.point('io.ox/core/export/export/format').extend({
@@ -221,10 +117,10 @@ define('io.ox/core/export/export',
     return {
         show: function (module, id) {
             var id = String(id),
-                dialog = new dialogs.ModalDialog({ width: 500, easyOut: true }),
+                dialog = new dialogs.ModalDialog({ width: 500 }),
                 baton = {id: id, module: module, simulate: true, format: {}, nodes: {}};
             // get folder and build dialog
-            folderApi.get({ folder: id}).done(function (folder) {
+            folderAPI.get({ folder: id}).done(function (folder) {
                 dialog
                     .build(function () {
                         //header
@@ -242,9 +138,6 @@ define('io.ox/core/export/export',
                     .show(function () {
                         //focus
                         this.find('select').focus();
-                        this.on('keydown', function (e) {
-                            e.stopPropagation();
-                        });
                     })
                     .done(function (action) {
                         if (action === 'export') {
@@ -252,7 +145,7 @@ define('io.ox/core/export/export',
                                 def = baton.format[id].getDeferred() || new $.Deferred();
                             def.done(function (data) {
                                 if (data) {
-                                    window.location.href = data;
+                                    window.location.href = data + '&content_disposition=attachment';
                                 }
                             })
                             .fail(function (obj) {

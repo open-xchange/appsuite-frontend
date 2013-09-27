@@ -25,7 +25,6 @@ var ast = require("./lib/build/ast");
 var i18n = require("./lib/build/i18n");
 var rimraf = require("./lib/rimraf/rimraf");
 var jshint = require("./lib/jshint").JSHINT;
-var less = require('./lib/less.js/lib/less/index.js');
 
 console.info('Node version:', process.version);
 console.info("Build path: " + utils.builddir);
@@ -57,12 +56,8 @@ version = ver + "-" + rev + "." + t.getUTCFullYear() +
     pad(t.getUTCSeconds());
 console.info("Build version: " + version);
 
-function envBoolean(name) {
-    return /^\s*(?:on|yes|true|1)/i.test(process.env[name]);
-}
-
-var debug = envBoolean('debug');
-var disableStrictMode = envBoolean('disableStrictMode');
+var debug = utils.envBoolean('debug');
+var disableStrictMode = utils.envBoolean('disableStrictMode');
 
 if (debug) console.info("Debug mode: on");
 
@@ -243,12 +238,12 @@ utils.topLevelTask('default', ['buildApp'], function() {
     utils.summary('default')();
 });
 
-utils.copy(utils.list("html", [".htaccess", "blank.html", "busy.html", "print.html", "favicon.ico"]));
+utils.copy(utils.list("html", [".htaccess", "blank.html", "busy.html", "unsupported.html", "print.html", "favicon.ico"]));
 utils.copy(utils.list("src/"));
 
 //html
 
-function htmlFilter (data) {
+function versionFilter (data) {
     return data
         .replace(/@\s?version\s?@/g, version)
         .replace(/@\s?revision\s?@/g, rev)
@@ -256,61 +251,44 @@ function htmlFilter (data) {
         .replace(/@debug@/g, debug);
 }
 
-function bodyFilter(data) {
-    var body_lines = data.split(/\r?\n|\r/);
-    for (var i = 0; i < body_lines.length; i++) {
-        body_lines[i].replace(/data-i18n="([^"]*)"/g, function(match, msgid) {
-            i18n.addMessage({
-                msgid: msgid,
-                locations: [{ name: "html/core_body.html", line: i + 1 }]
-            }, "html/core_body.html");
-        });
-    }
-    i18n.modules.add("io.ox/core/login", "html/core_body.html",
-                     "html/core_body.html");
-    return htmlFilter(data);
-}
+var htmlFilter = _.compose(versionFilter, utils.includeFilter);
 
-utils.copy(utils.list('html', 'core_head.html'),
-    { to: 'tmp', filter: htmlFilter });
-utils.copy(utils.list('html', 'core_body.html'),
-    { to: 'tmp', filter: bodyFilter });
-utils.concat('core', ['html/index.html'], { filter: utils.includeFilter });
-utils.concat('signin', ['html/signin.html'], { filter: utils.includeFilter });
-utils.concat('core.appcache', ['html/core.appcache'], { filter: htmlFilter });
-utils.concat('signin.appcache', ['html/signin.appcache'], { filter: htmlFilter });
+utils.concat('core', ['html/index.html'], { filter: htmlFilter });
+utils.concat('signin', ['html/signin.html'], { filter: htmlFilter });
+utils.concat('core.appcache', ['html/core.appcache'], { filter: versionFilter });
+utils.concat('signin.appcache', ['html/signin.appcache'], { filter: versionFilter });
 
 task('force');
-_.each(_.map(['core', 'signin', 'core.appcache', 'signin.appcache'], utils.dest)
-       .concat(['tmp/core_head.html', 'tmp/core_body.html']),
-       function (name) { file(name, ['force']); });
+_.each(['core', 'signin', 'core.appcache', 'signin.appcache'],
+       function (name) { file(utils.dest(name), ['force']); });
 
 //js
 
 utils.concat("boot.js",
     [utils.string("// NOJSHINT\ndependencies = "), "tmp/dependencies.json",
-     utils.string(';\n'), "src/plugins.js", "src/jquery.plugins.js",
-     "apps/io.ox/core/gettext.js", "src/util.js", "src/boot.js"],
-    { to: "tmp", type: "source" });
-
-
-utils.concat("boot.js", [
-        "lib/jquery.min.js",
-        "lib/jquery.mobile.touch.min.js",
-        "lib/underscore.js", // load this before require.js to keep global object
-        "lib/require.js",
-        "lib/require-fix.js",
-        "lib/modernizr.js",
-        "lib/bigscreen.js",
-        "lib/placeholder.min.js",
-        //add backbone and dot.js may be a AMD-variant would be better
-        "lib/backbone.js",
-        "lib/backbone.modelbinder.js",
-        "lib/backbone.collectionbinder.js",
-        "lib/backbone.validation.js",
-        "lib/backbone.custom.js",
-        "lib/doT.js",
-        "tmp/boot.js"]);
+     utils.string(';\n'),
+     "lib/jquery.js",
+     "lib/jquery.mobile.touch.min.js",
+     "lib/underscore.js", // load this before require.js to keep global object
+     "lib/require.js",
+     "lib/require-fix.js",
+     "lib/modernizr.js",
+     "lib/bigscreen.js",
+     "lib/placeholder.min.js",
+     //add backbone and dot.js may be a AMD-variant would be better
+     "lib/backbone.js",
+     "lib/backbone.modelbinder.js",
+     "lib/backbone.collectionbinder.js",
+     "lib/backbone.validation.js",
+     "lib/backbone.custom.js",
+     "lib/doT.js",
+     "lib/textarea-helper.js",
+     "src/util.js",
+     "src/plugins.js",
+     "src/jquery.plugins.js",
+     "apps/io.ox/core/gettext.js",
+     "src/boot.js"],
+    { type: "source" });
 
 // Twitter Bootstrap
 utils.copy(utils.list("lib/bootstrap", ["img/*"]),
@@ -319,6 +297,16 @@ utils.copy(utils.list("lib/bootstrap", ["img/*"]),
 // jQuery UI
 utils.copy(utils.list("lib", ["jquery-ui.min.js"]),
     { to: utils.dest("apps/io.ox/core/tk") });
+
+//Mobiscroll
+utils.concat("mobi.js", [utils.string("// NOJSHINT\n"),
+                         "lib/mobiscroll/js/mobiscroll.core.js",
+                         "lib/mobiscroll/js/mobiscroll.datetime.js",
+                         "lib/mobiscroll/js/mobiscroll.android-ics.js",
+                         "lib/mobiscroll/js/mobiscroll.ios.js"],
+    { to: utils.dest("apps/mobiscroll/js"), type:"source"});
+utils.copy(utils.list("lib/mobiscroll", ["css/*"]),
+        { to: utils.dest("apps/mobiscroll/")});
 
 // jQuery Imageloader
 
@@ -336,6 +324,11 @@ utils.copy(utils.list("lib", "ace/"), {to: utils.dest("apps")});
 utils.copy(utils.list("lib/node_modules/emoji/lib", ["emoji.js", "emoji.css", "emoji.png"]),
         { to: utils.dest("apps/3rd.party/emoji") });
 
+// Frameworks for guided tours
+
+utils.copy(utils.list("lib", "hopscotch/", ["hopscotch-0.1.js", "hopscotch-0.1.css", "sprite-*.png"]), {to: utils.dest("apps") });
+
+
 //online help
 
 if (path.existsSync('help')) {
@@ -347,11 +340,19 @@ if (path.existsSync('help')) {
             to: helpDir.replace(/@lang@/g, lang)
         });
     });
-    utils.copy(['help/help.css'], { to: helpDir });
+    utils.copy(['help/help.css']);
 }
 
 // postinst utilities
 
+utils.copy(utils.list('lib',
+    ['build/fileutils.js',
+     'build/themes.js',
+     'jake/',
+     'less.js/lib/',
+     'node_modules/',
+     'underscore.js']),
+    { to: utils.dest('share/lib') });
 utils.concat('update-themes.js', utils.list('lib',
     ['less.js/build/require-rhino.js',
      'less.js/build/ecma-5.js',
@@ -363,7 +364,7 @@ utils.concat('update-themes.js', utils.list('lib',
      'build/update-themes.js']),
     { to: utils.dest('share') });
 utils.copy(utils.list('lib/build', 'update-themes.sh'),
-    { to: utils.dest('share') });
+    { to: utils.dest('share'), mode: 0x1ed /* 755 octal */ });
 
 // external apps
 
@@ -372,7 +373,7 @@ utils.topLevelTask('app', ['buildApp'], utils.summary('app'));
 
 // common task for external apps and the GUI
 
-utils.topLevelTask('buildApp', ['ox.pot'], function () {
+utils.topLevelTask('buildApp', ['ox.pot', 'update-themes'], function () {
     utils.includes.save();
     i18n.modules.save();
 });
@@ -387,7 +388,7 @@ file("ox.pot", [utils.source("Jakefile.js")], function() {
         i18n.generatePOT(this.prereqs.slice(skipOxPotPrereqs)));
 });
 if (path.existsSync('html/core_body.html')) {
-    file('ox.pot', ['tmp/core_body.html']);
+    file('ox.pot', ['html/core_body.html']);
 }
 var skipOxPotPrereqs = jake.Task['ox.pot'].prereqs.length;
 
@@ -448,7 +449,7 @@ utils.merge('manifests/' + pkgName + '.json',
             var combinedManifest = [];
             _.each(manifests, function (m, i) {
                 var prefix = /^apps[\\\/](.*)[\\\/]manifest\.json$/
-                             .exec(names[i])[1] + '/';
+                             .exec(names[i])[1].replace(/\\/g, '/') + '/';
                 var data = null;
                 try {
                     data = new Function('return (' + m + ')')();
@@ -481,85 +482,9 @@ utils.merge('manifests/' + pkgName + '.json',
         }
     });
 
-// themes
+// update-themes task
 
-if (!envBoolean('skipLess')) compileLess();
-function compileLess() {
-
-    var coreDir = process.env.coreDir || utils.builddir;
-
-    function core(file) { return path.join(coreDir, file); }
-
-    var ownLess = utils.list('apps', '**/*.less'), coreLess;
-    var ownThemes = utils.list('apps/themes/*/definitions.less');
-    var coreThemes = utils.list(core('apps/themes'), '*/definitions.less');
-
-    if ((ownThemes.length || ownLess.length) &&
-        !path.existsSync('apps/themes/definitions.less') &&
-        !path.existsSync(core('apps/themes/definitions.less')))
-    {
-        if (process.env.coreDir) {
-            console.warn('Warning: Invalid coreDir');
-        } else {
-            console.warn('Warning: Themes require either coreDir or skipLess');
-        }
-        return;
-    }
-
-    function compile(dest, defs, defsInCore, src, srcInCore) {
-        dest = core(dest);
-        utils.file(dest,
-            [core('apps/themes/definitions.less'),
-             defsInCore ? core(defs) : defs, srcInCore ? core(src) : src],
-            function () {
-                var ast;
-                new less.Parser({
-                    paths: [coreDir],
-                    syncImport: true,
-                    relativeUrls: true
-                }).parse('@import "apps/themes/definitions.less";\n' +
-                         '@import "' + defs.replace(/\\/g, '/') + '";\n' +
-                         '@import "' + src.replace(/\\/g, '/') + '";\n',
-                function (e, tree) {
-                    if (e) fail(JSON.stringify(e, null, 4)); else ast = tree;
-                });
-                fs.writeFileSync(dest, ast.toCSS({ compress: !utils.debug }));
-            });
-    }
-
-    // own themes
-    _.each(ownThemes, function(defs) {
-        if (!coreLess) coreLess = utils.list(core('apps'), '**/*.less');
-        var dir = path.dirname(defs);
-        compile(path.join(dir, 'less/common.css'), defs, false,
-                'apps/themes/style.less', true);
-        compile(path.join(dir, 'less/style.css'), defs, false,
-                path.join(dir, 'style.less'), false);
-        _.each(ownLess, function (file) {
-            if (/^themes[\/\\]/.test(file)) return;
-            compile(path.join(dir, 'less', file), defs, false,
-                    path.join('apps', file), false);
-        });
-        _.each(coreLess, function (file) {
-            if (/^themes[\/\\]/.test(file)) return;
-            compile(path.join(dir, 'less', file), defs, false,
-                    path.join('apps', file), true);
-        });
-    });
-
-    // core themes
-    _.each(coreThemes,
-        function (defs) {
-            if (path.existsSync(path.join('apps/themes', defs))) return;
-            var dir = path.join('apps/themes', path.dirname(defs));
-            _.each(ownLess, function (file) {
-                if (/^themes[\/\\]/.test(file)) return;
-                compile(path.join(dir, 'less', file),
-                        path.join('apps/themes', defs), true,
-                        path.join('apps', file), false);
-            });
-        });
-}
+require('./lib/build/themes.js');
 
 // docs task
 
@@ -792,8 +717,12 @@ task("dist", [distDest], function () {
     }
     function addL10n(spec) {
         spec = replaceL10n(spec, 'l10n', i18n.languages());
+        function isDir(Lang) {
+            return fs.statSync(path.join('help', Lang)).isDirectory();
+        }
         if (path.existsSync('help')) {
-            spec = replaceL10n(spec, 'help', fs.readdirSync('help'));
+            spec = replaceL10n(spec, 'help',
+                               _.filter(fs.readdirSync('help'), isDir));
         }
         return spec;
     }
@@ -801,11 +730,15 @@ task("dist", [distDest], function () {
         if (code) return fail('cp exited with code ' + code);
 
         var file = path.join(dest, pkgName + '.spec');
-        fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')
-            .replace(/^(Version:\s*)\S+/gm, '$01' + ver)
-            .replace(/^(%define\s+ox_release\s+)\S+/gm, '$01' + rev)));
+        if (path.existsSync(file)) {
+            fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')
+                .replace(/^(Version:\s*)\S+/gm, '$01' + ver)
+                .replace(/^(%define\s+ox_release\s+)\S+/gm, '$01' + rev)));
+        }
         file = path.join(dest, 'debian/control');
-        fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')));
+        if (path.existsSync(file)) {
+            fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')));
+        }
 
         if (path.existsSync('i18n/languagenames.json')) {
             var languageNames = _.extend(
@@ -826,17 +759,18 @@ task("dist", [distDest], function () {
         }
 
         utils.exec(['tar', 'cjf', debName + '.orig.tar.bz2', tarName],
-                   { cwd: distDest }, dpkgSource);
+                   { cwd: distDest, env: { COPYFILE_DISABLE: 'true' } },
+                   dpkgSource);
     }
     function dpkgSource(code) {
         if (code) return fail('tar exited with code ' + code);
-        if (envBoolean('skipDeb')) return done();
+        if (utils.envBoolean('skipDeb')) return done();
         utils.exec(['dpkg-source', '-Zbzip2', '-b', tarName],
                    { cwd: distDest }, done);
     }
     function done(code) {
         if (!code) return complete();
-        if (envBoolean('forceDeb')) {
+        if (utils.envBoolean('forceDeb')) {
             fail('dpkg-source exited with code ' + code);
         } else {
             console.warn('Warning: dpkg-source exited with code ' + code);
@@ -959,3 +893,47 @@ function checkExtensions(name, deps, f) {
     }).scan(f);
     function checkPoint(id) { return self.points[id[1]] = true; }
 }
+
+// run tests
+
+desc('Do a single run of all tests');
+task('test', [], function () {
+    var karma = require("karma"),
+        configFile = nextGen(karma) ? path.resolve('./karma.conf_next.js') : path.resolve('./karma.conf.js');
+    function nextGen(karma) {
+        var version = {},
+            tmp = karma.VERSION.split('.');
+
+        version.major = Number(tmp[0]);
+        version.minor = Number(tmp[1]);
+        version.bugfix = Number(tmp[2]);
+
+        return version.minor >= 9 && version.bugfix >= 3;
+    }
+
+    karma.server.start({
+        configFile: configFile,
+        singleRun: true,
+        autoWatch: false
+    });
+});
+
+desc('Start a karma testserver');
+task('testserver', [], function () {
+    var karma = require("karma"),
+        configFile = nextGen(karma) ? path.resolve('./karma.conf_next.js') : path.resolve('./karma.conf.js');
+    function nextGen(karma) {
+        var version = {},
+            tmp = karma.VERSION.split('.');
+
+        version.major = Number(tmp[0]);
+        version.minor = Number(tmp[1]);
+        version.bugfix = Number(tmp[2]);
+
+        return version.minor >= 9 && version.bugfix >= 3;
+    }
+
+    karma.server.start({
+        configFile: configFile
+    });
+});

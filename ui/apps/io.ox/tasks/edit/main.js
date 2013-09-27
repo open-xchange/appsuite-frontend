@@ -11,13 +11,13 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tasks/edit/main', ['gettext!io.ox/tasks',
-                                 'io.ox/core/extensions',
-                                 'io.ox/tasks/model',
-                                 'io.ox/tasks/edit/view',
-                                 'io.ox/core/extPatterns/dnd',
-                                 'less!io.ox/tasks/edit/style.less'],
-                                 function (gt, ext, model, view, dnd) {
+define('io.ox/tasks/edit/main',
+    ['gettext!io.ox/tasks',
+     'io.ox/core/extensions',
+     'io.ox/tasks/model',
+     'io.ox/tasks/edit/view',
+     'io.ox/core/extPatterns/dnd',
+     'less!io.ox/tasks/edit/style.less'], function (gt, ext, model, view, dnd) {
 
     'use strict';
 
@@ -79,6 +79,10 @@ define('io.ox/tasks/edit/main', ['gettext!io.ox/tasks',
 
         // launcher
         app.setLauncher(function (options) {
+            //close notification area when edit task is opened to prevent overlapping if started from notification area
+            require(['io.ox/core/notifications'], function (notifications) {
+                notifications.hideList();
+            });
             var taskData = options.taskData;
             self = this;
             self.markDirty();
@@ -92,22 +96,22 @@ define('io.ox/tasks/edit/main', ['gettext!io.ox/tasks',
             app.setWindow(win);
             win.nodes.main.addClass('scrollable');
             //ModelView
-            if (taskData) {
+            if (taskData && taskData.id) {
                 this.edit = true;
                 app.cid = 'io.ox/tasks:edit.' + _.cid(taskData);
                 model.factory.realm('edit').retain().get(taskData).done(function (task) {
-                    taskModel = task;
+                    app.model = taskModel = task;
                     taskModel.getParticipants();
-                    taskView = view.getView(taskModel, win.nodes.main, app);
+                    app.view = taskView = view.getView(taskModel, win.nodes.main, app);
                 });
             } else {
                 app.attributes.title = gt('Create task');
-                taskModel = model.factory.create();
+                app.model = taskModel = model.factory.create();
                 if (options.folderid) {//on reload there is no options.folderid so it would crash on saving. Leave default
                     options.folderid = parseInt(options.folderid, 10);//folderId is sometimes a String but must be a number else the discard buttons thinks this is a missmatch to the defaults
                     taskModel.set('folder_id', options.folderid, {validate: true});
                 }
-                taskView = view.getView(taskModel, win.nodes.main, app);
+                app.view = taskView = view.getView(taskModel, win.nodes.main, app);
             }
             if (_.browser.IE === undefined || _.browser.IE > 9) {
                 self.dropZone = new dnd.UploadZone({
@@ -127,6 +131,7 @@ define('io.ox/tasks/edit/main', ['gettext!io.ox/tasks',
                     app.dropZone.remove();
                 }
             });
+
             //ready for show
             win.show();
         });
@@ -162,7 +167,7 @@ define('io.ox/tasks/edit/main', ['gettext!io.ox/tasks',
             } else {
                 if (app.edit) {
                     require(['io.ox/tasks/api'], function (api) {
-                        api.trigger('update:' + encodeURIComponent(taskModel.attributes.folder_id + '.' + taskModel.attributes.id));
+                        api.trigger('update:' + _.ecid(taskModel.attributes));
                         clean();
                         model.factory.realm('edit').release();//old model no longer needed
                         def.resolve();
@@ -175,6 +180,35 @@ define('io.ox/tasks/edit/main', ['gettext!io.ox/tasks',
 
             return def;
         });
+
+        app.failSave = function () {
+            if (this.model) {
+                var title = this.attributes.title;
+                return {
+                    description: gt('Task') + (title ? ': ' + title : ''),
+                    module: 'io.ox/tasks/edit',
+                    point: this.model.attributes
+                };
+            }
+            return false;
+        };
+
+        app.failRestore = function (point) {
+            var df = $.Deferred();
+            this.markDirty();
+            if (_.isUndefined(point.id)) {
+                this.model.set(point);
+            } else {
+                this.model.set(point);
+                this.edit = true;
+                this.view.trigger('changeMode', 'edit');
+                this.cid = 'io.ox/tasks:edit.' + _.cid(point);
+                this.setTitle(point.title || gt('Edit task'));
+            }
+            df.resolve();
+            return df;
+        };
+
         return app;
     }
 

@@ -61,6 +61,23 @@ define.async = (function () {
                 definitionFunction: callback
             };
         }
+        if (wrapper.after && wrapper.after.length) {
+            (function () {
+                var definitionFunction = wrapper.definitionFunction;
+                wrapper.definitionFunction = function () {
+                    var def = definitionFunction.apply(window, arguments);
+                    var allLoaded = $.Deferred();
+
+                    def.done(function (module) {
+                        require(wrapper.after).done(function () {
+                            allLoaded.resolve(module);
+                        });
+                    }).fail(allLoaded.reject);
+
+                    return allLoaded;
+                };
+            }());
+        }
         define(name + ':init', { load: getLoader(name, wrapper.dependencies, wrapper.definitionFunction) });
         // define real module - will wait for promise
         define(name, [name + ':init!'], _.identity);
@@ -96,6 +113,19 @@ define.async = (function () {
             // already defined?
             if (!requirejs.defined(name)) {
                 var wrapper = ox.manifests.wrapperFor(name, dependencies, definitionFunction);
+                if (wrapper.after && wrapper.after.length) {
+                    originalDefine(name + ":init", {load: function (name, req, onLoad, config) {
+                        req(wrapper.dependencies, function () {
+                            // get module (must return deferred object)
+                            var module = wrapper.definitionFunction.apply(null, arguments);
+                            require(wrapper.after).done(function () {
+                                onLoad(module);
+                            });
+                        });
+                    }});
+
+                    return originalDefine(name, [name + ':init!'], _.identity);
+                }
                 return originalDefine(name, wrapper.dependencies, wrapper.definitionFunction);
             } else {
                 return;

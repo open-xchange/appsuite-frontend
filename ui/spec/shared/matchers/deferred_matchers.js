@@ -10,20 +10,53 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 if (jasmine) {
+    var deferredMatchers = {
+
+        toBeDeferred: function () {
+            var def = this.actual;
+
+            expect(def.state).toBeDefined();
+            expect(def.done).toBeDefined();
+            expect(def.fail).toBeDefined();
+            expect(def.then).toBeDefined();
+            expect(def.progress).toBeDefined();
+            expect(def.promise).toBeDefined();
+
+            return this.spec.results();
+        },
+        toBePromise: function () {
+            var def = this.actual;
+            deferredMatchers.toBeDeferred.call(this);
+            expect(def.reject).not.toBeDefined();
+            expect(def.resolve).not.toBeDefined();
+
+            return this.spec.results();
+        },
+        toResolve: function () {
+            var spy = sinon.spy(),
+                actual = this.actual;
+
+            this.spec.after(function() {
+                expect(spy).toHaveBeenCalledOnce();
+            });
+
+            this.actual.done(spy);
+            return true;
+        },
+        toReject: function () {
+            var spy = sinon.spy(),
+                actual = this.actual;
+
+            this.spec.after(function() {
+                expect(spy).toHaveBeenCalledOnce();
+            });
+
+            this.actual.fail(spy);
+            return true;
+        }
+    };
+
     beforeEach(function () {
-        this.addMatchers({
-            toBeDeferred: function () {
-                var def = this.actual;
-
-                expect(def.state).toBeDefined();
-                expect(def.done).toBeDefined();
-                expect(def.fail).toBeDefined();
-                expect(def.then).toBeDefined();
-                expect(def.progress).toBeDefined();
-                expect(def.promise).toBeDefined();
-
-                return this.spec.results();
-            }
-        });
+        this.addMatchers(deferredMatchers);
     });
 };

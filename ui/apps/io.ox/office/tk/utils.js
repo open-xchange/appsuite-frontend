@@ -24,6 +24,9 @@ define.async('io.ox/office/tk/utils',
         // the CSS classes added to localized icons
         localeIconClasses = null,
 
+        // a global timer that can be used for performance debugging
+        globalTimer = null,
+
         // selector for the icon <span> element in a control caption
         ICON_SELECTOR = 'span[data-role="icon"]',
 
@@ -62,6 +65,8 @@ define.async('io.ox/office/tk/utils',
     /**
      * A unique object used as return value in callback functions of iteration
      * loops to break the iteration process immediately.
+     *
+     * @constant
      */
     Utils.BREAK = {};
 
@@ -69,25 +74,55 @@ define.async('io.ox/office/tk/utils',
      * The full identifier of the current locale, with leading lower-case
      * language identifier, and trailing upper-case country identifier,
      * separated by an underscore character, e.g. 'en_US'.
+     *
+     * @constant
      */
     Utils.LOCALE = '';
 
     /**
      * The lower-case language identifier of the current locale, e.g. 'en'.
+     *
+     * @constant
      */
     Utils.LANGUAGE = '';
 
     /**
      * The upper-case country identifier of the current locale, e.g. 'US'.
+     *
+     * @constant
      */
     Utils.COUNTRY = '';
+
+    /**
+     * CSS class for button elements.
+     *
+     * @constant
+     */
+    Utils.BUTTON_CLASS = 'button';
 
     /**
      * CSS selector for button elements.
      *
      * @constant
      */
-    Utils.BUTTON_SELECTOR = '.button';
+    Utils.BUTTON_SELECTOR = '.' + Utils.BUTTON_CLASS;
+
+    /**
+     * CSS class for hidden elements.
+     */
+    Utils.HIDDEN_CLASS = 'hidden';
+
+    /**
+     * CSS selector for visible elements.
+     */
+    Utils.VISIBLE_SELECTOR = ':not(.' + Utils.HIDDEN_CLASS + ')';
+
+    /**
+     * jQuery selector for elements that are effectively visible.
+     *
+     * @constant
+     */
+    Utils.REALLY_VISIBLE_SELECTOR = ':visible';
 
     /**
      * CSS class for disabled controls.
@@ -104,33 +139,109 @@ define.async('io.ox/office/tk/utils',
     Utils.ENABLED_SELECTOR = ':not(.' + Utils.DISABLED_CLASS + ')';
 
     /**
-     * CSS selector for focused controls.
-     *
-     * @constant
-     */
-    Utils.FOCUSED_SELECTOR = ':focus';
-
-    /**
      * CSS class for selected (active) buttons or tabs.
      *
      * @constant
      */
     Utils.SELECTED_CLASS = 'selected';
 
+    /**
+     * CSS selector for selected (active) buttons or tabs.
+     *
+     * @constant
+     */
+    Utils.SELECTED_SELECTOR = '.' + Utils.SELECTED_CLASS;
+
+    /**
+     * CSS class for elements that contain the focused node.
+     *
+     * @constant
+     */
+    Utils.FOCUSED_CLASS = 'focused';
+
+    /**
+     * CSS class for focusable control elements.
+     *
+     * @constant
+     */
+    Utils.FOCUSABLE_CLASS = 'focusable';
+
+    /**
+     * CSS selector for focusable control elements.
+     *
+     * @constant
+     */
+    Utils.FOCUSABLE_SELECTOR = '.' + Utils.FOCUSABLE_CLASS;
+
+    /**
+     * A Boolean flag specifying whether the current display is a retina
+     * display.
+     *
+     * @constant
+     */
+    Utils.RETINA = _.device('retina');
+
+    /**
+     * A Boolean flag specifying whether the Internet Explorer 9 is running.
+     *
+     * @constant
+     */
+    Utils.IE9 = _.isNumber(_.browser.IE) && (_.browser.IE < 10);
+
+    /**
+     * The maximum explicit size of single DOM nodes, in pixels. The size is
+     * limited by browsers; by using larger sizes the elements may collapse to
+     * zero size.
+     * - IE limits this to 1,533,917 (2^31/1400) in both directions.
+     * - Firefox limits this to 17,895,696 (0x1111110) in both directions.
+     * - Chrome limits this to 33,554,428 (0x1FFFFFC) in both directions.
+     *
+     * @constant
+     */
+    Utils.MAX_NODE_SIZE = _.browser.IE ? 1.5e6 : _.browser.WebKit ? 33.5e6 : 17.8e6;
+
+    /**
+     * The maximum width of a container node that can be reached by inserting
+     * multiple child nodes, in pixels. The width is limited by browsers; by
+     * inserting more nodes the width of the container node becomes incorrect
+     * or collapses to zero.
+     * - IE limits this to 10,737,418 (2^31/200) pixels.
+     * - Firefox and Chrome do not allow to extend the container node beyond
+     *   the explicit size limits of a single node (see comment for the
+     *   Utils.MAX_NODE_SIZE constant above).
+     *
+     * @constant
+     */
+    Utils.MAX_CONTAINER_WIDTH = _.browser.IE ? 10.7e7 : Utils.MAX_NODE_SIZE;
+
+    /**
+     * The maximum height of a container node that can be reached by inserting
+     * multiple child nodes, in pixels. The height is limited by browsers; by
+     * inserting more nodes the height of the container node becomes incorrect
+     * or collapses to zero.
+     * - IE limits this to 21,474,836 (2^31/100) pixels.
+     * - Firefox and Chrome do not allow to extend the container node beyond
+     *   the explicit size limits of a single node (see comment for the
+     *   Utils.MAX_NODE_SIZE constant above).
+     *
+     * @constant
+     */
+    Utils.MAX_CONTAINER_HEIGHT = _.browser.IE ? 21.4e6 : Utils.MAX_NODE_SIZE;
+
     // generic JS object helpers ----------------------------------------------
 
     /**
-     * Returns a new object containing a single attribute with the specified
-     * value.
+     * Returns a new object containing a single property with the specified key
+     * and value.
      *
      * @param {String} key
-     *  The name of the attribute to be inserted into the returned object.
+     *  The name of the property to be inserted into the returned object.
      *
      * @param value
-     *  The value of the attribute to be inserted into the returned object.
+     *  The value of the property to be inserted into the returned object.
      *
      * @returns {Object}
-     *  A new object with a single attribute.
+     *  A new object with a single property.
      */
     Utils.makeSimpleObject = function (key, value) {
         var object = {};
@@ -171,10 +282,10 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
-     * Returns whether specific attributes of the passed objects are equal,
-     * while ignoring all other attributes. If an attribute is missing in both
+     * Returns whether specific properties of the passed objects are equal,
+     * while ignoring all other properties. If a property is missing in both
      * objects, it is considered to be equal. Uses the Underscore method
-     * _.isEqual() to compare the attribute values.
+     * _.isEqual() to compare the property values.
      *
      * @param {Object} object1
      *  The first object to be compared to the other.
@@ -182,29 +293,108 @@ define.async('io.ox/office/tk/utils',
      * @param {Object} object2
      *  The second object to be compared to the other.
      *
-     * @param {String[]} attributeNames
-     *  The names of all attributes of the objects that will be compared.
+     * @param {String[]} propertyNames
+     *  The names of all properties of the objects that will be compared.
      *
      * @param {Function} [comparator=_.isEqual]
-     *  A binary predicate function that returns true if the passed attribute
+     *  A binary predicate function that returns true if the passed property
      *  values are considered being equal. Will be called, if both objects
-     *  passed to this method contain a specific attribute, and receives the
-     *  attribute values from both objects.
+     *  passed to this method contain a specific property, and receives the
+     *  property values from both objects.
      *
      * @returns {Boolean}
-     *  Whether all specified attributes are equal in both objects.
+     *  Whether all specified properties are equal in both objects.
      */
-    Utils.hasEqualAttributes = function (object1, object2, attributeNames, comparator) {
+    Utils.hasEqualAttributes = function (object1, object2, propertyNames, comparator) {
 
-        // default to the _isEqual() method to compare attribute values
+        // default to the _isEqual() method to compare property values
         comparator = _.isFunction(comparator) ? comparator : _.isEqual;
 
-        // process all specified attributes
-        return _(attributeNames).all(function (attrName) {
+        // process all specified properties
+        return _(propertyNames).all(function (attrName) {
             var hasAttr1 = attrName in object1,
                 hasAttr2 = attrName in object2;
             return (hasAttr1 === hasAttr2) && (!hasAttr1 || comparator(object1[attrName], object2[attrName]));
         });
+    };
+
+    /**
+     * Calls the passed iterator function for all elements of the passed array.
+     *
+     * @param {Array} array
+     *  The array whose elements will be iterated.
+     *
+     * @param {Function} iterator
+     *  The iterator function invoked for all elements in the array. Receives
+     *  the following parameters:
+     *  (1) {Any} element
+     *      The current array element.
+     *  (2) {Number} index
+     *      The index of the array element.
+     *  (3) {Array} array
+     *      The array passed to this method.
+     *  If the iterator returns the Utils.BREAK object, the iteration process
+     *  will be stopped immediately.
+     *
+     * @param {Object} [options]
+     *  A map with options controlling the behavior of this method. The
+     *  following options are supported:
+     *  @param {Object} [options.context]
+     *      If specified, the iterator will be called with this context (the
+     *      symbol 'this' will be bound to the context inside the iterator
+     *      function).
+     *  @param {Boolean} [options.reverse=false]
+     *      If set to true, the elements will be visited in reversed order.
+     *
+     * @returns {Utils.BREAK|Undefined}
+     *  A reference to the Utils.BREAK object, if the iterator has returned
+     *  Utils.BREAK to stop the iteration process, otherwise undefined.
+     */
+    Utils.iterateArray = function (array, iterator, options) {
+
+        var context = Utils.getOption(options, 'context');
+
+        if (Utils.getBooleanOption(options, 'reverse', false)) {
+            for (var index = array.length - 1; index >= 0; index -= 1) {
+                if (iterator.call(context, array[index], index, array) === Utils.BREAK) {
+                    return Utils.BREAK;
+                }
+            }
+        } else {
+            for (var index = 0; index < array.length; index += 1) {
+                if (iterator.call(context, array[index], index, array) === Utils.BREAK) {
+                    return Utils.BREAK;
+                }
+            }
+        }
+    };
+
+    /**
+     * Finds the last element in the passed array, that passed a truth test.
+     *
+     * @param {Array} array
+     *  The array to be searched for a matching element.
+     *
+     * @param {Function} iterator
+     *  The iterator implementing the truth test. Receives the array element,
+     *  the element index, and the complete array. The method iterates
+     *  backwards through the array, and returns the first array element that
+     *  passes the truth test.
+     *
+     * @param {Object} [context]
+     *  If specified, the iterator will be called with this context (the symbol
+     *  'this' will be bound to the context inside the iterator function).
+     *
+     * @returns {Any}
+     *  The last matching element in the array; or undefined, if no element
+     *  passes the truth test.
+     */
+    Utils.findLast = function (array, iterator, context) {
+        for (var index = array.length - 1; index >= 0; index -= 1) {
+            if (iterator.call(context, array[index], index, array)) {
+                return array[index];
+            }
+        }
     };
 
     // calculation, conversion, string manipulation ---------------------------
@@ -230,18 +420,65 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
-     * Rounds the passed floating-point number to the specified number of
-     * digits after the decimal point.
+     * Rounds the passed floating-point number to the nearest multiple of the
+     * specified precision.
      *
      * @param {Number} value
-     *  The value to be rounded.
+     *  The floating-point number to be rounded.
      *
-     * @param {Number} digits
-     *  The number of digits after the decimal point.
+     * @param {Number} precision
+     *  The precision used to round the number. The value 1 will round to
+     *  integers (exactly like the Math.round() method). Must be positive.
+     *
+     * @returns {Number}
+     *  The rounded number.
      */
-    Utils.roundDigits = function (value, digits) {
-        var pow10 = Math.pow(10, digits);
-        return _.isFinite(value) ? (Math.round(value * pow10) / pow10) : value;
+    Utils.round = function (value, precision) {
+        value = Math.round(value / precision);
+        // Multiplication with small value may result in rounding errors (e.g.,
+        // 227*0.1 results in 22.700000000000003), division by inverse value
+        // works as expected (e.g. 227/(1/0.1) results in 22.7).
+        return (precision < 1) ? (value / (1 / precision)) : (value * precision);
+    };
+
+    /**
+     * Rounds the passed floating-point number down to the nearest multiple of
+     * the specified precision.
+     *
+     * @param {Number} value
+     *  The floating-point number to be rounded.
+     *
+     * @param {Number} precision
+     *  The precision used to round the number. The value 1 will round down to
+     *  integers (exactly like the Math.floor() method). Must be positive.
+     *
+     * @returns {Number}
+     *  The rounded number.
+     */
+    Utils.roundDown = function (value, precision) {
+        value = Math.floor(value / precision);
+        // see comment in Utils.round()
+        return (precision < 1) ? (value / (1 / precision)) : (value * precision);
+    };
+
+    /**
+     * Rounds the passed floating-point number up to the nearest multiple of
+     * the specified precision.
+     *
+     * @param {Number} value
+     *  The floating-point number to be rounded.
+     *
+     * @param {Number} precision
+     *  The precision used to round the number. The value 1 will round up to
+     *  integers (exactly like the Math.ceil() method). Must be positive.
+     *
+     * @returns {Number}
+     *  The rounded number.
+     */
+    Utils.roundUp = function (value, precision) {
+        value = Math.ceil(value / precision);
+        // see comment in Utils.round()
+        return (precision < 1) ? (value / (1 / precision)) : (value * precision);
     };
 
     /**
@@ -257,7 +494,52 @@ define.async('io.ox/office/tk/utils',
      */
     Utils.roundSignificantDigits = function (value, digits) {
         var pow10 = Math.pow(10, Math.floor(Math.log(value) / Math.log(10)));
-        return Utils.roundDigits(value / pow10, digits - 1) * pow10;
+        return Utils.round(value / pow10, Math.pow(10, digits - 1)) * pow10;
+    };
+
+    /**
+     * Iterates through a range of numbers, without creating a temporary array.
+     *
+     * @param {Number} begin
+     *  The iteration will be started with this value.
+     *
+     * @param {Number} end
+     *  The iteration will be stopped before this value will be reached
+     *  (half-open range).
+     *
+     * @param {Function} iterator
+     *  The iterator function that will be called for every value. Receives the
+     *  current value as first parameter. If the iterator returns the
+     *  Utils.BREAK object, the iteration process will be stopped immediately.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the iteration. Supports the following
+     *  options:
+     *  @param {Object} [options.context]
+     *      If specified, the iterator will be called with this context (the
+     *      symbol 'this' will be bound to the context inside the iterator
+     *      function).
+     *  @param {Number} [options.step=1]
+     *      If specified, the current value will be increased or decreased by
+     *      this amount.
+     *
+     * @returns {Utils.BREAK|Undefined}
+     *  A reference to the Utils.BREAK object, if the iterator has returned
+     *  Utils.BREAK to stop the iteration process, otherwise undefined.
+     */
+    Utils.iterateRange = function (begin, end, iterator, options) {
+
+        var // context for iterator function
+            context = Utils.getOption(options, 'context'),
+            // step value
+            step = Utils.getNumberOption(options, 'step', 1),
+            // the current value
+            value = begin;
+
+        while ((step > 0) ? (value < end) : (value > end)) {
+            if (iterator.call(context, value) === Utils.BREAK) { return Utils.BREAK; }
+            value += step;
+        }
     };
 
     /**
@@ -275,9 +557,9 @@ define.async('io.ox/office/tk/utils',
      * @param {String} toUnit
      *  The target measurement unit.
      *
-     * @param {Number} [digits]
-     *  If specified, the number of digits after the decimal point to round the
-     *  result to.
+     * @param {Number} [precision]
+     *  If specified, the resulting length will be rounded to the nearest
+     *  multiple of this value. Must be positive.
      *
      * @returns {Number}
      *  The length value converted to the target measurement unit, as
@@ -295,9 +577,9 @@ define.async('io.ox/office/tk/utils',
                 'mm': 96 / 25.4
             };
 
-        return function (value, fromUnit, toUnit, digits) {
+        return function (value, fromUnit, toUnit, precision) {
             value *= (FACTORS[fromUnit] || 1) / (FACTORS[toUnit] || 1);
-            return _.isFinite(digits) ? Utils.roundDigits(value, digits) : value;
+            return _.isFinite(precision) ? Utils.round(value, precision) : value;
         };
     }());
 
@@ -330,16 +612,16 @@ define.async('io.ox/office/tk/utils',
      *  The target measurement unit. See method Utils.convertLength() for a
      *  list of supported units.
      *
-     * @param {Number} [digits]
-     *  If specified, the number of digits after the decimal point to round the
-     *  result to.
+     * @param {Number} [precision]
+     *  If specified, the resulting length will be rounded to the nearest
+     *  multiple of this value. Must be positive.
      *
      * @returns {Number}
      *  The length value converted to the target measurement unit, as
      *  floating-point number.
      */
-    Utils.convertHmmToLength = function (value, toUnit, digits) {
-        return Utils.convertLength(value / 100, 'mm', toUnit, digits);
+    Utils.convertHmmToLength = function (value, toUnit, precision) {
+        return Utils.convertLength(value / 100, 'mm', toUnit, precision);
     };
 
     /**
@@ -353,21 +635,21 @@ define.async('io.ox/office/tk/utils',
      *  The target CSS measurement unit. See method Utils.convertLength() for
      *  a list of supported units.
      *
-     * @param {Number} [digits]
-     *  If specified, the number of digits after the decimal point to round the
-     *  result to.
+     * @param {Number} [precision]
+     *  If specified, the resulting length will be rounded to the nearest
+     *  multiple of this value. Must be positive.
      *
      * @returns {Number}
      *  The length value converted to the target measurement unit, as
      *  floating-point number.
      */
-    Utils.convertCssLength = function (valueAndUnit, toUnit, digits) {
+    Utils.convertCssLength = function (valueAndUnit, toUnit, precision) {
         var value = parseFloat(valueAndUnit);
         if (!_.isFinite(value)) {
             value = 0;
         }
         if (value && (valueAndUnit.length > 2)) {
-            value = Utils.convertLength(value, valueAndUnit.substr(-2), toUnit, digits);
+            value = Utils.convertLength(value, valueAndUnit.substr(-2), toUnit, precision);
         }
         return value;
     };
@@ -397,16 +679,16 @@ define.async('io.ox/office/tk/utils',
      *  The target measurement unit. See method Utils.convertLength() for a
      *  list of supported units.
      *
-     * @param {Number} [digits]
-     *  If specified, the number of digits after the decimal point to round the
-     *  result to.
+     * @param {Number} [precision]
+     *  If specified, the resulting length will be rounded to the nearest
+     *  multiple of this value. Must be positive.
      *
      * @returns {String}
      *  The length value converted to the target measurement unit, followed by
      *  the unit name.
      */
-    Utils.convertHmmToCssLength = function (value, toUnit, digits) {
-        return Utils.convertHmmToLength(value, toUnit, digits) + toUnit;
+    Utils.convertHmmToCssLength = function (value, toUnit, precision) {
+        return Utils.convertHmmToLength(value, toUnit, precision) + toUnit;
     };
 
     /**
@@ -518,7 +800,62 @@ define.async('io.ox/office/tk/utils',
      *  The generated string.
      */
     Utils.repeatString = function (text, count) {
-        return new Array(count + 1).join(text);
+        var result = null;
+        switch (count) {
+        case 0:
+            return '';
+        case 1:
+            return text;
+        }
+        result = Utils.repeatString(text, Math.floor(count / 2));
+        result += result;
+        if (count % 2) {
+            result += text;
+        }
+        return result;
+    };
+
+    /**
+     * Trims non-printable characters and white-spaces at the beginning and end
+     * of the passed string.
+     *
+     * @param {String} text
+     *  The text to be trimmed.
+     *
+     * @returns {String}
+     *  The trimmed text.
+     */
+    Utils.trimString = function (text) {
+        return text.replace(/^[\x00-\x1f\s]+|[\x00-\x1f\s]+$/g, '');
+    };
+
+    /**
+     * Replaces all non-printable characters (ASCII 0x00-0x1F) in the passed
+     * string with space characters.
+     *
+     * @param {String} text
+     *  The text to be cleaned from non-printable characters.
+     *
+     * @returns {String}
+     *  The new text without non-printable characters.
+     */
+    Utils.cleanString = function (text) {
+        return text.replace(/[\x00-\x1f]/g, ' ');
+    };
+
+    /**
+     * Trims non-printable characters and white-spaces at the beginning and end
+     * of the passed string, and replaces all embedded non-printable characters
+     * (ASCII 0x00-0x1F) with space characters.
+     *
+     * @param {String} text
+     *  The text to be trimmed and cleaned from non-printable characters.
+     *
+     * @returns {String}
+     *  The new trimmed text without non-printable characters.
+     */
+    Utils.trimAndCleanString = function (text) {
+        return Utils.cleanString(Utils.trimString(text));
     };
 
     /**
@@ -547,43 +884,67 @@ define.async('io.ox/office/tk/utils',
         return _(text.split(' ')).map(Utils.capitalize).join(' ');
     };
 
+    /**
+     * Escapes HTML mark-up characters (angle brackets, ampersand, double
+     * quotes, and apostrophes) in the passed text.
+     *
+     * @param {String} text
+     *  The text containing special HTML mark-up characters.
+     *
+     * @returns {String}
+     *  The passed text with all mark-up characters escaped.
+     */
+    Utils.escapeHTML = function (text) {
+        return Utils.cleanString(text)
+            // replace the ampersand with the text &amp; (must be done first!)
+            .replace(/&/g, '&amp;')
+            // replace the left angle bracket with the text &lt;
+            .replace(/</g, '&lt;')
+            // replace the right angle bracket with the text &gt;
+            .replace(/>/g, '&gt;')
+            // replace the double quote character with the text &quot;
+            .replace(/"/g, '&quot;')
+            // replace the apostrophe with the text &#39; (&apos; is not an HTML entity!)
+            .replace(/'/g, '&#39;');
+    };
+
     // options object ---------------------------------------------------------
 
     /**
-     * Extracts an attribute value from the passed object. If the attribute
-     * does not exist, returns the specified default value.
+     * Extracts a property value from the passed object. If the property does
+     * not exist, returns the specified default value.
      *
      * @param {Object|Undefined} options
-     *  An object containing some attribute values. May be undefined.
+     *  An object containing some properties. May be undefined.
      *
      * @param {String} name
-     *  The name of the attribute to be returned.
+     *  The name of the property to be returned.
      *
      * @param [def]
      *  The default value returned when the options parameter is not an object,
-     *  or if it does not contain the specified attribute.
+     *  or if it does not contain the specified property.
      *
      * @returns
-     *  The value of the specified attribute, or the default value.
+     *  The value of the specified property, or the default value.
      */
     Utils.getOption = function (options, name, def) {
         return (_.isObject(options) && (name in options)) ? options[name] : def;
     };
 
     /**
-     * Extracts a string attribute from the passed object. If the attribute
-     * does not exist, or is not a string, returns the specified default value.
+     * Extracts a string property from the passed object. If the property does
+     * not exist, or is not a string, returns the specified default value.
      *
      * @param {Object|Undefined} options
-     *  An object containing some attribute values. May be undefined.
+     *  An object containing some properties. May be undefined.
      *
      * @param {String} name
-     *  The name of the string attribute to be returned.
+     *  The name of the string property to be returned.
      *
      * @param [def]
      *  The default value returned when the options parameter is not an object,
-     *  or if it does not contain the specified attribute, or if the attribute
-     *  is not a string. May be any value (not only strings).
+     *  or if it does not contain the specified property, or if the property is
+     *  not a string. May be any value (not only strings).
      *
      * @param {Boolean} [nonEmpty=false]
      *  If set to true, only non-empty strings will be returned from the
@@ -591,7 +952,7 @@ define.async('io.ox/office/tk/utils',
      *  default value.
      *
      * @returns
-     *  The value of the specified attribute, or the default value.
+     *  The value of the specified property, or the default value.
      */
     Utils.getStringOption = function (options, name, def, nonEmpty) {
         var value = Utils.getOption(options, name);
@@ -599,23 +960,23 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
-     * Extracts a boolean attribute from the passed object. If the attribute
-     * does not exist, or is not a boolean value, returns the specified default
+     * Extracts a boolean property from the passed object. If the property does
+     * not exist, or is not a boolean value, returns the specified default
      * value.
      *
      * @param {Object|Undefined} options
-     *  An object containing some attribute values. May be undefined.
+     *  An object containing some properties. May be undefined.
      *
      * @param {String} name
-     *  The name of the boolean attribute to be returned.
+     *  The name of the boolean property to be returned.
      *
      * @param [def]
      *  The default value returned when the options parameter is not an object,
-     *  or if it does not contain the specified attribute, or if the attribute
-     *  is not a boolean value. May be any value (not only booleans).
+     *  or if it does not contain the specified property, or if the property is
+     *  not a boolean value. May be any value (not only booleans).
      *
      * @returns
-     *  The value of the specified attribute, or the default value.
+     *  The value of the specified property, or the default value.
      */
     Utils.getBooleanOption = function (options, name, def) {
         var value = Utils.getOption(options, name);
@@ -623,99 +984,97 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
-     * Extracts a floating-point attribute from the passed object. If the
-     * attribute does not exist, or is not a number, returns the specified
+     * Extracts a floating-point property from the passed object. If the
+     * property does not exist, or is not a number, returns the specified
      * default value.
      *
      * @param {Object|Undefined} options
-     *  An object containing some attribute values. May be undefined.
+     *  An object containing some properties. May be undefined.
      *
      * @param {String} name
-     *  The name of the floating-point attribute to be returned.
+     *  The name of the floating-point property to be returned.
      *
      * @param [def]
      *  The default value returned when the options parameter is not an object,
-     *  or if it does not contain the specified attribute, or if the attribute
-     *  is not a number. May be any value (not only numbers).
+     *  or if it does not contain the specified property, or if the property is
+     *  not a number. May be any value (not only numbers).
      *
      * @param [min]
      *  If specified and a number, set a lower bound for the returned value. Is
-     *  not used, if neither the attribute nor the passed default are numbers.
+     *  not used, if neither the property nor the passed default are numbers.
      *
      * @param [max]
      *  If specified and a number, set an upper bound for the returned value.
-     *  Is not used, if neither the attribute nor the passed default are
+     *  Is not used, if neither the property nor the passed default are
      *  numbers.
      *
-     * @param [digits]
-     *  If specified, the number of digits after the decimal point to round the
-     *  attribute value to.
+     * @param [precision]
+     *  If specified, the resulting number will be rounded to the nearest
+     *  multiple of this value. Must be positive.
      *
      * @returns
-     *  The value of the specified attribute, or the default value, rounded
-     *  down to an integer.
+     *  The value of the specified property, or the default value.
      */
-    Utils.getNumberOption = function (options, name, def, min, max, digits) {
+    Utils.getNumberOption = function (options, name, def, min, max, precision) {
         var value = Utils.getOption(options, name);
         value = _.isFinite(value) ? value : def;
         if (_.isFinite(value)) {
             if (_.isFinite(min) && (value < min)) { value = min; }
             if (_.isFinite(max) && (value > max)) { value = max; }
-            return _.isFinite(digits) ? Utils.roundDigits(value, digits) : value;
+            return _.isFinite(precision) ? Utils.round(value, precision) : value;
         }
         return value;
     };
 
     /**
-     * Extracts an integer attribute from the passed object. If the attribute
+     * Extracts an integer property from the passed object. If the property
      * does not exist, or is not a number, returns the specified default value.
      *
      * @param {Object|Undefined} options
-     *  An object containing some attribute values. May be undefined.
+     *  An object containing some properties. May be undefined.
      *
      * @param {String} name
-     *  The name of the integer attribute to be returned.
+     *  The name of the integer property to be returned.
      *
      * @param [def]
      *  The default value returned when the options parameter is not an object,
-     *  or if it does not contain the specified attribute, or if the attribute
-     *  is not a number. May be any value (not only numbers).
+     *  or if it does not contain the specified property, or if the property is
+     *  not a number. May be any value (not only numbers).
      *
      * @param [min]
      *  If specified and a number, set a lower bound for the returned value. Is
-     *  not used, if neither the attribute nor the passed default are numbers.
+     *  not used, if neither the property nor the passed default are numbers.
      *
      * @param [max]
      *  If specified and a number, set an upper bound for the returned value.
-     *  Is not used, if neither the attribute nor the passed default are
+     *  Is not used, if neither the property nor the passed default are
      *  numbers.
      *
      * @returns
-     *  The value of the specified attribute, or the default value, rounded
-     *  down to an integer.
+     *  The value of the specified property, or the default value, rounded to
+     *  an integer.
      */
     Utils.getIntegerOption = function (options, name, def, min, max) {
-        return Utils.getNumberOption(options, name, def, min, max, 0);
+        return Utils.getNumberOption(options, name, def, min, max, 1);
     };
 
     /**
-     * Extracts an object attribute from the passed object. If the attribute
-     * does not exist, or is not an object, returns the specified default
-     * value.
+     * Extracts an object property from the passed object. If the property does
+     * not exist, or is not an object, returns the specified default value.
      *
      * @param {Object|Undefined} options
-     *  An object containing some attribute values. May be undefined.
+     *  An object containing some properties. May be undefined.
      *
      * @param {String} name
-     *  The name of the attribute to be returned.
+     *  The name of the property to be returned.
      *
      * @param [def]
      *  The default value returned when the options parameter is not an object,
-     *  or if it does not contain the specified attribute, or if the attribute
-     *  is not an object. May be any value (not only objects).
+     *  or if it does not contain the specified property, or if the property is
+     *  not an object. May be any value (not only objects).
      *
      * @returns
-     *  The value of the specified attribute, or the default value.
+     *  The value of the specified property, or the default value.
      */
     Utils.getObjectOption = function (options, name, def) {
         var value = Utils.getOption(options, name);
@@ -723,22 +1082,22 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
-     * Extracts a function from the passed object. If the attribute does not
+     * Extracts a function from the passed object. If the property does not
      * exist, or is not a function, returns the specified default value.
      *
      * @param {Object|Undefined} options
-     *  An object containing some attribute values. May be undefined.
+     *  An object containing some properties. May be undefined.
      *
      * @param {String} name
-     *  The name of the attribute to be returned.
+     *  The name of the property to be returned.
      *
      * @param [def]
      *  The default value returned when the options parameter is not an object,
-     *  or if it does not contain the specified attribute, or if the attribute
-     *  is not an object. May be any value (not only functions).
+     *  or if it does not contain the specified property, or if the property is
+     *  not an object. May be any value (not only functions).
      *
      * @returns
-     *  The value of the specified attribute, or the default value.
+     *  The value of the specified property, or the default value.
      */
     Utils.getFunctionOption = function (options, name, def) {
         var value = Utils.getOption(options, name);
@@ -746,26 +1105,26 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
-     * Extracts a array from the passed object. If the attribute does not
-     * exist, or is not an array, returns the specified default value.
+     * Extracts a array from the passed object. If the property does not exist,
+     * or is not an array, returns the specified default value.
      *
      * @param {Object|Undefined} options
-     *  An object containing some attribute values. May be undefined.
+     *  An object containing some properties. May be undefined.
      *
      * @param {String} name
-     *  The name of the attribute to be returned.
+     *  The name of the property to be returned.
      *
      * @param [def]
      *  The default value returned when the options parameter is not an object,
-     *  or if it does not contain the specified attribute, or if the attribute
-     *  is not an array. May be any value.
+     *  or if it does not contain the specified property, or if the property is
+     *  not an array. May be any value.
      *
      * @param {Boolean} [nonEmpty=false]
      *  If set to true, only non-empty arrays will be returned from the options
      *  object. Empty arrays will be replaced with the specified default value.
      *
      * @returns
-     *  The value of the specified attribute, or the default value.
+     *  The value of the specified property, or the default value.
      */
     Utils.getArrayOption = function (options, name, def, nonEmpty) {
         var value = Utils.getOption(options, name);
@@ -773,44 +1132,45 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
-     * Extends the passed object with the specified attributes. Unlike
-     * underscore's extend() method, does not modify the passed object, but
-     * creates and returns a clone. Additionally, extends embedded objects
-     * deeply instead of replacing them.
-     *
-     * @param {Object} [options]
-     *  An object containing some attribute values. If undefined, creates and
-     *  extends a new empty object.
+     * Creates and returns a merged options map from the passed objects. Unlike
+     * Underscore's extend() method, does not modify the passed objects, but
+     * creates and returns a clone. Additionally, extends embedded plain JS
+     * objects deeply instead of replacing them, for example, extending the
+     * objects {a:{b:1}} and {a:{c:2}} will result in {a:{b:1,c:2}}.
      *
      * @param {Object} [...]
-     *  Other objects whose attributes will be inserted into the former object.
-     *  Will overwrite existing attributes in the clone of the passed object.
+     *  Other objects whose properties will be inserted into the former object.
+     *  Will overwrite existing properties in the clone of the passed object.
      *
      * @returns {Object}
-     *  A new clone of the passed object, extended by the new attributes.
+     *  A new clone of the passed object, extended by the new properties.
      */
-    Utils.extendOptions = function (options) {
+    Utils.extendOptions = function () {
+
+        var // the resulting options
+            options = {};
+
+        function isPlainObject(value) {
+            return _.isObject(value) && (value.constructor === Object);
+        }
 
         function extend(options, extensions) {
             _(extensions).each(function (value, name) {
-                if (_.isObject(value) && !_.isArray(value) && !_.isFunction(value) && !(value instanceof $)) {
-                    // extension value is an object: ensure that the options map contains an embedded object
-                    if (!_.isObject(options[name])) {
+                if (isPlainObject(value)) {
+                    // extension value is a plain object: ensure that the options map contains an embedded object
+                    if (!isPlainObject(options[name])) {
                         options[name] = {};
                     }
                     extend(options[name], value);
                 } else {
-                    // extension value is not an object: clear old value, even if it was an object
+                    // extension value is not a plain object: clear old value, even if it was an object
                     options[name] = value;
                 }
             });
         }
 
-        // create a deep copy of the passed options, or an empty object
-        options = _.isObject(options) ? _.copy(options, true) : {};
-
-        // add all extensions to the clone
-        for (var index = 1; index < arguments.length; index += 1) {
+        // add all objects to the clone
+        for (var index = 0; index < arguments.length; index += 1) {
             if (_.isObject(arguments[index])) {
                 extend(options, arguments[index]);
             }
@@ -822,11 +1182,9 @@ define.async('io.ox/office/tk/utils',
     // generic DOM/CSS helpers ------------------------------------------------
 
     /**
-     * A jQuery selector that returns true if the DOM node bound to the 'this'
-     * symbol is a text node. Can be used in all helper functions that expect a
-     * jQuery selector.
-     *
-     * @constant
+     * A jQuery function selector that returns true if the DOM node bound to
+     * the 'this' symbol is a text node. Can be used in all helper functions
+     * that expect a jQuery selector including functions.
      */
     Utils.JQ_TEXTNODE_SELECTOR = function () { return this.nodeType === 3; };
 
@@ -933,7 +1291,23 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
-     * Returns an integer attribute of the passed element.
+     * Returns whether one of the descendant elements in the passed element
+     * contains the active (focused) element.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  A single DOM element, or a jQuery collection, whose descendants will be
+     *  checked for the active (focused) element.
+     *
+     * @returns {Boolean}
+     *  Whether one of the descendant elements in the passed element contains
+     *  the active (focused) element.
+     */
+    Utils.containsFocus = function (node) {
+        return $(node).find(window.document.activeElement).length > 0;
+    };
+
+    /**
+     * Returns an integer attribute value of the passed element.
      *
      * @param {HTMLElement|jQuery} node
      *  The DOM element whose attribute will be returned. If this object is a
@@ -997,10 +1371,11 @@ define.async('io.ox/office/tk/utils',
      *  The new value of the CSS attribute.
      */
     Utils.setCssAttributeWithPrefixes = function (node, name, value) {
-        node = $(node);
+        var props = {};
         _(['-webkit-', '-moz-', '-ms-', '-o-', '']).each(function (prefix) {
-            node.css(prefix + name, value);
+            props[prefix + name] = value;
         });
+        $(node).css(props);
     };
 
     /**
@@ -1048,9 +1423,9 @@ define.async('io.ox/office/tk/utils',
      * @param {Object} [options]
      *  A map of options to control the iteration. Supports the following
      *  options:
-     *  @param {Boolean} [options.children]
+     *  @param {Boolean} [options.children=false]
      *      If set to true, only direct child nodes will be visited.
-     *  @param {Boolean} [options.reverse]
+     *  @param {Boolean} [options.reverse=false]
      *      If set to true, the descendant nodes are visited in reversed order.
      *
      * @returns {Utils.BREAK|Undefined}
@@ -1494,173 +1869,187 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
-     * Returns the position and size of the specified node inside visible area
-     * of the browser window. This includes the distances of all four borders
-     * of the node to the borders of the browser window.
+     * Returns the position and size of the specified node inside the entire
+     * document page. This includes the distances of all four borders of the
+     * node to the borders of the document.
      *
      * @param {HTMLElement|jQuery} node
-     *  The DOM element whose position relative to the browser window will be
+     *  The DOM element whose position relative to the document page will be
      *  calculated. If this object is a jQuery collection, uses the first node
      *  it contains.
      *
      * @returns {Object}
-     *  An object with numeric attributes representing the position and size of
-     *  the node relative to the browser window in pixels:
-     *  - 'left': the distance of the left border of the node to the left
-     *      border of the browser window,
-     *  - 'top': the distance of the top border of the node to the top border
-     *      of the browser window,
-     *  - 'right': the distance of the right border of the node to the right
-     *      border of the browser window,
-     *  - 'bottom': the distance of the bottom border of the node to the bottom
-     *      border of the browser window,
-     *  - 'width': the outer width of the node (including its borders),
-     *  - 'height': the outer height of the node (including its borders).
+     *  An object with numeric properties representing the position and size of
+     *  the node relative to the document page, in pixels:
+     *  - {Number} left
+     *      The distance of the left border of the node to the left border of
+     *      the document page.
+     *  - {Number} top
+     *      The distance of the top border of the node to the top border of the
+     *      document page.
+     *  - {Number} right
+     *      The distance of the right border of the node to the right border of
+     *      the document page.
+     *  - {Number} bottom
+     *      The distance of the bottom border of the node to the bottom border
+     *      of the document page.
+     *  - {Number} width
+     *      The outer width of the node (including its borders).
+     *  - {Number} height
+     *      The outer height of the node (including its borders).
      */
-    Utils.getNodePositionInWindow = function (node) {
+    Utils.getNodePositionInPage = function (node) {
 
         var // the passed node, as jQuery object
             $node = $(node),
             // the offset of the node, relative to the browser window
             position = $node.offset();
 
-        // add size and right/bottom distances
         position.width = $node.outerWidth();
         position.height = $node.outerHeight();
-        position.right = window.innerWidth - position.left - position.width;
-        position.bottom = window.innerHeight - position.top - position.height;
+        position.right = document.body.clientWidth - position.left - position.width;
+        position.bottom = document.body.clientHeight - position.top - position.height;
 
         return position;
     };
 
     /**
-     * Returns the position of the visible area of the passed scrollable node.
+     * Returns the position of the visible area of the passed container node.
      * This includes the size of the visible area without scroll bars (if
      * shown), and the distances of all four borders of the visible area to the
      * borders of the entire scroll area.
      *
-     * @param {HTMLElement|jQuery} node
-     *  The scrollable DOM element. If this object is a jQuery collection, uses
+     * @param {HTMLElement|jQuery} containerNode
+     *  The DOM container element. If this object is a jQuery collection, uses
      *  the first node it contains.
      *
      * @returns {Object}
-     *  An object with numeric attributes representing the position and size of
-     *  the visible area relative to the entire scroll area of the node in
-     *  pixels:
-     *  - 'left': the distance of the left border of the visible area to the
-     *      left border of the entire scroll area,
-     *  - 'top': the distance of the top border of the visible area to the top
-     *      border of the entire scroll area,
-     *  - 'right': the distance of the right border of the visible area
-     *      (without scroll bar) to the right border of the entire scroll area,
-     *  - 'bottom': the distance of the bottom border of the visible area
-     *      (without scroll bar) to the bottom border of the entire scroll
-     *      area,
-     *  - 'width': the width of the visible area (without scroll bar),
-     *  - 'height': the height of the visible area (without scroll bar).
+     *  An object with numeric properties representing the position and size of
+     *  the visible area relative to the entire scroll area of the container
+     *  node in pixels:
+     *  - {Number} left
+     *      The distance of the left border of the visible area to the left
+     *      border of the entire scroll area.
+     *  - {Number} top
+     *      The distance of the top border of the visible area to the top
+     *      border of the entire scroll area.
+     *  - {Number} right
+     *      The distance of the right border of the visible area (without
+     *      scroll bar) to the right border of the entire scroll area.
+     *  - {Number} bottom
+     *      The distance of the bottom border of the visible area (without
+     *      scroll bar) to the bottom border of the entire scroll area.
+     *  - {Number} width
+     *      The width of the visible area (without scroll bar).
+     *  - {Number} height
+     *      The height of the visible area (without scroll bar).
      */
-    Utils.getVisibleAreaPosition = function (node) {
-        node = Utils.getDomNode(node);
+    Utils.getVisibleAreaPosition = function (containerNode) {
+        containerNode = Utils.getDomNode(containerNode);
         return {
-            left: node.scrollLeft,
-            top: node.scrollTop,
-            right: node.scrollWidth - node.clientWidth - node.scrollLeft,
-            bottom: node.scrollHeight - node.clientHeight - node.scrollTop,
-            width: node.clientWidth,
-            height: node.clientHeight
+            left: containerNode.scrollLeft,
+            top: containerNode.scrollTop,
+            right: containerNode.scrollWidth - containerNode.clientWidth - containerNode.scrollLeft,
+            bottom: containerNode.scrollHeight - containerNode.clientHeight - containerNode.scrollTop,
+            width: containerNode.clientWidth,
+            height: containerNode.clientHeight
         };
     };
 
     /**
-     * Returns the position and size of the specified window rectangle inside
-     * the passed scrollable node. This includes the size of the rectangle as
-     * specified, and the distances of all four borders of the rectangle to the
-     * borders of the visible area or entire scroll area of the scrollable
-     * node.
+     * Returns the position and size of the specified document page rectangle
+     * inside the passed DOM container node. This includes the size of the
+     * rectangle as specified, and the distances of all four borders of the
+     * rectangle to the borders of the visible area or entire scroll area of
+     * the container node.
      *
-     * @param {HTMLElement|jQuery} scrollableNode
-     *  The scrollable DOM element. If this object is a jQuery collection, uses
+     * @param {HTMLElement|jQuery} containerNode
+     *  The container DOM element. If this object is a jQuery collection, uses
      *  the first node it contains.
      *
-     * @param {Object} windowRect
-     *  The rectangle whose position and size relative to the scrollable node
-     *  will be calculated. Must provide the attributes 'left', 'top', 'width',
-     *  and 'height' in pixels. The attributes 'left' and 'top' are interpreted
-     *  relatively to the browser window.
+     * @param {Object} pageRect
+     *  The document page rectangle whose position will be converted relatively
+     *  to the position of the container node. Must provide the properties
+     *  'left', 'top', 'width', and 'height' in pixels. The properties 'left'
+     *  and 'top' are interpreted relatively to the entire document page.
      *
      * @param {Object} [options]
      *  A map of options to control the calculation. Supports the following
      *  options:
      *  @param {Boolean} [options.visibleArea=false]
-     *      If set to true, calculates the distances of the window rectangle to
-     *      the visible area of the scrollable node. Otherwise, returns the
-     *      top and left position and the size of the window rectangle
-     *      unmodified, and adds the distance of its right and bottom borders
-     *      to the right and bottom borders of the entire scroll area of the
-     *      scrollable node.
+     *      If set to true, calculates the distances of the rectangle to the
+     *      visible area of the container node. Otherwise, calculates the
+     *      distances of the rectangle to the entire scroll area of the
+     *      container node.
      *
      * @returns {Object}
-     *  An object with numeric attributes representing the position and size of
-     *  the window rectangle relative to the entire scroll area or visible area
-     *  of the scrollable node in pixels:
-     *  - 'left': the distance of the left border of the window rectangle to
-     *      the left border of the scrollable node,
-     *  - 'top': the distance of the top border of the window rectangle to the
-     *      top border of the scrollable node,
-     *  - 'right': the distance of the right border of the window rectangle to
-     *      the right border of the scrollable node,
-     *  - 'bottom': the distance of the bottom border of the window rectangle
-     *      to the bottom border of the scrollable node,
-     *  - 'width': the width of the window rectangle, as passed,
-     *  - 'height': the height of the window rectangle, as passed.
+     *  An object with numeric properties representing the position and size of
+     *  the page rectangle relative to the entire scroll area or visible area
+     *  of the container node, in pixels:
+     *  - {Number} left
+     *      The distance of the left border of the rectangle to the left border
+     *      of the container node.
+     *  - {Number} top
+     *      The distance of the top border of the rectangle to the top border
+     *      of the container node.
+     *  - {Number} right
+     *      The distance of the right border of the rectangle to the right
+     *      border of the container node.
+     *  - {Number} bottom
+     *      The distance of the bottom border of the rectangle to the bottom
+     *      border of the container node.
+     *  - {Number} width
+     *      The width of the rectangle, as passed.
+     *  - {Number} height
+     *      The height of the rectangle, as passed.
      */
-    Utils.getRectanglePositionInNode = function (scrollableNode, windowRect, options) {
+    Utils.getRectanglePositionInNode = function (containerNode, pageRect, options) {
 
-        var // the passed scrollable node, as jQuery object
-            $scrollableNode = $(scrollableNode),
-            // the offset of the scrollable node, relative to the browser window
-            scrollableOffset = $scrollableNode.offset(),
+        var // the passed container node, as jQuery object
+            $containerNode = $(containerNode),
+            // the offset of the container node, relative to the document body
+            containerOffset = containerNode.offset(),
             // the width of the left and top border of the scrollable node, in pixels
-            leftBorderWidth = Utils.convertCssLength($scrollableNode.css('borderLeftWidth'), 'px'),
-            topBorderWidth = Utils.convertCssLength($scrollableNode.css('borderTopWidth'), 'px'),
-            // dimensions of the visible area of the scrollable node
-            visiblePosition = Utils.getVisibleAreaPosition(scrollableNode),
+            leftBorderWidth = Utils.convertCssLength($containerNode.css('borderLeftWidth'), 'px'),
+            topBorderWidth = Utils.convertCssLength($containerNode.css('borderTopWidth'), 'px'),
+            // position and size of the visible area of the container node
+            visiblePosition = Utils.getVisibleAreaPosition(containerNode),
 
-            // the dimensions of the window rectangle, relative to the visible area of the scrollable node
-            dimensions = {
-                left: windowRect.left + leftBorderWidth - scrollableOffset.left,
-                top: windowRect.top + topBorderWidth - scrollableOffset.top,
-                width: windowRect.width,
-                height: windowRect.height
+            // the position and size, relative to the visible area of the container node
+            position = {
+                left: pageRect.left + leftBorderWidth - containerOffset.left,
+                top: pageRect.top + topBorderWidth - containerOffset.top,
+                width: pageRect.width,
+                height: pageRect.height
             };
 
         // add right and bottom distance of child node to visible area
-        dimensions.right = visiblePosition.width - dimensions.left - dimensions.width;
-        dimensions.bottom = visiblePosition.height - dimensions.top - dimensions.height;
+        position.right = visiblePosition.width - position.left - position.width;
+        position.bottom = visiblePosition.height - position.top - position.height;
 
         // add distances to entire scroll area, if option 'visibleArea' is not set
         if (!Utils.getBooleanOption(options, 'visibleArea', false)) {
             _(['left', 'top', 'right', 'bottom']).each(function (border) {
-                dimensions[border] += visiblePosition[border];
+                position[border] += visiblePosition[border];
             });
         }
 
-        return dimensions;
+        return position;
     };
 
     /**
-     * Returns the dimensions of the specified child node inside its scrollable
-     * ancestor node. This includes the size of the child node, and the
-     * distances of all four borders of the child node to the borders of the
-     * visible area or entire scroll area of the scrollable node.
+     * Returns the position and size of the specified child node inside its
+     * ancestor container node. This includes the outer size of the child node,
+     * and the distances of all four borders of the child node to the borders
+     * of the visible area or entire scroll area of the container node.
      *
-     * @param {HTMLElement|jQuery} scrollableNode
-     *  The scrollable DOM element. If this object is a jQuery collection, uses
+     * @param {HTMLElement|jQuery} containerNode
+     *  The DOM container element. If this object is a jQuery collection, uses
      *  the first node it contains.
      *
      * @param {HTMLElement|jQuery} childNode
      *  The DOM element whose dimensions will be calculated. Must be contained
-     *  in the specified scrollable element. If this object is a jQuery
+     *  in the specified container element. If this object is a jQuery
      *  collection, uses the first node it contains.
      *
      * @param {Object} [options]
@@ -1668,55 +2057,62 @@ define.async('io.ox/office/tk/utils',
      *  options:
      *  @param {Boolean} [options.visibleArea=false]
      *      If set to true, calculates the distances of the child node to the
-     *      visible area of the scrollable node. Otherwise, calculates the
+     *      visible area of the container node. Otherwise, calculates the
      *      distances of the child node to the entire scroll area of the
-     *      scrollable node.
+     *      container node.
      *
      * @returns {Object}
-     *  An object with numeric attributes representing the position and size of
+     *  An object with numeric properties representing the position and size of
      *  the child node relative to the entire scroll area or visible area of
-     *  the scrollable node in pixels:
-     *  - 'left': the distance of the left border of the child node to the
-     *      left border of the scrollable node,
-     *  - 'top': the distance of the top border of the child node to the top
-     *      border of the scrollable node,
-     *  - 'right': the distance of the right border of the child node to the
-     *      right border of the scrollable node,
-     *  - 'bottom': the distance of the bottom border of the child node to the
-     *      bottom border of the scrollable node,
-     *  - 'width': the outer width of the child node (including its borders),
-     *  - 'height': the outer height of the child node (including its borders).
+     *  the container node, in pixels:
+     *  - {Number} left
+     *      The distance of the left border of the child node to the left
+     *      border of the container node.
+     *  - {Number} top
+     *      The distance of the top border of the child node to the top border
+     *      of the container node.
+     *  - {Number} right
+     *      The distance of the right border of the child node to the right
+     *      border of the container node.
+     *  - {Number} bottom
+     *      The distance of the bottom border of the child node to the bottom
+     *      border of the container node.
+     *  - {Number} width
+     *      The outer width of the child node (including its borders).
+     *  - {Number} height
+     *      The outer height of the child node (including its borders).
      */
-    Utils.getChildNodePositionInNode = function (scrollableNode, childNode, options) {
-        var windowPosition = Utils.getNodePositionInWindow(childNode);
-        return Utils.getRectanglePositionInNode(scrollableNode, windowPosition, options);
+    Utils.getChildNodePositionInNode = function (containerNode, childNode, options) {
+        var pageRect = Utils.getNodePositionInPage(childNode);
+        return Utils.getRectanglePositionInNode(containerNode, pageRect, options);
     };
 
     /**
-     * Scrolls the passed window rectangle into the visible area of the
-     * specified scrollable node.
+     * Scrolls the passed page rectangle into the visible area of the specified
+     * container node.
      *
-     * @param {HTMLElement|jQuery} scrollableNode
-     *  The scrollable DOM element. If this object is a jQuery collection, uses
-     *  the first node it contains.
+     * @param {HTMLElement|jQuery} containerNode
+     *  The DOM container element. If this object is a jQuery collection, uses
+     *  the first node it contains. This method works independent from the
+     *  current overflow mode of the container node.
      *
-     * @param {Object} windowRect
-     *  The rectangle of the browser window that will be made visible by
-     *  scrolling the scrollable node. Must provide the attributes 'left',
-     *  'top', 'width', and 'height' in pixels. The attributes 'left' and 'top'
-     *  are interpreted relatively to the browser window.
+     * @param {Object} pageRect
+     *  The document page rectangle that will be made visible by scrolling the
+     *  container node. Must provide the properties 'left', 'top', 'width', and
+     *  'height' in pixels. The properties 'left' and 'top' are interpreted
+     *  relatively to the entire document page.
      *
      * @param {Object} [options]
      *  A map of options to control the scroll action. Supports the following
      *  options:
      *  @param {Number} [options.padding=0]
-     *      Minimum distance between the borders of the visible area and the
-     *      rectangle.
+     *      Minimum distance between the borders of the visible area in the
+     *      container node, and the rectangle scrolled into the visible area.
      */
-    Utils.scrollToWindowRectangle = function (scrollableNode, windowRect, options) {
+    Utils.scrollToPageRectangle = function (containerNode, pageRect, options) {
 
         var // dimensions of the rectangle in the visible area of the scrollable node
-            position = Utils.getRectanglePositionInNode(scrollableNode, windowRect, { visibleArea: true }),
+            position = Utils.getRectanglePositionInNode(containerNode, pageRect, { visibleArea: true }),
             // padding between scrolled element and border of visible area
             padding = Utils.getIntegerOption(options, 'padding', 0, 0);
 
@@ -1725,7 +2121,7 @@ define.async('io.ox/office/tk/utils',
             var maxPadding = Utils.minMax((leadingChildOffset + trailingChildOffset) / 2, 0, padding),
                 offset = Math.max(leadingChildOffset - Math.max(maxPadding - trailingChildOffset, 0), maxPadding);
 
-            Utils.getDomNode(scrollableNode)[scrollAttributeName] -= (offset - leadingChildOffset);
+            Utils.getDomNode(containerNode)[scrollAttributeName] -= (offset - leadingChildOffset);
         }
 
         updateScrollPosition(position.left, position.right, 'scrollLeft');
@@ -1733,17 +2129,17 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
-     * Scrolls the passed child node into the visible area of the specified
-     * scrollable container node.
+     * Scrolls the passed child node into the visible area of the specified DOM
+     * container node.
      *
-     * @param {HTMLElement|jQuery} scrollableNode
-     *  The scrollable DOM element that contains the specified child node. If
+     * @param {HTMLElement|jQuery} containerNode
+     *  The DOM container element that contains the specified child node. If
      *  this object is a jQuery collection, uses the first node it contains.
      *
      * @param {HTMLElement|jQuery} childNode
      *  The DOM element that will be made visible by scrolling the specified
-     *  scrollable container element. If this object is a jQuery collection,
-     *  uses the first node it contains.
+     *  container element. If this object is a jQuery collection, uses the
+     *  first node it contains.
      *
      * @param {Object} [options]
      *  A map of options to control the scroll action. Supports the following
@@ -1752,9 +2148,109 @@ define.async('io.ox/office/tk/utils',
      *      Minimum distance between the borders of the visible area and the
      *      child node.
      */
-    Utils.scrollToChildNode = function (scrollableNode, childNode, options) {
-        var windowPosition = Utils.getNodePositionInWindow(childNode);
-        Utils.scrollToWindowRectangle(scrollableNode, windowPosition, options);
+    Utils.scrollToChildNode = function (containerNode, childNode, options) {
+        var pageRect = Utils.getNodePositionInPage(childNode);
+        Utils.scrollToPageRectangle(containerNode, pageRect, options);
+    };
+
+    /**
+     * Sets the size of the passed DOM nodes. As a workaround for IE which
+     * restricts the explicit size of single nodes to ~1.5m pixels (see comment
+     * for the Utils.MAX_NODE_SIZE constant), descendant nodes will be inserted
+     * whose sizes add up to the specified total node size. The total size of
+     * the node will still be restricted depending on the browser (see comment
+     * for the Utils.MAX_CONTAINER_WIDTH and Utils.MAX_CONTAINER_HEIGHT
+     * constants).
+     *
+     * @param {HTMLElement|jQuery} containerNode
+     *  The DOM container element that will be resized. If this object is a
+     *  jQuery collection, resizes all node it contains.
+     *
+     * @param {Number} width
+     *  The new total width of the node. The resulting width will not exceed
+     *  the value of Utils.MAX_CONTAINER_WIDTH, depending on the current
+     *  browser.
+     *
+     * @param {Number} height
+     *  The new total height of the node. The resulting height will not exceed
+     *  the value of Utils.MAX_CONTAINER_HEIGHT, depending on the current
+     *  browser.
+     */
+    Utils.setContainerNodeSize = function (containerNode, width, height) {
+        containerNode = $(containerNode);
+
+        // restrict to maximum allowed node size
+        width = Utils.minMax(width, 0, Utils.MAX_CONTAINER_WIDTH);
+        height = Utils.minMax(height, 0, Utils.MAX_CONTAINER_HEIGHT);
+
+        // if node is small enough, set its size directly
+        if ((width <= Utils.MAX_NODE_SIZE) && (height <= Utils.MAX_NODE_SIZE)) {
+            containerNode.empty().css({ width: width, height: height });
+            return;
+        }
+
+        // IE: insert embedded nodes to expand the container node beyond the limits of a single node
+        if ((width !== containerNode.width()) || (height !== containerNode.height())) {
+
+            // generate the mark-up for the embedded horizontal sizer nodes
+            var markup = Utils.repeatString('<div style="width:' + Utils.MAX_NODE_SIZE + 'px;"></div>', Math.floor(width / Utils.MAX_NODE_SIZE));
+            width %= Utils.MAX_NODE_SIZE;
+            if (width > 0) { markup += '<div style="width:' + width + 'px;"></div>'; }
+
+            // generate the mark-up for the vertical sizer nodes
+            markup = '<div style="height:' + Math.min(height, Utils.MAX_NODE_SIZE) + 'px;">' + markup + '</div>';
+            height = Math.max(0, height - Utils.MAX_NODE_SIZE);
+            markup += Utils.repeatString('<div style="height:' + Utils.MAX_NODE_SIZE + 'px;"></div>', Math.floor(height / Utils.MAX_NODE_SIZE));
+            height %= Utils.MAX_NODE_SIZE;
+            if (height > 0) { markup += '<div style="height:' + height + 'px;"></div>'; }
+
+            // insert entire HTML mark-up into the container node
+            containerNode.css({ width: 'auto', height: 'auto' }).addClass('ie-node-size-container').html(markup);
+        }
+    };
+
+    // event handling ---------------------------------------------------------
+
+    /**
+     * Attaches an event handler to the given jQuery object and assures
+     * that the handler is the first one to be executed if more than
+     * one handler is attached to the object.
+     *
+     * Note: $._data() is not a supported public interface; the actual
+     * data structures may change incompatibly from jQuery version to version.
+     *
+     * @param {jQuery} object
+     *  The jQuery object the handler function is attached.
+     * @param {String} event
+     *  The event type and optional namespaces, such as 'click' or 'keydown.myPlugin'.
+     * @param {Function} func
+     *  The handler function to execute when the event is triggered.
+     *  @returns {Boolean}
+     *  Returns true if handler has been added as first one.
+     */
+    Utils.bindAsFirstHandler = function (object, event, func) {
+
+        object = (object instanceof $) ? object : $(object);
+
+        // normally attach the event first
+        object.on(event, func);
+
+        if (!_.isFunction($._data)) { return false; }
+
+        // move the handler function
+        object.each(function () {
+            var // all handlers for the event
+                handlers = $._data(this, 'events')[event.split('.')[0]],
+                // the handler that has just been inserted at the end of the list
+                handler = _.isArray(handlers) ? handlers.pop() : null;
+
+            // move the handler to the beginning of the list
+            if (handler) {
+                handlers.splice(0, 0, handler);
+            }
+        });
+
+        return true;
     };
 
     // form control elements --------------------------------------------------
@@ -1795,13 +2291,18 @@ define.async('io.ox/office/tk/utils',
      * @param {Object} [options]
      *  A map of options to control the properties of the new element. The
      *  following options are supported:
-     *  @param [options.value]
-     *      A value, object, or function that will be copied to the
-     *      'data-value' attribute of the control. Must not be null or
-     *      undefined.
-     *  @param [options.userData]
-     *      A value or object that will be copied to the 'data-userdata'
-     *      attribute of the control. May contain any user-defined data.
+     *  @param {Any} [options.value]
+     *      A value, object, or function that will be copied to the attribute
+     *      'data-value' of the control. Must not be null or undefined.
+     *  @param {String} [options.dataValue]
+     *      A string that will be inserted into the 'data-value' attribute of
+     *      the control. If omitted, the JSON string representation of the
+     *      'options.value' option will be used instead (all double-quote
+     *      characters will be removed from the string though), unless the
+     *      passed value is a function.
+     *  @param {Any} [options.userData]
+     *      A value or object that will be copied to the attribute
+     *      'data-userdata' of the control. May contain any user-defined data.
      *  @param {Number|String} [options.width]
      *      The total width of the control element (including padding). If
      *      omitted, the size will be set automatically according to the
@@ -1821,7 +2322,7 @@ define.async('io.ox/office/tk/utils',
             .width(Utils.getOption(options, 'width', ''))
             .css(Utils.getObjectOption(options, 'css', {}));
 
-        Utils.setControlValue(control, Utils.getOption(options, 'value'));
+        Utils.setControlValue(control, Utils.getOption(options, 'value'), Utils.getStringOption(options, 'dataValue'));
         Utils.setControlUserData(control, Utils.getOption(options, 'userData'));
 
         return control;
@@ -1847,13 +2348,26 @@ define.async('io.ox/office/tk/utils',
      * @param {jQuery} control
      *  A jQuery collection containing a control element.
      *
-     * @param value
+     * @param {Any} value
      *  A value, object, or function that will be copied to the 'value' data
      *  attribute of the control. Must not be null or undefined.
+     *
+     * @param {String} [dataValue]
+     *  A string value that will be inserted into the 'data-value' attribute of
+     *  the control. If omitted, the JSON string representation of the passed
+     *  value will be used instead (all double-quote characters will be removed
+     *  from the string though), unless the passed value is a function.
      */
-    Utils.setControlValue = function (control, value) {
+    Utils.setControlValue = function (control, value, dataValue) {
         if (!_.isUndefined(value) && !_.isNull(value)) {
             control.data('value', value);
+            // set the data-value attribute
+            if (!_.isString(dataValue) && !_.isFunction(value)) {
+                dataValue = JSON.stringify(value).replace(/"/g, '');
+            }
+            if (dataValue) {
+                control.attr('data-value', dataValue);
+            }
         }
     };
 
@@ -1883,98 +2397,20 @@ define.async('io.ox/office/tk/utils',
         control.data('userdata', value);
     };
 
-    /**
-     * Returns whether the first form control in the passed jQuery collection
-     * is enabled.
-     *
-     * @param {jQuery} control
-     *  A jQuery collection containing a form control.
-     *
-     * @returns {Boolean}
-     *  True, if the form control is enabled.
-     */
-    Utils.isControlEnabled = function (control) {
-        return control.first().is(Utils.ENABLED_SELECTOR);
-    };
-
-    /**
-     * Enables or disables all form controls in the passed jQuery collection.
-     *
-     * @param {jQuery} controls
-     *  A jQuery collection containing one or more form controls.
-     *
-     * @param {Boolean} [state]
-     *  If omitted or set to true, all form controls in the passed collection
-     *  will be enabled. Otherwise, all controls will be disabled.
-     *
-     * @returns {Boolean}
-     *  The effective state (whether the controls are enabled or disabled now).
-     */
-    Utils.enableControls = function (controls, state) {
-        var enabled = _.isUndefined(state) || (state === true);
-        controls.toggleClass(Utils.DISABLED_CLASS, !enabled);
-        return enabled;
-    };
-
-    /**
-     * Returns whether the first form control in the passed jQuery collection
-     * is currently focused.
-     *
-     * @param {jQuery} control
-     *  A jQuery collection containing a form control.
-     *
-     * @returns {Boolean}
-     *  True, if the form control is focused.
-     */
-    Utils.isControlFocused = function (control) {
-        return control.first().is(Utils.FOCUSED_SELECTOR);
-    };
-
-    /**
-     * Returns the form control from the passed jQuery collection, if it is
-     * currently focused.
-     *
-     * @param {jQuery} controls
-     *  A jQuery collection containing form controls.
-     *
-     * @returns {jQuery}
-     *  The focused control, as new jQuery collection. Will be empty, if the
-     *  passed collection does not contain a focused control.
-     */
-    Utils.getFocusedControl = function (controls) {
-        return controls.filter(Utils.FOCUSED_SELECTOR);
-    };
-
-    /**
-     * Returns whether the passed jQuery collection contains a focused control.
-     *
-     * @param {jQuery} controls
-     *  A jQuery collection containing form controls.
-     *
-     * @returns {Boolean}
-     *  True, if one of the elements in the passed jQuery collection is
-     *  focused.
-     */
-    Utils.hasFocusedControl = function (controls) {
-        return Utils.getFocusedControl(controls).length !== 0;
-    };
-
-    /**
-     * Returns whether one of the elements in the passed jQuery collection
-     * contains a control that is focused.
-     *
-     * @param {jQuery} node
-     *  A jQuery collection with container elements that contain different form
-     *  controls.
-     *
-     * @returns {Boolean}
-     *  True, if one of the container elements contains a focused form control.
-     */
-    Utils.containsFocusedControl = function (node) {
-        return node.find(Utils.FOCUSED_SELECTOR).length !== 0;
-    };
-
     // control captions -------------------------------------------------------
+
+    /**
+     * Create and the HTML markup of an <i> DOM element representing an icon.
+     *
+     * @param {String} icon
+     *  The CSS class name of the icon.
+     *
+     * @returns {String}
+     *  The HTML markup of the icon element, as string.
+     */
+    Utils.createIconMarkup = function (icon) {
+        return '<i class="' + icon + ' ' + localeIconClasses + (Utils.RETINA ? ' retina' : '') + '"></i>';
+    };
 
     /**
      * Create and returns a new <i> DOM element representing an icon.
@@ -1985,8 +2421,8 @@ define.async('io.ox/office/tk/utils',
      * @returns {jQuery}
      *  The new icon element, as jQuery object.
      */
-    Utils.createIcon = function (icon, white) {
-        return $('<i>').addClass(icon + ' ' + localeIconClasses).toggleClass('retina', _.device('retina'));
+    Utils.createIcon = function (icon) {
+        return $(Utils.createIconMarkup(icon));
     };
 
     /**
@@ -2001,6 +2437,44 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
+     * Creates the HTML markup of an icon and a text label for a form control.
+     *
+     * @param {Object} [options]
+     *  A map of options with the properties of the caption. The following
+     *  options are supported:
+     *  @param {String} [options.icon]
+     *      The full name of the Bootstrap or OX Documents icon class. If
+     *      omitted, no icon will be shown.
+     *  @param {String} [options.label]
+     *      The text label. Will follow an icon. If omitted, no text will be
+     *      shown.
+     *
+     * @returns {String}
+     *  The HTML markup of the caption element, as string.
+     */
+    Utils.createControlCaptionMarkup = function (options) {
+
+        var // option values
+            icon = Utils.getStringOption(options, 'icon'),
+            label = Utils.getStringOption(options, 'label'),
+            // the caption markup
+            markup = '';
+
+        // append the icon
+        if (icon) {
+            markup += '<span data-role="icon" data-icon="' + icon + '">' + Utils.createIconMarkup(icon) + '</span>';
+        }
+
+        // append the label
+        if (_.isString(label)) {
+            markup += '<span data-role="label">' + Utils.escapeHTML(label) + '</span>';
+        }
+
+        // embed in the caption container if any markup is present
+        return (markup.length > 0) ? ('<div class="caption">' + markup + '</div>') : '';
+    };
+
+    /**
      * Inserts an icon and a text label into the passed form control.
      *
      * @param {jQuery} control
@@ -2010,8 +2484,8 @@ define.async('io.ox/office/tk/utils',
      *  A map of options to control the properties of the caption. The
      *  following options are supported:
      *  @param {String} [options.icon]
-     *      The full name of the Bootstrap or OX icon class. If omitted, no
-     *      icon will be shown.
+     *      The full name of the Bootstrap or OX Documents icon class. If
+     *      omitted, no icon will be shown.
      *  @param {String} [options.label]
      *      The text label. Will follow an icon. If omitted, no text will be
      *      shown.
@@ -2021,47 +2495,22 @@ define.async('io.ox/office/tk/utils',
      */
     Utils.setControlCaption = function (control, options) {
 
-        var // option values
-            icon = Utils.getStringOption(options, 'icon'),
-            label = Utils.getStringOption(options, 'label'),
-            labelCss = Utils.getObjectOption(options, 'labelCss'),
-
-            // the caption container node
-            caption = null;
+        var // the caption container node
+            caption = $(Utils.createControlCaptionMarkup(options)),
+            // the label CSS attributes
+            labelCss = Utils.getObjectOption(options, 'labelCss', {});
 
         // restrict to one element in the passed collection
         control = control.first();
 
-        // create a caption container if missing
-        caption = control.children('div.caption');
-        if (caption.length === 0) {
-            control.prepend(caption = $('<div>').addClass('caption'));
+        // add CSS attributes
+        if (!_.isEmpty(labelCss)) {
+            caption.children(LABEL_SELECTOR).css(labelCss);
         }
 
-        // remove the old caption spans
-        caption.empty();
-
-        // append the icon
-        if (icon) {
-            caption.append($('<span>')
-                .attr('data-role', 'icon')
-                .attr('data-icon', icon)
-                .append(Utils.createIcon(icon))
-            );
-        }
-
-        // append the label
-        if (_.isString(label)) {
-            caption.append($('<span>')
-                .attr('data-role', 'label')
-                .text(label || '')
-                .css(labelCss || {}));
-        }
-
-        // remove the caption from the control if it is empty
-        if (caption.children().length === 0) {
-            caption.remove();
-        }
+        // remove the old caption, insert new caption
+        control.children('div.caption').remove();
+        control.prepend(caption);
     };
 
     /**
@@ -2094,7 +2543,11 @@ define.async('io.ox/office/tk/utils',
      *  'left', and 'right'.
      */
     Utils.setControlTooltip = function (control, tooltip, placement) {
-        control.first().attr('title', tooltip || '');
+        if (tooltip) {
+            control.first().attr('title', tooltip);
+        } else {
+            control.first().removeAttr('title');
+        }
     };
 
     // label elements ---------------------------------------------------------
@@ -2124,12 +2577,50 @@ define.async('io.ox/office/tk/utils',
     // button elements --------------------------------------------------------
 
     /**
+     * Creates and returns the HTML markup of a button element.
+     *
+     * @param {String} [innerMarkup='']
+     *  The HTML markup that will be inserted into the button element, right
+     *  after the button caption element as specified by the passed options.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the properties of the new button. Supports
+     *  all generic options supported by the method Utils.setControlLabel().
+     *  Additionally, the following options are supported:
+     *  @param {Boolean} [focusable=false]
+     *      If set to true, a CSS marker class will be added marking the button
+     *      to be focusable.
+     *  @param {Number} [tabIndex=0]
+     *      The tab index set as 'tabindex' attribute at the button element.
+     *
+     * @returns {String}
+     *  The HTML markup of the button element, as string. The button element
+     *  will be represented by an <a> DOM element due to rendering bugs in
+     *  FireFox with <button> elements.
+     */
+    Utils.createButtonMarkup = function (innerMarkup, options) {
+
+        var // whether the button will be focusable
+            focusable = Utils.getBooleanOption(options, 'focusable', false),
+            // the tab index
+            tabIndex = Utils.getIntegerOption(options, 'tabIndex', 0),
+            // the HTML mark-up of the caption icon and label
+            captionMarkup = Utils.createControlCaptionMarkup(options);
+
+        innerMarkup = (innerMarkup || '') + captionMarkup;
+        return '<a class="' + Utils.BUTTON_CLASS + (focusable ? (' ' + Utils.FOCUSABLE_CLASS) : '') + '" tabindex="' + tabIndex + '">' + innerMarkup + '</a>';
+    };
+
+    /**
      * Creates and returns a new button element.
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the new button. Supports
      *  all generic options supported by the method Utils.createControl(), and
      *  all caption options supported by the method Utils.setControlLabel().
+     *  Additionally, the following options are supported:
+     *  @param {Number} [tabIndex=0]
+     *      The tab index set as 'tabindex' attribute at the button element.
      *
      * @returns {jQuery}
      *  A jQuery object containing the new button element. The button element
@@ -2138,10 +2629,12 @@ define.async('io.ox/office/tk/utils',
      */
     Utils.createButton = function (options) {
 
-        var // Create the DOM anchor element representing the button (href='#' is
-            // essential for tab traveling). Do NOT use <button> elements, Firefox has
-            // problems with text clipping and correct padding of the <button> contents.
-            button = Utils.createControl('a', { href: '#', tabindex: 0 }, options).addClass('button');
+        var // the tab index
+            tabIndex = Utils.getIntegerOption(options, 'tabIndex', 0),
+            // Create the DOM anchor element representing the button. Do NOT use
+            // <button> elements, Firefox has problems with text clipping and
+            // correct padding of the <button> contents.
+            button = Utils.createControl('a', { tabindex: tabIndex }, options).addClass(Utils.BUTTON_CLASS);
 
         Utils.setControlCaption(button, options);
         return button;
@@ -2171,7 +2664,7 @@ define.async('io.ox/office/tk/utils',
      *  A jQuery collection with all selected buttons.
      */
     Utils.getSelectedButtons = function (buttons) {
-        return buttons.filter('.' + Utils.SELECTED_CLASS);
+        return buttons.filter(Utils.SELECTED_SELECTOR);
     };
 
     /**
@@ -2228,7 +2721,7 @@ define.async('io.ox/office/tk/utils',
     // text field elements ----------------------------------------------------
 
     /**
-     * Creates and returns a new text input field.
+     * Creates and returns a new text <input> field.
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the new text input field.
@@ -2236,35 +2729,63 @@ define.async('io.ox/office/tk/utils',
      *  method. Additionally, the following options are supported:
      *  @param {String} [options.placeholder='']
      *      A place holder text that will be shown in an empty text field.
+     *  @param {String} [options.keyboard='text']
+     *      Specifies which virtual keyboard should occur on touch devices.
+     *      Supported types are 'text' (default) for a generic text field with
+     *      alphanumeric keyboard, 'number' for floating-point numbers with
+     *      numeric keyboard, 'url' for an alphanumeric keyboard with additions
+     *      for entering URLs, or 'email' for an alphanumeric keyboard with
+     *      additions for entering e-mail addresses.
      *
      * @returns {jQuery}
      *  A jQuery object containing the new text field element.
      */
     Utils.createTextField = function (options) {
-        var textField = Utils.createControl('input', { type: 'text' }, options);
+        var type = Modernizr.touch ? Utils.getStringOption(options, 'keyboard', 'text') : 'text',
+            textField = Utils.createControl('input', { type: type, tabindex: 0 }, options);
         return textField.attr('placeholder', Utils.getStringOption(options, 'placeholder', ''));
+    };
+
+    /**
+     * Creates and returns a new <textarea> element.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the properties of the new text area.
+     *  Supports all generic options supported by the Utils.createControl()
+     *  method. Additionally, the following options are supported:
+     *  @param {String} [options.placeholder='']
+     *      A place holder text that will be shown in an empty text area.
+     *
+     * @returns {jQuery}
+     *  A jQuery object containing the new text area element.
+     */
+    Utils.createTextArea = function (options) {
+        var textArea = Utils.createControl('textarea', undefined, options);
+        return textArea.attr('placeholder', Utils.getStringOption(options, 'placeholder', ''));
     };
 
     /**
      * Returns the current selection in the passed text field.
      *
-     * @param {jQuery} textField
-     *  A jQuery object containing a text field element.
+     * @param {HTMLElement|jQuery} textField
+     *  A text field element (an HTML <input> or <textarea> element). If this
+     *  object is a jQuery collection, used the first DOM node it contains.
      *
      * @returns {Object}
-     *  An object with the attributes 'start' and 'end' containing the start
+     *  An object with the properties 'start' and 'end' containing the start
      *  and end character offset of the selection in the text field.
      */
     Utils.getTextFieldSelection = function (textField) {
-        var input = textField.get(0);
-        return input ? { start: input.selectionStart, end: input.selectionEnd } : undefined;
+        var node = Utils.getDomNode(textField);
+        return { start: node.selectionStart, end: node.selectionEnd };
     };
 
     /**
      * Changes the current selection in the passed text field.
      *
-     * @param {jQuery} textField
-     *  A jQuery object containing a text field element.
+     * @param {HTMLElement|jQuery} textField
+     *  A text field element (an HTML <input> or <textarea> element). If this
+     *  object is a jQuery collection, used the first DOM node it contains.
      *
      * @param {Number} start
      *  The start character offset of the new selection in the text field.
@@ -2274,141 +2795,74 @@ define.async('io.ox/office/tk/utils',
      *  omitted, sets a text cursor according to the passed start position.
      */
     Utils.setTextFieldSelection = function (textField, start, end) {
-        var input = textField.get(0);
-        if (input) {
-            input.selectionStart = start;
-            input.selectionEnd = _.isNumber(end) ? end : start;
+        Utils.getDomNode(textField).setSelectionRange(start, _.isNumber(end) ? end : start);
+    };
+
+    /**
+     * Replaces the current selection of the text field with the specified
+     * text, and places a simple text cursor behind the new text.
+     *
+     * @param {HTMLElement|jQuery} textField
+     *  A text field element (an HTML <input> or <textarea> element). If this
+     *  object is a jQuery collection, used the first DOM node it contains.
+     *
+     * @param {String} [text='']
+     *  The text used to replace the selected text in the text field. If
+     *  omitted, the selection will simply be deleted.
+     */
+    Utils.replaceTextInTextFieldSelection = function (textField, text) {
+        var node = Utils.getDomNode(textField), start = node.selectionStart;
+        text = _.isString(text) ? text : '';
+        node.value = node.value.substring(0, start) + text + node.value.substring(node.selectionEnd);
+        node.setSelectionRange(start + text.length, start + text.length);
+    };
+
+    // global timer -----------------------------------------------------------
+
+    /**
+     * Starting the global timer.
+     *
+     * @param {String} message
+     *  A message that is displayed in the console, when the timer starts.
+     */
+    Utils.startGlobalTimer = function (message) {
+        Utils.log(message);
+        globalTimer = _.now();
+    };
+
+    /**
+     * Logging info from the global timer.
+     *
+     * @param {String} message
+     *  A message that is displayed in the console, if the timer runs.
+     */
+    Utils.logGlobalTimer  = function (message) {
+        if (globalTimer) {
+            Utils.log(message + ' (' + (_.now() - globalTimer) + 'ms)');
         }
     };
 
-    // key codes --------------------------------------------------------------
+    /**
+     * Stopping the global timer.
+     *
+     * @param {String} message
+     *  A message that is displayed in the console, when the timer is stopped.
+     */
+    Utils.stopGlobalTimer = function (message) {
+        if (globalTimer) {
+            Utils.log(message + ' (' + (_.now() - globalTimer) + 'ms)');
+            globalTimer = null;
+        }
+    };
 
     /**
-     * A map of key codes that will be passed to keyboard events.
+     * Checking if the global timer is already running.
+     *
+     * @returns {Boolean}
+     *  Whether the global timer is running.
      */
-    Utils.KeyCodes = {
-
-        BACKSPACE:      8,
-        TAB:            9,
-        ENTER:          13,
-        SHIFT:          16,
-        CONTROL:        17,
-        ALT:            18,
-        BREAK:          19,
-        CAPS_LOCK:      20,
-        ESCAPE:         27,
-        SPACE:          32,
-        PAGE_UP:        33,
-        PAGE_DOWN:      34,
-        END:            35,
-        HOME:           36,
-        LEFT_ARROW:     37,
-        UP_ARROW:       38,
-        RIGHT_ARROW:    39,
-        DOWN_ARROW:     40,
-        PRINT:          44,
-        INSERT:         45,
-        DELETE:         46,
-
-        0:              48,
-        1:              49,
-        2:              50,
-        3:              51,
-        4:              52,
-        5:              53,
-        6:              54,
-        7:              55,
-        8:              56,
-        9:              57,
-
-        MOZ_SEMICOLON:  59,     // Semicolon in Firefox (otherwise: 186 SEMICOLON)
-        MOZ_OPEN_ANGLE: 60,     // Open angle in Firefox, German keyboard (otherwise: 226 OPEN_ANGLE)
-        MOZ_EQUAL_SIGN: 61,     // Equal sign in Firefox (otherwise: 187 EQUAL_SIGN)
-
-        A:              65,
-        B:              66,
-        C:              67,
-        D:              68,
-        E:              69,
-        F:              70,
-        G:              71,
-        H:              72,
-        I:              73,
-        J:              74,
-        K:              75,
-        L:              76,
-        M:              77,
-        N:              78,
-        O:              79,
-        P:              80,
-        Q:              81,
-        R:              82,
-        S:              83,
-        T:              84,
-        U:              85,
-        V:              86,
-        W:              87,
-        X:              88,
-        Y:              89,
-        Z:              90,
-
-        LEFT_WINDOWS:   91,
-        RIGHT_WINDOWS:  92,
-        SELECT:         93,
-
-        NUM_0:          96,     // attention: numpad keys totally broken in Opera
-        NUM_1:          97,
-        NUM_2:          98,
-        NUM_3:          99,
-        NUM_4:          100,
-        NUM_5:          101,
-        NUM_6:          102,
-        NUM_7:          103,
-        NUM_8:          104,
-        NUM_9:          105,
-
-        NUM_MULTIPLY:   106,
-        NUM_PLUS:       107,
-        NUM_MINUS:      109,
-        NUM_POINT:      110,
-        NUM_DIVIDE:     111,
-
-        F1:             112,
-        F2:             113,
-        F3:             114,
-        F4:             115,
-        F5:             116,
-        F6:             117,
-        F7:             118,
-        F8:             119,
-        F9:             120,
-        F10:            121,
-        F11:            122,
-        F12:            123,
-
-        NUM_LOCK:       144,
-        SCROLL_LOCK:    145,
-
-        IME_INPUT:      229     // indicates an IME input session
-
-/* enable when needed
-        MOZ_HASH:       163,    // Hash sign in Firefox, German keyboard (otherwise: 191 SLASH)
-        MOZ_PLUS:       171,    // Plus sign in Firefox, German keyboard (otherwise: 187 EQUAL_SIGN)
-        MOZ_DASH:       173,    // Dash sign in Firefox (otherwise: 189 DASH)
-
-        SEMICOLON:      186,    // (but Firefox: 59 MOZ_SEMICOLON)
-        EQUAL_SIGN:     187,    // (but Firefox: 61 MOZ_EQUAL_SIGN)
-        COMMA:          188,
-        DASH:           189,    // (but Firefox: 173 MOZ_DASH)
-        PERIOD:         190,
-        SLASH:          191,
-        GRAVE:          192,
-        OPEN_BRACKET:   219,
-        BACKSLASH:      220,
-        CLOSE_BRACKET:  221,
-        APOSTROPH:      222,
-        OPEN_ANGLE:     226     // Open angle, German keyboard (but Firefox: 60 MOZ_OPEN_ANGLE)
-*/
+    Utils.isGlobalTimerRunning = function () {
+        return globalTimer !== null;
     };
 
     // console output =========================================================
@@ -2469,7 +2923,71 @@ define.async('io.ox/office/tk/utils',
 
     } : $.noop;
 
+    /**
+     * Executes the passed callback function and writes a message to the
+     * browser console containing the execution time of the callback.
+     *
+     * @param {String} message
+     *  The message that will be printed to the browser console. The execution
+     *  time will be appended to that message.
+     *
+     * @param {Function} callback
+     *  The callback function to be executed.
+     *
+     * @param {Object} [context]
+     *  The context to be bound to the callback function.
+     */
+    Utils.takeTime = (function () {
+        var indent = '', INDENT_PIECE = '\xa0 ';
+        return function (message, callback, context) {
+            var t0 = _.now();
+            try {
+                Utils.log(indent + '=> ' + message);
+                indent += INDENT_PIECE;
+                return callback.call(context);
+            } finally {
+                indent = indent.substring(INDENT_PIECE.length);
+                Utils.log(indent + '<= ' + (_.now() - t0) + 'ms');
+            }
+        };
+    }());
+
     // global initialization ==================================================
+
+    // forward console output into a fixed DOM node
+/*
+    (function () {
+        var ICONS = { info: 'icon-info-sign', warn: 'icon-warning-sign', error: 'icon-remove-sign' },
+            consoleNode = $('<div>', { id: 'io-ox-office-console' }).addClass('noI18n').appendTo('body'),
+            outputNode = $('<div>').addClass('output').appendTo(consoleNode),
+            clearButton = $('<button>').text('Clear').appendTo(consoleNode);
+        clearButton.on('click', function () { outputNode.empty(); return false; });
+        consoleNode.on('click', function () { consoleNode.toggleClass('collapsed'); });
+        _(['log', 'info', 'warn', 'error']).each(function (methodName) {
+            var origMethod = _.bind(window.console[methodName], window.console);
+            window.console[methodName] = function (msg) {
+                outputNode.append($('<p>').addClass(methodName).append(
+                    (methodName in ICONS) ? Utils.createIcon(ICONS[methodName]) : $(),
+                    $('<span>').text(msg)));
+                outputNode.scrollTop(outputNode[0].scrollHeight);
+                return origMethod(msg);
+            };
+        });
+    }());
+*/
+
+    // global focus log
+/*
+    (function () {
+        function getNodeName(node) {
+            var id = node.id || '', classes = node.className || '';
+            return node.nodeName + (id ? ('#' + id) : '') + (classes ? ('.' + classes.replace(/ +/g, '.')) : '');
+        }
+        $(document).on('focusin focusout', function (event) {
+            Utils.log(event.type + ': ' + getNodeName(event.target));
+        });
+    }());
+*/
 
     // deferred initialization of class members according to current language
     gettext.language.done(function (language) {

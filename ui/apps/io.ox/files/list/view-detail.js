@@ -43,10 +43,15 @@ define('io.ox/files/list/view-detail',
         index: 200,
         draw: function (baton) {
             this.append(
-                $('<div>').addClass('title clear-title')
+                $('<div tabindex="1">').addClass('title clear-title')
                 .text(gt.noI18n(baton.data.filename || baton.data.title || '\u00A0'))
                 .on('dblclick', function () {
                     actionPerformer.invoke('io.ox/files/actions/rename', null, baton);
+                })
+                .on('keydown', function (e) {
+                    if ((e.keyCode || e.which) === 13) { // enter
+                        actionPerformer.invoke('io.ox/files/actions/rename', null, baton);
+                    }
                 })
             );
         }
@@ -89,7 +94,8 @@ define('io.ox/files/list/view-detail',
                 size: file.file_size,
                 dataURL: filesAPI.getUrl(file, 'bare'),
                 version: file.version,
-                id: file.id
+                id: file.id,
+                folder_id: file.folder_id
             };
         }
 
@@ -108,7 +114,7 @@ define('io.ox/files/list/view-detail',
 
                 function fnDrawPreview() {
                     var width = $previewNode.innerWidth();
-                    if (width > lastWidth) {
+                    if (width !== lastWidth) {
                         $previewNode.empty();
                         lastWidth = width; // Must only recalculate once we get bigger
                         var prev = new preview.Preview(parseArguments(baton.data), { width: width, height: 'auto'});
@@ -174,7 +180,7 @@ define('io.ox/files/list/view-detail',
         id: 'upload',
         index: 600,
         draw: function (baton) {
-            if (!ox.uploadsEnabled) return;
+            if (baton.openedBy === 'io.ox/mail/write') return;//no uploads in mail preview
             var self = this, file = baton.data;
 
             var $node,
@@ -192,11 +198,12 @@ define('io.ox/files/list/view-detail',
                     $('<div class="pull-left">').append(
                         $input
                     ),
-                    $uploadButton = $('<button class="uploadbutton">', { 'data-action': 'upload' }).addClass('btn btn-primary pull-right').text(gt('Upload file')),
+                    $uploadButton = $('<button type="button" data-action="upload" tabindex="1">')
+                        .addClass('uploadbutton btn btn-primary pull-right').text(gt('Upload file')),
                     $('<div>').addClass('comment').append(
                         $comment = $('<div class="row-fluid">').append(
                             $('<label>').text(gt('Version Comment')),
-                            $commentArea = $('<textarea rows="5"></textarea>')
+                            $commentArea = $('<textarea rows="5" tabindex="1"></textarea>')
                         ).hide()
                     )
                 )
@@ -216,14 +223,8 @@ define('io.ox/files/list/view-detail',
 
             var uploadFailed = function (e) {
                 require(['io.ox/core/notifications']).pipe(function (notifications) {
-                    if (e && e.code && (e.code === 'UPL-0005' || e.code === 'IFO-1700')) {
-                        notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
-                    }
-                    else if (e && e.code && e.code === 'FLS-0024') {
-                        notifications.yell('error', gt('The allowed quota is reached.'));
-                    }
-                    else {
-                        notifications.yell('error', gt('This file has not been added'));
+                    if (e && e.data && e.data.custom) {
+                        notifications.yell(e.data.custom.type, e.data.custom.text);
                     }
                 });
                 resetCommentArea();
@@ -283,7 +284,7 @@ define('io.ox/files/list/view-detail',
         index: 700,
         draw: function (baton, detailView, allVersions) {
 
-            var $content;
+            var $content, openedBy = baton.openedBy;
 
             function drawAllVersions(allVersions) {
                 _.chain(allVersions)
@@ -299,7 +300,7 @@ define('io.ox/files/list/view-detail',
                             );
 
 
-                    var baton = ext.Baton({ data: version });
+                    var baton = ext.Baton({ data: version, openedBy: openedBy});
                     baton.isCurrent = version.id === baton.data.current_version;
                     ext.point(POINT + '/version').invoke('draw', $entryRow, baton);
                     $content.append($entryRow);
@@ -326,7 +327,7 @@ define('io.ox/files/list/view-detail',
                 }
 
                 var $historyDefaultLabel = gt('Show version history') + ' (' + baton.data.number_of_versions + ')',
-                    $historyButton = $('<a>', { 'data-action': 'history', 'href': '#' }).addClass('noI18n').text($historyDefaultLabel)
+                    $historyButton = $('<a>', { 'data-action': 'history', 'href': '#', tabindex: 1 }).addClass('noI18n').text($historyDefaultLabel)
                         .on('click', function (e) {
                         e.preventDefault();
                         if ($content.is(':hidden')) {
@@ -390,16 +391,16 @@ define('io.ox/files/list/view-detail',
         id: 'created_by',
         index: 40,
         draw: function (baton) {
-            this.find('td:last').append($('<span class="pull-right createdby">').append(userAPI.getLink(baton.data.created_by)));
+            this.find('td:last').append($('<span class="pull-right createdby">').append(userAPI.getLink(baton.data.created_by).attr('tabindex', 1)));
         }
     });
 
     ext.point(POINT + '/version').extend({
-        id: 'creation_date',
+        id: 'last_modified',
         index: 30,
         draw: function (baton) {
-            var d = new date.Local(baton.data.creation_date);
-            this.find('td:last').append($('<span class="pull-right creationdate">').text(gt.noI18n(d.format(date.DATE_TIME))));
+            var d = new date.Local(baton.data.last_modified);
+            this.find('td:last').append($('<span class="pull-right last_modified">').text(gt.noI18n(d.format(date.DATE_TIME))));
         }
     });
 
@@ -414,11 +415,16 @@ define('io.ox/files/list/view-detail',
     });
 
     var draw = function (baton, app) {
+
         if (!baton) return $('<div>');
+
         baton = ext.Baton.ensure(baton);
 
-        var node = $.createViewContainer(baton.data, filesAPI);
+        if (app) { //save the appname so the extensions know what opened them (to disable some options for example)
+            baton.openedBy = app.getName();
+        }
 
+        var node = $.createViewContainer(baton.data, filesAPI);
         node.on('redraw', createRedraw(node)).addClass('file-details view');
         ext.point(POINT).invoke('draw', node, baton, app);
 
@@ -427,7 +433,9 @@ define('io.ox/files/list/view-detail',
 
     var createRedraw = function (node) {
         return function (e, data) {
-            node.replaceWith(draw(data));
+            var replacement = draw(data);
+            if ('former_id' in data) replacement.attr('former-id', data.former_id);
+            node.replaceWith(replacement);
         };
     };
 

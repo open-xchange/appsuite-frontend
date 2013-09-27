@@ -122,6 +122,7 @@
             left: 0;
             right: 0;
             bottom: 0;
+            outline: 0;
 
             .week-container-label {
 
@@ -185,9 +186,11 @@
         float: left;
         border-left: 1px solid #ccc;
         background-color: rgba(0, 0, 0, 0.01);
+        .user-select(none);
 
         .timeslot {
 
+            -webkit-touch-callout: none !important;
             border-bottom: 1px solid #ccc;
             height: 24px;
 
@@ -236,11 +239,12 @@
         }
 
         &.border {
-            border: 1px solid rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        &.current {
-            z-index: 9 !important;
+        &.current, &.hover {
+            z-index: 999 !important;
+            .transition(background-color 0.4s);
         }
 
         &.lasso {
@@ -259,6 +263,7 @@
         }
 
         .appointment-content {
+
             height: 100%;
             font-size: 12px;
             color: #fff;
@@ -317,7 +322,7 @@
     }
 
     /* Mobile */
-    @media all and (max-width: 480px) {
+    @media all and (max-width: 480px), all and (max-device-width: 480px)  {
 
         .week-view-container {
 

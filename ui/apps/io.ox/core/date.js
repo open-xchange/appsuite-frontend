@@ -13,8 +13,9 @@
 
 define.async('io.ox/core/date',
     ['io.ox/core/gettext',
-     'io.ox/core/config',
-     'gettext!io.ox/core'], function (gettext, config, gt) {
+     'settings!io.ox/core/settingOptions',
+     'settings!io.ox/core',
+     'gettext!io.ox/core'], function (gettext, settingOptions, settings, gt) {
 
     /*jshint white:false */
 
@@ -22,7 +23,7 @@ define.async('io.ox/core/date',
 
     var dateTimeFormats = ['', 'E', 'yMd', 'yMEd', 'Hm', 'yMEdHm', 'yMdHm',
                            'yMEdHm', 'v', 'yMEdHmv', 'yMdHmv', 'yMEdHmv', 'Hmv',
-                           'yMEdHmv', 'yMdHmv', 'yMEdHmv'];
+                           'yMEdHmv', 'yMdHmv', 'yMEdHmv', 'Md'];
 
     var AVG_YEAR = 31556952000; // average ms / year
 
@@ -48,6 +49,7 @@ define.async('io.ox/core/date',
         TIME_TIMEZONE:       12,
         DATE_TIME_TIMEZONE:  14,
         FULL_DATE:           15,
+        DATE_NOYEAR:         16,
 
         getFormat: function (format) {
             format = format || api.DATE_TIME;
@@ -391,12 +393,14 @@ define.async('io.ox/core/date',
         Y: function(n) {
             return function (s, d) {
                 d.wcentury = n === 2 && s.match(/^\d\d$/);
+                d.wyStr = s.length;
                 d.wy = Number(s);
             };
         },
         y: function (n) {
             return function (s, d) {
                 d.century = n === 2 && s.match(/^\d\d$/);
+                d.yStr = s.length;
                 d.y = Number(s);
             };
         },
@@ -440,19 +444,21 @@ define.async('io.ox/core/date',
         {
             return null;
         }
-        function adjustYear(year, isCentury) {
-            if (isCentury) {
-                year = Number(year) + century;
-                var date = new D(year - 20, d.m, d.d, d.h, d.min, d.s, d.ms);
-                if (date.getTime() > threshold.getTime()) year -= 100;
+        function adjustYear(year, strLen) {
+            year = Number(year);
+            var yL = year.toString().length;
+            if (yL <= 2 && yL === strLen) {
+                year += century;
             }
+            // var date = new D(year - 20, d.m, d.d, d.h, d.min, d.s, d.ms);
+            // if (date.getTime() > threshold.getTime()) year -= 100;
             if (d.bc) year = 1 - year;
             return year;
         }
-        d.y = adjustYear(d.y);
+        d.y = adjustYear(d.y, d.yStr);
         var date = new D(0);
         if ("wy" in d) {
-            d.wy = adjustYear(d.wy);
+            d.wy = adjustYear(d.wy, d.wyStr);
             date.setYear(d.wy);
             var jan1st = date.getDays(), start = getWeekStart(date);
             if (7 - (jan1st - start) < api.locale.daysInFirstWeek) start += 7;
@@ -935,6 +941,7 @@ define.async('io.ox/core/date',
             var fields = {}, match;
             regex.lastIndex = 0;
             while ((match = regex.exec(format))) {
+                if (!match[1]) continue;
                 var letter = match[1].charAt(0);
                 if (fields[letter]) break;
                 fields[letter] = true;
@@ -953,7 +960,7 @@ define.async('io.ox/core/date',
             .pipe(parseTZInfo)
             .pipe(function (D) {
                 D.id = name;
-                D.displayName = config.get(['availableTimeZones', name], name);
+                D.displayName = settingOptions.get(['availableTimeZones', name], name);
                 return D;
             });
     });
@@ -971,14 +978,14 @@ define.async('io.ox/core/date',
     });
 
     // TODO: get default from local clock
-    return config.load().then(function () {
-        return $.when(
-            api.getTimeZone(config.get('timezone', 'UTC'))
-                .then(null, function () { return api.getTimeZone('UTC'); }),
-            locale
-        ).then(function (tz) {
-            api.Local = tz;
-            return api;
-        });
+    return $.when(
+        api.getTimeZone('UTC'),
+        api.getTimeZone(settings.get('timezone', 'UTC'))
+            .then(null, function () { return api.getTimeZone('UTC'); }),
+        locale
+    ).then(function (utc, tz) {
+        api.UTC = utc;
+        api.Local = tz;
+        return api;
     });
 });

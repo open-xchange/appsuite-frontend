@@ -11,15 +11,18 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
-                                          'io.ox/core/pubsub/model',
-                                          'io.ox/core/extensions',
-                                          'io.ox/backbone/forms',
-                                          'io.ox/core/api/pubsub',
-                                          'io.ox/core/api/templating',
-                                          'io.ox/core/notifications',
-                                          'io.ox/core/tk/dialogs',
-                                          'less!io.ox/core/pubsub/style.less'], function (gt, pubsub, ext, forms, api, templApi, notifications, dialogs)  {
+define('io.ox/core/pubsub/publications',
+    ['io.ox/core/pubsub/model',
+     'io.ox/core/extensions',
+     'io.ox/backbone/forms',
+     'io.ox/core/api/pubsub',
+     'io.ox/core/api/templating',
+     'io.ox/core/api/folder',
+     'io.ox/core/notifications',
+     'io.ox/core/tk/dialogs',
+     'settings!io.ox/core',
+     'gettext!io.ox/core/pubsub',
+     'less!io.ox/core/pubsub/style.less'], function (pubsub, ext, forms, api, templAPI, folderAPI, notifications, dialogs, settings, gt)  {
 
     'use strict';
 
@@ -87,14 +90,14 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
         render: function () {
             var self = this;
             //build popup
-            var popup = new dialogs.ModalDialog({ async: true, easyOut: true })
-                .addPrimaryButton('publish', gt('Publish'))
+            var popup = new dialogs.ModalDialog({ async: true })
+                .addPrimaryButton('publish', gt('Share'))
                 .addButton('cancel', gt('Cancel'));
             //Header
             if (self.model.attributes.entity.folder) {
-                popup.getHeader().append($('<h4>').text(gt('Publish folder')));
+                popup.getHeader().append($('<h4>').text(gt('Share this folder')));
             } else {
-                popup.getHeader().append($('<h4>').text(gt('Publish item')));
+                popup.getHeader().append($('<h4>').text(gt('Share this file')));
             }
             //Body
             popup.getBody().addClass('form-horizontal publication-dialog max-height-250');
@@ -102,14 +105,27 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
             var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, templates: [], popup: popup, target: self.model.attributes[self.model.attributes.target]});
 
             popup.on('publish', function (action) {
+
                 self.model.save().done(function (id) {
-                    notifications.yell('success', gt("Publication has been added"));
 
                     //set id, if none is present (new model)
                     if (!self.model.id) { self.model.id = id; }
 
                     self.model.fetch().done(function (model, collection) {
-                        var publications = pubsub.publications();
+
+                        var publications = pubsub.publications(),
+                            pubUrl = model[model.target].url;
+
+                        notifications.yell({
+                            type: 'success',
+                            html: true,
+                            message: gt(
+                                'The publication has been made available as %s',
+                                '<a href="' + pubUrl + '" target="_blank">' + pubUrl + '</a>'
+                            ),
+                            duration: 10000
+                        });
+
                         //update the model-(collection)
                         publications.add(model, {merge: true});
                         if (self.model.get('invite')) {
@@ -123,15 +139,15 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                             // close popup now
                             popup.close();
                         }
+                        folderAPI.reload(baton.model.get('entity').folder);
                     });
-                }).fail(function (error) {
+                })
+                .fail(function (error) {
                     popup.idle();
                     if (!self.model.valid) {
                         if (!error.model) {//backend Error
-                            if (error.error_params[0].indexOf('PUB-0006') === 0) {
+                            if (error.code === 'PUB-0006') {
                                 popup.getBody().find('.siteName-control').addClass('error').find('.help-inline').text(gt('Name already taken'));
-                            } else {
-                                notifications.yell('error', _.noI18n(error.error));
                             }
                         } else {//validation gone wrong
                             //must be namefield empty because other fields are correctly filled by default
@@ -140,14 +156,31 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                     }
                 });
             });
+
+            function show() {
+                // show popup
+                popup.show(function () {
+                    popup.getBody().find('input:text, input:checkbox').first().focus();
+                });
+            }
+
             if (!this.infostoreItem) {
-                templApi.getNames().done(function (data) {//get the templates if needed
+                templAPI.getNames().done(function (data) {//get the templates if needed
                     baton.templates = data;
                     ext.point('io.ox/core/pubsub/publications/dialog').invoke('draw', popup.getBody(), baton);
-                    //go
-                    popup.show(function () {
-                        popup.getBody().find('input[type="text"]').focus();
-                    });
+                    // get folder first to have its name
+                    folderAPI.get({ folder: baton.model.get('entity').folder }).then(
+                        function success(data) {
+                            var target = baton.model.get('target'),
+                                description = baton.model.get(target);
+                            description.siteName = data.title;
+                            popup.getBody().find('.siteName-value').val(data.title);
+                            show();
+                        },
+                        function fail() {
+                            show();
+                        }
+                    );
                 });
             } else {
                 ext.point('io.ox/core/pubsub/publications/dialog').each(function (extension) {
@@ -155,10 +188,9 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                         extension.invoke('draw', popup.getBody(), baton);
                     }
                 });
-                //go
-                popup.show();
+                // go!
+                show();
             }
-
         }
     });
 
@@ -180,8 +212,6 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                                         control.removeClass('error');
                                         control.find('.help-inline').text('');
                                     }
-                                    //make input lowercase and save to model
-                                    node.val(node.val().toLowerCase());
                                     baton.target.siteName = node.val();
                                 }),
                              $('<span>').addClass('help-inline'))));
@@ -231,26 +261,27 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
         }
     });
 
+    function cipherChange(e) {
+        e.data.baton.target['protected'] = $(this).prop('checked');
+    }
+
     ext.point('io.ox/core/pubsub/publications/dialog').extend({
         id: 'cypher',
         index: 300,
         draw: function (baton) {
-            var node;
-            this.append($('<div>').addClass('control-group').append(
-                    $('<div>').addClass('controls checkboxes').append(
-                            $('<label>').addClass('checkbox').text(gt('Add cipher code')).append(
-                            node = $('<input>').attr('type', 'checkbox').addClass('cypher-checkbox').on('change', function () {
-                                if (node.attr('checked') === 'checked') {
-                                    baton.target['protected'] = true;
-                                } else {
-                                    baton.target['protected'] = false;
-                                }
-                            }))))
-                    );
-            if (baton.target['protected'] === true) {
-                node.attr('checked', 'checked');
-            } else {
-                node.attr('checked', 'unchecked');
+            // end-users don't understand this, so this becomes optional
+            if (settings.get('features/publicationCipherCode', false)) {
+                this.append(
+                    $('<div class="control-group">').append(
+                        $('<div class="controls checkboxes">').append(
+                            $('<label class="checkbox">').text(gt('Add cipher code')).append(
+                                $('<input type="checkbox" class="cypher-checkbox">')
+                                .prop('checked', baton.target['protected'] === true)
+                                .on('change', { baton: baton }, cipherChange)
+                            )
+                        )
+                    )
+                );
             }
         }
     });
@@ -286,7 +317,6 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
         return require(['io.ox/mail/write/main', 'io.ox/contacts/util', 'io.ox/core/api/user']).then(function (m, util, userAPI) {
                 userAPI.getCurrentUser().then(function (user) {
                     //predefined data for mail
-                    console.log(baton);
                     var url = baton.target.url,
                         text = gt('Hi!<br><br>%1$s shares a publication with you:<br>%2$s', util.getMailFullName(user.toJSON()), '<a href="' + url + '">' + url + '</a>'),
                         textplain = gt('Hi!<br><br>%1$s shares a publication with you:<br>%2$s', util.getMailFullName(user.toJSON()), url),
@@ -319,14 +349,22 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
         draw: function (baton) {
             var node;
             if (baton.view.editMode) {
-                this.append($('<div>').addClass('control-group').append(
-                            $('<div>').addClass('controls').append(
-                            $('<button>').addClass('email-btn btn').text(gt('Share Link by E-mail')).on('click', function () {
-                                sendInvitation(baton);
-                            }))),
-                            $('<br>'));
+                this.append(
+                    $('<div>').addClass('control-group').append(
+                        $('<div>').addClass('controls').append(
+                        $('<button type="button" class="email-btn btn">')
+                            .text(gt('Share link by email'))
+                            .on('click', function () {
+                                sendInvitation(baton).always(function () {
+                                    baton.popup.close();
+                                });
+                            })
+                        )
+                    ),
+                    $('<br>')
+                );
             } else {
-                var temp = $('<label>').addClass('checkbox').text(gt('Share Link by E-mail')).append(
+                var temp = $('<label>').addClass('checkbox').text(gt('Share link by email')).append(
                                node = $('<input>').attr('type', 'checkbox').addClass('invite-checkbox').on('change', function () {
                                     if (node.attr('checked') === 'checked') {
                                         baton.model.attributes.invite = true;
@@ -352,16 +390,16 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
         draw: function (baton) {
             var fullNode = $('<div>').addClass('alert alert-info').append($('<b>').addClass('warning-label').text(gt('Attention')),
                         $('<div>').addClass('warning-text').text(
-                            gt('The published data will be accessible to everyone on the Internet. Please consider, which data you want to publish.')),
+                            gt('The shared data will be accessible to everyone on the Internet. Please consider, which data you want to share.')),
                         $('<br>'),
                         $('<b>').addClass('privacy-label').text(gt('Privacy Notice')),
                         $('<div>').addClass('privacy-text').text(
-                            gt('When using this publish feature, you as the current owner of the data are responsible for being careful with privacy rules and for complying with legal obligations (Copyright, Privacy Laws). ' +
-                               'Especially when publishing personal data you are the responsible party according to the Federal Data Protection Act (BDSG, Germany) or other Privacy Acts of your country. ' +
+                            gt('When using this feature, you as the current owner of the data are responsible for being careful with privacy rules and for complying with legal obligations (Copyright, Privacy Laws). ' +
+                               'Especially when sharing personal data you are the responsible party according to the Federal Data Protection Act (BDSG, Germany) or other Privacy Acts of your country. ' +
                                'According to European and other national regulations you as the responsible party are in charge of data economy, and must not publish or forward personal data without the person\'s consent. ' +
                                'Beyond legal obligations, we would like to encourage extreme care when dealing with personal data. Please consider carefully where you store and to whom you forward personal data. Please ensure appropriate access protection, e.g. by proper password protection.')));
 
-            var link = $('<div>').css('cursor', 'pointer').addClass('control-group').append($('<a>').addClass('controls').text(gt('Show legal information')).on('click', function (e) {
+            var link = $('<div>').css('cursor', 'pointer').addClass('control-group').append($('<a href="#">').addClass('controls').text(gt('Show legal information')).on('click', function (e) {
                     e.preventDefault();
                     link.replaceWith(fullNode);
                 }));

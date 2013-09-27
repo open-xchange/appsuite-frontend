@@ -13,17 +13,50 @@
 
 define('io.ox/office/framework/view/baseview',
     ['io.ox/core/event',
+     'io.ox/core/notifications',
      'io.ox/office/tk/utils',
+     'io.ox/office/tk/keycodes',
      'io.ox/office/framework/view/pane',
      'gettext!io.ox/office/main',
+     'io.ox/office/framework/view/nodetracking',
      'less!io.ox/office/framework/view/basestyle.less',
      'less!io.ox/office/framework/view/docs-icons.less'
-    ], function (Events, Utils, Pane, gt) {
+    ], function (Events, Notifications, Utils, KeyCodes, Pane, gt) {
 
     'use strict';
 
     var // the global root element used to store DOM elements temporarily
-        tempStorageNode = $('<div>', { id: 'io-ox-office-temp' }).appendTo('body');
+        tempStorageNode = $('<div>', { id: 'io-ox-office-temp' }).appendTo('body'),
+
+        // a helper node to workaround selection problems in IE (bug 28515, bug 28711)
+        focusHelperNode = $('<div>', { contenteditable: true }).appendTo(tempStorageNode);
+
+    // global functions =======================================================
+
+    /**
+     * Converts the passed number or object to a complete margin descriptor
+     * with the properties 'left', 'right', 'top', and 'bottom'.
+     *
+     * @param {Number|Object} margin
+     *  The margins, as number (for all margins) or as object with the optional
+     *  properties 'left', 'right', 'top', and 'bottom'. Missing properties
+     *  default to the value zero.
+     *
+     * @returns {Object}
+     *  The margins (in pixels), in the properties 'left', 'right', 'top', and
+     *  'bottom'.
+     */
+    function getMarginFromValue(margin) {
+
+        if (_.isObject(margin)) {
+            return _({ left: 0, right: 0, top: 0, bottom: 0 }).extend(margin);
+        }
+
+        if (!_.isNumber(margin)) {
+            margin = 0;
+        }
+        return { left: margin, right: margin, top: margin, bottom: margin };
+    }
 
     // class BaseView =========================================================
 
@@ -31,6 +64,14 @@ define('io.ox/office/framework/view/baseview',
      * Base class for the view instance of an office application. Creates the
      * application window, and provides functionality to create and control the
      * top, bottom, and side pane elements.
+     *
+     * Triggers the following events:
+     * - 'refresh:layout': After this view instance has refreshed the layout of
+     *      all registered view panes. This event will be triggered after
+     *      inserting new view panes into this view, or content nodes into the
+     *      application pane, after showing/hiding view panes, while and after
+     *      the browser window is resized, and when the method
+     *      BaseView.refreshPaneLayout() has been called manually.
      *
      * @constructor
      *
@@ -53,15 +94,31 @@ define('io.ox/office/framework/view/baseview',
      *      into the application pane. Used in the method BaseView.grabFocus()
      *      of this class. If omitted, the application pane itself will be
      *      focused.
-     *  @param {Boolean} [options.scrollable=false]
-     *      If set to true, the application pane will be scrollable, and the
-     *      application container node becomes resizeable. By default, the size
-     *      of the application container node is locked and synchronized with
-     *      the size of the application pane (with regard to padding, see the
-     *      option 'options.appPanePadding').
-     *  @param {String} [options.margin='0']
-     *      The margin between the fixed application pane and the embedded
-     *      application container node, as CSS 'margin' attribute.
+     *  @param {Boolean} [options.contentFocusable=false]
+     *      If set to true, the container node for the document contents will
+     *      be focusable and will be registered for global focus traversal with
+     *      the F6 key.
+     *  @param {Boolean} [options.contentScrollable=false]
+     *      If set to true, the container node for the document contents will
+     *      be scrollable. By default, the size of the container node is locked
+     *      and synchronized with the size of the application pane (with regard
+     *      to content margins, see the option 'options.contentMargin' for
+     *      details).
+     *  @param {Number|Object} [options.contentMargin=0]
+     *      The margins between the fixed application pane and the embedded
+     *      application container node, in pixels. If set to a number, all
+     *      margins will be set to the specified value. Otherwise, an object
+     *      with the optional properties 'left', 'right', 'top', and 'bottom'
+     *      for specific margins for each border. Missing properties default to
+     *      the value zero. The content margin can also be modified at runtime
+     *      with the method BaseView.setContentMargin().
+     *  @param {Number|Object} [options.overlayMargin=0]
+     *      The margins between the overlay panes and the inner borders of the
+     *      application pane, in pixels. If set to a number, all margins will
+     *      be set to the specified value. Otherwise, an object with the
+     *      optional properties 'left', 'right', 'top', and 'bottom' for
+     *      specific margins for each border. Missing properties default to the
+     *      value zero.
      */
     function BaseView(app, options) {
 
@@ -77,11 +134,17 @@ define('io.ox/office/framework/view/baseview',
             // centered application pane
             appPane = null,
 
-            // root application container node
-            appContainerNode = $('<div>').addClass('app-container'),
+            // root container node for invisible document contents
+            hiddenRootNode = $('<div>').addClass('abs app-hidden-root'),
+
+            // root container node for visible document contents (may be scrollable)
+            contentRootNode = $('<div>').addClass('abs app-content-root'),
+
+            // container node for application contents
+            appContentNode = $('<div>').addClass('app-content').appendTo(contentRootNode),
 
             // busy node for the application pane
-            appBusyNode = $('<div>').addClass('abs'),
+            appBusyNode = $('<div>').addClass('abs app-busy'),
 
             // all fixed view panes, in insertion order
             fixedPanes = [],
@@ -92,14 +155,26 @@ define('io.ox/office/framework/view/baseview',
             // inner shadows for application pane
             shadowNodes = {},
 
-            // alert banner currently shown
-            currentAlert = null,
+            // whether refreshing the pane layout is currently locked
+            layoutLocks = 0,
 
             // the temporary container for all nodes while application is hidden
             tempNode = $('<div>').addClass(windowNodeClasses).appendTo(tempStorageNode),
 
+            // margins of overlay panes to the borders of the application pane
+            overlayMargin = getMarginFromValue(Utils.getOption(options, 'overlayMargin', 0)),
+
+            // whether the content root node is focusable by itself
+            contentFocusable = Utils.getBooleanOption(options, 'contentFocusable', false),
+
             // whether the application is hidden explicitly
-            viewHidden = false;
+            viewHidden = false,
+
+            // cached notification, shown when application becomes visible
+            lastNotification = null,
+
+            // the timer waiting to fade in the blocker element in busy mode
+            blockerFadeTimer = null;
 
         // base constructor ---------------------------------------------------
 
@@ -116,9 +191,7 @@ define('io.ox/office/framework/view/baseview',
             var // the root node of the application pane
                 appPaneNode = appPane.getNode(),
                 // current offsets representing available space in the application window
-                offsets = { top: 0, bottom: 0, left: 0, right: 0 },
-                // margin for the alert banner, to keep a maximum width
-                alertMargin = 0;
+                offsets = { top: 0, bottom: 0, left: 0, right: 0 };
 
             function updatePane(pane) {
 
@@ -155,8 +228,8 @@ define('io.ox/office/framework/view/baseview',
                 }
             }
 
-            // do nothing if the window is hidden
-            if (!app.getWindow().state.visible) { return; }
+            // do nothing if refreshing is currently locked, or the window is hidden, or import still running
+            if ((layoutLocks > 0) || !self.isVisible() || !app.isImportFinished()) { return; }
 
             // update fixed view panes
             _(fixedPanes).each(updatePane);
@@ -168,28 +241,35 @@ define('io.ox/office/framework/view/baseview',
             shadowNodes.left.css({ top: offsets.top, bottom: offsets.bottom, left: offsets.left - 10, width: 10 });
             shadowNodes.right.css({ top: offsets.top, bottom: offsets.bottom, right: offsets.right - 10, width: 10 });
 
-            // skip scroll bars of application pane for overlay panes
-            if (/^(scroll|auto)$/.test(appPaneNode.css('overflow-x'))) {
-                offsets.right += Utils.SCROLLBAR_WIDTH;
-            }
-            if (/^(scroll|auto)$/.test(appPaneNode.css('overflow-y'))) {
-                offsets.bottom += Utils.SCROLLBAR_HEIGHT;
-            }
-
-            // update alert banner
-            if (_.isObject(currentAlert)) {
-                if (app.getWindowNode().width() <= 640) {
-                    alertMargin = Math.max((app.getWindowNode().width() - 500) / 2, 10);
-                    // TODO: get size of existing overlay panes at top border
-                    currentAlert.css({ top: offsets.top + 56, left: alertMargin, right: alertMargin });
-                } else {
-                    alertMargin = Math.max((appPaneNode.width() - 500) / 2, 10);
-                    currentAlert.css({ top: offsets.top + 10, left: offsets.left + alertMargin, right: offsets.right + alertMargin });
-                }
-            }
+            // skip margins for overlay panes
+            _(offsets).each(function (offset, pos) { offsets[pos] += overlayMargin[pos]; });
 
             // update overlay view panes
             _(overlayPanes).each(updatePane);
+
+            // notify listeners
+            self.trigger('refresh:layout');
+        }
+
+        /**
+         * Shows the specified notification message. If the message is of type
+         * 'error', the message will be stored internally and automatically
+         * shown again, after the application has been hidden and shown.
+         *
+         * @param {Object} notification
+         *  The notification message data. Supports all options also supported
+         *  by the static method 'Notifications.yell()'.
+         */
+        function showNotification(notification) {
+            if (notification.type === 'error') {
+                // Bug 28554: no auto-close for error messages
+                _.extend(notification, { duration: -1 });
+                // remember error message, show again after switching applications
+                lastNotification = notification;
+            } else {
+                lastNotification = null;
+            }
+            Notifications.yell(notification);
         }
 
         /**
@@ -198,16 +278,20 @@ define('io.ox/office/framework/view/baseview',
         function windowShowHandler() {
 
             // do not show the window contents if view is still hidden explicitly
-            if (viewHidden) { return; }
+            if (viewHidden || (tempNode.children().length === 0)) { return; }
 
             // move all application nodes from temporary storage into view
             app.getWindowNode().append(tempNode.children());
-            refreshPaneLayout();
 
             // do not update GUI and grab focus while document is still being imported
             if (app.isImportFinished()) {
+                refreshPaneLayout();
                 app.getController().update();
                 self.grabFocus();
+                // show notification cached while view was hidden
+                if (lastNotification) {
+                    showNotification(lastNotification);
+                }
             }
         }
 
@@ -216,7 +300,9 @@ define('io.ox/office/framework/view/baseview',
          */
         function windowHideHandler() {
             // move all application nodes from view to temporary storage
-            tempNode.append(app.getWindowNode().children());
+            if (tempNode.children().length === 0) {
+                tempNode.append(app.getWindowNode().children());
+            }
         }
 
         // methods ------------------------------------------------------------
@@ -229,12 +315,27 @@ define('io.ox/office/framework/view/baseview',
          *  A reference to this instance.
          */
         this.grabFocus = function () {
-            if (_.isFunction(grabFocusHandler)) {
-                grabFocusHandler.call(this);
-            } else {
-                this.getAppPaneNode().focus();
+            if (this.isVisible()) {
+                if (_.isFunction(grabFocusHandler)) {
+                    grabFocusHandler.call(this);
+                } else if (contentFocusable) {
+                    contentRootNode.focus();
+                } else {
+                    this.getAppPaneNode().find('[tabindex]').first().focus();
+                }
             }
             return this;
+        };
+
+        /**
+         * Returns whether the contents of the view are currently visible.
+         *
+         * @returns {Boolean}
+         *  Whether the application is active, and the view has not been hidden
+         *  manually.
+         */
+        this.isVisible = function () {
+            return !viewHidden && app.getWindow().state.visible;
         };
 
         /**
@@ -305,24 +406,78 @@ define('io.ox/office/framework/view/baseview',
         };
 
         /**
-         * Detaches the application pane from the DOM.
+         * Detaches the document contents in the application pane from the DOM.
          *
          * @returns {BaseView}
          *  A reference to this instance.
          */
         this.detachAppPane = function () {
-            appContainerNode.detach();
+            appContentNode.detach();
             return this;
         };
 
         /**
-         * Attaches the application pane to the DOM.
+         * Attaches the document contents in the application pane to the DOM.
          *
          * @returns {BaseView}
          *  A reference to this instance.
          */
         this.attachAppPane = function () {
-            this.getAppPaneNode().prepend(appContainerNode);
+            contentRootNode.append(appContentNode);
+            return this;
+        };
+
+        /**
+         * Returns the root container node for the application contents. Note
+         * that this is NOT the direct parent node where applications insert
+         * their own contents, but the (optionally scrollable) root node
+         * containing the target container node for document contents. The
+         * method BaseView.insertContentNode() is intended to be used to insert
+         * own contents into the application pane.
+         *
+         * @returns {jQuery}
+         *  The DOM root node for visible document contents.
+         */
+        this.getContentRootNode = function () {
+            return contentRootNode;
+        };
+
+        /**
+         * Returns the current margins between the fixed application pane and
+         * the embedded application container node.
+         *
+         * @returns {Object}
+         *  The margins between the fixed application pane and the embedded
+         *  application container node (in pixels), in the properties 'left',
+         *  'right', 'top', and 'bottom'.
+         */
+        this.getContentMargin = function () {
+            return {
+                left: Utils.convertCssLength(appContentNode.css('margin-left'), 'px', 1),
+                right: Utils.convertCssLength(appContentNode.css('margin-right'), 'px', 1),
+                top: Utils.convertCssLength(appContentNode.css('margin-top'), 'px', 1),
+                bottom: Utils.convertCssLength(appContentNode.css('margin-bottom'), 'px', 1)
+            };
+        };
+
+        /**
+         * Changes the margin between the fixed application pane and the
+         * embedded application container node.
+         *
+         * @param {Number|Object} margin
+         *  The margins between the fixed application pane and the embedded
+         *  application container node, in pixels. If set to a number, all
+         *  margins will be set to the specified value. Otherwise, an object
+         *  with the optional properties 'left', 'right', 'top', and 'bottom'
+         *  for specific margins for each border. Missing properties default to
+         *  the value zero.
+         *
+         * @returns {BaseView}
+         *  A reference to this instance.
+         */
+        this.setContentMargin = function (margin) {
+            margin = getMarginFromValue(margin);
+            appContentNode.css('margin', margin.top + 'px ' + margin.right + 'px ' + margin.bottom + 'px ' + margin.left + 'px');
             return this;
         };
 
@@ -330,7 +485,7 @@ define('io.ox/office/framework/view/baseview',
          * Inserts new DOM nodes into the container node of the application
          * pane.
          *
-         * @param {HTMLElement|jQuery}
+         * @param {HTMLElement|jQuery} contentNode
          *  The DOM node(s) to be inserted into the application pane. If this
          *  object is a jQuery collection, inserts all contained DOM nodes into
          *  the application pane.
@@ -339,8 +494,47 @@ define('io.ox/office/framework/view/baseview',
          *  A reference to this instance.
          */
         this.insertContentNode = function (contentNode) {
-            appContainerNode.append(contentNode);
+            appContentNode.append(contentNode);
             return this.refreshPaneLayout();
+        };
+
+        /**
+         * Removes all DOM nodes from the container node of the application
+         * pane.
+         *
+         * @returns {BaseView}
+         *  A reference to this instance.
+         */
+        this.removeAllContentNodes = function () {
+            appContentNode.empty();
+            return this.refreshPaneLayout();
+        };
+
+        /**
+         * Returns the root container node for hidden application contents.
+         *
+         * @returns {jQuery}
+         *  The DOM root node for hidden document contents.
+         */
+        this.getHiddenRootNode = function () {
+            return hiddenRootNode;
+        };
+
+        /**
+         * Inserts new DOM nodes into the hidden container node of the
+         * application pane.
+         *
+         * @param {HTMLElement|jQuery} hiddenNode
+         *  The DOM node(s) to be inserted into the hidden container of the
+         *  application pane. If this object is a jQuery collection, inserts
+         *  all contained DOM nodes into the application pane.
+         *
+         * @returns {BaseView}
+         *  A reference to this instance.
+         */
+        this.insertHiddenNode = function (hiddenNode) {
+            hiddenRootNode.append(hiddenNode);
+            return this;
         };
 
         /**
@@ -372,26 +566,48 @@ define('io.ox/office/framework/view/baseview',
          */
         this.addPane = function (pane) {
 
-            var // callback to be executed after the pane node is inside the DOM
-                insertHandler = Utils.getFunctionOption(pane.getOptions(), 'insertHandler');
-
             // insert the pane
             (pane.isOverlay() ? overlayPanes : fixedPanes).push(pane);
             app.getWindowNode().append(pane.getNode());
 
-            // refresh overall layout, call insert handler
+            // refresh pane layout when the pane or its contents are changed
+            pane.on('pane:show pane:resize pane:layout', refreshPaneLayout);
             refreshPaneLayout();
-            if (_.isFunction(insertHandler)) {
-                insertHandler.call(pane);
-            }
 
             return this;
         };
 
         /**
          * Adjusts the positions of all view pane nodes.
+         *
+         * @returns {BaseView}
+         *  A reference to this instance.
          */
         this.refreshPaneLayout = function () {
+            refreshPaneLayout();
+            return this;
+        };
+
+        /**
+         * Prevents refreshing the pane layout while the specified callback
+         * function is running. After the callback function has finished, the
+         * pane layout will be adjusted once by calling the method
+         * BaseApplication.refreshPaneLayout().
+         *
+         * @param {Function} callback
+         *  The callback function that will be executed synchronously while
+         *  refreshing the pane layout is locked.
+         *
+         * @param {Object} [context]
+         *  The context bound to the callback function.
+         *
+         * @returns {BaseView}
+         *  A reference to this instance.
+         */
+        this.lockPaneLayout = function (callback, context) {
+            layoutLocks += 1;
+            callback.call(context);
+            layoutLocks -= 1;
             refreshPaneLayout();
             return this;
         };
@@ -400,39 +616,120 @@ define('io.ox/office/framework/view/baseview',
          * Sets the application into the busy state by displaying a window
          * blocker element covering the entire GUI of the application. The
          * contents of the header and footer in the blocker element are
-         * cleared, and the passed callback may insert new contents into these
-         * elements.
+         * cleared, and the passed initialization callback function may insert
+         * new contents into these elements.
          *
-         * @param {Function} [callback]
-         *  A function that can fill custom contents into the header and footer
-         *  of the window blocker element. Receives the following parameters:
-         *  (1) {jQuery} header
-         *      The header element above the centered progress bar.
-         *  (2) {jQuery} footer
-         *      The footer element below the centered progress bar.
-         *  (3) {jQuery} blocker
-         *      The entire window blocker element (containing the header,
-         *      footer, and progress bar elements).
-         *  Will be called in the context of this view instance.
+         * @param {Object} [options]
+         *  A map with additional options. The following options are supported:
+         *  @param {Boolean} [options.showFileName=false]
+         *      If set to true, the file name will be shown in the top-left
+         *      corner of the blocker element.
+         *  @param {Function} [options.initHandler]
+         *      A function that can fill custom contents into the header and
+         *      footer of the window blocker element. Receives the following
+         *      parameters:
+         *      (1) {jQuery} header
+         *          The header element above the centered progress bar.
+         *      (2) {jQuery} footer
+         *          The footer element below the centered progress bar.
+         *      (3) {jQuery} blocker
+         *          The entire window blocker element (containing the header,
+         *          footer, and progress bar elements).
+         *      Will be called in the context of this view instance.
+         *  @param {Function} [options.cancelHandler]
+         *      If specified, a 'Cancel' button will be shown after a short
+         *      delay. Pressing that button, or pressing the ESCAPE key, will
+         *      execute this callback function, and will leave the busy mode
+         *      afterwards. Will be called in the context of this view
+         *      instance.
+         *  @param {Number} [options.delay]
+         *      If set to a non-negative integer value, the busy blocker
+         *      element will be transparent initially, and will fade in after
+         *      the specified delay time in milliseconds. If omitted, the busy
+         *      blocker element will be shown immediately without fading in.
          *
          * @returns {BaseView}
          *  A reference to this instance.
          */
-        this.enterBusy = function (callback) {
+        this.enterBusy = function (options) {
+
+            // for safety against repeated calls: stops pending animations etc.
+            this.leaveBusy();
 
             // enter busy state, and extend the blocker element
             app.getWindow().busy(null, null, function () {
 
-                var // the window blocker element (bound to 'this')
-                    blocker = this;
+                var // the initialization handler
+                    initHandler = Utils.getFunctionOption(options, 'initHandler'),
+                    // the cancel handler
+                    cancelHandler = Utils.getFunctionOption(options, 'cancelHandler'),
+                    // the cancel handler
+                    delay = Utils.getIntegerOption(options, 'delay'),
+                    // the window blocker element (bound to 'this')
+                    blockerNode = this,
+                    // the header container node
+                    headerNode = blockerNode.find('.header').empty(),
+                    // the footer container node
+                    footerNode = blockerNode.find('.footer').empty(),
+                    // the container element with the button to cancel the busy mode
+                    cancelNode = null;
+
+                // keyboard event handler for busy mode (ESCAPE key)
+                function busyKeydownHandler(event) {
+                    if (event.keyCode === KeyCodes.ESCAPE) {
+                        cancelHandler.call(self);
+                        return false;
+                    }
+                }
 
                 // special marker for custom CSS formatting, clear header/footer
-                blocker.addClass('io-ox-office-blocker').find('.header, .footer').empty();
+                blockerNode.addClass('io-ox-office-blocker');
 
-                // execute callback
-                if (_.isFunction(callback)) {
-                    callback.call(self, blocker.find('.header'), blocker.find('.footer'), blocker);
+                // add file name to header area
+                if (Utils.getBooleanOption(options, 'showFileName', false)) {
+                    headerNode.append($('<div>').addClass('filename clear-title').text(_.noI18n(app.getFullFileName())));
                 }
+
+                // initialize 'Cancel' button (hide initially, show after a delay)
+                if (_.isFunction(cancelHandler)) {
+
+                    // create and insert the container node for the Cancel button
+                    cancelNode = $('<div>').addClass('cancel-node').hide().appendTo(footerNode);
+
+                    // create the Cancel button
+                    $.button({ label: gt('Cancel') })
+                        .addClass('btn-warning')
+                        .on('click', function () { cancelHandler.call(self); })
+                        .appendTo(cancelNode);
+
+                    // register a keyboard handler for the ESCAPE key
+                    app.getWindowNode().on('keydown', busyKeydownHandler);
+                    app.getWindow().one('idle', function () {
+                        app.getWindowNode().off('keydown', busyKeydownHandler);
+                    });
+
+                    // make the blocker focusable for keyboard input
+                    blockerNode.attr('tabindex', 0).focus();
+
+                    // show the Cancel button after a delay
+                    _.delay(function () { cancelNode.show().find('.btn').focus(); }, 5000);
+                }
+
+                // execute initialization handler
+                if (_.isFunction(initHandler)) {
+                    initHandler.call(self, headerNode, footerNode, blockerNode);
+                }
+
+                // fade in the blocker if specified
+                if (_.isNumber(delay) && (delay >= 0)) {
+                    blockerNode.css('opacity', 0);
+                    blockerFadeTimer = app.repeatDelayed(function (index) {
+                        blockerNode.css('opacity', (index + 1) / 10);
+                    }, { delay: delay, repeatDelay: 50, cycles: 10 });
+                } else {
+                    blockerNode.css('opacity', '');
+                }
+
             });
 
             return this;
@@ -446,190 +743,43 @@ define('io.ox/office/framework/view/baseview',
          *  A reference to this instance.
          */
         this.leaveBusy = function () {
+
+            // stop timer that fades in the blocker element delayed
+            if (blockerFadeTimer) {
+                blockerFadeTimer.abort();
+                blockerFadeTimer = null;
+            }
+
             app.getWindow().idle();
             return this;
         };
 
         /**
-         * Returns whether an alert banner is currently visible.
-         *
-         * @returns {Boolean}
-         *  Whether an alert banner is visible.
-         */
-        this.hasAlert = function () {
-            return _.isObject(currentAlert);
-        };
-
-        /**
-         * Shows an alert banner at the top of the application window. An alert
-         * currently shown will be removed before.
-         *
-         * @param {String} title
-         *  The alert title.
-         *
-         * @param {String} message
-         *  The alert message text.
+         * Shows an alert banner, if the application is currently visible.
+         * Otherwise, the last alert banner will be cached until the
+         * application becomes visible again.
          *
          * @param {String} type
-         *  The type of the alert banner. Supported values are 'error',
-         *  'warning', and 'success'.
+         *  The type of the alert banner. Supported types are 'success',
+         *  'info', 'warning', and 'error'.
          *
-         * @param {Object} [options]
-         *  A map with additional options controlling the appearance and
-         *  behavior of the alert banner. The following options are supported:
-         *  @param {Boolean} [options.closeable]
-         *      If set to true, the alert banner can be closed with a close
-         *      button shown in the top-right corner of the banner.
-         *  @param {Number} [options.timeout=5000]
-         *      Can be specified together with 'options.closeable'. Specifies
-         *      the number of milliseconds until the alert banner will vanish
-         *      automatically. If not specified, the default of five seconds is
-         *      used. The value 0 will show a closeable alert banner that will
-         *      not vanish automatically.
-         *  @param {String} [options.buttonLabel]
-         *      If specified, a push button will be shown with the passed
-         *      caption label.
-         *  @param {Function|String} [options.buttonAction]
-         *      Must be specified together with the 'options.buttonLabel'
-         *      option. When the button has been pressed, the passed function
-         *      will be executed. If set to a string, the controller item with
-         *      the passed key will be executed instead.
+         * @param {String} message
+         *  The message text shown in the alert banner.
+         *
+         * @param {String} [headline]
+         *  An optional headline shown above the message text.
          *
          * @returns {BaseView}
          *  A reference to this instance.
          */
-        this.showAlert = function (title, message, type, options) {
-
-            var // the label of the push button to be shown in the alert banner
-                buttonLabel = Utils.getStringOption(options, 'buttonLabel'),
-                // the callback action for the push button
-                buttonAction = Utils.getFunctionOption(options, 'buttonAction'),
-                // the controller key for the push button
-                buttonKey = Utils.getStringOption(options, 'buttonAction'),
-                // create a new alert node
-                alert = $('<div>')
-                    .addClass('alert alert-' + type)
-                    .append($('<h4>').text(title), $('<p>').text(message))
-                    .data('pane-pos', 'top'),
-                // auto-close timeout delay
-                delay = Utils.getIntegerOption(options, 'timeout', 5000);
-
-            // Hides the alert with a specific animation.
-            function closeAlert() {
-                currentAlert = null;
-                alert.off('click').stop(true).fadeOut(function () { alert.remove(); });
+        this.yell = function (type, message, headline) {
+            var notification = { type: type, message: message, headline: headline };
+            if (this.isVisible()) {
+                showNotification(notification);
+            } else {
+                lastNotification = notification;
             }
-
-            // remove the alert banner currently shown, store reference to new alert
-            if (currentAlert) { currentAlert.stop(true).remove(); }
-            currentAlert = alert;
-
-            // make the alert banner closeable
-            if (Utils.getBooleanOption(options, 'closeable', false)) {
-                // add closer symbol
-                alert.prepend($('<a>', { href: '#' }).text('\xd7').addClass('close'))
-                    .css('cursor', 'pointer')
-                    // alert can be closed by clicking anywhere in the banner
-                    .on('click', closeAlert)
-                    // initialize auto-close
-                    .delay(delay)
-                    .fadeOut(function () {
-                        currentAlert = null;
-                        alert.remove();
-                    });
-            }
-
-            // return focus to application pane when alert has been clicked (also if not closeable)
-            alert.on('click', function () { self.grabFocus(); });
-
-            // create a function that executes the specified controller item
-            if (_.isString(buttonKey)) {
-                buttonAction = function () { app.getController().change(buttonKey); };
-            }
-
-            // insert the push button into the alert banner
-            if (_.isString(buttonLabel) && _.isFunction(buttonAction)) {
-                alert.prepend(
-                    $.button({ label: buttonLabel })
-                        .addClass('btn-' + ((type === 'error') ? 'danger' : type) + ' btn-mini')
-                        .on('click', function () {
-                            closeAlert();
-                            buttonAction.call(self);
-                        })
-                );
-            }
-
-            // insert and show the new alert banner
-            app.getWindowNode().append(alert);
-            refreshPaneLayout();
-
             return this;
-        };
-
-        /**
-         * Shows an error alert banner at the top of the application window. An
-         * alert currently shown will be removed before.
-         *
-         * @param {String} title
-         *  The alert title.
-         *
-         * @param {String} message
-         *  The alert message text.
-         *
-         * @param {Object} [options]
-         *  A map with additional options controlling the appearance and
-         *  behavior of the alert banner. See method Alert.showAlert() for
-         *  details.
-         *
-         * @returns {BaseView}
-         *  A reference to this instance.
-         */
-        this.showError = function (title, message, options) {
-            return this.showAlert(title, message, 'error', options);
-        };
-
-        /**
-         * Shows a warning alert banner at the top of the application window.
-         * An alert currently shown will be removed before.
-         *
-         * @param {String} title
-         *  The alert title.
-         *
-         * @param {String} message
-         *  The alert message text.
-         *
-         * @param {Object} [options]
-         *  A map with additional options controlling the appearance and
-         *  behavior of the alert banner. See method Alert.showAlert() for
-         *  details.
-         *
-         * @returns {BaseView}
-         *  A reference to this instance.
-         */
-        this.showWarning = function (title, message, options) {
-            return this.showAlert(title, message, 'warning', options);
-        };
-
-        /**
-         * Shows a success alert banner at the top of the application window.
-         * An alert currently shown will be removed before.
-         *
-         * @param {String} title
-         *  The alert title.
-         *
-         * @param {String} message
-         *  The alert message text.
-         *
-         * @param {Object} [options]
-         *  A map with additional options controlling the appearance and
-         *  behavior of the alert banner. See method Alert.showAlert() for
-         *  details.
-         *
-         * @returns {BaseView}
-         *  A reference to this instance.
-         */
-        this.showSuccess = function (title, message, options) {
-            return this.showAlert(title, message, 'success', options);
         };
 
         this.destroy = function () {
@@ -637,17 +787,15 @@ define('io.ox/office/framework/view/baseview',
             _(fixedPanes).invoke('destroy');
             _(overlayPanes).invoke('destroy');
             appPane.destroy();
-            appPane = fixedPanes = overlayPanes = null;
+            tempNode.remove();
+            appPane = fixedPanes = overlayPanes = tempNode = null;
         };
 
         // initialization -----------------------------------------------------
 
-        // create the application pane, and insert the container node
-        appPane = new Pane(app, { classes: 'app-pane unselectable' });
-        appPane.getNode()
-            .attr('tabindex', -1) // make focusable for global keyboard shortcuts
-            .toggleClass('scrollable', Utils.getBooleanOption(options, 'scrollable', false))
-            .append(appContainerNode.css('margin', Utils.getStringOption(options, 'margin', '0')), appBusyNode.hide());
+        // create the application pane, and insert the container nodes
+        appPane = new Pane(app, 'app', { classes: 'app-pane', enableContextMenu: true });
+        appPane.getNode().append(hiddenRootNode, contentRootNode, appBusyNode.hide());
 
         // add the main application pane to the application window
         app.getWindowNode().addClass(windowNodeClasses).append(appPane.getNode());
@@ -656,6 +804,15 @@ define('io.ox/office/framework/view/baseview',
         _(['top', 'bottom', 'left', 'right']).each(function (border) {
             app.getWindowNode().append(shadowNodes[border] = $('<div>').addClass('app-pane-shadow'));
         });
+
+        // initialize content node from passed options
+        contentRootNode.toggleClass('scrolling', Utils.getBooleanOption(options, 'contentScrollable', false));
+        this.setContentMargin(Utils.getOption(options, 'contentMargin', 0));
+
+        // make the content root node focusable for global navigation with F6 key
+        if (contentFocusable) {
+            contentRootNode.addClass('f6-target').attr('tabindex', 0);
+        }
 
         // listen to browser window resize events when the application window is visible
         app.registerWindowResizeHandler(refreshPaneLayout);
@@ -666,19 +823,49 @@ define('io.ox/office/framework/view/baseview',
 
         // after construction, call initialization handler
         app.on('docs:init', function () {
-            Utils.getFunctionOption(options, 'initHandler', $.noop).call(self);
+            self.lockPaneLayout(function () {
+                Utils.getFunctionOption(options, 'initHandler', $.noop).call(self);
+            });
         });
 
         // after import, call deferred initialization handler, and update view and controller
         app.on('docs:import:after', function () {
-            Utils.getFunctionOption(options, 'deferredInitHandler', $.noop).call(self);
+            self.lockPaneLayout(function () {
+                Utils.getFunctionOption(options, 'deferredInitHandler', $.noop).call(self);
+            });
             windowShowHandler();
         });
 
-        // remove hidden container node when application has been closed
-        app.on('quit', function () { tempNode.remove(); });
+        // safely destroy all image nodes
+        app.getWindow().on('quit', function () {
+            app.destroyImageNodes(app.getWindowNode().find('img'));
+        });
 
     } // class BaseView
+
+    // static methods ---------------------------------------------------------
+
+    /**
+     * Clears the current browser selection ranges.
+     */
+    BaseView.clearBrowserSelection = function () {
+        try {
+            // Bug 28515, bug 28711: IE fails to clear the selection (and to
+            // modify it afterwards), if it currently points to a DOM node that
+            // is not visible anymore. This happens e.g. after clicking on the
+            // 'Show/hide side panel' button shown by all OX Documents
+            // applications, which hide themselves together with the side pane
+            // or overlay pane after activation. Workaround is to move focus to
+            // an editable DOM node which will cause IE to update the browser
+            // selection object. Using another focusable node (e.g. the body
+            // element) is not sufficient. Use try/catch anyway to be notified
+            // about other problems with the selection.
+            if (_.browser.IE) { focusHelperNode.focus(); }
+            window.getSelection().removeAllRanges();
+        } catch (ex) {
+            Utils.exception(ex);
+        }
+    };
 
     // exports ================================================================
 

@@ -11,14 +11,18 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
-.contact-detail .furigana {
-    font-size: 50%;
-    line-height: 1.2em;
+.contact-detail .with-furigana {
+    float: left;
+    margin-right: 28px;
 }
 
-.edit-contact .furigana.readonly {
-	border: none;
-	background: none;
-	margin: 0;
-	padding: 0;
+.contact-detail .furigana {
+    font-family: @normalFontFamily;
+    font-size: 70%;
+    line-height: 1.2em;
+    color: #888;
+}
+
+.edit-contact .input-xlarge.furigana {
+    margin-bottom: 2px;
 }

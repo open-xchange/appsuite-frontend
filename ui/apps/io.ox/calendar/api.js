@@ -16,9 +16,10 @@
 define('io.ox/calendar/api',
     ['io.ox/core/http',
      'io.ox/core/event',
-     'io.ox/core/config',
+     'settings!io.ox/core',
      'io.ox/core/notifications',
-     'io.ox/core/api/factory'], function (http, Events, config, notifications, factory) {
+     'io.ox/core/date',
+     'io.ox/core/api/factory'], function (http, Events, coreConfig, notifications, date, factory) {
 
     'use strict';
 
@@ -30,17 +31,34 @@ define('io.ox/calendar/api',
         DAY = HOUR * 24;
     // object to store appointments, that have attachments uploading atm
     var uploadInProgress = {},
+        //grepRemove equivalent
+        grepRemove = function (pattern, cache) {
+            var keys = Object.keys(cache),
+                cache = cache || {};
+
+            if (typeof pattern === 'string') {
+                pattern = new RegExp(_.escapeRegExp(pattern));
+            }
+
+            if (_.isRegExp(pattern)) {
+                _.each(keys, function (key) {
+                    if (pattern.test(key)) {
+                        delete cache[key];
+                    }
+                });
+            }
+        },
 
         checkForNotification = function (obj, removeAction) {
             if (removeAction) {
                 api.trigger('delete:appointment', obj);
             } else if (obj.alarm !== '-1' && obj.end_date > _.now()) {//new appointments
-                require(['io.ox/core/api/reminder'], function (reminderApi) {
-                    reminderApi.getReminders();
+                require(['io.ox/core/api/reminder'], function (reminderAPI) {
+                    reminderAPI.getReminders();
                 });
             } else if (obj.alarm || obj.end_date || obj.start_date) {//if one of this has changed during update action
-                require(['io.ox/core/api/reminder'], function (reminderApi) {
-                    reminderApi.getReminders();
+                require(['io.ox/core/api/reminder'], function (reminderAPI) {
+                    reminderAPI.getReminders();
                 });
             }
         },
@@ -54,7 +72,7 @@ define('io.ox/calendar/api',
                 recurrence_master: false
             }, o || {});
 
-            var key = o.folder + '.' + o.start + '.' + o.end,
+            var key = (o.folder || o.folder_id) + '.' + o.start + '.' + o.end,
                 params = {
                     action: 'updates',
                     // id, folder_id, private_flag, recurrence_id, recurrence_position, start_date,
@@ -72,7 +90,7 @@ define('io.ox/calendar/api',
                 };
 
             if (o.folder !== 'all') {
-                params.folder = o.folder || config.get('folder.calendar');
+                params.folder = o.folder || coreConfig.get('folder/calendar');
             }
 
             // do not know if cache is a good idea
@@ -114,10 +132,10 @@ define('io.ox/calendar/api',
                         params: params
                     })
                     .done(function (data) {
-                        get_cache[key] = JSON.stringify(data);
+                        get_cache[key] = data;
                     });
             } else {
-                return $.Deferred().resolve(JSON.parse(get_cache[key]));
+                return $.Deferred().resolve(get_cache[key]);
             }
         },
 
@@ -129,7 +147,7 @@ define('io.ox/calendar/api',
                 order: 'asc'
             }, o || {});
             useCache = useCache === undefined ? true : !!useCache;
-            var key = o.folder + '.' + o.start + '.' + o.end + '.' + o.order,
+            var key = (o.folder || o.folder_id) + '.' + o.start + '.' + o.end + '.' + o.order,
                 params = {
                     action: 'all',
                     // id, folder_id, private_flag, recurrence_id, recurrence_position, start_date,
@@ -203,7 +221,7 @@ define('io.ox/calendar/api',
          * @return {deferred} returns current appointment object
          */
         update: function (o) {
-            var folder_id = o.folder_id || o.folder,
+            var folder_id = o.folder_id || o.folder, pattern,
                 key = folder_id + '.' + o.id + '.' + (o.recurrence_position || 0),
                 attachmentHandlingNeeded = o.tempAttachmentIndicator;
             delete o.tempAttachmentIndicator;
@@ -221,33 +239,39 @@ define('io.ox/calendar/api',
                     },
                     data: o
                 })
-                .pipe(function (obj) {
-                    checkForNotification(o);
-                    var getObj = {};
+                .then(function (obj) {
                     if (!_.isUndefined(obj.conflicts)) {
-                        var df = new $.Deferred();
-                        _(obj.conflicts).each(function (item) {
-                            item.folder_id = folder_id;
-                        });
-                        df.reject(obj);
-                        return df;
+                        return $.Deferred().reject(obj);
                     }
 
-                    getObj.id = o.id;
-                    getObj.folder = folder_id;
-                    if (o.recurrence_position !== null) {
+                    checkForNotification(o);
+
+                    var getObj = {
+                        id: obj.id || o.id,
+                        folder: folder_id
+                    };
+                    all_cache = {};
+
+                    if (o.recurrence_position !== null && obj.id === o.id) {
                         getObj.recurrence_position = o.recurrence_position;
                     }
 
-                    all_cache = {};
                     delete get_cache[key];
                     return api.get(getObj)
-                        .pipe(function (data) {
+                        .then(function (data) {
                             if (attachmentHandlingNeeded) {
-                                api.addToUploadList(encodeURIComponent(_.cid(data)));//to make the detailview show the busy animation
+                                //to make the detailview show the busy animation
+                                api.addToUploadList(_.ecid(data));
+                            }
+                            //series master changed?
+                            if (data.recurrence_type > 0 && !data.recurrence_position) {
+                                //id without specified recurrence_position
+                                pattern = (o.folder || o.folder_id) + '.' + o.id + '.';
+                                grepRemove(pattern, get_cache);
+                                api.trigger('update:series:' + _.ecid(pattern), data);
                             }
                             api.trigger('update', data);
-                            api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
+                            api.trigger('update:' + _.ecid(o), data);
                             return data;
                         });
                 }, function (error) {
@@ -260,19 +284,19 @@ define('io.ox/calendar/api',
 
         /**
          * used to cleanup Cache and trigger refresh after attachmentHandling
-         * @param  {object} obj (appointment object)
+         * @param  {object} o (appointment object)
          * @fires  api#update (data)
          * @return {deferred}
          */
-        attachmentCallback: function (obj) {
+        attachmentCallback: function (o) {
             all_cache = {};
-            var key = obj.folder_id + '.' + obj.id + '.' + (obj.recurrence_position || 0);
+            var key = (o.folder || o.folder_id) + '.' + o.id + '.' + (o.recurrence_position || 0);
             delete get_cache[key];
-            return api.get(obj)
+            return api.get(o)
                 .pipe(function (data) {
                     api.trigger('update', data);
                     //to make the detailview remove the busy animation
-                    api.removeFromUploadList(encodeURIComponent(_.cid(data)));
+                    api.removeFromUploadList(_.ecid(data));
                 });
         },
 
@@ -294,30 +318,31 @@ define('io.ox/calendar/api',
                 },
                 data: o
             })
-            .pipe(function (obj) {
-                checkForNotification(o);
-                var getObj = {};
+            .then(function (obj) {
                 if (!_.isUndefined(obj.conflicts)) {
-                    var df = new $.Deferred();
-                    _(obj.conflicts).each(function (item) {
-                        item.folder_id = o.folder_id;
-                    });
-                    df.reject(obj);
-                    return df;
+                    return $.Deferred().reject(obj);
                 }
-                getObj.id = obj.id;
-                getObj.folder = o.folder_id;
+
+                checkForNotification(o);
+
+                var getObj = {
+                    id: obj.id,
+                    folder: o.folder_id
+                };
+                all_cache = {};
+
                 if (o.recurrence_position !== null) {
                     getObj.recurrence_position = o.recurrence_position;
                 }
-                all_cache = {};
+
                 return api.get(getObj)
-                        .pipe(function (data) {
+                        .then(function (data) {
                             if (attachmentHandlingNeeded) {
-                                api.addToUploadList(encodeURIComponent(_.cid(data)));//to make the detailview show the busy animation
+                                //to make the detailview show the busy animation
+                                api.addToUploadList(_.ecid(data));
                             }
                             api.trigger('create', data);
-                            api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
+                            api.trigger('update:' + _.ecid(data), data);
                             return data;
                         });
             });
@@ -326,28 +351,40 @@ define('io.ox/calendar/api',
         // delete is a reserved word :( - but this will delete the
         // appointment on the server
         remove: function (o) {
+            var keys = [];
 
-            var key = (o.folder_id || o.folder) + '.' + o.id + '.' + (o.recurrence_position || 0);
+            o = _.isArray(o) ? o : [o];
 
-            return http.PUT({
-                module: 'calendar',
-                params: {
-                    action: 'delete',
-                    timestamp: _.now()
-                },
-                data: o
-            })
-            .done(function (resp) {
-                all_cache = {};
-                delete get_cache[key];
+            // pause http layer
+            http.pause();
+
+            _(o).each(function (obj) {
+                keys.push((obj.folder_id || obj.folder) + '.' + obj.id + '.' + (obj.recurrence_position || 0));
+                return http.PUT({
+                    module: 'calendar',
+                    params: {
+                        action: 'delete',
+                        timestamp: _.then()
+                    },
+                    data: obj
+                })
+                .done(function (resp) {
+                    all_cache = {};
+                    _(keys).each(function (key) {
+                        delete get_cache[key];
+                    });
+                    api.trigger('delete', obj);
+                    api.trigger('delete:' + _.ecid(obj), obj);
+                    //remove Reminders in Notification Area
+                    checkForNotification(obj, true);
+                }).fail(function () {
+                    all_cache = {};
+                    api.trigger('delete');
+                });
+            });
+
+            return http.resume().then(function (response) {
                 api.trigger('refresh.all');
-                api.trigger('delete', resp);
-                api.trigger('delete:' + encodeURIComponent(_.cid(o)), o);
-                //remove Reminders in Notification Area
-                checkForNotification(o, true);
-            }).fail(function () {
-                all_cache = {};
-                api.trigger('delete');
             });
         },
 
@@ -381,7 +418,7 @@ define('io.ox/calendar/api',
                 return api.get(o)
                         .pipe(function (data) {
                             api.trigger('update', data);
-                            api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
+                            api.trigger('update:' + _.ecid(data), data);
                             return data;
                         });
             });
@@ -414,12 +451,14 @@ define('io.ox/calendar/api',
      */
     api.getInvites = function () {
 
-        var now = _.now(), start = now - 2 * HOUR;
+        var now = _.now(),
+            start = now - 2 * HOUR,
+            end = new date.Local().addYears(5).getTime();
 
         return getUpdates({
             folder: 'all',
             start: start,
-            end: start + 28 * 5 * DAY, // next four month?!?
+            end: end, // 5 years like OX6
             timestamp: 0,
             recurrence_master: true
         })
@@ -489,8 +528,7 @@ define('io.ox/calendar/api',
                 all_cache = {};
                 get_cache = {};
                 _(list).each(function (obj) {
-                    var cid = encodeURIComponent(_.cid(obj));
-                    api.trigger('move:' + cid, targetFolderId);
+                    api.trigger('move:' + _.ecid(obj), targetFolderId);
                 });
                 api.trigger('refresh.all');
             });
@@ -566,6 +604,8 @@ define('io.ox/calendar/api',
                         timezone: 'UTC'
                     });
                 }
+            } else {
+                result.push({data: []});
             }
         });
 

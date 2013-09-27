@@ -82,7 +82,7 @@ define("io.ox/settings/accounts/email/test",
         id: 'email-account-create-api',
         index: 100,
         test: function (j) {
-            j.describe("Creates a new Emailaccount via api", function () {
+            j.describe("Creates a new email account via api", function () {
 
                 var dataId, obj;
 
@@ -161,7 +161,7 @@ define("io.ox/settings/accounts/email/test",
         id: 'email-account-create-ui',
         index: 100,
         test: function (j) {
-            j.describe("Creates a new Emailaccount via ui", function () {
+            j.describe("Creates a new email account via ui", function () {
 
                 var app = null, accountPane, buttonAdd, buttonAddAutoconf, buttonAddPassword, dialogAutoconf, dialogPassword,
                     buttonSave, detailPane, dataId, dialogSuccess, buttonClose;

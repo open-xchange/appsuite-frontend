@@ -184,7 +184,13 @@ define('io.ox/calendar/month/view',
                 if (util.getConfirmationStatus(model.attributes, myself) !== 2 || settings.get('showDeclinedAppointments', false)) {
 
                     var startTSUTC = Math.max(model.get('start_date'), this.weekStart),
-                        endTSUTC = Math.min(model.get('end_date'), this.weekEnd) - 1;
+                        endTSUTC = Math.min(model.get('end_date'), this.weekEnd),
+                        maxCount = 7;
+
+                    // need -1 for rendering, but destroys zero time appointments
+                    if (endTSUTC > startTSUTC) {
+                        endTSUTC--;
+                    }
 
                     // fix full-time UTC timestamps
                     if (model.get('full_time')) {
@@ -195,8 +201,7 @@ define('io.ox/calendar/month/view',
                     var startDate = new date.Local(startTSUTC),
                         endDate = new date.Local(endTSUTC),
                         start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime(),
-                        end = new date.Local(endDate.getYear(), endDate.getMonth(), endDate.getDate()).getTime(),
-                        maxCount = 7;
+                        end = new date.Local(endDate.getYear(), endDate.getMonth(), endDate.getDate()).getTime();
 
                     // draw across multiple days
                     while (maxCount >= 0) {
@@ -281,7 +286,7 @@ define('io.ox/calendar/month/view',
                     });
                     return tmp;
                 }),
-                $('<div>').addClass('scrollpane')
+                $('<div class="scrollpane f6-target" tabindex="1">')
             );
     };
 
@@ -290,15 +295,16 @@ define('io.ox/calendar/month/view',
         index: 100,
         draw: function (baton) {
             var a = baton.model,
+                folder = baton.folder,
                 conf = 1,
                 confString = _.noI18n('%1$s'),
                 classes = '';
-
-            if (a.get('private_flag') && myself !== a.get('created_by')) {
+            if (a.get('private_flag') && ox.user_id !== a.get('created_by') && !folderAPI.is('private', folder)) {
                 classes = 'private disabled';
             } else {
+                conf = util.getConfirmationStatus(a.attributes, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
                 classes = (a.get('private_flag') ? 'private ' : '') + util.getShownAsClass(a.attributes) +
-                    ' ' + util.getConfirmationClass(conf = util.getConfirmationStatus(a.attributes, myself)) +
+                    ' ' + util.getConfirmationClass(conf) +
                     (folderAPI.can('write', baton.folder, a.attributes) ? ' modify' : '');
                 if (conf === 3) {
                     confString =
@@ -309,7 +315,9 @@ define('io.ox/calendar/month/view',
                 }
             }
 
-            this.addClass(classes)
+            this
+                .attr({ tabindex: 1 })
+                .addClass(classes)
                 .append(
                     $('<div>')
                     .addClass('appointment-content')

@@ -43,9 +43,7 @@ define("io.ox/settings/accounts/settings/createAccountDialog",
             $('<div class="span6">').append($('<a href="#">').text(submodule.displayName).on("click", selectService(submodule.id))).appendTo($currentRow);
         });
 
-        dialog = new dialogs.ModalDialog({
-            easyOut: true
-        });
+        dialog = new dialogs.ModalDialog();
         dialog.header($("<h4>").text("Add an account"));
         dialog.append($servicesPane).addButton("cancel", "Cancel").show(function () {
             $servicesPane.find("a:first").focus();

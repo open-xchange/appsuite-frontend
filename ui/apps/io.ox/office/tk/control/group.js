@@ -13,22 +13,17 @@
 
 define('io.ox/office/tk/control/group',
     ['io.ox/core/event',
-     'io.ox/office/tk/utils'
-    ], function (Events, Utils) {
+     'io.ox/office/tk/utils',
+     'io.ox/office/tk/keycodes'
+    ], function (Events, Utils, KeyCodes) {
 
     'use strict';
 
-    var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes,
+    var // DOM event that will cause a 'group:change' event from a group
+        INTERNAL_TRIGGER_EVENT = 'private:trigger',
 
-        // CSS class for hidden groups
-        HIDDEN_CLASS = 'hidden',
-
-        // CSS class for disabled groups
-        DISABLED_CLASS = 'disabled',
-
-        // CSS class for the group node while any embedded control is focused
-        FOCUSED_CLASS = 'focused';
+        // the group instances currently focused (as array, groups may be embedded)
+        focusStack = [];
 
     // class Group ============================================================
 
@@ -39,16 +34,26 @@ define('io.ox/office/tk/control/group',
      * functionality to the inserted controls.
      *
      * Instances of this class trigger the following events:
-     * - 'change': If the control has been activated in a special way depending
-     *      on the type of the control group. The event handler receives the
-     *      new value of the activated control.
-     * - 'cancel': When the focus needs to be returned to the application (e.g.
-     *      when the Escape key is pressed, or when a click on a drop-down
-     *      button closes the opened drop-down menu).
-     * - 'show': After the control has been shown or hidden. The event handler
-     *      receives the new visibility state.
-     * - 'enable': After the control has been enabled or disabled. The event
-     *      handler receives the new state.
+     * - 'group:change': If the control has been activated in a special way
+     *      depending on the type of the control group. The event handler
+     *      receives the new value of the activated control.
+     * - 'group:cancel': When the focus needs to be returned to the application
+     *      (e.g. when the ESCAPE key is pressed, or when a click on a
+     *      drop-down button closes the opened drop-down menu).
+     * - 'group:show': After the control has been shown or hidden. The event
+     *      handler receives the new visibility state.
+     * - 'group:enable': After the control has been enabled or disabled. The
+     *      event handler receives the new state.
+     * - 'group:layout': After child nodes have been inserted into this group
+     *      using the method Group.addChildNodes().
+     * - 'group:focus': After the group has been focused, by initially focusing
+     *      any of its focusable child nodes. As long as the focus remains
+     *      inside the group (even if the focus moves to another DOM node in
+     *      the group), no further 'group:focus' event will be triggered.
+     * - 'group:blur': After the group has lost the browser focus, after
+     *      focusing any other DOM node outside the group. As long as the focus
+     *      remains inside the group (even if the focus moves to another DOM
+     *      node in the group), the 'group:blur' event will not be triggered.
      *
      * @constructor
      *
@@ -61,10 +66,6 @@ define('io.ox/office/tk/control/group',
      *  @param {String} [options.classes]
      *      Additional CSS classes that will be set at the root DOM node of
      *      this instance.
-     *  @param {Boolean} [options.visible=true]
-     *      If set to false, the group will be hidden permanently. Can be used
-     *      to hide groups depending on a certain condition while initializing
-     *      view components.
      */
     function Group(options) {
 
@@ -74,8 +75,17 @@ define('io.ox/office/tk/control/group',
             // create the group container element
             groupNode = $('<div>').addClass('group'),
 
+            // the current value of this control group
+            groupValue = null,
+
+            // the current value options of this control group
+            groupOptions = null,
+
             // update handler functions
-            updateHandlers = [];
+            updateHandlers = [],
+
+            // all container nodes that are part of this group instance, for focus handling
+            focusableNodes = groupNode;
 
         // base constructor ---------------------------------------------------
 
@@ -85,24 +95,82 @@ define('io.ox/office/tk/control/group',
         // private methods ----------------------------------------------------
 
         /**
-         * Shows or hides this group.
-         */
-        function showGroup(visible) {
-            groupNode.toggleClass(HIDDEN_CLASS, !visible);
-            self.trigger('show', visible);
-        }
-
-        /**
          * Keyboard handler for the entire group.
          */
         function keyHandler(event) {
-
-            var // distinguish between event types
-                keyup = event.type === 'keyup';
-
             if (event.keyCode === KeyCodes.ESCAPE) {
-                if (keyup) { self.trigger('cancel'); }
+                if ((event.type === 'keydown') && !event.isDefaultPrevented()) {
+                    self.triggerCancel();
+                }
                 return false;
+            }
+        }
+
+        /**
+         * Triggers a 'group:cancel' event and suppresses the default action of
+         * the passed event, if this group is disabled.
+         */
+        function disabledHandler(event) {
+            if (!self.isEnabled()) {
+                event.preventDefault();
+                self.triggerCancel();
+            }
+        }
+
+        /**
+         * Updates the focused state of this group, according to the passed
+         * 'focusin' and 'focusout' events. The order of focusin/focusout
+         * events is not reliable, therefore, a simple check whether the focus
+         * is inside the group is performed.
+         */
+        function focusHandler(event) {
+
+            // update CSS focus class, trigger event (check that group is not destroyed yet)
+            function changeFocusState(group, focused) {
+                if (_.isFunction(group.trigger)) {
+                    group.getNode().toggleClass(Utils.FOCUSED_CLASS, focused);
+                    group.trigger(focused ? 'group:focus' : 'group:blur');
+                }
+            }
+
+            function processEvent(focusNode) {
+
+                var // the top entry of the focus stack
+                    stackEntry = null;
+
+                // Returns whether the focus node is one of the focusable
+                // container nodes, or if it is contained in one of these nodes.
+                function isFocusable(focusableNodes) {
+                    return (focusableNodes.filter(focusNode).length > 0) || (focusableNodes.has(focusNode).length > 0);
+                }
+
+                // trigger a 'group:blur' event at all cached focus groups that
+                // do not contain the passed focus node anymore
+                while ((focusStack.length > 0) && !isFocusable(_.last(focusStack).nodes)) {
+                    stackEntry = focusStack.pop();
+                    changeFocusState(stackEntry.group, false);
+                }
+
+                // trigger a 'group:focus' event at this group, if it is not already focused
+                if (!groupNode.hasClass(Utils.FOCUSED_CLASS) && isFocusable(focusableNodes)) {
+                    focusStack.push({ group: self, nodes: focusableNodes });
+                    changeFocusState(self, true);
+                }
+            }
+
+            switch (event.type) {
+            // focus received: process event synchronously, use target node of
+            // event to be sure to generate the 'group:focus' event (using
+            // document.activeElement and jQuery.find(':focus') is not reliable
+            // before the event has been processed by the browser)
+            case 'focusin':
+                processEvent(event.target);
+                break;
+            // focus lost: order of focus events is not reliable, process event
+            // asynchronously, check directly whether the group is still focused
+            case 'focusout':
+                _.defer(function () { processEvent(document.activeElement); });
+                break;
             }
         }
 
@@ -123,28 +191,19 @@ define('io.ox/office/tk/control/group',
         };
 
         /**
-         * Returns the position and size of the group node in the browser
-         * window.
-         *
-         * @returns {Object}
-         *  An object with numeric 'left', 'top', 'right', 'bottom', 'width',
-         *  and 'height' attributes representing the position and size of the
-         *  group node in pixels. The attributes 'right' and 'bottom' represent
-         *  the distance of the right/bottom corner of the group node to the
-         *  right/bottom border of the browser window.
-         */
-        this.getNodePosition = function () {
-            return Utils.getNodePositionInWindow(groupNode);
-        };
-
-        /**
          * Registers the passed update handler function. These handlers will be
-         * called from the method Group.update() in order of their
+         * called from the method Group.setValue() in order of their
          * registration.
          *
          * @param {Function} updateHandler
          *  The update handler function. Will be called in the context of this
-         *  group. Receives the value passed to the method Group.update().
+         *  group. Receives the following parameters:
+         *  (1) {Any} value
+         *      The value passed to the method Group.setValue().
+         *  (2) {Object|Undefined} options
+         *      The options map passed to the method Group.setValue().
+         *  (3) {Any} oldValue
+         *      The old value of the group.
          *
          * @returns {Group}
          *  A reference to this group.
@@ -156,13 +215,15 @@ define('io.ox/office/tk/control/group',
 
         /**
          * Registers an event handler for specific DOM control nodes, that will
-         * trigger a 'change' event for this group instance. The value of the
-         * 'change' event will be determined by the passed value resolver
-         * function.
+         * trigger a 'group:change' event for this group instance. The value of
+         * the 'group:change' event will be determined by the passed value
+         * resolver function.
          *
-         * @param {String} type
+         * @param {String} [type]
          *  The type of the event handler that will be bound to the selected
-         *  DOM node(s), e.g. 'click' or 'change'.
+         *  DOM node(s), e.g. 'click' or 'change'. If omitted, the
+         *  'group:change' event can only be triggered manually with the method
+         *  'Group.triggerChange()'.
          *
          * @param {Object} [options]
          *  A map of options to control the behavior of this method. The
@@ -185,9 +246,9 @@ define('io.ox/office/tk/control/group',
          *      object. Must return the current value of the control (e.g. the
          *      boolean state of a toggle button, the value of a list item, or
          *      the current text in a text input field). May return null to
-         *      indicate that a 'cancel' event should be triggered instead of a
-         *      'change' event. If omitted, defaults to the static method
-         *      Utils.getControlValue().
+         *      indicate that a 'group:cancel' event should be triggered
+         *      instead of a 'group:change' event. If omitted, defaults to the
+         *      static method Utils.getControlValue().
          *
          * @returns {Group}
          *  A reference to this group.
@@ -201,16 +262,18 @@ define('io.ox/office/tk/control/group',
                 // the resolver function for the control value
                 valueResolver = Utils.getFunctionOption(options, 'valueResolver', Utils.getControlValue);
 
-            function eventHandler(event) {
-                var value =  self.isEnabled() ? valueResolver.call(self, $(this)) : null;
+            function eventHandler(event, options) {
+                var value = self.isEnabled() ? valueResolver.call(self, $(this)) : null;
                 if (_.isNull(value)) {
-                    self.trigger('cancel');
+                    self.triggerCancel(options);
                 } else {
-                    self.update(value);
-                    self.trigger('change', value);
+                    self.setValue(value, options);
+                    self.trigger('group:change', value, Utils.extendOptions(options, { source: node[0] }));
                 }
-                return false;
             }
+
+            // the resulting event type names
+            type = _.isString(type) ? (type + ' ' + INTERNAL_TRIGGER_EVENT) : INTERNAL_TRIGGER_EVENT;
 
             // attach event handler to the node
             if (selector) {
@@ -223,7 +286,43 @@ define('io.ox/office/tk/control/group',
         };
 
         /**
-         * Inserts the passed DOM elements into this group.
+         * Registers a container DOM node located outside the root node of this
+         * group instance, that contains control nodes that will be included
+         * into the focus handling and generation of 'group:focus' and
+         * 'group:blur' events.
+         *
+         * @param {HTMLElement|jQuery} node
+         *  The DOM node(s) to be added to the internal focus handling.
+         *
+         * @returns {Group}
+         *  A reference to this instance.
+         */
+        this.registerFocusableContainerNode = function (node) {
+            focusableNodes = focusableNodes.add(node);
+            node.on('focus focusin focusout blur', focusHandler);
+            return this;
+        };
+
+        /**
+         * Inserts the passed HTML mark-up into this group (all existing child
+         * nodes will be removed). Triggers a 'group:layout' event notifying
+         * all listeners about the changed layout of this group.
+         *
+         * @param {String} markup
+         *  The HTML mark-up to be inserted into this group, as string.
+         *
+         * @returns {Group}
+         *  A reference to this group.
+         */
+        this.setChildMarkup = function (markup) {
+            groupNode.html(markup);
+            return this.trigger('group:layout');
+        };
+
+        /**
+         * Inserts the passed DOM elements into this group, and triggers a
+         * 'group:layout' event notifying all listeners about the changed
+         * layout of this group.
          *
          * @param {jQuery} nodes
          *  The nodes to be inserted into this group, as jQuery object.
@@ -233,7 +332,7 @@ define('io.ox/office/tk/control/group',
          */
         this.addChildNodes = function (nodes) {
             groupNode.append(nodes);
-            return this;
+            return this.trigger('group:layout');
         };
 
         /**
@@ -247,30 +346,32 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.addFocusableControl = function (control) {
-            return this.addChildNodes(control.addClass(Group.FOCUSABLE_CLASS));
+            return this.addChildNodes(control.addClass(Utils.FOCUSABLE_CLASS));
         };
 
         /**
          * Returns whether this group contains any focusable controls.
          */
         this.hasFocusableControls = function () {
-            return groupNode.find(Group.FOCUSABLE_SELECTOR).length > 0;
+            return groupNode.find(Utils.FOCUSABLE_SELECTOR).length > 0;
         };
 
         /**
-         * Returns all controls from this group that need to be included into
-         * keyboard focus navigation.
+         * Returns all control nodes contained in this group that need to be
+         * included into keyboard focus navigation.
          */
         this.getFocusableControls = function () {
-            return groupNode.find(Group.FOCUSABLE_SELECTOR);
+            return groupNode.find(Utils.FOCUSABLE_SELECTOR);
         };
 
         /**
          * Returns whether this group contains the control that is currently
-         * focused. Searches in all ancestor elements of this group.
+         * focused. Searches in all ancestor elements of this group, and in all
+         * other focusable container nodes that have been registered with the
+         * method 'Group.registerFocusableContainerNode()'.
          */
         this.hasFocus = function () {
-            return Utils.containsFocusedControl(groupNode);
+            return Utils.containsFocus(focusableNodes);
         };
 
         /**
@@ -288,10 +389,22 @@ define('io.ox/office/tk/control/group',
         };
 
         /**
-         * Returns whether this control group is visible.
+         * Returns whether this control group is configured to be visible (via
+         * the methods Group.show(), Group.hide(), or Group.toggle()). Does not
+         * check the effective visibility depending on the visibility of all
+         * parent DOM nodes (see method Group.isReallyVisible() to do that).
          */
         this.isVisible = function () {
-            return !groupNode.hasClass(HIDDEN_CLASS);
+            return !groupNode.hasClass(Utils.HIDDEN_CLASS);
+        };
+
+        /**
+         * Returns whether this control group is effectively visible (it must
+         * not be hidden by itself, it must be inside the DOM tree, and all its
+         * parent nodes must be visible too).
+         */
+        this.isReallyVisible = function () {
+            return groupNode.is(Utils.REALLY_VISIBLE_SELECTOR);
         };
 
         /**
@@ -301,8 +414,7 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.show = function () {
-            showGroup(true);
-            return this;
+            return this.toggle(true);
         };
 
         /**
@@ -312,8 +424,7 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.hide = function () {
-            showGroup(false);
-            return this;
+            return this.toggle(false);
         };
 
         /**
@@ -327,7 +438,14 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.toggle = function (state) {
-            showGroup((state === true) || ((state !== false) && this.isVisible()));
+
+            var // whether to show the group instance
+                visible = (state === true) || ((state !== false) && this.isVisible());
+
+            if (this.isVisible() !== visible) {
+                groupNode.toggleClass(Utils.HIDDEN_CLASS, !visible);
+                this.trigger('group:show', visible);
+            }
             return this;
         };
 
@@ -335,7 +453,7 @@ define('io.ox/office/tk/control/group',
          * Returns whether this control group is enabled.
          */
         this.isEnabled = function () {
-            return Utils.isControlEnabled(groupNode);
+            return groupNode.is(Utils.ENABLED_SELECTOR);
         };
 
         /**
@@ -350,30 +468,98 @@ define('io.ox/office/tk/control/group',
          */
         this.enable = function (state) {
 
-            var // enable/disable the entire group node with all its descendants
-                enabled = Utils.enableControls(groupNode, state);
+            var // whether to enable the group instance
+                enabled = _.isUndefined(state) || (state === true);
 
-            // trigger an 'enable' event so that derived classes can react
-            return this.trigger('enable', enabled);
+            // enable/disable the entire group node with all its descendants
+            if (this.isEnabled() !== enabled) {
+                groupNode.toggleClass(Utils.DISABLED_CLASS, !enabled);
+                this.trigger('group:enable', enabled);
+            }
+            return this;
+        };
+
+        /**
+         * Returns the current value of this control group.
+         *
+         * @returns {Any}
+         *  The current value of this control group.
+         */
+        this.getValue = function () {
+            return groupValue;
         };
 
         /**
          * Updates the controls in this group with the specified value, by
          * calling the registered update handlers.
          *
-         * @param value
+         * @param {Any} value
          *  The new value to be displayed in the controls of this group.
+         *
+         * @param {Object} [options]
+         *  A map with options that will be passed as second parameter to all
+         *  registered update handlers.
          *
          * @returns {Group}
          *  A reference to this group.
          */
-        this.update = function (value) {
+        this.setValue = function (value, options) {
+            var oldValue = groupValue;
             if (!_.isUndefined(value)) {
+                groupValue = value;
+                groupOptions = options;
                 _(updateHandlers).each(function (updateHandler) {
-                    updateHandler.call(this, value);
+                    updateHandler.call(this, value, options, oldValue);
                 }, this);
             }
             return this;
+        };
+
+        /**
+         * Debounced call of the Group.setValue() method with the current value
+         * of this group. Can be used to refresh the appearance of the group
+         * after changing its content.
+         */
+        this.refresh = _.debounce(function () {
+            self.setValue(groupValue, groupOptions);
+        });
+
+        /**
+         * Triggers a special event at the passed DOM control node contained in
+         * this Group instance. The group will catch the event, and will
+         * trigger a 'group:change' event by itself with the value associated
+         * to the DOM control node.
+         *
+         * @param {HTMLElement|jQuery}
+         *  A DOM control node of this group that must have been configured as
+         *  source of change events with the Group.registerChangeHandler()
+         *  method. If this object is a jQuery collection, uses the first DOM
+         *  node it contains.
+         *
+         * @param {Object} [options]
+         *  A map with additional options that will be passed to the
+         *  'group:change' event listeners of this class.
+         *
+         * @returns {Group}
+         *  A reference to this group.
+         */
+        this.triggerChange = function (control, options) {
+            $(control).first().trigger(INTERNAL_TRIGGER_EVENT, options);
+            return this;
+        };
+
+        /**
+         * Triggers a 'group:cancel' event at this Group instance.
+         *
+         * @param {Object} [options]
+         *  A map with additional options that will be passed to the
+         *  'group:cancel' event listeners of this class.
+         *
+         * @returns {Group}
+         *  A reference to this group.
+         */
+        this.triggerCancel = function (options) {
+            return this.trigger('group:cancel', options);
         };
 
         this.destroy = function () {
@@ -386,45 +572,14 @@ define('io.ox/office/tk/control/group',
         groupNode.addClass(Utils.getStringOption(options, 'classes', ''));
         Utils.setControlTooltip(groupNode, Utils.getStringOption(options, 'tooltip'));
 
-        if (Utils.getBooleanOption(options, 'visible', true)) {
-            // add event handlers
-            groupNode
-                .on('keydown keypress keyup', keyHandler)
-                // suppress events for disabled controls
-                .on('mousedown dragover drop contextmenu', function (event) {
-                    if (!self.isEnabled()) {
-                        event.preventDefault();
-                        self.trigger('cancel');
-                    }
-                })
-                .on('focusin focusout', function () {
-                    _.defer(function () {
-                        // cannot rely on the order of focusin/focusout events, simply check
-                        // if focus is inside the group (after browser has processed the event!)
-                        groupNode.toggleClass(FOCUSED_CLASS, Utils.containsFocusedControl(groupNode));
-                    });
-                });
-        } else {
-            this.hide();
-        }
+        // add event handlers
+        groupNode.on({
+            'keydown keypress keyup': keyHandler,
+            'mousedown touchstart dragover drop contextmenu': disabledHandler,
+            'focus focusin focusout blur': focusHandler
+        });
 
     } // class Group
-
-    // constants --------------------------------------------------------------
-
-    /**
-     * CSS class for focusable control elements in this group.
-     *
-     * @constant
-     */
-    Group.FOCUSABLE_CLASS = 'focusable';
-
-    /**
-     * CSS selector for focusable control elements in this group.
-     *
-     * @constant
-     */
-    Group.FOCUSABLE_SELECTOR = '.' + Group.FOCUSABLE_CLASS;
 
     // exports ================================================================
 

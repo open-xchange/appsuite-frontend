@@ -67,7 +67,7 @@ define("io.ox/core/extensions",
             list = function () {
                 return _.chain(extensions)
                     .select(function (obj) {
-                        return !disabled[obj.id];
+                        return !disabled[obj.id] && !disabled['*'];
                     });
             },
             // look for existing extension
@@ -163,7 +163,7 @@ define("io.ox/core/extensions",
             }
 
             if (!extension.id) {
-                extensions.id = 'default';
+                extension.id = 'default';
                 extension.index = extension.index || 100;
             } else {
                 extension.index = extension.index || 1000000000;
@@ -305,14 +305,13 @@ define("io.ox/core/extensions",
                 args = ['invoke'].concat($.makeArray(arguments));
             // manual invoke to consider baton
             if (baton instanceof Baton) {
-                return o.map(function (ext) {
-                    if (!baton.isDisabled(self.id, ext.id)) {
-                        if (_.isFunction(ext[name])) {
-                            return ext[name].apply(context, args.slice(3));
-                        }
-                    }
-                })
-                .compact();
+                return o
+                    .filter(function (ext) {
+                        return !baton.isDisabled(self.id, ext.id) && _.isFunction(ext[name]);
+                    })
+                    .map(function (ext) {
+                        return ext[name].apply(context, args.slice(3));
+                    });
             } else {
                 return o.invoke.apply(o, args);
             }
@@ -329,7 +328,7 @@ define("io.ox/core/extensions",
         };
 
         this.isEnabled = function (id) {
-            return !disabled[id];
+            return !disabled[id] && !disabled['*'];
         };
 
         this.inspect = function () {

@@ -140,7 +140,7 @@ define('io.ox/tasks/util',
                     };
                 return result;
             },
-            
+
             //selects the default reminder if its available, otherwise the next item
             selectDefaultReminder: function (node) {
                 var interval = settings.get('interval', '5'),
@@ -159,7 +159,7 @@ define('io.ox/tasks/util',
                                 break;
                             }
                         }
-                        
+
                         if (!found) {//too late for today. use tomorrow
                             interval = 't';
                         }
@@ -233,11 +233,66 @@ define('io.ox/tasks/util',
                 }
 
                 if (bootstrapDropdown) {
-                    appendString = appendString.replace(/<option/g, "<li><a href='#'");
+                    appendString = appendString.replace(/<option/g, '<li><a tabindex="1" role="menuitem" href="#"');
                     appendString = appendString.replace(/option>/g, 'a></li>');
                 }
 
                 return appendString;
+            },
+
+            //returns the same as buildDropdownMenu but returns an array of value string pairs
+            buildOptionArray: function (time) {
+                if (!time) {
+                    time = new Date();
+                }
+                var result = [ [5, gt('in 5 minutes')],
+                               [15, gt('in 15 minutes')],
+                               [30, gt('in 30 minutes')],
+                               [60, gt('in one hour')]];
+
+                // variable daytimes
+                var i = time.getHours();
+
+                if (i < 6) {
+                    i = 0;
+                } else if (i < 12) {
+                    i = 1;
+                } else if (i < 15) {
+                    i = 2;
+                } else if (i < 18) {
+                    i = 3;
+                } else if (i < 22) {
+                    i = 4;
+                }
+
+                while (i < lookupDaytimeStrings.length) {
+                    result.push(['d' + i, lookupDaytimeStrings[i]]);
+                    i++;
+                }
+
+                //weekdays
+                var circleIncomplete = true,
+                    startday = time.getDay();
+
+                i = (time.getDay() + 2) % 7;
+
+                result.push(['t', gt('tomorrow')]);
+
+                while (circleIncomplete) {
+                    result.push(['w' + i, lookupWeekdayStrings[i]]);
+                    if (i < 6) {
+                        i++;
+                    } else {
+                        i = 0;
+                    }
+
+                    if (i === startday) {
+                        result.push(['ww', gt('in one week')]);
+                        circleIncomplete = false;
+                    }
+                }
+
+                return result;
             },
 
             //change status number to status text. format enddate to presentable string
@@ -319,33 +374,43 @@ define('io.ox/tasks/util',
                 }
 
                 var resultArray = [],
-                    alphabetArray = [];
+                    dateArray = [],
+                    emptyDateArray = [];
 
                 for (var i = 0; i < tasks.length; i++) {
                     if (tasks[i].status === 3) {
                         resultArray.push(tasks[i]);
+                    } else if (tasks[i].end_date === null || tasks[i].end_date === undefined) {
+                        emptyDateArray.push(tasks[i]);
                     } else {
-                        alphabetArray.push(tasks[i]);
+                        dateArray.push(tasks[i]);
                     }
                 }
 
-                alphabetArray.sort(function (a, b) {
-                        if (a.end_date > b.end_date || a.end_date === null) {
-                            return 1;
-                        } else if (a.end_date < b.end_date || b.end_date === null) {
-                            return -1;
-                        } else if (a.title > b.title) {
-                            return 1;
-                        } else {
-                            return -1;
-                        }
-                    });
+                emptyDateArray.sort(function (a, b) {
+                    if (a.title > b.title) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                });
+
+                dateArray.sort(function (a, b) {
+                    if (a.end_date > b.end_date) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                });
+
                 if (order === 'desc') {
-                    resultArray.push(alphabetArray);
+                    resultArray.push(emptyDateArray.reverse(), dateArray.reverse());
+                    resultArray = _.flatten(resultArray);
                 } else {
-                    resultArray.unshift(alphabetArray);
+                    resultArray.unshift(dateArray, emptyDateArray);
+                    resultArray = _.flatten(resultArray);
                 }
-                return _.flatten(resultArray);
+                return resultArray;
             }
 
         };

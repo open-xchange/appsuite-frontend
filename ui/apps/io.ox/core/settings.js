@@ -51,7 +51,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
     var Settings = function (path, tree, meta) {
 
         var self = this, detached = false,
-            initial = JSON.parse(JSON.stringify(tree || {}));
+            saved = JSON.parse(JSON.stringify(tree || {}));
 
         tree = tree || {};
         meta = meta || {};
@@ -86,22 +86,17 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
         };
 
         var resolve = function (path, callback, create) {
-            var key, parts = getParts(path), tmp = tree || {};
+            var key, parts = getParts(path), tmp = tree || {}, notPlainObject;
             while (parts.length) {
                 key = parts.shift();
                 if (_.isObject(tmp)) {
                     if (parts.length) {
-                        if (!_.isObject(tmp[key]) && !!create) {
-                            tmp = (tmp[key] = {});
-                        } else {
-                            tmp = tmp[key];
-                        }
+                        notPlainObject = !!create && (!_.isObject(tmp[key]) || _.isArray(tmp[key]));
+                        tmp = notPlainObject ? (tmp[key] = {}) : tmp[key];
                     } else {
                         callback(tmp, key);
                     }
-                } else {
-                    break;
-                }
+                } else break;
             }
         };
 
@@ -162,17 +157,27 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                     params: { action: 'list' },
                     data: [path]
                 })
-                .pipe(function (data) {
-                    if (!detached) {
-                        tree = data[0].tree;
-                        meta = data[0].meta;
-                        initial = JSON.parse(JSON.stringify(tree));
+                .then(
+                    function success(data) {
+                        if (!detached) {
+                            tree = data[0].tree;
+                            meta = data[0].meta;
+                            saved = JSON.parse(JSON.stringify(tree));
+                            return applyDefaults();
+                        } else {
+                            return $.when();
+                        }
+                    },
+                    function fail(e) {
+                        tree = {};
+                        meta = {};
+                        saved = {};
+                        detached = true;
+                        console.error('Cannot load jslob', path, e);
                         return applyDefaults();
-                    } else {
-                        return $.when();
                     }
-                })
-                .pipe(function () {
+                )
+                .then(function () {
                     self.trigger('load', tree, meta);
                     var data = { tree: tree, meta: meta };
                     return settingsCache.add(path, data).pipe(function () { return data; });
@@ -229,7 +234,10 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                     params: { action: 'set', id: path },
                     data: data
                 })
-                .done(function () { self.trigger('save'); });
+                .done(function () {
+                    saved = JSON.parse(JSON.stringify(data));
+                    self.trigger('save');
+                });
             }, 5000); // limit to 5 seconds
 
             return function (custom) {
@@ -237,8 +245,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                 if (detached) {
                     console.warn('Not saving detached settings.', path);
                 }
-
-                if (!custom && _.isEqual(initial, tree)) return $.when();
+                if (!custom && _.isEqual(saved, tree)) return $.when();
 
                 var data = { tree: custom || tree, meta: meta };
                 settingsCache.add(path, data);
@@ -247,6 +254,45 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                 return request;
             };
         }());
+
+        /**
+         * facade for this.save to notify user in case of errors
+         * @return {deferred}
+         */
+        this.saveAndYell = function (custom, options) {
+            var def = this.save(custom),
+                //options
+                opt = $.extend({
+                    debug: false
+                }, options),
+                notify = function (e) {
+                    require(['io.ox/core/notifications'], function (notifications) {
+                        notifications.yell(e);
+                    });
+                };
+
+            //debug
+            if (opt.debug) {
+                def.always(function () {
+                    var list = _.isArray(this) ? this : [this];
+                    _.each(list, function (current) {
+                        if (current.state)
+                            console.warn('SAVEANDYELL: ' +  current.state());
+                        else if (def.state)
+                            console.warn('SAVEANDYELL: ' +  def.state());
+                    });
+                });
+            }
+
+            //yell on reject
+            return def.fail(function (e) {
+                        require(['io.ox/core/notifications'], function (notifications) {
+                            var obj = e || { type: 'error' };
+                            //use obj.message for custom error message
+                            notifications.yell(obj);
+                        });
+                    });
+        };
 
         Event.extend(this);
     };

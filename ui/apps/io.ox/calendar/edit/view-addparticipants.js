@@ -22,7 +22,8 @@ define('io.ox/calendar/edit/view-addparticipants',
 
     'use strict';
 
-    var AddParticipantView = Backbone.View.extend({
+    var lastSearchResults = [],//last results, used to identify internal Users
+        AddParticipantView = Backbone.View.extend({
         events: {
             'click [data-action="add"]': 'onClickAdd'
         },
@@ -41,7 +42,8 @@ define('io.ox/calendar/edit/view-addparticipants',
                     resources: true,
                     distributionlists: true,
                     parentSelector: '.io-ox-calendar-edit',
-                    placement: 'bottom'
+                    placement: 'bottom',
+                    keepId: false
                 },
                 options = $.extend(defaults, opt),
                 autocompleteAPI = new AutocompleteAPI(options);
@@ -57,8 +59,11 @@ define('io.ox/calendar/edit/view-addparticipants',
                     parentSelector: options.parentSelector,
                     placement: options.placement,
                     api: autocompleteAPI,
+                    name: options.name,
                     // reduce suggestion list
                     reduce: function (data) {
+                        // updating baton-data-node
+                        self.trigger('update');
                         var baton = $.data(self.$el, 'baton') || {list: []},
                             hash = {},
                             list,
@@ -82,7 +87,7 @@ define('io.ox/calendar/edit/view-addparticipants',
                                 }
                             },
                             //set hash for doublet check
-                            getHash = function (list) {
+                            getHash = function () {
                                 var hash = {};
                                 _(baton.list).each(function (obj) {
                                     // handle contacts/external contacts
@@ -94,7 +99,7 @@ define('io.ox/calendar/edit/view-addparticipants',
                                 return hash;
                             },
                             // remove doublets from list
-                            filterDoubletes = function (list, hash) {
+                            filterDoubletes = function (hash) {
                                 return _(data).filter(function (recipient) {
                                     var type = getType(recipient),
                                         uniqueId = type === 1 ? !hash[type + '|' + recipient.data.internal_userid || ''] : !hash[type + '|' + recipient.data.id],
@@ -103,10 +108,10 @@ define('io.ox/calendar/edit/view-addparticipants',
                                 });
                             };
 
-                        // updating baton-data-node
-                        self.trigger('update');
-                        hash = getHash(list);
-                        list = filterDoubletes(list, hash);
+                        hash = getHash();
+                        list = filterDoubletes(hash);
+                        //save Results
+                        lastSearchResults = data;
                         //return number of query hits and the filtered list
                         return { list: list, hits: data.length };
                     },
@@ -115,17 +120,21 @@ define('io.ox/calendar/edit/view-addparticipants',
                             switch (obj.type) {
                             case 'user':
                             case 'contact':
-                                if (obj.data.internal_userid && obj.data.email1 === obj.email) {
-                                    obj.data.type = 1; //user
-                                    obj.data.id = obj.data.internal_userid;
-                                } else if (obj.data.mark_as_distributionlist) {
-                                    obj.data.type = 6; //distlistunsergroup
-                                } else {
-                                    obj.data.type = 5;
-                                    // h4ck
-                                    obj.data.email1 = obj.email;
-                                    //uses emailparam as flag, to support adding users with their 2nd/3rd emailaddress
-                                    obj.data.emailparam = obj.email;
+                                if (!obj.data.type) {//only change if no type is there or type 5 will be made to type 1 on the second run
+                                    if (obj.data.internal_userid && obj.data.email1 === obj.email) {
+                                        obj.data.type = 1; //user
+                                        if (!options.keepId) {
+                                            obj.data.id = obj.data.internal_userid;
+                                        }
+                                    } else if (obj.data.mark_as_distributionlist) {
+                                        obj.data.type = 6; //distlistunsergroup
+                                    } else {
+                                        obj.data.type = 5;
+                                        // h4ck
+                                        obj.data.email1 = obj.email;
+                                        //uses emailparam as flag, to support adding users with their 2nd/3rd emailaddress
+                                        obj.data.emailparam = obj.email;
+                                    }
                                 }
                                 break;
                             case 'resource':
@@ -149,9 +158,8 @@ define('io.ox/calendar/edit/view-addparticipants',
                 })
                 .on('selected', function (e, selected) {
                     if (_.isObject(selected)) {
-                        //console.log(selected.data);
                         self.$('.add-participant').val('');
-                        self.trigger('select', selected.data);
+                        self.trigger('select', selected.contact);
                     } else {
                         self.onClickAdd();
                     }
@@ -159,6 +167,9 @@ define('io.ox/calendar/edit/view-addparticipants',
             return self;
         },
         onClickAdd: function (e) {
+
+            // updating baton-data-node
+            this.trigger('update');
 
             var selectedItem = this.autoparticipants.getSelectedItem(),
                 self = this;
@@ -179,6 +190,32 @@ define('io.ox/calendar/edit/view-addparticipants',
                 node.focus();
                 return;
             }
+            //look if value was in last search results
+            var foundContact;
+            for (var i = 0; i < lastSearchResults.length; i++) {
+                if (lastSearchResults[i].email === val) {
+                    foundContact = lastSearchResults[i];
+                    //do some formating
+                    foundContact.contact = foundContact.data;
+                    break;
+                }
+            }
+            //found one? add it!
+            if (foundContact) {
+                this.$('.add-participant').val('');
+                return this.autoparticipants.trigger('selected', foundContact);
+            }
+
+            var alreadyIn = $.data(self.$el, 'baton') || { list: []};
+            //look if it's not there already
+            _.each(list, function (elem, index) {
+                for (var i = 0; i < alreadyIn.list.length; i++) {
+                    if (elem[1] === alreadyIn.list[i].email) {
+                        list.splice(index, 1);
+                        break;
+                    }
+                }
+            });
 
             if (list.length === 0) {
                 node.focus();

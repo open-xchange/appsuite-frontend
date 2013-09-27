@@ -53,13 +53,13 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                 );
             }
 
-            if (task.alarm) {
+            if (task.alarm && !_.device('small')) {//alarm makes no sense if reminders are disabled
                 infoPanel.append(
                         $('<br>'),
                         $('<div>').addClass('alarm-date').text(
                             //#. %1$s reminder date of a task
                             //#, c-format
-                            gt('Remind date %1$s', _.noI18n(task.alarm))
+                            gt('Reminder date %1$s', _.noI18n(task.alarm))
                         )
                 );
             }
@@ -114,10 +114,10 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                 )
             );
 
-            if (api.uploadInProgress(encodeURIComponent(_.cid(data)))) {
+            if (api.uploadInProgress(_.ecid(data))) {
                 $('<div>').addClass('attachments-container')
                     .append(
-                        $('<span>').text(gt('Attachments \u00A0\u00A0')).addClass('attachments'),
+                        $('<span>').text(gt('Attachments') + ' \u00A0\u00A0').addClass('attachments'),
                         $('<div>').css({width: '70px', height: '12px', display: 'inline-block'}).busy())
                     .appendTo(node);
             } else if (task.number_of_attachments > 0) {
@@ -136,7 +136,6 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                 actual_duration: gt('Actual duration in minutes'),
                 target_costs: gt('Estimated costs'),
                 actual_costs: gt('Actual costs'),
-                currency: gt('Currency'),
                 trip_meter: gt('Distance'),
                 billing_information: gt('Billing information'),
                 companies: gt('Companies'),
@@ -147,15 +146,18 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
 
             //add recurrence sentence, use calendarfunction to avoid code duplicates
             if (task.recurrence_type) {
-                $details.append($('<label class="detail-label">').text(gt('This task recurs')),
-                                $('<div class="detail-value">').text(calendarUtil.getRecurrenceString(data)));
+                $details.append($('<div class="detail-item">').append($('<label class="detail-label">').text(gt('This task recurs')),
+                                $('<div class="detail-value">').text(calendarUtil.getRecurrenceString(data))));
             }
+            var temp;
             _(fields).each(function (label, key) {
                 if (task[key]) {
-                    $details.append(
-                        $('<label class="detail-label">').text(label),
-                        $('<div class="detail-value">').text(gt.noI18n(task[key]))
-                    );
+                    $details.append(temp = $('<div class="detail-item">').append($('<label class="detail-label">').text(label)));
+                    if ((key === 'target_costs' || key === 'actual_costs') && task.currency) {
+                        temp.append($('<div class="detail-value">').text(gt.noI18n(task[key]) + ' ' + task.currency));
+                    } else {
+                        temp.append($('<div class="detail-value">').text(gt.noI18n(task[key])));
+                    }
                     hasDetails = true;
                 }
             });
@@ -165,7 +167,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
             }
 
             if (task.participants.length > 0) {
-                require(['io.ox/core/api/user'], function (userApi) {
+                require(['io.ox/core/api/user'], function (userAPI) {
                     var table,
                         states = [
                             [gt('Not yet confirmed'), 'gray'],
@@ -175,7 +177,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                         ],
                         lookupParticipant = function (node, table, participant) {
                             if (participant.id) {//external participants dont have an id but the display name is already given
-                                userApi.get({id: participant.id}).done(function (userInformation) {
+                                userAPI.get({id: participant.id}).done(function (userInformation) {
                                         drawParticipant(table, participant, userInformation.display_name, userInformation);
                                     }).fail(function () {
                                         failedToLoad(node, table, participant);
@@ -188,20 +190,20 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                         drawParticipant = function (table, participant, name, userInformation) {
                             var row;
                             if (userInformation) {
-                                table.append(row = $('<tr>').append(
-                                    $('<td class="halo-link">').data(_.extend(userInformation, { display_name: name, email1: userInformation.email1 })).append($('<a href="#">').text(name)))
+                                table.append(row = $('<div class="task-participant">').append(
+                                    $('<span class="halo-link participants-table-name">').data(_.extend(userInformation, { display_name: name, email1: userInformation.email1 })).append($('<a href="#">').text(name)))
                                 );
                             } else {
-                                table.append(row = $('<tr>').append(
-                                    $('<td class="halo-link">').data(_.extend(participant, { display_name: name, email1: participant.mail })).append($('<a href="#">').text(name)))
+                                table.append(row = $('<div class="task-participant">').append(
+                                    $('<span class="halo-link participants-table-name">').data(_.extend(participant, { display_name: name, email1: participant.mail })).append($('<a href="#">').text(name)))
                                 );
                             }
                             row.append(
-                                $('<td>').append($('<div>').addClass('participants-table-colorsquare').css('background-color', states[participant.confirmation || 0][1])),
-                                $('<td>').text(states[participant.confirmation || 0][0])
+                                $('<span>').addClass('participants-table-colorsquare').css('background-color', states[participant.confirmation || 0][1]),
+                                $('<span>').text(states[participant.confirmation || 0][0])
                                 );
                             if (participant.confirmmessage) {
-                                row.append($('<td>').addClass('participants-table-confirmmessage').text(_.noI18n('\u00A0\u00A0\u00A0' + participant.confirmmessage)));
+                                row.append($('<span>').addClass('participants-table-confirmmessage').text(_.noI18n(participant.confirmmessage)));
                             }
                         },
                         failedToLoad = function (node, table, participant) {
@@ -226,14 +228,14 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                     });
                     if (intParticipants.length > 0) {
                         node.append($('<label class="detail-label">').text(gt('Participants')),
-                                table = $("<table class='task-participants-table'>"));
+                                table = $("<div class='task-participants-table'>"));
                         _(intParticipants).each(function (participant) {
                             lookupParticipant(node, table, participant);
                         });
                     }
                     if (extParticipants.length > 0) {
                         node.append($('<label class="detail-label">').text(gt('External participants')),
-                                table = $("<table class='task-participants-table'>"));
+                                table = $("<div class='task-participants-table'>"));
                         _(extParticipants).each(function (participant) {
                             lookupParticipant(node, table, participant);
                         });
@@ -263,7 +265,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
             } else {
                 attachmentNode = $('<div>').addClass('attachments-container').appendTo(this);//else build new
             }
-            $('<span>').text(gt('Attachments \u00A0\u00A0')).addClass('attachments').appendTo(attachmentNode);
+            $('<span>').text(gt('Attachments') + ' \u00A0\u00A0').addClass('attachments').appendTo(attachmentNode);
             require(['io.ox/core/api/attachment'], function (api) {
                 api.getAll({folder_id: task.folder_id, id: task.id, module: 4}).done(function (data) {
                     _(data).each(function (a, index) {
@@ -271,7 +273,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                         buildDropdown(attachmentNode, _.noI18n(a.filename), a);
                     });
                     if (data.length > 1) {
-                        buildDropdown(attachmentNode, gt('all'), data);
+                        buildDropdown(attachmentNode, gt('All attachments'), data).find('a').removeClass('attachment-item');
                     }
                     attachmentNode.delegate('a', 'click', function (e) {e.preventDefault(); });
                 }).fail(function () {
@@ -290,11 +292,16 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
     };
 
     var buildDropdown = function (container, label, data) {
-        new links.DropdownLinks({
+        var bla = new links.DropdownLinks({
                 label: label,
                 classes: 'attachment-item',
                 ref: 'io.ox/tasks/attachment/links'
             }).draw.call(container, data);
+
+        if (_.device('small')) {//no inline style for mobile
+            $(bla).css('display', 'block');
+        }
+        return bla;
     };
 
     return taskDetailView;

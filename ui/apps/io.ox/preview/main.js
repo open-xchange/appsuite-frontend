@@ -16,7 +16,9 @@
 define('io.ox/preview/main',
     ['io.ox/core/extensions',
      'io.ox/core/capabilities',
-     'gettext!io.ox/preview'], function (ext, capabilities, gt) {
+     'io.ox/files/mediasupport',
+     'gettext!io.ox/preview'
+    ], function (ext, capabilities, mediasupport, gt) {
 
     'use strict';
 
@@ -31,7 +33,7 @@ define('io.ox/preview/main',
             });
         };
         clickableLink = function (desc, clickHandler) {
-            var $a = $('<a>', { draggable: true })
+            var $a = $('<a>', { draggable: true, tabindex: 1 })
                 .attr('data-downloadurl', desc.mimetype + ':' + desc.name + ':' + ox.abs + desc.dataURL + '&delivery=download');
             if (clickHandler) {
                 $a.on('click', clickHandler);
@@ -42,7 +44,7 @@ define('io.ox/preview/main',
         };
     } else {
         clickableLink = function (desc, clickHandler) {
-            var link = $('<a>', { href: desc.dataURL + '&delivery=view', target: '_blank'});
+            var link = $('<a>', { href: desc.dataURL + '&delivery=view', target: '_blank', tabindex: 1});
             if (clickHandler) {
                 link.on('click', clickHandler);
             }
@@ -110,21 +112,18 @@ define('io.ox/preview/main',
         }
     }));
 
+
     // register audio typed renderer
-    if (Modernizr.audio && _.device('!android')) {
+    if (mediasupport.hasSupport('audio')) {
         Renderer.point.extend(new Engine({
             id: 'audio',
             index: 10,
             supports: (function () {
-                var tmp = [];
-                $.each(Modernizr.audio, function (id, elem) {
-                    tmp.push(id);
-                });
-                return tmp;
+                return mediasupport.supportedExtensionsArray('audio');
             }()),
             draw: function (file) {
                 var audiofile = $('<audio>').attr({
-                    src: file.dataURL,
+                    src: file.dataURL + '&delivery=view&content_type=' + file.mimetype,
                     type: file.mimetype,
                     preload: 'metadata',
                     controls: 'control',
@@ -136,10 +135,11 @@ define('io.ox/preview/main',
 
                     var pw = self.closest('.file-details').width();
 
-                    self.find('video, audio').mediaelementplayer({
+                    self.find('audio').mediaelementplayer({
                         audioWidth: pw,
                         videoWidth: pw,
                         plugins: ['flash', 'silverlight'],
+                        pluginPath: 'apps/mediaelement/',
                         enableAutosize: false,
                         timerRate: 250,
                         features: ['playpause', 'progress', 'current', 'volume'],
@@ -172,62 +172,6 @@ define('io.ox/preview/main',
                     });
                 });
             }
-        }));
-    }
-
-    function previewLoaded() {
-        $(this).css('visibility', '').closest('div').idle();
-    }
-
-    function previewFailed() {
-        $(this).closest('div').empty();
-    }
-
-    // if available register office typed renderer
-    if (capabilities.has('document_preview')) {
-        Renderer.point.extend(new Engine({
-            id: 'office',
-            index: 10,
-            supports:  ['doc', 'dot', 'docx', 'dotx', 'docm', 'dotm', 'xls', 'xlt', 'xla', 'xlsx', 'xltx', 'xlsm',
-             'xltm', 'xlam', 'xlsb', 'ppt', 'pot', 'pps', 'ppa', 'pptx', 'potx', 'ppsx', 'ppam', 'pptm', 'potm', 'ppsm', 'pdf',
-             'odt', 'ods', 'odp', 'odg', 'odc', 'odf', 'odi', 'odm', 'otg', 'otp', 'ott', 'ots', 'rtf' ],
-            getUrl: function (file, options) {
-                options = _.extend({ width: 400 }, options);
-                var url = file.dataURL || file.url;
-                return url + '&format=preview_image&width=' + options.width + '&delivery=view&scaleType=contain';
-            },
-            draw: function (file, options) {
-
-                var $a = clickableLink(file, function (e) {
-                        e.preventDefault();
-                        if (file.module) {
-                            file.source = 'task';
-                            file.folder_id = file.folder;
-                        } else if (file.data && file.data.mail) {
-                            file.folder_id = file.data.mail.folder_id;
-                            file.attached = file.data.id;
-                            file.id = file.data.mail.id;
-                            file.source = 'mail';
-                        }
-
-                        ox.launch('io.ox/office/preview/main', { action: 'load', file: file });
-                    }),
-                    width = options.width || '400',
-                    $img = $('<img alt="">')
-                        .css({ width: width + 'px', maxWidth: '100%', visibility: 'hidden' })
-                        .addClass('io-ox-clickable')
-                        .on({ load: previewLoaded, error: previewFailed });
-
-                this.busy();
-
-                // setting src now; just helpful for debugging/setTimeout
-                $img.attr('src', file.dataURL + '&format=preview_image&width=' + width + '&delivery=view&scaleType=contain');
-
-                $a.append($img);
-                dragOutHandler($a);
-                this.append($a);
-            },
-            omitDragoutAndClick: true
         }));
     }
 
@@ -265,9 +209,12 @@ define('io.ox/preview/main',
         supports: ['txt', 'plain/text', 'asc', 'js', 'md'],
         draw: function (file) {
             var node = this;
-            $.ajax({ url: file.dataURL, dataType: 'text' }).done(function (text) {
-                // plain text preview
-                node.addClass('plaintext').text(_.noI18n(text));
+            require(['io.ox/core/emoji/util', 'less!io.ox/preview/style.less'], function (emoji) {
+                $.ajax({ url: file.dataURL, dataType: 'text' }).done(function (text) {
+                    // plain text preview with emoji support
+                    text = emoji.processEmoji(text);
+                    node.addClass('preview-plaintext').html(_.escape(text));
+                });
             });
         },
         omitClick: true
@@ -363,6 +310,7 @@ define('io.ox/preview/main',
 
     return {
         Preview: Preview,
+        Renderer: Renderer,
         Engine: Engine,
         Extension: Extension,
         protectedMethods: {

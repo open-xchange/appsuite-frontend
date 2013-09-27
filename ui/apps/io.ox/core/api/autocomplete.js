@@ -14,19 +14,28 @@
 define('io.ox/core/api/autocomplete',
       ['io.ox/core/http',
        'io.ox/core/capabilities',
+       'io.ox/mail/api',
        'io.ox/contacts/api',
+       'io.ox/contacts/util',
        'io.ox/core/api/resource',
-       'io.ox/core/api/group'], function (http, capabilities, contactsAPI, resourceAPI, groupAPI) {
+       'io.ox/core/api/group'], function (http, capabilities, mailAPI, contactsAPI, util, resourceAPI, groupAPI) {
 
     'use strict';
 
     function Autocomplete(options) {
+
         var that = this;
+
         this.options = options || {};
         this.cache = {};
         this.apis = [];
 
         contactsAPI.on('create update delete', function () {
+            that.cache = {};
+        });
+
+        mailAPI.on('send', function () {
+            // clear on mail send. Auto-collect contacts might have added new contacts
             that.cache = {};
         });
 
@@ -123,6 +132,7 @@ define('io.ox/core/api/autocomplete',
          * @return {array}
          */
         processContactResults: function (type, data, query, options) {
+
             var tmp = [], hash = {}, self = this, list = [];
 
             //distinguish email and phone objects
@@ -185,23 +195,10 @@ define('io.ox/core/api/autocomplete',
             var fields = [].concat(fields), ids;
             //process each field
             _.each(fields, function (field) {
-                if (obj.data[field]) {
-                    var name, a = obj.data.last_name, b = obj.data.first_name, c = obj.data.display_name;
-                    if (a && b) {
-                        // use last_name & first_name
-                        name = a + ', ' + b;
-                    } else if (c) {
-                        // use display name
-                        name = c + '';
-                    } else {
-                        // use last_name & first_name
-                        name = [];
-                        if (a) { name.push(a); }
-                        if (b) { name.push(b); }
-                        name = name.join(', ');
-                    }
+                var data = obj.data;
+                if (data[field]) {
 
-                    if (obj.data.folder_id !== 6 && type === 'user') return;
+                    if (data.folder_id !== 6 && type === 'user') return;
 
                     //store target value
                     ids = {};
@@ -210,8 +207,10 @@ define('io.ox/core/api/autocomplete',
                     list.push(
                         $.extend({
                             type: obj.type,
-                            display_name: name,
-                            data: _(obj.data).clone(),
+                            first_name: data.first_name || '',
+                            last_name: data.last_name || '',
+                            display_name: util.getMailFullName(data),
+                            data: _(data).clone(),
                             field: field,
                             email: '',
                             phone: ''

@@ -15,11 +15,12 @@
 define('io.ox/mail/util',
     ['io.ox/core/extensions',
      'io.ox/core/date',
+     'io.ox/core/util',
      'io.ox/core/api/account',
      'io.ox/core/capabilities',
      'settings!io.ox/mail',
      'settings!io.ox/contacts',
-     'gettext!io.ox/core'], function (ext, date, accountAPI, capabilities, settings, contactsSetting, gt) {
+     'gettext!io.ox/core'], function (ext, date, util, accountAPI, capabilities, settings, contactsSetting, gt) {
 
     'use strict';
 
@@ -57,6 +58,11 @@ define('io.ox/mail/util',
             return isSameDay() && opt.filtertoday ? timestr() : datestr();
         },
 
+        trimAddress = function (address) {
+            address = $.trim(address || '');
+            // apply toLowerCase only for mail addresses, don't change phone numbers
+            return address.indexOf('@') > -1 ? address.toLowerCase() : address;
+        },
 
         // regex: split list at non-quoted ',' or ';'
         rRecipientList = /([^,;"]+|"(\\.|[^"])+")+/,
@@ -70,8 +76,6 @@ define('io.ox/mail/util',
         rTelephoneCleanup = /[^0-9+]/g,
         // regex: used to identify phone numbers
         rNotDigitAndAt = /[^A-Za-z@]/g,
-        // regex: clean up display name
-        rDisplayNameCleanup = /(^["'\\\s]+|["'\\\s]+$)/g,
 
         // mail addresses hash
         addresses = {};
@@ -131,7 +135,7 @@ define('io.ox/mail/util',
                 } else {
                     target = that.cleanupPhone(match[3]);
                 }
-                name = match[1].replace(rDisplayNameCleanup, '');
+                name = util.unescapeDisplayName(match[1]);
             } else {
                 // case 2: assume plain email address / telephone number
                 if (that.getChannel(recipient) === 'email') {
@@ -168,7 +172,7 @@ define('io.ox/mail/util',
                             message = that.removeChannelSuffix(message);
                         });
                     } else if (_.isObject(mail)) {
-                        if (_.isArray(mail.from[0]) && mail.from[0][1])
+                        if (mail.from && _.isArray(mail.from[0]) && mail.from[0][1])
                             mail.from[0][1] = remove(mail.from[0][1]);
                         if (_.isArray(mail.to)) {
                             _.each(mail.to, function (recipient) {
@@ -220,25 +224,28 @@ define('io.ox/mail/util',
                     display_name: this.getDisplayName(list[i]),
                     email1: String(list[i][1] || '').toLowerCase()
                 };
-                $('<a>', { href: '#', title: obj.email1 })
-                    .addClass('person-link person-' + field)
-                    .css('whiteSpace', 'nowrap')
-                    .text(_.noI18n(obj.display_name))
-                    .data('person', obj)
-                    .on('click', obj, fnClickPerson).css('cursor', 'pointer')
-                    .appendTo(tmp);
+                if (obj.email1 !== 'undisclosed-recipients:;') {
+                    $('<a>', { href: '#', title: obj.email1, tabindex: 1 })
+                        .addClass('person-link person-' + field)
+                        .text(_.noI18n(obj.display_name))
+                        .data('person', obj)
+                        .on('click', obj, fnClickPerson)
+                        .appendTo(tmp);
+                } else {
+                    $('<span>').text(_.noI18n(obj.display_name)).appendTo(tmp);
+                }
 
                 // add 'on behalf of'?
                 if (field === 'from' && 'headers' in data && 'Sender' in data.headers) {
                     sender = this.parseRecipients(data.headers.Sender);
                     // only show if display names differ (otherwise it looks like a senseless duplicate)
-                    if (sender[0][0] !== data.from[0][0]) {
-                        tmp.prepend(
-                            this.serializeList({ sender: sender }, 'sender'),
+                    if (sender[0][0] !== data.from[0][0] && sender[0][1] !== data.from[0][1]) {
+                        tmp.append(
                             $.txt(_.noI18n(' ')),
-                            //#. (From) email1 on behalf of email2. Appears in email detail view.
-                            gt('on behalf of'),
-                            $.txt(_.noI18n(' '))
+                            //#. (From) email1 via email2. Appears in email detail view.
+                            gt('via'),
+                            $.txt(_.noI18n(' ')),
+                            this.serializeList({ sender: sender }, 'sender')
                         );
                     }
                 }
@@ -277,11 +284,13 @@ define('io.ox/mail/util',
         },
 
         getDisplayName: function (pair) {
-            if (!pair) {
-                return '';
-            }
-            var name = pair[0], email = String(pair[1] || '').toLowerCase(),
-                display_name = _.isString(name) ? name.replace(rDisplayNameCleanup, '') : '';
+
+            if (!_.isArray(pair)) return '';
+
+            var name = pair[0],
+                email = String(pair[1] || '').toLowerCase(),
+                display_name = util.unescapeDisplayName(name);
+
             return display_name || email;
         },
 
@@ -294,7 +303,12 @@ define('io.ox/mail/util',
             field = field || 'from';
             var list = data[field] || [['', '']],
                 dn = that.getDisplayName(list[0]);
-            return $('<span>').addClass('person').text(_.noI18n(dn));
+            if (field === 'to' && dn === '') {
+                dn = gt('No recipients');
+            } else {
+                dn = _.noI18n(dn);
+            }
+            return $('<span class="person">').text(dn);
         },
 
         /**
@@ -302,15 +316,23 @@ define('io.ox/mail/util',
          *
          * @return the email address or a string like "Display Name" <email@address.example>
          */
-        formatSender: function (name, address) {
+        formatSender: function (name, address, quote) {
+
             var args = _(arguments).toArray();
+
             if (_.isArray(args[0])) {
+                quote = address;
                 name = args[0][0];
                 address = args[0][1];
             }
-            name = _.isString(name) ? name.replace(rDisplayNameCleanup, '') : '';
-            address = $.trim(address || '').toLowerCase();
-            return name === '' ? address : '"' + name + '" <' + address + '>';
+
+            name = util.unescapeDisplayName(name);
+            address = trimAddress(address);
+
+            // short version; just mail address
+            if (name === '') return address;
+            // long version; display_name plus address
+            return (quote === false ? name : '"' + name + '"') + ' <' + address + '>';
         },
 
         getPriority: function (data) {
@@ -340,7 +362,7 @@ define('io.ox/mail/util',
         },
 
         getFullDate: function (timestamp) {
-            var t = new date.Local(date.Local.utc(timestamp));
+            var t = new date.Local(timestamp);
             return t.format(date.DATE_TIME);
         },
 
@@ -463,7 +485,6 @@ define('io.ox/mail/util',
 
                 //fix referenced mail
                 if (data.parent && mail && mail.folder_id === undefined) {
-                    console.log('fixed mail', data, mail);
                     mail.id =  data.parent.id;
                     mail.folder_id = data.parent.folder_id;
                 }

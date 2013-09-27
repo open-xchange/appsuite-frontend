@@ -41,11 +41,13 @@ define("io.ox/core/extPatterns/links",
         this.draw = this.draw || function (baton) {
             baton = ext.Baton.ensure(baton);
             this.append(
-                $("<a>", { href: "#", tabindex: "1", "data-action": self.id })
+                $("<a>", { href: "#", tabindex: 1, "data-action": self.id })
                 .addClass(self.cssClasses || 'io-ox-action-link')
                 .attr({
+                    'data-section': self.section || 'default',
                     'data-prio': self.prio || 'lo',
-                    'data-ref': self.ref
+                    'data-ref': self.ref,
+                    'data-prio-mobile': self.prioMobile || 'none'
                 })
                 .data({ ref: self.ref, baton: baton })
                 .click(click)
@@ -72,8 +74,8 @@ define("io.ox/core/extPatterns/links",
             draw: function (baton) {
                 baton = ext.Baton.ensure(baton);
                 this.append(
-                    $('<li>').append(
-                        $('<a href="#">').attr('data-action', extension.ref).text(extension.label)
+                    $('<li>').attr('role', 'menuitem').append(
+                        $('<a href="#" tabindex="1">').attr('data-action', extension.ref).text(extension.label)
                         .on('click', { baton: baton, extension: extension }, actionClick)
                     )
                 );
@@ -98,9 +100,10 @@ define("io.ox/core/extPatterns/links",
 
         this.draw = function (baton) {
             baton = ext.Baton.ensure(baton);
+            var attr = { href: '#', 'class': 'btn', 'data-action': self.id, tabIndex: self.tabIndex };
+            if (tag === 'button') attr.type = 'button';
             this.append(
-                $('<' + tag + ' href="#" class="btn">')
-                .attr({ "data-action": self.id, tabIndex: self.tabIndex })
+                $('<' + tag + '>', attr)
                 .addClass(self.cssClasses)
                 .css(self.css || {})
                 .on('click', { extension: self, baton: baton }, click)
@@ -114,10 +117,20 @@ define("io.ox/core/extPatterns/links",
         return actions.applyCollection(self.ref, collection, baton, args);
     };
 
-    var drawLinks = function (self, collection, node, baton, args, bootstrapMode) {
+    var drawLinks = function (extension, collection, node, baton, args, bootstrapMode) {
+
         baton = ext.Baton.ensure(baton);
-        var nav = $('<nav>').appendTo(node);
-        return getLinks(self, collection, baton, args)
+        var nav = $('<nav role="presentation">').appendTo(node);
+
+        // customize
+        if (extension.attributes) {
+            nav.attr(extension.attributes);
+        }
+        if (extension.classes) {
+            nav.addClass(extension.classes);
+        }
+
+        return getLinks(extension, collection, baton, args)
             .always(function (links) {
                 // count resolved links
                 var count = 0;
@@ -182,32 +195,50 @@ define("io.ox/core/extPatterns/links",
                 multiple = _.isArray(baton.data) && baton.data.length > 1;
 
             drawLinks(extension, new Collection(baton.data), this, baton, args).done(function (nav) {
-                // customize
-                if (extension.attributes) {
-                    nav.attr(extension.attributes);
-                }
-                if (extension.classes) {
-                    nav.addClass(extension.classes);
-                }
+
                 // add toggle unless multi-selection
-                var all = nav.children(), lo = nav.children('[data-prio="lo"]');
-                if (!multiple && all.length > 5 && lo.length > 1) {
+                var all = nav.children(),
+                    lo = all.filter('[data-prio="lo"]'),
+                    stayOnTop = all.filter('[data-prio-mobile="none"]'),
+                    isSmall = _.device('small');
+
+                if (!multiple && (isSmall || (all.length > 5 && lo.length > 1))) {
                     nav.append(
                         $('<span class="io-ox-action-link dropdown">').append(
-                            $('<a href="#" data-toggle="dropdown" data-action="more">').append(
-                                $.txt(gt('More')),
-                                $.txt(_.noI18n(' ...')),
-                                $('<b class="caret">')
-                            ).on('click', function (e) {
+                            $('<a href="#" data-toggle="dropdown" data-action="more" aria-haspopup="true" tabindex="1">')
+                            .append(
+                                isSmall ?
+                                    [$.txt(gt('Actions')), $('<b class="caret">')] :
+                                    [$.txt(gt('More')), $.txt(_.noI18n(' ...')), $('<b class="caret">')]
+                            )
+                            .on(Modernizr.touch ? 'touchstart' : 'click', function (e) {
+                                // fix dropdown position on-the-fly
                                 var left = $(this).parent().position().left;
-                                if (left < 100) {
-                                    $(this).next().removeClass('dropdown-right').addClass('dropdown-left');
-                                } else {
-                                    $(this).next().removeClass('dropdown-left').addClass('dropdown-right');
-                                }
+                                $(this).next().attr('class', 'dropdown-menu' + (left < 100 ? '' : ' dropdown-right'));
                             }),
-                            $('<ul class="dropdown-menu dropdown-right">').append(
-                                lo.map(wrapAsListItem)
+                            $('<ul class="dropdown-menu dropdown-right" role="menu">').append((function () {
+                                if (isSmall) {
+                                    if (stayOnTop) {
+                                        return stayOnTop.map(wrapAsListItem);
+                                    } else {
+                                        return all.stayOnTop.map(wrapAsListItem);
+                                    }
+                                } else {
+                                    // loop over all items and visually group by "section"
+                                    var items = [], currentSection = '';
+                                    lo.each(function () {
+                                        var node = $(this), section = node.attr('data-section');
+                                        // add divider?
+                                        if (currentSection !== '' && currentSection !== section) {
+                                            items.push($('<li class="divider" role="presentation">'));
+                                        }
+                                        currentSection = section;
+                                        // add item
+                                        items.push($('<li>').append(node));
+                                    });
+                                    return items;
+                                }
+                            }())
                             )
                         )
                     );
@@ -227,24 +258,33 @@ define("io.ox/core/extPatterns/links",
         }
         var args = $.makeArray(arguments),
             $parent = $('<div>').addClass('dropdown')
-                .css({ display: 'inline-block', zIndex: (z = z > 0 ? z - 1 : 11000) })
+                .css('display', 'inline-block')
                 .appendTo(this),
-            $toggle = $('<a href="#" data-toggle="dropdown">')
+            label = options.label || baton.label || '###',
+            $toggle = $('<a href="#" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
                 .data('context', baton.data)
-                .text(options.label || baton.label || '###')
                 .append(
+                    _.isString(label) ? $.txt(label) : label,
                     $('<span>').text(_.noI18n(' ')),
                     $('<b>').addClass('caret')
                 )
                 .appendTo($parent);
 
+        if (options.zIndex !== undefined) {
+            $parent.css('zIndex', (z = z > 0 ? z - 1 : 11000));
+        }
         $toggle.addClass(options.classes);
         $parent.append($.txt(_.noI18n('\u00A0\u00A0 '))); // a bit more space
 
         // create & add node first, since the rest is async
-        var node = $('<ul>').addClass('dropdown-menu').appendTo($parent);
+        var node = $('<ul role="menu">').addClass('dropdown-menu').appendTo($parent);
         if (options.open === 'left') {
             node.addClass("pull-right").css({textAligh: 'left'});
+        } else {
+            $toggle.on(Modernizr.touch ? 'touchstart' : 'click', function (e) {
+                // fix dropdown position on-the-fly
+                node.addClass($parent.position().left < 100 ? '' : ' dropdown-right');
+            });
         }
         drawLinks(options, new Collection(baton.data), node, baton, args, true);
 
@@ -278,7 +318,6 @@ define("io.ox/core/extPatterns/links",
     var drawButtonGroup = function (options, baton) {
         var args = $.makeArray(arguments),
             $parent = $("<div>").addClass('btn-group')
-                .css({ display: 'inline-block' })
                 .addClass(options.classes)
                 .attr('data-toggle', (options.radio ? 'buttons-radio' : ''))
                 .appendTo(this);
@@ -309,14 +348,14 @@ define("io.ox/core/extPatterns/links",
         }
 
         function draw(extension, baton) {
-            var args = $.makeArray(arguments), a, ul, title = [];
+            var args = $.makeArray(arguments), a, ul, div, title = [];
             this.append(
-                $('<div class="toolbar-button dropdown">').append(
-                    a = $('<a href="#" data-toggle="dropdown" title="">')
+                div = $('<div class="toolbar-button dropdown">').append(
+                    a = $('<a href="#" data-toggle="dropdown" title="" tabindex="1">')
                         .attr('data-ref', extension.ref)
                         .addClass(extension.addClass)
                         .append(extension.icon()),
-                    ul = $('<ul class="dropdown-menu dropdown-right-side">')
+                    ul = $('<ul class="dropdown-menu dropdown-right-side" role="menu" aria-hidden="true">')
                 )
             );
             // get links
@@ -332,11 +371,15 @@ define("io.ox/core/extPatterns/links",
                             x.draw.call(ul, baton);
                         });
                     // set title attribute
-                    a.attr('title', extension.label || title.join(', '));
+                    a.attr('title', extension.label || title.join(', '))
+                     .attr('aria-label', extension.label || title.join(', '))
+                     .attr('aria-haspopup', true);
+
+                    div.attr('role', 'menu');
                     // add footer label?
                     if (extension.label) {
                         ul.append(
-                            $('<li class="dropdown-footer">').text(extension.label)
+                            $('<li class="dropdown-footer">').attr('role', 'menuitem').text(extension.label)
                         );
                     }
                 } else {
@@ -345,8 +388,13 @@ define("io.ox/core/extPatterns/links",
                     ul.remove();
                     if (links.length === 1) {
                         // directly link actions
-                        a.attr('title', links[0].label || '')
-                            .on('click', { baton: baton, extension: links[0] }, actionClick);
+                        a.attr({
+                            title: links[0].label || '',
+                            'aria-label': links[0].label || '',
+                            role: 'menuitem',
+                            tabindex: 1
+                        })
+                        .on('click', { baton: baton, extension: links[0] }, actionClick);
                     } else {
                         a.addClass('disabled').on('click', preventDefault);
                     }

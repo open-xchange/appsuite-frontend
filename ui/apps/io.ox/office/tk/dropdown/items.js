@@ -13,11 +13,15 @@
 
 define('io.ox/office/tk/dropdown/items',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/keycodes',
      'io.ox/office/tk/control/group',
      'io.ox/office/tk/dropdown/dropdown'
-    ], function (Utils, Group, DropDown) {
+    ], function (Utils, KeyCodes, Group, DropDown) {
 
     'use strict';
+
+    var // CSS marker class for control groups with menu items
+        ITEM_GROUP_CLASS = 'item-group';
 
     // class Items ============================================================
 
@@ -81,11 +85,8 @@ define('io.ox/office/tk/dropdown/items',
         var // self reference (the Group instance)
             self = this,
 
-            // the group in the drop-down menu containing the menu items
-            itemGroup = new Group({ classes: 'item-buttons design-' + Utils.getStringOption(options, 'itemDesign', 'default') }),
-
-            // the root node of the item group
-            itemGroupNode = itemGroup.getNode(),
+            // the groups in the drop-down menu containing the menu items, mapped by section identifier
+            sectionItemGroups = {},
 
             // handler called to insert a new item element into the item group
             itemInserter = Utils.getFunctionOption(options, 'itemInserter'),
@@ -101,20 +102,9 @@ define('io.ox/office/tk/dropdown/items',
 
         // base constructor ---------------------------------------------------
 
-        DropDown.call(this, Utils.extendOptions(options, { autoLayout: true }));
+        DropDown.call(this, Utils.extendOptions(options, { autoLayout: true, getFocusableHandler: getFocusableHandler }));
 
         // private methods ----------------------------------------------------
-
-        /**
-         * Returns the section node with the passed identifier.
-         *
-         * @returns {jQuery}
-         *  The section node with the passed identifier if existing, otherwise
-         *  an empty jQuery collection.
-         */
-        function getSectionNode(sectionId) {
-            return itemGroupNode.children('.item-section[data-section="' + sectionId + '"]');
-        }
 
         /**
          * Gets or creates the section node with the passed identifier.
@@ -122,33 +112,105 @@ define('io.ox/office/tk/dropdown/items',
          * @returns {jQuery}
          *  The section node with the passed identifier.
          */
-        function getOrCreateSectionNode(sectionId, label) {
-            var sectionNode = getSectionNode(sectionId);
+        function getOrCreateSectionNode(sectionId, options) {
+
+            var menuNode = self.getMenuNode(),
+                sectionNode = menuNode.children('.section-container[data-section="' + sectionId + '"]'),
+                label = Utils.getStringOption(options, 'label', ''),
+                separator = Utils.getBooleanOption(options, 'separator', false),
+                classes = Utils.getStringOption(options, 'classes');
+
             if (sectionNode.length === 0) {
-                if (_.isString(label)) {
-                    itemGroupNode.append(Utils.createLabel({ label: label }));
+                // add separator line if specified
+                if (separator && (menuNode.children().length > 0)) {
+                    menuNode.append($('<div>').addClass('section-separator'));
                 }
-                sectionNode = Utils.createContainerNode('item-section').attr('data-section', sectionId).appendTo(itemGroupNode);
+                // add heading label if specified
+                if (label.length > 0) {
+                    menuNode.append(Utils.createLabel({ label: label }).addClass('section-heading'));
+                }
+                // create the section root node
+                sectionNode = Utils.createContainerNode('section-container')
+                    .attr('data-section', sectionId)
+                    .addClass(classes)
+                    .appendTo(menuNode);
             }
             return sectionNode;
         }
 
-        // methods ------------------------------------------------------------
-
         /**
-         * Returns the group instance containing all items in the drop-down
-         * menu.
+         * Gets or creates an item group for the specified section.
+         *
+         * @returns {Group}
+         *  The existing or new item group.
          */
-        this.getItemGroup = function () {
+        function getOrCreateItemGroup(sectionId) {
+
+            var // existing item group
+                itemGroup = sectionItemGroups[sectionId];
+
+            if (!itemGroup) {
+
+                // create and insert a new item group
+                itemGroup = sectionItemGroups[sectionId] = new Group({ classes: 'item-group' });
+                self.addSectionGroup(sectionId, itemGroup);
+
+                // register click handler for all item buttons
+                itemGroup.registerChangeHandler('click', {
+                    selector: Utils.BUTTON_SELECTOR,
+                    valueResolver: Utils.getFunctionOption(options, 'itemValueResolver')
+                });
+            }
+
             return itemGroup;
-        };
+        }
 
         /**
-         * Returns all button elements representing the menu items.
+         * Handles key events in the drop-down menu.
          */
-        this.getItems = function () {
-            return itemGroupNode.find(Utils.BUTTON_SELECTOR);
-        };
+        function menuKeyHandler(event) {
+
+            var // distinguish between event types (ignore keypress events)
+                keydown = event.type === 'keydown',
+                keyup = event.type === 'keyup';
+
+            // ignore all other key events in input fields
+            if ($(event.target).is('input, textarea')) { return; }
+
+            // handle generic keys
+            switch (event.keyCode) {
+            case KeyCodes.SPACE:
+            case KeyCodes.ENTER:
+                // Bug 28528: ENTER key must be handled explicitly, <a> elements
+                // without 'href' attribute do not trigger click events. The 'href'
+                // attribute has been removed from the buttons to prevent useless
+                // tooltips with the link address.
+                if (keyup && $(event.target).is(Utils.BUTTON_SELECTOR)) {
+                    self.triggerChange(event.target, { preserveFocus: event.keyCode === KeyCodes.SPACE });
+                }
+                return false;
+            case KeyCodes.HOME:
+                if (keydown) {
+                    self.getFocusableMenuControls().first().focus();
+                }
+                return false;
+            case KeyCodes.END:
+                if (keydown) {
+                    self.getFocusableMenuControls().last().focus();
+                }
+                return false;
+            }
+        }
+
+        /**
+         * Filters the passed collection of focusable drop-down menu controls
+         * to the controls currently selected.
+         */
+        function getFocusableHandler(focusableNodes) {
+            return Utils.getSelectedButtons(focusableNodes);
+        }
+
+        // methods ------------------------------------------------------------
 
         /**
          * Removes all list items and their section nodes from the drop-down
@@ -157,26 +219,63 @@ define('io.ox/office/tk/dropdown/items',
          * @returns {Items}
          *  A reference to this instance.
          */
-        this.clearItemGroup = function () {
-            itemGroupNode.empty();
+        this.clearMenuSections = function () {
+            sectionItemGroups = {};
+            this.getMenuNode().empty();
+            this.refresh();
             return this;
         };
 
         /**
-         * Adds a new section node to the drop-down menu.
+         * Adds a new section to the drop-down menu.
          *
          * @param {String} sectionId
          *  The unique identifier of the section.
          *
-         * @param {String} [label]
-         *  If specified, a heading label will be created for the section.
+         * @param {Object} [options]
+         *  A map of options to control the appearance of the section. The
+         *  following options are supported:
+         *  @param {String} [options.label]
+         *      If specified, a heading label will be created for the section.
+         *  @param {Boolean} [options.separator]
+         *      If true, a horizontal line will be drawn above the section.
+         *  @param {String} [options.classes]
+         *      Additional CSS classes that will be added to the section root
+         *      node.
          *
          * @returns {Items}
          *  A reference to this instance.
          */
-        this.createSection = function (sectionId, label) {
-            getOrCreateSectionNode(sectionId, label);
+        this.createMenuSection = function (sectionId, options) {
+            getOrCreateSectionNode(sectionId, options);
             return this;
+        };
+
+        /**
+         * Adds a new control group to the drop-down menu.
+         *
+         * @param {String} sectionId
+         *  The unique identifier of the section. Missing sections will be
+         *  created automatically.
+         *
+         * @param {Group} group
+         *  The control group to be inserted into the section.
+         *
+         * @returns {Items}
+         *  A reference to this instance.
+         */
+        this.addSectionGroup = function (sectionId, group) {
+            this.registerMenuGroup(group);
+            getOrCreateSectionNode(sectionId).append(group.getNode());
+            this.refresh();
+            return this;
+        };
+
+        /**
+         * Returns all button elements representing the menu items.
+         */
+        this.getItems = function () {
+            return this.getMenuNode().find('.' + ITEM_GROUP_CLASS + ' ' + Utils.BUTTON_SELECTOR);
         };
 
         /**
@@ -202,12 +301,14 @@ define('io.ox/office/tk/dropdown/items',
          */
         this.createItem = function (options) {
 
-            var // the section node
-                sectionNode = getOrCreateSectionNode(Utils.getStringOption(options, 'sectionId', '')),
-                // all existing items in the current section
-                sectionButtons = sectionNode.find(Utils.BUTTON_SELECTOR),
+            var // the section identifier
+                sectionId = Utils.getStringOption(options, 'sectionId', ''),
+                // the item group of the section
+                itemGroup = getOrCreateItemGroup(sectionId),
+                // all existing item buttons in the current section
+                groupButtons = itemGroup.getNode().find(Utils.BUTTON_SELECTOR),
                 // create the button element representing the item
-                button = Utils.createButton(options).addClass(Group.FOCUSABLE_CLASS),
+                button = Utils.createButton(options).addClass(Utils.FOCUSABLE_CLASS),
                 // insertion index for sorted items
                 index = -1;
 
@@ -216,7 +317,7 @@ define('io.ox/office/tk/dropdown/items',
 
             // find insertion index for sorted items
             if (sorted) {
-                index = _.chain(sectionButtons.get())
+                index = _.chain(groupButtons.get())
                     // convert array of button elements to strings returned by sort functor
                     .map(function (button) { return sortFunctor.call(self, $(button)); })
                     // calculate the insertion index of the new list item
@@ -225,33 +326,32 @@ define('io.ox/office/tk/dropdown/items',
                     .value();
             } else {
                 // else: append to existing items
-                index = sectionButtons.length;
+                index = groupButtons.length;
             }
 
             // insert the new item element
             if (_.isFunction(itemInserter)) {
-                itemInserter.call(this, sectionNode, button, index);
-            } else if ((0 <= index) && (index < sectionButtons.length)) {
-                button.insertBefore(sectionButtons[index]);
+                itemInserter.call(this, itemGroup.getNode(), button, index);
+            } else if ((0 <= index) && (index < groupButtons.length)) {
+                button.insertBefore(groupButtons[index]);
             } else {
-                sectionNode.append(button);
+                itemGroup.getNode().append(button);
             }
 
             // call external handler
             itemCreateHandler.call(this, button, options);
+
+            this.refresh();
             return button;
         };
 
         // initialization -----------------------------------------------------
 
-        // add the button group control to the drop-down view component
-        this.addPrivateMenuGroup(itemGroup);
+        // add the design marker class
+        this.getMenuNode().addClass('section-list design-' + Utils.getStringOption(options, 'itemDesign', 'default'));
 
         // register event handlers
-        itemGroup.registerChangeHandler('click', {
-            selector: Utils.BUTTON_SELECTOR,
-            valueResolver: Utils.getFunctionOption(options, 'itemValueResolver')
-        });
+        this.getMenuNode().on('keydown keypress keyup', menuKeyHandler);
 
         // default sort functor: sort by button label text, case insensitive
         sortFunctor = _.isFunction(sortFunctor) ? sortFunctor : function (button) {

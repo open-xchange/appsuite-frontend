@@ -17,36 +17,32 @@ define('io.ox/contacts/distrib/create-dist-view',
      'gettext!io.ox/contacts',
      'io.ox/core/tk/autocomplete',
      'io.ox/contacts/api',
-     'io.ox/core/api/autocomplete',
      'io.ox/contacts/util',
-     'io.ox/core/extensions'
-    ], function (views, forms, gt, autocomplete, api, AutocompleteAPI, util, ext) {
+     'io.ox/core/extensions',
+     'io.ox/calendar/edit/view-addparticipants',
+     'io.ox/core/notifications'
+    ], function (views, forms, gt, autocomplete, api, util, ext, AddParticipantsView, notifications) {
 
     'use strict';
-
-    var autocompleteAPI = new AutocompleteAPI({id: 'createDistributionList', contacts: true, distributionlists: false });
 
     var point = views.point('io.ox/contacts/distrib/create-dist-view'),
         ContactCreateDistView = point.createView({
             tagName: 'div'
-//            className: 'container'
         });
 
-    point.extend(new forms.ControlGroup({
-        id: 'displayname',
-        index: 100,
-        attribute: 'display_name',
-        label: gt('List name'), // noun
-        control: '<input type="text" class="input-xlarge">',
-        buildControls: function () {
-            var self = this,
-                buttonText = (self.model.get('id')) ? gt('Save') : gt('Create list');
 
-            return this.nodes.controls || (this.nodes.controls = $('<div class="controls">').append(
-                // element
-                this.buildElement(),
+    point.extend({
+        id: 'title-controls',
+        index: 100,
+        className: 'row-fluid title-controls',
+        render: function (baton) {
+            var self = this,
+            buttonText = (self.model.get('id')) ? gt('Save') : gt('Create list');
+
+            this.$el.append(
+                $('<h1 class="clear-title title">').text(gt('Create distribution list')),
                 // save/create button
-                $('<button class="btn btn-primary" data-action="save">').text(buttonText).on('click', function () {
+                $('<button type="button" class="btn btn-primary" data-action="save" tabindex="3">').text(buttonText).on('click', function () {
                     self.options.parentView.trigger('save:start');
                     self.options.model.save().done(function () {
                         self.options.parentView.trigger('save:success');
@@ -55,68 +51,87 @@ define('io.ox/contacts/distrib/create-dist-view',
                     });
                 }),
                 // cancel button
-                $('<button class="btn" data-action="discard">').text(gt('Discard')).on('click', function () {
+                $('<button type="button" class="btn" data-action="discard" tabindex="2">').text(gt('Discard')).on('click', function () {
                     // use this sneaky channel
                     $(this).trigger('controller:quit');
                 })
+            );
+        }
+    });
+
+
+    point.extend(new forms.ControlGroup({
+        id: 'displayname',
+        index: 200,
+        attribute: 'display_name',
+        className: 'row-fluid',
+        label: gt('List name'), // noun
+        control: '<input tabindex="1" type="text" class="span6">',
+        buildControls: function () {
+            var self = this;
+            return this.nodes.controls || (this.nodes.controls = $('<div class="controls">').append(
+                // element
+                this.buildElement()
             ));
         }
-
     }));
 
     point.extend({
         id: 'add-members',
         index: 300,
-        render: function () {
+        className: 'row-fluid',
+        render: function (baton) {
             var self = this;
+
+            var pNode = $('<div class="autocomplete-controls input-append">').append(
+                    $('<input tabindex="1" type="text" class="add-participant">').attr('placeholder', gt('Add contact') + ' ...'),
+                    $('<button type="button" class="btn" data-action="add" tabindex="1">')
+                        .append($('<i class="icon-plus">'))
+                ),
+
+            autocomplete = new AddParticipantsView({ el: pNode });
+
+            if (!_.browser.Firefox) { pNode.addClass('input-append-fix'); }
+
+            autocomplete.render({
+                autoselect: true,
+                parentSelector: '.create-distributionlist',
+                placement: 'bottom',
+                contacts: true,
+                resources: false,
+                distributionlists: false,
+                users: false,
+                groups: false,
+                keepId: true
+            });
+
+            autocomplete.on('select', function (data) {
+
+                // overwrite display_name
+                data.display_name = util.getMailFullName(data);
+
+                var newMember,
+                    mailValue = data.email1 || data.email2 || data.email3 || data.mail,
+                    nameValue = data.display_name;
+
+                if (data.id) {
+                    newMember = self.copyContact(self.$el, data, mailValue);
+                } else {
+                    newMember = self.copyContact(self.$el, nameValue, mailValue);
+                }
+
+                if (newMember) {
+                    if (self.isUnique(newMember)) {
+                        self.model.addMember(newMember);
+                    }
+                }
+
+            });
 
             this.$el.append(
                 $('<legend>').addClass('sectiontitle').text(gt('Contacts')),
-                this.itemList = $('<div>').attr('id', _.uniqueId('box_')).addClass('item-list'),
-
-                $('<div>').attr('data-holder', 'data-holder').append(
-                    self.createField(this, 'name', 'input#mail', gt('Name'), '2'),
-                    self.createField(this, 'mail', 'input#name', gt('Email address'), '3')
-                ),
-
-                $('<a>').attr({
-                    'data-action': 'add',
-                    'href': '#',
-                    'tabindex': '4'
-                })
-                .addClass('btn btn-inverse')
-                .text('+')
-                .on('click', function (e) {
-                    var newMember,
-                        data = self.$el.find('[data-holder="data-holder"]').data(),
-                        mailValue = self.$el.find('input#mail').val(),
-                        nameValue = self.$el.find('input#name').val(),
-                        isUpToDate = data.email === mailValue && data.display_name === nameValue;
-
-                    if (isUpToDate && data.data) {
-                        newMember = self.copyContact(self.$el, data.data, data.email);
-                    } else {
-                        //normalise
-                        if (nameValue !== '' || mailValue !== '') {
-                            nameValue = nameValue === '' ? mailValue : nameValue;
-                            mailValue = mailValue === '' ? nameValue : mailValue;
-                            newMember = self.copyContact(self.$el, nameValue, mailValue);
-                        }
-                    }
-
-                    if (newMember) {
-                        if (self.isUnique(newMember)) {
-                            self.model.addMember(newMember);
-                        }
-
-                        // reset the fields
-                        self.$el.find('[data-holder="data-holder"]').removeData();
-                        self.$el.find('input#mail').val('');
-                        self.$el.find('input#name').val('');
-                    }
-
-                })
-
+                this.itemList = $('<div>').addClass('item-list row-fluid'),
+                pNode
             );
 
             if (_.isEmpty(this.model.get('distribution_list'))) {
@@ -124,9 +139,8 @@ define('io.ox/contacts/distrib/create-dist-view',
 
             } else {
                 _(this.model.get('distribution_list')).each(function (member) {
-
                     self.$el.find('.item-list').append(
-                            self.drawListetItem(member)
+                        self.drawListedItem(member)
                     );
                 });
             }
@@ -156,7 +170,8 @@ define('io.ox/contacts/distrib/create-dist-view',
                     else if (matchingPlaceholder)
                         message = gt('The person ' + newMember.display_name + ' is already in the list');
 
-                    self.drawAlert(message, self.$el);
+                    notifications.yell('info', message);
+
                     //abort each-loop
                     unique = false;
                     return unique;
@@ -166,35 +181,19 @@ define('io.ox/contacts/distrib/create-dist-view',
             return unique;
         },
 
-        drawAlert: function (message, displayBox) {
-            displayBox.parent().find('.sectiontitle .alert.alert-block').remove();
-            displayBox.parent().find('.sectiontitle').append(
-                $('<div>')
-                .addClass('alert alert-block fade in')
-                .append(
-                    $('<a>').attr({ href: '#', 'data-dismiss': 'alert' })
-                    .addClass('close')
-                    .html('&times;'),
-                    $('<p>').text(message)
-                )
-            );
-        },
-
         drawEmptyItem: function (node) {
             node.append(
-                $('<div>').addClass('listet-item backstripes')
+                $('<div>').addClass('listed-item backstripes')
                 .attr({ 'data-mail': 'empty' })
                 .text(gt('This list has no contacts yet'))
             );
         },
 
         copyContact: function (options, contact, selectedMail) {
-            var dataMailId,
-                newMember;
+
+            var newMember;
 
             if (_.isString(contact)) {
-
-                dataMailId = '[data-mail="' + contact + '_' + selectedMail + '"]';
                 newMember = {
                     display_name: contact,
                     mail: selectedMail,
@@ -203,11 +202,11 @@ define('io.ox/contacts/distrib/create-dist-view',
 
             } else {
 
-                dataMailId = '[data-mail="' + contact.display_name + '_' + selectedMail + '"]';
                 var mailNr = (util.calcMailField(contact, selectedMail));
 
                 newMember = {
                     id: contact.id,
+                    folder_id: contact.folder_id,
                     display_name: contact.display_name,
                     mail: selectedMail,
                     mail_field: mailNr
@@ -217,119 +216,45 @@ define('io.ox/contacts/distrib/create-dist-view',
             return newMember;
         },
 
-        createField: function (options, id, related, label, tab) {
-            var self = this;
-            return $('<div>')
-            .addClass('fieldset ' + id)
-            .append(
-                $('<label>', { 'for' : 'input_field_' + id }).text(label),
-                $('<input>', {
-                    type: 'text',
-                    tabindex: tab,
-                    id: id
-                })
-                .attr('data-type', id) // not name=id!
-                .addClass('discreet input-large')
-                .autocomplete({
-                    api: autocompleteAPI,
-                    reduce: function (data) {
-                        return filterUsed.call(self, data, $(this));
-                    },
-                    stringify: function (obj) {
-                        if (related === 'input#mail') {
-                            return obj.display_name;
-                        } else {
-                            return obj.email;
-                        }
-
-                    },
-                    // for a second (related) Field
-                    stringifyrelated: function (obj) {
-                        return (related === 'input#mail') ? obj.email : obj.display_name;
-                    },
-                    draw: function (obj) {
-                        self.drawAutoCompleteItem.call(null, this, obj);
-                    },
-                    // to specify the related Field
-                    related: function () {
-                        var field = $(related);
-                        return field;
-                    },
-                    dataHolder: function () {
-                        var holder = $('[data-holder="data-holder"]');
-                        return holder;
-                    }
-                })
-                .on('keydown', function (e) {
-                    if (e.which === 13) {
-                        $('[data-action="add"]').trigger('click');
-                    }
-                })
-            );
-        },
-
-        drawAutoCompleteItem: function (node, obj) {
-            var img = $('<div>').addClass('create-distributionlist-contact-image'),
-                url = util.getImage(obj.data);
-
-            if (Modernizr.backgroundsize) {
-                img.css('backgroundImage', 'url(' + url + ')');
-            } else {
-                img.append(
-                    $('<img>', { src: url, alt: '' }).css({ width: '100%', height: '100%' })
-                );
-            }
-
-            node.append(
-                img,
-                $('<div>').addClass('person-link ellipsis').text(obj.display_name),
-                $('<div>').addClass('ellipsis').text(obj.email)
-            );
-        },
-
         onDistributionListChange: function () {
             var self = this;
             this.$el.find('.item-list').empty();
             _(this.model.get('distribution_list')).each(function (member) {
                 self.$el.find('.item-list').append(
-                        self.drawListetItem(member)
+                    self.drawListedItem(member)
                 );
             });
 
         },
 
-        drawFail: function () {
-            var self = this;
-            $('.error-alerts').empty();
-            $('.error-alerts').append(
-                $.fail(gt("Couldn't load all contact images."), function () {
-                    self.model.trigger('change:distribution_list');
-                })
-            );
-        },
+        drawListedItem: function (o) {
 
-        drawListetItem: function (o) {
-            var self = this,
-                frame = $('<div>').addClass('listet-item').attr({
-                'data-mail': o.display_name + '_' + o.mail
-            }),
-            img = api.getPicture(o.mail).addClass('contact-image'),
-            button = $('<a>', { href: '#' }).addClass('close').html('&times;')
-            .on('click', {mail: o.mail, name: o.display_name }, function (e) {
-                self.model.removeMember(e.data.mail, e.data.name);
-            });
-            frame.append(button);
-            frame.append(img)
-            .append(
-                $('<div>').addClass('person-link ellipsis')
-                .append($('<div>').append(api.getDisplayName({email: o.mail, display_name: o.display_name }))),
-                $('<div>').addClass('person-selected-mail')
-                .text((o.mail))
-            );
-            api.on('fail', function () {
-                self.drawFail();
-            });
-            return frame;
+            var self = this;
+
+            return $('<div class="listed-item span6">')
+                .attr('data-mail', o.display_name + '_' + o.mail)
+                .append(
+                    // contact picture
+                    api.getPicture(o, { scaleType: 'cover', width: 54, height: 54 }).addClass('contact-image'),
+                    // name
+                    $('<div class="person-name ellipsis">').text(o.display_name),
+                    // mail address
+                    $('<div class="person-mail ellipsis">').append(
+                        $('<a href="#" class="halo-link" tabindex="1">')
+                            .data({ email1: o.mail })
+                            .text(o.mail)
+                    ),
+                    // remove icon
+                    $('<a href="#" class="remove" tabindex="1">').append(
+                        $('<div class="icon">').append(
+                            $('<i class="icon-trash">')
+                        )
+                    )
+                    .on('click', { mail: o.mail, name: o.display_name }, function (e) {
+                        e.preventDefault();
+                        self.model.removeMember(e.data.mail, e.data.name);
+                    })
+                );
         },
 
         fnClickPerson: function (e) {
@@ -344,8 +269,16 @@ define('io.ox/contacts/distrib/create-dist-view',
 
     });
 
+    point.extend({
+        id: 'notice',
+        index: 400,
+        render: function (baton) {
+            this.$el.append($('<div class="alert alert-info">').text(gt('To add contacts manually, just provide a valid email address (e.g john.doe@example.com or "John Doe" <jd@example.com>)')));
+        }
+    });
+
     /**
-    * remove allready used items
+    * remove already used items
     *
     * @return {object} data (list, hits)
     */
@@ -371,9 +304,6 @@ define('io.ox/contacts/distrib/create-dist-view',
     ext.point('io.ox/contacts/model/validation/distribution_list').extend({
         id: 'check_for_duplicates',
         validate: function (value) {
-//            console.log(value);
-//            console.log('im validate');
-
         }
     });
 

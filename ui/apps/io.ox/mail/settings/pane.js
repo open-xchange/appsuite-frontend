@@ -31,28 +31,28 @@ define('io.ox/mail/settings/pane',
         staticStrings =  {
             TITLE_MAIL: gt.pgettext('app', 'Mail'),
             TITLE_COMMON: gt('Common'),
-            PERMANENT_REMOVE_MAILS: gt('Permanently remove deleted E-Mails'),
+            PERMANENT_REMOVE_MAILS: gt('Permanently remove deleted emails'),
             COLLECT_CONTACTS_SENDING: gt('Automatically collect contacts in the folder "Collected addresses" while sending'),
             COLLECT_CONTACTS_READING: gt('Automatically collect contacts in the folder "Collected addresses" while reading'),
             USE_FIXED_WIDTH_FONT: gt('Use fixed-width font for text mails'),
             TITLE_COMPOSE: gt('Compose'),
             APPEND_VCARD: gt('Append vCard'),
-            INSERT_ORG_TO_REPLY: gt('Insert the original E-Mail text to a reply'),
-            FORWARD_EMAIL_AS: gt('Forward E-Mails as:'),
+            INSERT_ORG_TO_REPLY: gt('Insert the original email text to a reply'),
+            FORWARD_EMAIL_AS: gt('Forward emails as'),
             INLINE: gt('Inline'),
             ATTACHEMENT: gt('Attachment'),
-            FORMAT_AS: gt('Format E-Mails as:'),
+            FORMAT_AS: gt('Format emails as'),
             HTML: gt('HTML'),
             PLAIN: gt('Plain text'),
             HTML_AND_PLAIN: gt('HTML and plain text'),
-            LINEWRAP: gt('Line wrap when sending text mails after: '),
+            LINEWRAP: gt('Line wrap when sending text mails after '),
             CHARACTERS: gt(' characters'),
-            DEFAULT_SENDER: gt('Default sender address:'),
-            AUTO_SAVE: gt('Auto-save Email drafts'),
+            DEFAULT_SENDER: gt('Default sender address'),
+            AUTO_SAVE: gt('Auto-save email drafts'),
             TITLE_DISPLAY: gt('Display'),
-            ALLOW_HTML: gt('Allow html formatted E-Mails'),
+            ALLOW_HTML: gt('Allow html formatted emails'),
             ALLOW_PRE: gt('Allow pre-loading of externally linked images'),
-            DISPLAY_EMOTICONS: gt('Display emoticons as graphics in text E-Mails'),
+            DISPLAY_EMOTICONS: gt('Display emoticons as graphics in text emails'),
             COLOR_QUOTED: gt('Color quoted lines'),
 
             TITLE_THREADVIEW: gt('Thread view'),
@@ -66,7 +66,8 @@ define('io.ox/mail/settings/pane',
                            {label: gt('3 minutes'), value: '3_minutes'},
                            {label: gt('5 minutes'), value: '5_minutes'},
                            {label: gt('10 minutes'), value: '10_minutes'}],
-        mailViewSettings;
+        mailViewSettings,
+        reloadMe = ['contactCollectOnMailTransport', 'contactCollectOnMailAccess'];
 
     var MailSettingsView = Backbone.View.extend({
         tagName: "div",
@@ -141,6 +142,22 @@ define('io.ox/mail/settings/pane',
         draw: function (data) {
 
             mailViewSettings = new MailSettingsView({model: mailSettings});
+
+            // mattes: please see bug 27510. maybe we don't need this
+
+            // mailViewSettings.model.on('change', function (model, e) {
+
+            //     var showNotice = _(reloadMe).any(function (attr) {
+            //         if (_.isBoolean(mailViewSettings.model.changed[attr])) {
+            //             return true;
+            //         }
+            //     });
+
+            //     if (showNotice) {
+            //         require("io.ox/core/notifications").yell("success", gt("The setting has been saved and will become active when you enter the application the next time."));
+            //     }
+            // });
+
             var holder = $('<div>').css('max-width', '800px');
             this.append(holder.append(
                 mailViewSettings.render().el)
@@ -151,10 +168,10 @@ define('io.ox/mail/settings/pane',
         },
 
         save: function () {
-            mailViewSettings.model.save().done(function () {
+            mailViewSettings.model.saveAndYell().done(function () {
                 //update mailapi
-                require(['io.ox/mail/api'], function (mailApi) {
-                    mailApi.updateViewSettings();
+                require(['io.ox/mail/api'], function (mailAPI) {
+                    mailAPI.updateViewSettings();
                 });
             }).fail(function () {
                 notifications.yell('error', gt('Could not save settings'));

@@ -21,7 +21,7 @@ define('plugins/portal/rss/register',
     'io.ox/rss/api',
     'io.ox/core/date',
     'io.ox/core/tk/dialogs',
-    'gettext!io.ox/portal'], function (ext, strings, accountApi, serviceApi, messageApi, keychain, rss, date, dialogs, gt) {
+    'gettext!io.ox/portal'], function (ext, strings, accountAPI, serviceAPI, messageAPI, keychain, rss, date, dialogs, gt) {
 
     'use strict';
 
@@ -31,7 +31,7 @@ define('plugins/portal/rss/register',
             return $.when();
         }
 
-        return accountApi.all('com.openexchange.messaging.rss').pipe(function (accounts) {
+        return accountAPI.all('com.openexchange.messaging.rss').pipe(function (accounts) {
             var index = 0;
             _(accounts).each(function (account) {
                 index += 100;
@@ -55,15 +55,28 @@ define('plugins/portal/rss/register',
 
         load: function (baton) {
 
+            // console.log('RSS title fix', this);
+            // this.find('.title').text('YEAH!!!');
+            // var props = baton.model.get('props');
+            // props.title = "YEAH !!!!";
+            // baton.model.set('props', props);
+
             return migrate().pipe(function () {
                 var urls = baton.model.get('props').url || [];
                 return rss.getMany(urls).done(function (data) {
                     //limit data manually till api call can be limited
                     data = data.slice(0, 100);
-                    baton.data = { items: data, title: '', link: '' };
+                    baton.data = {
+                        items: data,
+                        title: '',
+                        link: '',
+                        urls: urls
+                    };
                     // get title & link of the first found feed
                     _(data).find(function (item) {
-                        baton.data.title = item.feedTitle || '';
+                        if (urls.length > 1) {
+                            baton.data.title = item.feedTitle || '';
+                        }
                         baton.data.link = item.feedLink || '';
                     });
                 });
@@ -73,19 +86,26 @@ define('plugins/portal/rss/register',
         preview: function (baton) {
 
             var data = baton.data,
+                count = _.device('small') ? 5 : 10,
                 $content = $('<div class="content pointer">');
-
-            _(data.items).each(function (entry) {
-                $content.append(
-                    $('<div class="paragraph">').append(
-                        $('<span class="gray">').text(_.noI18n(entry.feedTitle + ' ')),
-                        $('<span class="bold">').text(_.noI18n(entry.subject)), $.txt('')
-                    )
-                );
-            });
 
             if (data.items.length === 0) {
                 $('<div class="item">').text(gt('No RSS feeds found.')).appendTo($content);
+            } else {
+                $(data.items).slice(0, count).each(function (index, entry) {
+                    $content.append(
+                        $('<div class="paragraph">').append(
+                            function () {
+                                if (data.urls.length > 1) {
+                                    return $('<span class="gray">').text(_.noI18n(entry.feedTitle + ' '));
+                                } else {
+                                    return '';
+                                }
+                            },
+                            $('<span class="bold">').html(_.noI18n(entry.subject)), $.txt('')
+                        )
+                    );
+                });
             }
 
             this.append($content);
@@ -100,9 +120,12 @@ define('plugins/portal/rss/register',
                 //replace img tags with empty src
                 $body.find('img[src=""]').replaceWith(gt('show image'));
 
+                //add target to a tags
+                $body.find('a').attr('target', '_blank');
+
                 this.append(
                     $('<div class="text">').append(
-                        $('<h2>').text(_.noI18n(item.subject)),
+                        $('<h2>').html(_.noI18n(item.subject)),
                         $('<div class="text-body noI18n">').append($body),
                         $('<div class="rss-url">').append(
                             $('<a>').attr({ href: item.url, target: '_blank' }).text(_.noI18n(item.feedTitle + ' - ' + publishedDate))
@@ -129,8 +152,10 @@ define('plugins/portal/rss/register',
     });
 
     function edit(model, view) {
+        //disable widget till data is set by user
+        model.set('candidate', true, { silent: true, validate: true });
 
-        var dialog = new dialogs.ModalDialog({ easyOut: true, async: true }),
+        var dialog = new dialogs.ModalDialog({ async: true }),
             $url = $('<textarea class="input-block-level" rows="5">').attr('placeholder', 'http://').placeholder(),
             $description = $('<input type="text" class="input-block-level">'),
             $error = $('<div class="alert alert-error">').hide(),
@@ -154,7 +179,7 @@ define('plugins/portal/rss/register',
             });
 
         dialog.on('cancel', function () {
-            if (model.has('candidate')) {
+            if (model.has('candidate') && _.isEmpty(model.attributes.props)) {
                 view.removeWidget();
             }
         });

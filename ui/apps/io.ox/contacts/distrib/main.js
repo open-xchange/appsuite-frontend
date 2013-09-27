@@ -36,17 +36,18 @@ define('io.ox/contacts/distrib/main',
 
         app = ox.ui.createApp({
             name: 'io.ox/contacts/distrib',
-            title: 'Distribution List',
+            title: gt('Distribution List'),
             userContent: true
         });
 
         app.create = function (folderId, initdata) {
 
-            initialDistlist = {
-                folder_id: folderId,
-                mark_as_distributionlist: true,
-                last_name: ''
-            };
+            initialDistlist = _.extend({
+                    mark_as_distributionlist: true,
+                    last_name: ''
+                },
+                data || {}, { folder_id: folderId }
+            );
 
             // set title, init model/view
             win.setTitle(gt('Create distribution list'));
@@ -69,11 +70,12 @@ define('io.ox/contacts/distrib/main',
             });
 
             view.on('save:fail', function () {
+                require("io.ox/core/notifications").yell("error", gt("Failed to save distribution list."));
                 win.idle();
             });
 
             view.on('save:success', function () {
-
+                require("io.ox/core/notifications").yell("success", gt("Distribution list has been saved"));
                 considerSaved = true;
                 win.idle();
                 app.quit();
@@ -87,7 +89,7 @@ define('io.ox/contacts/distrib/main',
         app.edit = function (obj) {
 
             app.cid = 'io.ox/contacts/group:edit.' + _.cid(obj);
-            return contactModel.factory.realm("edit").retain().get(api.reduce(obj)).done(function (data) {
+            return contactModel.factory.realm('edit').retain().get(api.reduce(obj)).done(function (data) {
 
                 // actually data IS a model
                 model = data;
@@ -127,18 +129,26 @@ define('io.ox/contacts/distrib/main',
                 name: 'io.ox/contacts/distrib'
             }));
 
+            function fnToggleSave(isDirty) {
+                var node = container.find('.btn[data-action="save"]');
+                if (isDirty) node.removeAttr('disabled'); else node.attr('disabled', 'disabled');
+            }
+
             win.on('show', function () {
+                if (!container.find('[data-extension-id="displayname"] input').val()) {
+                    container.find('.btn[data-action="save"]').attr('disabled', 'disabled');
+                }
                 container.find('input[type=text]:visible').eq(0).focus();
-                container.find('[data-extension-id="displayname"] input').on('keydown', function () {
+                container.find('[data-extension-id="displayname"] input').on('keyup', _.debounce(function () {
                     var title = _.noI18n($.trim($(this).val()));
                     app.setTitle(title);
-                });
+                    fnToggleSave($(this).val());
+                }, 150));
             });
 
-            container = win.nodes.main
-                .addClass('create-distributionlist')
-                .scrollable()
-                .css({ width: '700px', margin: '20px auto 20px auto' });
+            container = $('<div>').addClass('create-distributionlist container-fluid default-content-padding');
+
+            win.nodes.main.addClass('scrollable').append(container);
 
             // hash state support
             var state = app.getState();
@@ -155,11 +165,11 @@ define('io.ox/contacts/distrib/main',
                 if (_.isEqual(initialDistlist, model.changedSinceLoading())) {
                     def.resolve();
                 } else {
-                    require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
                         new dialogs.ModalDialog()
-                            .text(gt("Do you really want to discard your changes?"))
-                            .addPrimaryButton("delete", gt('Discard'))
-                            .addButton("cancel", gt('Cancel'))
+                            .text(gt('Do you really want to discard your changes?'))
+                            .addPrimaryButton('delete', gt('Discard'))
+                            .addButton('cancel', gt('Cancel'))
                             .show()
                             .done(function (action) {
                                 if (action === 'delete') {

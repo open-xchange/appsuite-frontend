@@ -74,6 +74,7 @@ define('io.ox/core/capabilities', function () {
     if (hash) {
         _(hash.split(/\s*[, ]\s*/)).each(function (id) {
             if (id[0] === '-') {
+                id = id.substr(1);
                 disabled[id] = true;
                 console.info('Disabled feature', id);
             } else {

@@ -13,16 +13,11 @@
 
 define('io.ox/office/framework/view/component',
     ['io.ox/core/event',
-     'io.ox/office/tk/utils'
-    ], function (Events, Utils) {
+     'io.ox/office/tk/utils',
+     'io.ox/office/tk/keycodes'
+    ], function (Events, Utils, KeyCodes) {
 
     'use strict';
-
-    var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes,
-
-        // CSS class for hidden components
-        HIDDEN_CLASS = 'hidden';
 
     // class Component ========================================================
 
@@ -31,12 +26,21 @@ define('io.ox/office/framework/view/component',
      * (controls or groups of controls).
      *
      * Instances of this class trigger the following events:
-     * - 'change': If a control has been activated. The event handler receives
-     *  the key and value of the activated control. The value depends on the
-     *  type of the activated control.
-     * - 'cancel': When the focus needs to be returned to the application (e.g.
-     *  when the Escape key is pressed, or when a click on a drop-down button
-     *  closes the opened drop-down menu).
+     * - 'component:show': After the view component has been shown or hidden.
+     *      The event handler receives the new visibility state.
+     * - 'component:layout': After the size of the view component has been
+     *      changed, by manipulating (showing, hiding, changing) the control
+     *      groups it contains.
+     * - 'group:change': If a control group has been activated. The event
+     *      handler receives the key and value of the activated control group.
+     *      The value depends on the type of the activated control.
+     * - 'group:cancel': When the focus needs to be returned to the application
+     *      (e.g. when the Escape key is pressed, or when a click on a
+     *      drop-down button closes the opened drop-down menu).
+     * - 'group:focus': After a control group has been focused, by initially
+     *      focusing any of its focusable child nodes.
+     * - 'group:blur': After the control group has lost the browser focus,
+     *      after focusing any other DOM node outside the group.
      *
      * @constructor
      *
@@ -44,6 +48,10 @@ define('io.ox/office/framework/view/component',
      *
      * @param {BaseApplication} app
      *  The application containing this view component instance.
+     *
+     * @param {String} id
+     *  The identifier for this view component. Must be unique across all view
+     *  components in the application.
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the new view component.
@@ -54,6 +62,16 @@ define('io.ox/office/framework/view/component',
      *  @param {Object} [options.css]
      *      Additional CSS formatting that will be set at the root DOM node of
      *      this view component.
+     *  @param {Boolean} [options.focusable=true]
+     *      If set to true or omitted, the view component will be inserted into
+     *      the chain of focusable nodes reachable with specific global
+     *      keyboard shortcuts (usually the F6 key with platform dependent
+     *      modifier keys).
+     *  @param {Boolean} [options.hoverEffect=false]
+     *      If set to true, all control groups in this view component will be
+     *      displayed half-transparent as long as the mouse does not hover the
+     *      view component. Has no effect, if the current device is a touch
+     *      device.
      *  @param {Function} [options.groupInserter]
      *      A function that will implement inserting the root DOM node of a new
      *      group into this view component. The function receives the reference
@@ -61,13 +79,16 @@ define('io.ox/office/framework/view/component',
      *      context of this view component instance. If omitted, groups will be
      *      appended to the root node of this view component.
      */
-    function Component(app, options) {
+    function Component(app, id, options) {
 
         var // self reference
             self = this,
 
             // create the DOM root element representing the view component
             node = Utils.createContainerNode('view-component', options),
+
+            // the last cached size of the root node, used to detect layout changes
+            nodeSize = null,
 
             // all control groups, as plain array
             groups = [],
@@ -86,13 +107,37 @@ define('io.ox/office/framework/view/component',
         // private methods ----------------------------------------------------
 
         /**
-         * Changes the visibility of this view component and triggers a 'show'
-         * event.
+         * Returns the current outer size of the root node of this view
+         * component. If the node is currently invisible, returns the last
+         * cached size.
          */
-        function showComponent(state) {
-            if (self.isVisible() !== state) {
-                node.toggleClass(HIDDEN_CLASS, !state);
+        function getNodeSize() {
+            return self.isReallyVisible() ? { width: node.outerWidth(), height: node.outerHeight() } : nodeSize;
+        }
+
+        /**
+         * Handles 'group:show', 'group:enable', and 'group:layout' events.
+         * Updates the CSS marker class controlling whether this view component
+         * is focusable with special keyboard shortcuts, and triggers a
+         * 'component:layout' event to all listeners, if the size of this view
+         * component has been changed due to the changed control group.
+         */
+        function groupLayoutHandler() {
+            var newNodeSize = getNodeSize();
+            if (!_.isEqual(nodeSize, newNodeSize)) {
+                nodeSize = newNodeSize;
+                self.trigger('component:layout');
             }
+        }
+
+        /**
+         * Handles 'group:focus' and 'group:blur' events from all registered
+         * group instances. Updates the CSS marker class at the root node of
+         * this view component, and forwards the event to all listeners.
+         */
+        function groupFocusHandler(event) {
+            node.toggleClass(Utils.FOCUSED_CLASS, event.type === 'group:focus');
+            self.trigger(event.type);
         }
 
         /**
@@ -116,16 +161,25 @@ define('io.ox/office/framework/view/component',
                 node.append(group.getNode());
             }
 
-            // always forward 'cancel' events (e.g. closed drop-down menu)
-            group.on('cancel', function () { self.trigger('cancel'); });
+            // forward various group events, update focusability depending on
+            // the group's state, forward other layout events
+            group.on({
+                'group:cancel': function (event, options) { self.trigger('group:cancel', options); },
+                'group:show group:enable group:layout': groupLayoutHandler,
+                'group:focus group:blur': groupFocusHandler
+            });
+
+            // make this view component focusable, if it contains any groups
+            groupLayoutHandler();
         }
 
         /**
-         * Returns all visible and enabled group objects as array.
+         * Returns all visible group objects that contain focusable controls as
+         * array.
          */
-        function getEnabledGroups() {
+        function getFocusableGroups() {
             return _(groups).filter(function (group) {
-                return group.isVisible() && group.isEnabled() && group.hasFocusableControls();
+                return group.isReallyVisible() && group.hasFocusableControls();
             });
         }
 
@@ -139,12 +193,12 @@ define('io.ox/office/framework/view/component',
          */
         function moveFocus(forward) {
 
-            var // all visible and enabled group objects
-                enabledGroups = getEnabledGroups(),
-                // extract all focusable controls from all visible and enabled groups
-                controls = _(enabledGroups).reduce(function (controls, group) { return controls.add(group.getFocusableControls()); }, $()),
+            var // all visible group objects with focusable controls
+                focusableGroups = getFocusableGroups(),
+                // extract all focusable controls from the groups
+                controls = _(focusableGroups).reduce(function (controls, group) { return controls.add(group.getFocusableControls()); }, $()),
                 // focused control
-                control = Utils.getFocusedControl(controls),
+                control = controls.filter(window.document.activeElement),
                 // index of focused control in all enabled controls
                 index = controls.index(control);
 
@@ -170,22 +224,10 @@ define('io.ox/office/framework/view/component',
          *  True, if the event has been handled and needs to stop propagating.
          */
         function keyHandler(event) {
-
-            var // distinguish between event types (ignore keypress events)
-                keydown = event.type === 'keydown';
-
-            switch (event.keyCode) {
-            case KeyCodes.TAB:
-                if (!event.ctrlKey && !event.altKey && !event.metaKey) {
-                    if (keydown) { moveFocus(!event.shiftKey); }
-                    return false;
+            if (KeyCodes.matchKeyCode(event, 'TAB', { shift: null })) {
+                if (event.type === 'keydown') {
+                    moveFocus(!event.shiftKey);
                 }
-                break;
-            case KeyCodes.LEFT_ARROW:
-                if (keydown) { moveFocus(false); }
-                return false;
-            case KeyCodes.RIGHT_ARROW:
-                if (keydown) { moveFocus(true); }
                 return false;
             }
         }
@@ -198,7 +240,7 @@ define('io.ox/office/framework/view/component',
                 if (key in groupsByKey) {
                     _.chain(groupsByKey[key])
                         .invoke('enable', itemState.enable)
-                        .invoke('update', itemState.value);
+                        .invoke('setValue', itemState.value, itemState.options);
                 }
             });
         }
@@ -222,9 +264,9 @@ define('io.ox/office/framework/view/component',
 
         /**
          * Adds the passed control group as a 'private group' to this view
-         * component. Change events of the group will not be forwarded to the
-         * listeners of this view component. Instead, the caller has to
-         * register a change listener at the group by itself.
+         * component. The 'group:change' events triggered by the group will not
+         * be forwarded to the listeners of this view component. Instead, the
+         * caller has to register a change listener at the group by itself.
          *
          * @param {Group} group
          *  The control group object to be inserted.
@@ -256,10 +298,16 @@ define('io.ox/office/framework/view/component',
             // insert the group object into this view component
             insertGroup(group);
 
-            // forward 'change' events to listeners of this view component
+            // forward 'group:change' events to listeners of this view component
             (groupsByKey[key] || (groupsByKey[key] = [])).push(group);
-            group.on('change', function (event, value) {
-                self.trigger('change', key, value);
+            group.on('group:change', function (event, value, options) {
+                self.trigger('group:change', key, value, options);
+            });
+
+            // create unique DOM identifier for Selenium testing, set the key as data attribute
+            group.getNode().attr({
+                'id': node.attr('id') + '-group-' + key.replace(/[^a-zA-Z0-9]+/g, '-') + '-' + groupsByKey[key].length,
+                'data-key': key
             });
 
             return this;
@@ -269,7 +317,16 @@ define('io.ox/office/framework/view/component',
          * Returns whether this view component is visible.
          */
         this.isVisible = function () {
-            return !node.hasClass(HIDDEN_CLASS);
+            return !node.hasClass(Utils.HIDDEN_CLASS);
+        };
+
+        /**
+         * Returns whether this view component is effectively visible (it must
+         * not be hidden by itself, it must be inside the DOM tree, and all its
+         * parent nodes must be visible too).
+         */
+        this.isReallyVisible = function () {
+            return node.is(Utils.REALLY_VISIBLE_SELECTOR);
         };
 
         /**
@@ -279,8 +336,7 @@ define('io.ox/office/framework/view/component',
          *  A reference to this view component.
          */
         this.show = function () {
-            showComponent(true);
-            return this;
+            return this.toggle(true);
         };
 
         /**
@@ -290,8 +346,7 @@ define('io.ox/office/framework/view/component',
          *  A reference to this view component.
          */
         this.hide = function () {
-            showComponent(false);
-            return this;
+            return this.toggle(false);
         };
 
         /**
@@ -306,7 +361,12 @@ define('io.ox/office/framework/view/component',
          *  A reference to this view component.
          */
         this.toggle = function (state) {
-            showComponent((state === true) || ((state !== false) && this.isVisible()));
+            var visible = (state === true) || ((state !== false) && !this.isVisible());
+            if (this.isVisible() !== visible) {
+                node.toggleClass(Utils.HIDDEN_CLASS, !visible);
+                this.trigger('component:show', visible);
+                nodeSize = getNodeSize();
+            }
             return this;
         };
 
@@ -327,18 +387,39 @@ define('io.ox/office/framework/view/component',
          */
         this.grabFocus = function () {
 
-            var // all visible and enabled group objects
-                enabledGroups = null;
+            var // all visible group objects with focusable controls
+                focusableGroups = this.hasFocus() ? [] : getFocusableGroups();
 
-            // set focus to first enabled group, if no group is focused
-            if (!this.hasFocus()) {
-                enabledGroups = getEnabledGroups();
-                if (enabledGroups.length) {
-                    enabledGroups[0].grabFocus();
-                }
+            // set focus to first focusable group
+            if (focusableGroups.length > 0) {
+                focusableGroups[0].grabFocus();
             }
 
             return this;
+        };
+
+        /**
+         * Visits all control groups registered at this view component.
+         *
+         * @param {Function} iterator
+         *  The iterator called for each control group. Receives the reference
+         *  to the control group, and its insertion index. If the iterator
+         *  returns the Utils.BREAK object, the iteration process will be
+         *  stopped immediately.
+         *
+         * @param {Object} [context]
+         *  If specified, the iterator will be called with this context (the
+         *  symbol 'this' will be bound to the context inside the iterator
+         *  function).
+         *
+         * @returns {Utils.BREAK|Undefined}
+         *  A reference to the Utils.BREAK object, if the iterator has returned
+         *  Utils.BREAK to stop the iteration process, otherwise undefined.
+         */
+        this.iterateGroups = function (iterator, context) {
+            return _(groups).any(function (group, index) {
+                return iterator.call(context, group, index) === Utils.BREAK;
+            }) ? Utils.BREAK : undefined;
         };
 
         /**
@@ -353,6 +434,18 @@ define('io.ox/office/framework/view/component',
         };
 
         // initialization -----------------------------------------------------
+
+        // create unique DOM identifier for Selenium testing
+        node.attr('id', app.getWindowId() + '-component-' + id);
+
+        // marker for touch devices
+        node.toggleClass('touch', Modernizr.touch);
+
+        // whether the pane will be focusable with keyboard
+        node.toggleClass('f6-target', Utils.getBooleanOption(options, 'focusable', true));
+
+        // hover effect for groups embedded in the view component
+        node.toggleClass('hover-effect', Utils.getBooleanOption(options, 'hoverEffect', false));
 
         // listen to key events for keyboard focus navigation
         node.on('keydown keypress keyup', keyHandler);

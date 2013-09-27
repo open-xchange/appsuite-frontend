@@ -15,8 +15,9 @@ define('io.ox/mail/vacationnotice/settings/model',
       ['io.ox/backbone/modelFactory',
        'io.ox/backbone/validation',
        'io.ox/core/api/mailfilter',
+       'io.ox/settings/util',
        'gettext!io.ox/mail'
-       ], function (ModelFactory, Validators, api, gt) {
+       ], function (ModelFactory, Validators, api, settingsUtil, gt) {
 
     'use strict';
 
@@ -95,7 +96,9 @@ define('io.ox/mail/vacationnotice/settings/model',
             ref: ref,
 
             update: function (model) {
-                return api.update(providePreparedData(model.attributes));
+                return settingsUtil.yellOnReject(
+                    api.update(providePreparedData(model.attributes))
+                );
             },
 
             create: function (model) {
@@ -103,7 +106,9 @@ define('io.ox/mail/vacationnotice/settings/model',
                 preparedData.rulename = gt("vacation notice");
                 preparedData.flags = ["vacation"];
 
-                return api.create(preparedData);
+                return settingsUtil.yellOnReject(
+                    api.create(preparedData)
+                );
             }
 
         });
@@ -128,7 +133,7 @@ define('io.ox/mail/vacationnotice/settings/model',
         text: gt('Text'),
         days: gt('Number of days between vacation notices to the same sender'),
         headlineAdresses: gt('Enabled for the following addresses'),
-        addresses: gt('E-mail addresses'),
+        addresses: gt('Email addresses'),
         dateFrom: gt('From'),
         dateUntil: gt('End'),
         activateTimeFrame: gt('Send vacation notice during this time only')

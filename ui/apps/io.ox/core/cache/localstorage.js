@@ -199,7 +199,7 @@ define('io.ox/core/cache/localstorage', ["io.ox/core/extensions"], function (ext
             function clear() {
                 // clear caches due to version change?
                 var ui = JSON.parse(localStorage.getItem('appsuite-ui') || '{}');
-                if (ui.version !== ox.version) {
+                if (ui.version !== ox.version && _.url.hash('keep-data') !== 'true') {
                     if (ox.debug === true) {
                         console.warn('LocalStorage: Clearing persistent caches due to UI update');
                     }

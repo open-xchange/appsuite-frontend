@@ -20,7 +20,8 @@ define('io.ox/participants/views',
         tagName: 'div',
 
         events: {
-            'click .remove': 'onRemove'
+            'click .remove': 'onRemove',
+            'keydown': 'fnKey'
         },
 
         render: function () {
@@ -29,14 +30,16 @@ define('io.ox/participants/views',
 
             // we set the class this way because some controller pass an existing node
             this.$el.addClass('participant-wrapper')
-                .attr('data-cid', this.model.cid);
+                .attr({
+                    'data-cid': this.model.cid
+                });
 
             this.nodes = {
                 $img: $('<div>'),
                 $text: $('<div class="participant-name">'),
-                $mail: $('<div class="participant-email">'),
-                $extra: $('<div class="extra-decorator">'),
-                $removeButton: $('<div class="remove"><div class="icon"><i class="icon-remove"></i></div></div>')
+                $mail: $('<a class="participant-email">'),
+                $extra: $('<a class="extra-decorator">'),
+                $removeButton: $('<a href="#" class="remove" tabindex="1"><div class="icon"><i class="icon-trash"></i></div></a>')
             };
 
             this.setDisplayName();
@@ -56,7 +59,11 @@ define('io.ox/participants/views',
             });
 
             this.$el.append(
-                this.nodes.$img, this.nodes.$text, this.nodes.$mail, this.nodes.$extra, this.nodes.$removeButton
+                this.nodes.$img,
+                this.nodes.$text,
+                $('<div>').append(this.nodes.$mail),
+                $('<div>').append(this.nodes.$extra),
+                this.nodes.$removeButton
             );
 
             if (this.options.customize) {
@@ -94,7 +101,8 @@ define('io.ox/participants/views',
         },
 
         setRows: function (mail, extra) {
-            this.nodes.$mail.text(mail || '');
+            mail = mail || '';
+            this.nodes.$mail.text(gt.noI18n(mail));
             this.nodes.$extra.text(extra || '');
             if (mail && extra) {
                 this.$el.addClass('three-rows');
@@ -124,7 +132,10 @@ define('io.ox/participants/views',
                 mail = this.model.get('emailparam') ? this.model.get('emailparam') : this.model.getEmail();
                 this.setRows(mail);
                 if (this.options.halo) {
-                    this.$el.data({ email1: mail }).addClass('pointer halo-link');
+                    this.nodes.$mail
+                        .attr({ href: '#', tabindex: '1' })
+                        .data({ email1: mail })
+                        .addClass('halo-link');
                 }
                 break;
             case 2:
@@ -135,7 +146,10 @@ define('io.ox/participants/views',
                 if (this.options.halo) {
                     data = this.model.toJSON();
                     data.callbacks = this.options.callbacks || {};
-                    this.$el.data(data).addClass('pointer halo-resource-link');
+                    this.nodes.$extra
+                        .attr({ href: '#', tabindex: '1' })
+                        .data(data)
+                        .addClass('pointer halo-resource-link');
                 }
                 break;
             case 4:
@@ -145,7 +159,10 @@ define('io.ox/participants/views',
                 mail = this.model.getEmail();
                 this.setRows(mail, gt('External contact'));
                 if (mail && this.options.halo) {
-                    this.$el.data({ email1: mail }).addClass('pointer halo-link');
+                    this.nodes.$mail
+                        .attr({ href: '#', tabindex: '1' })
+                        .data({ email1: mail })
+                        .addClass('halo-link');
                 }
                 break;
             case 6:
@@ -154,13 +171,20 @@ define('io.ox/participants/views',
             }
         },
 
+        fnKey: function (e) {
+            if (e.which === 46) this.onRemove(e); // DEL
+        },
+
         onRemove: function (e) {
-            // remove participant from model
+
             e.preventDefault();
-            // get cid from parent node
-            var cid = $(e.currentTarget).closest('[data-cid]').attr('data-cid');
-            // remove from collection by cid
-            this.model.collection.remove(this.model.collection.get(cid));
+
+            var removable = $(e.target).closest('.participant-wrapper.removable');
+            if (removable.length) {
+                // remove from collection by cid
+                var cid = removable.attr('data-cid');
+                this.model.collection.remove(this.model.collection.get(cid));
+            }
         }
     });
 
@@ -168,10 +192,7 @@ define('io.ox/participants/views',
         tagName: 'div',
         className: 'participantsrow',
         initialize: function (options) {
-            var self = this;
-            options.collection.on('add', _.bind(this.onAdd, this));
-            options.collection.on('remove', _.bind(this.onRemove, this));
-            options.collection.on('reset', _.bind(this.updateContainer, this));
+            options.collection.on('add remove reset', _.bind(this.updateContainer, this));
         },
         render: function () {
             var self = this,
@@ -187,16 +208,11 @@ define('io.ox/participants/views',
                     counter++;
                 }
             });
-            var row = null;
-            var c = 0;
+            var row = $('<div class="row-fluid">');
             _(this.nodes).chain().values().each(function (node) {
-                if (c % 2 === 0) {
-                    row = $('<div class="row-fluid">');
-                    self.$el.append(row);
-                }
                 row.append(node);
-                c++;
             });
+            self.$el.append(row);
             return this;
         },
         createParticipantNode: function (participant) {
@@ -212,12 +228,6 @@ define('io.ox/participants/views',
             this.nodes = {};
             this.$el.empty();
             this.render();
-        },
-        onAdd: function (participant, participants, options) {
-            this.updateContainer();
-        },
-        onRemove: function (participant, participants, options) {
-            this.updateContainer();
         }
     });
 

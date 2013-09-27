@@ -20,16 +20,19 @@
     }
 
     .typeahead.calendaredit {
+
         height: 200px;
-        overflow: auto;
-        min-width: 70px;
-        max-width: 70px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        min-width: 85px;
+
+        a {
+            text-align: right;
+            padding: 3px 15px 3px 3px;
+        }
+
     }
 
-    .typeahead.calendaredit a {
-        text-align: right;
-        padding: 3px 15px 3px 3px;
-    }
 
     .title {
         float:left;
@@ -52,10 +55,15 @@
         margin-right: auto;
         margin-top: 20px;
     }
-    .task-participant-input-field { width: 334px; }
+    .task-participant-input-field { width: 340px; }
 
     .attachment-edit-row,
     .task-edit-row { margin-bottom: 9px; }
+
+    .expand-link {
+        margin-bottom: 9px;
+        display: block;
+    }
 
     .tab-pane { margin-bottom: 85px; }
 
@@ -85,34 +93,10 @@
      }
 
     .info-wrapper .task-attachment-link { margin-bottom: 9px; }
-
-    .task-remove-attachment {
-        float: right;
-        cursor: pointer;
-        width: 20px!important;
-        margin-top: 10px;
-        margin-right: 10px;
-    }
-    .icon-paper-clip {
-        font-size: 30px;
-        width: 20px;
-        margin-right: 0.5em;
-        height: 15px;
-        margin-top: 10px;
-        float: left;
-        position: relative;
-    }
-    .io-ox-core-tk-attachment {
-        .delete {
-            width: 25px;
-            font-size: 19px;
-            padding-left: 12px;
-            cursor: pointer;
-        }
-        .attachment-icon {
-            padding-left: 15px;
-            width: 45px;
-        }
+    .tab-link {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     .task-add-attachments-button,
@@ -123,12 +107,30 @@
 
     .task-add-attachments-input { margin-left: 10px; }
 
+    .sectiontitle {
+        font-size: 13px;
+        font-family: @normalFontFamily;
+        font-weight: normal;
+        margin: 20px 0 15px 0;
+        color: #888;
+    }
+
+    legend {
+        display: block;
+        width: 100%;
+        padding: 0;
+        margin-bottom: 27px;
+        font-size: 19.5px;
+        line-height: 26px;
+        color: #333;
+        border: 0;
+    }
+
     /* Mobile */
     @media all and (max-width: 980px) {
         .progress-field { width: 49px; }
-        .task-participant-input-field { width: 286px; }
     }
-    @media all and (max-width: 480px) {
+    @media all and (max-width: 480px), (max-device-width: 480px) {
         .title {
             width: 100%; //to push the buttons under the title
         }
@@ -138,14 +140,14 @@
         .task-edit-headline {
             margin-bottom: 9px;
         }
-        .task-participant-input-field {
-            width: 82%;
+        .tab-content {
+            min-height: 0px;
+        }
+        .task-edit-wrapper {
+            margin-top: 0px;
         }
     }
 }
-
-
-
 
 @media (max-width: 767px) {
     .span3.btn.fluid-grid-fix {

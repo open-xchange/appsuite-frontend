@@ -110,6 +110,9 @@ define('io.ox/core/pubsub/settings/pane',
 
         var options = {
             handler: function (id, data) {
+                if (!mapping[data.module]) {
+                    return;
+                }
                 ox.launch(mapping[data.module] + '/main', { folder: id }).done(function () {
                     this.folder.set(id);
                 });
@@ -129,7 +132,7 @@ define('io.ox/core/pubsub/settings/pane',
             entity = model.get('entity');
             if (entity.id) {
                 // single file
-                options.leaf = $('<a href="#" class="file-detail-link">').attr('data-cid', _.cid(entity)).text(model.get('displayName'));
+                options.leaf = $('<a href="#" tabindex="1" class="file-detail-link">').attr('data-cid', _.cid(entity)).text(model.get('displayName'));
             }
             folder = entity.folder;
         }
@@ -144,7 +147,7 @@ define('io.ox/core/pubsub/settings/pane',
             return nameNode.addClass('disabled');
         }
 
-        return nameNode.after(' (', $('<a>', { href: url, target: '_blank' }).text(gt('Link')), ')');
+        return nameNode.after(' (', $('<a>', { href: url, target: '_blank', tabindex: 1 }).text(gt('Link')), ')');
     }
 
     var getSiteNameRegex = /^http[^?]+\/(\w+)\?/,
@@ -203,7 +206,7 @@ define('io.ox/core/pubsub/settings/pane',
 
             if (data.source && (baton.model.refreshState() === 'ready')) {
                 // this is a subscription
-                dynamicAction = $('<a href="#" class="action" data-action="refresh">').text(gt('Refresh'));
+                dynamicAction = $('<a href="#" tabindex="1" class="action" data-action="refresh">').text(gt('Refresh'));
                 if (isDestructiveRefresh(data)) {
                     dynamicAction.addClass("text-error");
                 }
@@ -212,22 +215,22 @@ define('io.ox/core/pubsub/settings/pane',
                 dynamicAction = $('<span>');
             } else if (data.target) {
                 // this is a publication
-                dynamicAction = $('<a href="#" class="action" data-action="edit">').text(gt('Edit'));
+                dynamicAction = $('<a href="#" tabindex="1" class="action" data-action="edit">').text(gt('Edit'));
             }
 
             url = getUrl(data);
 
             this.addClass('item').append(
                 $('<div class="actions">').append(
-                    $('<a href="#" class="close" data-action="remove">').html('&times;'),
                     enabled ? dynamicAction : '',
-                    $('<a href="#" class="action" data-action="toggle">').text(enabled ? gt('Disable') : gt('Enable'))
+                    $('<a href="#" tabindex="1" class="action" data-action="toggle">').text(enabled ? gt('Disable') : gt('Enable')),
+                    $('<a href="#" tabindex="1" class="close" data-action="remove">').append($('<i class="icon-trash">'))
                 ),
                 $('<div class="content">').append(
                     $('<div class="name">').text(getDisplayName(data) || '\u00A0'),
                     $('<div class="url">').append(
                         enabled ?
-                            $('<a target="_blank">').attr('href', url).text(getShortUrl(url) || '\u00A0') :
+                            $('<a tabindex="1" target="_blank">').attr('href', url).text(getShortUrl(url) || '\u00A0') :
                             $('<i>').text(getShortUrl(url))
                     ),
                     createPathInformation(baton.model),
@@ -257,13 +260,9 @@ define('io.ox/core/pubsub/settings/pane',
         tagName: 'li',
         className: '',
         initialize: function () {
-            //TODO:switch to listenTo here, once backbone is up to date
-            //see [1](http://blog.rjzaworski.com/2013/01/why-listento-in-backbone/)
-            this.model.off('change', performRender);
-            this.model.on('change', performRender, this);
+            this.listenTo(this.model, 'change', performRender);
 
-            this.model.off('remove', performRemove, this);
-            this.model.on('remove', performRemove, this);
+            this.listenTo(this.model, 'remove', performRemove);
         },
         events: {
             'click [data-action="toggle"]': 'onToggle',
@@ -309,8 +308,10 @@ define('io.ox/core/pubsub/settings/pane',
             baton.view.render();
         },
         onRemove: function (ev) {
-            ev.preventDefault();
             this.model.destroy();
+        },
+        close: function () {
+            this.stopListening();
         }
     });
 
@@ -331,7 +332,7 @@ define('io.ox/core/pubsub/settings/pane',
             hintNode, hint;
 
         if (!capabilities.has(type)) {
-            node.after($('<div class="empty">').text(gt('This feature is deactivated') + '.'));
+            //node.after($('<div class="empty">').text(gt('This feature is deactivated') + '.'));
             return;
         }
 
@@ -368,7 +369,7 @@ define('io.ox/core/pubsub/settings/pane',
         });
 
         function getHint() {
-
+            filteredList = collection.forFolder(filter);
             var isEmpty = filteredList.length === 0,
                 isFiltered = !!filter.folder,
                 hasPublications = folderState.isPublished && type === 'publication',
@@ -410,19 +411,26 @@ define('io.ox/core/pubsub/settings/pane',
         id: 'content',
         render: function () {
 
-            var baton = this.baton;
+            var baton = this.baton, both = capabilities.has('publication') && capabilities.has('subscription');
 
-            this.$el.append(
-                // pub
-                $('<h2 class="pane-headline">').text(gt('Publications')),
-                baton.pubListNode = $('<ul class="publications">'),
-                // sub
-                $('<h2 class="pane-headline">').text(gt('Subscriptions')),
-                baton.subListNode = $('<ul class="subscriptions">')
-            );
+            if (capabilities.has('publication')) {
+                this.$el.append(
+                    // pub
+                    both ? $('<h2 class="pane-headline">').text(gt('Publications')) : $(),
+                    baton.pubListNode = $('<ul class="publications">')
+                );
+                setupList(baton.pubListNode.empty(), baton.publications, 'publication');
+            }
 
-            setupList(baton.pubListNode.empty(), baton.publications, 'publication');
-            setupList(baton.subListNode.empty(), baton.subscriptions, 'subscription');
+            if (capabilities.has('subscription')) {
+                this.$el.append(
+                    // sub
+                    both ? $('<h2 class="pane-headline">').text(gt('Subscriptions')) : $(),
+                    baton.subListNode = $('<ul class="subscriptions">')
+                );
+                setupList(baton.subListNode.empty(), baton.subscriptions, 'subscription');
+            }
+
         }
     });
 });

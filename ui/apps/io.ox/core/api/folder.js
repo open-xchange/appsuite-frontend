@@ -13,12 +13,14 @@
 define('io.ox/core/api/folder',
     ['io.ox/core/http',
      'io.ox/core/cache',
-     'io.ox/core/config',
+     'settings!io.ox/mail',
      'settings!io.ox/core',
      'io.ox/core/api/account',
      'io.ox/core/event',
      'io.ox/core/notifications',
-     'gettext!io.ox/core'], function (http, cache, config, settings, account, Events, notifications, gt) {
+     'io.ox/core/capabilities',
+     'io.ox/core/extensions',
+     'gettext!io.ox/core'], function (http, cache, mailSettings, settings, account, Events, notifications, capabilities, ext, gt) {
 
     'use strict';
 
@@ -34,7 +36,8 @@ define('io.ox/core/api/folder',
          */
         visible = function (folder) {
             var blacklist = settings.get('folder/blacklist') || {};
-            return folder !== undefined && blacklist[String(folder.data ? folder.data.id : folder.id)] === undefined;
+            var blacklistedFolder = blacklist[String(folder.data ? folder.data.id : folder.id)];
+            return folder !== undefined && (blacklistedFolder === undefined || blacklistedFolder === false);
         },
 
         // magic permission check
@@ -47,6 +50,14 @@ define('io.ox/core/api/folder',
             // get cache
             opt = opt || {};
             var cache = opt.storage ? opt.storage.folderCache : folderCache;
+            // make sure it's a string
+            id = String(id);
+            // fetch GAB but GAB is disabled?
+            if (id === '6' && !capabilities.has('gab')) {
+                var error = gt('Accessing global address book is not permitted');
+                console.warn(error);
+                return $.Deferred().reject({ error: error });
+            }
             // cache miss?
             var getter = function () {
                 return http.GET({
@@ -59,12 +70,18 @@ define('io.ox/core/api/folder',
                         timezone: 'UTC'
                     }
                 })
-                .done(function (data, timestamp) {
+                .then(function (data, timestamp) {
                     // add to cache
-                    cache.add(data.id, data);
-                })
-                .fail(function (error) {
-                    console.error('folder.get', id, error);
+                    return cache.add(data.id, data);
+                }, function (error) {
+                    if (error.categories === 'PERMISSION_DENIED') {
+                        if (!opt.suppressYell)
+                            notifications.yell(error);
+                    } else {
+                        if (ox.debug) {
+                            console.error('folder.get', id, error);
+                        }
+                    }
                 });
             };
 
@@ -184,25 +201,50 @@ define('io.ox/core/api/folder',
                         appendColumns: true
                     })
                     .pipe(function (data, timestamp) {
+
                         // rearrange on multiple ???
                         if (data.timestamp) {
-                            timestamp = _.now(); // force update
+                            timestamp = _.then(); // force update
                             data = data.data;
                         }
-                        //apply blacklist
+
+                        // apply blacklist
                         data = _.filter(data, visible);
+
                         // fix order of mail folders (INBOX first)
                         if (opt.folder === '1') {
+
+                            var head = new Array(1 + 5), types = 'inbox sent drafts trash spam'.split(' ');
+
+                            // get unified folder first
+                            _(data).find(function (folder) {
+                                return account.isUnified(folder.id) && !!(head[0] = folder);
+                            });
+
+                            // get standard folders
+                            _(data).each(function (folder) {
+                                _(types).find(function (type, index) {
+                                    return account.is(type, folder.id) && !!(head[index + 1] = folder);
+                                });
+                            });
+
+                            // exclude unified and standard folders
+                            data = _(data).reject(function (folder) {
+                                return account.isUnified(folder.id) || account.isStandardFolder(folder.id);
+                            });
+
+                            // sort the rest
                             data.sort(function (a, b) {
-                                if (account.isUnified(a.id)) return -1;
-                                if (account.isUnified(b.id)) return +1;
-                                if (a.id === 'default0/INBOX') return -1;
-                                if (b.id === 'default0/INBOX') return +1;
+                                // external accounts at last
                                 if (account.isExternal(a.id)) return +1;
                                 if (account.isExternal(b.id)) return -1;
                                 return a.title.toLowerCase() > b.title.toLowerCase() ? +1 : -1;
                             });
+
+                            // combine
+                            data.unshift.apply(data, _(head).compact());
                         }
+
                         return $.when(
                             // add to cache
                             cache.add(opt.folder, data),
@@ -218,7 +260,9 @@ define('io.ox/core/api/folder',
                         });
                     })
                     .fail(function (e) {
-                        console.error('folder.getSubFolders', opt.folder, e.error, e);
+                        if (ox.debug) {
+                            console.error('folder.getSubFolders', opt.folder, e.error, e);
+                        }
                     });
                 };
 
@@ -310,7 +354,7 @@ define('io.ox/core/api/folder',
                         .pipe(function (data, timestamp) {
                             // clean up
                             var id, folders, tmp = {},
-                                defaultFolder = String(config.get('folder.' + opt.type, 0)),
+                                defaultFolder = String(settings.get('folder/' + opt.type, 0)),
 
                                 makeObject = function (raw) {
                                     return http.makeObject(raw, 'folders');
@@ -319,9 +363,9 @@ define('io.ox/core/api/folder',
                                     // checks if folder is blacklisted
                                     return visible(folder);
                                 },
-                                canRead = function (obj) {
+                                canReadOrIsAdmin = function (obj) {
                                     // read permission?
-                                    return api.can('read', obj);
+                                    return api.can('read', obj) || (perm(obj.own_rights, 28) === 1);
                                 },
                                 addToCache = function (obj) {
                                     // add to folder cache
@@ -336,7 +380,7 @@ define('io.ox/core/api/folder',
                                 folders = _.chain(data[id])
                                     .map(makeObject)
                                     .filter(blacklisted)
-                                    .filter(canRead)
+                                    .filter(canReadOrIsAdmin)
                                     .map(addToCache) // since each doesn't chain
                                     .value();
                                 // empty?
@@ -362,6 +406,14 @@ define('io.ox/core/api/folder',
 
         remove: function (options) {
 
+            require(['io.ox/core/config'], function (config) {
+                var folderInConfig = config.get('modules.mail.contactCollectFolder');
+
+                if (folderInConfig.toString() === options.folder) {
+                    notifications.yell('success', gt('The settings for collecting contacts in this folder will become disabled when you enter the application the next time.'));
+                }
+            });
+
             var opt = _.extend({
                 folder: null
             }, options || {});
@@ -380,7 +432,7 @@ define('io.ox/core/api/folder',
                 )
                 .then(function () {
                     // trigger event
-                    api.trigger('delete:prepare', id, folder_id);
+                    api.trigger('delete:prepare', data);
                     // delete on server
                     return http.PUT({
                         module: 'folders',
@@ -405,7 +457,6 @@ define('io.ox/core/api/folder',
         },
 
         create: function (options) {
-
             // options
             var opt = $.extend({
                 folder: null,
@@ -461,7 +512,7 @@ define('io.ox/core/api/folder',
                     )
                     .pipe(function (getRequest) {
                         // return proper data
-                        var data = getRequest[0];
+                        var data = getRequest;
                         if (!options.silent) {
                             api.trigger('create', data);
                         }
@@ -545,6 +596,8 @@ define('io.ox/core/api/folder',
                     });
                 })
                 .fail(function (error) {
+                    if (error && error.code && error.code === 'FLD-0018')
+                        error.error = gt('Could not save settings. There have to be at least one user with administration rights.');
                     api.trigger('update:fail', error, opt.folder);
                 });
             });
@@ -659,7 +712,7 @@ define('io.ox/core/api/folder',
                         return (/^default[1-9]/).test(String(data.id)) && !this.is('unifiedmail', data);
                     case 'defaultfolder':
                         // get default folder
-                        var folders = config.get('mail.folder');
+                        var folders = mailSettings.get('folder');
                         for (id in folders) {
                             if (folders[id] === data.id) {
                                 return true;
@@ -706,9 +759,9 @@ define('io.ox/core/api/folder',
                 // 256 = read own, 512 = read all, 8192 = admin
                 // hide folders where your only permission is to see the foldername (rights !== 1)
                 // return (rights & 256 || rights & 512 || rights & 8192) > 0;
-                return perm(rights, 7) > 0 ||
-                        (!isSystem && this.is('public', data) && data.folder_id !== '10') && rights !== 1;
-                        // please use parantheses properly OR OR AND or OR AND AND?
+                // 10: shared files folder
+                return perm(rights, 7) > 0 /*|| (!isSystem && this.is('public', data) && data.folder_id !== '10') // see bug 28379 and 23933 */&& rights !== 1;
+                // please use parantheses properly OR OR AND or OR AND AND?
             case 'create':
                 // can create objects?
                 return perm(rights, 0) > 1;
@@ -757,9 +810,18 @@ define('io.ox/core/api/folder',
                 // view properties
                 return !isMail && !this.is('account', data) && (data.capabilities & 1);
             case 'publish':
-                // can publish (rough, currently only used for files)
-                return this.can('create', data) && rights !== 1 && rights !== 4;
+                // check folder capability
+                if (_(data.supported_capabilities).indexOf('publication') === -1) return false;
+                // contact?
+                if (data.module === 'contacts') return true;
+                // files?
+                return data.module === 'infostore' && this.can('create', data) && rights !== 1 && rights !== 4;
             case 'subscribe':
+                // check folder capability
+                if (_(data.supported_capabilities).indexOf('subscription') === -1) return false;
+                // check rights
+                return (/^(contacts|calendar|infostore)$/).test(data.module) && api.can('write', data);
+            case 'imap-subscribe':
                 // can subscribe
                 return isMail && Boolean(data.capabilities & Math.pow(2, 4));
             default:
@@ -801,7 +863,11 @@ define('io.ox/core/api/folder',
                         // compare folder data. Might be different due to differences in get & list requests (sadly),
                         // so we cannot use _.isEqual(). Actually we are just interested in some fields:
                         // unread, title, subfolders, subscr_subflds
-                        var equalData = a.title === b.title && a.subfolders === b.subfolders && a.subscr_subflds === b.subscr_subflds;
+                        var equalData = a.title === b.title &&
+                                        a.subfolders === b.subfolders &&
+                                        a.subscr_subflds === b.subscr_subflds &&
+                                        a['com.openexchange.publish.publicationFlag'] === b['com.openexchange.publish.publicationFlag'] &&
+                                        a['com.openexchange.publish.subscriptionFlag'] === b['com.openexchange.publish.subscriptionFlag'];
                         api.trigger('update:total', id, b);
                         api.trigger('update:total:' + id, b);
                         api.trigger('update:unread', id, b);
@@ -884,7 +950,7 @@ define('io.ox/core/api/folder',
 
     api.getDefaultFolder = function (type) {
         type = type || 'mail';
-        return config.get(type === 'mail' ? 'mail.folder.inbox' : 'folder.' + type);
+        return type === 'mail' ? mailSettings.get('folder/inbox') : settings.get('folder/' + type);
     };
 
     // central hub to coordinate events and caches
@@ -931,22 +997,41 @@ define('io.ox/core/api/folder',
      */
     api.getBreadcrumb = (function () {
 
-        var dropdown = function (li, id, title) {
+        var dropdown = function (li, id, title, options) {
             _.defer(function () {
                 api.getSubFolders({ folder: id }).done(function (list) {
                     if (list.length) {
                         li.addClass('dropdown').append(
-                            $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">')
+                            $('<a href="#" class="dropdown-toggle" tabindex="1" data-toggle="dropdown">')
                             .append(
                                 $.txt(gt.noI18n(title)),
                                 $('<b class="caret">')
                             ),
-                            $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">').append(
+                            $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel" aria-haspopup="true">').append(
                                 _(list).map(function (folder) {
-                                    return $('<li>').append(
-                                        $('<a href="#">')
+                                    var $a, $li = $('<li>').append(
+                                        $a = $('<a href="#" tabindex="1" role="menuitem">')
                                         .attr('data-folder-id', folder.id).text(gt.noI18n(folder.title))
                                     );
+                                    /**
+                                     * special mobile handling due to on-the-fly bootstrap-dropdown mod on mobile
+                                     *
+                                     * on mobile devices the dropdowns are moved around in the down
+                                     * causing the click delegate to break which is defined on the "breadcrump" element
+                                     * Therfore we need to bind the handler on each dropdown href for mobile as the
+                                     * handlers will stay alive after append the whole dropdown to a new
+                                     * root node in the DOM.
+                                     */
+                                    if (_.device('smartphone')) {
+                                        $a.on('click', function (e) {
+                                            e.preventDefault();
+                                            var id = $(this).attr('data-folder-id');
+                                            if (id !== undefined) {
+                                                _.call(options.handler, id, $(this).data());
+                                            }
+                                        });
+                                    }
+                                    return $li;
                                 })
                             )
                         );
@@ -964,17 +1049,18 @@ define('io.ox/core/api/folder',
                 clickable = properModule && options.handler !== undefined;
 
             if (isLast && options.subfolder && clickable) {
-                dropdown(elem = li, folder.id, folder.title);
+                dropdown(elem = li, folder.id, folder.title, options);
             } else if (isLast && options.last) {
                 elem = li.addClass('active').text(gt.noI18n(folder.title));
             } else {
                 if (!clickable) {
                     elem = li.addClass('active').text(gt.noI18n(folder.title));
                 } else {
-                    li.append(elem = $('<a href="#">').text(gt.noI18n(folder.title)));
+                    li.append(elem = $('<a href="#" tabindex="1" role="menuitem">').text(gt.noI18n(folder.title)));
                 }
-                li.append(isLast ? $() : $('<span class="divider">').text(gt.noI18n(' / ')));
+                li.append(isLast ? $() : $('<span class="divider" role="presentation">').text(gt.noI18n(' / ')));
             }
+
             elem.attr('data-folder-id', folder.id).data(folder);
             this.append(li);
         };
@@ -998,20 +1084,27 @@ define('io.ox/core/api/folder',
                 return ul;
             }
             finally {
-                api.getPath({ folder: id }).done(function (list) {
-                    var exclude = _(options.exclude);
-                    _(list).each(function (o, i, list) {
-                        if (!exclude.contains(o.id)) {
-                            add.call(ul, o, i, list, options);
+                api.getPath({ folder: id }).then(
+                    function success(list) {
+                        var exclude = _(options.exclude);
+                        _(list).each(function (o, i, list) {
+                            if (!exclude.contains(o.id)) {
+                                add.call(ul, o, i, list, options);
+                            }
+                        });
+                        if (options.leaf) {
+                            ul.append(
+                                $('<li>').append($('<span class="divider">').text(gt.noI18n(' / ')), options.leaf)
+                            );
                         }
-                    });
-                    if (options.leaf) {
-                        ul.append(
-                            $('<li>').append($('<span class="divider">').text(gt.noI18n(' / ')), options.leaf)
-                        );
+                        ul = null;
+                    },
+                    function fail() {
+                        // cannot show breadcrumb, for example due to disabled GAB
+                        ul.remove();
+                        ul = null;
                     }
-                    ul = null;
-                });
+                );
             }
         };
     }());
@@ -1028,6 +1121,33 @@ define('io.ox/core/api/folder',
         subFolderCache: subFolderCache,
         visibleCache: visibleCache
     };
+
+    // filename validator
+    ext.point('io.ox/core/filename')
+        .extend({
+            index: 100,
+            id: 'empty',
+            validate: function (name, type) {
+                if (name === '') {
+                    return type === 'file' ?
+                        gt('File names must not be empty') :
+                        gt('Folder names must not be empty');
+                }
+                return true;
+            }
+        })
+        .extend({
+            index: 200,
+            id: 'slash',
+            validate: function (name, type) {
+                if (/\//.test(name)) {
+                    return type === 'file' ?
+                        gt('File names must not contain slashes') :
+                        gt('Folder names must not contain slashes');
+                }
+                return true;
+            }
+        });
 
     return api;
 });

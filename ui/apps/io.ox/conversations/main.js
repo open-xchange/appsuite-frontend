@@ -16,12 +16,11 @@ define("io.ox/conversations/main",
      "io.ox/conversations/api",
      "io.ox/core/tk/vgrid",
      "io.ox/core/api/user",
-     "io.ox/core/config",
      "io.ox/core/extensions",
      "io.ox/core/date",
      "less!io.ox/conversations/style.less",
      "io.ox/conversations/actions"
-    ], function (util, api, VGrid, userAPI, config, ext, date) {
+    ], function (util, api, VGrid, userAPI, ext, date) {
 
     "use strict";
 
@@ -361,11 +360,11 @@ define("io.ox/conversations/main",
         });
 
         win.on("show", function () {
-            grid.selection.keyboard(true);
+            grid.keyboard(true);
             resumePolling();
         });
         win.on("hide", function () {
-            grid.selection.keyboard(false);
+            grid.keyboard(false);
             stopPolling();
         });
 

@@ -19,19 +19,19 @@ define("io.ox/help/center", [
 ], function (ext, core_doc, gt) {
     //TODO Launcher refactoren, hier hin
     'use strict';
-    
+
     var center = { active: false },
         origPopovers = {};
-    
+
     var isVisible = function (elem) {
         var $elem = $(elem);
         var rectPos = elem.getBoundingClientRect();
         var result = 0;
-        
+
         if ($elem.width() === 0 || $elem.height() === 0) {
             return false;
         }
-        
+
         if (elem === document.elementFromPoint(rectPos.left, rectPos.top)) {
             result++;
         }
@@ -54,7 +54,7 @@ define("io.ox/help/center", [
         }
         return result === 'visible';
     };
-    
+
     center.toggle = function () {
         this.active = !this.active;
         if (this.active) {
@@ -63,7 +63,7 @@ define("io.ox/help/center", [
             disableHelp();
         }
     };
-    
+
     var enableHelp = function () {
         var $body = $('body');
         var $helpButton = $body.find('#io-ox-help-on');
@@ -72,10 +72,10 @@ define("io.ox/help/center", [
             var dataRef = $elem.attr('data-ref');
             return getHelpText(dataRef) !== undefined;
         }));
-        
+
         //blackout everything
         var $wall = $('<div class="io-ox-help-blacksheepwall"/>');
-        
+
         //highlight things with help texts
         _($saveThese).each(function (elem) {
             var $elem = $(elem);
@@ -113,7 +113,7 @@ define("io.ox/help/center", [
                 .appendTo($wall);
             }
         });
-        
+
         //add cancel button
         console.log("Check help button:", $helpButton);
         $('<i class="icon-remove-circle icon-white" id="io-ox-help-off">')
@@ -137,7 +137,7 @@ define("io.ox/help/center", [
         .appendTo($wall);
         $wall.appendTo($body);
     };
-    
+
     var getHelpText = function (id) {
         var help;
         ext.point('io.ox/help/helper').each(function (helper) {
@@ -148,14 +148,14 @@ define("io.ox/help/center", [
         });
         return help;
     };
-    
+
     var disableHelp = function () {
         $('.io-ox-help-blacksheepwall').detach();
         $('.io-ox-help-highlight').detach();
         $('#io-ox-help-off').detach();
     };
-    
-    
+
+
     return center;
-    
+
 });

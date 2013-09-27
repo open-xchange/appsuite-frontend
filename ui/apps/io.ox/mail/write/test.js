@@ -14,11 +14,13 @@
 define('io.ox/mail/write/test',
     ['io.ox/mail/write/main',
      'io.ox/mail/api',
+     'io.ox/mail/util',
      'io.ox/core/api/account',
      'io.ox/core/extensions',
+     'io.ox/mail/sender',
      'io.ox/mail/write/test/html_send',
      'io.ox/mail/write/test/text_send',
-     'io.ox/mail/write/test/html_reply'], function (writer, mailAPI, accountAPI, ext) {
+     'io.ox/mail/write/test/html_reply'], function (writer, mailAPI, mailUtil, accountAPI, ext, sender) {
 
     'use strict';
 
@@ -612,6 +614,351 @@ define('io.ox/mail/write/test',
                     app.dirty(false).quit();
                     j.expect(app.getEditor).toBeUndefined();
                     app = ed = null;
+                });
+            });
+        }
+    });
+
+    /*
+     * Suite: Account/Folder/Sender stuff
+     */
+    ext.point('test/suite').extend({
+        id: 'mail-account',
+        index: 400,
+        test: function (j, options) {
+
+            j.describe('Mail Account API', function () {
+
+                var api = accountAPI,
+                    account0 = {
+                        addresses: "matthias.biggeleben@OX.IO", // uppercase!
+                        confirmed_ham: "confirmed-ham",
+                        confirmed_ham_fullname: "default0/INBOX/confirmed-ham",
+                        confirmed_spam: "confirmed-spam",
+                        confirmed_spam_fullname: "default0/INBOX/confirmed-spam",
+                        drafts: "Entwürfe",
+                        drafts_fullname: "default0/INBOX/Entwürfe",
+                        id: 0,
+                        login: "matthias.biggeleben",
+                        mail_port: 143,
+                        mail_protocol: "imap",
+                        mail_secure: false,
+                        mail_server: "ox.open-xchange.com",
+                        mail_url: "imap://ox.open-xchange.com:143",
+                        meta: null,
+                        name: "Email",
+                        password: null,
+                        personal: "Biggeleben", // just last_name
+                        pop3_delete_write_through: false,
+                        pop3_expunge_on_quit: false,
+                        pop3_path: "INBOX/EMail",
+                        pop3_refresh_rate: null,
+                        pop3_storage : null,
+                        primary_address: "matthias.biggeleben@OX.IO", // uppercase!
+                        reply_to: null,
+                        sent: "Gesendete Objekte",
+                        sent_fullname: "default0/INBOX/Gesendete Objekte",
+                        spam: "Spam",
+                        spam_fullname: "default0/INBOX/Spam",
+                        spam_handler: "NoSpamHandler",
+                        transport_login: "matthias.biggeleben",
+                        transport_password: null,
+                        transport_port: 25,
+                        transport_protocol: "smtp",
+                        transport_secure: false,
+                        transport_server: "ox.open-xchange.com",
+                        transport_url: "smtp://ox.open-xchange.com:25",
+                        trash: "Papierkorb",
+                        trash_fullname: "default0/INBOX/Papierkorb",
+                        unified_inbox_enabled: false
+                    };
+
+                j.it('sets custom account data', function () {
+
+                    var done = new Done();
+                    j.waitsFor(done, 'set data', TIMEOUT);
+
+                    api.cache.clear().done(function () {
+
+                        // check that we get no account
+                        api.cache.keys().done(function (keys) {
+
+                            j.expect(keys.length).toEqual(0);
+
+                            // now add custom data
+                            $.when(
+                                api.cache.add(account0)
+                            )
+                            .done(function () {
+                                api.all().done(function (accounts) {
+                                    done.yep();
+                                    j.expect(accounts.length).toEqual(1);
+                                });
+                            });
+                        });
+                    });
+                });
+
+                j.it('returns proper account data', function () {
+
+                    var done = new Done();
+                    j.waitsFor(done, 'load account', TIMEOUT);
+
+                    api.get(0).done(function (data) {
+                        j.expect(data.id).toEqual(0);
+                        j.expect(data.login).toEqual('matthias.biggeleben');
+                        done.yep();
+                    });
+                });
+
+                j.it('is account', function () {
+                    j.expect(api.isAccount(0)).toEqual(true);
+                    j.expect(api.isAccount(1)).toEqual(false);
+                });
+
+                j.it('is primary account', function () {
+                    j.expect(api.isPrimary('default0/yeah')).toEqual(true);
+                    j.expect(api.isPrimary('default1/nope')).toEqual(false);
+                });
+
+                j.it('is "inbox" folder', function () {
+                    j.expect(api.is('inbox', 'default0/INBOX')).toEqual(true);
+                    j.expect(api.is('inbox', 'default0/XOBNI')).toEqual(false);
+                });
+
+                j.it('is "sent" folder', function () {
+                    j.expect(api.is('sent', 'default0/INBOX/Gesendete Objekte')).toEqual(true);
+                    j.expect(api.is('sent', 'default0/INBOX/nope')).toEqual(false);
+                });
+
+                j.it('parses account id', function () {
+
+                    var id;
+
+                    id = api.parseAccountId('default0');
+                    j.expect(id).toEqual(0);
+
+                    id = api.parseAccountId('default01337', true);
+                    j.expect(id).toEqual(1337);
+
+                    id = api.parseAccountId(0);
+                    j.expect(id).toEqual(0);
+                });
+
+                j.it('returns correct primary address', function () {
+
+                    var done = new Done();
+                    j.waitsFor(done, 'get primary address', TIMEOUT);
+
+                    require(['settings!io.ox/mail']).then(function (settings) {
+
+                        // overwrite settings. white-space
+                        settings.detach().set('defaultSendAddress', ' matthias.biggeleben@ox.io ');
+
+                        api.getPrimaryAddress(0).done(function (address) {
+                            j.expect(address).toEqual(['Biggeleben', 'matthias.biggeleben@ox.io']);
+                            done.yep();
+                        });
+                    });
+                });
+
+                j.it('uses default display_name as fallback (personal)', function () {
+
+                    var done = new Done();
+                    j.waitsFor(done, 'default display_name', TIMEOUT);
+
+                    // clear "personal" first
+                    account0.personal = '';
+
+                    $.when(
+                        api.getDefaultDisplayName(),
+                        api.cache.add(account0)
+                    )
+                    .done(function (name) {
+
+                        api.getPrimaryAddress(0).done(function (address) {
+                            j.expect(address).toEqual([name, 'matthias.biggeleben@ox.io']);
+                            done.yep();
+                        });
+                    });
+                });
+
+                j.it('returns correct sender addresses', function () {
+
+                    var done = new Done();
+                    j.waitsFor(done, 'sender addresses', TIMEOUT);
+
+                    // add some addresses. with some falsy white-space and upper-case
+                    account0.addresses = ' ALL@open-xchange.com, matthias.biggeleben@ox.io,mattes@open-xchange.com ';
+
+                    api.cache.add(account0)
+                    .done(function (name) {
+
+                        api.getSenderAddresses(0).done(function (addresses) {
+                            var expected = [
+                                ['Matthias Biggeleben', 'all@open-xchange.com'],
+                                ['Matthias Biggeleben', 'matthias.biggeleben@ox.io'],
+                                ['Matthias Biggeleben', 'mattes@open-xchange.com']
+                            ];
+                            j.expect(addresses).toEqual(expected);
+                            done.yep();
+                        });
+                    });
+                });
+
+                j.it('returns all sender addresses across all accounts', function () {
+
+                    var done = new Done();
+                    j.waitsFor(done, 'all sender addresses', TIMEOUT);
+
+                    // add second account
+                    var account1 = _.extend(account0, {
+                        addresses: ' test@gmail.com,   FOO@gmail.com, yeah@gmail.com',
+                        id: 1,
+                        personal: 'Test',
+                        primary_address: 'FOO@gmail.com'
+                    });
+
+                    api.cache.add(account1)
+                    .done(function (name) {
+
+                        api.getAllSenderAddresses().done(function (addresses) {
+                            var expected = [
+                                ['Matthias Biggeleben', 'all@open-xchange.com'],
+                                ['Matthias Biggeleben', 'matthias.biggeleben@ox.io'],
+                                ['Matthias Biggeleben', 'mattes@open-xchange.com'],
+                                ['Test', 'foo@gmail.com'],
+                                ['Test', 'test@gmail.com'],
+                                ['Test', 'yeah@gmail.com']
+                            ];
+                            j.expect(addresses).toEqual(expected);
+                            done.yep();
+                        });
+                    });
+                });
+
+                j.it('returns correct primary address for folder_id', function () {
+
+                    var done = new Done();
+                    j.waitsFor(done, 'get address', TIMEOUT);
+
+                    api.getPrimaryAddressFromFolder('default1/INBOX/test').done(function (address) {
+                        j.expect(address).toEqual(['Test', 'foo@gmail.com']);
+                        done.yep();
+                    });
+                });
+
+                j.it('returns correct primary address for account_id', function () {
+
+                    var done = new Done();
+                    j.waitsFor(done, 'get address', TIMEOUT);
+
+                    api.getPrimaryAddressFromFolder(1).done(function (address) {
+                        j.expect(address).toEqual(['Test', 'foo@gmail.com']);
+                        done.yep();
+                    });
+                });
+
+                j.it('creates proper select-box with sender addresses', function () {
+
+                    var done = new Done(), select;
+                    j.waitsFor(done, 'get addresses', TIMEOUT);
+
+                    options.node.append(
+                        select = $('<select class="sender-dropdown" size="1">').css('width', '400px')
+                    );
+
+                    // patch to get test data
+                    sender.getNumbers = function () {
+                        return $.Deferred().resolve({
+                            cellular_telephone0: '+49 151 00 000 001', // should not appear
+                            cellular_telephone1: '+49 151 99 888 777',
+                            cellular_telephone2: '+49 151 99 999 888',
+                            cellular_telephone3: ' ' // should not appear
+                        });
+                    };
+
+                    sender.getMapping = function () {
+                        return ['cellular_telephone1', 'cellular_telephone2', 'cellular_telephone3'];
+                    };
+
+                    sender.drawOptions(select).done(function () {
+                        j.expect(select.children().length).toEqual(8);
+                        j.expect(select.find('[default]').length).toEqual(1);
+                        done.yep();
+                    });
+                });
+
+                function setValue(from) {
+                    var select = options.node.find('.sender-dropdown');
+                    sender.set(select, from);
+                }
+
+                function getValue() {
+                    var select = options.node.find('.sender-dropdown');
+                    return sender.get(select);
+                }
+
+                j.it('sets initial value of select-box correctly', function () {
+                    var from = getValue();
+                    // box should automatically select the default value
+                    j.expect(from).toEqual(['Matthias Biggeleben', 'matthias.biggeleben@ox.io']);
+                });
+
+                j.it('sets value of select-box correctly', function () {
+                    setValue(['Test', 'foo@gmail.com']);
+                    var index = options.node.find('.sender-dropdown').prop('selectedIndex');
+                    j.expect(index).toEqual(5);
+                });
+
+                j.it('uses default address if invalid values are set', function () {
+                    // an invalid value select first item in the list
+                    setValue(['Test', 'not-in@the.list']);
+                    var select = options.node.find('.sender-dropdown'),
+                        index = select.prop('selectedIndex'),
+                        value = select.val();
+                    j.expect(index).toEqual(4);
+                    j.expect(value).toEqual('"Matthias Biggeleben" <matthias.biggeleben@ox.io>');
+                });
+
+                j.it('selects proper address during initial loading', function () {
+
+                    var done = new Done(), select;
+                    j.waitsFor(done, 'async test', TIMEOUT);
+
+                    // clear box
+                    var select = options.node.find('.sender-dropdown');
+                    select.empty().removeAttr('data-default');
+
+                    // set value
+                    setValue(['Test', 'foo@gmail.com']);
+
+                    j.expect(select.val()).toEqual(null);
+                    j.expect(select.children().length).toEqual(0);
+
+                    // an invalid value select first item in the list
+                    setTimeout(function () {
+                        sender.drawOptions(select).done(function () {
+                            var index = options.node.find('.sender-dropdown').prop('selectedIndex');
+                            j.expect(index).toEqual(5);
+                            done.yep();
+                        });
+                    }, 100);
+                });
+
+                // tidy up
+
+                j.it('resets account data', function () {
+
+                    var done = new Done();
+                    j.waitsFor(done, 'reset data', TIMEOUT);
+
+                    api.cache.clear().done(function () {
+                        api.all().done(function (accounts) {
+                            j.expect(accounts.length >= 1).toEqual(true);
+                            done.yep();
+                        });
+                    });
                 });
             });
         }

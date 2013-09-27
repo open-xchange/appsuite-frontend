@@ -9,7 +9,8 @@
 <link rel="prev" href="ox.appsuite.user.sect.datainterchange.import.ical.accomplish.html" title="13.1.1.3. iCal インポートの実行">
 <link rel="next" href="ox.appsuite.user.index.html" title="索引">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
-<link rel="stylesheet" type="text/css" href="http://www.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css"/> 
+<link rel="stylesheet" type="text/css" href="../../apps/io.ox/core/bootstrap/css/bootstrap.min.css"​/> 
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -57,6 +58,8 @@
 </dt>
 <dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.unifiedmail">複数のメール アカウントの受信トレイを一覧表示する方法を教えてください。</a>
 </dt>
+<dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.mailfilter.conditions">メール フィルタのルールに使用する条件について教えてください。</a>
+</dt>
 <dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.subscribe.socialnetworks">ソーシャル ネットワークの連絡先を使用する方法を教えてください。</a>
 </dt>
 </dl></dd>
@@ -89,7 +92,7 @@
 </dl></dd>
 </dl>
 </div>
-<a class="indexterm" name="idm140156167495760"></a><a class="indexterm" name="idm140156170424416"></a><a class="indexterm" name="idm140156168528544"></a><div class="qandaset">
+<a class="indexterm" name="idm139770617447184"></a><a class="indexterm" name="idm139770619551360"></a><a class="indexterm" name="idm139770623773104"></a><div class="qandaset">
 <a name="ox.appsuite.user.practice"></a><dl>
 <dt>14.1  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.common">全般に関する質問</a>
 </dt>
@@ -119,6 +122,8 @@
 <dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.autoforward">別のメール アドレスにメールを自動転送する方法を教えてください。</a>
 </dt>
 <dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.unifiedmail">複数のメール アカウントの受信トレイを一覧表示する方法を教えてください。</a>
+</dt>
+<dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.mailfilter.conditions">メール フィルタのルールに使用する条件について教えてください。</a>
 </dt>
 <dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.subscribe.socialnetworks">ソーシャル ネットワークの連絡先を使用する方法を教えてください。</a>
 </dt>
@@ -172,11 +177,11 @@
 </dl></td></tr>
 <tr class="question">
 <td align="left" valign="top">
-<a name="ox.appsuite.user.practice.personaldata"></a><a name="idm140156169465872"></a><p><b>問：</b></p>
+<a name="ox.appsuite.user.practice.personaldata"></a><a name="idm139770620973984"></a><p><b>問：</b></p>
 </td>
 <td align="left" valign="top">
 <p>個人データや個人データに関する設定は変更できますか？</p>
-<a class="indexterm" name="idm140156168470320"></a>
+<a class="indexterm" name="idm139770622955488"></a>
 </td>
 </tr>
 <tr class="answer">
@@ -193,11 +198,11 @@
 </tr>
 <tr class="question">
 <td align="left" valign="top">
-<a name="ox.appsuite.user.practice.changepassword"></a><a name="idm140156169982096"></a><p><b>問：</b></p>
+<a name="ox.appsuite.user.practice.changepassword"></a><a name="idm139770621551536"></a><p><b>問：</b></p>
 </td>
 <td align="left" valign="top">
 <p>パスワードを変更する方法を教えてください。</p>
-<a class="indexterm" name="idm140156166797904"></a>
+<a class="indexterm" name="idm139770622357392"></a>
 </td>
 </tr>
 <tr class="answer">
@@ -206,11 +211,11 @@
 </tr>
 <tr class="question">
 <td align="left" valign="top">
-<a name="ox.appsuite.user.practice.hiddenelements"></a><a name="idm140156171160144"></a><p><b>問：</b></p>
+<a name="ox.appsuite.user.practice.hiddenelements"></a><a name="idm139770620063456"></a><p><b>問：</b></p>
 </td>
 <td align="left" valign="top">
 <p>特定のボタンや入力フィールドが表示されないことがあるのはなぜですか？</p>
-<a class="indexterm" name="idm140156166948992"></a>
+<a class="indexterm" name="idm139770620062800"></a>
 </td>
 </tr>
 <tr class="answer">
@@ -225,11 +230,11 @@
 </tr>
 <tr class="question">
 <td align="left" valign="top">
-<a name="ox.appsuite.user.practice.unreadbadge"></a><a name="idm140156169057296"></a><p><b>問：</b></p>
+<a name="ox.appsuite.user.practice.unreadbadge"></a><a name="idm139770616728016"></a><p><b>問：</b></p>
 </td>
 <td align="left" valign="top">
 <p>新規のメールやアポイントへの出席依頼は、どのように通知されますか？</p>
-<a class="indexterm" name="idm140156169056640"></a>
+<a class="indexterm" name="idm139770616727360"></a>
 </td>
 </tr>
 <tr class="answer">
@@ -238,11 +243,11 @@
 </tr>
 <tr class="question">
 <td align="left" valign="top">
-<a name="ox.appsuite.user.practice.socialmessaging"></a><a name="idm140156162459936"></a><p><b>問：</b></p>
+<a name="ox.appsuite.user.practice.socialmessaging"></a><a name="idm139770614846192"></a><p><b>問：</b></p>
 </td>
 <td align="left" valign="top">
 <p>ソーシャル ネットワークやニュース ページから最新のメッセージを閲覧する方法を教えてください。</p>
-<a class="indexterm" name="idm140156162459136"></a>
+<a class="indexterm" name="idm139770614845488"></a>
 </td>
 </tr>
 <tr class="answer">
@@ -264,16 +269,18 @@
 </dt>
 <dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.unifiedmail">複数のメール アカウントの受信トレイを一覧表示する方法を教えてください。</a>
 </dt>
+<dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.mailfilter.conditions">メール フィルタのルールに使用する条件について教えてください。</a>
+</dt>
 <dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.subscribe.socialnetworks">ソーシャル ネットワークの連絡先を使用する方法を教えてください。</a>
 </dt>
 </dl></td></tr>
 <tr class="question">
 <td align="left" valign="top">
-<a name="ox.appsuite.user.practice.email.recipients"></a><a name="idm140156168631344"></a><p><b>問：</b></p>
+<a name="ox.appsuite.user.practice.email.recipients"></a><a name="idm139770614855040"></a><p><b>問：</b></p>
 </td>
 <td align="left" valign="top">
 <p>複数のメール アドレスに一度にメールを送信する方法を教えてください。</p>
-<a class="indexterm" name="idm140156168630688"></a>
+<a class="indexterm" name="idm139770614854384"></a>
 </td>
 </tr>
 <tr class="answer">
@@ -282,17 +289,17 @@
 <p>複数の宛先に一度にメールを送信するには、次のいずれかのオプションを使用します。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>すべての宛先を <span class="guibutton"><strong>宛先 ...</strong></span>、<span class="guibutton"><strong>CC:</strong></span>、<span class="guibutton"><strong>BCC:</strong></span> のいずれかの入力フィールドに入力します。オートコンプリート機能を使用すると、アドレスの入力が容易になります。各入力フィールドの違いについては、<a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.email.cc_or_bcc" title="問：">CC と BCC の違い</a> を参照してください。</p></li>
-<li class="listitem"><p>同じグループに定期的にメールを送信する場合には、<span class="phrase"><span class="guilabel"><strong>アドレス帳</strong></span></span>    アプリケーションで、配布リストを作成し、この配布リストにメール アドレスを登録します。詳細は、<a class="xref" href="ox.appsuite.user.sect.contacts.distributionlist.html" title="7.5. 配布リストの作成">配布リストの作成</a> を参照してください。</p></li>
+<li class="listitem"><p>同じグループに定期的にメールを送信する場合には、<span class="phrase"><span class="guilabel"><strong>アドレス帳</strong></span></span>    アプリケーションで、配布リストを作成し、この配布リストにメール アドレスを登録します。詳細は、<a class="xref" href="ox.appsuite.user.sect.contacts.distributionlist.html" title="6.5. 配布リストの作成">配布リストの作成</a> を参照してください。</p></li>
 </ul></div>
 </td>
 </tr>
 <tr class="question">
 <td align="left" valign="top">
-<a name="ox.appsuite.user.practice.email.cc_or_bcc"></a><a name="idm140156169528944"></a><p><b>問：</b></p>
+<a name="ox.appsuite.user.practice.email.cc_or_bcc"></a><a name="idm139770617262416"></a><p><b>問：</b></p>
 </td>
 <td align="left" valign="top">
 <p><span class="guibutton"><strong>CC:</strong></span> や <span class="guibutton"><strong>BCC:</strong></span> の入力フィールドは、どのような用途に使用するのですか？</p>
-<a class="indexterm" name="idm140156169527280"></a>
+<a class="indexterm" name="idm139770620633504"></a>
 </td>
 </tr>
 <tr class="answer">
@@ -307,63 +314,115 @@
 </tr>
 <tr class="question">
 <td align="left" valign="top">
-<a name="ox.appsuite.user.practice.email.draft"></a><a name="idm140156169102656"></a><p><b>問：</b></p>
+<a name="ox.appsuite.user.practice.email.draft"></a><a name="idm139770622520016"></a><p><b>問：</b></p>
 </td>
 <td align="left" valign="top">
 <p>同一の内容や類似した内容のメールを定期的に送信しています。この作業を効率化する方法を教えてください。</p>
-<a class="indexterm" name="idm140156168898288"></a>
+<a class="indexterm" name="idm139770622519472"></a>
 </td>
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>答：</b></p></td>
-<td align="left" valign="top"><p>メールを下書きとして保存する機能を使用します。詳細は、<a class="xref" href="ox.appsuite.user.sect.email.manage.draft.html" title="6.5.7. メールの下書きの作成">メールの下書きの作成</a> を参照してください。 </p></td>
+<td align="left" valign="top"><p>メールを下書きとして保存する機能を使用します。詳細は、<a class="xref" href="ox.appsuite.user.sect.email.manage.draft.html" title="5.5.7. メールの下書きの作成">メールの下書きの作成</a> を参照してください。 </p></td>
 </tr>
 <tr class="question">
 <td align="left" valign="top">
-<a name="ox.appsuite.user.practice.externalaccounts"></a><a name="idm140156168895296"></a><p><b>問：</b></p>
+<a name="ox.appsuite.user.practice.externalaccounts"></a><a name="idm139770623031168"></a><p><b>問：</b></p>
 </td>
 <td align="left" valign="top">
 <p>Google などの外部メール アカウントに送信されたメールにアクセスできますか？</p>
-<a class="indexterm" name="idm140156168894624"></a>
+<a class="indexterm" name="idm139770623030528"></a>
 </td>
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>答：</b></p></td>
-<td align="left" valign="top"><p>Google を含む、さまざまなメール サービス プロバイダのメール アカウントをセットアップできます。この際に必要になるのは、各プロバイダのアカウント情報だけです。外部メール アカウントのセットアップが完了すれば、すぐにフォルダ ツリー内からそのアカウントのメールにアクセスできます。詳細は、<a class="xref" href="ox.appsuite.user.sect.email.externalaccounts.html" title="6.7. 外部メール アカウント">外部メール アカウント</a> を参照してください。 </p></td>
+<td align="left" valign="top"><p>Google を含む、さまざまなメール サービス プロバイダのメール アカウントをセットアップできます。この際に必要になるのは、各プロバイダのアカウント情報だけです。外部メール アカウントのセットアップが完了すれば、すぐにフォルダ ツリー内からそのアカウントのメールにアクセスできます。詳細は、<a class="xref" href="ox.appsuite.user.sect.email.externalaccounts.html" title="5.7. 外部メール アカウント">外部メール アカウント</a> を参照してください。 </p></td>
 </tr>
 <tr class="question">
 <td align="left" valign="top">
-<a name="ox.appsuite.user.practice.autoforward"></a><a name="idm140156165210880"></a><p><b>問：</b></p>
+<a name="ox.appsuite.user.practice.autoforward"></a><a name="idm139770623026960"></a><p><b>問：</b></p>
 </td>
 <td align="left" valign="top">
 <p>別のメール アドレスにメールを自動転送する方法を教えてください。</p>
-<a class="indexterm" name="idm140156165210224"></a>
+<a class="indexterm" name="idm139770623026304"></a>
 </td>
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>答：</b></p></td>
-<td align="left" valign="top"><p>設定で、<span class="guilabel"><strong>自動転送</strong></span> の機能を有効にします。詳細は、<a class="xref" href="ox.appsuite.user.sect.email.send.autoforward.html" title="6.4.4. メールの自動転送">メールの自動転送</a> を参照してください。 </p></td>
+<td align="left" valign="top"><p>設定で、<span class="guilabel"><strong>自動転送</strong></span> の機能を有効にします。詳細は、<a class="xref" href="ox.appsuite.user.sect.email.send.autoforward.html" title="5.4.4. メールの自動転送">メールの自動転送</a> を参照してください。 </p></td>
 </tr>
 <tr class="question">
 <td align="left" valign="top">
-<a name="ox.appsuite.user.practice.unifiedmail"></a><a name="idm140156165082304"></a><p><b>問：</b></p>
+<a name="ox.appsuite.user.practice.unifiedmail"></a><a name="idm139770617104528"></a><p><b>問：</b></p>
 </td>
 <td align="left" valign="top">
 <p>複数のメール アカウントの受信トレイを一覧表示する方法を教えてください。</p>
-<a class="indexterm" name="idm140156165081632"></a>
+<a class="indexterm" name="idm139770617103856"></a>
 </td>
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>答：</b></p></td>
-<td align="left" valign="top"><p>ユニファイド メールを使用すると、複数のメール アカウントの受信トレイを一つの特定のフォルダに表示できます。詳細は、<a class="xref" href="ox.appsuite.user.sect.email.manage.unifiedmail.html" title="6.5.16. ユニファイド メールの使用">ユニファイド メールの使用</a> を参照してください。 </p></td>
+<td align="left" valign="top"><p>統合メールを使用すると、複数のメール アカウントの受信トレイを一つの特定のフォルダに表示できます。詳細は、<a class="xref" href="ox.appsuite.user.sect.email.manage.unifiedmail.html" title="5.5.16. 統合メールの使用">統合メールの使用</a> を参照してください。 </p></td>
 </tr>
 <tr class="question">
 <td align="left" valign="top">
-<a name="ox.appsuite.user.practice.subscribe.socialnetworks"></a><a name="idm140156165232816"></a><p><b>問：</b></p>
+<a name="ox.appsuite.user.practice.mailfilter.conditions"></a><a name="idm139770617367824"></a><p><b>問：</b></p>
+</td>
+<td align="left" valign="top">
+<p>メール フィルタのルールに使用する条件について教えてください。</p>
+<a class="indexterm" name="idm139770617367168"></a>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>答：</b></p></td>
+<td align="left" valign="top">
+<p>次の方法で、条件を作成できます。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>メールの要素 (例: 「件名」) を選択</p></li>
+<li class="listitem"><p>判定基準 (例: 「次の文字列と完全に一致」) を選択</p></li>
+<li class="listitem"><p>引数 (例: 「protocol」) を入力</p></li>
+</ul></div>
+<p>上記の場合、メールの件名が引数の文字 (「protocol」) に完全に一致するかどうかが検証されます。判定基準や文字列を変更して、条件を調整できます。各判定基準の違いは、次の例で説明します。ここでは、メールの絞り込みとして件名を使用します。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p>判定基準: 「次の文字列を含む」 引数の文字が件名に含まれる場合、条件を満たします。例: 引数に「protocol」を設定します。</p>
+<div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>件名が「protocol」の場合、条件を満たします。</p></li>
+<li class="listitem" style="list-style-type: none"><p>件名が「meeting protocol」の場合も、条件を満たします。</p></li>
+</ul></div>
+</li>
+<li class="listitem">
+<p>判定基準: 「次の文字列と完全に一致」件名が引数の文字列に完全に一致する場合、条件を満たします。例: 引数に「protocol」を設定します。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>件名が「protocol」の場合、条件を満たします。</p></li>
+<li class="listitem" style="list-style-type: none"><p>件名が「meeting protocol」の場合、条件を満たしません。</p></li>
+</ul></div>
+</li>
+<li class="listitem">
+<p>判定基準: 「次の文字列と一致」 件名が引数の文字に完全に一致する場合、条件を満たします。この文字列には、ワイルドカードを含めることができます。例: 引数に「protocol*」を設定します。「*」の文字は、任意の文字を示すワイルドカードです。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>件名が「protocol update」の場合、条件を満たします。</p></li>
+<li class="listitem" style="list-style-type: none"><p>件名が「meeting protocol」の場合、条件を満たしません。</p></li>
+</ul></div>
+</li>
+<li class="listitem">
+<p>判定基準: 「次の文字列と一致 (正規表現)」 正規表現の形で引数に入力した文字が件名に含まれる場合、条件を満たします。正規表現を使用すれば、複雑な絞込みも可能になります。詳細は、インターネットの関連サイトを参照してください。正規表現の非常に簡単な例を次に示します。 例: 引数に「organi(z|s)ation」を設定します。「(z|s)」の表現は、「z」または「s」のいずれかの文字を表します。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>件名が「organization」の場合、条件を満たします。</p></li>
+<li class="listitem" style="list-style-type: none"><p>件名が「organisation」の場合も条件を満たします。</p></li>
+<li class="listitem" style="list-style-type: none"><p>件名が「Organic」の場合、条件は満たしません。</p></li>
+</ul></div>
+</li>
+</ul></div>
+</td>
+</tr>
+<tr class="question">
+<td align="left" valign="top">
+<a name="ox.appsuite.user.practice.subscribe.socialnetworks"></a><a name="idm139770614341488"></a><p><b>問：</b></p>
 </td>
 <td align="left" valign="top">
 <p>ソーシャル ネットワークの連絡先を使用する方法を教えてください。</p>
-<a class="indexterm" name="idm140156165232160"></a>
+<a class="indexterm" name="idm139770614340832"></a>
 </td>
 </tr>
 <tr class="answer">
@@ -388,43 +447,43 @@
 </dl></td></tr>
 <tr class="question">
 <td align="left" valign="top">
-<a name="ox.appsuite.user.practice.task_or_appointment"></a><a name="idm140156165109872"></a><p><b>問：</b></p>
+<a name="ox.appsuite.user.practice.task_or_appointment"></a><a name="idm139770615037872"></a><p><b>問：</b></p>
 </td>
 <td align="left" valign="top">
 <p>仕事とアポイントはどのように使い分ければよいのですか？</p>
-<a class="indexterm" name="idm140156165109328"></a>
+<a class="indexterm" name="idm139770615037328"></a>
 </td>
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>答：</b></p></td>
 <td align="left" valign="top">
-<p>アポイントを使用するのがよいのか、仕事を使用するのがよいのかは、次の条件をもとに判断します。</p>
+<p>アポイントを使用するのがよいのか、仕事を使用するのがよいのかは、次の基準をもとに判断します。 </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>特定の時期に任意のアクションを実行する必要がある場合は、アポイントを選択します。</p></li>
-<li class="listitem"><p>仕事では期限や優先順位を設定できるため、任意のアクションを実行する時期を柔軟に変更できる必要があり、かつ期限のみを守ればよい場合は、仕事を選択します。</p></li>
+<li class="listitem"><p>アポイントは、特定の時間に行われるものです。特定の時間に任意のアクションを実行する必要がある場合は、アポイントを選択します。</p></li>
+<li class="listitem"><p>仕事では期限や優先順位を設定できるため、任意のアクションを実行する時間を柔軟に変更できる必要があり、かつ期限のみを守ればよい場合は、仕事を選択します。</p></li>
 </ul></div>
 </td>
 </tr>
 <tr class="question">
 <td align="left" valign="top">
-<a name="ox.appsuite.user.practice.email_to_task"></a><a name="idm140156170589872"></a><p><b>問：</b></p>
+<a name="ox.appsuite.user.practice.email_to_task"></a><a name="idm139770615033504"></a><p><b>問：</b></p>
 </td>
 <td align="left" valign="top">
 <p>メールから仕事を作成する方法を教えてください。</p>
-<a class="indexterm" name="idm140156170589328"></a>
+<a class="indexterm" name="idm139770615032960"></a>
 </td>
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>答：</b></p></td>
-<td align="left" valign="top"><p><span class="phrase"><span class="guilabel"><strong>メール</strong></span></span>    アプリケーションの表示エリアにある <span class="guilabel"><strong>アラーム</strong></span> の機能を使用します。詳細は、<a class="xref" href="ox.appsuite.user.sect.email.manage.reminder.html" title="6.5.8. メール アラームの設定">メール アラームの設定</a> を参照してください。</p></td>
+<td align="left" valign="top"><p><span class="phrase"><span class="guilabel"><strong>メール</strong></span></span>    アプリケーションの表示エリアにある <span class="guilabel"><strong>アラーム</strong></span> の機能を使用します。詳細は、<a class="xref" href="ox.appsuite.user.sect.email.manage.reminder.html" title="5.5.8. メール アラームの設定">メール アラームの設定</a> を参照してください。</p></td>
 </tr>
 <tr class="question">
 <td align="left" valign="top">
-<a name="ox.appsuite.user.practice.calendar.assistant"></a><a name="idm140156164675552"></a><p><b>問：</b></p>
+<a name="ox.appsuite.user.practice.calendar.assistant"></a><a name="idm139770614804304"></a><p><b>問：</b></p>
 </td>
 <td align="left" valign="top">
 <p>代理として、他のユーザのアポイントを作成する方法を教えてください。</p>
-<a class="indexterm" name="idm140156164674896"></a>
+<a class="indexterm" name="idm139770614803648"></a>
 </td>
 </tr>
 <tr class="answer">
@@ -433,11 +492,11 @@
 </tr>
 <tr class="question">
 <td align="left" valign="top">
-<a name="ox.appsuite.user.practice.calendar.display_as"></a><a name="idm140156164672448"></a><p><b>問：</b></p>
+<a name="ox.appsuite.user.practice.calendar.display_as"></a><a name="idm139770620425120"></a><p><b>問：</b></p>
 </td>
 <td align="left" valign="top">
 <p>予定あり、欠席、空き時間など、予定の空き状況に関する機能はどのように使用するのですか？</p>
-<a class="indexterm" name="idm140156165061552"></a>
+<a class="indexterm" name="idm139770620424432"></a>
 </td>
 </tr>
 <tr class="answer">
@@ -446,11 +505,11 @@
 </tr>
 <tr class="question">
 <td align="left" valign="top">
-<a name="ox.appsuite.user.practice.calendar.serial"></a><a name="idm140156165058512"></a><p><b>問：</b></p>
+<a name="ox.appsuite.user.practice.calendar.serial"></a><a name="idm139770620421392"></a><p><b>問：</b></p>
 </td>
 <td align="left" valign="top">
 <p>予定表または仕事の繰り返しの設定方法を教えてください。</p>
-<a class="indexterm" name="idm140156165057968"></a><a class="indexterm" name="idm140156165056704"></a>
+<a class="indexterm" name="idm139770620420848"></a><a class="indexterm" name="idm139770614717568"></a>
 </td>
 </tr>
 <tr class="answer">
@@ -515,16 +574,16 @@
 </tr>
 <tr class="question">
 <td align="left" valign="top">
-<a name="ox.appsuite.user.practice.scheduling"></a><a name="idm140156165166032"></a><p><b>問：</b></p>
+<a name="ox.appsuite.user.practice.scheduling"></a><a name="idm139770614269376"></a><p><b>問：</b></p>
 </td>
 <td align="left" valign="top">
 <p>アポイントの作成時に空き時間を検索する方法を教えてください。</p>
-<a class="indexterm" name="idm140156165165376"></a>
+<a class="indexterm" name="idm139770614268720"></a>
 </td>
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>答：</b></p></td>
-<td align="left" valign="top"><p>アポイントの作成時に、<span class="guibutton"><strong>空き時間を検索</strong></span> をクリックするか、ツールバーで <span class="guibutton"><strong>スケジューリング</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.practice.scheduling"></a><img src="images/appsuite_user_icon_toolbar_schedule.png"></span> をクリックします。詳細は、<a class="xref" href="ox.appsuite.user.sect.calendar.share.freebusy.html" title="8.6.4. 複数の出席者とのアポイントのスケジューリング">複数の出席者とのアポイントのスケジューリング</a> を参照してください。 </p></td>
+<td align="left" valign="top"><p>アポイントの作成時に、<span class="guibutton"><strong>空き時間を検索</strong></span> をクリックするか、ツールバーで <span class="guibutton"><strong>スケジューリング</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.practice.scheduling"></a><img src="images/appsuite_user_icon_toolbar_schedule.png"></span> をクリックします。詳細は、<a class="xref" href="ox.appsuite.user.sect.calendar.share.freebusy.html" title="7.6.4. 複数の出席者とのアポイントのスケジューリング">複数の出席者とのアポイントのスケジューリング</a> を参照してください。 </p></td>
 </tr>
 <tr class="qandadiv"><td align="left" valign="top" colspan="2"><h3 class="title">
 <a name="ox.appsuite.user.practice.dataexchange"></a>14.4. データの整理とチームでの作業に関する質問</h3></td></tr>
@@ -538,11 +597,11 @@
 </dl></td></tr>
 <tr class="question">
 <td align="left" valign="top">
-<a name="ox.appsuite.user.practice.publish.contacts"></a><a name="idm140156169648864"></a><p><b>問：</b></p>
+<a name="ox.appsuite.user.practice.publish.contacts"></a><a name="idm139770617340288"></a><p><b>問：</b></p>
 </td>
 <td align="left" valign="top">
 <p>外部のパートナーが特定の連絡先を利用できるようにする方法を教えてください。</p>
-<a class="indexterm" name="idm140156169648192"></a>
+<a class="indexterm" name="idm139770617339616"></a>
 </td>
 </tr>
 <tr class="answer">
@@ -558,11 +617,11 @@
 </tr>
 <tr class="question">
 <td align="left" valign="top">
-<a name="ox.appsuite.user.practice.publish.files"></a><a name="idm140156164708960"></a><p><b>問：</b></p>
+<a name="ox.appsuite.user.practice.publish.files"></a><a name="idm139770622759152"></a><p><b>問：</b></p>
 </td>
 <td align="left" valign="top">
 <p>特定のドキュメントを外部のパートナーと共有する方法を教えてください。</p>
-<a class="indexterm" name="idm140156162975824"></a>
+<a class="indexterm" name="idm139770622758496"></a>
 </td>
 </tr>
 <tr class="answer">
@@ -577,11 +636,11 @@
 </tr>
 <tr class="question">
 <td align="left" valign="top">
-<a name="ox.appsuite.user.practice.rights"></a><a name="idm140156167267024"></a><p><b>問：</b></p>
+<a name="ox.appsuite.user.practice.rights"></a><a name="idm139770618489792"></a><p><b>問：</b></p>
 </td>
 <td align="left" valign="top">
 <p>他のユーザとフォルダを共有したいのですが、どの権限を設定すればよいのでしょうか？</p>
-<a class="indexterm" name="idm140156167266496"></a>
+<a class="indexterm" name="idm139770618489264"></a>
 </td>
 </tr>
 <tr class="answer">

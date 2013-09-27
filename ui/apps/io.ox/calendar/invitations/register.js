@@ -71,7 +71,7 @@ define('io.ox/calendar/invitations/register',
         3: gt("You have tentatively accepted the appointment")
     };
 
-    var priority = ['update', 'ignore', 'decline', 'tentative', 'accept', 'declinecounter', 'accept_and_replace', 'accept_and_ignore_conflicts', 'accept_party_crasher', 'create', 'delete'];
+    var priority = ['update', 'ignore', 'accept', 'tentative', 'decline', 'declinecounter', 'accept_and_replace', 'accept_and_ignore_conflicts', 'accept_party_crasher', 'create', 'delete'];
 
 
     function discoverIMipAttachment(baton) {
@@ -120,105 +120,135 @@ define('io.ox/calendar/invitations/register',
 
         function render(baton) {
 
-            var appointments = [];
+            if (baton.analysis.actions.length !== 1 || baton.analysis.actions[0] !== 'ignore') {
 
-            _(baton.analysis.annotations).each(function (annotation) {
-                if (annotation.appointment) {
-                    appointments.push(annotation.appointment);
-                }
-            });
+                var appointments = [],
+                    introductions = [];
 
-            _(baton.analysis.changes).each(function (change) {
-                // preference on currentAppointment, so that we can show the current status
-                var appointment = change.currentAppointment || change.newAppointment || change.deletedAppointment;
-                if (appointment) {
-                    appointments.push(appointment);
-                }
-            });
-
-            var appointment = appointments[0],
-                status = util.getConfirmationStatus(appointment),
-                selector = getConfirmationSelector(status),
-                accepted = status === 1,
-                $well = drawWell();
-
-            if (baton.$.well) {
-                baton.$.well.replaceWith($well);
-            }
-
-            drawScaffold.call(baton.$.well = $well, 'app');
-
-            if (accepted) {
-                baton.analysis.actions = _(baton.analysis.actions).without('decline', 'tentative', 'accept');
-            }
-
-            baton.$.well.find('.itip-actions').addClass('block').append(
-
-                _(priority).chain()
-                .filter(function (action) {
-                    return _(baton.analysis.actions).contains(action);
-                })
-                .map(function (action) {
-                    return $('<button class="btn">')
-                        .attr('data-action', action)
-                        .addClass(buttonClasses[action])
-                        .text(i18n[action])
-                        .add($.txt('\u00A0'));
-                })
-                .value()
-            )
-            .on('click', 'button', function (e) {
-                e.preventDefault();
-                var action = $(this).attr('data-action');
-                if (action === 'ignore') {
-                    //deleteMailIfNeeded(baton);
-                }
-                // be busy
-                baton.$.well.empty().busy();
-                http.PUT({
-                    module: 'calendar/itip',
-                    params: {
-                        action: action,
-                        dataSource: 'com.openexchange.mail.ical',
-                        descriptionFormat: 'html'
-                    },
-                    data: {
-                        "com.openexchange.mail.conversion.fullname": baton.data.folder_id,
-                        "com.openexchange.mail.conversion.mailid": baton.data.id,
-                        "com.openexchange.mail.conversion.sequenceid": baton.imip.attachment.id
+                _(baton.analysis.annotations).each(function (annotation) {
+                    if (annotation.appointment) {
+                        appointments.push(annotation.appointment);
                     }
-                })
-                .then(
-                    function done() {
-                        notifications.yell('success', success[action]);
-                        // deleteMailIfNeeded(baton);
-                        rerender(baton);
-                    },
-                    function fail(e) {
-                        notifications.yell(e);
-                        rerender(baton);
+                });
+
+                _(baton.analysis.changes).each(function (change) {
+                    var appointment = change.deletedAppointment || change.newAppointment || change.currentAppointment;
+                    if (appointment) {
+                        appointments.push(appointment);
                     }
+                    introductions.push(change.introduction);
+                });
+
+                var appointment = appointments[0],
+                    status = util.getConfirmationStatus(appointment),
+                    selector = getConfirmationSelector(status),
+                    accepted = status === 1,
+                    $well = drawWell();
+
+                if (baton.$.well) {
+                    baton.$.well.replaceWith($well);
+                }
+
+                drawScaffold.call(baton.$.well = $well, 'appointment');
+
+                if (accepted) {
+                    baton.analysis.actions = _(baton.analysis.actions).without('decline', 'tentative', 'accept');
+                }
+
+                baton.$.well.find('.itip-actions').addClass('block').append(
+
+                    _(priority).chain()
+                    .filter(function (action) {
+                        return _(baton.analysis.actions).contains(action);
+                    })
+                    .map(function (action) {
+                        return $('<button type="button" class="btn">')
+                            .attr('data-action', action)
+                            .addClass(buttonClasses[action])
+                            .text(i18n[action])
+                            .add($.txt('\u00A0'));
+                    })
+                    .value()
+                )
+                .on('click', 'button', function (e) {
+                    e.preventDefault();
+                    var action = $(this).attr('data-action');
+                    if (action === 'ignore') {
+                        //deleteMailIfNeeded(baton);
+                    }
+                    // be busy
+                    baton.$.well.empty().busy();
+                    http.PUT({
+                        module: 'calendar/itip',
+                        params: {
+                            action: action,
+                            dataSource: 'com.openexchange.mail.ical',
+                            descriptionFormat: 'html'
+                        },
+                        data: {
+                            "com.openexchange.mail.conversion.fullname": baton.data.folder_id,
+                            "com.openexchange.mail.conversion.mailid": baton.data.id,
+                            "com.openexchange.mail.conversion.sequenceid": baton.imip.attachment.id
+                        }
+                    })
+                    .then(
+                        function done() {
+                            notifications.yell('success', success[action]);
+                            // deleteMailIfNeeded(baton);
+                            rerender(baton);
+                        },
+                        function fail(e) {
+                            notifications.yell(e);
+                            rerender(baton);
+                        }
+                    );
+                })
+                // disable buttons - don't know why we have an array of appointments but just one set of buttons
+                // so, let's use the first one
+                .find(selector).addClass('disabled').attr('disabled', 'disabled');
+
+                if (baton.analysis.messageType !== 'request' && introductions[0]) {
+                    baton.$.well.find('.muted').html(introductions[0]);
+                }
+
+                baton.$.well.find('.appointmentInfo').append(
+                    _(appointments).map(function (appointment) {
+                        return $('<div>').append(drawSummary(appointment));
+                    })
                 );
-            })
-            // disable buttons - don't know why we have an array of appointments but just one set of buttons
-            // so, let's use the first one
-            .find(selector).addClass('disabled').attr('disabled', 'disabled');
 
-            baton.$.well.find('.appointmentInfo').append(
-                _(appointments).map(function (appointment) {
-                    return $('<div>').append(drawSummary(appointment));
-                })
-            );
+                _(baton.analysis.changes).each(function (change) {
+                    baton.$.well.find('.appointmentInfo').append(renderDiffDescription(change));
+                });
 
-            _(baton.analysis.changes).each(function (change) {
-                baton.$.well.find('.appointmentInfo').append(renderDiffDescription(change));
-            });
+                if (appointments.length === 0) {
+                    baton.$.well.find(".muted").remove();
+                }
 
-            if (appointments.length === 0) {
-                baton.$.well.find(".muted").remove();
+                $node.append(baton.$.well.show());
+            } else {
+                if (baton.$.well) {
+                    baton.$.well.remove();
+                }
             }
 
-            baton.$.well.show();
+            // draw appointment details and well
+            var $analysisNode = $('<div class="io-ox-calendar-itip-analysis">');
+            if (baton.$.analysis) {
+                baton.$.analysis.replaceWith($analysisNode);
+            }
+
+            $node.append(baton.$.analysis = $analysisNode);
+
+            // Annotations
+            _(baton.analysis.annotations).each(function (annotation) {
+                renderAnnotation(baton.$.analysis, annotation, baton.analysis, baton);
+            });
+
+            // Changes
+            _(baton.analysis.changes).each(function (change) {
+                renderChange(baton.$.analysis, change, baton.analysis, baton);
+            });
         }
 
         baton.imip.analysis = baton.analysis;
@@ -229,22 +259,7 @@ define('io.ox/calendar/invitations/register',
         });
 
         // draw well
-        if (baton.analysis.actions.length !== 1 || baton.analysis.actions[0] !== 'ignore') {
-            render(baton);
-            $node.append(baton.$.well);
-        }
-
-        // draw appointment details
-        var $analysisNode;
-        $node.append($analysisNode = $('<div class="io-ox-calendar-itip-analysis">'));
-        // Annotations
-        _(baton.analysis.annotations).each(function (annotation) {
-            renderAnnotation($analysisNode, annotation, baton.analysis, baton);
-        });
-        // Changes
-        _(baton.analysis.changes).each(function (change) {
-            renderChange($analysisNode, change, baton.analysis, baton);
-        });
+        render(baton);
     }
 
     function renderAnnotation($node, annotation, analysis, baton) {
@@ -260,7 +275,8 @@ define('io.ox/calendar/invitations/register',
         $node.append(
             $('<div class="change">').append(
                 renderConflicts(change),
-                renderAppointment(change.newAppointment || change.currentAppointment || change.deletedAppointment, baton)
+                // preference on currentAppointment, so that we can show the current status
+                renderAppointment(change.currentAppointment || change.newAppointment || change.deletedAppointment, baton)
             )
         );
     }
@@ -296,8 +312,8 @@ define('io.ox/calendar/invitations/register',
             return $();
         }
         var $node = $("<div>");
-        var text = gt.format(gt.ngettext('You already have %1$d appointment in this timeframe.',
-            'You already have %1$d appointments in this timeframe.', change.conflicts.length), change.conflicts.length);
+        var text = gt.format(gt.ngettext('There is already %1$d appointment in this timeframe.',
+            'There are already %1$d appointments in this timeframe.', change.conflicts.length), change.conflicts.length);
 
         $node.append(
             $('<div class="alert alert-info">').append(
@@ -370,12 +386,15 @@ define('io.ox/calendar/invitations/register',
         var text = type !== 'task' ?
             gt('This email contains an appointment') :
             gt('This email contains a task');
+
         return this.append(
             $('<div class="muted">').text(text),
             $('<div class="appointmentInfo">'),
-            $('<div class="itip-action-container">').css({ textAlign: 'right', marginTop: '1em', minHeight: '30px' }).append(
-                $('<div class="itip-actions">')
-            )
+            $('<div class="itip-action-container">')
+                .css({ textAlign: 'right', marginTop: '1em', minHeight: '30px' })
+                .append(
+                    $('<div class="itip-actions">')
+                )
         );
     }
 
@@ -477,9 +496,10 @@ define('io.ox/calendar/invitations/register',
     }
 
     function drawSummary(data) {
-        var recurrenceString = util.getRecurrenceString(data);
+        var recurrenceString = util.getRecurrenceString(data),
+            separator = data.title ? $.txt(', ') : $.txt('');
         return [
-            $('<b>').text(data.title), $.txt(', '),
+            $('<b>').text(data.title), separator,
             $('<span class="day">').append(
                 $.txt(gt.noI18n(util.getDateInterval(data))),
                 $.txt(gt.noI18n((recurrenceString !== '' ? ' \u2013 ' + recurrenceString : '')))
@@ -525,11 +545,11 @@ define('io.ox/calendar/invitations/register',
                 )
             )
             .append(
-                $('<button class="btn btn-danger" data-action="2">').text(gt("Decline")),
+                $('<button type="button" class="btn btn-success" data-action="1">').text(gt("Accept")),
                 '&nbsp;',
-                $('<button class="btn btn-warning" data-action="3">').text(gt("Tentative")),
+                $('<button type="button" class="btn btn-warning" data-action="3">').text(gt("Tentative")),
                 '&nbsp;',
-                $('<button class="btn btn-success" data-action="1">').text(gt("Accept"))
+                $('<button type="button" class="btn btn-danger" data-action="2">').text(gt("Decline"))
             )
             .on('click', 'button', function (e) {
 
@@ -567,7 +587,16 @@ define('io.ox/calendar/invitations/register',
                         }
                     });
                 })
-                .fail(notifications.yell);
+                .fail(function (error) {
+                    //appointment or task was deleted in the meantime
+                    baton.$.well.idle();
+                    baton.$.well.hide();
+                    if (data.type === 'appointment') {
+                        notifications.yell('error', gt('Failed to update confirmation status; most probably the appointment has been deleted.'));
+                    } else {
+                        notifications.yell('error', gt('Failed to update confirmation status; most probably the task has been deleted.'));
+                    }
+                });
             })
             // disable button matching current status
             .find(selector).addClass('disabled').attr('disabled', 'disabled');

@@ -9,15 +9,15 @@
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
-
 define('moxiecode/tiny_mce/plugins/emoji/main',
        ['3rd.party/emoji/emoji',
        'moxiecode/tiny_mce/plugins/emoji/categories',
+       'moxiecode/tiny_mce/plugins/emoji/conversions',
        'io.ox/core/extensions',
        'settings!io.ox/mail/emoji',
        'css!3rd.party/emoji/emoji.css',
        'less!moxiecode/tiny_mce/plugins/emoji/emoji.less'
-    ], function (emoji, categories, ext, settings) {
+    ], function (emoji, categories, conversions, ext, settings) {
 
     "use strict";
 
@@ -29,9 +29,13 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
     function parseCollections() {
         //TODO: may be, filter the list for collections, we support in the frontend
         var e = settings.get('availableCollections', '');
-        return _(e.split(',')).map(function (collection) {
-            return collection.trim();
-        });
+        return _(e.split(','))
+            .chain()
+            .map(function (collection) {
+                return collection.trim();
+            })
+            .compact()
+            .value();
     }
 
     function parseUnicode(str) {
@@ -51,42 +55,42 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
         return $('<div>').html(unicode).text();
     }
 
-    var collections = parseCollections();
-
     function escape(s) {
         return window.escape(s).replace(/%u/g, '\\u').toLowerCase();
     }
 
     // introduce Emoji class
-    function Emoji() {
+    function Emoji(opt) {
 
-        // inherit from emoji
-        _.extend(this, emoji);
+        opt = opt || {};
 
         // plain data API
         this.icons = [];
-        this.collections = collections;
+        this.collections = parseCollections();
         this.category_map = {};
 
         // make settings accessible, esp. for editor plugin
         this.settings = settings;
 
+        //FIXME: check if default is still valid after icons have been removed
         var defaultCollection = settings.get('defaultCollection', 'japan_carrier');
-        this.currentCollection = settings.get('userCollection', defaultCollection);
+        this.currentCollection = opt.collection || settings.get('userCollection', defaultCollection);
 
         this.createCategoryMap();
     }
 
     _.extend(Emoji.prototype, {
 
-        iconInfo: function (unicode, mapping) {
+        iconInfo: function (unicode) {
 
-            if (!unicode || !mapping || !mapping[1][1] || !mapping[1][2]) return { invalid: true };
+            var mapping = emoji.EMOJI_MAP[unicode];
+
+            if (!unicode || !mapping || !mapping[1] || !mapping[2]) return;
 
             return {
                 css: this.cssFor(unicode),
                 unicode: unicode,
-                desc: mapping[1][1],
+                desc: mapping[1],
                 category: this.category_map[unicode]
             };
         },
@@ -95,11 +99,16 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
             var icon = emoji.EMOJI_MAP[unicode];
 
-            if (this.currentCollection === 'softbank' || this.currentCollection === 'japan_carrier') {
-                return 'emoji-softbank sprite-emoji-' + icon[5][1].substring(2).toLowerCase();
+            if (!this.category_map[unicode]) {
+                return undefined;
             }
 
-            return 'emoji-unified emoji' + icon[2];
+            //TODO: move this to softbanke emoji app
+            if (this.currentCollection === 'softbank' || this.currentCollection === 'japan_carrier') {
+                return 'emoji-' + this.currentCollection + ' sprite-emoji-' + icon[5][1].substring(2).toLowerCase();
+            }
+
+            return 'emoji-' + this.currentCollection + ' emoji' + icon[2];
         },
 
         // add to "recently used" category
@@ -149,17 +158,18 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                     })
                     // sort by timestamp
                     .sortBy(function (array) {
-                        return array[1].time;
+                        return 0 - array[1].time;
                     })
                     // get first 40 icons (5 rows; 8 per row)
                     .first(40)
                     // now sort by frequency (descending order)
                     .sortBy(function (array) {
-                        return 0 - array[1].count;
+                        return array[1].count;
                     })
                     // extract the icon
                     .pluck(0)
-                    .value();
+                    .value()
+                    .reverse();
             }
 
             return _(this.icons).filter(function (icon) {
@@ -225,23 +235,24 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                 .chain()
                 .values()
                 .flatten(true)
-                .map(function (unicode) {
-                    return this.iconInfo(unicode, emoji.EMOJI_MAP[unicode]);
-                }, this)
+                .map(this.iconInfo, this)
+                .compact()
                 .value();
         }
     });
 
-    return {
+    return  _.extend({
 
-        getInstance: function () {
-            return new Emoji();
+        getInstance: function (opt) {
+            return new Emoji(opt);
         },
 
         // HTML related API
         unifiedToImageTag: function (text, options) {
 
-            var parsedText,
+            var pos,
+                oldpos = -1,
+                searchText = '<span class="emoji',
                 self = this;
 
             options = options || {};
@@ -249,19 +260,53 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             if (options.forceEmojiIcons !== true && _.device('emoji')) {
                 return text;
             }
-            parsedText = $('<div>').append(emoji.unifiedToHTML(text));
 
-            parsedText.find('span.emoji').each(function (index, node) {
-                //parse unicode number
-                var unicode = parseUnicode(_.find($(node).attr('class').split('emoji'), function (item) {
+            text = emoji.unifiedToHTML(text);
+            var isFalsyString = function (item) {
                     return item.trim();
-                }));
-                $(node).replaceWith(
-                    $('<img src="apps/themes/login/1x1.gif" class="' + self.getInstance().cssFor(unicode) + '">')
-                    .attr('data-emoji-unicode', unicode)
-                );
-            });
-            return parsedText.html();
+                },
+                cssFromCollection = function (unicode) {
+                    return function (c) {
+                        return self.getInstance({collection: c}).cssFor(unicode);
+                    };
+                },
+                createImageTag = function (css, unicode) {
+                    return $('<div>').append(
+                        $('<img src="apps/themes/login/1x1.gif" class="' + css + '">')
+                        .attr('data-emoji-unicode', unicode)
+                    ).html();
+                };
+
+            while (text.indexOf(searchText, oldpos + 1) >= 0 && oldpos < text.indexOf(searchText, oldpos + 1)) {
+                pos = text.indexOf(searchText, oldpos + 1);
+                oldpos = pos;
+
+                var endpos = text.indexOf('>', pos) + 1,
+                    node = $('<div>').append(
+                        text.slice(pos, endpos)
+                    );
+                //parse unicode number
+                var unicode = parseUnicode(_.find(node.find('span').attr('class').split('emoji'), isFalsyString)),
+                css = null,
+                defaultCollection = self.getInstance();
+
+                if (!unicode) {
+                    continue;
+                }
+
+                if (!settings.get('overrideUserCollection', false)) {
+                    css = defaultCollection.cssFor(unicode);
+                }
+                css = css || defaultCollection.collections.map(cssFromCollection(unicode))
+                .filter(_.isString)[0];
+
+                if (text.substr(endpos, 7) === '</span>') {
+                    endpos += 7;
+                }
+                text = text.replace(text.slice(pos, endpos), createImageTag(css, unicode));
+            }
+
+            return text;
         },
 
         imageTagsToUnified: function (html) {
@@ -273,6 +318,58 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             });
 
             return node.html();
+        },
+
+        imageTagsToPUA: function (text) {
+            var pos,
+                oldpos = -1;
+
+            while (text.indexOf('<img ', oldpos + 1) >= 0 && oldpos < text.indexOf('<img ', oldpos + 1)) {
+                pos = text.indexOf('<img ', oldpos + 1);
+                oldpos = pos;
+
+                var node = $('<div>').append(
+                        text.slice(pos, text.indexOf('>', pos) + 1)
+                    ),
+                    unicode = node.find('img').attr('data-emoji-unicode');
+
+                if (!unicode) {
+                    continue;
+                }
+                var info = emoji.EMOJI_MAP[unicode],
+                    converted;
+
+                if (info && info[5] && info[5][0] !== '-') {
+                    converted = info[5][0];
+                }
+                //convert to PUA or leave as is
+                unicode = converted || unicode || '';
+                text = text.replace(node.html(), unicode);
+            }
+
+            return text;
+        },
+
+        converterFor: function (options, format) {
+            var self = this;
+
+            options = _.extend({
+                from: 'unified',
+                to: 'unified'
+            }, options);
+
+            if (options.from === options.to) {
+                return _.identity;
+            } else if (options.from === 'unified' && options.to === 'pua') {
+                return function (text, format) {
+                    return self.imageTagsToPUA(self.unifiedToImageTag(text), format || 'html');
+                };
+            }
+            return;
+        },
+
+        sendEncoding: function () {
+            return settings.get('sendEncoding', 'unified');
         }
-    };
+    }, conversions, emoji);
 });

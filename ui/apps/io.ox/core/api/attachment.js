@@ -13,7 +13,7 @@
 
 define('io.ox/core/api/attachment', ['io.ox/core/http',
                                      'io.ox/core/event',
-                                     'io.ox/core/config'], function (http, Events, config) {
+                                     'settings!io.ox/core'], function (http, Events, coreConfig) {
     'use strict';
 
     var api = {
@@ -194,7 +194,7 @@ define('io.ox/core/api/attachment', ['io.ox/core/http',
             //multiple does not work, because module overides module
             //in params. So we need to do it one by one
             // be robust
-            target = target || config.get('folder.infostore');
+            target = (target || coreConfig.get('folder/infostore')).toString();//make sure we have a string or target + api.DELIM results in NaN
 
             http.PUT({
                 module: 'files',
@@ -209,7 +209,7 @@ define('io.ox/core/api/attachment', ['io.ox/core/http',
                 appendColumns: false
             }).done(function () {
                 require(['io.ox/files/api'], function (fileAPI) {
-                    fileAPI.caches.all.grepRemove(target + api.DELIM);
+                    fileAPI.caches.all.grepRemove(target + (api.DELIM || '//'));
                     fileAPI.trigger('refresh.all');
                 });
             });

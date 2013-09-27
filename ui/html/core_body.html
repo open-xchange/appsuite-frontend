@@ -3,13 +3,13 @@
 <div id="background_loader" class="busy"></div>
 
 <!-- Core Panel -->
-<div id="io-ox-core" class="abs unselectable wallpaper" style="display: none">
+<div id="io-ox-core" class="abs unselectable" style="display: none">
     <!-- top bar -->
-    <div id="io-ox-topbar">
-        <div class="launchers"></div>
-        <div class="launcher-dropdown dropdown">
+    <div id="io-ox-topbar" role="navigation" class="f6-target">
+        <ul class="launchers" role="menubar"></ul>
+        <div class="launcher-dropdown dropdown" aria-hidden="true">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-reorder"></i></a>
-            <ul class="dropdown-menu"></ul>
+            <ul class="dropdown-menu" role="menu"></ul>
         </div>
     </div>
     <!-- screens -->
@@ -57,53 +57,41 @@
                         <div class="span6">
                             <label class="no-margin"><input type="email" id="io-ox-login-username" name="username" tabindex="1"
                                 class="span12" maxlength="1000" autocorrect="off" autocapitalize="off" spellcheck="false"
-                                placeholder="Username" data-i18n="Username" data-i18n-attr='placeholder'></label>
+                                aria-label="User name"
+                                aria-required="true"
+                                placeholder="User name" data-i18n="User name" data-i18n-attr="placeholder,aria-label"></label>
                         </div>
                         <div class="span3">
-                            <label class="no-margin"><input type="password" id="io-ox-login-password" name="password" tabindex="2"
+                            <label class="no-margin"><input type="password" id="io-ox-login-password" name="password" tabindex="1"
                                 class="span12" maxlength="100" autocorrect="off" autocapitalize="off"
-                                placeholder="Password" data-i18n="Password" data-i18n-attr='placeholder'></label>
+                                aria-label="Password"
+                                aria-required="true"
+                                placeholder="Password" data-i18n="Password" data-i18n-attr="placeholder,aria-label"></label>
                         </div>
                         <div class="span3">
-                            <input type="submit" tabindex="3" name="signin"
+                            <input type="submit" tabindex="1" name="signin"
                                 id="login-button" class="span12 btn btn-primary"
-                                value="Sign in" data-i18n="Sign in" data-i18n-attr='value'>
+                                role="button"
+                                aria-label="Sign in"
+                                value="Sign in" data-i18n="Sign in" data-i18n-attr="value,aria-label">
                         </div>
                     </div>
 
                     <div class="row-fluid control-group">
                         <div class="span6" id="io-ox-login-store">
-                            <label for="io-ox-login-store-box" class="checkbox"
-                                data-i18n="Stay signed in" data-i18n-attr="label"
-                                ><input type="checkbox" tabindex="4" id="io-ox-login-store-box" checked="checked" name="store" value="1">
+                            <label for="io-ox-login-store-box" class="checkbox" aria-label="Stay signed in"
+                                data-i18n="Stay signed in" data-i18n-attr="label,aria-label"
+                                ><input type="checkbox" tabindex="1" id="io-ox-login-store-box" checked="checked" name="store" value="1">
                                 Stay signed in
                             </label>
                         </div>
                         <div class="span6" id="io-ox-forgot-password">
-                            <a href="#" target="_blank" tabindex="5" data-i18n="Forgot your password?">Forgot your password?</a>
+                            <a href="#" target="_blank" tabindex="1" data-i18n="Forgot your password?">Forgot your password?</a>
                         </div>
                     </div>
 
                     <!-- Feedback area -->
                     <div id="io-ox-login-feedback"></div>
-
-                    <div id="io-ox-login-feedback-strings" style="display: none">
-                        <span data-i18n-id="no-connection" data-i18n="No connection to server. Please check your internet connection and retry."></span>
-                        <span data-i18n-id="enter-credentials" data-i18n="Please enter your credentials."></span>
-                        <span data-i18n-id="enter-password" data-i18n="Please enter your password."></span>
-                        <span data-i18n-id="browser-version" data-i18n="Your browser version is not supported!"></span>
-                        <span data-i18n-id="browser" data-i18n="Your browser is not supported!"></span>
-                        <span data-i18n-id="os-android" data-i18n="You need to use Android %n or higher."></span>
-                        <span data-i18n-id="os-ios" data-i18n="You need to use iOS %n or higher."></span>
-                        <span data-i18n-id="os-general" data-i18n="Your operating system is not supported."></span>
-                        <span data-i18n-id="please-update" data-i18n="Please update your browser."></span>
-                        <span data-i18n-id="please-use" data-i18n="For best results, please use "></span>
-                        <span data-i18n-id="slow" data-i18n="Your browser is slow and outdated!"></span>
-                        <span data-i18n-id="autologout" data-i18n="You have been automatically logged out"></span>
-                        <span data-i18n-id="mobile-preview" data-i18n="Unsupported Preview - Certain functions disabled and stability not assured until general release later this year"></span>
-                        <span data-i18n-id="addtohomescreen" data-i18n="Install this web app on your %s: Tap %s and then %s'Add to Home Screen'%s"></span>
-
-                    </div>
 
                 </form>
             </div>
@@ -111,7 +99,7 @@
 
             <div class="css-table-row">
             <div class="css-table-cell" id="io-ox-login-footer">
-                <div id="io-ox-languages"><i data-i18n="Languages">Languages</i>:&nbsp; <span id="io-ox-language-list"></span></div>
+                <div id="io-ox-languages"><i data-i18n="Languages" data-i18n-attr="text,aria-label" aria-label="Languages">Languages</i>:&nbsp; <span id="io-ox-language-list"></span></div>
                 <div id="io-ox-copyright"></div>
             </div>
             </div>
@@ -122,6 +110,9 @@
 </div>
 
 <!-- offline notifier -->
-<div id="io-ox-offline" style="display: none"></div>
+<div id="io-ox-offline" style="bottom: -41px; display: none;"></div>
 
 <div id="tmp" style="display: none;"></div>
+
+<!-- blur effect overlay for browsers without cssfilter support -->
+<svg><filter id="overlay-effect"><feGaussianBlur stdDeviation="2"/></filter></svg>

@@ -42,6 +42,45 @@ define('io.ox/core/cache',
         }
     };
 
+    // listen for logout event
+    ext.point('io.ox/core/logout').extend({
+        logout: function (baton) {
+            var clear = function () {
+                return ox.cache.clear();
+            };
+            if (baton.autologout && baton.autologout === true) {
+                return clear();
+            } else {
+                return ox.ui.App.canRestore().then(function (canRestore) {
+                    if (canRestore) {
+                        return ox.load(['io.ox/core/tk/dialogs', 'gettext!io.ox/core']).then(function (dialogs, gt) {
+                            var def = $.Deferred();
+                            new dialogs.ModalDialog()
+                                .text(gt('Unsaved documents will be lost. Do you want to logout now?'))
+                                .addPrimaryButton('Yes', gt('Yes'))
+                                .addButton('No', gt('No'))
+                                .show()
+                                .then(function (action) {
+                                    if (action === 'No') {
+                                        return def.reject();
+                                    } else {
+                                        clear().then(function () {
+                                            def.resolve();
+                                        });
+                                    }
+                                });
+                            return def;
+                        });
+                    } else {
+                        return clear();
+                    }
+                }, function () {
+                    return clear();
+                });
+            }
+        }
+    });
+
     ext.point("io.ox/core/cache/storage").each(function (storage) {
         if (storage.isUsable() && _.isNull(preferredPersistentCache)) {
             preferredPersistentCache = storage.id;
@@ -59,15 +98,21 @@ define('io.ox/core/cache',
 
         return function (name, persistent, options) {
 
+            if (/app-cache\.index$/.test(name) && Modernizr.localstorage) {
+                // due to the sync behavior of localstorage, we can rescue
+                // the savepoints to a persistent cache.
+                options = options || {};
+                options.persistent = 'localstorage';
+            }
+
             var opt = _.extend({
                     fluent: 'simple',
                     persistent: preferredPersistentCache
                 }, options || {}),
-
                 persistentCache = storages[opt.persistent],
                 fluentCache = storages[opt.fluent],
                 // use persistent storage?
-                persist = (persistentCache.isUsable() && _.url.hash('persistence') !== 'false' && persistent === true ?
+                persist = (ox.secretCookie === true && persistentCache.isUsable() && _.url.hash('persistence') !== 'false' && persistent === true ?
                         function () {
                             return ox.user !== '';
                         } :
@@ -137,13 +182,14 @@ define('io.ox/core/cache',
             // timestamp
             timestamp = timestamp !== undefined ? timestamp : _.now();
             // add/update?
-            return index.get(key).pipe(function (getdata) {
+            return index.get(key).then(function (getdata) {
                 if (getdata !== null) {
                     if (timestamp >= getdata.timestamp) {
                         return index.set(key, {
                             data: data,
                             timestamp: timestamp
-                        }).pipe(function () {
+                        })
+                        .then(function () {
                             return data;
                         });
                     } else {
@@ -153,7 +199,8 @@ define('io.ox/core/cache',
                     return index.set(key, {
                         data: data,
                         timestamp: timestamp
-                    }).pipe(function () {
+                    })
+                    .then(function () {
                         return data;
                     });
                 }
@@ -162,7 +209,7 @@ define('io.ox/core/cache',
 
         // get from cache
         this.get = function (key, getter, readThroughHandler) {
-            return index.get(key).pipe(function (o) {
+            return index.get(key).then(function (o) {
                 if (o !== null) {
                     if (readThroughHandler) { readThroughHandler(o.data); }
                     return o.data;
@@ -174,7 +221,7 @@ define('io.ox/core/cache',
 
         // get timestamp of cached element
         this.time = function (key) {
-            return index.get(key).pipe(function (o) {
+            return index.get(key).then(function (o) {
                 return o !== null ? o.timestamp : 0;
             });
         };
@@ -207,7 +254,7 @@ define('io.ox/core/cache',
                 }
             };
 
-            return index.keys().pipe(function (keys) {
+            return index.keys().then(function (keys) {
                 $i = keys.length;
 
                 var c = [];
@@ -249,11 +296,11 @@ define('io.ox/core/cache',
 
         // list values
         this.values = function () {
-            return index.keys().pipe(function (keys) {
+            return index.keys().then(function (keys) {
                 return $.when.apply($,
-                    _(keys).map(function (key) { return index.get(key).pipe(getData); })
+                    _(keys).map(function (key) { return index.get(key).then(getData); })
                 )
-                .pipe(function () {
+                .then(function () {
                     return _(arguments).compact();
                 });
             });
@@ -261,7 +308,7 @@ define('io.ox/core/cache',
 
         // get size
         this.size = function () {
-            return index.keys().pipe(function (keys) {
+            return index.keys().then(function (keys) {
                 return keys.length;
             });
         };
@@ -332,7 +379,7 @@ define('io.ox/core/cache',
                 var i = 0, $i = data.length, self = this;
 
                 var adder = function (data, timestamp) {
-                    return self.add(data, timestamp).pipe(function () {
+                    return self.add(data, timestamp).then(function () {
                         return self.keyGenerator(data);
                     });
                 };
@@ -341,14 +388,14 @@ define('io.ox/core/cache',
                     c.push(adder(data[i], timestamp));
                 }
 
-                return $.when.apply($, c).pipe(function () {
+                return $.when.apply($, c).then(function () {
                     return _(arguments).without(null);
                 });
             } else {
                 // get key
                 key = String(this.keyGenerator(data));
 
-                return add(key, data, timestamp).pipe(function (result) {
+                return add(key, data, timestamp).then(function (result) {
                     return key;
                 });
             }
@@ -368,15 +415,15 @@ define('io.ox/core/cache',
 
                 var c = [];
                 for (; i < $i; i++) {
-                    c.push(this.merge(data[i], timestamp).pipe(merger));
+                    c.push(this.merge(data[i], timestamp).then(merger));
                 }
 
-                return $.when.apply(null, c).pipe(function () {
+                return $.when.apply(null, c).then(function () {
                     return changed;
                 });
             } else {
                 key = String(this.keyGenerator(data));
-                return get(key).pipe(function (target) {
+                return get(key).then(function (target) {
                     if (target !== null) {
                         var id;
                         for (id in target) {
@@ -386,7 +433,7 @@ define('io.ox/core/cache',
                             }
                         }
                         if (changed) {
-                            return self.add(target, timestamp).pipe(function (addReturn) {
+                            return self.add(target, timestamp).then(function (addReturn) {
                                 return changed;
                             });
                         } else {

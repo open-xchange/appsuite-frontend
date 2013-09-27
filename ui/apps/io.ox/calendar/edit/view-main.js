@@ -25,7 +25,13 @@ define('io.ox/calendar/edit/view-main',
             var rows = [];
             var rowPerExtensionId = {};
 
+            if (_.device('smartphone')) {
+                ext.point('io.ox/calendar/edit/section/buttons').disable('save');
+                ext.point('io.ox/calendar/edit/section/buttons').disable('discard');
+            }
+
             ext.point('io.ox/calendar/edit/section/header').invoke("draw", self.$el, self.baton);
+
             this.point.each(function (extension) {
                 var row = null;
                 if (extension.nextTo) {
@@ -44,10 +50,14 @@ define('io.ox/calendar/edit/view-main',
             _(rows).each(function (row) {
                 var $rowNode = $('<div class="row-fluid">').appendTo(self.$el);
                 _(row).each(function (extension) {
+                    $rowNode.addClass(extension.rowClass || '');
                     extension.invoke("draw", $rowNode, self.baton);
                 });
             });
 
+            if (_.device('smartphone')) {
+                ext.point('io.ox/calendar/edit/bottomToolbar').invoke('draw', self.$el, self.baton);
+            }
             return this;
         }
     });

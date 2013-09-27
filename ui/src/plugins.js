@@ -17,6 +17,187 @@
 
 (function() {
 
+    // File Caching
+    var fileCache, dummyFileCache = {
+        retrieve: function (name) {
+            return $.Deferred().reject();
+        },
+        cache: function (name, content) {
+            return;
+        }
+    };
+
+    fileCache = dummyFileCache;
+
+    function runCode(name, code) {
+        eval("//@ sourceURL=" + name + ".js\n" + code);
+    }
+
+    if (_.device('desktop') && !_.device("Safari") && window.IDBVersionChangeEvent !== undefined && Modernizr.indexeddb && window.indexedDB) {
+        // IndexedDB
+        (function () {
+
+            var initialization = $.Deferred();
+
+            var request = window.indexedDB.open('appsuite.filecache', 1);
+            var db = null;
+
+            function fail(e) {
+                if (ox.debug) {
+                    console.warn('Failed to initiliaze IndexedDB file cache', e);
+                }
+                window.indexedDB.deleteDatabase('appsuite.filecache'); // delete, so maybe this works next time
+                fileCache = dummyFileCache;
+                initialization.reject();
+            }
+
+            request.onupgradeneeded = function (e) {
+                db = e.target.result;
+                db.createObjectStore('filecache', {keyPath: 'name'});
+                db.createObjectStore('version', {keyPath: 'name'});
+            };
+
+            request.onsuccess = function (e) {
+                var tx, request;
+                db = e.target.result;
+                try {
+                    tx = db.transaction(['filecache', 'version'], 'readwrite');
+                    request = tx.objectStore('version').get('version');
+                    request.onerror = fail;
+                    request.onsuccess = function (e) {
+                        if (!e.target.result || e.target.result.version !== ox.version) {
+                            // Clear the filecache
+                            tx.objectStore('filecache').clear().onsuccess = initialization.resolve;
+                            // Save the new version number
+                            tx.objectStore('version').put({name: 'version', version: ox.version});
+                            if (request.transaction) {
+                                request.transaction.oncomplete = initialization.resolve;
+                            }
+                        } else {
+                            initialization.resolve();
+                        }
+                    };
+
+                } catch (e) {
+                    fail(e);
+                }
+            };
+
+            request.onerror = function (e) {
+                // fallback
+                // console.log('request error outerlevel', e);
+                fileCache = dummyFileCache;
+                initialization.reject();
+            };
+
+            fileCache.retrieve = function (name) {
+                var def = $.Deferred();
+                initialization.then(
+                    function success() {
+                        var tx = db.transaction(['filecache'], 'readonly');
+                        var request = tx.objectStore('filecache').get(name);
+                        request.onsuccess = function (e) {
+                            if (!e.target.result) {
+                                def.reject();
+                                return;
+                            }
+                            if (e.target.result.version !== ox.version) {
+                                def.reject();
+                                return;
+                            }
+                            def.resolve(e.target.result.contents);
+                        };
+                    },
+                    function fail() {
+                        def.reject();
+                    }
+                );
+                return def;
+            };
+
+            fileCache.cache = function (name, contents) {
+                initialization.done(function () {
+                    var tx = db.transaction(['filecache'], 'readwrite');
+                    tx.objectStore('filecache').put({name: name, contents: contents, version: ox.version});
+                });
+            };
+
+
+        })();
+    } /*else if (Modernizr.localstorage && !_.device("desktop")) {
+        (function () {
+            var queue = null;
+            fileCache.retrieve = function (name) {
+                var found = localStorage.getItem(name);
+                if (found && found.version === ox.version) {
+                    return $.Deferred().resolve(found.text);
+                }
+            };
+            fileCache.cache = function (name, contents) {
+                if (queue) {
+                    queue.items.push({k: name, c: {text: contents, version: ox.version}});
+                } else {
+                    queue = {
+                        items: []
+                    };
+                    setTimeout(function () {
+                        _(queue.items).each(function (e) {
+                            localStorage.setItem(e.k, e.c);
+                        });
+                        queue = null;
+                    }, 5000);
+                }
+            };
+        }());
+    }*/ else if (Modernizr.websqldatabase && ! _.device("Safari && desktop") && (_.browser.ios < 7)) {
+        // Web SQL
+        (function () {
+            var initialization = $.Deferred();
+            var db = openDatabase("filecache", "1.0", "caches files for OX", 4 * 1024 * 1024);
+            db.transaction(function (tx) {
+                tx.executeSql("CREATE TABLE IF NOT EXISTS version (version TEXT)");
+                tx.executeSql("SELECT 1 FROM version WHERE version = ?", [ox.version], function (tx, result) {
+                    if (result.rows.length === 0) {
+                        tx.executeSql("DROP TABLE IF EXISTS files");
+                        tx.executeSql("CREATE TABLE files (name TEXT unique, contents TEXT, version TEXT)");
+                        tx.executeSql("DELETE FROM version");
+                        tx.executeSql("INSERT INTO version VALUES (?)", [ox.version]);
+                    }
+                    initialization.resolve();
+
+                });
+            });
+            fileCache.retrieve = function (name) {
+                var def = $.Deferred();
+                initialization.done(function () {
+                    db.transaction(function (tx) {
+                        tx.executeSql("SELECT contents FROM files WHERE name = ? and version = ?", [name, ox.version], function (tx, result) {
+                            if (result.rows.length === 0) {
+                                def.reject();
+                            } else {
+                                def.resolve(result.rows.item(0).contents);
+                            }
+                        }, function () {
+                            console.error(arguments);
+                            def.reject();
+                        });
+                    });
+                });
+                return def;
+            };
+
+            fileCache.cache = function (name, contents) {
+                initialization.done(function () {
+                    db.transaction(function (tx) {
+                        tx.executeSql("INSERT OR REPLACE INTO files (name, contents, version) VALUES (?,?,?) ", [name, contents, ox.version]);
+                    });
+                });
+            };
+        })();
+    }
+
+
+
     function dirname(filename) {
         return filename.replace(/(?:^|(\/))[^\/]+$/, "$1");
     }
@@ -46,7 +227,10 @@
         window.dependencies = undefined;
         req.load = function (context, modulename, url) {
             var prefix = context.config.baseUrl;
-            if (modulename.charAt(0) !== '/') {
+            if (modulename.slice(0, 5) === 'apps/') {
+                url = ox.apiRoot + '/apps/load/' + ox.base + ',' + url.slice(5);
+                return oldload.apply(this, arguments);
+            } else if (modulename.charAt(0) !== '/') {
                 if (url.slice(0, prefix.length) !== prefix) {
                     return oldload.apply(this, arguments);
                 }
@@ -54,25 +238,69 @@
             } else if (modulename.indexOf('/base/spec/') === 0) {
                 return oldload.apply(this, arguments);
             }
-            req.nextTick(null, loaded);
-            var next = deps[modulename];
-            if (next && next.length) context.require(next);
-            queue.push(url);
 
             function loaded() {
                 var q = queue;
                 queue = [];
-                if (_.url.hash('debug-js')) {
-                    _.each(q, load);
-                } else {
-                    load(q.join(), modulename);
-                }
+                load(q.join(), modulename);
+                _.each(q, function (module) {
+                    $(window).trigger("require:load", module);
+                });
+
                 if (queue.length) console.error('recursive require', queue);
             }
+            if (_.url.hash('debug-js')) {
+                oldload(context, modulename,
+                    [ox.apiRoot, '/apps/load/', ox.base, ',', url].join(''));
+                return;
+            }
+
+            // Try file cache
+            fileCache.retrieve(modulename).done(function (contents) {
+                runCode(modulename, contents);
+                context.completeLoad(modulename);
+                if (_.url.hash('debug-filecache')) {
+                    console.log("CACHE HIT!", modulename);
+                }
+            }).fail(function () {
+                if (_.url.hash('debug-filecache')) {
+                    console.log("CACHE MISS!", modulename);
+                }
+                // Append and load in bulk
+                req.nextTick(null, loaded);
+                var next = deps[modulename];
+                if (next && next.length) context.require(next);
+                queue.push(url);
+            });
 
             function load(module, modulename) {
-                oldload(context, modulename || module,
-                    [ox.apiRoot, '/apps/load/', ox.base, ',', module].join(''));
+                 $.ajax({ url: [ox.apiRoot, '/apps/load/', ox.base, ',', module].join(''), dataType: "text" })
+                 .done(function (concatenatedText) {
+                        runCode([ox.apiRoot, '/apps/load/', ox.base, ',', module].join(''), concatenatedText);
+                        context.completeLoad(modulename);
+                        // Chop up the concatenated modules and put them into file cache
+                        _(concatenatedText.split("/*:oxsep:*/")).each(function (moduleText) {
+                            (function () {
+                                var name = null;
+                                var match = moduleText.match(/define(\.async)?\(([^,]+),/);
+                                if (match) {
+                                    name = match[2].substr(1, match[2].length -2);
+                                }
+                                if (name) {
+                                    if (_.url.hash('debug-filecache')) {
+                                        console.log("Caching " + name);
+                                    }
+                                    fileCache.cache(name, moduleText);
+                                } else {
+                                    if (_.url.hash('debug-filecache')) {
+                                        console.log("Couldn't determine name for " + moduleText);
+                                    }
+                                }
+                            })();
+                        });
+                 });
+
+
             }
         };
 
@@ -88,7 +316,7 @@
     define("css", {
         load: function (name, parentRequire, load, config) {
             require(["text!" + name]).done(function (css) {
-                var path = config.baseUrl + name; 
+                var path = config.baseUrl + name;
                 load(insert(path, relativeCSS(dirname(path), css), "#css"));
             });
         }
@@ -178,27 +406,64 @@
     });
 }());
 
-define("gettext", function (gettext) {
-    return {
+(function () {
+    var callbacks = {}, lang = null, langDef = $.Deferred();
+    define('gettext', {
+        /**
+         * Switches the language.
+         * Only the signin page is allowed to call this multiple times.
+         * @param {String} language The new language ID.
+         * @returns A promise which gets resolved when all known gettext
+         * modules have loaded their replacements.
+         * @private
+         */
+        setLanguage: function (language) {
+            assert(ox.signin || !this.language, 'Multiple setLanguage calls');
+            lang = language;
+            langDef.resolve();
+            if (!ox.signin) {
+                require(['io.ox/core/gettext']).done(function (gettext) {
+                    gettext.setLanguage(lang);
+                });
+            }
+            if (_.isEmpty(callbacks)) return $.when();
+            var names = _.keys(callbacks);
+            var files = _.map(names, function (n) { return n + '.' + lang; });
+            return require(files).done(function () {
+                var args = _.toArray(arguments);
+                _.each(names, function (n, i) { callbacks[n](args[i]); });
+            });
+        },
+        enable: function () {
+            require(['io.ox/core/gettext']).done(function (gt) { gt.enable(); });
+        },
         load: function (name, parentRequire, load, config) {
-            var gt;
-            require(["io.ox/core/gettext"]).pipe(function (gettext) {
-                gt = gettext;
-                assert(gettext.language.state() !== 'pending', _.printf(
-                    'Invalid gettext dependency on %s (before login).', name));
-                return gettext.language;
-            }).done(function (language) {
-                parentRequire([name + '.' + language], load, function (err) {
-                    load(gt(name + '.' + language, {
+            assert(langDef.state !== 'pending', _.printf(
+                'Invalid gettext dependency on %s (before login).', name));
+            langDef.done(function () {
+                parentRequire([name + '.' + lang], ox.signin ? wrap : load, error);
+            });
+            function wrap(f) {
+                var f2 = function () { return f.apply(this, arguments); };
+                // _.each by foot to avoid capturing members of f in closures
+                for (var i in f) (function (i) {
+                    f2[i] = function () { f[i].apply(f, arguments); };
+                }(i));
+                callbacks[name] = function (newF) { f = newF; };
+                load(f2);
+            }
+            function error() {
+                require(['io.ox/core/gettext']).done(function (gt) {
+                    load(gt(name, {
                         nplurals: 2,
                         plural: 'n != 1',
                         dictionary: {}
                     }));
                 });
-            });
+            }
         }
-    };
-});
+    });
+}());
 
 /*
  * dot.js template loader

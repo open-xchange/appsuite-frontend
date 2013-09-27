@@ -17,19 +17,18 @@ define('io.ox/mail/view-detail',
      'io.ox/core/extPatterns/links',
      'io.ox/mail/util',
      'io.ox/mail/api',
-     'io.ox/core/config',
      'io.ox/core/http',
+     'io.ox/core/util',
      'io.ox/core/api/account',
      'settings!io.ox/mail',
      'gettext!io.ox/mail',
      'io.ox/core/api/folder',
-     'moxiecode/tiny_mce/plugins/emoji/main',
+     'io.ox/core/emoji/util',
      'io.ox/mail/actions',
      'less!io.ox/mail/style.less'
-    ], function (ext, links, util, api, config, http, account, settings, gt, folder, emoji) {
+    ], function (ext, links, util, api, http, coreUtil, account, settings, gt, folder, emoji) {
 
     'use strict';
-
     // define global iframe resize handler
     window.iframeResize = function (guid, doc) {
         _.defer(function () {
@@ -76,8 +75,10 @@ define('io.ox/mail/view-detail',
     var regHTML = /^text\/html$/i,
         regImage = /^image\/(jpe?g|png|gif|bmp)$/i,
         regFolder = /^(\s*)(http[^#]+#m=infostore&f=(\d+))(\s*)$/i,
+        regFolderAlt = /^(\s*)(http[^#]+#!&?app=io\.ox\/files&folder=(\d+))(\s*)$/i,
         regDocument = /^(\s*)(http[^#]+#m=infostore&f=(\d+)&i=(\d+))(\s*)$/i,
         regDocumentAlt = /^(\s*)(http[^#]+#!&?app=io\.ox\/files(?:&perspective=list)?&folder=(\d+)&id=([\d\.]+))(\s*)$/i,
+        regDocumentAlt2 = /^(\s*)(http[^#]+#!&?app=io\.ox\/files&folder=(\d+)(?:&perspective=list)?&id=([\d\.]+))(\s*)$/i,
         regTask = /^(\s*)(http[^#]+#m=task&i=(\d+)&f=(\d+))(\s*)$/i,
         regTaskAlt = /^(\s*)(http[^#]+#!&?app=io\.ox\/tasks?&id=\d+.(\d+)&folder=([\d\.]+))(\s*)$/i,
         regAppointment = /^(\s*)(http[^#]+#m=calendar&i=(\d+)&f=(\d+))(\s*)$/i,
@@ -104,7 +105,7 @@ define('io.ox/mail/view-detail',
             ':(': '&#x1F61E;'
         };
 
-        var regex = /(&quot)?([:;]-?[(|)D])/g;
+        var regex = /(&quot)?([:;]-?[(|)D])\W/g;
 
         return function (text) {
             if (settings.get('displayEmoticons')) {
@@ -116,32 +117,43 @@ define('io.ox/mail/view-detail',
                     return !emote ? match : emote;
                 });
             }
-            text = emoji.getInstance().softbankToUnified(text);
-            return emoji.unifiedToImageTag(text, {
-                forceEmojiIcons: settings.get('emoji/forceEmojiIcons', false)
-            });
+            return text;
         };
     }());
 
+    var isURL = /^https?:\S+$/i;
+
     var beautifyText = function (text) {
 
-        var content = markupQuotes(
-            insertEmoticons(
-                $.trim(text)
-                // remove line breaks
-                .replace(/\n|\r/g, '')
-                // replace leading BR
-                .replace(/^\s*(<br\/?>\s*)+/g, '')
-                // reduce long BR sequences
-                .replace(/(<br\/?>\s*){3,}/g, '<br><br>')
-                // remove split block quotes
-                .replace(/<\/blockquote>\s*(<br\/?>\s*)+<blockquote[^>]+>/g, '<br><br>')
-                // add markup for email addresses
-                .replace(regMailComplex, '<a href="mailto:$6">$2$3</a>')
-            )
-        );
+        text = $.trim(text)
+            // remove line breaks
+            .replace(/\n|\r/g, '')
+            // replace leading BR
+            .replace(/^\s*(<br\/?>\s*)+/g, '')
+            // reduce long BR sequences
+            .replace(/(<br\/?>\s*){3,}/g, '<br><br>')
+            // remove split block quotes
+            .replace(/<\/blockquote>\s*(<br\/?>\s*)+<blockquote[^>]+>/g, '<br><br>')
+            // add markup for email addresses
+            .replace(regMailComplex, '<a href="mailto:$6">$2$3</a>');
 
-        return content;
+        // split source to safely ignore tags
+        text = _(text.split(/(<[^>]+>)/))
+            .map(function (line) {
+                // ignore tags
+                if (line[0] === '<') return line;
+                // ignore URLs
+                if (isURL.test(line)) return line;
+                // process plain text
+                line = insertEmoticons(line);
+                line = emoji.processEmoji(line);
+                return line;
+            })
+            .join('');
+
+        text = markupQuotes(text);
+
+        return text;
     };
 
     var getContentType = function (type) {
@@ -208,28 +220,44 @@ define('io.ox/mail/view-detail',
         return match && match.length && _(ox.serverConfig.hosts).indexOf(match[1]) > -1;
     };
 
-    var drawDocumentLink = function (matches, title) {
-        var link, href, folder, id;
-        // create link
-        link = $('<a>', { href: '#' })
-            .css({ textDecoration: 'none', fontFamily: 'Arial' })
-            .append($('<span class="label label-info">').text(title));
-        // get values
-        href = matches[2];
-        folder = matches[3];
-        id = matches[4];
-        // internal document?
-        /* TODO: activate internal Links when files app is ready */
-        if (isValidHost(href)) {
-            // yep, internal
-            href = '#app=io.ox/files&perspective=list&folder=' + folder + '&id=' + id;
-            link.on('click', { hash: href, folder: folder, id: id }, openDocumentLink);
-        } else {
-            // nope, external
-            link.attr({ href: matches[0], target: '_blank' });
+    var drawDocumentLink, drawFolderLink;
+
+    (function () {
+
+        function draw(matches, title, perspective) {
+            var link, href, folder, id;
+            // create link
+            link = $('<a>', { href: '#' })
+                .css({ textDecoration: 'none', fontFamily: 'Arial' })
+                .append($('<span class="label label-info">').text(title));
+            // get values
+            href = matches[2];
+            folder = matches[3];
+            id = matches[4];
+            // internal document?
+            /* TODO: activate internal Links when files app is ready */
+            if (isValidHost(href)) {
+                // yep, internal
+                href = '#app=io.ox/files&perspective=' + perspective + '&folder=' + folder + '&id=' + id;
+                link.on('click', { hash: href, folder: folder, id: id }, openDocumentLink);
+            } else {
+                // nope, external
+                link.attr({ href: matches[0], target: '_blank' });
+            }
+            return link;
         }
-        return link;
-    };
+
+        drawFolderLink = function (matches, title) {
+            return draw(matches, title, 'icons');
+        };
+
+        drawDocumentLink = function (matches, title) {
+            return draw(matches, title, 'list');
+        };
+
+    }());
+
+    // biggeleben: the following is not really DRY ...
 
     var drawAppointmentLink = function (matches, title) {
         var link, href, folder, id;
@@ -279,13 +307,6 @@ define('io.ox/mail/view-detail',
         return $('<a>', { href: href }).text(href);
     };
 
-    var delayedRead = function (data, node) {
-        setTimeout(function () {
-            api.tracker.applyAutoRead(data);
-            node = data = null;
-        }, 0); // without visual transition
-    };
-
     var blockquoteMore, blockquoteClickOpen, blockquoteClickClose, blockquoteCollapsedHeight = 57, mailTo;
 
     blockquoteMore = function (e) {
@@ -300,7 +321,7 @@ define('io.ox/mail/view-detail',
             .off('click.open')
             .on('dblclick.close', blockquoteClickClose)
             .stop().animate({ maxHeight: h }, 300, function () {
-                $(this).removeClass('collapsed-blockquote');
+                $(this).css('opacity', 1.00).removeClass('collapsed-blockquote');
             });
         $(this).next().hide();
     };
@@ -313,7 +334,7 @@ define('io.ox/mail/view-detail',
         $(this).off('dblclick.close')
             .on('click.open', blockquoteClickOpen)
             .stop().animate({ maxHeight: blockquoteCollapsedHeight }, 300, function () {
-                $(this).addClass('collapsed-blockquote');
+                $(this).css('opacity', 0.50).addClass('collapsed-blockquote');
             });
         $(this).next().show();
     };
@@ -336,11 +357,13 @@ define('io.ox/mail/view-detail',
 
     var that = {
 
-        getContent: function (data) {
+        getContent: function (data, options) {
 
             if (!data || !data.attachments) {
                 return { content: $(), isLarge: false, type: 'text/plain' };
             }
+
+            options = options || {};
 
             var att = data.attachments, source = '', type = 'text/plain',
                 isHTML = false, isLarge = false, content = '';
@@ -367,7 +390,7 @@ define('io.ox/mail/view-detail',
                 });
 
                 source = $.trim(source);
-                isLarge = source.length > 1024 * 512; // > 512 KB
+                isLarge = source.length > 1024 * 100; // > 100 KB
 
                 // empty?
                 if (source === '') {
@@ -382,8 +405,10 @@ define('io.ox/mail/view-detail',
 
                 // replace images on source level
                 source = source.replace(regImageSrc, '$1' + ox.apiRoot);
+
+                // apply emoji stuff for HTML
                 if (isHTML && !isLarge) {
-                    source = emoji.unifiedToImageTag(source);
+                    source = emoji.processEmoji(source);
                 }
 
                 // robust constructor for large HTML
@@ -395,11 +420,16 @@ define('io.ox/mail/view-detail',
                 // last line of defense
                 content.find('script').remove();
 
+                // setting isColorQuoted
+                var colorQuoted = settings.get('isColorQuoted', true);
+                if (colorQuoted) content.addClass('colorQuoted');
+
                 if (isHTML) {
                     // HTML
                     if (!isLarge) {
                         // remove stupid tags
                         content.find('meta').remove();
+
                         // transform outlook's pseudo blockquotes
                         content.find('div[style*="none none none solid"][style*="1.5pt"]').each(function () {
                             $(this).replaceWith($('<blockquote>').append($(this).contents()));
@@ -455,20 +485,16 @@ define('io.ox/mail/view-detail',
 
                 // process all text nodes unless mail is too large (> 512 KB)
                 if (!isLarge) {
-                    content.contents().add($('*', content).not('style').contents()).each(function () {
+                    var processTextNode = function () {
                         if (this.nodeType === 3) {
                             var node = $(this), text = this.nodeValue, length = text.length, m, n;
-                            // split long character sequences for better wrapping
-                            if (length >= 60 && /\S{60}/.test(text)) {
-                                this.nodeValue = text.replace(/(\S{60})/g, '$1\u200B'); // zero width space
-                            }
                             // some replacements
                             if ((m = text.match(regDocument)) && m.length) {
                                 // link to document
                                 node.replaceWith(
                                      $($.txt(m[1])).add(drawDocumentLink(m, gt('Document'))).add($.txt(m[5]))
                                 );
-                            } else if ((m = text.match(regDocumentAlt)) && m.length) {
+                            } else if ((m = (text.match(regDocumentAlt) || text.match(regDocumentAlt2))) && m.length) {
                                 // link to document (new syntax)
                                 node.replaceWith(
                                      $($.txt(m[1])).add(drawDocumentLink(m, gt('Document'))).add($.txt(m[6]))
@@ -476,7 +502,12 @@ define('io.ox/mail/view-detail',
                             } else if ((m = text.match(regFolder)) && m.length) {
                                 // link to folder
                                 node.replaceWith(
-                                    $($.txt(m[1])).add(drawDocumentLink(m, gt('Folder'))).add($.txt(m[4]))
+                                    $($.txt(m[1])).add(drawFolderLink(m, gt('Folder'))).add($.txt(m[4]))
+                                );
+                            } else if ((m = text.match(regFolderAlt)) && m.length) {
+                                // link to folder
+                                node.replaceWith(
+                                    $($.txt(m[1])).add(drawFolderLink(m, gt('Folder'))).add($.txt(m[4]))
                                 );
                             } else if ((m = text.match(regTask) || text.match(regTaskAlt)) && m.length) {
                                 // link to folder
@@ -539,8 +570,17 @@ define('io.ox/mail/view-detail',
                                     );
                                 }
                             }
+                            else if (length >= 30 && /\S{30}/.test(text)) {
+                                // split long character sequences for better wrapping
+                                node.replaceWith(
+                                    $.parseHTML(coreUtil.breakableHTML(text))
+                                );
+                            }
                         }
-                    });
+                    };
+                    // don't combine these two lines via add() - very slow!
+                    content.contents().each(processTextNode);
+                    $('*', content).not('style').contents().each(processTextNode);
                 }
 
                 // further fixes
@@ -557,12 +597,17 @@ define('io.ox/mail/view-detail',
                         .filter('[href^="mailto:"]').on('click', mailTo);
                 });
 
-                if (!isLarge) {
+                // auto-collapse blockquotes?
+                var autoCollapse = !isLarge &&
+                    options.autoCollapseBlockquotes !== false &&
+                    settings.get('features/autoCollapseBlockquotes', true) === true;
+
+                if (autoCollapse) {
                     // blockquotes (top-level only)
                     content.find('blockquote').not(content.find('blockquote blockquote')).each(function () {
                         var node = $(this);
                         node.addClass('collapsed-blockquote')
-                            .css({ opacity: 0.75, maxHeight: blockquoteCollapsedHeight })
+                            .css({ opacity: 0.50, maxHeight: blockquoteCollapsedHeight })
                             .on('click.open', blockquoteClickOpen)
                             .on('dblclick.close', blockquoteClickClose)
                             .after(
@@ -589,45 +634,79 @@ define('io.ox/mail/view-detail',
         },
 
         drawScaffold: function (baton, resolver) {
-            return $('<div class="mail-detail"></div>')
+
+            var node = $('<section class="mail-detail">')
                 .busy()
                 .one('resolve', { baton: baton }, resolver);
+
+            if (baton.options.tabindex) {
+                node.attr('tabindex', baton.options.tabindex);
+            }
+
+            return node;
         },
 
         draw: function (baton) {
-            if (!baton) {
-                return $('<div>');
-            }
+
+            if (!baton) return $('<div>');
 
             // ensure baton
             baton = ext.Baton.ensure(baton);
 
             var data = baton.data,
+                copy = _.extend({}, data),
                 self = this,
                 node = $('<section class="mail-detail">'),
                 container = $.createViewContainer(data, api)
                     .addClass('mail-detail-decorator')
-                    .on('redraw', function (e, tmp) {
-                        copyThreadData(tmp, data);
-                        container.replaceWith(self.draw(tmp));
+                    .on('redraw', function (e, fresh) {
+                        // mails can only change color_label and flags
+                        var current = {
+                            color_label: parseInt(container.find('.flag-dropdown-icon').attr('data-color'), 10) || 0,
+                            unseen: node.hasClass('unread')
+                        };
+                        // flags changed?
+                        if (current.unseen !== util.isUnseen(fresh)) {
+                            // update class
+                            node.toggleClass('unread', util.isUnseen(fresh));
+                            // udpate inline links
+                            ext.point('io.ox/mail/detail').get('inline-links', function (extension) {
+                                var div = $('<div>'), baton = ext.Baton({ data: _.extend(copy, fresh) });
+                                extension.draw.call(div, baton);
+                                node.find('nav.io-ox-inline-links').replaceWith(div.find('nav'));
+                            });
+                        }
+                        if (current.color_label !== fresh.color_label) {
+                            setLabel(node, fresh.color_label);
+                        }
+                        // update copy
+                        _.extend(copy, fresh);
                     });
 
+            if (baton.options.tabindex) {
+                // we add f6-target just here; first mail in thread
+                node.addClass('f6-target').attr({
+                    tabindex: baton.options.tabindex,
+                    role: 'document',
+                    'aria-label': baton.data.subject
+                });
+            }
+
             try {
+
+                // fix z-index in threads?
+                if (data.threadSize > 1) {
+                    container.css('zIndex', data.threadSize - data.threadPosition);
+                }
 
                 // threaded & send by myself (and not in sent folder)?
                 if (data.threadSize > 1 && util.byMyself(data) && !account.is('sent', data.folder_id)) {
                     node.addClass('by-myself');
                 }
 
-                var isUnseen = api.tracker.isUnseen(data),
-                    canAutoRead = api.tracker.canAutoRead(data);
-
-                if (isUnseen && !canAutoRead) {
-                    node.addClass('unread');
-                }
-
-                if (canAutoRead) {
-                    delayedRead(data, node);
+                // make sure this mail is seen
+                if (api.tracker.isUnseen(baton.data)) {
+                    api.markRead(baton.data);
                 }
 
                 ext.point('io.ox/mail/detail').invoke('draw', node, baton);
@@ -637,7 +716,6 @@ define('io.ox/mail/view-detail',
             }
 
             container.append(node);
-            node.closest('.scrollable').scrollTop(0);
 
             return container;
         },
@@ -693,16 +771,17 @@ define('io.ox/mail/view-detail',
             }
 
             function scrubThreadDelete(deleteAction) {
-                if (! deleteAction) { return; }
+
+                if (!deleteAction) return;
 
                 var modifiedBaton, sentFolder, inboxMails;
 
                 modifiedBaton = deleteAction.data('baton');
                 if (!modifiedBaton || !modifiedBaton.data) {
-                    console.error('No baton found. Not supposed to happen.');
+                    if (ox.debug) console.warn('No baton found. Not supposed to happen.');
                     return;
                 }
-                sentFolder = config.get('mail.folder.sent');
+                sentFolder = settings.get('folder.sent');
                 inboxMails = _(modifiedBaton.data).filter(function (elem) {
                     return elem.folder_id !== sentFolder;
                 });
@@ -710,28 +789,37 @@ define('io.ox/mail/view-detail',
                 deleteAction.data('baton', modifiedBaton);
             }
 
-            function drawThread(node, baton, pos, top, bottom, mails) {
+            function drawThread(node, baton, options, mails) {
+
                 var i, obj, frag = document.createDocumentFragment(),
                     scrollpane = node.closest('.scrollable').off('scroll'),
-                    nodes, inline, top, mail,
+                    nodes, inline, mail,
                     list = baton.data;
+
                 try {
+
                     // draw inline links for whole thread
                     if (list.length > 1) {
                         inline = $('<div class="thread-inline-actions">');
                         ext.point('io.ox/mail/thread').invoke('draw', inline, baton);
                         inline.find('.dropdown > a').addClass('btn'); // was: btn-primary
-                        frag.appendChild(inline.get(0));
-
-                        //replace delete action with one excluding the sent folder
-                        scrubThreadDelete($(inline).find('[data-action=delete]'));
-
+                        if (_.device('!smartphone')) {
+                            frag.appendChild(inline.get(0));
+                        } else {
+                            node.parent().parent().find('.rightside-inline-actions').empty().append(inline);
+                        }
+                        // replace delete action with one excluding the sent folder
+                        scrubThreadDelete(inline.find('[data-action=delete]'));
                     }
+
                     // loop over thread - use fragment to be fast for tons of mails
                     for (i = 0; (obj = list[i]); i++) {
-                        if (i >= top && i <= bottom) {
+                        obj.threadPosition = i;
+                        obj.threadSize = list.length;
+                        if (i >= options.top && i <= options.bottom) {
                             mail = mails.shift();
                             copyThreadData(mail, obj);
+                            // draw mail
                             frag.appendChild(that.draw(
                                 ext.Baton({ data: mail, app: baton.app, options: baton.options })
                             ).get(0));
@@ -742,12 +830,15 @@ define('io.ox/mail/view-detail',
                             );
                         }
                     }
+                    options.children = null;
                     node.empty().get(0).appendChild(frag);
                     // get nodes
-                    nodes = node.find('.mail-detail').not('.thread-inline-actions');
+                    nodes = node.find('.mail-detail');
                     // set initial scroll position (37px not to see thread's inline links)
-                    top = nodes.eq(pos).position().top - 20;
-                    scrollpane.scrollTop(list.length === 1 ? 0 : top);
+                    if (_.device('!smartphone')) {
+                        options.top = nodes.eq(options.pos).parent().position().top;
+                    }
+                    scrollpane.scrollTop(list.length === 1 ? 0 : options.top);
                     scrollpane.on('scroll', { nodes: nodes, node: node }, _.debounce(autoResolve, 100));
                     scrollpane.one('scroll.now', { nodes: nodes, node: node }, autoResolve);
                     scrollpane.trigger('scroll.now'); // to be sure
@@ -763,7 +854,12 @@ define('io.ox/mail/view-detail',
                 // define next step now
                 var list = baton.data,
                     next = _.lfo(drawThread),
-                    node = this;
+                    node = this,
+                    options = {
+                        pos: 0,
+                        top: 0,
+                        bottom: 0
+                    };
 
                 // get list data, esp. to know unseen flag - we need this list for inline link checks anyway
                 api.getList(list).then(
@@ -795,8 +891,11 @@ define('io.ox/mail/view-detail',
                             }
                             $.when.apply($, defs).then(
                                 function () {
+                                    options.pos = pos;
+                                    options.top = top;
+                                    options.bottom = bottom;
                                     baton = ext.Baton({ data: list, app: baton.app, options: baton.options });
-                                    next(node, baton, pos, top, bottom, $.makeArray(arguments));
+                                    next(node, baton, options, $.makeArray(arguments));
                                 },
                                 function () {
                                     fail(node.empty(), baton);
@@ -811,6 +910,65 @@ define('io.ox/mail/view-detail',
                         fail(node.empty(), baton);
                     }
                 );
+            };
+        }()),
+
+        // redraw with new threadData without loosing scrollposition
+        updateThread: (function () {
+
+            function autoResolve(e) {
+                // check for data (due to debounce)
+                if (e.data) {
+                    // determine visible nodes
+                    var pane = $(this), node = e.data.node,
+                        top = pane.scrollTop(), bottom = top + node.parent().height();
+                    e.data.nodes.each(function () {
+                        var self = $(this), pos = self.position();
+                        if ((pos.top + 100) > top && pos.top < bottom) { // +100 due to min-height
+                            self.trigger('resolve');
+                        }
+                    });
+                }
+            }
+
+            return function (baton) {
+
+                var nodeTable  = {},
+                    node = this,
+                    data = baton.data,
+                    scrollpane = $(node).parent(),
+                    top = scrollpane.scrollTop(),
+                    currentMail,
+                    currentMailOffset,
+                    nodes = node.find('.mail-detail');
+                //fill nodeTable
+                for (var i = 0; i < nodes.length; i++) {//bring nodes and mails together;
+                    if ($(nodes[i]).parent().hasClass('mail-detail-decorator')) {
+                        nodes[i] = $(nodes[i]).parent().get(0);
+                    }
+                    nodeTable[_.ecid($(nodes[i]).attr('data-cid'))] = nodes[i];
+                }
+                //remember current scrollposition
+                currentMail = $(nodes[0]);//select first
+                for (var i = 1; i < nodes.length && $(nodes[i]).position().top <= top; i++) {
+                    currentMail = $(nodes[i]);
+                }
+                currentMailOffset = top - currentMail.position().top;
+                node.find('.mail-detail.io-ox-busy,.mail-detail-decorator').detach();
+                for (var i = 0; i < data.length; i++) {//draw new thread
+                    if (nodeTable[_.ecid(data[i])]) {
+                        node.append(nodeTable[_.ecid(data[i])]);
+                    } else {
+                        node.append(that.drawScaffold(
+                            ext.Baton({ data: data[i], app: baton.app, options: baton.options }),
+                            that.autoResolveThreads).addClass('io-ox-busy').get(0)//no 200ms wait for busy animation because this changes our scroll position
+                        );
+                    }
+                }
+                nodes = node.find('.mail-detail');
+                scrollpane.off('scroll').on('scroll', { nodes: nodes, node: node }, _.debounce(autoResolve, 100));//update event parameters
+                //scroll to old position
+                scrollpane.scrollTop(currentMail.position().top + currentMailOffset);
             };
         }())
     };
@@ -829,6 +987,20 @@ define('io.ox/mail/view-detail',
         id: 'header',
         draw: function (baton) {
             var header = $('<header>');
+            function setHeaderWidth() {
+                var wW = $(window).width();
+                return wW - 25;
+            }
+            if (_.device('smartphone')) {
+                $(window)
+                    .off('orientationchange.mailheader')
+                    .on('orientationchange.mailheader', function () {
+                    header.css('max-width', setHeaderWidth());
+                });
+                header.addClass('details-collapsed');
+                header.css('max-width', setHeaderWidth());
+
+            }
             ext.point('io.ox/mail/detail/header').invoke('draw', header, baton);
             this.append(header);
         }
@@ -884,8 +1056,12 @@ define('io.ox/mail/view-detail',
         id: 'fromlist',
         draw: function (baton) {
             var data = baton.data, list = util.serializeList(data, 'from'), node;
-            this.append($('<div class="from list">').append(list.removeAttr('style')));
-            if (ox.ui.App.get('io.ox/mail').length) {
+            this.append(
+                $('<div class="from list">').append(
+                    baton.data.from ? list.removeAttr('style') : $.txt('\u00A0')
+                )
+            );
+            if (baton.data.from && ox.ui.App.get('io.ox/mail').length) {
                 node = list.last();
                 node.after(
                     $('<i class="icon-search">').on('click', node.data('person'), searchSender)
@@ -893,21 +1069,6 @@ define('io.ox/mail/view-detail',
                 );
             }
             list = node = null;
-        }
-    });
-
-    ext.point('io.ox/mail/detail/header').extend({
-        index: 124,
-        id: 'thread-position',
-        draw: function (baton) {
-            var data = baton.data;
-            if (data.threadSize > 1) {
-                this.append(
-                    $('<div>')
-                    .addClass('thread-size clear-title')
-                    .text(_.noI18n(data.threadPosition + ' / ' + data.threadSize))
-                );
-            }
         }
     });
 
@@ -925,34 +1086,57 @@ define('io.ox/mail/view-detail',
         YELLOW:     gt('Yellow')
     };
 
+    var colorLabelIconEmpty = 'icon-bookmark-empty',
+        colorLabelIcon = 'icon-bookmark';
+
+    function setLabel(node, color) {
+        // set proper icon class
+        var className = 'flag-dropdown-icon ';
+        className += color === 0 ? colorLabelIconEmpty : colorLabelIcon;
+        className += ' flag_' + color;
+        node.find('.flag-dropdown-icon').attr({ 'class': className, 'data-color': color });
+    }
+
     function changeLabel(e) {
+
         e.preventDefault();
-        $(this).closest('.flag-dropdown').removeClass(e.data.flagclass).addClass('flag_' + e.data.color);
-        return api.changeColor(e.data.data, e.data.color);
+
+        var data = e.data.data,
+            color = e.data.color,
+            node = $(this).closest('.flag-dropdown');
+
+        setLabel(node, color);
+        node.find('.dropdown-toggle').focus();
+
+        return api.changeColor(data, color);
     }
 
     ext.point('io.ox/mail/detail/header').extend({
         index: 130,
         id: 'flag',
         draw: function (baton) {
-            var data = baton.data, flagclass = 'flag_' + api.tracker.getColorLabel(data);
+
+            var data = baton.data, color = api.tracker.getColorLabel(data);
 
             this.append(
-                $('<div class="dropdown flag-dropdown clear-title flag">')
-                .addClass(flagclass)
-                .append(
+                $('<div class="dropdown flag-dropdown clear-title flag">').append(
                     // box
-                    $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown">'),
+                    $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" tabindex="1">').append(
+                        $('<i class="flag-dropdown-icon">')
+                            .attr('data-color', color)
+                            .addClass(color === 0 ? colorLabelIconEmpty : colorLabelIcon)
+                            .addClass('flag_' + color)
+                    ),
                     // drop down
-                    $('<ul class="dropdown-menu">')
+                    $('<ul class="dropdown-menu" role="menu">')
                     .append(
                         _(api.COLORS).reduce(function (memo, index, color) {
                             return memo.add($('<li>').append(
-                                $('<a href="#">').append(
-                                    index > 0 ? $('<span class="flag-example">').addClass('flag_' + index) : $(),
+                                $('<a href="#" tabindex="1" role="menuitem">').append(
+                                    index > 0 ? $('<span class="flag-example">').addClass('flag_bg_' + index) : $(),
                                     $.txt(colorNames[color])
                                 )
-                                .on('click', { data: data, color: index, flagclass: flagclass }, changeLabel)
+                                .on('click', { data: data, color: index }, changeLabel)
                                 .addClass(color === index ? 'active-label' : undefined)
                             ));
                         }, $())
@@ -966,16 +1150,24 @@ define('io.ox/mail/view-detail',
         index: 140,
         id: 'subject',
         draw: function (baton) {
+
             // soft-break long words (like long URLs)
-            var subject = $.trim(baton.data.subject).replace(/(\S{20})/g, '$1\u200B');
+            var subject = $.trim(baton.data.subject),
+                html = emoji.processEmoji(coreUtil.breakableHTML(subject));
+
+            // process emoji
+            subject = subject ? $('<span>').html(html) : '';
+
             this.append(
                 $('<div class="mail-detail-clear-left">'),
                 $('<div>')
-                .addClass('subject clear-title' + (subject === '' ? ' empty' : ''))
+                .addClass('subject' + (_.device('!smartphone') ? ' clear-title' : '') + (subject === '' ? ' empty' : ''))
                 .append(
+                    // unread
                     $('<i class="icon-unread icon-circle">'),
                     // inject some zero width spaces for better word-break
-                    $.txt(_.noI18n(subject || gt('No subject'))),
+                    subject || $.txt(gt('No subject')),
+                    // priority
                     $('<span class="priority">').append(util.getPriority(baton.data))
                 )
             );
@@ -1001,37 +1193,68 @@ define('io.ox/mail/view-detail',
             // figure out if 'to' just contains myself - might be a mailing list, for example
             var showCC = data.cc && data.cc.length > 0,
                 showTO = data.to && data.to.length > 0,
-                show = showTO || showCC,
+                showBCC = data.bcc && data.bcc.length > 0,
+                show = showTO || showCC || showBCC,
                 container = $('<div>').addClass('to-cc list');
 
+            if (showTO) {
+                container.append(
+                    // TO
+                    $('<span>').addClass('io-ox-label').append(
+                        $.txt(gt('To')),
+                        $.txt(_.noI18n('\u00A0\u00A0'))
+                    ),
+                    util.serializeList(data, 'to'),
+                    $.txt(_.noI18n(' \u00A0 '))
+                );
+            }
+            if (showCC) {
+                container.append(
+                    //#. CC list - use npgettext cause pgettext is broken
+                    $('<span>').addClass('io-ox-label').append(
+                        $.txt(gt.npgettext('CC', 'Copy', 'Copy', 1)),
+                        _.noI18n('\u00A0\u00A0')
+                    ),
+                    util.serializeList(data, 'cc'),
+                    $.txt(_.noI18n(' \u00A0 '))
+                );
+            }
+            if (showBCC) {
+                container.append(
+                    // BCC
+                    $('<span>').addClass('io-ox-label').append(
+                        $.txt(gt('Bcc')),
+                        _.noI18n('\u00A0\u00A0')
+                    ),
+                    util.serializeList(data, 'bcc'),
+                    $.txt(_.noI18n(' \u00A0 '))
+                );
+            }
             if (show) {
+                if (_.device('smartphone')) {
+                    container.find('.io-ox-label').prepend(
+                        $('<div>').addClass('mail-detail-clear-left')
+                    );
+                }
                 this.append(
                     $('<div>').addClass('mail-detail-clear-left'),
-                    container.append(
-                        // TO
-                        $('<span>').addClass('io-ox-label').append(
-                            $.txt(gt('To')),
-                            $.txt(_.noI18n('\u00A0\u00A0'))
-                        ),
-                        util.serializeList(data, 'to'),
-                        $.txt(_.noI18n(' \u00A0 ')),
-                        //#. CC list - use npgettext cause pgettext is broken
-                        showCC ? $('<span>').addClass('io-ox-label').append(
-                            $.txt(gt.npgettext('CC', 'Copy', 'Copy', 1)),
-                            _.noI18n('\u00A0\u00A0')
-                        ) : [],
-                        util.serializeList(data, 'cc'),
-                        $.txt(_.noI18n(' \u00A0 '))
-                    )
+                    container
                 );
-                drawAllDropDown(container, gt('All recipients'), data);
+                if (_.device('!smartphone')) {
+                    if (!(!showCC && showTO && data.to[0][1] === 'undisclosed-recipients:;')) {
+                        var dd = $('<div class="recipient-actions">');
+                        drawAllDropDown(dd, $('<i class="icon-group">'), data);
+                        dd.appendTo(container);
+                    }
+                }
+
             }
         }
     });
 
     ext.point('io.ox/mail/detail/header').extend({
-        after: 'tocopy',
         id: 'account',
+        index: 152,
         draw: function (baton) {
 
             if (!folder.is('unifiedfolder', baton.data.folder_id)) return;
@@ -1062,13 +1285,24 @@ define('io.ox/mail/view-detail',
         // add instant preview
         if (regImage.test(contentType)) {
             dd.find('a').on('click', data, function (e) {
-                var node = $(this), data = e.data, p = node.parent(), url, src;
+                var node = $(this), data = e.data, p = node.parent(), url, src, used;
                 if (p.hasClass('open') && p.find('.instant-preview').length === 0) {
                     url = api.getUrl(data, 'view');
                     src = url + '&scaleType=contain&width=190&height=190'; // 190 + 2 * 15 pad = 220 max-width
-                    p.find('ul').append($('<li>').append($('<a>', { href: url, target: '_blank' }).append(
-                        $('<img>', { src: src, alt: '' }).addClass('instant-preview')
-                    )));
+                    //default vs. phone custom-dropdown
+                    used = $.extend({menu: p.find('ul')}, p.data() || { addlink: true });
+                    //append instant-preview if not done yet
+                    if (used.menu.find('.instant-preview').length !== 1) {
+                        var $li =  $('<li>').busy().append(
+                                (used.addlink ? $('<a>', { href: url, target: '_blank' }) : $('<span>'))
+                                .append(
+                                    $('<img>', { src: src, alt: '' }).addClass('instant-preview').load(function () {
+                                        $li.idle();
+                                    })
+                                )
+                            );
+                        used.menu.append($li);
+                    }
                 }
             });
         }
@@ -1103,16 +1337,34 @@ define('io.ox/mail/view-detail',
         id: 'attachments',
         draw: function (baton) {
 
-            var data = baton.data;
-            var attachments = util.getAttachments(data), length = attachments.length;
+            var data = baton.data,
+                attachments = util.getAttachments(data), length = attachments.length,
+                aLabel;
 
             if (length > 0) {
-                var outer = $('<div>').addClass('list attachment-list').append(
-                    $('<span>').addClass('io-ox-label').append(
+                var outer = $('<div>').addClass('list attachment-list'),
+                    aLabel;
+                if (_.device('!smartphone')) {
+                    aLabel = $('<span>').addClass('io-ox-label').append(
                         $.txt(gt.npgettext('plural', 'Attachment', 'Attachments', length)),
                         $.txt('\u00A0\u00A0')
-                    )
-                );
+                    );
+                } else {
+                    aLabel = $('<a>', { href: '#'})
+                        .text(gt.npgettext('plural', 'Show attachment', 'Show attachments', length))
+                        .on('click', function (e) {
+                        e.preventDefault();
+                        outer.toggleClass('attachments-collapsed');
+                        if (outer.hasClass('attachments-collapsed')) {
+                            outer.find('.dropdown').hide();
+                            $(this).text(gt.npgettext('plural', 'Show attachment', 'Show attachments', length));
+                        } else {
+                            outer.find('.dropdown').css('display', 'block');
+                            $(this).text(gt.npgettext('plural', 'Hide attachment', 'Hide attachments', length));
+                        }
+                    });
+                }
+                outer.append(aLabel);
                 _(attachments).each(function (a, i) {
                     try {
                         var label = (a.filename || ('Attachment #' + i))
@@ -1122,6 +1374,9 @@ define('io.ox/mail/view-detail',
                             });
                         // draw
                         var dd = drawAttachmentDropDown(outer, _.noI18n(label), a);
+                        if (_.device('smartphone')) {
+                            dd.hide();
+                        }
                         // cut off long lists?
                         if (i > 3 && length > 5) {
                             dd.hide();
@@ -1131,7 +1386,7 @@ define('io.ox/mail/view-detail',
                     }
                 });
                 // add "[n] more ..."
-                if (length > 5) {
+                if (_.device('!smartphone') && length > 5) {
                     outer.append(
                         //#. 'more' like in 'x more attachments' / 'weitere' in German
                         $('<a href="#" class="n-more">').text((length - 4) + ' ' + gt('more') + ' ...').click(showAllAttachments)
@@ -1141,6 +1396,9 @@ define('io.ox/mail/view-detail',
                 if (length > 1) {
                     attachments.subject = data.subject;
                     drawAttachmentDropDown(outer, gt('All attachments'), attachments).find('a').removeClass('attachment-link');
+                }
+                if (_.device('smartphone')) {
+                    outer.addClass('attachments-collapsed').find('.dropdown').hide();
                 }
                 this.append(outer);
             }
@@ -1169,7 +1427,7 @@ define('io.ox/mail/view-detail',
                 pub.module  = pubtype[1];
                 pub.type  = pubtype[2];
                 pub.name = _.first(_.last(pub.url.split('/')).split('?'));
-                pub.parent = require('io.ox/core/config').get('folder.' + pub.module);
+                pub.parent = require('settings!io.ox/core').get('folder/' + pub.module);
                 pub.folder = '';
                 label = pub.module === 'infostore' ? gt('files') : gt(pub.module);
 
@@ -1181,7 +1439,7 @@ define('io.ox/mail/view-detail',
                         $('<div class="well">').append(
                             $('<div class="invitation">').text(gt('Someone shared a file with you')),
                             $('<div class="subscription-actions">').append(
-                                $('<button class="btn" data-action="show">').text(gt('Show file'))
+                                $('<button type="button" class="btn" data-action="show">').text(gt('Show file'))
                             )
                         )
                     );
@@ -1190,9 +1448,9 @@ define('io.ox/mail/view-detail',
                         $('<div class="well">').append(
                             $('<div class="invitation">').text(gt('Someone shared a folder with you. Would you like to subscribe those %1$s?', label)),
                             $('<div class="subscription-actions">').append(
-                                $('<button class="btn" data-action="show">').text(gt('Show original publication')),
+                                $('<button type="button" class="btn" data-action="show">').text(gt('Show original publication')),
                                 "&nbsp;",
-                                $('<button class="btn btn-primary" data-action="subscribe">').text(gt('Subscribe'))
+                                $('<button type="button" class="btn btn-primary" data-action="subscribe">').text(gt('Subscribe'))
                             )
                         )
                     );
@@ -1297,6 +1555,96 @@ define('io.ox/mail/view-detail',
         }
     });
 
+    if (_.device('smartphone')) {
+        ext.point('io.ox/mail/detail');
+        ext.point('io.ox/mail/detail').disable('inline-links');
+        ext.point('io.ox/mail/detail/header')
+            .replace({
+                id: 'fromlist',
+                index: 120
+            })
+            .replace({
+                id: 'tocopy',
+                index: 130
+            })
+            .replace({
+                id: 'account',
+                index: 140
+            })
+            .replace({
+                id: 'externalresources-warning',
+                index: 160
+            })
+            .replace({
+                id: 'subscribe',
+                index: 170
+            })
+            .extend(new links.InlineLinks({
+                id: 'inline-links',
+                index: 175,
+                ref: 'io.ox/mail/links/inline'
+            }))
+            .extend({
+                id: 'recipient-actions',
+                index: 176,
+                draw: function (baton) {
+                    var data = baton.data,
+                        showCC = data.cc && data.cc.length > 0,
+                        showTO = data.to && data.to.length > 0,
+                        show = showTO || showCC;
+
+                    if (!(!showCC && showTO && data.to[0][1] === 'undisclosed-recipients:;')) {
+                        var dd = $('<div class="recipient-actions">');
+                        drawAllDropDown(dd, gt('All recipients'), data);
+                        if ((data.to.length === 1 && data.cc.length < 1) ||
+                            (data.cc.length === 1 && data.to.length < 1)) {
+                            dd.show().find('a').show();
+                        }
+                        this.append(dd);
+                    }
+                }
+            })
+            .extend({
+                id: 'details-toggle',
+                index: 177,
+                draw: function (baton) {
+                    if ((baton.data.to.length === 1 && baton.data.cc.length < 1) ||
+                        (baton.data.cc.length === 1 && baton.data.to.length < 1))
+                         {
+                        return;
+                    }
+                    var self = this;
+                    this.append(
+                        $('<a>', { href: '#'}).text(gt('Show details')).on('click', function (e) {
+                            e.preventDefault();
+                            self.toggleClass('details-collapsed');
+                            if (self.hasClass('details-collapsed')) {
+                                $(this).text(gt('Show details'));
+                            } else {
+                                $(this).text(gt('Hide details'));
+                            }
+                        })
+                    );
+                }
+            })
+            .replace({
+                id: 'attachments',
+                index: 178
+            })
+            .replace({
+                id: 'subject',
+                index: 180
+            })
+            .replace({
+                id: 'flag',
+                index: 190
+            })
+            .replace({
+                id: 'receiveddate',
+                index: 200
+            });
+    }
+
     function findFarthestElement(memo, node) {
         var pos;
         if (node.css('position') === 'absolute' && (pos = node.position())) {
@@ -1312,7 +1660,7 @@ define('io.ox/mail/view-detail',
         id: 'content',
         draw: function (baton) {
 
-            var data = baton.data, content = that.getContent(data);
+            var data = baton.data, content = that.getContent(data, baton.options);
 
             this.append(
                 $('<article>').attr({

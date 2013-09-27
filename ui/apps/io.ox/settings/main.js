@@ -19,8 +19,10 @@ define('io.ox/settings/main',
       'io.ox/core/tk/view',
       'io.ox/core/commons',
       'gettext!io.ox/core',
+      'settings!io.ox/settings/configjump',
       'io.ox/core/settings/errorlog/settings/pane',
-      'less!io.ox/settings/style.less'], function (VGrid, appsApi, ext, forms, View, commons, gt) {
+      'io.ox/core/settings/downloads/pane',
+      'less!io.ox/settings/style.less'], function (VGrid, appsAPI, ext, forms, View, commons, gt, configJumpSettings) {
 
     'use strict';
 
@@ -30,20 +32,23 @@ define('io.ox/settings/main',
                 var title;
                 this.addClass('application')
                     .append(
-                        title = $('<div>').addClass('title')
+                        title = $('<div>')
+                            .addClass('title')
                     );
+                if (_.device('smartphone')) title.prepend($('<i class="icon-chevron-right" style="float:right">'));
                 return { title: title };
             },
             set: function (data, fields, index) {
                 var title = gt.pgettext('app', data.title);
-                fields.title.text(
-                    title === data.title ? gt(data.title) : title
+                fields.title.append($.txt(
+                        title === data.title ? gt(data.title) : title
+                    )
                 );
             }
         },
         label: {
             build: function () {
-                this.addClass("settings-label");
+                this.addClass('settings-label');
             },
             set: function (data, fields, index) {
                 this.text(data.group || '');
@@ -92,7 +97,7 @@ define('io.ox/settings/main',
             saveSettings = function (triggeredBy) {
 
             switch (triggeredBy) {
-            case "changeMain":
+            case 'changeMain':
                 if (currentSelection !== null && currentSelection.lazySaveSettings !== true) {
                     var settingsID = currentSelection.id + '/settings';
                     ext.point(settingsID + '/detail').invoke('save');
@@ -103,6 +108,13 @@ define('io.ox/settings/main',
             case 'changeGrid':
                 if (previousSelection !== null && previousSelection.lazySaveSettings === true && changeStatus === true) {
                     var settingsID = previousSelection.id + '/settings';
+                    ext.point(settingsID + '/detail').invoke('save');
+                    changeStatus = false;
+                }
+                break;
+            case 'changeGridMobile':
+                if (currentSelection.lazySaveSettings === true && changeStatus === true) {
+                    var settingsID = currentSelection.id + '/settings';
                     ext.point(settingsID + '/detail').invoke('save');
                     changeStatus = false;
                 }
@@ -140,10 +152,10 @@ define('io.ox/settings/main',
 
         var vsplit = commons.vsplit(win.nodes.main, app);
         left = vsplit.left.addClass('leftside border-right');
-        right = vsplit.right.addClass('default-content-padding settings-detail-pane').scrollable();
+        right = vsplit.right.addClass('default-content-padding settings-detail-pane f6-target').attr('tabindex', 1).scrollable();
 
 
-        grid = new VGrid(left, { multiple: false, draggable: false, showToggle: false, toolbarPlacement: 'none' });
+        grid = new VGrid(left, { multiple: false, draggable: false, showToggle: false, toolbarPlacement: 'none', selectSmart: _.device('!smartphone') });
 
         // disable the Deserializer
         grid.setDeserialize(function (cid) {
@@ -156,14 +168,14 @@ define('io.ox/settings/main',
         //grid.requiresLabel = tmpl.requiresLabel;
 
         // Create extensions for the apps
-        var appsInitialized = appsApi.getInstalled().done(function (installed) {
+        var appsInitialized = appsAPI.getInstalled().done(function (installed) {
             var apps = _.filter(installed, function (item) {
                 return item.settings;
             });
             var index = 200;
 
             _(apps).each(function (app) {
-                ext.point("io.ox/settings/pane").extend(_.extend({}, {
+                ext.point('io.ox/settings/pane').extend(_.extend({}, {
                     title: app.description,
                     ref: app.id,
                     index: index
@@ -173,13 +185,64 @@ define('io.ox/settings/main',
             });
         });
 
-        ext.point("io.ox/settings/pane").extend({
+        // Create extensions for the config jump pages
+        _(configJumpSettings.get()).chain().keys().each(function (id) {
+            var declaration = configJumpSettings.get(id);
+            if (declaration.requires) {
+                if (!require("io.ox/core/capabilities").has(declaration.requires)) {
+                    return;
+                }
+            }
+            ext.point("io.ox/settings/pane").extend(_.extend({
+                id: id,
+                title: gt(declaration.title || ''),
+                ref: 'io.ox/configjump/' + id,
+                loadSettingPane: false
+            }, declaration));
+
+            ext.point("io.ox/configjump/" + id + "/settings/detail").extend({
+                id: 'iframe',
+                index: 100,
+                draw: function () {
+                    var $node = this;
+                    $node.css({height: "100%"});
+                    var fillUpURL = $.Deferred();
+
+                    if (declaration.url.indexOf("[token]") > 0) {
+                        // Grab token
+                        $node.busy();
+                        require(["io.ox/core/http"], function (http) {
+                            http.GET({
+                                module: 'token',
+                                params: {
+                                    action: 'acquireToken'
+                                }
+                            }).done(function (resp) {
+                                fillUpURL.resolve(declaration.url.replace("[token]", resp.token));
+                            }).fail(require("io.ox/core/notifications").yell);
+                        });
+                    } else {
+                        fillUpURL.resolve(declaration.url);
+                    }
+
+                    fillUpURL.done(function (url) {
+                        $node.idle();
+                        $node.append($('<iframe>', { src: url, frameborder: 0 }).css({
+                            width: '100%',
+                            minHeight: '90%'
+                        }));
+                    });
+                }
+            });
+        });
+
+        ext.point('io.ox/settings/pane').extend({
             title: gt('Basic settings'),
             index: 50,
             id: 'io.ox/core'
         });
 
-        ext.point("io.ox/settings/pane").extend({
+        ext.point('io.ox/settings/pane').extend({
             title: gt('Mail and Social Accounts'),
             index: 600,
             id: 'io.ox/settings/accounts'
@@ -188,7 +251,7 @@ define('io.ox/settings/main',
         var getAllSettingsPanes = function () {
             var def = $.Deferred();
             appsInitialized.done(function () {
-                def.resolve(ext.point("io.ox/settings/pane").list());
+                def.resolve(ext.point('io.ox/settings/pane').list());
             });
 
             appsInitialized.fail(def.reject);
@@ -207,20 +270,22 @@ define('io.ox/settings/main',
             baton.grid = grid;
 
             var data = baton.data,
-                settingsPath = (data.ref || data.id) + '/settings/pane',
-                extPointPart = (data.ref || data.id) + '/settings';
+                settingsPath = data.pane || ((data.ref || data.id) + '/settings/pane'),
+                extPointPart = data.pane || ((data.ref || data.id) + '/settings/detail');
 
             right.empty().busy();
             if (data.loadSettingPane || _.isUndefined(data.loadSettingPane)) {
                 return require([settingsPath], function (m) {
                     right.empty().idle(); // again, since require makes this async
-                    ext.point(extPointPart + '/detail').invoke('draw', right, baton);
+                    ext.point(extPointPart).invoke('draw', right, baton);
                     updateExpertMode();
                 });
             } else {
-                right.empty().idle(); // again, since require makes this async
-                ext.point(extPointPart + '/detail').invoke('draw', right, baton);
-                updateExpertMode();
+                return require(['io.ox/contacts/settings/pane', 'io.ox/mail/vacationnotice/settings/filter', 'io.ox/mail/autoforward/settings/filter'], function () {
+                    right.empty().idle(); // again, since require makes this async
+                    ext.point(extPointPart).invoke('draw', right, baton);
+                    updateExpertMode();
+                });
             }
         };
 
@@ -235,6 +300,12 @@ define('io.ox/settings/main',
         grid.selection.on('change', function () {
             saveSettings('changeGrid');
         });
+
+        if (_.device('small')) {
+            grid.selection.on('changeMobile', function () {
+                saveSettings('changeGridMobile');
+            });
+        }
 
         // trigger auto save on any change
 

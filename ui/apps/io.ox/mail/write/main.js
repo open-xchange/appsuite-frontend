@@ -16,7 +16,6 @@ define('io.ox/mail/write/main',
     ['io.ox/mail/api',
      'io.ox/mail/util',
      'io.ox/core/extensions',
-     'io.ox/core/config',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
      'io.ox/core/api/user',
@@ -26,10 +25,11 @@ define('io.ox/mail/write/main',
      'io.ox/mail/write/view-main',
      'moxiecode/tiny_mce/plugins/emoji/main',
      'io.ox/core/notifications',
+     'io.ox/mail/sender',
      'settings!io.ox/mail',
      'gettext!io.ox/mail',
      'less!io.ox/mail/style.less',
-     'less!io.ox/mail/write/style.less'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, emoji, notifications, settings, gt) {
+     'less!io.ox/mail/write/style.less'], function (mailAPI, mailUtil, ext, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, emoji, notifications, sender, settings, gt) {
 
     'use strict';
 
@@ -60,26 +60,46 @@ define('io.ox/mail/write/main',
     var timerScale = {
         minute: 60000, //60s
         minutes: 60000
-    };
+    },
+        autoSavedMail = false;
+
+    function stopAutoSave(app) {
+        if (app.autosave) {
+            window.clearTimeout(app.autosave.timer);
+        }
+    }
 
     function initAutoSaveAsDraft(app) {
-        var timeout = settings.get('autoSaveDraftsAfter', false),
-            scale, timer, performAutoSave = _.bind(app.saveDraft, app);
 
-        if (!timeout) { return; }
+        var timeout = settings.get('autoSaveDraftsAfter', false),
+            scale, delay, timer;
+
+        if (!timeout) return;
 
         timeout = timeout.split('_');
         scale = timerScale[timeout[1]];
         timeout = timeout[0];
 
-        if (!timeout || !scale) { /* settings not parsable */ return; }
+        if (!timeout || !scale) return; // settings not parsable
 
-        if (app.autosave) {
-            window.clearTimeout(app.autosave.timer);
-        }
-        app.autosave = {
-            timer: _.delay(performAutoSave, timeout * scale)
+        stopAutoSave(app);
+
+        delay = function () {
+            app.autosave.timer = _.delay(timer, timeout * scale);
         };
+
+        timer = function () {
+            // only auto-save if something changed (see Bug #26927)
+            if (app.dirty()) {
+                app.saveDraft();
+                autoSavedMail = true;
+            } else {
+                delay();
+            }
+        };
+
+        app.autosave = {};
+        delay();
     }
 
     function prepareMailForSending(mail) {
@@ -163,32 +183,46 @@ define('io.ox/mail/write/main',
 
         window.newmailapp = function () { return app; };
 
-        view.signatures = _(config.get('gui.mail.signatures') || []).map(function (obj) {
-            obj.signature_name = _.noI18n(obj.signature_name);
-            return obj;
-        });
+        view.signatures = _.device('smartphone') ?
+            [{ id: 0, content: settings.get('mobileSignature') }] : [];
 
         function trimSignature(text) {
             // remove white-space and evil \r
             return $.trim(text).replace(/\r\n/g, '\n');
         }
 
+        app.getSignatures = function () {
+            return view.signatures;
+        };
+
+        app.isSignature = function (text) {
+
+            var signatures = _(this.getSignatures()).map(function (signature) {
+                return String(signature.content || '').replace(/(\r\n|\n|\r)/gm, '');
+            });
+
+            return _(signatures).indexOf(text) > - 1;
+        };
+
         app.setSignature = function (e) {
 
             var index = e.data.index,
                 signature, text,
                 ed = this.getEditor(),
-                isHTML = !!ed.removeBySelector,
-                modified = isHTML ? $('<root></root>').append(ed.getContent()).find('p.io-ox-signature').text() !== currentSignature.replace(/(\r\n|\n|\r)/gm, '') : false;
+                isHTML = !!ed.find;
 
             // remove current signature from editor
             if (isHTML) {
-                //only remove class if user modified content of signature paragraph block
-                if (modified) {
-                    ed.removeClassBySelector('.io-ox-signature', 'io-ox-signature');
-                } else {
-                    ed.removeBySelector('.io-ox-signature');
-                }
+                ed.find('.io-ox-signature').each(function () {
+                    var node = $(this), text = node.text();
+                    if (app.isSignature(text)) {
+                        // remove entire node
+                        node.remove();
+                    } else {
+                        // was modified so remove class
+                        node.removeClass('io-ox-signature');
+                    }
+                });
             } else {
                 if (currentSignature) {
                     ed.replaceParagraph(currentSignature, '');
@@ -201,7 +235,6 @@ define('io.ox/mail/write/main',
                 signature = view.signatures[index];
                 text = trimSignature(signature.content);
                 if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
-
                 if (isHTML) {
                     if (signature.misc && signature.misc.insertion === 'below') {
                         ed.appendContent('<p class="io-ox-signature">' + ed.ln2br(text) + '</p>');
@@ -263,15 +296,12 @@ define('io.ox/mail/write/main',
             );
 
             if (_.browser.IE === undefined || _.browser.IE > 9) {
-                var dropZone = upload.dnd.createDropZone({'type': 'single'});
+                var dropZone = upload.dnd.createDropZone({'type': 'single', actions: [{id: 'mailAttachment', label: gt('Drop the file anywhere to add attachment')}]});
                 dropZone.on('drop', function (e, file) {
-                    view.form.find('input[type=file]').last()
-                        .prop('file', file)
-                        .trigger('change');
+                    view.fileList.add(_.extend(file, { group: 'file' }));
                     view.showSection('attachments');
                 });
             }
-
             win.on('show', function () {
                 if (app.getEditor()) {
                     app.getEditor().handleShow();
@@ -366,27 +396,23 @@ define('io.ox/mail/write/main',
         };
 
         app.getFrom = function () {
-            var from_field = view.leftside.find('.fromselect-wrapper select > :selected');
-            return [from_field.data('displayname'), from_field.data('primaryaddress')];
+            var select = view.leftside.find('.sender-dropdown');
+            return sender.get(select);
         };
 
         app.setFrom = function (data) {
-            var folder_id = 'folder_id' in data ? data.folder_id : 'default0/INBOX',
-                $select = view.leftside.find('.fromselect-wrapper select');
-            return accountAPI.getPrimaryAddressFromFolder(data.account_id || folder_id).done(function (from) {
-                if (data.from && data.from.length === 2) {
-                    // from is already set in the mail, prefer this
-                    from = { displayname: data.from[0], primaryaddress: data.from[1] };
-                }
 
-                $select.val(mailUtil.formatSender(from.displayname, from.primaryaddress));
-                //identify option via data.primaryadress
-                _.each($select.children(), function (option) {
-                    var $option = $(option),
-                        data = $option.data();
-                    if (data.primaryaddress === from.primaryaddress)
-                        $select.val($option.attr('value'));
-                });
+            var folder_id = 'folder_id' in data ? data.folder_id : 'default0/INBOX',
+                select = view.leftside.find('.sender-dropdown');
+
+            // from is already set in the mail, prefer this
+            if (data.from && data.from.length === 2) {
+                sender.set(select, data.from);
+                return;
+            }
+
+            accountAPI.getPrimaryAddressFromFolder(data.account_id || folder_id).done(function (from) {
+                sender.set(select, from);
             });
         };
 
@@ -400,10 +426,11 @@ define('io.ox/mail/write/main',
 
         app.setBody = function (str) {
             // get default signature
+            var dsID = _.device('smartphone') ?
+                (settings.get('mobileSignatureType') === 'custom' ? 0 : 1) :
+                settings.get('defaultSignature');
             var ds = _(view.signatures)
-                    .find(function (o) {
-                        return o.id === settings.get('defaultSignature');
-                    }),
+                    .find(function (o) { return o.id === dsID; }),
                 content = trimContent(str);
 
             // set signature?
@@ -439,8 +466,28 @@ define('io.ox/mail/write/main',
             app.getEditor().setContent(content);
         };
 
+        app.getRecipients = function (id) {
+
+            // get raw list
+            var list = _(view.form.find('input[name=' + id + ']')).map(function (node) {
+                var recipient = mailUtil.parseRecipient($(node).val()),
+                    typesuffix = mailUtil.getChannel(recipient[1]) === 'email' ? '' : mailUtil.getChannelSuffixes().msisdn;
+                return ['"' + recipient[0] + '"', recipient[1], typesuffix];
+            });
+
+            return list;
+        };
+
+        app.getTo = function () {
+            return app.getRecipients('to');
+        };
+
         app.setTo = function (list) {
             view.addRecipients('to', list || []);
+        };
+
+        app.getCC = function () {
+            return app.getRecipients('cc');
         };
 
         app.setCC = function (list) {
@@ -448,6 +495,10 @@ define('io.ox/mail/write/main',
             if (list && list.length) {
                 view.showSection('cc', false);
             }
+        };
+
+        app.getBCC = function () {
+            return app.getRecipients('bcc');
         };
 
         app.setBCC = function (list) {
@@ -458,51 +509,111 @@ define('io.ox/mail/write/main',
         };
 
         app.setReplyTo = function (value) {
-            if (config.get('ui.mail.replyTo.configurable', false) === false) return;
+            if (settings.get('showReplyTo/configurable', false) === false) return;
             view.form.find('input#writer_field_replyTo').val(value);
         };
 
-        app.setAttachments = function (list) {
+        app.setAttachments = function (data) {
             // look for real attachments
-            var found = false;
-            _(list || []).each(function (attachment) {
-                if (attachment.disp === 'attachment') {
-                    // add as linked attachment
-                    attachment.type = 'file';
+            //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
+            if (_.browser.IE !== 9) {
+                var items = _.chain(data.attachments || [])
+                            .filter(function (attachment) {
+                                //only real attachments
+                                return attachment.disp === 'attachment';
+                            })
+                            .map(function (attachment) {
+                                // add as linked attachment
+                                if (data.msgref) {
+                                    attachment.atmsgref = data.msgref;
+                                }
+                                attachment.type = attachment.filename && attachment.filename.split('.').length > 1  ? attachment.filename.split('.').pop() : 'file';
+                                attachment.group = 'attachment';
+                                return attachment;
+                            })
+                            .value();
+                //add to file list and show section
+                if (items.length) {
+                    view.fileList.add(items);
+                    view.showSection('attachments');
+                }
+            } else {
+                var found = false;
+                _(data.attachments || []).each(function (attachment) {
+                    if (attachment.disp === 'attachment') {
+                        // add as linked attachment
+                        if (data.msgref) {
+                            attachment.atmsgref = data.msgref;
+                        }
+                        attachment.type = 'file';
+                        found = true;
+
+                        view.form.find('input[type=file]').last()
+                            .prop('attachment', attachment)
+                            .trigger('change');
+                    }
+                });
+                if (found) {
+                    view.showSection('attachments');
+                }
+            }
+        };
+
+        app.setNestedMessages = function (data) {
+            var list = data.nested_msgs, parent;
+
+            //fixes preview: mail compose save of an forwarded mail with previewable attachment
+            if (data.folder_id && data.id) {
+                parent = {
+                    folder_id: data.folder_id,
+                    id: data.id
+                };
+            }
+            //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
+            if (_.browser.IE !== 9) {
+                var items = _(list || []).map(function (obj) {
+                    return _.extend(obj, { content_type: 'message/rfc822', parent: parent, group: 'nested'});
+                });
+                if (items.length) {
+                    view.fileList.add(items);
+                    view.showSection('attachments');
+                }
+            } else {
+                var found = false;
+                _(list || []).each(function (obj) {
                     found = true;
                     view.form.find('input[type=file]').last()
-                        .prop('attachment', attachment)
+                        .prop('nested', { message: obj, name: obj.subject, content_type: 'message/rfc822' })
                         .trigger('change');
+                });
+                if (found) {
+                    view.showSection('attachments');
                 }
-            });
-            if (found) {
-                view.showSection('attachments');
             }
         };
 
-        app.setNestedMessages = function (list) {
+        app.addFiles = function (list, group) {
             var found = false;
-            _(list || []).each(function (obj) {
-                found = true;
-                view.form.find('input[type=file]').last()
-                    .prop('nested', { message: obj, name: obj.subject, content_type: 'message/rfc822' })
-                    .trigger('change');
-            });
-            if (found) {
-                view.showSection('attachments');
-            }
-        };
 
-        app.addFiles = function (list) {
-            var found = false;
-            _(list || []).each(function (obj) {
-                found = true;
-                view.form.find('input[type=file]').last()
-                    .prop('file', obj)
-                    .trigger('change');
-            });
-            if (found) {
-                view.showSection('attachments');
+            //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
+            if (_.browser.IE !== 9) {
+                var items = _.map(list || [], function (obj) {
+                    return $.extend(obj, {group: group || 'file'});
+                });
+                if (items.length) {
+                    view.fileList.add(items);
+                    view.showSection('attachments');
+                }
+            } else {
+                _(list || []).each(function (obj) {
+                    found = true;
+                    view.form.find('input[type=file]').last()
+                        .prop('file', obj)
+                        .trigger('change');
+                });
+                if (found) {
+                    view.showSection('attachments');
+                }
             }
         };
 
@@ -567,6 +678,10 @@ define('io.ox/mail/write/main',
             forward: gt('Forward')
         };
 
+        app.getDefaultWindowTitle = function () {
+            return windowTitles[composeMode || 'compose'];
+        };
+
         app.dirty = function (flag) {
             if (flag === true) {
                 previous = null; // always dirty this way
@@ -588,7 +703,7 @@ define('io.ox/mail/write/main',
             mail.initial = mail.initial || false;
 
             //config settings
-            mail.data.vcard = settings.get('appendVcard');
+            mail.data.vcard = mail.data.vcard || settings.get('appendVcard');
 
             // call setters
             var data = mail.data;
@@ -599,19 +714,20 @@ define('io.ox/mail/write/main',
             this.setCC(data.cc);
             this.setBCC(data.bcc);
             this.setReplyTo(data.headers && data.headers['Reply-To']);
-            this.setAttachments(data.attachments);
-            this.setNestedMessages(data.nested_msgs);
+            this.setAttachments(data);
+            this.setNestedMessages(data);
             this.setPriority(data.priority || 3);
-            this.setAttachVCard(data.vcard !== undefined ? data.vcard : config.get('mail.vcard', false));
+            this.setAttachVCard(data.vcard !== undefined ? data.vcard : settings.get('vcard', false));
             this.setMsgRef(data.msgref);
             this.setSendType(data.sendtype);
             this.setHeaders(data.headers);
             // add files (from file storage)
-            this.addFiles(data.infostore_ids);
+            this.addFiles(data.infostore_ids, 'infostore');
             // add files (from contacts)
-            this.addFiles(data.contacts_ids);
+            this.addFiles(data.contacts_ids, 'vcard');
             // app title
-            var title = windowTitles[composeMode = mail.mode];
+            composeMode = mail.mode;
+            var title = app.getDefaultWindowTitle();
             win.nodes.main.find('h1.title').text(title);
             title = data.subject ? _.noI18n(data.subject) : title;
             app.setTitle(title);
@@ -669,14 +785,16 @@ define('io.ox/mail/write/main',
         app.compose = function (data) {
 
             // register mailto!
-            // only for browsers != firefox due to a bug in firefox
-            // https://bugzilla.mozilla.org/show_bug.cgi?id=440620
-            // maybe this will be fixed in the future by mozilla
-            if (navigator.registerProtocolHandler && !_.browser.Firefox) {
-                var l = location, $l = l.href.indexOf('#'), url = l.href.substr(0, $l);
-                navigator.registerProtocolHandler(
-                    'mailto', url + '#app=io.ox/mail/write:compose&mailto=%s', ox.serverConfig.productNameMail
-                );
+            if (settings.get('features/registerProtocolHandler', true)) {
+                // only for browsers != firefox due to a bug in firefox
+                // https://bugzilla.mozilla.org/show_bug.cgi?id=440620
+                // maybe this will be fixed in the future by mozilla
+                if (navigator.registerProtocolHandler && !_.browser.Firefox) {
+                    var l = location, $l = l.href.indexOf('#'), url = l.href.substr(0, $l);
+                    navigator.registerProtocolHandler(
+                        'mailto', url + '#app=io.ox/mail/write:compose&mailto=%s', ox.serverConfig.productNameMail
+                    );
+                }
             }
 
             var mailto, tmp, params, def = $.Deferred();
@@ -714,7 +832,7 @@ define('io.ox/mail/write/main',
                     } else {
                         focus('to');
                     }
-                    def.resolve();
+                    def.resolve({app: app});
                 })
                 .fail(function (e) {
                     notifications.yell(e);
@@ -750,7 +868,11 @@ define('io.ox/mail/write/main',
                                 win.idle();
                                 ed.focus();
                                 view.scrollpane.scrollTop(0);
-                                def.resolve();
+                                def.resolve({app: app});
+                                if (_.device('smartphone')) {
+                                    // trigger keyup to resize the textarea
+                                    view.textarea.trigger('keyup');
+                                }
                             });
                         })
                         .fail(function (e) {
@@ -795,6 +917,10 @@ define('io.ox/mail/write/main',
                         win.idle();
                         focus('to');
                         def.resolve();
+                        if (_.device('smartphone')) {
+                            // trigger keyup to resize the textarea
+                            view.textarea.trigger('keyup');
+                        }
                     });
                 })
                 .fail(function (e) {
@@ -882,7 +1008,7 @@ define('io.ox/mail/write/main',
                     return obj;
                 }, {}),
                 headers,
-                content,
+                attachments,
                 mail,
                 files = [],
                 parse = function (list) {
@@ -898,15 +1024,15 @@ define('io.ox/mail/write/main',
 
             // get content
             if (editorMode === 'html') {
-                content = {
+                attachments = {
                     content: (app.getEditor() ? app.getEditor().getContent() : '')
                         // reverse img fix
                         .replace(/(<img[^>]+src=")(\/appsuite\/)?api\//g, '$1/ajax/')
                 };
                 //don’t send emoji images, but unicode characters
-                content.content = emoji.imageTagsToUnified(content.content);
+                attachments.content = emoji.imageTagsToUnified(attachments.content);
             } else {
-                content = {
+                attachments = {
                     content: (app.getEditor() ? app.getEditor().getContent() : ''),
                     raw: true
                         // .replace(/</g, '&lt;') // escape <
@@ -914,7 +1040,12 @@ define('io.ox/mail/write/main',
                 };
             }
 
-            content.content_type = getContentType(editorMode);
+            // remove trailing white-space, line-breaks, and empty paragraphs
+            attachments.content = attachments.content.replace(
+                /(\s|&nbsp;|\0x20|<br\/?>|<p( class="io-ox-signature")>(&nbsp;|\s|<br\/?>)*<\/p>)*$/g, ''
+            );
+
+            attachments.content_type = getContentType(editorMode);
 
             // might fail
             try {
@@ -929,11 +1060,11 @@ define('io.ox/mail/write/main',
                 cc: parse(data.cc),
                 bcc: parse(data.bcc),
                 headers: headers,
-                reply_to: mailUtil.formatSender(replyTo[0], replyTo[1]),
+                reply_to: mailUtil.formatSender(replyTo),
                 subject: data.subject + '',
                 priority: parseInt(data.priority, 10) || 3,
                 vcard: parseInt(data.vcard, 10) || 0,
-                attachments: [content],
+                attachments: [attachments],
                 nested_msgs: []
             };
             // add msgref?
@@ -942,36 +1073,64 @@ define('io.ox/mail/write/main',
             }
             // sendtype
             mail.sendtype = data.sendtype || mailAPI.SENDTYPE.NORMAL;
+
             // get files
-            view.form.find(':input[name][type=file]').each(function () {
-                // link to existing attachments (e.g. in forwards)
-                var attachment = $(this).prop('attachment'),
-                    // get file via property (DND) or files array and add to list
-                    file = $(this).prop('file'),
-                    // get nested messages
-                    nested = $(this).prop('nested');
-                if (attachment) {
-                    // add linked attachment
-                    mail.attachments.push(attachment);
-                } else if (nested) {
-                    // add nested message (usually multiple mail forward)
-                    mail.nested_msgs.push(nested.message);
-                } else if ('File' in window && file instanceof window.File) {
-                    // add dropped file
-                    files.push(file);
-                } else if (file && ('id' in file) && ('file_size' in file)) {
-                    // infostore id
-                    (mail.infostore_ids = (mail.infostore_ids || [])).push(file);
-                } else if (file && ('id' in file) && ('display_name' in file)) {
-                    // contacts id
-                    (mail.contacts_ids = (mail.contacts_ids || [])).push(file);
-                } else if (this.files && this.files.length) {
+            //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
+            if (_.browser.IE !== 9) {
+                var fileList = view.baton.fileList;
+
+                //attachments
+                mail.attachments = mail.attachments.concat(fileList.get('attachment'));
+                //nested message (usually multiple mail forward)
+                mail.nested_msgs = mail.nested_msgs.concat(fileList.get('nested'));
+                //referenced contacts (vcards)
+                mail.contacts_ids = (mail.contacts_ids || []).concat(fileList.get('vcard'));
+                //referenced inforstore files
+                mail.infostore_ids = (mail.infostore_ids || []).concat(fileList.get('infostore'));
+                //local files
+                files = files.concat(fileList.get('file'));
+                //local files (form input)
+                //files = files.concat(fileList.get('input'));
+
+                //TODO: removeable?
+                /*if (this.files && this.files.length) {
                     // process normal upload
                     _(this.files).each(function (file) {
                         files.push(file);
                     });
-                }
-            });
+                }*/
+
+            } else {
+                view.form.find(':input[name][type=file]').each(function () {
+                    // link to existing attachments (e.g. in forwards)
+                    var attachment = $(this).prop('attachment'),
+                        // get file via property (DND) or files array and add to list
+                        file = $(this).prop('file'),
+                        // get nested messages
+                        nested = $(this).prop('nested');
+                    if (attachment) {
+                        // add linked attachment
+                        mail.attachments.push(attachment);
+                    } else if (nested) {
+                        // add nested message (usually multiple mail forward)
+                        mail.nested_msgs.push(nested.message);
+                    } else if ('File' in window && file instanceof window.File) {
+                        // add dropped file
+                        files.push(file);
+                    } else if (file && ('id' in file) && ('file_size' in file)) {
+                        // infostore id
+                        (mail.infostore_ids = (mail.infostore_ids || [])).push(file);
+                    } else if (file && ('id' in file) && ('display_name' in file)) {
+                        // contacts id
+                        (mail.contacts_ids = (mail.contacts_ids || [])).push(file);
+                    } else if (this.files && this.files.length) {
+                        // process normal upload
+                        _(this.files).each(function (file) {
+                            files.push(file);
+                        });
+                    }
+                });
+            }
             // return data, file references, mode, format
             return {
                 data: mail,
@@ -988,15 +1147,26 @@ define('io.ox/mail/write/main',
         app.send = function () {
             // get mail
             var mail = this.getMail(), def = $.Deferred();
+            var convert = emoji.converterFor({to: emoji.sendEncoding()});
 
             blockReuse(mail.data.sendtype);
             prepareMailForSending(mail);
+
+            //convert to target emoji send encoding
+            if (convert && emoji.sendEncoding() !== 'unified') {
+                //convert to send encoding (NOOP, if target encoding is 'unified')
+                mail.data.attachments[0].content = convert(mail.data.attachments[0].content, mail.format);
+            }
 
             function cont() {
                 // start being busy
                 win.busy();
                 // close window now (!= quit / might be reopened)
                 win.preQuit();
+                //look if mail was autosaved, if so delete the draft on send
+                if (autoSavedMail) {
+                    mail.data.deleteDraft = true;
+                }
                 // send!
                 mailAPI.send(mail.data, mail.files, view.form.find('.oldschool')).always(function (result) {
                     if (result.error && !result.warnings) {
@@ -1005,11 +1175,13 @@ define('io.ox/mail/write/main',
                         notifications.yell(result);
                         unblockReuse(mail.data.sendtype);
                     } else {
-                        if (result.warnings)
+                        if (result.warnings) {
                             //warnings
                             notifications.yell('warning', result.warnings.error);
-                        else
-                            notifications.yell('success', gt('Mail has been sent'));
+                        }
+
+                        // we no longer yell on success - that's expected result
+
                         // update base mail
                         var isReply = mail.data.sendtype === mailAPI.SENDTYPE.REPLY,
                             isForward = mail.data.sendtype === mailAPI.SENDTYPE.FORWARD,
@@ -1058,9 +1230,10 @@ define('io.ox/mail/write/main',
                 });
             }
 
-            // ask for empty to and/or empty subject
-            if ($.trim(mail.data.subject) === '' || _.isEmpty(mail.data.to)) {
-                if (_.isEmpty(mail.data.to)) {
+            // ask for empty to,cc,bcc and/or empty subject
+            var noRecipient = _.isEmpty(mail.data.to) && _.isEmpty(mail.data.cc) && _.isEmpty(mail.data.bcc);
+            if ($.trim(mail.data.subject) === '' || noRecipient) {
+                if (noRecipient) {
                     notifications.yell('error', gt('Mail has no recipient.'));
                     focus('to');
                     def.reject();
@@ -1097,7 +1270,8 @@ define('io.ox/mail/write/main',
 
             // get mail
             var mail = this.getMail(),
-                def = new $.Deferred();
+                def = new $.Deferred(),
+                old_vcard_flag;
 
             prepareMailForSending(mail);
 
@@ -1112,6 +1286,7 @@ define('io.ox/mail/write/main',
 
             // never append vcard when saving as draft
             // backend will append vcard for every send operation (which save as draft is)
+            old_vcard_flag = mail.data.vcard;
             delete mail.data.vcard;
 
             mailAPI.send(mail.data, mail.files, view.form.find('.oldschool'))
@@ -1128,16 +1303,22 @@ define('io.ox/mail/write/main',
                 });
 
             _.defer(initAutoSaveAsDraft, this);
+
             return def.then(function (result) {
                 var base = _(result.data.split(mailAPI.separator)),
                     id = base.last(),
                     folder = base.without(id).join(mailAPI.separator);
-                mailAPI.get({ folder_id: folder, id: id }).then(function (draftMail) {
+                mailAPI.get({ folder_id: folder, id: id, edit: '1' }).then(function (draftMail) {
                     var format = draftMail.content_type === 'text/plain' ? 'text' : 'html';
 
                     view.form.find('.section-item.file').remove();
                     $(_.initial(view.form.find(':input[name][type=file]'))).remove();
+                    //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
+                    if (_.browser.IE !== 9) {
+                        view.baton.fileList.clear();
+                    }
                     draftMail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
+                    draftMail.vcard = old_vcard_flag;
                     app.setMail({ data: draftMail, mode: mail.mode, initial: false, replaceBody: 'no', format: format});
                 });
             });
@@ -1166,10 +1347,8 @@ define('io.ox/mail/write/main',
                 for (var id in editorHash) {
                     editorHash[id].destroy();
                 }
-                //clear timer for autosave
-                if (app.autosave) {
-                    window.clearTimeout(app.autosave.timer);
-                }
+                // clear timer for autosave
+                stopAutoSave(app);
                 // clear all private vars
                 app = win = editor = currentSignature = editorHash = null;
             };

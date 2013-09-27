@@ -58,7 +58,7 @@
     }
 
     /* Mobile */
-    @media all and (max-width: 480px) {
+    @media all and (max-width: 480px), all and (max-device-width: 480px) {
 
         .toolbar {
 
@@ -189,8 +189,11 @@
             color: @appointmentDeclinedFont;
         }
 
+        &:focus {
+            outline: 0;
+            box-shadow: 0 0 20px 1px #08C;
+        }
     }
-
 }
 
 /* Grid */
@@ -199,7 +202,12 @@
     &.calendar {
 
         height: 60px; /* = 3 rows */
-        padding: 0.75em 13px 0.75em 13px;
+        padding-top: 13px;
+        padding-bottom: 13px;
+
+        .vgrid-cell-checkbox {
+            padding-top: 9px;
+        }
 
         .title {
             font-weight: bold;
@@ -250,11 +258,18 @@
     }
 
     &.vgrid-label.calendar-label {
-        font-size: 9pt;
-        font-weight: normal;
-        line-height: 1.2em;
-        height: 1.2em;
-        color: #555;
+
+        text-align: left;
+        font-weight: 200;
+        font-size: 20px;
+        line-height: 20px;
+        color: @linkColor;
+        padding-top: 32px;
+        padding-bottom: 14px;
+        background-image: none;
+        background-color: #fff;
+        border-top: 0px none;
+        border-bottom: 0px none;
     }
 
     .shown_as {
@@ -298,14 +313,31 @@
             position: relative;
         }
     }
+
+    .conflicts .person-link {
+
+        &.accepted {
+            color: #799952;  /* green */
+        }
+
+        &.declined {
+            text-decoration: line-through; color: #913F3F;
+        }
+
+        &.tentative {
+            color: #c80; /* orange */
+        }
+
+    }
+
 }
 
 /* Detail view */
 .calendar-detail {
+    font-weight: 300;
 
-    .io-ox-inline-links {
+    .io-ox-inline-links:first-child {
         margin: 0 0 26px 0;
-        text-align: left;
     }
 
     .appointment-date {
@@ -500,6 +532,15 @@
     .group {
         margin: 0.75em 0 0.25em 0;
         color: #333;
+    }
+
+    @media all and (max-width: 480px), all and (max-device-width: 480px) {
+        .io-ox-inline-links:first-child {
+            margin:0;
+            span.io-ox-action-link.dropdown {
+                float:right;
+            }
+        }
     }
 }
 

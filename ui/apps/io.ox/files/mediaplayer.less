@@ -33,13 +33,18 @@
 
 
 .mediaplayer_container {
+    &:focus {
+        outline:none;
+    }
 
     z-index: 10001; /* at least 1 higher than slideshow overlay */
 
     background-color:@playerBg;
 
     .mediaplayer_inner {
-
+        &:focus {
+            outline:none;
+        }
         left: 50%;
         width: @playerWidth;
         margin-left: 0 - (@playerWidth / 2) - @playerMargin;
@@ -89,10 +94,12 @@
                 margin-top:43px;
                 video {
                     width:100%;
+                    max-height:270px;
                 }
             }
             // MediaElement Container
             .mejs-container {
+                max-height:270px;
 
                 .mejs-mediaelement {
                     text-align:center;
@@ -207,5 +214,10 @@
                 }
             }
         }
+    }
+}
+.mejs-fullscreen .mediaplayer_container .mediaplayer_inner .mediaplayer_player {
+     .mejs-video video, .mejs-container {
+        max-height:100% !important;
     }
 }

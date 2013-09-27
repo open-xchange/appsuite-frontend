@@ -11,13 +11,13 @@
         "ວັນເສົາ"
     ],
     "daysShort": [
-        "ອາ.",
-        "ຈ.",
-        "ອ.",
-        "ພ.",
-        "ພຫ.",
-        "ສກ.",
-        "ສ."
+        "ວັນອາທິດ",
+        "ວັນຈັນ",
+        "ວັນອັງຄານ",
+        "ວັນພຸດ",
+        "ວັນພະຫັດ",
+        "ວັນສຸກ",
+        "ວັນເສົາ"
     ],
     "daysStandalone": [
         "ອ.ທ.",
@@ -25,7 +25,7 @@
         "ຄ",
         "ພ",
         "ພຫ",
-        "ສ",
+        "ວັນສຸກ",
         "ເສົາ"
     ],
     "months": [
@@ -58,23 +58,24 @@
     ],
     "formats": {
         "E": "E",
-        "yMd": "y-M-d",
-        "yMEd": "E, y-M-d",
-        "yMMMd": "y MMM d",
-        "yMMMEd": "E, y MMM d",
+        "yMd": "d/M/y",
+        "yMEd": "E, d/M/y",
+        "yMMMd": "d MMM y",
+        "yMMMEd": "E, d MMM y",
         "hm": "h:mm a",
         "Hm": "HH:mm",
         "v": "v",
+        "Md": "d/M",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
-        "yMdHm": "y-M-d, HH:mm",
-        "yMdHmv": "y-M-d, HH:mm v",
-        "yMdhm": "y-M-d, h:mm a",
-        "yMdhmv": "y-M-d, h:mm a v",
-        "yMEdHm": "E, y-M-d, HH:mm",
-        "yMEdHmv": "E, y-M-d, HH:mm v",
-        "yMEdhm": "E, y-M-d, h:mm a",
-        "yMEdhmv": "E, y-M-d, h:mm a v"
+        "yMdHm": "d/M/y, HH:mm",
+        "yMdHmv": "d/M/y, HH:mm v",
+        "yMdhm": "d/M/y, h:mm a",
+        "yMdhmv": "d/M/y, h:mm a v",
+        "yMEdHm": "E, d/M/y, HH:mm",
+        "yMEdHmv": "E, d/M/y, HH:mm v",
+        "yMEdhm": "E, d/M/y, h:mm a",
+        "yMEdhmv": "E, d/M/y, h:mm a v"
     },
     "date": "d MMM y",
     "time": "H:mm",
@@ -100,14 +101,14 @@
             "m": "HH:mm–HH:mm v"
         },
         "yMMMd": {
-            "d": "yyyy-MM-d – d",
-            "m": "yyyy-MM-dd – MM-d",
-            "y": "yyyy-MM-dd – yyyy-MM-dd"
+            "d": "d/MM/y – d/MM/y",
+            "m": "d/MM/y – d/MM",
+            "y": "dd/MM/y – dd/MM/y"
         },
         "yMMMEd": {
-            "d": "E, yyyy-MM-dd – E, yyyy-MM-dd",
-            "m": "E, yyyy-MM-dd – E, yyyy-MM-dd",
-            "y": "E, yyyy-MM-dd – E, yyyy-MM-dd"
+            "d": "E, dd/MM/y – E, dd/MM/y",
+            "m": "E, dd/MM/y – E, dd/MM/y",
+            "y": "E, dd/MM/y – E, dd/MM/y"
         }
     },
     "dayPeriods": {
@@ -115,7 +116,7 @@
         "pm": "ຫຼັງທ່ຽງ"
     },
     "eras": [
-        "ບີຊີ",
+        "ກ່ອນ ຄ.ສ.",
         "ຄ.ສ."
     ],
     "dateTime": "d MMM y, H:mm",

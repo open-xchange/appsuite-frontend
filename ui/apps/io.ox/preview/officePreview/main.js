@@ -65,13 +65,13 @@ define('io.ox/preview/officePreview/main',
 
         var $pageIndicator = $('<span>').addClass('io-ox-office-preview-page-indicator').text('1');
 
-        var $nextButton = $('<button>').addClass('btn btn-primary disabled')
+        var $nextButton = $('<button type="button">').addClass('btn btn-primary disabled')
             .append('<i class="icon-white icon-chevron-right">').on('click', function (e) {
                 e.preventDefault();
                 app.nextPage();
             });
 
-        var $previousButton = $('<button>').addClass('btn btn-primary disabled')
+        var $previousButton = $('<button type="button">').addClass('btn btn-primary disabled')
             .append('<i class="icon-white icon-chevron-left">').on('click', function (e) {
                 e.preventDefault();
                 app.previousPage();

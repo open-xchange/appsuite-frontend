@@ -79,19 +79,18 @@ $(window).load(function () {
             e.preventDefault();
         });
     }
-    ox.uploadsEnabled = true;
 
-    // TODO
-    // clean this up and enhance _.device function. 'desktop' or 'tablet' are not reliable
-    // because they only look at the screen size
-    if (_.device('ios || android')) {
-        // Disable attachments and uploads for specific clients
-        ox.uploadsEnabled = false;
-        if (_.device('tablet && iOS >= 6')) {
-            // reenable if iPad with iOS 6
-            ox.uploadsEnabled = true;
-        }
+    //ugly device hack
+    //if device small wait 10ms check again
+    //maybe the check was made too early could be wrong
+    //desktop was recognized as mobile in some cases because of this
+    if(_.device('small')) {
+        setTimeout(function () {
+            _.recheckDevice();
+        }, 10);
+
     }
+
     // check for supported browser
     function isBrowserSupported() {
         var supp = false;
@@ -103,18 +102,6 @@ $(window).load(function () {
         return supp;
     }
     window.isBrowserSupported = isBrowserSupported;
-
-    // feedback
-    function feedback(type, node) {
-        $('#io-ox-login-feedback').empty().append(
-            $('<div class="alert alert-block alert-' + type + ' selectable-text">').append(node)
-        );
-    }
-
-    // gettext for stupids
-    function gt(id) {
-        return $('#io-ox-login-feedback-strings').find('[data-i18n-id="' + id + '"]').text();
-    }
 
     // continuation
     cont = function () {
@@ -153,24 +140,23 @@ $(window).load(function () {
         $('html').addClass('ios');
     }
 
+    if (_.device('Android')) {
+        if (_.browser.chrome === 18 || !_.browser.chrome) {
+             $('html').addClass('legacy-chrome');
+        }
+        // disable context menu on chrome for android
+        document.oncontextmenu = function (e) {
+            e.preventDefault();
+            return false;
+        };
+    }
+
     // be busy
     $('#background_loader').busy();
 
-    // handle online/offline mode
-    if (!ox.signin) {
-        $(window).on('online offline', function (e) {
-            if (e.type === 'offline') {
-                $('#io-ox-offline').text('Offline').fadeIn(DURATION);
-                ox.online = false;
-            } else {
-                $('#io-ox-offline').text('Online').fadeOut(DURATION);
-                ox.online = true;
-            }
-        });
-        if (!ox.online) {
-            $(window).trigger('offline');
-        }
-    }
+    $(window).on('online offline', function (e) {
+        ox.trigger('connection:' + e.type);
+    });
 
     // handle document visiblity
     $(window).on('blur focus', function (e) {
@@ -204,6 +190,9 @@ $(window).load(function () {
     require = function (deps, success, fail) {
         if (_.isArray(deps)) {
             // use deferred object
+            _(deps).each(function (m) {
+                $(window).trigger("require:require", m);
+            })
             var def = $.Deferred().done(success).fail(fail);
             req(deps, def.resolve, def.reject);
             return def.promise();
@@ -214,7 +203,9 @@ $(window).load(function () {
     };
     _.extend(require, req);
 
-    function loadSuccess(http, session, cache, extensions, gettext, manifests, capabilities, config, themes) {
+    function loadSuccess(http, session, cache, extensions, gettext, manifests, capabilities, themes) {
+
+        var gt; // set by initialize()
 
         debug('boot.js: require > loadSuccess');
 
@@ -223,13 +214,17 @@ $(window).load(function () {
         ox.on('language', displayFeedback);
 
         function displayFeedback() {
+
             var node = feedbackNode;
+
             if (!node) return;
             if (typeof node === 'function') node = node();
             if (typeof node === 'string') node = $.txt(gt(node));
+
             $('#io-ox-login-feedback').empty().append(
-                $('<div class="alert alert-block alert-' + feedbackType +
-                              ' selectable-text">').append(node)
+                $('<div role="alert" class="selectable-text alert alert-block alert-info">').append(
+                    node
+                )
             );
         }
 
@@ -281,21 +276,72 @@ $(window).load(function () {
             // hide login dialog
             $('#io-ox-login-screen').hide();
             $(this).busy();
+            debug('boot.js: loadCore > load settings ...');
             // get configuration & core
             require(['settings!io.ox/core'], function (settings) {
-                var theme = settings.get('theme') || 'default';
-                config.load().done(function () {
-                    $.when(
-                        require(['io.ox/core/main']),
-                        themes.set(theme)
-                    ).done(function (core) {
-                        // go!
-                        core.launch();
-                    })
-                    .fail(function (e) {
-                        console.error('Cannot launch core!', e);
-                    });
+                var theme = _.url.hash('theme') || settings.get('theme') || 'default';
+                debug('boot.js: loadCore > load config ...');
+
+                debug('boot.js: loadCore > require "main" & set theme', theme);
+
+                var def1 = require(['io.ox/core/main']),
+                    def2 = themes.set(theme);
+
+                function cont() {
+                    def1.then(
+                        function success(core) {
+                            // go!
+                            debug('boot.js: core.launch()');
+                            core.launch();
+                        },
+                        function fail(e) {
+                            console.error('Cannot launch core!', e);
+                        }
+                    );
+                }
+
+                function fail() {
+                    console.error('Could not load theme: ' + theme);
+                    gotoSignin('autologin=false');
+                }
+
+                $.when(def1, def2).always(function () {
+                    // failed to load theme?
+                    if (def2.state() === 'rejected') {
+                        // give up if it was the default theme
+                        if (theme === 'default') return fail();
+                        // otherwise try to load default theme now
+                        console.error('Could not load custom theme: ' + theme);
+                        themes.set('default').then(cont, fail);
+                    } else {
+                        cont();
+                    }
                 });
+            }, function () {
+                debug('boot.js: loadCore > load config failed, using default ...');
+                var def1 = require(['io.ox/core/main']),
+                    def2 = themes.set('default');
+
+                function cont() {
+                    debug('boot.js: loadCore def1 and def2 resolved');
+                    def1.then(
+                        function success(core) {
+                            // go!
+                            debug('boot.js: core.launch()');
+                            core.launch();
+                        },
+                        function fail(e) {
+                            console.error('Cannot launch core!', e);
+                        }
+                    );
+                }
+
+                function fail() {
+                    console.error('Could not load theme: ' + theme);
+                    gotoSignin('autologin=false');
+                }
+
+                $.when(def2, def1).then(cont, fail);
             });
         };
 
@@ -323,9 +369,11 @@ $(window).load(function () {
                     $('#io-ox-login-form').css('opacity', '');
                     // show error
                     if (error && error.error === '0 general') {
-                        error = { error: gt('no-connection') };
+                        feedback('error', 'No connection to server. Please ' +
+                                 'check your internet connection and retry.');
+                    } else {
+                        feedback('error', $.txt(_.formatError(error, '%1$s (%2$s)')));
                     }
-                    feedback('info', $.txt(_.formatError(error, '%1$s')));
                     // restore form
                     restore();
                     // reset focus
@@ -340,10 +388,10 @@ $(window).load(function () {
             $('#io-ox-login-feedback').busy().empty();
             // user name and password shouldn't be empty
             if ($.trim(username).length === 0) {
-                return fail({ error: gt('enter-credentials'), code: 'UI-0001' }, 'username');
+                return fail({ error: gt('Please enter your credentials.'), code: 'UI-0001' }, 'username');
             }
             if ($.trim(password).length === 0 && ox.online) {
-                return fail({ error: gt('enter-password'), code: 'UI-0002' }, 'password');
+                return fail({ error: gt('Please enter your password.'), code: 'UI-0002' }, 'password');
             }
             // login
             session.login(
@@ -365,31 +413,29 @@ $(window).load(function () {
 
         changeLanguage = function (id) {
             // if the user sets a language on the login page, it will be used for the rest of the session, too
-            return require(['io.ox/core/login.' + id]).done(function (gt) {
-                // 404 are a success for IE
-                // "except for some of the error ones on IE (since it triggers success callbacks on scripts that load 404s)
-                // (see https://github.com/jrburke/requirejs/wiki/Requirejs-2.0-draft)
-                if (gt !== undefined) {
-                    gettext.enable();
-                    // get all nodes
-                    $('[data-i18n]').each(function () {
-                        var node = $(this),
-                            val = gt(node.attr('data-i18n')),
-                            target = node.attr('data-i18n-attr') || 'text';
-                        switch (target) {
+            gettext.setLanguage(id).done(function () {
+                gettext.enable();
+                // get all nodes
+                $('[data-i18n]').each(function () {
+                    var node = $(this),
+                        val = gt(node.attr('data-i18n')),
+                        target = (node.attr('data-i18n-attr') || 'text').split(',');
+                    _.each(target, function (el) {
+                        switch (el) {
                         case 'value': node.val(val); break;
                         case 'text': node.text(val); break;
                         case 'label': node.contents().get(-1).nodeValue = val; break;
-                        default: node.attr(target, val); break;
+                        default: node.attr(el, val); break;
                         }
                     });
-                    // Set Cookie
-                    _.setCookie('language', (ox.language = id));
-                    // update placeholder (IE9 fix)
-                    if (_.browser.IE) {
-                        $('input[type=text], input[type=password]').val('').placeholder();
-                    }
+                });
+                // Set Cookie
+                _.setCookie('language', (ox.language = id));
+                // update placeholder (IE9 fix)
+                if (_.browser.IE) {
+                    $('input[type=text], input[type=password]').val('').placeholder();
                 }
+                ox.trigger('language');
             });
         };
 
@@ -439,7 +485,10 @@ $(window).load(function () {
 
         function updateServerConfig(data) {
             ox.serverConfig = data || {};
+            require('io.ox/core/capabilities').reset();
+            require('io.ox/core/manifests').reset();
             capabilities.reset();
+            manifests.reset();
         }
 
         function setFallbackConfig() {
@@ -523,6 +572,14 @@ $(window).load(function () {
             return fetchServerConfig('generalconfig');
         }
 
+        function gotoSignin(hash) {
+            var ref = (location.hash || '').replace(/^#/, ''),
+                path = String(ox.serverConfig.logoutLocation || ox.logoutLocation),
+                glue = path.indexOf('#') > -1 ? '&' : '#';
+            hash = (hash || '') + (ref ? '&ref=' + enc(ref) : '');
+            _.url.redirect((hash ? path + glue + hash : path));
+        }
+
         /**
          * Auto login
          */
@@ -538,17 +595,9 @@ $(window).load(function () {
                     gettext.enable();
                     return $.when();
                 }
-                return manifests.manager.loadPluginsFor('core')
-                    .done(gettext.enable);
-            }
 
-            function gotoSignin(hash) {
-                var ref = (location.hash || '').replace(/^#/, ''),
-                    path = String(ox.serverConfig.logoutLocation || ox.logoutLocation),
-                    glue = path.indexOf('#') > -1 ? '&' : '#';
-                hash = (hash || '') + (ref ? '&ref=' + enc(ref) : '');
-
-                _.url.redirect((hash ? path + glue + hash : path));
+                debug('boot.js: loadCoreFiles > loadPluginsFor(core) ...');
+                return manifests.manager.loadPluginsFor('core').always(gettext.enable);
             }
 
             function continueWithoutAutoLogin() {
@@ -560,10 +609,11 @@ $(window).load(function () {
                             serverUp();
                             debug('boot.js: fetchGeneralServerConfig > success');
                             // set page title now
-                            document.title = _.noI18n(ox.serverConfig.pageTitle || '');
+                            document.title = _.noI18n(ox.serverConfig.pageTitle || '') + ' ' + 'Login'
                             themes.set(ox.serverConfig.signinTheme || 'login');
                             // continue
-                            initialize();
+                            gettext.setLanguage('en_US');
+                            require(['io.ox/core/login-i18n']).done(initialize);
                         },
                         function fail() {
                             // nope, had some stuff in the caches but server is down
@@ -679,21 +729,30 @@ $(window).load(function () {
                         debug('boot.js: autoLogin > loginSuccess');
                         // are we on login page?
                         if (ox.signin) {
-                            gotoCore(true)
+                            gotoCore(true);
                         } else {
-                            fetchUserSpecificServerConfig().done(function () {
+                            debug('boot.js: autoLogin > loginSuccess > fetch user config ...');
+                            fetchUserSpecificServerConfig().then(function () {
                                 // apply session data (again) & page title
                                 session.set(data);
                                 document.title = _.noI18n(ox.serverConfig.pageTitle || '');
-                                loadCoreFiles().done(function () {
-                                    loadCore();
-                                });
+                                debug('boot.js: autoLogin > loginSuccess > loadCoreFiles ...');
+                                return loadCoreFiles();
+                            })
+                            .always(function () {
+                                loadCore();
                             });
                         }
                     },
-                    function loginFailed() {
-                        debug('boot.js: autoLogin > loginSuccess');
-                        continueWithoutAutoLogin();
+                    function loginFailed(data) {
+                        debug('boot.js: autoLogin > loginFailed', data);
+                        // special autologin error handling. redirect user to an
+                        // external page defined in the error params
+                        if (data && data.code === 'LGI-0016' && (data.error_params || []).length === 1) {
+                            window.location.href = data.error_params[0];
+                        } else {
+                            continueWithoutAutoLogin();
+                        }
                     }
                 );
             }
@@ -702,18 +761,18 @@ $(window).load(function () {
         /**
          * Initialize login screen
          */
-        initialize = function () {
+        initialize = function (gtModule) {
+            gt = gtModule;
 
             // shortcut
             var sc = ox.serverConfig,
                 lang = sc.languages,
-                capabilities = require("io.ox/core/capabilities"),
                 node,
                 id = '',
                 footer = '',
                 i = 0,
                 cl = $('#io-ox-current-language').parent(),
-                maxLang = 20;
+                maxLang = 30;
 
             debug('boot.js: initialize ...');
 
@@ -722,18 +781,21 @@ $(window).load(function () {
 
                 debug('boot.js: List languages', lang);
 
-                var langCount = _.size(lang);
                 node = $('#io-ox-language-list');
-                // Display native select box for languages if there are up to "maxLang" languages
-                var langSorted = _.toArray(_.invert(lang)).sort(function (a, b) {
-                    return lang[a] <= lang[b] ? -1 : +1;
-                });
-                if (langCount < maxLang) {
+
+                var langCount = _.size(lang),
+                    defaultLanguage = _.getCookie('language') || getBrowserLanguage(),
+                    // Display native select box for languages if there are up to "maxLang" languages
+                    langSorted = _.toArray(_.invert(lang)).sort(function (a, b) {
+                        return lang[a] <= lang[b] ? -1 : +1;
+                    });
+
+                if (langCount < maxLang && !_.url.hash('language-select')) {
                     for (id in langSorted) {
                         var link;
                         i++;
                         node.append(
-                            $('<a href="#">')
+                            $('<a href="#" aria-label="' + lang[langSorted[id]] + '">')
                                 .on('click', { id: langSorted[id] }, fnChangeLanguage)
                                 .text(lang[langSorted[id]])
                         );
@@ -742,17 +804,27 @@ $(window).load(function () {
                         }
                     }
                 } else {
-                    var sel = $('<select>').change(function() {
-                        changeLanguage($(this).val());
-                        forcedLanguage = $(this).val();
-                    });
-                    for (id in lang) {
-                        sel.append(
-                            $('<option>').attr('value', id)
-                                .text(lang[langSorted[id]])
-                        );
-                    }
-                    $('#io-ox-language-list').append(sel);
+                    $('#io-ox-language-list').append(
+                        $('<select>').change(function(e) {
+                            var id = $(this).val();
+                            if (id !== '') {
+                                e.data = { id: id };
+                                fnChangeLanguage(e);
+                            }
+                        })
+                        .append(
+                            _(langSorted).map(function (value, id) {
+                                var option = $('<option>')
+                                    .attr({
+                                        'aria-label': lang[langSorted[id]],
+                                        'value': langSorted[id]
+                                    })
+                                    .text(lang[langSorted[id]]);
+                                return option;
+                            })
+                        )
+                        .val(defaultLanguage)
+                    );
                 }
             } else {
                 $("#io-ox-languages").remove();
@@ -785,7 +857,7 @@ $(window).load(function () {
             // disable password?
             if (!ox.online) {
                 $('#io-ox-login-password').attr('disabled', 'disabled');
-                feedback('info', $.txt('Offline mode'));
+                feedback('info', 'Offline mode');
             } else {
                 $('#io-ox-login-password').removeAttr('disabled');
             }
@@ -821,29 +893,57 @@ $(window).load(function () {
 
                     if (_.device('android')) {
                         // special info for not supported android
-                        feedback('info', $.txt(_.printf(gt('os-android'), _.browserSupport.Android)));
+                        feedback('info', function () {
+                            return $.txt(
+                                //#. %n in the lowest version of Android
+                                gt('You need to use Android %n or higher.',
+                                    _.browserSupport.Android));
+                        });
+
                     } else if (_.device('ios')) {
                         // special info for not supported iOS
-                        feedback('info', $.txt(_.printf(gt('os-ios'), _.browserSupport.iOS)));
+                        feedback('info', function () {
+                            return $.txt(
+                                //#. %n is the lowest version of iOS
+                                gt('You need to use iOS %n or higher.',
+                                    _.browserSupport.iOS));
+                        });
+                    } else if (_.browser.Chrome) {
+                        // warning about Chrome version
+                        feedback('info', function () {
+                            return $('<b>').text(gt('Your browser version is not supported!'))
+                                .add($.txt(_.noI18n('\xa0')))
+                                .add($('<div>').text(gt('Please update your browser.')));
+                        });
+
                     } else {
                         // general warning about browser
-                        feedback('info', $(
-                            _.browser.Chrome ?
-                            '<b>' + gt('browser-version') + '</b> <div>' + gt('please-update') + '</div>' :
-                            '<b>' + gt('browser') + '</b>&nbsp;' + gt('please-use') + '<div><a href="http://www.google.com/chrome" target="_blank">Google Chrome</a>.</div>'
-                        ));
+                        feedback('info', function () {
+                            return $('<b>').text(gt('Your browser is not supported!'))
+                                .add($.txt(_.noI18n('\xa0')))
+                                .add($.txt(gt('For best results, please use ')))
+                                .add($('<br><a href="http://www.google.com/chrome" target="_blank">Google Chrome</a>.'));
+                        });
                     }
 
-                } else if (_.browser.IE <= 8) {
-                    // recommend chrome frame?
-                    var link = 'http://www.google.com/chromeframe/?user=true';
-                    feedback('info', $(
-                        '<b>' + gt('slow') + '</b> <div><a href="http://www.google.com/chrome" target="_blank">Google Chrome</a>.</div>'
-                    ));
-                } else if (_.device('android || (ios && small)')) {
-                    // TODO remove after 7.4
-                    // inform about preview mode for 7.2
-                    feedback('info', $.txt(gt('mobile-preview')));
+                } else if (_.device('android') && !_.browser.chrome) {
+                    // Offer Chrome to all non-chrome users on android
+                    feedback('info', function () {
+                        return $('<b>').text(
+                            //#. "Google Chrome" is a brand and should not be translated
+                            gt('For best results we recommend using Google Chrome for Android.'))
+                            .add($.txt(_.noI18n('\xa0')))
+                            //.# The missing word at the end of the sentence ("Play Store") will be injected later by script
+                            .add($.txt(gt('Get the latest version from the ')))
+                            .add($('<a href="http://play.google.com/store/apps/details?id=com.android.chrome">Play Store</>'));
+                    });
+                } else {
+                    // cookie check (else clause because we don't want to show multiple warnings; plus this is an edge case)
+                    _.setCookie('test', 'cookie');
+                    if (_.getCookie('test') !== 'cookie') {
+                        feedback('info', gt('Your browser\'s cookie functionality is disabled. Please turn it on.'));
+                    }
+                    _.setCookie('test', null, -1);
                 }
 
                 // show login dialog
@@ -853,11 +953,6 @@ $(window).load(function () {
 
                 debug('boot.js: Fade in ...');
                 $('#background_loader').idle().fadeOut(DURATION, cont);
-
-                if (_.device('ios')) {
-                    //load on ios only
-                    require(['plugins/mobile/addToHomescreen/register']);
-                }
             });
         };
 
@@ -877,13 +972,13 @@ $(window).load(function () {
 
     require([
         'io.ox/core/http', 'io.ox/core/session', 'io.ox/core/cache', 'io.ox/core/extensions',
-        'io.ox/core/gettext', 'io.ox/core/manifests', 'io.ox/core/capabilities', 'io.ox/core/config',
+        'gettext', 'io.ox/core/manifests', 'io.ox/core/capabilities',
         'themes', 'io.ox/core/settings'],
         loadSuccess, loadFail
     );
 
     // reload if files have change; need this during development
-    if (Modernizr.applicationcache && _.browser.webkit && ox.debug) {
+    if (Modernizr.applicationcache && _.browser.chrome && ox.debug && $('html').attr('manifest')) {
 
         (function () {
 

@@ -10,11 +10,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/config', ['io.ox/core/http', 'io.ox/core/cache'], function (http, cache) {
+define.async('io.ox/core/config', ['io.ox/core/http', 'io.ox/core/cache'], function (http, cache) {
 
     'use strict';
-
-    var config = {}, configCache;
+    var config = {}, configCache, moduleDefined = $.Deferred();
 
     var get = function (key) {
         var parts = typeof key === 'string' ? key.split(/\./) : key,
@@ -77,7 +76,7 @@ define('io.ox/core/config', ['io.ox/core/http', 'io.ox/core/cache'], function (h
         delete tmp[parts[$i]];
     };
 
-    return {
+    var api = {
 
         get: function (path, defaultValue) {
             if (!path) { // undefined, null, ''
@@ -152,4 +151,9 @@ define('io.ox/core/config', ['io.ox/core/http', 'io.ox/core/cache'], function (h
             return def;
         }
     };
+    api.load().done(function () {
+        moduleDefined.resolve(api);
+    }).fail(moduleDefined.reject);
+
+    return moduleDefined;
 });

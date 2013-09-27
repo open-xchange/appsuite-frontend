@@ -15,8 +15,9 @@ define('io.ox/mail/autoforward/settings/model',
       ['io.ox/backbone/modelFactory',
        'io.ox/backbone/validation',
        'io.ox/core/api/mailfilter',
+       'io.ox/settings/util',
        'gettext!io.ox/mail'
-       ], function (ModelFactory, Validators, api, gt) {
+       ], function (ModelFactory, Validators, api, settingsUtil, gt) {
 
     'use strict';
 
@@ -40,9 +41,6 @@ define('io.ox/mail/autoforward/settings/model',
                         },
                         {
                             "id": "keep"
-                        },
-                        {
-                            "id": "stop"
                         }
                     ],
                     "flags": ["autoforward"],
@@ -63,22 +61,26 @@ define('io.ox/mail/autoforward/settings/model',
             ref: ref,
 
             update: function (model) {
+                $(document.activeElement).blur();//make the active element lose focus to get the changes of the field a user was editing
                 if (model.attributes.forwardmail === '') {
-                    return api.deleteRule(model.attributes.id);
+                    return settingsUtil.yellOnReject(
+                        api.deleteRule(model.attributes.id)
+                    );
                 } else {
-                    return api.update(providePreparedData(model.attributes));
+                    return settingsUtil.yellOnReject(
+                        api.update(providePreparedData(model.attributes))
+                    );
                 }
             },
             create: function (model) {
-                return api.create(providePreparedData(model.attributes));
+                $(document.activeElement).blur();//make the active element lose focus to get the changes of the field a user was editing
+                return settingsUtil.yellOnReject(
+                    api.create(providePreparedData(model.attributes))
+                );
             }
 
         });
 
-        Validators.validationFor(ref, {
-            forwardmail: {  format: 'email' },
-            active: { format: 'boolean' }
-        });
         return factory;
 
     }

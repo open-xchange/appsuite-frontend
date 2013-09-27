@@ -13,14 +13,12 @@
 
 define('io.ox/office/tk/dropdown/grid',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/keycodes',
      'io.ox/office/tk/control/group',
      'io.ox/office/tk/dropdown/items'
-    ], function (Utils, Group, Items) {
+    ], function (Utils, KeyCodes, Group, Items) {
 
     'use strict';
-
-    var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes;
 
     // class Grid =============================================================
 
@@ -94,7 +92,7 @@ define('io.ox/office/tk/dropdown/grid',
         /**
          * Handles key events in the open drop-down grid menu element.
          */
-        function gridKeyHandler(event) {
+        function menuKeyHandler(event) {
 
             var // distinguish between event types (ignore keypress events)
                 keydown = event.type === 'keydown',
@@ -104,26 +102,138 @@ define('io.ox/office/tk/dropdown/grid',
                 index = buttons.index(event.target);
 
             switch (event.keyCode) {
+            case KeyCodes.LEFT_ARROW:
+                if (keydown && (index > 0)) {
+                    buttons.eq(index - 1).focus();
+                }
+                return false;
+            case KeyCodes.RIGHT_ARROW:
+                if (keydown && (index >= 0) && (index + 1 < buttons.length)) {
+                    buttons.eq(index + 1).focus();
+                }
+                return false;
             case KeyCodes.UP_ARROW:
-                if (index <= 0) { break; } // let key bubble up to hide the menu
-                if (keydown) { buttons.eq(index - 1).focus(); }
+                if (keydown && (index >= 0) && (buttons.length > 0)) {
+                    buttons.eq(calcNewIndex(buttons, event.target, index, true)).focus();
+                }
                 return false;
             case KeyCodes.DOWN_ARROW:
-                if (keydown && (index >= 0) && (index + 1 < buttons.length)) { buttons.eq(index + 1).focus(); }
-                return false;
-            case KeyCodes.HOME:
-                if (keydown) { buttons.first().focus(); }
-                return false;
-            case KeyCodes.END:
-                if (keydown) { buttons.last().focus(); }
+                if (keydown && (index >= 0) && (buttons.length > 0)) {
+                    buttons.eq(calcNewIndex(buttons, event.target, index, false)).focus();
+                }
                 return false;
             }
         }
 
+        /**
+         * Calculates the previous/next button index dependent on the direction
+         * of movement.
+         *
+         * @param {Number} currIndex
+         *  The index of the current button.
+         *
+         * @param {Boolean} up
+         *  The movement direction. True means up otherwise down.
+         *
+         * @returns {Number}
+         *  The index of the button which should get the focus. If no previous
+         *  or next button could be found, currIndex is returned. The algorithm
+         *  tries to find the nearest button in the previous/next row. Nearest
+         *  means the minimal distance graphic wise.
+         */
+        function calcNewIndex(buttons, focusNode, currIndex, up) {
+            var // index
+                i,
+                // current td element
+                currTD = $(focusNode).closest('td'),
+                // position of current td element
+                pos = currTD.position(),
+                // next position
+                nextPos,
+                // the current index/resulting index
+                index = currIndex,
+                // table of the current element
+                table,
+                // tables inside the grid
+                tables,
+                // table index of the current element
+                tableIndex,
+                // check previous/next table for next element
+                findNextTable = false,
+                // row index of the current element
+                rowIndex,
+                // rows inside the current table
+                rows,
+                // all td elements inside the row
+                rowElements,
+                // distance between two td elements
+                distance = 1000000.0,
+                // current distance between two td elements
+                currDistance = distance;
+
+            // find out current table, row & rowIndex
+            table = currTD.closest('table');
+            rows = table.find('tbody > tr');
+            rowIndex = rows.index(currTD.closest('tr'));
+
+            // try to find previous/next button in current table
+            if (up) {
+                if (rowIndex > 0) {
+                    rowIndex--;
+                } else {
+                    findNextTable = true;
+                }
+            } else {
+                if (rowIndex < rows.length - 1) {
+                    rowIndex++;
+                } else {
+                    findNextTable = true;
+                }
+            }
+
+            if (findNextTable) {
+                // try find previous/next table in the grid
+                tables = self.getMenuNode().find('table');
+                tableIndex = tables.index(table);
+                if (up && (tableIndex > 0)) {
+                    table = tables.eq(tableIndex - 1);
+                    rows = table.find('> tbody > tr');
+                    rowIndex = rows.length - 1;
+                } else if (!up && (tableIndex < tables.length - 1)) {
+                    table = tables.eq(tableIndex + 1);
+                    rows = table.find('> tbody > tr');
+                    rowIndex = 0;
+                } else {
+                    // NO next/previous table
+                    return index;
+                }
+            }
+
+            // calculate the best button index in the previous/next row
+            rowElements = rows.eq(rowIndex).find('td');
+            for (i = 0; i < rowElements.length; i++) {
+                nextPos = rowElements.eq(i).position();
+                currDistance = Math.sqrt(Math.pow(nextPos.top - pos.top, 2) +
+                                         Math.pow(nextPos.left - pos.left, 2));
+                if (currDistance < distance) {
+                    distance = currDistance;
+                    index = i;
+                }
+            }
+
+            // find out index of the new button element
+            index = buttons.index(rowElements.eq(index).find(Utils.BUTTON_SELECTOR));
+
+            return index;
+        }
+
         // initialization -----------------------------------------------------
 
-        // additional formatting for grid layout, register event handlers
-        this.getItemGroup().getNode().addClass('grid').on('keydown keypress keyup', gridKeyHandler);
+        // additional formatting for grid layout
+        this.getMenuNode().addClass('layout-grid');
+
+        // register event handlers
+        this.getMenuNode().on('keydown keypress keyup', menuKeyHandler);
 
     } // class Grid
 

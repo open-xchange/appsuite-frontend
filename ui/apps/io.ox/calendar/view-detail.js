@@ -449,7 +449,7 @@ define("io.ox/calendar/view-detail",
         index: 550,
         draw: function (data) {
             var $node;
-            if (calAPI.uploadInProgress(encodeURIComponent(_.cid(data)))) {
+            if (calAPI.uploadInProgress(_.ecid(data))) {
                 this.append(
                         $('<div class="io-ox-label">').text(gt('Attachments')),
                         $node = $('<div>').css({width: '30%', height: '12px'}).busy()
@@ -467,7 +467,8 @@ define("io.ox/calendar/view-detail",
     ext.point("io.ox/calendar/detail/attachments").extend(new attachments.AttachmentList({
         id: 'attachment-list',
         index: 200,
-        module: 1
+        module: 1,
+        selector: '.window-container.io-ox-calendar-window'
     }));
 
     function redraw(e, data) {
@@ -480,7 +481,7 @@ define("io.ox/calendar/view-detail",
 
             try {
                 var node = $.createViewContainer(data, calAPI).on('redraw', { view: this }, redraw);
-                node.addClass('calendar-detail view').attr('data-cid', String(_.cid(data)));
+                node.addClass('calendar-detail view user-select-text').attr('data-cid', String(_.cid(data)));
                 ext.point("io.ox/calendar/detail").invoke("draw", node, data, options);
 
                 return node;

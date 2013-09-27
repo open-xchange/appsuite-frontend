@@ -19,9 +19,8 @@ define('io.ox/core/import/import',
     'io.ox/core/api/folder',
     'io.ox/core/api/import',
     'io.ox/core/notifications',
-    'io.ox/core/config',
     'gettext!io.ox/core',
-    'less!io.ox/core/import/style.less'], function (ext, dialogs, attachments, folderApi, api, notifications, config, gt) {
+    'less!io.ox/core/import/style.less'], function (ext, dialogs, attachments, folderAPI, api, notifications, gt) {
 
     'use strict';
 
@@ -30,7 +29,7 @@ define('io.ox/core/import/import',
         id: 'default',
         draw: function (id, prefix) {
             this.append(
-                folderApi.getBreadcrumb(id, { prefix: prefix || '' }),
+                folderAPI.getBreadcrumb(id, { prefix: prefix || '' }),
                 $('<input type="hidden" name="folder">').val(id)
             );
         }
@@ -100,9 +99,21 @@ define('io.ox/core/import/import',
     ext.point('io.ox/core/import/file_upload').extend({
         id: 'default',
         draw: function (baton) {
-            baton.nodes.file_upload = attachments.fileUploadWidget({displayLabel: true});
+            baton.nodes.file_upload = attachments.fileUploadWidget({ displayLabel: true, tabindex: 0 });
             this.append(
                 baton.nodes.file_upload
+            );
+        }
+    });
+
+    ext.point('io.ox/core/import/ignore_uuids').extend({
+        id: 'default',
+        draw: function (baton) {
+            this.append(
+                $('<label class="checkbox">').append(
+                    $('<input type="checkbox" name="ignore_uuids">'),
+                    gt('Ignore existing events. Helpful to import public holiday calendars, for example.')
+                )
             );
         }
     });
@@ -120,12 +131,12 @@ define('io.ox/core/import/import',
         show: function (module, id) {
 
             var id = String(id),
-                dialog = new dialogs.ModalDialog({ easyOut: true }),
+                dialog = new dialogs.ModalDialog(),
                 baton = {id: id, module: module, simulate: true, format: {}, nodes: {}},
                 form;
 
             //get folder and process
-            folderApi.get({ folder: id}).done(function (folder) {
+            folderAPI.get({ folder: id }).done(function (folder) {
                 dialog.build(function () {
                     form = $('<form>', { 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' });
                     this.getContentNode().append(form);
@@ -135,15 +146,21 @@ define('io.ox/core/import/import',
                         .invoke('draw', form, id, gt('Import into'));
                     ext.point('io.ox/core/import/select')
                         .invoke('draw', form, baton);
+                    ext.point('io.ox/core/import/ignore_uuids')
+                        .invoke('draw', form, baton);
                     ext.point('io.ox/core/import/file_upload')
                         .invoke('draw', form, baton);
+
                     //buttons
                     ext.point('io.ox/core/import/buttons')
                         .invoke('draw', this);
                     this.getPopup().addClass('import-dialog');
                 })
-                .on('import', function () {
-
+                .show(function () {
+                    //focus
+                    this.find('select').focus();
+                });
+                dialog.on('import', function () {
                     var type = baton.nodes.select.val() || '',
                         file = baton.nodes.file_upload.find('input[type=file]'),
                         popup = this,
@@ -164,12 +181,17 @@ define('io.ox/core/import/import',
                         notifications.yell('error', gt('Please select a file to import'));
                         popup.idle();
                         return;
+                    } else if (baton.nodes.select.val() === 'ICAL' && !(/\.(ical|ics)$/i).test(file.val())) {
+                        notifications.yell('error', gt('Please select a valid iCal File to import'));
+                        popup.idle();
+                        return;
                     }
 
                     api.importFile({
                         file: file[0].files ? file[0].files[0] : [],
                         form: form,
                         type: type,
+                        ignoreUIDs: popup.getContentNode().find('input[name="ignore_uuids"]').prop('checked'),
                         folder: id
                     })
                     .done(function (data) {
