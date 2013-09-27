@@ -183,6 +183,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         display: 'DATETIME',
         attribute: 'alarm',
         label: gt('Date'),
+        clearButton: _.device('small'),//add clearbutton on mobile devices
         updateModelDate: function () {
             this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model), {validate: true});
         },
@@ -845,6 +846,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         display: 'DATETIME',
         attribute: 'start_date',
         label: gt('Starts on'),
+        clearButton: _.device('small'),//add clearbutton on mobile devices
         updateModelDate: function () {
             this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model), { validate: true });
         },
@@ -864,6 +866,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         display: 'DATETIME',
         attribute: 'end_date',
         label: gt('Due date'),
+        clearButton: _.device('small'),//add clearbutton on mobile devices
         updateModelDate: function () {
             this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model), {validate: true});
         },

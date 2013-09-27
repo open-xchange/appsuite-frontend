@@ -845,6 +845,14 @@ define('io.ox/backbone/forms',
                             self.nodes.dayField.mobiscroll().date();
                         }
 
+                        if (options.clearButton) {//add clear button
+                            self.nodes.dayField.mobiscroll('option', 'button3Text', gt('clear'));
+                            self.nodes.dayField.mobiscroll('option', 'button3', function () {
+                                self.model.set(self.attribute, null);
+                                self.nodes.dayField.mobiscroll('hide');
+                            });
+                        }
+
                         self.nodes.dayField.val = function (value) {//repairing functionality
                             if (arguments.length > 0) {
                                 this['0'].value = value;
