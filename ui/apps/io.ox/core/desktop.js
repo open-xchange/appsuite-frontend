@@ -964,15 +964,19 @@ define("io.ox/core/desktop",
                             self.state.visible = true;
                             self.state.open = true;
                             self.trigger("show");
-                            document.temptitle = gt.format(
-                                //#. Title of the browser window
-                                //#. %1$s is the name of the page, e.g. OX App Suite
-                                //#. %2$s is the title of the active app, e.g. Calendar
-                                gt.pgettext('window title', '%1$s %2$s'),
-                                _.noI18n(ox.serverConfig.pageTitle),
-                                self.getTitle());
-                            if (document.fixedtitle !== true) {//to prevent erasing the New Mail title
-                                document.title = document.temptitle;
+                            if (_.device('!small')) {
+                                document.temptitle = gt.format(
+                                    //#. Title of the browser window
+                                    //#. %1$s is the name of the page, e.g. OX App Suite
+                                    //#. %2$s is the title of the active app, e.g. Calendar
+                                    gt.pgettext('window title', '%1$s %2$s'),
+                                    _.noI18n(ox.serverConfig.pageTitle),
+                                    self.getTitle());
+                                if (document.fixedtitle !== true) {//to prevent erasing the New Mail title
+                                    document.title = document.temptitle;
+                                }
+                            } else {
+                                document.title = _.noI18n(ox.serverConfig.pageTitle);
                             }
 
                             if (firstShow) {
@@ -1007,9 +1011,13 @@ define("io.ox/core/desktop",
                     ox.ui.windowManager.trigger("window.hide", this);
                     if (currentWindow === this) {
                         currentWindow = null;
-                        document.temptitle = _.noI18n(ox.serverConfig.pageTitle);
-                        if (document.fixedtitle !== true) {//to prevent erasing the New Mail title
-                            document.title = document.temptitle;
+                        if (_.device('!small')) {
+                            document.temptitle = _.noI18n(ox.serverConfig.pageTitle);
+                            if (document.fixedtitle !== true) {//to prevent erasing the New Mail title
+                                document.title = document.temptitle;
+                            }
+                        } else {
+                            document.title = _.noI18n(ox.serverConfig.pageTitle);
                         }
                     }
                     return this;
@@ -1131,16 +1139,20 @@ define("io.ox/core/desktop",
                         title = str;
                         self.nodes.title.find('span').first().text(title);
                         if (this === currentWindow) {
-
-                            document.temptitle = gt.format(
-                                //#. Title of the browser window
-                                //#. %1$s is the name of the page, e.g. OX App Suite
-                                //#. %2$s is the title of the active app, e.g. Calendar
-                                gt.pgettext('window title', '%1$s %2$s'),
-                                _.noI18n(ox.serverConfig.pageTitle),
-                                title);
-                            if (document.fixedtitle !== true) {//to prevent erasing the New Mail title
-                                document.title = document.temptitle;
+                            if (_.device('!small')) {
+                                document.temptitle = gt.format(
+                                    //#. Title of the browser window
+                                    //#. %1$s is the name of the page, e.g. OX App Suite
+                                    //#. %2$s is the title of the active app, e.g. Calendar
+                                    gt.pgettext('window title', '%1$s %2$s'),
+                                    _.noI18n(ox.serverConfig.pageTitle),
+                                    title);
+                                if (document.fixedtitle !== true) {//to prevent erasing the New Mail title
+                                    document.title = document.temptitle;
+                                }
+                                
+                            } else {
+                                document.title = _.noI18n(ox.serverConfig.pageTitle);
                             }
                         }
                         this.trigger('change:title');

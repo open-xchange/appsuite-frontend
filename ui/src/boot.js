@@ -609,7 +609,12 @@ $(window).load(function () {
                             serverUp();
                             debug('boot.js: fetchGeneralServerConfig > success');
                             // set page title now
-                            document.title = _.noI18n(ox.serverConfig.pageTitle || '') + ' ' + 'Login'
+                            if (_.device('!small')) {
+                                document.title = _.noI18n(ox.serverConfig.pageTitle || '') + ' ' + 'Login';
+                            } else {
+                                document.title = _.noI18n(ox.serverConfig.pageTitle || '');
+                            }
+
                             themes.set(ox.serverConfig.signinTheme || 'login');
                             // continue
                             gettext.setLanguage('en_US');

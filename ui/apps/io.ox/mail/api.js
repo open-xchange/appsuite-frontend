@@ -1665,12 +1665,14 @@ define('io.ox/mail/api',
      * @return {undefined}
      */
     api.newMailTitle = function (state) {
-        if (state === true) {//show new mail title
-            document.fixedtitle = true;
-            document.title = gt('New Mail');
-        } else {//stop showing new mail title
-            document.fixedtitle = false;
-            document.title = document.temptitle;
+        if (_.device('!small')) {
+            if (state === true) {//show new mail title
+                document.fixedtitle = true;
+                document.title = gt('New Mail');
+            } else {//stop showing new mail title
+                document.fixedtitle = false;
+                document.title = document.temptitle;
+            }
         }
     };
 
