@@ -43,8 +43,6 @@ define('io.ox/core/tk/mobiscroll', ['apps/mobiscroll/js/mobi.js',
             theme: 'ios7'
         };
         settings.timeWheels = settings.timeFormat.replace(/\W/g, '');
-
-        $.mobiscroll.setDefaults(settings);
         set = true;
     }
 

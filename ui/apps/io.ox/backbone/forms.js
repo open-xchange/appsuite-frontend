@@ -835,12 +835,11 @@ define('io.ox/backbone/forms',
                     require(['io.ox/core/tk/mobiscroll'], function (defaultSettings) {
                         //do funky mobiscroll stuff
                         if (options.display === "DATETIME") {
-                            self.nodes.dayField.mobiscroll().datetime();
-
+                            self.nodes.dayField.mobiscroll().datetime(defaultSettings);
                         } else {
-                            self.nodes.dayField.mobiscroll().date();
+                            self.nodes.dayField.mobiscroll().date(defaultSettings);
                         }
-
+                        // self.nodes.dayField.mobiscroll('option', 'dateOrder', 'dmy');
                         if (options.clearButton) {//add clear button
                             self.nodes.dayField.mobiscroll('option', 'button3Text', gt('clear'));
                             self.nodes.dayField.mobiscroll('option', 'button3', function () {

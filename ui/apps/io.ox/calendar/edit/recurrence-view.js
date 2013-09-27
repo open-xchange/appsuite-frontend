@@ -142,10 +142,9 @@ define("io.ox/calendar/edit/recurrence-view",
                     }).val(renderDate());
 
                 if (_.device('small')) {
-                    require(["io.ox/core/tk/mobiscroll"], function () {
+                    require(["io.ox/core/tk/mobiscroll"], function (defaultSettings) {
                         var now = new dateAPI.Local();
-                        $dateInput.mobiscroll({
-                            preset: 'date',
+                        $dateInput.mobiscroll().date($.extend(defaultSettings, {
                             onSelect: function () {
                                 updateValue();
                             },
@@ -153,7 +152,7 @@ define("io.ox/calendar/edit/recurrence-view",
                                 updateValue();
                             },
                             minDate: new Date(now.getYear(), now.getMonth(), now.getDate())
-                        }).mobiscroll('show');
+                        })).mobiscroll('show');
                     });
                 } else {
                     $dateInput.datepicker({
