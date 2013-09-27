@@ -189,6 +189,7 @@ define('io.ox/mail/settings/pane',
         index: 400,
         id: 'imap-subscription',
         draw: function (data) {
+            var button = $('<button type="button" class="btn btn-primary">').on('click', changeIMAPSubscription);
 
             if (_.device('smartphone')) return;
 
@@ -196,12 +197,9 @@ define('io.ox/mail/settings/pane',
                 $('<div class="settings sectiondelimiter expertmode">'),
                 $('<legend class="sectiontitle">').text(gt('IMAP folder subscription')),
                 $('<div class="sectioncontent">').append(
-                    $('<button type="button" class="btn btn-primary">')
-                    .text(gt('Change subscription'))
+                    button.text(gt('Change subscription'))
                 )
             );
-
-            this.on('click', 'button', changeIMAPSubscription);
         }
     });
 
