@@ -58,12 +58,15 @@ define("io.ox/calendar/view-grid-template",
                 };
             },
             set: function (data, fields, index) {
-                var folder = folderAPI.get({ folder: data.folder_id }),
-                    self = this;
-                folder.done(function (folder) {
-                    var conf = util.getConfirmationStatus(data, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
-                    self.addClass(util.getConfirmationClass(conf) + (data.hard_conflict ? ' hardconflict' : ''));
-                });
+                var self = this;
+                if (data.folder_id) {//conflicts with appointments, where you aren't a participant don't have a folder_id.
+                    var folder = folderAPI.get({ folder: data.folder_id });
+                    folder.done(function (folder) {
+                        var conf = util.getConfirmationStatus(data, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
+                        self.addClass(util.getConfirmationClass(conf) + (data.hard_conflict ? ' hardconflict' : ''));
+                    });
+                }
+
                 fields.title
                     .text(data.title ? gt.noI18n(data.title || '\u00A0') : gt('Private'));
                 if (data.conflict) {
