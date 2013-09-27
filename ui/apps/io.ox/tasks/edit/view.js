@@ -88,14 +88,14 @@ define('io.ox/tasks/edit/view',
 
             // Disable Save Button if title is empty on startup
             if (!self.$el.find('#task-edit-title').val()) {
-                self.$el.find('.btn[data-action="save"]').attr('disabled', 'disabled');
+                self.$el.find('.btn[data-action="save"]').prop('disabled', true);
             }
 
             // Toggle disabled state of save button
             function fnToggleSave(isDirty) {
                 var node = self.$el.find('.btn[data-action="save"]');
                 if (_.device('smartphone')) node = self.$el.parent().parent().find('.btn[data-action="save"]');
-                if (isDirty) node.removeAttr('disabled'); else node.attr('disabled', 'disabled');
+                if (isDirty) node.prop('disabled', false); else node.prop('disabled', true);
             }
             //delegate some events
             self.$el.delegate('#task-edit-title', 'keyup blur', function () {

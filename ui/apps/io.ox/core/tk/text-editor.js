@@ -150,7 +150,7 @@ define('io.ox/core/tk/text-editor', [], function () {
         }());
 
         this.handleShow = function () {
-            textarea.removeAttr('disabled').idle().show()
+            textarea.prop('disabled', false).idle().show()
                 .next().hide();
             resizeEditorMargin();
             $(window).on('resize', resizeEditorMargin);

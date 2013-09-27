@@ -567,9 +567,9 @@ define("io.ox/calendar/edit/recurrence-view",
                     type = this.model.get('recurrence_type');
 
                 if (type === RECURRENCE_TYPES.NO_RECURRENCE) {
-                    this.controls.checkbox.removeAttr("checked");
+                    this.controls.checkbox.prop('checked', false);
                 } else {
-                    this.controls.checkbox.attr('checked', 'checked');
+                    this.controls.checkbox.prop('checked', true);
                     this.lastConfiguration = {};
 
                     _(["recurrence_type", "days", "day_in_month", "interval", "occurrences", "until"]).each(function (attr) {

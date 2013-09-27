@@ -345,7 +345,7 @@ define('io.ox/mail/write/main',
 
             function changeMode(mode) {
                 // be busy
-                view.textarea.attr('disabled', 'disabled').busy();
+                view.textarea.prop('disabled', true).busy();
                 if (app.getEditor()) {
                     var content = app.getEditor().getPlainText();
                     app.getEditor().clear();
@@ -908,8 +908,8 @@ define('io.ox/mail/write/main',
                 ) {
                     // we are editing a message with html format, keep it
                     data.format = 'html';
-                    view.form.find('input[name=format][value=text]').attr('checked', null);
-                    view.form.find('input[name=format][value=html]').attr('checked', 'checked');
+                    view.form.find('input[name=format][value=text]').prop('checked', false);
+                    view.form.find('input[name=format][value=html]').prop('checked', true);
                     return $.Deferred().resolve(data);
                 } else {
                     return $.Deferred().resolve(data);

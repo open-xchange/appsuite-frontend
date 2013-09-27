@@ -426,7 +426,7 @@ define('io.ox/core/commons-folderview',
                                     .text(gt('Folder type')),
                                 $('<input>', { type: 'text' })
                                     .addClass('span9')
-                                    .attr('readonly', 'readonly')
+                                    .prop('readonly', true)
                                     .val(ucfirst(folder.module))
                             )
                         );
@@ -441,7 +441,7 @@ define('io.ox/core/commons-folderview',
                                         .text(gt('CalDAV URL')),
                                     $('<input>', { type: 'text' })
                                         .addClass('span9')
-                                        .attr('readonly', 'readonly')
+                                        .prop('readonly', true)
                                         .val(
                                             _.noI18n(caldavConfig.get('url')
                                                 .replace("[hostname]", location.host)

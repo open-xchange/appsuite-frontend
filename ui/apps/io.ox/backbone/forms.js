@@ -401,19 +401,15 @@ define('io.ox/backbone/forms',
                         )
                 );
                 if (this.model.get(this.attribute)) {
-                    this.nodes.checkbox.attr({checked: "checked"});
+                    this.nodes.checkbox.prop('checked', true);
                 }
-                this.nodes.checkbox.attr('checked', this.model.get(this.attribute));
+                this.nodes.checkbox.prop('checked', this.model.get(this.attribute));
                 this.nodes.checkbox.on('change', function () {
-                    self.model.set(self.attribute, self.nodes.checkbox.is(':checked'), {validate: true});
+                    self.model.set(self.attribute, self.nodes.checkbox.prop('checked'), {validate: true});
                 });
             },
             updateCheckbox: function () {
-                if (this.model.get(this.attribute)) {
-                    this.nodes.checkbox.attr({checked: "checked"});
-                } else {
-                    this.nodes.checkbox.removeAttr("checked");
-                }
+                this.nodes.checkbox.prop('checked', this.model.get(this.attribute));
             }
         };
 
@@ -431,7 +427,7 @@ define('io.ox/backbone/forms',
                 this.nodes = {};
                 this.nodes.select = $('<select tabindex="1">');
                 if (options.multiple) {
-                    this.nodes.select.attr('multiple', 'multiple');
+                    this.nodes.select.prop('multiple', true);
                 }
                 _(this.selectOptions).each(function (label, value) {
                     self.nodes.select.append(
@@ -790,7 +786,7 @@ define('io.ox/backbone/forms',
                             function () {
                                 self.nodes.dayField = $('<input type="text" tabindex="1" class="input-small datepicker-day-field">');
                                 if (options.initialStateDisabled) {
-                                    self.nodes.dayField.attr('disabled', true);
+                                    self.nodes.dayField.prop('disabled', true);
                                 }
 
                                 if (options.display === "DATETIME") {

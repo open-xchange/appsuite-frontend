@@ -397,7 +397,7 @@ define('io.ox/core/tk/folderviews',
                     nodes.counter = $('<div class="folder-counter">').append('<span class="folder-counter-badge">');
                     nodes.subscriber = $('<input>').attr({ 'type': 'checkbox', 'name': 'folder', tabindex: -1, 'value': data.id }).css('float', 'right');
                     if (data.subscribed) {
-                        nodes.subscriber.attr('checked', 'checked');
+                        nodes.subscriber.prop('checked', true);
                     }
                 }  else {
                     //potential workaround for bug 24377 (horizontal folder duplicates)

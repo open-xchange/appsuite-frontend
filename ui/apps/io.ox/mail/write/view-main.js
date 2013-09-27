@@ -1000,12 +1000,12 @@ define('io.ox/mail/write/view-main',
             node.val('').focus();
         } else if ($.trim(node.val()) !== '') {
             // not accepted but has content
-            node.attr('disabled', 'disabled')
+            node.prop('disabled', true)
                 .css({ border: '1px solid #a00', backgroundColor: '#fee' })
                 .delay(600)
                 .queue(function () {
                     node.css({ border: '', backgroundColor: '' })
-                        .removeAttr('disabled')
+                        .prop('disabled', false)
                         .focus()
                         .dequeue();
                 });
@@ -1164,7 +1164,7 @@ define('io.ox/mail/write/view-main',
             radio, $.txt(_.noI18n('\u00A0\u00A0')), text, $.txt(_.noI18n('\u00A0\u00A0\u00A0\u00A0 '))
         );
         if (isChecked) {
-            radio.attr('checked', 'checked');
+            radio.prop('checked', true);
         }
         // if (Modernizr.touch) {
         //     label.on('click', clickRadio);
@@ -1184,7 +1184,7 @@ define('io.ox/mail/write/view-main',
             box, $.txt(_.noI18n('\u00A0\u00A0')), text, $.txt(_.noI18n('\u00A0\u00A0\u00A0\u00A0 '))
         );
         if (isChecked) {
-            box.attr('checked', 'checked');
+            box.prop('checked', true);
         }
         // if (Modernizr.touch) {
         //     label.on('click', clickCheckbox);

@@ -366,7 +366,7 @@ define('io.ox/core/pubsub/publications',
             } else {
                 var temp = $('<label>').addClass('checkbox').text(gt('Share link by email')).append(
                                node = $('<input>').attr('type', 'checkbox').addClass('invite-checkbox').on('change', function () {
-                                    if (node.attr('checked') === 'checked') {
+                                    if (node.prop('checked')) {
                                         baton.model.attributes.invite = true;
                                     } else {
                                         baton.model.attributes.invite = false;

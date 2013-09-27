@@ -19,7 +19,7 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
     // Grab the extension point for the wizard
     // Every page in the wizard will be an extension to this extension point
     var point = ext.point("io.ox/dev/wizard/welcomeWizard");
-    
+
     // We will build a few pages here to showcase how you can use the framework.
     // Firstly, the simplest case, just a static page
     // It's a nice trick to start off with a static page, so the subsequent page can already start loading data
@@ -79,7 +79,7 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
             // reason to believe the state changed
             baton.helpers = {
                 updateState: function () {
-                    if (baton.form.male.attr("checked") === 'checked' || baton.form.female.attr("checked") === 'checked') {
+                    if (baton.form.male.prop('checked') || baton.form.female.prop('checked')) {
                         // One of the two was picked, so enable the next button
                         baton.buttons.enableNext();
                     } else {
@@ -90,7 +90,7 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
             };
             baton.form.male.on('click', baton.helpers.updateState);
             baton.form.female.on('click', baton.helpers.updateState);
-                
+
         },
 
         activate: function (baton) {
@@ -104,9 +104,9 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
             // with the entered value, in this case we'll remember it in the wizards data section for inter-page stuff
 
             var gender = null;
-            if (baton.form.male.attr("checked") === 'checked') {
+            if (baton.form.male.prop('checked')) {
                 gender = 'male';
-            } else if (baton.form.female.attr("checked") === 'checked') {
+            } else if (baton.form.female.prop('checked')) {
                 gender = 'female';
             }
 
@@ -123,7 +123,7 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
             // The load method is an optional method. It is called to load data that you need to set up the page
             // And it is called as soon as the page is the 'next' or 'previous' page of the active page, so you can start loading
             // even before the page shows up. Return a deferred to let the wizard framework know when you're done.
-            
+
 
             // We will fetch the user data for our example.
             var def = $.Deferred();
@@ -293,7 +293,7 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
             }
         });
 
-         
+
     });
 
     */

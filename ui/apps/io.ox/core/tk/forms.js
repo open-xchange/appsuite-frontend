@@ -410,8 +410,8 @@ define('io.ox/core/tk/forms',
 
             item.on('click', function () {
                 // console.log('click');
-                item.parent().find('div[selected="selected"]').attr('selected', null);
-                item.attr('selected', 'selected');
+                item.parent().find('div[selected="selected"]').prop('selected', false);
+                item.prop('selected', true);
             });
             return item;
         },

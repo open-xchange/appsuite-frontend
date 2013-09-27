@@ -205,7 +205,7 @@ define('io.ox/calendar/invitations/register',
                 })
                 // disable buttons - don't know why we have an array of appointments but just one set of buttons
                 // so, let's use the first one
-                .find(selector).addClass('disabled').attr('disabled', 'disabled');
+                .find(selector).addClass('disabled').prop('disabled', true);
 
                 if (baton.analysis.messageType !== 'request' && introductions[0]) {
                     baton.$.well.find('.muted').html(introductions[0]);
@@ -599,7 +599,7 @@ define('io.ox/calendar/invitations/register',
                 });
             })
             // disable button matching current status
-            .find(selector).addClass('disabled').attr('disabled', 'disabled');
+            .find(selector).addClass('disabled').prop('disabled', true);
         }
 
         baton.$.well.show();

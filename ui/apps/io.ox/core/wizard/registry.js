@@ -23,7 +23,7 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 		var renderedPages = {};
 		var self = this;
 		var isBusy = false;
-		
+
 		this.options = options;
 		this.runOptions = null;
 
@@ -36,7 +36,7 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 		this.pageData = {};
 
 		this.wizardIsRunning = null;
-		
+
 		this.navButtons = $("<div/>").append(
 			$('<button class="btn wizard-prev">').text(gt("Previous")).on("click", function () {
 				self.back();
@@ -57,7 +57,7 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 			);
 		}
 
-		
+
 
 		function isNextEnabled() {
 			return getBaton().buttons.nextEnabled;
@@ -73,7 +73,7 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 			self.dialog.idle();
 			self.updateButtonState();
 		}
-		
+
 
 		function getBaton(index) {
 			if (_.isUndefined(index)) {
@@ -247,11 +247,11 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 				return;
 			}
 			if (isNextEnabled()) {
-				this.navButtons.find(".next").removeAttr("disabled");
-				this.navButtons.find(".done").removeAttr("disabled");
+				this.navButtons.find(".next").prop('disabled', false);
+				this.navButtons.find(".done").prop('disabled', false);
 			} else {
-				this.navButtons.find(".next").attr("disabled", "disabled");
-				this.navButtons.find(".done").attr("disabled", "disabled");
+				this.navButtons.find(".next").prop('disabled', true);
+				this.navButtons.find(".done").prop('disabled', false);
 			}
 		};
 
@@ -284,7 +284,7 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 			goToPage(0);
 			this.wizardIsRunning = this.dialog.show();
 			return this.wizardIsRunning;
-			
+
 		};
 
 		this.next = function () {
@@ -338,7 +338,7 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 		this.busy = busy;
 		this.idle = idle;
 		this.goToPage = goToPage;
-	
+
 	}
 
 

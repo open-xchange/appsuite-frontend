@@ -61,7 +61,7 @@ define('io.ox/mail/settings/signatures/register',
                     $('<label>').text(gt('Signature position')),
                     $insertion = $('<select>').append(
                         $('<option value="above">').text(gt('Above content')),
-                        $('<option value="below">').text(gt('Below content')).attr('selected', true)
+                        $('<option value="below">').text(gt('Below content')).prop('selected', true)
                     )
                 )
             )
@@ -166,14 +166,14 @@ define('io.ox/mail/settings/signatures/register',
                         return;
                     }
                     var $checkbox = $(this).find(':checkbox');
-                    $checkbox.attr('checked', !$checkbox.attr('checked'));
+                    $checkbox.prop('checked', !$checkbox.prop('checked'));
                 });
             });
 
             $pane.append($('<a href="#">').text(gt('Select all')).on('click', function () {
                 $container.find(':checkbox').each(function () {
-                    if (!$(this).attr('checked')) {
-                        $(this).attr('checked', 'checked');
+                    if (!$(this).prop('checked')) {
+                        $(this).prop('checked', true);
                     }
                 });
                 return false;
@@ -256,11 +256,11 @@ define('io.ox/mail/settings/signatures/register',
                         .append($('<label class="radio">')
                             .text(gt('No signature'))
                             .append(radioNone = $('<input type="radio" name="mobileSignature">')
-                                .attr('checked', type === 'none'))
+                                .prop('checked', type === 'none'))
                                 .on('change', radioChange))
                         .append($('<label class="radio">')
                             .append(radioCustom = $('<input type="radio" name="mobileSignature">')
-                                .attr('checked', type === 'custom')
+                                .prop('checked', type === 'custom')
                                 .on('change', radioChange))
                             .append(signatureText = $('<textarea class="span12">')
                                 .val(settings.get('mobileSignature'))
@@ -274,7 +274,7 @@ define('io.ox/mail/settings/signatures/register',
             }
 
             function radioChange() {
-                var type = radioCustom.attr('checked') ? 'custom' : 'none';
+                var type = radioCustom.prop('checked') ? 'custom' : 'none';
                 settings.set('mobileSignatureType', type).save();
             }
 

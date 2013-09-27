@@ -183,9 +183,9 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                             var fields = $('.edit-vacation').find('.input-small');
 
                             if (self.$el.find('input').prop('checked') !== true) {
-                                fields.attr('disabled', true);
+                                fields.prop('disabled', true);
                             } else {
-                                fields.attr('disabled', false);
+                                fields.prop('disabled', false);
                             }
                         });
                     }

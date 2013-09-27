@@ -135,7 +135,7 @@ define('io.ox/contacts/distrib/main',
 
             win.on('show', function () {
                 if (!container.find('[data-extension-id="displayname"] input').val()) {
-                    container.find('.btn[data-action="save"]').attr('disabled', 'disabled');
+                    container.find('.btn[data-action="save"]').prop('disabled', true);
                 }
                 container.find('input[type=text]:visible').eq(0).focus();
                 container.find('[data-extension-id="displayname"] input').on('keyup', _.debounce(function () {

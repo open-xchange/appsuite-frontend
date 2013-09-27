@@ -116,12 +116,12 @@ define('io.ox/editor/main',
         },
 
         busy: function () {
-            this.$el.find('input.title, button.save').attr('disabled', 'disabled');
+            this.$el.find('input.title, button.save').prop('disabled', true);
             this.$el.find('button.save').empty().append($('<i class="icon-refresh icon-spin">'));
         },
 
         idle: function () {
-            this.$el.find('input.title, button.save').removeAttr('disabled');
+            this.$el.find('input.title, button.save').prop('disabled', false);
             this.$el.find('button.save').text(gt('Save'));
         },
 

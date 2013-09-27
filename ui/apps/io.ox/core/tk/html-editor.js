@@ -735,7 +735,7 @@ define.async('io.ox/core/tk/html-editor',
 
         this.handleShow = function () {
             textarea.parents('.window-content').find('.editor-print-margin').hide();
-            textarea.removeAttr('disabled').idle().next().show();
+            textarea.prop('disabled', false).idle().next().show();
             textarea.hide();
             resizeEditor();
             $(window).on('resize', resizeEditor);

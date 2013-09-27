@@ -291,8 +291,8 @@ define('io.ox/core/pubsub/subscriptions',
                 $('<div>').addClass('control-group').append(
                     $('<div>').addClass('controls').append(
                         $('<label>').addClass('checkbox').text(gt('Add new folder for this subscription')).append(
-                            $('<input type="checkbox">').attr('checked', 'checked').on('change', function () {
-                                if (!$(this).attr('checked')) {
+                            $('<input type="checkbox">').prop('checked', true).on('change', function () {
+                                if (!$(this).prop('checked')) {
                                     baton.newFolder = false;
                                 }
                             })

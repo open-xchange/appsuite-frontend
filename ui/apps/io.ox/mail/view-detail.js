@@ -1469,7 +1469,7 @@ define('io.ox/mail/view-detail',
                     if (button.data('action') === 'show') {
                         window.open(pub.url, '_blank');
                     } else {
-                        $(e.target).attr('disabled', 'disabled');
+                        $(e.target).prop('disabled', true);
                         notifications.yell('info', gt('Adding subscription. This may take some seconds...'));
                         var self = this,
                             opt = opt || {};

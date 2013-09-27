@@ -90,7 +90,7 @@ define('io.ox/backbone/mini-views/date',
                 this.model.set(this.name, tempDate.getTime());
             } else {
                 this.model.set(this.name, null);
-                this.$el.find('.date').children().attr('disabled', false);//enable all
+                this.$el.find('.date').children().prop('disabled', false);//enable all
             }
         },
 
@@ -120,9 +120,9 @@ define('io.ox/backbone/mini-views/date',
                 d.setMonth(d.getMonth() + 1);
                 d.setDate(0);
                 var validDays = d.getDate(),
-                    options = this.$el.find('.date').children().attr('disabled', false);
+                    options = this.$el.find('.date').children().prop('disabled', false);
                 options = options.slice(validDays + 1, options.length);
-                options.attr('disabled', true);
+                options.prop('disabled', true);
             }
         },
 

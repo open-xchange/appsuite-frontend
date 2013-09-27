@@ -276,7 +276,7 @@ define("io.ox/conversations/main",
         sendMessage = function () {
             var val = $.trim(textarea.val());
             if (val !== "") {
-                textarea.attr("disabled", "disabled");
+                textarea.prop('disabled', true);
                 api.sendMessage(currentChatId, val)
                     .done(function () {
                         lastMessage = val;
@@ -284,7 +284,7 @@ define("io.ox/conversations/main",
                         pollNow();
                     })
                     .always(function () {
-                        textarea.removeAttr("disabled").focus();
+                        textarea.prop('disable', false).focus();
                     });
             }
         };

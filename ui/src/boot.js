@@ -112,7 +112,7 @@ $(window).load(function () {
         // remove dom nodes
         $('#io-ox-login-footer').remove();
         // update form
-        $('#io-ox-login-username').attr('disabled', 'disabled');
+        $('#io-ox-login-username').prop('disabled', true);
         $('#io-ox-login-password').val('');
         // unbind
         $('#io-ox-login-form').off('submit');
@@ -856,10 +856,10 @@ $(window).load(function () {
 
             // disable password?
             if (!ox.online) {
-                $('#io-ox-login-password').attr('disabled', 'disabled');
+                $('#io-ox-login-password').prop('disabled', true);
                 feedback('info', 'Offline mode');
             } else {
-                $('#io-ox-login-password').removeAttr('disabled');
+                $('#io-ox-login-password').prop('disabled', false);
             }
 
             // set username input type to text in IE
@@ -949,7 +949,7 @@ $(window).load(function () {
                 // show login dialog
                 $('#io-ox-login-blocker').on('mousedown', false);
                 $('#io-ox-login-form').on('submit', fnSubmit);
-                $('#io-ox-login-username').removeAttr('disabled').focus().select();
+                $('#io-ox-login-username').prop('disabled', false).focus().select();
 
                 debug('boot.js: Fade in ...');
                 $('#background_loader').idle().fadeOut(DURATION, cont);

@@ -332,7 +332,7 @@ define('io.ox/core/tk/selection',
             return (node || getNode(key))
                 .addClass(self.classSelected)
                 .find('input.reflect-selection')
-                .attr('checked', 'checked')
+                .prop('checked', true)
                 .end();
         };
 
@@ -356,7 +356,7 @@ define('io.ox/core/tk/selection',
             delete selectedItems[key];
             getNode(key)
                 .removeClass(self.classSelected)
-                .find('input.reflect-selection').removeAttr('checked');
+                .find('input.reflect-selection').prop('checked', false);
             self.trigger('deselect', key);
         };
 
@@ -387,10 +387,10 @@ define('io.ox/core/tk/selection',
                     self.addToIndex(objID);
                 }
                 if (isSelected(objID)) {
-                    $('input.reflect-selection', node).attr('checked', 'checked');
+                    $('input.reflect-selection', node).prop('checked', true);
                     node.addClass(self.classSelected);
                 } else {
-                    $('input.reflect-selection', node).removeAttr('checked');
+                    $('input.reflect-selection', node).prop('checked', false);
                     node.removeClass(self.classSelected);
                 }
             }
@@ -401,7 +401,7 @@ define('io.ox/core/tk/selection',
             selectedItems = {};
             // clear nodes
             container.find('.selectable.' + self.classSelected).removeClass(self.classSelected);
-            container.find('.selectable input.reflect-selection').removeAttr('checked');
+            container.find('.selectable input.reflect-selection').prop('checked', false);
         };
 
         /**
@@ -452,10 +452,10 @@ define('io.ox/core/tk/selection',
                 var node = $(this),
                     cid = node.attr('data-obj-id');
                 if (cid in hash) {
-                    $('input.reflect-selection', node).attr('checked', 'checked');
+                    $('input.reflect-selection', node).prop('checked', true);
                     node.addClass(self.classSelected);
                 } else {
-                    $('input.reflect-selection', node).removeAttr('checked');
+                    $('input.reflect-selection', node).prop('checked', false);
                     node.removeClass(self.classSelected);
                 }
             });

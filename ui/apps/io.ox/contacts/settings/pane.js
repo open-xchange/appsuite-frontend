@@ -53,7 +53,7 @@ define('io.ox/contacts/settings/pane',
                 buildInputRadio = function (list, selected) {
                     return _.pairs(list).map(function (option) {
                         var o = $('<input type="radio" name="fullNameFormat">').val(option[0]);
-                        if (selected === option[0]) o.attr('checked', 'checked');
+                        if (selected === option[0]) o.prop('checked', true);
                         return $('<label class="radio">').text(option[1]).append(o);
                     });
                 };

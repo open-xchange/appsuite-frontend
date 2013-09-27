@@ -1064,7 +1064,7 @@ define("io.ox/core/desktop",
                         blocker = self.nodes.blocker;
                         $('body').focus(); // steal focus
                         self.nodes.main.find(BUSY_SELECTOR)
-                            .not(':disabled').attr('disabled', 'disabled').addClass(TOGGLE_CLASS);
+                            .not(':disabled').prop('disabled', true).addClass(TOGGLE_CLASS);
                         if (_.isNumber(pct)) {
                             pct = Math.max(0, Math.min(pct, 1));
                             blocker.idle().find('.bar').eq(0).css('width', (pct * 100) + '%').parent().show();
@@ -1091,7 +1091,7 @@ define("io.ox/core/desktop",
                             .end().idle().hide()
                             .find('.header, .footer').empty();
                         self.nodes.main.find(BUSY_SELECTOR).filter('.' + TOGGLE_CLASS)
-                            .removeAttr('disabled').removeClass(TOGGLE_CLASS);
+                            .prop('disabled', false).removeClass(TOGGLE_CLASS);
                         self.trigger('idle');
                     }
                     return this;

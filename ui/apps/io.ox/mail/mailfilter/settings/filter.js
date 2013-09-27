@@ -158,8 +158,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     },
 
                     onSelect: function () {
-                        this.$el.parent().find('li[selected="selected"]').attr('selected', null);
-                        this.$el.find('.deletable-item').attr('selected', 'selected');
+                        this.$el.parent().find('li[selected="selected"]').prop('selected', false);
+                        this.$el.find('.deletable-item').prop('selected', true);
                     }
 
                 }),

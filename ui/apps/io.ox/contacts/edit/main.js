@@ -102,7 +102,7 @@ define('io.ox/contacts/edit/main',
                         function fnToggleSave(isDirty) {
                             var node = container.find('.btn[data-action="save"]');
                             if (_.device('smartphone')) node = container.parent().parent().find('.btn[data-action="save"]');
-                            if (isDirty) node.removeAttr('disabled'); else node.attr('disabled', 'disabled');
+                            if (isDirty) node.prop('disabled', false); else node.prop('disabled', true);
                         }
 
                         if (!data.id) {
@@ -113,7 +113,7 @@ define('io.ox/contacts/edit/main',
                             });
 
                             if (contact.id === undefined && _.keys(contact.attributes).length <= 1) {
-                                container.find('.btn[data-action="save"]').attr('disabled', 'disabled');
+                                container.find('.btn[data-action="save"]').prop('disabled', true);
                             }
 
                             container.find('input[type="text"]').on('keyup', _.debounce(function (e) {

@@ -155,9 +155,9 @@ define("io.ox/core/extPatterns/actions",
                     var ref = node.attr('data-action');
                     return processActions(ref, collection, selection).done(function (result) {
                         if (result === false) {
-                            node.attr('disabled', 'disabled').off('click.action');
+                            node.prop('disabled', true).off('click.action');
                         } else {
-                            node.removeAttr('disabled').off('click.action')
+                            node.prop('disabled', false).off('click.action')
                                 .on('click.action', { ref: ref, selection: selection }, customClick);
                         }
                     });

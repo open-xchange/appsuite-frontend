@@ -93,11 +93,11 @@ define("io.ox/core/tk/dialogs",
             busy = function () {
                 nodes.footer
                     .find('input, select, button')
-                    .attr('disabled', 'disabled');
+                    .prop('disabled', true);
                 nodes.body
                     .css('opacity', 0.5)
                     .find('input, select, button, textarea')
-                    .attr('disabled', 'disabled');
+                    .prop('disabled', true);
                 innerFocus = $(document.activeElement);
                 nodes.popup.focus();
                 isBusy = true;
@@ -106,11 +106,11 @@ define("io.ox/core/tk/dialogs",
             idle = function () {
                 nodes.footer
                     .find('input, select, button')
-                    .removeAttr('disabled');
+                    .prop('disabled', false);
                 nodes.body
                     .css('opacity', '')
                     .find('input, select, button, textarea')
-                    .removeAttr('disabled');
+                    .prop('disabled', false);
                 innerFocus.focus();
                 isBusy = false;
             },
@@ -787,10 +787,10 @@ define("io.ox/core/tk/dialogs",
         CreateDialog: CreateDialog,
         SidePopup: SidePopup,
         busy: function (node) {
-            node.find('button, input').attr('disabled', 'disabled');
+            node.find('button, input').prop('disabled', true);
         },
         idle: function (node) {
-            node.find('button, input').removeAttr('disabled');
+            node.find('button, input').prop('disabled', false);
         }
     };
 });
