@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
-"PO-Revision-Date: 2013-07-24 21:33-0600\n"
+"PO-Revision-Date: 2013-09-10 20:53-0600\n"
 "Last-Translator: Timothy Friesen <tjfriese@gmail.com>\n"
 "Language-Team: British English <kde-i18n-doc@kde.org>\n"
 "Language: en_GB\n"
@@ -97,9 +97,8 @@ msgid "Cancel"
 msgstr "Cancel"
 
 #: apps/io.ox/office/framework/app/baseapplication.js:197
-#, fuzzy
 msgid "unnamed"
-msgstr "Unnamed"
+msgstr "unnamed"
 
 #: apps/io.ox/office/framework/app/baseapplication.js:257
 msgid "An error occurred while loading the document."
@@ -165,9 +164,8 @@ msgid "No"
 msgstr "No"
 
 #: apps/io.ox/office/preview/main.js:96
-#, fuzzy
 msgid "The document is protected by a password."
-msgstr "The document is password protected."
+msgstr "The document is protected by a password."
 
 #: apps/io.ox/office/preview/app/actionshelper.js:96
 msgid "View"
@@ -261,7 +259,7 @@ msgstr "Zoom: %1$d%"
 
 #: apps/io.ox/office/preview/view/view.js:242
 msgid "Sorry, this page is not available at the moment."
-msgstr ""
+msgstr "Sorry, this page is not available at the moment."
 
 #: apps/io.ox/calendar/edit/template.js:63
 #: apps/io.ox/contacts/distrib/create-dist-view.js:40
@@ -337,13 +335,12 @@ msgid "Click to open."
 msgstr "Click to open."
 
 #: apps/io.ox/files/util.js:34
-#, fuzzy
 msgid ""
 "Please note, changing or removing the file extension will cause problems "
 "when viewing or editing."
 msgstr ""
-"Please note, Changing or removing will cause problems for viewing and "
-"editing."
+"Please note, changing or removing the file extension will cause problems "
+"when viewing or editing."
 
 #: apps/io.ox/files/util.js:42
 msgid ""
@@ -377,19 +374,16 @@ msgid "Sort options"
 msgstr "Sort options"
 
 #: apps/io.ox/files/list/perspective.js:284
-#, fuzzy
 msgid "File name"
-msgstr "Middle name"
+msgstr "Filename"
 
 #: apps/io.ox/files/list/perspective.js:285
-#, fuzzy
 msgid "File size"
-msgstr "Files"
+msgstr "File size"
 
 #: apps/io.ox/files/list/perspective.js:286
-#, fuzzy
 msgid "Last modified"
-msgstr "Modified"
+msgstr "Last modified"
 
 #: apps/io.ox/calendar/list/perspective.js:193
 #: apps/io.ox/files/list/perspective.js:288 apps/io.ox/mail/main.js:291
@@ -452,11 +446,11 @@ msgstr "Version history"
 
 #: apps/io.ox/files/actions.js:154
 msgid "Items without a file can not be downloaded."
-msgstr ""
+msgstr "Items without a file can not be downloaded."
 
 #: apps/io.ox/files/actions.js:195
 msgid "Items without a file can not be opened."
-msgstr ""
+msgstr "Items without a file can not be opened."
 
 #: apps/io.ox/files/actions.js:214
 msgid "File: %1$s"
@@ -618,23 +612,20 @@ msgid "Edit"
 msgstr "Edit"
 
 #: apps/io.ox/core/pubsub/publications.js:100 apps/io.ox/files/actions.js:800
-#, fuzzy
 msgid "Share this file"
-msgstr "Save as file"
+msgstr "Share this file"
 
 #: apps/io.ox/files/actions.js:809
 msgid "Send by mail"
 msgstr "Send by mail"
 
 #: apps/io.ox/files/actions.js:818
-#, fuzzy
 msgid "Send as internal link"
-msgstr "Send as link"
+msgstr "Send as internal link"
 
 #: apps/io.ox/files/actions.js:827
-#, fuzzy
 msgid "Show internal link"
-msgstr "Show link"
+msgstr "Show internal link"
 
 #: apps/io.ox/contacts/actions.js:746 apps/io.ox/files/actions.js:836
 #: apps/io.ox/mail/actions.js:1119
@@ -685,9 +676,8 @@ msgstr "Drop here to upload a <b class=\"dndignore\">new version</b>"
 
 #: apps/io.ox/core/commons-folderview.js:224
 #: apps/io.ox/core/pubsub/publications.js:98 apps/io.ox/files/actions.js:1105
-#, fuzzy
 msgid "Share this folder"
-msgstr "Sent folder"
+msgstr "Share this folder"
 
 #: apps/io.ox/files/actions.js:1113
 msgid "View Slideshow"
@@ -707,9 +697,8 @@ msgid "This file has been added"
 msgstr "This file has been added"
 
 #: apps/io.ox/files/views/create.js:134
-#, fuzzy
 msgid "Upload new files"
-msgstr "Upload new file"
+msgstr "Upload new files"
 
 #. Appears in file icon view during searches
 #: apps/io.ox/files/icons/perspective.js:63
@@ -741,7 +730,7 @@ msgstr "Minimise"
 
 #: apps/io.ox/files/api.js:304
 msgid "The provided filename exceeds the allowed length."
-msgstr ""
+msgstr "The provided filename exceeds the allowed length."
 
 #: apps/io.ox/files/api.js:309
 msgid "The allowed quota is reached."
@@ -819,14 +808,12 @@ msgid "No recipients"
 msgstr "No recipients"
 
 #: apps/io.ox/mail/util.js:344
-#, fuzzy
 msgid "High priority"
-msgstr "Priority"
+msgstr "High priority"
 
 #: apps/io.ox/mail/util.js:346
-#, fuzzy
 msgid "Low priority"
-msgstr "Priority"
+msgstr "Low priority"
 
 #: apps/io.ox/mail/util.js:353
 msgid "Primary account"
@@ -916,7 +903,7 @@ msgstr "Email text"
 
 #: apps/io.ox/mail/main.js:876
 msgid "Application may not work as expected until this problem is solved."
-msgstr ""
+msgstr "Application may not work as expected until this problem is solved."
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:115
 #: apps/io.ox/mail/mailfilter/settings/register.js:22
@@ -1069,17 +1056,19 @@ msgstr "Pink"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:79
 #: apps/io.ox/mail/view-detail.js:1066 apps/io.ox/portal/settings/pane.js:153
 msgid "Gray"
-msgstr "Grey"
+msgstr "Gray"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:110
 msgid ""
 "This rule applies to all messages. Please add a condition to restrict this "
 "rule to specific messages."
 msgstr ""
+"This rule applies to all messages. Please add a condition to restrict this "
+"rule to specific messages."
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:339
 msgid "The character \" \" is not allowed."
-msgstr ""
+msgstr "The character \" \" is not allowed."
 
 #: apps/io.ox/mail/accounts/view-form.js:263
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:364
@@ -1199,7 +1188,7 @@ msgstr "Reply to"
 #. %1$s = maximum
 #: apps/io.ox/mail/write/view-main.js:363
 msgid "The number of recipients is limited to %1$s recipients per field"
-msgstr ""
+msgstr "The number of recipients is limited to %1$s recipients per field"
 
 #: apps/io.ox/mail/write/view-main.js:532
 #: apps/io.ox/mail/write/view-main.js:533
@@ -1207,9 +1196,8 @@ msgid "Copy (CC) to"
 msgstr "Copy (CC) to"
 
 #: apps/io.ox/mail/write/view-main.js:536
-#, fuzzy
 msgid "in copy"
-msgstr "Blind copy to"
+msgstr "in copy"
 
 #: apps/io.ox/mail/write/view-main.js:542
 #: apps/io.ox/mail/write/view-main.js:543
@@ -1217,9 +1205,8 @@ msgid "Blind copy (BCC) to"
 msgstr "Blind copy (BCC) to"
 
 #: apps/io.ox/mail/write/view-main.js:546
-#, fuzzy
 msgid "in blind copy"
-msgstr "Blind copy to"
+msgstr "in blind copy"
 
 #: apps/io.ox/calendar/edit/template.js:412
 #: apps/io.ox/calendar/view-detail.js:454
@@ -1236,6 +1223,7 @@ msgstr "Attachments"
 msgid ""
 "You can drag and drop files from your computer here to add as attachment."
 msgstr ""
+"You can drag and drop files from your computer here to add as attachments."
 
 #: apps/io.ox/mail/write/view-main.js:555
 #, fuzzy
@@ -1326,14 +1314,14 @@ msgstr "Remove attachment"
 #: apps/io.ox/mail/write/view-main.js:1278
 #: apps/io.ox/mail/write/view-main.js:1279
 msgid "Phone (business)"
-msgstr "Phone (Business)"
+msgstr "Phone (business)"
 
 #: apps/io.ox/contacts/view-detail.js:467
 #: apps/io.ox/contacts/view-detail.js:468
 #: apps/io.ox/mail/write/view-main.js:1280
 #: apps/io.ox/mail/write/view-main.js:1281
 msgid "Phone (private)"
-msgstr "Phone (Private)"
+msgstr "Phone (private)"
 
 #: apps/io.ox/contacts/view-detail.js:463
 #: apps/io.ox/contacts/view-detail.js:464
@@ -1353,7 +1341,7 @@ msgstr "Compose"
 
 #: apps/io.ox/mail/write/main.js:299
 msgid "Drop the file anywhere to add attachment"
-msgstr ""
+msgstr "Drop the file anywhere to add attachment"
 
 #: apps/io.ox/mail/actions.js:966 apps/io.ox/mail/write/main.js:675
 msgid "Compose new mail"
@@ -1463,7 +1451,6 @@ msgid "Your name:"
 msgstr "Your name:"
 
 #: apps/io.ox/mail/accounts/view-form.js:30
-#, fuzzy
 msgid "Email Address:"
 msgstr "Email Address:"
 
@@ -1511,7 +1498,7 @@ msgstr "Refresh rate in minutes:"
 
 #: apps/io.ox/mail/accounts/view-form.js:40
 msgid "Remove copy from server after retrieving a message"
-msgstr ""
+msgstr "Remove copy from server after retrieving a message"
 
 #: apps/io.ox/mail/accounts/view-form.js:41
 msgid "Deleting messages on local storage also deletes them on server"
@@ -1568,14 +1555,12 @@ msgid "Please enter the following data: %1$s"
 msgstr "Please enter the following data: %1$s"
 
 #: apps/io.ox/mail/accounts/view-form.js:242
-#, fuzzy
 msgid "This account cannot be validated"
-msgstr "The account must be named"
+msgstr "This account cannot be validated"
 
 #: apps/io.ox/mail/accounts/keychain.js:98
-#, fuzzy
 msgid "Mail account"
-msgstr "Add email account"
+msgstr "Email account"
 
 #: apps/io.ox/mail/accounts/model.js:33
 msgid "The account must be named"
@@ -1622,7 +1607,7 @@ msgstr "Show more"
 
 #: apps/io.ox/mail/view-detail.js:1212
 msgid "Bcc"
-msgstr ""
+msgstr "Bcc"
 
 #: apps/io.ox/core/pubsub/subscriptions.js:227
 #: apps/io.ox/mail/view-detail.js:1250
@@ -1637,20 +1622,18 @@ msgstr[0] "Attachment"
 msgstr[1] "Attachments"
 
 #: apps/io.ox/mail/view-detail.js:1340 apps/io.ox/mail/view-detail.js:1346
-#, fuzzy
 msgctxt "plural"
 msgid "Show attachment"
 msgid_plural "Show attachments"
-msgstr[0] "Remove attachment"
-msgstr[1] "Remove attachment"
+msgstr[0] "Show attachment"
+msgstr[1] "Show attachments"
 
 #: apps/io.ox/mail/view-detail.js:1349
-#, fuzzy
 msgctxt "plural"
 msgid "Hide attachment"
 msgid_plural "Hide attachments"
-msgstr[0] "Remove attachment"
-msgstr[1] "Remove attachment"
+msgstr[0] "Hide attachment"
+msgstr[1] "Hide attachments"
 
 #: apps/io.ox/mail/view-detail.js:1378
 msgid "more"
@@ -1729,14 +1712,12 @@ msgid "All recipients"
 msgstr "All recipients"
 
 #: apps/io.ox/mail/view-detail.js:1604 apps/io.ox/mail/view-detail.js:1608
-#, fuzzy
 msgid "Show details"
-msgstr "Show completed tasks"
+msgstr "Show details"
 
 #: apps/io.ox/mail/view-detail.js:1610
-#, fuzzy
 msgid "Hide details"
-msgstr "Hide side panel"
+msgstr "Hide details"
 
 #: apps/io.ox/mail/statistics.js:58
 msgid "Top 10 you sent mail to"
@@ -1755,21 +1736,21 @@ msgid "Mails per hour (%)"
 msgstr "Email messages per hour (%)"
 
 #: apps/io.ox/mail/actions.js:63
-#, fuzzy
 msgid "Do you want to permanently delete this mail?"
 msgid_plural "Do you want to permanently delete these mails?"
-msgstr[0] "Do you really want to permanently delete this email?"
-msgstr[1] "Do you really want to permanently delete these email messages?"
+msgstr[0] "Do you want to permanently delete this email?"
+msgstr[1] "Do you want to permanently delete these email messages?"
 
 #: apps/io.ox/mail/actions.js:89
-#, fuzzy
 msgid "Mail quota exceeded"
-msgstr "Mail quota"
+msgstr "Mail quota exceeded"
 
 #: apps/io.ox/mail/actions.js:92
 msgid ""
 "Emails cannot be put into trash folder while your mail quota is exceeded."
 msgstr ""
+"Email messages cannot be put into the trash folder while you have exceeded "
+"your mail quota."
 
 #: apps/io.ox/mail/actions.js:180
 msgid "Mail source"
@@ -1792,9 +1773,8 @@ msgid "Mail has been copied"
 msgstr "Email has been copied"
 
 #: apps/io.ox/mail/actions.js:566
-#, fuzzy
 msgid "Attachments will be saved"
-msgstr "Attachments have been saved"
+msgstr "Attachments will be saved"
 
 #: apps/io.ox/mail/actions.js:569
 msgid "Attachments have been saved"
@@ -1802,7 +1782,7 @@ msgstr "Attachments have been saved"
 
 #: apps/io.ox/mail/actions.js:603
 msgid "Failed to add. Maybe the vCard attachment is invalid."
-msgstr ""
+msgstr "Failed to add. The vCard attachment may be invalid."
 
 #: apps/io.ox/mail/actions.js:664
 msgid "The appointment has been added to your calendar"
@@ -1932,7 +1912,7 @@ msgstr "Vacation Notice"
 
 #: apps/io.ox/mail/vacationnotice/settings/register.js:69
 msgid "Couldn't load your vacation notice."
-msgstr "Could not load your vacation notice."
+msgstr "Couldn't load your vacation notice."
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js:106
 msgid "vacation notice"
@@ -1947,7 +1927,6 @@ msgid "Enabled for the following addresses"
 msgstr "Enabled for the following addresses"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js:136
-#, fuzzy
 msgid "Email addresses"
 msgstr "Email addresses"
 
@@ -1982,9 +1961,8 @@ msgid "Common"
 msgstr "Common"
 
 #: apps/io.ox/mail/settings/pane.js:34
-#, fuzzy
 msgid "Permanently remove deleted emails"
-msgstr "Permanently remove deleted Email messages"
+msgstr "Permanently remove deleted email messages"
 
 #: apps/io.ox/mail/settings/pane.js:35
 msgid ""
@@ -2011,14 +1989,12 @@ msgid "Append vCard"
 msgstr "Append vCard"
 
 #: apps/io.ox/mail/settings/old_pane.js:72 apps/io.ox/mail/settings/pane.js:40
-#, fuzzy
 msgid "Insert the original email text to a reply"
 msgstr "Insert the original email text into a reply"
 
 #: apps/io.ox/mail/settings/pane.js:41
-#, fuzzy
 msgid "Forward emails as"
-msgstr "Forward email messages as:"
+msgstr "Forward email messages as"
 
 #: apps/io.ox/mail/settings/old_pane.js:85 apps/io.ox/mail/settings/pane.js:42
 msgid "Inline"
@@ -2029,9 +2005,8 @@ msgid "Attachment"
 msgstr "Attachment"
 
 #: apps/io.ox/mail/settings/pane.js:44
-#, fuzzy
 msgid "Format emails as"
-msgstr "Format email messages as:"
+msgstr "Format email messages as"
 
 #: apps/io.ox/mail/settings/old_pane.js:98 apps/io.ox/mail/settings/pane.js:46
 msgid "Plain text"
@@ -2042,21 +2017,18 @@ msgid "HTML and plain text"
 msgstr "HTML and plain text"
 
 #: apps/io.ox/mail/settings/pane.js:48
-#, fuzzy
 msgid "Line wrap when sending text mails after "
-msgstr "Line wrap when sending text email messages after: "
+msgstr "Line wrap when sending text email messages after "
 
 #: apps/io.ox/mail/settings/pane.js:49
 msgid " characters"
 msgstr "characters"
 
 #: apps/io.ox/mail/settings/pane.js:50
-#, fuzzy
 msgid "Default sender address"
-msgstr "Default sender address:"
+msgstr "Default sender address"
 
 #: apps/io.ox/mail/settings/pane.js:51
-#, fuzzy
 msgid "Auto-save email drafts"
 msgstr "Auto-save email drafts"
 
@@ -2067,7 +2039,6 @@ msgstr "Display"
 
 #: apps/io.ox/mail/settings/old_pane.js:151
 #: apps/io.ox/mail/settings/pane.js:53
-#, fuzzy
 msgid "Allow html formatted emails"
 msgstr "Allow HTML formatted email messages"
 
@@ -2077,7 +2048,6 @@ msgstr "Allow pre-loading of externally linked images"
 
 #: apps/io.ox/mail/settings/old_pane.js:153
 #: apps/io.ox/mail/settings/pane.js:55
-#, fuzzy
 msgid "Display emoticons as graphics in text emails"
 msgstr "Display emoticons as graphics in text email messages"
 
@@ -2138,28 +2108,24 @@ msgid "Please enter a valid name"
 msgstr "Please enter a valid name"
 
 #: apps/io.ox/mail/settings/signatures/register.js:48
-#, fuzzy
 msgid "Add signature"
-msgstr "Add new signature"
+msgstr "Add signature"
 
 #: apps/io.ox/mail/settings/signatures/register.js:48
 msgid "Edit signature"
 msgstr "Edit signature"
 
 #: apps/io.ox/mail/settings/signatures/register.js:52
-#, fuzzy
 msgid "Signature name"
-msgstr "Signature"
+msgstr "Signature name"
 
 #: apps/io.ox/mail/settings/signatures/register.js:57
-#, fuzzy
 msgid "Signature text"
-msgstr "Signature"
+msgstr "Signature text"
 
 #: apps/io.ox/mail/settings/signatures/register.js:61
-#, fuzzy
 msgid "Signature position"
-msgstr "Signature insertion:"
+msgstr "Signature position"
 
 #: apps/io.ox/mail/settings/signatures/register.js:63
 msgid "Above content"
@@ -2199,7 +2165,6 @@ msgid "Add new signature"
 msgstr "Add new signature"
 
 #: apps/io.ox/mail/settings/old_pane.js:37
-#, fuzzy
 msgid "Permanently remove deleted emails?"
 msgstr "Permanently remove deleted email messages?"
 
@@ -2220,12 +2185,10 @@ msgstr ""
 "reading?"
 
 #: apps/io.ox/mail/settings/old_pane.js:83
-#, fuzzy
 msgid "Forward emails as:"
 msgstr "Forward email messages as:"
 
 #: apps/io.ox/mail/settings/old_pane.js:95
-#, fuzzy
 msgid "Format emails as:"
 msgstr "Format email messages as:"
 
@@ -2238,7 +2201,6 @@ msgid "Default sender address:"
 msgstr "Default sender address:"
 
 #: apps/io.ox/mail/settings/old_pane.js:121
-#, fuzzy
 msgid "Auto-save email drafts?"
 msgstr "Auto-save email drafts?"
 
@@ -2271,29 +2233,26 @@ msgstr "Folder actions"
 #: apps/io.ox/mail/guidance/main.js:101
 msgctxt "help"
 msgid "The E-Mail Components"
-msgstr ""
+msgstr "The Email Components"
 
 #: apps/io.ox/mail/guidance/main.js:102
-#, fuzzy
 msgctxt "help"
 msgid "Managing E-Mail messages"
-msgstr "Opening email threads"
+msgstr "Managing Email messages"
 
 #: apps/io.ox/mail/guidance/main.js:103
-#, fuzzy
 msgctxt "help"
 msgid "External E-Mail Accounts"
-msgstr "External participants"
+msgstr "External Email Accounts"
 
 #: apps/io.ox/mail/guidance/main.js:104
-#, fuzzy
 msgctxt "help"
 msgid "E-Mail Settings"
-msgstr "Settings"
+msgstr "Email Settings"
 
 #: apps/io.ox/mail/guidance/main.js:108
 msgid "Related articles"
-msgstr ""
+msgstr "Related articles"
 
 #: apps/io.ox/backbone/forms.js:964 apps/io.ox/backbone/validation.js:57
 #: apps/io.ox/backbone/validation.js:64
@@ -2309,9 +2268,8 @@ msgid "Please enter a valid email address"
 msgstr "Please enter a valid email address"
 
 #: apps/io.ox/backbone/validation.js:75
-#, fuzzy
 msgid "Please enter a valid phone number. Allowed characters are: %1$s"
-msgstr "Please enter a valid email address"
+msgstr "Please enter a valid phone number. Allowed characters are: %1$s"
 
 #: apps/io.ox/backbone/validation.js:82
 msgid "Please enter a valid object"
@@ -2326,9 +2284,8 @@ msgid "Invalid data"
 msgstr "Invalid data"
 
 #: apps/io.ox/backbone/mini-views/date.js:22
-#, fuzzy
 msgid "Year"
-msgstr "Years"
+msgstr "Year"
 
 #: apps/io.ox/backbone/mini-views/date.js:23
 #: apps/io.ox/calendar/actions.js:495 apps/io.ox/calendar/settings/pane.js:69
@@ -2440,7 +2397,7 @@ msgstr "Drag to reorder widget"
 
 #: apps/io.ox/portal/settings/pane.js:227
 msgid "Use cursor keys to change the item position"
-msgstr ""
+msgstr "Use cursor keys to change the item position"
 
 #: apps/io.ox/tours/main.js:47 apps/io.ox/tours/main.js:140
 msgid "Launching an app"
@@ -3144,14 +3101,12 @@ msgstr ""
 "bar. Select Sign out."
 
 #: apps/io.ox/core/main.js:107
-#, fuzzy
 msgid "Offline"
-msgstr "Offline mode"
+msgstr "Offline"
 
 #: apps/io.ox/core/main.js:118
-#, fuzzy
 msgid "Server unreachable"
-msgstr "Server Name:"
+msgstr "Server unreachable"
 
 #: apps/io.ox/core/main.js:134 apps/io.ox/launchpad/main.js:28
 msgctxt "app"
@@ -3193,11 +3148,11 @@ msgstr[1] "You will be automatically logged out in %1$d seconds"
 
 #: apps/io.ox/core/main.js:366
 msgid "Automatic logout"
-msgstr "Automatic sign out"
+msgstr "Automatic logout"
 
 #: apps/io.ox/core/main.js:370
 msgid "Logout now"
-msgstr "Sign out now"
+msgstr "Logout now"
 
 #: apps/io.ox/core/main.js:571 apps/io.ox/core/pubsub/settings/pane.js:209
 msgid "Refresh"
@@ -3276,7 +3231,7 @@ msgstr "Your password has been changed"
 
 #: apps/io.ox/core/relogin.js:54
 msgid "Relogin"
-msgstr "Sign in"
+msgstr "Relogin"
 
 #: apps/io.ox/core/relogin.js:85
 msgid "Please enter correct password"
@@ -3284,7 +3239,7 @@ msgstr "Please enter the correct password"
 
 #: apps/io.ox/core/relogin.js:88
 msgid "Failed to relogin"
-msgstr "Failed to sign in"
+msgstr "Failed to relogin"
 
 #. Reminder (objective case): in X weeks
 #. %d is the number of weeks
@@ -3509,9 +3464,8 @@ msgid "Please select a file to import"
 msgstr "Please select a file to import"
 
 #: apps/io.ox/core/import/import.js:185
-#, fuzzy
 msgid "Please select a valid iCal File to import"
-msgstr "Please select a file to import"
+msgstr "Please select a valid iCal file to import"
 
 #: apps/io.ox/core/import/import.js:214
 msgid "Data imported successfully"
@@ -3589,9 +3543,8 @@ msgstr ""
 "Future releases will work significantly faster."
 
 #: apps/io.ox/core/pubsub/publications.js:94
-#, fuzzy
 msgid "Share"
-msgstr "Shared"
+msgstr "Share"
 
 #: apps/io.ox/core/pubsub/publications.js:122
 msgid "The publication has been made available as %s"
@@ -3629,29 +3582,26 @@ msgstr "Publication"
 
 #: apps/io.ox/core/pubsub/publications.js:356
 #: apps/io.ox/core/pubsub/publications.js:367
-#, fuzzy
 msgid "Share link by email"
-msgstr "Share Link by email"
+msgstr "Share link by email"
 
 #: apps/io.ox/core/pubsub/publications.js:391
 msgid "Attention"
 msgstr "Attention"
 
 #: apps/io.ox/core/pubsub/publications.js:393
-#, fuzzy
 msgid ""
 "The shared data will be accessible to everyone on the Internet. Please "
 "consider, which data you want to share."
 msgstr ""
-"The published data will be accessible to everyone on the Internet. Please "
-"consider what data you want to publish."
+"The shared data will be accessible to everyone on the Internet. Please "
+"consider which data you want to share."
 
 #: apps/io.ox/core/pubsub/publications.js:395
 msgid "Privacy Notice"
 msgstr "Privacy Notice"
 
 #: apps/io.ox/core/pubsub/publications.js:397
-#, fuzzy
 msgid ""
 "When using this feature, you as the current owner of the data are "
 "responsible for being careful with privacy rules and for complying with "
@@ -3666,13 +3616,13 @@ msgid ""
 "Please ensure appropriate access protection, e.g. by proper password "
 "protection."
 msgstr ""
-"When using the publish feature, you as the current owner of the data are "
+"When using this feature you, as the current owner of the data, are "
 "responsible for being careful with privacy rules and for complying with "
-"legal obligations (Copyright, Privacy Laws). Especially when publishing "
-"personal data you are the responsible party according to the Federal Data "
-"Protection Act (BDSG, Germany) or other Privacy Acts for your country. "
-"According to European and other national regulations you as the responsible "
-"party are in charge of data economy, and must not publish or forward "
+"legal obligations (Copyright, Privacy Laws). Especially when sharing "
+"personal data, you are the responsible party according to the Federal Data "
+"Protection Act (BDSG, Germany) or other Privacy Acts of your country. "
+"According to European and other national regulations you, as the responsible "
+"party, are in charge of data economy, and must not publish or forward "
 "personal data without the person's consent. Beyond legal obligations, we "
 "would like to encourage extreme care when dealing with personal data. Please "
 "consider carefully where you store and to whom you forward personal data. "
@@ -3905,6 +3855,8 @@ msgid ""
 "The blue graph shows the distribution of request durations in percent. The "
 "gray graph shows a trivial network ping to recognize slow connections."
 msgstr ""
+"The blue graph shows the distribution of request durations in percent. The "
+"grey graph shows a trivial network ping to recognize slow connections."
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:216
 msgid "Errors"
@@ -4002,12 +3954,16 @@ msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
 msgstr ""
+"The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
+"size of %2$s"
 
 #: apps/io.ox/core/tk/attachments.js:306 apps/io.ox/core/tk/upload.js:250
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
 "%2$s"
 msgstr ""
+"The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
+"%2$s"
 
 #: apps/io.ox/contacts/actions.js:563 apps/io.ox/core/tk/attachments.js:479
 #: apps/io.ox/tasks/actions.js:389
@@ -4024,9 +3980,8 @@ msgid "Change"
 msgstr "Change"
 
 #: apps/io.ox/core/tk/dropdown-options.js:204
-#, fuzzy
 msgid "close"
-msgstr "Close"
+msgstr "close"
 
 #: apps/io.ox/core/tk/reminder-util.js:23
 #: apps/io.ox/core/tk/reminder-util.js:38
@@ -4076,7 +4031,7 @@ msgstr "Do you really want to delete folder \"%s\"?"
 
 #: apps/io.ox/core/tk/folderviews.js:680
 msgid "This is a standard folder, which can't be renamed."
-msgstr "This is a system folder, which cannot be renamed."
+msgstr "This is a standard folder, which cannot be renamed."
 
 #: apps/io.ox/core/tk/folderviews.js:689
 msgid "Rename folder"
@@ -4116,7 +4071,6 @@ msgstr "Select none"
 
 #. list is empty / no items
 #: apps/io.ox/core/tk/vgrid.js:706
-#, fuzzy
 msgctxt "vgrid"
 msgid "Empty"
 msgstr "Empty"
@@ -4127,16 +4081,15 @@ msgstr "Uploading folders is not supported."
 
 #: apps/io.ox/core/tk/upload.js:106
 msgid "Mail was not imported, only .eml files are supported."
-msgstr ""
+msgstr "Email was not imported, only .eml files are supported."
 
 #: apps/io.ox/core/tk/dialogs.js:683
 msgid "Close all"
 msgstr "Close all"
 
 #: apps/io.ox/core/desktop.js:209
-#, fuzzy
 msgid "Could not get a default folder for this application."
-msgstr "Could not load attachments for this contact."
+msgstr "Could not get a default folder for this application."
 
 #: apps/io.ox/core/desktop.js:563
 msgid "There are unsaved changes."
@@ -4216,16 +4169,15 @@ msgstr "Back"
 
 #: apps/io.ox/core/api/folder.js:57
 msgid "Accessing global address book is not permitted"
-msgstr ""
+msgstr "Accessing global address book is not permitted"
 
 #: apps/io.ox/core/api/folder.js:413
-#, fuzzy
 msgid ""
 "The settings for collecting contacts in this folder will become disabled "
 "when you enter the application the next time."
 msgstr ""
-"The setting has been saved and will become active when you enter the "
-"application the next time."
+"The settings for collecting contacts in this folder will become disabled "
+"when you enter the application the next time."
 
 #: apps/io.ox/core/api/folder.js:600
 msgid ""
@@ -4236,23 +4188,20 @@ msgstr ""
 "administration rights."
 
 #: apps/io.ox/core/api/folder.js:1133
-#, fuzzy
 msgid "File names must not be empty"
-msgstr "Login must not be empty."
+msgstr "File names must not be empty"
 
 #: apps/io.ox/core/api/folder.js:1134
-#, fuzzy
 msgid "Folder names must not be empty"
-msgstr "Login must not be empty."
+msgstr "Folder names must not be empty"
 
 #: apps/io.ox/core/api/folder.js:1145
 msgid "File names must not contain slashes"
-msgstr ""
+msgstr "File names must not contain slashes"
 
 #: apps/io.ox/core/api/folder.js:1146
-#, fuzzy
 msgid "Folder names must not contain slashes"
-msgstr "folder does not contain any data"
+msgstr "Folder names must not contain slashes"
 
 #: apps/io.ox/core/commons-folderview.js:96
 #: apps/io.ox/core/commons-folderview.js:97
@@ -4472,7 +4421,7 @@ msgstr "For best results, please use "
 
 #: apps/io.ox/core/login-i18n.js:39
 msgid "You have been automatically logged out"
-msgstr "You have been automatically signed out"
+msgstr "You have been automatically logged out"
 
 #: apps/io.ox/core/login-i18n.js:40
 msgid ""
@@ -4488,7 +4437,7 @@ msgstr "Offline mode"
 
 #: apps/io.ox/core/login-i18n.js:43
 msgid "Your browser's cookie functionality is disabled. Please turn it on."
-msgstr ""
+msgstr "Your browser's cookie functionality is disabled. Please turn it on."
 
 #: apps/io.ox/oauth/settings.js:55
 msgid "Changes have been saved."
@@ -4500,7 +4449,7 @@ msgstr "Something went wrong saving your changes."
 
 #: apps/io.ox/oauth/settings.js:62
 msgid "You have reauthorized this account."
-msgstr "You have re-authorised this account."
+msgstr "You have reauthorised this account."
 
 #: apps/io.ox/oauth/settings.js:62
 msgid "Something went wrong reauthorizing the account."
@@ -4533,7 +4482,7 @@ msgstr "Phone"
 
 #: apps/io.ox/contacts/model.js:272 apps/io.ox/contacts/print.js:78
 msgid "Cell phone"
-msgstr "Mobile phone"
+msgstr "Cell phone"
 
 #: apps/io.ox/contacts/print.js:80
 msgid "Note: One contact is not shown due to missing phone numbers"
@@ -4662,9 +4611,8 @@ msgid "Create contact"
 msgstr "Create contact"
 
 #: apps/io.ox/contacts/edit/main.js:90
-#, fuzzy
 msgid "Some fields contain invalid data"
-msgstr "folder does not contain any data"
+msgstr "Some fields contain invalid data"
 
 #: apps/io.ox/contacts/edit/main.js:186
 msgid "New contact"
@@ -4680,9 +4628,8 @@ msgid "This list has no contacts yet"
 msgstr "This list has no contacts yet"
 
 #: apps/io.ox/contacts/view-detail.js:314
-#, fuzzy
 msgid "Email"
-msgstr "Email 1"
+msgstr "Email"
 
 #: apps/io.ox/contacts/view-detail.js:362
 msgid "Messenger"
@@ -4748,19 +4695,19 @@ msgstr "Phone numbers"
 
 #: apps/io.ox/contacts/model.js:274 apps/io.ox/contacts/view-detail.js:469
 msgid "Phone (other)"
-msgstr "Phone (Other)"
+msgstr "Phone (other)"
 
 #: apps/io.ox/contacts/view-detail.js:470
 msgid "Fax (business)"
-msgstr "Fax (Business)"
+msgstr "Fax (business)"
 
 #: apps/io.ox/contacts/view-detail.js:471
 msgid "Fax (private)"
-msgstr "Fax (Private)"
+msgstr "Fax (private)"
 
 #: apps/io.ox/contacts/view-detail.js:472
 msgid "Fax (other)"
-msgstr "Fax (Other)"
+msgstr "Fax (other)"
 
 #: apps/io.ox/contacts/view-detail.js:475
 msgid "Business Address"
@@ -4864,14 +4811,12 @@ msgid "Copy to description"
 msgstr "Copy to description"
 
 #: apps/io.ox/contacts/view-detail.js:575
-#, fuzzy
 msgid "Hide QR code"
-msgstr "Hide comments"
+msgstr "Hide QR code"
 
 #: apps/io.ox/contacts/view-detail.js:591
-#, fuzzy
 msgid "Show QR code"
-msgstr "Show more"
+msgstr "Show QR code"
 
 #: apps/io.ox/contacts/model.js:222
 msgid "Display name"
@@ -4903,7 +4848,7 @@ msgstr "Postcode"
 #: apps/io.ox/contacts/model.js:230 apps/io.ox/contacts/model.js:247
 #: apps/io.ox/contacts/model.js:260
 msgid "Town"
-msgstr "City/Town"
+msgstr "Town"
 
 #: apps/io.ox/contacts/model.js:231 apps/io.ox/contacts/model.js:248
 #: apps/io.ox/contacts/model.js:314
@@ -4993,7 +4938,7 @@ msgstr "Phone (car)"
 
 #: apps/io.ox/contacts/model.js:268
 msgid "Phone (company)"
-msgstr "Phone (Business)"
+msgstr "Phone (company)"
 
 #: apps/io.ox/contacts/model.js:269
 msgid "Phone (Home)"
@@ -5013,7 +4958,7 @@ msgstr "Cell phone alt"
 
 #: apps/io.ox/contacts/model.js:275
 msgid "Fax (alt)"
-msgstr "Fax (Alt)"
+msgstr "Fax (alt)"
 
 #: apps/io.ox/contacts/model.js:276
 msgid "Email 1"
@@ -5097,7 +5042,7 @@ msgstr "Address Other"
 
 #: apps/io.ox/contacts/model.js:320
 msgid "This contact is private and cannot be shared"
-msgstr ""
+msgstr "This contact is private and cannot be shared"
 
 #: apps/io.ox/contacts/main.js:192
 msgid "Empty name and description found."
@@ -5112,7 +5057,6 @@ msgid "Couldn't load contact data."
 msgstr "Could not load contact data."
 
 #: apps/io.ox/contacts/main.js:358
-#, fuzzy
 msgid "Names and email addresses"
 msgstr "Names and email addresses"
 
@@ -5152,28 +5096,24 @@ msgid "Click to upload image"
 msgstr "Click to upload image"
 
 #: apps/io.ox/contacts/settings/pane.js:38
-#, fuzzy
 msgid "Address Book"
 msgstr "Address Book"
 
 #: apps/io.ox/contacts/settings/pane.js:48
 msgid "Language-specific default"
-msgstr ""
+msgstr "Language-specific default"
 
 #: apps/io.ox/contacts/settings/pane.js:49
-#, fuzzy
 msgid "First name Last name"
-msgstr "First name"
+msgstr "First name Last name"
 
 #: apps/io.ox/contacts/settings/pane.js:50
-#, fuzzy
 msgid "Last name, First name"
-msgstr "First name"
+msgstr "Last name, First name"
 
 #: apps/io.ox/contacts/settings/pane.js:63
-#, fuzzy
 msgid "Display of names"
-msgstr "Display name"
+msgstr "Display of names"
 
 #: apps/io.ox/contacts/settings/pane.js:81
 #: apps/plugins/portal/userSettings/register.js:119
@@ -5207,23 +5147,20 @@ msgid ""
 "To add contacts manually, just provide a valid email address (e.g john."
 "doe@example.com or \"John Doe\" <jd@example.com>)"
 msgstr ""
-"To add contacts manually, just provide a valid email address (e.g.: john."
+"To add contacts manually, provide a valid email address (e.g john."
 "doe@example.com or \"John Doe\" <jd@example.com>)"
 
 #: apps/io.ox/contacts/distrib/main.js:39
-#, fuzzy
 msgid "Distribution List"
-msgstr "Distribution list"
+msgstr "Distribution List"
 
 #: apps/io.ox/contacts/distrib/main.js:73
-#, fuzzy
 msgid "Failed to save distribution list."
-msgstr "Save as distribution list"
+msgstr "Failed to save distribution list."
 
 #: apps/io.ox/contacts/distrib/main.js:78
-#, fuzzy
 msgid "Distribution list has been saved"
-msgstr "This distribution list has been added to the portal"
+msgstr "Distribution list has been saved"
 
 #: apps/io.ox/help/center.js:128
 msgid "Click here to quit the help center"
@@ -5334,9 +5271,8 @@ msgid "Date completed"
 msgstr "Date completed"
 
 #: apps/io.ox/tasks/print.js:98
-#, fuzzy
 msgid "Reminder date"
-msgstr "Remind date"
+msgstr "Reminder date"
 
 #: apps/io.ox/tasks/print.js:100 apps/io.ox/tasks/view-detail.js:149
 msgid "This task recurs"
@@ -5475,9 +5411,9 @@ msgstr "Due %1$s"
 
 #. %1$s reminder date of a task
 #: apps/io.ox/tasks/view-detail.js:62
-#, fuzzy, c-format
+#, c-format
 msgid "Reminder date %1$s"
-msgstr "Remind date %1$s"
+msgstr "Reminder date %1$s"
 
 #. %1$s how much of a task is completed in percent, values from 0-100
 #: apps/io.ox/tasks/view-detail.js:72
@@ -5582,9 +5518,8 @@ msgid "in one week"
 msgstr "in one week"
 
 #: apps/io.ox/tasks/util.js:311
-#, fuzzy
 msgid "Overdue"
-msgstr "Over due"
+msgstr "Overdue"
 
 #: apps/io.ox/tasks/main.js:233
 msgid "Couldn't load that task."
@@ -5595,9 +5530,8 @@ msgid "Show done tasks"
 msgstr "Show completed tasks"
 
 #: apps/io.ox/tasks/model.js:111 apps/io.ox/tasks/model.js:119
-#, fuzzy
 msgid "Costs must be between -%1$d and %1$d."
-msgstr "Costs must be between -130000 and 130000."
+msgstr "Costs must be between -%1$d and %1$d."
 
 #: apps/io.ox/tasks/model.js:128
 msgid "Progress must be a valid number between 0 and 100"
@@ -5639,7 +5573,7 @@ msgstr "Undone"
 
 #: apps/io.ox/tasks/actions.js:159 apps/io.ox/tasks/actions.js:231
 msgid "A severe error occurred!"
-msgstr "A severe error occurred"
+msgstr "A severe error occurred!"
 
 #: apps/io.ox/tasks/actions.js:161
 msgid "Task was modified before, please reload"
@@ -5694,29 +5628,24 @@ msgid "Change confirmation status"
 msgstr "Change confirmation status"
 
 #: apps/io.ox/tasks/settings/pane.js:24
-#, fuzzy
 msgid "Email notification for task"
 msgstr "Email notification for task"
 
 #: apps/io.ox/calendar/settings/pane.js:41
 #: apps/io.ox/tasks/settings/pane.js:25
-#, fuzzy
 msgid "Email notification for New, Changed, Deleted?"
 msgstr "Email notification for New, Changed, Deleted?"
 
 #: apps/io.ox/calendar/settings/pane.js:42
 #: apps/io.ox/tasks/settings/pane.js:26
-#, fuzzy
 msgid "Email notification for Accept/Declined"
 msgstr "Email notification for Accept/Declined"
 
 #: apps/io.ox/tasks/settings/pane.js:27
-#, fuzzy
 msgid "Email notification for task creator?"
 msgstr "Email notification for task creator?"
 
 #: apps/io.ox/tasks/settings/pane.js:28
-#, fuzzy
 msgid "Email notification for task participant?"
 msgstr "Email notification for task participant?"
 
@@ -5887,7 +5816,6 @@ msgid "Type"
 msgstr "Type"
 
 #: apps/io.ox/calendar/edit/template.js:395
-#, fuzzy
 msgid "Notify all participants by email."
 msgstr "Notify all participants by email."
 
@@ -6333,101 +6261,89 @@ msgstr "Whole day"
 
 #. recurrence string
 #: apps/io.ox/calendar/util.js:370
-#, fuzzy
 msgid "work days"
-msgstr "Work Day"
+msgstr "work days"
 
 #. recurrence string
 #. used to concatenate two weekdays, like Monday and Tuesday
 #: apps/io.ox/calendar/util.js:385
-#, fuzzy
 msgid "and"
-msgstr "End"
+msgstr "and"
 
 #: apps/io.ox/calendar/util.js:405 apps/io.ox/calendar/util.js:415
-#, fuzzy
 msgid "Every day"
-msgstr "every day"
+msgstr "Every day"
 
 #. recurrence string
 #. %1$d: numeric
 #: apps/io.ox/calendar/util.js:408
-#, fuzzy
 msgid "Every %1$d days"
-msgstr "every %1$d day"
+msgstr "Every %1$d days"
 
 #. recurrence string
 #. %1$d: numeric
 #: apps/io.ox/calendar/util.js:418
-#, fuzzy
 msgid "Every %1$d weeks on all days"
-msgstr "every %1$d week"
+msgstr "Every %1$d weeks on all days"
 
 #. recurrence string
 #: apps/io.ox/calendar/util.js:426
-#, fuzzy
 msgid "On work days"
-msgstr "Work Day"
+msgstr "On work days"
 
 #. recurrence string
 #. %1$d: numeric
 #: apps/io.ox/calendar/util.js:429
-#, fuzzy
 msgid "Every %1$d weeks on work days"
-msgstr "every %1$d week"
+msgstr "Every %1$d weeks on work days"
 
 #. recurrence string
 #. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
 #: apps/io.ox/calendar/util.js:435
-#, fuzzy
 msgid "Weekly on %1$s"
-msgstr "Weekly on %s"
+msgstr "Weekly on %1$s"
 
 #. recurrence string
 #. %1$d: numeric
 #. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
 #: apps/io.ox/calendar/util.js:439
-#, fuzzy
 msgid "Every %1$d weeks on %2$s"
-msgstr "every %1$d week"
+msgstr "Every %1$d weeks on %2$s"
 
 #. recurrence string
 #. %1$d: numeric, day in month
 #: apps/io.ox/calendar/util.js:447
 msgid "Monthly on day %1$d"
-msgstr ""
+msgstr "Monthly on day %1$d"
 
 #. recurrence string
 #. %1$d: numeric, interval
 #. %1$d: numeric, day in month
 #: apps/io.ox/calendar/util.js:451
-#, fuzzy
 msgid "Every %1$d months on day %2$d"
-msgstr "every %1$d month"
+msgstr "Every %1$d months on day %2$d"
 
 #. recurrence string
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
 #: apps/io.ox/calendar/util.js:458
 msgid "Monthly on the %1$s %2$s"
-msgstr ""
+msgstr "Monthly on the %1$s %2$s"
 
 #. recurrence string
 #. %1$d: numeric, interval
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
 #: apps/io.ox/calendar/util.js:463
-#, fuzzy
 msgid "Every %1$d months on the %2$s %3$s"
-msgstr "every %1$d month"
+msgstr "Every %1$d months on the %2$s %3$s"
 
 #. recurrence string
 #. %1$s: Month nane, e.g. January
 #. %2$d: Date, numeric, e.g. 29
 #: apps/io.ox/calendar/util.js:472
-#, fuzzy
 msgid "Yearly on %1$s %2$d"
-msgstr "Due on %1$s"
+msgstr "Yearly on %1$s %2$d"
 
 #. recurrence string
 #. %1$d: interval, numeric
@@ -6435,7 +6351,7 @@ msgstr "Due on %1$s"
 #. %3$d: Date, numeric, e.g. 29
 #: apps/io.ox/calendar/util.js:477
 msgid "Every %1$d years on %2$s %3$d"
-msgstr ""
+msgstr "Every %1$d years on %2$s %3$d"
 
 #. recurrence string
 #. %1$s: count string, e.g. first, second, or last
@@ -6443,7 +6359,7 @@ msgstr ""
 #. %3$s: month nane, e.g. January
 #: apps/io.ox/calendar/util.js:485
 msgid "Yearly on the %1$s %2$s of %3$d"
-msgstr ""
+msgstr "Yearly on the %1$s %2$s of %3$d"
 
 #. recurrence string
 #. %1$d: interval, numeric
@@ -6452,7 +6368,7 @@ msgstr ""
 #. %4$s: month nane, e.g. January
 #: apps/io.ox/calendar/util.js:491
 msgid "Every %1$d years on the %2$s %3$s of %4$d"
-msgstr ""
+msgstr "Every %1$d years on the %2$s %3$s of %4$d"
 
 #: apps/io.ox/calendar/acceptdeny.js:55
 msgid ""
@@ -6582,17 +6498,14 @@ msgid "Default time for reminder"
 msgstr "Default time for reminder"
 
 #: apps/io.ox/calendar/settings/pane.js:40
-#, fuzzy
 msgid "Email notification for appointment"
 msgstr "Email notification for appointment"
 
 #: apps/io.ox/calendar/settings/pane.js:43
-#, fuzzy
 msgid "Email notification for appointment creator?"
 msgstr "Email notification for appointment creator?"
 
 #: apps/io.ox/calendar/settings/pane.js:44
-#, fuzzy
 msgid "Email notification for appointment participant?"
 msgstr "Email notification for appointment participant?"
 
@@ -6634,7 +6547,7 @@ msgstr "1 hour"
 
 #: apps/io.ox/calendar/settings/pane.js:84
 msgid "2 hour"
-msgstr "2 hours"
+msgstr "2 hour"
 
 #: apps/io.ox/calendar/settings/pane.js:85
 msgid "4 hour"
@@ -6797,24 +6710,28 @@ msgid ""
 "Failed to update confirmation status; most probably the appointment has been "
 "deleted."
 msgstr ""
+"Failed to update confirmation status; most likely the appointment has been "
+"deleted."
 
 #: apps/io.ox/calendar/invitations/register.js:597
 msgid ""
 "Failed to update confirmation status; most probably the task has been "
 "deleted."
 msgstr ""
+"Failed to update confirmation status; most likely the task has been deleted."
 
 #: apps/io.ox/keychain/api.js:168
 msgid ""
 "The unrecoverable items have been cleaned up successfully. Please refresh "
 "this page to see the changes."
 msgstr ""
+"The unrecoverable items have been cleaned up successfully. Please refresh "
+"this page to see the changes."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js:22
 #: apps/io.ox/settings/accounts/settings/pane.js:79
-#, fuzzy
 msgid "Recover passwords"
-msgstr "Your password"
+msgstr "Recover passwords"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js:25
 msgid ""
@@ -6823,14 +6740,12 @@ msgstr ""
 "Please provide the old password so the account passwords can be recovered."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js:27
-#, fuzzy
 msgid "Your old password"
-msgstr "Your password"
+msgstr "Your old password"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js:32
-#, fuzzy
 msgid "Recover"
-msgstr "Recover accounts"
+msgstr "Recover"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js:47
 msgid "Failed to recover accounts"
@@ -6856,6 +6771,10 @@ msgid ""
 "accounts might stop working. In this case, you can use your old password to "
 "recover all account passwords:"
 msgstr ""
+"For security reasons, all account passwords are encrypted with your primary "
+"account password. If you change your primary password, your external "
+"accounts might stop working. In this case, you can use your old password to "
+"recover all account passwords:"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:134
 msgid "Do you really want to delete this account?"
@@ -7021,9 +6940,8 @@ msgid "Show all %1$d messages in inbox"
 msgstr ""
 
 #: apps/plugins/notifications/mail/register.js:33
-#, fuzzy
 msgid "Show inbox"
-msgstr "Show Inbox"
+msgstr "Show inbox"
 
 #: apps/plugins/notifications/tasks/register.js:35
 msgid "Overdue Tasks"
@@ -7168,9 +7086,8 @@ msgid "Read article on tumblr.com"
 msgstr "Read article on tumblr.com"
 
 #: apps/plugins/portal/tumblr/register.js:177
-#, fuzzy
 msgid "Open external link"
-msgstr "Send as link"
+msgstr "Open external link"
 
 #: apps/plugins/portal/tumblr/register.js:228
 msgid "Edit Tumblr feed"
@@ -7244,7 +7161,7 @@ msgstr "Twitter reported the following errors:"
 #: apps/plugins/portal/linkedIn/register.js:111
 #: apps/plugins/portal/twitter/register.js:248
 msgid "You have reauthorized this %s account."
-msgstr "You have re-authorised this %s account."
+msgstr "You have reauthorised this %s account."
 
 #: apps/plugins/portal/twitter/register.js:254
 msgid "Click to retry later."
@@ -7390,7 +7307,7 @@ msgstr "Recent activities"
 
 #: apps/plugins/portal/linkedIn/register.js:295
 msgid "There were not activities in your network"
-msgstr ""
+msgstr "There was no activity in your network"
 
 #: apps/plugins/portal/linkedIn/register.js:348
 msgid "LinkedIn"
@@ -7467,32 +7384,78 @@ msgstr "Cannot find any messages you sent to this contact."
 
 #. Placeholder in furigana field
 #: apps/l10n/ja_JP/io.ox/register.js:51
-#, fuzzy
 msgid "Furigana for last name"
-msgstr "First name"
+msgstr "Furigana for last name"
 
 #. Placeholder in furigana field
 #: apps/l10n/ja_JP/io.ox/register.js:54
-#, fuzzy
 msgid "Furigana for first name"
-msgstr "First name"
+msgstr "Furigana for first name"
 
 #. Placeholder in furigana field
 #: apps/l10n/ja_JP/io.ox/register.js:57
 msgid "Furigana for company"
-msgstr ""
+msgstr "Furigana for company"
+
+#~ msgid "Finish tour"
+#~ msgstr "Finish tour"
+
+#~ msgid "Next step"
+#~ msgstr "Next step"
+
+#~ msgid "Skip this step"
+#~ msgstr "Skip this step"
+
+#~ msgid "Your password has been changed"
+#~ msgstr "Your password has been changed"
+
+#~ msgid "Do you want to keep the draft after sending this mail?"
+#~ msgstr "Do you want to keep the draft after sending this email?"
+
+#~ msgid "Delete the draft after sending."
+#~ msgstr "Delete the draft after sending."
+
+#~ msgid "Keep the draft."
+#~ msgstr "Keep the draft."
+
+#~ msgid "All messages"
+#~ msgstr "All messages"
+
+#~ msgid "Publish"
+#~ msgstr "Publish"
+
+#~ msgid "Settings saved."
+#~ msgstr "Settings saved."
+
+#~ msgid "Attachments   "
+#~ msgstr "Attachments   "
+
+#~ msgid "Under construction"
+#~ msgstr "Under construction"
+
+#~ msgid "Publish folder"
+#~ msgstr "Publish folder"
+
+#~ msgid "Publish item"
+#~ msgstr "Publish item"
+
+#~ msgid "Publication has been added"
+#~ msgstr "Publication has been added"
+
+#~ msgid "Show strack trace"
+#~ msgstr "Show strack trace"
+
+#~ msgid "Add member"
+#~ msgstr "Add member"
+
+#~ msgid "Members"
+#~ msgstr "Members"
 
 #~ msgid "Your data has been saved"
 #~ msgstr "Your data has been saved"
 
-#~ msgid "Your passward has been changed"
-#~ msgstr "Your password has been changed"
-
 #~ msgid "Your primary mail account can not be deleted."
 #~ msgstr "Your primary email account can not be deleted."
-
-#~ msgid "All messages"
-#~ msgstr "All messages"
 
 #~ msgid "Mailfilter updated"
 #~ msgstr "Mailfilter updated"
@@ -7555,20 +7518,8 @@ msgstr ""
 #~ msgid "Save changes"
 #~ msgstr "Save changes"
 
-#~ msgid "Contact: %1$s"
-#~ msgstr "Contact: %1$s"
-
 #~ msgid "Open in new tab"
 #~ msgstr "Open in new tab"
-
-#~ msgid "Finish tour"
-#~ msgstr "Finish tour"
-
-#~ msgid "Next step"
-#~ msgstr "Next step"
-
-#~ msgid "Skip this step"
-#~ msgstr "Skip this step"
 
 #~ msgid "hCard Export"
 #~ msgstr "hCard Export"
@@ -7576,23 +7527,8 @@ msgstr ""
 #~ msgid "This feature is deactivated"
 #~ msgstr "This feature is deactivated"
 
-#~ msgid "Publish"
-#~ msgstr "Publish"
-
-#~ msgid "Publish folder"
-#~ msgstr "Publish folder"
-
-#~ msgid "Publish item"
-#~ msgstr "Publish item"
-
-#~ msgid "Publication has been added"
-#~ msgstr "Publication has been added"
-
 #~ msgid "Your browser is slow and outdated!"
 #~ msgstr "Your browser is slow and outdated."
-
-#~ msgid "Settings saved."
-#~ msgstr "Settings saved."
 
 #~ msgid "Delete accounts"
 #~ msgstr "Delete accounts"
@@ -7602,9 +7538,6 @@ msgstr ""
 
 #~ msgid "all"
 #~ msgstr "all"
-
-#~ msgid "Under construction"
-#~ msgstr "Under construction"
 
 #~ msgid "on behalf of"
 #~ msgstr "on behalf of"
