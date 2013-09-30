@@ -73,11 +73,8 @@ define('io.ox/core/folder/add',
         )
         .build(function () {
 
-            var showBreadCrumb = (opt.module === 'mail' && folder !== '1') || opt.module === 'infostore';
-
             this.getContentNode().append(
                 $('<div class="row-fluid">').append(
-                    showBreadCrumb ? api.getBreadcrumb(folder, { subfolders: false }) : [],
                     $('<input type="text" class="span12">').attr('placeholder', gt('Folder name'))
                 )
             );
