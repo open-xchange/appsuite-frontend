@@ -969,6 +969,29 @@ define('io.ox/core/api/folder',
         return ready;
     };
 
+    //shortens the folder title and adds ellipsis
+    api.getFolderTitle = function (title, max) {
+        title = String(title || '').trim();
+        var split = title.split(/[ _-]+/),
+            delimiters = title.split(/[^ _-]+/),
+            length = title.length;
+
+        while (length > max && split.length > 2) {
+            var index = Math.floor(split.length / 2);
+
+            length -= split[index].length + 2;
+            split.splice(index, 1);
+            delimiters.splice(index + 1, 1);
+            delimiters[Math.floor(delimiters.length / 2)] = '\u2026';
+        }
+
+        if (length > max) {
+            return _.ellipsis(title, {charpos: 'middle', max: max, length: Math.floor(max / 2 - 1)});
+        }
+
+        return _(split).map(function (val, key) { return val + delimiters[key + 1]; }).join('');
+    };
+
     /**
      * Create a Breadcrum widget for a given folder.
      *
@@ -1003,15 +1026,16 @@ define('io.ox/core/api/folder',
                     if (list.length) {
                         li.addClass('dropdown').append(
                             $('<a href="#" class="dropdown-toggle" tabindex="1" data-toggle="dropdown">')
+                            .attr('title', title)
                             .append(
-                                $.txt(gt.noI18n(title)),
+                                $.txt(gt.noI18n(api.getFolderTitle(title, 30))),
                                 $('<b class="caret">')
                             ),
                             $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel" aria-haspopup="true">').append(
                                 _(list).map(function (folder) {
                                     var $a, $li = $('<li>').append(
                                         $a = $('<a href="#" tabindex="1" role="menuitem">')
-                                        .attr('data-folder-id', folder.id).text(gt.noI18n(folder.title))
+                                        .attr({'data-folder-id': folder.id}).text(gt.noI18n(api.getFolderTitle(folder.title, 30)))
                                     );
                                     /**
                                      * special mobile handling due to on-the-fly bootstrap-dropdown mod on mobile
@@ -1046,17 +1070,18 @@ define('io.ox/core/api/folder',
 
             var li = $('<li>'), elem, isLast = i === list.length - 1,
                 properModule = options.module === undefined || folder.module === options.module,
-                clickable = properModule && options.handler !== undefined;
+                clickable = properModule && options.handler !== undefined,
+                displayTitle = gt.noI18n(api.getFolderTitle(folder.title, 30));
 
             if (isLast && options.subfolder && clickable) {
                 dropdown(elem = li, folder.id, folder.title, options);
             } else if (isLast && options.last) {
-                elem = li.addClass('active').text(gt.noI18n(folder.title));
+                elem = li.addClass('active').text(displayTitle);
             } else {
                 if (!clickable) {
-                    elem = li.addClass('active').text(gt.noI18n(folder.title));
+                    elem = li.addClass('active').text(displayTitle);
                 } else {
-                    li.append(elem = $('<a href="#" tabindex="1" role="menuitem">').text(gt.noI18n(folder.title)));
+                    li.append(elem = $('<a href="#" tabindex="1" role="menuitem">').attr('title', folder.title).text(displayTitle));
                 }
                 li.append(isLast ? $() : $('<span class="divider" role="presentation">').text(gt.noI18n(' / ')));
             }
