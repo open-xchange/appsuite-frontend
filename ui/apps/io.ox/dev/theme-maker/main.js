@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/dev/theme-maker/main", ["themes", "io.ox/core/tk/simple-colorpicker"], function (themes) {
+define('io.ox/dev/theme-maker/main', ['themes', 'io.ox/core/tk/simple-colorpicker'], function (themes) {
 
     'use strict';
 
@@ -75,23 +75,23 @@ define("io.ox/dev/theme-maker/main", ["themes", "io.ox/core/tk/simple-colorpicke
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/dev/theme-maker',
-            title: "Theme maker",
+            title: 'Theme maker',
             toolbar: true
         });
 
         app.setWindow(win);
 
         // left panel
-        left = $("<div>")
-            .addClass("leftside")
+        left = $('<div>')
+            .addClass('leftside')
             .css({
                 backgroundColor: 'transparent'
             })
             .appendTo(win.nodes.main);
 
         // right panel
-        right = $("<div>")
-            .addClass("rightside")
+        right = $('<div>')
+            .addClass('rightside')
             .css({
                 backgroundColor: 'transparent'
             })

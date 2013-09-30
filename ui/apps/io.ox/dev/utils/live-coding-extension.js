@@ -10,8 +10,8 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/dev/utils/live-coding-extension", ["io.ox/backbone/views"], function (views) {
-    "use strict";
+define('io.ox/dev/utils/live-coding-extension', ['io.ox/backbone/views'], function (views) {
+    'use strict';
 
     function LiveCodingExtension(options) {
         var self = this;
@@ -22,7 +22,7 @@ define("io.ox/dev/utils/live-coding-extension", ["io.ox/backbone/views"], functi
             }
             self.pending = true;
             $.ajax(options.url, {
-                dataType: "text",
+                dataType: 'text',
                 ifModified: true // E-Tag and LastModified Magic
             }).done(function (code) {
                 if (code) {

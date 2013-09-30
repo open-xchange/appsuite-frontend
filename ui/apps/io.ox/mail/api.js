@@ -1581,7 +1581,7 @@ define('io.ox/mail/api',
     api.beautifyMailText = function (str, lengthLimit) {
         lengthLimit = lengthLimit || 500;
         str = String(str)
-            .replace(/(\r\n|\n|\r)/gm, "") // remove line breaks
+            .replace(/(\r\n|\n|\r)/gm, '') // remove line breaks
             .substr(0, lengthLimit) // limit overall length
             .replace(/-{3,}/g, '---') // reduce dashes
             .replace(/<br\s?\/?>(&gt;)+/ig, ' ') // remove quotes after line breaks

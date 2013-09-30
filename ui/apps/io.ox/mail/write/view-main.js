@@ -758,8 +758,8 @@ define('io.ox/mail/write/view-main',
 
 
                     if (clientHeight < scrollHeight) {
-                        paddingTop = parseFloat(input.css("padding-top"));
-                        paddingBottom = parseFloat(input.css("padding-bottom"));
+                        paddingTop = parseFloat(input.css('padding-top'));
+                        paddingBottom = parseFloat(input.css('padding-bottom'));
                         paddingHeight = paddingTop + paddingBottom;
 
                         var scroll = (scrollHeight - paddingHeight + 15) - input.height();

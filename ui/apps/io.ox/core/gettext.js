@@ -133,12 +133,12 @@ define('io.ox/core/gettext', [], function () {
         }
 
         function pgettext(context, text) {
-            var key = context ? context + "\x00" + text : text;
+            var key = context ? context + '\x00' + text : text;
             return get(key) || text;
         }
 
         function npgettext(context, singular, plural, n) {
-            var key = (context ? context + "\x00" : '') + singular + "\x01" + plural,
+            var key = (context ? context + '\x00' : '') + singular + '\x01' + plural,
                 translation = get(key);
             return translation ?
                 translation[Number(po.plural(Number(n)))] :

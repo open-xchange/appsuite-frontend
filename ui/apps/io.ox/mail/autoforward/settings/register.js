@@ -48,7 +48,7 @@ define('io.ox/mail/autoforward/settings/register',
                             msg = gt('Unable to load mail filter settings.');
                         }
                         $container.append(
-                            $.fail(msg || gt("Couldn't load your auto forward."), function () {
+                            $.fail(msg || gt('Couldn\'t load your auto forward.'), function () {
                                 filters.editAutoForward($node).done(function () {
                                     $container.find('[data-action="discard"]').hide();
                                 });

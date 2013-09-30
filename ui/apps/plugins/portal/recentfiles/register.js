@@ -30,7 +30,7 @@ define('plugins/portal/recentfiles/register',
             temp = temp / 1024;
             pos += 1;
         }
-        return Math.round(temp) + " " + suffixes[pos];
+        return Math.round(temp) + ' ' + suffixes[pos];
     };
 
     _(['recentfiles', 'myfiles']).each(function (type) {

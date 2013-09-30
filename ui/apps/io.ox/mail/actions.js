@@ -72,8 +72,8 @@ define('io.ox/mail/actions',
                         .append(
                             $('<div>').text(question)
                         )
-                        .addPrimaryButton("delete", gt('Delete'))
-                        .addButton("cancel", gt('Cancel'))
+                        .addPrimaryButton('delete', gt('Delete'))
+                        .addButton('cancel', gt('Cancel'))
                         .on('delete', function () {
                             api.remove(list).fail(notifications.yell);
                         })
@@ -92,8 +92,8 @@ define('io.ox/mail/actions',
                                     $('<div>').text(gt('Emails cannot be put into trash folder while your mail quota is exceeded.')),
                                     $('<div>').text(question)
                                 )
-                                .addPrimaryButton("delete", gt('Delete'))
-                                .addButton("cancel", gt('Cancel'))
+                                .addPrimaryButton('delete', gt('Delete'))
+                                .addButton('cancel', gt('Cancel'))
                                 .on('delete', function () {
                                     api.remove(list, { force: true });
                                 })
@@ -173,9 +173,9 @@ define('io.ox/mail/actions',
         requires: 'toplevel one',
         action: function (baton) {
             var getSource = api.getSource(baton.data), textarea;
-            require(["io.ox/core/tk/dialogs"], function (dialogs) {
+            require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 new dialogs.ModalDialog({ width: 700 })
-                    .addPrimaryButton("close", gt("Close"))
+                    .addPrimaryButton('close', gt('Close'))
                     .header(
                         $('<h4>').text(gt('Mail source') + ': ' + (baton.data.subject || ''))
                     )
@@ -297,10 +297,10 @@ define('io.ox/mail/actions',
             multiple: function (list, baton) {
                 var vGrid = baton.grid || ('app' in baton && baton.app.getGrid());
 
-                require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
+                require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
 
                     function commit(target) {
-                        if (type === "move" && vGrid) vGrid.busy();
+                        if (type === 'move' && vGrid) vGrid.busy();
                         api[type](list, target).then(
                             function (resp) {
                                 if (resp) {
@@ -309,7 +309,7 @@ define('io.ox/mail/actions',
                                     notifications.yell('success', list.length > 1 ? success.multi : success.single);
                                 }
                                 folderAPI.reload(target, list);
-                                if (type === "move" && vGrid) vGrid.idle();
+                                if (type === 'move' && vGrid) vGrid.idle();
                             },
                             notifications.yell
                         );
@@ -323,8 +323,8 @@ define('io.ox/mail/actions',
                     } else {
                         var dialog = new dialogs.ModalDialog()
                             .header($('<h4>').text(label))
-                            .addPrimaryButton("ok", label)
-                            .addButton("cancel", gt("Cancel"));
+                            .addPrimaryButton('ok', label)
+                            .addButton('cancel', gt('Cancel'));
                         dialog.getBody().css({ height: '250px' });
                         var folderId = String(list[0].folder_id),
                             id = settings.get('folderpopup/last') || folderId,
@@ -885,7 +885,7 @@ define('io.ox/mail/actions',
 
                 //Header
                 popup.getHeader()
-                    .append($("<h4>")
+                    .append($('<h4>')
                             .text(gt('Remind me')));
 
                 //fill popup body
@@ -898,16 +898,16 @@ define('io.ox/mail/actions',
                         })
                     .appendTo(popupBody);
 
-                popupBody.append("<div>" + gt('Note') + "</div>");
-                var noteInput = $('<textarea>', { width: '90%', rows: "5", value: gt('Mail reminder for') + ": " + data.subject + " \n" +
-                    gt('From') + ": " + util.formatSender(data.from[0]) })
+                popupBody.append('<div>' + gt('Note') + '</div>');
+                var noteInput = $('<textarea>', { width: '90%', rows: '5', value: gt('Mail reminder for') + ': ' + data.subject + ' \n' +
+                    gt('From') + ': ' + util.formatSender(data.from[0]) })
                     .focus(function () {
                         this.select();
                     })
                     .appendTo(popupBody);
 
-                popupBody.append("<div>" + gt('Remind me') + "</div>");
-                var dateSelector = $('<select>', {name: "dateselect"})
+                popupBody.append('<div>' + gt('Remind me') + '</div>');
+                var dateSelector = $('<select>', {name: 'dateselect'})
                 .appendTo(popupBody);
                 var endDate = new Date();
                 dateSelector.append(tasksUtil.buildDropdownMenu(endDate));
@@ -916,7 +916,7 @@ define('io.ox/mail/actions',
                 var def = popup.show();
                 titleInput.focus();
                 def.done(function (action) {
-                    if (action === "create") {
+                    if (action === 'create') {
 
                         //Calculate the right time
                         var dates = tasksUtil.computePopupTime(endDate, dateSelector.val());
@@ -1108,7 +1108,7 @@ define('io.ox/mail/actions',
         index: INDEX += 100,
         prio: 'lo',
         id: 'reminder',
-        label: gt("Reminder"),
+        label: gt('Reminder'),
         ref: 'io.ox/mail/actions/reminder'
     }));
 

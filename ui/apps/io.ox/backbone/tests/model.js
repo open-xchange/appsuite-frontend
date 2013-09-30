@@ -10,8 +10,8 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/modelFactory", "io.ox/backbone/tests/recipeApi"], function (ext, ModelFactory, api) {
-    "use strict";
+define('io.ox/backbone/tests/model', ['io.ox/core/extensions', 'io.ox/backbone/modelFactory', 'io.ox/backbone/tests/recipeApi'], function (ext, ModelFactory, api) {
+    'use strict';
     // Firstly let's define a factory for use in our tests
     var ref = 'io.ox/lessons/recipes/model/' + new Date().getTime(); // Again namespaced fun
 
@@ -22,8 +22,8 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
             addIngredient: function (ingredient) {
                 if (! _(this.get('ingredients')).contains(ingredient)) {
                     this.get('ingredients').push(ingredient);
-                    this.trigger("change");
-                    this.trigger("change:ingredients");
+                    this.trigger('change');
+                    this.trigger('change:ingredients');
                 }
             },
 
@@ -33,13 +33,13 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
         }
     });
 
-    ext.point("test/suite").extend({
+    ext.point('test/suite').extend({
         id: 'backbone-model',
         index: 100,
         test: function (j, utils) {
-            j.describe("ModelFactory CRUD", function () {
+            j.describe('ModelFactory CRUD', function () {
 
-                j.it("should be able to load entries", function () {
+                j.it('should be able to load entries', function () {
                     var recipe = null;
                     j.spyOn(api, 'get').andCallThrough();
 
@@ -57,7 +57,7 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
 
                 });
 
-                j.it("should be able to list folders", function () {
+                j.it('should be able to list folders', function () {
                     var allInFolder = null;
 
                     j.spyOn(api, 'getAll').andCallThrough();
@@ -69,12 +69,12 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                     j.runs(function () {
                         j.expect(allInFolder.length).toEqual(3);
 
-                        j.expect(_(allInFolder).pluck("id")).toEqual([1, 2, 3]);
+                        j.expect(_(allInFolder).pluck('id')).toEqual([1, 2, 3]);
                         j.expect(api.getAll).toHaveBeenCalledWith({folder: 12});
                     });
                 });
 
-                j.it("should be able to bulk-load entries", function () {
+                j.it('should be able to bulk-load entries', function () {
                     var listed = null;
 
                     j.spyOn(api, 'getList').andCallThrough();
@@ -86,20 +86,20 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
 
                     j.runs(function () {
                         j.expect(listed.length).toEqual(2);
-                        j.expect(_(listed).pluck("id")).toEqual([1, 3]);
+                        j.expect(_(listed).pluck('id')).toEqual([1, 3]);
                         j.expect(api.getList).toHaveBeenCalledWith([{id: 1, folder: 12}, {id: 3, folder: 12}]);
                     });
                 });
 
                 var testId = null;
 
-                j.it("should be able to create entries", function () {
+                j.it('should be able to create entries', function () {
                     var newRecipe = factory.create({
-                        title: "Test Recipe",
+                        title: 'Test Recipe',
                         folder_id: 12
                     });
 
-                    j.spyOn(api, "create").andCallThrough();
+                    j.spyOn(api, 'create').andCallThrough();
 
                     utils.waitsFor(newRecipe.save().done(function (response) {
                         testId = response.id;
@@ -108,11 +108,11 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                     j.runs(function () {
                         j.expect(testId).not.toEqual(null);
 
-                        j.expect(api.create).toHaveBeenCalledWith({title: "Test Recipe", folder_id: 12});
+                        j.expect(api.create).toHaveBeenCalledWith({title: 'Test Recipe', folder_id: 12});
                     });
                 });
 
-                j.it("should be able to update entries", function () {
+                j.it('should be able to update entries', function () {
                     j.expect(testId).toBeDefined();
                     j.expect(testId).not.toEqual(null);
 
@@ -133,13 +133,13 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                     }));
 
                     j.runs(function () {
-                        j.expect(reloadedEntry.get("title")).toEqual("New Title");
+                        j.expect(reloadedEntry.get('title')).toEqual('New Title');
 
                         j.expect(api.update).toHaveBeenCalledWith({id: testId, folder: 12, title: 'New Title'});
                     });
                 });
 
-                j.it("should be able to reload entries", function () {
+                j.it('should be able to reload entries', function () {
                     j.expect(testId).toBeDefined();
                     j.expect(testId).not.toEqual(null);
 
@@ -152,7 +152,7 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
 
                     factory.get({id: testId, folder: 12}).done(function (loaded) {
                         recipe = loaded;
-                        originalTitle = loaded.get("title");
+                        originalTitle = loaded.get('title');
                         loaded.set('title', 'Supercalifragilisticexpialidocious', {validate: true});
                         loaded.fetch().done(updated.yep);
                     });
@@ -168,7 +168,7 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
 
                 });
 
-                j.it("should be able to delete entries", function () {
+                j.it('should be able to delete entries', function () {
                     j.expect(testId).toBeDefined();
                     j.expect(testId).not.toEqual(null);
 
@@ -187,10 +187,10 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                 });
             });
 
-            j.describe("ModelFactory realms", function () {
-                j.it("should provide different instances for different realms", function () {
-                    var r1 = factory.realm("r1"),
-                        r2 = factory.realm("r2");
+            j.describe('ModelFactory realms', function () {
+                j.it('should provide different instances for different realms', function () {
+                    var r1 = factory.realm('r1'),
+                        r2 = factory.realm('r2');
 
 
                     var recipe1, recipe2;
@@ -216,9 +216,9 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                     });
                 });
 
-                j.it("should update models in a different realm on update", function () {
-                    var r1 = factory.realm("r1"),
-                        r2 = factory.realm("r2");
+                j.it('should update models in a different realm on update', function () {
+                    var r1 = factory.realm('r1'),
+                        r2 = factory.realm('r2');
 
                     var recipe1, recipe2;
 
@@ -249,9 +249,9 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                     });
                 });
 
-                j.it("should trigger destroy events when a model was deleted in a different realm", function () {
-                    var r1 = factory.realm("r1"),
-                        r2 = factory.realm("r2");
+                j.it('should trigger destroy events when a model was deleted in a different realm', function () {
+                    var r1 = factory.realm('r1'),
+                        r2 = factory.realm('r2');
 
                     var recipe1, recipe2;
 
@@ -270,7 +270,7 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                         j.expect(recipe1).toBeDefined();
                         j.expect(recipe2).toBeDefined();
 
-                        recipe2.on("destroy", function () {
+                        recipe2.on('destroy', function () {
                             destroyed = true;
                         });
 
@@ -283,7 +283,7 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                     });
                 });
 
-                j.it("should do reference counting", function () {
+                j.it('should do reference counting', function () {
                     var r = factory.realm('r');
 
                     j.spyOn(r, 'destroy');
@@ -300,9 +300,9 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
 
             });
 
-            j.describe("ModelFactory validation", function () {
+            j.describe('ModelFactory validation', function () {
 
-                j.it("should run an extension for each attribute", function () {
+                j.it('should run an extension for each attribute', function () {
                     // Create an extension that forces servings to be even
                     ext.point(ref + '/validation/servings').extend({
                         id: 'servings-must-be-even',
@@ -311,29 +311,29 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                                 value = parseInt(value, 10);
                             }
                             if (value % 2 === 1) {
-                                return "Servings must be even";
+                                return 'Servings must be even';
                             }
                         }
                     });
 
                     // violate the rule
-                    j.expect(factory.create().set("servings", 1, {validate: true}).isValid()).toEqual(false);
-                    j.expect(factory.create().set("servings", 2, {validate: true}).get("servings")).toEqual(2);
+                    j.expect(factory.create().set('servings', 1, {validate: true}).isValid()).toEqual(false);
+                    j.expect(factory.create().set('servings', 2, {validate: true}).get('servings')).toEqual(2);
                 });
 
-                j.it("should trigger 'invalid' and 'invalid:attribute' events", function () {
+                j.it('should trigger "invalid" and "invalid:attribute" events', function () {
                     var model = factory.create();
                     var invalidTriggered, invalidServingsTriggered;
 
-                    model.on("invalid", function () {
+                    model.on('invalid', function () {
                         invalidTriggered = true;
                     });
 
-                    model.on("invalid:servings", function () {
+                    model.on('invalid:servings', function () {
                         invalidServingsTriggered = true;
                     });
 
-                    model.set("servings", 1, {validate: true});
+                    model.set('servings', 1, {validate: true});
 
                     j.expect(invalidTriggered).toEqual(true);
                     j.expect(invalidServingsTriggered).toEqual(true);
@@ -341,7 +341,7 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
 
                 });
 
-                j.it("should run general validation extensions after attribute extensions", function () {
+                j.it('should run general validation extensions after attribute extensions', function () {
                     var validations = [];
 
                     ext.point(ref + '/validation/servings').replace({
@@ -352,7 +352,7 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                                 value = parseInt(value, 10);
                             }
                             if (value % 2 === 1) {
-                                return "Servings must be even";
+                                return 'Servings must be even';
                             }
                         }
                     });
@@ -369,32 +369,32 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                     j.expect(validations).toEqual(['servings-must-be-even', 'general']);
                 });
 
-                j.it("should trigger a 'valid' event if the model becomes valid again", function () {
+                j.it('should trigger a "valid" event if the model becomes valid again', function () {
                     var model = factory.create();
                     var invalidTriggered, validTriggered, validServingsTriggered;
 
-                    model.on("invalid", function () {
+                    model.on('invalid', function () {
                         invalidTriggered = true;
                     });
 
-                    model.on("valid", function () {
+                    model.on('valid', function () {
                         validTriggered = true;
                     });
-                    model.on("valid:servings", function () {
+                    model.on('valid:servings', function () {
                         validServingsTriggered = true;
                     });
 
-                    model.set("servings", 2, {validate: true});
-                    model.set("servings", 1, {validate: true});
-                    model.set("servings", 2, {validate: true});
+                    model.set('servings', 2, {validate: true});
+                    model.set('servings', 1, {validate: true});
+                    model.set('servings', 2, {validate: true});
 
-                    j.expect(model.get("servings")).toEqual(2);
+                    j.expect(model.get('servings')).toEqual(2);
                     j.expect(invalidTriggered).toEqual(true);
                     j.expect(validTriggered).toEqual(true);
                     j.expect(validServingsTriggered).toEqual(true);
                 });
 
-                j.it("should work for attributes whose validity is dependant on each other", function () {
+                j.it('should work for attributes whose validity is dependant on each other', function () {
                     ext.point(ref + '/validation/servings').disable('servings-must-be-even');
                     ext.point(ref + '/validation').extend({
                         id: 'servings-and-title',
@@ -407,7 +407,7 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                                     return; // Yeah, we're happy with that
                                 }
                                 if (attributes.servings % 2 === 1) {
-                                    this.add('servings', "Servings must be equal, unless the title starts with 'The great'");
+                                    this.add('servings', 'Servings must be equal, unless the title starts with "The great"');
                                 }
                             }
                         }
@@ -426,8 +426,8 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
 
 
 
-            j.describe("ModelFactory change detection", function () {
-                j.it("should track changes differing from the loaded state", function () {
+            j.describe('ModelFactory change detection', function () {
+                j.it('should track changes differing from the loaded state', function () {
                     var recipe;
 
                     utils.waitsFor(factory.get({id: 1, folder: 12}).done(function (loaded) {
@@ -441,17 +441,17 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                     });
                 });
 
-                j.it("should be able to handle array attributes", function () {
+                j.it('should be able to handle array attributes', function () {
                     var recipe;
 
-                    utils.waitsFor(factory.realm("" + _.now()).get({id: 1, folder: 12}).done(function (loaded) {
+                    utils.waitsFor(factory.realm('' + _.now()).get({id: 1, folder: 12}).done(function (loaded) {
                         recipe = loaded;
                     }));
 
                     j.runs(function () {
-                        recipe.addIngredient("new ingredient");
+                        recipe.addIngredient('new ingredient');
                         j.expect(recipe.isDirty()).toEqual(true);
-                        j.expect(recipe.changedSinceLoading()).toEqual({ingredients: ["A glass", "Some Water", "new ingredient"]});
+                        j.expect(recipe.changedSinceLoading()).toEqual({ingredients: ['A glass', 'Some Water', 'new ingredient']});
                     });
                 });
 

@@ -183,12 +183,12 @@ define('io.ox/core/pubsub/settings/pane',
     }
 
     isDestructiveRefresh.needsWarning = {
-        "com.openexchange.subscribe.crawler.google.calendar": true
+        'com.openexchange.subscribe.crawler.google.calendar': true
     };
 
     function refreshWarning(data) {
         if (isDestructiveRefresh(data)) {
-            return $('<span class="text-warning"></span>').text(gt("Note: Refreshing this subscription will replace the calendar content with the external content. Changes you have made inside appsuite will be overwritten"));
+            return $('<span class="text-warning"></span>').text(gt('Note: Refreshing this subscription will replace the calendar content with the external content. Changes you have made inside appsuite will be overwritten'));
         }
         return $();
     }
@@ -208,7 +208,7 @@ define('io.ox/core/pubsub/settings/pane',
                 // this is a subscription
                 dynamicAction = $('<a href="#" tabindex="1" class="action" data-action="refresh">').text(gt('Refresh'));
                 if (isDestructiveRefresh(data)) {
-                    dynamicAction.addClass("text-error");
+                    dynamicAction.addClass('text-error');
                 }
             } else if (data.source && (baton.model.refreshState() !== 'pending')) {
                 // this is a subscription and refresh should be disabled

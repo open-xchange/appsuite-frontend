@@ -230,7 +230,7 @@ define('io.ox/tasks/main',
 
         drawFail = function (obj) {
             right.idle().empty().append(
-                $.fail(gt("Couldn't load that task."), function () {
+                $.fail(gt('Couldn\'t load that task.'), function () {
                     showTask(obj);
                 })
             );

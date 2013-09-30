@@ -329,7 +329,7 @@ define('io.ox/files/actions',
                                 if (e && e.code && e.code === 'IFO-0415') {
                                     notifications.yell('error', responseFailLocked);
                                 } else {
-                                    notifications.yell('error', responseFail + "\n" + e.error);
+                                    notifications.yell('error', responseFail + '\n' + e.error);
                                 }
                                 api.trigger('refresh:all');
                             });

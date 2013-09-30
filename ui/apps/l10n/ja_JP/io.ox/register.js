@@ -140,9 +140,9 @@ define('l10n/ja_JP/io.ox/register',
             v0 = v;
 
             if (!v) {
-                yomiField.value = "";
+                yomiField.value = '';
                 yl = 0;
-                lv = "";
+                lv = '';
                 lp = 0;
                 ls = 0;
                 return;

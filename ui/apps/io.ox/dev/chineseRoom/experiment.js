@@ -14,9 +14,9 @@
 define('io.ox/dev/chineseRoom/experiment', ['io.ox/dev/chineseRoom/room', 'io.ox/realtime/rt'], function (rooms, rt) {
 	'use strict';
 
-	console.log("Setting up experiment");
+	console.log('Setting up experiment');
 	window.rooms = rooms;
-	window.r = rooms.getRoom("a");
+	window.r = rooms.getRoom('a');
 	window.rt = rt;
 
 	window.rtExperiments = {
@@ -27,14 +27,14 @@ define('io.ox/dev/chineseRoom/experiment', ['io.ox/dev/chineseRoom/room', 'io.ox
 			var log = {};
 
 			interval = setInterval(function () {
-				window.r.sayAndTrace(i, ox.base + "///" + i);
+				window.r.sayAndTrace(i, ox.base + '///' + i);
 				log[i] = 0;
 				i++;
 			}, 500);
 
-			window.r.on("received", function (e, o) {
+			window.r.on('received', function (e, o) {
 				delete log[Number(o.message)];
-				console.log("Received: ", o, log);
+				console.log('Received: ', o, log);
 			});
 
 			function check() {
@@ -42,7 +42,7 @@ define('io.ox/dev/chineseRoom/experiment', ['io.ox/dev/chineseRoom/room', 'io.ox
 				_(log).each(function (count, key) {
 					console.log(key, count);
 					if (count > 4) {
-						console.log("MISSING MESSAGE: ", ox.base + "///" + key);
+						console.log('MISSING MESSAGE: ', ox.base + '///' + key);
 						clearInterval(interval);
 						window.r.leave();
 						failed = true;
@@ -59,7 +59,7 @@ define('io.ox/dev/chineseRoom/experiment', ['io.ox/dev/chineseRoom/room', 'io.ox
 		}
 	};
 
-	console.log("Done");
+	console.log('Done');
 
 	return true;
 });

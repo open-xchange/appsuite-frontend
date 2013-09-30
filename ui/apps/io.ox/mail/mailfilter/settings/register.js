@@ -40,7 +40,7 @@ define('io.ox/mail/mailfilter/settings/register',
                         msg = gt('Unable to load mail filter settings.');
                     }
                     $container.append(
-                        $.fail(msg || gt("Couldn't load your mail filters."), function () {
+                        $.fail(msg || gt('Couldn\'t load your mail filters.'), function () {
                             filters.editMailfilter($node).done(function () {
                                 $container.find('[data-action="discard"]').hide();
                             });

@@ -1022,7 +1022,7 @@ define('io.ox/core/main',
                                 // Show dialog
                                 require(['io.ox/keychain/secretRecoveryDialog'], function (d) { d.show(); });
                                 if (ox.debug) {
-                                    console.error("Couldn't decrypt accounts: ", analysis.diagnosis);
+                                    console.error('Couldn\'t decrypt accounts: ', analysis.diagnosis);
                                 }
                             }
                         });
@@ -1066,7 +1066,7 @@ define('io.ox/core/main',
                             $('<div class="header">').append(
                                 $('<h3>').text(gt('Restore applications')),
                                 $('<div>').text(
-                                    gt("The following applications can be restored. Just remove the restore point if you don't want it to be restored.")
+                                    gt('The following applications can be restored. Just remove the restore point if you don\'t want it to be restored.')
                                 )
                             ),
                             $('<ul class="content">'),

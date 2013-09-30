@@ -182,10 +182,10 @@ define('io.ox/tasks/util',
                 }
 
                 //normal times
-                var appendString = "<option value='5'>" + gt('in 5 minutes') + '</option>' +
-                "<option value='15'>" + gt('in 15 minutes') + '</option>' +
-                "<option value='30'>" + gt('in 30 minutes') + '</option>' +
-                "<option value='60'>" + gt('in one hour') + '</option>';
+                var appendString = '<option value="5">' + gt('in 5 minutes') + '</option>' +
+                '<option value="15">' + gt('in 15 minutes') + '</option>' +
+                '<option value="30">' + gt('in 30 minutes') + '</option>' +
+                '<option value="60">' + gt('in one hour') + '</option>';
 
                 // variable daytimes
                 var i = time.getHours(),
@@ -205,7 +205,7 @@ define('io.ox/tasks/util',
 
                 while (i < lookupDaytimeStrings.length) {
                     temp = lookupDaytimeStrings[i];
-                    appendString = appendString + "<option value='d" + i + "'>" + temp + '</option>';
+                    appendString = appendString + '<option value="d' + i + '">' + temp + '</option>';
                     i++;
                 }
 
@@ -215,11 +215,11 @@ define('io.ox/tasks/util',
 
                 i = (time.getDay() + 2) % 7;
 
-                appendString = appendString + "<option value='t'>" + gt('tomorrow') + '</option>';
+                appendString = appendString + '<option value="t">' + gt('tomorrow') + '</option>';
 
                 while (circleIncomplete) {
                     temp = lookupWeekdayStrings[i];
-                    appendString = appendString + "<option value='w" + i + "'>" + temp + '</option>';
+                    appendString = appendString + '<option value="w' + i + '">' + temp + '</option>';
                     if (i < 6) {
                         i++;
                     } else {
@@ -227,7 +227,7 @@ define('io.ox/tasks/util',
                     }
 
                     if (i === startday) {
-                        appendString = appendString + "<option value='ww'>" + gt('in one week') + '</option>';
+                        appendString = appendString + '<option value="ww">' + gt('in one week') + '</option>';
                         circleIncomplete = false;
                     }
                 }

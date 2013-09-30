@@ -71,7 +71,7 @@ define('io.ox/core/tk/autocomplete',
             // last search
             lastValue = '',
             // no-results prefix
-            emptyPrefix = "\u0000",
+            emptyPrefix = '\u0000',
             // current search result index
             index = -1,
             // state
@@ -209,7 +209,7 @@ define('io.ox/core/tk/autocomplete',
                             node.appendTo(scrollpane);
                         });
                         // leads to results
-                        emptyPrefix = "\u0000";
+                        emptyPrefix = '\u0000';
                         index = -1;
                         //select first element without updating input field
                         if (o.autoselect) {

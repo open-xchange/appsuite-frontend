@@ -11,9 +11,9 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("io.ox/help/hints", ["io.ox/core/tk/dialogs"], function (dialogs) {
+define('io.ox/help/hints', ['io.ox/core/tk/dialogs'], function (dialogs) {
 
-    "use strict";
+    'use strict';
 
     // A hint consists of a short teaser text and, optionally, a longer explanation
     // Therefore, options include:
@@ -22,12 +22,12 @@ define("io.ox/help/hints", ["io.ox/core/tk/dialogs"], function (dialogs) {
     // TODO: Allow explanations to be whole node structures with nice pictures and all...
     function Hint(options) {
 
-        var $hintNode = $('<span/>').addClass("hint");
-        $hintNode.append($("<span>").text(options.teaser + " "));
+        var $hintNode = $('<span/>').addClass('hint');
+        $hintNode.append($('<span>').text(options.teaser + ' '));
 
         if (options.explanation) {
-            var $explanationLink = $("<a/>").text("What's that?");
-            var pane = new dialogs.SlidingPane().text(options.explanation).addButton("okay", "Got it!").relativeTo($explanationLink);
+            var $explanationLink = $('<a/>').text('What\'s that?');
+            var pane = new dialogs.SlidingPane().text(options.explanation).addButton('okay', 'Got it!').relativeTo($explanationLink);
 
             var toggleExplanation = function () {
                 pane.toggle();

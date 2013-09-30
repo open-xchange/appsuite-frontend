@@ -14,23 +14,23 @@
 
 /*global escape:true, unescape:true */
 
-define("io.ox/dev/ajaxDebug/callViews", function () {
+define('io.ox/dev/ajaxDebug/callViews', function () {
 
-    "use strict";
+    'use strict';
 
     function CallView($node, callHandling) {
 
         var self = this,
 
             $address = $('<input>', {
-                    type: "text",
-                    placeholder: "module.action?param1=value&param2=value"
+                    type: 'text',
+                    placeholder: 'module.action?param1=value&param2=value'
                 }).css({
                     width: '500px'
                 }),
 
             $body = $('<textarea>', {
-                    placeholder: "{ the: 'body', json: data }"
+                    placeholder: '{ the: "body", json: data }'
                 })
                 .css({ width: '500px', height: '200px' }),
 
@@ -39,13 +39,13 @@ define("io.ox/dev/ajaxDebug/callViews", function () {
                 })
                 .css({ width: '500px', height: '200px', marginTop: '10px' }).hide(),
 
-            $submit = $('<button>').addClass('btn btn-primary').text("Send");
+            $submit = $('<button>').addClass('btn btn-primary').text('Send');
 
         $node.append(
-            $("<div>").append($address),
-            $("<div>").append($body),
-            $("<div>").append($submit),
-            $("<div>").append($resp)
+            $('<div>').append($address),
+            $('<div>').append($body),
+            $('<div>').append($submit),
+            $('<div>').append($resp)
         );
 
         this.draw = function (entry) {
@@ -53,15 +53,15 @@ define("io.ox/dev/ajaxDebug/callViews", function () {
             this.id = entry.id;
             // Address Text
             $address.focus();
-            var addressText = entry.query.module + "." + entry.query.params.action;
-            var queryString = "";
+            var addressText = entry.query.module + '.' + entry.query.params.action;
+            var queryString = '';
             _(entry.query.params).each(function (value, key) {
                 if (key !== 'action' && key !== 'session') {
-                    queryString = queryString + "&" + escape(key) + "=" + escape(value);
+                    queryString = queryString + '&' + escape(key) + '=' + escape(value);
                 }
             });
             if (queryString.length > 0) {
-                addressText += "?" + queryString.substring(1);
+                addressText += '?' + queryString.substring(1);
             }
             $address.val(addressText);
 
@@ -73,7 +73,7 @@ define("io.ox/dev/ajaxDebug/callViews", function () {
                     $body.val(JSON.stringify(entry.query.data, null, 4));
                 }
             } else {
-                $body.val("");
+                $body.val('');
             }
 
             $resp.busy().show();
@@ -84,8 +84,8 @@ define("io.ox/dev/ajaxDebug/callViews", function () {
             });
 
             this.dirty = false;
-            $address.css("border", '');
-            $body.css("border", '');
+            $address.css('border', '');
+            $body.css('border', '');
 
         };
 
@@ -101,20 +101,20 @@ define("io.ox/dev/ajaxDebug/callViews", function () {
                 };
                 var queryString = match[5];
                 if (queryString) {
-                    _(queryString.split("&")).each(function (pair) {
-                        var splitPair = pair.split("=");
+                    _(queryString.split('&')).each(function (pair) {
+                        var splitPair = pair.split('=');
                         var key = unescape(splitPair[0]);
                         var value = unescape(splitPair[1]);
                         query.params[key] = value;
                     });
                 }
             } else {
-                alert("Can't parse query: " + $address.val() + ". Please use the following format: module.action?param1=value1&param2=value2");
+                alert('Can\'t parse query: ' + $address.val() + '. Please use the following format: module.action?param1=value1&param2=value2');
             }
 
             if ($body.val()) {
                 try {
-                    query.data = new Function("return " + $body.val())(); // The JSON parser is too anal
+                    query.data = new Function('return ' + $body.val())(); // The JSON parser is too anal
                 } catch (err) {
                     query.data = $body.val();
                 }
@@ -132,16 +132,16 @@ define("io.ox/dev/ajaxDebug/callViews", function () {
 
         function changed() {
             if ($address.val().match(addrRegex)) {
-                $address.css("border", "green solid 1px");
+                $address.css('border', 'green solid 1px');
             } else {
-                $address.css("border", "red solid 1px");
+                $address.css('border', 'red solid 1px');
             }
             if ($body.val()) {
                 try {
-                    new Function("return " + $body.val())(); // The JSON parser is too anal
-                    $body.css("border", "green solid 1px");
+                    new Function('return ' + $body.val())(); // The JSON parser is too anal
+                    $body.css('border', 'green solid 1px');
                 } catch (err) {
-                    $body.css("border", "red solid 1px");
+                    $body.css('border', 'red solid 1px');
                 }
             }
             self.dirty = true;
@@ -151,7 +151,7 @@ define("io.ox/dev/ajaxDebug/callViews", function () {
         $address.change(changed);
         $body.change(changed);
 
-        callHandling.on("entrychanged", function (e, entry) {
+        callHandling.on('entrychanged', function (e, entry) {
             if (entry.id === self.id && !self.dirty) {
                 self.draw(entry);
             }

@@ -13,8 +13,8 @@
  *
  */
 
-define("io.ox/files/tests/interface/test", ["io.ox/core/extensions", "io.ox/files/api"], function (ext, api) {
-    "use strict";
+define('io.ox/files/tests/interface/test', ['io.ox/core/extensions', 'io.ox/files/api'], function (ext, api) {
+    'use strict';
 
     var TIMEOUT = ox.testTimeout;
 
@@ -34,9 +34,9 @@ define("io.ox/files/tests/interface/test", ["io.ox/core/extensions", "io.ox/file
         index: 100,
         test: function (j) {
             var timestamp = new Date().getTime();
-            var testtitle = "Check it out (" + timestamp + ")";
+            var testtitle = 'Check it out (' + timestamp + ')';
 
-            j.describe("Info item creation", function () {
+            j.describe('Info item creation', function () {
 
                 var app = null,
                     id, dataId, dataFolder, dataObj;
@@ -50,11 +50,11 @@ define("io.ox/files/tests/interface/test", ["io.ox/core/extensions", "io.ox/file
                     });
 
                     j.waitsFor(function () {
-                        var button = $("[data-ref='io.ox/files/links/toolbar/default']");
+                        var button = $('[data-ref="io.ox/files/links/toolbar/default"]');
                         if (button[0]) {
                             button.triggerHandler('click');
                             _.defer(function () {
-                                $("[data-action='io.ox/files/actions/upload']").triggerHandler('click');
+                                $('[data-action="io.ox/files/actions/upload"]').triggerHandler('click');
                             });
                             return true;
                         }
@@ -63,7 +63,7 @@ define("io.ox/files/tests/interface/test", ["io.ox/core/extensions", "io.ox/file
 
                 j.it('looks for "show more" button and hits', function () {
                     j.waitsFor(function () {
-                        var button = $(".create-file a[class='more']");
+                        var button = $('.create-file a[class="more"]');
                         if (button[0]) {
                             button.triggerHandler('click');
                             return true;

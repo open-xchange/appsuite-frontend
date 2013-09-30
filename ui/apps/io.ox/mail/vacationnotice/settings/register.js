@@ -33,23 +33,23 @@ define('io.ox/mail/vacationnotice/settings/register',
         return objectOfValues;
     };
 
-    ext.point("io.ox/settings/pane").extend({
+    ext.point('io.ox/settings/pane').extend({
         id: 'io.ox/vacation',
-        title: gt("Vacation Notice"),
+        title: gt('Vacation Notice'),
         ref: 'io.ox/vacation',
         loadSettingPane: false,
         index: 400,
         lazySaveSettings: true
     });
 
-    ext.point("io.ox/vacation/settings/detail").extend({
+    ext.point('io.ox/vacation/settings/detail').extend({
         index: 100,
         draw: function () {
             var $node = this,
                 $container = $('<div>');
 
             $node.append($container);
-            require(["io.ox/mail/vacationnotice/settings/filter"], function (filters) {
+            require(['io.ox/mail/vacationnotice/settings/filter'], function (filters) {
                 userAPI.get().done(function (user) {
 
                     var multiValues = {
@@ -66,7 +66,7 @@ define('io.ox/mail/vacationnotice/settings/register',
                             msg = gt('Unable to load mail filter settings.');
                         }
                         $container.append(
-                            $.fail(msg || gt("Couldn't load your vacation notice."), function () {
+                            $.fail(msg || gt('Couldn\'t load your vacation notice.'), function () {
                                 filters.editVacationtNotice($node).done(function () {
                                     $node.find('[data-action="discard"]').hide();
                                 });

@@ -146,16 +146,16 @@ define('io.ox/contacts/api',
                 sort: '607', // magic sort field - ignores asc/desc
                 getData: function (query, opt) {
                     var queryFields = {
-                            names: ("display_name first_name last_name yomiFirstName yomiLastName company yomiCompany " +
-                            "email1 email2 email3").split(" "),
-                            addresses: ("street_home postal_code_home city_home state_home country_home " +
-                            "street_business postal_code_business city_business state_business country_business " +
-                            "street_other postal_code_other city_other state_other country_other").split(" "),
-                            phones: ("telephone_business1 telephone_business2 telephone_home1 telephone_home2 " +
-                            "telephone_other fax_business telephone_callback telephone_car telephone_company " +
-                            "fax_home cellular_telephone1 cellular_telephone2 fax_other telephone_isdn " +
-                            "telephone_pager telephone_primary telephone_radio telephone_telex telephone_ttytdd " +
-                            "telephone_ip telephone_assistant").split(" ")
+                            names: ('display_name first_name last_name yomiFirstName yomiLastName company yomiCompany ' +
+                            'email1 email2 email3').split(' '),
+                            addresses: ('street_home postal_code_home city_home state_home country_home ' +
+                            'street_business postal_code_business city_business state_business country_business ' +
+                            'street_other postal_code_other city_other state_other country_other').split(' '),
+                            phones: ('telephone_business1 telephone_business2 telephone_home1 telephone_home2 ' +
+                            'telephone_other fax_business telephone_callback telephone_car telephone_company ' +
+                            'fax_home cellular_telephone1 cellular_telephone2 fax_other telephone_isdn ' +
+                            'telephone_pager telephone_primary telephone_radio telephone_telex telephone_ttytdd ' +
+                            'telephone_ip telephone_assistant').split(' ')
                         },
                         filter = ['or'],
                         data,

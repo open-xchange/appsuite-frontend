@@ -10,30 +10,30 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/modelFactory", "io.ox/backbone/views", "io.ox/backbone/tests/recipeApi"], function (ext, ModelFactory, views, api) {
-    "use strict";
+define('io.ox/backbone/tests/views', ['io.ox/core/extensions', 'io.ox/backbone/modelFactory', 'io.ox/backbone/views', 'io.ox/backbone/tests/recipeApi'], function (ext, ModelFactory, views, api) {
+    'use strict';
 
     var factory = new ModelFactory({
-        ref: "io.ox/backbone/tests/views/factory" + _.now(),
+        ref: 'io.ox/backbone/tests/views/factory' + _.now(),
         api: api
     });
 
-    ext.point("test/suite").extend({
+    ext.point('test/suite').extend({
         id: 'backbone-views',
         index: 100,
         test: function (j, utils) {
 
-            j.describe("view extension points", function () {
+            j.describe('view extension points', function () {
 
-                j.it("should provide an extension point to draw into", function () {
-                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                j.it('should provide an extension point to draw into', function () {
+                    var ref = 'io.ox/backbone/tests/testView-' + _.now();
                     var point = views.point(ref);
 
                     point.basicExtend({
                         id: 'testExtension',
                         draw: function () {
                             this.append(
-                                $('<div class="find-me">').text("Hello")
+                                $('<div class="find-me">').text('Hello')
                             );
                         }
                     });
@@ -42,13 +42,13 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
 
                     var $el = new View().render().$el;
 
-                    j.expect($el.find('.find-me').text()).toEqual("Hello");
+                    j.expect($el.find('.find-me').text()).toEqual('Hello');
 
                 });
 
 
-                j.it("should be extensible through new views", function () {
-                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                j.it('should be extensible through new views', function () {
+                    var ref = 'io.ox/backbone/tests/testView-' + _.now();
                     var point = views.point(ref);
 
                     point.extend({
@@ -56,7 +56,7 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
                         tagName: 'div',
                         className: 'find-me',
                         render: function () {
-                            this.$el.text("Hello");
+                            this.$el.text('Hello');
                         }
                     });
 
@@ -64,12 +64,12 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
 
                     var $el = new View().render().$el;
 
-                    j.expect($el.find('.find-me').text()).toEqual("Hello");
+                    j.expect($el.find('.find-me').text()).toEqual('Hello');
 
                 });
 
-                j.it("should have extension views mark their node with extension-point, extension-id and objects composite id", function () {
-                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                j.it('should have extension views mark their node with extension-point, extension-id and objects composite id', function () {
+                    var ref = 'io.ox/backbone/tests/testView-' + _.now();
                     var point = views.point(ref);
 
                     point.extend({
@@ -77,7 +77,7 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
                         tagName: 'div',
                         className: 'find-me',
                         render: function () {
-                            this.$el.text("Hello");
+                            this.$el.text('Hello');
                         }
                     });
 
@@ -87,13 +87,13 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
 
                     var $extensionNode = $el.find('.find-me');
 
-                    j.expect($extensionNode.data('extension-id')).toEqual("view");
+                    j.expect($extensionNode.data('extension-id')).toEqual('view');
                     j.expect($extensionNode.data('extension-point')).toEqual(ref);
-                    j.expect(String($extensionNode.data('composite-id'))).toEqual("12.23");
+                    j.expect(String($extensionNode.data('composite-id'))).toEqual('12.23');
                 });
 
-                j.it("should provide access to the baton, model and element to extension views", function () {
-                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                j.it('should provide access to the baton, model and element to extension views', function () {
+                    var ref = 'io.ox/backbone/tests/testView-' + _.now();
                     var point = views.point(ref);
                     var extension = null;
 
@@ -102,7 +102,7 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
                         tagName: 'div',
                         className: 'find-me',
                         render: function () {
-                            this.$el.text("Hello");
+                            this.$el.text('Hello');
                             extension = this;
                         }
                     });
@@ -126,19 +126,19 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
 
                     j.expect(extension.$el).toBeDefined();
                     j.expect(extension.$el).not.toEqual(null);
-                    j.expect(extension.$el.text()).toEqual("Hello");
+                    j.expect(extension.$el.text()).toEqual('Hello');
 
                 });
 
-                j.it("should automatically trigger update, invalid and valid methods", function () {
-                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                j.it('should automatically trigger update, invalid and valid methods', function () {
+                    var ref = 'io.ox/backbone/tests/testView-' + _.now();
                     var point = views.point(ref);
                     var extension = {
                         id: 'view',
                         tagName: 'div',
                         className: 'find-me',
                         render: function () {
-                            this.$el.text("Hello");
+                            this.$el.text('Hello');
                         },
                         update: function () {
                         },
@@ -171,8 +171,8 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
 
                 });
 
-                j.it("should allow extensions to observe an attribute", function () {
-                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                j.it('should allow extensions to observe an attribute', function () {
+                    var ref = 'io.ox/backbone/tests/testView-' + _.now();
                     var point = views.point(ref);
                     var extension = {
                         id: 'view',
@@ -181,7 +181,7 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
                         observe: 'title',
 
                         render: function () {
-                            this.$el.text("Hello");
+                            this.$el.text('Hello');
                         },
                         onTitleChange: function () {
                         },
@@ -213,8 +213,8 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
                     j.expect(extension.onTitleValid).toHaveBeenCalled();
                 });
 
-                j.it("should allow extensions to observe multiple attributes, and deal gracefully with snake-case or snake_case names", function () {
-                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                j.it('should allow extensions to observe multiple attributes, and deal gracefully with snake-case or snake_case names', function () {
+                    var ref = 'io.ox/backbone/tests/testView-' + _.now();
                     var point = views.point(ref);
                     var extension = {
                         id: 'view',
@@ -223,7 +223,7 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
                         observe: 'title description servings-number recipe_dot_com_rating',
 
                         render: function () {
-                            this.$el.text("Hello");
+                            this.$el.text('Hello');
                         },
                         onTitleChange: function () {
                         },
@@ -322,19 +322,19 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
 
                 });
 
-                j.it("should be able to register listeners for model events", function () {
-                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                j.it('should be able to register listeners for model events', function () {
+                    var ref = 'io.ox/backbone/tests/testView-' + _.now();
                     var point = views.point(ref);
                     var extension = {
                         id: 'view',
                         tagName: 'div',
                         className: 'find-me',
                         modelEvents: {
-                            "customEvent": "onCustomEvent"
+                            'customEvent': 'onCustomEvent'
                         },
 
                         render: function () {
-                            this.$el.text("Hello");
+                            this.$el.text('Hello');
                         },
                         onCustomEvent: function () {
                         }
@@ -354,8 +354,8 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
 
                 });
 
-                j.it("should allow extensions to use the parent view as an event bus", function () {
-                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                j.it('should allow extensions to use the parent view as an event bus', function () {
+                    var ref = 'io.ox/backbone/tests/testView-' + _.now();
                     var point = views.point(ref);
                     point.extend({
                         id: 'view',
@@ -363,8 +363,8 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
                         className: 'find-me',
 
                         render: function () {
-                            this.$el.text("Hello");
-                            this.baton.parentView.trigger("event");
+                            this.$el.text('Hello');
+                            this.baton.parentView.trigger('event');
                         }
                     });
 
@@ -384,11 +384,11 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
 
                 });
 
-                j.it("should allow sub extension points", function () {
-                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                j.it('should allow sub extension points', function () {
+                    var ref = 'io.ox/backbone/tests/testView-' + _.now();
                     var point = views.point(ref);
-                    var subpoint1 = point.createSubpoint("section1", {tagName: 'div', className: 's1'});
-                    var subpoint2 = point.createSubpoint("section2", {tagName: 'div', className: 's2'});
+                    var subpoint1 = point.createSubpoint('section1', {tagName: 'div', className: 's1'});
+                    var subpoint2 = point.createSubpoint('section2', {tagName: 'div', className: 's2'});
 
 
                     subpoint1.extend({
@@ -396,7 +396,7 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
                         tagName: 'div',
                         className: 'view11',
                         render: function () {
-                            this.$el.text("1.1");
+                            this.$el.text('1.1');
                         }
                     });
 
@@ -405,7 +405,7 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
                         tagName: 'div',
                         className: 'view12',
                         render: function () {
-                            this.$el.text("1.2");
+                            this.$el.text('1.2');
                         }
                     });
 
@@ -414,7 +414,7 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
                         tagName: 'div',
                         className: 'view21',
                         render: function () {
-                            this.$el.text("2.1");
+                            this.$el.text('2.1');
                         }
                     });
 
@@ -423,7 +423,7 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
                         tagName: 'div',
                         className: 'view22',
                         render: function () {
-                            this.$el.text("2.2");
+                            this.$el.text('2.2');
                         }
                     });
 
@@ -432,18 +432,18 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
 
                     var $el = new View({model: recipe}).render().$el;
 
-                    j.expect($el.find('.s1 .view11').text()).toEqual("1.1");
-                    j.expect($el.find('.s1 .view12').text()).toEqual("1.2");
-                    j.expect($el.find('.s2 .view21').text()).toEqual("2.1");
-                    j.expect($el.find('.s2 .view22').text()).toEqual("2.2");
+                    j.expect($el.find('.s1 .view11').text()).toEqual('1.1');
+                    j.expect($el.find('.s1 .view12').text()).toEqual('1.2');
+                    j.expect($el.find('.s2 .view21').text()).toEqual('2.1');
+                    j.expect($el.find('.s2 .view22').text()).toEqual('2.2');
 
                 });
 
             });
 
-            j.describe("AttributeView", function () {
-                j.it("should display and update an attribute value", function () {
-                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+            j.describe('AttributeView', function () {
+                j.it('should display and update an attribute value', function () {
+                    var ref = 'io.ox/backbone/tests/testView-' + _.now();
                     var point = views.point(ref);
                     point.extend(new views.AttributeView({
                         id: 'title',
@@ -456,16 +456,16 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
 
                     var $el = new View({model: recipe}).render().$el;
 
-                    j.expect($el.find("h1").text()).toEqual("original title");
+                    j.expect($el.find('h1').text()).toEqual('original title');
 
-                    recipe.set("title", "updated title", {validate: true});
+                    recipe.set('title', 'updated title', {validate: true});
 
-                    j.expect($el.find("h1").text()).toEqual("updated title");
+                    j.expect($el.find('h1').text()).toEqual('updated title');
 
                 });
 
-                j.it("should be able to handle multiple attributes", function () {
-                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                j.it('should be able to handle multiple attributes', function () {
+                    var ref = 'io.ox/backbone/tests/testView-' + _.now();
                     var point = views.point(ref);
                     point.extend(new views.AttributeView({
                         id: 'title',
@@ -478,20 +478,20 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
 
                     var $el = new View({model: recipe}).render().$el;
 
-                    j.expect($el.find("h1").text()).toEqual("original title subtitle");
+                    j.expect($el.find('h1').text()).toEqual('original title subtitle');
 
-                    recipe.set("title", "updated title", {validate: true});
+                    recipe.set('title', 'updated title', {validate: true});
 
-                    j.expect($el.find("h1").text()).toEqual("updated title subtitle");
+                    j.expect($el.find('h1').text()).toEqual('updated title subtitle');
 
-                    recipe.set("subtitle", "updated subtitle", {validate: true});
+                    recipe.set('subtitle', 'updated subtitle', {validate: true});
 
-                    j.expect($el.find("h1").text()).toEqual("updated title updated subtitle");
+                    j.expect($el.find('h1').text()).toEqual('updated title updated subtitle');
 
                 });
 
-                j.it("should allow a transformation function to be applied to values", function () {
-                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                j.it('should allow a transformation function to be applied to values', function () {
+                    var ref = 'io.ox/backbone/tests/testView-' + _.now();
                     var point = views.point(ref);
                     point.extend(new views.AttributeView({
                         id: 'title',
@@ -499,7 +499,7 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
                         attribute: 'title',
                         transform: {
                             title: function (title) {
-                                return "The great " + title;
+                                return 'The great ' + title;
                             }
                         }
                     }));
@@ -509,11 +509,11 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
 
                     var $el = new View({model: recipe}).render().$el;
 
-                    j.expect($el.find("h1").text()).toEqual("The great original title");
+                    j.expect($el.find('h1').text()).toEqual('The great original title');
 
-                    recipe.set("title", "updated title", {validate: true});
+                    recipe.set('title', 'updated title', {validate: true});
 
-                    j.expect($el.find("h1").text()).toEqual("The great updated title");
+                    j.expect($el.find('h1').text()).toEqual('The great updated title');
                 });
             });
         }

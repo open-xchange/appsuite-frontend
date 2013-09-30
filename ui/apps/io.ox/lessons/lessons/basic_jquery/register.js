@@ -33,14 +33,14 @@ define('io.ox/lessons/lessons/basic_jquery/register', ['io.ox/core/extensions', 
                     element = $(element);
 
                     element.before($('<form class="form-inline">').append(
-                        $('<span class="muted">').text("node.find('"),
+                        $('<span class="muted">').text('node.find(\''),
                         selectorField = $('<input type="text">').on('keydown', function (e) {
                             if (e.which === 13) {
                                 e.preventDefault();
                                 runExperiment();
                             }
                         }),
-                        $('<span class="muted">').text("') "),
+                        $('<span class="muted">').text('\') '),
                         $('<button>').text('Try it').on('click', function () {
                             runExperiment();
                         })

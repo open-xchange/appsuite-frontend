@@ -10,11 +10,11 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("io.ox/settings/accounts/email/test",
-    ["io.ox/core/extensions", "io.ox/core/api/account",
-     "io.ox/settings/main"], function (ext, api, settings) {
+define('io.ox/settings/accounts/email/test',
+    ['io.ox/core/extensions', 'io.ox/core/api/account',
+     'io.ox/settings/main'], function (ext, api, settings) {
 
-    "use strict";
+    'use strict';
 
 
     // test objects
@@ -24,37 +24,37 @@ define("io.ox/settings/accounts/email/test",
     var TIMEOUT = ox.testTimeout,
 
         TESTACCOUNT = {
-            "primary_address": "oxtestermail@googlemail.com",
-            "mail_protocol": "imap",
-            "mail_port": "993",
-            "mail_server": "imap.googlemail.com",
-            "transport_protocol": "smtp",
-            "transport_port": "465",
-            "transport_server": "smtp.googlemail.com",
-            "login": "oxtestermail@googlemail.com",
-            "name": "Neuer Account",
-            "personal": "oxtestermail",
-            "unified_inbox_enabled": false,
-            "mail_secure": true,
-            "transport_secure": true,
-            "pop3_storage": "mailaccount",
-            "spam_handler": "NoSpamHandler"
+            'primary_address': 'oxtestermail@googlemail.com',
+            'mail_protocol': 'imap',
+            'mail_port': '993',
+            'mail_server': 'imap.googlemail.com',
+            'transport_protocol': 'smtp',
+            'transport_port': '465',
+            'transport_server': 'smtp.googlemail.com',
+            'login': 'oxtestermail@googlemail.com',
+            'name': 'Neuer Account',
+            'personal': 'oxtestermail',
+            'unified_inbox_enabled': false,
+            'mail_secure': true,
+            'transport_secure': true,
+            'pop3_storage': 'mailaccount',
+            'spam_handler': 'NoSpamHandler'
         },
 
         TESTACCOUNTVALDIDATION = {
-            "name": "Neuer Account",
-            "primary_address": "oxtestermail@googlemail.com",
-            "personal": "oxtestermail",
-            "unified_inbox_enabled": false,
-            "mail_protocol": "imap",
-            "mail_secure": true,
-            "mail_server": "imap.googlemail.com",
-            "mail_port": "993",
-            "login": "oxtestermail@googlemail.com",
-            "transport_secure": true,
-            "transport_server": "smtp.googlemail.com",
-            "transport_port": "465",
-            "transport_credentials": false
+            'name': 'Neuer Account',
+            'primary_address': 'oxtestermail@googlemail.com',
+            'personal': 'oxtestermail',
+            'unified_inbox_enabled': false,
+            'mail_protocol': 'imap',
+            'mail_secure': true,
+            'mail_server': 'imap.googlemail.com',
+            'mail_port': '993',
+            'login': 'oxtestermail@googlemail.com',
+            'transport_secure': true,
+            'transport_server': 'smtp.googlemail.com',
+            'transport_port': '465',
+            'transport_credentials': false
         },
 
         TESTMAILAUTOCONFIG = {
@@ -82,7 +82,7 @@ define("io.ox/settings/accounts/email/test",
         id: 'email-account-create-api',
         index: 100,
         test: function (j) {
-            j.describe("Creates a new email account via api", function () {
+            j.describe('Creates a new email account via api', function () {
 
                 var dataId, obj;
 
@@ -161,7 +161,7 @@ define("io.ox/settings/accounts/email/test",
         id: 'email-account-create-ui',
         index: 100,
         test: function (j) {
-            j.describe("Creates a new email account via ui", function () {
+            j.describe('Creates a new email account via ui', function () {
 
                 var app = null, accountPane, buttonAdd, buttonAddAutoconf, buttonAddPassword, dialogAutoconf, dialogPassword,
                     buttonSave, detailPane, dataId, dialogSuccess, buttonClose;
@@ -271,7 +271,7 @@ define("io.ox/settings/accounts/email/test",
         id: 'email-autoconfig',
         index: 100,
         test: function (j) {
-            j.describe("Tests the mail-autoconfig api", function () {
+            j.describe('Tests the mail-autoconfig api', function () {
 
                 TESTMAILAUTOCONFIG.password = password || (password = prompt('PasswMail Account Password'));
 

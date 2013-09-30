@@ -22,7 +22,7 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
     'less!io.ox/mail/vacationnotice/settings/style.less'
 ], function (model, views, forms, actions, links, date, notifications, gt) {
 
-    "use strict";
+    'use strict';
 
     var CustomBinderUtils = {
             _timeStrToDate: function (value, attribute, model) {

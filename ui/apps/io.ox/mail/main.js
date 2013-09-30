@@ -80,7 +80,7 @@ define('io.ox/mail/main',
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/mail',
-            title: "Inbox",
+            title: 'Inbox',
             search: true
         });
 
@@ -677,7 +677,7 @@ define('io.ox/mail/main',
         app.showMail = showMail = function (obj) {
 
             // which mode?
-            if (grid.getMode() === "all" && grid.prop('sort') === 'thread' && !isInOpenThreadSummary(obj)) {
+            if (grid.getMode() === 'all' && grid.prop('sort') === 'thread' && !isInOpenThreadSummary(obj)) {
                 // get thread
                 var thread = api.getThread(obj),
                     baton = ext.Baton({ data: thread, app: app }),
@@ -800,8 +800,8 @@ define('io.ox/mail/main',
 
         if (!_.isEmpty(app.queues)) {
             // drop zone
-            var dropZone = new dnd.UploadZone({ ref: "io.ox/mail/dnd/actions" }, app);
-            win.on("show", dropZone.include).on('hide', dropZone.remove);
+            var dropZone = new dnd.UploadZone({ ref: 'io.ox/mail/dnd/actions' }, app);
+            win.on('show', dropZone.include).on('hide', dropZone.remove);
         }
 
         //if viewSetting ins changed redraw detailviews and grid
@@ -872,10 +872,10 @@ define('io.ox/mail/main',
         win.on('show:initial', grid.focus);
 
         // Push mail
-        if (require("io.ox/core/capabilities").has("rt lab:pushMail")) {
-            require(["io.ox/realtime/events"], function (rtEvents) {
-                rtEvents.on("mail:new", function (data) {
-                    //if (data.folder === "default0/INBOX") {
+        if (require('io.ox/core/capabilities').has('rt lab:pushMail')) {
+            require(['io.ox/realtime/events'], function (rtEvents) {
+                rtEvents.on('mail:new', function (data) {
+                    //if (data.folder === 'default0/INBOX') {
                     api.refresh();
                     //}
                 });

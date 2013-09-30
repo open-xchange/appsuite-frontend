@@ -18,52 +18,52 @@ define('io.ox/mail/mailfilter/settings/filter/defaults',
     return {
             tests: {
                 'From': {
-                    'comparison': "matches",
-                    'headers': ["From"],
-                    'id': "header",
+                    'comparison': 'matches',
+                    'headers': ['From'],
+                    'id': 'header',
                     'values': ['']
                 },
                 'any': {
-                    'comparison': "matches",
-                    'headers': ["To", "Cc"],
-                    'id': "header",
+                    'comparison': 'matches',
+                    'headers': ['To', 'Cc'],
+                    'id': 'header',
                     'values': ['']
                 },
                 'Subject': {
-                    'comparison': "matches",
-                    'headers': ["Subject"],
-                    'id': "header",
+                    'comparison': 'matches',
+                    'headers': ['Subject'],
+                    'id': 'header',
                     'values': ['']
                 },
                 'mailingList': {
-                    'comparison': "matches",
-                    'headers': ["List-Id", "X-BeenThere", "X-Mailinglist", "X-Mailing-List"],
-                    'id': "header",
+                    'comparison': 'matches',
+                    'headers': ['List-Id', 'X-BeenThere', 'X-Mailinglist', 'X-Mailing-List'],
+                    'id': 'header',
                     'values': ['']
                 },
                 'To': {
-                    'comparison': "matches",
-                    'headers': ["To"],
-                    'id': "header",
+                    'comparison': 'matches',
+                    'headers': ['To'],
+                    'id': 'header',
                     'values': ['']
                 },
                 'Cc': {
-                    'comparison': "matches",
-                    'headers': ["Cc"],
-                    'id': "header",
+                    'comparison': 'matches',
+                    'headers': ['Cc'],
+                    'id': 'header',
                     'values': ['']
                 },
                 'cleanHeader': {
-                    'comparison': "matches",
-                    'headers': [""],
-                    'id': "header",
-                    'values': [""]
+                    'comparison': 'matches',
+                    'headers': [''],
+                    'id': 'header',
+                    'values': ['']
                 },
                 'envelope': {
-                    'comparison': "matches",
-                    'headers': ["To"],
-                    'id': "envelope",
-                    'values': [""]
+                    'comparison': 'matches',
+                    'headers': ['To'],
+                    'id': 'envelope',
+                    'values': ['']
                 },
                 'true': {
                     'id': 'true'
@@ -76,36 +76,36 @@ define('io.ox/mail/mailfilter/settings/filter/defaults',
             },
             actions: {
                 'keep': {
-                    'id': "keep"
+                    'id': 'keep'
                 },
                 'discard': {
-                    'id': "discard"
+                    'id': 'discard'
                 },
                 'redirect': {
-                    'id': "redirect",
-                    'to': ""
+                    'id': 'redirect',
+                    'to': ''
                 },
                 'move': {
-                    'id': "move",
-                    'into': "default0/INBOX"
+                    'id': 'move',
+                    'into': 'default0/INBOX'
                 },
                 'reject': {
-                    'id': "reject",
-                    'text': ""
+                    'id': 'reject',
+                    'text': ''
 
                 },
                 'markmail': {
-                    'flags': ["\\seen"],
-                    'id': "addflags"
+                    'flags': ['\\seen'],
+                    'id': 'addflags'
                 },
                 'tag': {
-                    'flags': ["$"],
-                    'id': "addflags"
+                    'flags': ['$'],
+                    'id': 'addflags'
 
                 },
                 'flag': {
-                    'flags': ["$cl_1"],
-                    'id': "addflags"
+                    'flags': ['$cl_1'],
+                    'id': 'addflags'
                 }
             }
         };

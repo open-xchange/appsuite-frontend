@@ -280,7 +280,7 @@ define('io.ox/files/icons/perspective',
                         dialog.on('close', function () {
                             if (window.mejs) {
                                 _(window.mejs.players).each(function (player) {
-                                    if ($(player.node).parents(".preview").length > 0) {
+                                    if ($(player.node).parents('.preview').length > 0) {
                                         player.pause();
                                     }
                                 });

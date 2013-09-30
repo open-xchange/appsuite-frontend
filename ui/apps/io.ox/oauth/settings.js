@@ -66,7 +66,7 @@ define('io.ox/oauth/settings',
                 $('<legend class="sectiontitle">').text(gt('Account Settings')),
                 $('<div class="form-horizontal">').append(
                     $('<div class="control-group">').append(
-                        $('<label for="displayName">').text(gt("Display Name")),
+                        $('<label for="displayName">').text(gt('Display Name')),
                         $('<div class="controls">').append(
                             $displayNameField = $('<input type="text" name="displayName">').val(account.displayName)
                         ) // End controls
