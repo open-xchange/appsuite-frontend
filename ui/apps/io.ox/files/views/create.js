@@ -133,6 +133,9 @@ define('io.ox/files/views/create', [
                 dialog.header($('<h4>').text(gt('Upload new files')));
                 dialog.getBody().append($('<div>').addClass('row-fluid').append($form));
                 dialog.getBody().append(baton.fileList.getNode());
+                dialog.getBody().append(
+                    (_.device('!touch') && (!_.browser.IE || _.browser.IE > 9) ? $('<div class="dndinfo alert alert-info">').text(gt('You can drag an drop files from your computer to upload either a new file or another version of a file.')) : '')
+                );
                 dialog
                     .addPrimaryButton('save', gt('Save'), 'save')
                     .addButton('cancel', gt('Cancel'), 'cancel')
