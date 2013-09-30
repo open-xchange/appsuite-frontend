@@ -35,7 +35,7 @@ define.async('io.ox/core/manifests',
                 cb();
                 return $.when();
             }
-            var requirements = _(this.pluginPoints[pointName]).pluck("path");
+            var requirements = _(this.pluginPoints[pointName]).pluck('path');
             return require(requirements, cb);
         },
 
@@ -45,7 +45,7 @@ define.async('io.ox/core/manifests',
             if (!this.pluginPoints[pointName] || this.pluginPoints[pointName].length === 0) {
                 return requirements;
             }
-            return requirements.concat(_(this.pluginPoints[pointName]).chain().pluck("path").uniq().value());
+            return requirements.concat(_(this.pluginPoints[pointName]).chain().pluck('path').uniq().value());
         },
 
         pluginsFor: function (pointName) {
@@ -53,17 +53,17 @@ define.async('io.ox/core/manifests',
             if (!this.pluginPoints[pointName] || this.pluginPoints[pointName].length === 0) {
                 return [];
             }
-            return [].concat(_(this.pluginPoints[pointName]).pluck("path"));
+            return [].concat(_(this.pluginPoints[pointName]).pluck('path'));
         },
 
         wrapperFor: function (pointName, dependencies, definitionFunction) {
             var self = this;
-            var pluginAware = _(dependencies).contains("plugins");
+            var pluginAware = _(dependencies).contains('plugins');
 
             if (pluginAware) {
                 // Plugin aware!
                 // Require the plugins asynchronously and pass plugin data to the module
-                var index = _(dependencies).indexOf("plugins");
+                var index = _(dependencies).indexOf('plugins');
                 var newDependencies = dependencies.slice(0, index).concat(dependencies.slice(index + 1));
                 return {
                     dependencies: newDependencies,
@@ -179,7 +179,7 @@ define.async('io.ox/core/manifests',
     var def = $.Deferred();
 
     if (_.url.hash('customManifests')) {
-        require([ox.base + "/src/manifests.js?t=" + ts], function (list) {
+        require([ox.base + '/src/manifests.js?t=' + ts], function (list) {
             custom = list;
             console.info('Loading custom manifests', _(list).pluck('path'), list);
             def.resolve(self);

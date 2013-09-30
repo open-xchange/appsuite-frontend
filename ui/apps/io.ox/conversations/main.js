@@ -11,18 +11,18 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/conversations/main",
-    ["io.ox/mail/util",
-     "io.ox/conversations/api",
-     "io.ox/core/tk/vgrid",
-     "io.ox/core/api/user",
-     "io.ox/core/extensions",
-     "io.ox/core/date",
-     "less!io.ox/conversations/style.less",
-     "io.ox/conversations/actions"
+define('io.ox/conversations/main',
+    ['io.ox/mail/util',
+     'io.ox/conversations/api',
+     'io.ox/core/tk/vgrid',
+     'io.ox/core/api/user',
+     'io.ox/core/extensions',
+     'io.ox/core/date',
+     'less!io.ox/conversations/style.less',
+     'io.ox/conversations/actions'
     ], function (util, api, VGrid, userAPI, ext, date) {
 
-    "use strict";
+    'use strict';
 
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/conversations', title: 'Conversations' }),
@@ -47,7 +47,7 @@ define("io.ox/conversations/main",
             toolbar: true
         });
 
-        win.addClass("io-ox-conversations-main");
+        win.addClass('io-ox-conversations-main');
         app.setWindow(win);
 
         // use notifications?
@@ -57,7 +57,7 @@ define("io.ox/conversations/main",
             if (perm === 1) {
                 // add toolbar link
                 win.addButton({
-                    label: "Use notifications",
+                    label: 'Use notifications',
                     action: function () {
                         notifications.requestPermission(function () {
                             useNotifier = true;
@@ -70,13 +70,13 @@ define("io.ox/conversations/main",
         }
 
         // left panel
-        left = $("<div>")
-            .addClass("leftside border-right")
+        left = $('<div>')
+            .addClass('leftside border-right')
             .appendTo(win.nodes.main);
 
         // right panel
-        right = $("<div>")
-            .addClass("rightside io-ox-conversation")
+        right = $('<div>')
+            .addClass('rightside io-ox-conversation')
             .appendTo(win.nodes.main);
 
         // grid
@@ -86,9 +86,9 @@ define("io.ox/conversations/main",
         grid.addTemplate({
             build: function () {
                 var subject, members;
-                this.addClass("conversation")
-                    .append(subject = $("<div>").addClass("subject"))
-                    .append(members = $("<div>").addClass("members"));
+                this.addClass('conversation')
+                    .append(subject = $('<div>').addClass('subject'))
+                    .append(members = $('<div>').addClass('members'));
                 return { subject: subject, members: members };
             },
             set: function (data, fields, index) {
@@ -104,20 +104,20 @@ define("io.ox/conversations/main",
 
         // all request
         grid.setAllRequest(function () {
-            //return $.Deferred().resolve([{ id: "db-0-1017" }]);
+            //return $.Deferred().resolve([{ id: 'db-0-1017' }]);
             return api.getAll();
         });
 
         // list request
         grid.setListRequest(function (ids) {
-            //return $.Deferred().resolve([{ id: "db-0-1017", subject: "YEAH" }]);
+            //return $.Deferred().resolve([{ id: 'db-0-1017', subject: 'YEAH' }]);
             return api.getList(ids);
         });
 
         // -------------------------------------------------------------
 
         var currentChatId = null,
-            lastMessage = "",
+            lastMessage = '',
             lastMessageId = null,
             lastTimestamp = 0,
             pollTimer = null,
@@ -191,9 +191,9 @@ define("io.ox/conversations/main",
                 drawMessages(list);
 
                 // show notification?
-                if (!firstPoll && useNotifier && ox.windowState === "background") {
+                if (!firstPoll && useNotifier && ox.windowState === 'background') {
 
-                    var from = last.from || { name: "" };
+                    var from = last.from || { name: '' };
 
                     userAPI.getPictureURL(from.id)
                         .done(function (url) {
@@ -225,10 +225,10 @@ define("io.ox/conversations/main",
             }
         };
 
-        var emoticons = { ":D": "bigsmile", ":)": "smile", "(y)": "yes" };
+        var emoticons = { ':D': 'bigsmile', ':)': 'smile', '(y)': 'yes' };
 
         applyEmoticons = function (str) {
-            return '<img src="' + ox.base + "/apps/io.ox/conversations/images/" +
+            return '<img src="' + ox.base + '/apps/io.ox/conversations/images/' +
                 emoticons[str] + '.gif" class="emoticon">';
         };
 
@@ -247,25 +247,25 @@ define("io.ox/conversations/main",
                         // replace emoticons
                         .replace(/(\:D|\:\)|\(y\))/g, applyEmoticons)
                         // textile stuff - bold
-                        .replace(/\*(\w[^\*]*\w)\*/g, "<b>$1</b>")
+                        .replace(/\*(\w[^\*]*\w)\*/g, '<b>$1</b>')
                         // detect links
                         .replace(/(http:\/\/\S+)/ig, '<a href="$1" target="_blank">$1</a>'),
                     from = msg.from || {};
                 pane.append(
-                    $("<div>").addClass("message")
+                    $('<div>').addClass('message')
                     .append(
-                        userAPI.getPicture(from.id).addClass("picture")
+                        userAPI.getPicture(from.id).addClass('picture')
                     )
                     .append(
                         $('<div>').addClass('timestamp').text(getTime(msg.timestamp))
                     )
                     .append(
-                        $("<a>").addClass("from" + (from.id === myself ? " me" : ""))
+                        $('<a>').addClass('from' + (from.id === myself ? ' me' : ''))
                         .on('click', { user_id: from.id }, fnClickPerson)
                         .text(from.name)
                     )
                     .append(
-                        $("<div>").addClass("text").html(html)
+                        $('<div>').addClass('text').html(html)
                     )
                 );
             });
@@ -275,12 +275,12 @@ define("io.ox/conversations/main",
 
         sendMessage = function () {
             var val = $.trim(textarea.val());
-            if (val !== "") {
+            if (val !== '') {
                 textarea.prop('disabled', true);
                 api.sendMessage(currentChatId, val)
                     .done(function () {
                         lastMessage = val;
-                        textarea.val("");
+                        textarea.val('');
                         pollNow();
                     })
                     .always(function () {
@@ -289,17 +289,17 @@ define("io.ox/conversations/main",
             }
         };
 
-        $("<div>").addClass("abs conversation default-content-padding")
-            .css({ overflow: "auto", paddingBottom: "0" })
+        $('<div>').addClass('abs conversation default-content-padding')
+            .css({ overflow: 'auto', paddingBottom: '0' })
             .append(
-                pane = $("<div>").addClass("centered-box")
+                pane = $('<div>').addClass('centered-box')
             )
             .appendTo(right);
 
         textarea = $('<textarea>')
-            .attr({ id: 'message-text', placeholder: "Type your message here...", tabindex: '1' })
-            .css("resize", "none")
-            .on("keydown", function (e) {
+            .attr({ id: 'message-text', placeholder: 'Type your message here...', tabindex: '1' })
+            .css('resize', 'none')
+            .on('keydown', function (e) {
                 // don't bubble up to the vgrid
                 e.stopPropagation();
                 var self;
@@ -308,15 +308,15 @@ define("io.ox/conversations/main",
                     sendMessage();
                 } else if (e.which === 38) {
                     self = $(this);
-                    if (self.val() === "") {
+                    if (self.val() === '') {
                         self.val(lastMessage).select();
                     }
                 }
             });
 
-        controls = $("<div>").addClass("abs controls")
+        controls = $('<div>').addClass('abs controls')
             .append(
-                $("<form>").addClass("centered-box form-inline")
+                $('<form>').addClass('centered-box form-inline')
                 .append(
                     $('<label>', { 'for': 'message-text' }).append(textarea)
                 )
@@ -335,21 +335,21 @@ define("io.ox/conversations/main",
             // add subject
             pane.append(
                 $.inlineEdit()
-                .text(data.subject || "No subject")
+                .text(data.subject || 'No subject')
                 .addClass('subject')
-                .on("update", function (e, subject) {
+                .on('update', function (e, subject) {
                     api.update(data.id, { subject: subject });
                 })
             );
             // focus textarea
-            textarea.val("").focus();
+            textarea.val('').focus();
             startPolling(data.id);
         };
 
         /*
          * Selection handling
          */
-        grid.selection.on("change", function (e, selection) {
+        grid.selection.on('change', function (e, selection) {
             if (selection.length === 1) {
                 pane.busy();
                 api.get({ id: selection[0].id })
@@ -359,22 +359,22 @@ define("io.ox/conversations/main",
             }
         });
 
-        win.on("show", function () {
+        win.on('show', function () {
             grid.keyboard(true);
             resumePolling();
         });
-        win.on("hide", function () {
+        win.on('hide', function () {
             grid.keyboard(false);
             stopPolling();
         });
 
         // bind all refresh
-        api.on("refresh.all", function (e, data) {
+        api.on('refresh.all', function (e, data) {
             grid.refresh();
         });
 
         // bind list refresh
-        api.on("refresh.list", function (e, data) {
+        api.on('refresh.list', function (e, data) {
             grid.repaint();
         });
 

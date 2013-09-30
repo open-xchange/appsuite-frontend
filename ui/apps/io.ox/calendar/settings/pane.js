@@ -44,8 +44,8 @@ define('io.ox/calendar/settings/pane',
             NOTIFICATIONS_FOR_ACCEPTDECLINEDPARTICIPANT: gt('Email notification for appointment participant?'),
             SHOW_DECLINED_APPOINTMENTS: gt('Show declined appointments'),
             NOTIFICATION_MAILS_ARE_DELETED: gt('Automatically delete a notification mail after it has been accepted or declined?'),
-            TITLE_NOTIFICATION_MAIL_HANDLING: gt("Incoming Notification Mails"),
-            MARK_FULLTIME_APPOINTMENTS_AS_FREE: gt("Mark all day appointments as free")
+            TITLE_NOTIFICATION_MAIL_HANDLING: gt('Incoming Notification Mails'),
+            MARK_FULLTIME_APPOINTMENTS_AS_FREE: gt('Mark all day appointments as free')
         },
 
         reloadMe = [],
@@ -102,7 +102,7 @@ define('io.ox/calendar/settings/pane',
 
         calendarViewSettings,
         CalendarSettingsView = Backbone.View.extend({
-            tagName: "div",
+            tagName: 'div',
             _modelBinder: undefined,
             initialize: function (options) {
                 // create template
@@ -159,7 +159,7 @@ define('io.ox/calendar/settings/pane',
                         if (showNotice) {
                             notifications.yell(
                                 'success',
-                                gt("The setting has been saved and will become active when you enter the application the next time.")
+                                gt('The setting has been saved and will become active when you enter the application the next time.')
                             );
                         }
                     }

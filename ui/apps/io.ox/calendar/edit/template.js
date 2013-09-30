@@ -71,7 +71,7 @@ define('io.ox/calendar/edit/template',
         id: 'save',
         draw: function (baton) {
             this.append($('<button type="button" class="btn btn-primary save" data-action="save" >')
-                .text(baton.mode === 'edit' ? gt("Save") : gt("Create"))
+                .text(baton.mode === 'edit' ? gt('Save') : gt('Create'))
                 .on('click', function () {
                     //check if attachments are changed
                     if (baton.attachmentList.attachmentsToDelete.length > 0 || baton.attachmentList.attachmentsToAdd.length > 0) {
@@ -91,7 +91,7 @@ define('io.ox/calendar/edit/template',
         id: 'discard',
         draw: function (baton) {
             this.append($('<button type="button" class="btn discard" data-action="discard" >')
-                .text(gt("Discard"))
+                .text(gt('Discard'))
                 .on('click', function () {
                     baton.app.quit();
                 })
@@ -211,7 +211,7 @@ define('io.ox/calendar/edit/template',
         labelClassName: 'control-label desc',
         control: '<textarea class="note">',
         attribute: 'note',
-        label: gt("Description")
+        label: gt('Description')
     }));
 
     // separator or toggle
@@ -248,9 +248,9 @@ define('io.ox/calendar/edit/template',
             id: 'alarm',
             index: 800,
             labelClassName: 'control-label desc',
-            className: "span4",
+            className: 'span4',
             attribute: 'alarm',
-            label: gt("Reminder"),
+            label: gt('Reminder'),
             selectOptions: calendarUtil.getReminderOptions()
         }), {
             rowClass: 'collapsed'
@@ -261,10 +261,10 @@ define('io.ox/calendar/edit/template',
     point.extend(new forms.SelectBoxField({
         id: 'shown_as',
         index: 900,
-        className: "span4",
+        className: 'span4',
         attribute: 'shown_as',
         label: //#. Describes how a appointment is shown in the calendar, values can be "reserved", "temporary", "absent" and "free"
-               gt("Shown as"),
+               gt('Shown as'),
         labelClassName: 'control-label desc',
         selectOptions: {
             1: gt('Reserved'),
@@ -325,7 +325,7 @@ define('io.ox/calendar/edit/template',
             var pNode;
             this.append(
                 pNode = $('<div class="input-append span6">').append(
-                    $('<input type="text" class="add-participant" tabindex="1">').attr("placeholder", gt("Add participant/resource")),
+                    $('<input type="text" class="add-participant" tabindex="1">').attr('placeholder', gt('Add participant/resource')),
                     $('<button type="button" class="btn" data-action="add" tabindex="1">')
                         .append($('<i class="icon-plus">'))
                 )
@@ -415,10 +415,10 @@ define('io.ox/calendar/edit/template',
         attribute: 'notification',
         index: 1510,
         customizeNode: function () {
-            this.$el.css("paddingTop", "5px");
+            this.$el.css('paddingTop', '5px');
         }
     }), {
-        nextTo: "add-participant",
+        nextTo: 'add-participant',
         rowClass: 'collapsed'
     });
 
@@ -496,10 +496,10 @@ define('io.ox/calendar/edit/template',
         }
     });
 
-    ext.point("io.ox/calendar/edit/dnd/actions").extend({
+    ext.point('io.ox/calendar/edit/dnd/actions').extend({
         id: 'attachment',
         index: 10,
-        label: gt("Drop here to upload a <b class='dndignore'>new attachment</b>"),
+        label: gt('Drop here to upload a <b class="dndignore">new attachment</b>'),
         multiple: function (files, app) {
             _(files).each(function (fileData) {
                 app.view.baton.attachmentList.addFile(fileData);
@@ -568,8 +568,8 @@ define('io.ox/calendar/edit/template',
     });
 
     if (!capabilities.has('infostore')) {
-        ext.point("io.ox/calendar/edit/section").disable("attachments_legend");
-        ext.point("io.ox/calendar/edit/section").disable("attachments_upload");
+        ext.point('io.ox/calendar/edit/section').disable('attachments_legend');
+        ext.point('io.ox/calendar/edit/section').disable('attachments_upload');
     }
 
     return null;

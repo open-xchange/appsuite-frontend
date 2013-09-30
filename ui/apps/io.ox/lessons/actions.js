@@ -12,7 +12,7 @@
  */
 define('io.ox/lessons/actions', ['io.ox/core/extensions', 'io.ox/core/extPatterns/links'], function (ext, links) {
 
-    "use strict";
+    'use strict';
 
     new links.Action('io.ox/lessons/actions/toc', {
         id: 'toc',
@@ -21,7 +21,7 @@ define('io.ox/lessons/actions', ['io.ox/core/extensions', 'io.ox/core/extPattern
         }
     });
 
-    new links.ActionGroup("io.ox/lessons/links/toolbar", {
+    new links.ActionGroup('io.ox/lessons/links/toolbar', {
         index: 100,
         id: 'default',
         icon: function () {

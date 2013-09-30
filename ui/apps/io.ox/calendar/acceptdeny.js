@@ -42,7 +42,7 @@ define('io.ox/calendar/acceptdeny',
                             var self = $(this),
                                 options = util.getReminderOptions();
                             _(options).each(function (label, value) {
-                                self.append($("<option>", {value: value}).text(label));
+                                self.append($('<option>', {value: value}).text(label));
                             });
                         }).val(defaultReminder)
                 ).before(

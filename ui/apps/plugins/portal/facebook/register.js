@@ -97,7 +97,7 @@ define('plugins/portal/facebook/register',
                 keychain.submodules.facebook.reauthorize(account).done(function () {
                     keychain.submodules.facebook.trigger('update');
                 }).fail(function () {
-                    console.error(gt("Something went wrong reauthorizing the %s account.", 'Facebook'));
+                    console.error(gt('Something went wrong reauthorizing the %s account.', 'Facebook'));
                 });
             });
         console.error('Facebook reported an error', resultsets.error);
@@ -141,11 +141,11 @@ define('plugins/portal/facebook/register',
         },
 
         performSetUp: function (baton) {
-            var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
+            var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
             return $.when(
                 keychain.createInteractively('facebook', win))
             .then(function () {
-                baton.model.node.removeClass("requires-setup");
+                baton.model.node.removeClass('requires-setup');
                 ox.trigger('refresh^');
             });
         },
@@ -258,7 +258,7 @@ define('plugins/portal/facebook/register',
 
         error: function (error) {
 
-            if (error.code !== "OAUTH-0006") return; // let the default handling do the job
+            if (error.code !== 'OAUTH-0006') return; // let the default handling do the job
 
             $(this).empty().append(
                 $('<div class="decoration">').append(
@@ -286,8 +286,8 @@ define('plugins/portal/facebook/register',
         draw: function (post) {
             var media = post.attachment.media[0];
             this.append(
-                $('<a>', {'class': "posted-image", 'href': media.href}).append(
-                    $('<img>', {'class': "posted-image", 'src': media.src, alt: media.alt, title: media.alt}),
+                $('<a>', {'class': 'posted-image', 'href': media.href}).append(
+                    $('<img>', {'class': 'posted-image', 'src': media.src, alt: media.alt, title: media.alt}),
                     $('<div>').text(post.description || ''),
                     $('<div>').text(post.message || '')
                 )
@@ -421,7 +421,7 @@ define('plugins/portal/facebook/register',
         index: 196,
         accepts: function (post) {
             return post.type === 80 &&
-                post.attachment.caption !== "www.youtube.com" &&
+                post.attachment.caption !== 'www.youtube.com' &&
                 post.attachment.media[0];
         },
         draw: function (post) {
@@ -440,7 +440,7 @@ define('plugins/portal/facebook/register',
         id: 'video',
         index: 196,
         accepts: function (post) {
-            return (post.type === 128) || (post.type === 80 && post.attachment.caption === "www.youtube.com");
+            return (post.type === 128) || (post.type === 80 && post.attachment.caption === 'www.youtube.com');
         },
         draw: function (post) {
             var media = post.attachment.media[0];

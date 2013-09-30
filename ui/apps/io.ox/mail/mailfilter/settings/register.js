@@ -17,15 +17,15 @@ define('io.ox/mail/mailfilter/settings/register',
 
     'use strict';
 
-    ext.point("io.ox/settings/pane").extend({
+    ext.point('io.ox/settings/pane').extend({
         id: 'mailfilter',
-        title: gt("Mail Filter"),
+        title: gt('Mail Filter'),
         ref: 'io.ox/mailfilter',
         loadSettingPane: false,
         index: 425
     });
 
-    ext.point("io.ox/mailfilter/settings/detail").extend({
+    ext.point('io.ox/mailfilter/settings/detail').extend({
         index: 100,
         draw: function () {
             var $node = this,
@@ -33,7 +33,7 @@ define('io.ox/mail/mailfilter/settings/register',
 
             $node.append($container);
 
-            ox.load(["io.ox/mail/mailfilter/settings/filter"]).done(function (filters) {
+            ox.load(['io.ox/mail/mailfilter/settings/filter']).done(function (filters) {
                 filters.editMailfilter($container).fail(function (error) {
                     var msg;
                     if (error.code === 'MAIL_FILTER-0015') {

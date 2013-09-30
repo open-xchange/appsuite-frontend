@@ -70,7 +70,7 @@ define('io.ox/core/pubsub/publications',
         }
     },
     PublicationView = Backbone.View.extend({
-        tagName: "div",
+        tagName: 'div',
         _modelBinder: undefined,
         editMode: undefined,
         infostoreItem: false,
@@ -249,7 +249,7 @@ define('io.ox/core/pubsub/publications',
                 buildTemplates(node, templates);
             } else {//no matching templates found on server
                 baton.popup.close();
-                notifications.yell('error', gt("No matching templates on this Server"));
+                notifications.yell('error', gt('No matching templates on this Server'));
             }
 
             //prefill

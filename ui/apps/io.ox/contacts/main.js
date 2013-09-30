@@ -13,23 +13,23 @@
  *
  */
 
-define("io.ox/contacts/main",
-    ["io.ox/contacts/util",
-     "io.ox/contacts/api",
-     "io.ox/core/tk/vgrid",
-     "io.ox/help/hints",
-     "io.ox/contacts/view-detail",
+define('io.ox/contacts/main',
+    ['io.ox/contacts/util',
+     'io.ox/contacts/api',
+     'io.ox/core/tk/vgrid',
+     'io.ox/help/hints',
+     'io.ox/contacts/view-detail',
      'io.ox/core/tk/dropdown-options',
-     "io.ox/core/extensions",
-     "io.ox/core/extPatterns/actions",
-     "io.ox/core/commons",
-     "gettext!io.ox/contacts",
-     "settings!io.ox/contacts",
-     "io.ox/core/api/folder",
-     "less!io.ox/contacts/style.less"
+     'io.ox/core/extensions',
+     'io.ox/core/extPatterns/actions',
+     'io.ox/core/commons',
+     'gettext!io.ox/contacts',
+     'settings!io.ox/contacts',
+     'io.ox/core/api/folder',
+     'less!io.ox/contacts/style.less'
     ], function (util, api, VGrid, hints, viewDetail, dropdownOptions, ext, actions, commons, gt, settings, folderAPI) {
 
-    "use strict";
+    'use strict';
 
     // application object
     var app = ox.ui.createApp({
@@ -189,8 +189,8 @@ define("io.ox/contacts/main",
                     fields.description.text(_.noI18n(util.getDescription(data)));
                     if ((_.noI18n(util.getFullName(data)) + _.noI18n(util.getDescription(data))).trim().length === 0) {
                         // nothing is written down, add some text, so user isn’t confused
-                        fields.name.addClass('bright-text').append(gt("Empty name and description found."));
-                        fields.description.append(gt("Edit to set a name."));
+                        fields.name.addClass('bright-text').append(gt('Empty name and description found.'));
+                        fields.description.append(gt('Edit to set a name.'));
                     } else {
                         fields.name.removeClass('bright-text');
                     }
@@ -266,7 +266,7 @@ define("io.ox/contacts/main",
 
         drawFail = function (obj) {
             right.idle().empty().append(
-                $.fail(gt("Couldn't load contact data."), function () {
+                $.fail(gt('Couldn\'t load contact data.'), function () {
                     showContact(obj);
                 })
             );

@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/lessons/editor', ['ace/ace', 'ace/mode/javascript', 'ace/mode/html'],  function (ace, JavaScript, HTML) {
-    "use strict";
+    'use strict';
 
     var Editor = {
         ace: ace,
@@ -19,31 +19,31 @@ define('io.ox/lessons/editor', ['ace/ace', 'ace/mode/javascript', 'ace/mode/html
             var div;
             el = $(el);
             options = options || {};
-            el.replaceWith(div = $("<div>").css({
+            el.replaceWith(div = $('<div>').css({
                 position: 'absolute',
                 width: options.width || el.width(),
-                height: options.height || el.height() + (options.padding || 0) + (el.data("padding") || 0),
-                border: "1px solid black"
+                height: options.height || el.height() + (options.padding || 0) + (el.data('padding') || 0),
+                border: '1px solid black'
             }).html(el.html()));
             el = div;
 
             var placeholder;
 
-            el.after(placeholder = $("<div>&nbsp;</div>").css({
+            el.after(placeholder = $('<div>&nbsp;</div>').css({
                 marginTop: el.height() + 14
             }));
 
             if (options.run) {
-                placeholder.append($('<button class="btn btn-primary">').text("Try this").on("click", function () {
+                placeholder.append($('<button class="btn btn-primary">').text('Try this').on('click', function () {
                     options.run(editor.getValue());
                 }));
             }
 
             var editor = ace.edit(el[0]);
 
-            if (!options.language || options.language === "javascript" || options.language === "js") {
+            if (!options.language || options.language === 'javascript' || options.language === 'js') {
                 editor.getSession().setMode(new JavaScript.Mode());
-            } else if (options.language === "html") {
+            } else if (options.language === 'html') {
                 editor.getSession().setMode(new HTML.Mode());
             }
             editor.setTheme('ace/theme/eclipse');
@@ -61,18 +61,18 @@ define('io.ox/lessons/editor', ['ace/ace', 'ace/mode/javascript', 'ace/mode/html
             options.contexts = options.contexts || {};
 
             // Highlight uneditable .code elements
-            node.find(".code").each(function (index, element) {
+            node.find('.code').each(function (index, element) {
                 Editor.highlight(element);
             });
 
             // More interesting experiments
             function createExperiment(index, element) {
-                var experimentDiv = $("<div>").css({
-                    marginTop: "10px"
+                var experimentDiv = $('<div>').css({
+                    marginTop: '10px'
                 });
 
                 var log = $('<pre class="log">').css({
-                    marginTop: "10px"
+                    marginTop: '10px'
                 }).hide();
 
                 var firstTime = true;
@@ -98,8 +98,8 @@ define('io.ox/lessons/editor', ['ace/ace', 'ace/mode/javascript', 'ace/mode/html
                         }
 
                         var ctx;
-                        if ($(element).data("context")) {
-                            ctx = options.contexts[$(element).data("context")];
+                        if ($(element).data('context')) {
+                            ctx = options.contexts[$(element).data('context')];
                             if (_.isFunction(ctx)) {
                                 ctx = ctx();
                             }
@@ -110,17 +110,17 @@ define('io.ox/lessons/editor', ['ace/ace', 'ace/mode/javascript', 'ace/mode/html
 
                         runIt.apply(parentNode);
 
-                        if (firstTime && experimentDiv.find("*").length > 0) {
+                        if (firstTime && experimentDiv.find('*').length > 0) {
                             firstTime = false;
-                            experimentDiv.addClass("well");
+                            experimentDiv.addClass('well');
                         }
                     }
                 });
             }
 
             // Node Experiments
-            node.find(".node_experiment").each(createExperiment);
-            node.find(".experiment").each(createExperiment);
+            node.find('.node_experiment').each(createExperiment);
+            node.find('.experiment').each(createExperiment);
         }
     };
     return Editor;

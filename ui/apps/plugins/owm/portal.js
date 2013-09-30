@@ -1,12 +1,12 @@
-define("plugins/owm/portal", ["io.ox/core/extensions"], function (ext) {
-    "use strict";
+define('plugins/owm/portal', ['io.ox/core/extensions'], function (ext) {
+    'use strict';
 
-    ext.point("io.ox/portal/widget").extend({id: 'owm1'});
+    ext.point('io.ox/portal/widget').extend({id: 'owm1'});
 
-    ext.point("io.ox/portal/widget/owm1").extend({
-        title: "Hello World",
+    ext.point('io.ox/portal/widget/owm1').extend({
+        title: 'Hello World',
         draw: function () {
-            this.append("Hello World");
+            this.append('Hello World');
             return $.when();
         },
         preview: function () {
@@ -15,7 +15,7 @@ define("plugins/owm/portal", ["io.ox/core/extensions"], function (ext) {
     });
 
     ext.point('io.ox/portal/widget/owm1/settings').extend({
-        title: "Greetings from OWM",
+        title: 'Greetings from OWM',
         type: 'owm1',
         editable: false
     });

@@ -77,7 +77,7 @@ define('io.ox/calendar/week/perspective',
                 api.update(obj).fail(function (con) {
                     if (con.conflicts) {
                         new dialogs.ModalDialog({
-                                top: "20%",
+                                top: '20%',
                                 center: false,
                                 container: self.main
                             })
@@ -243,7 +243,7 @@ define('io.ox/calendar/week/perspective',
             if (this.views[opt.perspective] === undefined) {
                 this.view = new View({
                     collection: this.collection,
-                    mode: opt.perspective.split(":")[1],
+                    mode: opt.perspective.split(':')[1],
                     refDate: this.app.refDate,
                     appExtPoint: 'io.ox/calendar/week/view/appointment'
                 });

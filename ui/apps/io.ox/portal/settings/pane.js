@@ -57,7 +57,7 @@ define('io.ox/portal/settings/pane',
 
     ext.point(POINT + '/pane').extend({
         index: 100,
-        id: "header",
+        id: 'header',
         draw: function () {
             this.addClass('io-ox-portal-settings').append(
                 $('<h1 class="no-margin">').text(gt('Portal settings'))
@@ -142,7 +142,7 @@ define('io.ox/portal/settings/pane',
 
     ext.point(POINT + '/pane').extend({
         index: 200,
-        id: "add",
+        id: 'add',
         draw: drawAddButton
     });
 
@@ -257,7 +257,7 @@ define('io.ox/portal/settings/pane',
 
             if (data.protectedWidget) {
                 // early exit if protected Widget
-                this.append("&nbsp;");
+                this.append('&nbsp;');
                 return;
             }
 
@@ -276,7 +276,7 @@ define('io.ox/portal/settings/pane',
                 // as the delegate is bound to parent element which is not longer
                 // valid
                 if (_.device('smartphone')) {
-                    $node.find("[data-action='change-color']").on('click', function (e) {
+                    $node.find('[data-action="change-color"]').on('click', function (e) {
                         baton.view.onChangeColor(e);
                     });
                 }
@@ -309,7 +309,7 @@ define('io.ox/portal/settings/pane',
 
     ext.point(POINT + '/pane').extend({
         index: 300,
-        id: "list",
+        id: 'list',
         draw: function () {
 
             this.append(list.empty());

@@ -18,7 +18,7 @@ define: true
 */
 
 define('io.ox/core/taskQueue', function () {
-    "use strict";
+    'use strict';
 
     /**
     * A task is a unit of work. A task is constructed form a task definition. The task definition must contain a method #perform which returns a deferred object.
@@ -119,7 +119,7 @@ define('io.ox/core/taskQueue', function () {
             if (tasks[taskId]) {
                 return tasks[taskId].start();
             }
-            throw "Unknown TaskId " + taskId;
+            throw 'Unknown TaskId ' + taskId;
         };
 
         this.get = function (taskId) {
@@ -130,7 +130,7 @@ define('io.ox/core/taskQueue', function () {
             if (tasks[taskId]) {
                 return tasks[taskId].when();
             }
-            throw "Unknown TaskId " + taskId;
+            throw 'Unknown TaskId ' + taskId;
         };
 
         this.start = function () {
@@ -141,7 +141,7 @@ define('io.ox/core/taskQueue', function () {
         };
 
         this.destroy = function () {
-            _(tasks).invoke("destroy");
+            _(tasks).invoke('destroy');
         };
 
         this.tasks = function () {

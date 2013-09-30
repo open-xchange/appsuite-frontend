@@ -28,11 +28,11 @@ define('io.ox/core/settings/pane',
 
     'use strict';
 
-    var point = views.point("io.ox/core/settings/entry"),
+    var point = views.point('io.ox/core/settings/entry'),
         SettingView = point.createView({ tagName: 'form', className: 'form-horizontal'}),
         reloadMe = ['language', 'timezone', 'theme', 'refreshInterval', 'autoOpenNotification'];
 
-    ext.point("io.ox/core/settings/detail").extend({
+    ext.point('io.ox/core/settings/detail').extend({
         index: 50,
         id: 'extensions',
         draw: function () {
@@ -49,26 +49,26 @@ define('io.ox/core/settings/pane',
                         // if (model.changed.autoOpenNotification) {//AutonOpenNotification updates directly
                         //     notifications.yell(
                         //         'success',
-                        //         gt("The setting has been saved.")
+                        //         gt('The setting has been saved.')
                         //     );
                         // } else if (showNotice) {
                         //     notifications.yell(
                         //         'success',
-                        //         gt("The setting has been saved and will become active when you enter the application the next time.")
+                        //         gt('The setting has been saved and will become active when you enter the application the next time.')
                         //     );
                         // }
 
                         if (showNotice) {
                             notifications.yell(
                                 'success',
-                                gt("The setting has been saved and will become active when you enter the application the next time.")
+                                gt('The setting has been saved and will become active when you enter the application the next time.')
                             );
                         }
                     }
                 );
             });
             this.addClass('settings-container').append(
-                $('<h1>').text(gt("Basic settings"))
+                $('<h1>').text(gt('Basic settings'))
             );
             new SettingView({model: model}).render().$el.appendTo(this);
         }
@@ -95,7 +95,7 @@ define('io.ox/core/settings/pane',
         id: 'language',
         index: 100,
         attribute: 'language',
-        label: gt("Language"),
+        label: gt('Language'),
         selectOptions: ox.serverConfig.languages || {},
         updateModel: function () {
             var value = this.nodes.element.val();
@@ -106,7 +106,7 @@ define('io.ox/core/settings/pane',
 
     (function () {
         // Timezones
-        var available = settingOptions.get("availableTimeZones"),
+        var available = settingOptions.get('availableTimeZones'),
             technicalNames = _(available).keys(),
             userTZ = settings.get('timezone', 'UTC'),
             sorted = {};
@@ -143,12 +143,12 @@ define('io.ox/core/settings/pane',
             id: 'timezones',
             index: 200,
             attribute: 'timezone',
-            label: gt("Time zone"),
+            label: gt('Time zone'),
             selectOptions: sorted
         }));
 
         // Themes
-        var availableThemes = settingOptions.get("themes");
+        var availableThemes = settingOptions.get('themes');
 
         //  until we get translated themes from backend
         if (availableThemes['default']) {
@@ -161,7 +161,7 @@ define('io.ox/core/settings/pane',
                 id: 'theme',
                 index: 400,
                 attribute: 'theme',
-                label: gt("Theme"),
+                label: gt('Theme'),
                 selectOptions: availableThemes
             }));
         }
@@ -173,17 +173,17 @@ define('io.ox/core/settings/pane',
             var MINUTES = 60000;
             var options = {};
 
-            options[5 * MINUTES] = gt("5 minutes");
-            options[10 * MINUTES] = gt("10 minutes");
-            options[15 * MINUTES] = gt("15 minutes");
-            options[30 * MINUTES] = gt("30 minutes");
+            options[5 * MINUTES] = gt('5 minutes');
+            options[10 * MINUTES] = gt('10 minutes');
+            options[15 * MINUTES] = gt('15 minutes');
+            options[30 * MINUTES] = gt('30 minutes');
 
 
             point.extend(new forms.SelectControlGroup({
                 id: 'refreshInterval',
                 index: 300,
                 attribute: 'refreshInterval',
-                label: gt("Refresh interval"),
+                label: gt('Refresh interval'),
                 selectOptions: options
             }));
         }
@@ -203,7 +203,7 @@ define('io.ox/core/settings/pane',
                 id: 'autoStart',
                 index: 500,
                 attribute: 'autoStart',
-                label: gt("Default App after login?"),
+                label: gt('Default App after login?'),
                 selectOptions: options
             }));
         }
@@ -213,16 +213,16 @@ define('io.ox/core/settings/pane',
     (function () {
         var options = {};
 
-        options.never = gt("Never");
-        options.noEmail = gt("On new notifications except mails");
-        options.always = gt("On every new notification");
+        options.never = gt('Never');
+        options.noEmail = gt('On new notifications except mails');
+        options.always = gt('On every new notification');
 
         if (settings.isConfigurable('autoOpenNotificationarea')) {
             point.extend(new forms.SelectControlGroup({
                 id: 'autoOpenNotfication',
                 index: 700,
                 attribute: 'autoOpenNotification',
-                label: gt("Automatic opening of notification area"),
+                label: gt('Automatic opening of notification area'),
                 selectOptions: options
             }));
         }
@@ -234,17 +234,17 @@ define('io.ox/core/settings/pane',
         var MINUTES = 60000,
             options = {};
 
-        options[0] = gt("Off");
-        options[5 * MINUTES] = gt("5 minutes");
-        options[10 * MINUTES] = gt("10 minutes");
-        options[15 * MINUTES] = gt("15 minutes");
-        options[30 * MINUTES] = gt("30 minutes");
+        options[0] = gt('Off');
+        options[5 * MINUTES] = gt('5 minutes');
+        options[10 * MINUTES] = gt('10 minutes');
+        options[15 * MINUTES] = gt('15 minutes');
+        options[30 * MINUTES] = gt('30 minutes');
 
         point.extend(new forms.SelectControlGroup({
             id: 'autoLogout',
             index: 600,
             attribute: 'autoLogout',
-            label: gt("Auto Logout"),
+            label: gt('Auto Logout'),
             selectOptions: options,
             updateModel: function () {
                 this.setValueInModel(this.nodes.element.val());

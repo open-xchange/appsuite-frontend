@@ -411,28 +411,28 @@ define('io.ox/core/commons',
             win.on('show', function () {
                 oldPerspective = win.currentPerspective;
                 if (win.currentPerspective) {
-                    app.trigger('perspective:' + win.currentPerspective + ":show");
+                    app.trigger('perspective:' + win.currentPerspective + ':show');
                 }
             });
 
             win.on('hide', function () {
                 oldPerspective = win.currentPerspective;
                 if (win.currentPerspective) {
-                    app.trigger('perspective:' + win.currentPerspective + ":hide");
+                    app.trigger('perspective:' + win.currentPerspective + ':hide');
                 }
             });
 
             win.on('change:perspective', function (e, newPerspective) {
                 if (oldPerspective) {
-                    app.trigger('perspective:' + oldPerspective + ":hide");
+                    app.trigger('perspective:' + oldPerspective + ':hide');
                 }
                 oldPerspective = newPerspective;
-                app.trigger('perspective:' + newPerspective + ":show");
+                app.trigger('perspective:' + newPerspective + ':show');
             });
 
             win.on('change:initialPerspective', function (e, newPerspective) {
                 oldPerspective = newPerspective;
-                app.trigger('perspective:' + newPerspective + ":show");
+                app.trigger('perspective:' + newPerspective + ':show');
             });
         },
 
@@ -641,7 +641,7 @@ define('io.ox/core/commons',
     // located here since we need a translation for 'Retry'
 
     $.fail = function (msg, retry) {
-        var tmp = $("<div>")
+        var tmp = $('<div>')
             .addClass('io-ox-fail')
             .append(
                 $('<span>').text(msg)

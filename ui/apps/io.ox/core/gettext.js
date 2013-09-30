@@ -11,9 +11,9 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
-define("io.ox/core/gettext", [], function () {
+define('io.ox/core/gettext', [], function () {
 
-    "use strict";
+    'use strict';
 
     // custom dictionary
     var custom = { '*': {} };
@@ -73,11 +73,11 @@ define("io.ox/core/gettext", [], function () {
 
     function gt(id, po) {
 
-        po.plural = new Function("n", "return " + po.plural + ";");
+        po.plural = new Function('n', 'return ' + po.plural + ';');
 
         function gettext(text) {
             var args;
-            text = gettext.pgettext("", text);
+            text = gettext.pgettext('', text);
             if (arguments.length < 2) {
                 return text;
             } else {
@@ -96,7 +96,7 @@ define("io.ox/core/gettext", [], function () {
                     if (isTranslated(arg)) {
                         arg = arg.slice(1, -1);
                     } else {
-                        console.error("Untranslated printf parameter", i, arg);
+                        console.error('Untranslated printf parameter', i, arg);
                         console.trace();
                     }
                     args[i] = arg;
@@ -114,11 +114,11 @@ define("io.ox/core/gettext", [], function () {
         }
 
         gettext.gettext = function (text) {
-            return gettext.pgettext("", text);
+            return gettext.pgettext('', text);
         };
 
         gettext.ngettext = function (singular, plural, n) {
-            return gettext.npgettext("", singular, plural, n);
+            return gettext.npgettext('', singular, plural, n);
         };
 
         gettext.getDictionary = function () {
@@ -138,7 +138,7 @@ define("io.ox/core/gettext", [], function () {
         }
 
         function npgettext(context, singular, plural, n) {
-            var key = (context ? context + "\x00" : "") + singular + "\x01" + plural,
+            var key = (context ? context + "\x00" : '') + singular + "\x01" + plural,
                 translation = get(key);
             return translation ?
                 translation[Number(po.plural(Number(n)))] :
@@ -154,7 +154,7 @@ define("io.ox/core/gettext", [], function () {
     gt.setLanguage = function (language) {
         gt.setLanguage = function (lang2) {
             if (lang2 !== language) {
-                throw new Error("Multiple setLanguage calls");
+                throw new Error('Multiple setLanguage calls');
             }
         };
         lang.resolve(language);

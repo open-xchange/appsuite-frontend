@@ -45,7 +45,7 @@ define('io.ox/core/permissions/permissions',
         ],
 
         Permission = Backbone.Model.extend({
-            idAttribute: "entity",
+            idAttribute: 'entity',
             defaults: {
                 group: false,
                 bits: 0
@@ -67,7 +67,7 @@ define('io.ox/core/permissions/permissions',
                 this.model.on('remove', performRemove, this);
             },
 
-            className: "permission row-fluid",
+            className: 'permission row-fluid',
 
             events: {
                 'click a.bit': 'updateDropdown',

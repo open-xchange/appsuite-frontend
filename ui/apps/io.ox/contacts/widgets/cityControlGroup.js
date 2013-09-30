@@ -10,7 +10,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/contacts/widgets/cityControlGroup', ['io.ox/backbone/forms', 'less!io.ox/contacts/widgets/widgets.less'], function (forms) {
-    "use strict";
+    'use strict';
 
     function CityControlGroup(options) {
         return new forms.ControlGroup(_.extend({}, {
@@ -42,7 +42,7 @@ define('io.ox/contacts/widgets/cityControlGroup', ['io.ox/backbone/forms', 'less
 
                 updateZip();
 
-                return this.nodes.bothElements = $("<span>").append(this.nodes.zipElement, $.txt(" "), this.nodes.element);
+                return this.nodes.bothElements = $('<span>').append(this.nodes.zipElement, $.txt(' '), this.nodes.element);
             },
 
             updateZipInModel: function () {

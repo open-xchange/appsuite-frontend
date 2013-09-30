@@ -82,7 +82,7 @@ define('io.ox/mail/accounts/view-form',
         },
 
         AccountDetailView = Backbone.View.extend({
-            tagName: "div",
+            tagName: 'div',
             _modelBinder: undefined,
             initialize: function (options) {
                 // create template
@@ -220,13 +220,13 @@ define('io.ox/mail/accounts/view-form',
                         }
                     })
                     .fail(function (data) {
-                        if (data.code === "ACC-0004" && data.error_params[0].substring(8, 13) === 'login') {//string comparison is ugly, maybe backend has a translated version of this
+                        if (data.code === 'ACC-0004' && data.error_params[0].substring(8, 13) === 'login') {//string comparison is ugly, maybe backend has a translated version of this
                             notifications.yell('error', gt('Login must not be empty.'));
-                        } else if (data.code === "SVL-0002") {
+                        } else if (data.code === 'SVL-0002') {
                             notifications.yell('error',
                                //#. %1$s the missing request parameter
                                //#, c-format
-                               gt("Please enter the following data: %1$s", _.noI18n(data.error_params[0])));
+                               gt('Please enter the following data: %1$s', _.noI18n(data.error_params[0])));
                         } else {
                             notifications.yell('error', _.noI18n(data.error));
                         }
@@ -258,13 +258,13 @@ define('io.ox/mail/accounts/view-form',
                     var property = $(e.currentTarget).prev().attr('data-property'),
                         id = self.model.get(property),
                         accountName = self.model.get('name');
-                    require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
+                    require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
 
                         var label = gt('Select folder'),
                             dialog = new dialogs.ModalDialog()
                             .header($('<h4>').text(label))
-                            .addPrimaryButton("select", label)
-                            .addButton("cancel", gt("Cancel"));
+                            .addPrimaryButton('select', label)
+                            .addButton('cancel', gt('Cancel'));
                         dialog.getBody().css({ height: '250px' });
                         var tree = new views.FolderTree(dialog.getBody(), {
                                 type: 'mail',

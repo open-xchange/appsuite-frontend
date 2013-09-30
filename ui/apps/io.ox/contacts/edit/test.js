@@ -18,7 +18,7 @@ define('io.ox/contacts/edit/test',
      'io.ox/core/date'
     ], function (ext, contacts, api, coreConfig, date) {
 
-    "use strict";
+    'use strict';
 
     // test objects
     var testObject = {
@@ -133,7 +133,7 @@ define('io.ox/contacts/edit/test',
     }
 
  // get the current folder
-    var fId = coreConfig.get("folder/contacts");
+    var fId = coreConfig.get('folder/contacts');
     testObject.folder_id = fId;
 
     var testFactory = {
@@ -152,7 +152,7 @@ define('io.ox/contacts/edit/test',
         index: 100,
         test: function (j) {
 
-            j.describe("Contact edit", function () {
+            j.describe('Contact edit', function () {
 
                 var app = null,
                     data, itemFill, itemDelete, buttonUpdate, buttonSave,
@@ -468,7 +468,7 @@ define('io.ox/contacts/edit/test',
         id: 'contacts-extpoint',
         index: 100,
         test: function (j) {
-            j.describe("Contact extpoint", function () {
+            j.describe('Contact extpoint', function () {
                 var app = null,
                 data, itemFill, itemDelete, buttonUpdate, buttonSave, buttonClose,
                 buttonDelete, dialog, testfield, testfield2, formFrame = null,
@@ -647,7 +647,7 @@ define('io.ox/contacts/edit/test',
 
                     app.launch();
                     j.runs(function () {
-                        ext.point("io.ox/contacts/edit/form/phone").disable("cellular_telephone1");
+                        ext.point('io.ox/contacts/edit/form/phone').disable('cellular_telephone1');
                     });
 
                     var grid = app.getGrid();

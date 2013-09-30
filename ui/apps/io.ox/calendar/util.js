@@ -11,24 +11,24 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/calendar/util",
-    ["io.ox/core/date",
+define('io.ox/calendar/util',
+    ['io.ox/core/date',
      'gettext!io.ox/calendar',
      'io.ox/core/api/user',
      'io.ox/contacts/api',
      'io.ox/core/api/group',
      'io.ox/core/util'], function (date, gt, userAPI, contactAPI, groupAPI, util) {
 
-    "use strict";
+    'use strict';
 
     var // day names
         n_count = [gt('last'), '', gt('first'), gt('second'), gt('third'), gt('fourth'), gt('last')],
         // shown as
-        n_shownAs = [gt("Reserved"), gt("Temporary"), gt("Absent"), gt("Free")],
-        shownAsClass = "reserved temporary absent free".split(' '),
-        shownAsLabel = "label-info label-warning label-important label-success".split(' '),
+        n_shownAs = [gt('Reserved'), gt('Temporary'), gt('Absent'), gt('Free')],
+        shownAsClass = 'reserved temporary absent free'.split(' '),
+        shownAsLabel = 'label-info label-warning label-important label-success'.split(' '),
         // confirmation status (none, accepted, declined, tentative)
-        confirmClass = "unconfirmed accepted declined tentative".split(' '),
+        confirmClass = 'unconfirmed accepted declined tentative'.split(' '),
         n_confirm = ['', '<i class="icon-ok">', '<i class="icon-remove">', '<i class="icon-question-sign">'];
 
     var that = {
@@ -64,10 +64,10 @@ define("io.ox/calendar/util",
             timestamp = timestamp || 0;
             step = step || date.HOUR;
             // number?
-            if (typeof step === "number") {
+            if (typeof step === 'number') {
                 return Math.floor(timestamp / step) * step;
             } else {
-                if (step === "week") {
+                if (step === 'week') {
                     // get current date
                     var d = new date.Local(timestamp),
                         // get work day TODO: consider custom week start
@@ -109,7 +109,7 @@ define("io.ox/calendar/util",
                 d = timestamp !== undefined ? new date.Local(timestamp) : new date.Local(),
                 now = new date.Local(),
                 showDate = showDate || false,
-                weekStart = this.floor(now.getTime(), "week"),
+                weekStart = this.floor(now.getTime(), 'week'),
                 diff = 0,
                 diffWeek = 0;
 
@@ -124,25 +124,25 @@ define("io.ox/calendar/util",
             // past?
             if (diff < 0) {
                 if (diff >= -1 * date.DAY) {
-                    return gt("Yesterday");
+                    return gt('Yesterday');
                 } else if (diffWeek > -7 * date.DAY) {
-                    return gt("Last Week");
+                    return gt('Last Week');
                 }
             } else {
                 // future
                 if (diff < date.DAY) {
-                    return gt("Today");
+                    return gt('Today');
                 } else if (diff < 2 * date.DAY) {
-                    return gt("Tomorrow");
+                    return gt('Tomorrow');
                 } else if (diffWeek < 7 * date.DAY) {
                     return date.locale.days[d.getDay()]; // this week
                 } else if (diffWeek >= 7 * date.DAY && diffWeek < 14 * date.DAY) {
-                    return showDate ? d.format(date.DATE) : gt("Next Week");
+                    return showDate ? d.format(date.DATE) : gt('Next Week');
                 }
             }
 
             // any other month
-            return showDate ? d.format(date.DATE) : date.locale.months[d.getMonth()] + " " + d.getYear();
+            return showDate ? d.format(date.DATE) : date.locale.months[d.getMonth()] + ' ' + d.getYear();
         },
 
         getDateInterval: function (data) {
@@ -157,10 +157,10 @@ define("io.ox/calendar/util",
                 if (this.onSameDay(startDate, endDate)) {
                     return this.getDate(startDate);
                 } else {
-                    return this.getDate(startDate) + " \u2013 " + this.getDate(endDate);
+                    return this.getDate(startDate) + ' \u2013 ' + this.getDate(endDate);
                 }
             } else {
-                return "";
+                return '';
             }
         },
 
@@ -464,9 +464,9 @@ define("io.ox/calendar/util",
         },
 
         getNote: function (data) {
-            return $.trim(gt.noI18n(data.note) || "")
-                .replace(/\n{3,}/g, "\n\n")
-                .replace(/</g, "&lt;")
+            return $.trim(gt.noI18n(data.note) || '')
+                .replace(/\n{3,}/g, '\n\n')
+                .replace(/</g, '&lt;')
                 .replace(/(https?\:\/\/\S+)/g, function ($1) {
                     // soft-break long words (like long URLs)
                     return '<a href="' + $1 + '" target="_blank">' + util.breakableHTML($1) + '</a>';
@@ -480,14 +480,14 @@ define("io.ox/calendar/util",
                 _(data.users).each(function (obj) {
                     hash[String(obj.id)] = {
                         status: obj.confirmation || 0,
-                        comment: obj.confirmmessage || ""
+                        comment: obj.confirmmessage || ''
                     };
                 });
                 // external users
                 _(data.confirmations).each(function (obj) {
                     hash[obj.mail] = {
                         status: obj.status || 0,
-                        comment: obj.confirmmessage || ""
+                        comment: obj.confirmmessage || ''
                     };
                 });
             }

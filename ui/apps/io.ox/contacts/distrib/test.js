@@ -11,11 +11,11 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define("io.ox/contacts/distrib/test",
-    ["io.ox/core/extensions", "io.ox/contacts/main",
-     "io.ox/contacts/api"], function (ext, contacts, api) {
+define('io.ox/contacts/distrib/test',
+    ['io.ox/core/extensions', 'io.ox/contacts/main',
+     'io.ox/contacts/api'], function (ext, contacts, api) {
 
-    "use strict";
+    'use strict';
 
     // test objects
     var testObjects = {
@@ -66,7 +66,7 @@ define("io.ox/contacts/distrib/test",
         index: 100,
         test: function (j) {
 
-            j.describe("Contact distrib", function () {
+            j.describe('Contact distrib', function () {
 
                 var app = null, buttonCreate, createForm, inputName, inputMail, addButton,
                 saveButton, displayName, dataId, dataObj, dataFolder;

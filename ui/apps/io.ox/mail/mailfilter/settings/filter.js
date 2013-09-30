@@ -78,8 +78,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
         myView.dialog.append(
             myView.render().el
         )
-        .addPrimaryButton("save", gt('Save'))
-        .addButton("cancel", gt('Cancel'));
+        .addPrimaryButton('save', gt('Save'))
+        .addButton('cancel', gt('Cancel'));
 
         myView.dialog.show();
         myView.$el.find('input[name="rulename"]').focus();
@@ -97,9 +97,9 @@ define('io.ox/mail/mailfilter/settings/filter', [
         });
     }
 
-    ext.point("io.ox/settings/mailfilter/filter/settings/detail").extend({
+    ext.point('io.ox/settings/mailfilter/filter/settings/detail').extend({
         index: 200,
-        id: "mailfiltersettings",
+        id: 'mailfiltersettings',
         draw: function (evt) {
             renderDetailView(evt, evt.data.obj);
         }

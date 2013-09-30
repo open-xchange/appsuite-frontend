@@ -21,7 +21,7 @@ define('plugins/portal/userSettings/register',
 
     function changeUserData(e) {
 
-        require(["io.ox/core/tk/dialogs", "io.ox/core/settings/user"], function (dialogs, users) {
+        require(['io.ox/core/tk/dialogs', 'io.ox/core/settings/user'], function (dialogs, users) {
             var usermodel,
                 dialog = new dialogs.ModalDialog({
                     top: 60,
@@ -29,8 +29,8 @@ define('plugins/portal/userSettings/register',
                     center: false,
                     maximize: true
                 })
-                .addPrimaryButton("save", gt('Save'))
-                .addButton('discard', gt("Discard"));
+                .addPrimaryButton('save', gt('Save'))
+                .addButton('discard', gt('Discard'));
 
             var $node = dialog.getContentNode();
 
@@ -38,7 +38,7 @@ define('plugins/portal/userSettings/register',
                 usermodel = model;
             }).fail(function () {
                 $node.append(
-                    $.fail(gt("Couldn't load your contact data."), function () {
+                    $.fail(gt('Couldn\'t load your contact data.'), function () {
                         users.editCurrentUser($node).done(function () {
                             $node.find('[data-action="discard"]').hide();
                         });

@@ -11,20 +11,20 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("io.ox/core/tk/keys", ["io.ox/core/event"], function (Events) {
-    "use strict";
+define('io.ox/core/tk/keys', ['io.ox/core/event'], function (Events) {
+    'use strict';
 
     var KEY_MAP = {
-        8: "backspace",
-        9: "tab",
-        13: "enter",
-        27: "esc",
-        32: "space",
-        37: "leftarrow",
-        38: "uparrow",
-        39: "rightarrow",
-        40: "downarrow",
-        46: "del"
+        8: 'backspace',
+        9: 'tab',
+        13: 'enter',
+        27: 'esc',
+        32: 'space',
+        37: 'leftarrow',
+        38: 'uparrow',
+        39: 'rightarrow',
+        40: 'downarrow',
+        46: 'del'
     };
 
     function translate(charCode) {
@@ -39,7 +39,7 @@ define("io.ox/core/tk/keys", ["io.ox/core/event"], function (Events) {
         } else {
             $node.on('dispose', function () {
                 if (included) {
-                    $node.off("keydown", handleEvent);
+                    $node.off('keydown', handleEvent);
                 }
             });
         }
@@ -47,16 +47,16 @@ define("io.ox/core/tk/keys", ["io.ox/core/event"], function (Events) {
         function handleEvent(evt) {
             var keys = [], expr;
             if (evt.shiftKey) {
-                keys.push("shift");
+                keys.push('shift');
             }
 
             if (evt.metaKey || evt.ctrlKey) {
-                keys.push("ctrl");
+                keys.push('ctrl');
             }
 
             keys.push(translate(evt.which));
 
-            expr = _.chain(keys).invoke("toLowerCase").sort().join("+").value();
+            expr = _.chain(keys).invoke('toLowerCase').sort().join('+').value();
             events.trigger(expr, evt);
         }
 
@@ -65,7 +65,7 @@ define("io.ox/core/tk/keys", ["io.ox/core/event"], function (Events) {
                 return;
             }
             included = true;
-            $node.on("keydown", handleEvent);
+            $node.on('keydown', handleEvent);
             return this;
         };
 
@@ -75,17 +75,17 @@ define("io.ox/core/tk/keys", ["io.ox/core/event"], function (Events) {
                 return;
             }
             included = false;
-            $node.off("keydown", handleEvent);
+            $node.off('keydown', handleEvent);
             return this;
         };
 
         function normalizeExpression(keyExpr) {
-            return _.chain(keyExpr.split(/[ +]+/)).invoke("toLowerCase").sort().join("+").value();
+            return _.chain(keyExpr.split(/[ +]+/)).invoke('toLowerCase').sort().join('+').value();
         }
 
         this.on = function (keyExpr, fn) {
             if (!keyExpr) {
-                throw new Error("Please specify a key expression");
+                throw new Error('Please specify a key expression');
             }
             events.on(normalizeExpression(keyExpr), fn);
             return this;

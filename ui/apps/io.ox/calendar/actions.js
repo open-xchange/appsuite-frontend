@@ -358,7 +358,7 @@ define('io.ox/calendar/actions',
             ox.load(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/api/folder']).done(function (dialogs, views, folderAPI) {
 
                 function commit(target) {
-                    if (type === "move" && vGrid) vGrid.busy();
+                    if (type === 'move' && vGrid) vGrid.busy();
                     api[type](list, target).then(
                         function () {
                             var response = type === 'move' ?
@@ -366,7 +366,7 @@ define('io.ox/calendar/actions',
                                 gt.ngettext('Appointment has been copied', 'Appointments have been copied', list.length);
                             notifications.yell('success', response);
                             folderAPI.reload(target, list);
-                            if (type === "move" && vGrid) vGrid.idle();
+                            if (type === 'move' && vGrid) vGrid.idle();
                         },
                         notifications.yell
                     );

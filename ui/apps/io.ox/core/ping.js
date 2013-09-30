@@ -38,7 +38,7 @@ define('io.ox/core/ping', ['io.ox/core/http', 'settings!io.ox/core'], function (
         stopInterval();
         mode = 'normal';
         ox.reachable = true;
-        ox.trigger("reachableChange");
+        ox.trigger('reachableChange');
 
         if (enabled) {
             ping();
@@ -52,15 +52,15 @@ define('io.ox/core/ping', ['io.ox/core/http', 'settings!io.ox/core'], function (
         }
         stopInterval();
         ox.reachable = false;
-        ox.trigger("reachableChange");
+        ox.trigger('reachableChange');
         mode = 'hectic';
         ping();
         intervalHandle = setInterval(ping, interval * 200);
     }
 
 
-    http.on("unreachable", hecticPing);
-    http.on("reachable", normalPing);
+    http.on('unreachable', hecticPing);
+    http.on('reachable', normalPing);
 
     normalPing();
 });

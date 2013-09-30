@@ -27,8 +27,8 @@ define('io.ox/portal/widgets',
     // application object
     var availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),
         collection = new Backbone.Collection([]),
-        widgetSet = settings.get("widgetSet", ""),
-        generation = Number(settings.get("generation", 0));
+        widgetSet = settings.get('widgetSet', ''),
+        generation = Number(settings.get('generation', 0));
 
     collection.comparator = function (a, b) {
         return ext.indexSorter({ index: a.get('index') }, { index: b.get('index') });
@@ -37,17 +37,17 @@ define('io.ox/portal/widgets',
     var widgets = (function () {
 
         var widgets = {},
-            userValues = settings.get("settings" + widgetSet, {});
+            userValues = settings.get('settings' + widgetSet, {});
 
         // Load the users widgets
-        _(settings.get("widgets/user", {})).each(function (widgetDef, id) {
+        _(settings.get('widgets/user', {})).each(function (widgetDef, id) {
             widgets[id] = _.extend({}, widgetDef, {userWidget: true});
         });
 
         // Ensure all eager widgets of all generations that weren't removed in their corresponding generation
         function processEager(gen) {
             var deleted = {};
-            _(settings.get("widgets/deleted" + widgetSet + "/gen_" + gen, [])).each(function (id) {
+            _(settings.get('widgets/deleted' + widgetSet + '/gen_' + gen, [])).each(function (id) {
                 deleted[id] = true;
             });
             return function process(widgetDef, id) {
@@ -58,11 +58,11 @@ define('io.ox/portal/widgets',
         }
 
         for (var gen = 0; gen <= generation; gen++) {
-            _(settings.get("widgets/eager" + widgetSet + "/gen_" + gen)).each(processEager(gen));
+            _(settings.get('widgets/eager' + widgetSet + '/gen_' + gen)).each(processEager(gen));
         }
 
         // Ensure all protected widgets
-        _(settings.get("widgets/protected" + widgetSet)).each(function (widgetDef, id) {
+        _(settings.get('widgets/protected' + widgetSet)).each(function (widgetDef, id) {
             widgetDef.protectedWidget = true;
             widgets[id] = _.extend({}, widgets[id], widgetDef, {protectedWidget: true});
             if (widgetDef.changeable) {
@@ -123,7 +123,7 @@ define('io.ox/portal/widgets',
                 }
             };
 
-            settings.set("widgets/user", widgets).save();
+            settings.set('widgets/user', widgets).save();
         }
 
         return widgets;
@@ -320,9 +320,9 @@ define('io.ox/portal/widgets',
                 }
                 var id = model.get('id');
                 extraSettings[id] = {
-                    color: model.get("color"),
-                    index: model.get("index"),
-                    enabled: model.get("protectedWidget") ? true : model.get("enabled")
+                    color: model.get('color'),
+                    index: model.get('index'),
+                    enabled: model.get('protectedWidget') ? true : model.get('enabled')
                 };
             });
 
@@ -359,14 +359,14 @@ define('io.ox/portal/widgets',
             });
             this.update(obj);
             collection.trigger('sort');
-            return settings.set('widgets/user', this.toJSON()).set("settings" + widgetSet, this.extraSettingsToJSON()).save().fail(
+            return settings.set('widgets/user', this.toJSON()).set('settings' + widgetSet, this.extraSettingsToJSON()).save().fail(
                 // don't say anything if successful
                 function () {
                     // reset old state
                     self.update(old_state);
                     collection.trigger('sort');
                     widgetList.sortable('cancel');
-                    notifications.yell('error', gt("Could not save settings."));
+                    notifications.yell('error', gt('Could not save settings.'));
                 }
             );
         },
@@ -417,27 +417,27 @@ define('io.ox/portal/widgets',
                 .value()
         )
         .on('change', _.debounce(function () {
-            settings.set('widgets/user', api.toJSON()).set("settings" + widgetSet, api.extraSettingsToJSON()).saveAndYell();
+            settings.set('widgets/user', api.toJSON()).set('settings' + widgetSet, api.extraSettingsToJSON()).saveAndYell();
             // don’t handle positive case here, since this is called quite often
         }, 100))
         .on('remove', function (model) {
-            if (model.get("protectedWidget")) {
+            if (model.get('protectedWidget')) {
                 // Don't you dare!
                 return;
             } else if (model.get('eagerWidget')) {
-                var blacklist = settings.get("widgets/deleted" + widgetSet + "/gen_" + generation, []);
+                var blacklist = settings.get('widgets/deleted' + widgetSet + '/gen_' + generation, []);
                 blacklist.push(model.get('id'));
-                if (!settings.get("widgets/deleted")) {
-                    settings.set("widgets/deleted", {});
+                if (!settings.get('widgets/deleted')) {
+                    settings.set('widgets/deleted', {});
                 }
 
-                if (!settings.get("widgets/deleted" + widgetSet)) {
-                    settings.set("widgets/deleted" + widgetSet, {});
+                if (!settings.get('widgets/deleted' + widgetSet)) {
+                    settings.set('widgets/deleted' + widgetSet, {});
                 }
 
-                settings.set("widgets/deleted" + widgetSet + "/gen_" + generation, blacklist).saveAndYell();
+                settings.set('widgets/deleted' + widgetSet + '/gen_' + generation, blacklist).saveAndYell();
 
-            } else if (model.get("userWidget")) {
+            } else if (model.get('userWidget')) {
                 settings.remove('widgets/user/' + model.get('id')).saveAndYell();
             }
         });

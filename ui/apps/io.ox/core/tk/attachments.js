@@ -58,7 +58,7 @@ define('io.ox/core/tk/attachments',
                     this.model.on('create update', uploadOnSave);
                 },
                 finishedCallback: function (model, id) {
-                    model.trigger("finishedAttachmentHandling");
+                    model.trigger('finishedAttachmentHandling');
                 },
                 render: function () {
                     var self = this,
@@ -89,7 +89,7 @@ define('io.ox/core/tk/attachments',
 
                     removeFile.on('click', function () { self.deleteAttachment(attachment); });
 
-                    if (size.text() === "0 B") {size.text(" "); }
+                    if (size.text() === '0 B') {size.text(' '); }
 
                     return $el;
                 },
@@ -388,7 +388,7 @@ define('io.ox/core/tk/attachments',
                                 if (attachments.length > 1)
                                     drawAttachment(attachments, gt('All attachments')).find('a').removeClass('attachment-link');
                             } else {
-                                $node.append(gt("None"));
+                                $node.append(gt('None'));
                             }
                         });
                     }

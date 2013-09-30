@@ -11,19 +11,19 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define("io.ox/contacts/view-detail",
-    ["io.ox/core/extensions",
-     "gettext!io.ox/contacts",
-     "io.ox/contacts/util",
-     "io.ox/contacts/api",
-     "io.ox/contacts/actions",
-     "io.ox/core/api/folder",
+define('io.ox/contacts/view-detail',
+    ['io.ox/core/extensions',
+     'gettext!io.ox/contacts',
+     'io.ox/contacts/util',
+     'io.ox/contacts/api',
+     'io.ox/contacts/actions',
+     'io.ox/core/api/folder',
      'io.ox/core/extPatterns/links',
      'io.ox/core/date',
-     "less!io.ox/contacts/style.less"
+     'less!io.ox/contacts/style.less'
     ], function (ext, gt, util, api, actions, folderAPI, links, date) {
 
-    "use strict";
+    'use strict';
 
     // smart join
     var join = function () {
@@ -31,7 +31,7 @@ define("io.ox/contacts/view-detail",
             .select(function (obj, i) {
                 return i > 0 && !!obj;
             })
-            .join(arguments[0] || "");
+            .join(arguments[0] || '');
     };
 
     function getDescription(data) {
@@ -91,19 +91,19 @@ define("io.ox/contacts/view-detail",
 
     var INDEX = 100;
 
-    ext.point("io.ox/contacts/detail").extend({
+    ext.point('io.ox/contacts/detail').extend({
         index: (INDEX += 100),
-        id: "inline-actions",
+        id: 'inline-actions',
         draw: function (baton) {
             if (!api.looksLikeResource(baton.data)) {
-                ext.point("io.ox/contacts/detail/actions").invoke("draw", this, baton.data);
+                ext.point('io.ox/contacts/detail/actions').invoke('draw', this, baton.data);
             }
         }
     });
 
-    ext.point("io.ox/contacts/detail").extend({
+    ext.point('io.ox/contacts/detail').extend({
         index: (INDEX += 100),
-        id: "contact-details",
+        id: 'contact-details',
         draw: function (baton) {
             var node;
             this.append(
@@ -115,7 +115,7 @@ define("io.ox/contacts/view-detail",
 
     // HEAD
 
-    ext.point("io.ox/contacts/detail/head").extend({
+    ext.point('io.ox/contacts/detail/head').extend({
         index: 100,
         id: 'contact-picture',
         draw: function (baton) {
@@ -127,7 +127,7 @@ define("io.ox/contacts/view-detail",
         }
     });
 
-    ext.point("io.ox/contacts/detail/head").extend({
+    ext.point('io.ox/contacts/detail/head').extend({
         index: 200,
         id: 'contact-title',
         draw: function (baton) {
@@ -198,9 +198,9 @@ define("io.ox/contacts/view-detail",
 
     // Content
 
-    ext.point("io.ox/contacts/detail").extend({
+    ext.point('io.ox/contacts/detail').extend({
         index: (INDEX += 100),
-        id: "contact-content",
+        id: 'contact-content',
         draw: function (baton) {
 
             var node = $('<article>').appendTo(this),
@@ -214,7 +214,7 @@ define("io.ox/contacts/view-detail",
 
     // Distribution list members
 
-    ext.point("io.ox/contacts/detail/member").extend({
+    ext.point('io.ox/contacts/detail/member').extend({
 
         draw: function (data) {
             // draw member
@@ -228,7 +228,7 @@ define("io.ox/contacts/view-detail",
         }
     });
 
-    ext.point("io.ox/contacts/detail/list").extend({
+    ext.point('io.ox/contacts/detail/list').extend({
 
         draw: function (baton) {
 
@@ -253,7 +253,7 @@ define("io.ox/contacts/view-detail",
                     }
                 })
                 .each(function (member) {
-                    ext.point("io.ox/contacts/detail/member").invoke('draw', this, member);
+                    ext.point('io.ox/contacts/detail/member').invoke('draw', this, member);
                 }, this);
         }
     });
@@ -396,11 +396,11 @@ define("io.ox/contacts/view-detail",
             );
     }
 
-    ext.point("io.ox/contacts/detail/content")
+    ext.point('io.ox/contacts/detail/content')
 
         // Contact note/comment
         .extend({
-            id: "comment",
+            id: 'comment',
             index: 100,
             draw: function (baton) {
 
@@ -609,9 +609,9 @@ define("io.ox/contacts/view-detail",
     var regPhone = /(\+?[\d\x20\/()]{4,})/g,
         regClean = /[^+0-9]/g;
 
-    ext.point("io.ox/contacts/detail/content").extend({
+    ext.point('io.ox/contacts/detail/content').extend({
         index: 'last',
-        id: "description", //
+        id: 'description', //
         draw: function (baton) {
 
             var str = $.trim(baton.data.description || ''), isHTML;
@@ -644,7 +644,7 @@ define("io.ox/contacts/view-detail",
         }
     });
 
-    ext.point("io.ox/contacts/detail/content").extend({
+    ext.point('io.ox/contacts/detail/content').extend({
         index: 10000,
         id: 'qr',
         draw: function (baton) {
@@ -654,12 +654,12 @@ define("io.ox/contacts/view-detail",
                     show = function (e) {
                         e.preventDefault();
                         node.empty().busy();
-                        require(["io.ox/contacts/view-qrcode"], function (qr) {
+                        require(['io.ox/contacts/view-qrcode'], function (qr) {
                             var vc = qr.getVCard(data);
                             node.append(
                                 $('<span>').addClass('qrcode').append(
                                     $('<i class="icon-qrcode">'), $.txt(' '),
-                                    $("<a>", { href: '#' })
+                                    $('<a>', { href: '#' })
                                     .text(gt('Hide QR code'))
                                     .on('click', hide)
                                 )
@@ -676,7 +676,7 @@ define("io.ox/contacts/view-detail",
                             showLink
                         );
                     },
-                    showLink = $("<a>", { href: '#' }).text(gt('Show QR code')).on("click", show);
+                    showLink = $('<a>', { href: '#' }).text(gt('Show QR code')).on('click', show);
 
                 this.append(
                     node
@@ -690,7 +690,7 @@ define("io.ox/contacts/view-detail",
         }
     });
 
-    ext.point("io.ox/contacts/detail").extend({
+    ext.point('io.ox/contacts/detail').extend({
         index: 'last',
         id: 'breadcrumb',
         draw: function (baton) {

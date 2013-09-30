@@ -12,11 +12,11 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define("plugins/portal/calendar/register",
-    ["io.ox/core/extensions",
-     "io.ox/core/date",
-     "io.ox/calendar/util",
-     "gettext!plugins/portal",
+define('plugins/portal/calendar/register',
+    ['io.ox/core/extensions',
+     'io.ox/core/date',
+     'io.ox/calendar/util',
+     'gettext!plugins/portal',
      'settings!io.ox/calendar',
      'io.ox/core/strings',
      'io.ox/calendar/api'
@@ -53,7 +53,7 @@ define("plugins/portal/calendar/register",
     //     return unit.replace("%s", Math.round(delta));
     // };
 
-    ext.point("io.ox/portal/widget/calendar").extend({
+    ext.point('io.ox/portal/widget/calendar').extend({
 
         title: gt('Appointments'),
 
@@ -94,7 +94,7 @@ define("plugins/portal/calendar/register",
             if (appointments.length === 0) {
                 $content.append(
                     $('<div class="line">')
-                    .text(gt("You don't have any appointments in the near future."))
+                    .text(gt('You don\'t have any appointments in the near future.'))
                 );
             } else {
                 _(appointments).each(function (nextApp) {
@@ -137,7 +137,7 @@ define("plugins/portal/calendar/register",
 
         post: function (ext) {
             var self = this;
-            require(["io.ox/calendar/api"], function (api) {
+            require(['io.ox/calendar/api'], function (api) {
                 api.on('refresh.all', function () {
                     ext.load().done(_.bind(ext.draw, self));
                 });

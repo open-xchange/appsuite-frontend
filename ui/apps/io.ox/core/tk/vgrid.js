@@ -365,7 +365,7 @@ define('io.ox/core/tk/vgrid',
             // create extension point for second toolbar
             ext.point('io.ox/core/vgrid/secondToolbar').extend({
                 index: 100,
-                id: "secondToolbar",
+                id: 'secondToolbar',
                 draw: function (baton) {
                     // select all/none
                     var link,
@@ -397,7 +397,7 @@ define('io.ox/core/tk/vgrid',
         }
 
         // draw second toolbar
-        ext.point('io.ox/core/vgrid/secondToolbar').invoke("draw", topbar, new ext.Baton({ grid: self, options: options }));
+        ext.point('io.ox/core/vgrid/secondToolbar').invoke('draw', topbar, new ext.Baton({ grid: self, options: options }));
 
         // swipe delegate
         if (_.device('touch')) {

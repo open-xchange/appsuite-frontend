@@ -11,16 +11,16 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define("plugins/portal/tasks/register",
+define('plugins/portal/tasks/register',
     ['io.ox/core/extensions',
      'io.ox/tasks/api',
      'gettext!plugins/portal',
      'io.ox/tasks/util'
     ], function (ext, taskAPI, gt, util) {
 
-    "use strict";
+    'use strict';
 
-    ext.point("io.ox/portal/widget/tasks").extend({
+    ext.point('io.ox/portal/widget/tasks').extend({
 
         title: gt('Tasks'),
 

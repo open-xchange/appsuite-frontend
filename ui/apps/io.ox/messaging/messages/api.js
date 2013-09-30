@@ -12,11 +12,11 @@
  */
 
 //TODO: split into packages for services, accounts and messages
-define("io.ox/messaging/messages/api",
-    ["io.ox/core/http",
-    "io.ox/core/api/user"], function (http, userAPI) {
+define('io.ox/messaging/messages/api',
+    ['io.ox/core/http',
+    'io.ox/core/api/user'], function (http, userAPI) {
 
-    "use strict";
+    'use strict';
 
     var api = {
         all: function (folder) {
@@ -24,8 +24,8 @@ define("io.ox/messaging/messages/api",
             return http.GET({
                 module: 'messaging/message',
                 params: {
-                    action: "all",
-                    columns: "folder,from,id,subject,from,receivedDate,body,headers,picture,url",
+                    action: 'all',
+                    columns: 'folder,from,id,subject,from,receivedDate,body,headers,picture,url',
                     folder: folder
                 }
             });

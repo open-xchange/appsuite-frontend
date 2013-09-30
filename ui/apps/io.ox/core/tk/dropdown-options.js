@@ -11,7 +11,7 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define("io.ox/core/tk/dropdown-options",
+define('io.ox/core/tk/dropdown-options',
     ['io.ox/core/event',
      'gettext!io.ox/core'], function (Events, gt) {
 
@@ -25,7 +25,7 @@ define("io.ox/core/tk/dropdown-options",
             data = {},
             //nodes
             $anchor,
-            $container = $('<span class="dropdown"">'),
+            $container = $('<span class="dropdown">'),
             $menu = $('<ul class="dropdown-menu no-clone" role="menu">'),
 
             /**

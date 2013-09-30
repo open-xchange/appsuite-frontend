@@ -14,7 +14,7 @@ define('io.ox/contacts/widgets/pictureUpload',
      'gettext!io.ox/contacts',
      'less!io.ox/contacts/widgets/widgets.less'], function (notifications, gt) {
 
-    "use strict";
+    'use strict';
 
     // For now specific to contacts
     // Might be generalized, who knows?
@@ -32,7 +32,7 @@ define('io.ox/contacts/widgets/pictureUpload',
 
             resetImage: function (e) {
                 e.stopImmediatePropagation();
-                this.model.set("image1", '', {validate: true});
+                this.model.set('image1', '', {validate: true});
                 this.closeBtn.hide();
                 this.addImgText.show();
                 this.setImageURL();

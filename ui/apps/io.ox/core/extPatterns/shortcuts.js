@@ -11,8 +11,8 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("io.ox/core/extPatterns/shortcuts", ["io.ox/core/tk/keys", "io.ox/core/collection", "io.ox/core/extPatterns/actions"], function (KeyListener, Collection, actions) {
-    "use strict";
+define('io.ox/core/extPatterns/shortcuts', ['io.ox/core/tk/keys', 'io.ox/core/collection', 'io.ox/core/extPatterns/actions'], function (KeyListener, Collection, actions) {
+    'use strict';
 
     function Shortcuts(options) {
         var keyListener = null,

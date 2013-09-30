@@ -17,25 +17,25 @@ define('io.ox/calendar/invitations/register',
      'settings!io.ox/calendar',
      'io.ox/calendar/util',
      'gettext!io.ox/calendar/main',
-     "io.ox/core/notifications",
-     "less!io.ox/calendar/style.less"], function (ext, http, settings, util, gt, notifications) {
+     'io.ox/core/notifications',
+     'less!io.ox/calendar/style.less'], function (ext, http, settings, util, gt, notifications) {
 
     'use strict';
 
     var regex = /text\/calendar.*?method=(.+)/i;
 
     var i18n = {
-        'accept': gt("Accept"),
-        'accept_and_replace': gt("Accept changes"),
-        'accept_and_ignore_conflicts': gt("Accept"),
-        'accept_party_crasher': gt("Add new participant"),
-        'create': gt("Accept"),
-        'update': gt("Accept changes"),
-        'delete': gt("Delete"),
-        'declinecounter': gt("Reject changes"),
-        'tentative': gt("Tentative"),
-        'decline': gt("Decline"),
-        'ignore': gt("Ignore")
+        'accept': gt('Accept'),
+        'accept_and_replace': gt('Accept changes'),
+        'accept_and_ignore_conflicts': gt('Accept'),
+        'accept_party_crasher': gt('Add new participant'),
+        'create': gt('Accept'),
+        'update': gt('Accept changes'),
+        'delete': gt('Delete'),
+        'declinecounter': gt('Reject changes'),
+        'tentative': gt('Tentative'),
+        'decline': gt('Decline'),
+        'ignore': gt('Ignore')
     };
 
     var buttonClasses = {
@@ -53,22 +53,22 @@ define('io.ox/calendar/invitations/register',
     };
 
     var success = {
-        'accept': gt("You have accepted the appointment"),
-        'accept_and_replace': gt("Changes have been saved"),
-        'accept_and_ignore_conflicts': gt("You have accepted the appointment"),
-        'accept_party_crasher': gt("Added the new participant"),
-        'create': gt("You have accepted the appointment"),
-        'update': gt("The appointment has been updated"),
-        'delete': gt("The appointment has been deleted"),
-        'declinecounter': gt("The changes have been rejected"),
-        'tentative': gt("You have tentatively accepted the appointment"),
-        'decline': gt("You have declined the appointment")
+        'accept': gt('You have accepted the appointment'),
+        'accept_and_replace': gt('Changes have been saved'),
+        'accept_and_ignore_conflicts': gt('You have accepted the appointment'),
+        'accept_party_crasher': gt('Added the new participant'),
+        'create': gt('You have accepted the appointment'),
+        'update': gt('The appointment has been updated'),
+        'delete': gt('The appointment has been deleted'),
+        'declinecounter': gt('The changes have been rejected'),
+        'tentative': gt('You have tentatively accepted the appointment'),
+        'decline': gt('You have declined the appointment')
     };
 
     var successInternal = {
-        1: gt("You have accepted the appointment"),
-        2: gt("You have declined the appointment"),
-        3: gt("You have tentatively accepted the appointment")
+        1: gt('You have accepted the appointment'),
+        2: gt('You have declined the appointment'),
+        3: gt('You have tentatively accepted the appointment')
     };
 
     var priority = ['update', 'ignore', 'accept', 'tentative', 'decline', 'declinecounter', 'accept_and_replace', 'accept_and_ignore_conflicts', 'accept_party_crasher', 'create', 'delete'];
@@ -77,8 +77,8 @@ define('io.ox/calendar/invitations/register',
     function discoverIMipAttachment(baton) {
         return _(baton.data.attachments).find(function (attachment) {
             var match = attachment.content_type.match(regex);
-            if (match && match[1].toLowerCase() !== "publish") {
-                var index = match[1].indexOf(";");
+            if (match && match[1].toLowerCase() !== 'publish') {
+                var index = match[1].indexOf(';');
                 var method = index !== -1 ? match[1].substr(0, index) : match[1];
                 method = method.toLowerCase();
 
@@ -96,12 +96,12 @@ define('io.ox/calendar/invitations/register',
                     action: 'analyze',
                     dataSource: 'com.openexchange.mail.ical',
                     descriptionFormat: 'html',
-                    timezone: "UTC"
+                    timezone: 'UTC'
                 },
                 data: {
-                    "com.openexchange.mail.conversion.fullname": baton.data.folder_id,
-                    "com.openexchange.mail.conversion.mailid": baton.data.id,
-                    "com.openexchange.mail.conversion.sequenceid": baton.imip.attachment.id
+                    'com.openexchange.mail.conversion.fullname': baton.data.folder_id,
+                    'com.openexchange.mail.conversion.mailid': baton.data.id,
+                    'com.openexchange.mail.conversion.sequenceid': baton.imip.attachment.id
                 }
             });
         } else {
@@ -186,9 +186,9 @@ define('io.ox/calendar/invitations/register',
                             descriptionFormat: 'html'
                         },
                         data: {
-                            "com.openexchange.mail.conversion.fullname": baton.data.folder_id,
-                            "com.openexchange.mail.conversion.mailid": baton.data.id,
-                            "com.openexchange.mail.conversion.sequenceid": baton.imip.attachment.id
+                            'com.openexchange.mail.conversion.fullname': baton.data.folder_id,
+                            'com.openexchange.mail.conversion.mailid': baton.data.id,
+                            'com.openexchange.mail.conversion.sequenceid': baton.imip.attachment.id
                         }
                     })
                     .then(
@@ -222,7 +222,7 @@ define('io.ox/calendar/invitations/register',
                 });
 
                 if (appointments.length === 0) {
-                    baton.$.well.find(".muted").remove();
+                    baton.$.well.find('.muted').remove();
                 }
 
                 $node.append(baton.$.well.show());
@@ -285,8 +285,8 @@ define('io.ox/calendar/invitations/register',
         if (!appointment) {
             return $();
         }
-        var node = $("<div>");
-        require(["io.ox/calendar/view-detail"], function (viewDetail) {
+        var node = $('<div>');
+        require(['io.ox/calendar/view-detail'], function (viewDetail) {
             node.append(viewDetail.draw(appointment, {brief: true}));
         });
 
@@ -311,7 +311,7 @@ define('io.ox/calendar/invitations/register',
         if (!change.conflicts) {
             return $();
         }
-        var $node = $("<div>");
+        var $node = $('<div>');
         var text = gt.format(gt.ngettext('There is already %1$d appointment in this timeframe.',
             'There are already %1$d appointments in this timeframe.', change.conflicts.length), change.conflicts.length);
 
@@ -321,10 +321,10 @@ define('io.ox/calendar/invitations/register',
                 $.txt(' '),
                 $('<a href="#">').text(gt('Show conflicts')).on('click', function (e) {
                     e.preventDefault();
-                    require(["io.ox/calendar/conflicts/conflictList"], function (conflictList) {
-                        $node.find(".alert").remove();
+                    require(['io.ox/calendar/conflicts/conflictList'], function (conflictList) {
+                        $node.find('.alert').remove();
                         $node.append(
-                            $('<div>').css({marginTop: "2em", marginBottom: "2em"}).append(
+                            $('<div>').css({marginTop: '2em', marginBottom: '2em'}).append(
                                 conflictList.drawList(change.conflicts)
                             )
                         );
@@ -337,8 +337,8 @@ define('io.ox/calendar/invitations/register',
     }
 
     function deleteMailIfNeeded(baton) {
-        require(["io.ox/mail/api", "settings!io.ox/calendar"], function (api, settings) {
-            if (settings.get("deleteInvitationMailAfterAction")) {
+        require(['io.ox/mail/api', 'settings!io.ox/calendar'], function (api, settings) {
+            if (settings.get('deleteInvitationMailAfterAction')) {
                 api.remove([baton.data]);
             }
         });
@@ -538,18 +538,18 @@ define('io.ox/calendar/invitations/register',
                             var self = $(this),
                                 options = util.getReminderOptions();
                             _(options).each(function (label, value) {
-                                self.append($("<option>", {value: value}).text(label));
+                                self.append($('<option>', {value: value}).text(label));
                             });
                         }).val(defaultReminder)
                     )
                 )
             )
             .append(
-                $('<button type="button" class="btn btn-success" data-action="1">').text(gt("Accept")),
+                $('<button type="button" class="btn btn-success" data-action="1">').text(gt('Accept')),
                 '&nbsp;',
-                $('<button type="button" class="btn btn-warning" data-action="3">').text(gt("Tentative")),
+                $('<button type="button" class="btn btn-warning" data-action="3">').text(gt('Tentative')),
                 '&nbsp;',
-                $('<button type="button" class="btn btn-danger" data-action="2">').text(gt("Decline"))
+                $('<button type="button" class="btn btn-danger" data-action="2">').text(gt('Decline'))
             )
             .on('click', 'button', function (e) {
 
@@ -559,7 +559,7 @@ define('io.ox/calendar/invitations/register',
                     folder: data.folder_id,
                     id: data.id,
                     data: {
-                        confirmation: Number($(e.target).data("action"))
+                        confirmation: Number($(e.target).data('action'))
                     }
                 })
                 .done(function () {
@@ -571,8 +571,8 @@ define('io.ox/calendar/invitations/register',
                         }
                     }
                     var dep = data.type === 'appointment' ? 'settings!io.ox/calendar' : 'settings!io.ox/tasks';
-                    require(["io.ox/mail/api", dep], function (api, settings) {
-                        if (settings.get("deleteInvitationMailAfterAction")) {
+                    require(['io.ox/mail/api', dep], function (api, settings) {
+                        if (settings.get('deleteInvitationMailAfterAction')) {
                             // remove mail
                             notifications.yell('success', successInternal[Number($(e.target).data('action'))]);
                             api.remove([baton.data]);

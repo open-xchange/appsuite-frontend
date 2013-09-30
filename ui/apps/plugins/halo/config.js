@@ -11,9 +11,9 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("plugins/halo/config", function () {
+define('plugins/halo/config', function () {
 
-    "use strict";
+    'use strict';
 
     return {
         interpret: function (providersConfig, activeProviders) {

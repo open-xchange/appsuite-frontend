@@ -13,17 +13,17 @@
  *
  */
 
-define("io.ox/core/desktop",
-    ["io.ox/core/event",
-     "io.ox/core/extensions",
-     "io.ox/core/extPatterns/links",
-     "io.ox/core/cache",
-     "io.ox/core/notifications",
-     "io.ox/core/upsell",
-     "io.ox/core/adaptiveLoader",
-     "gettext!io.ox/core"], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, gt) {
+define('io.ox/core/desktop',
+    ['io.ox/core/event',
+     'io.ox/core/extensions',
+     'io.ox/core/extPatterns/links',
+     'io.ox/core/cache',
+     'io.ox/core/notifications',
+     'io.ox/core/upsell',
+     'io.ox/core/adaptiveLoader',
+     'gettext!io.ox/core'], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, gt) {
 
-    "use strict";
+    'use strict';
 
     /**
      * Core UI
@@ -403,8 +403,8 @@ define("io.ox/core/desktop",
                 self.folder.destroy();
                 if (self.has('window')) {
                     win = self.get('window');
-                    win.trigger("quit");
-                    ox.ui.windowManager.trigger("window.quit", win);
+                    win.trigger('quit');
+                    ox.ui.windowManager.trigger('window.quit', win);
                     win.destroy();
                 }
                 // remove from list
@@ -495,7 +495,7 @@ define("io.ox/core/desktop",
                 $.when.apply($,
                     _(data).map(function (obj) {
                         adaptiveLoader.stop();
-                        var requirements = adaptiveLoader.startAndEnhance(obj.module, [obj.module + "/main"]);
+                        var requirements = adaptiveLoader.startAndEnhance(obj.module, [obj.module + '/main']);
                         return ox.load(requirements).pipe(function (m) {
                             return m.getApp().launch().done(function () {
                                 // update unique id
@@ -547,7 +547,7 @@ define("io.ox/core/desktop",
     });
 
     // show
-    $("#io-ox-core").show();
+    $('#io-ox-core').show();
 
     // check if any open application has unsaved changes
     window.onbeforeunload = function () {
@@ -692,7 +692,7 @@ define("io.ox/core/desktop",
                 return $.when();
             }
 
-            return require([app.get('name') + '/' + p.split(":")[0] + '/perspective'], function (newPers) {
+            return require([app.get('name') + '/' + p.split(':')[0] + '/perspective'], function (newPers) {
                 handlePerspectiveChange(app, p, newPers);
             });
         };
@@ -731,7 +731,7 @@ define("io.ox/core/desktop",
             ox.ui.screens.show('windowmanager');
         };
 
-        that.on("window.open window.show", function (e, win) {
+        that.on('window.open window.show', function (e, win) {
             // show window managher
             this.show();
             // move/add window to top of stack
@@ -746,11 +746,11 @@ define("io.ox/core/desktop",
             }
         });
 
-        that.on("window.beforeshow", function (e, win) {
-            that.trigger("empty", false);
+        that.on('window.beforeshow', function (e, win) {
+            that.trigger('empty', false);
         });
 
-        that.on("window.close window.quit window.pre-quit", function (e, win, type) {
+        that.on('window.close window.quit window.pre-quit', function (e, win, type) {
             // fallback for different trigger functions
             if (!type) {
                 type = e.type + '.' + e.namespace;
@@ -758,12 +758,12 @@ define("io.ox/core/desktop",
             var pos = _(windows).indexOf(win), i, $i, w;
             if (pos !== -1) {
                 // quit?
-                if (type === "window.quit") {
+                if (type === 'window.quit') {
                     // remove item at pos
                     windows.splice(pos, 1);
                 }
                 // close?
-                else if (type === "window.close" || type === 'window.pre-quit') {
+                else if (type === 'window.close' || type === 'window.pre-quit') {
                     // add/move window to end of stack
                     windows = _(windows).without(win);
                     windows.push(win);
@@ -790,10 +790,10 @@ define("io.ox/core/desktop",
             var isEmpty = numOpen() === 0;
             if (isEmpty) {
                 appCache.get('windows').done(function (winCache) {
-                    that.trigger("empty", true, winCache ? winCache[1] || null : null);
+                    that.trigger('empty', true, winCache ? winCache[1] || null : null);
                 });
             } else {
-                that.trigger("empty", false);
+                that.trigger('empty', false);
             }
         });
 
@@ -809,15 +809,15 @@ define("io.ox/core/desktop",
         // window guid
         var guid = 0,
 
-            pane = $("#io-ox-windowmanager-pane"),
+            pane = $('#io-ox-windowmanager-pane'),
 
             getX = function (node) {
-                return node.data("x") || 0;
+                return node.data('x') || 0;
             },
 
             scrollTo = function (node, cont) {
 
-                var index = node.data("index") || 0,
+                var index = node.data('index') || 0,
                     left = (-index * 101),
                     done = function () {
                         // use timeout for smoother animations
@@ -828,22 +828,22 @@ define("io.ox/core/desktop",
                 // change?
                 if (left !== getX(pane)) {
                     // remember position
-                    pane.data("x", left);
+                    pane.data('x', left);
                     // do motion TODO: clean up here!
                     if (true) {
-                        pane.animate({ left: left + "%" }, 0, done);
+                        pane.animate({ left: left + '%' }, 0, done);
                     }
                     // touch device?
                     else if (Modernizr.touch) {
-                        pane.css("left", left + "%");
+                        pane.css('left', left + '%');
                         done();
                     }
                     // use CSS transitions?
                     else if (Modernizr.csstransforms3d) {
-                        pane.one(_.browser.WebKit ? "webkitTransitionEnd" : "transitionend", done);
-                        pane.css("left", left + "%");
+                        pane.one(_.browser.WebKit ? 'webkitTransitionEnd' : 'transitionend', done);
+                        pane.css('left', left + '%');
                     } else {
-                        pane.stop().animate({ left: left + "%" }, 250, done);
+                        pane.stop().animate({ left: left + '%' }, 250, done);
                     }
                 } else {
                     done();
@@ -936,7 +936,7 @@ define("io.ox/core/desktop",
                     if (!appchange && self && (currentWindow !== this || parent.length === 0)) {
                         // show
                         if (firstShow) {
-                            node.data("index", guid - 1).css("left", ((guid - 1) * 101) + "%");
+                            node.data('index', guid - 1).css('left', ((guid - 1) * 101) + '%');
                         }
                         if (node.parent().length === 0) {
                             if (this.simple) {
@@ -946,8 +946,8 @@ define("io.ox/core/desktop",
                                 node.appendTo(pane);
                             }
                         }
-                        ox.ui.windowManager.trigger("window.beforeshow", self);
-                        this.trigger("beforeshow");
+                        ox.ui.windowManager.trigger('window.beforeshow', self);
+                        this.trigger('beforeshow');
                         this.updateToolbar();
                         //set current appname in url, was lost on returning from edit app
                         if (!_.url.hash('app') || self.app.getName() !== _.url.hash('app').split(':', 1)[0]) {//just get everything before the first ':' to exclude parameter additions
@@ -963,7 +963,7 @@ define("io.ox/core/desktop",
                             _.call(cont);
                             self.state.visible = true;
                             self.state.open = true;
-                            self.trigger("show");
+                            self.trigger('show');
                             if (_.device('!small')) {
                                 document.temptitle = gt.format(
                                     //#. Title of the browser window
@@ -981,13 +981,13 @@ define("io.ox/core/desktop",
 
                             if (firstShow) {
                                 shown.resolve();
-                                self.trigger("show:initial"); // alias for open
-                                self.trigger("open");
+                                self.trigger('show:initial'); // alias for open
+                                self.trigger('open');
                                 self.state.running = true;
-                                ox.ui.windowManager.trigger("window.open", self);
+                                ox.ui.windowManager.trigger('window.open', self);
                                 firstShow = false;
                             }
-                            ox.ui.windowManager.trigger("window.show", self);
+                            ox.ui.windowManager.trigger('window.show', self);
                             ox.ui.apps.trigger('resume', self.app);
                         });
                     } else {
@@ -998,17 +998,17 @@ define("io.ox/core/desktop",
 
                 this.hide = function () {
                     // detach if there are no iframes
-                    this.trigger("beforehide");
+                    this.trigger('beforehide');
                     // TODO: decide on whether or not to detach nodes
-                    if (this.simple || (this.detachable && this.nodes.outer.find("iframe").length === 0)) {
+                    if (this.simple || (this.detachable && this.nodes.outer.find('iframe').length === 0)) {
                         this.nodes.outer.detach();
                         $('body').css('overflowY', '');
                     } else {
                         this.nodes.outer.hide();
                     }
                     this.state.visible = false;
-                    this.trigger("hide");
-                    ox.ui.windowManager.trigger("window.hide", this);
+                    this.trigger('hide');
+                    ox.ui.windowManager.trigger('window.hide', this);
                     if (currentWindow === this) {
                         currentWindow = null;
                         if (_.device('!small')) {
@@ -1035,8 +1035,8 @@ define("io.ox/core/desktop",
                 this.preQuit = function () {
                     this.hide();
                     this.state.open = false;
-                    this.trigger("pre-quit");
-                    ox.ui.windowManager.trigger("window.pre-quit", this);
+                    this.trigger('pre-quit');
+                    ox.ui.windowManager.trigger('window.pre-quit', this);
                     return this;
                 };
 
@@ -1046,7 +1046,7 @@ define("io.ox/core/desktop",
                     var self = this;
 
                     if (quitOnClose && this.app !== null) {
-                        this.trigger("beforequit");
+                        this.trigger('beforequit');
                         this.app.quit()
                             .done(function () {
                                 self.state.open = false;
@@ -1056,8 +1056,8 @@ define("io.ox/core/desktop",
                     } else {
                         this.hide();
                         this.state.open = false;
-                        this.trigger("close");
-                        ox.ui.windowManager.trigger("window.close", this);
+                        this.trigger('close');
+                        ox.ui.windowManager.trigger('window.close', this);
                     }
                     return this;
                 };
@@ -1109,7 +1109,7 @@ define("io.ox/core/desktop",
                     // hide window
                     this.hide();
                     // trigger event
-                    this.trigger("destroy");
+                    this.trigger('destroy');
                     // disconnect from app
                     if (this.app !== null) {
                         this.app.win = null;
@@ -1128,7 +1128,7 @@ define("io.ox/core/desktop",
                     return this;
                 };
 
-                var title = "";
+                var title = '';
 
                 this.getTitle = function () {
                     return title;
@@ -1150,7 +1150,7 @@ define("io.ox/core/desktop",
                                 if (document.fixedtitle !== true) {//to prevent erasing the New Mail title
                                     document.title = document.temptitle;
                                 }
-                                
+
                             } else {
                                 document.title = _.noI18n(ox.serverConfig.pageTitle);
                             }
@@ -1246,14 +1246,14 @@ define("io.ox/core/desktop",
                 this.addButton = function (options) {
 
                     var o = $.extend({
-                        label: "Action",
+                        label: 'Action',
                         action: $.noop
                     }, options || {});
 
-                    return $("<div>")
-                        .addClass("io-ox-toolbar-link")
+                    return $('<div>')
+                        .addClass('io-ox-toolbar-link')
                         .text(String(o.label))
-                        .on("click", o.action)
+                        .on('click', o.action)
                         .appendTo(this.nodes.toolbar);
                 };
 
@@ -1315,7 +1315,7 @@ define("io.ox/core/desktop",
             }, options);
 
             // get width
-            var meta = (String(opt.width).match(/^(\d+)(px|%)$/) || ["", "100", "%"]).splice(1),
+            var meta = (String(opt.width).match(/^(\d+)(px|%)$/) || ['', '100', '%']).splice(1),
                 width = meta[0],
                 unit = meta[1],
                 // create new window instance
@@ -1327,7 +1327,7 @@ define("io.ox/core/desktop",
 
             // window container
             win.nodes.outer = $('<div class="window-container">')
-                .attr({ id: opt.id, "data-window-nr": guid });
+                .attr({ id: opt.id, 'data-window-nr': guid });
 
             // create very simple window?
             if (opt.simple) {
@@ -1659,9 +1659,9 @@ define("io.ox/core/desktop",
         return def;
     };
 
-    ox.ui.apps.on("resume", function (app) {
+    ox.ui.apps.on('resume', function (app) {
         adaptiveLoader.stop();
-        adaptiveLoader.listen(app.get("name"));
+        adaptiveLoader.listen(app.get('name'));
     });
 
 

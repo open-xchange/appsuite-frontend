@@ -11,15 +11,15 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/conversations/api",
-    ["io.ox/core/http", "io.ox/core/api/factory"
+define('io.ox/conversations/api',
+    ['io.ox/core/http', 'io.ox/core/api/factory'
     ], function (http, apiFactory) {
 
-    "use strict";
+    'use strict';
 
     // generate basic API
     var api = apiFactory({
-        module: "conversation",
+        module: 'conversation',
         keyGenerator: function (obj) {
             return String(obj.id);
         },
@@ -31,7 +31,7 @@ define("io.ox/conversations/api",
                 folder: 'default'
             },
             get: {
-                action: "get"
+                action: 'get'
             }
         }
     });
@@ -42,8 +42,8 @@ define("io.ox/conversations/api",
 
     api.update = function (id, data) {
         return http.PUT({
-                module: "conversation",
-                params: { action: "update", id: id },
+                module: 'conversation',
+                params: { action: 'update', id: id },
                 data: data || {}
             })
             .done(function (data) {
@@ -51,7 +51,7 @@ define("io.ox/conversations/api",
                 api.caches.get.add(data);
                 api.caches.list.add(data);
                 // publish new state
-                api.trigger("refresh.list");
+                api.trigger('refresh.list');
             });
     };
 
@@ -62,17 +62,17 @@ define("io.ox/conversations/api",
 
         function create(ids) {
             return http.PUT({
-                    module: "conversation",
-                    params: { action: "new" },
+                    module: 'conversation',
+                    params: { action: 'new' },
                     data: {
-                        subject: subject || display_names.join(", "),
+                        subject: subject || display_names.join(', '),
                         newMembers: ids
                     }
                 });
         }
 
         // get all user IDs
-        require(["io.ox/core/api/user"], function (userAPI) {
+        require(['io.ox/core/api/user'], function (userAPI) {
             userAPI.getAll()
                 .pipe(function (data) {
                     return _(data)
@@ -88,7 +88,7 @@ define("io.ox/conversations/api",
                         .done(function (data) {
                             // trigger
                             api.caches.all.clear();
-                            api.trigger("refresh.all");
+                            api.trigger('refresh.all');
                             def.resolve();
                         })
                         .fail(def.reject);
@@ -101,9 +101,9 @@ define("io.ox/conversations/api",
 
     api.getMessages = function (id, since) {
         return http.GET({
-            module: "conversation",
+            module: 'conversation',
             params: {
-                action: "allMessages",
+                action: 'allMessages',
                 id: id,
                 since: since || 0
             }
@@ -112,9 +112,9 @@ define("io.ox/conversations/api",
 
     api.sendMessage = function (id, text) {
         return http.PUT({
-            module: "conversation",
+            module: 'conversation',
             params: {
-                action: "newMessage",
+                action: 'newMessage',
                 id: id
             },
             data: {

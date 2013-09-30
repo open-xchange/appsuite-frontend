@@ -59,7 +59,7 @@ define('io.ox/core/event', function () {
             var myHub = hub; // Keep reference in case a handler cleans up the event dispatcher
             _(types.split(/\s+/)).each(function (type) {
                 myHub.triggerHandler.call(hub, type, args);
-                myHub.triggerHandler.call(hub, "triggered", _([type, args]).flatten()); // Allow stringing event hubs together
+                myHub.triggerHandler.call(hub, 'triggered', _([type, args]).flatten()); // Allow stringing event hubs together
             });
             return this;
         };

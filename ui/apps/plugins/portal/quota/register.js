@@ -11,7 +11,7 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define("plugins/portal/quota/register",
+define('plugins/portal/quota/register',
     ['io.ox/core/extensions',
      'gettext!plugins/portal',
      'io.ox/core/api/quota',
@@ -20,14 +20,14 @@ define("plugins/portal/quota/register",
      'less!plugins/portal/quota/style.less'
     ], function (ext, gt, api, strings, capabilities) {
 
-    "use strict";
+    'use strict';
 
     var loadTile = function () {
         return api.get();
     },
     availableQuota = function (quota) {
         var fields = [];
-        
+
         if (capabilities.has('infostore')) {
             fields.push({
                 quota: quota.file.quota,
@@ -42,7 +42,7 @@ define("plugins/portal/quota/register",
             name: 'memory-mail',
             i18nName: gt('Mail quota')
         });
-       
+
 
         fields.push({
             quota: quota.mail.countquota,
@@ -116,7 +116,7 @@ define("plugins/portal/quota/register",
             label.text(gt('unlimited'));
             bar.remove();
         } else {
-            if (quota.name === "mailcount") {//mailcount must not be shown in bytes
+            if (quota.name === 'mailcount') {//mailcount must not be shown in bytes
                 label.text(
                         //#. %1$s is the number of mails in use
                         //#. %2$s is the max number of mails

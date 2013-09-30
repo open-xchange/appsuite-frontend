@@ -12,13 +12,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/extPatterns/links",
-    ["io.ox/core/extensions",
-     "io.ox/core/collection",
-     "io.ox/core/extPatterns/actions",
-     "gettext!io.ox/core"], function (ext, Collection, actions, gt) {
+define('io.ox/core/extPatterns/links',
+    ['io.ox/core/extensions',
+     'io.ox/core/collection',
+     'io.ox/core/extPatterns/actions',
+     'gettext!io.ox/core'], function (ext, Collection, actions, gt) {
 
-    "use strict";
+    'use strict';
 
     // common extension classes
 
@@ -32,8 +32,8 @@ define("io.ox/core/extPatterns/links",
             click = function (e) {
                 e.preventDefault();
                 var node = $(this),
-                    baton = node.data("baton"),
-                    ref = node.data("ref");
+                    baton = node.data('baton'),
+                    ref = node.data('ref');
                 baton.e = e;
                 actions.invoke(ref, this, baton, e);
             };
@@ -41,7 +41,7 @@ define("io.ox/core/extPatterns/links",
         this.draw = this.draw || function (baton) {
             baton = ext.Baton.ensure(baton);
             this.append(
-                $("<a>", { href: "#", tabindex: 1, "data-action": self.id })
+                $('<a>', { href: '#', tabindex: 1, 'data-action': self.id })
                 .addClass(self.cssClasses || 'io-ox-action-link')
                 .attr({
                     'data-section': self.section || 'default',
@@ -285,7 +285,7 @@ define("io.ox/core/extPatterns/links",
         // create & add node first, since the rest is async
         var node = $('<ul role="menu">').addClass('dropdown-menu').appendTo($parent);
         if (options.open === 'left') {
-            node.addClass("pull-right").css({textAligh: 'left'});
+            node.addClass('pull-right').css({textAligh: 'left'});
         } else {
             $toggle.on(Modernizr.touch ? 'touchstart' : 'click', function (e) {
                 // fix dropdown position on-the-fly
@@ -323,7 +323,7 @@ define("io.ox/core/extPatterns/links",
 
     var drawButtonGroup = function (options, baton) {
         var args = $.makeArray(arguments),
-            $parent = $("<div>").addClass('btn-group')
+            $parent = $('<div>').addClass('btn-group')
                 .addClass(options.classes)
                 .attr('data-toggle', (options.radio ? 'buttons-radio' : ''))
                 .appendTo(this);

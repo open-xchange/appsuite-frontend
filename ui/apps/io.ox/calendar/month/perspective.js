@@ -102,7 +102,7 @@ define('io.ox/calendar/month/perspective',
                 api.update(obj).fail(function (con) {
                     if (con.conflicts) {
                         new dialogs.ModalDialog({
-                                top: "20%",
+                                top: '20%',
                                 center: false,
                                 container: self.main
                             })

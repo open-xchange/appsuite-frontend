@@ -267,7 +267,7 @@ define.async('io.ox/core/tk/html-editor',
         // range collapsed?
         if (!range.collapsed) {
             // delete selected content now
-            ed.execCommand("Delete", false, null);
+            ed.execCommand('Delete', false, null);
             // reselect new range
             range = ed.selection.getRng();
         }
@@ -291,13 +291,13 @@ define.async('io.ox/core/tk/html-editor',
                             node.childNodes[i].nodeValue = node.childNodes[i].nodeValue.replace('\u200B', '');
                         }
                     }
-                } else if (node.nodeName === "BR") {
+                } else if (node.nodeName === 'BR') {
                     // remember node
                     lastBR = node;
                 }
             }
         };
-        while (container && container.nodeName !== "BODY") {
+        while (container && container.nodeName !== 'BODY') {
             // set range to end of container
             range.setEndAfter(container);
             // get parent node
@@ -333,16 +333,16 @@ define.async('io.ox/core/tk/html-editor',
             }
         }
         // create new elements
-        var dummySpan = ed.getDoc().createElement("span");
-        dummySpan.innerHTML = "&nbsp;";
-        var para = ed.getDoc().createElement("p");
+        var dummySpan = ed.getDoc().createElement('span');
+        dummySpan.innerHTML = '&nbsp;';
+        var para = ed.getDoc().createElement('p');
         // and both elements to editor
         para.appendChild(dummySpan);
         range.insertNode(para);
         // select the span
         ed.selection.select(dummySpan);
         // and delete it
-        ed.execCommand("Delete", false, null);
+        ed.execCommand('Delete', false, null);
     }
 
     function splitContent(ed, e) {
@@ -368,8 +368,8 @@ define.async('io.ox/core/tk/html-editor',
         tinymce_langpacks = ['ar', 'az', 'be', 'bg', 'bn', 'br', 'bs', 'ca', 'ch', 'cn', 'cs', 'cy', 'da', 'de', 'dv', 'el', 'en', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fr', 'gl', 'gu', 'he', 'hi', 'hr', 'hu', 'hy', 'ia', 'id', 'is', 'it', 'ja', 'ka', 'kk', 'kl', 'km', 'ko', 'lb', 'lt', 'lv', 'mk', 'ml', 'mn', 'ms', 'my', 'nb', 'nl', 'nn', 'no', 'pl', 'ps', 'pt', 'ro', 'ru', 'sc', 'se', 'si', 'sk', 'sl', 'sq', 'sr', 'sv', 'sy', 'ta', 'te', 'th', 'tn', 'tr', 'tt', 'tw', 'uk', 'ur', 'vi', 'zh', 'zu'],
 
         tinymce_special = {
-            zh_CN: "zh-cn",
-            zh_TW: "zh-tw"
+            zh_CN: 'zh-cn',
+            zh_TW: 'zh-tw'
         };
 
         if (_.has(tinymce_special, lookup_lang)) {

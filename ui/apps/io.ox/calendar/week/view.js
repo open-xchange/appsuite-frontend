@@ -879,7 +879,7 @@ define('io.ox/calendar/week/view',
                 ftHeight = (fulltimeColPos.length <= this.fulltimeMax ? fulltimeColPos.length : (this.fulltimeMax + 0.5)) * (this.fulltimeHeight + 1);
                 this.fulltimePane.css({ height: fulltimeColPos.length * (this.fulltimeHeight + 1) + 'px'});
                 this.fulltimeCon.resizable({
-                    handles: "s",
+                    handles: 's',
                     minHeight: this.fulltimeHeight,
                     maxHeight: fulltimeColPos.length * (this.fulltimeHeight + 1),
                     resize: function (event, ui) {
@@ -979,10 +979,10 @@ define('io.ox/calendar/week/view',
             // add resizable and draggable plugin to all appointments with modify class
             $('.week-container .day>.appointment.modify', this.$el)
                 .resizable({
-                    handles: "n, s",
+                    handles: 'n, s',
                     grid: [0, self.gridHeight()],
                     minHeight: self.gridHeight(),
-                    containment: "parent",
+                    containment: 'parent',
                     start: function (e, ui) {
                         var d = $(this).data('resizable');
                         // init custom resize object
@@ -1367,8 +1367,8 @@ define('io.ox/calendar/week/view',
                 .resizable({
                     grid: [colWidth, 0],
                     minWidth: colWidth,
-                    handles: "w, e",
-                    containment: "parent",
+                    handles: 'w, e',
+                    containment: 'parent',
                     start: function (e, ui) {
                         $(this).addClass('opac').css('zIndex', $(this).css('zIndex') + 2000);
                     },

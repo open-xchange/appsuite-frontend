@@ -11,14 +11,14 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("plugins/halo/contacts/register", ["io.ox/core/extensions"], function (ext) {
+define('plugins/halo/contacts/register', ['io.ox/core/extensions'], function (ext) {
 
-    "use strict";
+    'use strict';
 
-    ext.point("io.ox/halo/contact:renderer").extend({
-        id: "contacts",
+    ext.point('io.ox/halo/contact:renderer').extend({
+        id: 'contacts',
         handles: function (type) {
-            return type === "com.openexchange.halo.contacts";
+            return type === 'com.openexchange.halo.contacts';
         },
         draw: function (baton) {
 
@@ -35,14 +35,14 @@ define("plugins/halo/contacts/register", ["io.ox/core/extensions"], function (ex
         }
     });
 
-    ext.point("io.ox/halo/contact:requestEnhancement").extend({
-        id: "contacts-request",
+    ext.point('io.ox/halo/contact:requestEnhancement').extend({
+        id: 'contacts-request',
         enhances: function (type) {
-            return type === "com.openexchange.halo.contacts";
+            return type === 'com.openexchange.halo.contacts';
         },
         enhance: function (request) {
             request.appendColumns = true;
-            request.columnModule = "contacts";
+            request.columnModule = 'contacts';
         }
     });
 });

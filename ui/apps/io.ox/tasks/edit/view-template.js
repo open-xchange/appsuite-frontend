@@ -640,7 +640,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
 
                 node.append(
                     input = $('<div class="input-append span6">').append(
-                        $('<input type="text" class="add-participant task-participant-input-field" tabindex="1">').attr("placeholder", gt("Add participant/resource")),
+                        $('<input type="text" class="add-participant task-participant-input-field" tabindex="1">').attr('placeholder', gt('Add participant/resource')),
                         $('<button type="button" class="btn" data-action="add" tabindex="1">')
                             .append($('<i class="icon-plus">'))
                     ),

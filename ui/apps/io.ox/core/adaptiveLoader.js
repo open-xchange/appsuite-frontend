@@ -14,8 +14,8 @@
 define('io.ox/core/adaptiveLoader', ['io.ox/core/extensions', 'io.ox/core/capabilities', 'settings!io.ox/core'], function (ext, caps, settings) {
     'use strict';
     var api;
-    if (localStorage && caps.has("lab:adaptiveLoading")) {
-        var capString = _(ox.serverConfig.capabilities).pluck("id").sort().join(","), language = settings.get("language"), theme = settings.get("theme");
+    if (localStorage && caps.has('lab:adaptiveLoading')) {
+        var capString = _(ox.serverConfig.capabilities).pluck('id').sort().join(','), language = settings.get('language'), theme = settings.get('theme');
         api = {
             log: function () {
                 if (api.debug || true) {
@@ -23,7 +23,7 @@ define('io.ox/core/adaptiveLoader', ['io.ox/core/extensions', 'io.ox/core/capabi
                 }
             },
             listen: function (chunkName) {
-                api.log("listen", chunkName);
+                api.log('listen', chunkName);
                 if (!api.cache) {
                     api.init();
                 }
@@ -31,7 +31,7 @@ define('io.ox/core/adaptiveLoader', ['io.ox/core/extensions', 'io.ox/core/capabi
                 api.modules = api.cache[chunkName] || [];
             },
             startAndLoad: function (chunkName) {
-                api.log("startAndLoad", chunkName);
+                api.log('startAndLoad', chunkName);
                 if (!api.cache) {
                     api.init();
                 }
@@ -41,7 +41,7 @@ define('io.ox/core/adaptiveLoader', ['io.ox/core/extensions', 'io.ox/core/capabi
                 }
             },
             startAndEnhance: function (chunkName, requirements) {
-                api.log("startAndEnhance", chunkName, requirements);
+                api.log('startAndEnhance', chunkName, requirements);
                 if (!api.cache) {
                     api.init();
                 }
@@ -53,12 +53,12 @@ define('io.ox/core/adaptiveLoader', ['io.ox/core/extensions', 'io.ox/core/capabi
                         }
                     });
                 }
-                api.log("enhanced", requirements);
+                api.log('enhanced', requirements);
                 return requirements;
             },
 
             stop: function () {
-                api.log("stop", api.currentChunk);
+                api.log('stop', api.currentChunk);
                 if (!api.cache) {
                     api.init();
                 }
@@ -73,7 +73,7 @@ define('io.ox/core/adaptiveLoader', ['io.ox/core/extensions', 'io.ox/core/capabi
             },
 
             record: function (chunkName, milliseconds) {
-                api.log("record", chunkName);
+                api.log('record', chunkName);
                 if (!api.cache) {
                     api.init();
                 }
@@ -85,14 +85,14 @@ define('io.ox/core/adaptiveLoader', ['io.ox/core/extensions', 'io.ox/core/capabi
                 return api.listen(chunkName);
             },
             init: function () {
-                api.log("init");
-                api.cacheKey = "ox-adaptiveload-" + ox.base + "[" + (ox.user || 'anon') + "][" + capString + "]" + "[" + language + "]" + "[" + theme + "]";
+                api.log('init');
+                api.cacheKey = 'ox-adaptiveload-' + ox.base + '[' + (ox.user || 'anon') + '][' + capString + ']' + '[' + language + ']' + '[' + theme + ']';
                 api.cache = JSON.parse(localStorage.getItem(api.cacheKey));
                 if (!api.cache) {
                     api.cache = {};
                 }
-                api.log("cache", api.cache);
-                $(window).on("require:require", function (event, module) {
+                api.log('cache', api.cache);
+                $(window).on('require:require', function (event, module) {
                     if (api.modules) {
                         api.modules.push(module.replace(/\.js$/, ''));
                     }

@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/lessons/lessons/model_view/register', ['io.ox/core/extensions', 'io.ox/lessons/editor', 'io.ox/lessons/toc', 'io.ox/backbone/modelFactory', 'io.ox/lessons/lessons/model_view/api'], function (ext, Editor, TOC, ModelFactory, api) {
-    "use strict";
+    'use strict';
     var factory = new ModelFactory({
         ref: 'io.ox/lessons/recipes/model',
         api: api,
@@ -19,8 +19,8 @@ define('io.ox/lessons/lessons/model_view/register', ['io.ox/core/extensions', 'i
             addIngredient: function (ingredient) {
                 if (! _(this.get('ingredients')).contains(ingredient)) {
                     this.get('ingredients').push(ingredient);
-                    this.trigger("change");
-                    this.trigger("change:ingredients");
+                    this.trigger('change');
+                    this.trigger('change:ingredients');
                 }
             },
 
@@ -30,7 +30,7 @@ define('io.ox/lessons/lessons/model_view/register', ['io.ox/core/extensions', 'i
         }
     });
 
-    ext.point("io.ox/lessons/lesson").extend({
+    ext.point('io.ox/lessons/lesson').extend({
         id: 'model_view',
         index: 500,
         title: 'On models and views',
@@ -38,7 +38,7 @@ define('io.ox/lessons/lessons/model_view/register', ['io.ox/core/extensions', 'i
         section: 'Architecture',
         start: function (options) {
             var win = options.win;
-            require(["text!io.ox/lessons/lessons/model_view/lesson.html"], function (html) {
+            require(['text!io.ox/lessons/lessons/model_view/lesson.html'], function (html) {
                 var win = options.win;
                 win.nodes.main.empty().append($(html));
                 TOC.setUp(win.nodes.main);

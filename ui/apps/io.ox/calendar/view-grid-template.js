@@ -11,20 +11,20 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/calendar/view-grid-template",
-    ["io.ox/calendar/util",
-     "io.ox/core/tk/vgrid",
-     "io.ox/core/extensions",
-     "io.ox/core/api/folder",
-     "gettext!io.ox/calendar",
-     "io.ox/core/api/user",
-     "io.ox/core/api/resource",
-     "less!io.ox/calendar/style.less"], function (util, VGrid, ext, folderAPI, gt, userAPI, resourceAPI) {
+define('io.ox/calendar/view-grid-template',
+    ['io.ox/calendar/util',
+     'io.ox/core/tk/vgrid',
+     'io.ox/core/extensions',
+     'io.ox/core/api/folder',
+     'gettext!io.ox/calendar',
+     'io.ox/core/api/user',
+     'io.ox/core/api/resource',
+     'less!io.ox/calendar/style.less'], function (util, VGrid, ext, folderAPI, gt, userAPI, resourceAPI) {
 
-    "use strict";
+    'use strict';
     var fnClickPerson = function (e) {
         e.preventDefault();
-        ext.point("io.ox/core/person:action").each(function (ext) {
+        ext.point('io.ox/core/person:action').each(function (ext) {
             _.call(ext.action, e.data, e);
         });
     };
@@ -35,16 +35,16 @@ define("io.ox/calendar/view-grid-template",
         main: {
             build: function () {
                 var title, location, time, date, shown_as, conflicts, isPrivate;
-                this.addClass("calendar").append(
-                    time = $("<div>").addClass("time"),
-                    date = $("<div>").addClass("date"),
+                this.addClass('calendar').append(
+                    time = $('<div>').addClass('time'),
+                    date = $('<div>').addClass('date'),
                     isPrivate = $('<i class="icon-lock private-flag">').hide(),
-                    title = $("<div>").addClass("title"),
+                    title = $('<div>').addClass('title'),
                     $('<div class="location-row">').append(
                         shown_as = $('<span class="shown_as label label-info">&nbsp;</span>'),
                         location = $('<span class="location">')
                     ),
-                    conflicts = $("<div>").addClass("conflicts").hide()
+                    conflicts = $('<div>').addClass('conflicts').hide()
                 );
 
                 return {
@@ -80,7 +80,7 @@ define("io.ox/calendar/view-grid-template",
                 fields.location.text(gt.noI18n(data.location || '\u00A0'));
                 fields.time.text(util.getTimeInterval(data));
                 fields.date.text(gt.noI18n(util.getDateInterval(data)));
-                fields.shown_as.get(0).className = "shown_as label " + util.getShownAsLabel(data);
+                fields.shown_as.get(0).className = 'shown_as label ' + util.getShownAsLabel(data);
                 if (data.participants && data.conflict) {
                     var conflicts = $('<span>');
                     fields.conflicts
@@ -138,7 +138,7 @@ define("io.ox/calendar/view-grid-template",
         // template for labels
         label: {
             build: function () {
-                this.addClass("calendar-label");
+                this.addClass('calendar-label');
             },
             set: function (data, fields, index) {
                 var d = util.getSmartDate(data);
@@ -160,7 +160,7 @@ define("io.ox/calendar/view-grid-template",
 
             // use template
             var tmpl = new VGrid.Template(),
-                $div = $("<div>");
+                $div = $('<div>');
 
             // add template
             tmpl.add(that.main);
@@ -169,9 +169,9 @@ define("io.ox/calendar/view-grid-template",
                 var clone = tmpl.getClone();
                 clone.update(data, i);
                 clone.appendTo($div).node
-                    .css("position", "relative")
-                    .data("appointment", data)
-                    .addClass("hover");
+                    .css('position', 'relative')
+                    .data('appointment', data)
+                    .addClass('hover');
             });
 
             return $div;

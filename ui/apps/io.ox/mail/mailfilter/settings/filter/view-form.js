@@ -112,14 +112,14 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         },
 
         prepareFolderForDisplay = function (folder) {
-            var arrayOfParts = folder.split("/");
+            var arrayOfParts = folder.split('/');
             arrayOfParts.shift();
-            return arrayOfParts.join("/");
+            return arrayOfParts.join('/');
         },
 
         AccountDetailView = Backbone.View.extend({
-            tagName: "div",
-            className: "io-ox-mailfilter-edit",
+            tagName: 'div',
+            className: 'io-ox-mailfilter-edit',
             _modelBinder: undefined,
             initialize: function (options) {
 
@@ -359,13 +359,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                 self.dialog.getPopup().hide();
 
-                require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
+                require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
 
                     var label = gt('Select folder'),
                         dialog = new dialogs.ModalDialog({ easyOut: true })
                         .header($('<h4>').text(label))
-                        .addPrimaryButton("select", label)
-                        .addButton("cancel", gt("Cancel"));
+                        .addPrimaryButton('select', label)
+                        .addButton('cancel', gt('Cancel'));
                     dialog.getBody().css({ height: '250px' });
                     var tree = new views.FolderTree(dialog.getBody(), {
                             type: 'mail'
@@ -551,7 +551,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                         } else {
                             listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'flags'}).text(actionsTranslations.tag).append(
                                     $('<div>').addClass('pull-right').append(
-                                        elements.drawInputfieldAction(action.flags[0].replace(/^\$+/, "")),
+                                        elements.drawInputfieldAction(action.flags[0].replace(/^\$+/, '')),
                                         elements.drawDeleteButton('action')
                                     )
                           ));
@@ -567,8 +567,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 }
             });
 
-            var headlineTest = $('<legend>').addClass("sectiontitle expertmode conditions").text(gt('Conditions')),
-                headlineActions = $('<legend>').addClass("sectiontitle expertmode actions").text(gt('Actions')),
+            var headlineTest = $('<legend>').addClass('sectiontitle expertmode conditions').text(gt('Conditions')),
+                headlineActions = $('<legend>').addClass('sectiontitle expertmode actions').text(gt('Actions')),
                 notification = $('<div>');
 
             if (_.isEqual(appliedTest[0], {id : 'true'})) {

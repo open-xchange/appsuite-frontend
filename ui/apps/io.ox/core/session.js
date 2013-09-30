@@ -41,7 +41,7 @@ function (http, manifests) {
         manifests.reset();
         $('html').attr('lang', ox.language.split('_')[0]);
         // should not hide store() request here; made debugging hard
-        ox.trigger("change:session", ox.session);
+        ox.trigger('change:session', ox.session);
     };
 
     var that = {

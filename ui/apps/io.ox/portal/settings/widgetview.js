@@ -27,7 +27,7 @@ define('io.ox/portal/settings/widgetview',
 
         tagName: 'li',
 
-        className: "widget-settings-view",
+        className: 'widget-settings-view',
 
         events: {
             'click [data-action="edit"]': 'onEdit',
@@ -107,7 +107,7 @@ define('io.ox/portal/settings/widgetview',
             // do we have custom data that might be lost?
             if (!_.isEmpty(this.model.get('props'))) {
                 var dialog = new dialogs.ModalDialog()
-                .header($("<h4>").text(gt('Delete widget')))
+                .header($('<h4>').text(gt('Delete widget')))
                 .append($('<span>').text(gt('Do you really want to delete this widget?')))
                 .addPrimaryButton('delete',
                     //#. Really delete portal widget - in contrast to "just disable"

@@ -30,7 +30,7 @@ define('io.ox/contacts/edit/view-form', [
     'less!io.ox/contacts/edit/style.less'
 ], function (model, views, forms, actions, links, PictureUpload, attachments, api, util, gt, capabilities, ext, date, mini, attachmentViews) {
 
-    "use strict";
+    'use strict';
 
     var meta = {
         sections: {
@@ -164,7 +164,7 @@ define('io.ox/contacts/edit/view-form', [
                 } else {
                     this.$el
                         .css({ display: 'inline-block' })
-                        .addClass("contact-picture-upload f6-target");
+                        .addClass('contact-picture-upload f6-target');
                 }
             }
         }));
@@ -172,23 +172,23 @@ define('io.ox/contacts/edit/view-form', [
         // Save
         if (!isMyContactData) {
             point.basicExtend(new links.Button({
-                id: "save",
+                id: 'save',
                 index: 110,
-                label: gt("Save"),
-                ref: ref + "/actions/edit/save",
-                cssClasses: "btn btn-primary control f6-target",
+                label: gt('Save'),
+                ref: ref + '/actions/edit/save',
+                cssClasses: 'btn btn-primary control f6-target',
                 tabIndex: 2,
-                tagtype: "button"
+                tagtype: 'button'
             }));
 
             point.basicExtend(new links.Button({
-                id: "discard",
+                id: 'discard',
                 index: 120,
-                label: gt("Discard"),
-                ref: ref + "/actions/edit/discard",
-                cssClasses: "btn control",
+                label: gt('Discard'),
+                ref: ref + '/actions/edit/discard',
+                cssClasses: 'btn control',
                 tabIndex: 3,
-                tagtype: "button"
+                tagtype: 'button'
             }));
         }
 
@@ -378,7 +378,7 @@ define('io.ox/contacts/edit/view-form', [
         new actions.Action(ref + '/actions/edit/reset-image', {
             id: 'imagereset',
             action: function (baton) {
-                baton.model.set("image1", '', { validate: true });
+                baton.model.set('image1', '', { validate: true });
                 var imageUrl =  ox.base + '/apps/themes/default/dummypicture.png';
                 baton.parentView.$el.find('.picture-uploader').css('background-image', 'url(' + imageUrl + ')');
             }

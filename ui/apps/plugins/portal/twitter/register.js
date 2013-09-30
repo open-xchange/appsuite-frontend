@@ -125,7 +125,7 @@ define('plugins/portal/twitter/register',
             $temp.find('.text').append(
                 $('<div class="io-ox-twitter-retweet-source">').append(
                     $('<i class="icon-retweet">'),
-                    " ",
+                    ' ',
                     $('<span>').text(gt('Retweeted by %s', tweet.user.screen_name))
                 )
             );
@@ -135,16 +135,16 @@ define('plugins/portal/twitter/register',
     };
 
     function followButton(tweet) {
-        var button_config = "show_count=false&align=right&show_screen_name=false&dnt=true";
+        var button_config = 'show_count=false&align=right&show_screen_name=false&dnt=true';
         // add lang parameter (use the first 2 letters as language indicator for twitter
-        button_config += "&lang=" + ox.language.split('_')[0];
-        button_config += "&screen_name=" + tweet.user.screen_name;
+        button_config += '&lang=' + ox.language.split('_')[0];
+        button_config += '&screen_name=' + tweet.user.screen_name;
         return $('<iframe>')
-            .attr("src", "//platform.twitter.com/widgets/follow_button.html?" + button_config)
-            .attr("allowtransparency", "true")
-            .attr("frameborder", "0")
-            .attr("scrolling", "no")
-            .addClass("io-ox-twitter-follow");
+            .attr('src', '//platform.twitter.com/widgets/follow_button.html?' + button_config)
+            .attr('allowtransparency', 'true')
+            .attr('frameborder', '0')
+            .attr('scrolling', 'no')
+            .addClass('io-ox-twitter-follow');
     }
 
     function parseDate(str) {
@@ -173,8 +173,8 @@ define('plugins/portal/twitter/register',
             $('<div class="io-ox-twitter-details">').append(
                 $('<a>').attr({'class': 'io-ox-twitter-date', 'href': tweetLink, 'target': '_blank'}).text(tweeted),
                 $('<a>').attr({'class': 'io-ox-twitter-reply', 'href': 'https://twitter.com/intent/tweet?in_reply_to=' + tweet.id_str}).text(gt('Reply')),
-                $('<a>').attr({'class': 'io-ox-twitter-retweet', 'href': "https://twitter.com/intent/retweet?tweet_id=" + tweet.id_str}).text(gt('Retweet')),
-                $('<a>').attr({'class': 'io-ox-twitter-favorite', 'href': "https://twitter.com/intent/favorite?tweet_id=" + tweet.id_str}).text(gt('Favorite'))
+                $('<a>').attr({'class': 'io-ox-twitter-retweet', 'href': 'https://twitter.com/intent/retweet?tweet_id=' + tweet.id_str}).text(gt('Retweet')),
+                $('<a>').attr({'class': 'io-ox-twitter-favorite', 'href': 'https://twitter.com/intent/favorite?tweet_id=' + tweet.id_str}).text(gt('Favorite'))
             )
         );
         if (tweet.favorited) {
@@ -221,7 +221,7 @@ define('plugins/portal/twitter/register',
             content.removeClass('pointer');
             $('<div class="paragraph">').text(gt('Twitter reported the following errors:')).appendTo(content);
             _(baton.data.errors).each(function (myError) {
-                $('<div class="error">').text("(" + myError.code + ") " + myError.message).appendTo(content);
+                $('<div class="error">').text('(' + myError.code + ') ' + myError.message).appendTo(content);
                 handleError(myError.code, this, baton).appendTo(content);
             });
 
@@ -245,9 +245,9 @@ define('plugins/portal/twitter/register',
 
             return $('<a class="solution">').text(gt('Click to authorize your account again')).on('click', function () {
                 keychain.submodules.twitter.reauthorize(account).done(function () {
-                    console.log(gt("You have reauthorized this %s account.", 'Twitter'));
+                    console.log(gt('You have reauthorized this %s account.', 'Twitter'));
                 }).fail(function () {
-                    console.error(gt("Something went wrong reauthorizing the %s account.", 'Twitter'));
+                    console.error(gt('Something went wrong reauthorizing the %s account.', 'Twitter'));
                 });
             });
         } else if (errorCode === 88 || errorCode === 130) {
@@ -286,7 +286,7 @@ define('plugins/portal/twitter/register',
         },
 
         performSetUp: function () {
-            var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
+            var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
             return keychain.createInteractively('twitter', win);
         },
 
@@ -391,7 +391,7 @@ define('plugins/portal/twitter/register',
 
         error: function (error) {
 
-            if (error.code !== "OAUTH-0006") return; // let the default handling do the job
+            if (error.code !== 'OAUTH-0006') return; // let the default handling do the job
 
             $(this).empty().append(
                 $('<div class="decoration">').append(

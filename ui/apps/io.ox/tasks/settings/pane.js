@@ -33,7 +33,7 @@ define('io.ox/tasks/settings/pane',
         tasksViewSettings;
 
     var TasksSettingsView = Backbone.View.extend({
-        tagName: "div",
+        tagName: 'div',
         _modelBinder: undefined,
         initialize: function (options) {
             // create template

@@ -40,7 +40,7 @@ define('io.ox/core/pubsub/subscriptions',
     },
 
     SubscriptionView = Backbone.View.extend({
-        tagName: "div",
+        tagName: 'div',
         _modelBinder: undefined,
         initialize: function (options) {
             this._modelBinder = new Backbone.ModelBinder();
@@ -194,7 +194,7 @@ define('io.ox/core/pubsub/subscriptions',
         }
 
         function oauth() {
-            var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
+            var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
             return keychainAPI.createInteractively(service.displayName.toLowerCase(), win);
         }
 

@@ -46,8 +46,8 @@
 
  **/
 
-define("io.ox/keychain/api", ["io.ox/core/extensions", "io.ox/core/event", 'io.ox/core/http', "gettext!io.ox/keychain"], function (ext, Events, http, gt) {
-    "use strict";
+define('io.ox/keychain/api', ['io.ox/core/extensions', 'io.ox/core/event', 'io.ox/core/http', 'gettext!io.ox/keychain'], function (ext, Events, http, gt) {
+    'use strict';
 
     var api = {};
 
@@ -55,11 +55,11 @@ define("io.ox/keychain/api", ["io.ox/core/extensions", "io.ox/core/event", 'io.o
 
     function initExtensions() {
         api.submodules = {};
-        ext.point("io.ox/keychain/api").each(function (extension) {
+        ext.point('io.ox/keychain/api').each(function (extension) {
             api.submodules[extension.id] = extension;
-            extension.invoke("init");
+            extension.invoke('init');
             if (extension.on) {
-                extension.on("triggered", function () {
+                extension.on('triggered', function () {
                     var args = $.makeArray(arguments);
                     args.shift();
                     if (args.length > 1) {
@@ -73,13 +73,13 @@ define("io.ox/keychain/api", ["io.ox/core/extensions", "io.ox/core/event", 'io.o
 
     initExtensions();
 
-    ext.point("io.ox/keychain/api").on("extended", initExtensions);
+    ext.point('io.ox/keychain/api').on('extended', initExtensions);
 
 
     function invokeExtension(accountType, method) {
         var extension = api.submodules[accountType];
         if (!extension) {
-            throw new Error("I do not know keys of accountType " + accountType + "! I suppose a needed plugin was not registered in the server configuration.");
+            throw new Error('I do not know keys of accountType ' + accountType + '! I suppose a needed plugin was not registered in the server configuration.');
         }
         return extension.invoke.apply(extension, [method, extension].concat($.makeArray(arguments).slice(2)));
     }
@@ -87,22 +87,22 @@ define("io.ox/keychain/api", ["io.ox/core/extensions", "io.ox/core/event", 'io.o
     api.getAll = function () {
         var result = [];
         _(api.submodules).each(function (extension) {
-            result = result.concat(invokeExtension(extension.id, "getAll"));
+            result = result.concat(invokeExtension(extension.id, 'getAll'));
         });
 
         return result;
     };
 
     api.get = function (accountType, id) {
-        return invokeExtension(accountType, "get", id);
+        return invokeExtension(accountType, 'get', id);
     };
 
     api.getStandardAccount = function (accountType) {
-        return invokeExtension(accountType, "getStandardAccount");
+        return invokeExtension(accountType, 'getStandardAccount');
     };
 
     api.hasStandardAccount = function (accountType) {
-        return invokeExtension(accountType, "hasStandardAccount");
+        return invokeExtension(accountType, 'hasStandardAccount');
     };
 
     api.getOrCreateStandardAccountInteractively = function (accountType, e) {
@@ -112,14 +112,14 @@ define("io.ox/keychain/api", ["io.ox/core/extensions", "io.ox/core/event", 'io.o
     };
 
     api.createInteractively = function (accountType, win) {
-        return invokeExtension(accountType, "createInteractively", win);
+        return invokeExtension(accountType, 'createInteractively', win);
     };
 
     api.remove = function (account) {
         if (account.attributes) {
             account = account.toJSON();
         }
-        return invokeExtension(account.accountType, "remove", account);
+        return invokeExtension(account.accountType, 'remove', account);
     };
 
     api.update = function (account) {
@@ -127,7 +127,7 @@ define("io.ox/keychain/api", ["io.ox/core/extensions", "io.ox/core/event", 'io.o
             account = account.toJSON();
         }
 
-        return invokeExtension(account.accountType, "update", account);
+        return invokeExtension(account.accountType, 'update', account);
     };
     api.isEnabled = function (accountType) {
         return !!api.submodules[accountType];
@@ -164,8 +164,8 @@ define("io.ox/keychain/api", ["io.ox/core/extensions", "io.ox/core/event", 'io.o
             }
         }).done(function () {
             ox.cache.clear();
-            require(["io.ox/core/notifications"], function (n) {
-                n.yell("success", gt("The unrecoverable items have been cleaned up successfully. Please refresh this page to see the changes."));
+            require(['io.ox/core/notifications'], function (n) {
+                n.yell('success', gt('The unrecoverable items have been cleaned up successfully. Please refresh this page to see the changes.'));
             });
         });
     };

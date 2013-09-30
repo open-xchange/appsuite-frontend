@@ -30,7 +30,7 @@ define('io.ox/core/main',
      'io.ox/core/relogin',
      'io.ox/core/bootstrap/basics'], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, ping, tours, settings, gt) {
 
-    "use strict";
+    'use strict';
 
     var PATH = ox.base + '/apps/io.ox/core',
         DURATION = 250;
@@ -69,7 +69,7 @@ define('io.ox/core/main',
             autologout: false
         }, opt || {});
 
-        $("#background_loader").fadeIn(DURATION, function () {
+        $('#background_loader').fadeIn(DURATION, function () {
 
             $('#io-ox-core').hide();
             var extensions = ext.point('io.ox/core/logout').list();
@@ -84,7 +84,7 @@ define('io.ox/core/main',
                 },
                 function cancel() {
                     $('#io-ox-core').show();
-                    $("#background_loader").fadeOut(DURATION);
+                    $('#background_loader').fadeOut(DURATION);
                 }
             );
         });
@@ -780,8 +780,8 @@ define('io.ox/core/main',
             id: 'default',
             draw: function () {
                 if (capabilities.has('launchpad')) {
-                    addLauncher("left", $('<i class="icon-th icon-white">').attr('aria-label', gt('Your Applications')), function () {
-                        return require(["io.ox/launchpad/main"], function (m) {
+                    addLauncher('left', $('<i class="icon-th icon-white">').attr('aria-label', gt('Your Applications')), function () {
+                        return require(['io.ox/launchpad/main'], function (m) {
                             launchers.children().removeClass('active-app');
                             launcherDropdown.children().removeClass('active-app');
                             launchers.children().first().addClass('active-app');
@@ -943,11 +943,11 @@ define('io.ox/core/main',
         .value();
 
         var drawDesktop = function () {
-            ext.point("io.ox/core/desktop").invoke("draw", $("#io-ox-desktop"), {});
+            ext.point('io.ox/core/desktop').invoke('draw', $('#io-ox-desktop'), {});
             drawDesktop = $.noop;
         };
 
-        ox.ui.windowManager.on("empty", function (e, isEmpty, win) {
+        ox.ui.windowManager.on('empty', function (e, isEmpty, win) {
             if (isEmpty) {
                 drawDesktop();
                 ox.ui.screens.show('desktop');
@@ -1016,11 +1016,11 @@ define('io.ox/core/main',
             index: 250,
             run: function () {
                 if (ox.online) {
-                    require(["io.ox/keychain/api"], function (keychainAPI) {
+                    require(['io.ox/keychain/api'], function (keychainAPI) {
                         keychainAPI.checkSecrets().done(function (analysis) {
                             if (!analysis.secretWorks) {
                                 // Show dialog
-                                require(["io.ox/keychain/secretRecoveryDialog"], function (d) { d.show(); });
+                                require(['io.ox/keychain/secretRecoveryDialog'], function (d) { d.show(); });
                                 if (ox.debug) {
                                     console.error("Couldn't decrypt accounts: ", analysis.diagnosis);
                                 }
@@ -1055,7 +1055,7 @@ define('io.ox/core/main',
 
                     var dialog,
                         def = $.Deferred().done(function () {
-                            $("#background_loader").busy().fadeIn();
+                            $('#background_loader').busy().fadeIn();
                             topbar.show();
                             dialog.remove();
                             dialog = null;
@@ -1110,7 +1110,7 @@ define('io.ox/core/main',
                     });
 
                     topbar.hide();
-                    $("#background_loader").idle().fadeOut(function () {
+                    $('#background_loader').idle().fadeOut(function () {
                         dialog.find('.btn-primary').focus();
                     });
 
@@ -1209,11 +1209,11 @@ define('io.ox/core/main',
 
                 if (baton.instantFadeOut) {
                     // instant fade out
-                    $("#background_loader").idle().hide();
+                    $('#background_loader').idle().hide();
                     return $.when();
                 } else {
                     var def = $.Deferred();
-                    $("#background_loader").idle().fadeOut(DURATION, def.resolve);
+                    $('#background_loader').idle().fadeOut(DURATION, def.resolve);
                     return def;
                 }
             }

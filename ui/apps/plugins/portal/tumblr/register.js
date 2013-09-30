@@ -22,7 +22,7 @@ define('plugins/portal/tumblr/register',
 
     'use strict';
 
-    var API_KEY = settings.get("apiKeys/tumblr"),
+    var API_KEY = settings.get('apiKeys/tumblr'),
         apiUrl = ['https://api.tumblr.com/v2/blog/', '/posts/?api_key=' + API_KEY + '&notes_info=&filter='];
 
     if (_.isUndefined(API_KEY)) {
@@ -43,7 +43,7 @@ define('plugins/portal/tumblr/register',
             function initFeed() {
                 var url = baton.model.get('props').url;
                 baton.feed = new Feed({
-                    url: '' + apiUrl.join(url) + "&jsonp="
+                    url: '' + apiUrl.join(url) + '&jsonp='
                 });
             }
 
@@ -159,7 +159,7 @@ define('plugins/portal/tumblr/register',
                 },
                 postBody = function () {
                     var strippedHtml = post.body
-                        .replace(/<(?!img\s*\/?)[^>]+>/g, "\n")
+                        .replace(/<(?!img\s*\/?)[^>]+>/g, '\n')
                         .replace(/<img.+?src=[\'"]([^\'"]+)[\'"].*?>/i, '<img src="$1">');
                     if (post.type === 'chat') {
                         strippedHtml = strippedHtml.replace(/\n/g, '<br />');
@@ -225,7 +225,7 @@ define('plugins/portal/tumblr/register',
             props = model.get('props') || {},
             that = this;
 
-        dialog.header($("<h4>").text(gt('Edit Tumblr feed')))
+        dialog.header($('<h4>').text(gt('Edit Tumblr feed')))
             .build(function () {
                 this.getContentNode().append(
                     $('<label>').text(gt('Feed URL')),

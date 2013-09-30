@@ -1454,7 +1454,7 @@ define('io.ox/mail/view-detail',
                             $('<div class="invitation">').text(gt('Someone shared a folder with you. Would you like to subscribe those %1$s?', label)),
                             $('<div class="subscription-actions">').append(
                                 $('<button type="button" class="btn" data-action="show">').text(gt('Show original publication')),
-                                "&nbsp;",
+                                '&nbsp;',
                                 $('<button type="button" class="btn btn-primary" data-action="subscribe">').text(gt('Subscribe'))
                             )
                         )

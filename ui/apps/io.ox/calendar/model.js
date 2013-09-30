@@ -21,12 +21,12 @@ define('io.ox/calendar/model',
         'io.ox/core/api/folder',
         'settings!io.ox/calendar'], function (api, ModelFactory, ext, gt, Validators, pModel, date, folderAPI, settings) {
 
-    "use strict";
+    'use strict';
 
     var defStart = new date.Local();
     defStart.setHours(defStart.getHours() + 1, 0, 0, 0);
 
-    var RECURRENCE_FIELDS = "recurrence_type interval days day_in_month month until occurrences".split(" ");
+    var RECURRENCE_FIELDS = 'recurrence_type interval days day_in_month month until occurrences'.split(' ');
 
     var factory = new ModelFactory({
         ref: 'io.ox/calendar/model',
@@ -123,12 +123,12 @@ define('io.ox/calendar/model',
         }
     });
 
-    ext.point("io.ox/calendar/model/validation").extend({
+    ext.point('io.ox/calendar/model/validation').extend({
         id: 'start-date-before-end-date',
         validate: function (attributes) {
             if (attributes.start_date && attributes.end_date && attributes.end_date < attributes.start_date) {
-                this.add('start_date', gt("The start date must be before the end date."));
-                this.add('end_date', gt("The start date must be before the end date."));
+                this.add('start_date', gt('The start date must be before the end date.'));
+                this.add('end_date', gt('The start date must be before the end date.'));
             }
         }
     });
@@ -166,13 +166,13 @@ define('io.ox/calendar/model',
     };
 
     DAYS.i18n = {
-        SUNDAY: gt("Sunday"),
-        MONDAY: gt("Monday"),
-        TUESDAY: gt("Tuesday"),
-        WEDNESDAY: gt("Wednesday"),
-        THURSDAY: gt("Thursday"),
-        FRIDAY: gt("Friday"),
-        SATURDAY: gt("Saturday")
+        SUNDAY: gt('Sunday'),
+        MONDAY: gt('Monday'),
+        TUESDAY: gt('Tuesday'),
+        WEDNESDAY: gt('Wednesday'),
+        THURSDAY: gt('Thursday'),
+        FRIDAY: gt('Friday'),
+        SATURDAY: gt('Saturday')
     };
 
     // Usage: DAYS.pack('monday', 'wednesday', 'friday') -> some bitmask
@@ -182,7 +182,7 @@ define('io.ox/calendar/model',
             var dayConst = DAYS[day.toUpperCase()];
 
             if (_.isUndefined(dayConst)) {
-                throw "Invalid day: " + day;
+                throw 'Invalid day: ' + day;
             }
             result = result | dayConst;
         });
@@ -204,7 +204,7 @@ define('io.ox/calendar/model',
         return days;
     };
 
-    DAYS.values = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+    DAYS.values = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
 
     return {
         setDefaultParticipants: function (model, options) {

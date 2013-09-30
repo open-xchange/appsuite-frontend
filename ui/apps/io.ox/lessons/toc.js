@@ -10,8 +10,8 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/lessons/toc",  function () {
-    "use strict";
+define('io.ox/lessons/toc',  function () {
+    'use strict';
     var id = 0;
     var TOC = {
         setUp: function (node) {
@@ -22,37 +22,37 @@ define("io.ox/lessons/toc",  function () {
                     var section = this.sections[id];
                     node.scrollTop(node.scrollTop() + section.offset().top - 100);
                     if (toc.activeSection) {
-                        this.elements[this.activeSection.attr("id")].removeClass("active");
+                        this.elements[this.activeSection.attr('id')].removeClass('active');
                     }
                     this.activeSection = section;
-                    this.elements[id].addClass("active");
+                    this.elements[id].addClass('active');
 
                 },
                 makeActive: function (id) {
                     var section = this.sections[id];
                     if (toc.activeSection) {
-                        this.elements[this.activeSection.attr("id")].removeClass("active");
+                        this.elements[this.activeSection.attr('id')].removeClass('active');
                     }
                     this.activeSection = section;
-                    this.elements[id].addClass("active");
+                    this.elements[id].addClass('active');
                 },
                 activeSection: null
             };
             id++;
 
-            var $nav = node.find(".navigation"),
-                $toc = $('<ul class="nav nav-stacked nav-pills span2">').attr("id", "io-ox-lessons-toc-" + id);
+            var $nav = node.find('.navigation'),
+                $toc = $('<ul class="nav nav-stacked nav-pills span2">').attr('id', 'io-ox-lessons-toc-' + id);
             if ($nav.length === 0) {
                 return;
             }
 
-            node.find("section").each(function (index, section) {
+            node.find('section').each(function (index, section) {
                 section = $(section);
-                var id = section.attr("id");
+                var id = section.attr('id');
 
-                var title = section.find(":header:first").text(), $item;
+                var title = section.find(':header:first').text(), $item;
                 $toc.append(
-                    $item = $('<li>').append($('<a href="#">').on("click", function (e) {
+                    $item = $('<li>').append($('<a href="#">').on('click', function (e) {
                         e.preventDefault();
                         toc.scrollTo(id);
 
@@ -70,7 +70,7 @@ define("io.ox/lessons/toc",  function () {
                 top: $toc.offset().top
             });
 
-            node.on("scroll", function () {
+            node.on('scroll', function () {
                 var visibleSection = _(toc.sections).chain().select(function (section) {
                     return section.offset().top - 300 < 0;
                 }).sortBy(function (section) {
@@ -82,7 +82,7 @@ define("io.ox/lessons/toc",  function () {
                 }
 
                 if (visibleSection !== toc.activeSection) {
-                    toc.makeActive(visibleSection.attr("id"));
+                    toc.makeActive(visibleSection.attr('id'));
                 }
             });
 

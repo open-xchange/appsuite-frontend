@@ -30,7 +30,7 @@ define('io.ox/mail/vacationnotice/settings/model',
             },
 
             preparedData = {
-                "actioncmds": [newAttributes]
+                'actioncmds': [newAttributes]
             };
 
         if (attributes.id !== undefined) {
@@ -55,17 +55,17 @@ define('io.ox/mail/vacationnotice/settings/model',
 
 
         var testForTimeframe = {
-                "id": "allof",
-                "tests": []
+                'id': 'allof',
+                'tests': []
             };
 
         if (attributes.dateFrom) {
             testForTimeframe.tests.push(
                 {
-                    "id": "currentdate",
-                    "comparison": "ge",
-                    "datepart": "date",
-                    "datevalue": [attributes.dateFrom]
+                    'id': 'currentdate',
+                    'comparison': 'ge',
+                    'datepart': 'date',
+                    'datevalue': [attributes.dateFrom]
                 }
             );
         }
@@ -73,16 +73,16 @@ define('io.ox/mail/vacationnotice/settings/model',
         if (attributes.dateUntil) {
             testForTimeframe.tests.push(
                 {
-                    "id": "currentdate",
-                    "comparison": "le",
-                    "datepart": "date",
-                    "datevalue": [attributes.dateUntil]
+                    'id': 'currentdate',
+                    'comparison': 'le',
+                    'datepart': 'date',
+                    'datevalue': [attributes.dateUntil]
                 }
             );
         }
 
         if (testForTimeframe.tests.length === 0 || attributes.activateTimeFrame === false) {
-            testForTimeframe = { id: "true" };
+            testForTimeframe = { id: 'true' };
         }
 
         preparedData.test = testForTimeframe;
@@ -103,8 +103,8 @@ define('io.ox/mail/vacationnotice/settings/model',
 
             create: function (model) {
                 var preparedData = providePreparedData(model.attributes);
-                preparedData.rulename = gt("vacation notice");
-                preparedData.flags = ["vacation"];
+                preparedData.rulename = gt('vacation notice');
+                preparedData.flags = ['vacation'];
 
                 return settingsUtil.yellOnReject(
                     api.create(preparedData)

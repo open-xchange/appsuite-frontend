@@ -189,37 +189,37 @@ define('io.ox/settings/main',
         _(configJumpSettings.get()).chain().keys().each(function (id) {
             var declaration = configJumpSettings.get(id);
             if (declaration.requires) {
-                if (!require("io.ox/core/capabilities").has(declaration.requires)) {
+                if (!require('io.ox/core/capabilities').has(declaration.requires)) {
                     return;
                 }
             }
-            ext.point("io.ox/settings/pane").extend(_.extend({
+            ext.point('io.ox/settings/pane').extend(_.extend({
                 id: id,
                 title: gt(declaration.title || ''),
                 ref: 'io.ox/configjump/' + id,
                 loadSettingPane: false
             }, declaration));
 
-            ext.point("io.ox/configjump/" + id + "/settings/detail").extend({
+            ext.point('io.ox/configjump/' + id + '/settings/detail').extend({
                 id: 'iframe',
                 index: 100,
                 draw: function () {
                     var $node = this;
-                    $node.css({height: "100%"});
+                    $node.css({height: '100%'});
                     var fillUpURL = $.Deferred();
 
-                    if (declaration.url.indexOf("[token]") > 0) {
+                    if (declaration.url.indexOf('[token]') > 0) {
                         // Grab token
                         $node.busy();
-                        require(["io.ox/core/http"], function (http) {
+                        require(['io.ox/core/http'], function (http) {
                             http.GET({
                                 module: 'token',
                                 params: {
                                     action: 'acquireToken'
                                 }
                             }).done(function (resp) {
-                                fillUpURL.resolve(declaration.url.replace("[token]", resp.token));
-                            }).fail(require("io.ox/core/notifications").yell);
+                                fillUpURL.resolve(declaration.url.replace('[token]', resp.token));
+                            }).fail(require('io.ox/core/notifications').yell);
                         });
                     } else {
                         fillUpURL.resolve(declaration.url);

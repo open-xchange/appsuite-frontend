@@ -74,7 +74,7 @@ define('io.ox/tasks/actions',
                                                                           'Tasks have been deleted!', numberOfTasks));
                                 popup.close();
                             }).fail(function (result) {
-                                if (result.code === "TSK-0019") { //task was already deleted somewhere else. everythings fine, just show info
+                                if (result.code === 'TSK-0019') { //task was already deleted somewhere else. everythings fine, just show info
                                     notifications.yell('info', gt('Task was already deleted!'));
                                     popup.close();
                                 } else if (result.error) {//there is an error message from the backend
@@ -155,9 +155,9 @@ define('io.ox/tasks/actions',
                         notifications.yell('success', mods.label);
                     })
                     .fail(function (result) {
-                        var errorMsg = gt("A severe error occurred!");
-                        if (result.code === "TSK-0007") {//task was modified before
-                            errorMsg = gt("Task was modified before, please reload");
+                        var errorMsg = gt('A severe error occurred!');
+                        if (result.code === 'TSK-0007') {//task was modified before
+                            errorMsg = gt('Task was modified before, please reload');
                         }
                         notifications.yell('error', errorMsg);
                     });
@@ -262,7 +262,7 @@ define('io.ox/tasks/actions',
                 var popup = editUtil.buildConfirmationPopup(data, dialogs, true);
                 //go
                 popup.popup.show().done(function (action) {
-                    if (action === "ChangeConfState") {
+                    if (action === 'ChangeConfState') {
                         var state = popup.state.prop('selectedIndex') + 1,
                             message = popup.message.val();
                         api.confirm({id: data.id,
@@ -271,7 +271,7 @@ define('io.ox/tasks/actions',
                                             confirmmessage: message}
                         }).done(function () {
                             //update detailview
-                            api.trigger("update:" + _.ecid({id: data.id, folder_id: data.folder_id}));
+                            api.trigger('update:' + _.ecid({id: data.id, folder_id: data.folder_id}));
                         });
                     }
                 });
@@ -507,7 +507,7 @@ define('io.ox/tasks/actions',
                     )
                     .delegate('li a', 'click', {task: data}, function (e) {
                         e.preventDefault();
-                        var finderId = $(this).attr("value");
+                        var finderId = $(this).attr('value');
                         ox.load(['io.ox/tasks/api']).done(function (api) {
                             var endDate = util.computePopupTime(new Date(), finderId).alarmDate,
                                 modifications = {end_date: endDate.getTime(),

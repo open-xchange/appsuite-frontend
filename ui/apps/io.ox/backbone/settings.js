@@ -10,8 +10,8 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/backbone/settings", ["io.ox/backbone/basicModel"], function (BasicModel) {
-    "use strict";
+define('io.ox/backbone/settings', ['io.ox/backbone/basicModel'], function (BasicModel) {
+    'use strict';
 
 
     var cache = {};
@@ -22,7 +22,7 @@ define("io.ox/backbone/settings", ["io.ox/backbone/basicModel"], function (Basic
                 return cache[ref];
             }
 
-            var settings = require("settings!" + ref);
+            var settings = require('settings!' + ref);
 
             var ModelClass = BasicModel.extend(_.extend({
                 ref: ref,

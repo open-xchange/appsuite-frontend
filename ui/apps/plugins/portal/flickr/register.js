@@ -53,7 +53,7 @@ define('plugins/portal/flickr/register',
                     url = '' + (apiUrl[props.method] || '') + encodeURIComponent(props.query) + '&jsoncallback=';
                     baton.feed = new Feed({ url: url });
                     baton.feed.process = function (data) {
-                        return data && data.stat === "ok" ? data.photos : { error: gt('Could not load data') };
+                        return data && data.stat === 'ok' ? data.photos : { error: gt('Could not load data') };
                     };
                 }
             }
@@ -211,7 +211,7 @@ define('plugins/portal/flickr/register',
             that = this,
             props = model.get('props') || {};
 
-        dialog.header($("<h4>").text(gt('Edit Flickr photo stream')))
+        dialog.header($('<h4>').text(gt('Edit Flickr photo stream')))
             .build(function () {
                 this.getContentNode().append(
                     $('<label>').text(gt('Search')),

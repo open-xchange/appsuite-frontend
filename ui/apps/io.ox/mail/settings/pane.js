@@ -70,7 +70,7 @@ define('io.ox/mail/settings/pane',
         reloadMe = ['contactCollectOnMailTransport', 'contactCollectOnMailAccess'];
 
     var MailSettingsView = Backbone.View.extend({
-        tagName: "div",
+        tagName: 'div',
         _modelBinder: undefined,
         initialize: function (options) {
             // create template
@@ -154,7 +154,7 @@ define('io.ox/mail/settings/pane',
             //     });
 
             //     if (showNotice) {
-            //         require("io.ox/core/notifications").yell("success", gt("The setting has been saved and will become active when you enter the application the next time."));
+            //         require('io.ox/core/notifications').yell('success', gt('The setting has been saved and will become active when you enter the application the next time.'));
             //     }
             // });
 

@@ -79,7 +79,7 @@ define('io.ox/mail/guidance/main',
 
                     // drop-down
                     $('<span class="dropdown">').append(
-                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1" >').text(gt('Folder actions')),
+                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">').text(gt('Folder actions')),
                         ul = $('<ul class="dropdown-menu compact" role="menu">')
                     )
                 )

@@ -40,7 +40,7 @@ define('plugins/portal/reddit/register',
                 mp.addFeed({
                     id: 'reddit-' + v.subreddit.replace(/[^a-z0-9]/g, '_') + '-' + v.mode.replace(/[^a-z0-9]/g, '_'),
                     description: v.subreddit,
-                    url: apiUrl[v.mode].split("##subreddit##").join(v.subreddit) + "&jsonp=",
+                    url: apiUrl[v.mode].split('##subreddit##').join(v.subreddit) + '&jsonp=',
                     index: index++
                 });
             }
@@ -49,15 +49,15 @@ define('plugins/portal/reddit/register',
         mp.setOptions({bigPreview: true});
 
         var extractImage = function (entry) {
-            var thumbUrl = "",
+            var thumbUrl = '',
                 big = mp.getOption('bigPreview');
 
             var directImages = ['whatgifs.com', 'imgur.com', 'i.imgur.com', 'i.minus.com'];
 
             if (_.include(directImages, entry.domain)) {
                 if (big) {
-                    if (entry.domain === "imgur.com") {
-                        thumbUrl = entry.url.replace(/http:\/\/imgur/g, 'http://i.imgur') + ".jpg";
+                    if (entry.domain === 'imgur.com') {
+                        thumbUrl = entry.url.replace(/http:\/\/imgur/g, 'http://i.imgur') + '.jpg';
                     } else {
                         thumbUrl = entry.url;
                     }
@@ -86,7 +86,7 @@ define('plugins/portal/reddit/register',
     //            }
 
                 if (offset) {
-                    myurl += "&after=" + lastShowedPreview;
+                    myurl += '&after=' + lastShowedPreview;
                 }
 
                 return myurl;
@@ -110,16 +110,16 @@ define('plugins/portal/reddit/register',
                 thumbUrl = extractImage(entry);
 
                 if (!thumbUrl && !title) {
-                    $node.append($("<div>").addClass("mediaplugin-title").text(gt("No title.")));
+                    $node.append($('<div>').addClass('mediaplugin-title').text(gt('No title.')));
                 } else if (title) {
-                    $node.append($("<div>").addClass("mediaplugin-title").text(title));
+                    $node.append($('<div>').addClass('mediaplugin-title').text(title));
                 }
 
-                $node.append($("<div>").addClass("mediaplugin-content mediaplugin-textbackground").text(entry.created_utc ? new date.Local(entry.created_utc * 1000).format(date.DATE_TIME) : ""));
+                $node.append($('<div>').addClass('mediaplugin-content mediaplugin-textbackground').text(entry.created_utc ? new date.Local(entry.created_utc * 1000).format(date.DATE_TIME) : ''));
 
                 lastShowedPreview = entry.name;
 
-                if (thumbUrl !== "") {
+                if (thumbUrl !== '') {
                     var $img = $('<img/>', {'data-original': thumbUrl});
                     return $img;
                 }
@@ -142,7 +142,7 @@ define('plugins/portal/reddit/register',
                     title = gt('No title.');
                 }
 
-                var $title = $("<div>").addClass("mediaplugin-title").text(title).css({width: maxWidth});
+                var $title = $('<div>').addClass('mediaplugin-title').text(title).css({width: maxWidth});
                 maxHeight -= $title.height();
                 $title.appendTo($node);
 
@@ -153,7 +153,7 @@ define('plugins/portal/reddit/register',
                 } else  if (imageUrl) {
                     willDisableBusyIndicator = true;
 
-                    $img = $("<img/>", {'src': imageUrl}).css({display: 'none'})
+                    $img = $('<img/>', {'src': imageUrl}).css({display: 'none'})
                         .load(function () {
                             if ($busyIndicator) {
                                 $busyIndicator.detach();

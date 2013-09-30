@@ -11,8 +11,8 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/oauth/proxy', ["io.ox/core/http"], function (http) {
-    "use strict";
+define('io.ox/oauth/proxy', ['io.ox/core/http'], function (http) {
+    'use strict';
 
     var that = {
         request: function (options) {
@@ -27,7 +27,7 @@ define('io.ox/oauth/proxy', ["io.ox/core/http"], function (http) {
                 delete options.account;
             }
             return http.PUT({
-                module: "oauth/proxy",
+                module: 'oauth/proxy',
                 params: params,
                 data: options
             });

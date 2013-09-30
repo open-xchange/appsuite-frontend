@@ -20,7 +20,7 @@ define('io.ox/core/settings/defaults', function (ext) {
     if (!ox.serverConfig || !ox.serverConfig.languages) {
         defaultLanguage = 'en_US';
     } else {
-        defaultLanguage = _(ox.serverConfig.languages).contains("en_US") ? 'en_US' : ox.serverConfig.languages[0];
+        defaultLanguage = _(ox.serverConfig.languages).contains('en_US') ? 'en_US' : ox.serverConfig.languages[0];
     }
     var cookieLanguage = _.getCookie('language');
     if (cookieLanguage) {

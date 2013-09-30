@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/core/cache/simple', ["io.ox/core/extensions"], function (ext) {
+define('io.ox/core/cache/simple', ['io.ox/core/extensions'], function (ext) {
 
     'use strict';
 
@@ -81,7 +81,7 @@ define('io.ox/core/cache/simple', ["io.ox/core/extensions"], function (ext) {
         }
     };
 
-    ext.point("io.ox/core/cache/storage").extend(that);
+    ext.point('io.ox/core/cache/storage').extend(that);
 
     return that;
 });

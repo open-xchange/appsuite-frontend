@@ -10,8 +10,8 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/core'], function (ext, gt) {
-    "use strict";
+define('io.ox/backbone/basicModel', [ 'io.ox/core/extensions', 'gettext!io.ox/core'], function (ext, gt) {
+    'use strict';
 
     function ValidationErrors() {
 
@@ -69,9 +69,9 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
             var self = this,
                 errors = new ValidationErrors();
             attributes = attributes || this.toJSON();
-            this.point("validation").invoke("validate", errors, attributes, errors, this);
+            this.point('validation').invoke('validate', errors, attributes, errors, this);
             if (options.isSave) {
-                this.point("validation/save").invoke("validate", errors, attributes, errors, this);
+                this.point('validation/save').invoke('validate', errors, attributes, errors, this);
             }
             if (errors.hasErrors()) {
                 var validAttributes = {};
@@ -80,7 +80,7 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
                 });
                 errors.each(function (messages, attribute) {
                     validAttributes[attribute] = false;
-                    self.trigger("invalid:" + attribute, messages, errors, self);
+                    self.trigger('invalid:' + attribute, messages, errors, self);
                 });
                 // Trigger a valid:attribute event for all attributes that have turned valid
                 _(self.attributeValidity).each(function (wasValid, attribute) {
@@ -140,11 +140,11 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
                         self.trigger(action + ':fail', response);
                         self.trigger('sync:fail', response);
                     }).always(function () {
-                        self.trigger(action + ":always");
+                        self.trigger(action + ':always');
                         self.trigger('sync:always');
                     });
             } else {
-                throw "No Syncer specified!";
+                throw 'No Syncer specified!';
             }
         },
         isSet: function () {

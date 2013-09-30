@@ -444,8 +444,8 @@ define('io.ox/core/commons-folderview',
                                         .prop('readonly', true)
                                         .val(
                                             _.noI18n(caldavConfig.get('url')
-                                                .replace("[hostname]", location.host)
-                                                .replace("[folderId]", id)
+                                                .replace('[hostname]', location.host)
+                                                .replace('[folderId]', id)
                                         )
                                     )
                                 )

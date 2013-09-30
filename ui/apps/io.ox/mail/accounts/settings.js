@@ -14,7 +14,7 @@
 define('io.ox/mail/accounts/settings',
       ['io.ox/core/extensions',
        'io.ox/core/api/account',
-       "io.ox/mail/accounts/model",
+       'io.ox/mail/accounts/model',
        'io.ox/mail/accounts/view-form',
        'io.ox/core/tk/dialogs',
        'io.ox/core/notifications',
@@ -27,7 +27,7 @@ define('io.ox/mail/accounts/settings',
     function renderDetailView(evt, data) {
         var myView, myModel, myViewNode;
 
-        myViewNode = $("<div>").addClass("accountDetail");
+        myViewNode = $('<div>').addClass('accountDetail');
         myModel = new AccountModel(data);
         myView = new AccountDetailView({model: myModel, node: myViewNode});
 
@@ -39,8 +39,8 @@ define('io.ox/mail/accounts/settings',
         myView.dialog.append(
             myView.render().el
         )
-        .addPrimaryButton("save", gt('Save'))
-        .addButton("cancel", gt('Cancel'))
+        .addPrimaryButton('save', gt('Save'))
+        .addButton('cancel', gt('Cancel'))
         .show(function () {
             this.find('input[type=text]:first').focus();
         });
@@ -60,9 +60,9 @@ define('io.ox/mail/accounts/settings',
         return myView.node;
     }
 
-    ext.point("io.ox/settings/accounts/mail/settings/detail").extend({
+    ext.point('io.ox/settings/accounts/mail/settings/detail').extend({
         index: 200,
-        id: "emailaccountssettings",
+        id: 'emailaccountssettings',
         draw: function (evt) {
             if (evt.data.id >= 0) {
                 api.get(evt.data.id).done(function (obj) {

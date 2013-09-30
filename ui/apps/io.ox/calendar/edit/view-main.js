@@ -30,7 +30,7 @@ define('io.ox/calendar/edit/view-main',
                 ext.point('io.ox/calendar/edit/section/buttons').disable('discard');
             }
 
-            ext.point('io.ox/calendar/edit/section/header').invoke("draw", self.$el, self.baton);
+            ext.point('io.ox/calendar/edit/section/header').invoke('draw', self.$el, self.baton);
 
             this.point.each(function (extension) {
                 var row = null;
@@ -51,7 +51,7 @@ define('io.ox/calendar/edit/view-main',
                 var $rowNode = $('<div class="row-fluid">').appendTo(self.$el);
                 _(row).each(function (extension) {
                     $rowNode.addClass(extension.rowClass || '');
-                    extension.invoke("draw", $rowNode, self.baton);
+                    extension.invoke('draw', $rowNode, self.baton);
                 });
             });
 

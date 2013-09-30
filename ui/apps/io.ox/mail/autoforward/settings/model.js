@@ -26,25 +26,25 @@ define('io.ox/mail/autoforward/settings/model',
             return {};
         } else {
             var preparedData = {
-                    "rulename": "autoforward",
+                    'rulename': 'autoforward',
 
-                    "test": {
-                        "id": "header",
-                        "comparison": "contains",
-                        "values": [attributes.userMainEmail],
-                        "headers": ["To"]
+                    'test': {
+                        'id': 'header',
+                        'comparison': 'contains',
+                        'values': [attributes.userMainEmail],
+                        'headers': ['To']
                     },
-                    "actioncmds": [
+                    'actioncmds': [
                         {
-                            "id": "redirect",
-                            "to": attributes.forwardmail
+                            'id': 'redirect',
+                            'to': attributes.forwardmail
                         },
                         {
-                            "id": "keep"
+                            'id': 'keep'
                         }
                     ],
-                    "flags": ["autoforward"],
-                    "active": attributes.active ? true : false
+                    'flags': ['autoforward'],
+                    'active': attributes.active ? true : false
                 };
             if (attributes.id) {
                 preparedData.id = attributes.id;

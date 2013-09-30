@@ -100,12 +100,12 @@ define('io.ox/core/print',
                             width: window.innerWidth * 0.9,
                             height: dHeight
                         })
-                        .addPrimaryButton("print", gt('Print'), null, {
+                        .addPrimaryButton('print', gt('Print'), null, {
                             click: function () {
                                 win.print();
                             }
                         })
-                        .addButton("cancel", gt("Cancel"));
+                        .addButton('cancel', gt('Cancel'));
                     dHeight -= 100;
                     dialog.getBody().css({
                         height: dHeight,

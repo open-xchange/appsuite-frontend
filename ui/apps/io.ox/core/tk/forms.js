@@ -253,7 +253,7 @@ define('io.ox/core/tk/forms',
         createLabel: function (options) {
             var label,
                 forTag = utils.connectLabelToField(options['for']);
-            options.text = options.text || "";
+            options.text = options.text || '';
 
             label = $('<label>');
             label.attr('for', forTag);
@@ -367,7 +367,7 @@ define('io.ox/core/tk/forms',
                     utils.createFileField({
                         wrap: false,
                         accept: 'image/*',
-                        "data-property": o.name,
+                        'data-property': o.name,
                         name: o.name
                     })
                 )

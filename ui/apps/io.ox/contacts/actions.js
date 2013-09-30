@@ -131,12 +131,12 @@ define('io.ox/contacts/actions',
                 require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/api/folder'], function (dialogs, views, folderAPI) {
 
                     function commit(target) {
-                        if (type === "move" && vGrid) vGrid.busy();
+                        if (type === 'move' && vGrid) vGrid.busy();
                         api[type](list, target).then(
                             function () {
                                 notifications.yell('success', success);
                                 folderAPI.reload(target, list);
-                                if (type === "move" && vGrid) vGrid.idle();
+                                if (type === 'move' && vGrid) vGrid.idle();
                             },
                             notifications.yell
                         );
@@ -147,8 +147,8 @@ define('io.ox/contacts/actions',
                     } else {
                         var dialog = new dialogs.ModalDialog()
                             .header($('<h4>').text(label))
-                            .addPrimaryButton("ok", label)
-                            .addButton("cancel", gt("Cancel"));
+                            .addPrimaryButton('ok', label)
+                            .addButton('cancel', gt('Cancel'));
                         dialog.getBody().css({ height: '250px' });
                         var folderId = String(list[0].folder_id),
                             id = settings.get('folderpopup/last') || folderId,

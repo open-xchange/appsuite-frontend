@@ -33,7 +33,7 @@ define('io.ox/calendar/edit/main',
                 var self = this;
                 if (_.browser.IE === undefined || _.browser.IE > 9) {
                     this.dropZone = new dnd.UploadZone({
-                        ref: "io.ox/calendar/edit/dnd/actions"
+                        ref: 'io.ox/calendar/edit/dnd/actions'
                     }, this);
                 }
             },
@@ -46,7 +46,7 @@ define('io.ox/calendar/edit/main',
                 if (self.getDirtyStatus()) {
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
                         new dialogs.ModalDialog()
-                            .text(gt("Do you really want to discard your changes?"))
+                            .text(gt('Do you really want to discard your changes?'))
                             .addPrimaryButton('delete', gt('Discard'))
                             .addButton('cancel', gt('Cancel'))
                             .show()
@@ -143,7 +143,7 @@ define('io.ox/calendar/edit/main',
 
                                 ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/conflicts/conflictList']).done(function (dialogs, conflictView) {
                                     var dialog = new dialogs.ModalDialog({
-                                            top: "20%",
+                                            top: '20%',
                                             center: false,
                                             container: self.getWindowNode()
                                         })

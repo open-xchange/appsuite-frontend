@@ -22,7 +22,7 @@ define('io.ox/mail/autoforward/settings/view-form', [
     'less!io.ox/mail/autoforward/settings/style.less'
 ], function (model, views, forms, actions, links, date, notifications, gt) {
 
-    "use strict";
+    'use strict';
 
     function createAutoForwardEdit(ref, multiValues) {
         var point = views.point(ref + '/edit/view'),

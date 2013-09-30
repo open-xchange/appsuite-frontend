@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("plugins/portal/linkedIn/register",
+define('plugins/portal/linkedIn/register',
     ['io.ox/core/extensions',
      'io.ox/core/http',
      'io.ox/oauth/proxy',
@@ -20,19 +20,19 @@ define("plugins/portal/linkedIn/register",
      'io.ox/core/capabilities',
      'gettext!plugins/portal'], function (ext, http, proxy, strings, keychain, capabilities, gt) {
 
-    "use strict";
+    'use strict';
 
     function fnClick(e) {
 
         var person = e.data;
         e.preventDefault();
 
-        require(["io.ox/linkedIn/view-detail", "io.ox/core/tk/dialogs"], function (viewer, dialogs) {
+        require(['io.ox/linkedIn/view-detail', 'io.ox/core/tk/dialogs'], function (viewer, dialogs) {
 
-            var busy = $("<div>")
-                    .css("minHeight", "100px")
+            var busy = $('<div>')
+                    .css('minHeight', '100px')
                     .busy(),
-                node = $("<div>")
+                node = $('<div>')
                     .append(viewer.draw(person))
                     .append(busy);
 
@@ -42,9 +42,9 @@ define("plugins/portal/linkedIn/register",
                 });
 
             return http.GET({
-                    module: "integrations/linkedin/portal",
+                    module: 'integrations/linkedin/portal',
                     params: {
-                        action: "fullProfile",
+                        action: 'fullProfile',
                         id: person.id
                     }
                 })
@@ -57,28 +57,28 @@ define("plugins/portal/linkedIn/register",
     }
 
     function displayName(person) {
-        var dname = person.firstName + " " + person.lastName;
-        return $("<a href='#' />")
+        var dname = person.firstName + ' ' + person.lastName;
+        return $('<a href="#" />')
             .text(dname)
-            .on("click", person, fnClick);
+            .on('click', person, fnClick);
     }
 
-    ext.point("io.ox/plugins/portal/linkedIn/updates/renderer").extend({
-        id: "CONN",
+    ext.point('io.ox/plugins/portal/linkedIn/updates/renderer').extend({
+        id: 'CONN',
         draw: function (activity) {
 
             var deferred = new $.Deferred();
 
-            if (activity.updateType !== "CONN") {
+            if (activity.updateType !== 'CONN') {
                 return deferred.resolve();
             }
 
-            var $updateEntry = $("<div/>")
-                    .addClass("io-ox-portal-linkedin-updates-entry")
+            var $updateEntry = $('<div/>')
+                    .addClass('io-ox-portal-linkedin-updates-entry')
                     .appendTo(this),
 
-                $detailEntry = $("<div/>")
-                    .addClass("io-ox-portal-linkedin-updates-details")
+                $detailEntry = $('<div/>')
+                    .addClass('io-ox-portal-linkedin-updates-details')
                     .hide().appendTo(this),
 
                 self = $(this);
@@ -87,7 +87,7 @@ define("plugins/portal/linkedIn/register",
             if (activity.updateContent.person.connections) {
                 $updateEntry.append(
                     displayName(activity.updateContent.person),
-                    $("<span>").text(" is now connected with "),
+                    $('<span>').text(' is now connected with '),
                     displayName(activity.updateContent.person.connections.values[0])
                 );
             }
@@ -98,7 +98,7 @@ define("plugins/portal/linkedIn/register",
 
     var handleError = function (node, baton) {
         var data = baton.data;
-        console.error("LinkedIn error occurred", '(' + data.errorCode + ') ' + data.message);
+        console.error('LinkedIn error occurred', '(' + data.errorCode + ') ' + data.message);
         node.append(
             $('<div class="error bold">').text(gt('LinkedIn reported an error:')),
             $('<div class="errormessage">').text('(' + data.errorCode + ') ' + data.message)
@@ -108,9 +108,9 @@ define("plugins/portal/linkedIn/register",
             node.append(
                 $('<a class="solution">').text(gt('Click to authorize your account again')).on('click', function () {
                     keychain.submodules.linkedin.reauthorize(account).done(function () {
-                        console.log(gt("You have reauthorized this %s account.", 'LinkedIn'));
+                        console.log(gt('You have reauthorized this %s account.', 'LinkedIn'));
                     }).fail(function () {
-                        console.error(gt("Something went wrong reauthorizing the %s account.", 'LinkedIn'));
+                        console.error(gt('Something went wrong reauthorizing the %s account.', 'LinkedIn'));
                     });
                 })
             );
@@ -122,8 +122,8 @@ define("plugins/portal/linkedIn/register",
     };
 
 
-    if (capabilities.has("linkedinPlus")) {
-        ext.point("io.ox/portal/widget/linkedIn").extend({
+    if (capabilities.has('linkedinPlus')) {
+        ext.point('io.ox/portal/widget/linkedIn').extend({
 
             title: 'LinkedIn',
 
@@ -136,7 +136,7 @@ define("plugins/portal/linkedIn/register",
             },
 
             performSetUp: function () {
-                var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
+                var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
                 return keychain.createInteractively('linkedin', win);
             },
 
@@ -170,7 +170,7 @@ define("plugins/portal/linkedIn/register",
                     _(baton.data).each(function (message) {
                         content.append(
                             $('<div class="paragraph">').append(
-                                $('<span class="bold">').text(message.from.person.firstName + " " + message.from.person.lastName + ": "),
+                                $('<span class="bold">').text(message.from.person.firstName + ' ' + message.from.person.lastName + ': '),
                                 $('<span class="normal">').text(message.subject), $.txt(' '),
                                 $('<span class="gray">').text(message.body)
                             )
@@ -193,18 +193,18 @@ define("plugins/portal/linkedIn/register",
                 var node = $('<div class="portal-feed linkedin-content">');
 
                 node.append(
-                    $("<h1>").text(gt("LinkedIn Network Updates"))
+                    $('<h1>').text(gt('LinkedIn Network Updates'))
                 );
 
                 if (baton.data) {
                     node.append(
-                        $('<h2 class="linkedin-messages-header">').text(gt("Your messages"))
+                        $('<h2 class="linkedin-messages-header">').text(gt('Your messages'))
                     );
                     _(baton.data).each(function (message, index) {
                         node.addClass(index % 2 ? 'odd' : 'even')
                         .append(
                             $('<div class="linkedin-message">').append(
-                                $('<span class="linkedin-name">').append(displayName(message.from.person), ": "),
+                                $('<span class="linkedin-name">').append(displayName(message.from.person), ': '),
                                 $('<span class="linkedin-subject">').html(_.escape(message.subject)),
                                 $('<div class="linkedin-body">').html(_.escape(message.body).replace(/\n/g, '<br>'))
                             )
@@ -213,16 +213,16 @@ define("plugins/portal/linkedIn/register",
                 }
 
                 http.GET({
-                    module: "integrations/linkedin/portal",
-                    params: { action: "updates" }
+                    module: 'integrations/linkedin/portal',
+                    params: { action: 'updates' }
                 })
                 .done(function (activities) {
                     if (activities.values && activities.values !== 0) {
                         node.append(
-                            $('<h2 class="linkedin-activities-header">').text(gt("Recent activities"))
+                            $('<h2 class="linkedin-activities-header">').text(gt('Recent activities'))
                         );
                         _(activities.values).each(function (activity) {
-                            ext.point("io.ox/plugins/portal/linkedIn/updates/renderer").invoke("draw", node, activity);
+                            ext.point('io.ox/plugins/portal/linkedIn/updates/renderer').invoke('draw', node, activity);
                         });
                     }
                 });
@@ -241,7 +241,7 @@ define("plugins/portal/linkedIn/register",
             }
         });
     } else {
-        ext.point("io.ox/portal/widget/linkedIn").extend({
+        ext.point('io.ox/portal/widget/linkedIn').extend({
 
             title: 'LinkedIn',
 
@@ -254,14 +254,14 @@ define("plugins/portal/linkedIn/register",
             },
 
             performSetUp: function () {
-                var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
+                var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
                 return keychain.createInteractively('linkedin', win);
             },
 
             load: function (baton) {
                 return http.GET({
-                    module: "integrations/linkedin/portal",
-                    params: { action: "updates" }
+                    module: 'integrations/linkedin/portal',
+                    params: { action: 'updates' }
                 })
                 .then(function (activities) {
                     if (activities.values && activities.values !== 0) {
@@ -284,7 +284,7 @@ define("plugins/portal/linkedIn/register",
                     content.addClass('pointer');
 
                     _(previewData).each(function (activity) {
-                        ext.point("portal/linkedIn/updates/renderer").invoke("draw", content, activity);
+                        ext.point('portal/linkedIn/updates/renderer').invoke('draw', content, activity);
                     });
                 } else if (baton.data && baton.data.errorCode !== undefined) {
                     content.removeClass('pointer');
@@ -301,31 +301,31 @@ define("plugins/portal/linkedIn/register",
             draw: function (baton) {
 
                 var node = $('<div class="portal-feed linkedin-content">');
-                var profile = $("<div>");
+                var profile = $('<div>');
                 node.append(profile);
 
                 http.GET({
-                    module: "integrations/linkedin/portal",
+                    module: 'integrations/linkedin/portal',
                     params: {
-                        action: "fullProfile",
-                        id: "~"
+                        action: 'fullProfile',
+                        id: '~'
                     }
                 })
                 .done(function (completeProfile) {
-                    require(["io.ox/linkedIn/view-detail"], function (viewer) {
+                    require(['io.ox/linkedIn/view-detail'], function (viewer) {
                         profile.empty()
                             .append(viewer.draw(completeProfile));
                     });
                 });
 
                 node.append(
-                    $('<h2 class="linkedin-activities-header">').text(gt("Recent activities"))
+                    $('<h2 class="linkedin-activities-header">').text(gt('Recent activities'))
                 );
-        
+
                 _(baton.data).each(function (activity) {
-                    ext.point("portal/linkedIn/updates/renderer").invoke("draw", node, activity);
+                    ext.point('portal/linkedIn/updates/renderer').invoke('draw', node, activity);
                 });
-                
+
 
                 this.append(node);
             },

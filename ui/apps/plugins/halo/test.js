@@ -11,10 +11,10 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("plugins/halo/test",
-    ["io.ox/core/extensions", "plugins/halo/config"], function (ext, haloConfig) {
+define('plugins/halo/test',
+    ['io.ox/core/extensions', 'plugins/halo/config'], function (ext, haloConfig) {
 
-    "use strict";
+    'use strict';
 
     /*
      * Suite: HALO config
@@ -26,72 +26,72 @@ define("plugins/halo/test",
 
             var describe = j.describe, it = j.it, expect = j.expect;
 
-            describe("HALO config", function () {
+            describe('HALO config', function () {
 
-                it("defaults to all available halo modules", function () {
-                    var activeProviders = haloConfig.interpret(null, ["halo1", "halo2", "halo3"]);
-                    expect(activeProviders).toEqual(["halo1", "halo2", "halo3"]);
+                it('defaults to all available halo modules', function () {
+                    var activeProviders = haloConfig.interpret(null, ['halo1', 'halo2', 'halo3']);
+                    expect(activeProviders).toEqual(['halo1', 'halo2', 'halo3']);
                 });
 
-                it("filters according to chosenModules", function () {
+                it('filters according to chosenModules', function () {
                     var activeProviders = haloConfig.interpret({
                         halo1: {
-                            provider: "halo1",
+                            provider: 'halo1',
                             position: 0,
                             enabled: true
                         },
                         halo2: {
-                            provider: "halo2",
+                            provider: 'halo2',
                             position: 1,
                             enabled: false
                         },
                         halo3: {
-                            provider: "halo3",
+                            provider: 'halo3',
                             position: 2,
                             enabled: true
                         }
-                    }, ["halo1", "halo2", "halo3"]);
+                    }, ['halo1', 'halo2', 'halo3']);
 
-                    expect(activeProviders).toEqual(["halo1", "halo3"]);
+                    expect(activeProviders).toEqual(['halo1', 'halo3']);
                 });
 
-                it("discards chosen but unavailable modules", function () {
+                it('discards chosen but unavailable modules', function () {
                     var activeProviders = new haloConfig.interpret({
                         halo1: {
-                            provider: "halo1",
+                            provider: 'halo1',
                             position: 0,
                             enabled: true
                         },
                         halo2: {
-                            provider: "halo2",
+                            provider: 'halo2',
                             position: 1,
                             enabled: true
                         }
-                    }, ["halo1"]);
+                    }, ['halo1']);
 
-                    expect(activeProviders).toEqual(["halo1"]);
+                    expect(activeProviders).toEqual(['halo1']);
                 });
 
-                it("respects the order of chosenModules", function () {
+                it('respects the order of chosenModules', function () {
                     var activeProviders = new haloConfig.interpret({
                         halo3: {
-                            provider: "halo3",
+                            provider: 'halo3',
                             position: 2,
                             enabled: true
                         },
                         halo1: {
-                            provider: "halo1",
+                            provider: 'halo1',
                             position: 0,
                             enabled: true
                         },
                         halo2: {
-                            provider: "halo2",
+                            provider: 'halo2',
                             position: 1,
                             enabled: true
                         }
-                    }, ["halo1", "halo2", "halo3"]);
+                    }, ['halo1', 'halo2', 'halo3']);
 
-                    expect(activeProviders).toEqual(["halo1", "halo2", "halo3"]);
+                    expect(activeProviders).toEqual(['halo1', 'halo2', 'halo3']);
                 });
             });
         }

@@ -182,7 +182,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             return this.notifications[key];
         },
         slowClose: function () {
-            $('#io-ox-notifications-overlay').off("mail-detail-closed");
+            $('#io-ox-notifications-overlay').off('mail-detail-closed');
             this.hideList();
         },
         updateNotification: function () {

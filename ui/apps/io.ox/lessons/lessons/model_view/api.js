@@ -10,16 +10,16 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/lessons/lessons/model_view/api", ["io.ox/core/event"], function (Events) {
-    "use strict";
+define('io.ox/lessons/lessons/model_view/api', ['io.ox/core/event'], function (Events) {
+    'use strict';
 
     var db = {
         1: {
             id: 1,
             folder_id: 12,
             title: 'Water',
-            ingredients: ["A glass", "Some Water"],
-            description: "Pour the water into the glass. Serve with desired temperature.",
+            ingredients: ['A glass', 'Some Water'],
+            description: 'Pour the water into the glass. Serve with desired temperature.',
             servings: 1
         },
         2: {
@@ -27,7 +27,7 @@ define("io.ox/lessons/lessons/model_view/api", ["io.ox/core/event"], function (E
             folder_id: 12,
             title: 'Pieces of melon',
             ingredients: ['A melon', 'Marshmellows', 'Peanut Butter'],
-            description: "Half the melon. Serve on a plate with a spoon. Dig holes with the spoon and dump in marshmellows or peanut butter to you liking",
+            description: 'Half the melon. Serve on a plate with a spoon. Dig holes with the spoon and dump in marshmellows or peanut butter to you liking',
             servings: 2
         },
         3: {
@@ -75,7 +75,7 @@ define("io.ox/lessons/lessons/model_view/api", ["io.ox/core/event"], function (E
             nextId++;
 
             db[element.id] = element;
-            this.trigger("created", element);
+            this.trigger('created', element);
 
             return $.Deferred().resolve({id: element.id});
         },
@@ -83,7 +83,7 @@ define("io.ox/lessons/lessons/model_view/api", ["io.ox/core/event"], function (E
         update: function (options) {
             if (db[options.id] && db[options.id].folder_id === options.folder) {
                 _.extend(db[options.id], options);
-                this.trigger("update", {id: options.id, folder: options.folder});
+                this.trigger('update', {id: options.id, folder: options.folder});
                 return $.Deferred().resolve({});
             }
 
@@ -93,7 +93,7 @@ define("io.ox/lessons/lessons/model_view/api", ["io.ox/core/event"], function (E
         remove: function (options) {
             if (db[options.id] && db[options.id].folder_id === options.folder) {
                 delete db[options.id];
-                this.trigger("delete", {id: options.id, folder: options.folder});
+                this.trigger('delete', {id: options.id, folder: options.folder});
                 return $.Deferred().resolve({});
             }
             return $.Deferred.rejec({error: 'Cannot resolve id %1$s in folder %2$s', error_params: [options.id, options.folder]});

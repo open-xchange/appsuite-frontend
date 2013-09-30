@@ -61,7 +61,7 @@ define('io.ox/core/about/about',
                     );
                     ext.point('io.ox/core/about').invoke('draw', this.getContentNode(), data);
                 })
-                .addPrimaryButton("cancel", gt('Close'))
+                .addPrimaryButton('cancel', gt('Close'))
                 .show();
         }
     };

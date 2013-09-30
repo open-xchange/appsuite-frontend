@@ -306,7 +306,7 @@ define('io.ox/tasks/api',
         if (task.alarm === null) {//task.alarm must not be null on creation, it's only used to delete an alarm on update actions
             delete task.alarm;    //leaving it in would throw a backend error
         }
-        
+
         if (task.status === 3 || task.status === '3') {
             task.date_completed = task.date_completed || _.now();//make sure we have date_completed
         } else {
@@ -502,7 +502,7 @@ define('io.ox/tasks/api',
             data: options.data, // object with confirmation attribute
             appendColumns: false
         }).pipe(function (response) {
-            api.trigger("mark:task:confirmed", [{id: options.id, data: options.data}]);
+            api.trigger('mark:task:confirmed', [{id: options.id, data: options.data}]);
             // update cache
             return api.removeFromCache(key);
         });

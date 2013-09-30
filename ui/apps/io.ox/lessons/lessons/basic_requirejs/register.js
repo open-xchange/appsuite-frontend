@@ -11,21 +11,21 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/lessons/lessons/basic_requirejs/register', ['io.ox/core/extensions', 'io.ox/lessons/editor', 'io.ox/lessons/toc', 'gettext!io.ox/lessons/lessons/basic_requirejs/lang'], function (ext, Editor, TOC, gt) {
-    "use strict";
+    'use strict';
     // We need some sample translations
     gt('Hello');
     gt('Good morning');
     gt('Good evening');
 
-    ext.point("io.ox/lessons/lesson").extend({
+    ext.point('io.ox/lessons/lesson').extend({
         id: 'basic_requirejs',
         index: 300,
         title: 'RequireJS',
         description: 'In which dependencies will be resolved',
-        section: "Basics",
+        section: 'Basics',
         start: function (options) {
             var win = options.win;
-            require(["text!io.ox/lessons/lessons/basic_requirejs/lesson.html"], function (html) {
+            require(['text!io.ox/lessons/lessons/basic_requirejs/lesson.html'], function (html) {
                 var win = options.win;
                 win.nodes.main.empty().append($(html));
                 TOC.setUp(win.nodes.main);

@@ -11,15 +11,15 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/calendar/main",
-    ["io.ox/core/date",
-     "settings!io.ox/core",
-     "io.ox/core/commons",
-     "settings!io.ox/calendar",
-     "io.ox/calendar/actions",
-     "less!io.ox/calendar/style.less"], function (date, coreConfig, commons, settings) {
+define('io.ox/calendar/main',
+    ['io.ox/core/date',
+     'settings!io.ox/core',
+     'io.ox/core/commons',
+     'settings!io.ox/calendar',
+     'io.ox/calendar/actions',
+     'less!io.ox/calendar/style.less'], function (date, coreConfig, commons, settings) {
 
-    "use strict";
+    'use strict';
 
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/calendar', title: 'Calendar' }),
@@ -47,7 +47,7 @@ define("io.ox/calendar/main",
         app.settings = settings;
         app.refDate = new date.Local();
 
-        win.addClass("io-ox-calendar-main");
+        win.addClass('io-ox-calendar-main');
 
         // folder tree
         commons.addFolderView(app, { type: 'calendar', view: 'FolderList' });

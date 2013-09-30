@@ -10,13 +10,13 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/backbone/validation",
-    ["io.ox/core/extensions",
-     "io.ox/core/util",
+define('io.ox/backbone/validation',
+    ['io.ox/core/extensions',
+     'io.ox/core/util',
      'settings!io.ox/core',
      'gettext!io.ox/backbone/validation'], function (ext, util, settings, gt) {
 
-    "use strict";
+    'use strict';
 
     // var regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
@@ -83,9 +83,9 @@ define("io.ox/backbone/validation",
         }
     };
 
-    ext.point("io.ox/backbone/validation/formats").invoke('customize', formats, formats);
+    ext.point('io.ox/backbone/validation/formats').invoke('customize', formats, formats);
 
-    ext.point("io.ox/backbone/validation/formats").on('extended', function (extension) {
+    ext.point('io.ox/backbone/validation/formats').on('extended', function (extension) {
         extension.invoke('customize', formats, formats);
     });
 
@@ -125,8 +125,8 @@ define("io.ox/backbone/validation",
                 });
 
                 if (definition.mandatory) {
-                    ext.point(validationNamespace + "/save").extend({
-                        id: attribute + "-is-mandatory",
+                    ext.point(validationNamespace + '/save').extend({
+                        id: attribute + '-is-mandatory',
                         validate: function (attributes, errors) {
                             var value = attributes[attribute];
 

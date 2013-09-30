@@ -15,19 +15,19 @@
  The keychain plugin. Use io.ox/keychain/api to interact with OAuth accounts
  **/
 
-define.async("io.ox/oauth/keychain",
-    ["io.ox/core/extensions",
-     "io.ox/core/http",
-     "io.ox/core/event",
-     "io.ox/core/notifications",
+define.async('io.ox/oauth/keychain',
+    ['io.ox/core/extensions',
+     'io.ox/core/http',
+     'io.ox/core/event',
+     'io.ox/core/notifications',
      'gettext!io.ox/core'
     ], function (ext, http, Events, notifications, gt) {
 
-    "use strict";
+    'use strict';
 
     var moduleDeferred = $.Deferred(),
         cache = null,
-        point = ext.point("io.ox/keychain/api");
+        point = ext.point('io.ox/keychain/api');
 
     var generateId = function () {
         generateId.id = generateId.id + 1;
@@ -38,7 +38,7 @@ define.async("io.ox/oauth/keychain",
 
 
     function simplifyId(id) {
-        return id.substring(id.lastIndexOf(".") + 1);
+        return id.substring(id.lastIndexOf('.') + 1);
     }
 
 
@@ -69,11 +69,11 @@ define.async("io.ox/oauth/keychain",
                 names[account.displayName] = 1;
             });
 
-            name = "My " + service.displayName + " account";
+            name = 'My ' + service.displayName + ' account';
 
             while (names[name]) {
                 counter++;
-                name = "My " + service.displayName + " account (" + counter + ")";
+                name = 'My ' + service.displayName + ' account (' + counter + ')';
             }
             return name;
         }
@@ -100,10 +100,10 @@ define.async("io.ox/oauth/keychain",
             var account = incoming(account),
                 def = $.Deferred();
 
-            require(["io.ox/core/tk/keys"], function (KeyListener) {
-                var callbackName = "oauth" + generateId();
+            require(['io.ox/core/tk/keys'], function (KeyListener) {
+                var callbackName = 'oauth' + generateId();
                 var params = {
-                    action: "init",
+                    action: 'init',
                     serviceId: service.id,
                     displayName: chooseDisplayName(),
                     cb: callbackName
@@ -113,23 +113,23 @@ define.async("io.ox/oauth/keychain",
                 }
 
                 // this is far too late not to run into popup blocker
-                var popupWindow = win || window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
+                var popupWindow = win || window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
 
                 http.GET({
-                    module: "oauth/accounts",
+                    module: 'oauth/accounts',
                     params: params
                 })
                 .done(function (interaction) {
-                    window["callback_" + callbackName] = function (response) {
+                    window['callback_' + callbackName] = function (response) {
                         // TODO handle a possible error object in response
                         cache[service.id].accounts[response.data.id] = response.data;
                         def.resolve(response.data);
-                        delete window["callback_" + callbackName];
+                        delete window['callback_' + callbackName];
                         popupWindow.close();
-                        self.trigger("create", response.data);
-                        self.trigger("refresh.all refresh.list");
-                        ox.trigger("refresh-portal");
-                        notifications.yell("success", gt("Account added successfully"));
+                        self.trigger('create', response.data);
+                        self.trigger('refresh.all refresh.list');
+                        ox.trigger('refresh-portal');
+                        notifications.yell('success', gt('Account added successfully'));
                     };
 
                     popupWindow.location = interaction.authUrl + '&display=popup';
@@ -149,22 +149,22 @@ define.async("io.ox/oauth/keychain",
         this.remove = function (account) {
             account = incoming(account);
             return http.PUT({
-                module: "oauth/accounts",
+                module: 'oauth/accounts',
                 params: {
-                    action: "delete",
+                    action: 'delete',
                     id: account.id
                 }
             }).done(function (response) {
                 delete cache[service.id].accounts[account.id];
-                self.trigger("delete", account);
-                self.trigger("refresh.all refresh.list", account);
+                self.trigger('delete', account);
+                self.trigger('refresh.all refresh.list', account);
             });
         };
 
         this.update = function (account) {
             account = incoming(account);
             return http.PUT({
-                module: "oauth/accounts",
+                module: 'oauth/accounts',
                 params: {
                     action: 'update',
                     id: account.id
@@ -172,16 +172,16 @@ define.async("io.ox/oauth/keychain",
                 data: {displayName: account.displayName}
             }).done(function (response) {
                 cache[service.id].accounts[account.id] = account;
-                self.trigger("update", account);
-                self.trigger("refresh.list", account);
+                self.trigger('update', account);
+                self.trigger('refresh.list', account);
             });
         };
 
         this.reauthorize = function (account) {
             var def = $.Deferred(),
-                callbackName = "oauth" + generateId(),
+                callbackName = 'oauth' + generateId(),
                 params = {
-                    action: "init",
+                    action: 'init',
                     serviceId: service.id,
                     displayName: account.displayName,
                     cb: callbackName
@@ -189,20 +189,20 @@ define.async("io.ox/oauth/keychain",
             if (account) {
                 params.id = account.id;
             }
-            var popupWindow = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
+            var popupWindow = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
             popupWindow.focus();
 
             http.GET({
-                module: "oauth/accounts",
+                module: 'oauth/accounts',
                 params: params
             })
             .done(function (interaction) {
-                window["callback_" + callbackName] = function (response) {
+                window['callback_' + callbackName] = function (response) {
                     cache[service.id].accounts[response.data.id] = response.data;
-                    delete window["callback_" + callbackName];
+                    delete window['callback_' + callbackName];
                     popupWindow.close();
-                    self.trigger("update", response.data);
-                    ox.trigger("refresh-portal");
+                    self.trigger('update', response.data);
+                    ox.trigger('refresh-portal');
                     def.resolve(response.data);
                 };
                 popupWindow.location = interaction.authUrl;
@@ -222,13 +222,13 @@ define.async("io.ox/oauth/keychain",
     // Fetch services & accounts
     $.when(
         http.GET({
-            module: "oauth/services",
+            module: 'oauth/services',
             params: {
                 action: 'all'
             }
         }),
         http.GET({
-            module: "oauth/accounts",
+            module: 'oauth/accounts',
             params: {
                 action: 'all'
             }
@@ -248,7 +248,7 @@ define.async("io.ox/oauth/keychain",
 
             // Resolve loading
             moduleDeferred.resolve({
-                message: "Done with oauth keychain",
+                message: 'Done with oauth keychain',
                 services: services,
                 accounts: accounts,
                 serviceIDs: _(services[0]).map(function (service) {return simplifyId(service.id); })
@@ -256,7 +256,7 @@ define.async("io.ox/oauth/keychain",
         })
         .fail(function () {
 
-            console.error("Could not initialize OAuth keyring!");
+            console.error('Could not initialize OAuth keyring!');
 
             // Resolve on fail
             moduleDeferred.resolve({ message: 'Init failed', services: [], accounts: [], serviceIDs: [] });

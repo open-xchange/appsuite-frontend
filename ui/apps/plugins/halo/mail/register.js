@@ -11,12 +11,12 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define("plugins/halo/mail/register",
+define('plugins/halo/mail/register',
     ['io.ox/core/extensions',
      'io.ox/mail/api',
      'gettext!plugins/halo'], function (ext, api, gt) {
 
-    "use strict";
+    'use strict';
 
     function trackUpdates(obj, node, baton) {
 
@@ -33,12 +33,12 @@ define("plugins/halo/mail/register",
         });
     }
 
-    ext.point("io.ox/halo/contact:renderer").extend({
+    ext.point('io.ox/halo/contact:renderer').extend({
 
-        id: "mail",
+        id: 'mail',
 
         handles: function (type) {
-            return type === "com.openexchange.halo.mail";
+            return type === 'com.openexchange.halo.mail';
         },
 
         draw: function  (baton) {
@@ -58,34 +58,34 @@ define("plugins/halo/mail/register",
             });
 
             this.append(
-                $('<div class="widget-title clear-title">').text(gt("Recent conversations"))
+                $('<div class="widget-title clear-title">').text(gt('Recent conversations'))
             );
 
-            require(["io.ox/core/tk/dialogs", "io.ox/mail/view-grid-template"], function (dialogs, viewGrid) {
+            require(['io.ox/core/tk/dialogs', 'io.ox/mail/view-grid-template'], function (dialogs, viewGrid) {
 
                 node.append(
                     // left column
                     $('<div class="io-ox-left-column">').append(
                         $('<p class="io-ox-subheader">').text(gt('Received mails')),
                         received.length === 0 ?
-                            $("<div>").text(gt("Cannot find any messages this contact sent to you.")) :
+                            $('<div>').text(gt('Cannot find any messages this contact sent to you.')) :
                             viewGrid.drawSimpleGrid(received)
                     ),
                     // right column
                     $('<div class="io-ox-right-column">').append(
-                        $('<p class="io-ox-subheader">').text(gt("Sent mails")),
+                        $('<p class="io-ox-subheader">').text(gt('Sent mails')),
                         sent.length === 0 ?
-                            $("<div>").text(gt("Cannot find any messages you sent to this contact.")) :
+                            $('<div>').text(gt('Cannot find any messages you sent to this contact.')) :
                             viewGrid.drawSimpleGrid(sent)
                     ),
                     // clear float
-                    $('<div>').css("clear", "both")
+                    $('<div>').css('clear', 'both')
                 );
 
-                new dialogs.SidePopup().delegate(node, ".vgrid-cell", function (pane, e, target) {
-                    var msg = target.data("objectData");
+                new dialogs.SidePopup().delegate(node, '.vgrid-cell', function (pane, e, target) {
+                    var msg = target.data('objectData');
                     api.get({ folder: msg.folder_id, id: msg.id }).done(function (data) {
-                        require(["io.ox/mail/view-detail"], function (view) {
+                        require(['io.ox/mail/view-detail'], function (view) {
                             pane.append(view.draw(data));
                             data = null;
                         });
@@ -99,16 +99,16 @@ define("plugins/halo/mail/register",
         }
     });
 
-    ext.point("io.ox/halo/contact:requestEnhancement").extend({
-        id: "request-mail",
+    ext.point('io.ox/halo/contact:requestEnhancement').extend({
+        id: 'request-mail',
         enhances: function (type) {
-            return type === "com.openexchange.halo.mail";
+            return type === 'com.openexchange.halo.mail';
         },
         enhance: function (request) {
             request.appendColumns = true;
-            request.columnModule = "mail";
+            request.columnModule = 'mail';
             request.params.limit = 10;
-            request.params.columns = "102,600,601,602,603,604,605,606,607,608,609,610,611,612,614,652";
+            request.params.columns = '102,600,601,602,603,604,605,606,607,608,609,610,611,612,614,652';
         }
     });
 });

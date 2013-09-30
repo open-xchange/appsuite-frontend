@@ -15,7 +15,7 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 
 	function Wizard(options) {
 		if (!options) {
-			console.error("Please specify options for the wizard. At minimum it needs an id!");
+			console.error('Please specify options for the wizard. At minimum it needs an id!');
 			options = {id: 'defunct'};
 		}
 		var state = 'stopped';
@@ -37,21 +37,21 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 
 		this.wizardIsRunning = null;
 
-		this.navButtons = $("<div/>").append(
-			$('<button class="btn wizard-prev">').text(gt("Previous")).on("click", function () {
+		this.navButtons = $('<div/>').append(
+			$('<button class="btn wizard-prev">').text(gt('Previous')).on('click', function () {
 				self.back();
 			}),
-			$('<button class="btn btn-primary wizard-next btn-disabled">').text(gt("Next")).on("click", function () {
+			$('<button class="btn btn-primary wizard-next btn-disabled">').text(gt('Next')).on('click', function () {
 				self.next();
 			}),
-			$('<button class="btn btn-primary wizard-done btn-disabled">').text(gt("Done")).on("click", function () {
+			$('<button class="btn btn-primary wizard-done btn-disabled">').text(gt('Done')).on('click', function () {
 				self.done();
 			})
 		);
 
 		if (options.closeable) {
 			this.navButtons.append(
-				$('<button class="btn wizard-close">').text(gt("Close")).on("click", function () {
+				$('<button class="btn wizard-close">').text(gt('Close')).on('click', function () {
 					self.close();
 				})
 			);
@@ -167,7 +167,7 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 					return elem.id === pageNum;
 				});
 				if (_.isUndefined(pageNum)) {
-					console.error("Could not find page with id '" + name + "'");
+					console.error('Could not find page with id "' + name + '"');
 					pageNum = 0;
 				}
 			}
@@ -190,29 +190,29 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 
 			// hide and show buttons as needed
 			if (self.previousPage) {
-				self.navButtons.find(".wizard-prev").show();
+				self.navButtons.find('.wizard-prev').show();
 			} else {
-				self.navButtons.find(".wizard-prev").hide();
+				self.navButtons.find('.wizard-prev').hide();
 			}
 
 			if (self.nextPage) {
-				self.navButtons.find(".wizard-next").show();
-				self.navButtons.find(".wizard-done").hide();
+				self.navButtons.find('.wizard-next').show();
+				self.navButtons.find('.wizard-done').hide();
 			} else {
-				self.navButtons.find(".wizard-next").hide();
-				self.navButtons.find(".wizard-done").show();
+				self.navButtons.find('.wizard-next').hide();
+				self.navButtons.find('.wizard-done').show();
 			}
 
-			self.navButtons.find(".wizard-close").show();
+			self.navButtons.find('.wizard-close').show();
 
-			if (self.currentPage.metadata("hideButtons", getBaton())) {
-				self.navButtons.find("button").hide();
+			if (self.currentPage.metadata('hideButtons', getBaton())) {
+				self.navButtons.find('button').hide();
 			}
 
 			self.index = pageNum;
 			busy();
 			triggerLoad(self.currentPage).done(function () {
-				self.dialog.getBody().find(".wizard-page").detach();
+				self.dialog.getBody().find('.wizard-page').detach();
 				if (!renderedPages[self.index]) {
 					var $div = $('<div class="wizard-page"></div>');
 					self.currentPage.draw.call($div, getBaton());
@@ -221,12 +221,12 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 				self.dialog.getBody().append(renderedPages[self.index]);
 				idle();
 				callMethod(self.currentPage, 'activate', self.index);
-				self.dialog.getHeader().find(".wizard-header").detach();
-				self.dialog.getHeader().append($('<h1 class="wizard-header" />').text(self.currentPage.metadata("title", getBaton())));
+				self.dialog.getHeader().find('.wizard-header').detach();
+				self.dialog.getHeader().append($('<h1 class="wizard-header" />').text(self.currentPage.metadata('title', getBaton())));
 				self.updateButtonState();
 
 			}).fail(function (resp) {
-				require("io.ox/core/notifications").yell(resp);
+				require('io.ox/core/notifications').yell(resp);
 				self.close();
 			});
 
@@ -247,11 +247,11 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 				return;
 			}
 			if (isNextEnabled()) {
-				this.navButtons.find(".next").prop('disabled', false);
-				this.navButtons.find(".done").prop('disabled', false);
+				this.navButtons.find('.next').prop('disabled', false);
+				this.navButtons.find('.done').prop('disabled', false);
 			} else {
-				this.navButtons.find(".next").prop('disabled', true);
-				this.navButtons.find(".done").prop('disabled', false);
+				this.navButtons.find('.next').prop('disabled', true);
+				this.navButtons.find('.done').prop('disabled', false);
 			}
 		};
 
@@ -263,7 +263,7 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 			var titles = [];
 			var i = 0;
 			_(this.pages()).each(function (page) {
-				titles.push(page.metadata("title", getBaton(i)));
+				titles.push(page.metadata('title', getBaton(i)));
 				i++;
 			});
 		};
@@ -274,7 +274,7 @@ define('io.ox/core/wizard/registry', ['io.ox/core/extensions', 'io.ox/core/tk/di
 
 		this.start = function (options) {
 			if (state !== 'stopped') {
-				console.error("Cannot start wizard, when it is in state: ", state);
+				console.error('Cannot start wizard, when it is in state: ', state);
 				return;
 			}
 			this.dialog = new dialogs.ModalDialog({easyOut: !!this.options.closeable});

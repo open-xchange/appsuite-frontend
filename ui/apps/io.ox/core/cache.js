@@ -13,10 +13,10 @@
  */
 
 define('io.ox/core/cache',
-    ["io.ox/core/extensions",
-     "io.ox/core/cache/indexeddb",
-     "io.ox/core/cache/localstorage",
-     "io.ox/core/cache/simple"], function (ext) {
+    ['io.ox/core/extensions',
+     'io.ox/core/cache/indexeddb',
+     'io.ox/core/cache/localstorage',
+     'io.ox/core/cache/simple'], function (ext) {
 
     'use strict';
 
@@ -35,7 +35,7 @@ define('io.ox/core/cache',
     ox.cache = {
         clear: function () {
             return $.when.apply($,
-                ext.point("io.ox/core/cache/storage").map(function (storage) {
+                ext.point('io.ox/core/cache/storage').map(function (storage) {
                     return storage.clear && storage.isUsable() ? storage.clear() : $.when();
                 })
             );
@@ -81,7 +81,7 @@ define('io.ox/core/cache',
         }
     });
 
-    ext.point("io.ox/core/cache/storage").each(function (storage) {
+    ext.point('io.ox/core/cache/storage').each(function (storage) {
         if (storage.isUsable() && _.isNull(preferredPersistentCache)) {
             preferredPersistentCache = storage.id;
         }

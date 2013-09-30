@@ -11,8 +11,8 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/lessons/lessons/basic_apps/register', ['io.ox/core/extensions'], function (ext) {
-    "use strict";
-    ext.point("io.ox/lessons/lesson").extend({
+    'use strict';
+    ext.point('io.ox/lessons/lesson').extend({
         id: 'basic_apps',
         index: 400,
         title: 'Basic Apps',
@@ -21,7 +21,7 @@ define('io.ox/lessons/lessons/basic_apps/register', ['io.ox/core/extensions'], f
         start: function (options) {
             var win = options.win;
 
-            win.nodes.main.empty().append($("<h1>").text("Basic Apps"));
+            win.nodes.main.empty().append($('<h1>').text('Basic Apps'));
         }
     });
 });

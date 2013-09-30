@@ -65,18 +65,18 @@ define('io.ox/realtime/events', ['io.ox/realtime/rt', 'io.ox/core/http'], functi
 		on: function (eventName, cb) {
 			internal.backend.events().done(function (eventNames) {
 				if (!_(eventNames).contains(eventName)) {
-					console.warn("Backend doesn't support event " + eventName);
+					console.warn('Backend doesn\'t support event ' + eventName);
 					return;
 				}
 
 				if (!events[eventName]) {
 
-					var selector = "events" + nextId++;
+					var selector = 'events' + nextId++;
 
-					rt.on("receive:" + selector, function (e, m) {
+					rt.on('receive:' + selector, function (e, m) {
 						// Unpack Event
-						var data = m.get("event", "data").data;
-						var eventName = m.get("event", "name").data;
+						var data = m.get('event', 'data').data;
+						var eventName = m.get('event', 'name').data;
 						// Dispatch locally
 						_(events[eventName].callbacks).each(function (cb) {
 							cb(data, eventName);
@@ -119,7 +119,7 @@ define('io.ox/realtime/events', ['io.ox/realtime/rt', 'io.ox/core/http'], functi
 		}
 	};
 
-	rt.on("reset", function () {
+	rt.on('reset', function () {
 		_(events).chain().keys().each(function (eventName) {
 			var entry = events[eventName];
 			internal.backend.on(eventName, entry.selector, rt.resource);

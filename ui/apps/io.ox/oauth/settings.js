@@ -10,14 +10,14 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/oauth/settings",
-    ["io.ox/core/extensions",
-    "io.ox/oauth/keychain",
-    "io.ox/keychain/api",
-    "io.ox/core/tk/dialogs",
-    "gettext!io.ox/settings/oauth"
+define('io.ox/oauth/settings',
+    ['io.ox/core/extensions',
+    'io.ox/oauth/keychain',
+    'io.ox/keychain/api',
+    'io.ox/core/tk/dialogs',
+    'gettext!io.ox/settings/oauth'
     ], function (ext, oauthKeychain, keychain, dialogs, gt) {
-    "use strict";
+    'use strict';
 
     function OAuthAccountDetailExtension(serviceId) {
         var self = this;
@@ -52,18 +52,18 @@ define("io.ox/oauth/settings",
             function doSave() {
                 if (account.displayName !== $displayNameField.val()) {
                     account.displayName = $displayNameField.val();
-                    keychain.update(account).done(displaySuccess(gt("Changes have been saved."))).fail(displayError(gt("Something went wrong saving your changes.")));
+                    keychain.update(account).done(displaySuccess(gt('Changes have been saved.'))).fail(displayError(gt('Something went wrong saving your changes.')));
                 }
                 closeDialog();
             }
 
             function doReauthorize() {
                 account.displayName = $displayNameField.val();
-                keychain.submodules[serviceId].reauthorize(account).done(displaySuccess(gt("You have reauthorized this account."))).fail(displayError(gt("Something went wrong reauthorizing the account.")));
+                keychain.submodules[serviceId].reauthorize(account).done(displaySuccess(gt('You have reauthorized this account.'))).fail(displayError(gt('Something went wrong reauthorizing the account.')));
             }
 
             $form = $('<div class="settings-detail-pane">').append(
-                $('<legend class="sectiontitle">').text(gt("Account Settings")),
+                $('<legend class="sectiontitle">').text(gt('Account Settings')),
                 $('<div class="form-horizontal">').append(
                     $('<div class="control-group">').append(
                         $('<label for="displayName">').text(gt("Display Name")),

@@ -11,12 +11,12 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define("plugins/portal/dummy/register", ["io.ox/core/extensions"], function (ext) {
+define('plugins/portal/dummy/register', ['io.ox/core/extensions'], function (ext) {
 
-    "use strict";
+    'use strict';
 
     var load = function () {
-        return $.Deferred().resolve($('<div>').text("Blablabla"));
+        return $.Deferred().resolve($('<div>').text('Blablabla'));
     };
     var drawTypeA = function () {
         var $node = $('<div class="io-ox-tile-container io-ox-portal-typeA">').append(
@@ -33,8 +33,8 @@ define("plugins/portal/dummy/register", ["io.ox/core/extensions"], function (ext
                 $('<div class="io-ox-portal-item">').text('item #9')
             ),
             $('<div class="io-ox-portal-actions">').append(
-                $('<i class="icon-edit io-ox-portal-tile-action">').text(" "),
-                $('<i class="icon-remove io-ox-portal-tile-action">').text(" ")
+                $('<i class="icon-edit io-ox-portal-tile-action">').text(' '),
+                $('<i class="icon-remove io-ox-portal-tile-action">').text(' ')
             )
         );
         return $node;

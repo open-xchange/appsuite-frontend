@@ -19,16 +19,16 @@ define('io.ox/mail/autoforward/settings/register',
 
     var filterModel;
 
-    ext.point("io.ox/settings/pane").extend({
+    ext.point('io.ox/settings/pane').extend({
         id: 'io.ox/autoforward',
-        title: gt("Auto Forward"),
+        title: gt('Auto Forward'),
         ref: 'io.ox/autoforward',
         loadSettingPane: false,
         index: 425,
         lazySaveSettings: true
     });
 
-    ext.point("io.ox/autoforward/settings/detail").extend({
+    ext.point('io.ox/autoforward/settings/detail').extend({
         index: 100,
         draw: function () {
             var $node = this,
@@ -36,7 +36,7 @@ define('io.ox/mail/autoforward/settings/register',
 
             $node.append($container);
 
-            require(["io.ox/mail/autoforward/settings/filter"], function (filters) {
+            require(['io.ox/mail/autoforward/settings/filter'], function (filters) {
 
                 userAPI.get().done(function (user) {
                     var multiValues = {};

@@ -51,7 +51,7 @@ define('io.ox/calendar/list/perspective',
 
         // fix selection's serialize
         grid.selection.serialize = function (obj) {
-            return typeof obj === "object" ? (obj.folder_id || obj.folder || 0) + "." + obj.id + "." + (obj.recurrence_position || 0) : obj;
+            return typeof obj === 'object' ? (obj.folder_id || obj.folder || 0) + '.' + obj.id + '.' + (obj.recurrence_position || 0) : obj;
         };
 
         commons.wireGridAndAPI(grid, api);
@@ -83,7 +83,7 @@ define('io.ox/calendar/list/perspective',
         });
 
         // special search: list request
-        grid.setListRequest("search", function (ids) {
+        grid.setListRequest('search', function (ids) {
             return $.Deferred().resolve(ids);
         });
 
@@ -142,7 +142,7 @@ define('io.ox/calendar/list/perspective',
 
         function drawFail(obj) {
             right.idle().empty().append(
-                $.fail(gt("Couldn't load appointment data."), function () {
+                $.fail(gt('Couldn\'t load appointment data.'), function () {
                     showAppointment(obj);
                 })
             );
@@ -285,7 +285,7 @@ define('io.ox/calendar/list/perspective',
             self.updateGridOptions();
             grid.refresh(true);
         });
-        
+
         //jump to newly created items
         api.on('create', function (e, data) {
             grid.selection.set(data);

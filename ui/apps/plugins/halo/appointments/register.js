@@ -11,18 +11,18 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("plugins/halo/appointments/register",
-    ["io.ox/core/extensions", "gettext!plugins/halo"], function (ext, gt) {
+define('plugins/halo/appointments/register',
+    ['io.ox/core/extensions', 'gettext!plugins/halo'], function (ext, gt) {
 
-    "use strict";
+    'use strict';
 
     // Taken From Calendar API
     var DAY = 60000 * 60 * 24;
 
-    ext.point("io.ox/halo/contact:renderer").extend({
-        id: "appointments",
+    ext.point('io.ox/halo/contact:renderer').extend({
+        id: 'appointments',
         handles: function (type) {
-            return type === "com.openexchange.halo.appointments";
+            return type === 'com.openexchange.halo.appointments';
         },
         draw: function (baton) {
 
@@ -31,14 +31,14 @@ define("plugins/halo/appointments/register",
             var node = this, def = $.Deferred();
 
             // TODO: unify with portal code (copy/paste right now)
-            require(["io.ox/core/tk/dialogs", "io.ox/calendar/view-grid-template"], function (dialogs, viewGrid) {
+            require(['io.ox/core/tk/dialogs', 'io.ox/calendar/view-grid-template'], function (dialogs, viewGrid) {
 
-                node.append($("<div>").addClass("widget-title clear-title").text(gt("Shared Appointments")));
+                node.append($('<div>').addClass('widget-title clear-title').text(gt('Shared Appointments')));
                 viewGrid.drawSimpleGrid(baton.data).appendTo(node);
 
-                new dialogs.SidePopup().delegate(node, ".vgrid-cell", function (popup, e, target) {
-                    var data = target.data("appointment");
-                    require(["io.ox/calendar/view-detail"], function (view) {
+                new dialogs.SidePopup().delegate(node, '.vgrid-cell', function (popup, e, target) {
+                    var data = target.data('appointment');
+                    require(['io.ox/calendar/view-detail'], function (view) {
                         popup.append(view.draw(data));
                         data = null;
                     });
@@ -51,17 +51,17 @@ define("plugins/halo/appointments/register",
         }
     });
 
-    ext.point("io.ox/halo/contact:requestEnhancement").extend({
-        id: "request-appointments",
+    ext.point('io.ox/halo/contact:requestEnhancement').extend({
+        id: 'request-appointments',
         enhances: function (type) {
-            return type === "com.openexchange.halo.appointments";
+            return type === 'com.openexchange.halo.appointments';
         },
         enhance: function (request) {
             request.appendColumns = true;
-            request.columnModule = "calendar";
+            request.columnModule = 'calendar';
             request.params.start = _.now();
             request.params.end = _.now() + 10 * DAY;
-            request.params.columns = "1,20,200,201,202,220,221,400,401,402";
+            request.params.columns = '1,20,200,201,202,220,221,400,401,402';
         }
     });
 });

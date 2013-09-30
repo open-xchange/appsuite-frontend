@@ -11,7 +11,7 @@ define('plugins/mobile/addToHomescreen/register',
      'gettext!plugins/mobile/addToHomescreen/i18n',
      'css!plugins/mobile/addToHomescreen/style.css'], function (ext, gt) {
 
-    "use strict";
+    'use strict';
     if (ox.debug) return;
 
     var nav = window.navigator,

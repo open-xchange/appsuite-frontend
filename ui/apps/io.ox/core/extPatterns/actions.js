@@ -12,12 +12,12 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("io.ox/core/extPatterns/actions",
+define('io.ox/core/extPatterns/actions',
     ['io.ox/core/extensions',
      'io.ox/core/upsell',
      'io.ox/core/collection'], function (ext, upsell, Collection) {
 
-    "use strict";
+    'use strict';
 
     var requires = function (str) {
         return function (e) {

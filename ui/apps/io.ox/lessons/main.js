@@ -11,9 +11,9 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("io.ox/lessons/main", ['io.ox/core/extensions', 'io.ox/lessons/actions', 'io.ox/lessons/lessonlist'], function (ext) {
+define('io.ox/lessons/main', ['io.ox/core/extensions', 'io.ox/lessons/actions', 'io.ox/lessons/lessonlist'], function (ext) {
 
-    "use strict";
+    'use strict';
 
     var app = ox.ui.createApp({ name: 'io.ox/lessons', title: 'Lessons' }),
         // app window
@@ -33,7 +33,7 @@ define("io.ox/lessons/main", ['io.ox/core/extensions', 'io.ox/lessons/actions', 
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/lessons',
-            title: "Lessons",
+            title: 'Lessons',
             toolbar: true
         });
 
@@ -69,22 +69,22 @@ define("io.ox/lessons/main", ['io.ox/core/extensions', 'io.ox/lessons/actions', 
             var section = lessons[lesson.section] || (lessons[lesson.section] = []);
             section.push(lesson);
         });
-        var $all = $("<div>").appendTo(win.nodes.main);
+        var $all = $('<div>').appendTo(win.nodes.main);
         $all.css({
-            margin: "20px"
+            margin: '20px'
         });
         win.nodes.main.css({overflow: 'auto'});
 
         _(lessons).each(function (lessons, sectionName) {
-            $all.append($("<h2>").text(sectionName));
-            var $list = $("<div>").appendTo(win.nodes.main);
+            $all.append($('<h2>').text(sectionName));
+            var $list = $('<div>').appendTo(win.nodes.main);
             _(lessons).each(function (lesson) {
-                var $lessonDiv = $("<div>").appendTo($all);
-                $lessonDiv.append($("<h3>").append($('<a href="#">').text(lesson.title)).on("click", openLesson(lesson)));
-                $lessonDiv.append($("<div>").text(lesson.description));
-                $lessonDiv.on("click", openLesson(lesson));
+                var $lessonDiv = $('<div>').appendTo($all);
+                $lessonDiv.append($('<h3>').append($('<a href="#">').text(lesson.title)).on('click', openLesson(lesson)));
+                $lessonDiv.append($('<div>').text(lesson.description));
+                $lessonDiv.on('click', openLesson(lesson));
                 $lessonDiv.css({
-                    margin: "20px"
+                    margin: '20px'
                 });
             });
         });

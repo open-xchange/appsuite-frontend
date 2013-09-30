@@ -107,7 +107,7 @@ define('io.ox/launchpad/main',
                 running[runIndex].app.launch();
             } else {
                 $.when(
-                    require([e.data.entryModule || e.data.id + "/main"]),
+                    require([e.data.entryModule || e.data.id + '/main']),
                     pad.fadeOut(FADE_DURATION >> 1)
                 )
                 .done(function (m) {
@@ -116,7 +116,7 @@ define('io.ox/launchpad/main',
                         app.launch.apply(app, e.data.launchArguments);
                     } else if (e.data.createArguments) {
                         //documents need a parameter to create a new document
-                        e.data.createArguments.folderId = String(coreConfig.get("folder/infostore"));
+                        e.data.createArguments.folderId = String(coreConfig.get('folder/infostore'));
                         m.getApp(e.data.createArguments).launch();
                     } else {
                         m.getApp().launch();
@@ -126,14 +126,14 @@ define('io.ox/launchpad/main',
         },
 
         fnHasAppStore = function () {
-            var managePoint = ext.point("io.ox/core/apps/manage");
+            var managePoint = ext.point('io.ox/core/apps/manage');
             return managePoint.list().length > 0;
         },
 
         fnOpenAppStore = function (e) {
             e.preventDefault();
             var openedStore = false;
-            ext.point("io.ox/core/apps/manage").each(function (extension) {
+            ext.point('io.ox/core/apps/manage').each(function (extension) {
                 if (openedStore) {
                     return;
                 }

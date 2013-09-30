@@ -48,7 +48,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         opened.onupgradeneeded = function (e) {
             // Set up object stores
             myDB = e.target.result;
-            myDB.createObjectStore("cache", { keyPath: "key" });
+            myDB.createObjectStore('cache', { keyPath: 'key' });
         };
         OP(opened).then(dbOpened.resolve, dbOpened.reject);
 
@@ -337,8 +337,8 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
     }
 
     function initializeDB() {
-        var tx = db.transaction("meta", "readwrite");
-        return OP(tx.objectStore("meta").put({
+        var tx = db.transaction('meta', 'readwrite');
+        return OP(tx.objectStore('meta').put({
             id: 'default',
             version: ox.version
         }));
@@ -372,7 +372,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         opened.onupgradeneeded = function (e) {
             // Set up object stores
             var db = e.target.result;
-            db.createObjectStore("meta", {keyPath: "id"});
+            db.createObjectStore('meta', {keyPath: 'id'});
         };
 
         OP(opened).then(
@@ -386,12 +386,12 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
 
                 // Setup
                 db.onerror = function (event) {
-                    console.error("IndexedDB error: ", event.target.errorCode, event);
+                    console.error('IndexedDB error: ', event.target.errorCode, event);
                 };
 
-                var tx = db.transaction("meta");
+                var tx = db.transaction('meta');
 
-                OP(tx.objectStore("meta").get("default")).done(function (meta) {
+                OP(tx.objectStore('meta').get('default')).done(function (meta) {
                     var setupCompleted = null;
                     if (!meta) {
                         setupCompleted = initializeDB();
@@ -403,7 +403,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                         setupCompleted = destroyDB().done(function () {
                             meta.cleanUp = false;
                             meta.version = ox.version;
-                            OP(db.transaction("meta", "readwrite").objectStore("meta").put(meta));
+                            OP(db.transaction('meta', 'readwrite').objectStore('meta').put(meta));
                         });
                     } else {
                         setupCompleted = $.when();
@@ -433,6 +433,6 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
     }
 
     return moduleDefined.done(function (storage) {
-        ext.point("io.ox/core/cache/storage").extend(storage);
+        ext.point('io.ox/core/cache/storage').extend(storage);
     });
 });

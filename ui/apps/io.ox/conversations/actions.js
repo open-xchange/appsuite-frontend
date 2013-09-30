@@ -11,30 +11,30 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/conversations/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/links"], function (ext, links) {
+define('io.ox/conversations/actions', ['io.ox/core/extensions', 'io.ox/core/extPatterns/links'], function (ext, links) {
 
-    "use strict";
+    'use strict';
 
     // actions
 
-    ext.point("io.ox/conversations/actions/create").extend({
+    ext.point('io.ox/conversations/actions/create').extend({
         index: 100,
-        id: "create",
+        id: 'create',
         action: function (data) {
-            require(["io.ox/conversations/api"], function (api) {
-                api.create("");
+            require(['io.ox/conversations/api'], function (api) {
+                api.create('');
             });
         }
     });
 
     // links
 
-    ext.point("io.ox/conversations/links/toolbar").extend(new links.Button({
+    ext.point('io.ox/conversations/links/toolbar').extend(new links.Button({
         index: 100,
-        id: "create",
-        label: "Start new conversation",
+        id: 'create',
+        label: 'Start new conversation',
         cssClasses: 'btn btn-primary',
-        ref: "io.ox/conversations/actions/create"
+        ref: 'io.ox/conversations/actions/create'
     }));
 
 });

@@ -11,20 +11,20 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("io.ox/mail/accounts/model",
-    ["io.ox/core/extensions",
-     "io.ox/keychain/model",
-     "io.ox/core/api/account",
+define('io.ox/mail/accounts/model',
+    ['io.ox/core/extensions',
+     'io.ox/keychain/model',
+     'io.ox/core/api/account',
      'io.ox/core/api/folder',
      'gettext!io.ox/mail/accounts/settings'], function (ext, keychainModel, AccountAPI, folderAPI, gt) {
 
-    "use strict";
+    'use strict';
 
     var AccountModel = keychainModel.Account.extend({
 
         defaults: {
             //some conditional defaults defined in view-form.render (pop3)
-            spam_handler: "NoSpamHandler"
+            spam_handler: 'NoSpamHandler'
         },
 
         validation: {
@@ -138,7 +138,7 @@ define("io.ox/mail/accounts/model",
 //                    obj.name = obj.primary_address;
 
                     this.attributes = obj;
-                    this.attributes.spam_handler = "NoSpamHandler";
+                    this.attributes.spam_handler = 'NoSpamHandler';
                 }
                 return AccountAPI.create(this.attributes).done(function (response) {
                     return defered.resolve(response);

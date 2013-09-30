@@ -229,11 +229,11 @@ define('io.ox/contacts/edit/main',
             var def = $.Deferred();
 
             if (getDirtyStatus()) {
-                require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
-                        .text(gt("Do you really want to discard your changes?"))
-                        .addPrimaryButton("delete", gt('Discard'))
-                        .addButton("cancel", gt('Cancel'))
+                        .text(gt('Do you really want to discard your changes?'))
+                        .addPrimaryButton('delete', gt('Discard'))
+                        .addButton('cancel', gt('Cancel'))
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {

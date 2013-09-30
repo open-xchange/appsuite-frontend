@@ -130,19 +130,19 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
                 title = model.title || '\u2014';
                 note  = model.note || '\u2014';
             } else {
-                title = model.get("title") || '\u2014';
-                note  = model.get("note") || '\u2014';
+                title = model.get('title') || '\u2014';
+                note  = model.get('note') || '\u2014';
             }
 
-            body.append($("<h4>").text(_.noI18n(title)),
+            body.append($('<h4>').text(_.noI18n(title)),
                         $('<div>').text(_.noI18n(note)).css({color: '#888', 'margin-bottom': '5px'}));
-            util.buildRow(body, [[util.buildLabel(gt("Confirmation status", "confStateInput")),
-                        state = $('<select class="stateselect" data-action="selector">').attr("id", "confStateInput").append(
+            util.buildRow(body, [[util.buildLabel(gt('Confirmation status', 'confStateInput')),
+                        state = $('<select class="stateselect" data-action="selector">').attr('id', 'confStateInput').append(
                         $('<option>').text(gt('Confirm')),
                         $('<option>').text(gt('Decline')),
                         $('<option>').text(gt('Tentative')))],
-                        [util.buildLabel(gt("Confirmation message", "confMessageInput")), message = $('<input>')
-                             .attr({type: 'text', id: "confMessageInput"})]]);
+                        [util.buildLabel(gt('Confirmation message', 'confMessageInput')), message = $('<input>')
+                             .attr({type: 'text', id: 'confMessageInput'})]]);
             return {popup: popup, state: state, message: message};
         }
     };

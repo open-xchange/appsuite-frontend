@@ -25,7 +25,7 @@ define('plugins/portal/mail/register',
 
     ext.point('io.ox/portal/widget/mail').extend({
 
-        title: gt("Inbox"),
+        title: gt('Inbox'),
 
         initialize: function (baton) {
             api.on('update create delete', function (event, element) {

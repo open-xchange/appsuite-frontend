@@ -31,7 +31,7 @@ define('io.ox/mail/settings/model',
         },
 
         destroy: function () {
-            console.log("destroy in model.js");
+            console.log('destroy in model.js');
         }
 
     });

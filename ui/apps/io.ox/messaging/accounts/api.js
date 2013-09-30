@@ -12,11 +12,11 @@
  */
 
 //TODO: split into packages for services, accounts and messages
-define("io.ox/messaging/accounts/api",
-    ["io.ox/core/http",
-    "io.ox/core/api/user"], function (http, userAPI) {
+define('io.ox/messaging/accounts/api',
+    ['io.ox/core/http',
+    'io.ox/core/api/user'], function (http, userAPI) {
 
-    "use strict";
+    'use strict';
 
     var api = {
         all: function (messagingService) {

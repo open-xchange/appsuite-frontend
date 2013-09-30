@@ -284,11 +284,11 @@ define('io.ox/editor/main',
         app.setQuit(function () {
             var def = $.Deferred();
             if (app.isDirty()) {
-                require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
-                    .text(gt("Do you really want to discard your changes?"))
-                    .addPrimaryButton("quit", gt('Discard'))
-                    .addButton("cancel", gt('Cancel'))
+                    .text(gt('Do you really want to discard your changes?'))
+                    .addPrimaryButton('quit', gt('Discard'))
+                    .addButton('cancel', gt('Cancel'))
                     .on('quit', def.resolve)
                     .on('cancel', def.reject)
                     .show();

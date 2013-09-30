@@ -12,10 +12,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/extensions",
-    ["io.ox/core/event", "io.ox/core/async"], function (Events, async) {
+define('io.ox/core/extensions',
+    ['io.ox/core/event', 'io.ox/core/async'], function (Events, async) {
 
-    "use strict";
+    'use strict';
 
     // global registry
     var registry = {},
@@ -47,7 +47,7 @@ define("io.ox/core/extensions",
 
 
     // never leak
-    $(window).on("unload", function () {
+    $(window).on('unload', function () {
         _(registry).each(function (ext) {
             ext.clear();
         });
@@ -57,7 +57,7 @@ define("io.ox/core/extensions",
     var Point = function (options) {
 
         this.id = String(options.id);
-        this.description = options.description || "";
+        this.description = options.description || '';
 
         var extensions = [],
             orphans = {},
@@ -109,7 +109,7 @@ define("io.ox/core/extensions",
 
                 function fnAddExtension(ext) {
                     if (circleGuard[ext.id]) {
-                        throw "Circular References detected for extension point " + self.id + " and extension " + ext.id;
+                        throw 'Circular References detected for extension point ' + self.id + ' and extension ' + ext.id;
                     }
                     circleGuard[ext.id] = true;
                     var before = befores[ext.id];
@@ -159,7 +159,7 @@ define("io.ox/core/extensions",
 
             if (extension.invoke) {
                 console.error(extension);
-                throw "Extensions must not have their own invoke method";
+                throw 'Extensions must not have their own invoke method';
             }
 
             if (!extension.id) {
@@ -194,7 +194,7 @@ define("io.ox/core/extensions",
                     };
                 }
 
-                this.trigger("extended", extension);
+                this.trigger('extended', extension);
             }
 
             return this;
@@ -210,7 +210,7 @@ define("io.ox/core/extensions",
         this.replace = function (extension) {
 
             if (!extension.id) {
-                throw "Replacements must have an id!";
+                throw 'Replacements must have an id!';
             }
 
             var replaced = false;
@@ -458,7 +458,7 @@ define("io.ox/core/extensions",
          * @return {point}
          */
         point: function (id) {
-            id = id || "";
+            id = id || '';
             if (registry[id] !== undefined) {
                 return registry[id];
             } else {

@@ -45,10 +45,10 @@ define('io.ox/mail/vacationnotice/settings/filter', [
 
             api.getRules('vacation').done(function (data) {
                 var defaultNotice = {
-                    days: "7",
+                    days: '7',
                     internal_id: 'vacation',
-                    subject: "",
-                    text: ""
+                    subject: '',
+                    text: ''
                 },
                     vacationData,
                     VacationEdit,
@@ -93,13 +93,13 @@ define('io.ox/mail/vacationnotice/settings/filter', [
 
                 $node.append(vacationNotice.render().$el);
 
-                ext.point("io.ox/core/vacationnotice/model/validation").extend({
+                ext.point('io.ox/core/vacationnotice/model/validation').extend({
                     id: 'start-date-before-end-date',
                     validate: function (attributes) {
 
                         if (attributes.dateFrom && attributes.dateUntil && attributes.dateUntil < attributes.dateFrom) {
-                            this.add('dateFrom', gt("The start date must be before the end date."));
-                            this.add('dateUntil', gt("The start date must be before the end date."));
+                            this.add('dateFrom', gt('The start date must be before the end date.'));
+                            this.add('dateUntil', gt('The start date must be before the end date.'));
                         }
                     }
                 });

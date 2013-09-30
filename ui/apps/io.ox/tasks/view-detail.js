@@ -228,14 +228,14 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                     });
                     if (intParticipants.length > 0) {
                         node.append($('<label class="detail-label">').text(gt('Participants')),
-                                table = $("<div class='task-participants-table'>"));
+                                table = $('<div class="task-participants-table">'));
                         _(intParticipants).each(function (participant) {
                             lookupParticipant(node, table, participant);
                         });
                     }
                     if (extParticipants.length > 0) {
                         node.append($('<label class="detail-label">').text(gt('External participants')),
-                                table = $("<div class='task-participants-table'>"));
+                                table = $('<div class="task-participants-table">'));
                         _(extParticipants).each(function (participant) {
                             lookupParticipant(node, table, participant);
                         });

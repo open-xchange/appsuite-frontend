@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], function (ext, Events) {
-    "use strict";
+    'use strict';
 
     var views;
 
@@ -27,7 +27,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                 return attributeDefinition;
             }
 
-            var canonicalName = "";
+            var canonicalName = '';
             var forceUpcase = true;
             for (var i = 0, length = attributeDefinition.length; i < length; i++) {
                 var c = attributeDefinition.charAt(i);
@@ -81,7 +81,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
 
             if (options.modelEvents) {
                 _(options.modelEvents).each(function (methodNames, evt) {
-                    _(methodNames.split(" ")).each(function (methodName) {
+                    _(methodNames.split(' ')).each(function (methodName) {
                         self.observeModel(evt, function () {
                             self[methodName].apply(self, $.makeArray(arguments));
                         });
@@ -182,9 +182,9 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
         };
 
         this.createSubpoint = function (subpath, options, extOptions) {
-            var point = views.point(name + "/" + subpath),
+            var point = views.point(name + '/' + subpath),
                 ViewClass = point.createView(options);
-            var id = options.id || name + "/" + subpath;
+            var id = options.id || name + '/' + subpath;
 
             if (options.id) {
                 delete options.id;
@@ -226,7 +226,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                     self.$el.empty();
                     self.render();
                 }
-                this.point.on("extended", redraw);
+                this.point.on('extended', redraw);
                 self.$el.on('dispose', function () {
                     self.point.off('extended', redraw);
                 });
@@ -270,7 +270,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
 
             },
             separator: function (attribute) {
-                return " ";
+                return ' ';
             },
             updateNode: function () {
                 this.$el.empty();

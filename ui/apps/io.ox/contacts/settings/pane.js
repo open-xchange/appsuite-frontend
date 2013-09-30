@@ -81,15 +81,15 @@ define('io.ox/contacts/settings/pane',
                     .text(gt('My contact data'));
 
             button.on('click', function () {
-                require(["io.ox/core/tk/dialogs", "io.ox/core/settings/user"], function (dialogs, users) {
+                require(['io.ox/core/tk/dialogs', 'io.ox/core/settings/user'], function (dialogs, users) {
                     var dialog = new dialogs.ModalDialog({
                             top: 60,
                             width: 900,
                             center: false,
                             maximize: true
                         })
-                        .addPrimaryButton("save", gt('Save'))
-                        .addButton('discard', gt("Discard"));
+                        .addPrimaryButton('save', gt('Save'))
+                        .addButton('discard', gt('Discard'));
 
                     var $node = dialog.getContentNode();
 
@@ -97,7 +97,7 @@ define('io.ox/contacts/settings/pane',
                         usermodel = model;
                     }).fail(function () {
                         $node.append(
-                            $.fail(gt("Couldn't load your contact data."), function () {
+                            $.fail(gt('Couldn\'t load your contact data.'), function () {
                                 users.editCurrentUser($node).done(function () {
                                     $node.find('[data-action="discard"]').hide();
                                 });

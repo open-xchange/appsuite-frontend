@@ -56,13 +56,13 @@ define('io.ox/mail/mailfilter/settings/model',
 
     function provideEmptyModel() {
         return {
-            "rulename": gt('New rule'),
-            "test": {
-                "id": "true"
+            'rulename': gt('New rule'),
+            'test': {
+                'id': 'true'
             },
-            "actioncmds": [],
-            "flags": [],
-            "active": true
+            'actioncmds': [],
+            'flags': [],
+            'active': true
         };
     }
 
