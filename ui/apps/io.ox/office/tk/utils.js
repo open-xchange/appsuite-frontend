@@ -905,7 +905,9 @@ define.async('io.ox/office/tk/utils',
             // replace the double quote character with the text &quot;
             .replace(/"/g, '&quot;')
             // replace the apostrophe with the text &#39; (&apos; is not an HTML entity!)
-            .replace(/'/g, '&#39;');
+            .replace(/'/g, '&#39;')
+            // replace the non-breakable space with the text &nbsp;
+            .replace(/\xa0/g, '&nbsp;');
     };
 
     // options object ---------------------------------------------------------
