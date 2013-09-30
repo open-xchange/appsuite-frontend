@@ -284,5 +284,23 @@ define(['shared/examples/for/api',
                 });
             });
         });
+
+        describe('shortens the folder title', function () {
+            it('from "this is a test title" to "this\u2026title"', function () {
+                expect(api.getFolderTitle('this is a test title', 10)).toBe('this\u2026title');
+            });
+
+            it('from "this is a test title" to "t\u2026e"', function () {
+                expect(api.getFolderTitle('this is a test title', 5)).toBe('t\u2026e');
+            });
+
+            it('from "this is a test title" to "this is a test title"', function () {
+                expect(api.getFolderTitle('this is a test title', 20)).toBe('this is a test title');
+            });
+
+            it('from "this is a test title" to "this is\u2026test title"', function () {
+                expect(api.getFolderTitle('this is a test title', 19)).toBe('this is\u2026test title');
+            });
+        });
     });
 });
