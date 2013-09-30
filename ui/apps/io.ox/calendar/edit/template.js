@@ -33,12 +33,15 @@ define('io.ox/calendar/edit/template',
         collapsed = false;
 
     // create blacklist
-    var blackList = {},
+    var blackList = null,
         blackListStr = settings.get('participantBlacklist') || '';
 
-    _(blackListStr.split(',')).each(function (item) {
-        blackList[item.trim()] = true;
-    });
+    if (blackListStr) {
+        blackList = {};
+        _(blackListStr.split(',')).each(function (item) {
+            blackList[item.trim()] = true;
+        });
+    }
 
     // subpoint for conflicts
     var pointConflicts = point.createSubpoint('conflicts', {
@@ -321,7 +324,7 @@ define('io.ox/calendar/edit/template',
         id: 'add-participant',
         index: 1500,
         rowClass: 'collapsed',
-        draw: function (options) {
+        draw: function (baton) {
             var pNode;
             this.append(
                 pNode = $('<div class="input-append span6">').append(
@@ -333,14 +336,21 @@ define('io.ox/calendar/edit/template',
 
             require(['io.ox/calendar/edit/view-addparticipants'], function (AddParticipantsView) {
 
-                var collection = options.model.getParticipants(),
+                var collection = baton.model.getParticipants(),
                     autocomplete = new AddParticipantsView({ el: pNode, blackList: blackList });
 
-                collection.each(function (item) {
-                    if (blackList[item.getEmail()]) {
-                        collection.remove(item);
-                    }
-                });
+                if (blackList) {
+                    collection.each(function (item) {
+                        if (item && blackList[item.getEmail()]) {
+                            collection.remove(item);
+                        }
+                    });
+                    collection.on('change', function (item) {
+                        if (item && blackList[item.getEmail()]) {
+                            collection.remove(item);
+                        }
+                    });
+                }
 
                 if (!_.browser.Firefox) { pNode.addClass('input-append-fix'); }
 
