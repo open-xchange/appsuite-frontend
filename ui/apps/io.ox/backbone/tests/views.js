@@ -10,7 +10,13 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/backbone/tests/views', ['io.ox/core/extensions', 'io.ox/backbone/modelFactory', 'io.ox/backbone/views', 'io.ox/backbone/tests/recipeApi'], function (ext, ModelFactory, views, api) {
+define('io.ox/backbone/tests/views',
+    ['io.ox/core/extensions',
+     'io.ox/backbone/modelFactory',
+     'io.ox/backbone/views',
+     'io.ox/backbone/tests/recipeApi'
+    ], function (ext, ModelFactory, views, api) {
+
     'use strict';
 
     var factory = new ModelFactory({
@@ -110,7 +116,7 @@ define('io.ox/backbone/tests/views', ['io.ox/core/extensions', 'io.ox/backbone/m
                     var View = point.createView();
                     var recipe = factory.create({folder: 12, id: 23});
 
-                    var $el = new View({model: recipe}).render().$el;
+                    new View({model: recipe}).render();
 
                     j.expect(extension).not.toEqual(null);
 

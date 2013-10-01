@@ -45,7 +45,6 @@ define('io.ox/lessons/lessons/model_view/register',
         description: 'In which changes will be observed, validations run and data displayed many times',
         section: 'Architecture',
         start: function (options) {
-            var win = options.win;
             require(['text!io.ox/lessons/lessons/model_view/lesson.html'], function (html) {
                 var win = options.win;
                 win.nodes.main.empty().append($(html));

@@ -99,11 +99,11 @@ define('io.ox/core/pubsub/model',
                         api.on('refresh:all', function () {
                             collection.fetch();
                         });
-                        this.on('change:enabled', function (model, value, opt) {
+                        this.on('change:enabled', function (model) {
                             model.collection.sort();
                         });
                     },
-                    sync: function (method, collection, options) {
+                    sync: function (method, collection) {
                         if (method !== 'read') return;
                         var self = this;
 

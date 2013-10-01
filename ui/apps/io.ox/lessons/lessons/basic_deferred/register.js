@@ -25,8 +25,6 @@ define('io.ox/lessons/lessons/basic_deferred/register',
         description: 'In which burgers will be ordered and the deferred objects pattern for asynchronous operations will be explored',
         section: 'Basics',
         start: function (options) {
-            var win = options.win;
-
             require(['text!io.ox/lessons/lessons/basic_deferred/lesson.html'], function (html) {
                 var win = options.win;
 
@@ -47,7 +45,6 @@ define('io.ox/lessons/lessons/basic_deferred/register',
                         }
                     }
                 });
-
                 win.idle();
             });
         }

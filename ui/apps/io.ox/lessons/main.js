@@ -51,7 +51,7 @@ define('io.ox/lessons/main',
             var state = app.getState();
             if (state && state.lesson) {
 
-                var lesson = ext.point('io.ox/lessons/lesson').get(state.lesson, function (lesson) {
+                ext.point('io.ox/lessons/lesson').get(state.lesson, function (lesson) {
                     lesson.start({
                         app: app,
                         win: win
@@ -81,7 +81,7 @@ define('io.ox/lessons/main',
 
         _(lessons).each(function (lessons, sectionName) {
             $all.append($('<h2>').text(sectionName));
-            var $list = $('<div>').appendTo(win.nodes.main);
+            $('<div>').appendTo(win.nodes.main);
             _(lessons).each(function (lesson) {
                 var $lessonDiv = $('<div>').appendTo($all);
                 $lessonDiv.append($('<h3>').append($('<a href="#">').text(lesson.title)).on('click', openLesson(lesson)));

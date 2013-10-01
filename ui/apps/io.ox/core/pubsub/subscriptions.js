@@ -35,8 +35,9 @@ define('io.ox/core/pubsub/subscriptions',
                 folder: options.folder,
                 entity: { folder: options.folder },
                 entityModule: options.module
-            }),
-            view = new SubscriptionView({ model: model }).render(options.app);
+            });
+
+        new SubscriptionView({ model: model }).render(options.app);
     },
 
     SubscriptionView = Backbone.View.extend({

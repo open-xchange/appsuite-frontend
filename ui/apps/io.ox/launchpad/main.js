@@ -83,15 +83,17 @@ define('io.ox/launchpad/main',
                 running,
                 parent = pad.parent().parent(),
                 p = self.offset(),
-                pp = parent.offset(),
-                clone = $(this).clone()
+                pp = parent.offset();
+
+            parent.append(
+                $(this).clone()
                     .addClass('io-ox-app-clone')
                     .css({
                         position: 'absolute',
                         top: p.top - pp.top,
                         left: p.left - pp.left
                     })
-                    .appendTo(parent);
+            );
             // animate & launch
             parent.focus();
             // look for running app

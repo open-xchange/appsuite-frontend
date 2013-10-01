@@ -516,6 +516,8 @@ define.async('io.ox/realtime/rt',
         start();
     });
 
+    /* jshint unused: false */
+    /* This function doesn't seem to be used, can it be removed? */
     function drainAckBuffer() {
         if (_(ackBuffer).isEmpty()) {
             return;

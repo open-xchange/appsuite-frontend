@@ -30,7 +30,6 @@ define('io.ox/lessons/lessons/basic_requirejs/register',
         description: 'In which dependencies will be resolved',
         section: 'Basics',
         start: function (options) {
-            var win = options.win;
             require(['text!io.ox/lessons/lessons/basic_requirejs/lesson.html'], function (html) {
                 var win = options.win;
                 win.nodes.main.empty().append($(html));

@@ -18,6 +18,7 @@ define('io.ox/core/login-i18n', ['gettext!io.ox/core/login'], function (gt) {
     return gt;
 
     // A list of all strings to be included in the POT file.
+    /* jshint unused: false */
     function list() {
         gt('User name');
         gt('Password');

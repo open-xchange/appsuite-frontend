@@ -407,7 +407,8 @@ define('io.ox/core/tk/folderviews',
                 var def = isOpen() ? paintChildren() : $.when();
                 updateArrow();
                 // add to DOM
-                if (checkbox && ((data.own_rights & 0x3f80 /* read access */) || data.subscribed /* to get rid of folder */)) {
+                // (data.own_rights & 0x3f80 /* read access */) || data.subscribed /* to get rid of folder */)
+                if (checkbox && ((data.own_rights & 0x3f80) || data.subscribed)) {
                     nodes.folder.append(nodes.arrow, nodes.label, nodes.counter, nodes.subscriber);
                 } else {
                     nodes.folder.append(nodes.arrow, nodes.label, nodes.counter);
