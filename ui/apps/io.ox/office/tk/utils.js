@@ -284,8 +284,8 @@ define.async('io.ox/office/tk/utils',
     /**
      * Returns whether specific properties of the passed objects are equal,
      * while ignoring all other properties. If a property is missing in both
-     * objects, it is considered to be equal. Uses the Underscore method
-     * _.isEqual() to compare the property values.
+     * objects, it is considered to be equal. Uses a custom comparator or the
+     * Underscore method _.isEqual() to compare the property values.
      *
      * @param {Object} object1
      *  The first object to be compared to the other.
@@ -316,6 +316,43 @@ define.async('io.ox/office/tk/utils',
                 hasAttr2 = attrName in object2;
             return (hasAttr1 === hasAttr2) && (!hasAttr1 || comparator(object1[attrName], object2[attrName]));
         });
+    };
+
+    /**
+     * Removes all occurrences of the specified value from the array in-place.
+     * Uses a custom comparator or the Underscore method _.isEqual() to compare
+     * the property values.
+     *
+     * @param {Array} array
+     *  (in/out) The array to be shortened.
+     *
+     * @param {Any} value
+     *  The value to be removed from the array.
+     *
+     * @param {Function} [comparator=_.isEqual]
+     *  A binary predicate function that returns true if the two passed values
+     *  are considered being equal. Will be called to compare the passed value
+     *  against the elements of the array.
+     *
+     * @returns {Number}
+     *  The number of elements removed from the array.
+     */
+    Utils.spliceValue = function (array, value, comparator) {
+
+        var // the old array length
+            length = array.length;
+
+        // default to the _isEqual() method to compare values
+        comparator = _.isFunction(comparator) ? comparator : _.isEqual;
+
+        // remove all elements matching the passed value
+        for (var index = length - 1; index >= 0; index -= 1) {
+            if (comparator(value, array[index])) {
+                array.splice(index, 1);
+            }
+        }
+
+        return length - array.length;
     };
 
     /**
@@ -1632,12 +1669,12 @@ define.async('io.ox/office/tk/utils',
 
     /**
      * Finds the closest ancestor of the passed node that matches the specified
-     * jQuery selector. In difference to the jQuery method jQuery.closest(),
-     * the passed node selector can be a function, and the found parent can be
-     * the root node itself.
+     * jQuery selector. If the specified node itself matches the selector, it
+     * will be returned. In difference to the jQuery method jQuery.closest(),
+     * the passed node selector can be a function.
      *
      * @param {HTMLElement|jQuery} rootNode
-     *  The DOM root node that will not be left while searching for an ancestor
+     *  The DOM root node that will not be left while searching for a matching
      *  node. If this object is a jQuery collection, uses the first node it
      *  contains.
      *
@@ -1647,26 +1684,75 @@ define.async('io.ox/office/tk/utils',
      *  jQuery collection, uses the first node it contains.
      *
      * @param {String|Function|Node|jQuery} selector
-     *  A jQuery selector that will be used to find the ancestor DOM node. The
+     *  A jQuery selector that will be used to find a matching DOM node. The
      *  selector will be passed to the jQuery method jQuery.is() for each node.
      *  If this selector is a function, it will be called with the current DOM
      *  node bound to the symbol 'this'. See the jQuery API documentation at
      *  http://api.jquery.com/is for details.
      *
      * @returns {Node|Null}
-     *  The first ancestor node that matches the passed selector, and is
-     *  contained in or equal to the root node; or null, no node has been
-     *  found.
+     *  The passed node, or the first ancestor node that matches the passed
+     *  selector, and is contained in or equal to the root node; or null, no
+     *  node has been found.
      */
-    Utils.findClosestParent = function (rootNode, node, selector) {
+    Utils.findClosest = function (rootNode, node, selector) {
 
         rootNode = Utils.getDomNode(rootNode);
-        node = Utils.getDomNode(node).parentNode;
-        while (node && !$(node).is(selector)) {
-            node = node.parentNode;
-        }
+        node = Utils.getDomNode(node);
 
-        return (node && ((rootNode === node) || Utils.containsNode(rootNode, node))) ? node : null;
+        do {
+            if ($(node).is(selector)) { return node; }
+            if (node === rootNode) { return null; }
+            node = node.parentNode;
+        } while (node);
+
+        return null;
+    };
+
+    /**
+     * Finds the farthest ancestor of the passed node that matches the
+     * specified jQuery selector. If the specified node itself matches the
+     * selector but none of its ancestors, the node will be returned itself. In
+     * difference to most jQuery methods, the passed node selector can be a
+     * function.
+     *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The DOM root node that will not be left while searching for matching
+     *  nodes. If this object is a jQuery collection, uses the first node it
+     *  contains.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node whose chain of ancestors will be searched for a matching
+     *  node. Must be a descendant of the passed root node. If this object is a
+     *  jQuery collection, uses the first node it contains.
+     *
+     * @param {String|Function|Node|jQuery} selector
+     *  A jQuery selector that will be used to find a matching DOM node. The
+     *  selector will be passed to the jQuery method jQuery.is() for each node.
+     *  If this selector is a function, it will be called with the current DOM
+     *  node bound to the symbol 'this'. See the jQuery API documentation at
+     *  http://api.jquery.com/is for details.
+     *
+     * @returns {Node|Null}
+     *  The passed node, or the farthest ancestor node that matches the passed
+     *  selector, and is contained in or equal to the root node; or null, no
+     *  node has been found.
+     */
+    Utils.findFarthest = function (rootNode, node, selector) {
+
+        var // the last found matching node
+            matchingNode = null;
+
+        rootNode = Utils.getDomNode(rootNode);
+        node = Utils.getDomNode(node);
+
+        do {
+            if ($(node).is(selector)) { matchingNode = node; }
+            if (node === rootNode) { return matchingNode; }
+            node = node.parentNode;
+        } while (node);
+
+        return null;
     };
 
     /**
