@@ -381,15 +381,22 @@ define.async('io.ox/office/tk/utils',
      *  backwards through the array, and returns the first array element that
      *  passes the truth test.
      *
-     * @param {Object} [context]
-     *  If specified, the iterator will be called with this context (the symbol
-     *  'this' will be bound to the context inside the iterator function).
+     * @param {Object} [options]
+     *  A map with options controlling the behavior of this method. The
+     *  following options are supported:
+     *  @param {Object} [options.context]
+     *      If specified, the iterator will be called with this context (the
+     *      symbol 'this' will be bound to the context inside the iterator
+     *      function).
      *
      * @returns {Any}
      *  The last matching element in the array; or undefined, if no element
      *  passes the truth test.
      */
-    Utils.findLast = function (array, iterator, context) {
+    Utils.findLast = function (array, iterator, options) {
+
+        var context = Utils.getOption(options, 'context');
+
         for (var index = array.length - 1; index >= 0; index -= 1) {
             if (iterator.call(context, array[index], index, array)) {
                 return array[index];
@@ -540,6 +547,41 @@ define.async('io.ox/office/tk/utils',
             if (iterator.call(context, value) === Utils.BREAK) { return Utils.BREAK; }
             value += step;
         }
+    };
+
+    /**
+     * Calculates the sum of the values returned by the iterator function
+     * invoked for each element of the passed array or property of the passed
+     * object. Can be used as convenience shortcut for the Underscore 'reduce'
+     * method.
+     *
+     * @param {Array|Object} list
+     *  The object or array whose properties/elements will be iterated.
+     *
+     * @param {Function} iterator
+     *  The iterator function invoked for all elements/properties. Receives
+     *  the current object property value or array element. Must return a
+     *  number.
+     *
+     * @param {Object} [options]
+     *  A map with options controlling the behavior of this method. The
+     *  following options are supported:
+     *  @param {Object} [options.context]
+     *      If specified, the iterator will be called with this context (the
+     *      symbol 'this' will be bound to the context inside the iterator
+     *      function).
+     *
+     * @returns {Number}
+     *  A reference to the Utils.BREAK object, if the iterator has returned
+     *  Utils.BREAK to stop the iteration process, otherwise undefined.
+     */
+    Utils.getSum = function (list, iterator, options) {
+
+        var context = Utils.getOption(options, 'context');
+
+        return _(list).reduce(function (sum, entry) {
+            return sum + iterator.call(context, entry);
+        }, 0);
     };
 
     /**
