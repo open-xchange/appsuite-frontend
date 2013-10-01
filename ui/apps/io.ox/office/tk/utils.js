@@ -2545,7 +2545,8 @@ define.async('io.ox/office/tk/utils',
      */
     Utils.setControlTooltip = function (control, tooltip, placement) {
         if (tooltip) {
-            control.first().attr('title', tooltip);  //Marko comment: adds attribute to button, the same value as tooltip, that´s "Bold".
+            control.first().attr('title', tooltip);     //Marko comment: adds attribute to button, the same value as tooltip. Example: value "Bold".
+            //console.log('Testing output: tooltip: ' + tooltip + '\n\n');	//Marko added: for testing output only
         } else {
             control.first().removeAttr('title');
         }
@@ -2626,25 +2627,41 @@ define.async('io.ox/office/tk/utils',
      * @returns {jQuery}
      *  A jQuery object containing the new button element. The button element
      *  will be represented by an <a> DOM element due to rendering bugs in
-     *  FireFox with <button> elements.‚
+     *  FireFox with <button> elements.
      */
     Utils.createButton = function (options) {
-
         var // the tab index
-            tabIndex = Utils.getIntegerOption(options, 'tabIndex', 0),
+        tabIndex = Utils.getIntegerOption(options, 'tabIndex', 0),
             // Create the DOM anchor element representing the button. Do NOT use
             // <button> elements, Firefox has problems with text clipping and
             // correct padding of the <button> contents.
+        
+        
+        //Marko added: "Utils.getStringOption()" - works as a filter because some DOM elements have an attribute "title" undefined, and we have to change that.
+        sayMyName = Utils.getStringOption(options, 'tooltip', ''),
+        
+        button = Utils.createControl('a', { tabindex: tabIndex, role: 'button', title: sayMyName }, options).addClass(Utils.BUTTON_CLASS);
+        
+        //console.log('Testing output: sayMyName: ' + sayMyName + '\n\n'); //Marko added: for testing output only
+        
+        
+        /*
+         Marko comments:
+          a) Added attribute "title" for ARIA for all buttons. We have to put an attribute "title" into button's <a> DOM element as well,
+             because Screen-Reader only says title name if it's defined inside <a> DOM element and not if it's defined in it's parent <div>.
 
-            button = Utils.createControl('a', { tabindex: tabIndex, 'role': 'button' }, options).addClass(Utils.BUTTON_CLASS);
-                                                              /* Marko added: attribute "role" for ARIA for all buttons.
-                                                                              You must add new attribute here, not in function
-                                                                              above under "Utils.createButtonMarkup" !
+             Object "options" has properties of the button and is defined for every button custom,
+             at file "office-web/.../io.ox/office/framework/view/editcontrols.js".
+             Example: object for button "Bold" is defined at: "EditControls.BOLD_OPTIONS"
 
-                                                                              Attribute must be placed inside button <a> to be recognized by AViewer, not
-                                                                              in it's parent <div> at file button.js under "initialization".
+          b) Added attribute "role" for ARIA for all buttons.
+             You must add new attribute here, not into function above at: "Utils.createButtonMarkup" !
 
-                                                                */
+             Attribute "role" must be placed inside button's <a> DOM element to be recognized by AViewer, not
+             in it's parent <div> at "button.js" under "initialization".
+         */
+
+
         Utils.setControlCaption(button, options);
         return button;
     };
