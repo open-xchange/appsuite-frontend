@@ -382,7 +382,7 @@ define('io.ox/calendar/edit/template',
                     });
 
                     if (!alreadyParticipant) {
-                        if (blackList[contactUtil.getMail(data)]) {
+                        if (blackList && blackList[contactUtil.getMail(data)]) {
                             notifications.yell('warning', gt('This email address cannot be used for appointments'));
                         } else {
                             if (data.type !== 5) {
