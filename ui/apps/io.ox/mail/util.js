@@ -403,15 +403,15 @@ define('io.ox/mail/util',
         },
 
         isUnseen: function (data) {
-            return data && data.flags ? (data.flags & 32) !== 32 : undefined;
+            return data && data.hasOwnProperty('flags') ? (data.flags & 32) !== 32 : undefined;
         },
 
         isDeleted: function (data) {
-            return data && data.flags ? (data.flags & 2) === 2 : undefined;
+            return data && data.hasOwnProperty('flags') ? (data.flags & 2) === 2 : undefined;
         },
 
         isSpam: function (data) {
-            return data && data.flags ? (data.flags & 128) === 128 : undefined;
+            return data && data.hasOwnProperty('flags') ? (data.flags & 128) === 128 : undefined;
         },
 
         isAnswered: function () {
