@@ -27,7 +27,8 @@ define('io.ox/calendar/freebusy/controller',
      'gettext!io.ox/calendar/freebusy',
      'settings!io.ox/core',
      'less!io.ox/calendar/week/style.less',
-     'less!io.ox/calendar/freebusy/style.less'], function (dialogs, WeekView, templates, folderAPI, AddParticipantsView, participantsModel, participantsView, userAPI, contactsUtil, api, notifications, date, detailView, gt, settings) {
+     'less!io.ox/calendar/freebusy/style.less'
+    ], function (dialogs, WeekView, templates, folderAPI, AddParticipantsView, participantsModel, participantsView, userAPI, contactsUtil, api, notifications, date, detailView, gt, settings) {
 
     'use strict';
 
@@ -133,12 +134,6 @@ define('io.ox/calendar/freebusy/controller',
                     return tempParticipant;
                 });
             };
-
-            function toModel(obj) {
-                var model = new Backbone.Model(obj);
-                model.id = _.cid(obj);
-                return model;
-            }
 
             function getColorByIndex(index) {
                 var model = self.participants.at(index);
@@ -418,7 +413,7 @@ define('io.ox/calendar/freebusy/controller',
                 self.changeMode(action);
             }
 
-            function clickButton(e) {
+            function clickButton() {
                 var action = $(this).attr('data-action');
                 state.resolve(action);
             }

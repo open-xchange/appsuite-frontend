@@ -22,7 +22,8 @@ define('io.ox/core/pubsub/publications',
      'io.ox/core/tk/dialogs',
      'settings!io.ox/core',
      'gettext!io.ox/core/pubsub',
-     'less!io.ox/core/pubsub/style.less'], function (pubsub, ext, forms, api, templAPI, folderAPI, notifications, dialogs, settings, gt)  {
+     'less!io.ox/core/pubsub/style.less'
+    ], function (pubsub, ext, forms, api, templAPI, folderAPI, notifications, dialogs, settings, gt)  {
 
     'use strict';
 
@@ -74,7 +75,7 @@ define('io.ox/core/pubsub/publications',
         _modelBinder: undefined,
         editMode: undefined,
         infostoreItem: false,
-        initialize: function (options) {
+        initialize: function () {
             if (this.model.id) {
                 this.editMode = true;
             } else {
@@ -104,14 +105,14 @@ define('io.ox/core/pubsub/publications',
 
             var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, templates: [], popup: popup, target: self.model.attributes[self.model.attributes.target]});
 
-            popup.on('publish', function (action) {
+            popup.on('publish', function () {
 
                 self.model.save().done(function (id) {
 
                     //set id, if none is present (new model)
                     if (!self.model.id) { self.model.id = id; }
 
-                    self.model.fetch().done(function (model, collection) {
+                    self.model.fetch().done(function (model) {
 
                         var publications = pubsub.publications(),
                             pubUrl = model[model.target].url;

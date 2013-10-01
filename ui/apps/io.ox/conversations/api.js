@@ -12,7 +12,8 @@
  */
 
 define('io.ox/conversations/api',
-    ['io.ox/core/http', 'io.ox/core/api/factory'
+    ['io.ox/core/http',
+     'io.ox/core/api/factory'
     ], function (http, apiFactory) {
 
     'use strict';
@@ -85,7 +86,7 @@ define('io.ox/conversations/api',
                 .pipe(function (ids) {
                     // create new conversation
                     return create(ids)
-                        .done(function (data) {
+                        .done(function () {
                             // trigger
                             api.caches.all.clear();
                             api.trigger('refresh.all');

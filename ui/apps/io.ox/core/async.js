@@ -1,5 +1,5 @@
 
-define('io.ox/core/async', [], function () {
+define('io.ox/core/async', function () {
 
     'use strict';
 

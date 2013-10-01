@@ -21,14 +21,14 @@ define('io.ox/mail/api',
      'io.ox/core/notifications',
      'io.ox/mail/util',
      'settings!io.ox/mail',
-     'gettext!io.ox/mail'], function (http, cache, coreConfig, apiFactory, folderAPI, accountAPI, notifications, util, settings, gt) {
+     'gettext!io.ox/mail'
+    ], function (http, cache, coreConfig, apiFactory, folderAPI, accountAPI, notifications, util, settings, gt) {
 
     // SHOULD NOT USE notifications inside API!
 
     'use strict';
 
     var DONE = $.when(),
-        DELAY = 1000 * 60, // 60 seconds (kind of protection against unwanted selection; e.g. Bug #26575)
         DELIM = '//';
 
     var tracker = (function () {
@@ -43,10 +43,6 @@ define('io.ox/mail/api',
             // track mails that are manually marked as unseen
             unseen = {},
             colorLabel = {};
-
-        var extend = function (a, b) {
-            return _.extend(a, { flags: b.flags, color_label: b.color_label });
-        };
 
         var calculateUnread = function (memo, obj) {
             return memo + ((obj.flags & 32) !== 32 ? 1 : 0);
@@ -184,8 +180,7 @@ define('io.ox/mail/api',
              */
             remove: function (obj) {
                 var cid = getCID(obj),
-                    root = this.getThreadCID(cid),
-                    thread;
+                    root = this.getThreadCID(cid);
                 if (root) {
                     threads[root] = _(threads[root]).filter(function (item) {
                         return cid !== getCID(item);
@@ -646,12 +641,6 @@ define('io.ox/mail/api',
                 api.caches.all.grepRemove(targetFolderId + DELIM) // clear target folder
             );
         };
-    };
-
-    var refreshAll = function (obj) {
-        $.when.apply($, obj).done(function () {
-            api.trigger('refresh.all');
-        });
     };
 
     api.update = function () {
@@ -1241,7 +1230,7 @@ define('io.ox/mail/api',
         }
 
         return deferred
-            .done(function (text) {
+            .done(function () {
                 api.trigger('send', { data: data, files: files, form: form });
             })
             .then(function (text) {
@@ -1280,7 +1269,7 @@ define('io.ox/mail/api',
                 var base = _(result.data.toString().split(api.separator)),
                     id = base.last(),
                     folder = base.without(id).join(api.separator);
-                api.get({ folder_id: folder, id: id }).then(function (mail) {
+                api.get({ folder_id: folder, id: id }).then(function () {
                     $.when(api.caches.list.add(data), api.caches.get.add(data))
                     .done(function () {
                         api.trigger('refresh.list');
@@ -1485,7 +1474,7 @@ define('io.ox/mail/api',
      * @fires  api#refresh.all
      * @return {promise}
      */
-    api.refresh = function (e) {
+    api.refresh = function () {
         if (ox.online) {
             // reset cache control
             _(cacheControl).each(function (val, cid) {
@@ -1655,7 +1644,7 @@ define('io.ox/mail/api',
         }
     });
 
-    api.on('delete', function (e, ids) {
+    api.on('delete', function () {
         api.refresh();
     });
 

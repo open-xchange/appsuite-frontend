@@ -10,7 +10,10 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/core/extPatterns/dnd', ['io.ox/core/extensions', 'io.ox/core/tk/upload'], function (ext, upload) {
+define('io.ox/core/extPatterns/dnd',
+    ['io.ox/core/extensions',
+     'io.ox/core/tk/upload'
+    ], function (ext, upload) {
 
     'use strict';
 

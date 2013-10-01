@@ -20,7 +20,8 @@ define('io.ox/mail/write/test',
      'io.ox/mail/sender',
      'io.ox/mail/write/test/html_send',
      'io.ox/mail/write/test/text_send',
-     'io.ox/mail/write/test/html_reply'], function (writer, mailAPI, mailUtil, accountAPI, ext, sender) {
+     'io.ox/mail/write/test/html_reply'
+    ], function (writer, mailAPI, mailUtil, accountAPI, ext, sender) {
 
     'use strict';
 
@@ -268,7 +269,7 @@ define('io.ox/mail/write/test',
                 if (!_.browser.IE) {
 
                     j.it('sends mail successfully', function () {
-                        var data = app.getMail().data, done = new Done(), myself = ox.user_id;
+                        var data = app.getMail().data, done = new Done();
                         j.waitsFor(done, 'mail being send', TIMEOUT);
                         // get myself
                         accountAPI.getPrimaryAddress().done(function (address) {
@@ -792,7 +793,7 @@ define('io.ox/mail/write/test',
                     account0.addresses = ' ALL@open-xchange.com, matthias.biggeleben@ox.io,mattes@open-xchange.com ';
 
                     api.cache.add(account0)
-                    .done(function (name) {
+                    .done(function () {
 
                         api.getSenderAddresses(0).done(function (addresses) {
                             var expected = [
@@ -820,7 +821,7 @@ define('io.ox/mail/write/test',
                     });
 
                     api.cache.add(account1)
-                    .done(function (name) {
+                    .done(function () {
 
                         api.getAllSenderAddresses().done(function (addresses) {
                             var expected = [

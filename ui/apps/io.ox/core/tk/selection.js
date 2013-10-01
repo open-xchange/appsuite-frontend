@@ -15,7 +15,8 @@ define('io.ox/core/tk/selection',
     ['io.ox/core/event',
      'io.ox/core/extensions',
      'io.ox/core/notifications',
-     'gettext!io.ox/core'], function (Events, ext, notifications, gt) {
+     'gettext!io.ox/core'
+    ], function (Events, ext, notifications, gt) {
 
     'use strict';
 
@@ -301,11 +302,10 @@ define('io.ox/core/tk/selection',
         };
 
         touchstartHandler = function (e) {
-            var node, key, id,
-                cancelAction = $(e.target).hasClass('cell-button') || $(e.target).hasClass('folder-label');
+            var node, key, id;
 
             // check if the touchstart was triggerd from a inline button or folder tree
-            if (/*!e.isDefaultPrevented() && !cancelAction*/ mobileSelectMode) {
+            if (mobileSelectMode) {
                 node = $(this);
                 key = node.attr('data-obj-id');
                 id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
@@ -785,7 +785,7 @@ define('io.ox/core/tk/selection',
             return this;
         };
 
-        this.selectIndex = function (index) {
+        this.selectIndex = function () {
             var item = observedItems[lastValidIndex];
             if (item !== undefined) {
                 this.select(item.data);
@@ -813,10 +813,7 @@ define('io.ox/core/tk/selection',
         };
 
         this.isEmpty = function () {
-            for (var id in selectedItems) {
-                return false;
-            }
-            return true;
+            return _.isEmpty(selectedItems);
         };
 
         this.contains = function (ids) {
@@ -986,7 +983,7 @@ define('io.ox/core/tk/selection',
                         scrollSpeed = 0;
                     }
                     scroll();
-                }).on('mouseleave.dnd', function (e) {
+                }).on('mouseleave.dnd', function () {
                     scrollSpeed = 0;
                     scroll();
                     $(node).off('mousemove.dnd mouseleave.dnd');
@@ -1050,7 +1047,7 @@ define('io.ox/core/tk/selection',
                 }
             }
 
-            function drop(e) {
+            function drop() {
                 clearTimeout(expandTimer);
                 var target = $(this).attr('data-obj-id') || $(this).attr('data-cid'),
                     baton = new ext.Baton({ data: data, dragType: options.dragType, dropzone: this, target: target });

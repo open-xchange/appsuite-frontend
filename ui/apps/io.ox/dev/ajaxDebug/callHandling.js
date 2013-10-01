@@ -13,7 +13,9 @@
  */
 
 define('io.ox/dev/ajaxDebug/callHandling',
-    ['io.ox/core/http', 'io.ox/core/event'], function (http, Events) {
+    ['io.ox/core/http',
+     'io.ox/core/event'
+    ], function (http, Events) {
 
     'use strict';
 

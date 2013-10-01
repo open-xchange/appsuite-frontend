@@ -46,7 +46,13 @@
 
  **/
 
-define('io.ox/keychain/api', ['io.ox/core/extensions', 'io.ox/core/event', 'io.ox/core/http', 'gettext!io.ox/keychain'], function (ext, Events, http, gt) {
+define('io.ox/keychain/api',
+    ['io.ox/core/extensions',
+     'io.ox/core/event',
+     'io.ox/core/http',
+     'gettext!io.ox/keychain'
+    ], function (ext, Events, http, gt) {
+
     'use strict';
 
     var api = {};

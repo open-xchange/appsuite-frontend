@@ -11,8 +11,10 @@
  */
 
 define('io.ox/settings/accounts/email/test',
-    ['io.ox/core/extensions', 'io.ox/core/api/account',
-     'io.ox/settings/main'], function (ext, api, settings) {
+    ['io.ox/core/extensions',
+     'io.ox/core/api/account',
+     'io.ox/settings/main'
+    ], function (ext, api, settings) {
 
     'use strict';
 
@@ -41,6 +43,7 @@ define('io.ox/settings/accounts/email/test',
             'spam_handler': 'NoSpamHandler'
         },
 
+        /*
         TESTACCOUNTVALDIDATION = {
             'name': 'Neuer Account',
             'primary_address': 'oxtestermail@googlemail.com',
@@ -56,6 +59,7 @@ define('io.ox/settings/accounts/email/test',
             'transport_port': '465',
             'transport_credentials': false
         },
+        */
 
         TESTMAILAUTOCONFIG = {
             'email': 'oxtestermail@googlemail.com'
@@ -163,8 +167,8 @@ define('io.ox/settings/accounts/email/test',
         test: function (j) {
             j.describe('Creates a new email account via ui', function () {
 
-                var app = null, accountPane, buttonAdd, buttonAddAutoconf, buttonAddPassword, dialogAutoconf, dialogPassword,
-                    buttonSave, detailPane, dataId, dialogSuccess, buttonClose;
+                var app = null, accountPane, buttonAdd, buttonAddAutoconf, dialogAutoconf,
+                    dataId, dialogSuccess, buttonClose;
 
                 TESTMAILAUTOCONFIG.password = password || (password = prompt('Mail Account Password'));
 
@@ -281,8 +285,7 @@ define('io.ox/settings/accounts/email/test',
                         var me = this;
                         me.ready = false;
                         api.autoconfig(TESTMAILAUTOCONFIG)
-                        .done(function (data) {
-//                            console.log(data);
+                        .done(function () {
                             me.ready = true;
                         })
                         .fail(function () {

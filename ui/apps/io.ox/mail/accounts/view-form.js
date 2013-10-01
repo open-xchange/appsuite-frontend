@@ -16,7 +16,7 @@ define('io.ox/mail/accounts/view-form',
      'io.ox/core/notifications',
      'io.ox/core/api/account',
      'text!io.ox/mail/accounts/account_detail.html',
-      'settings!io.ox/mail',
+     'settings!io.ox/mail',
      'gettext!io.ox/settings/settings'
     ], function (View, notifications, AccountAPI, tmpl, settings, gt) {
 
@@ -84,7 +84,7 @@ define('io.ox/mail/accounts/view-form',
         AccountDetailView = Backbone.View.extend({
             tagName: 'div',
             _modelBinder: undefined,
-            initialize: function (options) {
+            initialize: function () {
                 // create template
                 this.template = doT.template(tmpl);
                 this._modelBinder = new Backbone.ModelBinder();
@@ -256,8 +256,7 @@ define('io.ox/mail/accounts/view-form',
 
                 if (self.model.get('id') !== 0) {
                     var property = $(e.currentTarget).prev().attr('data-property'),
-                        id = self.model.get(property),
-                        accountName = self.model.get('name');
+                        id = self.model.get(property);
                     require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
 
                         var label = gt('Select folder'),

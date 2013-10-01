@@ -14,7 +14,8 @@
 define('io.ox/contacts/util',
     ['io.ox/core/util',
      'settings!io.ox/contacts',
-     'gettext!io.ox/contacts'], function (util, settings, gt) {
+     'gettext!io.ox/contacts'
+    ], function (util, settings, gt) {
 
     'use strict';
 

@@ -16,7 +16,8 @@ define('io.ox/calendar/acceptdeny',
      'io.ox/core/api/folder',
      'io.ox/calendar/util',
      'settings!io.ox/calendar',
-     'gettext!io.ox/calendar'], function (api, dialogs, folderAPI, util, calSettings, gt) {
+     'gettext!io.ox/calendar'
+    ], function (api, dialogs, folderAPI, util, calSettings, gt) {
 
     'use strict';
 
@@ -38,7 +39,7 @@ define('io.ox/calendar/acceptdeny',
                     $('<select>')
                         .attr('data-property', 'reminder')
                         .attr('id', 'reminderSelect')
-                        .append(function (i, html) {
+                        .append(function () {
                             var self = $(this),
                                 options = util.getReminderOptions();
                             _(options).each(function (label, value) {

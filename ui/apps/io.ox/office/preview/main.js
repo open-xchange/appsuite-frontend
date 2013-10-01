@@ -71,7 +71,7 @@ define('io.ox/office/preview/main',
          *  initial data of the preview document has been loaded; or rejected
          *  when an error has occurred.
          */
-        function importDocument(point) {
+        function importDocument() {
 
             // disable drop events
             self.getWindowNode().on('drop dragstart dragover', false);

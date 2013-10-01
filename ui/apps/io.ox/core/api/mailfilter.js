@@ -11,7 +11,9 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 define('io.ox/core/api/mailfilter',
-        ['io.ox/core/http', 'io.ox/core/event'], function (http, Events) {
+    ['io.ox/core/http',
+     'io.ox/core/event'
+    ], function (http, Events) {
 
     'use strict';
 

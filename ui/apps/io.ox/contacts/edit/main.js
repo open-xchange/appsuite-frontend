@@ -22,7 +22,7 @@ define('io.ox/contacts/edit/main',
      'io.ox/core/notifications',
      'io.ox/core/util',
      'less!io.ox/contacts/edit/style.less'
-     ], function (view, model, gt, ext, util, dnd, capabilities, notifications, coreUtil) {
+    ], function (view, model, gt, ext, util, dnd, capabilities, notifications, coreUtil) {
 
     'use strict';
 
@@ -107,8 +107,7 @@ define('io.ox/contacts/edit/main',
 
                         if (!data.id) {
                             editView.listenTo(contact, 'change', function () {
-                                var isDirty = getDirtyStatus(),
-                                    node = container.find('.btn[data-action="save"]');
+                                var isDirty = getDirtyStatus();
                                 fnToggleSave(isDirty);
                             });
 
@@ -116,7 +115,7 @@ define('io.ox/contacts/edit/main',
                                 container.find('.btn[data-action="save"]').prop('disabled', true);
                             }
 
-                            container.find('input[type="text"]').on('keyup', _.debounce(function (e) {
+                            container.find('input[type="text"]').on('keyup', _.debounce(function () {
                                 var isDirty = getDirtyStatus();
                                 if (!isDirty && $(this).val()) {
                                     fnToggleSave(true);
@@ -254,9 +253,9 @@ define('io.ox/contacts/edit/main',
 
         ext.point('io.ox/contacts/edit/main/model').extend({
             id: 'io.ox/contacts/edit/main/model/auto_display_name',
-            customizeModel: function (contact, value, options) {
+            customizeModel: function (contact) {
                 contact.on('change:first_name change:last_name change:title',
-                    function (model, value, options) {
+                    function (model) {
                         if (model.changed.display_name) return;
                         var mod = model.toJSON();
                         delete mod.display_name;

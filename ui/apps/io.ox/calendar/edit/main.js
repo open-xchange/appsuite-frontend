@@ -12,14 +12,15 @@
  */
 
 define('io.ox/calendar/edit/main',
-      ['io.ox/calendar/model',
-       'io.ox/calendar/api',
-       'io.ox/core/extPatterns/dnd',
-       'io.ox/calendar/edit/view-main',
-       'io.ox/core/notifications',
-       'gettext!io.ox/calendar/edit/main',
-       'settings!io.ox/calendar',
-       'less!io.ox/calendar/edit/style.less'], function (appointmentModel, api, dnd, MainView, notifications, gt, settings) {
+    ['io.ox/calendar/model',
+     'io.ox/calendar/api',
+     'io.ox/core/extPatterns/dnd',
+     'io.ox/calendar/edit/view-main',
+     'io.ox/core/notifications',
+     'gettext!io.ox/calendar/edit/main',
+     'settings!io.ox/calendar',
+     'less!io.ox/calendar/edit/style.less'
+    ], function (appointmentModel, api, dnd, MainView, notifications, gt, settings) {
 
     'use strict';
 
@@ -30,7 +31,6 @@ define('io.ox/calendar/edit/main',
         controller = _.extend(app, {
 
             start: function () {
-                var self = this;
                 if (_.browser.IE === undefined || _.browser.IE > 9) {
                     this.dropZone = new dnd.UploadZone({
                         ref: 'io.ox/calendar/edit/dnd/actions'

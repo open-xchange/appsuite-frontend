@@ -13,7 +13,8 @@
 define('io.ox/core/upsell',
     ['io.ox/core/capabilities',
      'settings!io.ox/core',
-     'gettext!io.ox/core'], function (capabilities, settings, gt) {
+     'gettext!io.ox/core'
+    ], function (capabilities, settings, gt) {
 
     'use strict';
 

@@ -12,9 +12,12 @@
  */
 
 define('io.ox/files/settings/pane',
-       ['settings!io.ox/files', 'io.ox/files/settings/model',
-        'dot!io.ox/files/settings/form.html', 'io.ox/core/extensions',
-        'gettext!io.ox/files'], function (settings, filesSettingsModel, tmpl, ext, gt) {
+    ['settings!io.ox/files',
+     'io.ox/files/settings/model',
+     'dot!io.ox/files/settings/form.html',
+     'io.ox/core/extensions',
+     'gettext!io.ox/files'
+    ], function (settings, filesSettingsModel, tmpl, ext, gt) {
 
     'use strict';
 

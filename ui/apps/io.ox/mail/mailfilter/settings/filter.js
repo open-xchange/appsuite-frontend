@@ -11,17 +11,17 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/mailfilter/settings/filter', [
-    'io.ox/core/extensions',
-    'io.ox/core/api/mailfilter',
-    'io.ox/mail/mailfilter/settings/model',
-    'io.ox/core/tk/dialogs',
-    'gettext!io.ox/mail',
-    'io.ox/settings/util',
-    'text!io.ox/mail/mailfilter/settings/tpl/listbox.html',
-    'text!io.ox/mail/mailfilter/settings/tpl/filter_select.html',
-    'io.ox/mail/mailfilter/settings/filter/view-form'
-], function (ext, api, mailfilterModel, dialogs, gt, settingsUtil, listboxtmpl, tmpl, FilterDetailView) {
+define('io.ox/mail/mailfilter/settings/filter',
+    ['io.ox/core/extensions',
+     'io.ox/core/api/mailfilter',
+     'io.ox/mail/mailfilter/settings/model',
+     'io.ox/core/tk/dialogs',
+     'gettext!io.ox/mail',
+     'io.ox/settings/util',
+     'text!io.ox/mail/mailfilter/settings/tpl/listbox.html',
+     'text!io.ox/mail/mailfilter/settings/tpl/filter_select.html',
+     'io.ox/mail/mailfilter/settings/filter/view-form'
+    ], function (ext, api, mailfilterModel, dialogs, gt, settingsUtil, listboxtmpl, tmpl, FilterDetailView) {
 
     'use strict';
 
@@ -125,7 +125,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                 var AccountSelectView = Backbone.View.extend({
 
                     _modelBinder: undefined,
-                    initialize: function (options) {
+                    initialize: function () {
                         this.template = doT.template(tmpl);
                         this._modelBinder = new Backbone.ModelBinder();
 
@@ -268,7 +268,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             handle: '.drag-handle',
                             scroll: true,
                             delay: 150,
-                            stop: function (e, ui) {
+                            stop: function () {
                                 var arrayOfFilters = $node.find('li[data-id]'),
                                 data = _.map(arrayOfFilters, function (single) {
                                     return parseInt($(single).attr('data-id'), 10);

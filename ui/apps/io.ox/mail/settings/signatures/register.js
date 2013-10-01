@@ -17,7 +17,8 @@ define('io.ox/mail/settings/signatures/register',
      'settings!io.ox/mail',
      'io.ox/core/tk/dialogs',
      'io.ox/core/api/snippets',
-     'less!io.ox/mail/settings/signatures/style.less'], function (ext, gt, settings, dialogs, snippets) {
+     'less!io.ox/mail/settings/signatures/style.less'
+    ], function (ext, gt, settings, dialogs, snippets) {
 
     'use strict';
 
@@ -68,7 +69,7 @@ define('io.ox/mail/settings/signatures/register',
         )
         .addPrimaryButton('save', gt('Save'))
         .addButton('cancel', gt('Discard'))
-        .on('save', function (action) {
+        .on('save', function () {
             if ($name.val() !== '') {
                 var update = signature.id ? {} : {type: 'signature', module: 'io.ox/mail', displayname: '', content: '', misc: {insertion: 'below'}};
 
@@ -86,7 +87,7 @@ define('io.ox/mail/settings/signatures/register',
                 } else {
                     def = snippets.create(update);
                 }
-                def.done(function (resp) {
+                def.done(function () {
                     popup.idle();
                     popup.close();
                 }).fail(require('io.ox/core/notifications').yell);
@@ -156,7 +157,7 @@ define('io.ox/mail/settings/signatures/register',
                 );
 
                 var specializedClick = false;
-                $row.find(':checkbox').on('click', function (e) {
+                $row.find(':checkbox').on('click', function () {
                     specializedClick = true;
                 });
 

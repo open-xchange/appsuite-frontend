@@ -28,6 +28,7 @@ define('io.ox/contacts/widgets/canvasresize',
     ['io.ox/contacts/widgets/exif'], function (exifread) {
 
     'use strict';
+
     var pluginName = 'canvasResize',
             methods = {
         newsize: function (w, h, W, H, C) {
@@ -238,7 +239,7 @@ define('io.ox/contacts/widgets/canvasresize',
                 var exif = exifread.getOrientation(dataURL);
 
                 var img = new Image();
-                img.onload = function (e) {
+                img.onload = function () {
 
                     var orientation = exif || 1;
                     orientation = methods.rotate(orientation, $this.options.rotate);

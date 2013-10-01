@@ -84,8 +84,7 @@ define('io.ox/editor/main',
         },
 
         updateModel: function () {
-            var filename = this.getFilename(),
-                title = this.getTitle();
+            var filename = this.getFilename();
             this.model.set({
                 title: filename,
                 filename: filename,

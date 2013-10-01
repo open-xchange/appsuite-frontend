@@ -12,14 +12,14 @@
  */
 define('io.ox/backbone/modelFactory',
     ['io.ox/backbone/basicModel',
-     'io.ox/core/extensions',
-     'gettext!io.ox/core'], function (BasicModel, ext, gt) {
+     'io.ox/core/extensions'
+    ], function (BasicModel, ext) {
 
     'use strict';
 
     var OXModel = BasicModel.extend({
         idAttribute: '_uid',
-        initialize: function (obj) {
+        initialize: function () {
             BasicModel.prototype.initialize.apply(this, $.makeArray(arguments));
 
             this.realm = this.get('_realm') || this.factory.realm('default');

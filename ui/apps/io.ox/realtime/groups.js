@@ -11,9 +11,15 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], function (rt, Event) {
+define('io.ox/realtime/groups',
+    ['io.ox/realtime/rt',
+     'io.ox/core/event'
+    ], function (rt, Event) {
+
     'use strict';
+
     var counter = 0;
+
     function RealtimeGroup(id) {
         var self = this, heartbeat = null, selector = 'rt-group-' + counter, destroyed = false;
         counter++;
@@ -27,10 +33,10 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
             };
         }
 
-        var relayOfflineEvent = relayEvent('offline');
-        var relayOnlineEvent = relayEvent('online');
-        var relayResetEvent = relayEvent('reset');
-        var relayHighLoadEvent = relayEvent('highLoad');
+        var relayOfflineEvent = relayEvent('offline'),
+            relayOnlineEvent = relayEvent('online'),
+            relayResetEvent = relayEvent('reset'),
+            relayHighLoadEvent = relayEvent('highLoad');
 
         rt.on('offline', relayOfflineEvent);
         rt.on('online', relayOnlineEvent);

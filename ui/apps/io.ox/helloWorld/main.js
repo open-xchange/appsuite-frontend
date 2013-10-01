@@ -12,7 +12,7 @@
 
 // convention: the application's central startup file is called "main"
 
-define('io.ox/helloWorld/main', [], function () {
+define('io.ox/helloWorld/main', function () {
 
     'use strict';
 

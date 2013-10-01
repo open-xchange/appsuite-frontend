@@ -1,4 +1,5 @@
 define('plugins/owm/portal', ['io.ox/core/extensions'], function (ext) {
+
     'use strict';
 
     ext.point('io.ox/portal/widget').extend({id: 'owm1'});

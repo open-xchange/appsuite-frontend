@@ -11,7 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/event'], function (http, cache, Event) {
+define('io.ox/core/settings',
+    ['io.ox/core/http',
+     'io.ox/core/cache',
+     'io.ox/core/event'
+    ], function (http, cache, Event) {
 
     'use strict';
 
@@ -130,7 +134,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
             });
         };
 
-        var change = function (model, e) {
+        var change = function (model) {
             _(model.changed).each(function (value, path) {
                 self.set(path, value, { validate: true });
             });
@@ -264,12 +268,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                 //options
                 opt = $.extend({
                     debug: false
-                }, options),
-                notify = function (e) {
-                    require(['io.ox/core/notifications'], function (notifications) {
-                        notifications.yell(e);
-                    });
-                };
+                }, options);
 
             //debug
             if (opt.debug) {
@@ -322,7 +321,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                     }
                     return hash[path] || { tree: {}, meta: {} };
                 },
-                function defaultsFail(e) {
+                function defaultsFail() {
                     console.warn('Could not load defaults for', path);
                     return $.Deferred().resolve(
                         hash[path] || { tree: {}, meta: {} }
@@ -333,7 +332,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
     }
 
     return {
-        load: function (name, req, load, config) {
+        load: function (name, req, load) {
             // init cache?
             if (!settingsCache) {
                 settingsCache = new cache.SimpleCache('settings', true);

@@ -16,7 +16,8 @@ define('io.ox/mail/accounts/model',
      'io.ox/keychain/model',
      'io.ox/core/api/account',
      'io.ox/core/api/folder',
-     'gettext!io.ox/mail/accounts/settings'], function (ext, keychainModel, AccountAPI, folderAPI, gt) {
+     'gettext!io.ox/mail/accounts/settings'
+    ], function (ext, keychainModel, AccountAPI, folderAPI, gt) {
 
     'use strict';
 
@@ -80,7 +81,7 @@ define('io.ox/mail/accounts/model',
             }
         },
 
-        initialize: function (options) {
+        initialize: function () {
 
         },
 
@@ -149,9 +150,8 @@ define('io.ox/mail/accounts/model',
 
         },
 
-        destroy: function (options) {
+        destroy: function () {
             AccountAPI.remove([this.attributes.id]);
-            var model = this;
         }
 
     });

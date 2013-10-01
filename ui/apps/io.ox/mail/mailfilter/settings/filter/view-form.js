@@ -96,16 +96,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             return $(el).find('[data-test-id]');
         },
 
-        checkForPosition = function (array, target) {
-            var position;
-            _.each(array, function (val, index) {
-                if (_.isEqual(val, target)) {
-                    position = index;
-                }
-            });
-            return position;
-        },
-
         renderWarningForEmptyTests = function (node) {
             var warning = $('<div>').addClass('alert alert-block').text(gt('This rule applies to all messages. Please add a condition to restrict this rule to specific messages.'));
             node.append(warning);
@@ -121,10 +111,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             tagName: 'div',
             className: 'io-ox-mailfilter-edit',
             _modelBinder: undefined,
-            initialize: function (options) {
-
-//                Backbone.Validation.bind(this, {selector: 'name', forceUpdate: true});//forceUpdate needed otherwise model is always valid even if inputfields contain wrong values
-            },
+            initialize: function () {},
             render: function () {
 
                 var baton = ext.Baton({ model: this.model, view: this });
@@ -243,7 +230,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     list = link.closest('li'),
                     type = list.attr('data-type'),
                     testID = list.attr('data-test-id'),
-                    testAction = list.attr('data-action'),
 
                     testArray =  this.model.get('test'),
                     translatedValue = type === 'size' ? sizeValues[value] : containsValues[value];
@@ -266,7 +252,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     link = node.closest('.action').find('a.dropdown-toggle'),
 
                     list = link.closest('li'),
-                    type = list.attr('data-type'),
                     actionID = list.attr('data-action-id'),
                     actionsArray =  this.model.get('actioncmds'),
                     translatedValue = flagValues[value];
@@ -398,9 +383,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
             onChangeColor: function (e) {
                 e.preventDefault();
-                var self = this,
-                    list = $(e.currentTarget).closest('li[data-action-id]'),
-                    type = list.attr('data-type'),
+                var list = $(e.currentTarget).closest('li[data-action-id]'),
                     actionID = list.attr('data-action-id'),
                     colorValue = list.find('div.flag').attr('data-color-value'),
                     actionArray =  this.model.get('actioncmds');
@@ -421,8 +404,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
             var listTests = $('<ol class="widget-list tests">'),
                 listActions = $('<ol class="widget-list actions">'),
-                appliedTest = baton.model.get('test'),
-                pullRight = $('<div>').addClass('pull-right');
+                appliedTest = baton.model.get('test');
 
             if (appliedTest.tests) {
                 appliedTest = appliedTest.tests;
@@ -658,8 +640,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             },
 
                 target = baton.view.dialog.getFooter(),
-                arrayOfActions = baton.model.get('actioncmds'),
-                checkbox;
+                arrayOfActions = baton.model.get('actioncmds');
 
             function checkForStopAction(array) {
                 var stopAction;
@@ -667,7 +648,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     return true;
                 }
 
-                _.each(array, function (single, id) {
+                _.each(array, function (single) {
                     if (single.id === 'stop') {
                         stopAction = false;
                     }

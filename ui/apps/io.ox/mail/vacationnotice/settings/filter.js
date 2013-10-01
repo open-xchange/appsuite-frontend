@@ -11,18 +11,17 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/mail/vacationnotice/settings/filter', [
-    'io.ox/core/extensions',
-    'io.ox/core/api/mailfilter',
-    'io.ox/mail/vacationnotice/settings/model',
-    'io.ox/mail/vacationnotice/settings/view-form',
-    'io.ox/core/tk/dialogs',
-    'io.ox/core/date',
-    'gettext!io.ox/mail'
-], function (ext, api, mailfilterModel, ViewForm, dialogs, date, gt) {
+define('io.ox/mail/vacationnotice/settings/filter',
+    ['io.ox/core/extensions',
+     'io.ox/core/api/mailfilter',
+     'io.ox/mail/vacationnotice/settings/model',
+     'io.ox/mail/vacationnotice/settings/view-form',
+     'io.ox/core/tk/dialogs',
+     'io.ox/core/date',
+     'gettext!io.ox/mail'
+    ], function (ext, api, mailfilterModel, ViewForm, dialogs, date, gt) {
 
     'use strict';
-
 
     var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/vacationnotice/model', api);
 
@@ -81,7 +80,6 @@ define('io.ox/mail/vacationnotice/settings/filter', [
 
                 vacationData.primaryMail = primaryMail;
 
-
                 VacationEdit = ViewForm.protectedMethods.createVacationEdit('io.ox/core/vacationnotice', multiValues, vacationData.activateTimeFrame);
                 vacationNotice = new VacationEdit({model: factory.create(vacationData)});
 
@@ -107,8 +105,7 @@ define('io.ox/mail/vacationnotice/settings/filter', [
                 ext.point('io.ox/core/vacationnotice/model').extend({
                     id: 'io.ox/core/vacationnotice/model/text',
                     triggerChange: function () {
-                        var that = this,
-                            textarea = $(this.el).find('textarea');
+                        var textarea = $(this.el).find('textarea');
                         textarea.on('keyup keydown', function () {
                             textarea.trigger('change');
                         });

@@ -14,9 +14,8 @@ define('io.ox/contacts/edit/test',
     ['io.ox/core/extensions',
      'io.ox/contacts/main',
      'io.ox/contacts/api',
-     'settings!io.ox/core',
-     'io.ox/core/date'
-    ], function (ext, contacts, api, coreConfig, date) {
+     'settings!io.ox/core'
+    ], function (ext, contacts, api, coreConfig) {
 
     'use strict';
 
@@ -470,9 +469,9 @@ define('io.ox/contacts/edit/test',
         test: function (j) {
             j.describe('Contact extpoint', function () {
                 var app = null,
-                data, itemFill, itemDelete, buttonUpdate, buttonSave, buttonClose,
-                buttonDelete, dialog, testfield, testfield2, formFrame = null,
-                dataId, dataFolder, dataObj, phrase;
+                data, buttonUpdate, buttonClose,
+                buttonDelete, dialog, testfield, formFrame = null,
+                phrase;
 
                 j.it('opens contact app', function () {
 

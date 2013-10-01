@@ -23,8 +23,7 @@ define('io.ox/tasks/actions',
     'use strict';
 
     //  actions
-    var Action = links.Action, Button = links.Button,
-        ActionGroup = links.ActionGroup, ActionLink = links.ActionLink;
+    var Action = links.Action;
 
     new Action('io.ox/tasks/actions/create', {
         requires: function (e) {
@@ -69,7 +68,7 @@ define('io.ox/tasks/actions',
                 popup.on('deleteTask', function () {
                     require(['io.ox/tasks/api'], function (api) {
                         api.remove(data)
-                            .done(function (data) {
+                            .done(function () {
                                 notifications.yell('success', gt.ngettext('Task has been deleted!',
                                                                           'Tasks have been deleted!', numberOfTasks));
                                 popup.close();
@@ -136,7 +135,7 @@ define('io.ox/tasks/actions',
         require(['io.ox/tasks/api'], function (api) {
             if (data.length > 1) {
                 api.updateMultiple(data, mods.data)
-                    .done(function (result) {
+                    .done(function () {
                         _(data).each(function (item) {
                             //update detailview
                             api.trigger('update:' + _.ecid(item));
@@ -151,7 +150,7 @@ define('io.ox/tasks/actions',
                 mods.data.id = data.id;
                 mods.data.folder_id = data.folder_id || data.folder;
                 api.update(mods.data)
-                    .done(function (result) {
+                    .done(function () {
                         notifications.yell('success', mods.label);
                     })
                     .fail(function (result) {
@@ -224,7 +223,7 @@ define('io.ox/tasks/actions',
                                     node.parent().idle();
                                     notifications.yell('success', gt.ngettext('Task moved.', 'Tasks moved.', numberOfTasks));
                                 })
-                                .fail(function (response) {
+                                .fail(function () {
                                     node.show();
                                     node.parent().idle();
                                     notifications.yell('error', gt('A severe error occurred!'));
@@ -283,7 +282,7 @@ define('io.ox/tasks/actions',
         requires: function (e) {
             return e.collection.has('some', 'read') && _.device('!small');
         },
-        multiple: function (list, baton) {
+        multiple: function (list) {
             print.request('io.ox/tasks/print', list);
         }
     });
@@ -331,7 +330,7 @@ define('io.ox/tasks/actions',
                 return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
             }, false);
         },
-        multiple: function (list, baton) {
+        multiple: function (list) {
             require(['io.ox/core/api/attachment', 'io.ox/files/carousel'], function (attachmentAPI, slideshow) {
                 var files = _(list).map(function (file) {
                     return {
@@ -370,7 +369,7 @@ define('io.ox/tasks/actions',
                      'io.ox/core/api/attachment']).done(function (dialogs, p, attachmentAPI) {
                 //build Sidepopup
                 new dialogs.SidePopup().show(baton.e, function (popup) {
-                    _(list).each(function (data, index) {
+                    _(list).each(function (data) {
                         data.dataURL = attachmentAPI.getUrl(data, 'view');
                         var pre = new p.Preview(data, {
                             width: popup.parent().width(),
@@ -485,7 +484,7 @@ define('io.ox/tasks/actions',
 
     //strange workaround because extend only takes new links instead of plain objects with draw method
     new Action('io.ox/tasks/actions/placeholder', {
-        action: function (baton) {}
+        action: $.noop
     });
 
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({

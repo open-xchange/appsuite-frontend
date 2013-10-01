@@ -12,19 +12,19 @@
  */
 
 define('io.ox/core/settings/pane',
-        ['io.ox/core/extensions',
-         'io.ox/backbone/basicModel',
-         'io.ox/backbone/views',
-         'io.ox/backbone/forms',
-         'io.ox/core/http',
-         'io.ox/core/api/apps',
-         'io.ox/core/capabilities',
-         'io.ox/core/notifications',
-         'plugins/portal/userSettings/register',
-         'settings!io.ox/core',
-         'settings!io.ox/core/settingOptions',
-         'gettext!io.ox/core'],
-         function (ext, BasicModel, views, forms, http, appAPI, capabilities, notifications, userSettings, settings, settingOptions, gt) {
+    ['io.ox/core/extensions',
+     'io.ox/backbone/basicModel',
+     'io.ox/backbone/views',
+     'io.ox/backbone/forms',
+     'io.ox/core/http',
+     'io.ox/core/api/apps',
+     'io.ox/core/capabilities',
+     'io.ox/core/notifications',
+     'plugins/portal/userSettings/register',
+     'settings!io.ox/core',
+     'settings!io.ox/core/settingOptions',
+     'gettext!io.ox/core'
+    ], function (ext, BasicModel, views, forms, http, appAPI, capabilities, notifications, userSettings, settings, settingOptions, gt) {
 
     'use strict';
 
@@ -37,7 +37,7 @@ define('io.ox/core/settings/pane',
         id: 'extensions',
         draw: function () {
             var model = settings.createModel(BasicModel);
-            model.on('change', function (model, e) {
+            model.on('change', function (model) {
 
                 settings.saveAndYell().then(
                     function success() {

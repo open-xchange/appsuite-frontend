@@ -17,14 +17,13 @@ define('io.ox/contacts/distrib/main',
      'io.ox/contacts/model',
      'io.ox/contacts/distrib/create-dist-view',
      'gettext!io.ox/contacts',
-     'io.ox/contacts/util',
      'less!io.ox/contacts/distrib/style.less'
-     ], function (api, contactModel, ContactCreateDistView, gt, util) {
+    ], function (api, contactModel, ContactCreateDistView, gt) {
 
     'use strict';
 
     // multi instance pattern
-    function createInstance(data, mainapp) {
+    function createInstance(data) {
 
         var app,
             win,
@@ -208,6 +207,3 @@ define('io.ox/contacts/distrib/main',
     };
 
 });
-
-
-

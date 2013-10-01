@@ -17,7 +17,8 @@ define('io.ox/tasks/print',
      'io.ox/tasks/util',
      'io.ox/calendar/util',
      'io.ox/core/date',
-     'gettext!io.ox/tasks'], function (print, calendarPrint, api, util, calendarUtil, date, gt) {
+     'gettext!io.ox/tasks'
+    ], function (print, calendarPrint, api, util, calendarUtil, date, gt) {
 
     'use strict';
 

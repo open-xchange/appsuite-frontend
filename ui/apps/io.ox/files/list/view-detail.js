@@ -24,7 +24,8 @@ define('io.ox/files/list/view-detail',
      'io.ox/core/api/folder',
      'io.ox/core/tk/attachments',
      'gettext!io.ox/files',
-     'less!io.ox/files/style.less'], function (ext, links, actionPerformer, date, actions, filesAPI, preview, userAPI, folderAPI, attachments, gt) {
+     'less!io.ox/files/style.less'
+    ], function (ext, links, actionPerformer, date, actions, filesAPI, preview, userAPI, folderAPI, attachments, gt) {
 
     'use strict';
 

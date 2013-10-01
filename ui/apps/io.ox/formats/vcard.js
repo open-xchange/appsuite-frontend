@@ -11,7 +11,7 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/formats/vcard', [], function () {
+define('io.ox/formats/vcard', function () {
 
     'use strict';
 
@@ -86,8 +86,7 @@ define('io.ox/formats/vcard', [], function () {
         }, n,
         contacts = [],
         imagecontainer = '',
-        lines = vcard.split(/\r?\n/),
-        fnFilter = function (p) { return ! p.match(/[a-z]+=[a-z]+/); };
+        lines = vcard.split(/\r?\n/);
 
         for (n in lines) {
             var line = lines[n],
@@ -118,16 +117,6 @@ define('io.ox/formats/vcard', [], function () {
             }
         }
         return contacts;
-    };
-
-    /**
-     * returns hcard
-     * @private
-     * @param  {array} contact
-     * @return {string} stringified content
-     */
-    var stringify = function (contact) {
-        return contact.toString();
     };
 
     /**

@@ -10,8 +10,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/emoji/util',
-    ['settings!io.ox/mail'], function (settings) {
+define('io.ox/core/emoji/util', ['settings!io.ox/mail'], function (settings) {
 
     'use strict';
 

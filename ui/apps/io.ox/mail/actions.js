@@ -54,7 +54,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/delete', {
         id: 'delete',
         requires: 'toplevel some delete',
-        multiple: function (list, baton) {
+        multiple: function (list) {
 
             var check = settings.get('removeDeletedPermanently') || _(list).any(function (o) {
                 return account.is('trash', o.folder_id);
@@ -203,7 +203,7 @@ define('io.ox/mail/actions',
         requires: function (e) {
             return e.collection.has('some', 'read') && _.device('!small');
         },
-        multiple: function (list, baton) {
+        multiple: function (list) {
             print.request('io.ox/mail/print', list);
         }
     });
@@ -476,7 +476,7 @@ define('io.ox/mail/actions',
             // open side popup
             require(['io.ox/core/tk/dialogs', 'io.ox/preview/main'], function (dialogs, p) {
                 new dialogs.SidePopup().show(baton.e, function (popup) {
-                    _(list).each(function (data, i) {
+                    _(list).each(function (data) {
                         var pre = new p.Preview({
                             data: data,
                             filename: data.filename,
@@ -565,7 +565,7 @@ define('io.ox/mail/actions',
         multiple: function (list) {
             notifications.yell('busy', gt('Attachments will be saved'));
             api.saveAttachments(list)
-                .done(function (data) {
+                .done(function () {
                     notifications.yell('success', gt('Attachments have been saved'));
                 })
                 .fail(notifications.yell);
@@ -660,7 +660,7 @@ define('io.ox/mail/actions',
                         {'com.openexchange.groupware.task.folder': coreConfig.get('folder/tasks')}
                     ]
                 })
-                .done(function (data) {
+                .done(function () {
                     notifications.yell('success', gt('The appointment has been added to your calendar'));
                 })
                 .fail(notifications.yell);
@@ -841,7 +841,7 @@ define('io.ox/mail/actions',
 
             lengthValue = collectedRecipients.length;
 
-            _(collectedRecipients).each(function (mail, index) {
+            _(collectedRecipients).each(function (mail) {
                 contactAPI.search(mail).done(function (obj) {
                     var currentObj = (obj[0]) ? obj[0] : {email1: mail, display_name: mail},
                         internalUser = {id: currentObj.internal_userid, type: 1},

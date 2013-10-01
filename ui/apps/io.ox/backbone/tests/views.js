@@ -21,7 +21,7 @@ define('io.ox/backbone/tests/views', ['io.ox/core/extensions', 'io.ox/backbone/m
     ext.point('test/suite').extend({
         id: 'backbone-views',
         index: 100,
-        test: function (j, utils) {
+        test: function (j) {
 
             j.describe('view extension points', function () {
 

@@ -247,7 +247,6 @@ define('plugins/notifications/tasks/register',
             e.stopPropagation();
             var endDate = new Date(),
                 dates,
-                reminder,
                 model = this.model,
                 time = ($(e.target).data('value') || $(e.target).val()).toString(),
                 key = [model.get('folder_id') + '.' + model.get('id')];

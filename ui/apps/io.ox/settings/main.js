@@ -12,17 +12,18 @@
  */
 
 define('io.ox/settings/main',
-     ['io.ox/core/tk/vgrid',
-      'io.ox/core/api/apps',
-      'io.ox/core/extensions',
-      'io.ox/core/tk/forms',
-      'io.ox/core/tk/view',
-      'io.ox/core/commons',
-      'gettext!io.ox/core',
-      'settings!io.ox/settings/configjump',
-      'io.ox/core/settings/errorlog/settings/pane',
-      'io.ox/core/settings/downloads/pane',
-      'less!io.ox/settings/style.less'], function (VGrid, appsAPI, ext, forms, View, commons, gt, configJumpSettings) {
+    ['io.ox/core/tk/vgrid',
+     'io.ox/core/api/apps',
+     'io.ox/core/extensions',
+     'io.ox/core/tk/forms',
+     'io.ox/core/tk/view',
+     'io.ox/core/commons',
+     'gettext!io.ox/core',
+     'settings!io.ox/settings/configjump',
+     'io.ox/core/settings/errorlog/settings/pane',
+     'io.ox/core/settings/downloads/pane',
+     'less!io.ox/settings/style.less'
+    ], function (VGrid, appsAPI, ext, forms, View, commons, gt, configJumpSettings) {
 
     'use strict';
 
@@ -38,7 +39,7 @@ define('io.ox/settings/main',
                 if (_.device('smartphone')) title.prepend($('<i class="icon-chevron-right" style="float:right">'));
                 return { title: title };
             },
-            set: function (data, fields, index) {
+            set: function (data, fields) {
                 var title = gt.pgettext('app', data.title);
                 fields.title.append($.txt(
                         title === data.title ? gt(data.title) : title
@@ -50,7 +51,7 @@ define('io.ox/settings/main',
             build: function () {
                 this.addClass('settings-label');
             },
-            set: function (data, fields, index) {
+            set: function (data) {
                 this.text(data.group || '');
             }
         }
@@ -275,7 +276,7 @@ define('io.ox/settings/main',
 
             right.empty().busy();
             if (data.loadSettingPane || _.isUndefined(data.loadSettingPane)) {
-                return require([settingsPath], function (m) {
+                return require([settingsPath], function () {
                     right.empty().idle(); // again, since require makes this async
                     ext.point(extPointPart).invoke('draw', right, baton);
                     updateExpertMode();

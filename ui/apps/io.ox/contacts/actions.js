@@ -21,12 +21,13 @@ define('io.ox/contacts/actions',
      'io.ox/portal/util',
      'gettext!io.ox/contacts',
      'settings!io.ox/contacts',
-     'io.ox/core/extPatterns/actions'], function (ext, links, api, coreConfig, notifications, print, portalUtil, gt, settings, actions) {
+     'io.ox/core/extPatterns/actions'
+    ], function (ext, links, api, coreConfig, notifications, print, portalUtil, gt, settings, actions) {
 
     'use strict';
 
     //  actions
-    var Action = links.Action, Button = links.Button,
+    var Action = links.Action,
         ActionGroup = links.ActionGroup, ActionLink = links.ActionLink;
 
     new Action('io.ox/contacts/actions/delete', {
@@ -280,7 +281,7 @@ define('io.ox/contacts/actions',
         requires: function (e) {
             return e.collection.has('some', 'read') && _.device('!small') && !e.context.mark_as_distributionlist;
         },
-        multiple: function (list, baton) {
+        multiple: function (list) {
             print.request('io.ox/contacts/print', list);
         }
     });
@@ -365,16 +366,6 @@ define('io.ox/contacts/actions',
 
         multiple: function (list) {
             var distLists = [];
-
-            function mapList(obj) {
-                if (obj.id) {
-                    // internal
-                    return { type: 1, id: obj.id, display_name: obj.display_name, mail: obj.mail };
-                } else {
-                    // external
-                    return { type: 5, display_name: obj.display_name, mail: obj.mail };
-                }
-            }
 
             function mapContact(obj) {
                 if (obj.distribution_list && obj.distribution_list.length) {
@@ -508,7 +499,7 @@ define('io.ox/contacts/actions',
                 return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
             }, false);
         },
-        multiple: function (list, baton) {
+        multiple: function (list) {
             require(['io.ox/core/api/attachment', 'io.ox/files/carousel'], function (attachmentAPI, slideshow) {
                 var files = _(list).map(function (file) {
                     return {
@@ -547,7 +538,7 @@ define('io.ox/contacts/actions',
                      'io.ox/core/api/attachment'], function (dialogs, p, attachmentAPI) {
                 //build Sidepopup
                 new dialogs.SidePopup().show(baton.e, function (popup) {
-                    _(list).each(function (data, index) {
+                    _(list).each(function (data) {
                         data.dataURL = attachmentAPI.getUrl(data, 'view');
                         var pre = new p.Preview(data, {
                             width: popup.parent().width(),
@@ -617,8 +608,7 @@ define('io.ox/contacts/actions',
         id: 'sendmail',
         index: 10,
         draw: function (data) {
-            var selection = data.data,
-                baton = new ext.Baton({data: data.data});
+            var baton = new ext.Baton({data: data.data});
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
@@ -641,8 +631,7 @@ define('io.ox/contacts/actions',
         id: 'delete',
         index: 20,
         draw: function (data) {
-            var selection = data.data,
-                baton = new ext.Baton({data: data.data});
+            var baton = new ext.Baton({data: data.data});
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(

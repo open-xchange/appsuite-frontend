@@ -15,7 +15,8 @@ define('io.ox/calendar/edit/recurrence-view',
      'io.ox/core/tk/config-sentence',
      'io.ox/core/date',
      'gettext!io.ox/calendar/edit/main',
-     'less!io.ox/calendar/edit/style.less'], function (model, ConfigSentence, dateAPI, gt) {
+     'less!io.ox/calendar/edit/style.less'
+    ], function (model, ConfigSentence, dateAPI, gt) {
 
     'use strict';
 
@@ -23,7 +24,7 @@ define('io.ox/calendar/edit/recurrence-view',
         RECURRENCE_TYPES = model.RECURRENCE_TYPES;
 
     var CalendarWidgets = {
-        days: function ($anchor, attribute, options) {
+        days: function ($anchor, attribute) {
             var self = this,
                 nodes = {},
                 now = new dateAPI.Local(),
@@ -97,8 +98,7 @@ define('io.ox/calendar/edit/recurrence-view',
         dateFormat: dateAPI.getFormat(dateAPI.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
 
         datePicker: function ($anchor, attribute, options) {
-            var self = this,
-                originalContent = $anchor.html();
+            var self = this;
 
             // check options
             if (!options || !options.model) {
@@ -187,7 +187,7 @@ define('io.ox/calendar/edit/recurrence-view',
                     $anchor.show().focus();
                 }
 
-                $dateInput.on('hide', function (e) {
+                $dateInput.on('hide', function () {
                     updateValue();
                 });
 
@@ -469,7 +469,7 @@ define('io.ox/calendar/edit/recurrence-view',
                         2: gt('ends on a specific date'),
                         3: gt('ends after a certain number of appointments')
                     },
-                    chooseLabel: function (value) {
+                    chooseLabel: function () {
                         return gt('ends');
                     }
                 };
@@ -478,7 +478,7 @@ define('io.ox/calendar/edit/recurrence-view',
                         id: 'never',
                         tabindex: self.tabindex,
                         ending: _.extend({}, endingOptions, {
-                            chooseLabel: function (value) {
+                            chooseLabel: function () {
                                 return gt('never ends');
                             }
                         })

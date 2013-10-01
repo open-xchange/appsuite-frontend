@@ -12,6 +12,7 @@
  */
 
 define('io.ox/core/tk/keys', ['io.ox/core/event'], function (Events) {
+
     'use strict';
 
     var KEY_MAP = {

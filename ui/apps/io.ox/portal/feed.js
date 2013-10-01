@@ -10,7 +10,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/portal/feed', ['io.ox/core/extensions'], function (ext) {
+define('io.ox/portal/feed', function () {
 
     'use strict';
 
@@ -47,7 +47,7 @@ define('io.ox/portal/feed', ['io.ox/core/extensions'], function (ext) {
         return response;
     };
 
-    Feed.prototype.appendLimitOffset = function (url, count, offset) {
+    Feed.prototype.appendLimitOffset = function (url) {
         return url;
     };
 

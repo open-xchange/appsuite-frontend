@@ -104,8 +104,7 @@ define('io.ox/mail/write/view-main',
 
     var View = ViewClass.extend({
 
-        initialize: function (app, model) {
-            var self = this;
+        initialize: function (app) {
             this.sections = {};
             this.baton = ext.Baton({
                 app: app,
@@ -231,7 +230,7 @@ define('io.ox/mail/write/view-main',
                         click: function (e) {
                             copyRecipients.call(self, id, $(this), e);
                         },
-                        blur: function (e) {
+                        blur: function () {
                             copyRecipients.call(self, id, $(this));
                         }
                     })
@@ -379,11 +378,9 @@ define('io.ox/mail/write/view-main',
 
             e.preventDefault();
 
-            var recently = {},
-                icon = $(e.target).data('icon'),
+            var icon = $(e.target).data('icon'),
                 content = this.editor.val(),
-                caret = parseInt($(this.editor).attr('caretPosition'), 10),
-                subjectCaret = parseInt($(this.subject).attr('caretPosition'), 10);
+                caret = parseInt($(this.editor).attr('caretPosition'), 10);
 
             this.emoji.recent(icon.unicode);
 
@@ -568,7 +565,7 @@ define('io.ox/mail/write/view-main',
                             }
                         }
                     };
-            $inputWrap.on('change.fileupload', function (e) {
+            $inputWrap.on('change.fileupload', function () {
                 //use bubbled event to add fileupload-new again (workaround to add multiple files with IE)
                 $(this).find('div[data-provides="fileupload"]').addClass('fileupload-new').removeClass('fileupload-exists');
             });
@@ -749,7 +746,7 @@ define('io.ox/mail/write/view-main',
             function createEditor() {
                 // autogrow function which expands a textarea while typing
                 // to prevent overflowing on mobile devices
-                var autogrow = function (e) {
+                var autogrow = function () {
                     var input = $(this),
                         scrollHeight = input[0].scrollHeight,
                         clientHeight = input[0].clientHeight,
@@ -774,7 +771,7 @@ define('io.ox/mail/write/view-main',
                     .attr({ name: 'content', tabindex: '4', disabled: 'disabled', caretPosition: '0' })
                     .addClass('text-editor')
                     .addClass(settings.get('useFixedWidthFont') ? 'monospace' : '')
-                    .on('keyup click', function (e) {
+                    .on('keyup click', function () {
                         /* disabled emoji input for subject */
                         //$(this).attr('emojiFocus', 'true');
                         //self.subject.attr('emojiFocus', 'false');
@@ -930,13 +927,6 @@ define('io.ox/mail/write/view-main',
 
     var dummySignature = { displayname: gt('No signature') };
 
-    function round(num, digits) {
-        // TODO: add localization (. vs ,)
-        digits = digits || 0;
-        var pow = Math.pow(10, digits);
-        return Math.round(num * pow) / pow;
-    }
-
     function fnToggleSection(e) {
         var id = e.data.id,
             target = e.target;
@@ -946,18 +936,6 @@ define('io.ox/mail/write/view-main',
         } else {
             this.showSection(id, target);
         }
-    }
-
-    function fnHideSection(e) {
-        var id = e.data.id;
-        e.preventDefault();
-        this.hideSection(id, e.target);
-    }
-
-    function fnShowSection(e) {
-        var id = e.data.id;
-        e.preventDefault();
-        this.showSection(id, e.target);
     }
 
     function togglePriority() {
@@ -1078,7 +1056,7 @@ define('io.ox/mail/write/view-main',
         return mapping[field] || '';
     }
 
-    function drawAutoCompleteItem(node, data, query) {
+    function drawAutoCompleteItem(node, data) {
         var url = contactsUtil.getImage(data.data, contactPictureOptions), labelnode = '';
         //source field label
         if (getFieldLabel(data.field) !== '')

@@ -52,8 +52,7 @@ define('io.ox/mail/guidance/main',
             var data = baton.data,
                 total = data.total,
                 text,
-                ul,
-                link = $();
+                ul;
 
             if (total === 0) {
                 text = gt('No mails');
@@ -95,7 +94,7 @@ define('io.ox/mail/guidance/main',
         ext.point('io.ox/mail/guidance').extend({
             id: 'folder-statistic-help',
             index: INDEX += 100,
-            draw: function (baton) {
+            draw: function () {
 
                 var helpDir = 'help/' + ox.language + '/',
                     topics = [
@@ -128,7 +127,7 @@ define('io.ox/mail/guidance/main',
     ext.point('io.ox/mail/guidance').extend({
         id: 'upsell',
         index: INDEX += 100,
-        draw: function (baton) {
+        draw: function () {
 
             $('head').append(
                 $('<link href="http://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">')

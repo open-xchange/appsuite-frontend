@@ -10,7 +10,7 @@
  *
  */
 
-define('io.ox/office/settings/defaults', [], function () {
+define('io.ox/office/settings/defaults', function () {
 
     'use strict';
 

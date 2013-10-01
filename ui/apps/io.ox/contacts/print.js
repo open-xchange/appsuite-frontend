@@ -14,7 +14,8 @@ define('io.ox/contacts/print',
     ['io.ox/core/print',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
-     'gettext!io.ox/contacts'], function (print, api, util, gt) {
+     'gettext!io.ox/contacts'
+    ], function (print, api, util, gt) {
 
     'use strict';
 

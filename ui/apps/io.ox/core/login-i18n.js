@@ -12,7 +12,9 @@
  */
 
 define('io.ox/core/login-i18n', ['gettext!io.ox/core/login'], function (gt) {
+
     'use strict';
+
     return gt;
 
     // A list of all strings to be included in the POT file.

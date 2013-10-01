@@ -12,7 +12,9 @@
  */
 
 define('io.ox/core/api/group',
-    ['io.ox/core/http', 'io.ox/core/api/factory'], function (http, apiFactory) {
+    ['io.ox/core/http',
+     'io.ox/core/api/factory'
+    ], function (http, apiFactory) {
 
     'use strict';
 

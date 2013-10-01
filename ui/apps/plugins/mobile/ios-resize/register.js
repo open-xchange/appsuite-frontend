@@ -10,7 +10,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('plugins/mobile/ios-resize/register', [], function () {
+define('plugins/mobile/ios-resize/register', function () {
 
     'use strict';
 

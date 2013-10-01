@@ -10,7 +10,13 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/lessons/lessons/basic_requirejs/register', ['io.ox/core/extensions', 'io.ox/lessons/editor', 'io.ox/lessons/toc', 'gettext!io.ox/lessons/lessons/basic_requirejs/lang'], function (ext, Editor, TOC, gt) {
+define('io.ox/lessons/lessons/basic_requirejs/register',
+    ['io.ox/core/extensions',
+     'io.ox/lessons/editor',
+     'io.ox/lessons/toc',
+     'gettext!io.ox/lessons/lessons/basic_requirejs/lang'
+    ], function (ext, Editor, TOC, gt) {
+
     'use strict';
     // We need some sample translations
     gt('Hello');

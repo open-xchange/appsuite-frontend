@@ -10,7 +10,12 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/lessons/editor', ['ace/ace', 'ace/mode/javascript', 'ace/mode/html'],  function (ace, JavaScript, HTML) {
+define('io.ox/lessons/editor',
+    ['ace/ace',
+     'ace/mode/javascript',
+     'ace/mode/html'
+    ],  function (ace, JavaScript, HTML) {
+
     'use strict';
 
     var Editor = {
@@ -84,20 +89,8 @@ define('io.ox/lessons/editor', ['ace/ace', 'ace/mode/javascript', 'ace/mode/html
                     run: function (jsText) {
                         experimentDiv.empty();
                         log.empty();
-                        var parentNode = experimentDiv;
-                        function print() {
-                            _(arguments).each(function (argument) {
-                                console.log(argument);
-                                if (_.isString(argument)) {
-                                    log.append($('<div class="log">').text(argument));
-                                } else {
-                                    log.append($('<div class="log">').text(JSON.stringify(argument, null, 4)));
-                                }
-                            });
-                            log.show();
-                        }
-
-                        var ctx;
+                        var parentNode = experimentDiv,
+                            ctx;
                         if ($(element).data('context')) {
                             ctx = options.contexts[$(element).data('context')];
                             if (_.isFunction(ctx)) {

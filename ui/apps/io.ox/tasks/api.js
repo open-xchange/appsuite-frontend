@@ -11,9 +11,11 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 define('io.ox/tasks/api',
-        ['io.ox/core/http',
-         'io.ox/core/api/factory',
-         'io.ox/core/api/folder', 'io.ox/tasks/util'], function (http, apiFactory, folderAPI, util) {
+    ['io.ox/core/http',
+     'io.ox/core/api/factory',
+     'io.ox/core/api/folder',
+     'io.ox/tasks/util'
+    ], function (http, apiFactory, folderAPI, util) {
 
     'use strict';
 
@@ -334,7 +336,7 @@ define('io.ox/tasks/api',
                     return $.when();
                 }
             });
-        }).then(function (cache) {
+        }).then(function () {
             if (attachmentHandlingNeeded) {
                 api.addToUploadList(_.ecid(task));//to make the detailview show the busy animation
             }
@@ -501,7 +503,7 @@ define('io.ox/tasks/api',
             },
             data: options.data, // object with confirmation attribute
             appendColumns: false
-        }).pipe(function (response) {
+        }).pipe(function () {
             api.trigger('mark:task:confirmed', [{id: options.id, data: options.data}]);
             // update cache
             return api.removeFromCache(key);

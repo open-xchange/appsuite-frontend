@@ -140,7 +140,7 @@ define('io.ox/office/tk/control/radiolist',
          *  The value associated to the button to be activated. If set to null,
          *  does not activate any button (ambiguous state).
          */
-        function itemUpdateHandler(value, valueOptions) {
+        function itemUpdateHandler(value) {
 
             var // the target caption button
                 captionButton = self.getCaptionButton(),

@@ -10,8 +10,14 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/lessons/lessons/basic_deferred/register', ['io.ox/core/extensions', 'io.ox/lessons/editor', 'io.ox/lessons/toc'], function (ext, Editor, TOC) {
+define('io.ox/lessons/lessons/basic_deferred/register',
+    ['io.ox/core/extensions',
+     'io.ox/lessons/editor',
+     'io.ox/lessons/toc'
+    ], function (ext, Editor, TOC) {
+
     'use strict';
+
     ext.point('io.ox/lessons/lesson').extend({
         id: 'basic_deferred',
         index: 200,

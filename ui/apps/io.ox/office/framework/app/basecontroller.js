@@ -311,7 +311,7 @@ define('io.ox/office/framework/app/basecontroller',
          *  found, propagation of the event will be stopped, and the browser
          *  default action will be suppressed.
          */
-        function keyHandler(event, options) {
+        function keyHandler(event) {
 
             var // whether to stop propagation and prevent the default action
                 stopPropagation = false;

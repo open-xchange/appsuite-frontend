@@ -16,7 +16,7 @@
 //
 //---------------------------------------------------------------------
 
-define("io.ox/contacts/view-qrcode", [], function () {
+define("io.ox/contacts/view-qrcode", function () {
 
     function QR8bitByte(data) {
         this.mode = QRMode.MODE_8BIT_BYTE;

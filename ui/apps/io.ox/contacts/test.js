@@ -13,7 +13,8 @@
 define('io.ox/contacts/test',
     ['io.ox/core/extensions',
      'io.ox/contacts/main',
-     'io.ox/contacts/api'], function (ext, contacts, api) {
+     'io.ox/contacts/api'
+    ], function (ext, contacts, api) {
 
     'use strict';
 

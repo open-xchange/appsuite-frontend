@@ -377,8 +377,7 @@ define('io.ox/portal/main',
 
             index = index || 0;
 
-            var type = model.get('type'),
-                node = model.node,
+            var node = model.node,
                 delay = (index / 2 >> 0) * 1000,
                 baton = model.get('baton'),
                 point = ext.point(baton.point);
@@ -423,7 +422,7 @@ define('io.ox/portal/main',
 
         win.show(function () {
             // draw scaffolds now for responsiveness
-            collection.each(function (model, index) {
+            collection.each(function (model) {
                 app.drawScaffold(model, false);
             });
 
@@ -483,7 +482,7 @@ define('io.ox/portal/main',
                         containment: win.nodes.main,
                         scroll: true,
                         delay: 150,
-                        update: function (e, ui) {
+                        update: function () {
                             widgets.save(appBaton.$.widgets);
                         }
                     });
@@ -491,7 +490,7 @@ define('io.ox/portal/main',
             }
         });
 
-        var lazyLayout = _.debounce(function (e) {
+        var lazyLayout = _.debounce(function () {
             scrollPos = $(this).scrollTop() + this.innerHeight;
             widgets.loadUsedPlugins().done(function (cleanCollection) {
                 cleanCollection.each(app.drawWidget);

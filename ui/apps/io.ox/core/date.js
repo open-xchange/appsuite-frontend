@@ -15,7 +15,8 @@ define.async('io.ox/core/date',
     ['io.ox/core/gettext',
      'settings!io.ox/core/settingOptions',
      'settings!io.ox/core',
-     'gettext!io.ox/core'], function (gettext, settingOptions, settings, gt) {
+     'gettext!io.ox/core'
+    ], function (gettext, settingOptions, settings, gt) {
 
     /*jshint white:false */
 

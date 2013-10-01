@@ -15,7 +15,8 @@ define('io.ox/core/api/factory',
     ['io.ox/core/http',
      'io.ox/core/cache',
      'io.ox/core/event',
-     'io.ox/core/extensions'], function (http, cache, Events, ext) {
+     'io.ox/core/extensions'
+    ], function (http, cache, Events, ext) {
 
     'use strict';
 
@@ -76,7 +77,7 @@ define('io.ox/core/api/factory',
         // use module as id?
         o.id = o.id || o.module;
 
-        _.each(o.requests, function (request, action) {
+        _.each(o.requests, function (request) {
             if (!request.extendColumns) return;
             request.columns = factory.extendColumns(request.extendColumns,
                 o.module, request.columns);
@@ -174,7 +175,7 @@ define('io.ox/core/api/factory',
                     });
                 };
 
-                var hit = function (data) {
+                var hit = function () {
                     if (!(cid in readThrough)) {
                         readThrough[cid] = true;
                         setTimeout(function () {

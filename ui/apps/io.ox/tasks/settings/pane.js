@@ -12,9 +12,12 @@
  */
 
 define('io.ox/tasks/settings/pane',
-       ['settings!io.ox/tasks', 'io.ox/tasks/settings/model',
-        'dot!io.ox/tasks/settings/form.html', 'io.ox/core/extensions',
-        'gettext!io.ox/tasks'], function (settings, tasksSettingsModel, tmpl, ext, gt) {
+    ['settings!io.ox/tasks',
+     'io.ox/tasks/settings/model',
+     'dot!io.ox/tasks/settings/form.html',
+     'io.ox/core/extensions',
+     'gettext!io.ox/tasks'
+    ], function (settings, tasksSettingsModel, tmpl, ext, gt) {
 
     'use strict';
 
@@ -35,7 +38,7 @@ define('io.ox/tasks/settings/pane',
     var TasksSettingsView = Backbone.View.extend({
         tagName: 'div',
         _modelBinder: undefined,
-        initialize: function (options) {
+        initialize: function () {
             // create template
             this._modelBinder = new Backbone.ModelBinder();
 
@@ -69,7 +72,7 @@ define('io.ox/tasks/settings/pane',
     ext.point('io.ox/tasks/settings/detail').extend({
         index: 200,
         id: 'taskssettings',
-        draw: function (data) {
+        draw: function () {
 
             tasksViewSettings = new TasksSettingsView({model: tasksSettings});
             var holder = $('<div>').css('max-width', '800px');

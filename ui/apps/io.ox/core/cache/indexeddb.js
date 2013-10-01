@@ -15,7 +15,6 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
     'use strict';
 
     var SCHEMA = 1,
-        QUEUE_DELAY = 5000,
         MAX_LENGTH = 1024 * 1024, // 1MB
         instances = {},
         moduleDefined = $.Deferred(),
@@ -80,8 +79,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 // get shallow copy
                 dbOpened.then(function (db) {
                     var tx = db.transaction('cache', 'readwrite'),
-                        store = tx.objectStore('cache'),
-                        key;
+                        store = tx.objectStore('cache');
                     // loop
                     _(queue.hash).each(function (data, key) {
                         key = String(id + '//' + key);
@@ -164,7 +162,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 });
             },
 
-            set: function (key, data, options) {
+            set: function (key, data) {
                 key = String(key);
                 try {
                     data = JSON.stringify(data);
@@ -420,7 +418,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                     );
                 });
             },
-            function fail(event) {
+            function fail() {
                 defunct = true;
                 console.warn('Failed to use IndexedDB');
                 moduleDefined.resolve(that);

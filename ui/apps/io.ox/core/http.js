@@ -13,7 +13,7 @@
  *
  */
 
-define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], function (Events, ext) {
+define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
 
     'use strict';
 
@@ -587,7 +587,6 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
         if (isError) {
             // session expired?
             var isSessionError = (/^SES\-/i).test(response.code),
-                isServerConfig = o.module === 'apps/manifests' && o.data && /^config$/.test(o.data.action),
                 isAutoLogin = o.module === 'login' && o.data && /^(autologin|store|tokens)$/.test(o.data.action);
             if (isSessionError && !isAutoLogin) {
                 // login dialog
@@ -833,7 +832,6 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
             if (!o.params.session) {
                 // check whitelist
                 var whiteList = ['login#*', 'capabilities#*', 'apps/manifests#*', 'files#document', 'office#getFile'],
-                    req = o.module + '#' + o.params.action,
                     found = _.find(whiteList, function (moduleAction) {
                         var e = moduleAction.split('#');
                         return (o.module === e[0] && (e[1] === '*' || o.params.action === e[1]));
@@ -970,8 +968,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                 def = $.Deferred(),
                 data = JSON.stringify(options.data),
                 url = ox.apiRoot + '/' + options.module + '?action=' + options.action + '&session=' + ox.session,
-                form = options.form,
-                blank = $.Deferred();
+                form = options.form;
 
             $('#tmp').append(
                 $('<iframe>', { name: name, id: name, height: 1, width: 1, src: ox.base + '/blank.html' })

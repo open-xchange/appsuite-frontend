@@ -22,7 +22,7 @@ define('io.ox/core/folder/imap-subscription',
 
     var that = {
 
-        show: function (data) {
+        show: function () {
 
             var folderCache = new cache.SimpleCache('folder-all', false),
                 subFolderCache = new cache.SimpleCache('subfolder-all', false),
@@ -78,7 +78,7 @@ define('io.ox/core/folder/imap-subscription',
                     }
                 });
 
-                tree.container.on('change', 'input[type="checkbox"]', function (e) {
+                tree.container.on('change', 'input[type="checkbox"]', function () {
                     var folder = $(this).val(),
                         checkboxStatus = $(this).is(':checked'),
                         changes = { subscribed: checkboxStatus },

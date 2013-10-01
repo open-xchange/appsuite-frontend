@@ -28,13 +28,6 @@ define('io.ox/calendar/view-detail',
 
     'use strict';
 
-    var fnClickPerson = function (e) {
-        e.preventDefault();
-        ext.point('io.ox/core/person:action').each(function (ext) {
-            _.call(ext.action, e.data, e);
-        });
-    };
-
     // draw via extension points
 
     ext.point('io.ox/calendar/detail').extend({

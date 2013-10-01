@@ -26,7 +26,7 @@ define('io.ox/core/tk/vgrid',
      * Template class
      * @returns {Template}
      */
-    function Template(options) {
+    function Template() {
 
         var template = [],
 
@@ -290,7 +290,6 @@ define('io.ox/core/tk/vgrid',
             itemHeight = 0,
             labelHeight = 0,
             // counters
-            minRows = 20,
             numVisible = 0,
             numRows = 0,
             numLabels = 0,
@@ -298,7 +297,7 @@ define('io.ox/core/tk/vgrid',
             currentMode = 'all',
             // default all & list request
             loadIds = {
-                all: function (con) {
+                all: function () {
                     return $.Deferred().resolve([]);
                 }
             },
@@ -315,9 +314,6 @@ define('io.ox/core/tk/vgrid',
             tail = $(),
             // bounds of currently visible area
             bounds = { top: 0, bottom: 0 },
-            // multiplier defines how much detailed data is loaded (must be >= 2)
-            // touch devices (esp. ipad) need higher multiplier due to momentum scrolling
-            mult = Modernizr.touch ? 6 : 3,
             // properties
             props = { editable: options.editable || false },
             // shortcut
@@ -370,7 +366,7 @@ define('io.ox/core/tk/vgrid',
                     // select all/none
                     var link,
                         sel = baton.grid.selection,
-                        fnShowAll = function (e) {
+                        fnShowAll = function () {
                             var checked = link.prop('checked');
                             sel[checked ? 'clear' : 'selectAll']();
                             setLink(!checked);
@@ -381,7 +377,7 @@ define('io.ox/core/tk/vgrid',
                         };
 
                     // fix link if selection is empty
-                    sel.on('empty', function (a) {
+                    sel.on('empty', function () {
                         setLink(false);
                     });
 
@@ -490,9 +486,8 @@ define('io.ox/core/tk/vgrid',
 
         cloneRow = (function () {
 
-            var guid = 0,
-                createCheckbox = function () {
-                    var id = 'grid_cb_' + (guid++), fields = {};
+            var createCheckbox = function () {
+                    var fields = {};
                     this.prepend(
                         fields.div = $('<div class="vgrid-cell-checkbox">').append(
                             fields.label = $('<label>').append(
@@ -850,7 +845,7 @@ define('io.ox/core/tk/vgrid',
                 }
             }
 
-            return function (repaint) {
+            return function () {
                 // get all IDs
                 if (responsiveChange || all.length === 0) self.busy();
                 var load = loadIds[currentMode] || loadIds.all;
@@ -1111,7 +1106,7 @@ define('io.ox/core/tk/vgrid',
             return mobileSelectMode;
         };
 
-        this.setEditable = function (flag, selector) {
+        this.setEditable = function (flag) {
             if (options.multiple === true) {
                 if (flag) {
                     node.addClass('editable');
@@ -1234,7 +1229,7 @@ define('io.ox/core/tk/vgrid',
             }
         });
 
-        this.on('change:mode', function (e, value, previous) {
+        this.on('change:mode', function () {
             // reset chunk loader
             loader.reset();
             // reset selection

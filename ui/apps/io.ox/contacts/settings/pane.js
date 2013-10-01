@@ -12,10 +12,11 @@
  */
 
 define('io.ox/contacts/settings/pane',
-       ['settings!io.ox/contacts',
-        'io.ox/contacts/settings/model',
-        'io.ox/core/extensions',
-        'gettext!io.ox/contacts'], function (settings, contactsSettingsModel, ext, gt) {
+    ['settings!io.ox/contacts',
+     'io.ox/contacts/settings/model',
+     'io.ox/core/extensions',
+     'gettext!io.ox/contacts'
+    ], function (settings, contactsSettingsModel, ext, gt) {
 
     'use strict';
 
@@ -63,7 +64,7 @@ define('io.ox/contacts/settings/pane',
                     $('<label for="displayformat" class="control-label">').text(gt('Display of names')),
                     $('<div class="controls">').append(
                         buildInputRadio(preferences, preference)
-                    ).on('click', 'input', function (e) {
+                    ).on('click', 'input', function () {
                         settings.set('fullNameFormat', this.value).save();
                     })
                 )
@@ -75,8 +76,7 @@ define('io.ox/contacts/settings/pane',
         index: 300,
         id: 'myaccount',
         draw: function () {
-            var self = this,
-                usermodel,
+            var usermodel,
                 button = $('<button type="button" class="btn btn-primary" data-action="add">')
                     .text(gt('My contact data'));
 

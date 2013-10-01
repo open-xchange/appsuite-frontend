@@ -13,13 +13,14 @@
 
 define('io.ox/core/export/export',
     ['io.ox/core/extensions',
-    'io.ox/core/tk/dialogs',
-    'io.ox/core/api/export',
-    'io.ox/core/api/folder',
-    'io.ox/core/notifications',
-    'io.ox/formats/vcard',
-    'gettext!io.ox/core',
-    'less!io.ox/core/export/style.less'], function (ext, dialogs, api, folderAPI, notifications, vcard, gt) {
+     'io.ox/core/tk/dialogs',
+     'io.ox/core/api/export',
+     'io.ox/core/api/folder',
+     'io.ox/core/notifications',
+     'io.ox/formats/vcard',
+     'gettext!io.ox/core',
+     'less!io.ox/core/export/style.less'
+    ], function (ext, dialogs, api, folderAPI, notifications, vcard, gt) {
 
     'use strict';
 
@@ -120,7 +121,7 @@ define('io.ox/core/export/export',
                 dialog = new dialogs.ModalDialog({ width: 500 }),
                 baton = {id: id, module: module, simulate: true, format: {}, nodes: {}};
             // get folder and build dialog
-            folderAPI.get({ folder: id}).done(function (folder) {
+            folderAPI.get({ folder: id}).done(function () {
                 dialog
                     .build(function () {
                         //header

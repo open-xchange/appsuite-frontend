@@ -28,12 +28,12 @@ define('io.ox/core/main',
      'settings!io.ox/core',
      'gettext!io.ox/core',
      'io.ox/core/relogin',
-     'io.ox/core/bootstrap/basics'], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, ping, tours, settings, gt) {
+     'io.ox/core/bootstrap/basics'
+    ], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, ping, tours, settings, gt) {
 
     'use strict';
 
-    var PATH = ox.base + '/apps/io.ox/core',
-        DURATION = 250;
+    var DURATION = 250;
 
     // enable special logging to investigate why boot fails
     var debug = _.url.hash('debug') === 'boot' ? function () { console.log.apply(console, arguments); } : $.noop;
@@ -493,7 +493,7 @@ define('io.ox/core/main',
             }
         }
 
-        ox.ui.apps.on('add', function (model, collection, e) {
+        ox.ui.apps.on('add', function (model) {
 
             if (model.get('title') === undefined) return;
 
@@ -531,13 +531,13 @@ define('io.ox/core/main',
             tabManager();
         });
 
-        ox.ui.apps.on('remove', function (model, collection, e) {
+        ox.ui.apps.on('remove', function (model) {
             launchers.children('[data-app-guid="' + model.guid + '"]').remove();
             launcherDropdown.children('[data-app-guid="' + model.guid + '"]').remove();
             tabManager();
         });
 
-        ox.ui.apps.on('launch resume', function (model, collection, e) {
+        ox.ui.apps.on('launch resume', function (model) {
             // mark last active app
             if (_.device('smartphone')) {
                 if (!settings.get('forceDesktopLaunchers', false)) {

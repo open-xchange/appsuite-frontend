@@ -10,8 +10,7 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/mailfilter/settings/filter/defaults',
-    [], function () {
+define('io.ox/mail/mailfilter/settings/filter/defaults', function () {
 
     'use strict';
 

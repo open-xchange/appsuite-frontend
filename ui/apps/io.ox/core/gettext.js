@@ -11,7 +11,7 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
-define('io.ox/core/gettext', [], function () {
+define('io.ox/core/gettext', function () {
 
     'use strict';
 

@@ -12,8 +12,7 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/files/mediasupport',
-    [], function () {
+define('io.ox/files/mediasupport', function () {
 
     'use strict';
 

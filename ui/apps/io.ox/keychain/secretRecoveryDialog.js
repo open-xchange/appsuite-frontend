@@ -11,7 +11,13 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/keychain/secretRecoveryDialog', ['io.ox/keychain/api', 'io.ox/core/tk/dialogs', 'io.ox/core/notifications', 'gettext!io.ox/keychain'], function (api, dialogs, notifications, gt) {
+define('io.ox/keychain/secretRecoveryDialog',
+    ['io.ox/keychain/api',
+     'io.ox/core/tk/dialogs',
+     'io.ox/core/notifications',
+     'gettext!io.ox/keychain'
+    ], function (api, dialogs, notifications, gt) {
+
     'use strict';
 
     return {

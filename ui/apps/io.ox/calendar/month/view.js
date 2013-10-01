@@ -18,7 +18,8 @@ define('io.ox/calendar/month/view',
      'gettext!io.ox/calendar',
      'settings!io.ox/calendar',
      'less!io.ox/calendar/month/style.less',
-     'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, ext, folderAPI, gt, settings) {
+     'apps/io.ox/core/tk/jquery-ui.min.js'
+    ], function (util, date, ext, folderAPI, gt, settings) {
 
     'use strict';
 
@@ -246,7 +247,7 @@ define('io.ox/calendar/month/view',
                         return false;
                     }
                 },
-                start: function (e, ui) {
+                start: function () {
                     $(this).hide();
                 }
             });

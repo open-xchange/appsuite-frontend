@@ -36,7 +36,7 @@ define('io.ox/core/tk/upload',
     // ]}
     function DropZone(options) {
         require(['less!io.ox/core/tk/upload.less']);
-        var self = this,  height, highlightedAction, dragLeaveTimer,
+        var self = this, highlightedAction, dragLeaveTimer,
             $overlay = $('<div class="abs io-ox-dropzone-multiple-overlay">').on('click', removeOverlay),
 
             showOverlay = function (e) {
@@ -46,7 +46,7 @@ define('io.ox/core/tk/upload',
                 return false;
             },
 
-            removeOverlay = function (e) {
+            removeOverlay = function () {
                 $('body').removeClass('io-ox-dropzone-active');
                 $overlay.detach();
                 return false;
@@ -63,7 +63,7 @@ define('io.ox/core/tk/upload',
         _(options.actions || []).each(function (action) {
             var $actionNode = nodeGenerator();
             $actionNode.append($('<div class="dropzone">').on({
-                dragenter: function (e) {
+                dragenter: function () {
                     if (highlightedAction) highlightedAction.removeClass('io-ox-dropzone-hover');
                     highlightedAction = $actionNode;
                     $actionNode.addClass('io-ox-dropzone-hover');
@@ -138,7 +138,7 @@ define('io.ox/core/tk/upload',
             included = true;
             $(document).on('dragenter', showOverlay);
             $overlay.on({
-                dragenter: function (e) {
+                dragenter: function () {
                     clearTimeout(dragLeaveTimer);
                     return false; // Prevent regular event handling
                 },
@@ -165,7 +165,7 @@ define('io.ox/core/tk/upload',
 
     // And this is the duck type compatible version for browsers which don't support
     // the File API. You can define this DropZone but will never hear back.
-    function DisabledDropZone($node) {
+    function DisabledDropZone() {
         this.enabled = false;
         this.bind = $.noop;
         this.unbind = $.noop;
@@ -193,7 +193,7 @@ define('io.ox/core/tk/upload',
         delegate = _.extend({
             start: $.noop,
             stop: $.noop,
-            progress: function (file) { return $.when(); },
+            progress: function () { return $.when(); },
             type: false
         }, delegate || {});
 
@@ -226,7 +226,7 @@ define('io.ox/core/tk/upload',
         };
 
         this.offer = function (file) {
-            var maxFileSize, fileTitle, proceed = true, self = this;
+            var fileTitle, proceed = true, self = this;
 
             files.push.apply(files, [].concat(file)); // handles both arrays and single objects properly
             require(['settings!io.ox/core', 'io.ox/core/strings'], function (settings, strings) {

@@ -204,7 +204,7 @@ define('io.ox/mail/view-detail',
         ox.launch('io.ox/calendar/main', { folder: e.data.folder, perspective: 'list' }).done(function () {
             var app = this, folder = e.data.folder, id = e.data.id;
             // switch to proper perspective
-            ox.ui.Perspective.show(app, 'list').done(function (perspective) {
+            ox.ui.Perspective.show(app, 'list').done(function () {
                 // set proper folder
                 if (app.folder.get() === folder) {
                     app.trigger('show:appointment', {id: id, folder_id: folder, recurrence_position: 0}, true);
@@ -321,7 +321,7 @@ define('io.ox/mail/view-detail',
     };
 
     blockquoteClickOpen = function () {
-        var h = this.scrollHeight + 'px', node = $(this);
+        var h = this.scrollHeight + 'px';
         $(this)
             .off('click.open')
             .on('dblclick.close', blockquoteClickClose)
@@ -388,7 +388,7 @@ define('io.ox/mail/view-detail',
                 isHTML = regHTML.test(type);
 
                 // add other parts?
-                _(att).each(function (attachment, index) {
+                _(att).each(function (attachment) {
                     if (attachment.disp === 'inline' && attachment.content_type === type) {
                         source += attachment.content;
                     }
@@ -660,7 +660,6 @@ define('io.ox/mail/view-detail',
 
             var data = baton.data,
                 copy = _.extend({}, data),
-                self = this,
                 node = $('<section class="mail-detail">'),
                 container = $.createViewContainer(data, api)
                     .addClass('mail-detail-decorator')
@@ -735,7 +734,7 @@ define('io.ox/mail/view-detail',
                         node.replaceWith(that.draw(ext.Baton({ data: data, options: baton.options })));
                         baton = null;
                     },
-                    function (err) {
+                    function () {
                         node.idle().empty().append(
                             $.fail(baton.options.failMessage, function () {
                                 resolve(node, baton);
@@ -1181,11 +1180,11 @@ define('io.ox/mail/view-detail',
 
     var drawAllDropDown = function (node, label, data) {
         // use extension pattern
-        var dd = new links.DropdownLinks({
-                label: label,
-                classes: 'all-link',
-                ref: 'io.ox/mail/all/actions'
-            }).draw.call(node, data);
+        new links.DropdownLinks({
+            label: label,
+            classes: 'all-link',
+            ref: 'io.ox/mail/all/actions'
+        }).draw.call(node, data);
     };
 
     ext.point('io.ox/mail/detail/header').extend({
@@ -1332,7 +1331,7 @@ define('io.ox/mail/view-detail',
         return dd;
     };
 
-    function showAllAttachments(e) {
+    function showAllAttachments() {
         $(this).closest('.attachment-list').children().css('display', 'inline-block');
         $(this).remove();
     }
@@ -1417,7 +1416,7 @@ define('io.ox/mail/view-detail',
         index: 199,
         id: 'subscribe',
         draw: function (baton) {
-            var data = baton.data, picture,
+            var data = baton.data,
                 label = '',
                 pub = {},
                 pubtype = '';
@@ -1471,12 +1470,11 @@ define('io.ox/mail/view-detail',
                     } else {
                         $(e.target).prop('disabled', true);
                         notifications.yell('info', gt('Adding subscription. This may take some seconds...'));
-                        var self = this,
-                            opt = opt || {};
+                        var opt = opt || {};
                         //create folder; create and refresh subscription
                         require(['io.ox/core/pubsub/util']).done(function (pubsubUtil) {
                             pubsubUtil.autoSubscribe(pub.module, pub.name, pub.url).then(
-                                function success(data) {
+                                function success() {
                                     notifications.yell('success', gt('Created private folder \'%1$s\' in %2$s and subscribed successfully to shared folder', pub.name, pub.module));
                                     //refresh folder views
                                     folder.trigger('update');
@@ -1595,8 +1593,7 @@ define('io.ox/mail/view-detail',
                 draw: function (baton) {
                     var data = baton.data,
                         showCC = data.cc && data.cc.length > 0,
-                        showTO = data.to && data.to.length > 0,
-                        show = showTO || showCC;
+                        showTO = data.to && data.to.length > 0;
 
                     if (!(!showCC && showTO && data.to[0][1] === 'undisclosed-recipients:;')) {
                         var dd = $('<div class="recipient-actions">');

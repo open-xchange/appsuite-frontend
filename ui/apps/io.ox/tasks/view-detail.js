@@ -11,14 +11,17 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
-                                   'io.ox/calendar/util',
-                                   'gettext!io.ox/tasks',
-                                   'io.ox/core/extensions',
-                                   'io.ox/core/extPatterns/links',
-                                   'io.ox/tasks/api',
-                                   'io.ox/tasks/actions',
-                                   'less!io.ox/tasks/style.less' ], function (util, calendarUtil, gt, ext, links, api) {
+define('io.ox/tasks/view-detail',
+    ['io.ox/tasks/util',
+     'io.ox/calendar/util',
+     'gettext!io.ox/tasks',
+     'io.ox/core/extensions',
+     'io.ox/core/extPatterns/links',
+     'io.ox/tasks/api',
+     'io.ox/tasks/actions',
+     'less!io.ox/tasks/style.less'
+    ], function (util, calendarUtil, gt, ext, links, api) {
+
     'use strict';
 
     var taskDetailView = {
@@ -268,7 +271,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
             $('<span>').text(gt('Attachments') + ' \u00A0\u00A0').addClass('attachments').appendTo(attachmentNode);
             require(['io.ox/core/api/attachment'], function (api) {
                 api.getAll({folder_id: task.folder_id, id: task.id, module: 4}).done(function (data) {
-                    _(data).each(function (a, index) {
+                    _(data).each(function (a) {
                         // draw
                         buildDropdown(attachmentNode, _.noI18n(a.filename), a);
                     });

@@ -10,7 +10,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('l10n/ja_JP/io.ox/collation', [], function () {
+define('l10n/ja_JP/io.ox/collation', function () {
 
     'use strict';
 

@@ -11,13 +11,15 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tasks/model', ['io.ox/tasks/api',
-                             'io.ox/backbone/modelFactory',
-                             'io.ox/backbone/validation',
-                             'io.ox/core/extensions',
-                             'io.ox/participants/model',
-                             'io.ox/core/date',
-                             'gettext!io.ox/tasks'], function (api, ModelFactory, Validations, ext, pModel, date, gt) {
+define('io.ox/tasks/model',
+    ['io.ox/tasks/api',
+     'io.ox/backbone/modelFactory',
+     'io.ox/backbone/validation',
+     'io.ox/core/extensions',
+     'io.ox/participants/model',
+     'io.ox/core/date',
+     'gettext!io.ox/tasks'
+    ], function (api, ModelFactory, Validations, ext, pModel, date, gt) {
 
     'use strict';
 
@@ -45,7 +47,7 @@ define('io.ox/tasks/model', ['io.ox/tasks/api',
                     var participants = this._participants = new pModel.Participants(this.get('participants'));
                     participants.invoke('fetch');
 
-                    function resetList(participant) {
+                    function resetList() {
                         if (changeParticipantsUpdate) {
                             return;
                         }

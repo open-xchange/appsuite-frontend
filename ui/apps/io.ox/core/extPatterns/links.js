@@ -16,7 +16,8 @@ define('io.ox/core/extPatterns/links',
     ['io.ox/core/extensions',
      'io.ox/core/collection',
      'io.ox/core/extPatterns/actions',
-     'gettext!io.ox/core'], function (ext, Collection, actions, gt) {
+     'gettext!io.ox/core'
+    ], function (ext, Collection, actions, gt) {
 
     'use strict';
 
@@ -211,7 +212,7 @@ define('io.ox/core/extPatterns/links',
                                     [$.txt(gt('Actions')), $('<b class="caret">')] :
                                     [$.txt(gt('More')), $.txt(_.noI18n(' ...')), $('<b class="caret">')]
                             )
-                            .on(Modernizr.touch ? 'touchstart' : 'click', function (e) {
+                            .on(Modernizr.touch ? 'touchstart' : 'click', function () {
                                 // fix dropdown position on-the-fly
                                 var left = $(this).parent().position().left;
                                 $(this).next().attr('class', 'dropdown-menu' + (left < 100 ? '' : ' dropdown-right'));
@@ -287,7 +288,7 @@ define('io.ox/core/extPatterns/links',
         if (options.open === 'left') {
             node.addClass('pull-right').css({textAligh: 'left'});
         } else {
-            $toggle.on(Modernizr.touch ? 'touchstart' : 'click', function (e) {
+            $toggle.on(Modernizr.touch ? 'touchstart' : 'click', function () {
                 // fix dropdown position on-the-fly
                 node.addClass($parent.position().left < 100 ? '' : ' dropdown-right');
             });

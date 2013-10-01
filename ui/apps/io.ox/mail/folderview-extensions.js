@@ -17,7 +17,8 @@ define('io.ox/mail/folderview-extensions',
      'io.ox/mail/api',
      'io.ox/core/notifications',
      'io.ox/core/capabilities',
-     'gettext!io.ox/mail'], function (ext, folderAPI, mailAPI, notifications, capabilities, gt) {
+     'gettext!io.ox/mail'
+    ], function (ext, folderAPI, mailAPI, notifications, capabilities, gt) {
 
     'use strict';
 
@@ -34,7 +35,7 @@ define('io.ox/mail/folderview-extensions',
         ext.point(POINT + '/sidepanel/links').extend({
             id: 'add-account',
             index: 300,
-            draw: function (baton) {
+            draw: function () {
                 if (_.device('!smartphone')) {
                     this.append($('<div>').append(
                         $('<a href="#" data-action="add-mail-account" tabindex="1" role="menuitem">')

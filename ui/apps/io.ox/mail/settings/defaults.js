@@ -16,37 +16,37 @@ define('io.ox/mail/settings/defaults', ['gettext!io.ox/mail'], function (gt) {
     'use strict';
 
     var settingsDefaults = {
-            'removeDeletedPermanently': false,
-            'contactCollectOnMailTransport': false,
-            'contactCollectOnMailAccess': false,
-            'useFixedWidthFont': false,
-            'appendVcard': false,
-            'appendMailTextOnReply': true,
-            'forwardMessageAs': 'Inline',
-            'messageFormat': 'html',
-            'lineWrapAfter': '',
-            'defaultSendAddress': '',
-            'autoSaveDraftsAfter': false,
-            'allowHtmlMessages': true,
-            'allowHtmlImages': false,
-            'displayEmoticons': false,
-            'isColorQuoted': false,
-            'selectFirstMessage': true,
-            'defaultSignature': false,
-            'mobileSignature':
-                //#. %s is the product name
-                gt('Sent from %s via mobile', ox.serverConfig.productName),
-            'mobileSignatureType': 'none', // one of 'none', 'custom'
-            'threadView': 'inbox',
-            //for persistent sort
-            'sort': 'thread',
-            'order': 'desc',
-            'unread': false,
-            //hidden atm
-            'features': {
-                'alwaysDeleteDraft': true
-            }
-        };
+        'removeDeletedPermanently': false,
+        'contactCollectOnMailTransport': false,
+        'contactCollectOnMailAccess': false,
+        'useFixedWidthFont': false,
+        'appendVcard': false,
+        'appendMailTextOnReply': true,
+        'forwardMessageAs': 'Inline',
+        'messageFormat': 'html',
+        'lineWrapAfter': '',
+        'defaultSendAddress': '',
+        'autoSaveDraftsAfter': false,
+        'allowHtmlMessages': true,
+        'allowHtmlImages': false,
+        'displayEmoticons': false,
+        'isColorQuoted': false,
+        'selectFirstMessage': true,
+        'defaultSignature': false,
+        'mobileSignature':
+            //#. %s is the product name
+            gt('Sent from %s via mobile', ox.serverConfig.productName),
+        'mobileSignatureType': 'none', // one of 'none', 'custom'
+        'threadView': 'inbox',
+        //for persistent sort
+        'sort': 'thread',
+        'order': 'desc',
+        'unread': false,
+        //hidden atm
+        'features': {
+            'alwaysDeleteDraft': true
+        }
+    };
 
     return settingsDefaults;
 });

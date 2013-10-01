@@ -137,7 +137,7 @@ define('plugins/portal/tumblr/register',
                     return tags;
                 },
                 postPhotos = function () {
-                    var img, node;
+                    var img;
                     if (_.isArray(post.photos) && post.photos.length && (sizes = post.photos[0].alt_sizes)) {
                         _(sizes).each(function (photo) {
                             if (width === 0 || (photo.width > 500 && photo.width < 1200)) {
@@ -222,8 +222,7 @@ define('plugins/portal/tumblr/register',
             $url = $('<input type="text" class="input-block-level" placeholder=".tumblr.com">').placeholder(),
             $description = $('<input type="text" class="input-block-level">'),
             $error = $('<div>').addClass('alert alert-error').hide(),
-            props = model.get('props') || {},
-            that = this;
+            props = model.get('props') || {};
 
         dialog.header($('<h4>').text(gt('Edit Tumblr feed')))
             .build(function () {
@@ -247,7 +246,7 @@ define('plugins/portal/tumblr/register',
             }
         });
 
-        dialog.on('save', function (e) {
+        dialog.on('save', function () {
 
             $error.hide();
 

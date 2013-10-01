@@ -24,8 +24,8 @@ define('plugins/portal/tasks/register',
 
         title: gt('Tasks'),
 
-        initialize: function (baton) {
-            taskAPI.on('update create delete', function (event, element) {
+        initialize: function () {
+            taskAPI.on('update create delete', function () {
                 require(['io.ox/portal/main'], function (portal) {//refresh portal
                     var portalApp = portal.getApp(),
                         portalModel = portalApp.getWidgetCollection()._byId.tasks_0;
@@ -37,7 +37,7 @@ define('plugins/portal/tasks/register',
             });
         },
 
-        action: function (baton) {
+        action: function () {
             ox.launch('io.ox/tasks/main');
         },
 

@@ -10,9 +10,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/ping', ['io.ox/core/http', 'settings!io.ox/core'], function (http, settings) {
+define('io.ox/core/ping',
+    ['io.ox/core/http',
+     'settings!io.ox/core'
+    ], function (http, settings) {
 
     'use strict';
+
     var enabled = settings.get('ping/enabled', true),
         interval = settings.get('ping/interval', 30),
         mode = 'none',

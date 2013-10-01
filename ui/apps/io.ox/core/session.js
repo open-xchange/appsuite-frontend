@@ -11,8 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/session', ['io.ox/core/http', 'io.ox/core/manifests'],
-function (http, manifests) {
+define('io.ox/core/session',
+    ['io.ox/core/http',
+     'io.ox/core/manifests'
+    ], function (http, manifests) {
 
     'use strict';
 

@@ -10,13 +10,11 @@
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
-define('io.ox/files/settings/model',
-      ['settings!io.ox/files'], function (settings) {
+define('io.ox/files/settings/model', ['settings!io.ox/files'], function (settings) {
 
     'use strict';
 
     var filesSettingsModel = Backbone.Model.extend({
-
 
         initialize: function () {
 

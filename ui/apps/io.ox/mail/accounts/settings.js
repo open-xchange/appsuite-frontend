@@ -12,15 +12,15 @@
  */
 
 define('io.ox/mail/accounts/settings',
-      ['io.ox/core/extensions',
-       'io.ox/core/api/account',
-       'io.ox/mail/accounts/model',
-       'io.ox/mail/accounts/view-form',
-       'io.ox/core/tk/dialogs',
-       'io.ox/core/notifications',
-       'gettext!io.ox/mail/accounts/settings',
-       'less!io.ox/settings/style.less'
-       ], function (ext, api, AccountModel, AccountDetailView, dialogs, notifications, gt) {
+    ['io.ox/core/extensions',
+     'io.ox/core/api/account',
+     'io.ox/mail/accounts/model',
+     'io.ox/mail/accounts/view-form',
+     'io.ox/core/tk/dialogs',
+     'io.ox/core/notifications',
+     'gettext!io.ox/mail/accounts/settings',
+     'less!io.ox/settings/style.less'
+    ], function (ext, api, AccountModel, AccountDetailView, dialogs, notifications, gt) {
 
     'use strict';
 
@@ -77,7 +77,7 @@ define('io.ox/mail/accounts/settings',
     ext.point('io.ox/mail/add-account/wizard').extend({
         id: 'address',
         index: 100,
-        draw: function (baton) {
+        draw: function () {
             this.append(
                 $('<label>').text(gt('Your mail address')).append(
                     $('<input type="text" class="span6 add-mail-account-address">')
@@ -89,7 +89,7 @@ define('io.ox/mail/accounts/settings',
     ext.point('io.ox/mail/add-account/wizard').extend({
         id: 'password',
         index: 200,
-        draw: function (baton) {
+        draw: function () {
             this.append(
                 $('<label>').text(gt('Your password')).append(
                     $('<input type="password" class="span6 add-mail-account-password">')
@@ -101,7 +101,7 @@ define('io.ox/mail/accounts/settings',
     ext.point('io.ox/mail/add-account/wizard').extend({
         id: 'feedback',
         index: 'last',
-        draw: function (baton) {
+        draw: function () {
             this.append(
                 $('<div class="alert-placeholder">')
             );
@@ -163,8 +163,7 @@ define('io.ox/mail/accounts/settings',
         },
 
         validateMailaccount = function (data, popup, def) {
-            var deferedValidation = $.Deferred(),
-                deferedSave = $.Deferred();
+            var deferedSave = $.Deferred();
 
             myModel.validationCheck(data, {ignoreInvalidTransport: true}).then(
                 function success(response) {
@@ -189,7 +188,7 @@ define('io.ox/mail/accounts/settings',
                         });
                     }
                 },
-                function fail(e) {
+                function fail() {
                     var message = gt('Failed to connect.');
                     drawAlert(getAlertPlaceholder(popup), message);
                     popup.idle();
@@ -237,8 +236,6 @@ define('io.ox/mail/accounts/settings',
 
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
 
-                var self = this;
-
                 new dialogs.ModalDialog({
                     width: 400,
                     async: true,
@@ -254,7 +251,7 @@ define('io.ox/mail/accounts/settings',
                 .addPrimaryButton('add', gt('Add'))
                 .addButton('cancel', gt('Cancel'))
                 .addAlternativeButton('skip', gt('Manual'))
-                .on('add', function (e) {
+                .on('add', function () {
 
                     var content = this.getContentNode(),
                         alertPlaceholder = content.find('.alert-placeholder'),
@@ -271,7 +268,7 @@ define('io.ox/mail/accounts/settings',
                         this.idle();
                     }
                 })
-                .on('skip', function (e) {
+                .on('skip', function () {
                     // primary address needs to be provided, why? fails without
                     args.data = { primary_address: this.getContentNode().find('.add-mail-account-address').val() };
                     // close
@@ -294,8 +291,7 @@ define('io.ox/mail/accounts/settings',
             var alertPlaceholder = $('<div>');
 
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                var self = this,
-                    successDialogbox = new dialogs.ModalDialog({
+                var successDialogbox = new dialogs.ModalDialog({
                         width: 400,
                         async: true
                     });
@@ -317,8 +313,7 @@ define('io.ox/mail/accounts/settings',
             var alertPlaceholder = $('<div>');
 
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                var self = this,
-                    failDialogbox = new dialogs.ModalDialog({
+                var failDialogbox = new dialogs.ModalDialog({
                         width: 400,
                         async: true
                     });

@@ -11,6 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/dev/utils/live-coding-extension', ['io.ox/backbone/views'], function (views) {
+
     'use strict';
 
     function LiveCodingExtension(options) {

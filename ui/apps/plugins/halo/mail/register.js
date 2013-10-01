@@ -14,7 +14,8 @@
 define('plugins/halo/mail/register',
     ['io.ox/core/extensions',
      'io.ox/mail/api',
-     'gettext!plugins/halo'], function (ext, api, gt) {
+     'gettext!plugins/halo'
+    ], function (ext, api, gt) {
 
     'use strict';
 

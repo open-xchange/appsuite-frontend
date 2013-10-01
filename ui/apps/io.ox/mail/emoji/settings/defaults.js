@@ -9,7 +9,7 @@
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
-define('io.ox/mail/emoji/settings/defaults', [], function () {
+define('io.ox/mail/emoji/settings/defaults', function () {
 
     'use strict';
 

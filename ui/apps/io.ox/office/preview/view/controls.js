@@ -65,7 +65,7 @@ define('io.ox/office/preview/view/controls',
      *
      * @extends Button
      */
-    PreviewControls.EditDocumentButton = Button.extend({ constructor: function (app) {
+    PreviewControls.EditDocumentButton = Button.extend({ constructor: function () {
 
         var // self reference
             self = this;

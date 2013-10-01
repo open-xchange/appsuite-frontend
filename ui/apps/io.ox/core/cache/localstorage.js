@@ -170,9 +170,9 @@ define('io.ox/core/cache/localstorage', ['io.ox/core/extensions'], function (ext
             return Modernizr.localstorage;
         },
 
-        gc: function (force) {
+        gc: function () {
 
-            var now = _.now(), cid, items = [], removed = 0, i = 0, $i;
+            var cid, items = [], removed = 0, i = 0, $i;
 
             // loop #1: get number of items
             for (cid in access) {

@@ -10,17 +10,13 @@
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
-define('io.ox/tasks/settings/model',
-      ['settings!io.ox/tasks'], function (settings) {
+define('io.ox/tasks/settings/model', ['settings!io.ox/tasks'], function (settings) {
 
     'use strict';
 
     var tasksSettingsModel = Backbone.Model.extend({
 
-
-        initialize: function (options) {
-
-        },
+        initialize: $.noop,
 
         save: function () {
             settings.save(this.attributes);

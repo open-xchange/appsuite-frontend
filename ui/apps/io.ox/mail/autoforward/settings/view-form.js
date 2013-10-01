@@ -10,21 +10,16 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/autoforward/settings/view-form', [
-    'io.ox/mail/autoforward/settings/model',
-    'io.ox/backbone/views',
-    'io.ox/backbone/forms',
-    'io.ox/core/extPatterns/actions',
-    'io.ox/core/extPatterns/links',
-    'io.ox/core/date',
-    'io.ox/core/notifications',
-    'gettext!io.ox/mail',
-    'less!io.ox/mail/autoforward/settings/style.less'
-], function (model, views, forms, actions, links, date, notifications, gt) {
+define('io.ox/mail/autoforward/settings/view-form',
+    ['io.ox/mail/autoforward/settings/model',
+     'io.ox/backbone/views',
+     'io.ox/backbone/forms',
+     'less!io.ox/mail/autoforward/settings/style.less'
+    ], function (model, views, forms) {
 
     'use strict';
 
-    function createAutoForwardEdit(ref, multiValues) {
+    function createAutoForwardEdit(ref) {
         var point = views.point(ref + '/edit/view'),
             VacationEditView = point.createView({
                 tagName: 'div',

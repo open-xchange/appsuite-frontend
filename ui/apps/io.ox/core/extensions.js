@@ -12,8 +12,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/extensions',
-    ['io.ox/core/event', 'io.ox/core/async'], function (Events, async) {
+define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
 
     'use strict';
 
@@ -38,12 +37,14 @@ define('io.ox/core/extensions',
                 return -1;
             }
             return a.index - b.index;
-        },
+        };
 
         // for debugging purposes
+        /*
         randomSorter = function () {
             return Math.random() > 0.5 ? -1 : +1;
         };
+        */
 
 
     // never leak

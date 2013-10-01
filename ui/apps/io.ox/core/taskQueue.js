@@ -18,6 +18,7 @@ define: true
 */
 
 define('io.ox/core/taskQueue', function () {
+
     'use strict';
 
     /**

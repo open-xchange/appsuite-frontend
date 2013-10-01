@@ -12,7 +12,8 @@
 
 define('io.ox/calendar/freebusy/main',
     ['io.ox/calendar/freebusy/controller',
-     'settings!io.ox/core'], function (controller, settings) {
+     'settings!io.ox/core'
+    ], function (controller, settings) {
 
     'use strict';
 

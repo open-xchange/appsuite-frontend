@@ -13,12 +13,10 @@
  *
  */
 
-define('io.ox/rss/api',
-    ['io.ox/core/http',
-     'io.ox/core/event',
-     'io.ox/core/api/user'], function (http, Events, userAPI) {
+define('io.ox/rss/api', ['io.ox/core/http'], function (http) {
 
     'use strict';
+
     var api = {
         get: function (feedUrl) {
             return http.GET({

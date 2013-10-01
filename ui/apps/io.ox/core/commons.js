@@ -15,7 +15,8 @@ define('io.ox/core/commons',
      'io.ox/core/extPatterns/links',
      'gettext!io.ox/core',
      'io.ox/core/commons-folderview',
-     'io.ox/core/api/folder'], function (ext, links, gt, folderview, folderAPI) {
+     'io.ox/core/api/folder'
+    ], function (ext, links, gt, folderview, folderAPI) {
 
     'use strict';
 
@@ -152,8 +153,7 @@ define('io.ox/core/commons',
                 }
             });
 
-            grid.selection.on('_m_change', function (e, selection) {
-                var len = selection.length;
+            grid.selection.on('_m_change', function () {
                 commons.mobileMultiSelection(id, node, this.unique(this.unfold()), api, grid);
             });
 
@@ -290,7 +290,7 @@ define('io.ox/core/commons',
                 });
             }
 
-            grid.on('change:prop:folder change:mode change:ids', function (e, value) {
+            grid.on('change:prop:folder change:mode change:ids', function () {
 
                 var folder_id = grid.prop('folder'), mode = grid.getMode(), node;
                 if (mode === 'all') {
@@ -318,7 +318,7 @@ define('io.ox/core/commons',
             });
 
             // unread counter for mail
-            folderAPI.on('update:total', function (e, id, data) {
+            folderAPI.on('update:total', function (e, id) {
                 // check for current folder (otherwise we get cross-app results! see bug #28558)
                 if (id === app.folder.get()) drawFolderInfo(id);
             });
@@ -351,7 +351,7 @@ define('io.ox/core/commons',
          * Wire grid and API refresh
          */
         wireGridAndRefresh: function (grid, api, win) {
-            var refreshAll = function (e) {
+            var refreshAll = function () {
                     grid.refresh(true);
                     if (_.device('smartphone')) grid.selection.retrigger();
                 },
@@ -495,7 +495,7 @@ define('io.ox/core/commons',
                 }
             };
 
-            var select = function (e) {
+            var select = function () {
                 var node = $(this);
                 selectionInProgress = true;
                 setTimeout(function () {
@@ -589,7 +589,7 @@ define('io.ox/core/commons',
 
             // checks if folder permissions etc. have changed, and triggers redraw.
             // Important to update inline links
-            checkFolder = function (e, folder, folderId, folderObj) {
+            checkFolder = function (e, folder) {
                 if (folder === e.data.folder.toString() && api) {
                     api.trigger('update:' + e.data.cid);
                 }

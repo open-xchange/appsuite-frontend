@@ -11,12 +11,12 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 define('io.ox/mail/mailfilter/settings/model',
-      ['io.ox/backbone/modelFactory',
-       'io.ox/backbone/validation',
-       'io.ox/core/api/mailfilter',
-       'io.ox/settings/util',
-       'gettext!io.ox/mail'
-       ], function (ModelFactory, Validators, api, settingsUtil, gt) {
+    ['io.ox/backbone/modelFactory',
+     'io.ox/backbone/validation',
+     'io.ox/core/api/mailfilter',
+     'io.ox/settings/util',
+     'gettext!io.ox/mail'
+    ], function (ModelFactory, Validators, api, settingsUtil, gt) {
 
     'use strict';
 

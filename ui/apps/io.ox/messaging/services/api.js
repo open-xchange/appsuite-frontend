@@ -12,14 +12,12 @@
  */
 
 //TODO: split into packages for services, accounts and messages
-define('io.ox/messaging/services/api',
-    ['io.ox/core/http',
-    'io.ox/core/api/user'], function (http, userAPI) {
+define('io.ox/messaging/services/api', ['io.ox/core/http'], function (http) {
 
     'use strict';
 
     var api = {
-        all: function (options) {
+        all: function () {
             return http.GET({
                 module: 'messaging/service',
                 params: {
@@ -27,9 +25,7 @@ define('io.ox/messaging/services/api',
                 }
             });
         },
-        get: function (options) {
-
-        }
+        get: $.noop
     };
     return api;
 });

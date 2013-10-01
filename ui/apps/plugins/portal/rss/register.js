@@ -13,15 +13,16 @@
 
 define('plugins/portal/rss/register',
     ['io.ox/core/extensions',
-    'io.ox/core/strings',
-    'io.ox/messaging/accounts/api',
-    'io.ox/messaging/services/api',
-    'io.ox/messaging/messages/api',
-    'io.ox/keychain/api',
-    'io.ox/rss/api',
-    'io.ox/core/date',
-    'io.ox/core/tk/dialogs',
-    'gettext!io.ox/portal'], function (ext, strings, accountAPI, serviceAPI, messageAPI, keychain, rss, date, dialogs, gt) {
+     'io.ox/core/strings',
+     'io.ox/messaging/accounts/api',
+     'io.ox/messaging/services/api',
+     'io.ox/messaging/messages/api',
+     'io.ox/keychain/api',
+     'io.ox/rss/api',
+     'io.ox/core/date',
+     'io.ox/core/tk/dialogs',
+     'gettext!io.ox/portal'
+    ], function (ext, strings, accountAPI, serviceAPI, messageAPI, keychain, rss, date, dialogs, gt) {
 
     'use strict';
 
@@ -159,8 +160,7 @@ define('plugins/portal/rss/register',
             $url = $('<textarea class="input-block-level" rows="5">').attr('placeholder', 'http://').placeholder(),
             $description = $('<input type="text" class="input-block-level">'),
             $error = $('<div class="alert alert-error">').hide(),
-            props = model.get('props') || {},
-            that = this;
+            props = model.get('props') || {};
 
         dialog.header($('<h4>').text(gt('RSS Feeds')))
             .build(function () {
@@ -184,7 +184,7 @@ define('plugins/portal/rss/register',
             }
         });
 
-        dialog.on('save', function (e) {
+        dialog.on('save', function () {
 
             var url = $.trim($url.val()),
                 description = $.trim($description.val()),

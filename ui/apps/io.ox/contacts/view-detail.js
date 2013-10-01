@@ -74,9 +74,6 @@ define('io.ox/contacts/view-detail',
         return (/<\w/).test(str);
     }
 
-    function attachmentFail(container, contact) {
-    }
-
     function buildDropdown(container, label, data) {
         return new links.DropdownLinks({
             label: label,
@@ -175,7 +172,7 @@ define('io.ox/contacts/view-detail',
                 api.getAll({ folder_id: contact.folder_id, id: contact.id, module: 7 }).then(
                     function success(data) {
                         section.empty();
-                        _(data).each(function (a, index) {
+                        _(data).each(function (a) {
                             // draw
                             buildDropdown(section, _.noI18n(a.filename), a);
                         });
@@ -258,7 +255,7 @@ define('io.ox/contacts/view-detail',
         }
     });
 
-    function block(legend, list) {
+    function block() {
 
         var args = _(arguments).toArray(),
             rows = _(args.slice(1)).compact();

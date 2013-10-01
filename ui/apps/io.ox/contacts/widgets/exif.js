@@ -10,8 +10,7 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/contacts/widgets/exif',
-    [], function () {
+define('io.ox/contacts/widgets/exif', function () {
 
     'use strict';
 
@@ -51,7 +50,6 @@ define('io.ox/contacts/widgets/exif',
             } else {
                 offset += 2 + file.getShortAt(offset + 2, true);
             }
-
         }
     }
 
@@ -62,8 +60,7 @@ define('io.ox/contacts/widgets/exif',
         }
 
         var bigEnd,
-            tags, tag,
-            exifData, gpsData,
+            tags,
             tiffOffset = start + 6;
 
         // test for TIFF validity and endianness

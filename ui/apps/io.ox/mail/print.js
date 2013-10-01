@@ -15,7 +15,8 @@ define('io.ox/mail/print',
      'io.ox/mail/api',
      'io.ox/mail/util',
      'io.ox/mail/view-detail',
-     'gettext!io.ox/mail'], function (print, api, util, detailview,  gt) {
+     'gettext!io.ox/mail'
+    ], function (print, api, util, detailview,  gt) {
 
     'use strict';
 
@@ -26,8 +27,7 @@ define('io.ox/mail/print',
     function getContent(data) {
         if (!_.isArray(data.attachments)) return '';
         if (type === 'text') {
-            var source = String(data.attachments[0].content || ''),
-                isLarge = source.length > 1024 * 512; // > 512 KB
+            var source = String(data.attachments[0].content || '');
             // replace images on source level
             source = source.replace(regImageSrc, '$1' + ox.apiRoot);
             return $.trim(source.replace(/\n/g, '').replace(/<br[ ]?\/?>/g, '\n'));

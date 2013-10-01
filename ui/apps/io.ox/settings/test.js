@@ -11,8 +11,10 @@
  */
 
 define('io.ox/settings/test',
-    ['io.ox/core/extensions', 'io.ox/core/api/account',
-     'settings!io.ox/mail'], function (ext, api, settings) {
+    ['io.ox/core/extensions',
+     'io.ox/core/api/account',
+     'settings!io.ox/mail'
+    ], function (ext, api, settings) {
 
     'use strict';
 

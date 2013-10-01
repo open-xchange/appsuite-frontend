@@ -12,12 +12,13 @@
  */
 
 define('io.ox/calendar/edit/view-addparticipants',
-      ['io.ox/core/tk/autocomplete',
-       'io.ox/core/api/autocomplete',
-       'io.ox/mail/util',
-       'io.ox/participants/model',
-       'io.ox/participants/views',
-       'gettext!io.ox/calendar/edit/main'], function (autocomplete, AutocompleteAPI, mailUtil, pModel, pViews, gt) {
+    ['io.ox/core/tk/autocomplete',
+     'io.ox/core/api/autocomplete',
+     'io.ox/mail/util',
+     'io.ox/participants/model',
+     'io.ox/participants/views',
+     'gettext!io.ox/calendar/edit/main'
+    ], function (autocomplete, AutocompleteAPI, mailUtil, pModel, pViews, gt) {
 
     'use strict';
 
@@ -35,7 +36,6 @@ define('io.ox/calendar/edit/view-addparticipants',
         // TODO: should refactored to a controller
         render: function (opt) {
             var self = this,
-                renderedContent,
                 defaults = {
                     id: 'participants',
                     users: false,
@@ -49,11 +49,6 @@ define('io.ox/calendar/edit/view-addparticipants',
                 },
                 options = $.extend(defaults, opt),
                 autocompleteAPI = new AutocompleteAPI(options);
-
-            function highlight(text, query) {
-                return String(text).replace(/</g, '&lt;')
-                    .replace(new RegExp(query, 'i'), '<b>' + query + '</b>');
-            }
 
             self.autoparticipants = self.$el.find('.add-participant')
                 .autocomplete({
@@ -166,7 +161,7 @@ define('io.ox/calendar/edit/view-addparticipants',
             return self;
         },
 
-        onClickAdd: function (e) {
+        onClickAdd: function () {
 
             // updating baton-data-node
             this.trigger('update');

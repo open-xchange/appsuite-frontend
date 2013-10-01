@@ -12,21 +12,21 @@
  */
 
 define('io.ox/portal/settings/pane',
-      ['io.ox/core/extensions',
-       'io.ox/core/manifests',
-       'io.ox/portal/settings/widgetview',
-       'io.ox/core/upsell',
-       'io.ox/portal/widgets',
-       'gettext!io.ox/portal',
-       'apps/io.ox/core/tk/jquery-ui.min.js',
-       'less!io.ox/portal/style.less'], function (ext, manifests, WidgetSettingsView, upsell, widgets, gt) {
+    ['io.ox/core/extensions',
+     'io.ox/core/manifests',
+     'io.ox/portal/settings/widgetview',
+     'io.ox/core/upsell',
+     'io.ox/portal/widgets',
+     'gettext!io.ox/portal',
+     'apps/io.ox/core/tk/jquery-ui.min.js',
+     'less!io.ox/portal/style.less'
+    ], function (ext, manifests, WidgetSettingsView, upsell, widgets, gt) {
 
     'use strict';
 
     var POINT = 'io.ox/portal/settings/detail', pane;
 
-    var availablePlugins = widgets.getAvailablePlugins(),
-        collection = widgets.getCollection(),
+    var collection = widgets.getCollection(),
         list = $('<ol class="widget-list">');
 
     collection
@@ -218,7 +218,7 @@ define('io.ox/portal/settings/pane',
     ext.point(POINT + '/view').extend({
         id: 'drag-handle',
         index: 200,
-        draw: function (baton) {
+        draw: function () {
             this
             .addClass('draggable')
             .attr('title', gt('Drag to reorder widget'))
@@ -325,7 +325,7 @@ define('io.ox/portal/settings/pane',
                 delay: 150,
                 handle: '.drag-handle',
                 scroll: true,
-                update: function (e, ui) {
+                update: function () {
                     widgets.save(list);
                 }
             });

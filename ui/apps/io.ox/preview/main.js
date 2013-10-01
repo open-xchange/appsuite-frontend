@@ -27,7 +27,7 @@ define('io.ox/preview/main',
     var clickableLink = $.noop;
 
     if (supportsDragOut) {
-        dragOutHandler = function ($node, desc) {
+        dragOutHandler = function ($node) {
             $node.on('dragstart', function (e) {
                 e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
             });
@@ -122,7 +122,7 @@ define('io.ox/preview/main',
                 return mediasupport.supportedExtensionsArray('audio');
             }()),
             draw: function (file) {
-                var audiofile = $('<audio>').attr({
+                $('<audio>').attr({
                     src: file.dataURL + '&delivery=view&content_type=' + file.mimetype,
                     type: file.mimetype,
                     preload: 'metadata',
@@ -180,8 +180,7 @@ define('io.ox/preview/main',
         supports: ['eml', 'message/rfc822'],
         draw: function (file) {
             var self = this;
-            require(['io.ox/mail/view-detail',
-                      'io.ox/mail/util'], function (view, util) {
+            require(['io.ox/mail/view-detail'], function (view) {
                 var data = file.data.nested_message;
                 data.parent = file.parent;
                 //preview during compose (forward mail as attachment)

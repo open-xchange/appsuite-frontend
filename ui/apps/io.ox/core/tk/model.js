@@ -18,7 +18,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
 
     'use strict';
 
-    var Error, regEmail, formats, isEqual, updateComputed, Schema, Model;
+    var Error, regEmail, formats, isEqual, Schema, Model;
 
     /**
      * General local Error class
@@ -34,7 +34,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
     regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
     formats = {
-        string: function (prop, val, def) {
+        string: function () {
             // always true!
             return true;
         },
@@ -55,7 +55,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             return _.isBoolean(val) ||
                 new Error(prop, _.printf('%s must be bool', def.i18n || prop));
         },
-        date: function (prop, val, def) {
+        date: function () {
             return true;
         },
         pastDate: function (prop, val, def) {
@@ -68,7 +68,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             return regEmail.test(val) ||
                 new Error(prop, _.printf('%s must be a valid email address', def.i18n || prop));
         },
-        url: function (prop, val, def) {
+        url: function () {
             return true;
         }
     };
@@ -149,7 +149,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
         },
 
         // can return deferred object / otherwise just instance of Error or nothing
-        check: function (data, Error) {
+        check: function () {
             return $.when();
         }
     };
@@ -426,7 +426,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
         }()),
 
         // store method must be replaced by custom handler
-        store: function (data, changes) { },
+        store: function () { },
 
         // destructor
         destroy: function () {

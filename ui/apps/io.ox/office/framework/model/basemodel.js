@@ -12,9 +12,7 @@
  */
 
 define('io.ox/office/framework/model/basemodel',
-     ['io.ox/core/event',
-      'io.ox/office/tk/utils'
-     ], function (Events, Utils) {
+     ['io.ox/core/event'], function (Events) {
 
     'use strict';
 
@@ -31,7 +29,7 @@ define('io.ox/office/framework/model/basemodel',
      * @param {BaseApplication} app
      *  The application that has created this model instance.
      */
-    function BaseModel(app) {
+    function BaseModel() {
 
         // base constructor ---------------------------------------------------
 

@@ -10,17 +10,13 @@
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
-define('io.ox/mail/settings/model',
-      ['settings!io.ox/mail'], function (settings) {
+define('io.ox/mail/settings/model', ['settings!io.ox/mail'], function (settings) {
 
     'use strict';
 
     var mailSettingsModel = Backbone.Model.extend({
 
-
-        initialize: function (options) {
-
-        },
+        initialize: $.noop,
 
         save: function () {
             return settings.save(this.attributes);

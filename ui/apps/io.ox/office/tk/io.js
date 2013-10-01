@@ -13,9 +13,8 @@
 
 define('io.ox/office/tk/io',
     ['io.ox/core/http',
-     'io.ox/office/tk/utils',
-     'gettext!io.ox/office/main'
-    ], function (http, Utils, gt) {
+     'io.ox/office/tk/utils'
+    ], function (http, Utils) {
 
     'use strict';
 
@@ -158,7 +157,7 @@ define('io.ox/office/tk/io',
             };
 
             // register error event handlers, Deferred object will be rejected
-            reader.onerror = reader.onabort = function (event) {
+            reader.onerror = reader.onabort = function () {
                 def.reject();
             };
 

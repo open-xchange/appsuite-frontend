@@ -12,17 +12,18 @@
  */
 
 define('io.ox/mail/settings/pane',
-   ['settings!io.ox/mail',
-    'io.ox/core/api/user',
-    'io.ox/core/capabilities',
-    'io.ox/contacts/api',
-    'io.ox/mail/util',
-    'io.ox/mail/settings/model',
-    'dot!io.ox/mail/settings/form.html',
-    'io.ox/core/extensions',
-    'io.ox/core/notifications',
-    'gettext!io.ox/mail',
-    'io.ox/core/api/account'], function (settings, userAPI, capabilities, contactsAPI, mailUtil, mailSettingsModel, tmpl, ext, notifications, gt, api) {
+    ['settings!io.ox/mail',
+     'io.ox/core/api/user',
+     'io.ox/core/capabilities',
+     'io.ox/contacts/api',
+     'io.ox/mail/util',
+     'io.ox/mail/settings/model',
+     'dot!io.ox/mail/settings/form.html',
+     'io.ox/core/extensions',
+     'io.ox/core/notifications',
+     'gettext!io.ox/mail',
+     'io.ox/core/api/account'
+    ], function (settings, userAPI, capabilities, contactsAPI, mailUtil, mailSettingsModel, tmpl, ext, notifications, gt, api) {
 
     'use strict';
 
@@ -66,13 +67,12 @@ define('io.ox/mail/settings/pane',
                            {label: gt('3 minutes'), value: '3_minutes'},
                            {label: gt('5 minutes'), value: '5_minutes'},
                            {label: gt('10 minutes'), value: '10_minutes'}],
-        mailViewSettings,
-        reloadMe = ['contactCollectOnMailTransport', 'contactCollectOnMailAccess'];
+        mailViewSettings;
 
     var MailSettingsView = Backbone.View.extend({
         tagName: 'div',
         _modelBinder: undefined,
-        initialize: function (options) {
+        initialize: function () {
             // create template
             this._modelBinder = new Backbone.ModelBinder();
         },
@@ -139,24 +139,9 @@ define('io.ox/mail/settings/pane',
     ext.point('io.ox/mail/settings/detail').extend({
         index: 200,
         id: 'mailsettings',
-        draw: function (data) {
+        draw: function () {
 
             mailViewSettings = new MailSettingsView({model: mailSettings});
-
-            // mattes: please see bug 27510. maybe we don't need this
-
-            // mailViewSettings.model.on('change', function (model, e) {
-
-            //     var showNotice = _(reloadMe).any(function (attr) {
-            //         if (_.isBoolean(mailViewSettings.model.changed[attr])) {
-            //             return true;
-            //         }
-            //     });
-
-            //     if (showNotice) {
-            //         require('io.ox/core/notifications').yell('success', gt('The setting has been saved and will become active when you enter the application the next time.'));
-            //     }
-            // });
 
             var holder = $('<div>').css('max-width', '800px');
             this.append(holder.append(
@@ -179,7 +164,7 @@ define('io.ox/mail/settings/pane',
         }
     });
 
-    function changeIMAPSubscription(e) {
+    function changeIMAPSubscription() {
         ox.load(['io.ox/core/folder/imap-subscription']).done(function (subscription) {
             subscription.show();
         });
@@ -188,7 +173,7 @@ define('io.ox/mail/settings/pane',
     ext.point('io.ox/mail/settings/detail').extend({
         index: 400,
         id: 'imap-subscription',
-        draw: function (data) {
+        draw: function () {
             var button = $('<button type="button" class="btn btn-primary">').on('click', changeIMAPSubscription);
 
             if (_.device('smartphone')) return;

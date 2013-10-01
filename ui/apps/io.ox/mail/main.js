@@ -35,13 +35,10 @@ define('io.ox/mail/main',
 
     'use strict';
 
-    var draftFolderId = settings.get('defaultFolder/drafts'),
-
-        hToolbarOptions = function (e) {
+    var hToolbarOptions = function (e) {
             e.preventDefault();
             var option = $(this).attr('data-option'),
-                grid = e.data.grid,
-                folder;
+                grid = e.data.grid;
             if (/^(603|607|610|102|thread|from-to)$/.test(option)) {
                 grid.prop('sort', option).refresh();
                 // sort must not react to the prop change event because autotoggle uses this too and would mess up the persistent settings
@@ -64,10 +61,8 @@ define('io.ox/mail/main',
         // grid
         grid,
         // nodes
-        audio,
         left,
-        right,
-        scrollpane;
+        right;
 
     // for saving the persistent settings
     // app.updateGridSettings = function (type, value) {
@@ -505,7 +500,6 @@ define('io.ox/mail/main',
         });
 
         grid.on('change:prop:unread', function (e, value) {
-            var state = grid.prop('unread');
             if (value === true) {
                 // turn on
                 grid.prop('unread', true);
@@ -540,11 +534,11 @@ define('io.ox/mail/main',
 
             // add label template
             grid.addLabelTemplate(tmpl.thread);
-            grid.requiresLabel = function (i, data, current) {
+            grid.requiresLabel = function (i) {
                 return openThreads[i] !== undefined && grid.prop('sort') === 'thread';
             };
 
-            function refresh(list, index) {
+            function refresh() {
                 grid.repaintLabels().done(function () {
                     grid.repaint();
                 });
@@ -874,10 +868,8 @@ define('io.ox/mail/main',
         // Push mail
         if (require('io.ox/core/capabilities').has('rt lab:pushMail')) {
             require(['io.ox/realtime/events'], function (rtEvents) {
-                rtEvents.on('mail:new', function (data) {
-                    //if (data.folder === 'default0/INBOX') {
+                rtEvents.on('mail:new', function () {
                     api.refresh();
-                    //}
                 });
             });
         }

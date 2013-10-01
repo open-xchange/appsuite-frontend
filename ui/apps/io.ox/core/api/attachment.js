@@ -11,9 +11,12 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/core/api/attachment', ['io.ox/core/http',
-                                     'io.ox/core/event',
-                                     'settings!io.ox/core'], function (http, Events, coreConfig) {
+define('io.ox/core/api/attachment',
+    ['io.ox/core/http',
+     'io.ox/core/event',
+     'settings!io.ox/core'
+    ], function (http, Events, coreConfig) {
+
     'use strict';
 
     var api = {

@@ -11,6 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], function (ext, Events) {
+
     'use strict';
 
     var views;
@@ -207,7 +208,6 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
         this.createView = function (options) {
             options = options || {};
 
-            var id = options.id || '';
             delete options.id;
 
             options.render = options.render || function () {
@@ -269,7 +269,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                 });
 
             },
-            separator: function (attribute) {
+            separator: function () {
                 return ' ';
             },
             updateNode: function () {

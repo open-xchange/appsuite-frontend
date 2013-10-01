@@ -10,10 +10,7 @@
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
-define('io.ox/settings/accounts/email/model',
-      ['io.ox/core/tk/model',
-       'io.ox/core/api/account'
-       ], function (Model, AccountAPI) {
+define('io.ox/settings/accounts/email/model', function () {
 
     'use strict';
 

@@ -4,14 +4,12 @@
 
 define('io.ox/files/guidance/statistics',
     ['io.ox/core/strings',
-    'io.ox/core/api/folder',
-    'io.ox/files/api',
-    'gettext!io.ox/files',
-    'io.ox/core/capabilities',
-    'io.ox/core/extensions',
-    'io.ox/core/extPatterns/links',
-    'apps/io.ox/core/tk/charts.js'
-    ], function (strings, folderAPI, api, gt, capabilities, ext, links) {
+     'io.ox/core/api/folder',
+     'io.ox/files/api',
+     'gettext!io.ox/files',
+     'io.ox/core/capabilities',
+     'apps/io.ox/core/tk/charts.js'
+    ], function (strings, folderAPI, api, gt, capabilities) {
 
     'use strict';
 
@@ -170,7 +168,7 @@ define('io.ox/files/guidance/statistics',
         if (baton.quota.infostoreQuota < 0) {
             node.idle.empty();
         } else {
-            getAllSubFolders(baton.folder).done(function (list) {
+            getAllSubFolders(baton.folder).done(function () {
                 node.append($('<h2>').text(gt('Capacity')));
 
                 node.idle();
@@ -231,7 +229,6 @@ define('io.ox/files/guidance/statistics',
             )
             .then(function success() {
                 var files = _(_(arguments).toArray()).flatten(),
-                    folderSizes = {},
                     data,
                     chart,
                     ctx,
@@ -271,7 +268,7 @@ define('io.ox/files/guidance/statistics',
                     new window.Chart(ctx).Bar(chart, {});
 
                     options = {
-                        handler: function (id, data) {
+                        handler: function (id) {
                             baton.app.folder.set(id);
                             baton.dialog.close();
                         },

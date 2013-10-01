@@ -91,7 +91,7 @@ define('io.ox/conversations/main',
                     .append(members = $('<div>').addClass('members'));
                 return { subject: subject, members: members };
             },
-            set: function (data, fields, index) {
+            set: function (data, fields) {
                 fields.subject.text(data.subject || '\u00A0');
                 fields.members.text(
                     _(data.members).map(function (member) {
@@ -369,12 +369,12 @@ define('io.ox/conversations/main',
         });
 
         // bind all refresh
-        api.on('refresh.all', function (e, data) {
+        api.on('refresh.all', function () {
             grid.refresh();
         });
 
         // bind list refresh
-        api.on('refresh.list', function (e, data) {
+        api.on('refresh.list', function () {
             grid.repaint();
         });
 

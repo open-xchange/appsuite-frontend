@@ -16,7 +16,7 @@ define('io.ox/backbone/tests/validations', ['io.ox/core/extensions', 'io.ox/back
     ext.point('test/suite').extend({
         id: 'backbone-validations',
         index: 100,
-        test: function (j, utils) {
+        test: function (j) {
             // Note: Most of these are todos
             j.describe('Backbone Validation', function () {
                 var formats = validations.formats;

@@ -11,7 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/conversations/actions', ['io.ox/core/extensions', 'io.ox/core/extPatterns/links'], function (ext, links) {
+define('io.ox/conversations/actions',
+    ['io.ox/core/extensions',
+     'io.ox/core/extPatterns/links'
+    ], function (ext, links) {
 
     'use strict';
 
@@ -20,7 +23,7 @@ define('io.ox/conversations/actions', ['io.ox/core/extensions', 'io.ox/core/extP
     ext.point('io.ox/conversations/actions/create').extend({
         index: 100,
         id: 'create',
-        action: function (data) {
+        action: function () {
             require(['io.ox/conversations/api'], function (api) {
                 api.create('');
             });

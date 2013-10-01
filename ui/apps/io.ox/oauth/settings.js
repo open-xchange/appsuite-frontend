@@ -12,15 +12,15 @@
  */
 define('io.ox/oauth/settings',
     ['io.ox/core/extensions',
-    'io.ox/oauth/keychain',
-    'io.ox/keychain/api',
-    'io.ox/core/tk/dialogs',
-    'gettext!io.ox/settings/oauth'
+     'io.ox/oauth/keychain',
+     'io.ox/keychain/api',
+     'io.ox/core/tk/dialogs',
+     'gettext!io.ox/settings/oauth'
     ], function (ext, oauthKeychain, keychain, dialogs, gt) {
+
     'use strict';
 
     function OAuthAccountDetailExtension(serviceId) {
-        var self = this;
         this.id = serviceId;
 
         this.draw = function (args) {
@@ -36,14 +36,14 @@ define('io.ox/oauth/settings',
                 }
             }
 
-            function displaySuccess(msg) {
+            function displaySuccess() {
                 return function () {
                     // TODO: Once we know how to notify user about results
                     closeDialog();
                 };
             }
 
-            function displayError(msg) {
+            function displayError() {
                 return function () {
                     // TODO: Once we know how to notify user about results
                 };

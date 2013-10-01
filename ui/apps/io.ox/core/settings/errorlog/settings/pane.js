@@ -15,7 +15,8 @@ define('io.ox/core/settings/errorlog/settings/pane',
      'io.ox/core/http',
      'io.ox/core/date',
      'gettext!io.ox/core',
-     'apps/io.ox/core/tk/charts.js'], function (ext, http, date, gt) {
+     'apps/io.ox/core/tk/charts.js'
+    ], function (ext, http, date, gt) {
 
     'use strict';
 
@@ -151,7 +152,7 @@ define('io.ox/core/settings/errorlog/settings/pane',
 
         updateChart: function () {
 
-            var canvas, data, list, chart, ctx;
+            var canvas, data, chart, ctx;
 
             function transform(list) {
 

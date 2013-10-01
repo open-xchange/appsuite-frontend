@@ -14,11 +14,13 @@
 define: true, _: true
 */
 define('io.ox/mail/settings/old_pane',
-       ['io.ox/core/extensions',
-        'io.ox/core/tk/view',
-        'io.ox/core/tk/model',
-        'gettext!io.ox/mail',
-        'settings!io.ox/mail', 'io.ox/core/api/account'], function (ext, View, Model, gt, settings, api) {
+    ['io.ox/core/extensions',
+     'io.ox/core/tk/view',
+     'io.ox/core/tk/model',
+     'gettext!io.ox/mail',
+     'settings!io.ox/mail',
+     'io.ox/core/api/account'
+    ], function (ext, View, Model, gt, settings, api) {
 
     'use strict';
 

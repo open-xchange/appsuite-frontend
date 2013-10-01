@@ -39,7 +39,7 @@ define('io.ox/core/emoji/view', ['moxiecode/tiny_mce/plugins/emoji/main'], funct
         },
 
         // when user clicks on emoji. inserts emoji into editor
-        onInsertEmoji: function (e) {
+        onInsertEmoji: function () {
             console.warn('Overwrite onInsertEmoji!');
         },
 

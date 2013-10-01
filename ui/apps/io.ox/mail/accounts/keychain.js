@@ -17,7 +17,8 @@ define.async('io.ox/mail/accounts/keychain',
      'io.ox/core/api/user',
      'io.ox/core/capabilities',
      'io.ox/core/event',
-     'gettext!io.ox/core'], function (ext, accountAPI, userAPI, capabilities, Events, gt) {
+     'gettext!io.ox/core'
+    ], function (ext, accountAPI, userAPI, capabilities, Events, gt) {
 
     'use strict';
 

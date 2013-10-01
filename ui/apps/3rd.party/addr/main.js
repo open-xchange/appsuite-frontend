@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('3rd.party/addr/main', [], function () {
+define('3rd.party/addr/main', function () {
 
     'use strict';
 

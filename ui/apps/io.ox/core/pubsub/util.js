@@ -16,7 +16,8 @@ define('io.ox/core/pubsub/util',
      'settings!io.ox/core',
      'io.ox/core/api/folder',
      'io.ox/core/pubsub/model',
-     'gettext!io.ox/mail'], function (api, coreConfig, folderAPI, model, gt) {
+     'gettext!io.ox/mail'
+    ], function (api, coreConfig, folderAPI, model, gt) {
 
     'use strict';
 

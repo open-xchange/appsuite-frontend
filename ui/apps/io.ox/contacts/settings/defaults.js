@@ -10,7 +10,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/contacts/settings/defaults', [], function () {
+define('io.ox/contacts/settings/defaults', function () {
 
     'use strict';
 

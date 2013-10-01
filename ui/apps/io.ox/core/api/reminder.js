@@ -10,11 +10,14 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define('io.ox/core/api/reminder', ['io.ox/core/http',
-                                   'io.ox/tasks/api',
-                                   'io.ox/calendar/api',
-                                   'io.ox/core/date',
-                                   'io.ox/core/event'], function (http, taskAPI, calendarAPI, date, Events) {
+define('io.ox/core/api/reminder',
+    ['io.ox/core/http',
+     'io.ox/tasks/api',
+     'io.ox/calendar/api',
+     'io.ox/core/date',
+     'io.ox/core/event'
+    ], function (http, taskAPI, calendarAPI, date, Events) {
+
     'use strict';
 
     //object to store reminders that are not to display yet

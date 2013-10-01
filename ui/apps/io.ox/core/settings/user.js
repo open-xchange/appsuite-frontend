@@ -11,15 +11,14 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/core/settings/user', [
-    'io.ox/core/extensions',
-    'io.ox/core/api/user',
-    'io.ox/contacts/model',
-    'io.ox/contacts/edit/view-form',
-    'io.ox/core/tk/dialogs',
-    'io.ox/contacts/util',
-    'io.ox/core/api/folder'
-], function (ext, api, contactModel, ViewForm, dialogs, util, folderAPI) {
+define('io.ox/core/settings/user',
+    ['io.ox/core/extensions',
+     'io.ox/core/api/user',
+     'io.ox/contacts/model',
+     'io.ox/contacts/edit/view-form',
+     'io.ox/core/tk/dialogs',
+     'io.ox/contacts/util'
+    ], function (ext, api, contactModel, ViewForm, dialogs, util) {
 
     'use strict';
 

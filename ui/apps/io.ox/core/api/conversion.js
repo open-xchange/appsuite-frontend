@@ -11,7 +11,10 @@
  * @author Matthias Biggeleben <tobias.prinz@open-xchange.com>
  */
 
-define('io.ox/core/api/conversion', ['io.ox/core/api/factory', 'io.ox/core/http', 'io.ox/core/cache'], function (apiFactory, http, cache) {
+define('io.ox/core/api/conversion',
+    ['io.ox/core/api/factory',
+     'io.ox/core/http'
+    ], function (apiFactory, http) {
 
     'use strict';
 

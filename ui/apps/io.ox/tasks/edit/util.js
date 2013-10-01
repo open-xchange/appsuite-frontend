@@ -11,8 +11,8 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
-                                'io.ox/core/strings'], function (gt, strings) {
+define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
+
     'use strict';
 
     var util = {
@@ -76,7 +76,7 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
                 extensions[i].invoke('draw', row, baton);
             }
             //find labels and make them focus the inputfield
-            row.find('label').each(function (label) {
+            row.find('label').each(function () {
                 if (this) {
                     $(this).attr('for', $(this).next().attr('id'));
                 }

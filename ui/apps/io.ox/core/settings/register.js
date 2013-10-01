@@ -11,9 +11,8 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/core/settings/register', ['io.ox/core/extensions', 'gettext!io.ox/core/settings'], function (ext, gt) {
+define('io.ox/core/settings/register', function () {
 
     'use strict';
-
 
 });

@@ -11,10 +11,7 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/tasks/settings/defaults',
-       [],
-
-function () {
+define('io.ox/tasks/settings/defaults', function () {
 
     'use strict';
 

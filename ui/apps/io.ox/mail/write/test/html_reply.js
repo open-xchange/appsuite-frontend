@@ -21,8 +21,7 @@ define('io.ox/mail/write/test/html_reply',
 
     'use strict';
 
-    var base = ox.base + '/apps/io.ox/mail/write/test',
-        TIMEOUT = ox.testTimeout;
+    var TIMEOUT = ox.testTimeout;
 
     // helpers
     function Done() {
@@ -34,10 +33,6 @@ define('io.ox/mail/write/test/html_reply',
             f.value = true;
         };
         return f;
-    }
-
-    function trim(str) {
-        return $.trim((str + '').replace(/[\r\n]+/g, ''));
     }
 
     /*

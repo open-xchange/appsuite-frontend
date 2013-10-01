@@ -9,9 +9,11 @@
 define('plugins/mobile/addToHomescreen/register',
     ['io.ox/core/extensions',
      'gettext!plugins/mobile/addToHomescreen/i18n',
-     'css!plugins/mobile/addToHomescreen/style.css'], function (ext, gt) {
+     'css!plugins/mobile/addToHomescreen/style.css'
+    ], function (ext, gt) {
 
     'use strict';
+
     if (ox.debug) return;
 
     var nav = window.navigator,
@@ -23,8 +25,6 @@ define('plugins/mobile/addToHomescreen/register',
         OSVersion = 6,
         startX = 0,
         startY = 0,
-        lastVisit = 0,
-        isExpired,
         balloon,
         overrideChecks,
 
@@ -201,7 +201,8 @@ define('plugins/mobile/addToHomescreen/register',
                 }
             }
 
-            var unsused = balloon.offsetHeight;   // repaint trick
+            var unused = balloon.offsetHeight;   // repaint trick
+            unused = null;
             balloon.style.webkitTransitionDuration = duration;
             balloon.style.opacity = '1';
             balloon.style.webkitTransform = 'translate3d(0,0,0)';

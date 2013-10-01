@@ -12,13 +12,14 @@
  */
 
 define('io.ox/core/api/autocomplete',
-      ['io.ox/core/http',
-       'io.ox/core/capabilities',
-       'io.ox/mail/api',
-       'io.ox/contacts/api',
-       'io.ox/contacts/util',
-       'io.ox/core/api/resource',
-       'io.ox/core/api/group'], function (http, capabilities, mailAPI, contactsAPI, util, resourceAPI, groupAPI) {
+    ['io.ox/core/http',
+     'io.ox/core/capabilities',
+     'io.ox/mail/api',
+     'io.ox/contacts/api',
+     'io.ox/contacts/util',
+     'io.ox/core/api/resource',
+     'io.ox/core/api/group'
+    ], function (http, capabilities, mailAPI, contactsAPI, util, resourceAPI, groupAPI) {
 
     'use strict';
 
@@ -133,7 +134,7 @@ define('io.ox/core/api/autocomplete',
          */
         processContactResults: function (type, data, query, options) {
 
-            var tmp = [], hash = {}, self = this, list = [];
+            var tmp = [], hash = {}, self = this;
 
             //distinguish email and phone objects
             function getTarget(obj) {

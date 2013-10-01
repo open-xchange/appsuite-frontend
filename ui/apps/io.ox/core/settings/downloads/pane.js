@@ -15,9 +15,11 @@ define('io.ox/core/settings/downloads/pane',
      'io.ox/core/capabilities',
      'gettext!io.ox/core',
      'settings!io.ox/core',
-     'less!io.ox/core/settings/downloads/style.less'], function (ext, capabilities, gt, settings) {
+     'less!io.ox/core/settings/downloads/style.less'
+    ], function (ext, capabilities, gt, settings) {
 
     'use strict';
+
     // please no download on mobile devices or when disabled via setting
     if (_.device('!desktop') || settings.get('settings/downloadsDisabled')) return;
 

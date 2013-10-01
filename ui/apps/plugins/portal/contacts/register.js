@@ -13,8 +13,8 @@
 define('plugins/portal/contacts/register',
     ['io.ox/core/extensions',
      'io.ox/contacts/api',
-     'io.ox/portal/widgets',
-     'gettext!plugins/portal'], function (ext, api, portalWidgets, gt) {
+     'io.ox/portal/widgets'
+    ], function (ext, api, portalWidgets) {
 
     'use strict';
 

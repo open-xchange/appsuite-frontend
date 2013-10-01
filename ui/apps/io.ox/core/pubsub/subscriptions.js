@@ -42,7 +42,7 @@ define('io.ox/core/pubsub/subscriptions',
     SubscriptionView = Backbone.View.extend({
         tagName: 'div',
         _modelBinder: undefined,
-        initialize: function (options) {
+        initialize: function () {
             this._modelBinder = new Backbone.ModelBinder();
         },
         render: function (app) {
@@ -71,7 +71,7 @@ define('io.ox/core/pubsub/subscriptions',
                             //set id, if none is present (new model)
                             if (!self.model.id) { self.model.id = id; }
                             api.subscriptions.refresh({ id: id, folder: folder }).then(
-                                function refreshSuccess(data) {
+                                function refreshSuccess() {
                                     notifications.yell('info', gt('Subscription successfully created.'));
                                     popup.close();
                                     return self.model;
@@ -88,7 +88,7 @@ define('io.ox/core/pubsub/subscriptions',
                                 }
                             ).then(function (model) {
                                 return model.fetch();
-                            }).then(function (model, collection) {
+                            }).then(function (model) {
                                 var subscriptions = pubsub.subscriptions();
                                 //update the model-(collection)
                                 subscriptions.add(model, {merge: true});
@@ -123,7 +123,7 @@ define('io.ox/core/pubsub/subscriptions',
                 popup.show(function () {
                     popup.getBody().find('select.service-value').focus();
                 });
-                popup.on('subscribe', function (action) {
+                popup.on('subscribe', function () {
 
                     popup.busy();
                     var invalid;
@@ -218,7 +218,7 @@ define('io.ox/core/pubsub/subscriptions',
                     setSource(accounts[0].id);
                 } else {
                     controls = $('<button type="button" class="btn">').text(gt('Add new account')).on('click', function () {
-                        oauth().done(function (data) {
+                        oauth().done(function () {
                             buildForm(node, baton);
                         });
                     });
@@ -236,7 +236,7 @@ define('io.ox/core/pubsub/subscriptions',
             );
         });
         var source = {};
-        node.on('change blur', 'input[type="text"], input[type="password"]', function (e) {
+        node.on('change blur', 'input[type="text"], input[type="password"]', function () {
             var cgroup = $(this).closest('.control-group');
             if (!$(this).val()) {
                 cgroup.addClass('error');
@@ -286,7 +286,6 @@ define('io.ox/core/pubsub/subscriptions',
         id: 'targetfolder',
         index: 200,
         draw: function (baton) {
-            var node;
             this.append(
                 $('<div>').addClass('control-group').append(
                     $('<div>').addClass('controls').append(
@@ -306,8 +305,7 @@ define('io.ox/core/pubsub/subscriptions',
     ext.point(POINT + '/dialog').extend({
         id: 'durationinformation',
         index: 300,
-        draw: function (baton) {
-
+        draw: function () {
             var fullNode = $('<div>').addClass('alert alert-info').append(
                 $('<b>').addClass('privacy-label').text(gt('Approximate Duration for Subscriptions')),
                         $('<div>').addClass('privacy-text').text(

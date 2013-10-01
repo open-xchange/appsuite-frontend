@@ -18,7 +18,8 @@ define('plugins/portal/linkedIn/register',
      'io.ox/core/strings',
      'io.ox/keychain/api',
      'io.ox/core/capabilities',
-     'gettext!plugins/portal'], function (ext, http, proxy, strings, keychain, capabilities, gt) {
+     'gettext!plugins/portal'
+    ], function (ext, http, proxy, strings, keychain, capabilities, gt) {
 
     'use strict';
 
@@ -73,15 +74,10 @@ define('plugins/portal/linkedIn/register',
                 return deferred.resolve();
             }
 
-            var $updateEntry = $('<div/>')
-                    .addClass('io-ox-portal-linkedin-updates-entry')
-                    .appendTo(this),
+            var $updateEntry = $('<div class="io-ox-portal-linkedin-updates-entry">'),
+                $detailEntry = $('<div class="io-ox-portal-linkedin-updates-details">').hide();
 
-                $detailEntry = $('<div/>')
-                    .addClass('io-ox-portal-linkedin-updates-details')
-                    .hide().appendTo(this),
-
-                self = $(this);
+            this.append($updateEntry, $detailEntry);
 
             // Check presence of all variables
             if (activity.updateContent.person.connections) {
@@ -162,7 +158,6 @@ define('plugins/portal/linkedIn/register',
             },
 
             preview: function (baton) {
-                var message = baton.data ? baton.data[0] : null;
                 var content = $('<div class="content">');
 
                 if (baton.data && baton.data.length) {

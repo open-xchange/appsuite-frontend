@@ -12,7 +12,9 @@
  */
 
 define('plugins/halo/test',
-    ['io.ox/core/extensions', 'plugins/halo/config'], function (ext, haloConfig) {
+    ['io.ox/core/extensions',
+     'plugins/halo/config'
+    ], function (ext, haloConfig) {
 
     'use strict';
 

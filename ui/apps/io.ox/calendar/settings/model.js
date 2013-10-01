@@ -11,15 +11,13 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 define('io.ox/calendar/settings/model',
-      ['settings!io.ox/calendar'], function (settings) {
+    ['settings!io.ox/calendar'], function (settings) {
 
     'use strict';
 
     var calendarSettingsModel = Backbone.Model.extend({
 
-
-        initialize: function (options) {
-        },
+        initialize: $.noop,
 
         save: function () {
             return settings.save(this.attributes);

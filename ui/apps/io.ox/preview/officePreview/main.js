@@ -13,8 +13,8 @@
 
 define('io.ox/preview/officePreview/main',
     ['io.ox/core/tk/keys',
-     'gettext!io.ox/preview/officePreview',
-     'less!io.ox/preview/officePreview/style.less'], function (KeyListener, gt) {
+     'less!io.ox/preview/officePreview/style.less'
+    ], function (KeyListener) {
 
     'use strict';
 

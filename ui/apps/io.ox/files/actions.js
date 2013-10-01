@@ -21,7 +21,8 @@ define('io.ox/files/actions',
      'io.ox/core/util',
      'io.ox/core/api/folder',
      'gettext!io.ox/files',
-     'settings!io.ox/files'], function (api, ext, links, actionPerformer, capabilities, notifications, util, folderAPI, gt, settings) {
+     'settings!io.ox/files'
+    ], function (api, ext, links, actionPerformer, capabilities, notifications, util, folderAPI, gt, settings) {
 
     'use strict';
 

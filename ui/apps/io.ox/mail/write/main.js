@@ -29,7 +29,8 @@ define('io.ox/mail/write/main',
      'settings!io.ox/mail',
      'gettext!io.ox/mail',
      'less!io.ox/mail/style.less',
-     'less!io.ox/mail/write/style.less'], function (mailAPI, mailUtil, ext, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, emoji, notifications, sender, settings, gt) {
+     'less!io.ox/mail/write/style.less'
+    ], function (mailAPI, mailUtil, ext, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, emoji, notifications, sender, settings, gt) {
 
     'use strict';
 
@@ -55,9 +56,9 @@ define('io.ox/mail/write/main',
         }
     });
 
-    var UUID = 1;
-    var blocked = {};
-    var timerScale = {
+    var UUID = 1,
+        blocked = {},
+        timerScale = {
         minute: 60000, //60s
         minutes: 60000
     },
@@ -558,7 +559,7 @@ define('io.ox/mail/write/main',
         };
 
         app.addFiles = function (list, group) {
-            var found = false, items;
+            var items;
             items = _.map(list || [], function (obj) {
                 return $.extend(obj, {group: group || 'file'});
             });
@@ -1272,7 +1273,7 @@ define('io.ox/mail/write/main',
                                 clean(); // clean before resolve, otherwise tinymce gets half-destroyed (ugly timing)
                                 def.resolve();
                             } else if (action === 'savedraft') {
-                                app.saveDraft().done(function (mail) {
+                                app.saveDraft().done(function () {
                                     clean();
                                     def.resolve();
                                 }).fail(function (e) {

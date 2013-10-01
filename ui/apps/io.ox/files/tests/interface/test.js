@@ -13,7 +13,8 @@
  *
  */
 
-define('io.ox/files/tests/interface/test', ['io.ox/core/extensions', 'io.ox/files/api'], function (ext, api) {
+define('io.ox/files/tests/interface/test', ['io.ox/core/extensions'], function (ext) {
+
     'use strict';
 
     var TIMEOUT = ox.testTimeout;
@@ -38,8 +39,7 @@ define('io.ox/files/tests/interface/test', ['io.ox/core/extensions', 'io.ox/file
 
             j.describe('Info item creation', function () {
 
-                var app = null,
-                    id, dataId, dataFolder, dataObj;
+                var app = null;
 
                 j.it('opens files app', function () {
                     var loaded = new Done();
@@ -91,7 +91,7 @@ define('io.ox/files/tests/interface/test', ['io.ox/core/extensions', 'io.ox/file
 
                     j.waitsFor(function () {
                         var boxes = $('.title'), found = false;
-                        boxes.each(function (index, box) {
+                        boxes.each(function () {
                             //console.debug("[" + index + "] '" + $(this).html() + "' vs '" + testtitle + "'");
                             if ($(this).text() === testtitle) {
                                 rightBox = $(this);

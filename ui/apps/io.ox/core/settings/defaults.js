@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/core/settings/defaults', function (ext) {
+define('io.ox/core/settings/defaults', function () {
 
     'use strict';
 

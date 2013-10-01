@@ -11,7 +11,6 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-
 define('io.ox/backbone/forms',
     ['io.ox/core/extensions',
      'io.ox/core/event',
@@ -19,7 +18,7 @@ define('io.ox/backbone/forms',
      'settings!io.ox/calendar',
      'gettext!io.ox/core',
      'less!io.ox/backbone/forms.less'
-     ], function (ext, Events, date, settings, gt) {
+    ], function (ext, Events, date, settings, gt) {
 
     'use strict';
 
@@ -50,7 +49,7 @@ define('io.ox/backbone/forms',
                 this.observeModel('backendError', showBackendError);
             },
 
-            isRelevant: function (response) {
+            isRelevant: function () {
                 return true;
             },
 
@@ -360,7 +359,7 @@ define('io.ox/backbone/forms',
                     .val(this.model.get(this.attribute))
                     .attr({ tabindex: 1 });
                 if (options.changeAppTitleOnKeyUp) {
-                    this.nodes.inputField.on('keyup', $.proxy(function (e) {
+                    this.nodes.inputField.on('keyup', $.proxy(function () {
                         this.model.trigger('keyup:' + this.attribute, this.model, this.nodes.inputField.val());
                     }, this));
                 }
@@ -699,7 +698,7 @@ define('io.ox/backbone/forms',
                 }
             },
 
-            _toTime: function (value, attribute) {
+            _toTime: function (value) {
                 if (value === undefined || value === null || value === '') {//dont use !value or 0 will result in false
                     return null;
                 }

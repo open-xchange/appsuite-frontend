@@ -19,7 +19,8 @@ define('io.ox/calendar/week/perspective',
      'io.ox/calendar/conflicts/conflictList',
      'io.ox/core/notifications',
      'gettext!io.ox/calendar',
-     'less!io.ox/calendar/week/style.less'], function (View, api, ext, dialogs, detailView, conflictView, notifications, gt) {
+     'less!io.ox/calendar/week/style.less'
+    ], function (View, api, ext, dialogs, detailView, conflictView, notifications, gt) {
 
     'use strict';
 
@@ -54,7 +55,7 @@ define('io.ox/calendar/week/perspective',
                         }
                     }
                 },
-                function fail(e) {
+                function fail() {
                     notifications.yell('error', gt('An error occurred. Please try again.'));
                     $('.appointment', self.main).removeClass('opac current');
                 }
@@ -285,9 +286,8 @@ define('io.ox/calendar/week/perspective',
         /**
          * initial rendering of the view
          * @param  {Object} app current application
-         * @param  {Object} opt perspective options
          */
-        render: function (app, opt) {
+        render: function (app) {
 
             var self = this;
 

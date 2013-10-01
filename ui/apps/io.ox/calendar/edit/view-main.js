@@ -11,9 +11,10 @@
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 define('io.ox/calendar/edit/view-main',
-       ['io.ox/core/extensions',
-       'io.ox/backbone/views',
-       'io.ox/calendar/edit/template'], function (ext, views) {
+    ['io.ox/core/extensions',
+     'io.ox/backbone/views',
+     'io.ox/calendar/edit/template'
+    ], function (ext, views) {
 
     'use strict';
 

@@ -12,7 +12,8 @@
 
 define('plugins/portal/helloworld/register',
     ['io.ox/core/extensions',
-     'gettext!plugins/portal'], function (ext, gt) {
+     'gettext!plugins/portal'
+    ], function (ext, gt) {
 
     'use strict';
 
@@ -42,7 +43,7 @@ define('plugins/portal/helloworld/register',
         },
 
         // called right after initialize. Should return a deferred object when done
-        load: function (baton) {
+        load: function () {
             return $.when();
         },
 

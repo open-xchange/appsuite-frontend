@@ -22,7 +22,8 @@
 */
 define('io.ox/core/api/snippets',
     ['io.ox/core/http',
-     'io.ox/core/event'], function (http, Events) {
+     'io.ox/core/event'
+    ], function (http, Events) {
 
     'use strict';
 
@@ -45,7 +46,7 @@ define('io.ox/core/api/snippets',
      * get all snippets
      * @return {deferred} array of snippet objects
      */
-    api.getAll = function (type) {
+    api.getAll = function () {
         return http.GET({
             module: 'snippet',
             params: {

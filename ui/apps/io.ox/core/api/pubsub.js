@@ -44,12 +44,13 @@ define('io.ox/core/api/pubsub',
      * @private
      * @return {deferred}
      */
-    var dumpKeys = function (api) {
+    /* var dumpKeys = function (api) {
         return $.when(
             api.caches.all.keys().pipe(function (data) { console.log('all', data); }),
             api.caches.get.keys().pipe(function (data) { console.log('get', data); })
         );
     };
+    */
 
     /**
      * gerneralized API for pubsub

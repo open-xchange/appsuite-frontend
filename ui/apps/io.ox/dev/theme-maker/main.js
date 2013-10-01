@@ -11,7 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/dev/theme-maker/main', ['themes', 'io.ox/core/tk/simple-colorpicker'], function (themes) {
+define('io.ox/dev/theme-maker/main',
+    ['themes',
+     'io.ox/core/tk/simple-colorpicker'
+    ], function (themes) {
 
     'use strict';
 

@@ -13,7 +13,8 @@
 
 define('io.ox/files/util',
     ['io.ox/core/tk/dialogs',
-     'gettext!io.ox/files'], function (dialogs, gt) {
+     'gettext!io.ox/files'
+    ], function (dialogs, gt) {
 
     'use strict';
 

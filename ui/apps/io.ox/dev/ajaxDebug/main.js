@@ -16,7 +16,8 @@ define('io.ox/dev/ajaxDebug/main',
      'io.ox/dev/ajaxDebug/callHandling',
      'io.ox/dev/ajaxDebug/callViews',
      'io.ox/core/extensions',
-     'io.ox/core/extPatterns/links'], function (VGrid, callHandler, callViews, ext, links) {
+     'io.ox/core/extPatterns/links'
+    ], function (VGrid, callHandler, callViews, ext, links) {
 
     'use strict';
 
@@ -101,7 +102,7 @@ define('io.ox/dev/ajaxDebug/main',
                     .append(name = $('<div>').addClass('name'));
                 return { name: name };
             },
-            set: function (data, fields, index) {
+            set: function (data, fields) {
                 fields.name.text(data.query.module + '.' + data.query.params.action);
             }
         });

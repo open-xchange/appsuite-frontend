@@ -14,7 +14,8 @@
 
 define('io.ox/dev/testing/main',
     ['io.ox/dev/testing/jasmine',
-     'io.ox/core/extensions'], function (jasmine, ext) {
+     'io.ox/core/extensions'
+    ], function (jasmine, ext) {
 
     'use strict';
 
@@ -184,7 +185,7 @@ define('io.ox/dev/testing/main',
                     });
                 },
 
-                reportRunnerResults: function (runner) {
+                reportRunnerResults: function () {
                     // stop being busy
                     win.nodes.main.idle();
                     win.show();
@@ -211,12 +212,12 @@ define('io.ox/dev/testing/main',
                         node.css({ color: '#a00', fontWeight: 'bold' });
                         _(result.items_).each(function (item) {
                             if (!item.passed()) {
-                                $('<div>').text(readable(item + '')).on("click", function () {
-                                        $(this).find("pre").remove();
-                                        $(this).append($("<pre>").text(item.trace.stack));
+                                $('<div>').text(readable(item + '')).on('click', function () {
+                                        $(this).find('pre').remove();
+                                        $(this).append($('<pre>').text(item.trace.stack));
                                     }
                                 ).appendTo(node);
-                                consoleError('Actual', item.actual, "Expected", item.expected);
+                                consoleError('Actual', item.actual, 'Expected', item.expected);
                             }
                         });
                         red++;

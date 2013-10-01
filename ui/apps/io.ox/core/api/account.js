@@ -65,18 +65,6 @@ define('io.ox/core/api/account',
         return isArray ? data : data[0];
     };
 
-    var invalidateRoot = function () {
-        ox.api.cache.folder0.setComplete('1', false);
-        ox.api.cache.folder1.setComplete('1', false);
-    };
-
-    var invalidateFolder = function (id) {
-        ox.api.cache.folder0.removeChildren(id, true); // deep
-        ox.api.cache.folder0.remove(id);
-        ox.api.cache.folder1.removeChildren(id, true); // deep
-        ox.api.cache.folder1.remove(id);
-    };
-
     var regParseAccountId = new RegExp('^default\\d+' + separator + '[^' + separator + ']+' + separator),
         regUnified = new RegExp('^default\\d+' + separator + '[^' + separator + ']+$');
 
@@ -143,7 +131,7 @@ define('io.ox/core/api/account',
                 folderAPI.getSubFolders(),
                 api.all()
             ).then(function (folders, accounts) {
-                var mailFolders, mailAccounts, unified, diff;
+                var mailFolders, mailAccounts, diff;
 
                 mailFolders = _(folders).chain()
                     .filter(function (folder) { return folder.id.match(/^default(\d+)/);  })

@@ -14,6 +14,7 @@
 define('plugins/halo/register', ['io.ox/core/extensions'], function (ext) {
 
     'use strict';
+
     ext.point('io.ox/core/person:action').extend({
         index: 10,
         id: 'default',

@@ -10,8 +10,7 @@
  *
  * @author Martin Holzhauer <martin.holzhauer@open-xchange.com>
  */
-define('io.ox/mail/model',
-      ['io.ox/core/tk/model'], function (Model) {
+define('io.ox/mail/model', ['io.ox/core/tk/model'], function (Model) {
 
     'use strict';
 

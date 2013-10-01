@@ -13,7 +13,8 @@
 define('io.ox/tasks/util',
     ['gettext!io.ox/tasks',
      'settings!io.ox/tasks',
-     'io.ox/core/date'], function (gt, settings, date) {
+     'io.ox/core/date'
+    ], function (gt, settings, date) {
 
     'use strict';
 

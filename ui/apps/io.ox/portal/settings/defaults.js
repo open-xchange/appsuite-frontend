@@ -11,7 +11,7 @@
  * @author Markus Bode <markus.bode@open-xchange.com>
  */
 
-define('io.ox/portal/settings/defaults', [], function () {
+define('io.ox/portal/settings/defaults', function () {
 
     'use strict';
 

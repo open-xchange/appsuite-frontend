@@ -13,7 +13,8 @@
 define('plugins/portal/upsell/register',
     ['io.ox/core/extensions',
      'io.ox/files/api',
-     'gettext!plugins/portal'], function (ext, api, gt) {
+     'gettext!plugins/portal'
+    ], function (ext, api, gt) {
 
     'use strict';
 
@@ -23,7 +24,7 @@ define('plugins/portal/upsell/register',
 
         title: title,
 
-        preview: function (baton) {
+        preview: function () {
 
             this.addClass('hide-title').append(
                 $('<div class="content centered" style="cursor: pointer; padding-top: 3em;">').append(

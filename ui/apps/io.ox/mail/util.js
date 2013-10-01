@@ -20,7 +20,8 @@ define('io.ox/mail/util',
      'io.ox/core/capabilities',
      'settings!io.ox/mail',
      'settings!io.ox/contacts',
-     'gettext!io.ox/core'], function (ext, date, util, accountAPI, capabilities, settings, contactsSetting, gt) {
+     'gettext!io.ox/core'
+    ], function (ext, date, util, accountAPI, capabilities, settings, contactsSetting, gt) {
 
     'use strict';
 

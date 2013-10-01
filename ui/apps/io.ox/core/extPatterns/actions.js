@@ -15,7 +15,8 @@
 define('io.ox/core/extPatterns/actions',
     ['io.ox/core/extensions',
      'io.ox/core/upsell',
-     'io.ox/core/collection'], function (ext, upsell, Collection) {
+     'io.ox/core/collection'
+    ], function (ext, upsell, Collection) {
 
     'use strict';
 
@@ -183,7 +184,7 @@ define('io.ox/core/extPatterns/actions',
         collection.getProperties().then(
             function () {
                 // get links (check for requirements)
-                var links = ext.point(ref).map(function (link, index) {
+                var links = ext.point(ref).map(function (link) {
                     // defer decision
                     var def = $.Deferred();
                     // store capabilities

@@ -16,7 +16,7 @@ define.async('io.ox/core/tk/html-editor',
      'io.ox/core/capabilities',
      'settings!io.ox/core',
      'io.ox/core/extensions'
-     ], function (emoji, capabilities, settings, ext) {
+    ], function (emoji, capabilities, settings, ext) {
 
     'use strict';
 
@@ -437,11 +437,11 @@ define.async('io.ox/core/tk/html-editor',
                 }
                 // add handler for focus/blur
                 $(ed.getWin())
-                    .on('focus', function (e) {
+                    .on('focus', function () {
                         $('#' + ed.id + '_tbl').addClass('focused');
                         ed.getBody().focus();
                     })
-                    .on('blur', function (e) {
+                    .on('blur', function () {
                         $('#' + ed.id + '_tbl').removeClass('focused');
                     });
                 // done!
@@ -618,7 +618,7 @@ define.async('io.ox/core/tk/html-editor',
                 str = str.substr(2);
             }
             // split & loop
-            _(str.split('\n').concat('')).each(function (line, i) {
+            _(str.split('\n').concat('')).each(function (line) {
                 var trimmed = $.trim(line);
                 if (trimmed === '' || (quote && trimmed.substr(0, 1) !== '>')) {
                     lTag = quote ? '<blockquote><p>' : '<p>';
@@ -652,7 +652,7 @@ define.async('io.ox/core/tk/html-editor',
             }
         };
 
-        this.setCaretPosition = function (pos) {
+        this.setCaretPosition = function () {
             $(ed.getDoc()).scrollTop(0);
         };
 

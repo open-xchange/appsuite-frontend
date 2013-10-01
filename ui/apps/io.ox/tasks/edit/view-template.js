@@ -11,20 +11,22 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
-                                          'io.ox/backbone/views',
-                                          'io.ox/core/date',
-                                          'io.ox/core/notifications',
-                                          'io.ox/backbone/forms',
-                                          'io.ox/calendar/util',
-                                          'io.ox/tasks/edit/util',
-                                          'io.ox/calendar/edit/recurrence-view',
-                                          'io.ox/participants/views',
-                                          'io.ox/core/tk/attachments',
-                                          'io.ox/tasks/api',
-                                          'io.ox/core/extensions',
-                                          'io.ox/tasks/util'],
-                                          function (gt, views, date, notifications, forms, calendarUtil, util, RecurrenceView, pViews, attachments, api, ext, reminderUtil) {
+define('io.ox/tasks/edit/view-template',
+    ['gettext!io.ox/tasks/edit',
+     'io.ox/backbone/views',
+     'io.ox/core/date',
+     'io.ox/core/notifications',
+     'io.ox/backbone/forms',
+     'io.ox/calendar/util',
+     'io.ox/tasks/edit/util',
+     'io.ox/calendar/edit/recurrence-view',
+     'io.ox/participants/views',
+     'io.ox/core/tk/attachments',
+     'io.ox/tasks/api',
+     'io.ox/core/extensions',
+     'io.ox/tasks/util'
+    ], function (gt, views, date, notifications, forms, calendarUtil, util, RecurrenceView, pViews, attachments, api, ext, reminderUtil) {
+
     'use strict';
 
     var point = views.point('io.ox/tasks/edit/view');
@@ -39,7 +41,6 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                 headlineText = gt('Create task'),
                 headline,
                 saveBtn,
-                self = this,
                 app = baton.app;
             if (baton.model.attributes.id) {
                 saveBtnText = gt('Save');
@@ -160,7 +161,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                     $('<label>').text(gt('Remind me')).addClass('task-edit-label').attr('for', 'task-edit-reminder-select'), selector = $('<select tabindex="1">').attr('id', 'task-edit-reminder-select').addClass('span12')
                     .append($('<option>')
                     .text(''), reminderUtil.buildDropdownMenu())
-                    .on('change', function (e) {
+                    .on('change', function () {
                         if (selector.prop('selectedIndex') === 0) {
                             baton.model.set('alarm', null, {validate: true});
                         } else {
@@ -763,7 +764,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                     }
                 };
             $input.on('change', changeHandler);
-            $inputWrap.on('change.fileupload', function (e) {
+            $inputWrap.on('change.fileupload', function () {
                 //use bubbled event to add fileupload-new again (workaround to add multiple files with IE)
                 $(this).find('div[data-provides="fileupload"]').addClass('fileupload-new').removeClass('fileupload-exists');
             });

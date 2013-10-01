@@ -17,7 +17,8 @@ define('io.ox/tasks/edit/main',
      'io.ox/tasks/model',
      'io.ox/tasks/edit/view',
      'io.ox/core/extPatterns/dnd',
-     'less!io.ox/tasks/edit/style.less'], function (gt, ext, model, view, dnd) {
+     'less!io.ox/tasks/edit/style.less'
+    ], function (gt, ext, model, view, dnd) {
 
     'use strict';
 
@@ -166,11 +167,9 @@ define('io.ox/tasks/edit/main',
                 });
             } else {
                 if (app.edit) {
-                    require(['io.ox/tasks/api'], function (api) {
-                        clean();
-                        model.factory.realm('edit').release();//old model no longer needed
-                        def.resolve();
-                    });
+                    clean();
+                    model.factory.realm('edit').release();//old model no longer needed
+                    def.resolve();
                 } else {
                     clean();
                     def.resolve();

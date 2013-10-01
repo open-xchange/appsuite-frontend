@@ -17,12 +17,12 @@ define('plugins/portal/birthdays/register',
      'io.ox/contacts/util',
      'gettext!plugins/portal',
      'settings!io.ox/core',
-     'less!plugins/portal/birthdays/style.less'], function (ext, api, date, util, gt, settings) {
+     'less!plugins/portal/birthdays/style.less'
+    ], function (ext, api, date, util, gt, settings) {
 
     'use strict';
 
     var WEEKS = 12,
-        RANGE = WEEKS * date.WEEK,
         sidepopup;
 
     function unifySpelling(name) {
@@ -80,7 +80,7 @@ define('plugins/portal/birthdays/register',
                     } else {
                         birthday = birthday.format(date.DATE);
                     }
-                        
+
                     if (!isDuplicate(name, hash)) {
                         $list.append(
                             $('<div class="line">').append(

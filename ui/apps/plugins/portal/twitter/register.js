@@ -20,11 +20,11 @@ define('plugins/portal/twitter/register',
      'gettext!plugins/portal',
      'io.ox/core/notifications',
      'io.ox/core/date',
-     'less!plugins/portal/twitter/style.less'], function (ext, proxy, strings, keychain, gt, notifications, date) {
+     'less!plugins/portal/twitter/style.less'
+    ], function (ext, proxy, strings, keychain, gt, notifications, date) {
 
     'use strict';
 
-    var extensionId = 'twitter';
     var loadEntriesPerPage = 10;
     var offset = 0;
     var $tweets = $('<div>').addClass('twitter');
@@ -239,7 +239,7 @@ define('plugins/portal/twitter/register',
         }
     };
 
-    var handleError = function (errorCode, baton) {
+    var handleError = function (errorCode) {
         if (errorCode === 32 || errorCode === 89 || errorCode === 135) {
             var account = keychain.getStandardAccount('twitter');
 
@@ -273,7 +273,7 @@ define('plugins/portal/twitter/register',
             });
         },
 
-        action: function (baton) {
+        action: function () {
             window.open('https://twitter.com/', 'twitter');
         },
 

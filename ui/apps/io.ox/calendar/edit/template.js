@@ -222,7 +222,6 @@ define('io.ox/calendar/edit/template',
         id: 'noteSeparator',
         index: 750,
         draw: function (baton) {
-            var self = this;
             if (_.device('small')) {
                 this.append(
                     $('<a href="#">')
@@ -498,7 +497,7 @@ define('io.ox/calendar/edit/template',
                     }
                 };
             $input.on('change', changeHandler);
-            $inputWrap.on('change.fileupload', function (e) {
+            $inputWrap.on('change.fileupload', function () {
                 //use bubbled event to add fileupload-new again (workaround to add multiple files with IE)
                 $(this).find('div[data-provides="fileupload"]').addClass('fileupload-new').removeClass('fileupload-exists');
             });

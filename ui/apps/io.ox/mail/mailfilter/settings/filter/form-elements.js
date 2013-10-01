@@ -10,8 +10,7 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/mailfilter/settings/filter/form-elements',
-    ['gettext!io.ox/settings/settings'], function (gt) {
+define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/settings/settings'], function (gt) {
 
     'use strict';
 

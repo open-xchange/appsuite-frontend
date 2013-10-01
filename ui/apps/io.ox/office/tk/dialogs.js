@@ -132,7 +132,7 @@ define('io.ox/office/tk/dialogs',
         addDialogButtons(dialog, options);
 
         // show the dialog and register listeners for the results
-        dialog.show().done(function (action, data, node) {
+        dialog.show().done(function (action) {
             def[(action === 'ok') ? 'resolve' : 'reject']();
         });
 
@@ -212,7 +212,7 @@ define('io.ox/office/tk/dialogs',
 
         // show the dialog and register listeners for the results
         dialog.show(function () { input.focus(); })
-        .done(function (action, data, node) {
+        .done(function (action) {
             if (action === 'ok') {
                 def.resolve(input.val());
             } else {
@@ -283,7 +283,7 @@ define('io.ox/office/tk/dialogs',
 
         // show the dialog and register listeners for the results
         dialog.show(function () { input.focus(); })
-        .done(function (action, data, node) {
+        .done(function (action) {
             if ((action === 'ok') && (_.isObject(file) || _.isString(file))) {
                 def.resolve(file);
             } else {

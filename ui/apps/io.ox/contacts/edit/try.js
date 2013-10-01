@@ -1,4 +1,8 @@
-define('io.ox/contacts/edit/try', ['io.ox/contacts/model', 'io.ox/contacts/edit/view-form', 'io.ox/core/tk/dialogs'], function (model, view, dialogs) {
+define('io.ox/contacts/edit/try',
+    ['io.ox/contacts/model',
+     'io.ox/contacts/edit/view-form',
+     'io.ox/core/tk/dialogs'
+    ], function (model, view, dialogs) {
 
     'use strict';
 
@@ -16,10 +20,7 @@ define('io.ox/contacts/edit/try', ['io.ox/contacts/model', 'io.ox/contacts/edit/
     pane.addPrimaryButton('save', 'Save')
         .addButton('cancel', 'Cancel');
 
-
     pane.show();
 
     return {};
-
-
 });

@@ -18,7 +18,8 @@ define('io.ox/core/commons-folderview',
      'settings!io.ox/core',
      'settings!io.ox/caldav',
      'io.ox/core/capabilities',
-     'gettext!io.ox/core'], function (ext, links, notifications, api, coreConfig, caldavConfig, capabilities, gt) {
+     'gettext!io.ox/core'
+    ], function (ext, links, notifications, api, coreConfig, caldavConfig, capabilities, gt) {
 
     'use strict';
 
@@ -48,7 +49,6 @@ define('io.ox/core/commons-folderview',
         ext.point(POINT + '/sidepanel').extend({
             index: 100,
             draw: function (baton) {
-                var container;
                 this.prepend(
                     // sidepanel
                     baton.$.sidepanel = $('<div class="abs border-right foldertree-sidepanel">')
@@ -130,14 +130,6 @@ define('io.ox/core/commons-folderview',
             e.preventDefault();
             ox.load(['io.ox/core/folder/add']).done(function (add) {
                 add(e.data.folder, { module: e.data.module });
-            });
-        }
-
-        function addPublicFolder(e) {
-            e.preventDefault();
-            // public folder has the magic id 2
-            ox.load(['io.ox/core/folder/add']).done(function (add) {
-                add('2', { module: e.data.module });
             });
         }
 
@@ -270,7 +262,7 @@ define('io.ox/core/commons-folderview',
         ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'pubsub-divider',
             after: 'subscribe',
-            draw: function (baton) {
+            draw: function () {
                 this.append($('<li class="divider">'));
             }
         });
@@ -406,7 +398,7 @@ define('io.ox/core/commons-folderview',
             var baton = e.data.baton, id = baton.app.folder.get();
 
             api.get({ folder: id }).done(function (folder) {
-                require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     var title = gt('Properties'),
                     dialog = new dialogs.ModalDialog({
                         easyOut: true
@@ -654,13 +646,13 @@ define('io.ox/core/commons-folderview',
 
             getWidths();
 
-            windowContainer.on('mouseup', function (e) {
+            windowContainer.on('mouseup', function () {
                 windowContainer.off('mousemove');
                 var width = $(this).data('resize-width') || 250;
                 app.settings.set('folderview/width/' + _.display(), width).save();
             });
 
-            $(window).off('resize.folderview').on('resize.folderview', function (e) {
+            $(window).off('resize.folderview').on('resize.folderview', function () {
                 if (!visible) { fnHide(); } else { fnShow(true);  }
             });
             $(window).off('orientationchange.folderview').on('orientationchange.folderview', fnHide);
@@ -822,7 +814,7 @@ define('io.ox/core/commons-folderview',
                         tree.repaint();
                     });
 
-                    api.on('update', function (e, id, newId, data) {
+                    api.on('update', function (e, id, newId) {
                         // this is used by folder rename, since the id might change (mail folders)
                         var sel = tree.selection.get();
                         if (_.isEqual(sel, [id])) {
@@ -843,7 +835,7 @@ define('io.ox/core/commons-folderview',
                         tree.repaint();
                     });
 
-                    api.on('update:unread', function (e, id, data) {
+                    api.on('update:unread', function (e, id) {
                         tree.reloadNode(id);
                     });
 
@@ -859,7 +851,7 @@ define('io.ox/core/commons-folderview',
             });
         };
 
-        loadTree = function (e) {
+        loadTree = function () {
             toggle();
             app.showFolderView = _.device('smartphone') ? fnShowSml : fnShow;
             app.hideFolderView = _.device('smartphone') ? fnHideSml : fnHide;
@@ -917,7 +909,7 @@ define('io.ox/core/commons-folderview',
         });
 
         new links.Action(ACTION, {
-            action: function (baton) {
+            action: function () {
                 toggleTree();
             }
         });

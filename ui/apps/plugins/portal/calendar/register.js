@@ -57,8 +57,8 @@ define('plugins/portal/calendar/register',
 
         title: gt('Appointments'),
 
-        initialize: function (baton) {
-            api.on('update create delete', function (event, element) {
+        initialize: function () {
+            api.on('update create delete', function () {
                 require(['io.ox/portal/main'], function (portal) {//refresh portal
                     var portalApp = portal.getApp(),
                         portalModel = portalApp.getWidgetCollection()._byId.calendar_0;
@@ -70,7 +70,7 @@ define('plugins/portal/calendar/register',
             });
         },
 
-        action: function (baton) {
+        action: function () {
             ox.launch('io.ox/calendar/main', { perspective: 'list' });
         },
 

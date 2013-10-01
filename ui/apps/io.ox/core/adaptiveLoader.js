@@ -11,8 +11,14 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/core/adaptiveLoader', ['io.ox/core/extensions', 'io.ox/core/capabilities', 'settings!io.ox/core'], function (ext, caps, settings) {
+define('io.ox/core/adaptiveLoader',
+    ['io.ox/core/extensions',
+     'io.ox/core/capabilities',
+     'settings!io.ox/core'
+    ], function (ext, caps, settings) {
+
     'use strict';
+
     var api;
     if (localStorage && caps.has('lab:adaptiveLoading')) {
         var capString = _(ox.serverConfig.capabilities).pluck('id').sort().join(','), language = settings.get('language'), theme = settings.get('theme');
@@ -72,7 +78,7 @@ define('io.ox/core/adaptiveLoader', ['io.ox/core/extensions', 'io.ox/core/capabi
                 delete api.currentChunk;
             },
 
-            record: function (chunkName, milliseconds) {
+            record: function (chunkName) {
                 api.log('record', chunkName);
                 if (!api.cache) {
                     api.init();

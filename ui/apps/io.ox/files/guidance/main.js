@@ -4,12 +4,12 @@
 
 define('io.ox/files/guidance/main',
     ['io.ox/core/extensions',
-    'io.ox/core/tk/dialogs',
-    'settings!io.ox/core',
-    'io.ox/core/api/folder',
-    'io.ox/core/extPatterns/links',
-    'io.ox/core/capabilities',
-    'gettext!io.ox/files'
+     'io.ox/core/tk/dialogs',
+     'settings!io.ox/core',
+     'io.ox/core/api/folder',
+     'io.ox/core/extPatterns/links',
+     'io.ox/core/capabilities',
+     'gettext!io.ox/files'
     ], function (ext, dialogs, settings, folderAPI, links, capabilities, gt) {
 
     'use strict';
@@ -50,7 +50,7 @@ define('io.ox/files/guidance/main',
     }
 
     //this function reloads the popup. It clears the old one and draws again.
-    function reloadPopup(app, e) {
+    function reloadPopup(app) {
         var id = app.get('name'),
             folder = lastBaton.folder,
             quota = settings.get('properties'),
@@ -83,7 +83,7 @@ define('io.ox/files/guidance/main',
         ext.point('io.ox/files/guidance').extend({
             id: 'files-statistic-help',
             index: INDEX += 100,
-            draw: function (baton) {
+            draw: function () {
 
                 var helpDir = 'help/' + ox.language + '/',
                     topics = [
@@ -112,7 +112,7 @@ define('io.ox/files/guidance/main',
     ext.point('io.ox/files/guidance').extend({
         id: 'upsell',
         index: INDEX += 100,
-        draw: function (baton) {
+        draw: function () {
 
             $('head').append(
                 $('<link href="http://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">')

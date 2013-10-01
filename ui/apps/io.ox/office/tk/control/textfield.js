@@ -375,8 +375,7 @@ define('io.ox/office/tk/control/textfield',
          *  value of the text field is considered to be valid and will not be
          *  modified.
          */
-        this.validate = function (text) {
-        };
+        this.validate = $.noop;
 
     }); // class TextField.Validator
 

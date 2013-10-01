@@ -15,9 +15,10 @@ define: true
 */
 
 define('io.ox/core/tk/view',
-      ['io.ox/core/tk/forms',
-       'io.ox/core/tk/model',
-       'io.ox/core/event'], function (forms, Model, Event) {
+    ['io.ox/core/tk/forms',
+     'io.ox/core/tk/model',
+     'io.ox/core/event'
+    ], function (forms, Model, Event) {
 
     'use strict';
 

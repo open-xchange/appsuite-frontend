@@ -11,8 +11,8 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/backbone/settings', ['io.ox/backbone/basicModel'], function (BasicModel) {
-    'use strict';
 
+    'use strict';
 
     var cache = {};
 

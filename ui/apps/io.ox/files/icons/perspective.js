@@ -25,7 +25,7 @@ define('io.ox/files/icons/perspective',
      'io.ox/core/tk/selection',
      'io.ox/core/notifications',
      'apps/io.ox/core/tk/jquery.imageloader.js'
-     ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, actions, folderAPI, gt, Caps, Selection, notifications) {
+    ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, actions, folderAPI, gt, Caps, Selection, notifications) {
 
     'use strict';
 
@@ -89,7 +89,7 @@ define('io.ox/files/icons/perspective',
         return node;
     }
 
-    function iconError(e) {
+    function iconError() {
         $(this).remove();
     }
 
@@ -183,8 +183,8 @@ define('io.ox/files/icons/perspective',
 
     function calculateLayout(el, options) {
 
-        var rows = Math.round((el.height() - 40) / options.fileIconHeight);
-        var cols = Math.floor((el.width() - 6) / options.fileIconWidth);
+        var rows = Math.round((el.height() - 40) / options.fileIconHeight),
+            cols = Math.floor((el.width() - 6) / options.fileIconWidth);
 
         if (rows === 0) rows = 1;
         if (cols === 0) cols = 1;
@@ -228,7 +228,7 @@ define('io.ox/files/icons/perspective',
 
             app.on('perspective:icons:hide', dropZoneOff)
                .on('perspective:icons:show', dropZoneOn)
-               .on('folder:change', function (e, id, folder) {
+               .on('folder:change', function () {
                     app.currentFile = null;
                     dropZoneInit(app);
                     app.getWindow().search.clear();
@@ -239,17 +239,6 @@ define('io.ox/files/icons/perspective',
                     self.selection.clear();
                     drawFirst();
                 });
-
-            function iconClick(popup, e, target) {
-                var cid = target.attr('data-obj-id');
-                api.get(_.cid(cid)).done(function (file) {
-                    app.currentFile = file;
-                    if (dropZone) {
-                        dropZone.update();
-                    }
-                    popup.append(viewDetail.draw(file, app));
-                });
-            }
 
             iconview.on('keydown', '.selectable', function (e) {
                 switch (e.keyCode || e.which) {
@@ -264,9 +253,7 @@ define('io.ox/files/icons/perspective',
                     break;
                 }
             }).on('click', '.selectable', function (e) {
-                var self = this,
-                el;
-                var cid = _.cid($(this).attr('data-obj-id'));
+                var self = this, el, cid = _.cid($(this).attr('data-obj-id'));
                 if (!e.metaKey && !e.ctrlKey && !e.shiftKey) {
                     api.get(cid).done(function (file) {
                         app.currentFile = file;
@@ -320,7 +307,7 @@ define('io.ox/files/icons/perspective',
 
             redraw = function (ids) {
                 drawIcons(ids);
-                scrollpane.on('scroll', function (e) {
+                scrollpane.on('scroll', function () {
                     /*
                      *  How this works:
                      *
@@ -574,9 +561,7 @@ define('io.ox/files/icons/perspective',
                         _(changed).each(function (cid) {
 
                             var data = hash[cid],
-                                prev = indexPrevPosition(newIds, cid),
-                                next = indexNextPosition(newIds, cid);
-
+                                prev = indexPrevPosition(newIds, cid);
 
                             iconview.find('.file-icon[data-obj-id="' + cid_find(cid) + '"]').remove();
 

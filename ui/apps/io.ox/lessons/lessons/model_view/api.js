@@ -11,6 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/lessons/lessons/model_view/api', ['io.ox/core/event'], function (Events) {
+
     'use strict';
 
     var db = {

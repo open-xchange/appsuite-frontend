@@ -100,7 +100,7 @@ define.async('io.ox/oauth/keychain',
             var account = incoming(account),
                 def = $.Deferred();
 
-            require(['io.ox/core/tk/keys'], function (KeyListener) {
+            require(['io.ox/core/tk/keys'], function () {
                 var callbackName = 'oauth' + generateId();
                 var params = {
                     action: 'init',
@@ -154,7 +154,7 @@ define.async('io.ox/oauth/keychain',
                     action: 'delete',
                     id: account.id
                 }
-            }).done(function (response) {
+            }).done(function () {
                 delete cache[service.id].accounts[account.id];
                 self.trigger('delete', account);
                 self.trigger('refresh.all refresh.list', account);
@@ -170,7 +170,7 @@ define.async('io.ox/oauth/keychain',
                     id: account.id
                 },
                 data: {displayName: account.displayName}
-            }).done(function (response) {
+            }).done(function () {
                 cache[service.id].accounts[account.id] = account;
                 self.trigger('update', account);
                 self.trigger('refresh.list', account);

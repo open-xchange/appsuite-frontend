@@ -12,7 +12,8 @@
 define('io.ox/contacts/widgets/pictureUpload',
     ['io.ox/core/notifications',
      'gettext!io.ox/contacts',
-     'less!io.ox/contacts/widgets/widgets.less'], function (notifications, gt) {
+     'less!io.ox/contacts/widgets/widgets.less'
+    ], function (notifications, gt) {
 
     'use strict';
 
@@ -65,7 +66,7 @@ define('io.ox/contacts/widgets/pictureUpload',
                 this.previewPictureFile();
             },
 
-            displayImageURL: function (e) {
+            displayImageURL: function () {
                 this.setImageURL(this.model.get('image1_url'));
             },
 
@@ -88,7 +89,7 @@ define('io.ox/contacts/widgets/pictureUpload',
                         height: 0,
                         crop: false,
                         quality: 80,
-                        callback: function (data, width, height) {
+                        callback: function (data) {
                             self.setImageURL(data);
                             self.addImgText.hide();
                             self.closeBtn.show();
@@ -133,10 +134,10 @@ define('io.ox/contacts/widgets/pictureUpload',
                             .on('change', function (e) {
                                 self.handleFileSelect(e, this);
                             })
-                            .on('focus', function (e) {
+                            .on('focus', function () {
                                 self.imgCon.addClass('focussed');
                             })
-                            .on('blur', function (e) {
+                            .on('blur', function () {
                                 self.imgCon.removeClass('focussed');
                             })
                     )

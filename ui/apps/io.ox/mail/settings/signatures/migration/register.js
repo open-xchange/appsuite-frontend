@@ -11,8 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/mail/settings/signatures/migration/register',
-    ['io.ox/core/extensions'], function (ext) {
+define('io.ox/mail/settings/signatures/migration/register', ['io.ox/core/extensions'], function (ext) {
 
     'use strict';
 

@@ -17,7 +17,8 @@ define('io.ox/calendar/week/view',
      'gettext!io.ox/calendar',
      'io.ox/core/api/folder',
      'settings!io.ox/calendar',
-     'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, ext, gt, folderAPI, settings) {
+     'apps/io.ox/core/tk/jquery-ui.min.js'
+    ], function (util, date, ext, gt, folderAPI, settings) {
 
     'use strict';
 
@@ -235,7 +236,7 @@ define('io.ox/calendar/week/view',
             this.gridSize = 60 / settings.get('interval', this.gridSize);
             this.workStart = settings.get('startTime', this.workStart);
             this.workEnd = settings.get('endTime', this.workEnd);
-            settings.on('change', function (e, key, value) {
+            settings.on('change', function (e, key) {
                 switch (key) {
                 case 'interval':
                     self.gridSize = 60 / settings.get('interval', self.gridSize);
@@ -882,7 +883,7 @@ define('io.ox/calendar/week/view',
                     handles: 's',
                     minHeight: this.fulltimeHeight,
                     maxHeight: fulltimeColPos.length * (this.fulltimeHeight + 1),
-                    resize: function (event, ui) {
+                    resize: function () {
                         self.pane.css({ top: self.fulltimeCon.outerHeight() });
                     }
                 });
@@ -1033,7 +1034,7 @@ define('io.ox/calendar/week/view',
                                 d.my.bottom = ui.size.height + ui.position.top;
                             }
                             if (d.my.day === day && day !== d.my.startPos) {
-                                d.my.curHelper.height(function (i, h) {
+                                d.my.curHelper.height(function () {
                                     return mouseY - $(this).position().top;
                                 });
                                 d.my.bottom = mouseY;
@@ -1129,7 +1130,7 @@ define('io.ox/calendar/week/view',
                         // update day
                         d.my.day = day;
                     },
-                    stop: function (e, ui) {
+                    stop: function () {
                         var el = $(this),
                             d = el.data('resizable'),
                             app = self.collection.get(el.data('cid')).attributes,
@@ -1344,7 +1345,7 @@ define('io.ox/calendar/week/view',
                     scroll: true,
                     snap: '.day',
                     zIndex: 2,
-                    stop: function (e, ui) {
+                    stop: function (e) {
                         if (e.pageX < window.innerWidth && e.pageY < window.innerHeight) {
                             $(this).draggable('disable').busy();
                             var newPos = Math.round($(this).position().left / (self.fulltimePane.width() / self.columns)),
@@ -1369,7 +1370,7 @@ define('io.ox/calendar/week/view',
                     minWidth: colWidth,
                     handles: 'w, e',
                     containment: 'parent',
-                    start: function (e, ui) {
+                    start: function () {
                         $(this).addClass('opac').css('zIndex', $(this).css('zIndex') + 2000);
                     },
                     stop: function (e, ui) {

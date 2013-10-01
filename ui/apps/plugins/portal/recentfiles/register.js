@@ -18,20 +18,10 @@ define('plugins/portal/recentfiles/register',
      'io.ox/core/date',
      'gettext!plugins/portal',
      'settings!io.ox/core',
-     'less!plugins/portal/recentfiles/style.less'], function (ext, filesAPI, userAPI, date, gt, settings) {
+     'less!plugins/portal/recentfiles/style.less'
+    ], function (ext, filesAPI, userAPI, date, gt, settings) {
 
     'use strict';
-
-    var humanReadable = function (bytes) {
-        var pos = 0,
-            temp = bytes,
-            suffixes = ['Byte', 'kb', 'mb', 'gb', 'tb', 'pb'];
-        while ((temp / 1024 >= 1) && (pos < suffixes.length - 1)) {
-            temp = temp / 1024;
-            pos += 1;
-        }
-        return Math.round(temp) + ' ' + suffixes[pos];
-    };
 
     _(['recentfiles', 'myfiles']).each(function (type) {
 

@@ -20,7 +20,8 @@ define('io.ox/core/api/folder',
      'io.ox/core/notifications',
      'io.ox/core/capabilities',
      'io.ox/core/extensions',
-     'gettext!io.ox/core'], function (http, cache, mailSettings, settings, account, Events, notifications, capabilities, ext, gt) {
+     'gettext!io.ox/core'
+    ], function (http, cache, mailSettings, settings, account, Events, notifications, capabilities, ext, gt) {
 
     'use strict';
 
@@ -70,7 +71,7 @@ define('io.ox/core/api/folder',
                         timezone: 'UTC'
                     }
                 })
-                .then(function (data, timestamp) {
+                .then(function (data) {
                     // add to cache
                     return cache.add(data.id, data);
                 }, function (error) {
@@ -451,7 +452,7 @@ define('io.ox/core/api/folder',
                     });
                 });
             })
-            .fail(function (error) {
+            .fail(function () {
                 api.trigger('delete:fail', opt.folder);
             });
         },
@@ -876,7 +877,7 @@ define('io.ox/core/api/folder',
                             api.trigger('update', id, id, b);
                         }
                     })
-                    .always(function (e) {
+                    .always(function () {
                         delete pending[id];
                     });
             }
@@ -955,7 +956,7 @@ define('io.ox/core/api/folder',
 
     // central hub to coordinate events and caches
     // (see files/api.js for a full implementation for files)
-    api.propagate = function (type, id) {
+    api.propagate = function (type) {
 
         var ready = $.when();
 

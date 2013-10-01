@@ -36,7 +36,7 @@ define('io.ox/tasks/edit/view',
 
             //if recurrence is set make sure we have start and end date
             //this prevents errors on saving because recurrence needs both fields filled
-            this.model.on('change:recurrence_type', function (model, value, changes) {
+            this.model.on('change:recurrence_type', function (model, value) {
                 if (value) {
                     if (!(model.get('start_date')) && model.get('start_date') !== 0) {
                         if (model.get('end_date') !== undefined && model.get('end_date') !== null) {

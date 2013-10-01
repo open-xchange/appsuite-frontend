@@ -33,7 +33,6 @@ define('io.ox/core/tk/folderviews',
         MOBILEFOLDERPADDING = 15,
         DESKTOPFOLDERPADDING = 30,
         SUBFOLDERPADDING = _.device('small') ? MOBILEFOLDERPADDING : DESKTOPFOLDERPADDING,
-        refreshHash = {},
 
         TRUE = function () { return true; };
 
@@ -95,7 +94,7 @@ define('io.ox/core/tk/folderviews',
                     //    }, 1000);
                     //    return def;
                     // })
-                    .fail(function (error) {
+                    .fail(function () {
                         // reset folder and show local error
                         nodes.sub.idle().empty().append(
                             $.fail(gt('Couldn\'t load subfolders.'), function () {
@@ -232,7 +231,7 @@ define('io.ox/core/tk/folderviews',
             updateArrow();
         };
 
-        this.refresh = function (newId, changed) {
+        this.refresh = function (newId) {
             // might have a new id
             id = newId;
             return $.when(
@@ -267,7 +266,7 @@ define('io.ox/core/tk/folderviews',
         // load sub folders - creates instances of TreeNode - does not yet paint them
         this.loadChildren = function (reload) {
 
-            var hash = {}, needsRefresh;
+            var hash = {};
 
             if (children === null || reload === true) {
                 // build hash?
@@ -551,7 +550,7 @@ define('io.ox/core/tk/folderviews',
             api.remove({ folder: folder.id });
         };
 
-        this.remove = function (folder) {
+        this.remove = function () {
             var self = this,
             folder_id = String(this.selection.get());
             if (folder_id) {
@@ -592,7 +591,7 @@ define('io.ox/core/tk/folderviews',
             return api.update({ folder: folder, changes: changes });
         };
 
-        this.rename = function (folder) {
+        this.rename = function () {
             var self = this,
             folder_id = String(this.selection.get());
             if (folder_id) {
@@ -990,7 +989,7 @@ define('io.ox/core/tk/folderviews',
                     }
                 }
             })
-            .fail(function (error) {
+            .fail(function () {
                 self.container.append(
                     $.fail(gt('Couldn\'t load folders.'), function () {
                         self.internal.repaint();

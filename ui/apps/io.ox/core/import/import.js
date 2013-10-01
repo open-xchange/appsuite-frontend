@@ -14,13 +14,14 @@
 
 define('io.ox/core/import/import',
     ['io.ox/core/extensions',
-    'io.ox/core/tk/dialogs',
-    'io.ox/core/tk/attachments',
-    'io.ox/core/api/folder',
-    'io.ox/core/api/import',
-    'io.ox/core/notifications',
-    'gettext!io.ox/core',
-    'less!io.ox/core/import/style.less'], function (ext, dialogs, attachments, folderAPI, api, notifications, gt) {
+     'io.ox/core/tk/dialogs',
+     'io.ox/core/tk/attachments',
+     'io.ox/core/api/folder',
+     'io.ox/core/api/import',
+     'io.ox/core/notifications',
+     'gettext!io.ox/core',
+     'less!io.ox/core/import/style.less'
+    ], function (ext, dialogs, attachments, folderAPI, api, notifications, gt) {
 
     'use strict';
 
@@ -108,7 +109,7 @@ define('io.ox/core/import/import',
 
     ext.point('io.ox/core/import/ignore_uuids').extend({
         id: 'default',
-        draw: function (baton) {
+        draw: function () {
             this.append(
                 $('<label class="checkbox">').append(
                     $('<input type="checkbox" name="ignore_uuids">'),
@@ -136,7 +137,7 @@ define('io.ox/core/import/import',
                 form;
 
             //get folder and process
-            folderAPI.get({ folder: id }).done(function (folder) {
+            folderAPI.get({ folder: id }).done(function () {
                 dialog.build(function () {
                     form = $('<form>', { 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' });
                     this.getContentNode().append(form);

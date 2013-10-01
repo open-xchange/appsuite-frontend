@@ -104,7 +104,7 @@ define('io.ox/calendar/settings/pane',
         CalendarSettingsView = Backbone.View.extend({
             tagName: 'div',
             _modelBinder: undefined,
-            initialize: function (options) {
+            initialize: function () {
                 // create template
                 this._modelBinder = new Backbone.ModelBinder();
 
@@ -147,10 +147,10 @@ define('io.ox/calendar/settings/pane',
     ext.point('io.ox/calendar/settings/detail').extend({
         index: 200,
         id: 'calendarsettings',
-        draw: function (data) {
+        draw: function () {
             calendarViewSettings = new CalendarSettingsView({model: calendarSettings});
             this.append($('<div>').addClass('section').append(calendarViewSettings.render().el));
-            settings.on('change', function (e, path, value) {
+            settings.on('change', function (e, path) {
                 calendarSettings.saveAndYell().then(
                     function success() {
                         var showNotice = _(reloadMe).any(function (attr) {

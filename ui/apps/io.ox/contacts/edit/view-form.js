@@ -11,24 +11,24 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/contacts/edit/view-form', [
-    'io.ox/contacts/model',
-    'io.ox/backbone/views',
-    'io.ox/backbone/forms',
-    'io.ox/core/extPatterns/actions',
-    'io.ox/core/extPatterns/links',
-    'io.ox/contacts/widgets/pictureUpload',
-    'io.ox/core/tk/attachments',
-    'io.ox/contacts/api',
-    'io.ox/contacts/util',
-    'gettext!io.ox/contacts',
-    'io.ox/core/capabilities',
-    'io.ox/core/extensions',
-    'io.ox/core/date',
-    'io.ox/backbone/mini-views',
-    'io.ox/backbone/mini-views/attachments',
-    'less!io.ox/contacts/edit/style.less'
-], function (model, views, forms, actions, links, PictureUpload, attachments, api, util, gt, capabilities, ext, date, mini, attachmentViews) {
+define('io.ox/contacts/edit/view-form',
+    ['io.ox/contacts/model',
+     'io.ox/backbone/views',
+     'io.ox/backbone/forms',
+     'io.ox/core/extPatterns/actions',
+     'io.ox/core/extPatterns/links',
+     'io.ox/contacts/widgets/pictureUpload',
+     'io.ox/core/tk/attachments',
+     'io.ox/contacts/api',
+     'io.ox/contacts/util',
+     'gettext!io.ox/contacts',
+     'io.ox/core/capabilities',
+     'io.ox/core/extensions',
+     'io.ox/core/date',
+     'io.ox/backbone/mini-views',
+     'io.ox/backbone/mini-views/attachments',
+     'less!io.ox/contacts/edit/style.less'
+    ], function (model, views, forms, actions, links, PictureUpload, attachments, api, util, gt, capabilities, ext, date, mini, attachmentViews) {
 
     'use strict';
 
@@ -198,7 +198,7 @@ define('io.ox/contacts/edit/view-form', [
         ext.point('io.ox/contacts/edit/bottomToolbar').extend({
             id: 'toolbar',
             index: 100,
-            draw: function (baton) {
+            draw: function () {
                 var node = $(this.attributes.window.nodes.body),
                     toolbar = $('<div class="app-bottom-toolbar">');
                 // due to the very strange usage of extension points in contacts module
@@ -251,7 +251,7 @@ define('io.ox/contacts/edit/view-form', [
         var FullnameView = mini.AbstractView.extend({
             tagName: 'h1',
             className: 'name',
-            setup: function (options) {
+            setup: function () {
                 this.listenTo(this.model, 'change:display_name', this.render);
             },
             render: function () {
@@ -268,7 +268,7 @@ define('io.ox/contacts/edit/view-form', [
         var JobView = mini.AbstractView.extend({
             tagName: 'h2',
             className: 'job',
-            setup: function (options) {
+            setup: function () {
                 this.listenTo(this.model, 'change:position change:department change:company', this.render);
             },
             render: function () {
@@ -298,7 +298,7 @@ define('io.ox/contacts/edit/view-form', [
         point.basicExtend({
             id: 'final',
             index: 'last',
-            draw: function (baton) {
+            draw: function () {
                 var link;
                 this.append(
                     $('<nav class="toggle-compact clear">').append(
@@ -357,7 +357,7 @@ define('io.ox/contacts/edit/view-form', [
 
         new actions.Action(ref + '/actions/edit/discard', {
             id: 'discard',
-            action: function (options, baton) {
+            action: function (options) {
                 if (ref === 'io.ox/core/user') {
                     //invoked by sidepopup (portal); uses event of hidden sidebar-close button
                     $('.io-ox-sidepopup').find('[data-action="close"]').trigger('click');
@@ -394,7 +394,7 @@ define('io.ox/contacts/edit/view-form', [
                 )
             )
             .on({
-                invalid: function (e, message, error) {
+                invalid: function (e, message) {
                     $(this).addClass('error')
                         .find('.inline-error').text(message).show().end()
                         .find('input').attr('aria-invalid', true).focus();

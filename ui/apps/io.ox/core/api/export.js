@@ -13,7 +13,8 @@
 
 define('io.ox/core/api/export',
     ['io.ox/core/http',
-     'io.ox/core/api/factory'], function (http, apiFactory) {
+     'io.ox/core/api/factory'
+    ], function (http, apiFactory) {
 
     'use strict';
 

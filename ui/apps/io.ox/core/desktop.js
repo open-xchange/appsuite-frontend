@@ -21,7 +21,8 @@ define('io.ox/core/desktop',
      'io.ox/core/notifications',
      'io.ox/core/upsell',
      'io.ox/core/adaptiveLoader',
-     'gettext!io.ox/core'], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, gt) {
+     'gettext!io.ox/core'
+    ], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, gt) {
 
     'use strict';
 
@@ -90,7 +91,7 @@ define('io.ox/core/desktop',
             }
         },
 
-        quit: function (force) {
+        quit: function () {
             // mark as not running
             this.set('state', 'stopped');
             // remove from list
@@ -529,7 +530,7 @@ define('io.ox/core/desktop',
         },
 
         reuse: function (cid) {
-            var app = ox.ui.apps.find(function (m) { return m.cid === cid; }), win;
+            var app = ox.ui.apps.find(function (m) { return m.cid === cid; });
             if (app) {
                 app.launch();
                 return true;
@@ -595,7 +596,7 @@ define('io.ox/core/desktop',
                 },
 
                 show: function (id) {
-                    $('#io-ox-screens').children().each(function (i, node) {
+                    $('#io-ox-screens').children().each(function () {
                         var attr = $(this).attr('id'),
                             screenId = String(attr || '').substr(6);
                         if (screenId !== id) {
@@ -746,7 +747,7 @@ define('io.ox/core/desktop',
             }
         });
 
-        that.on('window.beforeshow', function (e, win) {
+        that.on('window.beforeshow', function () {
             that.trigger('empty', false);
         });
 
@@ -1092,7 +1093,7 @@ define('io.ox/core/desktop',
                     return this;
                 };
 
-                this.idle = function (enable) {
+                this.idle = function () {
                     // use self instead of this to make busy/idle robust for callback use
                     if (self) {
                         self.nodes.blocker.find('.progress').hide()
@@ -1319,11 +1320,7 @@ define('io.ox/core/desktop',
                 width = meta[0],
                 unit = meta[1],
                 // create new window instance
-                win = new Window(opt.id, opt.name),
-                // close window
-                close = function () {
-                    win.close();
-                };
+                win = new Window(opt.id, opt.name);
 
             // window container
             win.nodes.outer = $('<div class="window-container">')
@@ -1403,7 +1400,7 @@ define('io.ox/core/desktop',
                         }
                     },
 
-                    clear: function (e) {
+                    clear: function () {
                         win.search.clear();
                     },
 
@@ -1648,7 +1645,7 @@ define('io.ox/core/desktop',
                         def.resolveWith(this, arguments);
                     });
                 },
-                function (err) {
+                function () {
                     notifications.yell('error', gt('Failed to start application. Maybe you have connection problems. Please try again.'));
                     requirejs.undef(id);
                 }

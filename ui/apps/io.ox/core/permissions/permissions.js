@@ -22,7 +22,8 @@ define('io.ox/core/permissions/permissions',
      'io.ox/calendar/edit/view-addparticipants',
      'io.ox/core/http',
      'gettext!io.ox/core',
-     'less!io.ox/core/permissions/style.less'], function (ext, notifications, api, userAPI, groupAPI, dialogs, contactsAPI, contactsUtil, AddParticipantsView, http, gt) {
+     'less!io.ox/core/permissions/style.less'
+    ], function (ext, notifications, api, userAPI, groupAPI, dialogs, contactsAPI, contactsUtil, AddParticipantsView, http, gt) {
 
     'use strict';
 
@@ -283,7 +284,6 @@ define('io.ox/core/permissions/permissions',
     addDropdown = function (permission, baton) {
         var bits = baton.model.get('bits'),
             selected = api.Bitmask(bits).get(permission),
-            admin = isFolderAdmin,
             menu, ul;
 
         if (preventAdminPermissions(permission, baton)) {
@@ -380,7 +380,7 @@ define('io.ox/core/permissions/permissions',
 
                     dialog.getContentNode().busy();
 
-                    userAPI.getList(ids, true, { allColumns: true }).done(function (list) {
+                    userAPI.getList(ids, true, { allColumns: true }).done(function () {
                         // stop being busy
                         dialog.getContentNode().idle();
                         // draw users

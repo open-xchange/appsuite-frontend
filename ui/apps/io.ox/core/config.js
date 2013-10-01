@@ -13,6 +13,7 @@
 define.async('io.ox/core/config', ['io.ox/core/http', 'io.ox/core/cache'], function (http, cache) {
 
     'use strict';
+
     var config = {}, configCache, moduleDefined = $.Deferred();
 
     var get = function (key) {

@@ -15,24 +15,20 @@ define('io.ox/linkedIn/view-detail',
     ['io.ox/core/extensions',
      'io.ox/core/tk/dialogs',
      'io.ox/core/http',
-     'less!io.ox/linkedIn/style.less'], function (ext, dialogs, http) {
+     'less!io.ox/linkedIn/style.less'
+    ], function (ext, dialogs, http) {
 
     'use strict';
 
     var actionPoint = ext.point('io.ox/linkedIn/details/actions');
     var rendererPoint = ext.point('io.ox/linkedIn/details/renderer');
 
-    function todo() {
-        alert('TODO');
-    }
-
     function draw(data) {
         var $node = $('<div>').addClass('linkedIn').css({ overflow: 'auto' }),
             $detailNode = $('<div>').addClass('details').appendTo($node),
             $table = $('<table><tr><td class="t10"></td><td class="t11"></td></tr><tr><td class="r2" colspan="2"></td></tr><table>').appendTo($detailNode),
             $pictureNode = $table.find('.t10'),
-            $nameNode = $table.find('.t11'),
-            $relationNode = $table.find('.r2');
+            $nameNode = $table.find('.t11');
 
         $pictureNode.append(
             $('<img>', {

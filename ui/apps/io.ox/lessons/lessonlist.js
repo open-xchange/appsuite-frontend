@@ -10,11 +10,10 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/lessons/lessonlist', [
-    'io.ox/lessons/lessons/basic_apps/register',
-    'io.ox/lessons/lessons/basic_deferred/register',
-    'io.ox/lessons/lessons/basic_extensions/register',
-    'io.ox/lessons/lessons/basic_jquery/register',
-    'io.ox/lessons/lessons/basic_requirejs/register',
-    'io.ox/lessons/lessons/model_view/register'
-], $.noop);
+define('io.ox/lessons/lessonlist',
+    ['io.ox/lessons/lessons/basic_apps/register',
+     'io.ox/lessons/lessons/basic_deferred/register',
+     'io.ox/lessons/lessons/basic_extensions/register',
+     'io.ox/lessons/lessons/basic_jquery/register',
+     'io.ox/lessons/lessons/basic_requirejs/register',
+     'io.ox/lessons/lessons/model_view/register'], $.noop);

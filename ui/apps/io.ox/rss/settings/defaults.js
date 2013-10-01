@@ -11,7 +11,7 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define('io.ox/rss/settings/defaults', [], function () {
+define('io.ox/rss/settings/defaults', function () {
 
     'use strict';
 

@@ -12,7 +12,12 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', 'apps/hopscotch/hopscotch-0.1.js', 'css!hopscotch/hopscotch.css'], function (notifications, gt) {
+define('io.ox/tours/main',
+    ['io.ox/core/notifications',
+     'gettext!io.ox/tours',
+     'apps/hopscotch/hopscotch-0.1.js',
+     'css!hopscotch/hopscotch.css'
+    ], function (notifications, gt) {
 
     'use strict';
 
@@ -651,9 +656,7 @@ define('io.ox/tours/main', ['io.ox/core/notifications', 'gettext!io.ox/tours', '
 
         runTour: function (tourname) {
             var tour = tours()[tourname],
-                hs = window.hopscotch,
-                currentApp = ox.ui.App.getCurrentApp(),
-                currentType = currentApp.attributes.name + '/main';
+                hs = window.hopscotch;
 
             if (!tour) {
                 return;

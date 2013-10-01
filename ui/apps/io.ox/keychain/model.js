@@ -11,6 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/keychain/model', ['io.ox/core/extensions'], function (ext) {
+
     'use strict';
 
     var Account = Backbone.Model.extend();

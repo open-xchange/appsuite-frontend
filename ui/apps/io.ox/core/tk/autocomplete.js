@@ -13,7 +13,8 @@
 
 define('io.ox/core/tk/autocomplete',
     ['gettext!io.ox/mail',
-     'io.ox/core/util'], function (gt, util) {
+     'io.ox/core/util'
+    ], function (gt, util) {
 
     'use strict';
 
@@ -24,47 +25,44 @@ define('io.ox/core/tk/autocomplete',
     $.fn.autocomplete = function (o) {
 
         o = $.extend({
+            minLength: 1,
+            maxResults: 25,
+            delay: 100,
+            collection: null,
+            draw: null,
+            blur: $.noop,
+            click: $.noop,
+            parentSelector: 'body',
+            autoselect: false,
+            api: null,
+            node: null,
 
-                minLength: 1,
-                maxResults: 25,
-                delay: 100,
-                collection: null,
-                draw: null,
-                blur: $.noop,
-                click: $.noop,
-                parentSelector: 'body',
-                autoselect: false,
-                api: null,
-                node: null,
+            //get data
+            source: function (val) {
+                return this.api.search(val).then(function (data) {
+                    return o.placement === 'top' ? data.reverse() : data;
+                });
+            },
 
-                //get data
-                source: function (val) {
-                    return this.api.search(val).then(function (data) {
-                        return o.placement === 'top' ? data.reverse() : data;
-                    });
-                },
+            //remove untwanted items
+            reduce: function (data) {
+                return data;
+            },
 
-                //remove untwanted items
-                reduce: function (data) {
-                    return data;
-                },
+            name: function (data) {
+                return util.unescapeDisplayName(data.display_name);
+            },
 
-                name: function (data) {
-                    return util.unescapeDisplayName(data.display_name);
-                },
+            // object related unique string
+            stringify: function (data) {
 
-                // object related unique string
-                stringify: function (data) {
+                if (data.type === 2 || data.type === 3)
+                    return this.name(data.contact);
 
-                    if (data.type === 2 || data.type === 3)
-                        return this.name(data.contact);
-
-                    var name = this.name(data);
-                    return name ? '"' + name + '" <' + data.email + '>' : data.email;
-                }
-
-            }, o || {});
-
+                var name = this.name(data);
+                return name ? '"' + name + '" <' + data.email + '>' : data.email;
+            }
+        }, o || {});
 
         var self = $(this),
 
@@ -115,15 +113,15 @@ define('io.ox/core/tk/autocomplete',
             },
 
 
-            fnBlur = function (e) {
+            fnBlur = function () {
                     setTimeout(close, 200);
                 },
 
-            blurOff = function (e) {
+            blurOff = function () {
                     self.off('blur', fnBlur).focus();
                 },
 
-            blurOn = function (e) {
+            blurOn = function () {
                     _.defer(function () {
                         self.on('blur', fnBlur).focus();
                     });
@@ -223,7 +221,7 @@ define('io.ox/core/tk/autocomplete',
                 },
 
             // adds 'retry'-item to popup
-            cbSearchResultFail = function (query) {
+            cbSearchResultFail = function () {
                     popup.idle();
                     var node = $('<div>')
                         .addClass('io-ox-center')

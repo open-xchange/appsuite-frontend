@@ -14,7 +14,8 @@ define('io.ox/core/about/about',
     ['io.ox/core/extensions',
      'io.ox/core/tk/dialogs',
      'io.ox/core/capabilities',
-     'gettext!io.ox/core'], function (ext, dialogs, cap, gt) {
+     'gettext!io.ox/core'
+    ], function (ext, dialogs, cap, gt) {
 
     'use strict';
 

@@ -19,7 +19,8 @@ define('io.ox/calendar/print',
      'io.ox/core/api/group',
      'io.ox/core/api/resource',
      'io.ox/core/util',
-     'gettext!io.ox/calendar'], function (print, api, util, contactsUtil, userAPI, groupAPI, resourceAPI, coreUtil, gt) {
+     'gettext!io.ox/calendar'
+    ], function (print, api, util, contactsUtil, userAPI, groupAPI, resourceAPI, coreUtil, gt) {
 
     'use strict';
 

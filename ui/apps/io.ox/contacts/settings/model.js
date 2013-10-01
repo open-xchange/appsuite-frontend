@@ -17,7 +17,7 @@ define('io.ox/contacts/settings/model',
 
     var contactsSettingsModel = Backbone.Model.extend({
 
-        initialize: function (options) {
+        initialize: function () {
         },
 
         save: function () {

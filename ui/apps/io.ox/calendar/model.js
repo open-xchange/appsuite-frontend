@@ -11,15 +11,16 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/calendar/model',
-        ['io.ox/calendar/api',
-        'io.ox/backbone/modelFactory',
-        'io.ox/core/extensions',
-        'gettext!io.ox/calendar',
-        'io.ox/backbone/validation',
-        'io.ox/participants/model',
-        'io.ox/core/date',
-        'io.ox/core/api/folder',
-        'settings!io.ox/calendar'], function (api, ModelFactory, ext, gt, Validators, pModel, date, folderAPI, settings) {
+    ['io.ox/calendar/api',
+     'io.ox/backbone/modelFactory',
+     'io.ox/core/extensions',
+     'gettext!io.ox/calendar',
+     'io.ox/backbone/validation',
+     'io.ox/participants/model',
+     'io.ox/core/date',
+     'io.ox/core/api/folder',
+     'settings!io.ox/calendar'
+    ], function (api, ModelFactory, ext, gt, Validators, pModel, date, folderAPI, settings) {
 
     'use strict';
 
@@ -58,19 +59,18 @@ define('io.ox/calendar/model',
                     }
                 });
             },
-            getParticipants: function (options) {
+            getParticipants: function () {
                 if (this._participants) {
                     return this._participants;
                 }
                 var self = this,
-                    defaults = _.extend({sortBy: 'display_name'}, options),
                     resetListUpdate = false,
                     changeParticipantsUpdate = false,
                     participants = this._participants = new pModel.Participants(this.get('participants'));
 
                 participants.invoke('fetch');
 
-                function resetList(participant) {
+                function resetList() {
                     if (changeParticipantsUpdate) {
                         return;
                     }

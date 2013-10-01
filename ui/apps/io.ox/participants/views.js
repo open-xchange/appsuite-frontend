@@ -11,7 +11,8 @@
 
 define('io.ox/participants/views',
     ['gettext!io.ox/calendar/edit/main',
-     'less!io.ox/participants/participants.less'], function (gt) {
+     'less!io.ox/participants/participants.less'
+    ], function (gt) {
 
     'use strict';
 
@@ -51,7 +52,7 @@ define('io.ox/participants/views',
                 this.$el.addClass('removable');
             }
 
-            this.model.on('change', function (model, e) {
+            this.model.on('change', function (model) {
                 if (model && model.changed) {
                     self.$el.empty();
                     self.render();
@@ -91,8 +92,7 @@ define('io.ox/participants/views',
 
             if (!this.options.baton) return;
 
-            var organizer = this.options.baton.model.get('organizer'),
-                organizerId = this.options.baton.model.get('organizerId');
+            var organizerId = this.options.baton.model.get('organizerId');
 
             if (this.model.get('id') === organizerId) {
                 this.$el.addClass('three-rows');

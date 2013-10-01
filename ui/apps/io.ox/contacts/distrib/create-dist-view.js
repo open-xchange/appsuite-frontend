@@ -35,7 +35,7 @@ define('io.ox/contacts/distrib/create-dist-view',
         id: 'title-controls',
         index: 100,
         className: 'row-fluid title-controls',
-        render: function (baton) {
+        render: function () {
             var self = this,
             buttonText = (self.model.get('id')) ? gt('Save') : gt('Create list');
 
@@ -68,7 +68,6 @@ define('io.ox/contacts/distrib/create-dist-view',
         label: gt('List name'), // noun
         control: '<input tabindex="1" type="text" class="span6">',
         buildControls: function () {
-            var self = this;
             return this.nodes.controls || (this.nodes.controls = $('<div class="controls">').append(
                 // element
                 this.buildElement()
@@ -80,7 +79,7 @@ define('io.ox/contacts/distrib/create-dist-view',
         id: 'add-members',
         index: 300,
         className: 'row-fluid',
-        render: function (baton) {
+        render: function () {
             var self = this;
 
             var pNode = $('<div class="autocomplete-controls input-append">').append(
@@ -272,38 +271,14 @@ define('io.ox/contacts/distrib/create-dist-view',
     point.extend({
         id: 'notice',
         index: 400,
-        render: function (baton) {
+        render: function () {
             this.$el.append($('<div class="alert alert-info">').text(gt('To add contacts manually, just provide a valid email address (e.g john.doe@example.com or "John Doe" <jd@example.com>)')));
         }
     });
 
-    /**
-    * remove already used items
-    *
-    * @return {object} data (list, hits)
-    */
-    function filterUsed(data, node) {
-        var self = this,
-            currentMembers = self.model.get('distribution_list') || {},
-            hash = {},
-            list;
-
-        _(currentMembers).each(function (val) {
-            hash[val.mail] = true;
-        });
-
-        // ignore doublets
-        list = _(data).filter(function (member) {
-            return (hash[member.email] === undefined);
-        }, this);
-
-        //return number of query hits and the filtered list
-        return { list: list, hits: data.length};
-    }
-
     ext.point('io.ox/contacts/model/validation/distribution_list').extend({
         id: 'check_for_duplicates',
-        validate: function (value) {
+        validate: function () {
         }
     });
 

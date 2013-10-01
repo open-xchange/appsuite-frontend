@@ -13,7 +13,8 @@
 
 define('plugins/portal/reddit/register',
     ['io.ox/core/date',
-     'gettext!io.ox/portal'], function (date, gt) {
+     'gettext!io.ox/portal'
+    ], function (date, gt) {
 
     'use strict';
 

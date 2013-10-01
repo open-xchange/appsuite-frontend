@@ -12,9 +12,10 @@
  */
 
 define('io.ox/core/pubsub/settings/register',
-       ['io.ox/core/extensions',
-        'io.ox/core/capabilities',
-        'gettext!io.ox/core/pubsub'], function (ext, capabilities, gt) {
+    ['io.ox/core/extensions',
+     'io.ox/core/capabilities',
+     'gettext!io.ox/core/pubsub'
+    ], function (ext, capabilities, gt) {
 
     'use strict';
 

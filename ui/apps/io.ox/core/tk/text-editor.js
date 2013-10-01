@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/text-editor', [], function () {
+define('io.ox/core/tk/text-editor', function () {
 
     'use strict';
 

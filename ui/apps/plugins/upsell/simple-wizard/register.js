@@ -15,7 +15,8 @@ define('plugins/upsell/simple-wizard/register',
      'io.ox/core/upsell',
      'settings!io.ox/mail',
      'settings!plugins/upsell/simple-wizard',
-     'gettext!plugins/upsell/simple-wizard'], function (ext, upsell, mailSettings, settings, gt) {
+     'gettext!plugins/upsell/simple-wizard'
+    ], function (ext, upsell, mailSettings, settings, gt) {
 
     'use strict';
 

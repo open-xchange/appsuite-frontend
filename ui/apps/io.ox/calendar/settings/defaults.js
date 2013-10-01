@@ -11,10 +11,7 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/calendar/settings/defaults',
-       [],
-
-function () {
+define('io.ox/calendar/settings/defaults', function () {
 
     'use strict';
 

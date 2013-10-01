@@ -16,7 +16,8 @@ define('io.ox/core/cache',
     ['io.ox/core/extensions',
      'io.ox/core/cache/indexeddb',
      'io.ox/core/cache/localstorage',
-     'io.ox/core/cache/simple'], function (ext) {
+     'io.ox/core/cache/simple'
+    ], function (ext) {
 
     'use strict';
 
@@ -165,8 +166,6 @@ define('io.ox/core/cache',
 
         // private fields
         var index = new CacheStorage(name + '.index', persistent);
-
-        var self = this;
 
         if (!name) {
             // not funny!
@@ -395,14 +394,14 @@ define('io.ox/core/cache',
                 // get key
                 key = String(this.keyGenerator(data));
 
-                return add(key, data, timestamp).then(function (result) {
+                return add(key, data, timestamp).then(function () {
                     return key;
                 });
             }
         };
 
         this.merge = function (data, timestamp) {
-            var key, target, id, changed = false, self = this;
+            var key, changed = false, self = this;
 
 
             if (_.isArray(data)) {
@@ -433,7 +432,7 @@ define('io.ox/core/cache',
                             }
                         }
                         if (changed) {
-                            return self.add(target, timestamp).then(function (addReturn) {
+                            return self.add(target, timestamp).then(function () {
                                 return changed;
                             });
                         } else {

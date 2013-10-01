@@ -11,7 +11,9 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define('plugins/portal/dummy/register', ['io.ox/core/extensions'], function (ext) {
+define('plugins/portal/dummy/register', $.noop);
+
+/*define('plugins/portal/dummy/register', ['io.ox/core/extensions'], function (ext) {
 
     'use strict';
 
@@ -82,3 +84,4 @@ define('plugins/portal/dummy/register', ['io.ox/core/extensions'], function (ext
     //     });
     // }
 });
+*/

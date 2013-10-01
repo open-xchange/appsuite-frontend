@@ -18,7 +18,8 @@ define('io.ox/calendar/invitations/register',
      'io.ox/calendar/util',
      'gettext!io.ox/calendar/main',
      'io.ox/core/notifications',
-     'less!io.ox/calendar/style.less'], function (ext, http, settings, util, gt, notifications) {
+     'less!io.ox/calendar/style.less'
+    ], function (ext, http, settings, util, gt, notifications) {
 
     'use strict';
 
@@ -173,9 +174,7 @@ define('io.ox/calendar/invitations/register',
                 .on('click', 'button', function (e) {
                     e.preventDefault();
                     var action = $(this).attr('data-action');
-                    if (action === 'ignore') {
-                        //deleteMailIfNeeded(baton);
-                    }
+
                     // be busy
                     baton.$.well.empty().busy();
                     http.PUT({
@@ -194,7 +193,6 @@ define('io.ox/calendar/invitations/register',
                     .then(
                         function done() {
                             notifications.yell('success', success[action]);
-                            // deleteMailIfNeeded(baton);
                             rerender(baton);
                         },
                         function fail(e) {
@@ -281,7 +279,7 @@ define('io.ox/calendar/invitations/register',
         );
     }
 
-    function renderAppointment(appointment, baton) {
+    function renderAppointment(appointment) {
         if (!appointment) {
             return $();
         }
@@ -334,14 +332,6 @@ define('io.ox/calendar/invitations/register',
         );
 
         return $node;
-    }
-
-    function deleteMailIfNeeded(baton) {
-        require(['io.ox/mail/api', 'settings!io.ox/calendar'], function (api, settings) {
-            if (settings.get('deleteInvitationMailAfterAction')) {
-                api.remove([baton.data]);
-            }
-        });
     }
 
     ext.point('io.ox/mail/detail').extend({
@@ -534,7 +524,7 @@ define('io.ox/calendar/invitations/register',
                     $('<div class="controls">').append(
                         $('<select id="reminderSelect" data-property="reminder">')
                         .css({ margin: '0' })
-                        .append(function (i, html) {
+                        .append(function () {
                             var self = $(this),
                                 options = util.getReminderOptions();
                             _(options).each(function (label, value) {
@@ -587,7 +577,7 @@ define('io.ox/calendar/invitations/register',
                         }
                     });
                 })
-                .fail(function (error) {
+                .fail(function () {
                     //appointment or task was deleted in the meantime
                     baton.$.well.idle();
                     baton.$.well.hide();
@@ -609,7 +599,7 @@ define('io.ox/calendar/invitations/register',
         before: 'content',
         id: 'accept-decline',
         draw: function (baton) {
-            var $well, module, reminder = baton.data.headers['X-OX-Reminder'], address;
+            var module, reminder = baton.data.headers['X-OX-Reminder'], address;
 
             if (reminder) {
 

@@ -11,8 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/calendar/conflicts/conflictList',
-    ['gettext!io.ox/calendar/conflicts/conflicts'], function (gt) {
+define('io.ox/calendar/conflicts/conflictList', ['gettext!io.ox/calendar/conflicts/conflicts'], function (gt) {
 
     'use strict';
 

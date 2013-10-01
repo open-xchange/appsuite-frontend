@@ -12,7 +12,9 @@
  */
 
 define('io.ox/core/api/user',
-    ['io.ox/core/http', 'io.ox/core/api/factory', 'gettext!io.ox/core'], function (http, apiFactory, gt) {
+    ['io.ox/core/http',
+     'io.ox/core/api/factory'
+    ], function (http, apiFactory) {
 
     'use strict';
 

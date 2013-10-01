@@ -12,8 +12,11 @@
  */
 
 define('io.ox/mail/vacationnotice/settings/register',
-        ['io.ox/core/extensions', 'io.ox/core/notifications',
-         'io.ox/core/api/user', 'gettext!io.ox/mail'], function (ext, notifications, userAPI, gt) {
+    ['io.ox/core/extensions',
+     'io.ox/core/notifications',
+     'io.ox/core/api/user',
+     'gettext!io.ox/mail'
+    ], function (ext, notifications, userAPI, gt) {
 
     'use strict';
 

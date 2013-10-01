@@ -17,7 +17,8 @@ define('io.ox/calendar/util',
      'io.ox/core/api/user',
      'io.ox/contacts/api',
      'io.ox/core/api/group',
-     'io.ox/core/util'], function (date, gt, userAPI, contactAPI, groupAPI, util) {
+     'io.ox/core/util'
+    ], function (date, gt, userAPI, contactAPI, groupAPI, util) {
 
     'use strict';
 
@@ -165,8 +166,7 @@ define('io.ox/calendar/util',
         },
 
         getReminderOptions: function () {
-            var inputid = _.uniqueId('dialog'),
-                reminderListValues = [
+            var reminderListValues = [
                 {value: -1, format: 'string'},
                 {value: 0, format: 'minutes'},
                 {value: 15, format: 'minutes'},
@@ -194,7 +194,7 @@ define('io.ox/calendar/util',
             ],
             options = {};
 
-            _(reminderListValues).each(function (item, index) {
+            _(reminderListValues).each(function (item) {
                 var i;
                 switch (item.format) {
                 case 'string':
@@ -226,7 +226,7 @@ define('io.ox/calendar/util',
         },
 
         getTimeInterval: function (data, D) {
-            var length, start, end, suffix;
+            var length;
             D = D || date.Local;
             if (data.full_time) {
                 length = (data.end_date - data.start_date) / date.DAY >> 0;

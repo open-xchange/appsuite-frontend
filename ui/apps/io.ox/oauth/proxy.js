@@ -12,6 +12,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/oauth/proxy', ['io.ox/core/http'], function (http) {
+
     'use strict';
 
     var that = {

@@ -10,7 +10,10 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/lessons/actions', ['io.ox/core/extensions', 'io.ox/core/extPatterns/links'], function (ext, links) {
+define('io.ox/lessons/actions',
+    ['io.ox/core/extensions',
+     'io.ox/core/extPatterns/links'
+    ], function (ext, links) {
 
     'use strict';
 

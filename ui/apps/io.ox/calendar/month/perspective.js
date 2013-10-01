@@ -20,7 +20,9 @@ define('io.ox/calendar/month/perspective',
      'io.ox/calendar/conflicts/conflictList',
      'io.ox/core/print',
      'settings!io.ox/calendar',
-     'gettext!io.ox/calendar'], function (View, api, date, ext, dialogs, detailView, conflictView, print, settings, gt) {
+     'gettext!io.ox/calendar'
+    ], function (View, api, date, ext, dialogs, detailView, conflictView, print, settings, gt) {
+
     'use strict';
 
     var perspective = new ox.ui.Perspective('month');
@@ -280,7 +282,7 @@ define('io.ox/calendar/month/perspective',
 
                 var firstDay = $('#' + param.date.getYear() + '-' + param.date.getMonth() + '-1', self.pane),
                     nextFirstDay = $('#' + param.date.getYear() + '-' + (param.date.getMonth() + 1) + '-1', self.pane),
-                    scrollToDate = function (pos) {
+                    scrollToDate = function () {
                         // scroll to position
                         if (param.duration === 0) {
                             firstDay.get(0).scrollIntoView();
@@ -395,7 +397,7 @@ define('io.ox/calendar/month/perspective',
                                     .prepend(
                                         this.showAll = $('<input type="checkbox" tabindex="1">')
                                             .prop('checked', settings.get('showAllPrivateAppointments', false))
-                                            .on('change', $.proxy(function (e) {
+                                            .on('change', $.proxy(function () {
                                                 settings.set('showAllPrivateAppointments', this.showAll.prop('checked')).save();
                                                 refresh();
                                             }, this))
@@ -451,7 +453,7 @@ define('io.ox/calendar/month/perspective',
                         }
                     }
                 }, this))
-                .on('scrollstop', $.proxy(function (e) {
+                .on('scrollstop', $.proxy(function () {
                     var month = false;
 
                     // find first visible month on scroll-position

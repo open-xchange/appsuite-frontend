@@ -17,7 +17,8 @@ define('plugins/portal/facebook/register',
      'io.ox/oauth/proxy',
      'io.ox/keychain/api',
      'gettext!plugins/portal',
-     'less!plugins/portal/facebook/style.less'], function (ext, proxy, keychain, gt) {
+     'less!plugins/portal/facebook/style.less'
+    ], function (ext, proxy, keychain, gt) {
 
     'use strict';
 
@@ -49,7 +50,7 @@ define('plugins/portal/facebook/register',
             JSON.stringify(post));
     };
 
-    var loadFromFacebook = function (baton) {
+    var loadFromFacebook = function () {
         return proxy.request({
                 api: 'facebook',
                 url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
@@ -128,7 +129,7 @@ define('plugins/portal/facebook/register',
             });
         },
 
-        action: function (baton) {
+        action: function () {
             window.open('https://www.facebook.com/me', 'facebook');
         },
 
@@ -207,10 +208,6 @@ define('plugins/portal/facebook/register',
                         $('<div class="wall-post-content">'),
                         $('<span class="datetime">').text(new Date(post.created_time * 1000))
                     ));
-
-                //use extension mechanism to enable rendering of different contents
-                var extPoints = ext.point('io.ox/plugins/portal/facebook/renderer'),
-                    sortedExtPoints = _(extPoints).sortBy(function (elem) {return elem.index; });
 
                 ext.point('io.ox/plugins/portal/facebook/renderer').each(function (renderer) {
                     var content_container = wall_content.find('div.wall-post-content');
@@ -495,7 +492,7 @@ define('plugins/portal/facebook/register',
     ext.point('io.ox/plugins/portal/facebook/renderer').extend({
         id: 'fallback',
         index: 256,
-        accepts: function (post) {
+        accepts: function () {
             return true;
         },
         draw: function (post) {

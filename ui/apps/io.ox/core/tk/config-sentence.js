@@ -11,6 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/core/tk/config-sentence', ['io.ox/core/tk/keys'], function (KeyListener) {
+
     'use strict';
 
     var Widgets = {
@@ -43,7 +44,6 @@ define('io.ox/core/tk/config-sentence', ['io.ox/core/tk/keys'], function (KeyLis
         },
         number: function ($anchor, attribute, options) {
             var self = this,
-                gt = options.gt,
                 originalContent = $anchor.html();
 
             // check options

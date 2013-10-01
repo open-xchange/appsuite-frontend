@@ -11,15 +11,12 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/mail/autoforward/settings/filter', [
-    'io.ox/core/extensions',
-    'io.ox/core/api/mailfilter',
-    'io.ox/mail/autoforward/settings/model',
-    'io.ox/mail/autoforward/settings/view-form',
-    'io.ox/core/tk/dialogs',
-    'io.ox/core/date',
-    'gettext!io.ox/mail'
-], function (ext, api, mailfilterModel, ViewForm, dialogs, date, gt) {
+define('io.ox/mail/autoforward/settings/filter',
+    ['io.ox/core/extensions',
+     'io.ox/core/api/mailfilter',
+     'io.ox/mail/autoforward/settings/model',
+     'io.ox/mail/autoforward/settings/view-form'
+    ], function (ext, api, mailfilterModel, ViewForm) {
 
     'use strict';
 

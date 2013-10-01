@@ -19,7 +19,8 @@ define('io.ox/calendar/api',
      'settings!io.ox/core',
      'io.ox/core/notifications',
      'io.ox/core/date',
-     'io.ox/core/api/factory'], function (http, Events, coreConfig, notifications, date, factory) {
+     'io.ox/core/api/factory'
+    ], function (http, Events, coreConfig, notifications, date, factory) {
 
     'use strict';
 
@@ -368,7 +369,7 @@ define('io.ox/calendar/api',
                     },
                     data: obj
                 })
-                .done(function (resp) {
+                .done(function () {
                     all_cache = {};
                     _(keys).each(function (key) {
                         delete get_cache[key];
@@ -383,7 +384,7 @@ define('io.ox/calendar/api',
                 });
             });
 
-            return http.resume().then(function (response) {
+            return http.resume().then(function () {
                 api.trigger('refresh.all');
             });
         },
@@ -410,7 +411,7 @@ define('io.ox/calendar/api',
                 },
                 data: o.data
             })
-            .pipe(function (resp) {
+            .pipe(function () {
                 get_cache = {};
                 api.trigger('mark:invite:confirmed', o); //redraw detailview to be responsive and remove invites
                 all_cache = {};

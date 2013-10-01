@@ -13,8 +13,9 @@
 
 define('io.ox/core/tk/dialogs',
     ['io.ox/core/event',
-    'gettext!io.ox/core',
-    'less!io.ox/core/tk/dialog.less'], function (Events, gt) {
+     'gettext!io.ox/core',
+     'less!io.ox/core/tk/dialog.less'
+    ], function (Events, gt) {
 
     'use strict';
 
@@ -50,7 +51,6 @@ define('io.ox/core/tk/dialogs',
             lastFocus = $(),
             innerFocus = $(),
             deferred = $.Deferred(),
-            lastSimpleScrollPos = 0,
             isBusy = false,
             self = this,
             data = {},
@@ -239,7 +239,7 @@ define('io.ox/core/tk/dialogs',
             return this;
         };
 
-        this.append = function (node) {
+        this.append = function () {
             nodes.body.append.apply(nodes.body, arguments);
             return this;
         };
@@ -574,7 +574,7 @@ define('io.ox/core/tk/dialogs',
             close(e);
         };
 
-        close = function (e) {
+        close = function () {
             // use this to check if it's open
             if (self.nodes.closest) {
 
@@ -694,8 +694,7 @@ define('io.ox/core/tk/dialogs',
                 // decide for proper side
                 var docWidth = $('body').width(), mode,
                     parentPopup = my.parents('.io-ox-sidepopup').first(),
-                    firstPopup = parentPopup.length === 0,
-                    x;
+                    firstPopup = parentPopup.length === 0;
 
                 // get side
                 if (/^(left|right)$/.test(options.side)) {
@@ -774,13 +773,6 @@ define('io.ox/core/tk/dialogs',
             close(e);
         };
     };
-
-    //TODO: Less C&P
-    var pane = $('<div>').addClass('abs io-ox-dialog-pane')
-            .append(
-                $('<div>').addClass('content'),
-                $('<div>').addClass('form-actions')
-        );
 
     return {
         ModalDialog: Dialog,

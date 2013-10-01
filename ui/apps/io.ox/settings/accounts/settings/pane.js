@@ -13,15 +13,15 @@
 
 define('io.ox/settings/accounts/settings/pane',
     ['io.ox/core/extensions',
-       'io.ox/core/tk/dialogs',
-       'io.ox/keychain/api',
-       'io.ox/keychain/model',
-       'io.ox/core/api/folder',
-       'io.ox/settings/util',
-       'io.ox/core/notifications',
-       'gettext!io.ox/settings/accounts',
-       'withPluginsFor!keychainSettings'
-   ], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, gt) {
+     'io.ox/core/tk/dialogs',
+     'io.ox/keychain/api',
+     'io.ox/keychain/model',
+     'io.ox/core/api/folder',
+     'io.ox/settings/util',
+     'io.ox/core/notifications',
+     'gettext!io.ox/settings/accounts',
+     'withPluginsFor!keychainSettings'
+    ], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, gt) {
 
     'use strict';
 
@@ -86,7 +86,7 @@ define('io.ox/settings/accounts/settings/pane',
             );
         },
 
-        drawPane = function (collection) {
+        drawPane = function () {
             return $('<div class="io-ox-accounts-settings">').append(
                 $('<h1 class="no-margin">').text(gt('Mail and Social Accounts')),
                 drawAddButton(),
@@ -105,7 +105,7 @@ define('io.ox/settings/accounts/settings/pane',
 
             _modelBinder: undefined,
 
-            initialize: function (options) {
+            initialize: function () {
                 this._modelBinder = new Backbone.ModelBinder();
             },
 
@@ -145,7 +145,7 @@ define('io.ox/settings/accounts/settings/pane',
                                     self.model.collection.remove(self.model);
                                     popup.close();
                                 },
-                                function fail(e) {
+                                function fail() {
                                     popup.close();
                                 }
                             )
@@ -264,7 +264,7 @@ define('io.ox/settings/accounts/settings/pane',
             redraw();
 
             api.on('refresh.all refresh.list', redraw);
-            data.grid.selection.on('change', function (a, b) {
+            data.grid.selection.on('change', function () {
                 api.off('refresh.all refresh.list', redraw);
             });
         },

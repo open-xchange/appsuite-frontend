@@ -12,13 +12,13 @@
  */
 
 define('io.ox/participants/model',
-        ['io.ox/core/api/user',
-         'io.ox/core/api/group',
-         'io.ox/core/api/resource',
-         'io.ox/contacts/api',
-         'io.ox/contacts/util',
-         'io.ox/core/util'
-         ], function (userAPI, groupAPI, resourceAPI, contactAPI, util, coreUtil) {
+    ['io.ox/core/api/user',
+     'io.ox/core/api/group',
+     'io.ox/core/api/resource',
+     'io.ox/contacts/api',
+     'io.ox/contacts/util',
+     'io.ox/core/util'
+    ], function (userAPI, groupAPI, resourceAPI, contactAPI, util, coreUtil) {
 
     'use strict';
     // TODO: Bulk Loading
@@ -83,7 +83,7 @@ define('io.ox/participants/model',
             });
         },
 
-        fetch: function (options) {
+        fetch: function () {
 
             var self = this, df = new $.Deferred();
 
@@ -204,7 +204,7 @@ define('io.ox/participants/model',
                 // Deduplication
                 var idMap = {};
                 var duplicates = [];
-                self.each(function (p, index) {
+                self.each(function (p) {
                     if (idMap[p.id]) {
                         duplicates.push(p);
                     } else {
@@ -217,7 +217,7 @@ define('io.ox/participants/model',
 
         model: ParticipantModel,
 
-        addUniquely: function (models, options) {
+        addUniquely: function (models) {
             var self = this;
             if (!_.isArray(models)) {
                 models = [models];

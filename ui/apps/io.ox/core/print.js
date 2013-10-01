@@ -13,7 +13,8 @@
 define('io.ox/core/print',
     ['io.ox/core/http',
      'io.ox/core/notifications',
-     'gettext!io.ox/core'], function (http, notifications, gt) {
+     'gettext!io.ox/core'
+    ], function (http, notifications, gt) {
 
     'use strict';
 
@@ -195,7 +196,7 @@ define('io.ox/core/print',
             http.resume();
         },
 
-        getWindowOptions: function (url) {
+        getWindowOptions: function () {
             var o = { width: 750, height: Math.min(screen.availHeight - 100, 1050), top: 40 };
             o.left = (screen.availWidth - o.width) / 2 >> 0;
             o.string = 'width=' + o.width + ',height=' + o.height + ',left=' + o.left + ',top=' + o.top + ',menubar=no,toolbar=no,location=no,scrollbars=yes,status=no';

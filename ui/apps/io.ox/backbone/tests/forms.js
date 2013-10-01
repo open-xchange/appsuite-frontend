@@ -23,7 +23,7 @@ define('io.ox/backbone/tests/forms', ['io.ox/core/extensions', 'io.ox/backbone/m
     ext.point('test/suite').extend({
         id: 'backbone-forms',
         index: 100,
-        test: function (j, utils) {
+        test: function (j) {
             j.describe('ErrorAlerts', function () {
                 j.it('should show a generic error message', function () {
                     // Firstly we need an extension point

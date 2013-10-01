@@ -12,8 +12,10 @@
  */
 
 define('io.ox/contacts/distrib/test',
-    ['io.ox/core/extensions', 'io.ox/contacts/main',
-     'io.ox/contacts/api'], function (ext, contacts, api) {
+    ['io.ox/core/extensions',
+     'io.ox/contacts/main',
+     'io.ox/contacts/api'
+    ], function (ext, contacts, api) {
 
     'use strict';
 
@@ -68,7 +70,7 @@ define('io.ox/contacts/distrib/test',
 
             j.describe('Contact distrib', function () {
 
-                var app = null, buttonCreate, createForm, inputName, inputMail, addButton,
+                var app = null, buttonCreate, createForm, inputName, addButton,
                 saveButton, displayName, dataId, dataObj, dataFolder;
 
                 j.it('opens contact app ', function () {
@@ -197,7 +199,7 @@ define('io.ox/contacts/distrib/test',
 
                 j.it('looks for the saved item / selects and deletes', function () {
 
-                    var item, button, dialog,
+                    var button, dialog,
                         cid = dataFolder + '.' + dataId,
                         grid = app.getGrid();
 

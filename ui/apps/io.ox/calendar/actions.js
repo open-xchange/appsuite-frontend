@@ -313,7 +313,7 @@ define('io.ox/calendar/actions',
         requires: function (e) {
             return e.collection.has('some', 'read') && _.device('!small');
         },
-        multiple: function (list, baton) {
+        multiple: function (list) {
             print.request('io.ox/calendar/print', list);
         }
     });
@@ -424,10 +424,10 @@ define('io.ox/calendar/actions',
 
     new Action('io.ox/calendar/actions/freebusy', {
         capabilities: 'freebusy !alone',
-        requires: function (e) {
+        requires: function () {
             return _.device('!small');
         },
-        action: function (baton, obj) {
+        action: function (baton) {
             ox.launch('io.ox/calendar/freebusy/main', {
                 baton: baton,
                 folder: baton.app.folder.get(),

@@ -12,7 +12,8 @@
 
 define('io.ox/calendar/freebusy/templates',
     ['io.ox/core/notifications',
-     'gettext!io.ox/calendar/freebusy'], function (notifications, gt) {
+     'gettext!io.ox/calendar/freebusy'
+    ], function (notifications, gt) {
 
     'use strict';
 

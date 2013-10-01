@@ -10,8 +10,16 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/lessons/lessons/model_view/register', ['io.ox/core/extensions', 'io.ox/lessons/editor', 'io.ox/lessons/toc', 'io.ox/backbone/modelFactory', 'io.ox/lessons/lessons/model_view/api'], function (ext, Editor, TOC, ModelFactory, api) {
+define('io.ox/lessons/lessons/model_view/register',
+    ['io.ox/core/extensions',
+     'io.ox/lessons/editor',
+     'io.ox/lessons/toc',
+     'io.ox/backbone/modelFactory',
+     'io.ox/lessons/lessons/model_view/api'
+    ], function (ext, Editor, TOC, ModelFactory, api) {
+
     'use strict';
+
     var factory = new ModelFactory({
         ref: 'io.ox/lessons/recipes/model',
         api: api,

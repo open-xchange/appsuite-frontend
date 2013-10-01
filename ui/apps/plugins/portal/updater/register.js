@@ -12,7 +12,8 @@
 
 define('plugins/portal/updater/register',
     ['io.ox/core/extensions',
-     'gettext!plugins/portal'], function (ext, gt) {
+     'gettext!plugins/portal'
+    ], function (ext, gt) {
 
     'use strict';
 
@@ -20,7 +21,7 @@ define('plugins/portal/updater/register',
 
         title: gt('Updater'),
 
-        preview: function (baton) {
+        preview: function () {
 
             var href = ox.apiRoot + '/updater/installer/oxupdater-install.exe?session=' + ox.session;
 

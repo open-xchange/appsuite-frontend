@@ -11,13 +11,13 @@
  */
 
 define('io.ox/portal/widgets',
-       ['io.ox/core/extensions',
-       'io.ox/core/manifests',
-       'io.ox/core/upsell',
-       'io.ox/core/notifications',
-       'settings!io.ox/portal',
-       'gettext!io.ox/portal'
-        ], function (ext, manifests, upsell, notifications, settings, gt) {
+    ['io.ox/core/extensions',
+     'io.ox/core/manifests',
+     'io.ox/core/upsell',
+     'io.ox/core/notifications',
+     'settings!io.ox/portal',
+     'gettext!io.ox/portal'
+    ], function (ext, manifests, upsell, notifications, settings, gt) {
 
     'use strict';
 

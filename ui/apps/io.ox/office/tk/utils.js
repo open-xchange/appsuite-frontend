@@ -27,9 +27,6 @@ define.async('io.ox/office/tk/utils',
         // a global timer that can be used for performance debugging
         globalTimer = null,
 
-        // selector for the icon <span> element in a control caption
-        ICON_SELECTOR = 'span[data-role="icon"]',
-
         // selector for the label <span> element in a control caption
         LABEL_SELECTOR = 'span[data-role="label"]';
 
@@ -2538,11 +2535,8 @@ define.async('io.ox/office/tk/utils',
      *  Tool tip text shown when the mouse hovers the control. If omitted, the
      *  control will not show a tool tip.
      *
-     * @param {String} [placement='top']
-     *  Placement of the tool tip box. Allowed values are 'top', 'bottom',
-     *  'left', and 'right'.
      */
-    Utils.setControlTooltip = function (control, tooltip, placement) {
+    Utils.setControlTooltip = function (control, tooltip) {
         if (tooltip) {
             control.first().attr('title', tooltip);
         } else {

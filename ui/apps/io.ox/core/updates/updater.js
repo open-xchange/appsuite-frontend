@@ -11,8 +11,13 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/core/updates/updater', ['io.ox/core/extensions', 'settings!io.ox/core/updates'], function (ext, settings) {
+define('io.ox/core/updates/updater',
+    ['io.ox/core/extensions',
+     'settings!io.ox/core/updates'
+    ], function (ext, settings) {
+
     'use strict';
+
     return {
         runUpdates: function () {
             var def = $.Deferred();

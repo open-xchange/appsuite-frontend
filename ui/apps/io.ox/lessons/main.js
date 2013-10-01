@@ -11,7 +11,11 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/lessons/main', ['io.ox/core/extensions', 'io.ox/lessons/actions', 'io.ox/lessons/lessonlist'], function (ext) {
+define('io.ox/lessons/main',
+    ['io.ox/core/extensions',
+     'io.ox/lessons/actions',
+     'io.ox/lessons/lessonlist'
+    ], function (ext) {
 
     'use strict';
 

@@ -18,7 +18,8 @@ define('io.ox/mail/view-grid-template',
      'io.ox/core/api/account',
      'io.ox/core/emoji/util',
      'gettext!io.ox/core/mail',
-     'less!io.ox/mail/style.less'], function (util, api, VGrid, account, emoji, gt) {
+     'less!io.ox/mail/style.less'
+    ], function (util, api, VGrid, account, emoji, gt) {
 
     'use strict';
 
@@ -151,7 +152,6 @@ define('io.ox/mail/view-grid-template',
                     }
                     // draw labels
                     _(subset).each(function (data, index) {
-                        var color = api.tracker.getColorLabel(data);
                         self.append(
                             $('<div class="thread-summary-item selectable">')
                             .addClass(util.isUnseen(data) ? 'unread' : undefined)

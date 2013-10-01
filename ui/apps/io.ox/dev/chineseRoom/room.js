@@ -11,7 +11,11 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups', 'io.ox/core/event'], function (groups, Events) {
+define('io.ox/dev/chineseRoom/room',
+    ['io.ox/realtime/groups',
+     'io.ox/core/event'
+    ], function (groups, Events) {
+
     'use strict';
 
     function ChineseRoom(roomName) {
@@ -23,7 +27,6 @@ define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups', 'io.ox/core/event
         this.join = function (options) {
             return this.group.join(options);
         };
-
 
         this.leave = function (options) {
             return this.group.leave(options);

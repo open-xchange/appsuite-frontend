@@ -20,7 +20,8 @@ define('io.ox/launchpad/main',
      'io.ox/core/extensions',
      'io.ox/core/upsell',
      'gettext!io.ox/core',
-     'less!io.ox/launchpad/style.less'], function (desktop, api, coreConfig, ext, upsell, gt) {
+     'less!io.ox/launchpad/style.less'
+    ], function (desktop, api, coreConfig, ext, upsell, gt) {
 
     'use strict';
 
@@ -40,7 +41,7 @@ define('io.ox/launchpad/main',
 
         firstRun = true,
 
-        pad, container,
+        pad,
 
         // app template
         appTmpl = _.template(
@@ -224,11 +225,6 @@ define('io.ox/launchpad/main',
 
             pad.append(hApps, secInstalled).fadeIn(firstRun ? FADE_DURATION : 0);
             firstRun = false;
-        },
-
-        // hide launch pad
-        hide = function () {
-            ox.ui.screens.show('windowmanager');
         },
 
         // show launch pad

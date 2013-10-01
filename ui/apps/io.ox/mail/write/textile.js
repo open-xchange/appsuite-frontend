@@ -254,11 +254,7 @@ define('io.ox/mail/write/textile', function () {
 
             // vars
             var content = str.replace(/</g, '&lt;'),
-                lines = [], i = 0, $i = 0, line,
-
-                tmp = '',
-                open = false,
-                dash = false,
+                lines = [],
                 frag = $('<div/>').addClass('textile');
 
             // multiline replacements:

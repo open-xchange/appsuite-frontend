@@ -12,14 +12,18 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/core', 'gettext!io.ox/core'], function (ext, settings, gt) {
+define('io.ox/core/notifications',
+    ['io.ox/core/extensions',
+     'settings!io.ox/core',
+     'gettext!io.ox/core'
+    ], function (ext, settings, gt) {
 
     'use strict';
 
     var BadgeView = Backbone.View.extend({
         tagName: 'a',
         className: 'notifications-icon',
-        initialize: function (options) {
+        initialize: function () {
             this.model.on('change', _.bind(this.onChange, this));
         },
         onChange: function () {
@@ -241,7 +245,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                 }
             }, this));
         },
-        hideList: function (softmode) {
+        hideList: function () {
             _.each(this.badges, function (badgeView) {
                 badgeView.setNotifier(false);
             });

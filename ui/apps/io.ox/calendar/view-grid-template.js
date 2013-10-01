@@ -19,7 +19,8 @@ define('io.ox/calendar/view-grid-template',
      'gettext!io.ox/calendar',
      'io.ox/core/api/user',
      'io.ox/core/api/resource',
-     'less!io.ox/calendar/style.less'], function (util, VGrid, ext, folderAPI, gt, userAPI, resourceAPI) {
+     'less!io.ox/calendar/style.less'
+    ], function (util, VGrid, ext, folderAPI, gt, userAPI, resourceAPI) {
 
     'use strict';
     var fnClickPerson = function (e) {
@@ -57,7 +58,7 @@ define('io.ox/calendar/view-grid-template',
                     isPrivate: isPrivate
                 };
             },
-            set: function (data, fields, index) {
+            set: function (data, fields) {
                 var self = this;
                 if (data.folder_id) {//conflicts with appointments, where you aren't a participant don't have a folder_id.
                     var folder = folderAPI.get({ folder: data.folder_id });
@@ -140,7 +141,7 @@ define('io.ox/calendar/view-grid-template',
             build: function () {
                 this.addClass('calendar-label');
             },
-            set: function (data, fields, index) {
+            set: function (data) {
                 var d = util.getSmartDate(data);
                 this.text(gt.noI18n(d));
             }

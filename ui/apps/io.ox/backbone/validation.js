@@ -18,17 +18,12 @@ define('io.ox/backbone/validation',
 
     'use strict';
 
-    // var regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-
-    var regEmail = /\@\S/; // See also io.ox/mail/accounts/model.js
-
     var emptycheck  = function (value) {
         return (_.isUndefined(value) || value === null || value === '');
     };
 
     var formats = {
-        string: function (val) {
-            // always true!
+        string: function () {
             return true;
         },
         text: function () {
@@ -74,7 +69,7 @@ define('io.ox/backbone/validation',
                 util.isValidPhoneNumber(val) ||
                 gt('Please enter a valid phone number. Allowed characters are: %1$s', '0-9 , . - ( ) # + ; /');
         },
-        url: function (val) {
+        url: function () {
             return true;
         },
         object: function (val) {

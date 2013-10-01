@@ -20,7 +20,7 @@ define('io.ox/contacts/api',
      'io.ox/contacts/util',
      'l10n/ja_JP/io.ox/collation',
      'settings!io.ox/contacts'
-     ], function (ext, http, apiFactory, notifications, cache, util, collation, settings) {
+    ], function (ext, http, apiFactory, notifications, cache, util, collation, settings) {
 
     'use strict';
 
@@ -850,7 +850,7 @@ define('io.ox/contacts/api',
                     })
                 );
             })
-            .done(function (data) {
+            .done(function () {
                 api.trigger('refresh.all');
             });
     };

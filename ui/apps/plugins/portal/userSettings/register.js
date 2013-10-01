@@ -15,11 +15,12 @@
 define('plugins/portal/userSettings/register',
     ['io.ox/core/extensions',
      'io.ox/core/main',
-     'gettext!io.ox/core'], function (ext, main, gt) {
+     'gettext!io.ox/core'
+    ], function (ext, main, gt) {
 
     'use strict';
 
-    function changeUserData(e) {
+    function changeUserData() {
 
         require(['io.ox/core/tk/dialogs', 'io.ox/core/settings/user'], function (dialogs, users) {
             var usermodel,
@@ -111,7 +112,7 @@ define('plugins/portal/userSettings/register',
 
         title: gt('User data'),
 
-        preview: function (baton) {
+        preview: function () {
             var content;
             this.append(
                 content = $('<div class="content">').append(

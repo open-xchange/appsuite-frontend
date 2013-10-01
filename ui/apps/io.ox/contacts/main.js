@@ -61,7 +61,7 @@ define('io.ox/contacts/main',
         app.setWindow(win);
         app.settings = settings;
 
-        function thumbClick(e) {
+        function thumbClick() {
             var text = $(this).data('text');
             if (text) grid.scrollToLabelText(text, /* silent? */ _.device('small'));
         }
@@ -170,7 +170,7 @@ define('io.ox/contacts/main',
                 );
                 return { name: name, private_flag: private_flag, description: description };
             },
-            set: function (data, fields, index) {
+            set: function (data, fields) {
                 if (data.mark_as_distributionlist === true) {
                     fields.name.text(_.noI18n(data.display_name || ''));
                     if (data.private_flag) {
@@ -210,7 +210,7 @@ define('io.ox/contacts/main',
         grid.addLabelTemplate({
             build: function () {
             },
-            set: function (data, fields, index) {
+            set: function (data) {
                 this.text(_.noI18n(getLabel(data)));
             }
         });
@@ -375,14 +375,6 @@ define('io.ox/contacts/main',
         button = $('<button type="button" data-action="search-options" class="btn fixed-btn search-options" aria-hidden="true">')
                 .append('<i class="icon-gear">');
         win.nodes.search.find('.search-query-container').after(button);
-
-        //add dropdown menue
-        var dropdown = dropdownOptions({
-            id: 'contacts.search',
-            anchor: button,
-            defaults: data,
-            settings: settings
-        });
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, right);
         commons.wireGridAndWindow(grid, win);

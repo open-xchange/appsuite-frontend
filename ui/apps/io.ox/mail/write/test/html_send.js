@@ -15,12 +15,12 @@ define('io.ox/mail/write/test/html_send',
     ['io.ox/mail/write/main',
      'io.ox/mail/api',
      'io.ox/core/api/user',
-     'io.ox/core/extensions'], function (writer, mailAPI, userAPI, ext) {
+     'io.ox/core/extensions'
+    ], function (writer, mailAPI, userAPI, ext) {
 
     'use strict';
 
-    var base = ox.base + '/apps/io.ox/mail/write/test',
-        TIMEOUT = ox.testTimeout;
+    var TIMEOUT = ox.testTimeout;
 
     // helpers
     function Done() {
@@ -32,10 +32,6 @@ define('io.ox/mail/write/test/html_send',
             f.value = true;
         };
         return f;
-    }
-
-    function trim(str) {
-        return $.trim((str + '').replace(/[\r\n]+/g, ''));
     }
 
     /*

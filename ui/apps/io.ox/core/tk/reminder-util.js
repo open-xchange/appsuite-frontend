@@ -13,7 +13,8 @@
 
 define('io.ox/core/tk/reminder-util',
     ['gettext!io.ox/core',
-     'less!io.ox/core/tk/reminder-util.less'], function (gt) {
+     'less!io.ox/core/tk/reminder-util.less'
+    ], function (gt) {
 
     'use strict';
 

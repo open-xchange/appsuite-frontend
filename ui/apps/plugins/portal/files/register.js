@@ -14,8 +14,8 @@ define('plugins/portal/files/register',
     ['io.ox/core/extensions',
      'io.ox/files/api',
      'io.ox/preview/main',
-     'io.ox/portal/widgets',
-     'gettext!plugins/portal'], function (ext, api, preview, portalWidgets, gt) {
+     'io.ox/portal/widgets'
+    ], function (ext, api, preview, portalWidgets) {
 
     'use strict';
 

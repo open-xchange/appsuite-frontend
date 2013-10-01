@@ -12,18 +12,17 @@
  */
 
 define('io.ox/core/pubsub/settings/pane',
-        ['io.ox/core/extensions',
-         'io.ox/core/pubsub/model',
-         'io.ox/backbone/views',
-         'io.ox/core/api/folder',
-         'io.ox/core/tk/dialogs',
-         'io.ox/core/notifications',
-         'io.ox/core/capabilities',
-         'settings!io.ox/core/pubsub',
-         'gettext!io.ox/core/pubsub',
-         'less!io.ox/core/pubsub/style.less'
-        ],
-         function (ext, model, views, folderAPI, dialogs, notifications, capabilities, settings, gt) {
+    ['io.ox/core/extensions',
+     'io.ox/core/pubsub/model',
+     'io.ox/backbone/views',
+     'io.ox/core/api/folder',
+     'io.ox/core/tk/dialogs',
+     'io.ox/core/notifications',
+     'io.ox/core/capabilities',
+     'settings!io.ox/core/pubsub',
+     'gettext!io.ox/core/pubsub',
+     'less!io.ox/core/pubsub/style.less'
+    ], function (ext, model, views, folderAPI, dialogs, notifications, capabilities, settings, gt) {
 
     'use strict';
 
@@ -138,16 +137,6 @@ define('io.ox/core/pubsub/settings/pane',
         }
 
         return folderAPI.getBreadcrumb(folder, options);
-    }
-
-    function drawDisplayName(name, url) {
-        var nameNode = $('<span>').text(name);
-
-        if (!url) {
-            return nameNode.addClass('disabled');
-        }
-
-        return nameNode.after(' (', $('<a>', { href: url, target: '_blank', tabindex: 1 }).text(gt('Link')), ')');
     }
 
     var getSiteNameRegex = /^http[^?]+\/(\w+)\?/,
@@ -279,7 +268,7 @@ define('io.ox/core/pubsub/settings/pane',
             var model = this.model;
             ev.preventDefault();
 
-            model.set('enabled', !model.get('enabled'), {validate: true}).save().fail(function (res) {
+            model.set('enabled', !model.get('enabled'), {validate: true}).save().fail(function () {
                 model.set('enabled', !model.get('enabled'), {validate: true});
             });
             this.render();
@@ -307,7 +296,7 @@ define('io.ox/core/pubsub/settings/pane',
             });
             baton.view.render();
         },
-        onRemove: function (ev) {
+        onRemove: function () {
             this.model.destroy();
         },
         close: function () {
@@ -342,7 +331,7 @@ define('io.ox/core/pubsub/settings/pane',
             );
         });
 
-        collection.on('add', function (model, collection, options) {
+        collection.on('add', function (model, collection) {
             var filteredIndex = _.chain(collection.forFolder(filter))
                 .map(function (e) { return e.id; })
                 .indexOf(model.id)
@@ -362,7 +351,7 @@ define('io.ox/core/pubsub/settings/pane',
 
         // handle empty lists
 
-        collection.on('remove', function (model, collection, options) {
+        collection.on('remove', function (model, collection) {
             if (collection.length === 0) {
                 addHint();
             }

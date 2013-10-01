@@ -10,7 +10,11 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/backbone/basicModel', [ 'io.ox/core/extensions', 'gettext!io.ox/core'], function (ext, gt) {
+define('io.ox/backbone/basicModel',
+    ['io.ox/core/extensions',
+     'gettext!io.ox/core'
+    ], function (ext, gt) {
+
     'use strict';
 
     function ValidationErrors() {
@@ -108,7 +112,7 @@ define('io.ox/backbone/basicModel', [ 'io.ox/core/extensions', 'gettext!io.ox/co
                 }
             }
         },
-        parse: function (model, resp) {
+        parse: function () {
             return {};
         },
         sync: function (action, model, callbacks) {

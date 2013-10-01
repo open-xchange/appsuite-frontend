@@ -1,4 +1,9 @@
-define('io.ox/files/test', ['io.ox/core/extensions', 'io.ox/files/main', 'io.ox/files/api'], function (ext, files, api) {
+define('io.ox/files/test',
+    ['io.ox/core/extensions',
+     'io.ox/files/main',
+     'io.ox/files/api'
+    ], function (ext, files, api) {
+
     'use strict';
 
     function Done() {
@@ -17,7 +22,6 @@ define('io.ox/files/test', ['io.ox/core/extensions', 'io.ox/files/main', 'io.ox/
         index: 100,
         test: function (j) {
 
-
             j.describe('Unit test for creating and reading info item via ALL request ', function () {
                 var expected = { title : 'expected Title', description : 'expected Description'};
 
@@ -29,7 +33,6 @@ define('io.ox/files/test', ['io.ox/core/extensions', 'io.ox/files/main', 'io.ox/
                     j.waitsFor(ready, 'Waited too long', 5000);
 
                     api.create({ json : expected }).done(function (createResp) {
-                        var fid = createResp.folder_id;
                         var id = createResp.id;
 
                         api.getAll({ columns: '20,1,700,706' }).done(function (data) {
@@ -50,8 +53,6 @@ define('io.ox/files/test', ['io.ox/core/extensions', 'io.ox/files/main', 'io.ox/
                     });
                 });
             });
-
-
 
             j.describe('Unit test for creating and reading info item via LIST request ', function () {
                 var expected = { title : 'expected Title', description : 'expected Description'};

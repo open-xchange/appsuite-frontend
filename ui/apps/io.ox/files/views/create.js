@@ -11,14 +11,14 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/files/views/create', [
-        'io.ox/core/tk/dialogs',
-        'io.ox/core/extensions',
-        'io.ox/files/api',
-        'io.ox/core/tk/upload',
-        'gettext!io.ox/files',
-        'io.ox/core/tk/attachments',
-        'io.ox/core/notifications'
+define('io.ox/files/views/create',
+    ['io.ox/core/tk/dialogs',
+     'io.ox/core/extensions',
+     'io.ox/files/api',
+     'io.ox/core/tk/upload',
+     'gettext!io.ox/files',
+     'io.ox/core/tk/attachments',
+     'io.ox/core/notifications'
     ], function (dialogs, ext, api, upload, gt, attachments, notifications) {
 
         'use strict';

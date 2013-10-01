@@ -21,7 +21,7 @@ define('io.ox/files/list/perspective',
      'io.ox/core/extensions',
      'gettext!io.ox/files',
      'io.ox/core/bootstrap/basics'
-     ], function (viewDetail, api, VGrid, upload, dnd, shortcuts, commons, ext, gt) {
+    ], function (viewDetail, api, VGrid, upload, dnd, shortcuts, commons, ext, gt) {
 
     'use strict';
 

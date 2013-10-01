@@ -361,11 +361,10 @@ define('plugins/notifications/calendar/register',
             reminderAPI
                 .on('add:calendar:reminder', function (e, reminder) {
 
-                    var tmp = [],
-                        counter = reminder.length,
+                    var counter = reminder.length,
                         now = _.now();
 
-                    _(reminder).each(function (remObj, index) {
+                    _(reminder).each(function (remObj) {
                         var obj = {
                             id: remObj.target_id,
                             folder: remObj.folder,

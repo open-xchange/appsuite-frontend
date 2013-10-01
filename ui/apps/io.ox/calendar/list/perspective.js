@@ -305,10 +305,8 @@ define('io.ox/calendar/list/perspective',
     /**
      * handle different views in this perspective
      * triggered by desktop.js
-     * @param  {object} app the application
-     * @param  {object} opt options from perspective
      */
-    perspective.afterShow = function (app, opt) {
+    perspective.afterShow = function () {
         this.updateGridOptions();
         this.grid.refresh(true);
     };

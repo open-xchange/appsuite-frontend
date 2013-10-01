@@ -19,7 +19,8 @@ define('plugins/portal/mail/register',
      'io.ox/core/date',
      'io.ox/core/api/account',
      'io.ox/portal/widgets',
-     'gettext!plugins/portal'], function (ext, api, util, date, accountAPI, portalWidgets, gt) {
+     'gettext!plugins/portal'
+    ], function (ext, api, util, date, accountAPI, portalWidgets, gt) {
 
     'use strict';
 
@@ -27,8 +28,8 @@ define('plugins/portal/mail/register',
 
         title: gt('Inbox'),
 
-        initialize: function (baton) {
-            api.on('update create delete', function (event, element) {
+        initialize: function () {
+            api.on('update create delete', function () {
                 require(['io.ox/portal/main'], function (portal) {//refresh portal
                     var portalApp = portal.getApp(),
                         portalModel = portalApp.getWidgetCollection()._byId.mail_0;
@@ -41,7 +42,7 @@ define('plugins/portal/mail/register',
             });
         },
 
-        action: function (baton) {
+        action: function () {
             ox.launch('io.ox/mail/main', { folder: api.getDefaultFolder() });
         },
 

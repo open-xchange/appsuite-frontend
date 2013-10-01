@@ -11,7 +11,14 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define.async('io.ox/realtime/rt', ['io.ox/core/extensions', 'io.ox/core/event', 'io.ox/core/capabilities', 'io.ox/core/uuids', 'io.ox/core/http'], function (ext, Event, caps, uuids, http) {
+define.async('io.ox/realtime/rt',
+    ['io.ox/core/extensions',
+     'io.ox/core/event',
+     'io.ox/core/capabilities',
+     'io.ox/core/uuids',
+     'io.ox/core/http'
+    ], function (ext, Event, caps, uuids, http) {
+
     'use strict';
 
     if (!caps.has('rt')) {
@@ -374,9 +381,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', 'io.ox/core/event', 
                 receivedAcknowledgement(sequenceNumber);
             });
         } else if (stanza.get('atmosphere', 'pong')) {
-            _(stanza.getAll('atmosphere', 'pong')).each(function (pong) {
-                // Discard
-            });
+            _(stanza.getAll('atmosphere', 'pong')).each($.noop);
         } else if (stanza.get('atmosphere', 'nextSequence')) {
             if (!initialReset) {
                 if (api.debug) {
