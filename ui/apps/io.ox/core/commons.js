@@ -186,7 +186,7 @@ define('io.ox/core/commons',
                 grid.selection.removeFromIndex(ids);
 
                 var list = grid.selection.get(), index;
-                if (list.length === 1 && !_.device('small')) {//don't jump to next item on mobile devices (jump back to grid view to be consistent)
+                if (list.length > 0 && !_.device('small')) {//don't jump to next item on mobile devices (jump back to grid view to be consistent)
                     index = grid.selection.getIndex(list[0]);
                     grid.selection.clear(true).selectIndex(index + 1);
                 }
