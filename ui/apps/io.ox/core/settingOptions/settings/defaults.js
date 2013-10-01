@@ -13,7 +13,7 @@
 
 define('io.ox/core/settingOptions/settings/defaults', function () {
 
-	'use strict';
+    'use strict';
 
-	return {};
+    return {};
 });

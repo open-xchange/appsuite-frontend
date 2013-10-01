@@ -13,11 +13,11 @@
 
 define('io.ox/caldav/settings/defaults', function () {
 
-	'use strict';
+    'use strict';
 
-	return {
-		url: '',
-		active: false
-	};
+    return {
+        url: '',
+        active: false
+    };
 
 });
