@@ -8,6 +8,8 @@ for (var file in window.__karma__.files) {
 }
 
 require(['io.ox/core/extPatterns/stage'], function (Stage) {
+    ox.testUtils.stubAppsuiteBody();
+
     new Stage('io.ox/core/stages', {
         id: 'run_tests',
         index: 99999,

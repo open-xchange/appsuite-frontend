@@ -50,6 +50,36 @@ window.ox = {
     windowState: 'foreground'
 };
 
+// stub the appsuite body
+
+(function () {
+    function stubAppsuiteBody() {
+        $('body', document).empty().append(
+            $('<div id="background_loader" class="busy" style="display: none;">'),
+            $('<div id="io-ox-core" class="abs unselectable" style="display: none">').append(
+                $('<div id="io-ox-topbar" role="navigation" class="f6-target">').append(
+                    $('<ul class="launchers" role="menubar">'),
+                    $('<div class="launcher-dropdown dropdown" aria-hidden="true">').append(
+                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">').append(
+                            $('<i class="icon-reorder">')
+                        ),
+                        $('<ul class="dropdown-menu" role="menu">')
+                    )
+                ),
+                $('<div id="io-ox-screens" class="abs">').append(
+                    $('<div id="io-ox-windowmanager" class="abs" style="display: none">').append(
+                        $('<div id="io-ox-windowmanager-pane" class="atb">')
+                    ),
+                    $('<div id="io-ox-desktop" class="abs">')
+                )
+            )
+        );
+    }
+    ox.testUtils = {
+        stubAppsuiteBody: stubAppsuiteBody
+    };
+}());
+
 // fake autologin
 
 if (sinon) {
