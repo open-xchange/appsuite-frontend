@@ -40,7 +40,7 @@ define('io.ox/mail/view-grid-template',
                 var from, date, priority, subject, attachment, threadSize, threadSizeCount, threadSizeIcon,
                     flag, answered, forwarded, unread, account = null, touchHelper = $();
                 if (_.device('smartphone')) {
-                    touchHelper = $('<div class="touch-helper">');
+                    touchHelper = $('<div class="touch-helper ignoreheight">');
                 }
                 this.addClass('mail').append(
                     $('<div>').append(

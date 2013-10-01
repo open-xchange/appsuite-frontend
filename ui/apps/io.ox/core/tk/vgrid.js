@@ -118,7 +118,7 @@ define('io.ox/core/tk/vgrid',
                 row.set.push(tmpl.set || $.noop);
             }
             // clean up template to avoid typical mistakes - once!
-            row.node.add(row.node.find('div, span, p, td')).each(function () {
+            row.node.add(row.node.find('div, span, p, td')).not('.ignoreheight').each(function () {
                 var node = $(this);
                 if (node.children().length === 0 && node.text() === '') {
                     node.text(_.noI18n('\u00A0'));
