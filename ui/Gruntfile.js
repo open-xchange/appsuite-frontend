@@ -78,7 +78,7 @@ module.exports = function (grunt) {
                         src: ['index.html', 'signin.html'],
                         expand: true,
                         cwd: 'html/',
-                        rename: function (dest, matchedSrcPath, options) {
+                        rename: function (dest, matchedSrcPath) {
                             var map = {
                                 'index.html': 'core',
                                 'signin.html': 'signin'
