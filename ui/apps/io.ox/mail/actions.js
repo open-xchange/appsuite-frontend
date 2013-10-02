@@ -80,7 +80,14 @@ define('io.ox/mail/actions',
                         .show();
                 });
             } else {
-                api.remove(list).fail(function (e) {
+                api.remove(list).done(function () {
+                    if (baton.grid) {
+                        if (_.isEmpty(baton.grid.getIds())) {
+                            baton.grid.selection.trigger('change', []);
+                        }
+                    }
+
+                }).fail(function (e) {
                     // mail quota exceeded?
                     if (e.code === 'MSG-0039') {
                         require(['io.ox/core/tk/dialogs'], function (dialogs) {
