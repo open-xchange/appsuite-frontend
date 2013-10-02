@@ -94,12 +94,11 @@ define('io.ox/contacts/actions',
         },
         action: function (baton) {
             require(['io.ox/contacts/edit/main'], function (m) {
-                var def = $.Deferred();
                 baton.data.folder_id = baton.folder;
-                m.getApp(baton.data).launch(def);
-                def.done(function (data) {
-                    baton.app.getGrid().selection.set(data);
-                });
+                m.getApp(baton.data).launch()
+                    .done(function (data) {
+                        baton.app.getGrid().selection.set(data);
+                    });
             });
         }
     });
