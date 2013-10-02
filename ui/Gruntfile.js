@@ -15,7 +15,8 @@
 
 module.exports = function (grunt) {
 
-    var local = grunt.file.exists('local.conf.json') ? grunt.file.readJSON('local.conf.json') : {};
+    var local = grunt.file.exists('local.conf.json') ? grunt.file.readJSON('local.conf.json') : {},
+        now = grunt.template.date(new Date(), 'yyyymmdd.hhMMss');
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -62,10 +63,10 @@ module.exports = function (grunt) {
         },
         assemble: {
             options: {
-                version: '<%= pkg.version %>-<%= pkg.revision %>.<%= grunt.template.date(new Date(), "yyyymmdd.hhMMss") %>',
+                version: '<%= pkg.version %>-<%= pkg.revision %>.' + now,
                 enable_debug: String(local.debug || false),
                 revision: '<%= pkg.revision %>',
-                base: 'v=<%= pkg.version %>-<%= pkg.revision %>.<%= grunt.template.date(new Date(), "yyyymmdd.hhMMss") %>'
+                base: 'v=<%= assemble.options.version %>'
             },
             base: {
                 options: {
@@ -152,7 +153,7 @@ module.exports = function (grunt) {
             static: {
                 files: [
                     {
-                        src: [".htaccess", "blank.html", "busy.html", "unsupported.html", "print.html", "favicon.ico"],
+                        src: ['.*', '*', '!*.hbs', '!{core_*,index,signin}.html'],
                         expand: true,
                         cwd: 'html/',
                         dest: 'build/'
@@ -192,7 +193,7 @@ module.exports = function (grunt) {
                              'src/jquery.plugins.js',
                              'apps/io.ox/core/gettext.js',
                              'src/boot.js'],
-                        dest: 'build/boot.js'
+                        dest: 'build/src/boot.js'
                     }
                 ]
             },
@@ -202,7 +203,7 @@ module.exports = function (grunt) {
                         src: ['apps/**/*.js'],
                         expand: true,
                         filter: 'isFile',
-                        dest: 'build/'
+                        dest: 'build/src/'
                     }
                 ]
             },
@@ -238,6 +239,34 @@ module.exports = function (grunt) {
                     }
                 ]
             }
+        },
+        uglify: {
+            bootjs: {
+                options: {
+                    sourceMap: 'build/maps/boot.js.map',
+                    sourceMapRoot: '/appsuite/<%= assemble.options.base %>',
+                    sourceMappingURL: '/appsuite/<%= assemble.options.base %>/maps/boot.js.map',
+                    sourceMapPrefix: 1
+                },
+                files: {
+                    'build/boot.js': ['build/src/boot.js']
+                }
+            },
+            apps: {
+                options: {
+                    sourceMap: function (path) { return path.replace(/^build\//, 'build/maps/').replace(/\.js$/, '.js.map'); },
+                    sourceMapRoot: '/appsuite/<%= assemble.options.base %>',
+                    sourceMappingURL: function (path) { return '/appsuite/' + grunt.config.get('assemble.options.base') + path.replace(/^build\//, '/maps/').replace(/\.js$/, '.js.map'); },
+                    sourceMapPrefix: 1
+                },
+                files: [{
+                    src: 'apps/**/*.js',
+                    cwd: 'build/src/',
+                    dest: 'build/',
+                    filter: 'isFile',
+                    expand: true
+                }]
+            }
         }
     });
 
@@ -245,6 +274,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('assemble-less');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-jsonlint');
     grunt.loadNpmTasks('grunt-recess');
     grunt.loadNpmTasks('grunt-contrib-clean');
@@ -258,5 +288,5 @@ module.exports = function (grunt) {
     // Custom tasks
     grunt.registerTask('force_update', ['assemble:base', 'assemble:appcache']);
 
-    grunt.registerTask('default', ['lint', 'newer:assemble', 'newer:concat', 'newer:less', 'force_update']);
+    grunt.registerTask('default', ['lint', 'newer:assemble', 'newer:concat', 'newer:less', 'force_update', 'newer:uglify']);
 };
