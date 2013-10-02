@@ -541,8 +541,10 @@ define('io.ox/core/tk/attachments',
     var fileUploadWidget = function (options) {
         options = _.extend({
             buttontext: gt('Select file'),
-            tabindex: 1
+            tabindex: 1,
+            drive: false
         }, options);
+
         var node = $('<div>').addClass((options.wrapperClass ? options.wrapperClass : 'row-fluid')),
             icon = options.buttonicon ? $('<i>').addClass(options.buttonicon) : $(),
             input;
@@ -553,35 +555,38 @@ define('io.ox/core/tk/attachments',
         if (options.displayLabel) node.append($('<label>').text(gt.noI18n(options.displayLabelText) || gt('File')));
         node.append(
             $('<div>', { 'data-provides': 'fileupload' }).addClass('fileupload fileupload-new')
-                .append($('<div>').addClass('input-append').append(
-                    $('<div>').addClass('uneditable-input').append(
-                        $('<i>').addClass('icon-file fileupload-exists'),
-                        $('<span>').addClass('fileupload-preview')
-                    ),
-                    $('<span>').addClass('btn btn-file').append(
-                        icon,
-                        $('<span>').addClass('fileupload-new').text(options.buttontext),
-                        $('<span>').addClass('fileupload-exists').text(gt('Change')),
-                        input = $('<input name="file" type="file">')
-                            .prop({
-                                multiple: options.multi
-                            })
-                            .attr({
-                                tabindex: options.tabindex
-                            })
-                    ),
-                    $('<a>', {'data-dismiss': 'fileupload', tabindex: 1, href: '#'}).addClass('btn fileupload-exists').text(gt('Cancel')),
-                    (options.displayButton ?
-                        $('<button type="button" class="btn btn-primary" data-action="upload" tabindex="1">')
-                            .text(gt('Upload file')).hide() : ''
+                .append($('<div>').addClass('input-prepend input-append').append(
+                    $('<div>').addClass('btn-group').append(
+                        $('<div>').addClass('uneditable-input').append(
+                            $('<i>').addClass('icon-file fileupload-exists'),
+                            $('<span>').addClass('fileupload-preview')
+                        ),
+                        $('<span>').addClass('btn btn-file').append(
+                            icon,
+                            $('<span>').addClass('fileupload-new').text(options.buttontext),
+                            $('<span>').addClass('fileupload-exists').text(gt('Change')),
+                            input = $('<input name="file" type="file">')
+                                .prop({
+                                    multiple: options.multi
+                                })
+                                .attr({
+                                    tabindex: options.tabindex
+                                })
+                        ),
+                        $('<a>', {'data-dismiss': 'fileupload', tabindex: 1, href: '#'}).addClass('btn fileupload-exists').text(gt('Cancel')),
+                        (options.displayButton ?
+                            $('<button type="button" class="btn btn-primary" data-action="upload" tabindex="1">')
+                                .text(gt('Upload file')).hide() : ''
+                        ),
+                        (options.drive ? $('<button type="button" class="btn" data-action="addinternal">').text(gt('Files')) : '')
                     )
                 )
             )
 
         );
-        input.on('focus', function () {
+        input.on('hover', function () {
             $(this).parent().addClass('hover');
-        }).on('blur', function () {
+        }, function () {
             $(this).parent().removeClass('hover');
         });
         return node;

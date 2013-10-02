@@ -504,7 +504,6 @@ define('io.ox/mail/write/view-main',
             );
 
             // CC
-
             this.addLink('cc', gt('Copy (CC) to'));
             this.addSection('cc', gt('Copy (CC) to'), false, true)
                 .append(this.createRecipientList('cc'))
@@ -514,14 +513,12 @@ define('io.ox/mail/write/view-main',
 
 
             // BCC
-
             this.addLink('bcc', gt('Blind copy (BCC) to'));
             this.addSection('bcc', gt('Blind copy (BCC) to'), false, true)
                 .append(this.createRecipientList('bcc'))
                 .append(this.createField('bcc')
                         .find('input').attr('placeholder', gt.format('%1$s ...', gt('in blind copy'))).placeholder().end()
                     );
-
 
             // Attachments
             this.fileCount = 0;
@@ -532,6 +529,7 @@ define('io.ox/mail/write/view-main',
                     multi: true,
                     displayLabel: false,
                     displayButton: true,
+                    drive: true,
                     buttontext: gt('Add Attachment'),
                     buttonicon: 'icon-paper-clip'
                 }),
@@ -570,6 +568,77 @@ define('io.ox/mail/write/view-main',
                 $(this).find('div[data-provides="fileupload"]').addClass('fileupload-new').removeClass('fileupload-exists');
             });
             $input.on('change', changeHandler);
+
+            var $infostoreButton = $inputWrap.find('button[data-action="addinternal"]').click(function (e) {
+                e.preventDefault();
+
+                require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/cache', 'io.ox/files/api']).done(function (dialogs, folderviews, cache, filesAPI) {
+
+                    var folderCache = new cache.SimpleCache('folder-all', false),
+                        subFolderCache = new cache.SimpleCache('subfolder-all', false),
+                        storage = {
+                            folderCache: folderCache,
+                            subFolderCache: subFolderCache
+                        },
+                        container = $('<div>'),
+                        filesPane = $('<div>').addClass('io-ox-fileselection'),
+                        tree = new folderviews.ApplicationFolderTree(container, {
+                            type: 'infostore',
+                            tabindex: 0,
+                            rootFolderId: '9',
+                            all: true,
+                            storage: storage
+                        }),
+                        pane = new dialogs.ModalDialog({
+                            width: window.innerWidth * 0.9,
+                            height: 400,
+                            addclass: 'add-infostore-file'
+                        }),
+                        changesArray = [];
+
+                    pane.header($('<h4>').text(gt('Choose file')))
+                    .build(function () {
+                        this.getContentNode().append(container, filesPane);
+                    })
+                    .addPrimaryButton('save', gt('Add'))
+                    .addButton('cancel', gt('Cancel'))
+                    .show(function () {
+                        tree.paint().done(function () {
+                            tree.selection.updateIndex().selectFirst();
+                            pane.getBody().find('.io-ox-foldertree').focus();
+                        });
+                    })
+                    .done(function (action) {
+                        if (action === 'save') {
+                            var result = [];
+                            filesPane.find('input:checked').each(function (index, el) {
+                                result.push($(el).data('fileData'));
+                            });
+                            app.addFiles(result, 'infostore');
+                        }
+                        tree.destroy().done(function () {
+                            tree = pane = null;
+                        });
+                    });
+
+                    tree.selection.on('select', function (e, folderId) {
+                        filesPane.empty();
+                        filesAPI.getAll({ folder: folderId }, false).then(function (files) {
+                            var fileArr = [];
+                            if (files.length) {
+                                for (var i = 0; i < files.length; i++) {
+                                    var file = files[i],
+                                        title = (file.filename || file.title),
+                                        input = $('<input type="checkbox" value="' + file.id + '"/>').data('fileData', file),
+                                        label = $('<label class="checkbox" title="' + title + '">').append(input, $.txt(' ' + title));
+                                    fileArr.push($('<div>').append(label));
+                                }
+                            }
+                            filesPane.append(fileArr);
+                        });
+                    });
+                });
+            });
 
             this.scrollpane.append(
                 $('<form class="oldschool">').append(

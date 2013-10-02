@@ -3,6 +3,29 @@
     height: 300px;
 }
 
+.add-infostore-file .modal-body {
+
+    &>div {
+        display: inline-block;
+        width: 49%;
+        height: 380px;
+        vertical-align: top;
+        overflow: auto;
+    }
+
+    .io-ox-foldertree {
+        border-right: 1px solid #EEE;
+    }
+
+    .io-ox-fileselection {
+        padding: 13px 0 4px 5px;
+
+        label {
+            .ellipsis();
+        }
+    }
+}
+
 /* ios momentum scrolling, breakes mobile chrome if applied to all devices */
 .ios {
     .io-ox-dialog-popup {
