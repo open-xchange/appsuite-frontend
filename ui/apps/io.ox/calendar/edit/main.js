@@ -221,7 +221,7 @@ define('io.ox/calendar/edit/main',
                             }
 
                             // init alarm
-                            if (!self.model.get('alarm')) {
+                            if (self.model.get('alarm') === undefined || self.model.get('alarm') === null) {//0 is valid don't change to -1 then
                                 self.model.set('alarm', -1, { silent: true, validate: true });
                             }
 
