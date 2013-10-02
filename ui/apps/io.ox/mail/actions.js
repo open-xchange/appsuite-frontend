@@ -54,8 +54,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/delete', {
         id: 'delete',
         requires: 'toplevel some delete',
-        multiple: function (list) {
-
+        multiple: function (list, baton) {
             var check = settings.get('removeDeletedPermanently') || _(list).any(function (o) {
                 return account.is('trash', o.folder_id);
             });
