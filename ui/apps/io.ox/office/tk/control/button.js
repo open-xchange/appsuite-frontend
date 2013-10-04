@@ -143,10 +143,6 @@ define('io.ox/office/tk/control/button',
             .registerChangeHandler('click', { node: button, valueResolver: clickHandler });
         button.on('keydown keypress keyup', keyHandler);
 
-        //this.getNode().attr('role', 'button'); //Marko add: attribute for all buttons, in parent <div>
-                                                 //           AViewer does not recognize ARIA inside this <div>, you have to put attribute at
-                                                 //           utils.js under "Utils.createButton".
-
     } // class Button
 
     // exports ================================================================

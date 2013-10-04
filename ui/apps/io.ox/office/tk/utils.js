@@ -2761,8 +2761,7 @@ define.async('io.ox/office/tk/utils',
      */
     Utils.setControlTooltip = function (control, tooltip, placement) {
         if (tooltip) {
-            control.first().attr('title', tooltip);     //Marko comment: adds attribute to button, the same value as tooltip. Example: value "Bold".
-            //console.log('Testing output: tooltip: ' + tooltip + '\n\n');	//Marko added: for testing output only
+            control.first().attr('title', tooltip);
         } else {
             control.first().removeAttr('title');
         }
@@ -2816,8 +2815,7 @@ define.async('io.ox/office/tk/utils',
      *  will be represented by an <a> DOM element due to rendering bugs in
      *  FireFox with <button> elements.
      */
-    Utils.createButtonMarkup = function (innerMarkup, options) {       // Marko comment: returns HTML markup of the button. (For more, see comment above).
-
+    Utils.createButtonMarkup = function (innerMarkup, options) {
         var // whether the button will be focusable
             focusable = Utils.getBooleanOption(options, 'focusable', false),
             // the tab index
@@ -2852,31 +2850,9 @@ define.async('io.ox/office/tk/utils',
             // <button> elements, Firefox has problems with text clipping and
             // correct padding of the <button> contents.
         
-        
-        //Marko added: "Utils.getStringOption()" - works as a filter because some DOM elements have an attribute "title" undefined, and we have to change that.
         sayMyName = Utils.getStringOption(options, 'tooltip', ''),
         
         button = Utils.createControl('a', { tabindex: tabIndex, role: 'button', title: sayMyName }, options).addClass(Utils.BUTTON_CLASS);
-        
-        //console.log('Testing output: sayMyName: ' + sayMyName + '\n\n'); //Marko added: for testing output only
-        
-        
-        /*
-         Marko comments:
-          a) Added attribute "title" for ARIA for all buttons. We have to put an attribute "title" into button's <a> DOM element as well,
-             because Screen-Reader only says title name if it's defined inside <a> DOM element and not if it's defined in it's parent <div>.
-
-             Object "options" has properties of the button and is defined for every button custom,
-             at file "office-web/.../io.ox/office/framework/view/editcontrols.js".
-             Example: object for button "Bold" is defined at: "EditControls.BOLD_OPTIONS"
-
-          b) Added attribute "role" for ARIA for all buttons.
-             You must add new attribute here, not into function above at: "Utils.createButtonMarkup" !
-
-             Attribute "role" must be placed inside button's <a> DOM element to be recognized by AViewer, not
-             in it's parent <div> at "button.js" under "initialization".
-         */
-
 
         Utils.setControlCaption(button, options);
         return button;
@@ -2921,12 +2897,11 @@ define.async('io.ox/office/tk/utils',
      *  selects or deselects all buttons.
      */
     Utils.toggleButtons = function (buttons, state) {
-        buttons.toggleClass(Utils.SELECTED_CLASS, state).attr('aria-pressed', state);
-                                                      /* Marko added: - attribute "aria-pressed" for ARIA.
-                                                                      - value "state" can be true/false, weather button is pressed or not.
-                                                                      - in the beginning (by default) all buttons are unpressed with "aria-pressed=false".
-                                                      */
-
+        buttons.toggleClass(Utils.SELECTED_CLASS, state);
+        
+        buttons.attr('aria-pressed', Utils.isButtonSelected(buttons));
+      
+       
     };
 
     /**

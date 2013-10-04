@@ -71,19 +71,19 @@ define('io.ox/office/tk/dropdown/grid',
             // create a new table element for the button if required
             tableNode = sectionNode.children('table');
             if (tableNode.length === 0) {
-                tableNode = $('<table>').attr('role', 'grid').appendTo(sectionNode); //Marko added: attribute "role" for ARIA table (drop-down menus on SidePane: Paragraph, Font-color picker).
+                tableNode = $('<table>').attr('role', 'grid').appendTo(sectionNode);
             }
 
             // create a new table row element for the button if required
             rowNode = tableNode.find('> tbody > tr').last();
             if ((rowNode.length === 0) || (rowNode.children().length === columns)) {
-                rowNode = $('<tr>').attr('role', 'row').appendTo(tableNode); //Marko added: attribute "role" for ARIA table rows (drop-down menus on SidePane: Paragraph, Font-color picker).
+                rowNode = $('<tr>').attr('role', 'row').appendTo(tableNode);
             }
 
             // insert the new button into the array, and reinsert all buttons into the table
             buttons = tableNode.find(Utils.BUTTON_SELECTOR).get();
             buttons.splice(index, 0, button);
-            rowNode.append($('<td>').attr('role', 'gridcell')); //Marko added: attribute "role" for ARIA table cells (drop-down menus on SidePane: Paragraph, Font-color picker).
+            rowNode.append($('<td>').attr('role', 'gridcell'));
             tableNode.find('> tbody > tr > td').each(function (index) {
                 $(this).append(buttons[index]);
             });
