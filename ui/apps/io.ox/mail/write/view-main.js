@@ -621,6 +621,16 @@ define('io.ox/mail/write/view-main',
                         });
                     });
 
+                    // add dbl-click option like native file-chooser
+                    filesPane.on('dblclick', 'label', function () {
+                        var data = $('input', this).data('fileData');
+                        if (data) {
+                            app.addFiles([data], 'infostore');
+                            pane.close();
+                        }
+                    });
+
+                    // on foldertree change update file selection
                     tree.selection.on('select', function (e, folderId) {
                         filesPane.empty();
                         filesAPI.getAll({ folder: folderId }, false).then(function (files) {
