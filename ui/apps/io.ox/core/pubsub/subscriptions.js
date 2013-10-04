@@ -293,9 +293,7 @@ define('io.ox/core/pubsub/subscriptions',
         id: 'targetfolder',
         index: 200,
         draw: function (baton) {
-            var node;
             var destructive = isDestructiveSubscription(baton);
-            console.log("Is destructive: ", destructive);
             this.append(
                 $('<div>').addClass('control-group').append(
                     $('<div>').addClass('controls').append(
