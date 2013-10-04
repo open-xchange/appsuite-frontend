@@ -54,7 +54,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/delete', {
         id: 'delete',
         requires: 'toplevel some delete',
-        multiple: function (list, baton) {
+        multiple: function (list) {
             var check = settings.get('removeDeletedPermanently') || _(list).any(function (o) {
                 return account.is('trash', o.folder_id);
             });
@@ -80,12 +80,6 @@ define('io.ox/mail/actions',
                 });
             } else {
                 api.remove(list).done(function () {
-                    if (baton.grid) {
-                        if (_.isEmpty(baton.grid.getIds())) {
-                            baton.grid.selection.trigger('change', []);
-                        }
-                    }
-
                 }).fail(function (e) {
                     // mail quota exceeded?
                     if (e.code === 'MSG-0039') {

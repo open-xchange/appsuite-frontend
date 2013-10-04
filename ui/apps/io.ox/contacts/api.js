@@ -412,6 +412,7 @@ define('io.ox/contacts/api',
      * @return {promise}
      */
     api.remove =  function (list) {
+        api.trigger('beforedelete', list);
         // get array
         list = _.isArray(list) ? list : [list];
         // remove
