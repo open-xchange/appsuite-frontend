@@ -285,8 +285,8 @@ define.async('io.ox/office/tk/utils',
     /**
      * Returns whether specific properties of the passed objects are equal,
      * while ignoring all other properties. If a property is missing in both
-     * objects, it is considered to be equal. Uses the Underscore method
-     * _.isEqual() to compare the property values.
+     * objects, it is considered to be equal. Uses a custom comparator or the
+     * Underscore method _.isEqual() to compare the property values.
      *
      * @param {Object} object1
      *  The first object to be compared to the other.
@@ -317,6 +317,43 @@ define.async('io.ox/office/tk/utils',
                 hasAttr2 = attrName in object2;
             return (hasAttr1 === hasAttr2) && (!hasAttr1 || comparator(object1[attrName], object2[attrName]));
         });
+    };
+
+    /**
+     * Removes all occurrences of the specified value from the array in-place.
+     * Uses a custom comparator or the Underscore method _.isEqual() to compare
+     * the property values.
+     *
+     * @param {Array} array
+     *  (in/out) The array to be shortened.
+     *
+     * @param {Any} value
+     *  The value to be removed from the array.
+     *
+     * @param {Function} [comparator=_.isEqual]
+     *  A binary predicate function that returns true if the two passed values
+     *  are considered being equal. Will be called to compare the passed value
+     *  against the elements of the array.
+     *
+     * @returns {Number}
+     *  The number of elements removed from the array.
+     */
+    Utils.spliceValue = function (array, value, comparator) {
+
+        var // the old array length
+            length = array.length;
+
+        // default to the _isEqual() method to compare values
+        comparator = _.isFunction(comparator) ? comparator : _.isEqual;
+
+        // remove all elements matching the passed value
+        for (var index = length - 1; index >= 0; index -= 1) {
+            if (comparator(value, array[index])) {
+                array.splice(index, 1);
+            }
+        }
+
+        return length - array.length;
     };
 
     /**
@@ -382,15 +419,22 @@ define.async('io.ox/office/tk/utils',
      *  backwards through the array, and returns the first array element that
      *  passes the truth test.
      *
-     * @param {Object} [context]
-     *  If specified, the iterator will be called with this context (the symbol
-     *  'this' will be bound to the context inside the iterator function).
+     * @param {Object} [options]
+     *  A map with options controlling the behavior of this method. The
+     *  following options are supported:
+     *  @param {Object} [options.context]
+     *      If specified, the iterator will be called with this context (the
+     *      symbol 'this' will be bound to the context inside the iterator
+     *      function).
      *
      * @returns {Any}
      *  The last matching element in the array; or undefined, if no element
      *  passes the truth test.
      */
-    Utils.findLast = function (array, iterator, context) {
+    Utils.findLast = function (array, iterator, options) {
+
+        var context = Utils.getOption(options, 'context');
+
         for (var index = array.length - 1; index >= 0; index -= 1) {
             if (iterator.call(context, array[index], index, array)) {
                 return array[index];
@@ -541,6 +585,41 @@ define.async('io.ox/office/tk/utils',
             if (iterator.call(context, value) === Utils.BREAK) { return Utils.BREAK; }
             value += step;
         }
+    };
+
+    /**
+     * Calculates the sum of the values returned by the iterator function
+     * invoked for each element of the passed array or property of the passed
+     * object. Can be used as convenience shortcut for the Underscore 'reduce'
+     * method.
+     *
+     * @param {Array|Object} list
+     *  The object or array whose properties/elements will be iterated.
+     *
+     * @param {Function} iterator
+     *  The iterator function invoked for all elements/properties. Receives
+     *  the current object property value or array element. Must return a
+     *  number.
+     *
+     * @param {Object} [options]
+     *  A map with options controlling the behavior of this method. The
+     *  following options are supported:
+     *  @param {Object} [options.context]
+     *      If specified, the iterator will be called with this context (the
+     *      symbol 'this' will be bound to the context inside the iterator
+     *      function).
+     *
+     * @returns {Number}
+     *  A reference to the Utils.BREAK object, if the iterator has returned
+     *  Utils.BREAK to stop the iteration process, otherwise undefined.
+     */
+    Utils.getSum = function (list, iterator, options) {
+
+        var context = Utils.getOption(options, 'context');
+
+        return _(list).reduce(function (sum, entry) {
+            return sum + iterator.call(context, entry);
+        }, 0);
     };
 
     /**
@@ -906,7 +985,9 @@ define.async('io.ox/office/tk/utils',
             // replace the double quote character with the text &quot;
             .replace(/"/g, '&quot;')
             // replace the apostrophe with the text &#39; (&apos; is not an HTML entity!)
-            .replace(/'/g, '&#39;');
+            .replace(/'/g, '&#39;')
+            // replace the non-breakable space with the text &nbsp;
+            .replace(/\xa0/g, '&nbsp;');
     };
 
     // options object ---------------------------------------------------------
@@ -1589,12 +1670,12 @@ define.async('io.ox/office/tk/utils',
 
     /**
      * Finds the closest ancestor of the passed node that matches the specified
-     * jQuery selector. In difference to the jQuery method jQuery.closest(),
-     * the passed node selector can be a function, and the found parent can be
-     * the root node itself.
+     * jQuery selector. If the specified node itself matches the selector, it
+     * will be returned. In difference to the jQuery method jQuery.closest(),
+     * the passed node selector can be a function.
      *
      * @param {HTMLElement|jQuery} rootNode
-     *  The DOM root node that will not be left while searching for an ancestor
+     *  The DOM root node that will not be left while searching for a matching
      *  node. If this object is a jQuery collection, uses the first node it
      *  contains.
      *
@@ -1604,26 +1685,75 @@ define.async('io.ox/office/tk/utils',
      *  jQuery collection, uses the first node it contains.
      *
      * @param {String|Function|Node|jQuery} selector
-     *  A jQuery selector that will be used to find the ancestor DOM node. The
+     *  A jQuery selector that will be used to find a matching DOM node. The
      *  selector will be passed to the jQuery method jQuery.is() for each node.
      *  If this selector is a function, it will be called with the current DOM
      *  node bound to the symbol 'this'. See the jQuery API documentation at
      *  http://api.jquery.com/is for details.
      *
      * @returns {Node|Null}
-     *  The first ancestor node that matches the passed selector, and is
-     *  contained in or equal to the root node; or null, no node has been
-     *  found.
+     *  The passed node, or the first ancestor node that matches the passed
+     *  selector, and is contained in or equal to the root node; or null, no
+     *  node has been found.
      */
-    Utils.findClosestParent = function (rootNode, node, selector) {
+    Utils.findClosest = function (rootNode, node, selector) {
 
         rootNode = Utils.getDomNode(rootNode);
-        node = Utils.getDomNode(node).parentNode;
-        while (node && !$(node).is(selector)) {
-            node = node.parentNode;
-        }
+        node = Utils.getDomNode(node);
 
-        return (node && ((rootNode === node) || Utils.containsNode(rootNode, node))) ? node : null;
+        do {
+            if ($(node).is(selector)) { return node; }
+            if (node === rootNode) { return null; }
+            node = node.parentNode;
+        } while (node);
+
+        return null;
+    };
+
+    /**
+     * Finds the farthest ancestor of the passed node that matches the
+     * specified jQuery selector. If the specified node itself matches the
+     * selector but none of its ancestors, the node will be returned itself. In
+     * difference to most jQuery methods, the passed node selector can be a
+     * function.
+     *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The DOM root node that will not be left while searching for matching
+     *  nodes. If this object is a jQuery collection, uses the first node it
+     *  contains.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node whose chain of ancestors will be searched for a matching
+     *  node. Must be a descendant of the passed root node. If this object is a
+     *  jQuery collection, uses the first node it contains.
+     *
+     * @param {String|Function|Node|jQuery} selector
+     *  A jQuery selector that will be used to find a matching DOM node. The
+     *  selector will be passed to the jQuery method jQuery.is() for each node.
+     *  If this selector is a function, it will be called with the current DOM
+     *  node bound to the symbol 'this'. See the jQuery API documentation at
+     *  http://api.jquery.com/is for details.
+     *
+     * @returns {Node|Null}
+     *  The passed node, or the farthest ancestor node that matches the passed
+     *  selector, and is contained in or equal to the root node; or null, no
+     *  node has been found.
+     */
+    Utils.findFarthest = function (rootNode, node, selector) {
+
+        var // the last found matching node
+            matchingNode = null;
+
+        rootNode = Utils.getDomNode(rootNode);
+        node = Utils.getDomNode(node);
+
+        do {
+            if ($(node).is(selector)) { matchingNode = node; }
+            if (node === rootNode) { return matchingNode; }
+            node = node.parentNode;
+        } while (node);
+
+        return null;
     };
 
     /**
@@ -2158,14 +2288,14 @@ define.async('io.ox/office/tk/utils',
      * Sets the size of the passed DOM nodes. As a workaround for IE which
      * restricts the explicit size of single nodes to ~1.5m pixels (see comment
      * for the Utils.MAX_NODE_SIZE constant), descendant nodes will be inserted
-     * whose sizes add up to the specified total node size. The total size of
-     * the node will still be restricted depending on the browser (see comment
-     * for the Utils.MAX_CONTAINER_WIDTH and Utils.MAX_CONTAINER_HEIGHT
+     * whose sizes will add up to the specified total node size. The total size
+     * of the node will still be restricted depending on the browser (see
+     * comment for the Utils.MAX_CONTAINER_WIDTH and Utils.MAX_CONTAINER_HEIGHT
      * constants).
      *
      * @param {HTMLElement|jQuery} containerNode
      *  The DOM container element that will be resized. If this object is a
-     *  jQuery collection, resizes all node it contains.
+     *  jQuery collection, resizes the first node it contains.
      *
      * @param {Number} width
      *  The new total width of the node. The resulting width will not exceed
@@ -2176,38 +2306,124 @@ define.async('io.ox/office/tk/utils',
      *  The new total height of the node. The resulting height will not exceed
      *  the value of Utils.MAX_CONTAINER_HEIGHT, depending on the current
      *  browser.
+     *
+     * @returns {Object}
+     *  The effective size of the container node, in the properties 'width' and
+     *  'height', in pixels (Internet Explorer does not report the correct
+     *  total width and height of the container node if it exceeds the size
+     *  limit of single nodes, as contained in Utils.MAX_NODE_SIZE).
      */
     Utils.setContainerNodeSize = function (containerNode, width, height) {
-        containerNode = $(containerNode);
+
+        var // the effective size of the container node (restrict to maximum allowed node size)
+            resultSize = null;
+
+        // convert to jQuery object, remove old helper nodes
+        containerNode = $(containerNode).first();
+        containerNode.find('>.ie-node-size-helper').remove();
 
         // restrict to maximum allowed node size
         width = Utils.minMax(width, 0, Utils.MAX_CONTAINER_WIDTH);
         height = Utils.minMax(height, 0, Utils.MAX_CONTAINER_HEIGHT);
+        resultSize = { width: width, height: height };
 
         // if node is small enough, set its size directly
         if ((width <= Utils.MAX_NODE_SIZE) && (height <= Utils.MAX_NODE_SIZE)) {
-            containerNode.empty().css({ width: width, height: height });
-            return;
+            containerNode.css(resultSize);
+            return resultSize;
         }
 
         // IE: insert embedded nodes to expand the container node beyond the limits of a single node
-        if ((width !== containerNode.width()) || (height !== containerNode.height())) {
 
-            // generate the mark-up for the embedded horizontal sizer nodes
-            var markup = Utils.repeatString('<div style="width:' + Utils.MAX_NODE_SIZE + 'px;"></div>', Math.floor(width / Utils.MAX_NODE_SIZE));
-            width %= Utils.MAX_NODE_SIZE;
-            if (width > 0) { markup += '<div style="width:' + width + 'px;"></div>'; }
+        // generate the mark-up for the embedded horizontal sizer nodes
+        var markup = Utils.repeatString('<div style="width:' + Utils.MAX_NODE_SIZE + 'px;"></div>', Math.floor(width / Utils.MAX_NODE_SIZE));
+        width %= Utils.MAX_NODE_SIZE;
+        if (width > 0) { markup += '<div style="width:' + width + 'px;"></div>'; }
 
-            // generate the mark-up for the vertical sizer nodes
-            markup = '<div style="height:' + Math.min(height, Utils.MAX_NODE_SIZE) + 'px;">' + markup + '</div>';
-            height = Math.max(0, height - Utils.MAX_NODE_SIZE);
-            markup += Utils.repeatString('<div style="height:' + Utils.MAX_NODE_SIZE + 'px;"></div>', Math.floor(height / Utils.MAX_NODE_SIZE));
-            height %= Utils.MAX_NODE_SIZE;
-            if (height > 0) { markup += '<div style="height:' + height + 'px;"></div>'; }
+        // generate the mark-up for the vertical sizer nodes
+        markup = '<div class="ie-node-size-helper" style="height:' + Math.min(height, Utils.MAX_NODE_SIZE) + 'px;">' + markup + '</div>';
+        height = Math.max(0, height - Utils.MAX_NODE_SIZE);
+        markup += Utils.repeatString('<div class="ie-node-size-helper" style="height:' + Utils.MAX_NODE_SIZE + 'px;"></div>', Math.floor(height / Utils.MAX_NODE_SIZE));
+        height %= Utils.MAX_NODE_SIZE;
+        if (height > 0) { markup += '<div class="ie-node-size-helper" style="height:' + height + 'px;"></div>'; }
 
-            // insert entire HTML mark-up into the container node
-            containerNode.css({ width: 'auto', height: 'auto' }).addClass('ie-node-size-container').html(markup);
+        // insert entire HTML mark-up into the container node
+        containerNode.css({ width: 'auto', height: 'auto' }).append(markup);
+
+        // return the effective size of the container node
+        return resultSize;
+    };
+
+    /**
+     * Sets the absolute position of the passed DOM node in a container node.
+     * As a workaround for IE which restricts the absolute position of a node
+     * to ~1.5m pixels (see comment for the Utils.MAX_NODE_SIZE constant),
+     * descendant embedded nodes will be inserted whose absolute positions will
+     * add up to the specified total node position.
+     *
+     * @param {HTMLElement|jQuery} containerNode
+     *  The DOM container element. If this object is a jQuery collection, uses
+     *  the first node it contains.
+     *
+     * @param {HTMLElement|jQuery} childNode
+     *  The DOM element that will be positioned absolutely in the container
+     *  node. If this object is a jQuery collection, uses the first node it
+     *  contains.
+     *
+     * @param {Number} left
+     *  The new horizontal offset of the child node, in pixels.
+     *
+     * @param {Number} top
+     *  The new vertical offset of the child node, in pixels.
+     */
+    Utils.setPositionInContainerNode = function (containerNode, childNode, left, top) {
+
+        var // new helper nodes inserted into the container node
+            helperNode = null,
+            // current parent for the next helper node
+            parentNode = null;
+
+        // convert to jQuery objects
+        containerNode = $(containerNode).first();
+        childNode = $(childNode).first();
+
+        // remove old helper nodes (detach first, child node may be embedded in old helper nodes)
+        childNode.detach();
+        containerNode.find('>.ie-node-position-helper').remove();
+
+        // set position and size of the child node directly, if target position is valid
+        if ((left <= Utils.MAX_NODE_SIZE) && (top <= Utils.MAX_NODE_SIZE)) {
+            childNode.css({ position: 'absolute', left: left, top: top }).appendTo(containerNode);
+            return;
         }
+
+        // create new helper nodes as long as the target position is beyond the node size limit
+        parentNode = containerNode;
+        while ((left > Utils.MAX_NODE_SIZE) || (top > Utils.MAX_NODE_SIZE)) {
+
+            // create the new helper node
+            helperNode = $('<div>').addClass('ie-node-position-helper');
+
+            // first helper node must be positioned explicitly
+            if (parentNode === containerNode) {
+                helperNode.css({ left: Math.min(left, Utils.MAX_NODE_SIZE), top: Math.min(top, Utils.MAX_NODE_SIZE) });
+            }
+
+            // reduce target position
+            left = Math.max(0, left - Utils.MAX_NODE_SIZE);
+            top = Math.max(0, top - Utils.MAX_NODE_SIZE);
+
+            // set the size of the helper node (must not exceed node size limit)
+            helperNode.css({ width: Math.min(left, Utils.MAX_NODE_SIZE), height: Math.min(top, Utils.MAX_NODE_SIZE) });
+
+            // insert the new helper node into the DOM
+            parentNode.append(helperNode);
+            parentNode = helperNode;
+        }
+
+        // insert the child node into the last helper node, set its position to
+        // the bottom-right corner of the last helper node
+        childNode.css({ position: 'absolute', left: '100%', top: '100%' }).appendTo(parentNode);
     };
 
     // event handling ---------------------------------------------------------
