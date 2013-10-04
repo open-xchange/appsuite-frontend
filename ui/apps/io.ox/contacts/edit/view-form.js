@@ -409,7 +409,12 @@ define('io.ox/contacts/edit/view-form',
             // trigger change event on keyup for view updates
             if (_.indexOf(['title', 'first_name', 'last_name'], options.field) >= 0) {
                 input.on('keyup', function () {
-                    model.set(options.field, _.noI18n($(this).val()));
+                    // update model value silinet
+                    model.set(options.field, _.noI18n($(this).val()), { silent: true });
+                    if (model.changed.display_name) return;
+                    var mod = model.toJSON();
+                    delete mod.display_name;
+                    model.set('display_name', util.getFullName(mod));
                 });
             }
         }
