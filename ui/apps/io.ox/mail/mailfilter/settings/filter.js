@@ -158,8 +158,9 @@ define('io.ox/mail/mailfilter/settings/filter',
                     },
 
                     onSelect: function () {
-                        this.$el.parent().find('li[selected="selected"]').prop('selected', false);
-                        this.$el.find('.deletable-item').prop('selected', true);
+                        // in this special case dont't use prop instead of attr
+                        this.$el.parent().find('li[selected="selected"]').attr('selected', null);
+                        this.$el.find('.deletable-item').attr('selected', 'selected');
                     }
 
                 }),
