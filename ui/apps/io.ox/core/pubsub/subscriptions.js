@@ -40,6 +40,11 @@ define('io.ox/core/pubsub/subscriptions',
         new SubscriptionView({ model: model }).render(options.app);
     },
 
+    isDestructiveSubscription = function (baton) {
+        console.log(baton, baton.data.entityModule, baton.data.entityModule === 'calendar');
+        return baton.data.entityModule === "calendar";
+    },
+
     SubscriptionView = Backbone.View.extend({
         tagName: 'div',
         _modelBinder: undefined,
@@ -282,16 +287,24 @@ define('io.ox/core/pubsub/subscriptions',
 
         }
     });
+    
+    
 
     ext.point(POINT + '/dialog').extend({
         id: 'targetfolder',
         index: 200,
         draw: function (baton) {
+            var destructive = isDestructiveSubscription(baton);
             this.append(
                 $('<div>').addClass('control-group').append(
                     $('<div>').addClass('controls').append(
                         $('<label>').addClass('checkbox').text(gt('Add new folder for this subscription')).append(
                             $('<input type="checkbox">').prop('checked', true).on('change', function () {
+                                if (destructive) {
+                                    baton.newFolder = true;
+                                    $(this).prop('checked', true);
+                                    return;
+                                }
                                 if (!$(this).prop('checked')) {
                                     baton.newFolder = false;
                                 }
@@ -300,6 +313,10 @@ define('io.ox/core/pubsub/subscriptions',
                     )
                 )
             );
+
+            if (destructive) {
+                this.append($('<p class="text-warning">').text(gt("Note: This subscription will replace the calendar content with the external content. Therefore you must create a new folder for this subscription.")));
+            }
         }
     });
 
