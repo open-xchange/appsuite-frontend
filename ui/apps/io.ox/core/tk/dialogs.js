@@ -68,6 +68,10 @@ define('io.ox/core/tk/dialogs',
             },
 
             close = function () {
+
+                // disable scrollblocker - Bug 29011
+                o.container.removeClass('blockscroll');
+
                 self.trigger('close');
                 document.removeEventListener('focus', keepFocus, true); // not via jQuery!
                 nodes.popup.empty().remove();
@@ -329,6 +333,9 @@ define('io.ox/core/tk/dialogs',
         };
 
         this.show = function (callback) {
+
+            // enable scrollblocker - Bug 29011
+            o.container.addClass('blockscroll');
 
             // remember focussed element
             lastFocus = $(document.activeElement);
