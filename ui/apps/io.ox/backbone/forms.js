@@ -354,7 +354,7 @@ define('io.ox/backbone/forms',
             tagName: 'div',
             render: function () {
                 this.nodes = {};
-                this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.inputField = $(this.control || '<input type="text">'));
+                this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label).append(this.nodes.inputField = $(this.control || '<input type="text">')));
                 this.nodes.inputField
                     .val(this.model.get(this.attribute))
                     .attr({ tabindex: 1 });
