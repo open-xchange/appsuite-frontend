@@ -570,7 +570,7 @@ define('io.ox/office/tk/control/group',
 
         // formatting and tool tip
         groupNode.addClass(Utils.getStringOption(options, 'classes', ''));
-        Utils.setControlTooltip(groupNode, Utils.getStringOption(options, 'tooltip')); //Marko comment: puts "tooltip" in button.
+        Utils.setControlTooltip(groupNode, Utils.getStringOption(options, 'tooltip'));
         // add event handlers
         groupNode.on({
             'keydown keypress keyup': keyHandler,
