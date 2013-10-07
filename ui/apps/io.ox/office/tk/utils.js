@@ -18,7 +18,6 @@ define.async('io.ox/office/tk/utils',
 
     'use strict';
 
-
     var // the Deferred object that will be resolved with the Utils class
         def = $.Deferred(),
 
@@ -2850,7 +2849,6 @@ define.async('io.ox/office/tk/utils',
             // Create the DOM anchor element representing the button. Do NOT use
             // <button> elements, Firefox has problems with text clipping and
             // correct padding of the <button> contents.
-        
         button = Utils.createControl('a', { tabindex: tabIndex, role: 'button', title: tooltip }, options).addClass(Utils.BUTTON_CLASS);
 
         Utils.setControlCaption(button, options);
@@ -2897,10 +2895,7 @@ define.async('io.ox/office/tk/utils',
      */
     Utils.toggleButtons = function (buttons, state) {
         buttons.toggleClass(Utils.SELECTED_CLASS, state);
-        
         buttons.attr('aria-pressed', Utils.isButtonSelected(buttons));
-      
-       
     };
 
     /**

@@ -518,7 +518,7 @@ define("io.ox/core/tk/dialogs",
             pane = $('<div class="io-ox-sidepopup-pane default-content-padding abs" tabindex="1">'),
 
             closer = $('<div class="io-ox-sidepopup-close">').append(
-                    $('<a class="btn-sidepopup" data-action="close" tabindex="1" >')
+                    $('<a class="btn-sidepopup" data-action="close" tabindex="1">')
                         .text(options.saveOnClose ? gt('Save') : gt('Close'))
                 ),
 
