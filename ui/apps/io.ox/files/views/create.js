@@ -26,10 +26,11 @@ define('io.ox/files/views/create',
         var POINT = 'io.ox/files/create',
             baton = new ext.Baton(),
             oldMode = _.browser.IE < 10,
+            dndInfo = $('<div class="dndinfo alert alert-info">').text(gt('You can drag and drop files from your computer to upload either a new file or another version of a file.')),
 
             show = function (app) {
                 var win = app.getWindow(),
-                    dialog = new dialogs.CreateDialog({ width: 450, center: true, async: true }),
+                    dialog = new dialogs.CreateDialog({ width: 450, center: true, async: true, container: $('.io-ox-files-window') }),
                     $form = $('<form>', { 'class': 'files-create', 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' }),
                     queue, description = '';
                 dialog.getContentNode().css('height', '300px'); // 400 is quite much
@@ -132,10 +133,10 @@ define('io.ox/files/views/create',
                 //dialog
                 dialog.header($('<h4>').text(gt('Upload new files')));
                 dialog.getBody().append($('<div>').addClass('row-fluid').append($form));
-                dialog.getBody().append(baton.fileList.getNode());
                 dialog.getBody().append(
-                    (_.device('!touch') && (!_.browser.IE || _.browser.IE > 9) ? $('<div class="dndinfo alert alert-info">').text(gt('You can drag and drop files from your computer to upload either a new file or another version of a file.')) : '')
+                    (_.device('!touch') && (!_.browser.IE || _.browser.IE > 9) ? dndInfo : '')
                 );
+                dialog.getBody().append(baton.fileList.getNode());
                 dialog
                     .addPrimaryButton('save', gt('Save'), 'save')
                     .addButton('cancel', gt('Cancel'), 'cancel')
@@ -173,6 +174,7 @@ define('io.ox/files/views/create',
                                 });
                                 baton.fileList.add(list);
                                 $input.trigger('reset.fileupload');
+                                dndInfo.remove();
                             }
                         };
                     this.append($inputWrap);
@@ -193,7 +195,6 @@ define('io.ox/files/views/create',
         //referenced via baton.fileList
         ext.point(POINT + '/filelist').extend(new attachments.EditableFileList({
                     id: 'attachment_list',
-                    itemClasses: 'span6',
                     fileClasses: 'background',
                     preview: false,
                     labelmax: 18,
