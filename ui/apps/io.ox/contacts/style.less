@@ -106,8 +106,9 @@
             .picture();
         }
 
-        .picture + div {
-            padding-left: 90px;
+        .picture + div { // .next-to-picture but this selector works better if picture if not availabel
+            display: table;
+            padding-left: 20px;
         }
 
         .private-flag {
@@ -123,16 +124,28 @@
             font-weight: 200;
             font-size: 24px;
             line-height: 28px;
-            margin: 0 0 4px 0;
+            margin: 0;
         }
 
         h2 {
             font-size: 16px;
             line-height: 20px;
             font-weight: 200;
+            float: left;
+            clear: both;
+        }
+
+        h2.header-company {
+            margin: 14px 0 14px 0;
+        }
+
+        h1:empty + h2.header-company {
+            margin-top: 0;
+        }
+
+        h2.header-job {
             color: #888;
             margin: 0 0 14px 0;
-            clear: both; // required if h1 contains floating element, for example, furigana
         }
     }
 

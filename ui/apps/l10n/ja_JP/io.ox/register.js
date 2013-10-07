@@ -28,12 +28,10 @@ define('l10n/ja_JP/io.ox/register',
         index: 'last',
         id: 'furigana',
         draw: function (baton) {
+
             var self = this;
-            addFurigana('.last_name', 'yomiLastName');
-            addFurigana('.first_name', 'yomiFirstName');
-            addFurigana('.company', 'yomiCompany');
-            function addFurigana(selector, yomiField) {
-                var value = baton.data[yomiField];
+
+            function prepend(selector, value) {
                 self.find(selector)
                 .addClass('with-furigana')
                 .prepend(
@@ -42,6 +40,33 @@ define('l10n/ja_JP/io.ox/register',
                     $('<br>')
                 );
             }
+
+            function addFurigana(selector, yomiField) {
+
+                var value = $.trim(baton.data[yomiField]);
+
+                if (yomiField === 'yomiCompany') {
+                    // don't do anything if company is empty
+                    if (value === '') return;
+                }
+                else {
+                    // don't add white-space if neither last nor first name has data
+                    if ($.trim(baton.data.yomiLastName) === '' && $.trim(baton.data.yomiFirstName) === '') return;
+                }
+
+                if (yomiField === 'yomiTitle') {
+                    // this is only applied if last and/or first name has data
+                    prepend(selector, '');
+                    return;
+                }
+
+                prepend(selector, value);
+            }
+
+            addFurigana('.title', 'yomiTitle');
+            addFurigana('.last_name', 'yomiLastName');
+            addFurigana('.first_name', 'yomiFirstName');
+            addFurigana('.company', 'yomiCompany');
         }
     });
 
