@@ -36,7 +36,7 @@ define('io.ox/mail/vacationnotice/settings/view-form',
         // Show backend errors
         point.extend(new forms.ErrorAlert({
             id: ref + '/edit/view/backendErrors',
-            className: 'span7',
+            className: 'col-md-7',
             index: 100,
             customizeNode: function () {
                 this.$el.css({
@@ -50,7 +50,7 @@ define('io.ox/mail/vacationnotice/settings/view-form',
             index: 150,
             fluid: true,
             label: model.fields.subject,
-            control: '<input type="text" id="subject" class="span12" name="subject" tabindex="1">',
+            control: '<input type="text" id="subject" class="form-control" name="subject" tabindex="1">',
             attribute: 'subject'
         }));
 
@@ -59,7 +59,7 @@ define('io.ox/mail/vacationnotice/settings/view-form',
             index: 200,
             fluid: true,
             label: model.fields.text,
-            control: '<textarea rows="12" id="text" class="span12" name="text" tabindex="1">',
+            control: '<textarea rows="12" id="text" class="form-control" name="text" tabindex="1">',
             attribute: 'text'
         }));
 
@@ -113,7 +113,7 @@ define('io.ox/mail/vacationnotice/settings/view-form',
                         var self = this;
 
                         this.$el.on('change', function () {
-                            var fields = $('.edit-vacation').find('.input-small');
+                            var fields = $('.edit-vacation').find('.input-sm');
 
                             if (self.$el.find('input').prop('checked') !== true) {
                                 fields.prop('disabled', true);
@@ -127,7 +127,7 @@ define('io.ox/mail/vacationnotice/settings/view-form',
                 point.extend(new forms.DatePicker({
                     id: ref + '/edit/view/start_date',
                     index: 450,
-                    className: 'span2',
+                    className: 'col-md-2',
                     labelClassName: 'timeframe-edit-label',
                     display: 'DATE',
                     attribute: 'dateFrom',
@@ -138,7 +138,7 @@ define('io.ox/mail/vacationnotice/settings/view-form',
                 point.extend(new forms.DatePicker({
                     id: ref + '/edit/view/end_date',
                     index: 500,
-                    className: 'span2',
+                    className: 'col-md-2',
                     labelClassName: 'timeframe-edit-label',
                     display: 'DATE',
                     attribute: 'dateUntil',

@@ -1,448 +1,180 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) 2011 Open-Xchange, Inc.
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+
+// Import Bootstrap defaults
+@import "../../lib/bootstrap/less/variables.less";
 
 //
 // Variables
 // --------------------------------------------------
 
 
-// Global values
-// --------------------------------------------------
-
-
-// Grays
-// -------------------------
-@black:                 #000;
-@grayDarker:            #222;
-@grayDark:              #333;
-@gray:                  #555;
-@grayLight:             #aaa;
-@grayLighter:           #eee;
-@white:                 #fff;
-
-
-// Accent colors
-// -------------------------
-@blue:                  darken(#049cdb, 5%);
-@blueDark:              #0064cd;
-@blueLight:             lighten(#049cdb, 25%);
-@green:                 #1A8D1A;
-@greenLight:            #92D050;
-@red:                   #cc0000;
-@yellow:                #F8E400; // bit darker than #FFFF00, slightly more red
-@orange:                #f89406;
-@pink:                  #E01CD9;
-@purple:                #7E16CF;
-
-
-
-
-// Scaffolding
-// -------------------------
-@bodyBackground:        @white;
-@textColor:             @grayDark;
-
-
-// Links
-// -------------------------
-@linkColor:             #08c;
-@linkColorHover:        darken(@linkColor, 15%);
-@linkAccentColor:       #ffad00;
-@linkAccentColorHover:  darken(@linkAccentColor, 15%);
-
-// Typography
-// -------------------------
-@sansFontFamily:        "Helvetica Neue", Helvetica, Arial, sans-serif;
-@serifFontFamily:       Georgia, "Times New Roman", Times, serif;
-@monoFontFamily:        Monaco, Menlo, Consolas, "Courier New", monospace;
-
-@baseFontSize:          14px;
-@baseFontFamily:        @sansFontFamily;
-@baseLineHeight:        20px;
-@altFontFamily:         @serifFontFamily;
-
-@touchFontSize:         14px;
-
-
-@headingsFontFamily:    inherit; // empty to use BS default, @baseFontFamily
-@headingsFontWeight:    bold;    // instead of browser default, bold
-@headingsColor:         inherit; // empty to use BS default, @textColor
-
-
-// Component sizing
-// -------------------------
-// Based on 14px font-size and 20px line-height
-
-@fontSizeLarge:         @baseFontSize * 1.25; // ~18px
-@fontSizeSmall:         @baseFontSize * 0.85; // ~12px
-@fontSizeMini:          @baseFontSize * 0.75; // ~11px
-
-@paddingLarge:          11px 19px; // 44px
-@paddingSmall:          2px 10px;  // 26px
-@paddingMini:           0 6px;   // 22px
-
-@baseBorderRadius:      4px;
-@borderRadiusLarge:     6px;
-@borderRadiusSmall:     3px;
-
-
-// Tables
-// -------------------------
-@tableBackground:                   transparent; // overall background-color
-@tableBackgroundAccent:             #f9f9f9; // for striping
-@tableBackgroundHover:              #f5f5f5; // for hover
-@tableBorder:                       #ddd; // table and cell border
-
-// Buttons
-// -------------------------
-@btnBackground:                     @white;
-@btnBackgroundHighlight:            darken(@white, 10%);
-@btnBorder:                         #bbb;
-
-@btnPrimaryBackground:              @linkColor;
-@btnPrimaryBackgroundHighlight:     darken(@btnPrimaryBackground, 10%);
-
-@btnInfoBackground:                 #5bc0de;
-@btnInfoBackgroundHighlight:        #2f96b4;
-
-@btnSuccessBackground:              #62c462;
-@btnSuccessBackgroundHighlight:     #51a351;
-
-@btnWarningBackground:              lighten(@orange, 15%);
-@btnWarningBackgroundHighlight:     @orange;
-
-@btnDangerBackground:               #ee5f5b;
-@btnDangerBackgroundHighlight:      #bd362f;
-
-@btnInverseBackground:              #444;
-@btnInverseBackgroundHighlight:     @grayDarker;
-
-
-// Forms
-// -------------------------
-@inputBackground:               @white;
-@inputBorder:                   #ccc;
-@inputBorderRadius:             @baseBorderRadius;
-@inputDisabledBackground:       @grayLighter;
-@formActionsBackground:         #f5f5f5;
-@inputHeight:                   @baseLineHeight + 10px; // base line-height + 8px vertical padding + 2px top/bottom border
-
-
-// Dropdowns
-// -------------------------
-@dropdownBackground:            @white;
-@dropdownBorder:                rgba(0,0,0,.2);
-@dropdownDividerTop:            #e5e5e5;
-@dropdownDividerBottom:         @white;
-
-@dropdownLinkColor:             @grayDark;
-@dropdownLinkColorHover:        @white;
-@dropdownLinkColorActive:       @white;
-
-@dropdownLinkBackgroundActive:  @linkColor;
-@dropdownLinkBackgroundHover:   @dropdownLinkBackgroundActive;
-
-
-// Input placeholder text color
-// -------------------------
-@placeholderText:         @grayLight;
-
-
-// Hr border color
-// -------------------------
-@hrBorder:                @grayLighter;
-
-
-// Horizontal forms & lists
-// -------------------------
-@horizontalComponentOffset:       180px;
-
-
-// Wells
-// -------------------------
-@wellBackground:                  #f5f5f5;
-
-// Pagination
-// -------------------------
-@paginationBackground:                #fff;
-@paginationBorder:                    #ddd;
-@paginationActiveBackground:          #f5f5f5;
-
-// Form states and alerts
-// -------------------------
-@warningText:             #c09853;
-@warningBackground:       #fcf8e3;
-@warningBorder:           darken(spin(@warningBackground, -10), 3%);
-
-@errorText:               #b94a48;
-@errorBackground:         #f2dede;
-@errorBorder:             darken(spin(@errorBackground, -10), 3%);
-
-@successText:             #468847;
-@successBackground:       #dff0d8;
-@successBorder:           darken(spin(@successBackground, -10), 5%);
-
-@infoText:                #3a87ad;
-@infoBackground:          #d9edf7;
-@infoBorder:              darken(spin(@infoBackground, -10), 7%);
-
-
-// Tooltips and popovers
-// -------------------------
-@tooltipColor:            #fff;
-@tooltipBackground:       #000;
-@tooltipArrowWidth:       5px;
-@tooltipArrowColor:       @tooltipBackground;
-
-@popoverBackground:       #fff;
-@popoverArrowWidth:       10px;
-@popoverArrowColor:       #fff;
-@popoverTitleBackground:  darken(@popoverBackground, 3%);
-
-// Special enhancement for popovers
-@popoverArrowOuterWidth:  @popoverArrowWidth + 1;
-@popoverArrowOuterColor:  rgba(0,0,0,.25);
-
-
-// OX
 //----------------------
 /* basic definitions */
 
-@accent1Bright: #0090CD;
-@accent1: #006897;
-@accent1Dark: #007DB3;
-@accent2: #c84673;
-@accent2Dark: #993658;
+@padding-base-vertical:      4px;
+@padding-base-horizontal:   12px;
+
+@light-font-family:     OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+@normal-font-family:    @font-family-sans-serif;
+@font-size-touch:       15px;
+@topbar-font-size:      13px;
+@window-head-font-size: 13px;
+@vgrid-font-size:       13px;
+@inline-link-font-size: 14px;
+
+// Accent colors
+// -------------------------
+@white:                 #fff;
+@black:                 #000;
+@blue:                  darken(#049cdb, 5%);
+@blue-dark:             #0064cd;
+@blue-light:            lighten(#049cdb, 25%);
+@green:                 #1a8d1a;
+@green-light:           #92d050;
+@red:                   #cc0000;
+@yellow:                #f8e400;
+@orange:                #f89406;
+@pink:                  #e01cd9;
+@purple:                #7e16cf;
+
+@link-accent-color:     #ffad00;
+
+@label-info-bg:         #3a87ad;
+
+@btn-primary-background:            @link-color;
+@btn-primary-background-highlight:  darken(@btn-primary-background, 10%);
+
+@btn-info-background:               #5bc0de;
+@btn-info-background-highlight:     #2f96b4;
+
+@btn-success-background:            #62c462;
+@btn-success-background-highlight:  #51a351;
+
+@btn-warning-background:            lighten(@orange, 15%);
+@btn-warning-background-highlight:  @orange;
+
+@btn-danger-background:             #ee5f5b;
+@btn-danger-background-highlight:   #bd362f;
+
+@btn-inverse-background:            #444;
+@btn-inverse-background-highlight:  @gray-darker;
+
+@accent-1-bright: #0090cd;
+@accent-1:        #006897;
+@accent-2:        #c84673;
 
 /* assignments */
 
-@linkOnDark: #3BF;
-@inlineLinkColor: @linkColor;
-@personLinkColor: @linkColor;
+@link-on-dark:  #3bf;
+@person-link-color: @link-color;
+@inline-link-color: @link-color;
+@inline-link-border-color: #eee;
 
 @toolbar: #08c;
-@outlineColor: @accent1;
+@outline-color: @accent-1;
 
-@enabledBackground: #ddd;
-@enabledColor: #000;
-
-@disabledBackground: #ccc;
-@disabledColor: #999;
-
-@topbarFontSize: 13px;
-@windowHeadFontSize: 13px;
-@vgridFontSize: 13px;
-@inlineLinkFontSize: 14px;
-@inlineLinksMargin: 18px 0;
-
-/* individual definitions */
-
-@lightFontFamily: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-@normalFontFamily: @sansFontFamily;
-
-@wallpaperColor1: rgba(255, 255, 255, 1);
-@wallpaperColor2: rgba(246, 246, 246, 1);
-@wallpaperColor3: rgba(168, 168, 168, 1);
+@wallpaper-color-1: rgba(255, 255, 255, 1);
+@wallpaper-color-2: rgba(246, 246, 246, 1);
+@wallpaper-color-3: rgba(168, 168, 168, 1);
 
 @background: #fff;
 
-@selectedBackground: #39A9E1;
-@selectedColor: #F0FAFF;
+@selected-background: #39a9e1;
+@selected-color: #f0faff;
 
-@windowHeadColor: #FFF;
-@windowHeadBorderColor: #eee;
-@windowHeadTop: #252525;
-@windowHeadBottom: #202020;
+@window-head-color: #fff;
+@window-head-border-color: #eee;
 
-@badgeColor: @white;
-@badgeBackground: #aaa; // used by folder tree for unread messages, for example
+@badge-color: @white;
+@badge-bg: #aaa; // used by folder tree for unread messages, for example
 
-@notificationIconBackground: #666;
-@notificationIconBackgroundActive: #08c; // alt. bright orange: #FF4700
+@notification-icon-background: #666;
+@notification-icon-background-active: #08c; // alt. bright orange: #ff4700
 
-// Foldertree
-@foldertreeSidepanelBackground: #EBEBEB;
-@foldertreeSectionTitleColor: #888;
-@foldertreeSelectedLabelColor: #333;
-@foldertreeFocusedLabelColor: #fff;
-@foldertreeActiveLabelColor: #333;
-@foldertreePassiveLabelColor: #888;
-@foldertreeHoverBackground: rgba(0, 0, 0, 0.05);
-@foldertreeSelectedBackground: rgba(0, 0, 0, 0.10);
-@foldertreeSelectedFocusBackground: #08c;
-@foldertreeBadgeBackground: @badgeBackground;
-@foldertreeBadgeFocusBackground: #006597;
-@foldertreeBadgeColor: @badgeColor;
+// foldertree
+@foldertree-sidepanel-background:       #ebebeb;
+@foldertree-section-title-color:        #888;
+@foldertree-selected-label-color:       #333;
+@foldertree-focused-label-color:        #fff;
+@foldertree-active-label-color:         #333;
+@foldertree-passive-label-color:        #888;
+@foldertree-hover-background:           rgba(0, 0, 0, 0.05);
+@foldertree-selected-background:        rgba(0, 0, 0, 0.10);
+@foldertree-selected-focus-background:  #08c;
+@foldertree-badge-background:           @badge-bg;
+@foldertree-badge-focus-background:     #006597;
+@foldertree-badge-color:                @badge-color;
 
-@windowTitleColor: #fff;
+@window-title-color: #fff;
 
-@toolbarButtonAccent: lighten(@linkColor, 0%);
-@toolbarButtonColor: #bbb;
-@toolbarLinkColor: lighten(@toolbar, 25%);
-@toolbarFocusColor: #08c;
+@toolbar-button-accent:  lighten(@link-color, 0%);
+@toolbar-button-color:   #bbb;
+@toolbar-link-color:     lighten(@toolbar, 25%);
+@toolbar-focus-color:    #08c;
+@toolbar-background:     #333;
+@toolbar-background-alt: lighten(@toolbar-background, 10%);
 
-@topbarBackground: #333;
-@topbarBackgroundAlt: lighten(@topbarBackground, 10%);
+@topbar-launcher-color:             #bbb;
+@topbar-launcher-color-hover:       #fff;
+@topbar-launcher-color-active:      #fff;
+@topbar-launcher-background-hover:  #333;
+@topbar-launcher-background-active: #333;
+@topbar-icon-color:                 #fff;
 
-@topbarLauncherColor: #bbb;
-@topbarLauncherColor-hover: #fff;
-@topbarLauncherColorActive: #fff;
-@topbarLauncherBackgroundHover: #333;
-@topbarLauncherBackgroundActive: #333;
-@topbarIconColor: #fff;
 
-@inlineLinkBorderColor: #eee;
+@mail-priority:                     #ff4700;
+@task-priority:                     #ff4700;
+@mail-attachment-link-color:        #333;
+@mail-attachment-link-color-hover:  #000;
 
-@mailPriority: #FF4700;
-@taskPriority: #FF4700;
-@mailAttachmentLinkColor: #333;
-@mailAttachmentLinkColorHover: #000;
+// calendar
+/* appointment colors */
+@appointment-reserved:          #08c;     /* blue */
+@appointment-temporary:         #ffbb00;  /* yellow */
+@appointment-absent:            #913f3f;  /* red */
+@appointment-free:              #8eb360;  /* green */
+@appointment-private:           #555;     /* gray */
+@appointment-declined-font:     #888;     /* dark gray */
+@appointment-unconfirmed-alpha: 0.4;
+@appointment-declined-alpha:    0.3;
+@appointment-hover-pct:         15%;
 
-@list-highlight: #ffc;
+@weekview-appointment-lasso:    #aeaeff;     /* light blue */
+@weekview-day-in:               #fff;        /* white */
+@weekview-day-out:              #e0e0e0;     /* grey */
+@weekview-timeline:             rgba(243, 15, 170, 0.4);
 
-// Calendar
-/* Appintment colors */
-@appointmentReserved: #08c;         /* blue */
-@appointmentTemporary: #ffbb00;     /* yellow */
-@appointmentAbsent: #913f3f;        /* red */
-@appointmentFree: #8eb360;          /* green */
-@appointmentPrivate: #555;          /* gray */
-@appointmentDeclinedFont: #888;     /* dark gray */
-@appointmentUnconfirmedAlpha: 0.4;
-@appointmentDeclinedAlpha: 0.3;
-@appointmentHoverPct: 15%;
+@monthview-appointment-out:     #aaa;        /* light gray */
+@monthview-today:               #daefff;     /* light blue */
+@weekview-today:                #f30faa;
 
-@weekviewAppointmentLasso: #aeaeff; /* light blue */
-@weekviewDayIn: #fff;               /* white */
-@weekviewDayOut: #e0e0e0;           /* grey */
-@weekviewTimeline: rgba(243, 15, 170, 0.4);
+@calendar-toolbar-height: 47px;
+@calendar-toolbar-top-padding: 13px;
+@weekview-time-width: 58px;
+@weekview-footer-height: 34px;
 
-@monthviewAppointmentOut: #aaa;     /* light gray */
-@monthviewToday: #daefff;           /* light blue */
-@weekviewToday: #F30FAA;
-
-@calendarToolbarHeight: 47px;
-@calendarToolbarTopPadding: 13px;
-@weekviewTimeWith: 58px;
-@weekviewFooterHeight: 34px;
-
-// Contact pictures
+// contact pictures
 @contact-picture-radius: 50%;
 
-// Dimensions
-@windowHeadWidth: 50px;
-@windowContentShift: 250px;
-@small-folderTreeShift: 90%;
+// dimensions
+@window-head-width: 50px;
+@inline-links-margin: 18px 0;
+
+// Bootstrap Mixins
+@import "../../lib/bootstrap/less/mixins.less";
 
 // Mixins
-.box-sizing(@boxmodel: content-box) {
-    -webkit-box-sizing: @boxmodel;
-    -moz-box-sizing: @boxmodel;
-    -ms-box-sizing: @boxmodel;
-    box-sizing: @boxmodel;
-}
-
-.user-select(@select: none) {
-    -webkit-user-select: @select;
-    -moz-user-select: @select;
-    -ms-user-select: @select;
-    user-select: @select;
-}
-
-.border-radius(@radius: 0px) {
-    -webkit-border-radius: @radius;
-    -moz-border-radius: @radius;
-    -ms-border-radius: @radius;
-    border-radius: @radius;
-}
-
-.box-shadow(@shadow: none) {
-    -webkit-box-shadow: @shadow;
-    -moz-box-shadow: @shadow;
-    -ms-box-shadow: @shadow;
-    box-shadow: @shadow;
-}
-
-.vertical-gradient(@startColor: #888888, @endColor: #333333) {
-    background-color: mix(@startColor, @endColor, 60%);
-    background-image: -moz-linear-gradient(top, @startColor, @endColor);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@startColor), to(@endColor));
-    background-image: -webkit-linear-gradient(top, @startColor, @endColor);
-    background-image: -o-linear-gradient(top, @startColor, @endColor);
-    background-image: linear-gradient(to bottom, @startColor, @endColor);
-    background-repeat: repeat-x;
-    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@startColor),argb(@endColor)));
-}
-
-.radial-gradient(@color1: #000000, @color2: #555555, @color3: #ffffff) {
-    background: mix(@color1, @color3, 60%); /* Old browsers */
-    background: -moz-radial-gradient(center, circle cover, @color1 0, @color2 40%, @color3 100%); /* FF3.6+ */
-    background: -webkit-gradient(radial, center center, 0, center center, 100%, color-stop(0,@color1), color-stop(31%,@color2), color-stop(100%,@color3)); /* Chrome,Safari4+ */
-    background: -webkit-radial-gradient(center, ellipse cover,  @color1 0,@color2 31%,@color3 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-radial-gradient(center, ellipse cover,  @color1 0,@color2 31%,@color3 100%); /* Opera 12+ */
-    background: -ms-radial-gradient(center, ellipse cover,  @color1 0,@color2 31%,@color3 100%); /* IE10+ */
-    background: radial-gradient(center, ellipse cover,  @color1 0,@color2 31%,@color3 100%); /* W3C */
-    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@color1),argb(@color3)));
-}
-
-.transition(@transition: all 1s linear) {
-    -webkit-transition: @transition;
-    -moz-transition: @transition;
-    -ms-transition: @transition;
-    transition: @transition;
-}
-
-.animation(@animation) {
-    -webkit-animation: @animation;
-    animation: @animation;
-}
-
-.animation-name(@name) {
-    -webkit-animation-name: @name;
-    -moz-animation-name: @name;
-    -ms-animation-name: @name;
-    animation-name: @name;
-}
-
-.picture(@width: 64px, @height: 64px) {
-    width: @width;
-    height: @height;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-    .border-radius(@contact-picture-radius);
-}
-
-.ellipsis() {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.overflow(@type: auto) {
-    overflow: @type;
-    -webkit-overflow-scrolling: touch;
-}
-
-.overflow-x(@type: auto) {
-    overflow-x: @type;
-    -webkit-overflow-scrolling: touch;
-}
-
-.overflow-y(@type: auto) {
-    overflow-y: @type;
-    -webkit-overflow-scrolling: touch;
-}
-
-.backface-visibility(@type: hidden) {
-   .touch & {
-        backface-visibility: @type;
-        -webkit-backface-visibility: @type;
-        -moz-backface-visibility: @type;
-    }
-}
-
-//used in files module
-.image-effect(@opacity: 1) {
-    img, .preview-cover, [class^="icon-"] {
-        opacity: @opacity;
-    }
-}
+@import "mixins.less";

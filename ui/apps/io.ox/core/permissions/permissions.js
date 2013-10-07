@@ -69,7 +69,7 @@ define('io.ox/core/permissions/permissions',
                 this.model.on('remove', performRemove, this);
             },
 
-            className: 'permission row-fluid',
+            className: 'permission row',
 
             events: {
                 'click a.bit': 'updateDropdown',
@@ -397,12 +397,14 @@ define('io.ox/core/permissions/permissions',
                             dialog.addPrimaryButton('save', gt('Save')).addButton('cancel', gt('Cancel'));
                         }
 
-                        var node =  $('<div class="autocomplete-controls input-append">').append(
-                                $('<input type="text" class="add-participant permissions-participant-input-field">').on('focus', function () {
+                        var node =  $('<div class="autocomplete-controls input-group">').append(
+                                $('<input type="text" class="add-participant permissions-participant-input-field form-control">').on('focus', function () {
                                     autocomplete.trigger('update');
                                 }),
-                                $('<button type="button" class="btn" data-action="add">')
-                                    .append($('<i class="icon-plus">'))
+                                $('<span class="input-group-btn">').append(
+                                    $('<button type="button" class="btn btn-default" data-action="add">')
+                                        .append($('<i class="icon-plus">'))
+                                )
                             ),
                             autocomplete = new AddParticipantsView({ el: node });
 

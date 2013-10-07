@@ -232,8 +232,6 @@ define('io.ox/backbone/mini-views/attachments',
             var self = this;
 
             var uploadWidget = attachments.fileUploadWidget({
-                displayButton: false,
-                multi: true,
                 wrapperClass: 'form-horizontal control-group'
             });
 

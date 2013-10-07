@@ -896,10 +896,9 @@ define('io.ox/mail/main',
             }
 
             //add dropdown button
-            button = $('<button type="button" data-action="search-options" class="btn fixed-btn search-options" aria-hidden="true">')
+            button = $('<button type="button" data-action="search-options" class="btn btn-default search-options" aria-hidden="true">')
                     .append('<i class="icon-gear">');
-            win.nodes.search.find('.dropdown').remove();
-            win.nodes.search.find('.search-query-container').after(button);
+            win.nodes.search.find('.form-search > .input-group > .input-group-btn').prepend(button);
 
             //add dropdown menue
             dropdownOptions({

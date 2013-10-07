@@ -1094,7 +1094,7 @@ define('io.ox/core/main',
                                     gt('The following applications can be restored. Just remove the restore point if you don\'t want it to be restored.')
                                 )
                             ),
-                            $('<ul class="content">'),
+                            $('<ul class="list-unstyled content">'),
                             $('<div class="footer">').append(
                                 $('<button type="button" class="btn btn-primary">').text(gt('Continue'))
                             )

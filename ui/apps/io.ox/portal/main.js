@@ -75,16 +75,15 @@ define('io.ox/portal/main',
                         }
                     });
                     // please no button
-                    $btn.find('.controls')
-                        .prepend($('<button type="button" class="btn btn-primary pull-right">')
-                        .css({ marginLeft: '5px' })
+                    $btn.find('.btn-group').after($greeting);
+                    $btn.find('.btn-group')
+                        .prepend($('<button type="button" class="btn btn-primary">')
                         .attr({
                             'data-action': 'customize',
                             tabindex: 1
                         })
                         .text(gt('Customize this page'))
                         .on('click', openSettings));
-                    $btn.append($greeting);
                 });
             } else {
                 $btn.append($greeting);

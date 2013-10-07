@@ -215,7 +215,7 @@ define('io.ox/participants/views',
                     counter++;
                 }
             });
-            var row = $('<div class="row-fluid">');
+            var row = $('<div class="row">');
             _(this.nodes).chain().values().each(function (node) {
                 row.append(node);
             });
@@ -226,7 +226,7 @@ define('io.ox/participants/views',
             return new ParticipantEntryView({
                 model: participant,
                 baton: this.options.baton,
-                className: 'span6',
+                className: 'col-md-6',
                 halo: true,
                 callbacks: this.options.baton.callbacks || {}
             }).render().$el;

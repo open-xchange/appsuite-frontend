@@ -476,8 +476,8 @@ define('io.ox/files/actions',
                         $('<h4>').text(gt('Rename'))
                     )
                     .append(
-                        $('<div class="row-fluid">').append(
-                            $('<input type="text" name="name" class="span12" tabindex="1">')
+                        $('<div class="row">').append(
+                            $('<input type="text" name="name" class="form-control tabindex="1"">')
                         )
                     )
                     .addPrimaryButton('rename', gt('Rename'), 'rename', {'tabIndex': '1'})
@@ -502,7 +502,7 @@ define('io.ox/files/actions',
             require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/keys'], function (dialogs, KeyListener) {
                 var keys = new KeyListener($input),
                     dialog = new dialogs.ModalDialog(),
-                    $input = $('<textarea rows="10" tabindex="1"></textarea>')
+                    $input = $('<textarea rows="10" class="form-control" tabindex="1"></textarea>')
                             .css({width: '507px'})
                             .val(baton.data.description),
                     $form = $('<form>')

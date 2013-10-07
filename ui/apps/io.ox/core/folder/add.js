@@ -84,10 +84,11 @@ define('io.ox/core/folder/add',
             )
         )
         .build(function () {
-
+            var guid = _.uniqueId('label_');
             this.getContentNode().append(
-                $('<div class="row-fluid">').append(
-                    $('<input type="text" class="span12">').attr('placeholder', gt('Folder name'))
+                $('<div class="form-group">').append(
+                    $('<label class="sr-only">').text(gt('New folder')).attr('for', guid),
+                    $('<input type="text" class="form-control">').attr({'id': guid, 'placeholder': gt('Folder name')})
                 )
             );
         })

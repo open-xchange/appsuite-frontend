@@ -30,7 +30,7 @@ define('io.ox/tasks/edit/view',
     var point = views.point('io.ox/tasks/edit/view'),
         TaskEditView = point.createView({
         tagName: 'div',
-        className: 'io-ox-tasks-edit task-edit-wrapper container-fluid default-content-padding',
+        className: 'io-ox-tasks-edit container default-content-padding',
         init: function () {
             this.collapsed = true;
 
@@ -87,7 +87,7 @@ define('io.ox/tasks/edit/view',
             }
 
             // Disable Save Button if title is empty on startup
-            if (!self.$el.find('#task-edit-title').val()) {
+            if (!self.$el.find('input.title-field').val()) {
                 self.$el.find('.btn[data-action="save"]').prop('disabled', true);
             }
 

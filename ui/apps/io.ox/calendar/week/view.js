@@ -683,8 +683,8 @@ define('io.ox/calendar/week/view',
             this.$el.empty().append(
                 $('<div class="toolbar">').append(
                     this.kwInfo,
-                    $('<div class="pagination">').append(
-                        $('<ul>').append(
+                    $('<div>').append(
+                        $('<ul class="pagination">').append(
                             $('<li>').append(
                                 $('<a>').attr({
                                         href: '#',

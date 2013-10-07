@@ -137,7 +137,7 @@ define('io.ox/calendar/edit/recurrence-view',
 
             $anchor.on('click', function (e) {
                 e.preventDefault();
-                var $dateInput = $('<input type="text" class="input-small no-clone">').css({
+                var $dateInput = $('<input type="text" class="input-sm no-clone">').css({
                         marginBottom: 0
                     }).val(renderDate());
 
@@ -231,11 +231,11 @@ define('io.ox/calendar/edit/recurrence-view',
                 this.nodes = {
                     recView: $('<div class="io-ox-recurrence-view">').hide(),
                     summary: $('<span>'),
-                    typeChoice: $('<div class="row-fluid inset">'),
-                    hint: $('<div class="row-fluid muted inset">'),
-                    alternative1: $('<div class="row-fluid inset">'),
-                    alternative2: $('<div class="row-fluid inset">'),
-                    endsChoice: $('<div class="row-fluid inset">')
+                    typeChoice: $('<div class="row inset">'),
+                    hint: $('<div class="row muted inset">'),
+                    alternative1: $('<div class="row inset">'),
+                    alternative2: $('<div class="row inset">'),
+                    endsChoice: $('<div class="row inset">')
                 };
 
                 // UI state
@@ -961,7 +961,7 @@ define('io.ox/calendar/edit/recurrence-view',
                 // if rec_pos is unset or zero
                 if (!this.model.get('recurrence_position')) {
                     this.$el.append(
-                        $('<div class="row-fluid">').append(
+                        $('<div class="form-group">').append(
                             this.controls.checkboxLabel.append(
                                 this.controls.checkbox,
                                 $.txt(gt('Repeat'))
@@ -972,10 +972,10 @@ define('io.ox/calendar/edit/recurrence-view',
                             this.controls.detailToggle,
                             this.nodes.hint,
                             this.nodes.typeChoice,
-                            $('<div class="row-fluid">&nbsp;</div>'),
+                            $('<div class="row">&nbsp;</div>'),
                             this.nodes.alternative1,
                             this.nodes.alternative2,
-                            $('<div class="row-fluid">&nbsp;</div>'),
+                            $('<div class="row">&nbsp;</div>'),
                             this.nodes.endsChoice
                         )
                     );

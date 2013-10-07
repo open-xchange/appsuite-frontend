@@ -388,7 +388,7 @@ define('plugins/portal/twitter/util',
     };
 
     var followButton = function (tweet) {
-        var btn = $('<div>').addClass('io-ox-twitter-follow btn small')
+        var btn = $('<div>').addClass('io-ox-twitter-follow btn btn-default small')
             .attr({'user_id': tweet.user.id_str,
                 'role': 'button'});
 
@@ -479,7 +479,7 @@ define('plugins/portal/twitter/util',
     var TwitterTextBox = function (title, options) {
         var replyBoxContainer = $('<div>').attr({'class': 'io-ox-twitter-tweet-container'}),
             textArea = $('<textarea>').attr({
-                    'class': 'io-ox-twitter-tweet-textarea',
+                    'class': 'io-ox-twitter-tweet-textarea form-control',
                     'aria-required': 'true',
                     maxlength: 140,
                     rows: '4'
@@ -507,7 +507,7 @@ define('plugins/portal/twitter/util',
                 }),
             buttonContainer = $('<div>').attr({'class': 'io-ox-twitter-tweet-button'}),
             tweetCounter = $('<div>').attr({'class': 'io-ox-twitter-tweet-counter'}).text(140),
-            tweetButton = $('<a>').attr({'class': 'btn disabled', role: 'button'})
+            tweetButton = $('<a>').attr({'class': 'btn btn-default disabled', role: 'button'})
                 .text(title)
                 .on('click', function (e) {
                     var text = textArea.val();

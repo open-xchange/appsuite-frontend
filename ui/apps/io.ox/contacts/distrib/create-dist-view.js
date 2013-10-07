@@ -34,7 +34,7 @@ define('io.ox/contacts/distrib/create-dist-view',
     point.extend({
         id: 'title-controls',
         index: 100,
-        className: 'row-fluid title-controls',
+        className: 'row title-controls',
         render: function () {
             var self = this,
             buttonText = (self.model.get('id')) ? gt('Save') : gt('Create list');
@@ -51,7 +51,7 @@ define('io.ox/contacts/distrib/create-dist-view',
                     });
                 }),
                 // cancel button
-                $('<button type="button" class="btn" data-action="discard" tabindex="2">').text(gt('Discard')).on('click', function () {
+                $('<button type="button" class="btn btn-default" data-action="discard" tabindex="2">').text(gt('Discard')).on('click', function () {
                     // use this sneaky channel
                     $(this).trigger('controller:quit');
                 })
@@ -63,11 +63,11 @@ define('io.ox/contacts/distrib/create-dist-view',
         id: 'displayname',
         index: 200,
         attribute: 'display_name',
-        className: 'row-fluid',
+        className: 'row',
         label:
             //#. Name of distribution list
             gt('Name'), // mind bug #31073
-        control: '<input tabindex="1" type="text" class="span6">',
+        control: '<input tabindex="1" type="text" class="form-control">',
         buildControls: function () {
             return this.nodes.controls || (this.nodes.controls = $('<div class="controls">').append(
                 // element
@@ -79,19 +79,21 @@ define('io.ox/contacts/distrib/create-dist-view',
     point.extend({
         id: 'add-members',
         index: 300,
-        className: 'row-fluid',
+        className: 'row',
         render: function () {
             var self = this;
 
-            var pNode = $('<div class="autocomplete-controls input-append">').append(
-                    $('<input tabindex="1" type="text" class="add-participant">').attr('placeholder', gt('Add contact') + ' ...'),
-                    $('<button type="button" class="btn" data-action="add" tabindex="1">')
-                        .append($('<i class="icon-plus">'))
+            var pNode = $('<div class="col-md-6 col-lg-6">').append(
+                    $('<div class="autocomplete-controls input-group">').append(
+                        $('<input tabindex="1" type="text" class="add-participant form-control">').attr('placeholder', gt('Add contact') + ' ...'),
+                        $('<span class="input-group-btn">').append(
+                            $('<button type="button" class="btn btn-default" data-action="add" tabindex="1">')
+                                .append($('<i class="icon-plus">'))
+                        )
+                    )
                 ),
 
             autocomplete = new AddParticipantsView({ el: pNode });
-
-            if (!_.browser.Firefox) { pNode.addClass('input-append-fix'); }
 
             autocomplete.render({
                 autoselect: true,
@@ -122,7 +124,7 @@ define('io.ox/contacts/distrib/create-dist-view',
 
             this.$el.append(
                 $('<legend>').addClass('sectiontitle').text(gt('Contacts')),
-                this.itemList = $('<div>').addClass('item-list row-fluid'),
+                this.itemList = $('<div>').addClass('item-list row'),
                 pNode
             );
 
@@ -224,7 +226,7 @@ define('io.ox/contacts/distrib/create-dist-view',
 
             var self = this;
 
-            return $('<div class="listed-item span6">')
+            return $('<div class="listed-item col-md-6">')
                 .attr('data-mail', o.display_name + '_' + o.mail)
                 .append(
                     // contact picture

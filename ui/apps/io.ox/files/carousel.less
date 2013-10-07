@@ -53,7 +53,7 @@
                         text-shadow: none;
                         word-wrap: break-word;
                         &.active { display: inline; }
-                        a { color: @linkOnDark; }
+                        a { color: @link-on-dark; }
                         span.divider { color: #fff; }
                     }
                 }
@@ -61,7 +61,15 @@
         }
     }
 
-    .carousel-control { cursor: pointer; }
+    .carousel-control {
+        cursor: pointer;
+        i {
+            cursor: pointer;
+            font-size: 50px;
+            &.icon-prev { left: 15px; }
+            &.icon-next { right: 15px; }
+        }
+    }
 
     .closecarousel {
         position: absolute;

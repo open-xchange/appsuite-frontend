@@ -17,21 +17,25 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
 
     return {
         drawInputfieldTest: function (activeValue) {
-            return $('<input>').attr({ type: 'text', 'data-action': 'change-text-test', 'tabindex': '1'}).val(activeValue);
+            return $('<input class="form-control">').attr({ type: 'text', 'data-action': 'change-text-test', 'tabindex': '1'}).val(activeValue);
         },
 
         drawInputfieldTestSecond: function (activeValue, label) {
-            return $('<label>').text(label = label ? label : '').append(
-                $('<input>').attr({ type: 'text', 'data-action': 'change-text-test-second', 'tabindex': '1'}).val(activeValue)
-            );
+            var inputid = _.uniqueId('change-text-test-second');
+            return [
+                $('<label>').attr('for', inputid).text(label = label ? label : ''),
+                $('<div>').addClass('first-label inline-input ').append(
+                    $('<input class="form-control">').attr({ id: inputid, type: 'text', 'data-action': 'change-text-test-second', 'tabindex': '1'}).val(activeValue)
+                )
+            ];
         },
 
         drawInputfieldAction: function (activeValue) {
-            return $('<input>').attr({ type: 'text', 'data-action': 'change-text-action', 'tabindex': '1'}).val(activeValue);
+            return $('<input class="form-control">').attr({ type: 'text', 'data-action': 'change-text-action', 'tabindex': '1'}).val(activeValue);
         },
 
         drawDisabledInputfield: function (activeValue) {
-            return $('<input>').attr({ type: 'text', disabled: 'disabled', title: activeValue, 'data-action': 'change-text-action', 'tabindex': '1'}).val(activeValue);
+            return $('<input class="form-control">').attr({ type: 'text', disabled: 'disabled', title: activeValue, 'data-action': 'change-text-action', 'tabindex': '1'}).val(activeValue);
         },
 
         drawFolderSelect: function () {
@@ -39,7 +43,7 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
         },
 
         drawDeleteButton: function (type) {
-            return $('<a href="#" class="close" tabindex="1" data-action="remove-' + type + '">').append($('<i class="icon-trash"/>'));
+            return $('<a href="#" class="remove" tabindex="1" data-action="remove-' + type + '">').append($('<i class="icon-trash">'));
         },
 
         drawOptions: function (activeValue, values) {

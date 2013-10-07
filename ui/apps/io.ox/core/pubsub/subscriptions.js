@@ -119,7 +119,7 @@ define('io.ox/core/pubsub/subscriptions',
                     );
                 }
 
-                popup.getBody().addClass('form-horizontal max-height-200');
+                popup.getBody().addClass('form-horizontal');
                 ext.point(POINT + '/dialog').invoke('draw', popup.getBody(), baton);
                 popup.show(function () {
                     popup.getBody().find('select.service-value').focus();
@@ -180,7 +180,7 @@ define('io.ox/core/pubsub/subscriptions',
         node.prepend($('<div class="alert alert-error alert-block">').append(
             $('<strong>').text(label),
             $.txt(' ' + msg),
-            $('<button type="button" data-dismiss="alert" class="btn close">').text('x'))
+            $('<button type="button" data-dismiss="alert" class="btn btn-default close">').text('x'))
         );
 
     }
@@ -211,7 +211,7 @@ define('io.ox/core/pubsub/subscriptions',
                 var accounts = _.where(keychainAPI.getAll(), { serviceId: fd.options.type });
                 if (accounts.length === 1) {
                     setSource(accounts[0].id);
-                    controls = $('<button type="button" class="btn disabled">').text(accounts[0].displayName);
+                    controls = $('<button type="button" class="btn btn-default disabled">').text(accounts[0].displayName);
                 } else if (accounts.length > 1) {
                     controls = $('<select name="' + fd.name + '">').on('change', function () {
                         setSource($(this).val());
@@ -224,7 +224,7 @@ define('io.ox/core/pubsub/subscriptions',
                     // set initially to first account in list
                     setSource(accounts[0].id);
                 } else {
-                    controls = $('<button type="button" class="btn">').text(gt('Add new account')).on('click', function () {
+                    controls = $('<button type="button" class="btn btn-default">').text(gt('Add new account')).on('click', function () {
                         oauth().done(function () {
                             buildForm(node, baton);
                         });
@@ -233,7 +233,7 @@ define('io.ox/core/pubsub/subscriptions',
 
             } else {
                 var input_type = fd.name === 'password' ? 'password' : 'text';
-                controls = $('<input type="' + input_type + '" name="' + fd.name + '">');
+                controls = $('<input class="form-control" type="' + input_type + '" name="' + fd.name + '">');
             }
             node.append(
                 $('<div>').addClass('control-group').append(
@@ -264,7 +264,7 @@ define('io.ox/core/pubsub/subscriptions',
             this.append($('<div>').addClass('control-group').append(
                 $('<label>').addClass('control-label').attr('for', 'service-value').text(gt('Source')),
                 $('<div>').addClass('controls').append(
-                    node = $('<select>').attr('name', 'service-value').addClass('service-value').on('change', function () {
+                    node = $('<select>').attr('name', 'service-value').addClass('form-control service-value').on('change', function () {
                         userform.parent().find('.alert-error').remove();
                         userform.parent().find('.error').removeClass('error');
                         baton.model.setSource(findId(baton.services, node.val()));
@@ -323,7 +323,7 @@ define('io.ox/core/pubsub/subscriptions',
         id: 'durationinformation',
         index: 300,
         draw: function () {
-            var fullNode = $('<div>').addClass('alert alert-info').append(
+            var fullNode = $('<div>').addClass('alert alert-info').css({'margin-bottom': 0, 'margin-top': '10px'}).append(
                 $('<b>').addClass('privacy-label').text(gt('Approximate Duration for Subscriptions')),
                         $('<div>').addClass('privacy-text').text(
                             gt('Updating subscribed data takes time. Importing 100 contacts for example, may take up to 5 minutes. Please have some patience.')));

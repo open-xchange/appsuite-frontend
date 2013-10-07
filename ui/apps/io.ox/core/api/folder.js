@@ -1145,7 +1145,6 @@ define('io.ox/core/api/folder',
                 } else {
                     li.append(elem = $('<a href="#" tabindex="1" role="menuitem">').attr('title', folder.title).text(displayTitle));
                 }
-                li.append(isLast ? $() : $('<span class="divider" role="presentation">').text(gt.noI18n(' / ')));
             }
 
             elem.attr('data-folder-id', folder.id).data(folder);
@@ -1159,11 +1158,6 @@ define('io.ox/core/api/folder',
                     add.call(ul, o, i, list, options);
                 }
             });
-            if (options.leaf) {
-                ul.append(
-                    $('<li>').append($('<span class="divider">').text(gt.noI18n(' / ')), options.leaf)
-                );
-            }
             ul = null;
         };
 
@@ -1184,7 +1178,7 @@ define('io.ox/core/api/folder',
                     });
                 if (options.prefix) {
                     ul.append($('<li class="prefix">').append(
-                        $.txt(options.prefix), $('<span class="divider">').text(gt.noI18n(' '))
+                        $.txt(options.prefix)
                     ));
                 }
                 return ul;

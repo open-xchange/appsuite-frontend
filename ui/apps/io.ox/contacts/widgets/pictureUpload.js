@@ -151,10 +151,6 @@ define('io.ox/contacts/widgets/pictureUpload',
                 self.imgCon.on('click', function () { self.fileInput.trigger('click'); });
 
                 self.setImageURL(dataUrl || imageUrl);
-
-                if (this.clear) {
-                    this.$el.append($('<div>').css({ clear: 'both' }));
-                }
             }
         }, options);
     }

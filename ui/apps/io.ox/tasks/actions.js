@@ -501,7 +501,7 @@ define('io.ox/tasks/actions',
                     $('<a href="#" data-action="change-due-date" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
                     .text(gt('Change due date')).append($('<b class="caret">')).dropdown(),
                     // drop down
-                    $('<ul class="dropdown-menu dropdown-right" role="menu">').append(
+                    $('<ul class="dropdown-menu pull-right" role="menu">').append(
                         util.buildDropdownMenu({bootstrapDropdown: true, daysOnly: true})
                     )
                     .on('click', 'li>a:not([data-action="close-menu"])', { task: data }, function (e) {

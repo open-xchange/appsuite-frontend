@@ -68,7 +68,7 @@ define('io.ox/core/tk/attachments',
             render: function () {
                 var self = this;
                 _(this.allAttachments).each(function (attachment) {
-                    self.$el.addClass('span12 io-ox-core-tk-attachment-list').append(self.renderAttachment(attachment));
+                    self.$el.addClass('io-ox-core-tk-attachment-list').append(self.renderAttachment(attachment));
                 });
 
                 //trigger refresh of attachmentcounter
@@ -79,7 +79,7 @@ define('io.ox/core/tk/attachments',
             renderAttachment: function (attachment) {
                 var self = this;
                 var size, removeFile;
-                var $el = $('<div class="span6">').append(
+                var $el = $('<div class="col-lg-6 col-md-6">').append(
                     $('<div class="io-ox-core-tk-attachment file">').append(
                         $('<i class="icon-paper-clip">'),
                         $('<div class="row-1">').text(_.ellipsis(attachment.filename, {max: 40, charpos: 'middel'})),
@@ -220,7 +220,7 @@ define('io.ox/core/tk/attachments',
         var self = this,
             counter = 0,
             files = [],
-            $el = (options.$el || $('<div>').addClass('row-fluid'));
+            $el = (options.$el || $('<div>').addClass('row'));
 
         if (options.registerTo) {
             _.each([].concat(options.registerTo), function (obj) {
@@ -575,56 +575,25 @@ define('io.ox/core/tk/attachments',
     });
 
     var fileUploadWidget = function (options) {
+
         options = _.extend({
-            buttontext: gt('Select file'),
+            buttontext: gt('Upload file'),
             tabindex: 1,
-            drive: false
+            drive: false,
+            multi: true
         }, options);
 
-        var node = $('<div>').addClass((options.wrapperClass ? options.wrapperClass : 'row-fluid')),
-            icon = options.buttonicon ? $('<i>').addClass(options.buttonicon) : $(),
-            input;
+        var node = $('<div>').addClass((options.wrapperClass ? options.wrapperClass : 'form-group')),
+            input = $('<input name="file" type="file" class="file-input">').prop({ multiple: options.multi }).attr({ tabindex: options.tabindex }),
+            uploadButton = $('<span class="btn btn-default btn-file" role="button">').append($('<i class="icon icon-paper-clip">'), $.txt(options.buttontext)).append(input),
+            driveButton = $('<button type="button" class="btn btn-default" data-action="addinternal">').text(gt('Files'));
 
-        //add space for icon
-        options.buttontext = options.buttonicon ? '\u00A0' + options.buttontext : options.buttontext;
+        if (options.drive && _.device('!smartphone')) {
+            uploadButton = $('<div class="btn-group">').append(uploadButton, driveButton);
+        }
 
-        if (options.displayLabel) node.append($('<label>').text(gt.noI18n(options.displayLabelText) || gt('File')));
-        node.append(
-            $('<div>', { 'data-provides': 'fileupload' }).addClass('fileupload fileupload-new')
-                .append($('<div>').addClass('input-prepend input-append').append(
-                    $('<div>').addClass('btn-group').append(
-                        $('<div>').addClass('uneditable-input').append(
-                            $('<i>').addClass('icon-file fileupload-exists'),
-                            $('<span>').addClass('fileupload-preview')
-                        ),
-                        $('<span>').attr({tabIndex: '1', 'role': 'button'}).addClass('btn btn-file').append(
-                            icon,
-                            $('<span>').addClass('fileupload-new').text(options.buttontext),
-                            $('<span>').attr({'role': 'button', 'aria-label': gt('Change')}).addClass('fileupload-exists').text(gt('Change')),
-                            input = $('<input name="file" type="file" role="button">')
-                                .prop({ multiple: options.multi })
-                                .attr({tabindex: options.tabindex })
-                        ),
-                        $('<a>', {'data-dismiss': 'fileupload', tabindex: 1, href: '#', role: 'button', 'aria-label': 'cancel'}).addClass('btn fileupload-exists').text(gt('Cancel')),
-                        (options.displayButton ?
-                            $('<button type="button" class="btn btn-primary" data-action="upload" tabindex="1">')
-                                .text(gt('Upload file')).hide() : ''
-                        ),
-                        ((options.drive && _.device('!smartphone') && capabilities.has('infostore')) ? $('<button type="button" class="btn" data-action="addinternal">').text(gt('Files')) : '')
-                    ).on('keypress', function (e) {
-                        if (e.which === 13) {
-                            node.find('input[name="file"]').trigger('click');
-                        }
-                    })
-                )
-            )
+        node.append(uploadButton);
 
-        );
-        input.on('hover', function () {
-            $(this).parent().addClass('hover');
-        }, function () {
-            $(this).parent().removeClass('hover');
-        });
         return node;
     };
 

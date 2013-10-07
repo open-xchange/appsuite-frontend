@@ -104,7 +104,7 @@ define('io.ox/contacts/view-detail',
         draw: function (baton) {
             var node;
             this.append(
-                node = $('<header class="row-fluid contact-header">')
+                node = $('<header class="row contact-header">')
             );
             ext.point('io.ox/contacts/detail/head').invoke('draw', node, baton);
         }
@@ -704,8 +704,8 @@ define('io.ox/contacts/view-detail',
                     options.handler = baton.app.folder.set;
                 }
                 this.append(
-                    folderAPI.getBreadcrumb(baton.data.folder_id, options)
-                    .addClass('chromeless clear-both')
+                    $('<div class="clearfix">'),
+                    folderAPI.getBreadcrumb(baton.data.folder_id, options).addClass('chromeless')
                 );
             }
         }

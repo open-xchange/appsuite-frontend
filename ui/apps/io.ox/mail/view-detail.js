@@ -207,7 +207,7 @@ define('io.ox/mail/view-detail',
                         // add special marker
                         baton.isThread = true;
                         ext.point('io.ox/mail/thread').invoke('draw', inline, baton);
-                        inline.find('.dropdown > a').addClass('btn'); // was: btn-primary
+                        inline.find('.dropdown > a').addClass('btn btn-default'); // was: btn-primary
                         if (_.device('!smartphone')) {
                             frag.appendChild(inline.get(0));
                         } else {
@@ -678,6 +678,7 @@ define('io.ox/mail/view-detail',
                     if (!(!showCC && showTO && data.to[0][1] === 'undisclosed-recipients:;')) {
                         var dd = $('<div class="recipient-actions">');
                         drawAllDropDown(dd, $('<i class="icon-group">'), data);
+                        dd.find('.dropdown').addClass('pull-right');
                         dd.appendTo(container);
                     }
                 }
@@ -884,7 +885,7 @@ define('io.ox/mail/view-detail',
                         $('<div class="well">').append(
                             $('<div class="invitation">').text(gt('Someone shared a file with you')),
                             $('<div class="subscription-actions">').append(
-                                $('<button type="button" class="btn" data-action="show">').text(gt('Show file'))
+                                $('<button type="button" class="btn btn-default" data-action="show">').text(gt('Show file'))
                             )
                         )
                     );
@@ -893,7 +894,7 @@ define('io.ox/mail/view-detail',
                         $('<div class="well">').append(
                             $('<div class="invitation">').text(gt('Someone shared a folder with you. Would you like to subscribe those %1$s?', label)),
                             $('<div class="subscription-actions">').append(
-                                $('<button type="button" class="btn" data-action="show">').text(gt('Show original publication')),
+                                $('<button type="button" class="btn btn-default" data-action="show">').text(gt('Show original publication')),
                                 '&nbsp;',
                                 $('<button type="button" class="btn btn-primary" data-action="subscribe">').text(gt('Subscribe'))
                             )

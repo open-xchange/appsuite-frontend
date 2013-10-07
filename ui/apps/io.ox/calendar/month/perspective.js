@@ -407,9 +407,8 @@ define('io.ox/calendar/month/perspective',
                     .append(
                         this.monthInfo = $('<div>').addClass('info').text(gt.noI18n(this.current.format('MMMM y'))),
                         $('<div>')
-                            .addClass('pagination')
                             .append(
-                                $('<ul>')
+                                $('<ul class="pagination">')
                                     .append(
                                         $('<li>')
                                             .append(

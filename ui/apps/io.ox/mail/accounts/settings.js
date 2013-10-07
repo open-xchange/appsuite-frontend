@@ -85,8 +85,9 @@ define('io.ox/mail/accounts/settings',
         index: 100,
         draw: function () {
             this.append(
-                $('<label>').text(gt('Your mail address')).append(
-                    $('<input type="text" class="span6 add-mail-account-address" tabindex="1">')
+                $('<div class="form-group">').append(
+                    $('<label for="add-mail-account-address">').text(gt('Your mail address')),
+                    $('<input id="add-mail-account-address" type="text" class="form-control add-mail-account-address" tabindex="1">')
                 )
             );
         }
@@ -97,8 +98,9 @@ define('io.ox/mail/accounts/settings',
         index: 200,
         draw: function () {
             this.append(
-                $('<label>').text(gt('Your password')).append(
-                    $('<input type="password" class="span6 add-mail-account-password" tabindex="1">')
+                $('<div class="form-group">').append(
+                    $('<label for="add-mail-account-password">').text(gt('Your password')),
+                    $('<input id="add-mail-account-password" type="password" class="form-control add-mail-account-password" tabindex="1">')
                 )
             );
         }

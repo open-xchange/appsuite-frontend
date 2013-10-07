@@ -21,7 +21,6 @@
     }
 }
 
-
 .add-infostore-file .modal-body {
     padding: 0;
 
@@ -51,17 +50,17 @@
             }
 
             &.selected, &.selected:hover {
-                background-color: @foldertreeSelectedBackground;
+                background-color: @foldertree-selected-background;
 
-                * { color: @foldertreeSelectedLabelColor; }
+                * { color: @foldertree-selected-label-color; }
             }
         }
 
         &:focus .file {
             &.selected {
-                background-color: @foldertreeSelectedFocusBackground;
+                background-color: @foldertree-selected-focus-background;
 
-                * { color: @foldertreeFocusedLabelColor; }
+                * { color: @foldertree-focused-label-color; }
             }
         }
     }
@@ -81,15 +80,13 @@
     .border-radius(0);
 
     .modal-footer {
-        .row-fluid {
-            [class*="span"] {
-                margin-left: 0;
-            }
+        .row {
+            [class*="span"] { margin-left: 0; }
             .btn {
                 width: 100%;
                 margin: 2px 0;
             }
-            .span3 { width: inherit; }
+            .col-md-3 { width: inherit; }
         }
     }
     h3 { font-size: 20px; }

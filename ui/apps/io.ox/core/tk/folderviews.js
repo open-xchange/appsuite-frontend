@@ -641,11 +641,10 @@ define('io.ox/core/tk/folderviews',
                     )
                     .build(function () {
                         this.getContentNode().append(
-                            $('<div class="row-fluid">').append(
-                                $('<input>', { type: 'text' })
+                            $('<div class="row">').append(
+                                $('<input class="form-control">', { type: 'text' })
                                 .val(folder.title)
                                 .attr('placeholder', gt('Folder name'))
-                                .addClass('span12')
                                 .on('keypress', { popup: this, action: 'rename' }, fnKeyPress)
                             )
                         );

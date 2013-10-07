@@ -121,7 +121,7 @@ define('io.ox/mail/settings/pane',
         index: 200,
         id: 'mailsettings',
         draw: function () {
-
+            this.addClass('io-ox-mail-settings');
             mailViewSettings = new MailSettingsView({model: mailSettings});
 
             var holder = $('<div>').css('max-width', '800px'),
@@ -130,7 +130,7 @@ define('io.ox/mail/settings/pane',
             this.append(holder.append(pane.append(mailViewSettings.render().$el)));
 
             if (Modernizr.touch) { // See Bug 24802
-                holder.find('input[name="messageFormat"]:first').closest('.control-group').hide().prev().hide();
+                this.find('input[name="messageFormat"]:first').closest('.control-group').hide().prev().hide();
             }
 
             if (!capabilities.has('emoji')) { // see Bug 25537

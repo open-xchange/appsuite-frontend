@@ -22,7 +22,7 @@
     }
     .vgrid-cell {
         &.contact {
-            height: 40px;
+            height: 60px;
             .private_flag {
                 float: left;
                 color: #AAA;
@@ -37,7 +37,7 @@
             font-weight: 200;
             font-size: 32px;
             line-height: 32px;
-            color: @linkColor;
+            color: @link-color;
             padding-top: 25px;
             padding-bottom: 15px;
             background-image: none;
@@ -45,6 +45,7 @@
             border-top: 0 none;
             border-bottom: 0 none;
         }
+
     }
 }
 
@@ -66,7 +67,7 @@
         margin: 1px 1px 0 1px;
         &:hover {
             color: white;
-            background-color: @linkColor;
+            background-color: @link-color;
         }
         &.thumb-index-disabled, &.thumb-index-disabled:hover {
             color: #ccc;
@@ -74,6 +75,7 @@
             cursor: default;
         }
     }
+
 }
 
 /* Detail view */
@@ -109,7 +111,7 @@
         }
 
         h1 {
-            font-family: @lightFontFamily;
+            font-family: @light-font-family;
             font-weight: 200;
             font-size: 24px;
             line-height: 28px;
@@ -169,7 +171,7 @@
         margin: 0 10px 30px 0;
 
         legend {
-            font-family: @lightFontFamily;
+            font-family: @light-font-family;
             font-size: 16px;
             line-height: 20px;
             font-weight: 200;
@@ -195,20 +197,12 @@
 
         caption {
             font-size: 12px;
-            color: @linkColor;
+            color: @link-color;
             margin-top: 10px;
         }
     }
 
-    span.qrcode {
-        display: block;
-    }
-
-    .clear-both { clear: both; }
-
-    .breadcrumb {
-        margin: 26px 0 0 0;
-    }
+    span.qrcode { display: block; }
 
     .member {
         height: 48px;

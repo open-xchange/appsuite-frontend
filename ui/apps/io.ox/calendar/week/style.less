@@ -11,12 +11,11 @@
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 
-@weekviewTimeWithSmall: @weekviewTimeWith - 13;
+@weekview-time-widthSmall: @weekview-time-width - 13;
 
 .week-view {
 
     * {
-        .box-sizing(border-box);
         -webkit-tap-highlight-color: rgba(0,0,0,0);
     }
 
@@ -42,16 +41,16 @@
         left: 0;
         right: 0;
         bottom: 0;
-        top: @calendarToolbarHeight + @weekviewFooterHeight;
+        top: @calendar-toolbar-height + @weekview-footer-height;
 
         .fulltime-container {
 
             position: absolute;
-            height: @weekviewFooterHeight;
+            height: @weekview-footer-height;
             overflow-y: scroll;
             overflow-x: hidden;
             border-bottom: 1px solid #ccc;
-            left: @weekviewTimeWith;
+            left: @weekview-time-width;
             right: 0;
 
             .fulltime {
@@ -89,7 +88,7 @@
             .overflow-y(scroll);
             .overflow-x(hidden);
             position: absolute;
-            top: @weekviewFooterHeight;
+            top: @weekview-footer-height;
             left: 0;
             right: 0;
             bottom: 0;
@@ -97,7 +96,7 @@
 
             .week-container-label {
 
-                width: @weekviewTimeWith;
+                width: @weekview-time-width;
                 position: absolute;
 
                 .time {
@@ -118,7 +117,7 @@
 
             .week-container {
 
-                left: @weekviewTimeWith;
+                left: @weekview-time-width;
                 right: 0;
                 position: absolute;
 
@@ -126,7 +125,7 @@
                     position: absolute;
                     height: 3px;
                     width: 100%;
-                    background-color: @weekviewTimeline;
+                    background-color: @weekview-timeline;
                     z-index: 10;
                     .user-select(none);
                 }
@@ -159,11 +158,11 @@
                 }
 
                 &.in {
-                    background-color: @weekviewDayIn;
+                    background-color: @weekview-day-in;
                 }
 
                 &.out {
-                    background-color: @weekviewDayOut;
+                    background-color: @weekview-day-out;
                 }
 
             }
@@ -171,11 +170,11 @@
             &.today .timeslot {
 
                 &.in {
-                    background-color: darken(@weekviewDayIn, 5%);
+                    background-color: darken(@weekview-day-in, 5%);
                 }
 
                 &.out {
-                    background-color: darken(@weekviewDayOut, 3%);
+                    background-color: darken(@weekview-day-out, 3%);
                 }
 
             }
@@ -188,11 +187,11 @@
     .dayview {
 
         .toolbar {
-            padding-bottom: @calendarToolbarTopPadding;
+            padding-bottom: @calendar-toolbar-top-padding;
         }
 
         .week-view-container {
-            top: @calendarToolbarHeight + @calendarToolbarTopPadding;
+            top: @calendar-toolbar-height + @calendar-toolbar-top-padding;
         }
 
         .footer-container {
@@ -224,11 +223,10 @@
 
         &.lasso {
             border: 1px solid #08c;
-            background-color: @weekviewAppointmentLasso;
-            opacity: @appointmentDeclinedAlpha;
+            background-color: @weekview-appointment-lasso;
+            opacity: @appointment-declined-alpha;
             width: 100%;
             cursor: default;
-            .box-sizing(border-box);
         }
 
         .private-flag {
@@ -306,17 +304,17 @@
         .week-view-container {
 
             .fulltime-container {
-                left: @weekviewTimeWithSmall;
+                left: @weekview-time-widthSmall;
             }
 
             .scrollpane {
 
                 .week-container-label {
-                    width: @weekviewTimeWithSmall;
+                    width: @weekview-time-widthSmall;
                 }
 
                 .week-container {
-                    left:  @weekviewTimeWithSmall;
+                    left:  @weekview-time-widthSmall;
                 }
 
             }
@@ -326,7 +324,7 @@
         .dayview {
 
             .week-view-container {
-               top: @calendarToolbarHeight + 15;
+               top: @calendar-toolbar-height + 15;
             }
 
         }

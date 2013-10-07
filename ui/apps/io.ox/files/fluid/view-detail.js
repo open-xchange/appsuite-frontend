@@ -195,13 +195,11 @@ define('io.ox/files/fluid/view-detail',
             $progressBarWrapper,
             $progressBar,
             $input = attachments.fileUploadWidget({
-                displayLabel: true,
-                displayButton: false,
-                displayLabelText: gt('Upload a new version')
+                buttontext: gt('Upload a new version')
             });
 
             $node = $('<form>').append(
-                $('<div>').addClass('row-fluid').append(
+                $('<div>').addClass('row').append(
                     $('<div class="pull-left">').append(
                         $input
                     ),
@@ -209,9 +207,9 @@ define('io.ox/files/fluid/view-detail',
                         .addClass('uploadbutton btn btn-primary pull-right').text(gt('Upload file')),
                     $progressBarWrapper = $('<div>').addClass('row-fluid').append($progressBar = $('<div>').addClass('bar')),
                     $('<div>').addClass('comment').append(
-                        $comment = $('<div class="row-fluid">').append(
+                        $comment = $('<div class="row">').append(
                             $('<label>').text(gt('Version Comment')),
-                            $commentArea = $('<textarea rows="5" tabindex="1"></textarea>')
+                            $commentArea = $('<textarea class="form-control" rows="5" tabindex="1"></textarea>')
                         ).hide()
                     )
                 )

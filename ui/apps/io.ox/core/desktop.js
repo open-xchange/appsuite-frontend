@@ -1429,8 +1429,6 @@ define('io.ox/core/desktop',
                         win.trigger('search', query);
                     };
 
-                var searchId = 'search_' + _.now(); // acccessibility
-
                 var searchHandler = {
 
                     keydown: function (e) {
@@ -1462,32 +1460,26 @@ define('io.ox/core/desktop',
                 };
 
                 $('<form class="form-search form-inline" role="search">')
-                .attr({
-                    'aria-label': gt('Search for items')
-                })
+                .attr('aria-label', gt('Search for items'))
                 .append(
-                    $('<div class="input-append">').append(
-                        $('<label>', { 'for': searchId }).addClass('search-query-container').append(
-                            // search field
-                            win.nodes.searchField = $('<input type="text" class="span6 search-query">')
-                            .attr({
-                                name: 'query',
-                                autocomplete: 'off',
-                                tabindex: '1',
-                                placeholder: gt('Search') + ' ...',
-                                id: searchId,
-                                'aria-label': gt('Search')
-                            })
-                            .on(searchHandler)
-                            .placeholder(),
-                            // 'clear' X
-                            $('<i class="icon-remove clear-query">')
-                            .on('click', searchHandler.clear)
-                        ),
-                        $('<button type="submit" data-action="search" class="btn margin-right" aria-hidden="true">')
-                            .on('click', searchHandler.change)
-                            .append('<i class="icon-search">')
-
+                    $('<div class="search-query-container input-group">').append(
+                        // search field
+                        win.nodes.searchField = $('<input type="text" class="form-control search-query">')
+                        .attr({ name: 'query',
+                            autocomplete: 'off',
+                            tabindex: '1',
+                            placeholder: gt('Search') + ' ...',
+                            'aria-label': gt('Search')
+                        })
+                        .on(searchHandler)
+                        .placeholder(),
+                        // 'clear' X
+                        $('<i class="icon-remove clear-query">').on('click', searchHandler.clear),
+                        $('<span class="input-group-btn">').append(
+                            $('<button type="submit" data-action="search" class="btn btn-default" aria-hidden="true">')
+                                .on('click', searchHandler.change)
+                                .append('<i class="icon-search">')
+                        )
                     ),
                     //abort button
                     $('<a href="#" data-action="remove" tabindex="1">×</a>')

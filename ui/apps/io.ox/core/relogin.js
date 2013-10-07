@@ -49,7 +49,7 @@ define('io.ox/core/relogin',
                         );
                         this.getContentNode().append(
                             $('<label>').text(gt('Password')),
-                            $('<input type="password" name"relogin-password" class="input-xlarge">')
+                            $('<input type="password" name"relogin-password" class="form-control">')
                         );
                     })
                     .addPrimaryButton('relogin', gt('Sign in'))

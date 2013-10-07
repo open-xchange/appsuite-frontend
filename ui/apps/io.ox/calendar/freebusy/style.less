@@ -49,21 +49,17 @@
         left: 13px;
         margin: 0;
         line-height: 38px;
-        font-family: @lightFontFamily;
+        font-family: @light-font-family;
         font-size: 20px;
         font-weight: 200;
     }
 
     .autocomplete-controls{
         top: 70px;
-        width: @participantsWidth;
+        width: @participantsWidth - 25;
         height: 30px;
         left: 13px;
         line-height: 30px;
-
-        .add-participant {
-            width: @participantsWidth - 75;
-        }
     }
 
     .participants-view-scrollpane {
@@ -71,7 +67,6 @@
         bottom: @bottom;
         padding: 0 13px 13px 13px;
         width: @participantsWidth;
-        .box-sizing(border-box);
         .overflow-y();
     }
 
@@ -163,8 +158,8 @@
 
     /* colors are in custom order: not rainbow */
     .color-index-0 { background-color: #333; }
-    .color-index-1 { background-color: darken(@blueLight, 20%); }
-    .color-index-2 { background-color: @greenLight; }
+    .color-index-1 { background-color: darken(@blue-light, 20%); }
+    .color-index-2 { background-color: @green-light; }
     .color-index-3 { background-color: #F7DC16; } /* better than pure yellow */
     .color-index-4 { background-color: #CA2929; } /* custom red */
     .color-index-5 { background-color: @orange; }

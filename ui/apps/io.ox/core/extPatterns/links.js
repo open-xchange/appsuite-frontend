@@ -132,7 +132,7 @@ define('io.ox/core/extPatterns/links',
 
         this.draw = function (baton) {
             baton = ext.Baton.ensure(baton);
-            var attr = { href: '#', 'class': 'btn', 'data-action': self.id, tabIndex: self.tabIndex };
+            var attr = { href: '#', 'class': 'btn btn-default', 'data-action': self.id, tabIndex: self.tabIndex };
             if (tag === 'button') attr.type = 'button';
             this.append(
                 node = $('<' + tag + '>', attr)
@@ -160,7 +160,7 @@ define('io.ox/core/extPatterns/links',
     var drawLinks = function (extension, collection, node, baton, args, bootstrapMode) {
 
         baton = ext.Baton.ensure(baton);
-        var nav = $('<ul role="menubar">').appendTo(node);
+        var nav = $('<ul class="list-unstyled" role="menubar">').appendTo(node);
 
         // customize
         if (extension.attributes) {
@@ -317,9 +317,9 @@ define('io.ox/core/extPatterns/links',
                             .on(Modernizr.touch ? 'touchstart' : 'click', function () {
                                 // fix dropdown position on-the-fly
                                 var left = $(this).parent().position().left;
-                                $(this).next().attr('class', 'dropdown-menu' + (left < 100 ? '' : ' dropdown-right'));
+                                $(this).next().attr('class', 'dropdown-menu' + (left < 100 ? '' : ' pull-right'));
                             }),
-                            $('<ul class="dropdown-menu dropdown-right">')
+                            $('<ul class="dropdown-menu pull-right">')
                             .attr({
                                 'role': 'menu',
                                 'aria-label': isSmall ? gt('Actions') : gt('More')

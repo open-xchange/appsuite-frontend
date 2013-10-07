@@ -165,7 +165,7 @@ define('io.ox/calendar/invitations/register',
                         return _(baton.analysis.actions).contains(action);
                     })
                     .map(function (action) {
-                        var button = $('<button type="button" class="btn">')
+                        var button = $('<button type="button" class="btn btn-default">')
                             .attr('data-action', action)
                             .addClass(buttonClasses[action])
                             .text(i18n[action]);

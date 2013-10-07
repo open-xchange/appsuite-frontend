@@ -40,8 +40,8 @@ define('io.ox/files/carousel',
         list: [],
         container:      $('<div class="abs carousel slide">'),
         inner:          $('<div class="abs carousel-inner">'),
-        prevControl:    $('<a class="carousel-control left">').text(gt.noI18n('‹')).attr('data-slide', 'prev'),
-        nextControl:    $('<a class="carousel-control right">').text(gt.noI18n('›')).attr('data-slide', 'next'),
+        prevControl:    $('<a class="left carousel-control">').attr('data-slide', 'prev').append($('<i class="icon-prev icon-angle-left">')),
+        nextControl:    $('<a class="right carousel-control">').attr('data-slide', 'next').append($('<i class="icon-next icon-angle-right">')),
         closeControl:   $('<button type="button" class="btn btn-primary closecarousel">').text(gt('Close')),
 
        /**

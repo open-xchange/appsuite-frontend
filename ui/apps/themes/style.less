@@ -12,6 +12,52 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+/* Bootstrap overrides BEGIN */
+label { font-weight:normal; }
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+
+    input[type=file] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 100%;
+        min-height: 100%;
+        font-size: 999px;
+        text-align: right;
+        filter: alpha(opacity=0);
+        opacity: 0;
+        background: red;
+        cursor: inherit;
+        display: block;
+    }
+
+    i.icon-paper-clip:after {
+        content: ' ';
+    }
+}
+
+.breadcrumb>li+li:before { content: "/"; }
+.breadcrumb>.prefix+li:before { content: ""; }
+
+@media (min-width: 768px) {
+    .form-inline .form-group {
+        margin-bottom: 9px;
+    }
+}
+
+.alert {
+    padding: 8px 35px 8px 14px;
+    margin-bottom: 20px;
+}
+
+.row {
+    label { padding-top: 8px; }
+}
+/* Bootstrap overrides END */
+
 #background-loader.secure {
     background-color: rgba(255, 255, 255, 0);
     /* bug 27760 */
@@ -34,7 +80,7 @@
     -webkit-backface-visibility: hidden;
 
     &.wallpaper {
-        .radial-gradient(@wallpaperColor1, @wallpaperColor2, @wallpaperColor3);
+        .radial-gradient(@wallpaper-color-1, @wallpaper-color-2, @wallpaper-color-3);
     }
 }
 
@@ -82,8 +128,8 @@
 .core-boot-dialog {
 
     position: absolute;
-    width: 500px;
-    height: 300px;
+    width: 552px;
+    height: 326px;
     padding: 13px 26px;
     background-color: white;
     top: 45%;
@@ -150,7 +196,7 @@
     height: 40px;
     bottom: auto;
     z-index: 2;
-    .vertical-gradient(@topbarBackgroundAlt, @topbarBackground);
+    .vertical-gradient(@toolbar-background-alt, @toolbar-background);
 
     .launchers {
         overflow: hidden;
@@ -203,7 +249,7 @@
     }
 
     #io-ox-topbar .launcher {
-        //font-size: @topbarFontSize + 1;
+        //font-size: @topbar-font-size + 1;
         //line-height: 35px;
         //padding: 0px 12px 0px 12px;
     }
@@ -217,7 +263,7 @@
     }
 
     body {
-        font-size: @touchFontSize;
+        font-size: @font-size-touch;
     }
 
     .scrollable .scrollable-pane {
@@ -232,15 +278,15 @@
 
     .launcher-dropdown, .launcher {
 
-        font-size: @topbarFontSize;
-        color: @topbarLauncherColor;
+        font-size: @topbar-font-size;
+        color: @topbar-launcher-color;
         line-height: 40px;
         white-space: nowrap;
         display: inline-block;
         -webkit-tap-highlight-color: transparent;
 
         & > a {
-            color: @topbarLauncherColor;
+            color: @topbar-launcher-color;
             padding: 12px;
         }
 
@@ -252,7 +298,7 @@
             outline: 0;
             background-color: #08c;
             i[class^="icon-"] {
-                color: @topbarLauncherColor-hover;
+                color: @topbar-launcher-color-hover;
             }
         }
 
@@ -262,15 +308,15 @@
 
         & > a:focus {
             outline: 0;
-            color: @topbarLauncherColor-hover;
+            color: @topbar-launcher-color-hover;
             background-color: #08c;
         }
 
     }
 
     .launcher.closable:hover {
-        color: @topbarLauncherColor-hover;
-        background-color: @topbarLauncherBackgroundHover;
+        color: @topbar-launcher-color-hover;
+        background-color: @topbar-launcher-background-hover;
     }
 
     .launcher {
@@ -283,25 +329,25 @@
 
         // IE10 needs this :link class otherwise :active is not removed
         & > a:link {
-            color: @topbarLauncherColor;
+            color: @topbar-launcher-color;
             background-color: transparent;
         }
 
         & > a:hover {
-            color: @topbarLauncherColor-hover;
-            background-color: @topbarLauncherBackgroundHover;
+            color: @topbar-launcher-color-hover;
+            background-color: @topbar-launcher-background-hover;
         }
 
         // don't add a:active otherwise IE10 messes it up
         & > a:focus {
             outline: 0;
-            color: @topbarLauncherColor-hover;
+            color: @topbar-launcher-color-hover;
             background-color: #08c;
         }
 
         &.upsell {
 
-            color: darken(@topbarLauncherColor, 20%);
+            color: darken(@topbar-launcher-color, 20%);
 
             i.icon-lock {
                 color: inherit;
@@ -312,9 +358,9 @@
         }
 
         &.active-app {
-            color: @topbarLauncherColorActive;
-            background-color: @topbarLauncherBackgroundActive;
-            & > a { color: @topbarLauncherColorActive; }
+            color: @topbar-launcher-color-active;
+            background-color: @topbar-launcher-background-active;
+            & > a { color: @topbar-launcher-color-active; }
         }
 
         &.closable {
@@ -346,12 +392,12 @@
         }
 
         &.closable i.icon-remove:hover {
-            color: @topbarLauncherColor-hover;
-            background-color: @topbarLauncherBackgroundHover;
+            color: @topbar-launcher-color-hover;
+            background-color: @topbar-launcher-background-hover;
         }
 
         &.active-app.closable i[class^="icon-"]{
-            color: @linkOnDark;
+            color: @link-on-dark;
         }
 
         &.left-corner {
@@ -427,7 +473,7 @@
     }
 
     i[class^="icon-"].launcher-icon {
-        color: @topbarIconColor;
+        color: @topbar-icon-color;
         font-size: 20px;
         text-decoration: none;
         line-height: 1em;
@@ -473,17 +519,17 @@
 
         .badge {
             color: #aaa;
-            background-color: @notificationIconBackground;
+            background-color: @notification-icon-background;
         }
 
         .badge.active {
             color: white;
-            background-color: @notificationIconBackgroundActive;
+            background-color: @notification-icon-background-active;
         }
 
         &:focus .badge, &:active .badge {
             color: white;
-            background-color: darken(@linkColor, 10%);
+            background-color: darken(@link-color, 10%);
         }
 
         .badge i {
@@ -502,17 +548,17 @@
 
         &:focus {
             i { color: white; }
-            background-color: @linkColor;
+            background-color: @link-color;
             outline-style: none;
         }
 
         &.active {
             color: white;
-            background-color: @topbarLauncherBackgroundHover;
+            background-color: @topbar-launcher-background-hover;
         }
 
         &.active:hover, &.active:focus {
-            background-color: @topbarLauncherBackgroundHover;
+            background-color: @topbar-launcher-background-hover;
         }
     }
 }
@@ -551,7 +597,6 @@
 
     .overflow-x(hidden);
     .overflow-y(auto);
-    .box-sizing(border-box);
 
      &:focus { outline: 0; }
 
@@ -582,7 +627,7 @@
         .section-title {
             color: #eee;
             border: none;
-            font-family: @lightFontFamily;
+            font-family: @light-font-family;
             font-size: 18px;
             margin: 0 0 0 13px;
             line-height: 46px;
@@ -735,7 +780,7 @@
     &.io-ox-alert-info .icon { color: #08c; }
     &.io-ox-alert-error .icon { color: #a00; }
     &.io-ox-alert-warning .icon { color: #fc0; }
-    &.io-ox-alert-success .icon { color: @greenLight; }
+    &.io-ox-alert-success .icon { color: @green-light; }
     &.io-ox-alert-busy .icon { color: #555; }
 
     &.io-ox-alert-success { cursor: pointer; }
@@ -858,19 +903,18 @@
 
 .window-head {
 
-    font-size: @windowHeadFontSize;
-    background-color: @windowHeadColor;
-    border-right: 1px solid @windowHeadBorderColor;
+    font-size: @window-head-font-size;
+    background-color: @window-head-color;
+    border-right: 1px solid @window-head-border-color;
 
     position: absolute;
-    top: 0;
-    width: @windowHeadWidth;
-    bottom: 0;
-    left: 0;
+    top: 0px;
+    width: @window-head-width;
+    bottom: 0px;
+    left: 0px;
     z-index: 20;
 
     .user-select(none);
-    .box-sizing(border-box);
     filter: none;
 
     &.css-table { table-layout: fixed; }
@@ -916,7 +960,7 @@
 .cell-right { text-align: right; }
 
 .clear-title {
-    font-family: @lightFontFamily;
+    font-family: @light-font-family;
     font-weight: 300;
     font-size: 20pt;
     line-height: 1.15em;
@@ -941,12 +985,12 @@
         display: inline-block;
         outline: 0;
         i {
-            color: @toolbarButtonColor;
+            color: @toolbar-button-color;
             &.accent-color {
-                background-color: @toolbarButtonAccent;
+                background-color: @toolbar-button-accent;
                 color: #FFF;
-                border: 2px solid @toolbarButtonAccent;
-                width: 25px;
+                border: 2px solid @toolbar-button-accent;
+                width: 29px;
                 border-radius: 5px;
                 padding-top: 2px;
                 display: inline-block;
@@ -955,26 +999,26 @@
         &:hover {
             text-decoration:none !important; // IE 10 needs important otherwise it will be ignored See: #27913
             i {
-                color: darken(@toolbarButtonColor, 20%);
+                color: darken(@toolbar-button-color, 20%);
                 text-decoration: none;
                 &.accent-color {
-                    background-color: darken(@toolbarButtonAccent, 10%);
-                    border-color: darken(@toolbarButtonAccent, 10%);
+                    background-color: darken(@toolbar-button-accent, 10%);
+                    border-color: darken(@toolbar-button-accent, 10%);
                 }
             }
         }
         @media (min-width: 481px), (min-device-width: 481px) {
             &:focus {
-                color: darken(@toolbarButtonColor, 20%);
+                color: darken(@toolbar-button-color, 20%);
                 text-decoration: none;
-                background-color: @toolbarFocusColor;
+                background-color: @toolbar-focus-color;
 
                 i {
                     color: white;
                     text-decoration: none;
                     &.accent-color {
-                        background-color: @toolbarFocusColor;
-                        border-color: @toolbarFocusColor;
+                        background-color: @toolbar-focus-color;
+                        border-color: @toolbar-focus-color;
                     }
                 }
             }
@@ -1006,21 +1050,20 @@
 
 .window-title {
     padding: 0 13px 0 13px;
-    color: @windowTitleColor;
-    font-family: @lightFontFamily;
+    color: @window-title-color;
+    font-family: @light-font-family;
     font-weight: 300;
     font-size: 22px;
     line-height: 30px;
     text-shadow: 0px 0px 2px #000;
     .ellipsis();
-    .box-sizing(border-box);
     /* override h1 */
     display: block;
     margin: 0;
 }
 
 .window-title .folderview-toggle {
-    color: @linkOnDark;
+    color: @link-on-dark;
 }
 
 .window-title .badge {
@@ -1036,7 +1079,7 @@
 }
 
 .window-toolbar > a {
-    color: @toolbarLinkColor;
+    color: @toolbar-link-color;
     display: inline-block;
     margin: 0 1em 0 0;
     cursor: pointer;
@@ -1045,7 +1088,7 @@
     outline: 0;
 }
 
-.window-toolbar > a:hover { color: darken(@toolbarLinkColor, 10%); }
+.window-toolbar > a:hover { color: darken(@toolbar-link-color, 10%); }
 
 .window-toolbar .dropdown-menu { text-align: left; }
 .window-toolbar .dropdown-menu a { margin-right: 0; }
@@ -1097,10 +1140,10 @@ a.button {
 
 .window-body {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: @windowHeadWidth;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: @window-head-width;
     white-space: normal;
     z-index: 1;
     .user-select(text);
@@ -1113,7 +1156,7 @@ a.button {
     }
     .window-body {
         left: 0;
-        right: @windowHeadWidth;
+        right: @window-head-width;
     }
 }
 
@@ -1122,6 +1165,13 @@ a.button {
 }
 .window-body.search-open > .window-search {
     display: block;
+
+    .close {
+        font-size: 30px;
+        position: absolute;
+        top: 7px;
+        right: 14px;
+    }
 }
 
 .window-search {
@@ -1136,12 +1186,10 @@ a.button {
     background-color: #f5f5f5;
     border-bottom: 1px solid #ddd;
 
-    .box-sizing(border-box);
-
     form { margin: 0; }
 
     .dropdown-menu {
-        top: 12px;
+        top: 27px;
     }
 
     .margin-right {
@@ -1149,27 +1197,15 @@ a.button {
     }
 }
 
-/* only last button of form-search is rounded rounded */
-.form-search .input-append .fixed-btn, .form-search .input-prepend .fixed-btn {
-    margin-left: -1px;
-    -webkit-border-radius: 0;
-    -moz-border-radius: 0;
-    border-radius: 0;
-}
-
-.form-search .input-append .fixed-btn .btn:last-child {
-    -webkit-border-radius: 0 14px 14px 0;
-    -moz-border-radius: 0 14px 14px 0;
-    border-radius: 0 14px 14px 0;
-}
-
 .search-query-container {
 
+    width: 300px;
+
     position: relative;
+    margin-right: 2em;
 
     input {
         padding-right: 30px;
-        width: 220px;
         position: relative;
         z-index: 1;
     }
@@ -1177,7 +1213,7 @@ a.button {
     .clear-query {
         position: absolute;
         top: 6px;
-        right: 10px;
+        margin-left: -25px;
         z-index: 2;
         font-size: 18px;
         color: #CCC;
@@ -1227,7 +1263,7 @@ a.button {
 
             &:focus .vgrid-cell.selected {
 
-                background-color: @selectedBackground;
+                background-color: @selected-background;
 
                 * {
                     color: #fff !important;
@@ -1257,12 +1293,12 @@ a.button {
 
         &.top {
             top: 0;
-            border-bottom: 1px solid mix(@textColor, @background, 200%/15);
+            border-bottom: 1px solid mix(@text-color, @background, 200%/15);
         }
 
         &.bottom {
             bottom: 0;
-            border-top: 1px solid mix(@textColor, @background, 200%/15);
+            border-top: 1px solid mix(@text-color, @background, 200%/15);
         }
 
         .grid-info {
@@ -1290,11 +1326,11 @@ a.button {
         float: left;
         width: 30px;
         height: 34px;
-        margin-top: 0;
-        margin-bottom: 0;
-        margin-left: -10px;
-        padding-top: 5px;
-        padding-left: 10px;
+        margin-top: -3px;
+        //margin-bottom: 0;
+        //margin-left: -10px;
+        //padding-top: 5px;
+        //padding-left: 10px;
         display: none;
     }
 
@@ -1348,9 +1384,9 @@ a.button {
     position: absolute;
     right: 0;
     left: 0;
-    font-size: @vgridFontSize;
+    font-size: @vgrid-font-size;
     padding: 10px 13px 10px 13px;
-    color: @textColor;
+    color: @text-color;
     background-color: @background; /* resolves hw accel anti-aliasing */
 
     * {
@@ -1362,7 +1398,7 @@ a.button {
     }
 
     &.hover:hover {
-        background-color: mix(@textColor, @background, 1000%/255);
+        background-color: mix(@text-color, @background, 1000%/255);
     }
 
     &.vgrid-label {
@@ -1370,10 +1406,10 @@ a.button {
         text-align: center;
         line-height: 1em;
         padding: 5px 13px 4px 13px;
-        border-bottom: 1px solid mix(@textColor, @background, 300%/15);
+        background-color: mix(@text-color, @background, 100%/15);
+        border-bottom: 1px solid mix(@text-color, @background, 300%/15);
         cursor: pointer;
-        background-color: mix(@textColor, @background, 100%/15);
-        .vertical-gradient(@background, mix(@textColor, @background, 1500%/255));
+        .vertical-gradient(@background, mix(@text-color, @background, 1500%/255));
 
         &.left {
             text-align: left;
@@ -1420,7 +1456,7 @@ a.button {
     .vgrid-cell-checkbox {
 
         position: absolute;
-        top: 0;
+        top: 3px;
         bottom: 0;
         left: 0;
         width: 30px;
@@ -1468,7 +1504,6 @@ a.button {
     bottom: 0;
     left: 0;
     width: 330px;
-    .box-sizing(border-box);
     background-color: @background;
 }
 
@@ -1479,7 +1514,6 @@ a.button {
     right: 0;
     bottom: 0;
     left: 330px;
-    .box-sizing(border-box);
     background-color: @background;
     overflow: auto;
 }
@@ -1508,11 +1542,11 @@ a.button {
 }
 
 .email-address, .blue {
-    color: @accent1Bright;
+    color: @accent-1-bright;
 }
 
 .person, .person-link {
-    color: @personLinkColor;
+    color: @person-link-color;
     word-break: normal;
     cursor: pointer;
     white-space: nowrap;
@@ -1533,18 +1567,18 @@ a.button {
 }
 
 a.attachment-link {
-    color: @mailAttachmentLinkColor;
+    color: @mail-attachment-link-color;
     word-break: break-all;
 }
 
 a.attachment-link:hover {
-    color: @mailAttachmentLinkColorHover;
+    color: @mail-attachment-link-color-hover;
 }
 
 a.n-more { white-space: nowrap; display: inline-block; margin-right: 1em; }
 
 a.nolink {
-    color: @textColor;
+    color: @text-color;
     text-decoration: none;
 }
 
@@ -1582,11 +1616,13 @@ input[type=search] {
 .search-options + ul {
     i.icon-none, i.icon-ok { display: inline-block; }
 }
+.search-options { border-radius: 0; }
 
 /* Dialogs */
 .io-ox-dialog-wrapper {
     height: 100%;
     width: 100%;
+    .modal-body { overflow-y: auto; }
 }
 
 .io-ox-dialog-underlay {
@@ -1605,7 +1641,7 @@ input[type=search] {
 .io-ox-dialog-popup {
 
     position: relative;
-    width: 500px;
+    max-width: 500px;
     margin: 0 auto 0 auto;
     overflow: visible;
     background-color: white;
@@ -1646,15 +1682,11 @@ input[type=search] {
     .content .plain-text {
         font-size: 12pt;
         text-align: center;
-        color: @textColor;
+        color: @text-color;
         padding: 10px;
     }
 
-    .form-actions {
-        text-align: right;
-    }
-
-    .modal-footer .btn {
+    .modal-footer > .btn {
         min-width: 5em;
     }
 
@@ -1668,7 +1700,7 @@ input[type=search] {
 
     &:focus {
         outline: none;
-        .box-shadow(0 5px 25px -5px darken(@linkColor, 20%));
+        .box-shadow(0px 5px 25px -5px darken(@link-color, 20%));
     }
 }
 
@@ -1692,7 +1724,7 @@ input[type=search] {
 .io-ox-dialog-pane .content {
     font-size: 12pt;
     text-align: center;
-    color: @textColor;
+    color: @text-color;
     padding: 10px;
 }
 
@@ -1736,12 +1768,10 @@ span.hint {
 
 /* inline links */
 .io-ox-inline-links {
-    position: relative;
-    font-size: @inlineLinkFontSize;
+    font-size: @inline-link-font-size;
     font-weight: 300;
-    margin: @inlineLinksMargin;
+    margin: @inline-links-margin;
     clear: both;
-    z-index: 3;
     .user-select(none);
     min-height: 20px;
 
@@ -1784,7 +1814,7 @@ ul.io-ox-inline-links + header {
 
 .io-ox-inline-links > a,
 .io-ox-inline-links > li.dropdown {
-    color: @inlineLinkColor;
+    color: @inline-link-color;
     text-decoration: none;
 
     li {
@@ -1848,7 +1878,7 @@ ul.io-ox-inline-links + header {
     .io-ox-inline-links {
         margin: 28px 0;
         a {
-            color: @inlineLinkColor;
+            color: @inline-link-color;
         }
         &.empty {
             display: none;
@@ -1898,7 +1928,7 @@ ul.io-ox-inline-links + header {
     }
 
     .window-container-center > &.left {
-        left: @windowHeadWidth;
+        left: @window-head-width;
     }
 }
 
@@ -2023,7 +2053,7 @@ ul.io-ox-inline-links + header {
 
 /* input fields */
 input.nice-input {
-    color: @textColor;
+    color: @text-color;
     background-color: white;
     border: 1px solid #ccc;
     padding: 0.10em 0.5em 0.10em 0.5em;
@@ -2033,7 +2063,7 @@ input.nice-input {
 
 .boxshadow input.nice-input:focus {
     border-color: transparent;
-    .box-shadow(0 0 5px 1px @accent1);
+    .box-shadow(0px 0px 5px 1px @accent-1);
 }
 
 /* auto complete */
@@ -2048,7 +2078,6 @@ input.nice-input {
     height: 200px;
     overflow-x: hidden;
     overfloy-y: auto;
-    .box-sizing(border-box);
     text-align:left;
     min-width: 360px;
 
@@ -2145,8 +2174,6 @@ input.nice-input {
         white-space: nowrap;
         width: 100%;
         display: block;
-        .box-sizing(border-box);
-
 
         &.selectable, &.expandable {
             cursor: pointer;
@@ -2158,10 +2185,10 @@ input.nice-input {
 
         &.selected, &.selected:hover {
 
-            background-color: @foldertreeSelectedBackground;
+            background-color: @foldertree-selected-background;
 
             * {
-                color: @foldertreeSelectedLabelColor;
+                color: @foldertree-selected-label-color;
             }
         }
 
@@ -2174,10 +2201,10 @@ input.nice-input {
 
             &.selected {
 
-                background-color: @foldertreeSelectedFocusBackground;
+                background-color: @foldertree-selected-focus-background;
 
                 * {
-                    color: @foldertreeFocusedLabelColor;
+                    color: @foldertree-focused-label-color;
                 }
             }
         }
@@ -2198,7 +2225,7 @@ input.nice-input {
             margin: 0 14px 0 0;
 
             i {
-                color: @foldertreePassiveLabelColor;
+                color: @foldertree-passive-label-color;
             }
 
             .long-title { display: inline; }
@@ -2328,8 +2355,9 @@ input.nice-input {
 .foldertree-links,
 .folder-section-links {
 
-    padding: 14px 0 0 21px;
-    line-height: 28px;
+    div { margin-bottom: 14px; }
+
+    padding: 4px 0 0 21px;
     font-weight: 300;
 
     &:empty { padding: 0; }
@@ -2341,12 +2369,12 @@ input.nice-input {
 
 .foldertree-sidepanel {
 
-    left: @windowHeadWidth;
+    left: @window-head-width;
 
     box-shadow: 0 0 3px -1px rgba(0, 0, 0, 1.0) inset;
 
-    @c1: lighten(@foldertreeSidepanelBackground, 8%);
-    @c2: @foldertreeSidepanelBackground;
+    @c1: lighten(@foldertree-sidepanel-background, 8%);
+    @c2: @foldertree-sidepanel-background;
 
     background: @c2;
     background: -moz-radial-gradient(center, ellipse cover, @c1 20%, @c2 100%);
@@ -2380,7 +2408,7 @@ input.nice-input {
             overflow: visible;
 
             .section .section-title {
-                color: @foldertreeSectionTitleColor;
+                color: @foldertree-section-title-color;
             }
 
             .folder {
@@ -2390,23 +2418,23 @@ input.nice-input {
                 }
 
                 &.selectable .folder-label {
-                    color: @foldertreeActiveLabelColor;
+                    color: @foldertree-active-label-color;
                 }
 
                 &.unreadable .folder-label {
-                    color: @foldertreePassiveLabelColor;
+                    color: @foldertree-passive-label-color;
                 }
 
                 &.selectable.dnd-over, &.selectable:hover {
-                    background-color: @foldertreeHoverBackground;
+                    background-color: @foldertree-hover-background;
                 }
 
                 &.selected {
 
-                    background-color: @foldertreeSelectedBackground;
+                    background-color: @foldertree-selected-background;
 
                     .folder-label {
-                        color: @foldertreeSelectedLabelColor;
+                        color: @foldertree-selected-label-color;
                         font-weight: 500;
                         text-shadow: none;
                     }
@@ -2418,13 +2446,13 @@ input.nice-input {
                 }
 
                 .folder-counter-badge {
-                    background-color: @foldertreeBadgeBackground;
-                    color: @foldertreeBadgeColor;
+                    background-color: @foldertree-badge-background;
+                    color: @foldertree-badge-color;
                 }
 
                 .folder-options-badge {
-                    background-color: darken(@foldertreeSelectedBackground, 10%);
-                    color: darken(@foldertreeSelectedBackground, 20%);
+                    background-color: darken(@foldertree-selected-background, 10%);
+                    color: darken(@foldertree-selected-background, 20%);
                 }
 
                 &:focus {
@@ -2433,15 +2461,15 @@ input.nice-input {
 
                     &.selected {
 
-                        background-color: @foldertreeSelectedFocusBackground;
+                        background-color: @foldertree-selected-focus-background;
 
                         .folder-counter-badge,
                         .folder-options-badge {
-                            background-color: @foldertreeBadgeFocusBackground;
+                            background-color: @foldertree-badge-focus-background;
                         }
 
                         .folder-label {
-                            color: @foldertreeFocusedLabelColor;
+                            color: @foldertree-focused-label-color;
                         }
 
                     }
@@ -2462,7 +2490,7 @@ input.nice-input {
 
             .folder-arrow {
                 font-size: 13px;
-                color: @linkColor;
+                color: @link-color;
             }
 
         }
@@ -2501,11 +2529,11 @@ a.toolbar-action {
 .toolbar-action i.enabled { color: #888; }
 .toolbar-action:hover { background-color: rgba(0, 0, 0, 0.20); }
 a.toolbar-action, .toolbar-action > a {
-    color: lighten(@linkColor, 5%);
+    color: lighten(@link-color, 5%);
     outline: 0;
     text-decoration: none;
     &:hover { text-decoration: none; }
-    i.accent-color { color: @linkAccentColor; }
+    i.accent-color { color: @link-accent-color; }
 }
 .toolbar-action.pull-left { margin-right: 1px; }
 .toolbar-action.pull-right { margin-left: 1px; }
@@ -2514,7 +2542,7 @@ a.toolbar-action, .toolbar-action > a {
 /* Focus */
 
 .toolbar-action a:focus {
-    background-color: @toolbarFocusColor;
+    background-color: @toolbar-focus-color;
     i { color: white; }
 }
 
@@ -2661,7 +2689,6 @@ a.toolbar-action, .toolbar-action > a {
 
 /** DROPDOWNS **/
 
-.dropdown-menu.dropdown-right { right: 0; left: auto; }
 .dropdown-menu.dropdown-right-side { top: 15%; left: 42px; }
 
 .dropdown-header, .dropdown-footer {
@@ -2693,7 +2720,7 @@ a.toolbar-action, .toolbar-action > a {
     color: white;
 }
 
-.btn {
+.btn-default {
     background-image: none;
     background-color: #eee;
     text-shadow: none;
@@ -2703,11 +2730,11 @@ a.toolbar-action, .toolbar-action > a {
     border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25);
 }
 
-.btn-primary { .btn-custom(@btnPrimaryBackground); }
-.btn-inverse { .btn-custom(@btnInverseBackgroundHighlight); }
-.btn-success { .btn-custom(@btnSuccessBackgroundHighlight); }
-.btn-warning { .btn-custom(@btnWarningBackgroundHighlight); }
-.btn-danger  { .btn-custom(@btnDangerBackgroundHighlight); }
+.btn-primary { .btn-custom(@btn-primary-background); }
+.btn-inverse { .btn-custom(@btn-inverse-background-highlight); }
+.btn-success { .btn-custom(@btn-success-background-highlight); }
+.btn-warning { .btn-custom(@btn-warning-background-highlight); }
+.btn-danger  { .btn-custom(@btn-danger-background-highlight); }
 
 /** BOOTSTRAP FIXES **/
 
@@ -2735,21 +2762,6 @@ a.toolbar-action, .toolbar-action > a {
 
 ul.dropdown-menu li a.disabled { color:#999; }
 
-.fileupload .uneditable-input { display:none; }
-
-.fileupload-new .uneditable-input {
-    display:none;
-}
-.fileupload-exists .uneditable-input {
-    display: inline-block;
-}
-
-.fileupload-new .input-append .btn-file {
-    .border-radius(3px);
-}
-.fileupload-exists .input-append .btn-file {
-    .border-radius(0 3px 3px 0);
-}
 
 /** Flat inputs **/
 
@@ -2875,7 +2887,7 @@ input.flat-input {
     .vsplit .leftside { width: 50%; right: auto; }
     .vsplit .rightside { left: 50%; width: 50%; top: 41px; right: auto; }
     .vsplit .rightside-navbar {
-        position: absolute; top: 0; left: 50%; width: 50%; height: 30px;
+        position: absolute; top: 0; left: 50%; width: 50%; height: 45px;
         background-color: #eee; border-bottom: 1px solid #ccc;
         padding: 5px 13px 5px 13px;
     }
@@ -3144,13 +3156,13 @@ input.flat-input {
         .color-black { background-color: #333; }
         .color-red { background-color: @red; }
         .color-orange { background-color: @orange; }
-        .color-lightgreen { background-color: darken(@greenLight, 10%); }
+        .color-lightgreen { background-color: darken(@green-light, 10%); }
         .color-green { background-color: @green; }
-        .color-lightblue { background-color: darken(@blueLight, 20%); }
+        .color-lightblue { background-color: darken(@blue-light, 20%); }
         .color-blue { background-color: @blue; }
         .color-purple { background-color: @purple; }
         .color-pink { background-color: darken(@pink, 10%); }
-        .color-gray { background-color: darken(@grayLight, 20%); }
+        .color-gray { background-color: darken(@gray-light, 20%); }
     }
 
     #background-loader.secure.block {
@@ -3179,10 +3191,10 @@ input.flat-input {
 
     }
     .dropdown-menu li > a:active {
-        color: @dropdownLinkColorActive;
+        color: @dropdown-link-active-color;
         text-decoration: none;
         outline: 0;
-        .vertical-gradient(@dropdownLinkBackgroundActive, darken(@dropdownLinkBackgroundActive, 5%));
+        .vertical-gradient(@dropdown-link-active-bg, darken(@dropdown-link-active-bg, 5%));
     }
 
 }

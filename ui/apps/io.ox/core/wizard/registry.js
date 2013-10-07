@@ -44,7 +44,7 @@ define('io.ox/core/wizard/registry',
         this.wizardIsRunning = null;
 
         this.navButtons = $('<div/>').append(
-            $('<button class="btn wizard-next" tabindex="1">').text(gt('Next')).on('click', function () {
+            $('<button class="btn btn-default wizard-next" tabindex="1">').text(gt('Next')).on('click', function () {
                 self.next();
             }),
             $('<button class="btn btn-primary wizard-done" tabindex="1">').text(gt('Done')).on('click', function () {
@@ -57,7 +57,7 @@ define('io.ox/core/wizard/registry',
 
         if (options.closeable) {
             this.navButtons.append(
-                $('<button class="btn wizard-close" tabindex="1">').text(gt('Close')).on('click', function () {
+                $('<button class="btn btn-default wizard-close" tabindex="1">').text(gt('Close')).on('click', function () {
                     self.close();
                 })
             );

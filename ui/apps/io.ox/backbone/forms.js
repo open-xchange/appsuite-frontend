@@ -77,10 +77,7 @@ define('io.ox/backbone/forms',
             }
             this.buildControls();
 
-            this.nodes.controlGroup = $('<div class="control-group">').appendTo(this.$el);
-            if (options.fluid) {
-                this.nodes.controlGroup.addClass('row-fluid');
-            }
+            this.nodes.controlGroup = $('<div class="form-group">').appendTo(this.$el);
             this.nodes.controlGroup.append(
                 this.buildLabel(),
                 this.buildControls()
@@ -88,11 +85,11 @@ define('io.ox/backbone/forms',
         };
 
         this.buildControls = function () {
-            return this.nodes.controls || (this.nodes.controls = $('<div class="controls">').append(this.buildElement()));
+            return this.nodes.controls || (this.nodes.controls = $('<div>').addClass(options.controlCssClass).append(this.buildElement()));
         };
 
         this.buildLabel = function () {
-            return this.nodes.label || (this.nodes.label = $('<label class="control-label" for="' + this.attribute + '">').text(this.label));
+            return this.nodes.label || (this.nodes.label = $('<label class="control-label" for="' + this.attribute + '">').addClass(options.labelCssClass).text(this.label));
         };
 
         this.buildElement = function () {
@@ -171,14 +168,14 @@ define('io.ox/backbone/forms',
     }
 
     function SelectControlGroup(options) {
-        _.extend(this, new ControlGroup({}), {
+        _.extend(this, new ControlGroup(options), {
             buildElement: function () {
                 var self = this;
                 if (this.nodes.element) {
                     return this.nodes.element;
                 }
 
-                this.nodes.element = $('<select tabindex="1">').addClass('control');
+                this.nodes.element = $('<select tabindex="1">').addClass('form-control');
                 _(this.selectOptions).each(function (label, value) {
                     self.nodes.element.append(
                         $('<option>', {value: value}).text(label)
@@ -230,9 +227,14 @@ define('io.ox/backbone/forms',
             tagName: 'div',
             render: function () {
                 this.nodes = {};
-                this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label).append(this.nodes.inputField = $(this.control || '<input type="text">')));
+                var guid = _.uniqueId('form-control-label-');
+                this.$el.append(
+                    $('<label>').addClass(this.labelClassName || '').attr('for', guid).text(this.label),
+                    this.nodes.inputField = $(this.control || '<input type="text">').attr('id', guid)
+                );
                 this.nodes.inputField
                     .val(this.model.get(this.attribute))
+                    .addClass('form-control')
                     .attr({ tabindex: 1 });
                 if (options.changeAppTitleOnKeyUp) {
                     this.nodes.inputField.on('keyup', $.proxy(function () {
@@ -300,7 +302,7 @@ define('io.ox/backbone/forms',
             render: function () {
                 var self = this;
                 this.nodes = {};
-                this.nodes.select = $('<select tabindex="1">');
+                this.nodes.select = $('<select class="form-control" tabindex="1">');
                 if (options.multiple) {
                     this.nodes.select.prop('multiple', true);
                 }
@@ -476,15 +478,15 @@ define('io.ox/backbone/forms',
                 this.$el.append(
                     this.nodes.controlGroup = $('<div class="control-group">').append(
                         $('<label>').addClass(options.labelClassName || '').text(this.label),
-                        $('<div class="controls">').append(
+                        $('<div class="form-inline">').append(
                             function () {
-                                self.nodes.dayField = $('<input type="text" tabindex="1" class="input-small datepicker-day-field">');
+                                self.nodes.dayField = $('<input type="text" tabindex="1" class="form-control datepicker-day-field">');
                                 if (options.initialStateDisabled) {
                                     self.nodes.dayField.prop('disabled', true);
                                 }
 
                                 if (options.display === 'DATETIME') {
-                                    self.nodes.timezoneField = $('<span class="label">');
+                                    self.nodes.timezoneField = $('<span class="label label-default">');
                                     if (self.model.get(self.attribute)) {
                                         self.nodes.timezoneField.text(gt.noI18n(date.Local.getTTInfoLocal(self.model.get(self.attribute)).abbr));
                                     } else {
@@ -493,14 +495,14 @@ define('io.ox/backbone/forms',
                                 }
 
                                 if (mobileMode) {
-                                    self.nodes.dayField.toggleClass('input-medium', 'input-small');
+                                    self.nodes.dayField.toggleClass('input-medium', 'input-sm');
                                     return [self.nodes.dayField];
                                 } else {
                                     if (options.display === 'DATE') {
                                         return [self.nodes.dayField, '&nbsp;', self.nodes.timezoneField];
                                     } else if (options.display === 'DATETIME') {
 
-                                        self.nodes.timeField = $('<input type="text" tabindex="1" class="input-mini">');
+                                        self.nodes.timeField = $('<input type="text" tabindex="1" class="form-control">');
                                         if (self.model.get('full_time')) {
                                             self.nodes.timeField.hide();
                                             self.nodes.timezoneField.hide();

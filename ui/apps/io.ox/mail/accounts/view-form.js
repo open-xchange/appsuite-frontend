@@ -153,7 +153,7 @@ define.async('io.ox/mail/accounts/view-form',
                 }
                 //disable folderselect if no account is defined
                 if (self.model.get('id') === undefined) {
-                    self.$el.find('button.btn.folderselect').hide();
+                    self.$el.find('button.btn.folderselect').prop('disabled', true);
                 }
 
                 return self;

@@ -651,7 +651,7 @@ define('io.ox/core/commons',
                     // navigation
                     $('<div class="rightside-navbar">').append(
                         $('<div class="rightside-inline-actions">'),
-                        $('<a href="#" class="btn" tabindex="-1">').append(
+                        $('<a href="#" class="btn btn-default" tabindex="-1">').append(
                             $('<i class="icon-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
                         ).on('click', { app: app }, click)
                     ),

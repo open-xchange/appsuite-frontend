@@ -13,6 +13,8 @@
     "jquery": "~2.0.3",
     "underscore": "~1.4.3",
     "mediaelement": "~2.13.1",
-    "bootstrap-datepicker": "https://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git#master"
+    "bootstrap": "~3.0.2",
+    "bootstrap-datepicker": "https://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git#bs3",
+    "bootstrap-typeahead": "https://github.com/bassjobsen/Bootstrap-3-Typeahead.git"
   }
 }

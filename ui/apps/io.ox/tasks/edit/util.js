@@ -34,54 +34,59 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
             });
         },
         buildLabel: function (text, id) {
-            return $('<label>').text(text).addClass('task-edit-label').attr('for', id);
+            return $('<label>').text(text).attr('for', id);
         },
         //build progressField and buttongroup
-        buildProgress: function (val) {
+        buildProgress: function () {
             var val = val || 0,
-                progress = $('<input>').attr({type: 'text', id: 'task-edit-progress-field', tabindex: 1}).val(val)
-                .addClass('span6 progress-field'),
-
-                wrapper = $('<div>').addClass('input-append').append(progress,
-                    $('<button type="button" tabindex="1">').attr('data-action', 'minus').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-minus'))
-                    .on('click', function () {
-                        var temp = parseInt(progress.val(), 10);
-                        temp -= 25;
-                        if (temp < 0) {
-                            temp = 0;
-                        }
-                        if (temp !== parseInt(progress.val(), 10)) {
-                            progress.val(temp);
-                            progress.trigger('change');
-                        }
-                    }),
-                    $('<button type="button" tabindex="1">').attr('data-action', 'plus').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-plus'))
-                    .on('click', function () {
-                        var temp = parseInt(progress.val(), 10);
-                        temp += 25;
-                        if (temp > 100) {
-                            temp = 100;
-                        }
-                        if (temp !== parseInt(progress.val(), 10)) {
-                            progress.val(temp);
-                            progress.trigger('change');
-                        }
-                    })
-                    );
+                progress = $('<input class="form-control progress-field">').attr({type: 'text', id: 'task-edit-progress-field', tabindex: 1}).val(val),
+                wrapper = $('<div class="input-group">').append(
+                    progress,
+                    $('<div class="input-group-btn">').append(
+                        $('<button type="button" tabindex="1" class="btn btn-default" data-action="minus">').append(
+                            $('<i>').addClass('icon-minus')
+                        )
+                        .on('click', function () {
+                            var temp = parseInt(progress.val(), 10);
+                            temp -= 25;
+                            if (temp < 0) {
+                                temp = 0;
+                            }
+                            if (temp !== parseInt(progress.val(), 10)) {
+                                progress.val(temp);
+                                progress.trigger('change');
+                            }
+                        }),
+                        $('<button type="button" tabindex="1" class="btn btn-default" data-action="plus">').append(
+                            $('<i>').addClass('icon-plus')
+                        )
+                        .on('click', function () {
+                            var temp = parseInt(progress.val(), 10);
+                            temp += 25;
+                            if (temp > 100) {
+                                temp = 100;
+                            }
+                            if (temp !== parseInt(progress.val(), 10)) {
+                                progress.val(temp);
+                                progress.trigger('change');
+                            }
+                        })
+                    )
+                );
 
             return {progress: progress, wrapper: wrapper};
         },
         buildExtensionRow: function (parent, extensions, baton) {
-            var row = $('<div class="row-fluid task-edit-row">').appendTo(parent);
+            var row = $('<div class="row">').appendTo(parent);
             for (var i = 0; i < extensions.length; i++) {
                 extensions[i].invoke('draw', row, baton);
             }
             //find labels and make them focus the inputfield
-            row.find('label').each(function () {
+            /*row.find('label').each(function () {
                 if (this) {
                     $(this).attr('for', $(this).next().attr('id'));
                 }
-            });
+            });*/
             return row;
         },
         buildRow: function (parent, nodes, widths, fillGrid) {
@@ -101,7 +106,7 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
                 }
             }
 
-            var row = $('<div>').addClass('row-fluid task-edit-row').appendTo(parent);
+            var row = $('<div class="row">').appendTo(parent);
             for (var i = 0; i < nodes.length; i++) {
                 if (_.isArray(widths[i])) {
                     $('<div>').addClass('span' + widths[i][0] + ' offset' + widths[i][1]).append(nodes[i]).appendTo(row);
@@ -112,7 +117,7 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
 
             //fillout gridCells
             if (fillGrid || fillGrid === undefined) {
-                row.children().children().not('label').addClass('span12');
+                row.children().children().not('label').addClass('col-md-12');
             }
         },
 

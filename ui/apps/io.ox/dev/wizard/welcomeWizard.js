@@ -190,16 +190,16 @@ define('io.ox/dev/wizard/welcomeWizard',
             var mini = baton.libraries.mini;
 
             this.append(
-                $('<form class="form-horizontal" />').append(
-                    $('<div class="control-group" />').append(
-                        $('<label class="control-label" for="first_name" />').text('First Name'), // Don't forget i18n in your own wizard!
-                        $('<div class="controls" />').append(
+                $('<form class="form-horizontal">').append(
+                    $('<div class="control-group">').append(
+                        $('<label class="control-label" for="first_name">').text('First Name'), // Don't forget i18n in your own wizard!
+                        $('<div class="controls">').append(
                             new mini.InputView({name: 'first_name', model: baton.user}).render().$el
                         )
                     ),
-                    $('<div class="control-group" />').append(
-                        $('<label class="control-label" for="last_name" />').text('Last Name'), // Don't forget i18n in your own wizard!
-                        $('<div class="controls" />').append(
+                    $('<div class="control-group">').append(
+                        $('<label class="control-label" for="last_name">').text('Last Name'), // Don't forget i18n in your own wizard!
+                        $('<div class="controls">').append(
                             new mini.InputView({name: 'last_name', model: baton.user}).render().$el
                         )
                     )
@@ -229,18 +229,18 @@ define('io.ox/dev/wizard/welcomeWizard',
         hideButtons: 'true',
         draw: function (baton) {
             this.append(
-                $('<div />').text('Would you like to be informed of special offers from time to time?'),
+                $('<div>').text('Would you like to be informed of special offers from time to time?'),
                 '<br />',
-                $('<div />').append(
-                    $('<button class="btn btn-primary" />').text('Yes! Send me information about special offers').on('click', function () {
+                $('<div>').append(
+                    $('<button class="btn btn-primary">').text('Yes! Send me information about special offers').on('click', function () {
                         baton.specialOffers = true;
                         baton.buttons.enableNext();
                         baton.wizard.next();
                     })
                 ),
                 '<br />',
-                $('<div />').append(
-                    $('<button class="btn" />').text('No, thanks').on('click', function () {
+                $('<div>').append(
+                    $('<button class="btn btn-default">').text('No, thanks').on('click', function () {
                         baton.specialOffers = false;
                         baton.buttons.enableNext();
                         baton.wizard.next();

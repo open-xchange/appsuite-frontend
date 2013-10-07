@@ -100,7 +100,7 @@
     }
 
     .attachments {
-        font-family: @lightFontFamily;
+        font-family: @light-font-family;
         color: #aaa;
     }
 
@@ -152,7 +152,7 @@
         vertical-align: top;
         white-space: nowrap;
         .high {
-            color: @taskPriority;
+            color: @task-priority;
         }
         .low {
             i:first-child { color: #888; }
@@ -185,9 +185,10 @@
         .attachments-container .dropdown { margin-top: 5px; }
 
         .info-panel { width: 100%; } //to push the title under the info panel, prevents long titles to be ripped apart
+
     }
 
-    div.io-ox-tasks-edit.task-edit-wrapper.container-fluid.default-content-padding { padding-bottom: 40px; }
+    div.io-ox-tasks-edit.task-edit-wrapper.container.default-content-padding { padding-bottom: 40px; }
 
     .task-detail-container { padding: 13px 13px 0 13px; }
 }

@@ -26,11 +26,10 @@ define('io.ox/mail/settings/signatures/register',
         id: 'name',
         index: 100,
         draw: function (baton) {
-            var inputId = _.uniqueId('signature-name_');
             this.append(
-                $('<div class="row-fluid">').append(
-                    $('<label>').attr('for', inputId).text(gt('Signature name')),
-                    baton.$.name = $('<input type="text" class="span12" tabindex="1">').attr('id', inputId)
+                $('<div class="form-group">').append(
+                    $('<label for="signature-name">').text(gt('Signature name')),
+                    baton.$.name = $('<input type="text" class="form-control">').attr({'id': 'signature-name', 'tabindex': 1})
                 )
             );
         }
@@ -50,11 +49,10 @@ define('io.ox/mail/settings/signatures/register',
         id: 'textarea',
         index: 300,
         draw: function (baton) {
-            var inputId = _.uniqueId('signature-textarea_');
             this.append(
-                $('<div class="row-fluid">').append(
-                    $('<label>').attr('for', inputId).text(gt('Signature text')),
-                    baton.$.signature = $('<textarea class="span12" rows="10" tabindex="1">').attr('id', inputId)
+                $('<div class="form-group">').append(
+                    $('<label for="signature-text">').text(gt('Signature text')),
+                    baton.$.signature = $('<textarea class="form-control" rows="10" id="signature-text">')
                 )
             );
         }
@@ -64,11 +62,10 @@ define('io.ox/mail/settings/signatures/register',
         id: 'position',
         index: 400,
         draw: function (baton) {
-            var inputId = _.uniqueId('signature-position_');
             this.append(
-                $('<div class="row-fluid">').append(
-                    $('<label>').attr('for', inputId).text(gt('Signature position')),
-                    baton.$.insertion = $('<select tabindex="1">').attr('id', inputId)
+                $('<div class="form-group">').append(
+                    $('<label for="signature-position">').text(gt('Signature position')),
+                    baton.$.insertion = $('<select id="signature-position" class="form-control">')
                         .append(
                             $('<option value="above">').text(gt('Above quoted text')),
                             $('<option value="below">').text(gt('Below quoted text'))
@@ -264,13 +261,13 @@ define('io.ox/mail/settings/signatures/register',
                         signatures[signature.id] = signature;
 
                         var isDefault = settings.get('defaultSignature') === signature.id,
-                            $item = $('<li>')
+                            $item = $('<li class="widget-settings-view">')
                                 .attr('data-id', signature.id)
                                 .append(
                                     $('<div class="pull-right">').append(
                                         $('<a class="action" tabindex="1" data-action="default">').text((isDefault ? gt('(Default)') : gt('Set as default'))),
                                         $('<a class="action" tabindex="1" data-action="edit">').text(gt('Edit')),
-                                        $('<a class="close">').attr({
+                                        $('<a class="remove-widget">').attr({
                                             'data-action': 'delete',
                                             title: gt('Delete'),
                                             tabindex: 1
@@ -324,7 +321,7 @@ define('io.ox/mail/settings/signatures/register',
 
             function addSignatureList($node) {
                 // List
-                $list = $('<ul class="settings-list">')
+                $list = $('<ul class="list-unstyled list-group settings-list">')
                 .on('click keydown', 'a[data-action=edit]', function (e) {
                     if ((e.type === 'click') || (e.which === 13)) {
                         var id = $(this).closest('li').attr('data-id');

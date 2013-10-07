@@ -29,11 +29,9 @@ define('io.ox/files/views/create',
             dndInfo = $('<div class="dndinfo alert alert-info">').text(gt('You can drag and drop files from your computer to upload either a new file or another version of a file.')),
 
             show = function (app) {
-
                 var dialog = new dialogs.CreateDialog({ width: 450, center: true, async: true, container: $('.io-ox-files-window'), 'tabTrap': true }),
-                    $form = $('<form>', { 'class': 'files-create', 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' }),
+                    $form = $('<form>', { 'class': 'files-create col-lg-12', 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' }),
                     description = '';
-
                 dialog.getContentNode().css('height', '300px'); // 400 is quite much
                 ext.point(POINT + '/form').invoke('draw', $form, baton);
                 ext.point(POINT + '/filelist').invoke();
@@ -107,7 +105,7 @@ define('io.ox/files/views/create',
 
                 //dialog
                 dialog.header($('<h4>').text(gt('Upload new files')));
-                dialog.getBody().append($('<div>').addClass('row-fluid').append($form));
+                dialog.getBody().append($('<div>').addClass('row').append($form));
                 dialog.getBody().append(
                     (_.device('!touch') && (!_.browser.IE || _.browser.IE > 9) ? dndInfo : '')
                 );
@@ -137,7 +135,7 @@ define('io.ox/files/views/create',
                 id: 'file',
                 index: 200,
                 draw: function (baton) {
-                    var $inputWrap = attachments.fileUploadWidget({displayLabel: true, multi: true}),
+                    var $inputWrap = attachments.fileUploadWidget(),
                         $input = $inputWrap.find('input[type="file"]'),
                         changeHandler = function (e) {
                             e.preventDefault();
@@ -161,8 +159,10 @@ define('io.ox/files/views/create',
                 index: 300,
                 draw: function () {
                     this.append(
-                        $('<label>').text(gt('Description')),
-                        $('<textarea name="description" rows="4" class="span12" tabindex="1"></textarea>')
+                        $('<div class"form-group">').append(
+                            $('<label>').text(gt('Description')),
+                            $('<textarea name="description" rows="4" class="form-control" tabindex="1"></textarea>')
+                        )
                     );
                 }
             });
@@ -170,6 +170,7 @@ define('io.ox/files/views/create',
         //referenced via baton.fileList
         ext.point(POINT + '/filelist').extend(new attachments.EditableFileList({
                     id: 'attachment_list',
+                    itemClasses: 'col-md-6',
                     fileClasses: 'background',
                     preview: false,
                     labelmax: 18,

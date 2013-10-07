@@ -97,11 +97,11 @@ define('plugins/portal/userSettings/register',
             .build(function () {
                 this.getContentNode().append(
                     $('<label>').text(gt('Your current password')),
-                    oldPass = $('<input type="password" class="input-large current-password">'),
+                    oldPass = $('<input type="password" class="form-control input-lg current-password">'),
                     $('<label>').text(gt('New password')),
-                    newPass = $('<input type="password" class="input-large new-password">').on('keyup', updateStrength),
+                    newPass = $('<input type="password" class="form-control input-lg new-password">').on('keyup', updateStrength),
                     $('<label>').text(gt('Repeat new password')),
-                    newPass2 = $('<input type="password" class="input-large repeat-new-password">'),
+                    newPass2 = $('<input type="password" class="form-control input-lg repeat-new-password">'),
                     strengthLabel = $('<label class="password-strength-label">').hide(),//hide till new pw is inserted
                     strengthBarWrapper = $('<div class="progress">').append(
                         strengthBar = $('<div class="bar password-strength-bar">')).hide(),//hide till new pw is inserted
@@ -150,7 +150,7 @@ define('plugins/portal/userSettings/register',
             .show(function () {
                 oldPass.focus();
             });
-                           
+
             function strengthtest(pw) {//returns the strength of a password
                 //length test
                 if (pw.length >= minLength && (pw.length <= maxLength || maxLength === 0)) {// between min and max length

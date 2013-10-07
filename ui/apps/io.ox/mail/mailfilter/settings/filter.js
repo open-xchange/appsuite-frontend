@@ -202,11 +202,12 @@ define('io.ox/mail/mailfilter/settings/filter',
                             return (checkForUnknown() === 'unknown' || _.contains(['autoforward', 'spam', 'vacation'], flag))  ? 'fixed' : 'editable';
                         }
 
-                        var title = self.model.get('rulename');
+                        var title = self.model.get('rulename'),
+                            titleNode;
                         this.$el.attr({
                                 'data-id': self.model.get('id')
                             })
-                            .addClass('selectable deletable-item ' + getEditableState() + ' ' + (self.model.get('active') ? 'active' : 'disabled'))
+                            .addClass('widget-settings-view draggable ' + getEditableState() + ' ' + (self.model.get('active') ? 'active' : 'disabled'))
                             .append(
                                 $('<a>').addClass('drag-handle').append(
                                     $('<i/>').addClass('icon-reorder')
@@ -224,7 +225,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                             );
 
                         self.model.on('change:rulename', function (el, val) {
-                            title.text(val);
+                            titleNode.text(val);
                         });
                         return self;
                     },
@@ -355,18 +356,16 @@ define('io.ox/mail/mailfilter/settings/filter',
                     },
 
                     render: function () {
-                        this.$el.append(
-                            $('<h1>').addClass('no-margin').text(gt('Mail Filter')),
-                            $('<div>').addClass('controls').append(
-                                $('<div>').addClass('btn-group pull-right').append(
-                                    $('<button>').addClass('btn btn-primary').text(gt('Add new rule')).attr({
-                                        'data-action': 'add',
-                                        tabindex: 1,
-                                        type: 'button'
-                                    })
-                                )
+                        this.$el.append($('<h1>').addClass('pull-left').text(gt('Mail Filter')),
+                            $('<div>').addClass('btn-group pull-right').append(
+                                $('<button>').addClass('btn btn-primary').text(gt('Add new rule')).attr({
+                                    'data-action': 'add',
+                                    tabindex: 1,
+                                    type: 'button'
+                                })
                             ),
-                            $('<ol>').addClass('widget-list')
+                            $('<div class="clearfix">'),
+                            $('<ol>').addClass('list-group list-unstyled widget-list ui-sortable')
                         );
                         this.renderFilter();
                         return this;

@@ -83,7 +83,7 @@ define('io.ox/mail/write/inplace/inplace',
             this.$el.addClass('inplace-reply').append(
                 $('<h4 class="subject">').text('\u00A0'),
                 $('<p class="recipients">').text('\u00A0'),
-                $('<textarea rows="5" class="editor input-xxlarge" tabindex="1">').attr({'placeholder': gt('Your answer'), 'aria-label': gt('Your answer')})
+                $('<textarea rows="5" class="editor form-control">').attr({'placeholder': gt('Your answer'), 'aria-label': gt('Your answer')})
             );
 
             this.renderContent();

@@ -40,11 +40,11 @@ define('io.ox/core/import/import',
         id: 'select',
         draw: function (baton) {
             var nodes = {}, formats;
-            nodes.row = $('<div class="row-fluid">').appendTo($(this));
+            nodes.row = $('<div class="form-group">').appendTo($(this));
 
             //lable and select
             nodes.label = $('<label>').text(gt('Format')).appendTo(nodes.row);
-            nodes.select = $('<select name="action" tabindex="1" aria-label="' + gt('select format') + '">').appendTo(nodes.row);
+            nodes.select = $('<select class="form-control" name="action" tabindex="1" aria-label="' + gt('select format') + '">').appendTo(nodes.row);
 
             //add option
             formats = ext.point('io.ox/core/import/format').invoke('draw', null, baton)._wrapped;
@@ -100,7 +100,7 @@ define('io.ox/core/import/import',
     ext.point('io.ox/core/import/file_upload').extend({
         id: 'default',
         draw: function (baton) {
-            baton.nodes.file_upload = attachments.fileUploadWidget({ displayLabel: true, tabindex: 0 });
+            baton.nodes.file_upload = attachments.fileUploadWidget({ displayLabel: true, tabindex: 0, multi: false });
             this.append(
                 baton.nodes.file_upload
             );

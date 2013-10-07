@@ -28,7 +28,7 @@ define('io.ox/portal/settings/pane',
     var POINT = 'io.ox/portal/settings/detail', pane;
 
     var collection = widgets.getCollection(),
-        list = $('<ol class="widget-list">');
+        list = $('<ol class="list-group list-unstyled widget-list">');
 
     collection
         .on('remove', function (model) {
@@ -61,7 +61,7 @@ define('io.ox/portal/settings/pane',
         id: 'header',
         draw: function () {
             this.addClass('io-ox-portal-settings').append(
-                $('<h1 class="no-margin">').text(gt('Portal settings'))
+                $('<h1 class="pull-left">').text(gt('Portal settings'))
             );
         }
     });
@@ -90,15 +90,14 @@ define('io.ox/portal/settings/pane',
 
     function drawAddButton() {
         this.append(
-            $('<div class="controls">').append(
-                $('<div class="btn-group pull-right">').append(
-                    $('<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" role="button" href="#" aria-haspopup="true" tabindex="1">').append(
-                        $.txt(gt('Add widget')), $.txt(' '),
-                        $('<span class="caret">')
-                    ),
-                    $('<ul class="dropdown-menu io-ox-portal-settings-dropdown" role="menu">').on('click', 'a:not(.io-ox-action-link)', addWidget)
-                )
-            )
+            $('<div class="btn-group pull-right">').append(
+                $('<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" role="button" href="#" aria-haspopup="true" tabindex="1">').append(
+                    $.txt(gt('Add widget')), $.txt(' '),
+                    $('<span class="caret">')
+                ),
+                $('<ul class="dropdown-menu io-ox-portal-settings-dropdown" role="menu">').on('click', 'a:not(.io-ox-action-link)', addWidget)
+            ),
+            $('<div class="clearfix">')
         );
         repopulateAddButton();
     }

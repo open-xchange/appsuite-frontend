@@ -65,7 +65,6 @@
         padding: 15px 40px;
         width: 100%;
         min-height: 200px; // for busy animation
-        .box-sizing(border-box);
 
         .inline-actions {
             min-height: 30px;
@@ -405,7 +404,6 @@
                     background-size: cover;
                     background-repeat: no-repeat;
                     background-position: center;
-                    .box-sizing(border-box);
 
                     [class^="icon-"] {
                         font-size: 100px;
@@ -534,7 +532,6 @@
             white-space: pre-wrap;
             cursor: auto;
             word-break: break-all;
-            .box-sizing(border-box);
             .user-select(text);
         }
     }
@@ -589,7 +586,7 @@
     }
 
     .dragout {
-        color: @textColor;
+        color: @text-color;
         cursor: pointer;
     }
 
@@ -737,7 +734,6 @@ ul.breadcrumb li.prefix {
                     height: 150px;
                     margin: 10px;
                     .preview img {
-                        .box-sizing(border-box);
                         max-width: 100%;
                         max-height: 100%;
                     }

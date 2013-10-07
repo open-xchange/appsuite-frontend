@@ -82,7 +82,7 @@ define('io.ox/core/settings/pane',
                 this.append(
                     $('<div class="control-group">').append(
                         $('<div class="controls">').append(
-                            $('<a class="btn">').text(gt('Change password'))
+                            $('<a class="btn btn-default">').text(gt('Change password'))
                             .on('click', userSettings.changePassword)
                         )
                     )
@@ -94,6 +94,8 @@ define('io.ox/core/settings/pane',
     point.extend(new forms.SelectControlGroup({
         id: 'language',
         index: 100,
+        labelCssClass: 'col-lg-3 col-md-3',
+        controlCssClass: 'col-lg-4 col-md-4',
         attribute: 'language',
         label: gt('Language'),
         selectOptions: ox.serverConfig.languages || {},
@@ -142,6 +144,8 @@ define('io.ox/core/settings/pane',
         point.extend(new forms.SelectControlGroup({
             id: 'timezones',
             index: 200,
+            labelCssClass: 'col-lg-3 col-md-3',
+            controlCssClass: 'col-lg-4 col-md-4',
             attribute: 'timezone',
             label: gt('Time zone'),
             selectOptions: sorted
@@ -159,6 +163,8 @@ define('io.ox/core/settings/pane',
             point.extend(new forms.SelectControlGroup({
                 id: 'theme',
                 index: 400,
+                labelCssClass: 'col-lg-3 col-md-3',
+                controlCssClass: 'col-lg-4 col-md-4',
                 attribute: 'theme',
                 label: gt('Theme'),
                 selectOptions: availableThemes
@@ -180,6 +186,8 @@ define('io.ox/core/settings/pane',
             point.extend(new forms.SelectControlGroup({
                 id: 'refreshInterval',
                 index: 300,
+                labelCssClass: 'col-lg-3 col-md-3',
+                controlCssClass: 'col-lg-4 col-md-4',
                 attribute: 'refreshInterval',
                 label: gt('Refresh interval'),
                 selectOptions: options
@@ -200,6 +208,8 @@ define('io.ox/core/settings/pane',
             point.extend(new forms.SelectControlGroup({
                 id: 'autoStart',
                 index: 500,
+                labelCssClass: 'col-lg-3 col-md-3',
+                controlCssClass: 'col-lg-4 col-md-4',
                 attribute: 'autoStart',
                 label: gt('Default app after sign in'),
                 selectOptions: options
@@ -219,6 +229,8 @@ define('io.ox/core/settings/pane',
             point.extend(new forms.SelectControlGroup({
                 id: 'autoOpenNotfication',
                 index: 700,
+                labelCssClass: 'col-lg-3 col-md-3',
+                controlCssClass: 'col-lg-4 col-md-4',
                 attribute: 'autoOpenNotification',
                 label: gt('Automatic opening of notification area'),
                 selectOptions: options
@@ -241,6 +253,8 @@ define('io.ox/core/settings/pane',
         point.extend(new forms.SelectControlGroup({
             id: 'autoLogout',
             index: 600,
+            labelCssClass: 'col-lg-3 col-md-3',
+            controlCssClass: 'col-lg-4 col-md-4',
             attribute: 'autoLogout',
             label: gt('Automatic sign out'),
             selectOptions: options,
@@ -257,7 +271,7 @@ define('io.ox/core/settings/pane',
     //     index: 200000,
     //     draw: function () {
     //         this.append(
-    //             $('<button type="button" class="btn">').text(gt("Clear cache")).on("click", function (e) {
+    //             $('<button type="button" class="btn btn-default">').text(gt("Clear cache")).on("click", function (e) {
     //                 e.preventDefault();
     //                 require(["io.ox/core/cache"], function () {
     //                     ox.cache.clear();

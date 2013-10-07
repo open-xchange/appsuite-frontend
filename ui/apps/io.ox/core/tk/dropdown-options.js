@@ -27,7 +27,7 @@ define('io.ox/core/tk/dropdown-options',
             //nodes
             $anchor,
             $container = $('<span class="dropdown">'),
-            $menu = $('<ul class="dropdown-menu no-clone" role="menu">'),
+            $menu = $('<ul class="dropdown-menu pull-right no-clone" role="menu">'),
 
             /**
              * @return {object} self for chaining

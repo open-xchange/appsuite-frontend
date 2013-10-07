@@ -35,7 +35,7 @@
     .header { margin: 0 13px @vert-spacing 0; }
 
     h1.greeting {
-        font-family: @lightFontFamily;
+        font-family: @light-font-family;
         font-weight: 300;
         font-size: 24px;
         line-height: 27px;
@@ -72,14 +72,12 @@
         background-clip: padding-box;
         overflow: hidden;
         .transition(background-color 0.3s linear);
-        .box-sizing(border-box);
         .user-select(none);
 
         /* widget border decoration */
         .decoration {
             width: 100%;
             height: 100%;
-            .box-sizing(border-box);
             .user-select(none);
             border: solid transparent 1px;
             background-color: #f5f5f5;
@@ -129,13 +127,13 @@
         &.widget-color-black      { .mixin-widget-color(#333, #333);                                         }
         &.widget-color-red        { .mixin-widget-color(@red, darken(@red, 10%));                            }
         &.widget-color-orange     { .mixin-widget-color(@orange, @orange);                                   }
-        &.widget-color-lightgreen { .mixin-widget-color(darken(@greenLight, 10%), darken(@greenLight, 20%)); }
+        &.widget-color-lightgreen { .mixin-widget-color(darken(@green-light, 10%), darken(@green-light, 20%)); }
         &.widget-color-green      { .mixin-widget-color(@green, @green);                                     }
-        &.widget-color-lightblue  { .mixin-widget-color(darken(@blueLight, 20%), darken(@blueLight, 30%));   }
+        &.widget-color-lightblue  { .mixin-widget-color(darken(@blue-light, 20%), darken(@blue-light, 30%));   }
         &.widget-color-blue       { .mixin-widget-color(@blue, darken(@blue, 10%));                          }
         &.widget-color-purple     { .mixin-widget-color(@purple, darken(@purple, 10%));                      }
         &.widget-color-pink       { .mixin-widget-color(darken(@pink, 10%), darken(@pink, 20%));             }
-        &.widget-color-gray       { .mixin-widget-color(darken(@grayLight, 20%), darken(@grayLight, 30%));   }
+        &.widget-color-gray       { .mixin-widget-color(darken(@gray-light, 20%), darken(@gray-light, 30%));   }
 
         &.requires-setup {
             background-color: #eee;
@@ -200,7 +198,7 @@
         margin: 0;
         font-weight: bold;
         line-height: 26px;
-        height: 26px;
+        height: 57px;
         z-index: 2;
         cursor: move;
         .transition(color 0.3s linear);
@@ -253,7 +251,7 @@
             position: absolute;
             bottom: 0; right: 0; left: 0;
             margin: 0;
-            height: 30px;
+            height: 57px;
             padding: 13px;
             color: #fff;
             background-color: rgba(0, 0, 0, 0.30);
@@ -295,7 +293,7 @@
 .portal-feed {
 
     h1 {
-        font-family: @lightFontFamily;
+        font-family: @light-font-family;
         font-size: 24px;
         font-weight: 300;
         text-align: left;
@@ -414,7 +412,7 @@
         }
 
         h1.greeting {
-            font-family: @normalFontFamily;
+            font-family: @normal-font-family;
             font-size: 20px;
             line-height: 24px;
             .greeting-phrase { display: block; }
@@ -486,7 +484,6 @@
 /* Settings */
 .io-ox-portal-settings {
     min-height: 100%;
-    max-width: 700px;
     .user-select(none);
 
     .controls {
@@ -603,20 +600,20 @@
     .widget-color-black { color: #333; }
     .widget-color-red { color: @red; }
     .widget-color-orange { color: @orange; }
-    .widget-color-lightgreen { color: darken(@greenLight, 10%); }
+    .widget-color-lightgreen { color: darken(@green-light, 10%); }
     .widget-color-green { color: @green; }
-    .widget-color-lightblue { color: darken(@blueLight, 20%); }
+    .widget-color-lightblue { color: darken(@blue-light, 20%); }
     .widget-color-blue { color: @blue; }
     .widget-color-purple { color: @purple; }
     .widget-color-pink { color: darken(@pink, 10%); }
-    .widget-color-gray { color: darken(@grayLight, 20%); }
+    .widget-color-gray { color: darken(@gray-light, 20%); }
 
     .colors {
         display: inline-block;
 
         ul {
 
-            font: 14px/20 @normalFontFamily;
+            font: 14px/20 @normal-font-family;
             width: 200px;
             text-align: left;
             right: 0;
@@ -636,13 +633,13 @@
             .color-black { background-color: #333; }
             .color-red { background-color: @red; }
             .color-orange { background-color: @orange; }
-            .color-lightgreen { background-color: darken(@greenLight, 10%); }
+            .color-lightgreen { background-color: darken(@green-light, 10%); }
             .color-green { background-color: @green; }
-            .color-lightblue { background-color: darken(@blueLight, 20%); }
+            .color-lightblue { background-color: darken(@blue-light, 20%); }
             .color-blue { background-color: @blue; }
             .color-purple { background-color: @purple; }
             .color-pink { background-color: darken(@pink, 10%); }
-            .color-gray { background-color: darken(@grayLight, 20%); }
+            .color-gray { background-color: darken(@gray-light, 20%); }
 
             .active-color { font-weight: bold; }
         }

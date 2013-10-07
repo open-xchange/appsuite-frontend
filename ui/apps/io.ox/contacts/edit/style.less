@@ -19,7 +19,7 @@
 
     @step: 60px;
 
-    max-width: 12 * @step;
+    max-width: 12 * @step + 110;
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
@@ -34,9 +34,19 @@
         margin-left: 14px;
     }
 
-    .picture-upload-view {
+    button[data-action="save"] {
+        margin-right:15px;
+    }
+    .toggle-compact {
+        padding-left:15px;
+        padding-right:15px;
+    }
 
+    .picture-upload-view {
+        padding-left: 15px;
         position: relative;
+        display: inline-block;
+        float: left;
 
         form {
             position: absolute;
@@ -57,15 +67,18 @@
         }
     }
 
+    .native-date-picker {
+        div:nth-child(1), div:nth-child(2) { padding-right:0; }
+    }
+
     .contact-picture-upload {
 
-        float: left;
         margin: 0 30px 10px 0;
         position: relative;
 
         .picture-uploader {
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
         }
 
         .add-img-text {
@@ -74,8 +87,13 @@
         }
     }
 
+    .block {
+        margin-bottom:28px;
+        .attachment-list { margin-left: 15px; }
+    }
+
     h1.name {
-        font-family: @lightFontFamily;
+        font-family: @light-font-family;
         font-weight: 300;
         font-size: 24px;
         line-height: 32px;
@@ -92,87 +110,41 @@
 
     nav {
         text-align: right;
-        margin: 28px 0;
+        margin: 33px 0;
     }
 
-    .clear {
-        clear: both;
-    }
-
-    .block {
-        width: @step * 6;
-        margin: 0 0 28px 0;
-        float: left;
-    }
-
-    .block.even {
-        width: @step * 6 - 30;
-    }
-
-    .block.odd {
-        width: @step * 6;
-        margin-right: 30px;
-        clear: both;
-    }
-
-    .block.double-block {
-        width: 100%;
-        max-width: @step * 12;
-        margin-right: 0;
-        clear: both;
-    }
-
-    .block.two-columns {
-        p.field {
-            float: left;
-            &:nth-child(even) {
-                margin-right: 60px;
-            }
-            &:nth-child(odd) {
-                margin-right: 0;
-            }
-        }
-    }
-
-    h2.group {
+    legend.group {
         font-size: 18px;
         line-height: 24px;
         font-weight: 300;
-        margin-bottom: 14px;
+        margin-bottom: 8px;
         display: block;
         border-bottom: 0;
         color: #DF5119; /* burning orange */
     }
 
-    & p.field.rare {
+    & div.field.rare,
+    &.compact div.field {
         display: none;
     }
 
-    &.compact p.field {
-        display: none;
-    }
-
-    & p.field.always {
-        display: block;
-    }
-
-    &.compact p.field.has-content {
+    & div.field.always,
+    &.compact div.field.has-content {
         display: block;
     }
 
     legend.simple,
-    label.input {
+    label {
         font-size: 12px;
         line-height: 20px;
         color: #777;
-        margin: 0;
-        padding: 0;
         border-bottom: 0 none;
     }
 
-    .input-xlarge {
-        width: 315px;
-        margin: 0 0 7px 0;
+    legend.simple {
+        margin:0;
+        padding:0;
+        padding-top:8px;
     }
 
     textarea {
@@ -187,15 +159,6 @@
     label.private-flag input {
         position: absolute;
         float: none;
-    }
-
-    select.date { width: 70px; }
-    select.month { width: 140px; }
-    select.year { width: 100px; }
-
-    .native-date-picker select {
-        margin-right: 10px;
-        &:last-child { margin-right: 0; }
     }
 
     .inline-error { display: none; }
@@ -218,12 +181,7 @@
 
     .btn-group {
         margin-bottom: 20px;
-        margin-top: 20px;
-
-        .btn {
-            margin-left: 13px;
-            float: right;
-        }
+        margin-top: 10px;
     }
 
     button[data-action="imagereset"] {
@@ -243,7 +201,6 @@
             width: 330px;
             float: left;
             margin-right: 0;
-            .box-sizing(border-box);
 
             &:nth-child(odd) {
                 margin-right: 60px;
@@ -297,6 +254,9 @@
     }
 
     .contact_attachments_buttons {
+        padding-top: 10px;
+        padding-left: 15px;
+        padding-right: 15px;
         clear: both;
     }
 
@@ -313,31 +273,6 @@
         .toggle-compact {
             clear: both;
             text-align: left;
-        }
-        .block, .block.even, .block.odd {
-            width: 300px;
-            margin-right: 0;
-        }
-        .input-xlarge {
-            width: 300px;
-        }
-        .block.double-block {
-            width: 300px;
-        }
-        .block.two-columns p.field {
-            &:nth-child(even) {
-                margin-right: 0;
-            }
-        }
-        .attachment-list .attachment {
-            width: 300px;
-            margin-right: 0;
-        }
-        select.date { width: 70px; }
-        select.month { width: 130px; }
-        select.year { width: 90px; }
-        .native-date-picker select {
-            margin-right: 5px;
         }
     }
 }

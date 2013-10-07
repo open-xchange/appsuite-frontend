@@ -14,9 +14,6 @@
 
  .permissions-dialog {
 
-    width: 800px;
-    min-width: 800px;
-
     .modal-header {
         .breadcrumb {
             margin-bottom: 0;
@@ -35,24 +32,15 @@
           content: "";
           line-height: 0;
         }
-        &:after {
-          clear: both;
-        }
+        &:after { clear: both; }
     }
 
-    .autocomplete-controls {
-        display: inline-block;
+    .modal-footer .autocomplete-controls {
+        width: 402px;
         float: left;
     }
 
-    .input-append {
-        input {
-            width: 300px;
-        }
-    }
-
     .permission {
-
         margin: 0 0 13px 0;
 
         .contact-picture {
@@ -64,9 +52,7 @@
             i { font-size: 64px; line-height: 64px; color: #eee; }
         }
 
-        .readwrite {
-            margin-right: 36px;
-        }
+        .readwrite { margin-right: 36px; }
 
         .readonly {
             color: #888;
@@ -78,11 +64,8 @@
         }
 
         .entity {
-
             padding-left: 64px + 13;
             a { white-space: nowrap; }
-            span.dropdown { position: static; }
-            span.dropdown.open { position: relative; }
         }
 
         .name {
@@ -92,19 +75,10 @@
 
         .owner {
             margin-right: 0.5em;
-            color: @accent2;
+            color: @accent-2;
         }
 
-        .close {
-            padding: 21px 0;
-        }
-    }
-}
-
-@media (min-width: 768px) and (max-width: 979px) {
-    .permissions-dialog {
-        min-width: 600px;
-        max-width: 768px;
+        .close { padding: 21px 0; }
     }
 }
 

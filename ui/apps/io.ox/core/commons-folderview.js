@@ -493,13 +493,10 @@ define('io.ox/core/commons-folderview',
                             return str.charAt(0).toUpperCase() + str.slice(1);
                         }
                         var node = this.getContentNode().append(
-                            $('<div class="row-fluid">').append(
-                                $('<label>')
-                                    .css({'padding-top': '5px', 'padding-left': '5px'})
-                                    .addClass('span3')
+                            $('<div class="form-group">').append(
+                                $('<label class="control-label">')
                                     .text(gt('Folder type')),
-                                $('<input>', { type: 'text' })
-                                    .addClass('span9')
+                                $('<input class="form-control">', { type: 'text' })
                                     .prop('readonly', true)
                                     .val(ucfirst(folder.module))
                             )
@@ -508,13 +505,10 @@ define('io.ox/core/commons-folderview',
                         // users requires "caldav" capability
                         if (folder.module === 'calendar' && capabilities.has('caldav')) {
                             node.append(
-                                $('<div class="row-fluid">').append(
-                                    $('<label>')
-                                        .css({'padding-top': '5px', 'padding-left': '5px'})
-                                        .addClass('span3')
+                                $('<div class="form-group">').append(
+                                    $('<label class="control-label">')
                                         .text(gt('CalDAV URL')),
-                                    $('<input>', { type: 'text' })
-                                        .addClass('span9')
+                                    $('<input class="form-control">', { type: 'text' })
                                         .prop('readonly', true)
                                         .val(
                                             _.noI18n(caldavConfig.get('url')

@@ -18,6 +18,12 @@
         font-size: 13px;
         color: #888;
     }
+    .form-inline input{
+        width: 90px;
+        &.datepicker-day-field {
+            width: 107px;
+        }
+    }
 
     .typeahead.calendaredit {
 
@@ -33,11 +39,9 @@
 
     }
 
+    .nav-tabs { margin-top: 20px; }
+    .tab-content { margin-top: 13px; }
 
-    .title {
-        float: left;
-        font-size: 20px;
-    }
     .collapsed      { display: none;      }
     .cancel         { float: right;       }
     .progress-field { text-align: center; }
@@ -49,13 +53,18 @@
         color: #000000;
         position: relative;
     }
-    .task-edit-wrapper {
-        max-width: 800px;
+    .io-ox-tasks-edit {
+        max-width: 880px;
         margin-left: auto;
         margin-right: auto;
         margin-top: 20px;
+        div:first-child { margin-bottom: 10px; }
+        h1.clear-title {
+            line-height:0;
+            font-size: 20px;
+            float: left;
+        }
     }
-    .task-participant-input-field { width: 340px; }
 
     .attachment-edit-row,
     .task-edit-row { margin-bottom: 9px; }
@@ -71,14 +80,6 @@
         min-height: 364px;
         overflow: visible;
     }
-
-    #task-edit-progress-field {
-        width: 61px;
-        float: left; //fix order of inputfields in combined inputs
-    }
-
-    //fix for gap between input and button in combined inputs
-    .fluid-grid-fix { margin-left: -1px; }
 
     .participantsrow { margin-bottom: 30px; }
 
@@ -109,7 +110,7 @@
 
     .sectiontitle {
         font-size: 13px;
-        font-family: @normalFontFamily;
+        font-family: @normal-font-family;
         font-weight: normal;
         margin: 20px 0 15px 0;
         color: #888;
@@ -143,7 +144,7 @@
         .tab-content {
             min-height: 0;
         }
-        .task-edit-wrapper {
+        .io-ox-tasks-edit {
             margin-top: 0;
         }
 
@@ -156,8 +157,8 @@
 }
 
 @media (max-width: 767px) {
-    .span3.btn.fluid-grid-fix {
-        width:auto;
+    .col-md-3.btn.fluid-grid-fix {
+        width: auto;
     }
     .io-ox-tasks-edit-main .private-flag {
         top: 5px;

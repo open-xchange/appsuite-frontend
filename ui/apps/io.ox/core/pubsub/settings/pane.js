@@ -406,7 +406,7 @@ define('io.ox/core/pubsub/settings/pane',
                 this.$el.append(
                     // pub
                     both ? $('<h2 class="pane-headline">').text(gt('Publications')) : $(),
-                    baton.pubListNode = $('<ul class="publications">')
+                    baton.pubListNode = $('<ul class="list-unstyled publications">')
                 );
                 setupList(baton.pubListNode.empty(), baton.publications, 'publication');
             }
@@ -415,7 +415,7 @@ define('io.ox/core/pubsub/settings/pane',
                 this.$el.append(
                     // sub
                     both ? $('<h2 class="pane-headline">').text(gt('Subscriptions')) : $(),
-                    baton.subListNode = $('<ul class="subscriptions">')
+                    baton.subListNode = $('<ul class="list-unstyled subscriptions">')
                 );
                 setupList(baton.subListNode.empty(), baton.subscriptions, 'subscription');
             }

@@ -5,16 +5,17 @@
     "css/datepicker.css"
   ],
   "dependencies": {
-    "jquery": ">=1.7.1"
+    "jquery": ">=1.7.1",
+    "bootstrap": ">=3.0 <4.0"
   },
   "homepage": "https://github.com/Open-Xchange-Frontend/bootstrap-datepicker",
-  "_release": "e73e77b4b8",
+  "_release": "fda46bbcf5",
   "_resolution": {
     "type": "branch",
-    "branch": "master",
-    "commit": "e73e77b4b877827d73471febec2d7d5434cdb755"
+    "branch": "bs3",
+    "commit": "fda46bbcf5747c54c3f795ed259a215ae1e1fbf6"
   },
   "_source": "https://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git",
-  "_target": "master",
+  "_target": "bs3",
   "_originalSource": "https://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git"
 }

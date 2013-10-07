@@ -40,7 +40,8 @@ define('io.ox/settings/accounts/settings/pane',
                     'data-accounttype': o.get('accountType')
                 })
                 .append(
-                    $('<div class="pull-right">').append(
+                    $('<span data-property="displayName" class="list-title pull-left">'),
+                    $('<div class="widget-controls">').append(
                         // edit
                         $('<a class="action">').text(gt('Edit')).attr({
                             href: '#',
@@ -53,7 +54,7 @@ define('io.ox/settings/accounts/settings/pane',
                         // delete
                         o.get('id') !== 0 ?
                             // trash icon
-                            $('<a class="close">').attr({
+                            $('<a class="remove">').attr({
                                 href: '#',
                                 tabindex: 1,
                                 role: 'button',
@@ -63,7 +64,7 @@ define('io.ox/settings/accounts/settings/pane',
                             })
                             .append($('<i class="icon-trash">')) :
                             // empty dummy
-                            $('<a class="close">').attr({
+                            $('<a class="remove">').attr({
                                 href: '#',
                                 tabindex: -1,
                                 role: 'button',
@@ -71,20 +72,17 @@ define('io.ox/settings/accounts/settings/pane',
                                 'aria-label': o.get('displayName') + ', ' + gt('Delete')
                             })
                             .append($('<i class="icon-trash" style="visibility: hidden">'))
-                    ),
-                    $('<span data-property="displayName" class="list-title">')
+                    )
                 );
         },
 
         drawAddButton = function () {
-            return $('<div class="controls">').append(
-                $('<div class="btn-group pull-right">').append(
-                    $('<a class="btn btn-primary dropdown-toggle" role="button" data-toggle="dropdown" href="#" aria-haspopup="true" tabindex="1">').append(
-                        $.txt(gt('Add account')), $.txt(' '),
-                        $('<span class="caret">')
-                    ),
-                    $('<ul class="dropdown-menu" role="menu">')
-                )
+            return $('<div class="btn-group pull-right">').append(
+                $('<a class="btn btn-primary dropdown-toggle" role="button" data-toggle="dropdown" href="#" aria-haspopup="true" tabindex="1">').append(
+                    $.txt(gt('Add account')), $.txt(' '),
+                    $('<span class="caret">')
+                ),
+                $('<ul class="dropdown-menu" role="menu">')
             );
         },
 
@@ -119,15 +117,18 @@ define('io.ox/settings/accounts/settings/pane',
 
         drawPane = function () {
             return $('<div class="io-ox-accounts-settings">').append(
-                $('<h1 class="no-margin">').text(gt('Mail and Social Accounts')),
+                $('<h1 class="pull-left">').text(gt('Mail and Social Accounts')),
                 drawAddButton(),
-                $('<ul class="settings-list">')
+                $('<div>').addClass('clearfix'),
+                $('<ul class="list-unstyled list-group widget-list">')
             );
         },
 
         AccountSelectView = Backbone.View.extend({
 
             tagName: 'li',
+
+            className: 'widget-settings-view',
 
             events: {
                 'click [data-action="edit"]': 'onEdit',
@@ -238,7 +239,7 @@ define('io.ox/settings/accounts/settings/pane',
                         }
 
                         this.collection.each(function (item) {
-                            self.$el.find('.settings-list').append(
+                            self.$el.find('.widget-list').append(
                                 new AccountSelectView({ model: item }).render().el
                             );
                         });

@@ -194,7 +194,7 @@ define('io.ox/mail/actions',
                         $('<h4>').text(gt('Mail source') + ': ' + (baton.data.subject || ''))
                     )
                     .append(
-                        textarea = $('<textarea class="mail-source-view" rows="15" readonly="readonly">')
+                        textarea = $('<textarea class="form-control mail-source-view" rows="15" readonly="readonly">')
                         .on('keydown', function (e) {
                             if (e.which !== 27) {
                                 e.stopPropagation();
@@ -832,37 +832,37 @@ define('io.ox/mail/actions',
             var data = baton.data;
             require(['io.ox/core/tk/dialogs', 'io.ox/tasks/api', 'io.ox/tasks/util'], function (dialogs, taskAPI, tasksUtil) {
                 //create popup dialog
-                var popup = new dialogs.ModalDialog()
-                    .addPrimaryButton('create', gt('Create reminder'), 'create', {tabIndex: '1'})
-                    .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
+
+                var titleInput,
+                    noteInput,
+                    dateSelector,
+                    endDate = new Date(),
+                    popup = new dialogs.ModalDialog()
+                        .addPrimaryButton('create', gt('Create reminder'), 'create', {tabIndex: '1'})
+                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
 
                 //Header
-                popup.getHeader()
-                    .append($('<h4>')
-                            .text(gt('Remind me')));
+                popup.getHeader().append($('<h4>').text(gt('Remind me')));
 
                 //fill popup body
                 var popupBody = popup.getBody();
 
-                popupBody.append($('<div>', {id: 'subject'}).text(gt('Subject')));
-                var titleInput = $('<input>', { type: 'text', value: gt('Mail reminder') + ': ' + data.subject, width: '90%', tabindex: '1', 'aria-labeledby': 'subject' })
-                    .focus(function () {
-                            this.select();
-                        })
-                    .appendTo(popupBody);
-
-                popupBody.append('<div id="note">' + gt('Note') + '</div>');
-                var noteInput = $('<textarea>', { width: '90%', rows: '5', tabindex: '1', 'aria-labeledby': 'note', value: gt('Mail reminder for') + ': ' + data.subject + ' \n' +
-                    gt('From') + ': ' + util.formatSender(data.from[0]) })
-                    .focus(function () {
-                        this.select();
-                    })
-                    .appendTo(popupBody);
-
-                popupBody.append('<div id="remindme">' + gt('Remind me') + '</div>');
-                var dateSelector = $('<select>', {name: 'dateselect', tabindex: '1', 'aria-labeledby': 'remindme'})
-                .appendTo(popupBody);
-                dateSelector.append(tasksUtil.buildDropdownMenu());
+                popupBody.append(
+                    $('<div class="form-group">').append(
+                        $('<label>').text(gt('Subject')),
+                        titleInput = $('<input class="form-control">', { type: 'text', value: gt('Mail reminder') + ': ' + data.subject, tabindex: '1', 'aria-labeledby': 'subject' })
+                            .focus(function () { this.select(); })
+                    ),
+                    $('<div class="form-group">').append(
+                        $('<label>').text(gt('Note')),
+                        noteInput = $('<textarea class="form-control">', { rows: '5', value: gt('Mail reminder for') + ': ' + data.subject + ' \n' + gt('From') + ': ' + util.formatSender(data.from[0]), tabindex: '1', 'aria-labeledby': 'note' })
+                            .focus(function () { this.select(); })
+                    ),
+                    $('<div class="form-group">').append(
+                        $('<label id="remindme">').text(gt('Remind me')),
+                        dateSelector = $('<select class="form-control">', { name: 'dateselect', tabindex: '1', 'aria-labeledby': 'remindme' }).append(tasksUtil.buildDropdownMenu({time: endDate}))
+                    )
+                );
 
                 //ready for work
                 var def = popup.show();

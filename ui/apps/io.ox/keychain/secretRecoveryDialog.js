@@ -31,7 +31,7 @@ define('io.ox/keychain/secretRecoveryDialog',
                         $('<p>').text(gt('Please provide the old password so the account passwords can be recovered.')),
                         $('<label>').append(
                             $.txt(gt('Your old password')), $('<br>'),
-                            $('<input type="password" name"recovery-password" class="input-xlarge" tabindex="1">')
+                            $('<input type="password" name"recovery-password" class="form-control" tabindex="1">')
                         )
                     );
                 })

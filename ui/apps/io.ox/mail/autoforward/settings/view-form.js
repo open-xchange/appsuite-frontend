@@ -36,7 +36,7 @@ define('io.ox/mail/autoforward/settings/view-form',
         // Show backend errors
         point.extend(new forms.ErrorAlert({
             id: ref + '/edit/view/backendErrors',
-            className: 'span7',
+            className: 'col-md-7',
             index: 100,
             customizeNode: function () {
                 this.$el.css({
@@ -49,7 +49,7 @@ define('io.ox/mail/autoforward/settings/view-form',
             id: ref + '/edit/view/forwardmail',
             index: 150,
             label: model.fields.forwardmail,
-            control: '<input type="text" class="span6" name="forwardmail" tabindex="1">',
+            control: '<input type="text" class="form-control" name="forwardmail" tabindex="1">',
             attribute: 'forwardmail',
             customizeNode: function () {
                 this.$el.css({

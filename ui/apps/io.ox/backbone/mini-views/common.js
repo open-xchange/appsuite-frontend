@@ -21,7 +21,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
 
     var InputView = AbstractView.extend({
         tagName: 'input type="text"',
-        className: 'input-xlarge',
+        className: 'form-control',
         events: { 'change': 'onChange' },
         onChange: function () {
             this.model.set(this.name, this.$el.val(), { validate: true });
@@ -47,7 +47,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
 
     var TextView = AbstractView.extend({
         tagName: 'textarea',
-        className: 'input-xlarge',
+        className: 'form-control',
         events: { 'change': 'onChange' },
         onChange: function () {
             this.model.set(this.name, this.$el.val());

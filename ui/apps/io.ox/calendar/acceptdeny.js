@@ -35,21 +35,17 @@ define('io.ox/calendar/acceptdeny',
         return api.get(o).then(function (data) {
 
             if (showReminderSelect) {
-                reminderSelect = $('<div>')
-                    .addClass('controls')
-                    .css({'margin-right': '10px'})
-                    .append(
-                        $('<select id="reminderSelect" data-property="reminder">').append(function () {
-                            var self = $(this),
-                                options = util.getReminderOptions();
-                            _(options).each(function (label, value) {
-                                self.append($('<option>', {value: value}).text(label));
-                            });
-                        })
-                        .val(defaultReminder)
-                    ).before(
-                        $('<label>').addClass('control-label').attr('for', 'reminderSelect').text(gt('Reminder'))
-                    );
+                reminderSelect = $('<div class="form-group">').append(
+                    $('<label>').attr('for', 'reminderSelect').text(gt('Reminder')),
+                    $('<select id="reminderSelect" class="form-control" data-property="reminder">').append(function () {
+                        var self = $(this),
+                            options = util.getReminderOptions();
+                        _(options).each(function (label, value) {
+                            self.append($('<option>', {value: value}).text(label));
+                        });
+                    })
+                    .val(defaultReminder)
+                );
             }
 
             return new dialogs.ModalDialog()
@@ -72,16 +68,9 @@ define('io.ox/calendar/acceptdeny',
                             $.txt(' '),
                             $.txt(util.getTimeInterval(data))
                         ),
-                        $('<div class="row-fluid">').css({'margin-top': '20px'}).append(
-                            $('<div class="control-group span12">').css({'margin-bottom': '0px'}).append(
-                                $('<label class="control-label">').attr('for', inputid).text(gt('Comment')),
-                                $('<div class="controls">').css({'margin-right': '10px'}).append(
-                                    $('<input type="text" data-property="comment">')
-                                        .attr({ id: inputid, tabindex: '1'})
-                                        .css({ width: '100%' })
-                                        .val(message)
-                                )
-                            ),
+                        $('<div class="form-group">').css({'margin-top': '20px'}).append(
+                            $('<label class="control-label">').attr('for', inputid).text(gt('Comment')),
+                            $('<input type="text" class="form-control" data-property="comment">').attr({ id: inputid, tabindex: '1' }).val(message),
                             reminderSelect
                         )
                     );

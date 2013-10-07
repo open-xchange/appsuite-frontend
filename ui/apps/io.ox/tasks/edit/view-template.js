@@ -46,12 +46,11 @@ define('io.ox/tasks/edit/view-template',
                 saveBtnText = gt('Save');
                 headlineText = gt('Edit task');
             }
-            this.append($('<div>').addClass('task-edit-headline row-fluid').append(
-                    headline = $('<h1>').addClass('clear-title title').text(headlineText),//title
+            this.append($('<div class="col-lg-12">').append(
+                    headline = $('<h1 class="clear-title">').text(headlineText),//title
                     saveBtn = $('<button type="button" data-action="save" class="btn btn-primary task-edit-save">')//save button
                         .text(saveBtnText)
-                        .on('click', function (e) {
-                            e.stopPropagation();
+                        .on('click', function () {
                             app.getWindow().busy();
 
                             // check if waiting for attachmenthandling is needed
@@ -78,7 +77,7 @@ define('io.ox/tasks/edit/view-template',
                             });
 
                         }),
-                    $('<button type="button" data-action="discard" class="btn cancel task-edit-cancel">')//cancel button
+                    $('<button type="button" data-action="discard" class="btn btn-default cancel task-edit-cancel">')//cancel button
                         .text(gt('Discard'))
                         .on('click', function () { app.quit(); })
                     ));
@@ -99,9 +98,8 @@ define('io.ox/tasks/edit/view-template',
     point.extend(new forms.InputField({
         id: 'title',
         index: 200,
-        className: 'span12',
-        labelClassName: 'task-edit-label',
-        control: '<input type="text" class="title-field span12" id="task-edit-title" tabindex="1">',
+        className: 'col-sm-12',
+        control: '<input type="text" class="title-field form-control" id="task-edit-title" tabindex="1">',
         attribute: 'title',
         label: gt('Subject')
     }), {
@@ -112,9 +110,8 @@ define('io.ox/tasks/edit/view-template',
     point.extend(new forms.InputField({
         id: 'note',
         index: 300,
-        className: 'span12',
-        labelClassName: 'task-edit-label',
-        control: '<textarea class="note-field span12" id="task-edit-note" tabindex="1">',
+        className: 'col-sm-12',
+        control: '<textarea class="note-field form-control" id="task-edit-note" tabindex="1">',
         attribute: 'note',
         label: gt('Description')
     }), {
@@ -131,18 +128,15 @@ define('io.ox/tasks/edit/view-template',
             if (baton.parentView.collapsed) {
                 text = gt('Expand form');
             }
-            this.append($('<a tabindex="1">').addClass('expand-link').text(text).attr('href', '#')
-                .on('click', function (e) {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    baton.parentView.$el.find('.collapsed').toggle();
-                    baton.parentView.collapsed = !baton.parentView.collapsed;
-                    if (baton.parentView.collapsed) {
-                        $(this).text(gt('Expand form'));
-                    } else {
-                        $(this).text(gt('Collapse form'));
-                    }
-                })
+            this.append(
+                $('<div class="col-lg-12">').append(
+                    $('<button tabindex="1" class="btn btn-link expand-link">').text(text)
+                    .on('click', function () {
+                        baton.parentView.$el.find('.collapsed').toggle();
+                        baton.parentView.collapsed = !baton.parentView.collapsed;
+                        $(this).text((baton.parentView.collapsed ? gt('Expand form') : gt('Collapse form')));
+                    })
+                )
             );
         }
     });
@@ -150,7 +144,7 @@ define('io.ox/tasks/edit/view-template',
     // recurrence
     point.extend(new RecurrenceView({
         id: 'recurrence',
-        className: 'span12 collapsed',
+        className: 'col-sm-12 collapsed',
         tabindex: 1,
         index: 700
     }), {
@@ -164,8 +158,8 @@ define('io.ox/tasks/edit/view-template',
         row: '6',
         draw: function (baton) {
             var selector;
-            this.append($('<div class="span5 collapsed">').append(
-                    $('<label>').text(gt('Remind me')).addClass('task-edit-label').attr('for', 'task-edit-reminder-select'), selector = $('<select tabindex="1">').attr('id', 'task-edit-reminder-select').addClass('span12')
+            this.append($('<div class="col-sm-5 collapsed">').append(
+                    $('<label>').text(gt('Remind me')).attr('for', 'task-edit-reminder-select'), selector = $('<select tabindex="1">').attr('id', 'task-edit-reminder-select').addClass('form-control')
                     .append($('<option>')
                     .text(''), taskUtil.buildDropdownMenu())
                     .on('change', function () {
@@ -184,8 +178,7 @@ define('io.ox/tasks/edit/view-template',
     point.extend(new forms.DatePicker({
         id: 'alarm',
         index: 900,
-        className: 'span6 offset1 collapsed',
-        labelClassName: 'task-edit-label',
+        className: 'col-sm-6 col-sm-offset-1 collapsed',
         display: 'DATETIME',
         attribute: 'alarm',
         label: gt('Date'),
@@ -199,12 +192,11 @@ define('io.ox/tasks/edit/view-template',
     point.extend(new forms.SelectBoxField({
         id: 'status',
         index: 1000,
-        className: 'span3 collapsed',
-        labelClassName: 'task-edit-label',
+        className: 'col-sm-3 collapsed',
         render: function () {
             var self = this;
             this.nodes = {};
-            this.nodes.select = $('<select tabindex="1">').addClass('status-selector span12').attr('id', 'task-edit-status-select');
+            this.nodes.select = $('<select tabindex="1">').addClass('status-selector form-control').attr('id', 'task-edit-status-select');
             _(this.selectOptions).each(function (label, value) {
                 self.nodes.select.append(
                     $('<option>', {value: value}).text(label)
@@ -243,9 +235,9 @@ define('io.ox/tasks/edit/view-template',
         row: '7',
         draw: function (baton) {
             var progressField = util.buildProgress(baton.model.get('percent_completed'));
-            this.append($('<div class="span3 collapsed">')
+            this.append($('<div class="col-sm-3 collapsed">')
                 .append(
-                     $('<label>').text(gt('Progress in %')).addClass('task-edit-label').attr('for', 'task-edit-progress-field'), $(progressField.wrapper)
+                     $('<label>').text(gt('Progress in %')).attr('for', 'task-edit-progress-field'), $(progressField.wrapper)
                     .val(baton.model.get('percent_completed'))
                     .on('change', function () {
                         var value = parseInt(progressField.progress.val(), 10);
@@ -280,12 +272,11 @@ define('io.ox/tasks/edit/view-template',
     point.extend(new forms.SelectBoxField({
         id: 'priority',
         index: 1200,
-        className: 'span3 collapsed',
-        labelClassName: 'task-edit-label',
+        className: 'col-sm-3 collapsed',
         render: function () {
             var self = this;
             this.nodes = {};
-            this.nodes.select = $('<select tabindex="1">').addClass('priority-selector span12').attr('id', 'task-edit-priority-select');
+            this.nodes.select = $('<select tabindex="1">').addClass('priority-selector form-control').attr('id', 'task-edit-priority-select');
             _(this.selectOptions).each(function (label, value) {
                 self.nodes.select.append(
                     $('<option>', {value: value}).text(label)
@@ -313,7 +304,7 @@ define('io.ox/tasks/edit/view-template',
         id: 'private_flag',
         index: 1300,
         labelClassName: 'private-flag',
-        className: 'span3 collapsed',
+        className: 'col-sm-3 collapsed',
         label: gt('Private'),
         attribute: 'private_flag'
     }), {
@@ -340,10 +331,10 @@ define('io.ox/tasks/edit/view-template',
                     content[extension.tab].push(extension);
                 }
             });
-            this.append(table = $('<ul>').addClass('nav nav-tabs collapsed'), contentNode = $('<div>').addClass('row-fluid tab-content collapsed'));
+            this.append($('<div class="col-lg-12">').append(table = $('<ul>').addClass('nav nav-tabs collapsed'), contentNode = $('<div>').addClass('tab-content collapsed')));
 
             for (var i = 0; i < tabs.length; i++) {
-                temp = $('<li>').css('width', 100 / tabs.length + '%').appendTo(table);
+                temp = $('<li class="col-lg-4 col-sm-4">').appendTo(table);
                 tabs[i].invoke('draw', temp, baton, contentNode, content[tabs[i].id], i);
             }
             table.find('li:first').addClass('active');
@@ -415,7 +406,7 @@ define('io.ox/tasks/edit/view-template',
             });
             //now draw the rest
             _(rows.rest).each(function (extension) {
-                extension.invoke('draw', tabContent, baton);
+                extension.invoke('draw', $('<div class="col-lg-12">').append(tabContent), baton);
             });
         }
     });
@@ -450,9 +441,8 @@ define('io.ox/tasks/edit/view-template',
     point.extend(new forms.InputField({
         id: 'target_duration',
         index: 1500,
-        className: 'span6',
-        labelClassName: 'task-edit-label',
-        control: '<input type="text" class="target_duration span12" id="task-edit-target-duration" tabindex="1">',
+        className: 'col-sm-6',
+        control: '<input type="text" class="target_duration form-control" id="task-edit-target-duration" tabindex="1">',
         attribute: 'target_duration',
         label: gt('Estimated duration in minutes'),
         updateModel: function () {
@@ -476,9 +466,8 @@ define('io.ox/tasks/edit/view-template',
     point.extend(new forms.InputField({
         id: 'actual_duration',
         index: 1600,
-        className: 'span6',
-        labelClassName: 'task-edit-label',
-        control: '<input type="text" class="actual_duration span12" id="task-edit-actual-duration" tabindex="1">',
+        className: 'col-sm-6',
+        control: '<input type="text" class="actual_duration form-control" id="task-edit-actual-duration" tabindex="1">',
         attribute: 'actual_duration',
         label: gt('Actual duration in minutes'),
         updateModel: function () {
@@ -502,9 +491,8 @@ define('io.ox/tasks/edit/view-template',
     point.extend(new forms.InputField({
         id: 'target_costs',
         index: 1700,
-        className: 'span6',
-        labelClassName: 'task-edit-label',
-        control: '<input type="text" class="target_costs span12" id="task-edit-target-costs" tabindex="1">',
+        className: 'col-sm-6',
+        control: '<input type="text" class="target_costs form-control" id="task-edit-target-costs" tabindex="1">',
         attribute: 'target_costs',
         label: gt('Estimated costs')
     }), {
@@ -516,9 +504,8 @@ define('io.ox/tasks/edit/view-template',
     point.extend(new forms.InputField({
         id: 'actual_costs',
         index: 1800,
-        className: 'span4',
-        labelClassName: 'task-edit-label',
-        control: '<input type="text" class="actual_costs span12" id="task-edit-actual-costs" tabindex="1">',
+        className: 'col-sm-4',
+        control: '<input type="text" class="actual_costs form-control" id="task-edit-actual-costs" tabindex="1">',
         attribute: 'actual_costs',
         label: gt('Actual costs')
     }), {
@@ -530,12 +517,11 @@ define('io.ox/tasks/edit/view-template',
     point.extend(new forms.SelectBoxField({
         id: 'currency',
         index: 1900,
-        className: 'span2',
-        labelClassName: 'task-edit-label',
+        className: 'col-sm-2',
         render: function () {
             var self = this;
             this.nodes = {};
-            this.nodes.select = $('<select tabindex="1">').addClass('currency span12').attr('id', 'task-edit-currency');
+            this.nodes.select = $('<select tabindex="1">').addClass('currency form-control').attr('id', 'task-edit-currency');
             _(this.selectOptions).each(function (label, value) {
                 self.nodes.select.append(
                     $('<option>', {value: value}).text(label)
@@ -572,9 +558,8 @@ define('io.ox/tasks/edit/view-template',
     point.extend(new forms.InputField({
         id: 'trip_meter',
         index: 2000,
-        className: 'span12',
-        labelClassName: 'task-edit-label',
-        control: '<input type="text" class="trip-meter span12" id="task-edit-trip-meter" tabindex="1">',
+        className: 'col-sm-12',
+        control: '<input type="text" class="trip-meter form-control" id="task-edit-trip-meter" tabindex="1">',
         attribute: 'trip_meter',
         label: gt('Distance')
     }), {
@@ -586,9 +571,8 @@ define('io.ox/tasks/edit/view-template',
     point.extend(new forms.InputField({
         id: 'billing_information',
         index: 2100,
-        className: 'span12',
-        labelClassName: 'task-edit-label',
-        control: '<input type="text" class="billing-information span12" id="task-edit-billing-information" tabindex="1">',
+        className: 'col-sm-12',
+        control: '<input type="text" class="billing-information form-control" id="task-edit-billing-information" tabindex="1">',
         attribute: 'billing_information',
         label: gt('Billing information')
     }), {
@@ -600,9 +584,8 @@ define('io.ox/tasks/edit/view-template',
     point.extend(new forms.InputField({
         id: 'companies',
         index: 2200,
-        className: 'span12',
-        labelClassName: 'task-edit-label',
-        control: '<input type="text" class="companies span12" id="task-edit-companies" tabindex="1">',
+        className: 'col-sm-12',
+        control: '<input type="text" class="companies form-control" id="task-edit-companies" tabindex="1">',
         attribute: 'companies',
         label: gt('Companies')
     }), {
@@ -640,14 +623,15 @@ define('io.ox/tasks/edit/view-template',
                 var collection = options.model.getParticipants();
 
                 node.append(
-                    input = $('<div class="input-append span6">').append(
-                        $('<input type="text" class="add-participant task-participant-input-field" tabindex="1">').attr('placeholder', gt('Add participant/resource')),
-                        $('<button type="button" class="btn" data-action="add" tabindex="1">')
-                            .append($('<i class="icon-plus">'))
+                    input = $('<div class="input-group col-sm-6">').append(
+                        $('<input type="text" class="add-participant task-participant-input-field form-control" tabindex="1">').attr('placeholder', gt('Add participant/resource')),
+                        $('<span class="input-group-btn">').append(
+                            $('<button type="button" class="btn btn-default" data-action="add" tabindex="1">')
+                                .append($('<i class="icon-plus">'))
+                        )
                     ),
                     $('<div>').css('height', '220px') // default height of autocomplete popup, we do need expand the page to a height which can show the autocomplete popup
                 );
-                if (!_.browser.Firefox) { input.addClass('input-append-fix'); }
 
                 var autocomplete = new AddParticipantsView({el: node});
                 autocomplete.render({
@@ -752,8 +736,8 @@ define('io.ox/tasks/edit/view-template',
         tab: 'attachments_tab',
         row: '1',
         draw: function (baton) {
-            var $node = $('<form>').appendTo(this).attr('id', 'attachmentsForm').addClass('span12'),
-                $inputWrap = attachments.fileUploadWidget({displayButton: false, multi: true}),
+            var $node = $('<form>').appendTo(this).attr('id', 'attachmentsForm').addClass('col-sm-12'),
+                $inputWrap = attachments.fileUploadWidget(),
                 $input = $inputWrap.find('input[type="file"]'),
                 changeHandler = function (e) {
                     e.preventDefault();
@@ -785,7 +769,7 @@ define('io.ox/tasks/edit/view-template',
                 //use bubbled event to add fileupload-new again (workaround to add multiple files with IE)
                 $(this).find('div[data-provides="fileupload"]').addClass('fileupload-new').removeClass('fileupload-exists');
             });
-            $node.append($('<div>').addClass('span12').append($inputWrap));
+            $node.append($('<div>').append($inputWrap));
         }
     });
 
@@ -795,9 +779,9 @@ define('io.ox/tasks/edit/view-template',
     point.extend(new forms.DatePicker({
         id: 'start_date',
         index: 500,
-        className: 'span6 collapsed',
         labelClassName: 'task-edit-label',
         display: 'DATE',
+        className: 'col-xs-2 collapsed',
         attribute: 'start_date',
         required: false,
         label: gt('Starts on'),
@@ -811,9 +795,9 @@ define('io.ox/tasks/edit/view-template',
     point.extend(new forms.DatePicker({
         id: 'end_date',
         index: 600,
-        className: 'span6 collapsed',
         labelClassName: 'task-edit-label',
         display: 'DATE',
+        className: 'col-xs-2 col-xs-offset-4 collapsed',
         attribute: 'end_date',
         required: false,
         label: gt('Due date'),

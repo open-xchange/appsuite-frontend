@@ -12,7 +12,7 @@
  *
  */
 
-@playerWidth: 480px;
+@playerWidth: 506px;
 @playerMargin: 13px;
 @playerBg:                  rgba(0,0,0,0.1);
 @playerSecondaryColor:      #444;
@@ -61,7 +61,7 @@
 
             .track {
                 color: @playerTextColor;
-                font-family: @lightFontFamily;
+                font-family: @light-font-family;
                 font-size: 18px;
                 line-height: 24px;
                 font-weight: 300;
@@ -94,7 +94,7 @@
                 // Controls Background
                 .mejs-controls {
 
-                    @mediaplayerSliderBackground: darken(@linkColor, 10%);
+                    @mediaplayerSliderBackground: darken(@link-color, 10%);
 
                     background-color: #333;
 
@@ -103,7 +103,7 @@
                                 background: @mediaplayerSliderBackground;
                             .mejs-time-loaded {
 
-                                background: lighten(@linkColor, 10%);
+                                background: lighten(@link-color, 10%);
                             }
                         }
                     }
@@ -121,7 +121,7 @@
             left: 13px;
             right: 13px;
             bottom: 13px;
-            width: 480px;
+            padding:0;
             margin: 0;
             overflow-y: auto;
 

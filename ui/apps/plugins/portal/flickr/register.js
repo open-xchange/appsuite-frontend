@@ -202,9 +202,9 @@ define('plugins/portal/flickr/register',
         model.set('candidate', true, { silent: true, validate: true });
 
         var dialog = new dialogs.ModalDialog({ async: true, width: 400 }),
-            $q = $('<input type="text" class="input-block-level">'),
-            $description = $('<input type="text" class="input-block-level">'),
-            $method = $('<select class="input-block-level">').append(
+            $q = $('<input type="text" class="form-control">'),
+            $description = $('<input type="text" class="form-control">'),
+            $method = $('<select class="form-control">').append(
                 $('<option>').attr('value', 'flickr.photos.search').text(gt('flickr.photos.search')),
                 $('<option>').attr('value', 'flickr.people.getPublicPhotos').text(gt('flickr.people.getPublicPhotos'))
             ),
