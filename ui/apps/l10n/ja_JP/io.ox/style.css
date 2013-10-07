@@ -13,12 +13,12 @@
 
 .contact-detail .with-furigana {
     float: left;
-    margin-right: 28px;
+    margin-right: 14px;
 }
 
 .contact-detail .furigana {
     font-family: @normalFontFamily;
-    font-size: 70%;
+    font-size: 14px;
     line-height: 1.2em;
     color: #888;
 }
