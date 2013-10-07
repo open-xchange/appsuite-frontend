@@ -55,8 +55,10 @@ define('io.ox/core/relogin',
                     .addAlternativeButton('cancel', gt('Cancel'))
                     .on('cancel', function () {
                         ox.trigger('relogin:cancel');
-                        var location = settings.get('customLocations/logout');
-                        _.url.redirect(location || ox.serverConfig.logoutLocation || ox.logoutLocation);
+                        var location = settings.get('customLocations/logout'),
+                            logoutLocation = location || ox.serverConfig.logoutLocation || ox.logoutLocation || "";
+                        logoutLocation = logoutLocation.replace("[hostname]", window.location.hostname);
+                        _.url.redirect(logoutLocation);
                     })
                     .on('relogin', function () {
                         var self = this.busy();

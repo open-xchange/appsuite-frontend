@@ -576,6 +576,7 @@ $(window).load(function () {
             var ref = (location.hash || '').replace(/^#/, ''),
                 path = String(ox.serverConfig.logoutLocation || ox.logoutLocation),
                 glue = path.indexOf('#') > -1 ? '&' : '#';
+            path = path.replace("[hostname]", window.location.hostname);
             hash = (hash || '') + (ref ? '&ref=' + enc(ref) : '');
             _.url.redirect((hash ? path + glue + hash : path));
         }

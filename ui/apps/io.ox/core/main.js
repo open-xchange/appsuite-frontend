@@ -78,8 +78,12 @@ define('io.ox/core/main',
                     session.logout().always(function () {
                         // get logout locations
                         var location = settings.get('customLocations/logout'),
-                            fallback = ox.serverConfig.logoutLocation || ox.logoutLocation;
-                        _.url.redirect(location || (fallback + (opt.autologout ? '#autologout=true' : '')));
+                            fallback = ox.serverConfig.logoutLocation || ox.logoutLocation,
+                            logoutLocation = location || (fallback + (opt.autologout ? '#autologout=true' : ''));
+                            // Substitute some variables
+                            // [hostname], [login]
+                        logoutLocation = logoutLocation.replace("[hostname]", window.location.hostname);
+                        _.url.redirect(logoutLocation);
                     });
                 },
                 function cancel() {
