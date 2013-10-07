@@ -22,11 +22,11 @@ define("io.ox/core/tk/dialogs",
     var underlay = $('<div class="abs io-ox-dialog-underlay">').hide(),
         popup = $('<div class="io-ox-dialog-popup" tabindex="-1" role="dialog" aria-labelledby="dialog-title">').hide()
             .append(
-                $('<div class="modal-header">'), //Marko: inside this <div> is <h4> defined in file at "web/.../tk/.../dialogs.js"
+                $('<div class="modal-header">'),
                 $('<div class="modal-body">'),
                 $('<div class="modal-footer">')
             );
-    
+
     var Dialog = function (options) {
 
         var o = _.extend({
@@ -228,7 +228,7 @@ define("io.ox/core/tk/dialogs",
         this.text = function (str) {
             var p = nodes.body;
             p.find(".plain-text").remove();
-            p.append($('<h4 class="plain-text" id="dialog-title">').text(str || "")); //Marko: this <h4> is not used in "pop-up dialog box", but for more general use (writing text in documents, etc)
+            p.append($('<h4 class="plain-text" id="dialog-title">').text(str || ""));
             return this;
         };
 
@@ -261,7 +261,6 @@ define("io.ox/core/tk/dialogs",
                 purelink: options.purelink,
                 inverse: options.inverse,
                 tabIndex: options.tabIndex
-                //role: 'button'          //Marko add: This has NO effect, adding an attribute here. You have to add a new attribute in "return" code. See some lines below.
             };
 
             if (options.type) {
@@ -269,7 +268,7 @@ define("io.ox/core/tk/dialogs",
             }
             var button = $.button(opt);
             nodes.buttons.push(button);
-            return button.addClass(options.classes).attr('role', 'button');   //Marko add: attribute "role" for ARIA.
+            return button.addClass(options.classes).attr('role', 'button');
         };
 
         this.addButton = function (action, label, dataaction, options) {
@@ -301,7 +300,7 @@ define("io.ox/core/tk/dialogs",
             nodes.footer.prepend(addButton(action, label, dataaction, options).css({ 'float': 'left', marginLeft: 0 }));
             return this;
         };
-        
+
         this.addButtonMobile = function (action, label, dataaction, options) {
             return addButton(action, label, dataaction, options);
         };

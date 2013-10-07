@@ -2846,13 +2846,12 @@ define.async('io.ox/office/tk/utils',
     Utils.createButton = function (options) {
         var // the tab index
         tabIndex = Utils.getIntegerOption(options, 'tabIndex', 0),
+        tooltip = Utils.getStringOption(options, 'tooltip', ''),
             // Create the DOM anchor element representing the button. Do NOT use
             // <button> elements, Firefox has problems with text clipping and
             // correct padding of the <button> contents.
         
-        sayMyName = Utils.getStringOption(options, 'tooltip', ''),
-        
-        button = Utils.createControl('a', { tabindex: tabIndex, role: 'button', title: sayMyName }, options).addClass(Utils.BUTTON_CLASS);
+        button = Utils.createControl('a', { tabindex: tabIndex, role: 'button', title: tooltip }, options).addClass(Utils.BUTTON_CLASS);
 
         Utils.setControlCaption(button, options);
         return button;
