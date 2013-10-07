@@ -100,7 +100,7 @@ define('io.ox/mail/write/textile', function () {
                     else if (rQuote.test(line)) {
                         // mail quote
                         parent.append(
-                            node = $('<blockquote/>')
+                            node = $('<blockquote type="cite">')
                             .addClass('textile-quote')
                             .html('<div class="textile-quote-arrow">\u25BC</div>')
                             .on('click', { open: false }, fnToggleQuote)

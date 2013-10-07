@@ -57,7 +57,7 @@ define('io.ox/mail/view-detail',
                     text += line + '<br>';
                 } else {
                     tmp = $.trim(tmp.join('\n')).replace(/\n/g, '<br>');
-                    text = text.replace(/<br>$/, '') + '<blockquote><p>' + tmp + '</p></blockquote>' + line;
+                    text = text.replace(/<br>$/, '') + '<blockquote type="cite"><p>' + tmp + '</p></blockquote>' + line;
                     quoting = false;
                 }
             } else {
@@ -437,7 +437,7 @@ define('io.ox/mail/view-detail',
 
                         // transform outlook's pseudo blockquotes
                         content.find('div[style*="none none none solid"][style*="1.5pt"]').each(function () {
-                            $(this).replaceWith($('<blockquote>').append($(this).contents()));
+                            $(this).replaceWith($('<blockquote type="cite">').append($(this).contents()));
                         })
                         .end()
                         // base tag

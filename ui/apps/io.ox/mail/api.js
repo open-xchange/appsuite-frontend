@@ -1061,7 +1061,7 @@ define('io.ox/mail/api',
                                     if (/^> /.test(line)) {
                                         quote += line.substr(2) + '\n';
                                     } else {
-                                        tmp += (quote !== '' ? '<blockquote><p>' + quote + '</p></blockquote>' : '') + line + '\n';
+                                        tmp += (quote !== '' ? '<blockquote type="cite"><p>' + quote + '</p></blockquote>' : '') + line + '\n';
                                         quote = '';
                                     }
                                 });

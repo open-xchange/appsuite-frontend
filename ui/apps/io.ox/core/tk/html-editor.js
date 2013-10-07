@@ -621,7 +621,7 @@ define.async('io.ox/core/tk/html-editor',
             _(str.split('\n').concat('')).each(function (line) {
                 var trimmed = $.trim(line);
                 if (trimmed === '' || (quote && trimmed.substr(0, 1) !== '>')) {
-                    lTag = quote ? '<blockquote><p>' : '<p>';
+                    lTag = quote ? '<blockquote type="cite"><p>' : '<p>';
                     rTag = quote ? '</blockquote></p>' : '</p>';
                     text += tmp !== '' ? lTag + tmp.replace(/<br>$/, '') + rTag : '';
                     tmp = '';
