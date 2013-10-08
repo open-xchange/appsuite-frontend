@@ -65,7 +65,7 @@ define('io.ox/office/tk/dialogs',
 
         // add title
         if (_.isString(title)) {
-            dialog.header($('<h4>').text(title));
+            dialog.header($('<h4>').text(title).attr('id', 'dialog-title'));
         }
 
         // add dummy input to catch the cursor on dialog open
