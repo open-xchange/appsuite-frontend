@@ -241,6 +241,8 @@ define('io.ox/core/api/factory',
                     if (typeof ids[0] === 'number') {
                         ids = [{id: ids[0]}];
                     }
+                    //TODO remove specialised code from a generic factory
+
                     // fix mail unseen issue
                     var getOptions = http.simplify(ids)[0];
                     if (o.module === 'mail') {
