@@ -1441,6 +1441,9 @@ define('io.ox/mail/api',
             }
         })
         .then(function (unseen) {
+            //update the tracker
+            //needed if mail app was not opened before to prevent mails not being marked as read because the tracker doesn't know them
+            tracker.reset(unseen);
 
             // check most recent mail
             var recent = _(unseen).filter(function (obj) {
