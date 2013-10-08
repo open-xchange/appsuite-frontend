@@ -780,6 +780,7 @@ define('io.ox/core/desktop',
                 //remove the window from cache if it's there
                 appCache.get('windows').done(function (winCache) {
                     var index = _.indexOf(winCache, win.name);
+
                     if (index > -1) {
                         winCache.splice(index, 1);
                         appCache.add('windows', winCache || []);
@@ -1537,7 +1538,8 @@ define('io.ox/core/desktop',
 
         var def,
             $blocker = $('#background_loader'),
-            buttonTimer;
+            buttonTimer,
+            launched;
 
         function startTimer() {
             var blockerTimer = setTimeout(function () {
@@ -1590,7 +1592,7 @@ define('io.ox/core/desktop',
             }
             var blockertimer = startTimer();
 
-            require(req).always(clear(blockertimer)).then(
+            require(req).always(clearViaLauncher(blockertimer)).then(
                 def.resolve,
                 function fail() {
                     def.reject(false);

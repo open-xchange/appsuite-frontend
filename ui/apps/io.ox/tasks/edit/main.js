@@ -199,13 +199,14 @@ define('io.ox/tasks/edit/main',
             } else {
                 this.model.set(point);
                 this.edit = true;
-                this.view.changeMode('edit');
+                this.view.trigger('changeMode', 'edit');
                 this.cid = 'io.ox/tasks:edit.' + _.cid(point);
                 this.setTitle(point.title || gt('Edit task'));
             }
             df.resolve();
             return df;
         };
+
         return app;
     }
 
