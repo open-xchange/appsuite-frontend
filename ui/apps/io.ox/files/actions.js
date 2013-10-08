@@ -1064,7 +1064,7 @@ define('io.ox/files/actions',
      * @return {deferred} resolves as array
      */
     function filterUnsupported(list) {
-        return api.getList(list).then(function (data) {
+        return api.getList(list, false).then(function (data) {//no cache use here or just the current version is returned
                 return _(data).filter(function (obj) {
                     return !_.isEmpty(obj.filename) || obj.file_size > 0;
                 });

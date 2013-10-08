@@ -234,6 +234,9 @@ define('io.ox/core/api/factory',
                 if (ids.length === 0) {
                     return $.Deferred().resolve([]).done(o.done.list || $.noop);
                 } else if (ids.length === 1) {
+                    //save Version (used in files)
+                    var version = ids[0].version;
+
                     // if just one item, we use get request
                     if (typeof ids[0] === 'number') {
                         ids = [{id: ids[0]}];
@@ -243,8 +246,13 @@ define('io.ox/core/api/factory',
                     if (o.module === 'mail') {
                         getOptions.unseen = true;
                     }
+
+                    // fix file version issue
+                    if (o.module === 'files') {
+                        getOptions.version = version;
+                    }
                     // go!
-                    return this.get(getOptions)
+                    return this.get(getOptions, useCache)
                         .pipe(function (data) { return [data]; })
                         .pipe(o.pipe.listPost)
                         .done(o.done.list || $.noop);
