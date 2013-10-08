@@ -572,7 +572,7 @@ define('io.ox/mail/write/view-main',
             var $infostoreButton = $inputWrap.find('button[data-action="addinternal"]').click(function (e) {
                 e.preventDefault();
 
-                require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/cache', 'io.ox/files/api']).done(function (dialogs, folderviews, cache, filesAPI) {
+                require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/cache', 'io.ox/files/api', 'io.ox/core/tk/selection']).done(function (dialogs, folderviews, cache, filesAPI, Selection) {
 
                     var folderCache = new cache.SimpleCache('folder-all', false),
                         subFolderCache = new cache.SimpleCache('subfolder-all', false),
@@ -581,7 +581,7 @@ define('io.ox/mail/write/view-main',
                             subFolderCache: subFolderCache
                         },
                         container = $('<div>'),
-                        filesPane = $('<div>').addClass('io-ox-fileselection'),
+                        filesPane = $('<div>').addClass('io-ox-fileselection').attr({ tabindex: 0}),
                         tree = new folderviews.ApplicationFolderTree(container, {
                             type: 'infostore',
                             tabindex: 0,
@@ -590,36 +590,42 @@ define('io.ox/mail/write/view-main',
                             storage: storage
                         }),
                         pane = new dialogs.ModalDialog({
-                            width: window.innerWidth * 0.9,
-                            height: 400,
+                            width: window.innerWidth * 0.8,
+                            height: 350,
                             addclass: 'add-infostore-file'
                         }),
+                        self = this,
                         changesArray = [];
 
+                    Selection.extend(this, filesPane, {});
+
+                    this.selection.keyboard(filesPane, true);
+                    this.selection.setEditable(true, 'label');
+
                     pane.header($('<h4>').text(gt('Choose file')))
-                    .build(function () {
-                        this.getContentNode().append(container, filesPane);
-                    })
-                    .addPrimaryButton('save', gt('Add'))
-                    .addButton('cancel', gt('Cancel'))
-                    .show(function () {
-                        tree.paint().done(function () {
-                            tree.selection.updateIndex().selectFirst();
-                            pane.getBody().find('.io-ox-foldertree').focus();
-                        });
-                    })
-                    .done(function (action) {
-                        if (action === 'save') {
-                            var result = [];
-                            filesPane.find('input:checked').each(function (index, el) {
-                                result.push($(el).data('fileData'));
+                        .build(function () {
+                            this.getContentNode().append(container, filesPane);
+                        })
+                        .addPrimaryButton('save', gt('Add'))
+                        .addButton('cancel', gt('Cancel'))
+                        .show(function () {
+                            tree.paint().done(function () {
+                                tree.selection.updateIndex().selectFirst();
+                                pane.getBody().find('.io-ox-foldertree').focus();
                             });
-                            app.addFiles(result, 'infostore');
-                        }
-                        tree.destroy().done(function () {
-                            tree = pane = null;
+                        })
+                        .done(function (action) {
+                            if (action === 'save') {
+                                var result = [];
+                                filesPane.find('input:checked').each(function (index, el) {
+                                    result.push($(el).data('fileData'));
+                                });
+                                app.addFiles(result, 'infostore');
+                            }
+                            tree.destroy().done(function () {
+                                tree = pane = null;
+                            });
                         });
-                    });
 
                     // add dbl-click option like native file-chooser
                     filesPane.on('dblclick', 'label', function () {
@@ -639,12 +645,16 @@ define('io.ox/mail/write/view-main',
                                 for (var i = 0; i < files.length; i++) {
                                     var file = files[i],
                                         title = (file.filename || file.title),
-                                        input = $('<input type="checkbox" value="' + file.id + '"/>').data('fileData', file),
-                                        label = $('<label class="checkbox" title="' + title + '">').append(input, $.txt(' ' + title));
-                                    fileArr.push($('<div>').append(label));
+                                        input = $('<input type="checkbox" class="reflect-selection" tabindex="-1" value="' + file.id + '"/>').data('fileData', file),
+                                        label = $('<label class="checkbox" title="' + title + '">').append(input),
+                                        filename = $('<div>').append($('<span>').text(' ' + title));
+                                    fileArr.push($('<div class="file selectable" data-obj-id="' + _.cid(file) + '">').append($('<div>').append(label), filename));
                                 }
                             }
                             filesPane.append(fileArr);
+                            self.selection.clear();
+                            self.selection.init(files);
+                            self.selection.selectFirst();
                         });
                     });
                 });

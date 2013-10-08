@@ -5,6 +5,8 @@
 
 .add-infostore-file .modal-body {
 
+    padding: 0px;
+
     &>div {
         display: inline-block;
         width: 49%;
@@ -15,14 +17,48 @@
 
     .io-ox-foldertree {
         border-right: 1px solid #EEE;
+        padding: 0px;
     }
 
     .io-ox-fileselection {
-        padding: 13px 0 4px 5px;
 
-        label {
-            .ellipsis();
+        outline: none;
+
+        .file {
+
+            padding: 7px 0 2px 10px;
+
+            div {
+                display: inline-block;
+                vertical-align: top;
+            }
+
+            &.selected, &.selected:hover {
+
+                background-color: @foldertreeSelectedBackground;
+
+                * {
+                    color: @foldertreeSelectedLabelColor;
+                }
+            }
+
+            label {
+                .ellipsis();
+            }
         }
+
+        &:focus .file {
+
+            &.selected {
+
+                background-color: @foldertreeSelectedFocusBackground;
+
+                * {
+                    color: @foldertreeFocusedLabelColor;
+                }
+            }
+        }
+
     }
 }
 
