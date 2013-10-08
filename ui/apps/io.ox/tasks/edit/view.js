@@ -52,9 +52,69 @@ define('io.ox/tasks/edit/view',
             });
         },
         render: function (app) {
-            var self = this,
-                rows = {};
-            self.baton.app = app;
+            var self = this;
+
+            //row0 headlinetext cancel and savebutton
+            self.$el.append($('<div>').addClass('task-edit-headline row-fluid').append(this.getRow(0, app)));
+
+            //row 1 subject
+            util.buildExtensionRow(self.$el, this.getRow(1, app), self.baton);
+
+            //row 2 start date due date
+            util.buildExtensionRow(self.$el, this.getRow(2), self.baton).addClass('collapsed');
+            
+            //row 3 recurrence
+            util.buildExtensionRow(self.$el, this.getRow(3), self.baton).addClass('collapsed');
+
+            //row 4 description
+            util.buildExtensionRow(self.$el, this.getRow(4), self.baton);
+
+            //expand link
+            $('<a>').text(gt('Expand form')).attr('href', '#')
+            .on('click', function (e) {
+                e.preventDefault();
+                self.$el.find('.collapsed').show();
+                $(this).remove();
+            })
+            .appendTo(this.$el);
+
+            //row 5 reminder
+            util.buildExtensionRow(self.$el, this.getRow(5), self.baton).addClass('collapsed');
+
+            //row 6 status progress priority privateFlag
+            util.buildExtensionRow(self.$el, this.getRow(6), self.baton).addClass('collapsed');
+
+            //tabsection
+            var temp = util.buildTabs([gt('Participants'),
+                                       //#. %1$s is the number of currently attached attachments
+                                       //#, c-format
+                                       gt('Attachments (%1$s)', gt.noI18n(0)),
+                                       gt('Details')], '-' + self.cid),
+                tabs = temp.table,
+                participantsTab = temp.content.find('#edit-task-tab0'  + '-' + self.cid),
+                attachmentsTab = temp.content.find('#edit-task-tab1'  + '-' + self.cid),
+                detailsTab = temp.content.find('#edit-task-tab2'  + '-' + self.cid);
+            this.$el.append(tabs.addClass('collapsed'), temp.content);
+
+            //partitipants tab
+            util.buildExtensionRow(participantsTab, [this.getRow(0, app, 'participants')], self.baton).addClass('collapsed');
+            util.buildExtensionRow(participantsTab, [this.getRow(1, app, 'participants')], self.baton).addClass('collapsed');
+
+            //attachmentTab
+            var attachmentTabheader = tabs.find('a:eq(1)');
+            this.on('attachmentCounterRefresh', function (e, number) {
+                e.stopPropagation();
+                attachmentTabheader.text(
+                    //#. %1$s is the number of currently attached attachments
+                    //#, c-format
+                    gt('Attachments (%1$s)', gt.noI18n(number)));
+            });
+
+            this.getRow(0, app, 'attachments').invoke('draw', attachmentsTab, self.baton);
+            util.buildExtensionRow(attachmentsTab, [this.getRow(1, app, 'attachments')], self.baton);
+
+            // Hide attachments on specific devices (boot.js)
+            if (!ox.uploadsEnabled) attachmentTabheader.hide();
 
             //hide stuff
             if (!capabilities.has('infostore')) {
@@ -86,10 +146,24 @@ define('io.ox/tasks/edit/view',
                 app.setTitle(self.model.get('title'));
             }
 
-            // Disable Save Button if title is empty on startup
-            if (!self.$el.find('#task-edit-title').val()) {
-                self.$el.find('.btn[data-action="save"]').prop('disabled', true);
-            }
+                    e.stopPropagation();
+                    app.getWindow().busy();
+
+                    //check if waiting for attachmenthandling is needed
+                    if (self.baton.attachmentList.attachmentsToAdd.length +
+                        self.baton.attachmentList.attachmentsToDelete.length > 0) {
+                        self.model.attributes.tempAttachmentIndicator = true;//temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
+                    }
+
+                    self.model.save().done(function () {
+                        app.markClean();
+                        app.quit();
+                    }).fail(function (response) {
+                        setTimeout(function () {
+                            app.getWindow().idle();
+                            notifications.yell('error', response.error);
+                        }, 300);
+                    });
 
             // Toggle disabled state of save button
             function fnToggleSave(isDirty) {
