@@ -37,7 +37,7 @@ define('io.ox/contacts/edit/main',
             userContent: true
         });
 
-        app.setLauncher(function (def) {
+        app.setLauncher(function () {
 
             var def = $.Deferred();
             var win = ox.ui.createWindow({
