@@ -2815,6 +2815,7 @@ define.async('io.ox/office/tk/utils',
      *  FireFox with <button> elements.
      */
     Utils.createButtonMarkup = function (innerMarkup, options) {
+
         var // whether the button will be focusable
             focusable = Utils.getBooleanOption(options, 'focusable', false),
             // the tab index
@@ -2843,13 +2844,14 @@ define.async('io.ox/office/tk/utils',
      *  FireFox with <button> elements.
      */
     Utils.createButton = function (options) {
-        var // the tab index
-        tabIndex = Utils.getIntegerOption(options, 'tabIndex', 0),
-        tooltip = Utils.getStringOption(options, 'tooltip', ''),
+
+        var // tab index abd tool tip for the button
+            tabIndex = Utils.getIntegerOption(options, 'tabIndex', 0),
+            tooltip = Utils.getStringOption(options, 'tooltip', ''),
             // Create the DOM anchor element representing the button. Do NOT use
             // <button> elements, Firefox has problems with text clipping and
             // correct padding of the <button> contents.
-        button = Utils.createControl('a', { tabindex: tabIndex, role: 'button', title: tooltip }, options).addClass(Utils.BUTTON_CLASS);
+            button = Utils.createControl('a', { tabindex: tabIndex, role: 'button', title: tooltip }, options).addClass(Utils.BUTTON_CLASS);
 
         Utils.setControlCaption(button, options);
         return button;
