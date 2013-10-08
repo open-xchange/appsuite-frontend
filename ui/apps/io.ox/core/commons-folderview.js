@@ -167,8 +167,11 @@ define('io.ox/core/commons-folderview',
             id: 'add-public-folder',
             index: 200,
             draw: function (baton) {
+
                 var type = baton.options.type,
-                    link = $('<a href="#" data-action="add-public-folder">').text(gt('Add public folder'));
+                    link = $('<a href="#" data-action="add-public-folder" role="menuitem">').text(gt('Add public folder'));
+
+                if (!capabilities.has('edit_public_folders')) return;
                 if (!(type === 'contacts' || type === 'calendar' || type === 'tasks')) return;
 
                 api.get({folder: 2}).then(function (public_folder) {
