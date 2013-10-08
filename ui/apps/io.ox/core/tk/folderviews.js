@@ -967,26 +967,27 @@ define('io.ox/core/tk/folderviews',
             self.busy();
 
             return api.getVisible(options).done(function (data) {
-                var id,
-                    section,
-                    baton,
-                    showHeadlines = Object.keys(data).length > 1;
+                var id, section,
+                    showHeadlines = Object.keys(data).length > 1,
+                    drawSection = function (node, list) {
+                        // loop over folders
+                        _(list).each(function (data) {
+                            node.append(drawFolder(data));
+                        });
+                    };
                 // idle
                 self.idle();
                 // loop over sections
                 for (id in sections) {
                     if (data[id]) {
-                        section = $('<div class="section">');
-                        baton = new ext.Baton({
-                            app: opt.app,
-                            id: id,
-                            data: data,
-                            showHeadlines: showHeadlines,
-                            selection: self.selection,
-                            options: opt
-                        });
-                        ext.point('io.ox/foldertree/section').invoke('draw', section, baton);
-                        self.container.append(section);
+                        self.container.append(
+                            section = $('<div>').addClass('section')
+                            .append(
+                                //headline if more than one section contains elements
+                                showHeadlines ? $('<div>').addClass('section-title').text(sections[id]) : $()
+                            )
+                        );
+                        drawSection(section, data[id]);
                     }
                 }
             })

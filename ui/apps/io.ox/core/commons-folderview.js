@@ -176,37 +176,18 @@ define('io.ox/core/commons-folderview',
             id: 'private',
             draw: function (baton) {
 
-                if (baton.id !== 'private') return;
+                var type = baton.options.type,
+                    link = $('<a href="#" data-action="add-public-folder" role="menuitem">').text(gt('Add public folder'));
 
-                this.append($('<div>').append(
-                    $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
-                    .text(gt('New private folder'))
-                    .on('click', { folder: api.getDefaultFolder(baton.options.type), module: baton.options.type }, addFolder)
-                ));
-            }
-        });
-
-        ext.point('io.ox/foldertree/section/links').extend({
-            index: 300,
-            id: 'public',
-            draw: function (baton) {
-
-                // yep, show this below private section.
-                // cause there might be no public folders, and in this case
-                // the section would be hidden
-                if (baton.id !== 'private') return;
                 if (!capabilities.has('edit_public_folders')) return;
+                if (!(type === 'contacts' || type === 'calendar' || type === 'tasks')) return;
 
-                var node = $('<div>');
-                this.append(node);
-
-                api.get({ folder: 2 }).then(function (public_folder) {
-                    if (!api.can('create', public_folder)) return;
-                    node.append(
-                        $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
-                        .text(gt('New public folder'))
-                        .on('click', { folder: '2', module: baton.options.type }, addFolder)
-                    );
+                api.get({folder: 2}).then(function (public_folder) {
+                    if (api.can('create', public_folder)) {
+                        link.on('click', {app: baton.app, module: type}, createPublicFolder);
+                    } else {
+                        link.addClass('disabled');
+                    }
                 });
             }
         });
