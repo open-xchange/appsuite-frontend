@@ -11,8 +11,9 @@
  */
 define(['shared/examples/for/api',
        'io.ox/core/api/folder',
-       'io.ox/core/http'
-], function (sharedExamplesFor, api, http) {
+       'io.ox/core/http',
+       'io.ox/core/extensions'
+], function (sharedExamplesFor, api, http, ext) {
     var setupFakeServer = function (server) {
         //sends a default folder for get calls
         server.respondWith('GET', /api\/folders\?action=get/, function (xhr) {
@@ -311,7 +312,8 @@ define(['shared/examples/for/api',
                                     data: [
                                         {id: '3', folder_id: 'hidden/test', title: '.drive'},
                                         {id: '4', folder_id: 'hidden/test', title: 'visible'},
-                                        {id: '5', folder_id: 'hidden/test', title: '.hidden'}
+                                        {id: '5', folder_id: 'hidden/test', title: '.hidden'},
+                                        {id: '6', folder_id: 'hidden/test', title: 'customHidden'}
                                     ]
                                 })
                     );
@@ -319,6 +321,58 @@ define(['shared/examples/for/api',
             });
             afterEach(function () {
                 this.server.restore();
+            });
+            describe('with "show hidden files" option enabled', function () {
+                it('should show folders starting with a dot', function () {
+                    var def = require([
+                            'settings!io.ox/core',
+                            'settings!io.ox/files'
+                        ]).then(function (settings, fileSettings) {
+                            settings.set('folder/blacklist');
+                            fileSettings.set('showHidden', true);
+                            return api.clearCaches();
+                        }).then(function () {
+                            return api.getSubFolders({folder: 'hidden/test'});
+                        }).done(function (f) {
+                            expect(_(f).pluck('title')).toContain('.hidden');
+                            expect(_(f).pluck('title')).toContain('visible');
+                            expect(_(f).pluck('title')).toContain('.drive');
+                        });
+
+                    expect(def).toResolve();
+                });
+
+                it('should show files starting with a dot', function () {
+                });
+            });
+
+            describe('with "show hidden files" option disabled (default)', function() {
+                it('should hide folders starting with a dot', function () {
+                    this.after(function () {
+                        this.handleExpectedFail({
+                            'folder API hidden objects with "show hidden files" option disabled (default) should hide folders starting with a dot.': true
+                        });
+                    });
+                    var def = require([
+                            'settings!io.ox/core',
+                            'settings!io.ox/files'
+                        ]).then(function (settings, fileSettings) {
+                            settings.set('folder/blacklist');
+                            fileSettings.set('showHidden');
+                            return api.clearCaches();
+                        }).then(function () {
+                            return api.getSubFolders({folder: 'hidden/test'});
+                        }).then(function (f) {
+                            expect(_(f).pluck('title')).not.toContain('.hidden');
+                            expect(_(f).pluck('title')).toContain('visible');
+                            expect(_(f).pluck('title')).not.toContain('.drive');
+                        });
+
+                    expect(def).toResolve();
+                });
+
+                it('should hide files starting with a dot', function () {
+                });
             });
 
             describe('defined by blacklist', function () {
@@ -339,17 +393,123 @@ define(['shared/examples/for/api',
                 });
 
                 it('should not show objects from blacklist', function () {
-                    var def = require(['settings!io.ox/core']).then(function (settings) {
-                        settings.set('folder/blacklist', {'4': true});
-                        return api.clearCaches();
-                    }).then(function () {
-                        return api.getSubFolders({folder: 'hidden/test'});
-                    })
-                    .done(function (f) {
-                        expect(_(f).pluck('title')).toContain('.hidden');
-                        expect(_(f).pluck('title')).not.toContain('visible');
-                        expect(_(f).pluck('title')).toContain('.drive');
+                    this.after(function () {
+                        this.handleExpectedFail({
+                            'folder API hidden objects defined by blacklist should not show objects from blacklist.': true
+                        });
                     });
+                    var def = require([
+                            'settings!io.ox/core',
+                            'settings!io.ox/files'
+                        ]).then(function (settings, fileSettings) {
+                            settings.set('folder/blacklist', {'4': true});
+                            fileSettings.set('showHidden', false);
+                            return api.clearCaches();
+                        }).then(function () {
+                            return api.getSubFolders({folder: 'hidden/test'});
+                        })
+                        .done(function (f) {
+                            expect(_(f).pluck('title')).not.toContain('.hidden');
+                            expect(_(f).pluck('title')).not.toContain('visible');
+                            expect(_(f).pluck('title')).not.toContain('.drive');
+                        });
+
+                    expect(def).toResolve();
+                });
+
+                it('should not be effected by "show hidden files" option', function () {
+                    var def = require([
+                            'settings!io.ox/core',
+                            'settings!io.ox/files'
+                        ]).then(function (settings, fileSettings) {
+                            settings.set('folder/blacklist', {'4': true});
+                            fileSettings.set('showHidden', true);
+                            return api.clearCaches();
+                        }).then(function () {
+                            return api.getSubFolders({folder: 'hidden/test'});
+                        })
+                        .done(function (f) {
+                            expect(_(f).pluck('title')).toContain('.hidden');
+                            expect(_(f).pluck('title')).not.toContain('visible');
+                            expect(_(f).pluck('title')).toContain('.drive');
+                        });
+
+                    expect(def).toResolve();
+                });
+            });
+
+            describe('defined by extension point "io.ox/folders/filter"', function () {
+
+                beforeEach(function () {
+                    ext.point('io.ox/folder/filter').extend({
+                        id: 'custom_filter',
+                        isVisible: function (folder) {
+                            var title = (folder.data ? folder.data.title : folder.title) || '';
+                            return title !== 'customHidden';
+                        }
+                    });
+                    ext.point('io.ox/folder/filter').enable('custom_filter');
+                });
+
+                afterEach(function () {
+                    ext.point('io.ox/folder/filter').disable('custom_filter');
+                });
+
+                it('should apply extension point isVisible method', function () {
+                    ext.point('io.ox/folder/filter').replace({
+                        id: 'custom_filter',
+                        isVisible: function (folder) {
+                            var title = (folder.data ? folder.data.title : folder.title) || '';
+                            return title !== 'customHidden';
+                        }
+                    });
+                    var def = require([
+                            'settings!io.ox/core',
+                            'settings!io.ox/files'
+                        ]).then(function (settings, fileSettings) {
+                            settings.set('folder/blacklist', {});
+                            fileSettings.set('showHidden', true);
+                            return api.clearCaches();
+                        }).then(function () {
+                            return api.getSubFolders({folder: 'hidden/test'});
+                        })
+                        .done(function (f) {
+                            expect(_(f).pluck('title')).toContain('.hidden');
+                            expect(_(f).pluck('title')).toContain('visible');
+                            expect(_(f).pluck('title')).toContain('.drive');
+                            expect(_(f).pluck('title')).not.toContain('customHidden');
+                        });
+
+                    expect(def).toResolve();
+                });
+                it('should disable if isEnabled evaluates to false', function () {
+                    ext.point('io.ox/folder/filter').replace({
+                        id: 'custom_filter',
+                        isEnabled: function (folder) {
+                            folder = ext.Baton.ensure(folder);
+                            return folder.data.folder_id !== 'hidden/test';
+                        },
+                        isVisible: function (folder) {
+                            var title = (folder.data ? folder.data.title : folder.title) || '';
+                            return title !== 'customHidden';
+                        }
+                    });
+                    var def = require([
+                            'settings!io.ox/core',
+                            'settings!io.ox/files'
+                        ]).then(function (settings, fileSettings) {
+                            settings.set('folder/blacklist', {});
+                            fileSettings.set('showHidden', true);
+                            return api.clearCaches();
+                        }).then(function () {
+                            return api.getSubFolders({folder: 'hidden/test'});
+                        })
+                        .done(function (f) {
+                            expect(_(f).pluck('title')).toContain('.hidden');
+                            expect(_(f).pluck('title')).toContain('visible');
+                            expect(_(f).pluck('title')).toContain('.drive');
+                            expect(_(f).pluck('title')).toContain('customHidden');
+                        });
 
                     expect(def).toResolve();
                 });
