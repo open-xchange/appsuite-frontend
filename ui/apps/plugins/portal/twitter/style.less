@@ -27,7 +27,17 @@
     .border-radius(5px);
     max-width: 48px;
 }
-
+.io-ox-twitter-title:after {
+    content: " ";
+    background: url('bird_blue_128.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    height: 50px;
+    width: 50px;
+    position: absolute;
+    top: -10px;
+}
 .twitter .name {
     font-weight: normal;
     color: gray;
@@ -79,16 +89,78 @@
 .io-ox-twitter-retweet.retweeted:before {
     background-position: -112px 0;
 }
+.io-ox-twitter-delete {
+    display: inline-block;
+    float: right;
+    overflow: hidden;
+    margin-left: 1em;
+
+    i {
+        padding-right: 5px;
+    }
+}
+.io-ox-twitter-delete:hover {
+    i {
+        color: #666666;
+        text-decoration: none;
+    }
+}
 .io-ox-twitter-follow {
     display: block;
     float: right;
+    padding: 0px 6px;
+    font-size: 11px;
+    font-weight: bold;
+    width: 70px;
+
+    div {
+        overflow: hidden;
+        margin-left: 0px;
+        padding-left: 12px;
+    }
+
+    div:before {
+        content: " ";
+        background: url('bird_blue_32.png');
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: contain;
+        height: 20px;
+        width: 20px;
+        position: absolute;
+        top: 1;
+        margin-left: -20px;
+    }
 }
-iframe.io-ox-twitter-follow {
-    width: 300px;
-    height: 20px;
-}
-.io-ox-twitter-retweet-source span, .io-ox-twitter-date, .io-ox-twitter-reply, .io-ox-twitter-retweet, .io-ox-twitter-favorite {
+.io-ox-twitter-retweet-source span, .io-ox-twitter-date, .io-ox-twitter-reply, .io-ox-twitter-retweet, .io-ox-twitter-favorite, .io-ox-twitter-delete {
     font-size: 90%;
     color: gray;
     font-weight: 300;
+}
+.io-ox-twitter-name a{
+    color: black;
+}
+.io-ox-twitter-tweet-container {
+    padding: 10px 0px 0px 5px;
+    display: block;
+    .io-ox-twitter-tweet-textarea {
+        resize: vertical;
+        width: 100%;
+    }
+    .io-ox-twitter-tweet-textarea-small {
+        resize: none;
+    }
+}
+.io-ox-twitter-tweet-button {
+    text-align: right;
+}
+.io-ox-twitter-tweet-counter {
+    padding: 0px 5px;
+    display: inline-block;
+    width: 30px;
+    color: gray;
+    text-align:right;
+}
+.io-ox-twitter-hidden {
+    display: none;
 }
