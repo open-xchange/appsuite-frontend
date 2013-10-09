@@ -90,9 +90,8 @@ define('io.ox/core/tk/selection',
             mobileSelectMode;
 
         isCheckbox = function (e) {
-            var closest = $(e.target).closest(editableSelector),
-                isEditable = editable && closest.length;
-            return isEditable;
+            var closest = $(e.target).closest(editableSelector);
+            return editable && closest.length;
         };
 
         isMultiple = function (e) {

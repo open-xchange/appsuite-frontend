@@ -600,13 +600,13 @@ define('io.ox/mail/write/view-main',
                     Selection.extend(this, filesPane, {});
 
                     this.selection.keyboard(filesPane, true);
-                    this.selection.setEditable(true, 'label');
+                    this.selection.setEditable(true, '.labelwrapper');
 
                     pane.header($('<h4>').text(gt('Choose file')))
                         .build(function () {
                             this.getContentNode().append(container, filesPane);
                         })
-                        .addPrimaryButton('save', gt('Add'))
+                        .addPrimaryButton('save', gt('Add files'))
                         .addButton('cancel', gt('Cancel'))
                         .show(function () {
                             tree.paint().done(function () {
@@ -628,7 +628,7 @@ define('io.ox/mail/write/view-main',
                         });
 
                     // add dbl-click option like native file-chooser
-                    filesPane.on('dblclick', 'label', function () {
+                    filesPane.on('dblclick', '.file', function () {
                         var data = $('input', this).data('fileData');
                         if (data) {
                             app.addFiles([data], 'infostore');
@@ -647,8 +647,8 @@ define('io.ox/mail/write/view-main',
                                         title = (file.filename || file.title),
                                         input = $('<input type="checkbox" class="reflect-selection" tabindex="-1" value="' + file.id + '"/>').data('fileData', file),
                                         label = $('<label class="checkbox" title="' + title + '">').append(input),
-                                        filename = $('<div>').append($('<span>').text(' ' + title));
-                                    fileArr.push($('<div class="file selectable" data-obj-id="' + _.cid(file) + '">').append($('<div>').append(label), filename));
+                                        labelWrapper = $('<div class="labelwrapper">').append(label);
+                                    fileArr.push($('<div class="file selectable" data-obj-id="' + _.cid(file) + '">').append(labelWrapper, $('<span>').text(' ' + title)));
                                 }
                             }
                             filesPane.append(fileArr);
