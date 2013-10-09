@@ -475,6 +475,19 @@ define('io.ox/portal/main',
                 win.nodes.main.css('-webkit-overflow-scrolling', 'touch');
             }
 
+            // enable position fixed toolbar on mobile. This will keep the lazy loading for
+            // portal apps with a fixed position toolbar
+            if (_.device('!desktop')) {
+
+                app.getWindow().on('hide', function () {
+                    $('#io-ox-topbar').removeClass('toolbar-fixed-position');
+                    app.getWindowNode().removeClass('content-v-shift');
+                }).on('show', function () {
+                    $('#io-ox-topbar').addClass('toolbar-fixed-position');
+                    app.getWindowNode().addClass('content-v-shift');
+                });
+            }
+
             // make sortable, but not for Touch devices
             if (!Modernizr.touch) {
                 require(['apps/io.ox/core/tk/jquery-ui.min.js']).done(function () {
@@ -499,7 +512,7 @@ define('io.ox/portal/main',
 
         $(window).on('scrollstop resize', lazyLayout);
     });
-
+    window.kacke = app;
     return {
         getApp: app.getInstance
     };
