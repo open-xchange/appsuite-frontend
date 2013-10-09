@@ -201,10 +201,10 @@ define(['io.ox/mail/util',
         describe('timestamp functions', function () {
             var expect = chai.expect;
             it('should return "unknown" for invalid data', function () {
-                expect(util.getTime(undefined), 'getTime').to.be.equal('unknown');
-                expect(util.getDateTime(undefined), 'getDateTime').to.be.equal('unknown');
-                expect(util.getFullDate(undefined), 'getFullDate').to.be.equal('unknown');
-                expect(util.getSmartTime(undefined), 'getSmartTime').to.be.equal('unknown');
+                expect(util.getTime(undefined), 'getTime').to.be.equal('unbekannt');
+                expect(util.getDateTime(undefined), 'getDateTime').to.be.equal('unbekannt');
+                expect(util.getFullDate(undefined), 'getFullDate').to.be.equal('unbekannt');
+                expect(util.getSmartTime(undefined), 'getSmartTime').to.be.equal('unbekannt');
             });
             it('should return a date string for valid data', function () {
                 expect(util.getTime(1379508350), 'getTime').to.be.equal('16.1.1970');
