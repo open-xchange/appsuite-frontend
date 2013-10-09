@@ -82,7 +82,7 @@ define(['io.ox/mail/write/main',
                     })
                     .then(sendMailWithApp(this.mail, this.app))
                     .done(function () {
-                        expect(notificationSpy).toHaveBeenCalledWith('info');
+                        expect(notificationSpy).toHaveBeenCalledWithMatch({type: 'info'});
                     });
                 });
 
@@ -95,7 +95,7 @@ define(['io.ox/mail/write/main',
                     })
                     .then(sendMailWithApp(this.mail, this.app))
                     .done(function () {
-                        expect(notificationSpy).not.toHaveBeenCalledWith('info');
+                        expect(notificationSpy).not.toHaveBeenCalledWithMatch({type: 'info'});
                     });
                 });
 
@@ -108,7 +108,7 @@ define(['io.ox/mail/write/main',
                     })
                     .then(sendMailWithApp(this.mail, this.app))
                     .done(function () {
-                        expect(notificationSpy).not.toHaveBeenCalledWith('info');
+                        expect(notificationSpy).not.toHaveBeenCalledWithMatch({type: 'info'});
                     });
                 });
 
@@ -119,7 +119,7 @@ define(['io.ox/mail/write/main',
                         this.def = setAutoCreatePublicationLimit({'attachmentQuota': 123400})
                             .then(sendMailWithApp(this.mail, this.app))
                             .done(function () {
-                                expect(notificationSpy).toHaveBeenCalledWith('info');
+                                expect(notificationSpy).toHaveBeenCalledWithMatch({type: 'info'});
                             });
                     });
 
@@ -129,7 +129,7 @@ define(['io.ox/mail/write/main',
                         this.def = setAutoCreatePublicationLimit({'attachmentQuota': 123412})
                             .then(sendMailWithApp(this.mail, this.app))
                             .done(function () {
-                                expect(notificationSpy).not.toHaveBeenCalledWith('info');
+                                expect(notificationSpy).not.toHaveBeenCalledWithMatch({type: 'info'});
                             });
                     });
 
@@ -139,7 +139,7 @@ define(['io.ox/mail/write/main',
                         this.def = setAutoCreatePublicationLimit({'attachmentQuota': 123500})
                             .then(sendMailWithApp(this.mail, this.app))
                             .done(function () {
-                                expect(notificationSpy).not.toHaveBeenCalledWith('info');
+                                expect(notificationSpy).not.toHaveBeenCalledWithMatch({type: 'info'});
                             });
                     });
                 });
@@ -151,7 +151,7 @@ define(['io.ox/mail/write/main',
                         this.def = setAutoCreatePublicationLimit({'attachmentQuotaPerFile': 123400})
                         .then(sendMailWithApp(this.mail, this.app))
                         .done(function () {
-                            expect(notificationSpy).toHaveBeenCalledWith('info');
+                            expect(notificationSpy).toHaveBeenCalledWithMatch({type: 'info'});
                         });
                     });
 
@@ -161,7 +161,7 @@ define(['io.ox/mail/write/main',
                         this.def = setAutoCreatePublicationLimit({'attachmentQuotaPerFile': 123412})
                         .then(sendMailWithApp(this.mail, this.app))
                         .done(function () {
-                            expect(notificationSpy).not.toHaveBeenCalledWith('info');
+                            expect(notificationSpy).not.toHaveBeenCalledWithMatch({type: 'info'});
                         });
                     });
 
@@ -171,7 +171,7 @@ define(['io.ox/mail/write/main',
                         this.def = setAutoCreatePublicationLimit({'attachmentQuotaPerFile': 123500})
                         .then(sendMailWithApp(this.mail, this.app))
                         .done(function () {
-                            expect(notificationSpy).not.toHaveBeenCalledWith('info');
+                            expect(notificationSpy).not.toHaveBeenCalledWithMatch({type: 'info'});
                         });
                     });
                 });
@@ -183,7 +183,7 @@ define(['io.ox/mail/write/main',
                         this.def = setAutoCreatePublicationLimit({})
                         .then(sendMailWithApp(this.mail, this.app))
                         .done(function () {
-                            expect(notificationSpy).not.toHaveBeenCalledWith('info');
+                            expect(notificationSpy).not.toHaveBeenCalledWithMatch({type: 'info'});
                         });
                     });
                 });
