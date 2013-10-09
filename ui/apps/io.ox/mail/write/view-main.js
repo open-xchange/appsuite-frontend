@@ -602,11 +602,11 @@ define('io.ox/mail/write/view-main',
                     this.selection.keyboard(filesPane, true);
                     this.selection.setEditable(true, '.labelwrapper');
 
-                    pane.header($('<h4>').text(gt('Choose file')))
+                    pane.header($('<h4>').text(gt('Add files')))
                         .build(function () {
                             this.getContentNode().append(container, filesPane);
                         })
-                        .addPrimaryButton('save', gt('Add files'))
+                        .addPrimaryButton('save', gt('Add'))
                         .addButton('cancel', gt('Cancel'))
                         .show(function () {
                             tree.paint().done(function () {
