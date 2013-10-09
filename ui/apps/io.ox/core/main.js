@@ -225,9 +225,9 @@ define('io.ox/core/main',
         //construct
         node.append(function () {
             if (_.isString(label)) {
-                return $('<a href="#" tabindex="1">').text(gt.pgettext('app', label));
+                return $('<a href="#" class="apptitle" tabindex="1">').text(gt.pgettext('app', label));
             } else if (label[0].tagName === 'I') {
-                return $('<a href="#" tabindex="1">').append(label);
+                return $('<a href="#" class="apptitle" tabindex="1">').append(label);
             } else {
                 return label;
             }
@@ -479,12 +479,14 @@ define('io.ox/core/main',
 
         function addUserContent(model, launcher, first) {
 
-            var quitApp = $('<i class="icon-remove">').on('click', function (e) {
+            var quitApp = $('<a href="#" class="closelink" tabindex="1">').append(
+                    $('<i class="icon-remove">')
+                ).on('click', function (e) {
                 e.stopImmediatePropagation();
                 model.getWindow().app.quit();
             });
 
-            if (model.get('userContent')) {
+            if (model.get('closable')) {
                 var cls = model.get('userContentClass') || '',
                     icon = model.get('userContentIcon') || '';
                 launcher.addClass('user-content').addClass(cls).children().first().prepend($('<span>').append(
@@ -556,7 +558,7 @@ define('io.ox/core/main',
 
         ox.ui.apps.on('change:title', function (model, value) {
             var node = $('[data-app-guid="' + model.guid + '"]', launchers);
-            $('a', node).text(value);
+            $('a.apptitle', node).text(value);
             addUserContent(model, node);
             launcherDropdown.find('a[data-app-guid="' + model.guid + '"]').text(value);
             tabManager();

@@ -190,7 +190,8 @@ define('io.ox/mail/write/main',
         app = ox.ui.createApp({
             name: 'io.ox/mail/write',
             title: gt('Compose'),
-            userContent: true
+            userContent: true,
+            closable: true
         });
 
         model = new MailModel();
