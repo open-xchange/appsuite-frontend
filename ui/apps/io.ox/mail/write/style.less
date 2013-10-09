@@ -680,6 +680,7 @@
             text-overflow: ellipsis;
         }
         .text-editor {
+            height: 200px;
             position: relative;
             bottom: 50px;
             top: 1px;
@@ -691,24 +692,13 @@
                 border-color: #ccc;
             }
         }
-        input[type=text]:not(#writer_field_to, #writer_field_cc, #writer_field_bcc), textarea, .text-editor {//exclude to,cc and bcc fields or they will get too huge
-            height: 200px;
-
-            border-top: none;
-            border-left: none;
-            border-right: none;
+        input[type=text], textarea, .text-editor, input[type=text]:focus, input[type=text].discreet:focus, textarea.discreet:focus {
+            border: 0;
+            border-bottom: 1px solid #ccc;
             box-shadow: none;
             -webkit-box-shadow: none;
         }
-        input[type=text]:focus, input[type=text].discreet:focus, textarea.discreet:focus {
-            border-top: none;
-            border-left: none;
-            border-right: none;
-            box-shadow: none;
-            -webkit-box-shadow: none;
 
-            border-color: #ccc;;
-        }
         input[type=text].subject {
             padding-left: 5px;
             padding-right: 30px;
