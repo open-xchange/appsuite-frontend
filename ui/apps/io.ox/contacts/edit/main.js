@@ -37,8 +37,9 @@ define('io.ox/contacts/edit/main',
             userContent: true
         });
 
-        app.setLauncher(function (def) {
+        app.setLauncher(function () {
 
+            var def = $.Deferred();
             var win = ox.ui.createWindow({
                 name: 'io.ox/contacts/edit',
                 title: 'Edit Contact',
@@ -123,7 +124,6 @@ define('io.ox/contacts/edit/main',
                                     fnToggleSave(false);
                                 }
                             }, 100));
-
                         }
 
                         editView.on('save:success', function (e, data) {
@@ -171,6 +171,8 @@ define('io.ox/contacts/edit/main',
                             }
                             app.setTitle(newTitle);
                         });
+
+                        def.resolve();
                     }
 
                     // create model & view
@@ -217,11 +219,14 @@ define('io.ox/contacts/edit/main',
 
             if (data) {
                 // hash support
-                app.setState({ folder: data.folder_id, id: data.id });
+                app.setState(data.id ? { folder: data.folder_id, id: data.id }
+                                     : { fodler: data.folder_id });
                 cont(data);
             } else {
                 cont({folder_id: app.getState().folder, id: app.getState().id});
             }
+
+            return def;
         });
 
         app.setQuit(function () {
@@ -250,6 +255,29 @@ define('io.ox/contacts/edit/main',
             //clean
             return def;
         });
+
+        app.failSave = function () {
+            if (this.contact) {
+                var title = this.contact.get('display_name');
+                return {
+                    description: gt('Contact') + (title ? ': ' + title : ''),
+                    module: 'io.ox/contacts/edit',
+                    point: this.contact.attributes
+                };
+            }
+            return false;
+        };
+
+        app.failRestore = function (point) {
+            if (_.isUndefined(point.id)) {
+                this.contact.set(point);
+            } else {
+                this.contact.set(point);
+                this.cid = 'io.ox/contacts/contact:edit.' + _.cid(data);
+                //this.setTitle(point.title || gt('Edit Contact'));
+            }
+            return $.when();
+        };
 
         ext.point('io.ox/contacts/edit/main/model').extend({
             id: 'io.ox/contacts/edit/main/model/auto_display_name',

@@ -286,11 +286,7 @@ define('io.ox/mail/api',
                 sort: '610',
                 order: 'desc',
                 getData: function (query, options) {
-                    var fromToColumn = 603; //fromto is special, the column changes if the search is inside the sent items folder
-                    if (options.folder === 'default0/INBOX/Sent Items') {
-                        fromToColumn = 604;
-                    }
-                    var map = { from: 603, fromTo: fromToColumn, to: 604, cc: 605, subject: 607, text: -1 }, composite = [];
+                    var map = { from: 603, to: 604, cc: 605, subject: 607, text: -1 }, composite = [];
                     _(options).each(function (value, key) {
                         if (key in map && value === 'on') {
                             composite.push({ col: map[key], pattern: query });
@@ -1445,6 +1441,9 @@ define('io.ox/mail/api',
             }
         })
         .then(function (unseen) {
+            //update the tracker
+            //needed if mail app was not opened before to prevent mails not being marked as read because the tracker doesn't know them
+            tracker.reset(unseen);
 
             // check most recent mail
             var recent = _(unseen).filter(function (obj) {

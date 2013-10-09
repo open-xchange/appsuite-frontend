@@ -807,19 +807,21 @@ define('io.ox/mail/main',
         (function () {
 
             ext.point('io.ox/mail/search/defaults').extend({
-                fromTo: true,
+                from: true,
+                to: true,
                 cc: true,
                 subject: true
             });
 
             ext.point('io.ox/mail/search/checkboxes').extend({
-                fromTo: true,
+                from: true,
+                to: true,
                 cc: true,
                 subject: true,
                 text: true
             });
 
-            var translations = { fromTo: gt('From'), cc: gt('CC'), subject: gt('Subject'), text: gt('Mail text') },
+            var translations = { from: gt('Sender'), to: gt('Receiver'), cc: gt('CC'), subject: gt('Subject'), text: gt('Mail text') },
                 checkboxes = ext.point('io.ox/mail/search/checkboxes').options(),
                 defaults = ext.point('io.ox/mail/search/defaults').options(),
                 data = {}, button;
@@ -835,14 +837,6 @@ define('io.ox/mail/main',
                 }
             });
 
-            grid.on('change:prop:folder', function (e, folder) {//change label of fromTo if User is in Sent Items folder.
-                if (folder === 'default0/INBOX/Sent Items') {
-                    data.fromTo.label = gt('To');
-                } else {
-                    data.fromTo.label = gt('From');
-                }
-                dropdown.redraw();
-            });
             //add dropdown button
             button = $('<button type="button" data-action="search-options" class="btn fixed-btn search-options" aria-hidden="true">')
                     .append('<i class="icon-gear">');
