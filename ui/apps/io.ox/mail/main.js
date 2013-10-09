@@ -696,6 +696,11 @@ define('io.ox/mail/main',
                     .done(_.lfo(drawMail))
                     .fail(_.lfo(drawFail, obj));
             }
+
+            api.on('refresh.seen', function (e, list) {
+                baton.app.getWindow().nodes.body.find('[data-action="markread"]').trigger('redraw', baton);
+            });
+
         };
 
         showMail.cancel = function () {

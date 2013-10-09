@@ -376,6 +376,8 @@ define('io.ox/core/tk/folderviews',
                 nodes.folder.css('paddingLeft', (0 + level * SUBFOLDERPADDING) + 'px');
             }
 
+            nodes.folder.attr('data-offset-left', level * SUBFOLDERPADDING);
+
             nodes.sub = tmplSub.clone();
 
             if (skip()) {
@@ -470,7 +472,8 @@ define('io.ox/core/tk/folderviews',
             .append(this.container = $('<div class="folder-root">'));
 
         // selection
-        Selection.extend(this, container, { dropzone: true, dropType: 'folder' }) // not this.container!
+        var selectionContainer = container.parent().is('.foldertree-container') ? container.parent() : container;
+        Selection.extend(this, selectionContainer, { dropzone: true, dropType: 'folder' }) // not this.container!
             .setMultiple(false)
             .setSerializer(function (obj) {
                 return obj ? String(obj.id) : '';
@@ -821,7 +824,8 @@ define('io.ox/core/tk/folderviews',
             }
 
             // set title
-            label.text(_.noI18n(data.title));
+            var shortTitle = api.getFolderTitle(data.title, 30);
+            label.attr('title', data.title).text(_.noI18n(shortTitle));
 
             // set counter (mail only)
             if (options.type === 'mail') {

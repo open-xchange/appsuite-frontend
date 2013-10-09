@@ -432,15 +432,15 @@
 @media all and (max-width: 560px) {
 
     .simple-window {
-    
+
         .io-ox-sidepopup {
             -webkit-user-select: text;
             -moz-user-select: text;
             -ms-user-select: text;
             user-select: text;
         }
-    
-    } 
+
+    }
 
     /* smartphone reduction */
     .io-ox-portal {
@@ -494,7 +494,7 @@
                 padding-top: 0;
             }
         }
-        
+
     }
 
     .portal-feed {
@@ -730,5 +730,16 @@
         position: relative;
     }
 
+}
+// position fixed toolbar, only for portal on mobile devices
+#io-ox-topbar.toolbar-fixed-position {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 15;
+}
+
+.window-content.io-ox-portal.content-v-shift {
+    padding-top: 45px
 }
 

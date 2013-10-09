@@ -14,7 +14,7 @@ define('plugins/mobile/addToHomescreen/register',
 
     'use strict';
 
-    if (ox.debug) return;
+    if (ox.debug || _.browser.ios === 7) return;
 
     var nav = window.navigator,
         isIDevice = _.device('iOS'),

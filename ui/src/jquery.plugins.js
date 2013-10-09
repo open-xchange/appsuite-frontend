@@ -120,14 +120,14 @@
 
             // get pane
             var pane = $(node),
-            // get pane height
-            height = 0,
-            // get visible area
-            y1 = pane.scrollTop(),
-            y2 = 0,
-            // get top position
-            top = this.offset().top + y1 - pane.offset().top,
-            h = 0;
+                // get pane height
+                height = 0,
+                // get visible area
+                y1 = pane.scrollTop(),
+                y2 = 0,
+                // get top position
+                top = this.offset().top + y1 - pane.offset().top,
+                h = 0, left = 0;
             // out of visible area?
             if (top < y1) {
                 // scroll up!
@@ -141,6 +141,9 @@
                     pane.scrollTop(y1 + top + h - y2);
                 }
             }
+            // custom offset?
+            left = this.data('offset-left');
+            if (left !== undefined) pane.scrollLeft(left);
 
         } catch (e) {
             // IE sometimes crashes

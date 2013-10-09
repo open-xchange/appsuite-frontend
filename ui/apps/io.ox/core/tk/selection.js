@@ -90,9 +90,8 @@ define('io.ox/core/tk/selection',
             mobileSelectMode;
 
         isCheckbox = function (e) {
-            var closest = $(e.target).closest(editableSelector),
-                isEditable = editable && closest.length;
-            return isEditable;
+            var closest = $(e.target).closest(editableSelector);
+            return editable && closest.length;
         };
 
         isMultiple = function (e) {
@@ -675,15 +674,17 @@ define('io.ox/core/tk/selection',
                 hash[cid] = node;
             });
 
-            _(!list || _.isArray(list) ? list : [list]).each(function (elem) {
-                var cid = self.serialize(elem), item;
+            _(!list || _.isArray(list) ? list : [list]).each(function (elem, index) {
+                var cid = self.serialize(elem), item, node;
                 // existing node?
                 if (cid in hash) {
                     if (typeof elem === 'string' && bHasIndex && (item = observedItems[getIndex(elem)]) !== undefined) {
-                        fastSelect(item.data, hash[cid]);
+                        node = fastSelect(item.data, hash[cid]);
                     } else {
-                        fastSelect(elem, hash[cid]);
+                        node = fastSelect(elem, hash[cid]);
                     }
+                    // put first item into viewport
+                    if (index === 0) node.intoViewport(container);
                 } else {
                     selectedItems[cid] = elem;
                 }
