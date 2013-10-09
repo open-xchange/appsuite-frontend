@@ -161,8 +161,7 @@
         var app = null;
 
         beforeEach(function () {
-            this.server = ox.fakeServer;
-            this.server.autoRespond = false;
+            this.server = ox.fakeServer.create();
 
             this.server.respondWith('PUT', /api\/contacts\?action=new/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(result));
@@ -175,7 +174,7 @@
         });
 
         afterEach(function () {
-            this.server.autoRespond = true;
+            this.server.restore();
         });
 
         it('should provide a getApp function ', function () {

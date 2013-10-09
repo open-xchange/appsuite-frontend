@@ -24,6 +24,10 @@ define(['io.ox/mail/write/main',
             waitsFor(function () {
                 return launched.state() === 'resolved';
             });
+            this.server = ox.fakeServer.create();
+        });
+        afterEach(function () {
+            this.server.restore();
         });
 
         describe('provides useful feedback', function () {
@@ -40,13 +44,13 @@ define(['io.ox/mail/write/main',
                             });
                         };
                     },
-                    setupFakeServer = _.once(function (server) {
+                    setupFakeServer = function (server) {
                         server.respondWith('PUT', /api\/mail\?action=new/, function (xhr) {
                             xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
                                 JSON.stringify({"data":"default0/Inbox/Sent Items/42"})
                             );
                         });
-                    });
+                    };
 
                 beforeEach(function () {
                     this.mail = {
@@ -61,7 +65,7 @@ define(['io.ox/mail/write/main',
                         ]
                     };
                     this.notificationSpy = sinon.spy(notifications, 'yell');
-                    setupFakeServer(ox.fakeServer);
+                    setupFakeServer(this.server);
                 });
 
                 afterEach(function () {
@@ -83,6 +87,7 @@ define(['io.ox/mail/write/main',
                     .then(sendMailWithApp(this.mail, this.app))
                     .done(function () {
                         expect(notificationSpy).toHaveBeenCalledWithMatch({type: 'info'});
+
                     });
                 });
 

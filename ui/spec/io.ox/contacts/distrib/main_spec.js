@@ -41,6 +41,13 @@
 
         listname = 'testlist',
 
+        result = {
+            'timestamp': 1379403021960,
+           'data': {
+               'id': 510778
+           }
+        },
+
         TIMEOUT = ox.testTimeout;
 
     // helpers
@@ -63,6 +70,18 @@
 
         var app = null, appContainer, buttonCreate, createForm, inputName, addButton,
         saveButton, displayName;
+
+        beforeEach(function () {
+            this.server = ox.fakeServer.create();
+
+            this.server.respondWith('PUT', /api\/contacts\?action=new/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(result));
+            });
+        });
+
+        afterEach(function () {
+            this.server.restore();
+        });
 
         it('should provide a getApp function ', function () {
             expect(main.getApp).toBeTruthy();

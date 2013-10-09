@@ -13,7 +13,7 @@ define(['shared/examples/for/api',
        'io.ox/core/api/folder',
        'io.ox/core/http'
 ], function (sharedExamplesFor, api, http) {
-    var setupFakeServer = _.once(function (server) {
+    var setupFakeServer = function (server) {
         //sends a default folder for get calls
         server.respondWith('GET', /api\/folders\?action=get/, function (xhr) {
             var sendObject = JSON.parse('{"' + decodeURI(xhr.url)
@@ -70,7 +70,7 @@ define(['shared/examples/for/api',
                 JSON.stringify({timestamp:1378223251586, data: []})
             );
         });
-    });
+    };
 
     return describe('folder API', function () {
         var options = {
@@ -110,8 +110,7 @@ define(['shared/examples/for/api',
                 }, 'cache clear takes too long', 1000);
                 runs(function () {
                     //make fake server only respond on demand
-                    this.server = ox.fakeServer;
-                    this.server.autoRespond = false;
+                    this.server = ox.fakeServer.create();
 
                     setupFakeServer(this.server);
                 });
@@ -119,7 +118,7 @@ define(['shared/examples/for/api',
 
             afterEach(function () {
                 //make fake server respond automatically
-                this.server.autoRespond = true;
+                this.server.restore();
             });
 
             it('should return a folder with correct id', function() {

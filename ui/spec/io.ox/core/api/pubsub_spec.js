@@ -20,11 +20,13 @@ define(
         }
     };
 
-    describe('publication API', function () {
-        sharedExamplesFor(api.publications, {testData: testData});
-    });
+    describe('Pub/Sub API', function () {
+        describe('publication API', function () {
+            sharedExamplesFor(api.publications, {testData: testData});
+        });
 
-    describe('subscription API', function () {
-        sharedExamplesFor(api.subscriptions, {testData: testData});
+        describe('subscription API', function () {
+            sharedExamplesFor(api.subscriptions, {testData: testData});
+        });
     });
 });
