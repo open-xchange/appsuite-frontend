@@ -49,7 +49,7 @@ define([
                 var imgTag = emoji.unifiedToImageTag('\u2600'),
                     text = emoji.unifiedToImageTag('On Tuesday "Some Body" <somebody@example.com> wrote: \u2600'),
                     test = 'On Tuesday "Some Body" <somebody@example.com> wrote: ' +
-                           '<img src="apps/themes/login/1x1.gif" class="emoji-unified emoji2600" ' +
+                           '<img src="apps/themes/login/1x1.gif" class="emoji emoji-unified emoji2600" ' +
                            'data-emoji-unicode="\u2600">';
 
                 expect($(imgTag).attr('data-emoji-unicode')).toBe('\u2600');
@@ -61,9 +61,9 @@ define([
                 beforeEach(function () {
                     settings.set('defaultCollection', 'unified');
                     this.imgTag = emoji.unifiedToImageTag('\u2600 \u2601');
-                    this.expected = '<img src="apps/themes/login/1x1.gif" class="emoji-unified emoji2600" ' +
+                    this.expected = '<img src="apps/themes/login/1x1.gif" class="emoji emoji-unified emoji2600" ' +
                                     'data-emoji-unicode="\u2600"> <img src="apps/themes/login/1x1.gif" ' +
-                                    'class="emoji-unified emoji2601" data-emoji-unicode="\u2601">';
+                                    'class="emoji emoji-unified emoji2601" data-emoji-unicode="\u2601">';
                 });
 
                 it('with default collection', function () {
