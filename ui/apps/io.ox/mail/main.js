@@ -698,7 +698,7 @@ define('io.ox/mail/main',
             }
 
             api.on('refresh.seen', function (e, list) {
-                baton.app.getWindow().nodes.body.find('[data-action="markread"]').trigger('redraw', baton);
+                app.getWindow().nodes.body.find('[data-action="markread"]').trigger('redraw', obj);
             });
 
         };
