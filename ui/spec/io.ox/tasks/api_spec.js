@@ -57,16 +57,18 @@ define(['shared/examples/for/api',
             };
         sharedExamplesFor(api, options);
 
+        beforeEach(function () {
+            this.server = ox.fakeServer.create();
+        });
+        afterEach(function () {
+            this.server.restore();
+        });
+
         describe('creating a task', function () {
             beforeEach(function () {
-                this.server = ox.fakeServer;
-                this.server.autoRespond = false;
                 this.server.respondWith('PUT', /api\/tasks\?action=new/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data":{"id":45}}');
                 });
-            });
-            afterEach(function () {
-                this.server.autoRespond = true;
             });
             it('should add a new task', function () {
                 //make copy of testData
@@ -116,14 +118,9 @@ define(['shared/examples/for/api',
         });
         describe('updating a task', function () {
             beforeEach(function () {
-                this.server = ox.fakeServer;
-                this.server.autoRespond = false;
                 this.server.respondWith('PUT', /api\/tasks\?action=update/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data":{}}');
                 });
-            });
-            afterEach(function () {
-                this.server.autoRespond = true;
             });
             it('should update a task', function () {
                 //make copy of testData
@@ -173,14 +170,9 @@ define(['shared/examples/for/api',
         });
         describe('confirming a task', function () {
             beforeEach(function () {
-                this.server = ox.fakeServer;
-                this.server.autoRespond = false;
                 this.server.respondWith('PUT', /api\/tasks\?action=confirm/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data":{}}');
                 });
-            });
-            afterEach(function () {
-                this.server.autoRespond = true;
             });
             it('should confirm a task', function () {
                 var result = api.confirm(options.testDataConfirm);
