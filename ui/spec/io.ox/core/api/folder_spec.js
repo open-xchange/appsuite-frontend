@@ -301,5 +301,57 @@ define(['shared/examples/for/api',
                 expect(api.getFolderTitle('this is a test title', 19)).toBe('this is\u2026test title');
             });
         });
+
+        describe('hidden objects', function () {
+            beforeEach(function () {
+                this.server = ox.fakeServer.create();
+                this.server.autoRespond = true;
+                this.server.respondWith('GET', /api\/folders\?action=list/, function (xhr) {
+                    xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
+                                JSON.stringify({
+                                    timestamp: 1368791630910,
+                                    data: [
+                                        {id: '3', folder_id: 'hidden/test', title: '.drive'},
+                                        {id: '4', folder_id: 'hidden/test', title: 'visible'},
+                                        {id: '5', folder_id: 'hidden/test', title: '.hidden'}
+                                    ]
+                                })
+                    );
+                });
+            });
+            afterEach(function () {
+                this.server.restore();
+            });
+
+            describe('defined by blacklist', function () {
+                it('should not filter without blacklist', function () {
+                    var def = require(['settings!io.ox/core']).then(function (settings) {
+                            settings.set('folder/blacklist', {});
+                            return api.caches.clear();
+                        }).then(function () {
+                            return api.getSubFolders({folder: 'hidden/test'});
+                        })
+                        .done(function (f) {
+                            expect(f.length).toBe(3);
+                        });
+
+                    expect(def).toResolve();
+                });
+
+                it('should not show objects from blacklist', function () {
+                    var def = require(['settings!io.ox/core']).then(function (settings) {
+                        settings.set('folder/blacklist', {'4': true});
+                        return api.caches.clear();
+                    }).then(function () {
+                        return api.getSubFolders({folder: 'hidden/test'});
+                    })
+                    .done(function (f) {
+                        expect(f.length).toBe(2);
+                    });
+
+                    expect(def).toResolve();
+                })
+            });
+        });
     });
 });
