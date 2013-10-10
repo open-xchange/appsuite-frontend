@@ -28,6 +28,11 @@ define('io.ox/calendar/list/perspective',
 
     var perspective = new ox.ui.Perspective('list');
 
+    perspective.refresh = function () {
+        this.updateGridOptions();
+        this.grid.refresh(true);
+    };
+
     perspective.render = function (app) {
 
         var win = app.getWindow(),
@@ -191,9 +196,7 @@ define('io.ox/calendar/list/perspective',
                             $('<ul class="dropdown-menu" role="menu">')
                                 .append(
                                     buildOption('asc', gt('Ascending')),
-                                    buildOption('desc', gt('Descending')),
-                                    $('<li class="divider">'),
-                                    buildOption('all', gt('show all'))
+                                    buildOption('desc', gt('Descending'))
                                 )
                                 .on('click', 'a', { grid: grid }, function () {
                                     var option = $(this).attr('data-option');
@@ -201,14 +204,6 @@ define('io.ox/calendar/list/perspective',
                                     case 'asc':
                                     case 'desc':
                                         grid.prop('order', option).refresh(true);
-                                        break;
-                                    case 'all':
-                                        settings.set('showAllPrivateAppointments', !settings.get('showAllPrivateAppointments', false)).save();
-                                        //no folder change trigger here (folderview would throw error)
-                                        self.updateGridOptions();
-                                        grid.refresh(true);
-                                        break;
-                                    default:
                                         break;
                                     }
                                 })
