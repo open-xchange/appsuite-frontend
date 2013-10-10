@@ -15,10 +15,12 @@ define('io.ox/calendar/main',
     ['io.ox/core/date',
      'settings!io.ox/core',
      'io.ox/core/commons',
+     'io.ox/core/extensions',
      'settings!io.ox/calendar',
+     'gettext!io.ox/calendar',
      'io.ox/calendar/actions',
      'less!io.ox/calendar/style.less'
-    ], function (date, coreConfig, commons, settings) {
+    ], function (date, coreConfig, commons, ext, settings, gt) {
 
     'use strict';
 
@@ -49,6 +51,33 @@ define('io.ox/calendar/main',
         app.refDate = new date.Local();
 
         win.addClass('io-ox-calendar-main');
+
+        // "show all" extension for folder view
+
+        function changeShowAll() {
+            settings.set('showAllPrivateAppointments', $(this).prop('checked')).save();
+            win.getPerspective().refresh();
+        }
+
+        ext.point('io.ox/foldertree/section/links').extend({
+            index: 100,
+            id: 'show-all',
+            draw: function (baton) {
+
+                if (baton.id !== 'private') return;
+
+                this.append(
+                    $('<div class="show-all-checkbox">').append(
+                        $('<label class="checkbox">').append(
+                            $('<input type="checkbox" tabindex="1">')
+                                .prop('checked', settings.get('showAllPrivateAppointments', false))
+                                .on('change', changeShowAll),
+                            $.txt(gt('Show appointments from all private calendars'))
+                        )
+                    )
+                );
+            }
+        });
 
         // folder tree
         commons.addFolderView(app, { type: 'calendar', view: 'FolderList' });

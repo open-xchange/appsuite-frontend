@@ -32,8 +32,6 @@ define('io.ox/calendar/month/perspective',
         scaffold: $(),      // perspective
         pane: $(),          // scrollpane
         monthInfo: $(),     //
-        showAll: $(),       // show all folders check-box
-        showAllCon: $(),    // container
         tops: {},           // scrollTop positions of the shown weeks
         firstWeek: 0,       // timestamp of the first week
         lastWeek: 0,        // timestamp of the last week
@@ -239,7 +237,6 @@ define('io.ox/calendar/month/perspective',
                 $('.day.today', this.pane).removeClass('today');
                 day.addClass('today');
             }
-            this.showAll.prop('checked', settings.get('showAllPrivateAppointments', false));
             var weeks = (this.lastWeek - this.firstWeek) / date.WEEK;
             this.updateWeeks({start: this.firstWeek, weeks: weeks}, useCache);
         },
@@ -320,8 +317,6 @@ define('io.ox/calendar/month/perspective',
             var self = this,
                 def = $.Deferred();
             self.app.folder.getData().done(function (data) {
-                // switch only visible on private folders
-                self.showAllCon[data.type === 1 ? 'show' : 'hide']();
                 self.folder = data;
                 def.resolve(data);
             });
@@ -355,6 +350,13 @@ define('io.ox/calendar/month/perspective',
             });
         },
 
+        refresh: function () {
+            var self = this;
+            this.getFolder().done(function () {
+                self.update();
+            });
+        },
+
         render: function (app) {
 
             var start = app.refDate || new date.Local(),
@@ -372,9 +374,7 @@ define('io.ox/calendar/month/perspective',
                 .append(this.scaffold = View.drawScaffold());
 
             var refresh = function () {
-                self.getFolder().done(function () {
-                    self.update();
-                });
+                self.refresh();
             };
 
             var reload = function () {
@@ -389,20 +389,6 @@ define('io.ox/calendar/month/perspective',
                     .addClass('toolbar')
                     .append(
                         this.monthInfo = $('<div>').addClass('info').text(gt.noI18n(this.current.format('MMMM y'))),
-                        this.showAllCon = $('<div>').addClass('showall')
-                            .append(
-                                $('<label>')
-                                    .addClass('checkbox')
-                                    .text(gt('show all'))
-                                    .prepend(
-                                        this.showAll = $('<input type="checkbox" tabindex="1">')
-                                            .prop('checked', settings.get('showAllPrivateAppointments', false))
-                                            .on('change', $.proxy(function () {
-                                                settings.set('showAllPrivateAppointments', this.showAll.prop('checked')).save();
-                                                refresh();
-                                            }, this))
-                                    )
-                            ),
                         $('<div>')
                             .addClass('pagination')
                             .append(

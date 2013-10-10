@@ -172,7 +172,7 @@ define('io.ox/core/commons-folderview',
         // flat folder view
 
         ext.point('io.ox/foldertree/section/links').extend({
-            index: 100,
+            index: 200,
             id: 'private',
             draw: function (baton) {
 
