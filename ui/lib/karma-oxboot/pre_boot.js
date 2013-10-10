@@ -109,6 +109,8 @@ if (sinon) {
                                         JSON.stringify({data: {secretWorks: true}})
                                     ]
                                 );
+
+            //faking configuration (jslob api and deprecated config api)
             fakeServer.respondWith("PUT", /api\/jslob\?action=list/, function (xhr) {
                 var ids = JSON.parse(xhr.requestBody),
                     fakeSettings = {data: []};
@@ -120,6 +122,17 @@ if (sinon) {
                     });
                 });
                 xhr.respond(200, {"Content-Type": "text/javascript;charset=UTF-8"}, JSON.stringify(fakeSettings));
+            });
+            fakeServer.respondWith("GET", /api\/apps\/manifests\?action=config/, function (xhr) {
+                var configData = {
+                    languages: {
+                        de_DE: 'Deutsch',
+                        en_US: 'English (US)'
+                    }
+                };
+                xhr.respond(200, {"Content-Type": "text/javascript;charset=UTF-8"}, JSON.stringify({
+                    data: configData
+                }));
             });
             //faking a few folders
             fakeServer.respondWith('GET', /api\/folders\?action=get/, function (xhr) {
@@ -149,17 +162,6 @@ if (sinon) {
             user_id: 1337
         };
         xhr.respond(200, {"Content-Type": "text/javascript;charset=UTF-8"}, JSON.stringify(session));
-    });
-    fakeServer.respondWith("GET", /api\/apps\/manifests\?action=config/, function (xhr) {
-        var configData = {
-            languages: {
-                de_DE: 'Deutsch',
-                en_US: 'English (US)'
-            }
-        };
-        xhr.respond(200, {"Content-Type": "text/javascript;charset=UTF-8"}, JSON.stringify({
-            data: configData
-        }));
     });
     fakeServer.autoRespond = true;
 }
