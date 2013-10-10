@@ -236,15 +236,17 @@
             color: @topbarLauncherColor;
             padding: 12px;
         }
-        
+
         & > a.closelink {
             padding: 13px 0px 13px 0px;;
         }
-        
+
         & > a.closelink:focus {
             outline: 0;
-            color: @topbarLauncherColor-hover;
             background-color: #08c;
+            i[class^="icon-"] {
+                color: @topbarLauncherColor-hover;
+            }
         }
 
         & > a:hover {
