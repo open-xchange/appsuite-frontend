@@ -36,7 +36,7 @@ define('io.ox/core/api/folder',
          * @return {boolean} true if not blacklisted
          */
         visible = function (folder) {
-            var blacklist = settings.get('folder/blacklist') || {};
+            var blacklist = settings.get('folder/blacklist', {});
             var blacklistedFolder = blacklist[String(folder.data ? folder.data.id : folder.id)];
             return folder !== undefined && (blacklistedFolder === undefined || blacklistedFolder === false);
         },
@@ -1157,7 +1157,14 @@ define('io.ox/core/api/folder',
     api.caches = {
         folderCache: folderCache,
         subFolderCache: subFolderCache,
-        visibleCache: visibleCache
+        visibleCache: visibleCache,
+        clear: function () {
+            return $.when(
+                        folderCache.clear(),
+                        subFolderCache.clear(),
+                        visibleCache.clear()
+                    );
+        }
     };
 
     // filename validator
