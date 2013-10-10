@@ -82,7 +82,8 @@ define('plugins/notifications/mail/register',
             }
 
             api.getList(mails).done(function (response) {
-                // draw placeholders
+                view.$el.find('.item').remove();//remove mails that may be drawn already. ugly race condition fix
+                // draw mails
                 for (i = 0; i < $i; i++) {
                     baton = ext.Baton({ data: response[i], view: view });
                     ext.point('io.ox/core/notifications/mail/item').invoke('draw', view.$('.notifications'), baton);
