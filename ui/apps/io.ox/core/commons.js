@@ -285,7 +285,7 @@ define('io.ox/core/commons',
 
                     var total = countGridData ? grid.getIds().length : data.total,
                         node = grid.getToolbar().find('[data-folder-id="' + folder_id + '"]');
-
+                    grid.getContainer().attr('aria-setsize', total);
                     node.find('.folder-name').text(data.title);
 
                     if (total > 0) {
