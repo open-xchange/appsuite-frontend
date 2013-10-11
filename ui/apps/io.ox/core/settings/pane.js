@@ -203,7 +203,7 @@ define('io.ox/core/settings/pane',
                 id: 'autoStart',
                 index: 500,
                 attribute: 'autoStart',
-                label: gt('Default app after sign in'),
+                label: gt('Default App after login?'),
                 selectOptions: options
             }));
         }
@@ -244,7 +244,7 @@ define('io.ox/core/settings/pane',
             id: 'autoLogout',
             index: 600,
             attribute: 'autoLogout',
-            label: gt('Automatic sign out'),
+            label: gt('Auto Logout'),
             selectOptions: options,
             updateModel: function () {
                 this.setValueInModel(this.nodes.element.val());

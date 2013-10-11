@@ -71,11 +71,11 @@ define('plugins/portal/userSettings/register',
                     $('<div class="alert alert-block alert-info">')
                     .css('margin', '14px 0px')
                     .text(
-                        gt('If you change the password, you will be signed out. Please ensure that everything is closed and saved.')
+                        gt('If you change the password, you will be logged out. Please ensure that everything is closed and saved.')
                     )
                 );
             })
-            .addPrimaryButton('change', gt('Change password and sign out'))
+            .addPrimaryButton('change', gt('Change password and logout'))
             .addButton('cancel', gt('Cancel'))
             .on('change', function (e, data, dialog) {
                 var node = dialog.getContentNode();

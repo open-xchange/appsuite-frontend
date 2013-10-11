@@ -237,6 +237,18 @@
             padding: 12px;
         }
 
+        & > a.closelink {
+            padding: 13px 0px 13px 0px;;
+        }
+
+        & > a.closelink:focus {
+            outline: 0;
+            background-color: #08c;
+            i[class^="icon-"] {
+                color: @topbarLauncherColor-hover;
+            }
+        }
+
         & > a:hover {
             text-decoration: none;
         }
@@ -250,7 +262,7 @@
 
     .launcher {
 
-        max-width: 15em; // see bug 29238
+        max-width: 15em; // see bug :29238
         cursor: pointer;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -302,7 +314,7 @@
                 text-overflow: ellipsis;
             }
 
-             & > a.special {
+             & > a.apptitle {
                 float: left;
                 line-height: 16px;
             }
@@ -318,7 +330,6 @@
         &.user-content i.icon-remove {
             padding: 13px 16px;
             margin: 0px;
-            background-color: rgba(0, 0, 0, 0.15);
         }
 
         &.user-content i.icon-remove:hover {
@@ -1729,17 +1740,6 @@ nav.io-ox-inline-links + header {
     z-index: 2;
 }
 
-.io-ox-inline-buttongroup {
-    .io-ox-inline-links;
-    margin: 0 0 0 0;
-    .io-ox-action-link {
-        margin-right: 0;
-    }
-    a:hover {
-        text-decoration: none;
-    }
-}
-
 .io-ox-inline-links.embedded {
     margin: 1em 0;
     text-align: right;
@@ -2081,13 +2081,14 @@ input.nice-input {
 
     .folder {
 
-        line-height: 34px;
+        line-height: 30px;
         padding: 0 13px 0 0;
         overflow: visible;
         white-space: nowrap;
         width: 100%;
-        .box-sizing(border-box);
         display: block;
+        .box-sizing(border-box);
+
 
         &.selectable, &.expandable {
             cursor: pointer;
@@ -2110,7 +2111,11 @@ input.nice-input {
             color: #bbb;
             font-style: italic;
         }
+    }
 
+    // more space for fat fingers
+    .touch & .folder {
+        line-height: 34px;
     }
 
     &:focus .folder {
@@ -2196,15 +2201,23 @@ input.nice-input {
         }
     }
 
-    .folder-counter-badge,
-    .folder-options-badge {
+    .folder-counter-badge, .folder-options-badge {
         color: #888;
         line-height: 26px;
         padding: 0 0.75em 0 0.75em;
-        margin-top: 4px;
+        margin-top: 2px;
+        margin-bottom: 2px;
         display: inline-block;
         background-color: #f0f0f0;
         border-radius: 5px;
+    }
+
+    // more space for fat fingers
+    .touch & {
+        .folder-counter-badge, .folder-options-badge {
+            margin-top: 4px;
+            margin-bottom: 4px;
+        }
     }
 
     .folder-options-badge {
@@ -2241,7 +2254,7 @@ input.nice-input {
 .foldertree-links,
 .folder-section-links {
 
-    padding: 14px 0 14px 21px;
+    padding: 14px 0 0 21px;
     line-height: 28px;
     font-weight: 300;
 
@@ -2903,12 +2916,7 @@ input.flat-input {
         }
     }
     .foldertree-sidepanel {
-        .foldertree-toolbar {
-            /*display: none;*/
-            /*background-color: #ebebeb;*/
-        }
         .foldertree-container {
-            bottom: 50px;
             .io-ox-foldertree {
                 .folder.selectable:hover {
                     background-color: inherit;
@@ -3075,7 +3083,8 @@ input.flat-input {
 
     #background_loader.secure.block {
         background-color: rgba(0,0,0,.6);
-        height: 150% !important;
+        height: 150%;
+        position: fixed; // always center this
     }
 
     #multi-select-toolbar {
