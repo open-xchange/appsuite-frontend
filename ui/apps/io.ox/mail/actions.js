@@ -997,7 +997,8 @@ define('io.ox/mail/actions',
         prio: 'hi',
         id: 'reply-all',
         label: gt('Reply All'),
-        ref: 'io.ox/mail/actions/reply-all'
+        ref: 'io.ox/mail/actions/reply-all',
+        drawDisabled: true
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
@@ -1015,6 +1016,14 @@ define('io.ox/mail/actions',
         id: 'edit',
         label: gt('Edit'),
         ref: 'io.ox/mail/actions/edit'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: INDEX += 100,
+        prio: 'hi',
+        id: 'delete',
+        label: gt('Delete'),
+        ref: 'io.ox/mail/actions/delete'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
@@ -1086,14 +1095,6 @@ define('io.ox/mail/actions',
         //#. source in terms of source code
         label: gt('View source'),
         ref: 'io.ox/mail/actions/source'
-    }));
-
-    ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: INDEX += 100,
-        prio: 'hi',
-        id: 'delete',
-        label: gt('Delete'),
-        ref: 'io.ox/mail/actions/delete'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
