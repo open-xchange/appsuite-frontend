@@ -126,7 +126,7 @@ define('io.ox/core/gettext', function () {
         };
 
         function get(key) {
-            assert(enabled, 'Early gettext call: ' + JSON.stringify(key));
+            assert(enabled, 'Early gettext call: ' + JSON.stringify(key) + '. This string cannot be replaced by custom translations.');
             if (key in custom['*']) return custom['*'][key];
             if (id in custom && key in custom[id]) return custom[id][key];
             return po.dictionary[key];
