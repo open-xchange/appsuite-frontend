@@ -698,7 +698,7 @@ define('io.ox/mail/main',
             }
 
             api.on('refresh.seen', function (e, list) {
-                baton.app.getWindow().nodes.body.find('[data-action="markread"]').trigger('redraw', baton);
+                app.getWindow().nodes.body.find('[data-action="markread"]').trigger('redraw', obj);
             });
 
         };
@@ -826,7 +826,7 @@ define('io.ox/mail/main',
                 text: true
             });
 
-            var translations = { from: gt('Sender'), to: gt('Receiver'), cc: gt('CC'), subject: gt('Subject'), text: gt('Mail text') },
+            var translations = { from: gt('Sender'), to: gt('Recipient'), cc: gt('CC'), subject: gt('Subject'), text: gt('Mail text') },
                 checkboxes = ext.point('io.ox/mail/search/checkboxes').options(),
                 defaults = ext.point('io.ox/mail/search/defaults').options(),
                 data = {}, button;

@@ -276,7 +276,7 @@ define('io.ox/core/commons',
                 node.empty()
                 .attr('data-folder-id', folder_id)
                 .append(
-                    $('<a href="#" class="folder-name" data-action="open-folderview" tabindex="1">'),
+                    $('<a href="#" role="button" aria-label="' + gt('open folderview') + '" class="folder-name" data-action="open-folderview" tabindex="1">'),
                     $.txt(' '),
                     $('<span class="folder-count">')
                 );
@@ -285,7 +285,7 @@ define('io.ox/core/commons',
 
                     var total = countGridData ? grid.getIds().length : data.total,
                         node = grid.getToolbar().find('[data-folder-id="' + folder_id + '"]');
-
+                    grid.getContainer().attr('aria-setsize', total);
                     node.find('.folder-name').text(data.title);
 
                     if (total > 0) {

@@ -13,7 +13,7 @@ define(['shared/examples/for/api',
        'io.ox/core/api/folder',
        'io.ox/core/http'
 ], function (sharedExamplesFor, api, http) {
-    var setupFakeServer = _.once(function (server) {
+    var setupFakeServer = function (server) {
         //sends a default folder for get calls
         server.respondWith('GET', /api\/folders\?action=get/, function (xhr) {
             var sendObject = JSON.parse('{"' + decodeURI(xhr.url)
@@ -70,7 +70,7 @@ define(['shared/examples/for/api',
                 JSON.stringify({timestamp:1378223251586, data: []})
             );
         });
-    });
+    };
 
     return describe('folder API', function () {
         var options = {
@@ -100,18 +100,15 @@ define(['shared/examples/for/api',
         describe('requests some folders from the server', function () {
             beforeEach(function () {
                 //TODO: clear global cache (must also be possible in phantomJS)
-                var cache1 = api.caches.folderCache.clear(),
-                    cache2 = api.caches.subFolderCache.clear(),
-                    cache3 = api.caches.visibleCache.clear();
+                var def = api.clearCaches();
 
                 //wait for caches to be clear, then procceed
                 waitsFor(function () {
-                    return cache1.state() === 'resolved' && cache2.state() === 'resolved' && cache3.state() === 'resolved';
+                    return def.state() === 'resolved';
                 }, 'cache clear takes too long', 1000);
                 runs(function () {
                     //make fake server only respond on demand
-                    this.server = ox.fakeServer;
-                    this.server.autoRespond = false;
+                    this.server = ox.fakeServer.create();
 
                     setupFakeServer(this.server);
                 });
@@ -119,7 +116,7 @@ define(['shared/examples/for/api',
 
             afterEach(function () {
                 //make fake server respond automatically
-                this.server.autoRespond = true;
+                this.server.restore();
             });
 
             it('should return a folder with correct id', function() {
@@ -300,6 +297,62 @@ define(['shared/examples/for/api',
 
             it('from "this is a test title" to "this is\u2026test title"', function () {
                 expect(api.getFolderTitle('this is a test title', 19)).toBe('this is\u2026test title');
+            });
+        });
+
+        describe('hidden objects', function () {
+            beforeEach(function () {
+                this.server = ox.fakeServer.create();
+                this.server.autoRespond = true;
+                this.server.respondWith('GET', /api\/folders\?action=list/, function (xhr) {
+                    xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
+                                JSON.stringify({
+                                    timestamp: 1368791630910,
+                                    data: [
+                                        {id: '3', folder_id: 'hidden/test', title: '.drive'},
+                                        {id: '4', folder_id: 'hidden/test', title: 'visible'},
+                                        {id: '5', folder_id: 'hidden/test', title: '.hidden'}
+                                    ]
+                                })
+                    );
+                });
+            });
+            afterEach(function () {
+                this.server.restore();
+            });
+
+            describe('defined by blacklist', function () {
+                it('should not filter without blacklist', function () {
+                    var def = require(['settings!io.ox/core']).then(function (settings) {
+                            settings.set('folder/blacklist', {});
+                            return api.clearCaches();
+                        }).then(function () {
+                            return api.getSubFolders({folder: 'hidden/test'});
+                        })
+                        .done(function (f) {
+                            expect(_(f).pluck('title')).toContain('.hidden');
+                            expect(_(f).pluck('title')).toContain('visible');
+                            expect(_(f).pluck('title')).toContain('.drive');
+                        });
+
+                    expect(def).toResolve();
+                });
+
+                it('should not show objects from blacklist', function () {
+                    var def = require(['settings!io.ox/core']).then(function (settings) {
+                        settings.set('folder/blacklist', {'4': true});
+                        return api.clearCaches();
+                    }).then(function () {
+                        return api.getSubFolders({folder: 'hidden/test'});
+                    })
+                    .done(function (f) {
+                        expect(_(f).pluck('title')).toContain('.hidden');
+                        expect(_(f).pluck('title')).not.toContain('visible');
+                        expect(_(f).pluck('title')).toContain('.drive');
+                    });
+
+                    expect(def).toResolve();
+                });
             });
         });
     });

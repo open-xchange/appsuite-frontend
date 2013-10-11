@@ -234,25 +234,19 @@ define('io.ox/core/api/factory',
                 if (ids.length === 0) {
                     return $.Deferred().resolve([]).done(o.done.list || $.noop);
                 } else if (ids.length === 1) {
-                    //save Version (used in files)
-                    var version = ids[0].version;
 
                     // if just one item, we use get request
                     if (typeof ids[0] === 'number') {
                         ids = [{id: ids[0]}];
                     }
-                    //TODO remove specialised code from a generic factory
 
-                    // fix mail unseen issue
                     var getOptions = http.simplify(ids)[0];
-                    if (o.module === 'mail') {
-                        getOptions.unseen = true;
+                    
+                    //look if special handling is needed
+                    if (_.isFunction(o.simplify)) {
+                        getOptions = o.simplify({ original: ids[0], simplified: getOptions });
                     }
 
-                    // fix file version issue
-                    if (o.module === 'files') {
-                        getOptions.version = version;
-                    }
                     // go!
                     return this.get(getOptions, useCache)
                         .pipe(function (data) { return [data]; })

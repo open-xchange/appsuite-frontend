@@ -98,8 +98,8 @@ define('io.ox/backbone/mini-views/date',
             var value = this.model.get(this.name), d, year, text;
             // change boxes only for valid dates
             if (_.isNumber(value)) {
-                d = new date.UTC(value);
-                year = String(d.getYear());
+                d = new Date(value);
+                year = String(d.getFullYear());
                 if (year !== '1') {
                     // if the year is not our dropdown we add it
                     var yearValues = [];
@@ -116,7 +116,8 @@ define('io.ox/backbone/mini-views/date',
                 this.$el.find('.year').val(year);
                 this.$el.find('.month').val(d.getMonth());
                 this.$el.find('.date').val(d.getDate());
-                //disable invalid dayfields
+                // disable invalid dayfields
+                d.setDate(1);
                 d.setMonth(d.getMonth() + 1);
                 d.setDate(0);
                 var validDays = d.getDate(),

@@ -20,7 +20,8 @@ define('io.ox/core/api/folder',
      'io.ox/core/notifications',
      'io.ox/core/capabilities',
      'io.ox/core/extensions',
-     'gettext!io.ox/core'
+     'gettext!io.ox/core',
+     'io.ox/filter/folder'
     ], function (http, cache, mailSettings, settings, account, Events, notifications, capabilities, ext, gt) {
 
     'use strict';
@@ -36,9 +37,14 @@ define('io.ox/core/api/folder',
          * @return {boolean} true if not blacklisted
          */
         visible = function (folder) {
-            var blacklist = settings.get('folder/blacklist') || {};
-            var blacklistedFolder = blacklist[String(folder.data ? folder.data.id : folder.id)];
-            return folder !== undefined && (blacklistedFolder === undefined || blacklistedFolder === false);
+            var point = ext.point('io.ox/folder/filter');
+            return point.map(function (p) {
+                    return p.invoke('isVisible', this, folder);
+                })
+                .reduce(function (acc, isVisible) {
+                    return acc && isVisible;
+                }, true)
+                .value();
         },
 
         // magic permission check
@@ -1158,6 +1164,14 @@ define('io.ox/core/api/folder',
         folderCache: folderCache,
         subFolderCache: subFolderCache,
         visibleCache: visibleCache
+    };
+
+    api.clearCaches = function () {
+        return $.when(
+            folderCache.clear(),
+            subFolderCache.clear(),
+            visibleCache.clear()
+        );
     };
 
     // filename validator

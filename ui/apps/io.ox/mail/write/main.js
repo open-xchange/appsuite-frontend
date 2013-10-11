@@ -27,10 +27,11 @@ define('io.ox/mail/write/main',
      'io.ox/core/notifications',
      'io.ox/mail/sender',
      'settings!io.ox/mail',
+     'settings!io.ox/core',
      'gettext!io.ox/mail',
      'less!io.ox/mail/style.less',
      'less!io.ox/mail/write/style.less'
-    ], function (mailAPI, mailUtil, ext, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, emoji, notifications, sender, settings, gt) {
+    ], function (mailAPI, mailUtil, ext, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, emoji, notifications, sender, settings, coreSettings, gt) {
 
     'use strict';
 
@@ -103,6 +104,25 @@ define('io.ox/mail/write/main',
         delay();
     }
 
+    function attachmentsExceedQouta(mail) {
+        var allAttachmentsSizes = [].concat(mail.files).concat(mail.data.attachments)
+                .map(function (m) {
+                    return m.size || 0;
+                }),
+            quota = coreSettings.get('properties/attachmentQuota', 0),
+            accumulatedSize = allAttachmentsSizes
+                .reduce(function (acc, size) {
+                    return acc + size;
+                }, 0),
+            singleFileExceedsQuota = allAttachmentsSizes
+                .reduce(function (acc, size) {
+                    var quotaPerFile = coreSettings.get('properties/attachmentQuotaPerFile', 0);
+                    return acc || (quotaPerFile > 0 && size > quotaPerFile);
+                }, false);
+
+        return singleFileExceedsQuota || (quota > 0 && accumulatedSize > quota);
+    }
+
     function prepareMailForSending(mail) {
         // get flat ids for data.infostore_ids
         if (mail.data.infostore_ids) {
@@ -170,7 +190,8 @@ define('io.ox/mail/write/main',
         app = ox.ui.createApp({
             name: 'io.ox/mail/write',
             title: gt('Compose'),
-            userContent: true
+            userContent: true,
+            closable: true
         });
 
         model = new MailModel();
@@ -184,8 +205,17 @@ define('io.ox/mail/write/main',
 
         window.newmailapp = function () { return app; };
 
-        view.signatures = _.device('smartphone') ?
-            [{ id: 0, content: settings.get('mobileSignature') }] : [];
+        app.getMobileSignature = function () {
+            var value = settings.get('mobileSignature');
+            if (value === undefined) {
+                value =
+                    //#. %s is the product name
+                    gt('Sent from %s via mobile', ox.serverConfig.productName);
+            }
+            return value;
+        };
+
+        view.signatures = _.device('smartphone') ? [{ id: 0, content: app.getMobileSignature() }] : [];
 
         function trimSignature(text) {
             // remove white-space and evil \r
@@ -1076,6 +1106,19 @@ define('io.ox/mail/write/main',
                 if (autoSavedMail) {
                     mail.data.deleteDraft = true;
                 }
+
+                if (attachmentsExceedQouta(mail)) {
+                    notifications.yell({
+                        type: 'info',
+                        message: gt(
+                            'One or more attached files exceed the size limit per email. ' +
+                            'Therefore, the files are not sent as attachments but kept on the server. ' +
+                            'The email you have sent just contains links to download these files.'
+                        ),
+                        duration: 30000
+                    });
+                }
+
                 // send!
                 mailAPI.send(mail.data, mail.files, view.form.find('.oldschool')).always(function (result) {
                     if (result.error && !result.warnings) {

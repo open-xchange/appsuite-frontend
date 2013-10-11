@@ -66,8 +66,7 @@ define('io.ox/calendar/week/view',
 
             // define view events
             var events = {
-                'click .control.next,.control.prev,.control.today': 'onControlView',
-                'change .toolbar .showall input[type="checkbox"]' : 'onControlView'
+                'click .control.next,.control.prev,.control.today': 'onControlView'
             };
 
             if (_.device('touch')) {
@@ -103,9 +102,7 @@ define('io.ox/calendar/week/view',
             this.timeline       = $('<div>').addClass('timeline');
             this.dayLabel       = $('<div>').addClass('footer');
             this.kwInfo         = $('<div>').addClass('info');
-            this.showAllCon     = $('<div>').addClass('showall');
             this.weekCon        = $('<div>').addClass('week-container');
-            this.showAllCheck   = $('<input/>').attr('type', 'checkbox').attr({ tabindex: 1 });
 
             this.mode = opt.mode || 'day';
             this.extPoint = opt.appExtPoint;
@@ -290,9 +287,6 @@ define('io.ox/calendar/week/view',
             }
             if (cT.hasClass('today')) {
                 this.setStartDate();
-            }
-            if (cT.attr('type') === 'checkbox') {
-                settings.set('showAllPrivateAppointments', cT.prop('checked')).save();
             }
             this.trigger('onRefresh');
             return false;
@@ -644,17 +638,6 @@ define('io.ox/calendar/week/view',
                     .addClass('toolbar')
                     .append(
                         this.kwInfo,
-                        this.showAllCon
-                            .empty()
-                            .append(
-                                $('<label>')
-                                    .addClass('checkbox')
-                                    .text(gt('show all'))
-                                    .prepend(
-                                        this.showAllCheck
-                                            .prop('checked', settings.get('showAllPrivateAppointments', false))
-                                    )
-                            ),
                         $('<div>')
                             .addClass('pagination')
                             .append(
@@ -1511,19 +1494,11 @@ define('io.ox/calendar/week/view',
         },
 
         /**
-         * get and set property of showAll checkbox
-         * @param  {Boolean} opt display option of the showAll checkbox
+         * get property of showAll checkbox
          * @return {Boolean}     value of the showAllPrivateAppointments setting (only when opt param === undefined)
          */
-        showAll: function (opt) {
-            if (typeof opt === 'boolean') {
-                this.showAllCon[opt ? 'show': 'hide']();
-                return this;
-            } else {
-                var set = settings.get('showAllPrivateAppointments', false);
-                this.showAllCheck.prop('checked', set);
-                return set;
-            }
+        showAll: function () {
+            return settings.get('showAllPrivateAppointments', false);
         },
 
         /**
@@ -1536,7 +1511,6 @@ define('io.ox/calendar/week/view',
             if (data) {
                 // set view data
                 this.folderData = data;
-                this.showAll(data.type === 1);
             }
             return this.folderData;
         },

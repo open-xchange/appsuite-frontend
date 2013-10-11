@@ -355,6 +355,11 @@ define('io.ox/mail/api',
                 }
                 return options;
             }
+        },
+        simplify: function (options) {//special function for list requests that fall back to a get request (only one item in the array)
+            // fix mail unseen issue
+            options.simplified.unseen = true;
+            return options.simplified;
         }
     });
 

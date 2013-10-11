@@ -225,9 +225,9 @@ define('io.ox/core/main',
         //construct
         node.append(function () {
             if (_.isString(label)) {
-                return $('<a href="#" tabindex="1">').text(gt.pgettext('app', label));
+                return $('<a href="#" class="apptitle" tabindex="1">').text(gt.pgettext('app', label));
             } else if (label[0].tagName === 'I') {
-                return $('<a href="#" tabindex="1">').append(label);
+                return $('<a href="#" class="apptitle" tabindex="1">').append(label);
             } else {
                 return label;
             }
@@ -358,8 +358,8 @@ define('io.ox/core/main',
                             getString = function (sec) {
                                 return gt.format(
                                     gt.ngettext(
-                                        'You will be automatically logged out in %1$d Second',
-                                        'You will be automatically logged out in %1$d Seconds', sec
+                                        'You will be automatically signed out in %1$d second',
+                                        'You will be automatically signed out in %1$d seconds', sec
                                     ), gt.noI18n(sec)
                                 );
                             },
@@ -370,11 +370,11 @@ define('io.ox/core/main',
                             }, 1000);
 
                         dialog = new dialogs.ModalDialog({ easyOut: false })
-                            .header($('<h4>').text(gt('Automatic logout')))
+                            .header($('<h4>').text(gt('Automatic sign out')))
                             .append(node)
                             .topmost()
                             .addPrimaryButton('cancel', gt('Cancel'))
-                            .addAlternativeButton('force', gt('Logout now'))
+                            .addAlternativeButton('force', gt('Sign out now'))
                             .setUnderlayStyle({
                                 backgroundColor: 'white',
                                 opacity: 0.90
@@ -479,10 +479,18 @@ define('io.ox/core/main',
 
         function addUserContent(model, launcher, first) {
 
-            var quitApp = $('<i class="icon-remove">').on('click', function (e) {
+            var quitApp = $('<a href="#" class="closelink" tabindex="1">').append(
+                    $('<i class="icon-remove">')
+                ).on('click', function (e) {
                 e.stopImmediatePropagation();
                 model.getWindow().app.quit();
             });
+
+            if (model.get('closable')) {
+                if (first) {
+                    launcher.find('a').after(quitApp);
+                }
+            }
 
             if (model.get('userContent')) {
                 var cls = model.get('userContentClass') || '',
@@ -490,10 +498,6 @@ define('io.ox/core/main',
                 launcher.addClass('user-content').addClass(cls).children().first().prepend($('<span>').append(
                     $('<i class="' + icon + '">'))
                 );
-                if (first) {
-                    launcher.find('a').addClass('special').after(quitApp);
-                }
-
             }
         }
 
@@ -556,7 +560,7 @@ define('io.ox/core/main',
 
         ox.ui.apps.on('change:title', function (model, value) {
             var node = $('[data-app-guid="' + model.guid + '"]', launchers);
-            $('a', node).text(value);
+            $('a.apptitle', node).text(value);
             addUserContent(model, node);
             launcherDropdown.find('a[data-app-guid="' + model.guid + '"]').text(value);
             tabManager();

@@ -33,9 +33,7 @@ define('io.ox/mail/settings/defaults', ['gettext!io.ox/mail'], function (gt) {
         'isColorQuoted': false,
         'selectFirstMessage': true,
         'defaultSignature': false,
-        'mobileSignature':
-            //#. %s is the product name
-            gt('Sent from %s via mobile', ox.serverConfig.productName),
+        'mobileSignature': undefined,
         'mobileSignatureType': 'none', // one of 'none', 'custom'
         'threadView': 'inbox',
         //for persistent sort

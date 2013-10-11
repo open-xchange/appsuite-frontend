@@ -85,7 +85,12 @@ define('io.ox/core/tk/dropdown-options',
                     var stored = opt.settings.get('options/' + opt.id, data);
                     _.each(data, function (item) {
                         //only use options that are currently available
-                        data[item.name] = stored[item.name] || data[item.name];
+                        if (stored[item.name]) {
+                            data[item.name].name = data[item.name].name;
+                            data[item.name].checked = data[item.name].checked;
+                            //use stored label only as fallback or the language does not change when ui language changes
+                            data[item.name].label = data[item.name].label || stored[item.name].label;
+                        }
                     });
                 }
             },

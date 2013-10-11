@@ -446,7 +446,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                                         $('<div>').append(
                                             elements.drawOptions(test.comparison, containsValues),
                                             elements.drawInputfieldTest(test.values[0])
-
                                         )
                                     ),
 

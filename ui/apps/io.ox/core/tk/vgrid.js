@@ -215,8 +215,8 @@ define('io.ox/core/tk/vgrid',
             responsiveChange = true,
             firstRun = true,
             // inner container / added role="presentation" because screen reader runs amok
-            scrollpane = $('<div class="abs vgrid-scrollpane f6-target" tabindex="1" aria-label="List">').appendTo(node),
-            container = $('<div>').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
+            scrollpane = $('<div class="abs vgrid-scrollpane">').appendTo(node),
+            container = $('<div class="vgrid-scrollpane-container f6-target" tabindex="1" role="listbox" aria-multiselectable="true" arai-label="Multiselect">').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
             // mobile select mode
             mobileSelectMode = false,
             // bottom toolbar
@@ -274,7 +274,7 @@ define('io.ox/core/tk/vgrid',
                     // show toggle
                     options.showToggle === false ?
                         [] :
-                        $('<a>', { href: '#', tabindex: -1 })
+                        $('<a>', { href: '#', tabindex: 1, role: 'button', 'aria-label': gt('Touchselect on/off')})
                         .css('float', 'left')
                         .append($('<i class="icon-th-list">'))
                         .on('click', { grid: this }, fnToggleEditable)
@@ -373,7 +373,10 @@ define('io.ox/core/tk/vgrid',
                         },
                         setLink = function (all) {
                             all = all || false;
-                            link.prop('checked', all).text(all ? gt('Select none') : gt('Select all'));
+                            link
+                                .prop('checked', all)
+                                .text(all ? gt('Select none') : gt('Select all'))
+                                .attr('aria-checked', all ? 'true' : 'false');
                         };
 
                     // fix link if selection is empty
@@ -384,7 +387,7 @@ define('io.ox/core/tk/vgrid',
                     // draw link
                     this.append(
                         $('<div class="grid-info">').append(
-                            link = $('<a href="#">').on('click', fnShowAll)
+                            link = $('<a href="#" tabindex="1" role="checkbox" aria-label="' + gt('Select all') + '">').on('click', fnShowAll)
                         )
                     );
                     setLink(false);
@@ -582,6 +585,8 @@ define('io.ox/core/tk/vgrid',
                     row = pool[i];
                     row.appendTo(container);
                     // reset class name
+
+                    row.node.attr({ role: 'option', 'aria-posinset': offset + i });
                     node = row.node[0];
                     node.className = defaultClassName + ' ' + ((offset + i) % 2 ? 'odd' : 'even');
                     // update fields
@@ -1238,7 +1243,7 @@ define('io.ox/core/tk/vgrid',
             self.selection.resetLastIndex();
         });
 
-        scrollpane.on('focus', function () {
+        container.on('focus', function () {
             if (!options.multiple && options.selectSmart) {
                 self.selection.selectSmart();
             }
@@ -1285,7 +1290,7 @@ define('io.ox/core/tk/vgrid',
         }());
 
         this.focus = function () {
-            scrollpane.focus();
+            container.focus();
         };
     };
 

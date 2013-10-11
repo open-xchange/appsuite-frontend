@@ -251,6 +251,11 @@ define('io.ox/files/api',
                 });
                 return data;
             }
+        },
+        simplify: function (options) {//special function for list requests that fall back to a get request (only one item in the array)
+            //add version parameter again so you don't get the current version all the time
+            options.simplified.version = options.original.version;
+            return options.simplified;
         }
     });
 
