@@ -29,7 +29,7 @@ define('plugins/notifications/mail/register',
                 $('<legend class="section-title">').text(gt('New Mails')),
                 $('<div class="notifications">'),
                 $('<div class="open-app">').append(
-                    $('<a href="#" data-action="open-app" tabindex="1">').text(
+                    $('<a role="button" href="#" data-action="open-app" tabindex="1">').text(
                         baton.more ? gt('Show all %1$d messages in inbox', baton.size) : gt('Show inbox')
                     )
                 )
@@ -40,7 +40,13 @@ define('plugins/notifications/mail/register',
     function drawItem(node, data) {
         var f = data.from || [['', '']];
         node.append(
-            $('<div class="item" tabindex="1">').attr('data-cid', _.cid(data)).append(
+            $('<div class="item" tabindex="1" role="listitem">')
+                .attr({'data-cid': _.cid(data),
+                        //#. %1$s mail sender
+                        //#. %2$s mail subject
+                        //#, c-format
+                        'aria-label': gt('New Mail from %1$s %2$s. Press [enter] to open', _.noI18n(util.getDisplayName(f[0])), _.noI18n(data.subject) || gt('No subject'))
+                      }).append(
                 $('<div class="title">').text(_.noI18n(util.getDisplayName(f[0]))),
                 $('<div class="subject">').text(_.noI18n(data.subject) || gt('No subject')).addClass(data.subject ? '' : 'empty')
                 // TODO: re-add teaser once we get this via getList(...)

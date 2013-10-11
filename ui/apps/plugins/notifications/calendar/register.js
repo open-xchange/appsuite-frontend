@@ -46,8 +46,19 @@ define('plugins/notifications/calendar/register',
         draw: function (baton) {
             var model = baton.model;
             this.attr({
+                role: 'listitem',
                 'data-cid': model.get('cid'),
-                'tabindex': 1
+                'tabindex': 1,
+                            //#. %1$s Appointment title
+                            //#. %2$s Appointment date
+                            //#. %3$s Appointment time
+                            //#. %4$s Appointment location
+                            //#. %5$s Appointment Organizer
+                            //#, c-format
+                'aria-label': gt('Appointement invitation. %1$s %2$s %3$s %4$s %5$s. Press [enter] to open',
+                        _.noI18n(model.get('title')), _.noI18n(model.get('date')),
+                        _.noI18n(model.get('time')), _.noI18n(model.get('location')) || '',
+                        _.noI18n(model.get('blue')))
             }).append(
                 $('<div class="time">').text(model.get('time')),
                 $('<div class="date">').text(model.get('date')),

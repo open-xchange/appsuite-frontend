@@ -35,7 +35,12 @@ define('io.ox/core/notifications',
             this.$el.find('.badge i').attr('class', open ? 'icon-caret-down' : 'icon-caret-right');
         },
         render: function () {
-            this.$el.attr({ href: '#', tabindex: '1' }).append(
+            this.$el.attr({ href: '#',
+                            tabindex: '1',
+                            role: 'menuitem',
+                            //#. %1$d number of notifications
+                            //#, c-format
+                            'aria-label': gt('You have %1$d notifications. Press [enter] to jump to the notification area.', this.model.get('count'))}).append(
                 $('<span class="badge">').append(
                     $('<span class="number">'), $.txt(' '),
                     $('<i class="icon-caret-right">')
@@ -45,7 +50,7 @@ define('io.ox/core/notifications',
             return this;
         },
         setNotifier: function (b) {
-            this.$el.attr('aria-disabled', !b).find('.badge').toggleClass('active', !!b);
+            this.$el.find('.badge').toggleClass('active', !!b);
         },
         setCount: function (count, newMails) {
             var newOther = count - this.model.get('count') - newMails;//check if there are new notifications, that are not mail
@@ -68,6 +73,7 @@ define('io.ox/core/notifications',
         initialize: function (options) {
             options = options || {};
             this.subviews = options.subviews || {};
+            this.$el.attr('role', 'list');
         },
         render: function (notifications) {
             var self = this,
@@ -163,7 +169,11 @@ define('io.ox/core/notifications',
 
             function focusNotifications(e) {
                 if (e.which === 13) {
-                    _.defer(function () { $('#io-ox-notifications').focus(); });
+                    if (self.opened()) {//focus badge when closing
+                        _.defer(function () { self.badgeView.$el.focus(); });
+                    } else {//focus notifications when opening
+                        _.defer(function () { $('#io-ox-notifications').focus(); });
+                    }
                 }
             }
 
@@ -172,6 +182,9 @@ define('io.ox/core/notifications',
                 self.badgeView.render().$el.on('keydown', focusNotifications),
                 $.proxy(this.toggleList, this)
             ).attr('id', 'io-ox-notifications-icon');
+        },
+        opened: function () {
+            return $('#io-ox-notifications').hasClass('active');
         },
         get: function (key, listview) {
             if (_.isUndefined(this.notifications[key])) {
@@ -217,8 +230,22 @@ define('io.ox/core/notifications',
                     badgeView.setNotifier(false);
                 }
             });
+            var focusBadge =  function (e) {
+                e.preventDefault();//prevent default to not jump to reload button
+                if (e.which === 9) { //tabkey
+                    self.badgeView.$el.focus();
+                }
+            };
 
             $('#io-ox-notifications').empty().append(this.notificationsView.render(this.notifications).el);
+            //clear last item reference
+            if (this.lastItem) {
+                this.lastItem.off('keydown', focusBadge);
+                this.lastItem = undefined;
+            }
+            //jump back to badge if tab is pressed on last item
+            this.lastItem = this.notificationsView.$el.find('[tabindex="1"]').last();
+            this.lastItem.on('keydown', focusBadge);
         },
         toggleList: function () {
             //create nice listing view of all notifications grouped by
@@ -241,6 +268,8 @@ define('io.ox/core/notifications',
             $(document).on('keydown.notification', $.proxy(function (e) {
                 if (e.which === 27) { // escapekey
                     $(document).off('keydown.notification');
+                    //focus badge when closing
+                    this.badgeView.$el.focus();
                     this.hideList();
                 }
             }, this));
