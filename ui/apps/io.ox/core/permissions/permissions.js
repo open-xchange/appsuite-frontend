@@ -101,6 +101,7 @@ define('io.ox/core/permissions/permissions',
             },
 
             applyRole: function (e) {
+                e.preventDefault();
                 var node = $(e.target), bits = node.attr('data-value');
                 this.model.set('bits', parseInt(bits, 10), {validate: true});
             },
