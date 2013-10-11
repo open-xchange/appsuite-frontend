@@ -358,8 +358,8 @@ define('io.ox/core/main',
                             getString = function (sec) {
                                 return gt.format(
                                     gt.ngettext(
-                                        'You will be automatically logged out in %1$d Second',
-                                        'You will be automatically logged out in %1$d Seconds', sec
+                                        'You will be automatically signed out in %1$d second',
+                                        'You will be automatically signed out in %1$d seconds', sec
                                     ), gt.noI18n(sec)
                                 );
                             },
@@ -370,11 +370,11 @@ define('io.ox/core/main',
                             }, 1000);
 
                         dialog = new dialogs.ModalDialog({ easyOut: false })
-                            .header($('<h4>').text(gt('Automatic logout')))
+                            .header($('<h4>').text(gt('Automatic sign out')))
                             .append(node)
                             .topmost()
                             .addPrimaryButton('cancel', gt('Cancel'))
-                            .addAlternativeButton('force', gt('Logout now'))
+                            .addAlternativeButton('force', gt('Sign out now'))
                             .setUnderlayStyle({
                                 backgroundColor: 'white',
                                 opacity: 0.90
