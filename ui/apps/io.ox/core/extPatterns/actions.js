@@ -209,9 +209,7 @@ define('io.ox/core/extPatterns/actions',
                 });
                 // wait for all links
                 $.when.apply($, links.value()).done(function () {
-                    linksResolved.resolve(
-                        _.chain(arguments).filter(function (o) { return o.state; }).pluck('link').value()
-                    );
+                    linksResolved.resolve(_(arguments).toArray());
                     links = null;
                 });
             },

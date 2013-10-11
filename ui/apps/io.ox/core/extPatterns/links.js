@@ -55,6 +55,22 @@ define('io.ox/core/extPatterns/links',
                 .text(String(self.label))
             );
         };
+
+        if (this.drawDisabled === true) {
+            this.drawDisabled = function (baton) {
+                this.append(
+                    $('<span>', { 'data-action': self.id })
+                    .addClass('io-ox-action-link disabled')
+                    .attr({
+                        'data-section': self.section || 'default',
+                        'data-prio': self.prio || 'lo',
+                        'data-ref': self.ref,
+                        'data-prio-mobile': self.prioMobile || 'none'
+                    })
+                    .text(String(self.label))
+                );
+            };
+        }
     };
 
     var XLink = function (id, options) {
@@ -132,12 +148,19 @@ define('io.ox/core/extPatterns/links',
         }
 
         return getLinks(extension, collection, baton, args)
-            .always(function (links) {
-                // count resolved links
+            .always(function (items) {
+                // count resolved items
                 var count = 0;
-                // draw links
-                _(links).each(function (link) {
-                    if (_.isFunction(link.draw)) {
+                // draw items
+                _(items).each(function (item) {
+                    var link = item.link;
+                    if (item.state === false) {
+                        if (_.isFunction(link.drawDisabled)) {
+                            link.drawDisabled.call(bootstrapMode ? $('<li>').appendTo(nav) : nav, baton);
+                            count++;
+                        }
+                    }
+                    else if (_.isFunction(link.draw)) {
                         link.draw.call(bootstrapMode ? $('<li>').appendTo(nav) : nav, baton);
                         if (_.isFunction(link.customize)) {
                             link.customize.call(nav.find('a'), baton);
@@ -366,47 +389,52 @@ define('io.ox/core/extPatterns/links',
                 )
             );
             // get links
-            return getLinks(extension, new Collection(baton.data), baton, args).done(function (links) {
-                if (links.length > 1) {
-                    // call draw method to fill dropdown
-                    _(links).chain()
-                        .filter(function (x) {
-                            return _.isFunction(x.draw);
-                        })
-                        .each(function (x) {
-                            title.push(x.label);
-                            x.draw.call(ul, baton);
-                        });
-                    // set title attribute
-                    a.attr('title', extension.label || title.join(', '))
-                     .attr('aria-label', extension.label || title.join(', '))
-                     .attr('aria-haspopup', true);
+            return getLinks(extension, new Collection(baton.data), baton, args)
+                .then(function (items) {
+                    // filter out disabled items
+                    return _.chain(items).filter(function (o) { return o.state; }).pluck('link').value();
+                })
+                .done(function (links) {
+                    if (links.length > 1) {
+                        // call draw method to fill dropdown
+                        _(links).chain()
+                            .filter(function (x) {
+                                return _.isFunction(x.draw);
+                            })
+                            .each(function (x) {
+                                title.push(x.label);
+                                x.draw.call(ul, baton);
+                            });
+                        // set title attribute
+                        a.attr('title', extension.label || title.join(', '))
+                         .attr('aria-label', extension.label || title.join(', '))
+                         .attr('aria-haspopup', true);
 
-                    div.attr('role', 'menu');
-                    // add footer label?
-                    if (extension.label) {
-                        ul.append(
-                            $('<li class="dropdown-footer">').attr('role', 'menuitem').text(extension.label)
-                        );
-                    }
-                } else {
-                    // disable dropdown
-                    a.removeAttr('data-toggle');
-                    ul.remove();
-                    if (links.length === 1) {
-                        // directly link actions
-                        a.attr({
-                            title: links[0].label || '',
-                            'aria-label': links[0].label || '',
-                            role: 'menuitem',
-                            tabindex: 1
-                        })
-                        .on('click', { baton: baton, extension: links[0] }, actionClick);
+                        div.attr('role', 'menu');
+                        // add footer label?
+                        if (extension.label) {
+                            ul.append(
+                                $('<li class="dropdown-footer">').attr('role', 'menuitem').text(extension.label)
+                            );
+                        }
                     } else {
-                        a.addClass('disabled').on('click', preventDefault);
+                        // disable dropdown
+                        a.removeAttr('data-toggle');
+                        ul.remove();
+                        if (links.length === 1) {
+                            // directly link actions
+                            a.attr({
+                                title: links[0].label || '',
+                                'aria-label': links[0].label || '',
+                                role: 'menuitem',
+                                tabindex: 1
+                            })
+                            .on('click', { baton: baton, extension: links[0] }, actionClick);
+                        } else {
+                            a.addClass('disabled').on('click', preventDefault);
+                        }
                     }
-                }
-            });
+                });
         }
 
         function icon() {
