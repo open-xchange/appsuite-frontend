@@ -57,7 +57,7 @@ define('io.ox/core/cache',
                         return ox.load(['io.ox/core/tk/dialogs', 'gettext!io.ox/core']).then(function (dialogs, gt) {
                             var def = $.Deferred();
                             new dialogs.ModalDialog()
-                                .text(gt('Unsaved documents will be lost. Do you want to sign out now?'))
+                                .text(gt('Unsaved documents will be lost. Do you want to logout now?'))
                                 .addPrimaryButton('Yes', gt('Yes'))
                                 .addButton('No', gt('No'))
                                 .show()
