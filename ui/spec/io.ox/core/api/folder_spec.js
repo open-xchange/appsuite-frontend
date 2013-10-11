@@ -332,7 +332,9 @@ define(['shared/examples/for/api',
                             return api.getSubFolders({folder: 'hidden/test'});
                         })
                         .done(function (f) {
-                            expect(f.length).toBe(3);
+                            expect(_(f).pluck('title')).toContain('.hidden');
+                            expect(_(f).pluck('title')).toContain('visible');
+                            expect(_(f).pluck('title')).toContain('.drive');
                         });
 
                     expect(def).toResolve();
@@ -346,11 +348,13 @@ define(['shared/examples/for/api',
                         return api.getSubFolders({folder: 'hidden/test'});
                     })
                     .done(function (f) {
-                        expect(f.length).toBe(2);
+                        expect(_(f).pluck('title')).toContain('.hidden');
+                        expect(_(f).pluck('title')).not.toContain('visible');
+                        expect(_(f).pluck('title')).toContain('.drive');
                     });
 
                     expect(def).toResolve();
-                })
+                });
             });
         });
     });
