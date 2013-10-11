@@ -82,7 +82,8 @@ define('io.ox/core/commons-folderview',
 
                 ext.point(POINT + '/sidepanel/context-menu').invoke('draw', ul, baton);
 
-                baton.$.sidepanel.on('click', '.folder-options-badge', function (e) {
+                function openContextMenu(e) {
+                    e.preventDefault(); // for contextmenu
                     var dropdown = baton.$.sidepanel.find('.context-dropdown');
                     setTimeout(function () {
                         // show first to get proper dimensions
@@ -96,7 +97,17 @@ define('io.ox/core/commons-folderview',
                         // update position
                         menu.css({ top: top, left: e.pageX + 15 });
                     }, 0);
-                });
+                }
+
+                function closeContextMenu(e) {
+                    e.preventDefault();
+                    $(this).closest('.dropdown.open').removeClass('open');
+                }
+
+                baton.$.sidepanel
+                    .on('click', '.folder-options-badge', openContextMenu)
+                    .on('contextmenu', '.folder', openContextMenu)
+                    .on('contextmenu', '.context-dropdown-overlay', closeContextMenu);
             }
         });
 
