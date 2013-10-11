@@ -433,7 +433,7 @@ define('io.ox/backbone/forms',
                         $('<option>', {value: value}).text(label)
                     );
                 });
-                this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
+                this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label).append(this.nodes.select));
                 this.updateChoice();
                 this.nodes.select.on('change', function () {
                     self.model.set(self.attribute, self.nodes.select.val(), {validate: true});
