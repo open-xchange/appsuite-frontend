@@ -373,7 +373,10 @@ define('io.ox/core/tk/vgrid',
                         },
                         setLink = function (all) {
                             all = all || false;
-                            link.prop('checked', all).text(all ? gt('Select none') : gt('Select all'));
+                            link
+                                .prop('checked', all)
+                                .text(all ? gt('Select none') : gt('Select all'))
+                                .attr('aria-checked', all ? 'true' : 'false');
                         };
 
                     // fix link if selection is empty
@@ -384,7 +387,7 @@ define('io.ox/core/tk/vgrid',
                     // draw link
                     this.append(
                         $('<div class="grid-info">').append(
-                            link = $('<a href="#">').on('click', fnShowAll)
+                            link = $('<a href="#" tabindex="1" role="checkbox" aria-label="' + gt('Select all') + '">').on('click', fnShowAll)
                         )
                     );
                     setLink(false);
