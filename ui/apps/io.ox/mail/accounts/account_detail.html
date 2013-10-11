@@ -44,7 +44,7 @@
 	            <div class="controls">
 	                <label class="select">
 	                    <select data-property="mail_protocol">
-	                        {{~it.optionsServer :value:index}}<option value="{{=value}}">{{=value}}</option>{{~}}
+	                        {{~it.optionsServer :value:index}}<option value="{{=value}}">{{= String(value).toUpperCase() }}</option>{{~}}
 	                    </select>
 	                </label>
 	            </div>
