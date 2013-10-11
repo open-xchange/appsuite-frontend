@@ -38,13 +38,15 @@ define('io.ox/core/api/folder',
          */
         visible = function (folder) {
             var point = ext.point('io.ox/folder/filter');
-            return point.map(function (p) {
+            return point.filter(function (p) {
+                    return p.invoke('isEnabled', this, folder) !== false;
+                })
+                .map(function (p) {
                     return p.invoke('isVisible', this, folder);
                 })
                 .reduce(function (acc, isVisible) {
                     return acc && isVisible;
-                }, true)
-                .value();
+                }, true);
         },
 
         // magic permission check
