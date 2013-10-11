@@ -39,10 +39,20 @@ define('plugins/notifications/tasks/register',
     });
 
     function drawItem(node, model) {
+        var endText = '';
+        if (_.noI18n(model.get('end_date'))) {
+            endText = gt('end date ') + _.noI18n(model.get('end_date'));
+        }
+                //#. %1$s task title
+                //#. %2$s task end date
+                //#, c-format
+        var label = gt('Overdue Task. %1$s %2$s. Press [enter] to open', _.noI18n(model.get('title')), endText);
+
         node.append(
-            $('<div class="taskNotification item" tabindex="1">')
-            .attr('data-cid', model.get('cid'))
-            .attr('model-cid', model.cid)
+            $('<div class="taskNotification item" tabindex="1" role="listitem">')
+            .attr({'data-cid': model.get('cid'),
+                   'model-cid': model.cid,
+                   'aria-label': label})
             .append(
                 $('<div class="title">').text(_.noI18n(model.get('title'))),
                 $('<span class="end_date">').text(_.noI18n(model.get('end_date'))),
@@ -388,14 +398,25 @@ define('plugins/notifications/tasks/register',
 
     ext.point('io.ox/core/notifications/task-confirmation/item').extend({
         draw: function (baton) {
-            var task = util.interpretTask(baton.model.toJSON());
-            this.attr('data-cid', baton.model.get('cid'))
+            var task = util.interpretTask(baton.model.toJSON()),
+                endText = '';
+            if (_.noI18n(baton.model.get('end_date'))) {
+                endText = gt('end date ') + _.noI18n(baton.model.get('end_date'));
+            }
+                    //#. %1$s task title
+                    //#. %2$s task end date
+                    //#, c-format
+            var label = gt('Task invitation. %1$s %2$s %3$s. Press [enter] to open', _.noI18n(baton.model.get('title')), endText);
+            this.attr({role: 'listitem',
+                       'data-cid': baton.model.get('cid'),
+                       tabindex: 1,
+                       'aria-label': label})
             .append(
                 $('<div class="title">').text(_.noI18n(task.title)),
                 $('<span class="end_date">').text(_.noI18n(task.end_date)),
                 $('<span class="status">').text(task.status).addClass(task.badge),
                 $('<div class="actions">').append(
-                    $('<button type="button" class="btn btn-inverse" data-action="change_state">').text(gt('Accept/Decline'))
+                    $('<button type="button" tabindex="1" class="btn btn-inverse" data-action="change_state">').text(gt('Accept/Decline'))
                 )
             );
             task = null;
