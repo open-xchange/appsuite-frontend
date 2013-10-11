@@ -276,7 +276,7 @@ define('io.ox/core/commons',
                 node.empty()
                 .attr('data-folder-id', folder_id)
                 .append(
-                    $('<a href="#" class="folder-name" data-action="open-folderview" tabindex="1">'),
+                    $('<a href="#" role="button" aria-label="' + gt('open folderview') + '" class="folder-name" data-action="open-folderview" tabindex="1">'),
                     $.txt(' '),
                     $('<span class="folder-count">')
                 );
