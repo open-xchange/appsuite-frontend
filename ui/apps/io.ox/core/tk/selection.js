@@ -330,6 +330,7 @@ define('io.ox/core/tk/selection',
             selectedItems[key] = id;
             return (node || getNode(key))
                 .addClass(self.classSelected)
+                .attr('aria-selected', 'true')
                 .find('input.reflect-selection')
                 .prop('checked', true)
                 .end();
@@ -355,6 +356,7 @@ define('io.ox/core/tk/selection',
             delete selectedItems[key];
             getNode(key)
                 .removeClass(self.classSelected)
+                .attr('aria-selected', 'false')
                 .find('input.reflect-selection').prop('checked', false);
             self.trigger('deselect', key);
         };
@@ -399,7 +401,7 @@ define('io.ox/core/tk/selection',
             // clear hash
             selectedItems = {};
             // clear nodes
-            container.find('.selectable.' + self.classSelected).removeClass(self.classSelected);
+            container.find('.selectable.' + self.classSelected).removeClass(self.classSelected).attr('aria-selected', 'false');
             container.find('.selectable input.reflect-selection').prop('checked', false);
         };
 
@@ -452,10 +454,10 @@ define('io.ox/core/tk/selection',
                     cid = node.attr('data-obj-id');
                 if (cid in hash) {
                     $('input.reflect-selection', node).prop('checked', true);
-                    node.addClass(self.classSelected);
+                    node.addClass(self.classSelected).attr('aria-selected', 'true');
                 } else {
                     $('input.reflect-selection', node).prop('checked', false);
-                    node.removeClass(self.classSelected);
+                    node.removeClass(self.classSelected).attr('aria-selected', 'false');
                 }
             });
 
@@ -1076,7 +1078,7 @@ define('io.ox/core/tk/selection',
                     .on('mouseup.dnd', stop);
                 // prevent text selection and kills the focus
                 if (!_.browser.IE) { // Not needed in IE - See #27981
-                    container.focus();
+                    container.find('[tabindex]').first().focus();
                 }
                 e.preventDefault();
             }

@@ -215,8 +215,8 @@ define('io.ox/core/tk/vgrid',
             responsiveChange = true,
             firstRun = true,
             // inner container / added role="presentation" because screen reader runs amok
-            scrollpane = $('<div class="abs vgrid-scrollpane f6-target" tabindex="1" aria-label="List">').appendTo(node),
-            container = $('<div>').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
+            scrollpane = $('<div class="abs vgrid-scrollpane">').appendTo(node),
+            container = $('<div class="f6-target" tabindex="1" role="listbox" aria-multiselectable="true" arai-label="Multiselect">').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
             // mobile select mode
             mobileSelectMode = false,
             // bottom toolbar
@@ -582,6 +582,7 @@ define('io.ox/core/tk/vgrid',
                     row = pool[i];
                     row.appendTo(container);
                     // reset class name
+                    row.node.attr('role', 'option');
                     node = row.node[0];
                     node.className = defaultClassName + ' ' + ((offset + i) % 2 ? 'odd' : 'even');
                     // update fields
@@ -1238,7 +1239,7 @@ define('io.ox/core/tk/vgrid',
             self.selection.resetLastIndex();
         });
 
-        scrollpane.on('focus', function () {
+        container.on('focus', function () {
             if (!options.multiple && options.selectSmart) {
                 self.selection.selectSmart();
             }
@@ -1285,7 +1286,7 @@ define('io.ox/core/tk/vgrid',
         }());
 
         this.focus = function () {
-            scrollpane.focus();
+            container.focus();
         };
     };
 
