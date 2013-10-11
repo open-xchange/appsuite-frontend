@@ -1157,14 +1157,15 @@ define('io.ox/core/api/folder',
     api.caches = {
         folderCache: folderCache,
         subFolderCache: subFolderCache,
-        visibleCache: visibleCache,
-        clear: function () {
-            return $.when(
-                        folderCache.clear(),
-                        subFolderCache.clear(),
-                        visibleCache.clear()
-                    );
-        }
+        visibleCache: visibleCache
+    };
+
+    api.clearCaches = function () {
+        return $.when(
+            folderCache.clear(),
+            subFolderCache.clear(),
+            visibleCache.clear()
+        );
     };
 
     // filename validator
