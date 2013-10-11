@@ -274,7 +274,7 @@ define('io.ox/core/tk/vgrid',
                     // show toggle
                     options.showToggle === false ?
                         [] :
-                        $('<a>', { href: '#', tabindex: -1 })
+                        $('<a>', { href: '#', tabindex: 1, role: 'button', 'aria-label': gt('Touchselect on/off')})
                         .css('float', 'left')
                         .append($('<i class="icon-th-list">'))
                         .on('click', { grid: this }, fnToggleEditable)
