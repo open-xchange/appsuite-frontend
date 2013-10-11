@@ -87,8 +87,12 @@ define('io.ox/mail/view-grid-template',
             },
             set: function (data, fields, index) {
                 fields.priority.empty().append(util.getPriority(data));
-                var subject = _.escape($.trim(data.subject));
+                var subject = _.escape($.trim(data.subject)),
+                    fromlist = data.from || [['', '']],
+                    a11yLabel = util.getDisplayName(fromlist[0]);
+                a11yLabel += ', ' + util.getTime(data.received_date);
                 if (subject !== '') {
+                    a11yLabel += ', ' + subject;
                     fields.subject.removeClass('empty').empty().html(
                         emoji.processEmoji(subject)
                     );
@@ -131,7 +135,10 @@ define('io.ox/mail/view-grid-template',
                 if (util.isForwarded(thread, data)) {
                     this.addClass('forwarded');
                 }
-                this.attr('data-index', index);
+                this.attr({
+                    'data-index': index,
+                    'aria-label': a11yLabel
+                });
             }
         },
 
