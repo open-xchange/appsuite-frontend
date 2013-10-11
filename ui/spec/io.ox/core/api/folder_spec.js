@@ -327,7 +327,7 @@ define(['shared/examples/for/api',
                 it('should not filter without blacklist', function () {
                     var def = require(['settings!io.ox/core']).then(function (settings) {
                             settings.set('folder/blacklist', {});
-                            return api.caches.clear();
+                            return api.clearCaches();
                         }).then(function () {
                             return api.getSubFolders({folder: 'hidden/test'});
                         })
@@ -343,7 +343,7 @@ define(['shared/examples/for/api',
                 it('should not show objects from blacklist', function () {
                     var def = require(['settings!io.ox/core']).then(function (settings) {
                         settings.set('folder/blacklist', {'4': true});
-                        return api.caches.clear();
+                        return api.clearCaches();
                     }).then(function () {
                         return api.getSubFolders({folder: 'hidden/test'});
                     })
