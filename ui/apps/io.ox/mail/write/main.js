@@ -205,8 +205,17 @@ define('io.ox/mail/write/main',
 
         window.newmailapp = function () { return app; };
 
-        view.signatures = _.device('smartphone') ?
-            [{ id: 0, content: settings.get('mobileSignature') }] : [];
+        app.getMobileSignature = function () {
+            var value = settings.get('mobileSignature');
+            if (value === undefined) {
+                value =
+                    //#. %s is the product name
+                    gt('Sent from %s via mobile', ox.serverConfig.productName);
+            }
+            return value;
+        };
+
+        view.signatures = _.device('smartphone') ? [{ id: 0, content: app.getMobileSignature() }] : [];
 
         function trimSignature(text) {
             // remove white-space and evil \r
