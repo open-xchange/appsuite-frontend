@@ -410,7 +410,7 @@ define('io.ox/portal/main',
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/portal',
             chromeless: true,
-            simple: _.device('small')
+            simple: _.device('smartphone')
         }));
 
         win.nodes.main.addClass('io-ox-portal f6-target').attr('tabindex', '1');
@@ -477,14 +477,13 @@ define('io.ox/portal/main',
 
             // enable position fixed toolbar on mobile. This will keep the lazy loading for
             // portal apps with a fixed position toolbar
-            if (_.device('!desktop')) {
-
+            if (_.device('smartphone')) {
                 app.getWindow().on('hide', function () {
                     $('#io-ox-topbar').removeClass('toolbar-fixed-position');
-                    app.getWindowNode().removeClass('content-v-shift');
+                    app.getWindow().nodes.outer.removeClass('content-v-shift');
                 }).on('show', function () {
                     $('#io-ox-topbar').addClass('toolbar-fixed-position');
-                    app.getWindowNode().addClass('content-v-shift');
+                    app.getWindow().nodes.outer.addClass('content-v-shift');
                 });
             }
 
