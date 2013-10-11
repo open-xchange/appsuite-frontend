@@ -59,29 +59,29 @@
 
             .week-info {
 
-                font-family: @lightFontFamily;
-                font-size: 22px;
-                line-height: 1.0em;
-                color: #555;
                 position: absolute;
                 right: 0px;
                 width: 100/8%; /* fix for different round functions */
                 height: 100/6%;
                 padding: 13px 13px 13px 1px;
+                font-size: 11px;
+                line-height: 1.0em;
                 text-align: right;
-                .ellipsis;
+                color: #888;
+                .ellipsis();
+
+                .month-name {
+                    font-family: @lightFontFamily;
+                    font-size: 18px;
+                    color: @linkColor;
+                }
 
                 .cw {
                     position: absolute;
                     right: 13px;
                     bottom: 5px;
                     z-index: 1;
-                    text-align: right;
-                    font-size: 11px;
-                    line-height: 1em;
-                    font-family: Arial, Helvetica, sans-serif;
                 }
-
             }
 
             .day {
