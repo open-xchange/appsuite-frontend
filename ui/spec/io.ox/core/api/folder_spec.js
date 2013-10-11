@@ -100,13 +100,11 @@ define(['shared/examples/for/api',
         describe('requests some folders from the server', function () {
             beforeEach(function () {
                 //TODO: clear global cache (must also be possible in phantomJS)
-                var cache1 = api.caches.folderCache.clear(),
-                    cache2 = api.caches.subFolderCache.clear(),
-                    cache3 = api.caches.visibleCache.clear();
+                var def = api.clearCaches();
 
                 //wait for caches to be clear, then procceed
                 waitsFor(function () {
-                    return cache1.state() === 'resolved' && cache2.state() === 'resolved' && cache3.state() === 'resolved';
+                    return def.state() === 'resolved';
                 }, 'cache clear takes too long', 1000);
                 runs(function () {
                     //make fake server only respond on demand
