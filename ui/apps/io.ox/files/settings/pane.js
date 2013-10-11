@@ -24,7 +24,8 @@ define('io.ox/files/settings/pane',
     var filesSettings =  settings.createModel(filesSettingsModel),
         staticStrings =  {
             TITLE_FILES: gt.pgettext('app', 'Files'),
-            DEFAULT_VIEW: gt('Default view')
+            DEFAULT_VIEW: gt('Default view'),
+            SHOW_HIDDEN: gt('Show hidden files and folders')
         },
         optionsView = [{label: gt('Icon view'), value: 'icons'},
                        {label: gt('List view'), value: 'list'}],
@@ -37,6 +38,12 @@ define('io.ox/files/settings/pane',
             // create template
             this._modelBinder = new Backbone.ModelBinder();
 
+            this.model.on('change:showHidden', function (model) {
+                require(['io.ox/core/api/folder'], function (folderAPI) {
+                    folderAPI.clearCaches();
+                    folderAPI.trigger('refresh');
+                });
+            });
         },
         render: function () {
             var self = this;

@@ -13,8 +13,9 @@
 
 define('io.ox/filter/folder', [
     'io.ox/core/extensions',
-    'settings!io.ox/core'
-], function (ext, settings) {
+    'settings!io.ox/core',
+    'settings!io.ox/files'
+], function (ext, settings, fileSettings) {
 
     'use strict';
 
@@ -24,6 +25,17 @@ define('io.ox/filter/folder', [
             var blacklist = settings.get('folder/blacklist', {});
             var blacklistedFolder = blacklist[String(folder.data ? folder.data.id : folder.id)];
             return folder !== undefined && (blacklistedFolder === undefined || blacklistedFolder === false);
+        }
+    });
+
+    ext.point('io.ox/folder/filter').extend({
+        id: 'dot_folders',
+        isEnabled: function () {
+            return fileSettings.get('showHidden', false) !== true;
+        },
+        isVisible: function (folder) {
+            var title = (folder.data ? folder.data.title : folder.title) || '';
+            return title.indexOf('.') !== 0;
         }
     });
 });

@@ -348,11 +348,6 @@ define(['shared/examples/for/api',
 
             describe('with "show hidden files" option disabled (default)', function() {
                 it('should hide folders starting with a dot', function () {
-                    this.after(function () {
-                        this.handleExpectedFail({
-                            'folder API hidden objects with "show hidden files" option disabled (default) should hide folders starting with a dot.': true
-                        });
-                    });
                     var def = require([
                             'settings!io.ox/core',
                             'settings!io.ox/files'
@@ -377,8 +372,12 @@ define(['shared/examples/for/api',
 
             describe('defined by blacklist', function () {
                 it('should not filter without blacklist', function () {
-                    var def = require(['settings!io.ox/core']).then(function (settings) {
-                            settings.set('folder/blacklist', {});
+                    var def = require([
+                            'settings!io.ox/core',
+                            'settings!io.ox/files'
+                        ]).then(function (settings, fileSettings) {
+                            settings.set('folder/blacklist');
+                            fileSettings.set('showHidden', true);
                             return api.clearCaches();
                         }).then(function () {
                             return api.getSubFolders({folder: 'hidden/test'});
@@ -393,11 +392,6 @@ define(['shared/examples/for/api',
                 });
 
                 it('should not show objects from blacklist', function () {
-                    this.after(function () {
-                        this.handleExpectedFail({
-                            'folder API hidden objects defined by blacklist should not show objects from blacklist.': true
-                        });
-                    });
                     var def = require([
                             'settings!io.ox/core',
                             'settings!io.ox/files'
