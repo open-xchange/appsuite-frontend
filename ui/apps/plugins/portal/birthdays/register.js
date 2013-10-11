@@ -114,8 +114,9 @@ define('plugins/portal/birthdays/register',
                 if (url !== 'none' && url !== '') {
                     $list.append(
                         $('<div class="buy-a-gift">').append(
-                            $('<i class="icon-gift">'), $.txt(' '),
-                            $('<a>', { href: url, target: '_blank' }).text(gt('Buy a gift'))
+                            $('<a>', { href: url, target: '_blank', title: gt('External link') }).text(gt('Buy a gift')),
+                            $.txt(' '),
+                            $('<i class="icon-external-link">')
                         )
                     );
                 }
