@@ -1179,21 +1179,28 @@ a.button {
 
     .vgrid-scrollpane {
 
-        outline: none;
         overflow-x: hidden;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         -webkit-tap-highlight-color: transparent;
         z-index: 1;
 
-        &:focus .vgrid-cell.selected {
+        & > div {
 
-            background-color: @selectedBackground;
+            outline: none;
 
-            * {
-                color: #fff !important;
+            &:focus .vgrid-cell.selected {
+
+                background-color: @selectedBackground;
+
+                * {
+                    color: #fff !important;
+                }
+
             }
+
         }
+
     }
 
     .vgrid-toolbar {
