@@ -68,6 +68,13 @@ define('io.ox/settings/accounts/settings/pane',
             );
         },
 
+        drawPrivacyNotice = function () {
+            return $('<div class="hint">').append(
+                $('<span>').text(gt('Social accounts are only used to download contact and/or calendar data') + '. '),
+                $('<b>').text(gt('Such data will never be uploaded') + '. ')
+            );
+        },
+
         drawRecoveryButton = function () {
             return $('<div class="hint">').append(
                 $.txt(
@@ -209,6 +216,8 @@ define('io.ox/settings/accounts/settings/pane',
                         var self = this, $dropDown;
 
                         self.$el.empty().append(drawPane);
+
+                        self.$el.find('.io-ox-accounts-settings').append(drawPrivacyNotice);
 
                         if (this.collection.length > 1) {
                             self.$el.find('.io-ox-accounts-settings').append(drawRecoveryButton);
