@@ -216,7 +216,7 @@ define('io.ox/core/tk/vgrid',
             firstRun = true,
             // inner container / added role="presentation" because screen reader runs amok
             scrollpane = $('<div class="abs vgrid-scrollpane">').appendTo(node),
-            container = $('<div class="f6-target" tabindex="1" role="listbox" aria-multiselectable="true" arai-label="Multiselect">').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
+            container = $('<div class="vgrid-scrollpane-container f6-target" tabindex="1" role="listbox" aria-multiselectable="true" arai-label="Multiselect">').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
             // mobile select mode
             mobileSelectMode = false,
             // bottom toolbar
