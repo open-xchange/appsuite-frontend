@@ -2051,13 +2051,14 @@ input.nice-input {
 
     .folder {
 
-        line-height: 34px;
+        line-height: 30px;
         padding: 0 13px 0 0;
         overflow: visible;
         white-space: nowrap;
         width: 100%;
-        .box-sizing(border-box);
         display: block;
+        .box-sizing(border-box);
+
 
         &.selectable, &.expandable {
             cursor: pointer;
@@ -2080,7 +2081,11 @@ input.nice-input {
             color: #bbb;
             font-style: italic;
         }
+    }
 
+    // more space for fat fingers
+    .touch & .folder {
+        line-height: 34px;
     }
 
     &:focus .folder {
@@ -2166,15 +2171,23 @@ input.nice-input {
         }
     }
 
-    .folder-counter-badge,
-    .folder-options-badge {
+    .folder-counter-badge, .folder-options-badge {
         color: #888;
         line-height: 26px;
         padding: 0 0.75em 0 0.75em;
-        margin-top: 4px;
+        margin-top: 2px;
+        margin-bottom: 2px;
         display: inline-block;
         background-color: #f0f0f0;
         border-radius: 5px;
+    }
+
+    // more space for fat fingers
+    .touch & {
+        .folder-counter-badge, .folder-options-badge {
+            margin-top: 4px;
+            margin-bottom: 4px;
+        }
     }
 
     .folder-options-badge {
