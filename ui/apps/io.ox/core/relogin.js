@@ -51,7 +51,7 @@ define('io.ox/core/relogin',
                             $('<input type="password" name"relogin-password" class="input-xlarge">')
                         );
                     })
-                    .addPrimaryButton('relogin', gt('Relogin'))
+                    .addPrimaryButton('relogin', gt('Sign in'))
                     .addAlternativeButton('cancel', gt('Cancel'))
                     .on('cancel', function () {
                         ox.trigger('relogin:cancel');
@@ -87,7 +87,7 @@ define('io.ox/core/relogin',
                                     e.error = gt('Please enter correct password');
                                 }
                                 notifications.yell({
-                                    headline: gt('Failed to relogin'),
+                                    headline: gt('Failed to sign in'),
                                     type: 'error',
                                     message: e.error
                                 });
