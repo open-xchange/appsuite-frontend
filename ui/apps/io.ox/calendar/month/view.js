@@ -146,7 +146,12 @@ define('io.ox/calendar/month/view',
                 );
 
                 if (day.isFirst) {
-                    weekinfo.prepend(gt.noI18n(date.locale.months[day.month]) + '<br>' + gt.noI18n(day.year));
+                    // prepend month name, like January 2013
+                    weekinfo.prepend(
+                        $('<span class="month-name">').text(
+                            gt.noI18n(date.locale.monthsShort[day.month]) + ' ' + gt.noI18n(day.year)
+                        )
+                    );
                 }
             }, this);
 
