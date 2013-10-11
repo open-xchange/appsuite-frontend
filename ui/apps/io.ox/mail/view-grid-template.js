@@ -88,7 +88,7 @@ define('io.ox/mail/view-grid-template',
             set: function (data, fields, index) {
                 fields.priority.empty().append(util.getPriority(data));
                 var subject = _.escape($.trim(data.subject)),
-                    fromlist = data.from || [['', '']],
+                    fromlist = data.from || [['', '']],
                     a11yLabel = util.getDisplayName(fromlist[0]);
                 a11yLabel += ', ' + util.getTime(data.received_date);
                 if (subject !== '') {
