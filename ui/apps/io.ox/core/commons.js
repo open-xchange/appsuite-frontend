@@ -241,17 +241,12 @@ define('io.ox/core/commons',
          */
         addGridToolbarFolder: function (app, grid) {
 
-            function fnOpen(e) {
-                e.preventDefault();
-                app.showFolderView();
-            }
-
             ext.point(app.get('name') + '/vgrid/toolbar').extend({
                 id: 'info',
                 index: 200,
                 draw: function () {
                     this.append(
-                        $('<div class="grid-info">').on('click', '.folder-name', fnOpen)
+                        $('<div class="grid-info">')
                     );
                 }
             });
@@ -276,7 +271,7 @@ define('io.ox/core/commons',
                 node.empty()
                 .attr('data-folder-id', folder_id)
                 .append(
-                    $('<a href="#" role="button" aria-label="' + gt('open folderview') + '" class="folder-name" data-action="open-folderview" tabindex="1">'),
+                    $('<span class="folder-name">'),
                     $.txt(' '),
                     $('<span class="folder-count">')
                 );
