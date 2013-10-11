@@ -695,7 +695,7 @@ define('io.ox/contacts/actions',
         id: 'vcard',
         index: INDEX += 100,
         prio: 'lo',
-        label: gt('Send vCard'),
+        label: gt('Send as vCard'),
         ref: 'io.ox/contacts/actions/vcard'
     }));
 
