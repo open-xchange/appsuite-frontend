@@ -634,38 +634,29 @@ define('io.ox/calendar/week/view',
 
             // create toolbar, view space and dayLabel
             this.$el.empty().append(
-                $('<div>')
-                    .addClass('toolbar')
-                    .append(
-                        this.kwInfo,
-                        $('<div>')
-                            .addClass('pagination')
-                            .append(
-                                $('<ul>')
-                                    .append(
-                                        $('<li>')
-                                            .append(
-                                                $('<a href="#" tabindex="1"/>').addClass('control prev').append($('<i>').addClass('icon-chevron-left'))
-                                            ),
-                                        $('<li>').append(
-                                            $('<a href="#" tabindex="1"/>').addClass('control today').text(gt('Today'))
-                                        ),
-                                        $('<li>')
-                                            .append(
-                                                    $('<a href="#" tabindex="1"/>').addClass('control next').append($('<i>').addClass('icon-chevron-right'))
-                                            )
-                                    )
+                $('<div class="toolbar">').append(
+                    this.kwInfo,
+                    $('<div class="pagination">').append(
+                        $('<ul>').append(
+                            $('<li>').append(
+                                $('<a href="#" tabindex="1">').addClass('control prev').append($('<i>').addClass('icon-chevron-left'))
+                            ),
+                            $('<li>').append(
+                                $('<a href="#" tabindex="1">').addClass('control today').text(gt('Today'))
+                            ),
+                            $('<li>').append(
+                                $('<a href="#" tabindex="1">').addClass('control next').append($('<i>').addClass('icon-chevron-right'))
                             )
-                    ),
-                $('<div>')
-                    .addClass('footer-container')
-                    .append(this.dayLabel),
-                $('<div>')
-                    .addClass('week-view-container')
-                    .append(
-                        this.fulltimeCon.empty().append(this.fulltimePane),
-                        this.pane.empty().append(timeLabel, self.weekCon)
+                        )
                     )
+                ),
+                $('<div class="footer-container">').append(
+                    this.dayLabel
+                ),
+                $('<div class="week-view-container">').append(
+                    this.fulltimeCon.empty().append(this.fulltimePane),
+                    this.pane.empty().append(timeLabel, self.weekCon)
+                )
             );
 
             this.renderDayLabel();
@@ -741,11 +732,18 @@ define('io.ox/calendar/week/view',
 
             this.dayLabel.empty().append(days);
 
-            this.kwInfo.text(
-                gt.noI18n(this.columns > 1 ?
-                    this.startDate
-                        .formatInterval(new date.Local(this.startDate.getTime() + ((this.columns - 1) * date.DAY)), date.DATE) :
-                    this.startDate.format(date.DAYOFWEEK_DATE)
+            //            new date.Local(this.weekStart + date.DAY).format('w')
+            this.kwInfo.empty().append(
+                $.txt(
+                    gt.noI18n(this.columns > 1 ?
+                        this.startDate.formatInterval(new date.Local(this.startDate.getTime() + ((this.columns - 1) * date.DAY)), date.DATE) :
+                        this.startDate.format(date.DAYOFWEEK_DATE)
+                    )
+                ),
+                $('<span class="cw">').text(
+                    ' / ' +
+                    //#. %$1d = Calendar week
+                    gt('CW %1$d', this.startDate.format('w'))
                 )
             );
         },
