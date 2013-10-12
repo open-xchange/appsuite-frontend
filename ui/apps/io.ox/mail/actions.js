@@ -208,88 +208,11 @@ define('io.ox/mail/actions',
         }
     });
 
-    new Action('io.ox/mail/actions/print#disabled', {
-        id: 'print',
-        requires: function () {
-            return _.device('!small');
-        },
-        multiple: function (list, baton) {
-                var data = baton.data,
-                    win;
-                //single vs. multi
-                if (list.length === 1) {
-                    win = print.open('mail', data, {
-                            template: 'infostore://70170',
-                            id: data.id,
-                            folder: data.folder_id,
-                            view: 'text',
-                            format: 'template'
-                        });
-                    win.print();
-                } else {
-                    win = print.openURL();
-                    win.document.title = gt('Print');
+    /*
+     *  Move and Copy
+     */
 
-                    require(['io.ox/core/http'], function (http) {
-                        /**
-                         * returns data for requested list elements
-                         * @param  {array} list of data objects
-                         * @return {deferred} arrray of objects sorted by received_date
-                         */
-                        var getList = function (list) {
-                            return api.getList(list)
-                            .pipe(function (data) {
-                                //sort and map for print request
-                                return _.chain(data)
-                                        .sortBy(function (mail) {
-                                            return 1 - mail.received_date;
-                                        })
-                                        .map(function (mail) {
-                                            return { id: mail.id, folder: mail.folder_id };
-                                        })
-                                        .value();
-                            });
-                        };
-                        /**
-                         * returns printable content ob submitted ids
-                         * @param  {array} listmin of data objects
-                         * @return {deferred} print content
-                         */
-                        var getPrintable = function (listmin) {
-                            return http.PUT({
-                                module: 'mail',
-                                dataType: 'text',
-                                params: {
-                                    action: 'list',
-                                    template: 'infostore://70170',
-                                    view: 'text',
-                                    format: 'template',
-                                    columns: '602,603,604,605,606,607,610'
-                                },
-                                data: listmin
-                            });
-                        };
-
-                        //get received_date for sorting
-                        getList(list)
-                        .pipe(function (listmin) {
-                            //get content for popup
-                            getPrintable(listmin)
-                            .done(function (print) {
-                                var $content = $('<div>').append(print),
-                                    head = $('<div>').append($content.find('style')),
-                                    body = $('<div>').append($content.find('.mail-detail'));
-                                win.document.write(head.html() + body.html());
-                                win.print();
-                            });
-                        });
-                    });
-                }
-                win.focus();
-            }
-    });
-
-    function moveAndCopy(type, label, success) {
+    function generate(type, label, success) {
 
         new Action('io.ox/mail/actions/' + type, {
             id: type,
@@ -363,8 +286,8 @@ define('io.ox/mail/actions',
         });
     }
 
-    moveAndCopy('move', gt('Move'), { multi: gt('Mails have been moved'), single: gt('Mail has been moved') });
-    moveAndCopy('copy', gt('Copy'), { multi: gt('Mails have been copied'), single: gt('Mail has been copied') });
+    generate('move', gt('Move'), { multi: gt('Mails have been moved'), single: gt('Mail has been moved') });
+    generate('copy', gt('Copy'), { multi: gt('Mails have been copied'), single: gt('Mail has been copied') });
 
     new Action('io.ox/mail/actions/markunread', {
         id: 'markunread',
@@ -563,12 +486,9 @@ define('io.ox/mail/actions',
         capabilities: 'infostore',
         requires: 'some',
         multiple: function (list) {
-            notifications.yell('busy', gt('Attachments will be saved'));
-            api.saveAttachments(list)
-                .done(function () {
-                    notifications.yell('success', gt('Attachments have been saved'));
-                })
-                .fail(notifications.yell);
+            require(['io.ox/mail/actions/attachmentSave'], function (action) {
+                action.multiple(list);
+            });
         }
     });
 
