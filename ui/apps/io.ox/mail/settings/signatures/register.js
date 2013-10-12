@@ -22,6 +22,60 @@ define('io.ox/mail/settings/signatures/register',
 
     'use strict';
 
+    ext.point('io.ox/mail/settings/signature-dialog').extend({
+        id: 'name',
+        index: 100,
+        draw: function (baton) {
+            this.append(
+                $('<div class="row-fluid">').append(
+                    $('<label>').text(gt('Signature name')),
+                    baton.$.name = $('<input type="text" class="span12">')
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/mail/settings/signature-dialog').extend({
+        id: 'error',
+        index: 200,
+        draw: function (baton) {
+            this.append(
+                baton.$.error = $('<div>').addClass('help-block error')
+            );
+        }
+    });
+
+    ext.point('io.ox/mail/settings/signature-dialog').extend({
+        id: 'textarea',
+        index: 300,
+        draw: function (baton) {
+            this.append(
+                $('<div class="row-fluid">').append(
+                    $('<label>').text(gt('Signature text')),
+                    baton.$.signature = $('<textarea class="span12" rows="10">')
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/mail/settings/signature-dialog').extend({
+        id: 'position',
+        index: 400,
+        draw: function (baton) {
+            this.append(
+                $('<div class="row-fluid">').append(
+                    $('<label>').text(gt('Signature position')),
+                    baton.$.insertion = $('<select>')
+                        .append(
+                            $('<option value="above">').text(gt('Above quoted text')),
+                            $('<option value="below">').text(gt('Below quoted text'))
+                        )
+                        .val(settings.get('defaultSignaturePosition', 'below'))
+                )
+            );
+        }
+    });
+
     function fnEditSignature(evt, signature) {
         if (!signature) {
             signature = {
@@ -41,43 +95,25 @@ define('io.ox/mail/settings/signatures/register',
             }
         }
 
-        var $name, $signature, $insertion, popup, $error;
-
         if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
 
-        popup = new dialogs.ModalDialog({ async: true });
+        var popup = new dialogs.ModalDialog({ async: true });
         popup.header($('<h4>').text(signature.id === null ? gt('Add signature') : gt('Edit signature')));
-        popup.append(
-            $('<div>').append(
-                $('<div class="row-fluid">').append(
-                    $('<label>').text(gt('Signature name')),
-                    $name = $('<input type="text" class="span12">')
-                ),
-                $error = $('<div>').addClass('help-block error'),
-                $('<div class="row-fluid">').append(
-                    $('<label>').text(gt('Signature text')),
-                    $signature = $('<textarea class="span12" rows="10">')
-                ),
-                $('<div class="row-fluid">').append(
-                    $('<label>').text(gt('Signature position')),
-                    $insertion = $('<select>').append(
-                        $('<option value="above">').text(gt('Above content')),
-                        $('<option value="below">').text(gt('Below content')).prop('selected', true)
-                    )
-                )
-            )
-        )
-        .addPrimaryButton('save', gt('Save'))
+
+        var baton = new ext.Baton();
+        ext.point('io.ox/mail/settings/signature-dialog').invoke('draw', popup.getContentNode(), baton);
+
+        popup.addPrimaryButton('save', gt('Save'))
         .addButton('cancel', gt('Discard'))
         .on('save', function () {
-            if ($name.val() !== '') {
+            if (baton.$.name.val() !== '') {
                 var update = signature.id ? {} : {type: 'signature', module: 'io.ox/mail', displayname: '', content: '', misc: {insertion: 'below'}};
 
                 update.id = signature.id;
-                update.misc = { insertion: $insertion.val() };
+                update.misc = { insertion: baton.$.insertion.val() };
 
-                if ($signature.val() !== signature.content) update.content = $signature.val();
-                if ($name.val() !== signature.displayname) update.displayname = $name.val();
+                if (baton.$.signature.val() !== signature.content) update.content = baton.$.signature.val();
+                if (baton.$.name.val() !== signature.displayname) update.displayname = baton.$.name.val();
 
                 popup.busy();
 
@@ -95,27 +131,27 @@ define('io.ox/mail/settings/signatures/register',
                 popup.close();
             } else {
                 popup.idle();
-                validateField($name, $error);
+                validateField(baton.$.name, baton.$.error);
             }
         }).show();
 
-        $name.val(signature.displayname);
-        $signature.val(signature.content);
+        baton.$.name.val(signature.displayname);
+        baton.$.signature.val(signature.content);
 
         if (_.isObject(signature.misc) && signature.misc.insertion) {
-            $insertion.val(signature.misc.insertion);
+            baton.$.insertion.val(signature.misc.insertion);
         }
 
         _.defer(function () {
             if (signature.displayname) {
-                $signature.select();
+                baton.$.signature.select();
             } else {
-                $name.select();
+                baton.$.name.select();
             }
         });
 
-        $name.on('change', function () {
-            validateField($name, $error);
+        baton.$.name.on('change', function () {
+            validateField(baton.$.name, baton.$.error);
         });
     }
 
