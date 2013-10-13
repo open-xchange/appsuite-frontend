@@ -169,6 +169,8 @@ define('io.ox/calendar/util',
             var reminderListValues = [
                 {value: -1, format: 'string'},
                 {value: 0, format: 'minutes'},
+                {value: 5, format: 'minutes'},
+                {value: 10, format: 'minutes'},
                 {value: 15, format: 'minutes'},
                 {value: 30, format: 'minutes'},
                 {value: 45, format: 'minutes'},
