@@ -1380,6 +1380,11 @@ define('io.ox/mail/view-detail',
                         var dd = drawAttachmentDropDown(outer, _.noI18n(label), a);
                         if (_.device('smartphone')) {
                             dd.hide();
+                        } else {
+                            dd.find('a').before(
+                                $('<i class="icon-paper-clip">'),
+                                $.txt('\u00A0')
+                            );
                         }
                         // cut off long lists?
                         if (i > 3 && length > 5) {
