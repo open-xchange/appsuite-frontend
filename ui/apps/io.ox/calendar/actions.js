@@ -85,6 +85,24 @@ define('io.ox/calendar/actions',
         }
     });
 
+    new Action('io.ox/calendar/detail/actions/invite', {
+        capabilities: 'calendar',
+        action: function (baton) {
+            require(['io.ox/calendar/edit/main'], function (m) {
+                m.getApp().launch().done(function () {
+                    // open create dialog with same participants
+                    var data = {
+                        folder_id: coreSettings.get('folder/calendar'),
+                        participants: baton.data.participants,
+                        title: baton.data.title
+                    };
+                    this.create(data);
+                    this.model.toSync = data;
+                });
+            });
+        }
+    });
+
     new Action('io.ox/calendar/detail/actions/save-as-distlist', {
         capabilities: 'contacts',
         action: function (baton) {
@@ -591,7 +609,15 @@ define('io.ox/calendar/actions',
     }));
 
     ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
-        index: 100,
+        index: 200,
+        prio: 'hi',
+        id: 'invite',
+        label: gt('Invite to new appointment'),
+        ref: 'io.ox/calendar/detail/actions/invite'
+    }));
+
+    ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
+        index: 300,
         prio: 'hi',
         id: 'save as distlist',
         label: gt('Save as distribution list'),
