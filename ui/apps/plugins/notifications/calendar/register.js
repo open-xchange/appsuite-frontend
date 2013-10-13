@@ -17,10 +17,11 @@ define('plugins/notifications/calendar/register',
      'io.ox/core/api/reminder',
      'io.ox/calendar/util',
      'io.ox/core/extensions',
+     'io.ox/core/api/folder',
      'io.ox/core/api/user',
      'io.ox/core/tk/reminder-util',
      'gettext!plugins/notifications'
-    ], function (calAPI, reminderAPI, util, ext, userAPI, reminderUtil, gt) {
+    ], function (calAPI, reminderAPI, util, ext, folderAPI, userAPI, reminderUtil, gt) {
 
     'use strict';
 
@@ -66,7 +67,12 @@ define('plugins/notifications/calendar/register',
                 $('<div class="location">').text(model.get('location')),
                 $('<div class="organizer">').text(model.get('blue')),
                 $('<div class="actions">').append(
-                    $('<button type="button" tabindex="1" class="btn btn-inverse" data-action="accept_decline">').text(gt('Accept / Decline'))
+                    $('<button type="button" tabindex="1" class="btn btn-inverse" data-action="accept_decline">')
+                        .css('margin-right', '14px')
+                        .text(gt('Accept / Decline')),
+                    $('<button type="button" tabindex="1" class="btn btn-success" data-action="accept">')
+                        .attr('title', gt('Accept invitation'))
+                        .append('<i class="icon-ok">')
                 )
             );
         }
@@ -91,7 +97,8 @@ define('plugins/notifications/calendar/register',
         events: {
             'click': 'onClickItem',
             'keydown': 'onClickItem',
-            'click [data-action="accept_decline"]': 'onClickChangeStatus'
+            'click [data-action="accept_decline"]': 'onClickChangeStatus',
+            'click [data-action="accept"]': 'onClickAccept'
         },
 
         render: function () {
@@ -137,6 +144,19 @@ define('plugins/notifications/calendar/register',
                     });
                 });
             }
+        },
+
+        onClickAccept: function (e) {
+            e.stopPropagation();
+            var o = calAPI.reduce(this.model.get('data'));
+            folderAPI.get({ folder: o.folder }).done(function (folder) {
+                o.data = { confirmmessage: '', confirmation: 1 };
+                // add current user id in shared or public folder
+                if (folderAPI.is('shared', folder)) {
+                    o.data.id = folder.created_by;
+                }
+                calAPI.confirm(o);
+            });
         },
 
         onClickChangeStatus: function (e) {
