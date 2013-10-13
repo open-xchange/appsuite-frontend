@@ -79,6 +79,7 @@ define('io.ox/calendar/week/view',
             } else {
                 _.extend(events, {
                     'dblclick .week-container>.day,.fulltime>.day': 'onCreateAppointment',
+                    'click .weekday': 'onCreateAppointment',
                     'click .appointment': 'onClickAppointment'
                 });
                 if (_.device('desktop')) {
@@ -363,9 +364,11 @@ define('io.ox/calendar/week/view',
          * @param  {MouseEvent} e double click event
          */
         onCreateAppointment: function (e) {
-            if (!folderAPI.can('create', this.folder())) {
-                return;
-            }
+
+            e.preventDefault();
+
+            if (!folderAPI.can('create', this.folder())) return;
+
             if ($(e.target).hasClass('timeslot')) {
                 // calculate timestamp for current position
                 var pos = this.getTimeFromPos(e.target.offsetTop),
@@ -375,7 +378,7 @@ define('io.ox/calendar/week/view',
                     end_date: start.add(date.HOUR).getTime()
                 });
             }
-            if ($(e.target).hasClass('day')) {
+            if ($(e.target).hasClass('day') || $(e.target).hasClass('weekday')) {
                 // calculate timestamp for current position
                 var startTS = date.Local.localTime(this.getTimeFromDateTag($(e.currentTarget).attr('date')).getTime());
                 this.trigger('openCreateAppointment', e, {start_date: startTS, end_date: startTS + date.DAY, full_time: true});
@@ -604,9 +607,11 @@ define('io.ox/calendar/week/view',
             renderTimeline();
             setInterval(renderTimeline, 60000);
 
-            if (!Modernizr.touch) {
-                this.fulltimePane.empty().append(this.fulltimeNote.text(gt('Doubleclick in this row for whole day appointment')).attr('unselectable', 'on'));
-            }
+            // mattes: guess we don't need this any more
+            // if (!Modernizr.touch) {
+            //     this.fulltimePane.empty().append(this.fulltimeNote.text(gt('Doubleclick in this row for whole day appointment')).attr('unselectable', 'on'));
+            // }
+
             this.fulltimePane.css({ height: (this.options.showFulltime ? 21 : 1) + 'px'});
 
             // create days
@@ -716,8 +721,9 @@ define('io.ox/calendar/week/view',
             // refresh dayLabel, timeline and today-label
             this.timeline.hide();
             for (var d = 0; d < this.columns; d++) {
-                var day = $('<div>')
-                    .addClass('weekday')
+                var day = $('<a href="#" class="weekday" tabindex="1">')
+                    .attr('date', d)
+                    .attr('title', gt('Click for whole day appointment'))
                     .text(gt.noI18n(tmpDate.format(date.DAYOFWEEK_DATE)))
                     .width(100 / this.columns + '%');
                 // mark today
