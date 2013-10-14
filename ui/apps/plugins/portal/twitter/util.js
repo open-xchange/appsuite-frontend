@@ -101,7 +101,7 @@ define('plugins/portal/twitter/util',
                 }
             }
         },
-        function fail(error) {
+        function fail() {
             notifications.yell('error', gt('An internal error occured'));
         });
     };
@@ -268,7 +268,7 @@ define('plugins/portal/twitter/util',
 
                             options.replyBoxContainer.remove();
                         },
-                        function fail(error) {
+                        function fail() {
                             notifications.yell('error', gt('An internal error occured'));
                         });
                     }
@@ -300,7 +300,7 @@ define('plugins/portal/twitter/util',
                                 notifications.yell('error', jsonResponse.errors);
                             }
                         }
-                    }, function fail(error) {
+                    }, function fail() {
                         notifications.yell('error', gt('An internal error occured'));
                     });
                 } else {
@@ -514,8 +514,7 @@ define('plugins/portal/twitter/util',
                         }
                     }
                 }),
-            success = options !== undefined ? options.success : undefined,
-            batonStorage;
+            success = options !== undefined ? options.success : undefined;
 
 
         replyBoxContainer.append(

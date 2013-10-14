@@ -11,7 +11,7 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/settings/defaults', ['gettext!io.ox/mail'], function (gt) {
+define('io.ox/mail/settings/defaults', [], function () {
 
     'use strict';
 

@@ -697,7 +697,7 @@ define('io.ox/mail/main',
                     .fail(_.lfo(drawFail, obj));
             }
 
-            api.on('refresh.seen', function (e, list) {
+            api.on('refresh.seen', function () {
                 app.getWindow().nodes.body.find('[data-action="markread"]').trigger('redraw', obj);
             });
 
@@ -848,7 +848,7 @@ define('io.ox/mail/main',
             win.nodes.search.find('.search-query-container').after(button);
 
             //add dropdown menue
-            var dropdown = dropdownOptions({
+            dropdownOptions({
                 id: 'mail.search',
                 anchor: button,
                 defaults: data,
