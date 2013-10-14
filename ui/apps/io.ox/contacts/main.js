@@ -171,8 +171,9 @@ define('io.ox/contacts/main',
                 return { name: name, private_flag: private_flag, description: description };
             },
             set: function (data, fields) {
+                var a11yLabel = '';
                 if (data.mark_as_distributionlist === true) {
-                    fields.name.text(_.noI18n(data.display_name || ''));
+                    fields.name.text(a11yLabel = _.noI18n(data.display_name || ''));
                     if (data.private_flag) {
                         fields.private_flag.show();
                     } else {
@@ -180,7 +181,7 @@ define('io.ox/contacts/main',
                     }
                     fields.description.text(gt('Distribution list'));
                 } else {
-                    fields.name.text(_.noI18n(util.getFullName(data)));
+                    fields.name.text(a11yLabel = _.noI18n(util.getFullName(data)));
                     if (data.private_flag) {
                         fields.private_flag.show();
                     } else {
@@ -195,6 +196,8 @@ define('io.ox/contacts/main',
                         fields.name.removeClass('bright-text');
                     }
                 }
+                this.attr({ 'aria-label': a11yLabel });
+
             }
         });
 
