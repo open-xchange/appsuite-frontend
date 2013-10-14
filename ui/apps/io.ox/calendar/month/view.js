@@ -118,9 +118,8 @@ define('io.ox/calendar/month/view',
                 weekinfo = $('<div>')
                     .addClass('week-info')
                     .append(
-                        $('<span>').addClass('cw').append(
-                            gt('CW'),
-                            gt.noI18n(' ' + new date.Local(this.weekStart + date.DAY).format('w'))
+                        $('<span>').addClass('cw').text(
+                            gt('CW %1$d', new date.Local(this.weekStart + date.DAY).format('w'))
                         )
                     );
             _(list.days).each(function (day, i) {
