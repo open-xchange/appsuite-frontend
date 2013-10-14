@@ -16,8 +16,9 @@ define('io.ox/core/folder/add',
      'io.ox/core/tk/dialogs',
      'io.ox/core/extensions',
      'io.ox/core/notifications',
+     'settings!io.ox/core',
      'gettext!io.ox/core'
-    ], function (api, dialogs, ext, notifications, gt) {
+    ], function (api, dialogs, ext, notifications, settings, gt) {
 
     'use strict';
 
@@ -62,6 +63,12 @@ define('io.ox/core/folder/add',
 
         if (!folder) return;
         opt = opt || {};
+        folder = String(folder);
+
+        var isContacts = String(settings.get('folder/contacts')) === folder,
+            isCalendar = String(settings.get('folder/calendar')) === folder,
+            isTasks =  String(settings.get('folder/tasks')) === folder,
+            isPrivate = isContacts || isCalendar || isTasks;
 
         new dialogs.ModalDialog({
             async: true,
@@ -69,7 +76,11 @@ define('io.ox/core/folder/add',
             enter: 'add'
         })
         .header(
-            $('<h4>').text(folder === '2' ? gt('New public folder') : gt('New folder'))
+            $('<h4>').text(
+                isPrivate ? gt('New private folder') :
+                folder === '2' ? gt('New public folder') :
+                folder === '1' ? gt('New folder') : gt('New subfolder')
+            )
         )
         .build(function () {
 
