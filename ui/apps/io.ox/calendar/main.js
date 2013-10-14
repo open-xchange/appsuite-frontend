@@ -75,7 +75,7 @@ define('io.ox/calendar/main',
                             $('<input type="checkbox" tabindex="1">')
                                 .prop('checked', settings.get('showAllPrivateAppointments', false))
                                 .on('change', changeShowAll),
-                            $.txt(gt('Show appointments from all private calendars'))
+                            $.txt(gt('Show appointments from all my private calendars'))
                         )
                     )
                 );
