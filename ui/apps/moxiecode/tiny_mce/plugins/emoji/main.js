@@ -272,7 +272,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                 },
                 createImageTag = function (css, unicode) {
                     return $('<div>').append(
-                        $('<img src="apps/themes/login/1x1.gif" class="' + css + '">')
+                        $('<img src="apps/themes/login/1x1.gif" class="emoji ' + css + '">')
                         .attr('data-emoji-unicode', unicode)
                     ).html();
                 };

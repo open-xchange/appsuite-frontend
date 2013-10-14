@@ -67,7 +67,7 @@ define('io.ox/files/views/create', [
 
                 //TODO: add support for multiple files via filelist widget
                 function uploadFilesIE9() {
-                    var files = ($form.find('input[type="file"]').length > 0 ? $form.find('input[type="file"]')[0].files : []) || [],
+                    var files = ($form.find('input[type="file"]').length > 0 ? $form.find('input[type="file"]').prop('disabled', false)[0].files : []) || [],
                         folder = app.folder.get();
                     if ($form.find('input[type="file"]').val()) {
                         api.uploadFile({

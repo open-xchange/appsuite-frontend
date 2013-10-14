@@ -46,13 +46,10 @@ define("io.ox/contacts/view-detail",
         if (api.looksLikeResource(data)) {
             return single(7, gt('Resource'), true);
         }
-        if (data.company || data.position || data.profession) {
+        if (data.position || data.profession) {
             return {
-                format: join(', ', data.company ? '%4$s' : '',
-                                   data.position ? '%5$s' : '',
-                                   data.profession ? '%6$s' : ''),
-                params: ['', '', '', _.noI18n(data.company),
-                         _.noI18n(data.position), _.noI18n(data.profession)]
+                format: join(', ', data.position ? '%1$s' : '', data.profession ? '%2$s' : ''),
+                params: [_.noI18n(data.position), _.noI18n(data.profession)]
             };
         }
         return util.getMailFormat(data);
@@ -135,16 +132,17 @@ define("io.ox/contacts/view-detail",
             var name = createText(util.getFullNameFormat(baton.data),
                     ['first_name', 'last_name', 'title', 'display_name']),
                 job = createText(getDescription(baton.data),
-                    ['email1', 'email2', 'email3', 'company', 'position',
-                     'profession', 'type']);
+                    ['position', 'profession', 'type']),
+                company = $.trim(baton.data.company);
 
             this.append(
-                $('<div>').append(
+                $('<div class="next-to-picture">').append(
                     // right side
                     $('<i class="icon-lock private-flag">').attr('title', gt('Private')).hide(),
-                    $('<h1>').append(name),
-                    $('<h2>').append(job),
-                    $('<section class="attachments-container">')
+                    $('<h1 class="header-name">').append(name),
+                    company ? $('<h2 class="header-company">').append($('<span class="company">').text(company)) : [],
+                    $('<h2 class="header-job">').append(job),
+                    $('<section class="attachments-container clear-both">')
                         .append($('<span class="attachments-in-progress">').busy())
                         .hide()
                 )
