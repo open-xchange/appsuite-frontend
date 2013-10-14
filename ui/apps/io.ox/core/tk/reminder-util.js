@@ -33,23 +33,25 @@ define('io.ox/core/tk/reminder-util',
                         }),
                     $('<button type="button" tabindex="1" class="btn btn-inverse remindOkBtn" data-action="ok">').text(gt('OK'))
                 );
-        } else {//special link dropdown
+        } else {
+            // special link dropdown
             node.append(
-                    $('<div>').addClass('dropdown').css({float: 'left'}).append(
-                        $('<a href="#" role="listbox" tabindex="1" data-action="reminderbutton" aria-haspopup="true">').attr('data-toggle', 'dropdown').text(gt('Remind me again')).append(
-                            $('<i>').addClass('icon-chevron-down').css({color: 'white', paddingLeft: '5px', textDecoration: 'none'})
-                        ),
-                        $('<ul role="listbox">').addClass('dropdown-menu dropdown-left').css({minWidth: 'auto'}).append(function () {
-                            var ret = '';
-                            for (var i = 0; i < values.length; i++) {
-                                ret += '<li><a tabindex="1" role="option" aria-label="' + gt('Remind me again ') + values[i][1] + '" href="#" data-action="reminder" data-value="' + values[i][0] + '">' +
-                                    values[i][1] +
-                                    '</a></li>';
-                            }
-                            return ret;
-                        })
-                    )
-                ).find('after').css('clear', 'both');
+                $('<div>').addClass('dropdown').css({float: 'left'}).append(
+                    $('<a href="#" role="listbox" tabindex="1" data-action="reminderbutton" aria-haspopup="true">').attr('data-toggle', 'dropdown').text(gt('Remind me again')).append(
+                        $('<i>').addClass('icon-chevron-down').css({color: 'white', paddingLeft: '5px', textDecoration: 'none'})
+                    ),
+                    $('<ul role="listbox">').addClass('dropdown-menu dropdown-left').css({minWidth: 'auto'}).append(function () {
+                        var ret = '';
+                        for (var i = 0; i < values.length; i++) {
+                            ret += '<li><a tabindex="1" role="option" aria-label="' + gt('Remind me again ') + values[i][1] + '" href="#" data-action="reminder" data-value="' + values[i][0] + '">' +
+                                values[i][1] +
+                                '</a></li>';
+                        }
+                        return ret;
+                    })
+                ),
+                $('<button type="button" tabindex="1" class="btn btn-inverse remindOkBtn" data-action="ok">').text(gt('OK'))
+            ).find('after').css('clear', 'both');
         }
     }
 
