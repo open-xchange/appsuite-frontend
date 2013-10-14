@@ -41,6 +41,9 @@ define('io.ox/settings/main',
             },
             set: function (data, fields) {
                 var title = gt.pgettext('app', data.title);
+                this.attr({
+                    'aria-label': title
+                });
                 fields.title.append($.txt(
                         title === data.title ? gt(data.title) : title
                     )

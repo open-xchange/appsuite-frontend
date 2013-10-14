@@ -343,7 +343,7 @@ define('io.ox/core/tk/vgrid',
 
         // add label class
         template.node.addClass('selectable');
-        label.node.addClass('vgrid-label');
+        label.node.addClass('vgrid-label').attr({ 'aria-hidden': 'true' });
 
         // fix mobile safari bug (all content other than position=static is cut off)
         if (_.device('iOS && Safari')) {
