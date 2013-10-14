@@ -1115,6 +1115,30 @@ define('io.ox/mail/view-detail',
         return api.changeColor(data, color);
     }
 
+    // show within multi-selection
+    ext.point('io.ox/links/multi-selection').extend({
+        id: 'color-labels',
+        index: 300,
+        draw: function (baton) {
+
+            if (baton.id !== 'io.ox/mail') return;
+
+            this.append(
+                $('<div class="multi-selection-flag">').append(
+                    _(api.COLORS).map(function (index, color) {
+                        return $('<a href="#" tabindex="1">').append(
+                            $('<i>')
+                            .addClass('flag_' + index)
+                            .addClass(index > 0 ? colorLabelIcon : colorLabelIconEmpty)
+                            .attr('title', colorNames[color])
+                        )
+                        .on('click', { data: baton.selection, color: index }, changeLabel);
+                    })
+                )
+            );
+        }
+    });
+
     ext.point('io.ox/mail/detail/header').extend({
         index: 130,
         id: 'flag',
