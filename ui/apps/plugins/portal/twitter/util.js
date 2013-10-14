@@ -234,8 +234,7 @@ define('plugins/portal/twitter/util',
                 replyBox = replyBox || new TwitterTextBox(gt('Reply'), {
                     open: function (options) {
                         options.textArea
-                            .attr({rows: '4', placeholder: ''})
-                            .removeClass('io-ox-twitter-tweet-textarea-small');
+                            .attr({rows: '4', placeholder: ''});
                         options.buttonContainer.removeClass('io-ox-twitter-hidden');
 
                         if (options.baton !== undefined) {
@@ -245,7 +244,6 @@ define('plugins/portal/twitter/util',
                     close: function (options) {
                         if (options.textArea.val() === '') {
                             options.textArea.attr({rows: '1', placeholder: 'Reply to'})
-                                .addClass('io-ox-twitter-tweet-textarea-small')
                                 .css('height', '');
                             options.buttonContainer.addClass('io-ox-twitter-hidden');
                         }
@@ -500,7 +498,7 @@ define('plugins/portal/twitter/util',
                 }),
             buttonContainer = $('<div>').attr({'class': 'io-ox-twitter-tweet-button'}),
             tweetCounter = $('<div>').attr({'class': 'io-ox-twitter-tweet-counter'}).text(140),
-            tweetButton = $('<a>').attr({'class': 'btn btn-primary disabled', role: 'button'})
+            tweetButton = $('<a>').attr({'class': 'btn disabled', role: 'button'})
                 .text(title)
                 .on('click', function (e) {
                     var text = textArea.val();
@@ -552,9 +550,9 @@ define('plugins/portal/twitter/util',
             tweetCounter.text((140 - textArea.val().length));
 
             if (textArea.val().length === 0) {
-                tweetButton.addClass('disabled');
+                tweetButton.addClass('disabled').removeClass('btn-primary');
             } else {
-                tweetButton.removeClass('disabled');
+                tweetButton.removeClass('disabled').addClass('btn-primary');
             }
         }
 
