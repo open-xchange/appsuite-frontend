@@ -40,31 +40,45 @@ define('io.ox/core/commons',
 
             var points = {};
 
-            function draw(id, selection, grid) {
-                // inline links
-                var node = $('<div>');
-                (points[id] || (points[id] = new links.InlineLinks({ id: 'inline-links', ref: id + '/links/inline' })))
-                    .draw.call(node, {data: selection, grid: grid});//needs grid to add busy animations without using global selectors
-                return $().add(
-                    $('<div>').addClass('summary').html(
-                        gt('<b>%1$d</b> elements selected', selection.length)
-                    )
-                )
-                .add(node.children().first());
-            }
+            ext.point('io.ox/links/multi-selection')
+            .extend({
+                id: 'summary',
+                index: 100,
+                draw: function (baton) {
+                    this.append(
+                        $('<div class="summary">').html(
+                            gt('<b>%1$d</b> elements selected', baton.selection.length)
+                        )
+                    );
+                }
+            })
+            .extend({
+                id: 'links',
+                index: 200,
+                draw: function (baton) {
+                    // inline links
+                    var node = $('<div>'), id = baton.id;
+                    (points[id] || (points[id] = new links.InlineLinks({ id: 'inline-links', ref: id + '/links/inline' })))
+                        .draw.call(node, { data: baton.selection, grid: baton.grid }); // needs grid to add busy animations without using global selectors
+                    this.append(
+                        node.children().first()
+                    );
+                }
+            });
 
             return function (id, node, selection, api, grid) {
                 if (selection.length > 1) {
                     // draw
-                    node.idle().empty().append(
-                        (api ? $.createViewContainer(selection, api) : $('<div>'))
-                        .on('redraw', function () {
-                            $(this).empty().append(draw(id, selection, grid));
-                        })
-                        .addClass('io-ox-multi-selection')
-                        .append(draw(id, selection, grid))
-                        .center()
-                    );
+                    var baton = ext.Baton({ id: id, grid: grid, selection: selection });
+                    node.idle().empty().append(function () {
+                        var container = (api ? $.createViewContainer(selection, api) : $('<div>'))
+                            .on('redraw', function () {
+                                ext.point('io.ox/links/multi-selection').invoke('draw', $(this).empty(), baton);
+                            })
+                            .addClass('io-ox-multi-selection');
+                        ext.point('io.ox/links/multi-selection').invoke('draw', container, baton);
+                        return container.center();
+                    });
                 }
             };
         }()),
