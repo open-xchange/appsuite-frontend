@@ -265,6 +265,7 @@ define('io.ox/files/carousel',
         },
 
         show: function () {
+
             var win;
             if (this.config.attachmentMode) {
                 win = $('.window-container:visible');
@@ -273,6 +274,11 @@ define('io.ox/files/carousel',
             } else {
                 win = this.win.nodes.outer;
             }
+            ox.trigger('slideshow:start', {
+                controller: this,
+                window: win,
+                container: this.container
+            });
             win.busy();
             win.append(
                 this.container.append(
@@ -289,6 +295,10 @@ define('io.ox/files/carousel',
         },
 
         close: function () {
+            ox.trigger('slideshow:end', {
+                controller: this,
+                container: this.container
+            });
             this.container
                 .off('slid')
                 .off('slide')
