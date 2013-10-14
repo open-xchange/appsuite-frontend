@@ -18,7 +18,7 @@ var jsp = require("../uglify-js/uglify-js").parser;
 var pro = require("../uglify-js/uglify-js").uglify;
 var ast = require("./ast");
 var rimraf = require("../rimraf/rimraf");
-var jshint = require("../jshint").JSHINT;
+var jshint = require("../jshint/jshint").JSHINT;
 var _ = require("../underscore.js");
 
 var potHeader = 'msgid ""\nmsgstr ""\n' +

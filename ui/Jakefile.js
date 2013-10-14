@@ -24,7 +24,7 @@ var pro = require("./lib/uglify-js/uglify-js").uglify;
 var ast = require("./lib/build/ast");
 var i18n = require("./lib/build/i18n");
 var rimraf = require("./lib/rimraf/rimraf");
-var jshint = require("./lib/jshint").JSHINT;
+var jshint = require("./lib/jshint/jshint").JSHINT;
 
 console.info('Node version:', process.version);
 console.info("Build path: " + utils.builddir);

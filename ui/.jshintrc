@@ -27,12 +27,6 @@
     // Legacy
     "white"         : true,    // true: Check against strict whitespace and indentation rules
 
-    /**
-     * TODO:
-     * Reenable whitespace checking when we fork jshint with the patch Matthias made.
-     * https://github.com/jshint/jshint/issues/428 // Commit id: e63ee7a3b1f5808873201823338b127c47dcd872
-     **/
-
     // Custom Globals
     "globals": {
         "ox": false,
