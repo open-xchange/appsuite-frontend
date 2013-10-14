@@ -586,7 +586,7 @@ define('io.ox/core/tk/vgrid',
                     row.appendTo(container);
                     // reset class name
 
-                    row.node.attr({ role: 'option', 'aria-posinset': offset + i });
+                    row.node.attr({ role: 'option', 'aria-posinset': offset + i + 1 });
                     node = row.node[0];
                     node.className = defaultClassName + ' ' + ((offset + i) % 2 ? 'odd' : 'even');
                     // update fields
