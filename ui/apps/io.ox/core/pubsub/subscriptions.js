@@ -42,7 +42,7 @@ define('io.ox/core/pubsub/subscriptions',
 
     isDestructiveSubscription = function (baton) {
         console.log(baton, baton.data.entityModule, baton.data.entityModule === 'calendar');
-        return baton.data.entityModule === "calendar";
+        return baton.data.entityModule === 'calendar';
     },
 
     SubscriptionView = Backbone.View.extend({
@@ -315,7 +315,7 @@ define('io.ox/core/pubsub/subscriptions',
             );
 
             if (destructive) {
-                this.append($('<p class="text-warning">').text(gt("Note: This subscription will replace the calendar content with the external content. Therefore you must create a new folder for this subscription.")));
+                this.append($('<p class="text-warning">').text(gt('Note: This subscription will replace the calendar content with the external content. Therefore you must create a new folder for this subscription.')));
             }
         }
     });

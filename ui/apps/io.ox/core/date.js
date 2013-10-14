@@ -1,3 +1,4 @@
+// NOJSHINT
 /**
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,

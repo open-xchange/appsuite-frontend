@@ -41,7 +41,7 @@ define('plugins/portal/twitter/register',
         if (options !== undefined && options.offline !== undefined && options.offline !== offline) {
             offline = options.offline;
 
-            if (composeBox !== undefined && $(composeBox).is(":visible")) {
+            if (composeBox !== undefined && $(composeBox).is(':visible')) {
                 composeBox.replaceWith(getComposeBox());
             }
         }
@@ -112,7 +112,7 @@ define('plugins/portal/twitter/register',
     var renderTweets = function (baton) {
         var timeline = baton.data;
 
-        if ($tweets === undefined || !$($tweets).is(":visible")) {
+        if ($tweets === undefined || !$($tweets).is(':visible')) {
             return;
         }
 
@@ -126,7 +126,7 @@ define('plugins/portal/twitter/register',
 
     var getComposeBox = function () {
         if (offline) {
-            composeBox = $('<div>').attr({style: "color: #FF0000; padding: 15px; "}).text(gt('This widget is currently offline because the twitter rate limit exceeded.'));
+            composeBox = $('<div>').attr({style: 'color: #FF0000; padding: 15px; '}).text(gt('This widget is currently offline because the twitter rate limit exceeded.'));
         } else {
             composeBox = new util.TwitterTextBox('Tweet', {
                 open: function (options) {
@@ -163,7 +163,7 @@ define('plugins/portal/twitter/register',
                             .css('height', '');
                         options.buttonContainer.addClass('io-ox-twitter-hidden');
                     },
-                    function fail(error) {
+                    function fail() {
                         notifications.yell('error', gt('An internal error occured'));
                     });
                 }
