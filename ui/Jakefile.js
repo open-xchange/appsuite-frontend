@@ -188,16 +188,60 @@ function jsFilter (data) {
 utils.fileType("source").addHook("filter", jsFilter)
     .addHook("define", i18n.potScanner);
 
-var jshintOptions = fs.readFileSync('./.jshintrc').toString();
+var jshintOptions = {
+    bitwise: false,
+    boss: true,
+    browser: true,
+    debug: debug,
+    devel: true,
+    eqeqeq: true,
+    evil: true,
+    forin: false,
+    immed: true,
+    loopfunc: false,
+    node: true,
+    nomen: false,
+    onevar: false,
+    plusplus: false,
+    regexp: false,
+    regexdash: true,
+    shadow: true,
+    strict: true,
+    trailing: true,
+    undef: true,
+    validthis: true,
+    white: true, // THIS IS TURNED ON - otherwise we have too many dirty check-ins
+    globals: {
+        "$": false,
+        "_": false,
+        "Modernizr": false,
+        "define": false,
+        "require": false,
+        "requirejs": false,
+        "ox": false,
+        "assert": false,
+        "include": false,
+        "doT": false,
+        "Backbone": false,
+        "BigScreen": false,
+        "MediaElementPlayer": false,
+        "tinyMCE": false
+    }
+};
 
-jshintOptions = jshintOptions.replace(/\/\*(?:(?!\*\/)[\s\S])*\*\//g, "");
-jshintOptions = jshintOptions.replace(/\/\/[^\n\r]*/g, "");
-jshintOptions = JSON.parse(jshintOptions);
+if (path.existsSync('./.jshintrc') && false) {
+    jshintOptions = fs.readFileSync('./.jshintrc').toString();
+
+    jshintOptions = jshintOptions.replace(/\/\*(?:(?!\*\/)[\s\S])*\*\//g, "");
+    jshintOptions = jshintOptions.replace(/\/\/[^\n\r]*/g, "");
+    jshintOptions = JSON.parse(jshintOptions);
+}
 
 function hint (data, getSrc) {
-    var globals = jshintOptions.globals;
-    delete jshintOptions.globals;
-    if (jshint(data, jshintOptions, globals)) return data;
+    var options = JSON.parse(JSON.stringify(jshintOptions)),
+        globals = options.globals;
+    delete options.globals;
+    if (jshint(data, options, globals)) return data;
     fs.writeFileSync('tmp/errorfile.js', data, 'utf8');
     console.error(jshint.errors.length + " Errors:");
     for (var i = 0; i < jshint.errors.length; i++) {
