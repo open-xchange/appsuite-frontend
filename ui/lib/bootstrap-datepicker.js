@@ -350,28 +350,28 @@
 		},
 
 		place: function(){
-						if(this.isInline) return;
-			var zIndex = parseInt(this.element.parents().filter(function() {
-							return $(this).css('z-index') != 'auto';
-						}).first().css('z-index'), 10) + 10,
-				scrollTopContainer = $(this.element).closest('.window-content.scrollable').scrollTop(),
-				top,
-				left;
+            if(this.isInline) return;
+            var zIndex = parseInt(this.element.parents().filter(function() {
+                            return $(this).css('z-index') != 'auto';
+                        }).first().css('z-index'), 10) + 10,
+                scrollTopContainer = $(this.element).closest('.window-content.scrollable').scrollTop(),
+                top,
+                left;
 
-			if (this.parentEl) {
-				var height = this.component ? this.component.outerHeight(true) : this.element.outerHeight(true);
-				top = $(this.element).position().top + height;
-				left = $(this.element).position().left;
-			} else {
-				top = $(this.element).offset().top;
-				left = $(this.element).offset().left;
-			}
+            if (this.parentEl) {
+                var height = this.component ? this.component.outerHeight(true) : this.element.outerHeight(true);
+                top = $(this.element).position().top + height;
+                left = $(this.element).position().left;
+            } else {
+                top = $(this.element).offset().top;
+                left = $(this.element).offset().left;
+            }
 
-			this.picker.css({
-				top: top + scrollTopContainer,
-				left: left,
-				zIndex: zIndex
-			});
+            this.picker.css({
+                top: top + scrollTopContainer,
+                left: left,
+                zIndex: zIndex
+            });
 		},
 
 		_allow_update: true,
