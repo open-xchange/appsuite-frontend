@@ -54,6 +54,9 @@ define('io.ox/files/list/perspective',
             },
             set: function (data, fields) {
                 var title = data.filename || data.title || '\u00A0';
+                this.attr({
+                    'aria-label': title
+                });
                 fields.name.text(cut(title));
             }
         });

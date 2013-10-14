@@ -59,7 +59,9 @@ define('io.ox/calendar/view-grid-template',
                 };
             },
             set: function (data, fields) {
-                var self = this;
+                var self = this,
+                    a11yLabel = '',
+                    tmpStr = '';
                 if (data.folder_id) {//conflicts with appointments, where you aren't a participant don't have a folder_id.
                     var folder = folderAPI.get({ folder: data.folder_id });
                     folder.done(function (folder) {
@@ -69,7 +71,7 @@ define('io.ox/calendar/view-grid-template',
                 }
 
                 fields.title
-                    .text(data.title ? gt.noI18n(data.title || '\u00A0') : gt('Private'));
+                    .text(a11yLabel = data.title ? gt.noI18n(data.title || '\u00A0') : gt('Private'));
                 if (data.conflict) {
                     fields.title
                         .append(
@@ -78,9 +80,14 @@ define('io.ox/calendar/view-grid-template',
                             $.txt(')')
                         );
                 }
+                if (data.location) {
+                    a11yLabel += ', ' + data.location;
+                }
                 fields.location.text(gt.noI18n(data.location || '\u00A0'));
-                fields.time.text(util.getTimeInterval(data));
-                fields.date.text(gt.noI18n(util.getDateInterval(data)));
+                fields.time.text(tmpStr = gt.noI18n(util.getTimeInterval(data)));
+                a11yLabel += ', ' + tmpStr;
+                fields.date.text(tmpStr = gt.noI18n(util.getDateInterval(data)));
+                a11yLabel += ', ' + tmpStr;
                 fields.shown_as.get(0).className = 'shown_as label ' + util.getShownAsLabel(data);
                 if (data.participants && data.conflict) {
                     var conflicts = $('<span>');
@@ -133,6 +140,7 @@ define('io.ox/calendar/view-grid-template',
                 } else {
                     fields.isPrivate.hide();
                 }
+                this.attr({ 'aria-label': a11yLabel });
             }
         },
 

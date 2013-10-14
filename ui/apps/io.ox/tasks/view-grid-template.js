@@ -42,7 +42,8 @@ define('io.ox/tasks/view-grid-template',
                 },
 
                 set: function (data, fields, index) {
-                    fields.title.text(_.noI18n(data.title));
+                    var a11yLabel = '';
+                    fields.title.text(a11yLabel = _.noI18n(data.title));
                     fields.end_date.text(_.noI18n(data.end_date));
                     fields.status.attr('class', 'status ' + data.badge) //important. with addClass old classes aren't removed correctly
                         .text(data.status || _.noI18n('\u00A0'));
@@ -57,7 +58,10 @@ define('io.ox/tasks/view-grid-template',
                     } else {
                         fields.progress.hide();
                     }
-                    this.attr('data-index', index);
+                    this.attr({
+                        'data-index': index,
+                        'aria-label': a11yLabel
+                    });
                 }
             },
 
