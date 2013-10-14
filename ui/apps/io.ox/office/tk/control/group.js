@@ -478,7 +478,7 @@ define('io.ox/office/tk/control/group',
 
             // enable/disable the entire group node with all its descendants
             if (this.isEnabled() !== enabled) {
-                groupNode.toggleClass(Utils.DISABLED_CLASS, !enabled);
+                groupNode.toggleClass(Utils.DISABLED_CLASS, !enabled).attr('aria-disabled', !enabled);
                 this.trigger('group:enable', enabled);
             }
             return this;
