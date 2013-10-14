@@ -188,33 +188,16 @@ function jsFilter (data) {
 utils.fileType("source").addHook("filter", jsFilter)
     .addHook("define", i18n.potScanner);
 
-var jshintOptions = {
-    bitwise: false,
-    browser: true,
-    debug: debug,
-    devel: true,
-    eqeqeq: true,
-    evil: true,
-    forin: false,
-    immed: true,
-    loopfunc: false,
-    nomen: false,
-    onevar: false,
-    plusplus: false,
-    regexp: false,
-    regexdash: true,
-    shadow: true,
-    strict: true,
-    trailing: true,
-    undef: true,
-    validthis: true,
-    white: true, // THIS IS TURNED ON - otherwise we have too many dirty check-ins
-    predef: ['$', '_', 'Modernizr', 'define', 'require', 'requirejs', 'ox', 'assert',
-             'include', 'doT', 'Backbone', 'BigScreen', 'MediaElementPlayer', 'tinyMCE']
-};
+var jshintOptions = fs.readFileSync('./.jshintrc').toString();
+
+jshintOptions = jshintOptions.replace(/\/\*(?:(?!\*\/)[\s\S])*\*\//g, "");
+jshintOptions = jshintOptions.replace(/\/\/[^\n\r]*/g, "");
+jshintOptions = JSON.parse(jshintOptions);
 
 function hint (data, getSrc) {
-    if (jshint(data, jshintOptions)) return data;
+    var globals = jshintOptions.globals;
+    delete jshintOptions.globals;
+    if (jshint(data, jshintOptions, globals)) return data;
     fs.writeFileSync('tmp/errorfile.js', data, 'utf8');
     console.error(jshint.errors.length + " Errors:");
     for (var i = 0; i < jshint.errors.length; i++) {
