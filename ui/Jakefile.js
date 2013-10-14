@@ -328,6 +328,17 @@ utils.copy(utils.list("lib/node_modules/emoji/lib", ["emoji.js", "emoji.css", "e
 
 utils.copy(utils.list("lib", "hopscotch/", ["hopscotch-0.1.js", "hopscotch-0.1.css", "sprite-*.png"]), {to: utils.dest("apps") });
 
+// tinyMCE
+
+utils.copy(utils.list("lib", "moxiecode/"), {to: utils.dest("apps") });
+
+// view-qrcode
+
+utils.copy(utils.list("lib", "view-qrcode.js"), {to: utils.dest("apps/io.ox/contacts/") });
+
+// tk/charts
+
+utils.copy(utils.list("lib", "charts.js"), {to: utils.dest("apps/io.ox/core/tk/") });
 
 //online help
 
