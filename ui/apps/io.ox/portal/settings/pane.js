@@ -269,7 +269,7 @@ define('io.ox/portal/settings/pane',
                 title = widgets.getTitle(data, point.prop('title'));
             this.append(
                 // widget title
-                $('<div>')
+                $('<span>')
                 .addClass('widget-title pull-left widget-color-' + (data.color || 'black') + ' widget-' + data.type)
                 .text(title)
             );
