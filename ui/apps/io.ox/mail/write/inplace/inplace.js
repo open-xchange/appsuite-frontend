@@ -32,7 +32,10 @@ define('io.ox/mail/write/inplace/inplace',
 
         onSend: function () {
 
-            var model = this.model, content = this.$el.find('.editor').val();
+            var model = this.model, content = $.trim(this.$el.find('.editor').val());
+
+            // don't send if message is empty
+            if (content === '') return false;
 
             // get sender address
             accountAPI.getPrimaryAddressFromFolder(this.model.get('account_id') || this.mail.folder_id).done(function (from) {
@@ -50,6 +53,8 @@ define('io.ox/mail/write/inplace/inplace',
                 };
                 api.send(data).fail(notifications.yell);
             });
+
+            return true;
         },
 
         renderContent: function () {
@@ -93,7 +98,12 @@ define('io.ox/mail/write/inplace/inplace',
             if (!_.isObject(options)) return;
             if (!_.isObject(options.mail)) return;
 
-            var dialog = new dialogs.ModalDialog({ easyOut: false, width: 572, container: options.container || $('body') }); // 572 fits input-xxlarge
+            var dialog = new dialogs.ModalDialog({
+                async: true,
+                container: options.container || $('body'),
+                easyOut: false,
+                width: 572 // 572 fits input-xxlarge
+            });
 
             // show dialog instantly
             var model = new Backbone.Model({ subject: undefined, to: [], cc: [] }),
@@ -102,7 +112,13 @@ define('io.ox/mail/write/inplace/inplace',
             dialog.append(view.render().$el)
                 .addAlternativeButton('cancel', gt('Discard'))
                 .addPrimaryButton('send', gt('Send'), 'send', { classes: 'pull-right' })
-                .on('send', function () { view.onSend(); })
+                .on('send', function () {
+                    if (view.onSend()) {
+                        dialog.close();
+                    } else {
+                        dialog.idle();
+                    }
+                })
                 .show(function () {
                     this.find('.btn-primary').prop('disabled', true);
                     this.find('.editor').focus();

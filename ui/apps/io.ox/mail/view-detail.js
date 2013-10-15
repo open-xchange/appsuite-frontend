@@ -1722,7 +1722,7 @@ define('io.ox/mail/view-detail',
         // collapse selection created by double click
         if (document.getSelection) document.getSelection().collapse(this, 0);
         // load ...
-        require(['io.ox/mail/write/inplace']).done(function (inplace) {
+        require(['io.ox/mail/write/inplace/inplace']).done(function (inplace) {
             var options = { mail: e.data.baton.data };
             if (e.data.baton.app) options.container = e.data.baton.app.getWindow().nodes.outer;
             inplace.reply(options);
