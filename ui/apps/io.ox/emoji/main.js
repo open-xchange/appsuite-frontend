@@ -98,7 +98,7 @@ define('io.ox/emoji/main',
 
             var icon = emoji.EMOJI_MAP[unicode];
 
-            if (!this.category_map[unicode]) {
+            if (!this.category_map[unicode] || !icon) {
                 return undefined;
             }
 
