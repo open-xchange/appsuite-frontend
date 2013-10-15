@@ -19,7 +19,7 @@ define('io.ox/emoji/main',
        'less!io.ox/emoji/emoji.less'
     ], function (emoji, categories, conversions, ext, settings) {
 
-    "use strict";
+    'use strict';
 
     ext.point('3rd.party/emoji/editor_css').extend({
         id: 'unified/icons',
@@ -351,6 +351,7 @@ define('io.ox/emoji/main',
 
         converterFor: function (options, format) {
             var self = this;
+            format =  format || 'html';
 
             options = _.extend({
                 from: 'unified',
@@ -361,7 +362,7 @@ define('io.ox/emoji/main',
                 return _.identity;
             } else if (options.from === 'unified' && options.to === 'pua') {
                 return function (text, format) {
-                    return self.imageTagsToPUA(self.unifiedToImageTag(text), format || 'html');
+                    return self.imageTagsToPUA(self.unifiedToImageTag(text), format);
                 };
             }
             return;

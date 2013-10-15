@@ -17,7 +17,7 @@ define('io.ox/emoji/categories',
        'raw!io.ox/emoji/japan_carrier.json'
     ], function (gt, unified, softbank, japan_carrier) {
 
-    "use strict";
+    'use strict';
 
     return {
 
