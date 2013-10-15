@@ -15,7 +15,6 @@
 define('io.ox/tours/main',
     ['io.ox/core/notifications',
      'gettext!io.ox/tours',
-     'apps/hopscotch/hopscotch-0.1.js',
      'css!hopscotch/hopscotch.css'
     ], function (notifications, gt) {
 
@@ -655,32 +654,34 @@ define('io.ox/tours/main',
         },
 
         runTour: function (tourname) {
-            var tour = tours()[tourname],
-                hs = window.hopscotch;
+            require(['apps/hopscotch/hopscotch-0.1.js']).done(function () {
+                var tour = tours()[tourname],
+                    hs = window.hopscotch;
 
-            if (!tour) {
-                return;
-            }
-            tour.i18n = {
-                prevBtn: '<i class="icon-chevron-left">&nbsp;</i>',
-                nextBtn: '<i class="icon-chevron-right">&nbsp;</i>',
-                doneBtn: '<i class="icon-ok">&nbsp;</i>'
-            };
+                if (!tour) {
+                    return;
+                }
+                tour.i18n = {
+                    prevBtn: '<i class="icon-chevron-left">&nbsp;</i>',
+                    nextBtn: '<i class="icon-chevron-right">&nbsp;</i>',
+                    doneBtn: '<i class="icon-ok">&nbsp;</i>'
+                };
 
-            //RESET
-            hs.endTour(true);
+                //RESET
+                hs.endTour(true);
 
-            // ERROR HANDLING
-            hs.registerHelper('error', function (arg) {
-                console.log('Tour error', arg);
+                // ERROR HANDLING
+                hs.registerHelper('error', function (arg) {
+                    console.log('Tour error', arg);
+                });
+
+                tour.onEnd = function () { window.hopscotch.endTour(true); };
+                tour.showPrevButton = true;
+                tour.showNextButton = true;
+
+                //GO!
+                hs.startTour(tour);
             });
-
-            tour.onEnd = function () { window.hopscotch.endTour(true); };
-            tour.showPrevButton = true;
-            tour.showNextButton = true;
-
-            //GO!
-            hs.startTour(tour);
         }
     };
 
