@@ -57,7 +57,7 @@ define('io.ox/core/extPatterns/links',
         };
 
         if (this.drawDisabled === true) {
-            this.drawDisabled = function (baton) {
+            this.drawDisabled = function () {
                 this.append(
                     $('<span>', { 'data-action': self.id })
                     .addClass('io-ox-action-link disabled')

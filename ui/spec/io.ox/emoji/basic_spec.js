@@ -10,7 +10,7 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 define([
-    'moxiecode/tiny_mce/plugins/emoji/main',
+    'io.ox/emoji/main',
     'settings!io.ox/mail/emoji'
 ], function (emoji, settings) {
     "use strict";

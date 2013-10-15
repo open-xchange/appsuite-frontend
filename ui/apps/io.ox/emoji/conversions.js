@@ -9,7 +9,7 @@
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
-define('moxiecode/tiny_mce/plugins/emoji/conversions',
+define('io.ox/emoji/conversions',
        [], function () {
 
     "use strict";

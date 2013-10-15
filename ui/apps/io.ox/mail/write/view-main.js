@@ -569,7 +569,7 @@ define('io.ox/mail/write/view-main',
             });
             $input.on('change', changeHandler);
 
-            var $infostoreButton = $inputWrap.find('button[data-action="addinternal"]').click(function (e) {
+            $inputWrap.find('button[data-action="addinternal"]').click(function (e) {
                 e.preventDefault();
 
                 require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/cache', 'io.ox/files/api', 'io.ox/core/tk/selection']).done(function (dialogs, folderviews, cache, filesAPI, Selection) {
@@ -594,8 +594,7 @@ define('io.ox/mail/write/view-main',
                             height: 350,
                             addclass: 'add-infostore-file'
                         }),
-                        self = this,
-                        changesArray = [];
+                        self = this;
 
                     Selection.extend(this, filesPane, {});
 

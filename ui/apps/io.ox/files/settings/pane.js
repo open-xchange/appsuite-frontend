@@ -38,7 +38,7 @@ define('io.ox/files/settings/pane',
             // create template
             this._modelBinder = new Backbone.ModelBinder();
 
-            this.model.on('change:showHidden', function (model) {
+            this.model.on('change:showHidden', function () {
                 require(['io.ox/core/api/folder'], function (folderAPI) {
                     folderAPI.clearCaches();
                     folderAPI.trigger('refresh');

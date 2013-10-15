@@ -9,14 +9,14 @@
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
-define('moxiecode/tiny_mce/plugins/emoji/main',
+define('io.ox/emoji/main',
        ['3rd.party/emoji/emoji',
-       'moxiecode/tiny_mce/plugins/emoji/categories',
-       'moxiecode/tiny_mce/plugins/emoji/conversions',
+       'io.ox/emoji/categories',
+       'io.ox/emoji/conversions',
        'io.ox/core/extensions',
        'settings!io.ox/mail/emoji',
        'css!3rd.party/emoji/emoji.css',
-       'less!moxiecode/tiny_mce/plugins/emoji/emoji.less'
+       'less!io.ox/emoji/emoji.less'
     ], function (emoji, categories, conversions, ext, settings) {
 
     "use strict";

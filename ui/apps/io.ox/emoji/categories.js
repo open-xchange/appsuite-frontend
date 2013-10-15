@@ -10,11 +10,11 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define('moxiecode/tiny_mce/plugins/emoji/categories',
+define('io.ox/emoji/categories',
        ['gettext!io.ox/mail/emoji',
-       'raw!moxiecode/tiny_mce/plugins/emoji/unified.json',
-       'raw!moxiecode/tiny_mce/plugins/emoji/softbank.json',
-       'raw!moxiecode/tiny_mce/plugins/emoji/japan_carrier.json'
+       'raw!io.ox/emoji/unified.json',
+       'raw!io.ox/emoji/softbank.json',
+       'raw!io.ox/emoji/japan_carrier.json'
     ], function (gt, unified, softbank, japan_carrier) {
 
     "use strict";

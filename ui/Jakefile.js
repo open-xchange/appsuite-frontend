@@ -24,7 +24,7 @@ var pro = require("./lib/uglify-js/uglify-js").uglify;
 var ast = require("./lib/build/ast");
 var i18n = require("./lib/build/i18n");
 var rimraf = require("./lib/rimraf/rimraf");
-var jshint = require("./lib/jshint").JSHINT;
+var jshint = require("./lib/jshint/jshint").JSHINT;
 
 console.info('Node version:', process.version);
 console.info("Build path: " + utils.builddir);
@@ -190,6 +190,7 @@ utils.fileType("source").addHook("filter", jsFilter)
 
 var jshintOptions = {
     bitwise: false,
+    boss: true,
     browser: true,
     debug: debug,
     devel: true,
@@ -198,6 +199,7 @@ var jshintOptions = {
     forin: false,
     immed: true,
     loopfunc: false,
+    node: true,
     nomen: false,
     onevar: false,
     plusplus: false,
@@ -209,12 +211,37 @@ var jshintOptions = {
     undef: true,
     validthis: true,
     white: true, // THIS IS TURNED ON - otherwise we have too many dirty check-ins
-    predef: ['$', '_', 'Modernizr', 'define', 'require', 'requirejs', 'ox', 'assert',
-             'include', 'doT', 'Backbone', 'BigScreen', 'MediaElementPlayer', 'tinyMCE']
+    globals: {
+        "$": false,
+        "_": false,
+        "Modernizr": false,
+        "define": false,
+        "require": false,
+        "requirejs": false,
+        "ox": false,
+        "assert": false,
+        "include": false,
+        "doT": false,
+        "Backbone": false,
+        "BigScreen": false,
+        "MediaElementPlayer": false,
+        "tinyMCE": false
+    }
 };
 
+if (path.existsSync('./.jshintrc') && false) {
+    jshintOptions = fs.readFileSync('./.jshintrc').toString();
+
+    jshintOptions = jshintOptions.replace(/\/\*(?:(?!\*\/)[\s\S])*\*\//g, "");
+    jshintOptions = jshintOptions.replace(/\/\/[^\n\r]*/g, "");
+    jshintOptions = JSON.parse(jshintOptions);
+}
+
 function hint (data, getSrc) {
-    if (jshint(data, jshintOptions)) return data;
+    var options = JSON.parse(JSON.stringify(jshintOptions)),
+        globals = options.globals;
+    delete options.globals;
+    if (jshint(data, options, globals)) return data;
     fs.writeFileSync('tmp/errorfile.js', data, 'utf8');
     console.error(jshint.errors.length + " Errors:");
     for (var i = 0; i < jshint.errors.length; i++) {
@@ -328,6 +355,17 @@ utils.copy(utils.list("lib/node_modules/emoji/lib", ["emoji.js", "emoji.css", "e
 
 utils.copy(utils.list("lib", "hopscotch/", ["hopscotch-0.1.js", "hopscotch-0.1.css", "sprite-*.png"]), {to: utils.dest("apps") });
 
+// tinyMCE
+
+utils.copy(utils.list("lib", "moxiecode/"), {to: utils.dest("apps") });
+
+// view-qrcode
+
+utils.copy(utils.list("lib", "view-qrcode.js"), {to: utils.dest("apps/io.ox/contacts/") });
+
+// tk/charts
+
+utils.copy(utils.list("lib", "charts.js"), {to: utils.dest("apps/io.ox/core/tk/") });
 
 //online help
 

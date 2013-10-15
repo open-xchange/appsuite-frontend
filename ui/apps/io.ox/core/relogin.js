@@ -56,8 +56,8 @@ define('io.ox/core/relogin',
                     .on('cancel', function () {
                         ox.trigger('relogin:cancel');
                         var location = settings.get('customLocations/logout'),
-                            logoutLocation = location || ox.serverConfig.logoutLocation || ox.logoutLocation || "";
-                        logoutLocation = logoutLocation.replace("[hostname]", window.location.hostname);
+                            logoutLocation = location || ox.serverConfig.logoutLocation || ox.logoutLocation || '';
+                        logoutLocation = logoutLocation.replace('[hostname]', window.location.hostname);
                         _.url.redirect(logoutLocation);
                     })
                     .on('relogin', function () {

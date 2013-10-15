@@ -82,7 +82,7 @@ define('io.ox/core/main',
                             logoutLocation = location || (fallback + (opt.autologout ? '#autologout=true' : ''));
                             // Substitute some variables
                             // [hostname], [login]
-                        logoutLocation = logoutLocation.replace("[hostname]", window.location.hostname);
+                        logoutLocation = logoutLocation.replace('[hostname]', window.location.hostname);
                         _.url.redirect(logoutLocation);
                     });
                 },
