@@ -574,7 +574,7 @@ define('io.ox/core/tk/attachments',
                                 })
                         ),
                         $('<a>', {'data-dismiss': 'fileupload', tabindex: 1, href: '#', role: 'button', 'aria-label': 'cancel'}).addClass('btn fileupload-exists').text(gt('Cancel')),
-                        (options.displayButton ?                                                       //Marko added: attribute 'aria-label'
+                        (options.displayButton ?                                                         //Marko added: attribute 'aria-label'
                             $('<button type="button" class="btn btn-primary" data-action="upload" tabindex="1">')
                                 .text(gt('Upload file')).hide() : ''
                         ),
