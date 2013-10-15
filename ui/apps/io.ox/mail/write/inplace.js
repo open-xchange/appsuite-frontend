@@ -54,9 +54,11 @@ define('io.ox/mail/write/inplace',
 
         renderContent: function () {
             // subject
-            this.$el.find('.subject').text(
-                $.trim(this.model.get('subject')) || '\u00A0'
-            );
+            if (this.model.get('subject') !== undefined) {
+                this.$el.find('.subject').text(
+                    $.trim(this.model.get('subject')) || '\u00A0'
+                );
+            }
             // recipients
             var list = [].concat(this.model.get('to'), this.model.get('cc'));
             if (list.length) {
@@ -94,7 +96,7 @@ define('io.ox/mail/write/inplace',
             var dialog = new dialogs.ModalDialog({ easyOut: false, width: 572, container: options.container }); // 572 fits input-xxlarge
 
             // show dialog instantly
-            var model = new Backbone.Model({ subject: '', to: [], cc: [] }),
+            var model = new Backbone.Model({ subject: undefined, to: [], cc: [] }),
                 view = new InplaceView({ model: model, mail: options.mail, el: dialog.getContentNode() });
 
             dialog.append(view.render().$el)
@@ -102,12 +104,14 @@ define('io.ox/mail/write/inplace',
                 .addPrimaryButton('send', gt('Send'), 'send', { classes: 'pull-right' })
                 .on('send', function () { view.onSend(); })
                 .show(function () {
+                    this.find('.btn-primary').prop('disabled', true);
                     this.find('.editor').focus();
                 });
 
             // fetch reply data
             api.replyall(api.reduce(options.mail)).then(
                 function success(data) {
+                    dialog.getPopup().find('.btn-primary').prop('disabled', false);
                     model.set(data);
                 },
                 function fail(e) {
