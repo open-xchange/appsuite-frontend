@@ -91,7 +91,7 @@ define('io.ox/portal/settings/pane',
         this.append(
             $('<div class="controls">').append(
                 $('<div class="btn-group pull-right">').append(
-                    $('<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#" aria-haspopup="true" tabindex="1">').append(
+                    $('<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" role="button" href="#" aria-haspopup="true" tabindex="1">').append(
                         $.txt(gt('Add widget')), $.txt(' '),
                         $('<span class="caret">')
                     ),
@@ -161,9 +161,21 @@ define('io.ox/portal/settings/pane',
             pink:       gt('Pink')
         };
 
-        return function (activeColor) {
+        return function (activeColor, title) {
             return $('<div class="action dropdown colors">').append(
-                    appendIconText($('<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" tabindex="1">'), gt('Color'), 'color', activeColor),
+                appendIconText(
+                    $('<a>').attr({
+                        href: '#',
+                        role: 'button',
+                        tabindex: 1,
+                        'data-toggle': 'dropdown',
+                        'aria-haspopup': 'true',
+                        'aria-label': title + ', ' + gt('Color')
+                    }).addClass('dropdown-toggle'),
+                    gt('Color'),
+                    'color',
+                    activeColor
+                ),
                 $('<ul class="dropdown-menu" role="menu">').append(
                     _(colorNames).map(function (name, color) {
                         return $('<li>').append(
@@ -203,32 +215,48 @@ define('io.ox/portal/settings/pane',
             list.find('[data-widget-id="' + id + '"] .drag-handle').focus();
         }
 
-        if (e.which === 38 && index > 0) { // up
-            e.preventDefault();
-            current.insertBefore(current.prev());
-            cont();
+        switch (e.which) {
+        case 38:
+            if (index > 0) { // up
+                e.preventDefault();
+                current.insertBefore(current.prev());
+                cont();
+            }
+            break;
+        case 40:
+            if (index < items.length) { // down
+                e.preventDefault();
+                current.insertAfter(current.next());
+                cont();
+            }
+            break;
+        default:
+            break;
         }
-        else if (e.which === 40 && index < items.length) { // down
-            e.preventDefault();
-            current.insertAfter(current.next());
-            cont();
-        }
+
     }
 
     ext.point(POINT + '/view').extend({
         id: 'drag-handle',
         index: 200,
-        draw: function () {
+        draw: function (baton) {
+            var data = baton.model.toJSON(),
+                point = ext.point(baton.view.point),
+                title = widgets.getTitle(data, point.prop('title'));
             this
-            .addClass('draggable')
-            .attr('title', gt('Drag to reorder widget'))
-            .append(
-                $('<a href="#" class="drag-handle" tabindex="1">')
-                .attr('aria-label', gt('Use cursor keys to change the item position'))
-                .append($('<i class="icon-reorder">'))
-                .on('click', $.preventDefault)
-                .on('keydown', dragViaKeyboard)
-            );
+                .addClass('draggable')
+                .attr('title', gt('Drag to reorder widget'))
+                .append(
+                    $('<a href="#" class="drag-handle">')
+                    .attr({
+                        'aria-label': title + ', ' + gt('Use cursor keys to change the item position'),
+                        role: 'button',
+                        tabindex: 1
+                    })
+                    .append($('<i class="icon-reorder">'))
+                    .on('click', $.preventDefault)
+                    .on('keydown', dragViaKeyboard)
+                );
         }
     });
 
@@ -252,8 +280,9 @@ define('io.ox/portal/settings/pane',
         id: 'controls',
         index: 400,
         draw: function (baton) {
-
-            var data = baton.model.toJSON();
+            var data = baton.model.toJSON(),
+                point = ext.point(baton.view.point),
+                title = widgets.getTitle(data, point.prop('title'));
 
             if (data.protectedWidget) {
                 // early exit if protected Widget
@@ -261,16 +290,31 @@ define('io.ox/portal/settings/pane',
                 return;
             }
 
-            var $controls = $('<div class="widget-controls">');
-
+            var $controls = $('<div class="widget-controls">'),
+                $link = $('<a>').attr({
+                            href: '#',
+                            role: 'button',
+                            tabindex: 1,
+                            'data-action': 'toggle'
+                        }).addClass('action');
             if (data.enabled) {
                 // editable?
                 if (baton.view.options.editable) {
                     $controls.append(
-                        appendIconText($('<a href="#" class="action" data-action="edit" tabindex="1">'), gt('Edit'), 'edit')
+                        appendIconText(
+                            $('<a>').attr({
+                                href: '#',
+                                role: 'button',
+                                tabindex: 1,
+                                'data-action': 'edit',
+                                'aria-label': title + ', ' + gt('Edit')
+                            }).addClass('action'),
+                            gt('Edit'),
+                            'edit'
+                        )
                     );
                 }
-                var $node = drawChangeColor(data.color);
+                var $node = drawChangeColor(data.color, title);
                 // Delegate fix for mobile dropdowns.
                 // On mobile we need to bind the action directly to the hrefs
                 // as the delegate is bound to parent element which is not longer
@@ -282,17 +326,23 @@ define('io.ox/portal/settings/pane',
                 }
                 $controls.append(
                     $node,
-                    appendIconText($('<a href="#" class="action" data-action="toggle" tabindex="1">'), gt('Disable'), 'disable')
+                    appendIconText($link.attr({ 'aria-label': title + ', ' + gt('Disable')}), gt('Disable'), 'disable')
                 );
             } else {
                 $controls.append(
-                    appendIconText($('<a href="#" class="action" data-action="toggle" tabindex="1">'), gt('Enable'), 'enable')
+                    appendIconText($link.attr({ 'aria-label': title + ', ' + gt('Enable')}), gt('Enable'), 'enable')
                 );
             }
 
             $controls.append(
                 // close (has float: right)
-                $('<a href="#" class="remove-widget" data-action="remove" tabindex="1"><i class="icon-trash"/></a>')
+                $('<a>').attr({
+                        href: '#',
+                        role: 'button',
+                        tabindex: 1,
+                        'data-action': 'remove',
+                        'aria-label': title + ', ' + gt('remove')
+                    }).append('<i class="icon-trash"/>')
             );
 
             this.append($controls);
@@ -324,6 +374,12 @@ define('io.ox/portal/settings/pane',
                 containment: this,
                 delay: 150,
                 handle: '.drag-handle',
+                start: function (e, ui) {
+                    ui.item.attr('aria-grabbed', 'true');
+                },
+                stop: function (e, ui) {
+                    ui.item.attr('aria-grabbed', 'false');
+                },
                 scroll: true,
                 update: function () {
                     widgets.save(list);
