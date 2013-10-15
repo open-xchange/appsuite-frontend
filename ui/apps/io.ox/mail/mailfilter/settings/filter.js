@@ -16,12 +16,10 @@ define('io.ox/mail/mailfilter/settings/filter',
      'io.ox/core/api/mailfilter',
      'io.ox/mail/mailfilter/settings/model',
      'io.ox/core/tk/dialogs',
-     'gettext!io.ox/mail',
      'io.ox/settings/util',
-     'text!io.ox/mail/mailfilter/settings/tpl/listbox.html',
-     'text!io.ox/mail/mailfilter/settings/tpl/filter_select.html',
-     'io.ox/mail/mailfilter/settings/filter/view-form'
-    ], function (ext, api, mailfilterModel, dialogs, gt, settingsUtil, listboxtmpl, tmpl, FilterDetailView) {
+     'io.ox/mail/mailfilter/settings/filter/view-form',
+     'gettext!io.ox/mail'
+    ], function (ext, api, mailfilterModel, dialogs, settingsUtil, FilterDetailView, gt) {
 
     'use strict';
 
@@ -109,12 +107,6 @@ define('io.ox/mail/mailfilter/settings/filter',
         editMailfilter: function ($node) {
 
             var deferred = $.Deferred(),
-
-                staticStrings =  {
-                    BUTTON_ADD: gt('Add new rule'),
-                    TITLE: gt('Mail Filter'),
-                    EMPTY: gt('There is no rule defined')
-                },
                 createExtpointForSelectedFilter = function (args) {
                     ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', args.data.node, args);
                 };
@@ -125,33 +117,51 @@ define('io.ox/mail/mailfilter/settings/filter',
                 var AccountSelectView = Backbone.View.extend({
 
                     _modelBinder: undefined,
-                    initialize: function () {
-                        this.template = doT.template(tmpl);
-                        this._modelBinder = new Backbone.ModelBinder();
 
+                    initialize: function () {
+                        this._modelBinder = new Backbone.ModelBinder();
                     },
+
                     render: function () {
-                        var flagArray = this.model.get('flags');
+                        var flagArray = this.model.get('flags'),
+                            self = this;
 
                         function getEditableState() {
                             if (flagArray) {
-                                var value = flagArray[0] !== 'vacation' && flagArray[0] !== 'autoforward' ? 'editable' : 'fixed';
-                                return value;
+                                return flagArray[0] !== 'vacation' && flagArray[0] !== 'autoforward' ? 'editable' : 'fixed';
                             } else {
                                 return 'editable';
                             }
                         }
-                        this.$el.empty().append(this.template({
-                            id: this.model.get('id'),
-                            state: this.model.get('active') ? { 'value': 'active', 'text': gt('Disable') } : { 'value': 'disabled', 'text': gt('Enable') },
-                            edit: gt('Edit'),
-                            editable: getEditableState()
 
-                        }));
+                        var listItem = $('<li>').attr({
+                                'data-id': self.model.get('id')
+                            })
+                            .addClass('selectable deletable-item ' + getEditableState() + ' ' + (self.model.get('active') ? 'active' : 'disabled'))
+                            .append(
+                                $('<div>').addClass('drag-handle').append(
+                                    $('<i/>').addClass('icon-reorder')
+                                ),
+                                $('<div>').addClass('pull-right').append(function () {
+                                    if (getEditableState() !== 'editable') return;
+                                    $(this).append(
+                                        $('<a>').addClass('action').text(gt('Edit')).attr({
+                                            'data-action': 'edit'
+                                        }),
+                                        $('<a>').addClass('action').text(self.model.get('active') ? gt('Disable') : gt('Enable')).attr({
+                                            'data-action': 'toggle'
+                                        }),
+                                        $('<a>').addClass('close').append($('<i/>').addClass('icon-trash')).attr({
+                                            'data-action': 'delete'
+                                        })
+                                    );
+                                }),
+                                $('<span>').attr('data-property', 'rulename').addClass('list-title')
+                            );
 
-                        this._modelBinder.bind(this.model, this.el, Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property'));
-
-                        return this;
+                        self.$el.empty().append(listItem);
+                        self._modelBinder.bind(this.model, this.el, Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property'));
+                        return self;
                     },
                     events: {
                         'click .deletable-item.editable': 'onSelect'
@@ -168,22 +178,54 @@ define('io.ox/mail/mailfilter/settings/filter',
                 MailfilterEdit = Backbone.View.extend({
 
                     initialize: function () {
-                        this.template = doT.template(listboxtmpl);
                         _.bindAll(this);
-
                         this.collection = collection;
                         this.collection.bind('add', this.render);
                         this.collection.bind('remove', this.render);
-
                     },
+
                     render: function () {
                         var self = this;
-                        self.$el.empty().append(self.template({
-                            strings: staticStrings
-                        }));
+
+                        // <div>
+                        //     <h1 class="no-margin">{{=it.strings.TITLE}}</h1>
+                        // </div>
+                        // <div class="section">
+                        //     <div id="controls">
+                        //         <div class="btn-group pull-right">
+                        //             <button type="button" class="btn btn-primary" data-action="add">{{=it.strings.BUTTON_ADD}}</button>
+                        //         </div>
+                        //     </div>
+                        //     <ol class="widget-list"></ol>
+                        //     <div class="sectioncontent"></div>
+                        // </div>
+
+
+                        // staticStrings =  {
+                        //     BUTTON_ADD: gt('Add new rule'),
+                        //     TITLE: gt('Mail Filter'),
+                        //     EMPTY: gt('There is no rule defined')
+                        // },
+
+                        self.$el.empty().append(
+                            $('<div>').append(
+                                $('<h1>').addClass('no-margin').text(gt('Mail Filter'))
+                            ),
+                            $('<div>').addClass('section').append(
+                                $('<div>').attr('id', 'controls').append(
+                                    $('<div>').addClass('btn-group pull-right').append(
+                                        $('<button>').addClass('btn btn-primary').text(gt('Add new rule')).attr({
+                                            'data-action': 'add'
+                                        })
+                                    )
+                                ),
+                                $('<ol>').addClass('widget-list'),
+                                $('<div>').addClass('sectioncontent')
+                            )
+                        );
 
                         if (this.collection.length === 0) {
-                            self.$el.find('.widget-list').append($('<div>').text(staticStrings.EMPTY));
+                            self.$el.find('.widget-list').append($('<div>').text(gt('There is no rule defined')));
                         } else {
                             this.collection.each(function (item) {
                                 self.$el.find('.widget-list').append(
@@ -269,7 +311,11 @@ define('io.ox/mail/mailfilter/settings/filter',
                             handle: '.drag-handle',
                             scroll: true,
                             delay: 150,
-                            stop: function () {
+                            start: function (e, ui) {
+                                ui.item.attr('aria-grabbed', 'true');
+                            },
+                            stop: function (e, ui) {
+                                ui.item.attr('aria-grabbed', 'false');
                                 var arrayOfFilters = $node.find('li[data-id]'),
                                 data = _.map(arrayOfFilters, function (single) {
                                     return parseInt($(single).attr('data-id'), 10);
@@ -284,7 +330,7 @@ define('io.ox/mail/mailfilter/settings/filter',
 
                 }),
 
-                    mailFilter = new MailfilterEdit();
+                mailFilter = new MailfilterEdit();
                 $node.append(mailFilter.render().$el);
 
 
