@@ -36,7 +36,7 @@ define('io.ox/core/emoji/util', ['settings!io.ox/mail'], function (settings) {
                     forceEmojiIcons: settings.get('emoji/forceEmojiIcons', false)
                 });
             } else {
-                require(['moxiecode/tiny_mce/plugins/emoji/main'], function (code) {
+                require(['io.ox/emoji/main'], function (code) {
                     emoji = code;
                 });
             }
