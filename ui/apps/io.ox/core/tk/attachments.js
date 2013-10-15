@@ -561,10 +561,10 @@ define('io.ox/core/tk/attachments',
                             $('<i>').addClass('icon-file fileupload-exists'),
                             $('<span>').addClass('fileupload-preview')
                         ),
-                        $('<span>').addClass('btn btn-file').append(
+                        $('<span>').attr({tabIndex: "1", 'role': 'button'}).addClass('btn btn-file').append( //Marko added: attributes "tabindex", "role"
                             icon,
                             $('<span>').addClass('fileupload-new').text(options.buttontext),
-                            $('<span>').addClass('fileupload-exists').text(gt('Change')),
+                            $('<span>').attr({'role': 'button', 'aria-label': 'Change'}).addClass('fileupload-exists').text(gt('Change')), //Marko added: attributes "role", "aria-label"
                             input = $('<input name="file" type="file" role="button">')
                                 .prop({
                                     multiple: options.multi
@@ -573,8 +573,8 @@ define('io.ox/core/tk/attachments',
                                     tabindex: options.tabindex
                                 })
                         ),
-                        $('<a>', {'data-dismiss': 'fileupload', tabindex: 1, href: '#', role: 'button'}).addClass('btn fileupload-exists').text(gt('Cancel')),
-                        (options.displayButton ?
+                        $('<a>', {'data-dismiss': 'fileupload', tabindex: 1, href: '#', role: 'button', 'aria-label': 'cancel'}).addClass('btn fileupload-exists').text(gt('Cancel')),
+                        (options.displayButton ?                                                      //Marko added: attribute 'aria-label'
                             $('<button type="button" class="btn btn-primary" data-action="upload" tabindex="1">')
                                 .text(gt('Upload file')).hide() : ''
                         ),
