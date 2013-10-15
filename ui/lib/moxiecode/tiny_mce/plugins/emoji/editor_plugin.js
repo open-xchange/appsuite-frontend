@@ -65,8 +65,6 @@
                 ed.execCommand('mceInsertEmoji', true, { event: e, editor: ed });
             }
         });
-
-        ed.contentCSS.push(url + '/emoji.less');
     }
 
     function getInfo() {
