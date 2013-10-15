@@ -10,7 +10,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/write/inplace',
+define('io.ox/mail/write/inplace/inplace',
     ['io.ox/mail/api',
      'io.ox/core/api/account',
      'io.ox/core/tk/dialogs',
@@ -18,7 +18,7 @@ define('io.ox/mail/write/inplace',
      'io.ox/core/util',
      'io.ox/backbone/mini-views/abstract',
      'gettext!io.ox/mail',
-     'less!io.ox/mail/write/inplace.less'
+     'less!io.ox/mail/write/inplace/inplace.less'
     ], function (api, accountAPI, dialogs, notifications, util, AbstractView, gt) {
 
     'use strict';
