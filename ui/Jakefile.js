@@ -229,7 +229,7 @@ var jshintOptions = {
     }
 };
 
-if (path.existsSync('./.jshintrc') && false) {
+if (path.existsSync('./.jshintrc')) {
     jshintOptions = fs.readFileSync('./.jshintrc').toString();
 
     jshintOptions = jshintOptions.replace(/\/\*(?:(?!\*\/)[\s\S])*\*\//g, "");
