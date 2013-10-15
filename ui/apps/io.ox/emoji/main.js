@@ -312,8 +312,8 @@ define('io.ox/emoji/main',
 
             var node = $('<div>').append(html);
 
-            node.find('img[data-emoji-unicode]').each(function (index, node) {
-                $(node).replaceWith($(node).attr('data-emoji-unicode'));
+            node.find('img[data-emoji-unicode]').each(function () {
+                $(this).replaceWith($(this).attr('data-emoji-unicode'));
             });
 
             return node.html();
