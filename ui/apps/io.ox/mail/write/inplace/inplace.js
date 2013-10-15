@@ -93,7 +93,7 @@ define('io.ox/mail/write/inplace',
             if (!_.isObject(options)) return;
             if (!_.isObject(options.mail)) return;
 
-            var dialog = new dialogs.ModalDialog({ easyOut: false, width: 572, container: options.container }); // 572 fits input-xxlarge
+            var dialog = new dialogs.ModalDialog({ easyOut: false, width: 572, container: options.container || $('body') }); // 572 fits input-xxlarge
 
             // show dialog instantly
             var model = new Backbone.Model({ subject: undefined, to: [], cc: [] }),

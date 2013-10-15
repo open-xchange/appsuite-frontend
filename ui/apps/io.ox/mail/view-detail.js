@@ -716,7 +716,7 @@ define('io.ox/mail/view-detail',
                     function (data) {
                         // replace placeholder with mail content
                         copyThreadData(data, baton.data);
-                        node.replaceWith(that.draw(ext.Baton({ data: data, options: baton.options })));
+                        node.replaceWith(that.draw(ext.Baton({ data: data, app: baton.app, options: baton.options })));
                         baton = null;
                     },
                     function () {
@@ -1734,7 +1734,7 @@ define('io.ox/mail/view-detail',
         index: 'last',
         draw: function (baton) {
             if (_.device('small')) return;
-            this.on('dblclick', '.content', { baton: baton }, quickReply);
+            this.on('dblclick', '.subject', { baton: baton }, quickReply);
         }
     });
 
