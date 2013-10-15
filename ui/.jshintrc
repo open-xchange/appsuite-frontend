@@ -29,6 +29,7 @@
 
     // Custom Globals
     "globals": {
+        "$": false,
         "ox": false,
         "_": false,
         "Modernizr": false,
