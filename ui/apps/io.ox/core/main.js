@@ -232,7 +232,7 @@ define('io.ox/core/main',
             if (_.isString(label)) {
                 return $('<a href="#" class="apptitle" tabindex="1" role="menuitem">').text(gt.pgettext('app', label));
             } else if (label[0].tagName === 'I') {
-                return $('<a href="#" class="apptitle" tabindex="1">').append(label);
+                return $('<a href="#" class="apptitle" tabindex="1" role="menuitem">').append(label);
             } else {
                 return label;
             }
