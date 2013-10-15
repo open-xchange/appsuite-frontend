@@ -134,6 +134,11 @@ define('io.ox/core/main',
         launchers = $('.launchers', topbar),
         launcherDropdown = $('.launcher-dropdown ul', topbar);
 
+    $('a.dropdown-toggle', topbar).attr({
+        'aria-label': gt('Launcher dropdown. Press [enter] to jump to the dropdown.'),
+        'aria-role': 'menuitem'
+    });
+
     // whatever ...
     gt.pgettext('app', 'Portal');
     gt.pgettext('app', 'Mail');
@@ -225,7 +230,7 @@ define('io.ox/core/main',
         //construct
         node.append(function () {
             if (_.isString(label)) {
-                return $('<a href="#" class="apptitle" tabindex="1">').text(gt.pgettext('app', label));
+                return $('<a href="#" class="apptitle" tabindex="1" role="menuitem">').text(gt.pgettext('app', label));
             } else if (label[0].tagName === 'I') {
                 return $('<a href="#" class="apptitle" tabindex="1">').append(label);
             } else {
@@ -479,7 +484,7 @@ define('io.ox/core/main',
 
         function addUserContent(model, launcher, first) {
             var ariaBasicLabel = gt('close for '),
-                quitApp = $('<a href="#" class="closelink" tabindex="1" aria-label="' + ariaBasicLabel +  model.get('title') + '">').append(
+                quitApp = $('<a href="#" class="closelink" tabindex="1" role="button" aria-label="' + ariaBasicLabel +  model.get('title') + '">').append(
                     $('<i class="icon-remove">')
                 ).on('click', function (e) {
                 e.stopImmediatePropagation();
@@ -527,7 +532,8 @@ define('io.ox/core/main',
                     href: '#',
                     'data-app-name': name,
                     'data-app-guid': model.guid,
-                    tabindex: 1
+                    tabindex: 1,
+                    'role': 'menuitem'
                 })
                 .text(gt.pgettext('app', title))
             );
