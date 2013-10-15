@@ -139,7 +139,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                             })
                             .addClass('selectable deletable-item ' + getEditableState() + ' ' + (self.model.get('active') ? 'active' : 'disabled'))
                             .append(
-                                $('<div>').addClass('drag-handle').append(
+                                $('<a>').addClass('drag-handle').append(
                                     $('<i/>').addClass('icon-reorder')
                                 ),
                                 $('<div>').addClass('pull-right').append(function () {
@@ -186,26 +186,6 @@ define('io.ox/mail/mailfilter/settings/filter',
 
                     render: function () {
                         var self = this;
-
-                        // <div>
-                        //     <h1 class="no-margin">{{=it.strings.TITLE}}</h1>
-                        // </div>
-                        // <div class="section">
-                        //     <div id="controls">
-                        //         <div class="btn-group pull-right">
-                        //             <button type="button" class="btn btn-primary" data-action="add">{{=it.strings.BUTTON_ADD}}</button>
-                        //         </div>
-                        //     </div>
-                        //     <ol class="widget-list"></ol>
-                        //     <div class="sectioncontent"></div>
-                        // </div>
-
-
-                        // staticStrings =  {
-                        //     BUTTON_ADD: gt('Add new rule'),
-                        //     TITLE: gt('Mail Filter'),
-                        //     EMPTY: gt('There is no rule defined')
-                        // },
 
                         self.$el.empty().append(
                             $('<div>').append(
