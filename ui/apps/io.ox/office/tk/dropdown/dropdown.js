@@ -100,7 +100,8 @@ define('io.ox/office/tk/dropdown/dropdown',
             getFocusableHandler = Utils.getFunctionOption(options, 'getFocusableHandler', _.identity),
 
             // the drop-down button
-            menuButton = Utils.createButton((caretMode === 'only') ? {} : options).addClass('dropdown-button'),
+            tooltip = Utils.getStringOption(options, 'tooltip', ''),
+            menuButton = Utils.createButton((caretMode === 'only') ? {tooltip: tooltip} : options).addClass('dropdown-button'),
 
             // the drop-down menu element containing the menu view component
             menuNode = $('<div>').addClass('io-ox-office-main dropdown-container'),

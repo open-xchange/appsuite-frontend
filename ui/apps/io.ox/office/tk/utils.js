@@ -2989,7 +2989,7 @@ define.async('io.ox/office/tk/utils',
     Utils.createTextField = function (options) {
         var type = Modernizr.touch ? Utils.getStringOption(options, 'keyboard', 'text') : 'text',
             textField = Utils.createControl('input', { type: type, tabindex: 0 }, options);
-        return textField.attr('placeholder', Utils.getStringOption(options, 'placeholder', ''));
+        return textField.attr({'placeholder': Utils.getStringOption(options, 'placeholder', ''), 'title': Utils.getStringOption(options, 'tooltip', '')});
     };
 
     /**

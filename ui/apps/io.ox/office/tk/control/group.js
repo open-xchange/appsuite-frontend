@@ -575,7 +575,7 @@ define('io.ox/office/tk/control/group',
 
         // formatting and tool tip
         groupNode.addClass(Utils.getStringOption(options, 'classes', ''));
-        Utils.setControlTooltip(groupNode, Utils.getStringOption(options, 'tooltip'));
+        //Utils.setControlTooltip(groupNode, Utils.getStringOption(options, 'tooltip'));
 
         // add event handlers
         groupNode.on({
