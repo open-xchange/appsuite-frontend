@@ -561,7 +561,7 @@ define('io.ox/core/tk/attachments',
                             $('<i>').addClass('icon-file fileupload-exists'),
                             $('<span>').addClass('fileupload-preview')
                         ),
-                        $('<span>').attr({tabIndex: "1", 'role': 'button'}).addClass('btn btn-file').append( //Marko added: attributes "tabindex", "role"
+                        $('<span>').attr({tabIndex: '1', 'role': 'button'}).addClass('btn btn-file').append( //Marko added: attributes "tabindex", "role"
                             icon,
                             $('<span>').addClass('fileupload-new').text(options.buttontext),
                             $('<span>').attr({'role': 'button', 'aria-label': 'Change'}).addClass('fileupload-exists').text(gt('Change')), //Marko added: attributes "role", "aria-label"
