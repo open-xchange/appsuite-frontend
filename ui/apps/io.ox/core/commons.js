@@ -71,12 +71,16 @@ define('io.ox/core/commons',
                     // draw
                     var baton = ext.Baton({ id: id, grid: grid, selection: selection });
                     node.idle().empty().append(function () {
-                        var container = (api ? $.createViewContainer(selection, api) : $('<div>'))
-                            .on('redraw', function () {
-                                ext.point('io.ox/links/multi-selection').invoke('draw', $(this).empty(), baton);
-                            })
-                            .addClass('io-ox-multi-selection');
-                        ext.point('io.ox/links/multi-selection').invoke('draw', container, baton);
+                        var container, box;
+                        container = (api ? $.createViewContainer(selection, api) : $('<div>'))
+                        .on('redraw', function () {
+                            ext.point('io.ox/links/multi-selection').invoke('draw', box.empty(), baton);
+                        })
+                        .addClass('io-ox-multi-selection')
+                        .append(
+                            box = $('<div class="box">')
+                        );
+                        ext.point('io.ox/links/multi-selection').invoke('draw', box, baton);
                         return container.center();
                     });
                 }

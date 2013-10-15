@@ -312,7 +312,7 @@ define('io.ox/mail/view-detail',
         return $('<a>', { href: href }).text(href);
     };
 
-    var blockquoteMore, blockquoteClickOpen, blockquoteClickClose, blockquoteCollapsedHeight = 57, mailTo;
+    var blockquoteMore, blockquoteClickOpen, blockquoteCollapsedHeight = 57, mailTo;
 
     blockquoteMore = function (e) {
         e.preventDefault();
@@ -324,24 +324,10 @@ define('io.ox/mail/view-detail',
         var h = this.scrollHeight + 'px';
         $(this)
             .off('click.open')
-            .on('dblclick.close', blockquoteClickClose)
             .stop().animate({ maxHeight: h }, 300, function () {
                 $(this).css('opacity', 1.00).removeClass('collapsed-blockquote');
             });
         $(this).next().hide();
-    };
-
-    blockquoteClickClose = function () {
-        // collapse selection created by double click
-        if (document.getSelection) {
-            document.getSelection().collapse(this, 0);
-        }
-        $(this).off('dblclick.close')
-            .on('click.open', blockquoteClickOpen)
-            .stop().animate({ maxHeight: blockquoteCollapsedHeight }, 300, function () {
-                $(this).css('opacity', 0.50).addClass('collapsed-blockquote');
-            });
-        $(this).next().show();
     };
 
     mailTo = function (e) {
@@ -614,7 +600,6 @@ define('io.ox/mail/view-detail',
                         node.addClass('collapsed-blockquote')
                             .css({ opacity: 0.50, maxHeight: blockquoteCollapsedHeight })
                             .on('click.open', blockquoteClickOpen)
-                            .on('dblclick.close', blockquoteClickClose)
                             .after(
                                 $('<a href="#" class="toggle-blockquote">').text(gt('Show more'))
                                 .on('click', blockquoteMore)
@@ -1730,6 +1715,26 @@ define('io.ox/mail/view-detail',
                 }
                 content = null;
             }, 0);
+        }
+    });
+
+    function quickReply(e) {
+        // collapse selection created by double click
+        if (document.getSelection) document.getSelection().collapse(this, 0);
+        // load ...
+        require(['io.ox/mail/write/inplace']).done(function (inplace) {
+            var options = { mail: e.data.baton.data };
+            if (e.data.baton.app) options.container = e.data.baton.app.getWindow().nodes.outer;
+            inplace.reply(options);
+        });
+    }
+
+    ext.point('io.ox/mail/detail').extend({
+        id: 'quick-reply',
+        index: 'last',
+        draw: function (baton) {
+            if (_.device('small')) return;
+            this.on('dblclick', '.content', { baton: baton }, quickReply);
         }
     });
 

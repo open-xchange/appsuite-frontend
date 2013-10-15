@@ -1792,7 +1792,13 @@ nav.io-ox-inline-links + header {
 
 .io-ox-multi-selection {
 
-    padding: 0 30px;
+    .box {
+        width: 300px;
+        max-width: 500px;
+        margin: 0 auto;
+        text-align: left;
+        display: table;
+    }
 
     .summary {
         font-size: 28px;
@@ -1804,21 +1810,26 @@ nav.io-ox-inline-links + header {
             color: #888;
             font-weight: normal;
         }
-    }
-
-    .summary b {
-        color: #aaa;
+        b {
+            color: #aaa;
+        }
     }
 
     .io-ox-inline-links {
-        text-align: center;
+        margin: 28px 0;
+        a {
+            color: @inlineLinkColor;
+        }
+        &.empty {
+            display: none;
+        }
     }
 
-    .io-ox-inline-links a {
-        color: @inlineLinkColor;
+    .io-ox-action-link {
+        display: block;
     }
 
-    .io-ox-inline-links.empty {
+    .io-ox-action-link.disabled {
         display: none;
     }
 }

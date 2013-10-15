@@ -1235,50 +1235,50 @@ define('io.ox/mail/api',
                 api.trigger('send', { data: data, files: files, form: form });
             })
             .then(function (text) {
-            // wait a moment, then update mail index
-            setTimeout(function () {
-                // clear inbox & sent folder
-                var folders = [].concat(
-                    accountAPI.getFoldersByType('inbox'),
-                    accountAPI.getFoldersByType('sent'),
-                    accountAPI.getFoldersByType('drafts')
-                );
-                $.when.apply(
-                    _(folders).map(function (id) {
-                        return api.caches.all.grepRemove(id + DELIM);
-                    })
-                )
-                .done(function () {
-                    api.trigger('refresh.all');
-                });
-            }, 3000);
-            // IE9
-            if (_.isObject(text))
-                return text;
-            // process HTML-ish non-JSONP response
-            var a = text.indexOf('{'),
-                b = text.lastIndexOf('}');
-            if (a > -1 && b > -1) {
-                return JSON.parse(text.substr(a, b - a + 1));
-            } else {
-                return {};
-            }
-        })
-        .then(function (result) {
-            //skip block if error returned
-            if (result.data) {
-                var base = _(result.data.toString().split(api.separator)),
-                    id = base.last(),
-                    folder = base.without(id).join(api.separator);
-                api.get({ folder_id: folder, id: id }).then(function () {
-                    $.when(api.caches.list.add(data), api.caches.get.add(data))
+                // wait a moment, then update mail index
+                setTimeout(function () {
+                    // clear inbox & sent folder
+                    var folders = [].concat(
+                        accountAPI.getFoldersByType('inbox'),
+                        accountAPI.getFoldersByType('sent'),
+                        accountAPI.getFoldersByType('drafts')
+                    );
+                    $.when.apply(
+                        _(folders).map(function (id) {
+                            return api.caches.all.grepRemove(id + DELIM);
+                        })
+                    )
                     .done(function () {
-                        api.trigger('refresh.list');
+                        api.trigger('refresh.all');
                     });
-                });
-            }
-            return result;
-        });
+                }, 3000);
+                // IE9
+                if (_.isObject(text))
+                    return text;
+                // process HTML-ish non-JSONP response
+                var a = text.indexOf('{'),
+                    b = text.lastIndexOf('}');
+                if (a > -1 && b > -1) {
+                    return JSON.parse(text.substr(a, b - a + 1));
+                } else {
+                    return {};
+                }
+            })
+            .then(function (result) {
+                //skip block if error returned
+                if (result.data) {
+                    var base = _(result.data.toString().split(api.separator)),
+                        id = base.last(),
+                        folder = base.without(id).join(api.separator);
+                    api.get({ folder_id: folder, id: id }).then(function () {
+                        $.when(api.caches.list.add(data), api.caches.get.add(data))
+                        .done(function () {
+                            api.trigger('refresh.list');
+                        });
+                    });
+                }
+                return result;
+            });
     };
 
     function handleSendXHR2(data, files) {
