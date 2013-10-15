@@ -65,9 +65,14 @@ define('io.ox/calendar/main',
             draw: function (baton) {
 
                 if (baton.id !== 'private') return;
+                if (!baton.data) return;
 
                 // hide "show all" checkbox when only one calendar is available
-                if (!baton.data || !_.isArray(baton.data['private']) || baton.data['private'].length <= 1) return;
+                var count =
+                    (_.isArray(baton.data['private']) ? baton.data['private'].length : 0) +
+                    (_.isArray(baton.data['public']) ? baton.data['public'].length : 0);
+
+                if (count <= 1) return;
 
                 this.append(
                     $('<div class="show-all-checkbox">').append(
