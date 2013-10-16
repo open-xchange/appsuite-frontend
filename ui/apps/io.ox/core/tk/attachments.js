@@ -564,12 +564,12 @@ define('io.ox/core/tk/attachments',
                         $('<span>').attr({tabIndex: '1', 'role': 'button'}).addClass('btn btn-file').append(
                             icon,
                             $('<span>').addClass('fileupload-new').text(options.buttontext),
-                            $('<span>').attr({'role': 'button', 'aria-label': 'Change'}).addClass('fileupload-exists').text(gt('Change')),
+                            $('<span>').attr({'role': 'button', 'aria-label': gt('Change')}).addClass('fileupload-exists').text(gt('Change')),
                             input = $('<input name="file" type="file" role="button">')
                                 .prop({ multiple: options.multi })
                                 .attr({tabindex: options.tabindex })
                         ),
-                        $('<a>', {'data-dismiss': 'fileupload', tabindex: 1, href: '#', role: 'button', 'aria-label': 'cancel'}).addClass('btn fileupload-exists').text(gt('Cancel')),
+                        $('<a>', {'data-dismiss': 'fileupload', tabindex: 1, href: '#', role: 'button'}).addClass('btn fileupload-exists').text(gt('Cancel')),
                         (options.displayButton ?
                             $('<button type="button" class="btn btn-primary" data-action="upload" tabindex="1">')
                                 .text(gt('Upload file')).hide() : ''
