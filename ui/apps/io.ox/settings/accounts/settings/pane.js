@@ -36,20 +36,40 @@ define('io.ox/settings/accounts/settings/pane',
         drawItem = function (o) {
             return $('<div class="selectable deletable-item">')
                 .attr({
-                    'data-id': o.id,
-                    'data-accounttype': o.accountType
+                    'data-id': o.get('id'),
+                    'data-accounttype': o.get('accountType')
                 })
                 .append(
                     $('<div class="pull-right">').append(
                         // edit
-                        $('<a href="#" class="action" tabindex="3" data-action="edit">').text(gt('Edit')),
+                        $('<a class="action">').text(gt('Edit')).attr({
+                            href: '#',
+                            tabindex: 1,
+                            role: 'button',
+                            title: gt('Edit'),
+                            'data-action': 'edit',
+                            'aria-label': o.get('displayName') + ', ' + gt('Edit')
+                        }),
                         // delete
-                        o.id !== 0 ?
+                        o.get('id') !== 0 ?
                             // trash icon
-                            $('<a href="#" class="close" tabindex="3" data-action="delete">').attr({ title: gt('Delete') })
+                            $('<a class="close">').attr({
+                                href: '#',
+                                tabindex: 1,
+                                role: 'button',
+                                title: gt('Delete'),
+                                'data-action': 'delete',
+                                'aria-label': o.get('displayName') + ', ' + gt('Delete')
+                            })
                             .append($('<i class="icon-trash">')) :
                             // empty dummy
-                            $('<a href="#" class="close" tabindex="-1">')
+                            $('<a class="close">').attr({
+                                href: '#',
+                                tabindex: -1,
+                                role: 'button',
+                                title: gt('Delete'),
+                                'aria-label': o.get('displayName') + ', ' + gt('Delete')
+                            })
                             .append($('<i class="icon-trash" style="visibility: hidden">'))
                     ),
                     $('<span data-property="displayName" class="list-title">')
@@ -59,7 +79,7 @@ define('io.ox/settings/accounts/settings/pane',
         drawAddButton = function () {
             return $('<div class="controls">').append(
                 $('<div class="btn-group pull-right">').append(
-                    $('<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#" aria-haspopup="true" tabindex="1">').append(
+                    $('<a class="btn btn-primary dropdown-toggle" role="button" data-toggle="dropdown" href="#" aria-haspopup="true" tabindex="1">').append(
                         $.txt(gt('Add account')), $.txt(' '),
                         $('<span class="caret">')
                     ),
@@ -83,7 +103,11 @@ define('io.ox/settings/accounts/settings/pane',
                         'you can use your old password to recover all account passwords:')
                 ),
                 $.txt(' '),
-                $('<a href="#" data-action="recover">').text(gt('Recover passwords'))
+                $('<a href="#" data-action="recover">').text(gt('Recover passwords')).attr({
+                    role: 'button',
+                    title: gt('Recover passwords'),
+                    'aria-label': gt('Recover passwords')
+                })
                 .on('click', function (e) {
                     e.preventDefault();
                     ox.load(['io.ox/keychain/secretRecoveryDialog']).done(function (srd) {
@@ -118,10 +142,7 @@ define('io.ox/settings/accounts/settings/pane',
 
             render: function () {
                 var self = this;
-                self.$el.empty().append(drawItem({
-                    id: this.model.get('id'),
-                    accountType: this.model.get('accountType')
-                }));
+                self.$el.empty().append(drawItem(self.model));
 
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
                 self._modelBinder.bind(self.model, self.el, defaultBindings);
