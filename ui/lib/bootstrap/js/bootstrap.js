@@ -685,6 +685,7 @@
         $parent.toggleClass('open');
         if (phone) {
           ox.disable(true);
+          $('#io-ox-core').addClass('menu-blur');
           $parent.data('menu').show();
         }
       }
@@ -744,6 +745,7 @@
       return;
     }
     if (phone) {
+      $('#io-ox-core').removeClass('menu-blur');
       $('.dropdown-menu').hide();
       ox.idle();
     }
