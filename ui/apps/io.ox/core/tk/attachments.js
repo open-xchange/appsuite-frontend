@@ -564,7 +564,7 @@ define('io.ox/core/tk/attachments',
                         $('<span>').attr({tabIndex: '1', 'role': 'button'}).addClass('btn btn-file').append(
                             icon,
                             $('<span>').addClass('fileupload-new').text(options.buttontext),
-                            $('<span>').attr({'role': 'button', 'aria-label': 'Change'}).addClass('fileupload-exists').text(gt('Change')),
+                            $('<span>').attr({'role': 'button', 'aria-label': gt('Change')}).addClass('fileupload-exists').text(gt('Change')),
                             input = $('<input name="file" type="file" role="button">')
                                 .prop({ multiple: options.multi })
                                 .attr({tabindex: options.tabindex })
