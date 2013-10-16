@@ -37,7 +37,7 @@ define('io.ox/core/notifications',
         render: function () {
             this.$el.attr({ href: '#',
                             tabindex: '1',
-                            role: 'menuitem',
+                            role: 'button',
                             //#. %1$d number of notifications
                             //#, c-format
                             'aria-label': gt('You have %1$d notifications. Press [enter] to jump to the notification area.', this.model.get('count'))}).append(

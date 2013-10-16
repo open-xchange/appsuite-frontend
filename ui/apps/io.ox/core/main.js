@@ -136,7 +136,8 @@ define('io.ox/core/main',
 
     $('a.dropdown-toggle', topbar).attr({
         'aria-label': gt('Launcher dropdown. Press [enter] to jump to the dropdown.'),
-        'aria-role': 'menuitem'
+        'role': 'button',
+        'aria-haspopup': 'true'
     });
 
     // whatever ...
@@ -209,7 +210,7 @@ define('io.ox/core/main',
     }, 100);
 
     // add launcher
-    var addLauncher = function (side, label, fn) {
+    var addLauncher = function (side, label, fn, arialabel) {
         var node = $('<li class="launcher">');
 
         if (fn) {
@@ -232,7 +233,7 @@ define('io.ox/core/main',
             if (_.isString(label)) {
                 return $('<a href="#" class="apptitle" tabindex="1" role="menuitem">').text(gt.pgettext('app', label));
             } else if (label[0].tagName === 'I') {
-                return $('<a href="#" class="apptitle" tabindex="1" role="menuitem">').append(label);
+                return arialabel ? $('<a href="#" class="apptitle" tabindex="1" role="button" aria-label="' + arialabel + '">').append(label) : $('<a href="#" class="apptitle" tabindex="1" role="button">').append(label);
             } else {
                 return label;
             }
@@ -597,10 +598,10 @@ define('io.ox/core/main',
             index: 200,
             draw: function () {
                 this.append(
-                    addLauncher('right', $('<i class="icon-refresh launcher-icon">').attr('aria-label', gt('Refresh')), function () {
+                    addLauncher('right', $('<i class="icon-refresh launcher-icon">').attr('aria-hidden', 'true'), function () {
                         refresh();
                         return $.when();
-                    })
+                    },  gt('Refresh'))
                     .attr('id', 'io-ox-refresh-icon')
                 );
             }
@@ -612,7 +613,7 @@ define('io.ox/core/main',
             draw: function () {
                 this.append(
                     $('<li>').append(
-                        $('<a href="#" data-app-name="io.ox/settings" role="menuitem" tabindex="1">').text(gt('Settings'))
+                        $('<a href="#" data-app-name="io.ox/settings" role="menuitem" aria-haspopup="true" tabindex="1">').text(gt('Settings'))
                     )
                     .on('click', function (e) {
                         e.preventDefault();
@@ -762,7 +763,7 @@ define('io.ox/core/main',
                 var div, a, ul;
                 this.append(
                     div = $('<div class="launcher" role="presentation">').append(
-                        a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="menuitem" aria-haspopup="true" tabindex="1">').append(
+                        a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" tabindex="1">').append(
                             $('<i class="icon-cog icon-white launcher-icon" aria-hidden="true">')
                         ),
                         ul = $('<ul class="dropdown-menu" role="menu">')
