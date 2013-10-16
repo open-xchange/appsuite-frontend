@@ -84,7 +84,10 @@ define('io.ox/portal/main',
                     $btn.find('.controls')
                         .prepend($('<button type="button" class="btn btn-primary pull-right">')
                         .css({ marginLeft: '5px' })
-                        .attr('data-action', 'customize')
+                        .attr({
+                            'data-action': 'customize',
+                            tabindex: 1
+                        })
                         .text(gt('Customize this page'))
                         .on('click', openSettings));
                     $btn.append($greeting);
@@ -125,8 +128,14 @@ define('io.ox/portal/main',
                             $('<h2>').append(
                                 // add remove icon
                                 baton.model.get('protectedWidget') ? [] :
-                                    $('<a href="#" class="disable-widget"><i class="icon-remove"/></a>')
-                                    .attr('title', gt('Disable widget')),
+                                    $('<a class="disable-widget"><i class="icon-remove"/></a>')
+                                    .attr({
+                                        href: '#',
+                                        role: 'button',
+                                        'title': gt('Disable widget'),
+                                        'aria-label': gt('Disable widget'),
+                                        tabindex: 1
+                                    }),
                                 // title span
                                 $('<span class="title">').text('\u00A0')
                             )
@@ -237,7 +246,9 @@ define('io.ox/portal/main',
     app.drawScaffold = function (model, add) {
         add = add || false;
         var baton = ext.Baton({ model: model, app: app, add: add }),
-            node = $('<li>');
+            node = $('<li>').attr({
+                tabindex: 1
+            });
 
         if (_.device('small')) {
             node.css('minHeight', 300);
@@ -341,11 +352,12 @@ define('io.ox/portal/main',
             // set/update title
             var baton = ext.Baton({ model: model, point: 'io.ox/portal/widget/' + model.get('type') }),
                 point = ext.point(baton.point),
-                title = node.find('h2 .title').text(_.noI18n(widgets.getTitle(model.toJSON(), point.prop('title')))),
+                title = widgets.getTitle(model.toJSON(), point.prop('title')),
+                $title = node.find('h2 .title').text(_.noI18n(title)),
                 requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, true).value();
             // remember
             model.set('baton', baton, { validate: true, silent: true });
-
+            node.attr('aria-label', title);
             // setup?
             if (requiresSetUp) {
                 node.find('.decoration').removeClass('pending');
@@ -353,7 +365,7 @@ define('io.ox/portal/main',
             } else {
                 // add link?
                 if (point.prop('action') !== undefined) {
-                    title.addClass('action-link').css('cursor', 'pointer').on('click', { baton: baton }, runAction);
+                    $title.addClass('action-link').css('cursor', 'pointer').on('click', { baton: baton }, runAction);
                 }
                 // simple delay approach
                 _.delay(function () {
