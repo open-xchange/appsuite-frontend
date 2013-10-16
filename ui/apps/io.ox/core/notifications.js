@@ -77,7 +77,13 @@ define('io.ox/core/notifications',
         },
         render: function (notifications) {
             var self = this,
+                refocus = false,
+                lastFocused = $(document.activeElement),//save focus
                 empty = true; //check if notification area is empty
+            if (lastFocused.hasClass('refocus')) {//refocusable elements have this marker class
+                lastFocused = lastFocused.attr('focus-id');
+                refocus = true;
+            }
             self.$el.empty();
 
             if (_.size(self.subviews) < _.size(notifications)) { //make sure views are created one time only to avoid zombies
@@ -99,6 +105,12 @@ define('io.ox/core/notifications',
                 self.$el.append($('<legend class="section-title">').text(gt('No notifications')));
             }
 
+            if (refocus) {//restore focus if possible
+                var found = self.$el.find('[focus-id="' + lastFocused + '"]');
+                if (found) {
+                    found.focus();
+                }
+            }
             return self;
         }
     });
@@ -120,7 +132,7 @@ define('io.ox/core/notifications',
             this.notificationsView = new NotificationsView();
 
             $('#io-ox-core').prepend(
-                $('<div id="io-ox-notifications" tabindex="-1">'),
+                $('<div id="io-ox-notifications" tabindex="-1">').append(this.notificationsView.el),
                 $('<div id="io-ox-notifications-overlay" class="abs notifications-overlay">').click(function (e) {
                     if (e.target === this) {
                         self.hideList();
@@ -168,7 +180,7 @@ define('io.ox/core/notifications',
             });
 
             function focusNotifications(e) {
-                if (e.which === 13) {
+                if (e.which === 13) { //enter
                     if (self.opened()) {//focus badge when closing
                         _.defer(function () { self.badgeView.$el.focus(); });
                     } else {//focus notifications when opening
@@ -237,7 +249,7 @@ define('io.ox/core/notifications',
                 }
             };
 
-            $('#io-ox-notifications').empty().append(this.notificationsView.render(this.notifications).el);
+            this.notificationsView.render(this.notifications);
             //clear last item reference
             if (this.lastItem) {
                 this.lastItem.off('keydown', focusBadge);

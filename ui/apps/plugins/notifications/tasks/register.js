@@ -49,8 +49,9 @@ define('plugins/notifications/tasks/register',
         var label = gt('Overdue Task. %1$s %2$s. Press [enter] to open', _.noI18n(model.get('title')), endText);
 
         node.append(
-            $('<div class="taskNotification item" tabindex="1" role="listitem">')
+            $('<div class="taskNotification item refocus" tabindex="1" role="listitem">')
             .attr({'data-cid': model.get('cid'),
+                   'focus-id': 'task-overdue-notification-' + model.get('cid'),
                    'model-cid': model.cid,
                    'aria-label': label})
             .append(
@@ -58,7 +59,9 @@ define('plugins/notifications/tasks/register',
                 $('<span class="end_date">').text(_.noI18n(model.get('end_date'))),
                 $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge')),
                 $('<div class="actions">').append(
-                    $('<button type="button" tabindex="1" class="btn btn-inverse" data-action="done">').text(gt('Done'))
+                    $('<button type="button" tabindex="1" class="refocus btn btn-inverse" data-action="done">')
+                    .attr('focus-id', 'task-overdue-notification-button-' + model.get('cid'))
+                    .text(gt('Done'))
                 )
             )
         );
@@ -408,7 +411,8 @@ define('plugins/notifications/tasks/register',
                     //#, c-format
             var label = gt('Task invitation. %1$s %2$s %3$s. Press [enter] to open', _.noI18n(baton.model.get('title')), endText);
             this.attr({role: 'listitem',
-                       'data-cid': baton.model.get('cid'),
+                       'data-cid': _.ecid(baton.model.attributes),
+                       'focus-id': 'task-invitation-' + _.ecid(baton.model.attributes),
                        tabindex: 1,
                        'aria-label': label})
             .append(
@@ -416,7 +420,9 @@ define('plugins/notifications/tasks/register',
                 $('<span class="end_date">').text(_.noI18n(task.end_date)),
                 $('<span class="status">').text(task.status).addClass(task.badge),
                 $('<div class="actions">').append(
-                    $('<button type="button" tabindex="1" class="btn btn-inverse" data-action="change_state">').text(gt('Accept/Decline'))
+                    $('<button type="button" tabindex="1" class="refocus btn btn-inverse" data-action="change_state">')
+                    .attr('focus-id', 'task-invitation-accept-' + _.ecid(baton.model.attributes))
+                    .text(gt('Accept/Decline'))
                 )
             );
             task = null;

@@ -26,10 +26,11 @@ define('plugins/notifications/mail/register',
     ext.point('io.ox/core/notifications/mail/header').extend({
         draw: function (baton) {
             this.append(
-                $('<legend class="section-title">').text(gt('New Mails')),
+                $('<legend class="section-title">').text(gt('New Mails'))
+                .attr('focusId', 'mail-notification-'),//special attribute to restore focus on redraw
                 $('<div class="notifications">'),
                 $('<div class="open-app">').append(
-                    $('<a role="button" href="#" data-action="open-app" tabindex="1">').text(
+                    $('<a role="button" href="#" data-action="open-app" tabindex="1" class="refocus" focus-id="mail-notification-open-app">').text(
                         baton.more ? gt('Show all %1$d messages in inbox', baton.size) : gt('Show inbox')
                     )
                 )
@@ -40,8 +41,9 @@ define('plugins/notifications/mail/register',
     function drawItem(node, data) {
         var f = data.from || [['', '']];
         node.append(
-            $('<div class="item" tabindex="1" role="listitem">')
-                .attr({'data-cid': _.cid(data),
+            $('<div class="item refocus" tabindex="1" role="listitem">')
+                .attr({'focus-id': 'mail-notification-' + _.cid(data),//special attribute to restore focus on redraw
+                       'data-cid': _.cid(data),
                         //#. %1$s mail sender
                         //#. %2$s mail subject
                         //#, c-format

@@ -49,6 +49,7 @@ define('plugins/notifications/calendar/register',
             this.attr({
                 role: 'listitem',
                 'data-cid': model.get('cid'),
+                'focus-id': 'calendar-invite-' + model.get('cid'),
                 'tabindex': 1,
                             //#. %1$s Appointment title
                             //#. %2$s Appointment date
@@ -67,11 +68,13 @@ define('plugins/notifications/calendar/register',
                 $('<div class="location">').text(model.get('location')),
                 $('<div class="organizer">').text(model.get('blue')),
                 $('<div class="actions">').append(
-                    $('<button type="button" tabindex="1" class="btn btn-inverse" data-action="accept_decline">')
+                    $('<button type="button" tabindex="1" class="refocus btn btn-inverse" data-action="accept_decline">')
+                        .attr('focus-id', 'calendar-invite-' + model.get('cid') + '-accept-decline')
                         .css('margin-right', '14px')
                         .text(gt('Accept / Decline')),
-                    $('<button type="button" tabindex="1" class="btn btn-success" data-action="accept">')
-                        .attr('title', gt('Accept invitation'))
+                    $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
+                        .attr({'title': gt('Accept invitation'),
+                               'focus-id': 'calendar-invite-' + model.get('cid') + '-accept'})
                         .append('<i class="icon-ok">')
                 )
             );
@@ -92,7 +95,7 @@ define('plugins/notifications/calendar/register',
 
     var InviteView = Backbone.View.extend({
 
-        className: 'item',
+        className: 'item refocus',
 
         events: {
             'click': 'onClickItem',

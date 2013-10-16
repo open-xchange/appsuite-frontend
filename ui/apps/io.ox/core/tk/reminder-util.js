@@ -19,7 +19,7 @@ define('io.ox/core/tk/reminder-util',
 
     'use strict';
 
-    function buildActions(node, values) {
+    function buildActions(node, values, focusId) {
         if (_.device('medium')) {//native style for tablet
             node.append(
                     $('<div>').text(gt('Remind me again')),
@@ -38,20 +38,23 @@ define('io.ox/core/tk/reminder-util',
             // special link dropdown
             node.append(
                 $('<div>').addClass('dropdown').css({float: 'left'}).append(
-                    $('<a href="#" role="listbox" tabindex="1" data-action="reminderbutton" aria-haspopup="true">').attr('data-toggle', 'dropdown').text(gt('Remind me again')).append(
+                    $('<a href="#" role="listbox" aria-label="' + gt('Press [enter] to select a time when you want to be reminded again') + '"tabindex="1" data-action="reminderbutton" aria-haspopup="true">')
+                    .attr({'data-toggle': 'dropdown', 'focus-id': focusId + '-select'})
+                    .text(gt('Remind me again')).addClass('refocus')
+                    .append(
                         $('<i>').addClass('icon-chevron-down').css({color: 'white', paddingLeft: '5px', textDecoration: 'none'})
                     ),
-                    $('<ul role="listbox">').addClass('dropdown-menu dropdown-left').css({minWidth: 'auto'}).append(function () {
-                        var ret = '';
+                    $('<ul role="menu">').addClass('dropdown-menu dropdown-left').css({minWidth: 'auto'}).append(function () {
+                        var ret = [];
                         for (var i = 0; i < values.length; i++) {
-                            ret += '<li><a tabindex="1" role="option" aria-label="' + gt('Remind me again ') + values[i][1] + '" href="#" data-action="reminder" data-value="' + values[i][0] + '">' +
+                            ret.push('<li><a  tabindex="1" role="menuitem" aria-label="' + gt('Remind me again ') + values[i][1] + '" href="#" data-action="reminder" data-value="' + values[i][0] + '">' +
                                 values[i][1] +
-                                '</a></li>';
+                                '</a></li>');
                         }
                         return ret;
                     })
                 ),
-                $('<button type="button" tabindex="1" class="btn btn-inverse remindOkBtn" data-action="ok">').text(gt('OK'))
+                $('<button type="button" tabindex="1" class="btn btn-inverse remindOkBtn refocus" focus-id="' + focusId + '-button" data-action="ok">').text(gt('OK'))
             ).find('after').css('clear', 'both');
         }
     }
@@ -60,8 +63,6 @@ define('io.ox/core/tk/reminder-util',
         var info,
             label,//aria label
             actions = $('<div class="reminder-actions">');
-
-        buildActions(actions, options);
 
         //find out remindertype
         if (model.get('reminder') && model.get('reminder').module === 4) {//task
@@ -95,13 +96,21 @@ define('io.ox/core/tk/reminder-util',
                     _.noI18n(model.get('title')), _.noI18n(model.get('date')), _.noI18n(model.get('time')), _.noI18n(model.get('location')) || '');
         }
 
+        var focusId = model.attributes.cid;
+        if (!model.attributes.cid) {
+            focusId = _.ecid(model.attributes);
+        }
+
         node.attr({'data-cid': model.get('cid'),
                    'model-cid': model.cid,
                    'aria-label': label,
+                   'focus-id': 'reminder-notification-' + focusId,//calendar and task are a bit different here (recurrenceposition etc)
                    role: 'listitem',
                    'tabindex': 1
-        }).addClass('reminder-item')
-            .append(
+        }).addClass('reminder-item refocus');
+        buildActions(actions, options, 'reminder-notification-' + focusId);
+        
+        node.append(
                 info,
                 actions
             );
