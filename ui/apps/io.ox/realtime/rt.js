@@ -383,7 +383,7 @@ define.async('io.ox/realtime/rt',
             });
         } else if (stanza.get('atmosphere', 'pong')) {
             _(stanza.getAll('atmosphere', 'pong')).each($.noop);
-        } else if (stanza.get('atmosphere', 'nextSequence')) {
+        } else if (stanza.get('atmosphere', 'nextSequence') || stanza.get('ox', 'nextSequence')) {
             if (!initialReset) {
                 if (api.debug) {
                     console.log('Got nextSequence stanza, so resetting sequence');
