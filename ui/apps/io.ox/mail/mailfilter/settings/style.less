@@ -2,70 +2,68 @@
 
     max-width: 700px;
 
-
     span.list-title {
         display: inline-block;
-    }
-
-    div.listbox {
-        border: none;
-    }
-
-    #controls {
-        padding: 13px;
-        height: 30px;
-        margin-bottom: 13px;
-    }
-
-    li.selectable {
-        background-color: #f5f5f5;
-        padding: 13px 13px 13px 60px;
-        margin: 0 0 7px 0;
-        position: relative;
-        text-align: left;
-    }
-
-    li.selectable.disabled {
-        font-style: italic;
-        font-weight: normal;
-        color: #888;
-    }
-
-    .drag-handle {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        width: 50px;
-        cursor: pointer;
-    }
-
-    .drag-handle:hover {
-        background-color: rgba(0, 0, 0, 0.05);
-    }
-
-    .drag-handle i {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin: -7px 0 0 -9px;
-        color: #aaa;
-    }
-
-   .deletable-item div.pull-right {
-        float: right;
-    }
-
-    a.action {
-        float: left;
-        font-style: normal;
-        margin-right: 2em;
     }
 
     ol.widget-list {
         list-style-type: none;
         margin: 0;
     }
+
+    .controls {
+        padding: 13px;
+        height: 30px;
+        margin-bottom: 13px;
+    }
+
+    li {
+
+        &.selectable {
+
+            background-color: #f5f5f5;
+            padding: 13px 13px 13px 60px;
+            margin: 0 0 7px 0;
+            position: relative;
+            text-align: left;
+
+            &.disabled {
+                font-style: italic;
+                font-weight: normal;
+                color: #888;
+            }
+
+        }
+
+        .drag-handle {
+
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.05);
+            }
+
+            i {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                margin: -7px 0 0 -9px;
+                color: #aaa;
+            }
+
+        }
+
+        a.action {
+            margin-right: 2em;
+        }
+
+    }
+
 }
 
 .io-ox-mailfilter-edit{
