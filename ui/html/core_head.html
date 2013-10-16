@@ -48,7 +48,7 @@ var root = location.pathname.replace(/\/[^\/]*$/, '');
 var oldRoot = root;
 root = root.replace(/^\/\//, '/');
 if (oldRoot !== root) {//only change if it's different, otherwise we get infinite reloads
-	location.href = location.href.replace(oldRoot, root);
+    location.href = location.href.replace(oldRoot, root);
 }
 
 // change ms-viewport rule for WP8 devices
