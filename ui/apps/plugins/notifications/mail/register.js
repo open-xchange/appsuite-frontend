@@ -39,21 +39,23 @@ define('plugins/notifications/mail/register',
     });
 
     function drawItem(node, data) {
-        var f = data.from || [['', '']];
-        node.append(
-            $('<div class="item refocus" tabindex="1" role="listitem">')
-                .attr({'focus-id': 'mail-notification-' + _.cid(data),//special attribute to restore focus on redraw
-                       'data-cid': _.cid(data),
-                        //#. %1$s mail sender
-                        //#. %2$s mail subject
-                        //#, c-format
-                        'aria-label': gt('New Mail from %1$s %2$s. Press [enter] to open', _.noI18n(util.getDisplayName(f[0])), _.noI18n(data.subject) || gt('No subject'))
-                      }).append(
-                $('<div class="title">').text(_.noI18n(util.getDisplayName(f[0]))),
-                $('<div class="subject">').text(_.noI18n(data.subject) || gt('No subject')).addClass(data.subject ? '' : 'empty')
-                // TODO: re-add teaser once we get this via getList(...)
-            )
-        );
+        if (data) {
+            var f = data.from || [['', '']];
+            node.append(
+                $('<div class="item refocus" tabindex="1" role="listitem">')
+                    .attr({'focus-id': 'mail-notification-' + _.cid(data),//special attribute to restore focus on redraw
+                           'data-cid': _.cid(data),
+                            //#. %1$s mail sender
+                            //#. %2$s mail subject
+                            //#, c-format
+                            'aria-label': gt('New Mail from %1$s %2$s. Press [enter] to open', _.noI18n(util.getDisplayName(f[0])), _.noI18n(data.subject) || gt('No subject'))
+                          }).append(
+                    $('<div class="title">').text(_.noI18n(util.getDisplayName(f[0]))),
+                    $('<div class="subject">').text(_.noI18n(data.subject) || gt('No subject')).addClass(data.subject ? '' : 'empty')
+                    // TODO: re-add teaser once we get this via getList(...)
+                )
+            );
+        }
     }
 
     ext.point('io.ox/core/notifications/mail/item').extend({
