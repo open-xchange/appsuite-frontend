@@ -166,7 +166,7 @@ define('io.ox/files/guidance/statistics',
     //appends quota to node, if disk space is limited.
     function storageQuota(node, baton) {
         if (baton.quota.infostoreQuota < 0) {
-            node.idle.empty();
+            node.idle().empty();
         } else {
             getAllSubFolders(baton.folder).done(function () {
                 node.append($('<h2>').text(gt('Capacity')));
