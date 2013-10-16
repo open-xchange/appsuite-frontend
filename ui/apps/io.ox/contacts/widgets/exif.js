@@ -4,8 +4,7 @@
  *
  * Licensed under the MPL License [http://www.nihilogic.dk/licenses/mpl-license.txt]
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  */
