@@ -44,6 +44,7 @@ define.async('io.ox/realtime/rt',
     var transmitting = false;
     var purging = false;
     var enroled = false;
+    var traceAll = false;
 
     var INFINITY = 10;
     var TIMEOUT = 2 * 60 * 1000;
@@ -391,6 +392,8 @@ define.async('io.ox/realtime/rt',
             } else {
                 initialReset = false;
             }
+        } else if (stanza.get('ox', 'tracingDemand')) {
+            traceAll = true;
         } else {
             if (stanza.seq > -1) {
                 if (api.debug) {
@@ -569,9 +572,9 @@ define.async('io.ox/realtime/rt',
     };
 
     api.query = function (options) {
-        if (options.trace) {
+        if (options.trace || traceAll) {
             delete options.trace;
-            options.tracer = uuids.randomUUID();
+            options.tracer = ox.user + '@' + ox.context_id + ' [' + uuids.randomUUID() + ']';
         }
         options.seq = seq;
         seq++;
@@ -617,7 +620,7 @@ define.async('io.ox/realtime/rt',
         }
         if (options.trace) {
             delete options.trace;
-            options.tracer = uuids.randomUUID();
+            options.tracer = ox.user + '@' + ox.context_id + ' [' + uuids.randomUUID() + ']';
         }
         if (_.isNumber(options.bufferinterval)) {
             delete options.bufferinterval;  // Do not send bufferinterval to server
