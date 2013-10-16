@@ -221,7 +221,7 @@ define('io.ox/contacts/edit/main',
             if (data) {
                 // hash support
                 app.setState(data.id ? { folder: data.folder_id, id: data.id }
-                                     : { fodler: data.folder_id });
+                                     : { folder: data.folder_id });
                 cont(data);
             } else {
                 cont({folder_id: app.getState().folder, id: app.getState().id});
