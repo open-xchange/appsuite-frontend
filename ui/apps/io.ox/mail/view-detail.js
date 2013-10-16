@@ -1334,7 +1334,7 @@ define('io.ox/mail/view-detail',
                 'data-downloadurl': contentType + ':' + filename.replace(/:/g, '') + ':' + ox.abs + url
             })
             .on('dragstart', function (e) {
-                $(this).css({ display: 'inline-block', backgroundColor: 'white' });
+                $(this).css({ display: 'inline-block' });
                 e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
             });
         return dd;
