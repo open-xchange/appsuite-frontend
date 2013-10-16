@@ -11,89 +11,78 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+ @thumbIndexWidth: 45px; // was 35, but we need 45 for proper Japanese
+
 /* VGrid elements */
 
-.vgrid-cell.contact {
-    height: 40px;
-}
-
-.vgrid-cell.contact .private_flag {
-    float: left;
-    color: #AAA;
-    font-size: 17px;
-    margin-right: 3px;
-}
-
-.vgrid-cell.contact .fullname {
-    font-weight: bold;
-}
-
 .contact-grid-container {
+    &.abs {
+        left: @thumbIndexWidth;
+        overflow: auto;
+    }
+    .vgrid-cell {
+        &.contact {
+            height: 40px;
+            .private_flag {
+                float: left;
+                color: #AAA;
+                font-size: 17px;
+                margin-right: 3px;
+            }
+            .fullname { font-weight: bold; }
+        }
 
-    .vgrid-cell.vgrid-label {
-        text-align: left;
-        font-weight: 200;
-        font-size: 32px;
-        line-height: 32px;
-        color: @linkColor;
-        padding-top: 25px;
-        padding-bottom: 15px;
-        background-image: none;
-        background-color: #fff;
-        border-top: 0px none;
-        border-bottom: 0px none;
+        &.vgrid-label {
+            text-align: left;
+            font-weight: 200;
+            font-size: 32px;
+            line-height: 32px;
+            color: @linkColor;
+            padding-top: 25px;
+            padding-bottom: 15px;
+            background-image: none;
+            background-color: #fff;
+            border-top: 0px none;
+            border-bottom: 0px none;
+        }
     }
 }
 
 /* Tabs */
 
-@thumbIndexWidth: 45px; // was 35, but we need 45 for proper Japanese
-
-.abs.contact-grid-container {
-    left: @thumbIndexWidth;
-    overflow: auto;
-}
-
 .contact-grid-index {
     width: @thumbIndexWidth;
     overflow: hidden;
     .user-select(none);
-}
 
-.contact-grid-index .thumb-index {
-    font-size: 8pt;
-    line-height: 10pt;
-    padding: 5px 5px 4px 5px;
-    font-weight: bold;
-    text-align: center;
-    white-space: nowrap;
-    cursor: pointer;
-    margin: 1px 1px 0 1px;
-}
-
-.contact-grid-index .thumb-index.thumb-index-disabled,
-.contact-grid-index .thumb-index.thumb-index-disabled:hover {
-    color: #ccc;
-    font-weight: normal;
-    cursor: default;
-}
-
-.contact-grid-index .thumb-index:hover {
-    color: white;
-    background-color: @linkColor;
+    .thumb-index {
+        font-size: 8pt;
+        line-height: 10pt;
+        padding: 5px 5px 4px 5px;
+        font-weight: bold;
+        text-align: center;
+        white-space: nowrap;
+        cursor: pointer;
+        margin: 1px 1px 0 1px;
+        &:hover {
+            color: white;
+            background-color: @linkColor;
+        }
+        &.thumb-index-disabled, &.thumb-index-disabled:hover {
+            color: #ccc;
+            font-weight: normal;
+            cursor: default;
+        }
+    }
 }
 
 /* Detail view */
 
-.contact-detail, .contact-detail-edit  {
-    width: 100%;
-}
+.contact-detail, .contact-detail-edit  { width: 100%; }
 
 .contact-detail {
 
-    .io-ox-inline-links:first-child {
-        margin: 0 0 26px 0;
-    }
+    .io-ox-inline-links:first-child { margin: 0 0 26px 0; }
 
     .contact-header {
 
@@ -133,20 +122,14 @@
             font-weight: 200;
             float: left;
             clear: both;
+            &.header-company { margin: 14px 0 14px 0; }
+            &.header-job {
+                color: #888;
+                margin: 0 0 14px 0;
+            }
         }
 
-        h2.header-company {
-            margin: 14px 0 14px 0;
-        }
-
-        h1:empty + h2.header-company {
-            margin-top: 0;
-        }
-
-        h2.header-job {
-            color: #888;
-            margin: 0 0 14px 0;
-        }
+        h1:empty + h2.header-company { margin-top: 0; }
     }
 
     .attachments-container {
@@ -156,10 +139,7 @@
         .dropdown {
             position: static;
             margin-right: 1em;
-        }
-
-        .dropdown.open {
-            position: relative;
+            &.open { position: relative; }
         }
     }
 
@@ -211,9 +191,7 @@
         color: #333;
         white-space: pre;
 
-        &:hover {
-            text-decoration: none;
-        }
+        &:hover { text-decoration: none; }
 
         caption {
             font-size: 12px;
@@ -226,9 +204,7 @@
         display: block;
     }
 
-    .clear-both {
-        clear: both;
-    }
+    .clear-both { clear: both; }
 
     .breadcrumb {
         margin: 26px 0 0 0;
@@ -252,78 +228,49 @@
     }
 }
 
-/* smartphone */
-@media (max-width: 480px), (max-device-width: 480px)  {
-    .contact-detail {
-        .io-ox-inline-links:first-child {
-            margin:0;
-            span.io-ox-action-link.dropdown {
-                float:right;
-            }
-        }
-        .block {
-            width: 100%;
-            margin-right: 0;
-            line-height: 24px;
-        }
+
+/*new contact form*/
+.edit-contact {
+    .btn.btn-inverse { vertical-align: top; }
+
+    .hidden {
+        display: none;
+        &.filled { display: table-row; }
+        &.mandatory { display: block; }
+    }
+
+    .savebutton { float: right; }
+
+    .contact-edit{ overflow: auto; }
+
+    .change-pic-link {
+        width: auto;
+        float: right;
+    }
+
+    input#image1 { width: 300px; }
+
+    .contact-detail input { width: 270px; }
+
+    .picture-uploader {
+        width: 100px;
+        height: 100px;
+        display: inline-block;
+        float: left;
+        background-position: right top;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-clip: content-box;
     }
 }
 
-
-/*new contact form*/
-
-.btn.btn-inverse {
-    vertical-align: top;
-}
-
-.hidden{
-    display: none;
-}
-
-.mandatory.hidden{
-    display: block;
-}
-
-.hidden.filled{
-    display: table-row;
-}
-
-.savebutton{
-    float: right;
-}
-
-.contact-edit{
-    overflow: auto;
-}
-
-.change-pic-link {
-    width: auto;
-    float: right;
-}
-
-input#image1 {
-    width: 300px;
-}
-
-.contact-detail input {
-    width: 270px;
-}
-
-.picture-uploader {
-    width: 100px;
-    height: 100px;
-    display: inline-block;
-    float: left;
-    background-position: right top;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-clip: content-box;
-}
-
+// smartphone
 @media (max-width: 480px), (max-device-width: 480px) {
-    .abs.contact-grid-container {
-        left: 0px;
-        right: @thumbIndexWidth;
+    .contact-grid-container {
+        &.abs {
+            left: 0px;
+            right: @thumbIndexWidth;
+        }
     }
     .contact-grid-index {
         left: auto;
@@ -335,6 +282,19 @@ input#image1 {
             line-height: 12px;
             padding: 0 5px 0 5px;
             margin: 0px 1px 0 1px;
+        }
+    }
+    .contact-detail {
+        .io-ox-inline-links:first-child {
+            margin:0;
+            span.io-ox-action-link.dropdown {
+                float:right;
+            }
+        }
+        .block {
+            width: 100%;
+            margin-right: 0;
+            line-height: 24px;
         }
     }
 }
