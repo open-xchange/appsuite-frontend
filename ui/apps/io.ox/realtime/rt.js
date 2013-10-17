@@ -618,7 +618,7 @@ define.async('io.ox/realtime/rt',
             }
             return def.reject();
         }
-        if (options.trace) {
+        if (options.trace || traceAll) {
             delete options.trace;
             options.tracer = ox.user + '@' + ox.context_id + ' [' + uuids.randomUUID() + ']';
         }
