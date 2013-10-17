@@ -40,7 +40,8 @@ define('io.ox/core/tk/selection',
             dragType: '',
             dropzone: false,
             dropzoneSelector: '.selectable',
-            dropType: ''
+            dropType: '',
+            tabFix: false
         }, options);
 
         this.classFocus = 'focussed';
@@ -329,9 +330,16 @@ define('io.ox/core/tk/selection',
         fastSelect = function (id, node) {
             var key = self.serialize(id);
             selectedItems[key] = id;
-            return (node || getNode(key))
+            var $node = (node || getNode(key));
+            if (options.tabFix !== false) {
+                $node.focus();
+            }
+            return $node
                 .addClass(self.classSelected)
-                .attr('aria-selected', 'true')
+                .attr({
+                    'aria-selected': 'true',
+                    'tabindex': options.tabFix !== false ? options.tabFix : -1
+                })
                 .find('input.reflect-selection')
                 .prop('checked', true)
                 .end();
@@ -357,7 +365,10 @@ define('io.ox/core/tk/selection',
             delete selectedItems[key];
             getNode(key)
                 .removeClass(self.classSelected)
-                .attr('aria-selected', 'false')
+                .attr({
+                    'aria-selected': 'false',
+                    tabindex: -1
+                })
                 .find('input.reflect-selection').prop('checked', false);
             self.trigger('deselect', key);
         };
@@ -402,7 +413,10 @@ define('io.ox/core/tk/selection',
             // clear hash
             selectedItems = {};
             // clear nodes
-            container.find('.selectable.' + self.classSelected).removeClass(self.classSelected).attr('aria-selected', 'false');
+            container.find('.selectable.' + self.classSelected).removeClass(self.classSelected).attr({
+                'aria-selected': 'true',
+                'tabindex': -1
+            });
             container.find('.selectable input.reflect-selection').prop('checked', false);
         };
 
@@ -455,10 +469,19 @@ define('io.ox/core/tk/selection',
                     cid = node.attr('data-obj-id');
                 if (cid in hash) {
                     $('input.reflect-selection', node).prop('checked', true);
-                    node.addClass(self.classSelected).attr('aria-selected', 'true');
+                    node.addClass(self.classSelected).attr({
+                        'aria-selected': 'true',
+                        'tabindex': options.tabFix !== false ? options.tabFix : -1
+                    });
+                    if (options.tabFix !== false) {
+                        node.focus();
+                    }
                 } else {
                     $('input.reflect-selection', node).prop('checked', false);
-                    node.removeClass(self.classSelected).attr('aria-selected', 'false');
+                    node.removeClass(self.classSelected).attr({
+                        'aria-selected': 'true',
+                        'tabindex': -1
+                    });
                 }
             });
 

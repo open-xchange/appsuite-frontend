@@ -33,8 +33,8 @@ define('io.ox/core/tk/folderviews',
         DESKTOP_FOLDER_PADDING = 30, // for mouse-based devices (could be smaller but irrelevant) and for fat finger support
         SUB_PADDING = _.device('small') ? SMALL_FOLDER_PADDING : DESKTOP_FOLDER_PADDING,
 
-        tmplFolder = $('<div class="folder selectable">'),
-        tmplSub = $('<div class="subfolders">').hide(),
+        tmplFolder = $('<div class="folder selectable" role="treeitem" tabindex="-1">'),
+        tmplSub = $('<div class="subfolders"role="group">').hide(),
 
         TRUE = function () { return true; };
 
@@ -142,6 +142,11 @@ define('io.ox/core/tk/folderviews',
 
             updateArrow = function () {
                 var className = hasChildren() ? (isOpen() ? CLOSE : OPEN) : 'icon-none';
+                if (hasChildren()) {
+                    nodes.folder.attr('aria-expanded', isOpen() ? 'true' : 'false');
+                } else {
+                    nodes.folder.removeAttr('aria-expanded');
+                }
                 nodes.arrow.find('i').attr('class', className);
                 if (childrenLoaded && !children) {
                     hideArrow();
@@ -186,17 +191,12 @@ define('io.ox/core/tk/folderviews',
             // open/close tree node
             toggleState = function (e) {
                 // not valid click?
-                if (e.type !== 'dblclick') {
-                    var node = $(this),
-                        isArrow = node.hasClass('folder-arrow'),
-                        isLabel = node.hasClass('folder-label'),
-                        folder = node.closest('.folder'),
-                        isUnselectable = folder.hasClass('unselectable');
-                    if (isArrow || (isLabel && isUnselectable)) {
-                        // avoid selection; allow for unreadable
-                        e.preventDefault();
-                        toggleNode();
-                    }
+                if (e.type === 'dblclick') return;
+                var node = $(this);
+                if (node.hasClass('folder-arrow') || (node.hasClass('folder-label') && node.closest('.folder').hasClass('unselectable'))) {
+                    // avoid selection; allow for unreadable
+                    e.preventDefault();
+                    toggleNode();
                 }
             };
 
@@ -395,7 +395,7 @@ define('io.ox/core/tk/folderviews',
 
                 if (nodes && nodes.arrow === undefined) {
                     // create DOM nodes
-                    nodes.arrow = $('<div class="folder-arrow"><i class="icon-chevron-right"></i></div>');
+                    nodes.arrow = $('<div class="folder-arrow" role="presentation"><i class="icon-chevron-right"></i></div>');
                     nodes.label = $('<div class="folder-label">');
                     nodes.counter = $('<div class="folder-counter">').append('<span class="folder-counter-badge">');
                     nodes.subscriber = $('<input>').attr({ 'type': 'checkbox', 'name': 'folder', tabindex: -1, 'value': data.id }).css('float', 'right');
@@ -464,18 +464,20 @@ define('io.ox/core/tk/folderviews',
 
         this.internal = { destroy: $.noop };
 
+        this.activeElement = null;
+
         // ref
         var self = this;
 
         $(container)
             .addClass('io-ox-foldertree f6-target')
-            .attr({ tabindex: this.options.tabindex, role: 'tree', 'aria-label': gt('Folder view') })
+            .attr({ role: 'tree', 'aria-label': gt('Folder view') })
             // add tree container
             .append(this.container = $('<div class="folder-root">'));
 
         // selection
         var selectionContainer = container.parent().is('.foldertree-container') ? container.parent() : container;
-        Selection.extend(this, selectionContainer, { dropzone: true, dropType: 'folder' }) // not this.container!
+        Selection.extend(this, selectionContainer, { dropzone: true, dropType: 'folder', tabFix: this.options.tabindex }) // not this.container!
             .setMultiple(false)
             .setSerializer(function (obj) {
                 return obj ? String(obj.id) : '';
@@ -505,6 +507,9 @@ define('io.ox/core/tk/folderviews',
 
         this.repaint = function () {
             var p = this.paint;
+            if ($.contains(container[0], document.activeElement)) {
+                this.activeElement = $(document.activeElement);
+            }
             if (p.running === null) {
                 this.trigger('beforerepaint');
                 this.selection.clearIndex();
@@ -512,7 +517,10 @@ define('io.ox/core/tk/folderviews',
                 p.running.always(function () {
                     self.selection.updateIndex();
                     self.trigger('repaint');
-                    p.running = null;
+                    if (self.activeElement) {
+                        self.activeElement.focus();
+                    }
+                    p.running = self.activeElement = null;
                 });
             }
             return p.running || $.when();
@@ -715,19 +723,19 @@ define('io.ox/core/tk/folderviews',
                 // cursor right
                 if (treeNode && !treeNode.isOpen()) {
                     treeNode.open().done(function () {
-                        self.repaint();
+                        self.selection.updateIndex();
                     });
                 }
-                return false;
+                break;
             case 37:
                 // cursor left
                 origEvent.preventDefault();
                 if (treeNode && treeNode.isOpen()) {
                     treeNode.close().done(function () {
-                        self.repaint();
+                        self.selection.updateIndex();
                     });
                 }
-                return false;
+                break;
             case 32:
                 // space
                 // disable space on checkbox option
@@ -741,11 +749,11 @@ define('io.ox/core/tk/folderviews',
                     return false;
                 }
                 treeNode.toggle();
-                return false;
+                break;
             case 13:
                 // enter
                 treeNode.toggle();
-                return false;
+                break;
             }
         });
 
@@ -828,6 +836,7 @@ define('io.ox/core/tk/folderviews',
             // set title
             var shortTitle = api.getFolderTitle(data.title, 30);
             label.attr('title', data.title).text(_.noI18n(shortTitle));
+            this.attr('aria-label', data.title);
 
             // set counter (mail only)
             if (options.type === 'mail') {

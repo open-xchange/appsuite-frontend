@@ -1,45 +1,55 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Viktor Pracht <viktor.pracht@open-xchange.com>
+ */
 
-.io-ox-halo .widget-title {
-    margin: 0.5em 0 1em 0;
-    font-size: 16pt;
-}
+.io-ox-halo {
+    .widget-title {
+        margin: 0.5em 0 1em 0;
+        font-size: 16pt;
+    }
 
-.io-ox-halo .vgrid-cell:last-child {
-    border-bottom: 0px none;
-}
+    .vgrid-cell {
+        &:last-child { border-bottom: 0px none; }
+        &.mail{ padding: 6px 0; }
+    }
 
-.io-ox-halo h1 {
-    font-size: 24px;
-    font-weight: normal;
-}
+    h1 {
+        font-size: 24px;
+        font-weight: normal;
+    }
 
-.io-ox-halo h2 {
-    font-size: 18px;
-}
+    h2 { font-size: 18px; }
 
-.ray {
-    margin: 0px 0px 30px 0px;
-}
-.io-ox-subheader {
-    font-weight:300;
-    font-size: 13pt;
-}
-.io-ox-left-column, .io-ox-right-column {
-    margin: 0;
-    padding: 0;
-    display: block;
-}
-.io-ox-left-column {
-    float: left;
-    width: 48%;
-    padding-right: 2%;
-}
-.io-ox-right-column {
-    float: right;
-    width: 48%;
-    padding-left: 2%;
-}
+    .ray { margin: 0px 0px 30px 0px; }
 
-.io-ox-halo .vgrid-cell.mail{
-    padding: 6px 0;
+    .io-ox-subheader {
+        font-weight:300;
+        font-size: 13pt;
+    }
+
+    .io-ox-left-column, .io-ox-right-column {
+        margin: 0;
+        padding: 0;
+        display: block;
+        width: 48%;
+    }
+
+    .io-ox-left-column {
+        float: left;
+        padding-right: 2%;
+    }
+
+    .io-ox-right-column {
+        float: right;
+        padding-left: 2%;
+    }
 }

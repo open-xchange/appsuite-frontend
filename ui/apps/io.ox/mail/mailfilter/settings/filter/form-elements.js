@@ -46,7 +46,7 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
 
             var active = values[activeValue];
             return $('<div class="action dropdown value">').append(
-                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">').text(active),
+                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').text(active),
                 $('<ul class="dropdown-menu" role="menu">').append(
                     _(values).map(function (name, value) {
                         return $('<li>').append(
@@ -66,7 +66,7 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
                 active = active + '<b class="caret">';
             }
             return $('<div class="action ' + options.toggle + ' value ">').addClass(options.classes).append(
-                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">').html(active),
+                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').html(active),
                 $('<ul class="dropdown-menu" role="menu">').append(
                     _(values).map(function (name, value) {
                         return $('<li>').append(
@@ -84,7 +84,7 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
             var active = values[activeValue];
             classes = classes ? classes : '';
             return $('<div class="action dropdown value ' + classes + '">').append(
-                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">').text(active),
+                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').text(active),
                 $('<ul class="dropdown-menu">').append(
                     _(values).map(function (name, value) {
                         return $('<li>').append(
@@ -109,7 +109,7 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
             .addClass(flagclass)
             .append(
                 // box
-                $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown">'),
+                $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true">'),
                 // drop down
                 $('<ul class="dropdown-menu" role="menu">')
                 .append(

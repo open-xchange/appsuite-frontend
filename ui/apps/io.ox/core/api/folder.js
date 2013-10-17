@@ -1035,11 +1035,10 @@ define('io.ox/core/api/folder',
                 api.getSubFolders({ folder: id }).done(function (list) {
                     if (list.length) {
                         li.addClass('dropdown').append(
-                            $('<a href="#" class="dropdown-toggle" tabindex="1" data-toggle="dropdown">')
-                            .attr({
-                                'title': title,
-                                'role': 'menuitem'
-                            }).append(
+                            $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">')
+                            .attr(
+                                'title', title
+                            ).append(
                                 $.txt(gt.noI18n(api.getFolderTitle(title, 30))),
                                 $('<b class="caret">')
                             ),

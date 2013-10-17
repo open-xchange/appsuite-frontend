@@ -112,8 +112,8 @@ define('io.ox/core/emoji/view', ['io.ox/emoji/main'], function (emoji) {
                     this.showDropdown ?
                         $('<div class="emoji-options dropdown pull-right">').append(
                             // link
-                            $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" tabindex="5" role="menuitem" aria-haspopup="true">')
-                            .attr('arial-label', 'Options')
+                            $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="5">')
+                            .attr('arial-label', gt('Options'))
                             .append(
                                 $('<i class="icon-cog" aria-hidden="true" role="presentation">')
                             ),

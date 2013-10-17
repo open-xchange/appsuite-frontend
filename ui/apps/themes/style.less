@@ -2381,26 +2381,30 @@ input.nice-input {
                     background-color: darken(@foldertreeSelectedBackground, 10%);
                     color: darken(@foldertreeSelectedBackground, 20%);
                 }
-            }
 
-            &:focus .folder {
+                &:focus {
 
-                &.selected {
+                    outline: none;
 
-                    background-color: @foldertreeSelectedFocusBackground;
+                    &.selected {
 
-                    .folder-counter-badge,
-                    .folder-options-badge {
-                        background-color: @foldertreeBadgeFocusBackground;
-                    }
+                        background-color: @foldertreeSelectedFocusBackground;
 
-                    .folder-label {
-                        color: @foldertreeFocusedLabelColor;
+                        .folder-counter-badge,
+                        .folder-options-badge {
+                            background-color: @foldertreeBadgeFocusBackground;
+                        }
+
+                        .folder-label {
+                            color: @foldertreeFocusedLabelColor;
+                        }
+
                     }
 
                 }
 
             }
+
 
             .folder-icon {
                 display: none;

@@ -69,7 +69,7 @@ define('io.ox/calendar/freebusy/templates',
 
         getIntervalDropdown: function () {
             return $('<div class="view-dropdown dropdown pull-right">').append(
-                $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" tabindex="4">').text(gt('Change view')),
+                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" tabindex="4">').text(gt('Change view')),
                 $.txt(' '), $('<b class="caret">'),
                 $('<ul class="dropdown-menu dropdown-right" role="menu">').append(
                     $('<li>').append($('<a role="menuitem" href="#" data-action="day">').text(gt('Day'))),
