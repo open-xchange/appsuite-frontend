@@ -1036,12 +1036,19 @@ define('io.ox/core/api/folder',
                     if (list.length) {
                         li.addClass('dropdown').append(
                             $('<a href="#" class="dropdown-toggle" tabindex="1" data-toggle="dropdown">')
-                            .attr('title', title)
-                            .append(
+                            .attr({
+                                'title': title,
+                                'role': 'menuitem'
+                            }).append(
                                 $.txt(gt.noI18n(api.getFolderTitle(title, 30))),
                                 $('<b class="caret">')
                             ),
-                            $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel" aria-haspopup="true">').append(
+                            $('<ul class="dropdown-menu">')
+                            .attr({
+                                'role': 'menu',
+                                'aria-haspopup': 'true',
+                                'aria-label': gt.format('subfolders of %s', gt.noI18n(api.getFolderTitle(title, 30)))
+                            }).append(
                                 _(list).map(function (folder) {
                                     var $a, $li = $('<li>').append(
                                         $a = $('<a href="#" tabindex="1" role="menuitem">')
@@ -1119,13 +1126,17 @@ define('io.ox/core/api/folder',
             var ul;
             options = _.extend({ subfolder: true, last: true, exclude: [] }, options);
             try {
-                ul = $('<ul class="breadcrumb">').on('click', 'a', function (e) {
-                    e.preventDefault();
-                    var id = $(this).attr('data-folder-id');
-                    if (id !== undefined) {
-                        _.call(options.handler, id, $(this).data());
-                    }
-                });
+                ul = $('<ul class="breadcrumb">')
+                    .attr({
+                        'role': 'menubar'
+                    })
+                    .on('click', 'a', function (e) {
+                        e.preventDefault();
+                        var id = $(this).attr('data-folder-id');
+                        if (id !== undefined) {
+                            _.call(options.handler, id, $(this).data());
+                        }
+                    });
                 if (options.prefix) {
                     ul.append($('<li class="prefix">').append(
                         $.txt(options.prefix), $('<span class="divider">').text(gt.noI18n(' '))
