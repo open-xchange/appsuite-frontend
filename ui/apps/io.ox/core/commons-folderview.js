@@ -75,7 +75,7 @@ define('io.ox/core/commons-folderview',
 
                 baton.$.sidepanel.append(
                     $('<div class="context-dropdown dropdown" data-action="context-menu">').append(
-                        $('<a href="#" class="dropdown-toggle">'),
+                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">'),
                         $('<div class="abs context-dropdown-overlay">'),
                         ul = $('<ul class="dropdown-menu" role="menu">')
                     )

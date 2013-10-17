@@ -1134,7 +1134,7 @@ define('io.ox/mail/view-detail',
             this.append(
                 $('<div class="dropdown flag-dropdown clear-title flag">').append(
                     // box
-                    $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" tabindex="1">').append(
+                    $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" tabindex="1">').append(
                         $('<i class="flag-dropdown-icon">')
                             .attr('data-color', color)
                             .addClass(color === 0 ? colorLabelIconEmpty : colorLabelIcon)
