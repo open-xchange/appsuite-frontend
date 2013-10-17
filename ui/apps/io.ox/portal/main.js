@@ -358,6 +358,9 @@ define('io.ox/portal/main',
             // remember
             model.set('baton', baton, { validate: true, silent: true });
             node.attr('aria-label', title);
+            node.find('a.disable-widget').attr({
+                'aria-label': title + ', ' + gt('Disable widget'),
+            });
             // setup?
             if (requiresSetUp) {
                 node.find('.decoration').removeClass('pending');
