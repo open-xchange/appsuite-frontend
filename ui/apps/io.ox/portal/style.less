@@ -393,10 +393,6 @@
             .greeting-phrase { display: block; }
             .signin { font-size: 12px; color: #aaa; white-space: normal; }
         }
-        .decoration {
-            height: auto;
-            background-color: transparent;
-        }
         h2 { padding: 0 0 @spacing 0; }
         .disable-widget { display: none; }
         .widget {
@@ -406,19 +402,24 @@
             border-right-width: 0;
             float: none;
             margin: @spacing 0;
+            .content { position: static; }
+            .decoration {
+                height: auto;
+                background-color: transparent;
+            }
+            &.requires-setup { background-color: transparent; }
+            &.requires-setup, &.error-occurred {
+                .content {
+                    text-align: left;
+                    color: #888;
+                    cursor: pointer;
+                    padding-top: 0;
+                }
+            }
         }
-        .content { position: static; }
+
         .photo-stream, .photo-stream .content, .preview, .preview .content {
             height: 320px;
-        }
-        .widget.requires-setup { background-color: transparent; }
-        .widget.requires-setup, .widget.error-occurred {
-            .content {
-                text-align: left;
-                color: #888;
-                cursor: pointer;
-                padding-top: 0;
-            }
         }
         .portal-feed {
             h1 { margin: 0 0 13px 0; }
