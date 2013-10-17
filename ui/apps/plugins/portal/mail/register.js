@@ -24,6 +24,9 @@ define('plugins/portal/mail/register',
 
     'use strict';
 
+    // helper to remember tracked mails
+    var trackedMails = [];
+
     ext.point('io.ox/portal/widget/mail').extend({
 
         title: gt('Inbox'),
@@ -47,10 +50,11 @@ define('plugins/portal/mail/register',
         },
 
         load: function (baton) {
+            var LIMIT = _.device('small') ? 5 : 10;
             return accountAPI.getUnifiedMailboxName().then(function (mailboxName) {
                 var folderName = mailboxName ? mailboxName + '/INBOX' : api.getDefaultFolder();
-                return api.getAll({ folder:  folderName, limit: 10 }, false).pipe(function (mails) {
-                    return api.getList(mails.slice(0, 10)).done(function (data) {
+                return api.getAll({ folder:  folderName, limit: LIMIT }, false).pipe(function (mails) {
+                    return api.getList(mails).done(function (data) {
                         baton.data = data;
                     });
                 });
@@ -58,23 +62,47 @@ define('plugins/portal/mail/register',
         },
 
         preview: function (baton) {
-
             var $content = $('<div class="content">');
-
+            var updater = function () {
+                require(['io.ox/portal/main'], function (portal) {
+                    var portalApp = portal.getApp(),
+                    portalModel = portalApp.getWidgetCollection()._byId.mail_0;
+                    if (portalModel) {
+                        portalApp.refreshWidget(portalModel, 0);
+                    }
+                });
+            };
             // remove deleted mails
             var list = _(baton.data).filter(function (obj) {
                 return !util.isDeleted(obj);
             });
 
-            var numOfItems = _.device('small') ? 5 : 15;
+            // unregister all old update handlers in this namespace
+            _(trackedMails).each(function (ecid) {
+                api.off('update:' + ecid + '.portalTile');
+            });
+            // reset list
+            trackedMails = [];
 
             if (list && list.length) {
                 $content.append(
-                    _(list.slice(0, numOfItems)).map(function (mail) {
+                    _(list).map(function (mail) {
+
+                        var ecid = _.ecid(mail);
+                        // store tracked ecids for unregistering
+                        trackedMails.push(ecid);
+                        // track updates for the mail
+                        api.on('update:' + ecid + '.portalTitle', updater);
+
                         var received = new date.Local(mail.received_date).format(date.DATE);
                         return $('<div class="item">')
                             .data('item', mail)
                             .append(
+                                (function () {
+                                    if ((mail.flags & 32) === 0) {
+                                        return $('<i class="icon-circle new-item accent">');
+                                    }
+                                })(),
                                 $('<span class="bold">').text(_.noI18n(util.getDisplayName(mail.from[0]))), $.txt(' '),
                                 $('<span class="normal">').text(_.noI18n(_.ellipsis(mail.subject, {max: 50}))), $.txt(' '),
                                 $('<span class="accent">').text(_.noI18n(received))
