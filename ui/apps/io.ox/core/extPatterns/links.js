@@ -290,7 +290,11 @@ define('io.ox/core/extPatterns/links',
                                 var left = $(this).parent().position().left;
                                 $(this).next().attr('class', 'dropdown-menu' + (left < 100 ? '' : ' dropdown-right'));
                             }),
-                            $('<ul class="dropdown-menu dropdown-right" role="menu">').append((function () {
+                            $('<ul class="dropdown-menu dropdown-right">')
+                            .attr({
+                                'role': 'menu',
+                                'aria-label': isSmall ? gt('Actions') : gt('More')
+                            }).append((function () {
                                 if (isSmall) {
                                     if (stayOnTop) {
                                         return stayOnTop.map(wrapAsListItem);
