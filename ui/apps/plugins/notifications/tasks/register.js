@@ -428,9 +428,14 @@ define('plugins/notifications/tasks/register',
                 $('<span class="end_date">').text(_.noI18n(task.end_date)),
                 $('<span class="status">').text(task.status).addClass(task.badge),
                 $('<div class="actions">').append(
-                    $('<button type="button" tabindex="1" class="refocus btn btn-inverse" data-action="change_state">')
-                    .attr('focus-id', 'task-invitation-accept-' + _.ecid(baton.model.attributes))
-                    .text(gt('Accept/Decline'))
+                    $('<button type="button" tabindex="1" class="accept-decline-button refocus btn btn-inverse" data-action="change_state">')
+                    .attr('focus-id', 'task-invitation-accept-decline' + _.ecid(baton.model.attributes))
+                    .text(gt('Accept/Decline')),
+                    $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
+                        .attr({'title': gt('Accept invitation'),
+                               'aria-label': gt('Accept invitation'),
+                               'focus-id': 'task-invite-accept-' + _.ecid(baton.model.attributes)})
+                        .append('<i class="icon-ok">')
                 )
             );
             task = null;
@@ -445,7 +450,9 @@ define('plugins/notifications/tasks/register',
             'click': 'onClickItem',
             'keydown': 'onClickItem',
             'click [data-action="change_state"]': 'onChangeState',
-            'keydown [data-action="change_state"]': 'onChangeState'
+            'keydown [data-action="change_state"]': 'onChangeState',
+            'click [data-action="accept"]': 'onClickAccept',
+            'keydown [data-action="accept"]': 'onClickAccept'
             //'dispose': 'close'
         },
 
@@ -503,8 +510,25 @@ define('plugins/notifications/tasks/register',
             }
         },
 
+        onClickAccept: function (e) {
+            e.stopPropagation();
+            if ((e.type !== 'click') && (e.which !== 13)) { return; }//only open if click or enter is pressed
+
+            var model = this.model,
+                o = {id: model.get('id'),
+                     folder_id: model.get('folder_id'),
+                     data: {confirmmessage: '', confirmation: 1 }};
+            api.confirm(o).done(function () {
+                //update detailview
+                var data = model.toJSON();
+                api.trigger('update:' + _.ecid(data));
+            });
+        },
+
         onChangeState: function (e) {
             e.stopPropagation();
+            if ((e.type !== 'click') && (e.which !== 13)) { return; }//only open if click or enter is pressed
+
             var model = this.model;
             require(['io.ox/tasks/edit/util', 'io.ox/core/tk/dialogs'], function (editUtil, dialogs) {
                 //build popup
