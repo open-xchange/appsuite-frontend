@@ -155,7 +155,7 @@ define('io.ox/core/commons-folderview',
 
                 // only show for mail
                 this.append($('<div>').append(
-                    $('<a href="#" data-action="add-toplevel-folder" tabindex="1" role="menuitem">').text(gt('New folder'))
+                    $('<a href="#" data-action="add-toplevel-folder" tabindex="1" role="button">').text(gt('New folder'))
                     .on('click', addTopLevelFolder)
                 ));
             }
