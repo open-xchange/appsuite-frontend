@@ -393,7 +393,11 @@ define.async('io.ox/realtime/rt',
                 initialReset = false;
             }
         } else if (stanza.get('ox', 'tracingDemand')) {
-            traceAll = true;
+            if (stanza.get('ox', 'tracingDemand').data) {
+                traceAll = true;
+            } else {
+                traceAll = false;
+            }
         } else {
             if (stanza.seq > -1) {
                 if (api.debug) {
