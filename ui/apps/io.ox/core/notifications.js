@@ -79,8 +79,23 @@ define('io.ox/core/notifications',
             var self = this,
                 refocus = false,
                 lastFocused = $(document.activeElement),//save focus
+                nextFocus, //focus in case lastFocus got lost (item not there anymore)
                 empty = true; //check if notification area is empty
+
             if (lastFocused.hasClass('refocus')) {//refocusable elements have this marker class
+                //find next possible focus
+                var items = $('#io-ox-notifications .item'),
+                    lastFocusItemId = lastFocused.closest('.item').attr('focus-id');
+                for (var i = 0; i < items.length; i++) {
+                    if (lastFocusItemId === $(items[i]).attr('focus-id')) {
+                        if ((i + 1) < items.length) { //prevent index out fo bounds
+                            nextFocus = $(items[i + 1]).attr('focus-id');
+                        }
+                        break;
+                    } else {
+                        nextFocus = $(items[i]).attr('focus-id');
+                    }
+                }
                 lastFocused = lastFocused.attr('focus-id');
                 refocus = true;
             }
@@ -107,8 +122,15 @@ define('io.ox/core/notifications',
 
             if (refocus) {//restore focus if possible
                 var found = self.$el.find('[focus-id="' + lastFocused + '"]');
-                if (found) {
+                if (found.length > 0) {
                     found.focus();
+                } else {//item was deleted. try focusing the next item
+                    found = self.$el.find('[focus-id="' + nextFocus + '"]');
+                    if (found.length > 0) {//focus if its there
+                        found.focus();
+                    } else {//just focus first
+                        $('#io-ox-notifications .item').first().focus();
+                    }
                 }
             }
             return self;
@@ -278,7 +300,7 @@ define('io.ox/core/notifications',
             $('#io-ox-notifications-overlay').addClass('active');
             this.badgeView.onToggle(true);
             $(document).on('keydown.notification', $.proxy(function (e) {
-                if (e.which === 27) { // escapekey
+                if (e.which === 27 && !($('#io-ox-notifications-overlay').prop('sidepopup'))) { // escapekey and no open sidepopup (escapekey closes the sidepopup then)
                     $(document).off('keydown.notification');
                     //focus badge when closing
                     this.badgeView.$el.focus();

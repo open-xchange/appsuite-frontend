@@ -134,6 +134,7 @@ define('plugins/notifications/mail/register',
                                     overlay.removeClass('active');
                                     $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
                                 }
+                                $('#io-ox-notifications .item').first().focus();//focus first for now
                             })
                             .show(e, function (popup) {
                                 popup.append(view.draw(data));

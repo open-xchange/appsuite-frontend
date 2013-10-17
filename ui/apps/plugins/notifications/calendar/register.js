@@ -119,6 +119,7 @@ define('plugins/notifications/calendar/register',
             var obj = this.model.get('data'),
                 overlay = $('#io-ox-notifications-overlay'),
                 sidepopup = overlay.prop('sidepopup'),
+                lastFocus = e.target,
                 cid = String(overlay.find('[data-cid]').data('cid'));
             // toggle?
             if (sidepopup && cid === _.cid(obj)) {
@@ -137,6 +138,8 @@ define('plugins/notifications/calendar/register',
                                     overlay.removeClass('active');
                                     $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
                                 }
+                                //restore focus
+                                $(lastFocus).focus();
                             })
                             .show(e, function (popup) {
                                 popup.append(view.draw(data));
@@ -204,6 +207,7 @@ define('plugins/notifications/calendar/register',
             var obj = this.model.get('remdata'),
                 overlay = $('#io-ox-notifications-overlay'),
                 sidepopup = overlay.prop('sidepopup'),
+                lastFocus = e.target,
                 cid = String(overlay.find('[data-cid]').data('cid'));
             obj = {id: obj.target_id, folder: obj.folder};
             // toggle?
@@ -222,6 +226,8 @@ define('plugins/notifications/calendar/register',
                                 overlay.removeClass('active');
                                 $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
                             }
+                            //restore focus
+                            $(lastFocus).focus();
                         })
                         .show(e, function (popup) {
                             popup.append(view.draw(data));

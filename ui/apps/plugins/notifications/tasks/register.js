@@ -123,10 +123,12 @@ define('plugins/notifications/tasks/register',
             if ((e.type !== 'click') && (e.which !== 13)) { return; }
             var cid = $(e.currentTarget).attr('data-cid'),
                 overlay = $('#io-ox-notifications-overlay'),
+                lastFocus = e.target,
                 sidepopup = overlay.prop('sidepopup');
 
             // toggle?
             if (sidepopup && cid === overlay.find('[data-cid]').attr('data-cid')) {
+                lastFocus = undefined;//no focus restore when toggling
                 sidepopup.close();
             } else {
                 require(['io.ox/core/tk/dialogs', 'io.ox/tasks/view-detail'], function (dialogs, viewDetail) {
@@ -142,6 +144,8 @@ define('plugins/notifications/tasks/register',
                                     overlay.removeClass('active');
                                     $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
                                 }
+                                //restore focus
+                                $(lastFocus).focus();
                             })
                             .show(e, function (popup) {
                                 popup.append(viewDetail.draw(taskData));
@@ -288,10 +292,12 @@ define('plugins/notifications/tasks/register',
                     folder: this.model.get('folder_id')
                 },
                 sidepopup = overlay.prop('sidepopup'),
+                lastFocus = e.target,
                 cid = _.cid(obj);
 
                 // toggle?
             if (sidepopup && cid === overlay.find('.tasks-detailview').attr('data-cid')) {
+                lastFocus = undefined;//no focus restore when toggling
                 sidepopup.close();
             } else {
                 require(['io.ox/core/tk/dialogs', 'io.ox/tasks/view-detail'], function (dialogs, viewDetail) {
@@ -307,6 +313,8 @@ define('plugins/notifications/tasks/register',
                                     overlay.removeClass('active');
                                     $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
                                 }
+                                //restore focus
+                                $(lastFocus).focus();
                             })
                             .show(e, function (popup) {
                                 popup.append(viewDetail.draw(taskData));
@@ -436,7 +444,8 @@ define('plugins/notifications/tasks/register',
         events: {
             'click': 'onClickItem',
             'keydown': 'onClickItem',
-            'click [data-action="change_state"]': 'onChangeState'
+            'click [data-action="change_state"]': 'onChangeState',
+            'keydown [data-action="change_state"]': 'onChangeState'
             //'dispose': 'close'
         },
 
@@ -458,11 +467,13 @@ define('plugins/notifications/tasks/register',
                     id: this.model.get('id'),
                     folder: this.model.get('folder_id')
                 },
+                lastFocus = e.target,
                 sidepopup = overlay.prop('sidepopup'),
                 cid = _.cid(obj);
 
                // toggle?
             if (sidepopup && cid === overlay.find('.tasks-detailview').attr('data-cid')) {
+                lastFocus = undefined;//no focus restore when toggling
                 sidepopup.close();
             } else {
                 require(['io.ox/core/tk/dialogs', 'io.ox/tasks/view-detail'], function (dialogs, viewDetail) {
@@ -478,6 +489,8 @@ define('plugins/notifications/tasks/register',
                                     overlay.removeClass('active');
                                     $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
                                 }
+                                //restore focus
+                                $(lastFocus).focus();
                             })
                             .show(e, function (popup) {
                                 popup.append(viewDetail.draw(taskData));
@@ -509,7 +522,6 @@ define('plugins/notifications/tasks/register',
                             //update detailview
                             var data = model.toJSON();
                             api.trigger('update:' + _.ecid(data));
-                            model.collection.remove(model);
                         });
                     }
                 });
