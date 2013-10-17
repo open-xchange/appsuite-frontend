@@ -11,16 +11,11 @@
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 
-/* Grid */
-
 .io-ox-settings-main {
-
     .window-controls label {
         display: inline-block;
         margin-bottom: 0;
     }
-
-
 }
 
 .vgrid-cell.settings {
@@ -40,7 +35,7 @@
     top: 5px;
     bottom: 5px;
     left: 3px;
-    border-right: 0px none;
+    border-right: 0 none;
     .border-radius(4px 4px 4px 4px);
 }
 
@@ -48,20 +43,16 @@
     clear: both;
     text-align: right;
     padding: 0.25em 0 0.5em 0;
-    margin: 1.5em 0px 1.5em 0px;
+    margin: 1.5em 0 1.5em 0;
     border-bottom: 1px solid @inlineLinkBorderColor;
     height: 1px;
 }
 
 .settings-detail-pane {
 
-    label, legend {
-        cursor: default;
-    }
+    label, legend { cursor: default; }
 
-    .section {
-        max-width: 800px;
-    }
+    .section { max-width: 800px; }
 
     h1, h1.pane-headline {
         font-family: @lightFontFamily;
@@ -69,46 +60,45 @@
         font-size: 26px;
         line-height: 32px;
         margin: 2em 0 1em 0;
-    }
 
-    h1:first-child, h1.pane-headline:first-child {
-        margin: 0 0 1.5em 0;
-    }
-
-    h1.no-margin, h2.no-margin {
-        margin: 0 0 0 0;
+        &:first-child { margin: 0 0 1.5em 0; }
+        &.no-margin { margin: 0; }
     }
 
     h2, h2.pane-headline {
         font-size: 20px;
         line-height: 24px;
         margin: 2em 0 1.5em 0;
+
+        &.no-margin { margin: 0; }
     }
 
-    .form-horizontal .control-group > label {
-        float: left;
-        width: 150px;
-        padding-top: 5px;
-        text-align: right;
-    }
+    .form-horizontal {
+        .control-group > label {
+            float: left;
+            width: 150px;
+            padding-top: 5px;
+            text-align: right;
+        }
 
-    .form-horizontal .controls, .help-inline {
-        margin-left: 170px;
+        .controls, .help-inline { margin-left: 170px; }
     }
 
     .form-inline .controls {
-        margin-left: 0px;
+        margin-left: 0;
         text-align: right;
         width: 440px;
     }
 
     .io-ox-accounts-settings {
         max-width: 700px;
+
         .controls {
             padding: 13px;
             height: 30px;
             margin-bottom: 13px;
         }
+
         .hint {
             margin: 14px 0;
             padding: 14px 14px 0 14px;
@@ -130,9 +120,8 @@
                 .list-title { font-weight: bold; }
             }
 
-            .list-title {
-                margin-right: 2em;
-            }
+            .list-title { margin-right: 2em; }
+
             a {
                 cursor: pointer;
                 &.action { margin-right: 2em; }
@@ -142,30 +131,26 @@
 
     .error-log {
 
-        section {
-            margin-bottom: 26px;
-        }
+        section { margin-bottom: 26px; }
 
-        .error-id {
-            color: #555;
-        }
+        .error-id { color: #555; }
+
         .url {
-            font-style: italic;
-            color: #888;
-            clear: both;
             .ellipsis;
         }
-        .stack-trace {
-            clear: both;
-        }
+
+        .stack-trace, .url { clear: both; }
+        
         .datetime {
             float: right;
             color: #888;
         }
+
         .toggle-request-body {
             display: inline-block;
             margin-right: 1em;
         }
+
         .request-body, .stack-trace {
             color: #555;
             white-space: pre;
@@ -173,33 +158,27 @@
             overflow: hidden;
             padding: 0.5em 0;
         }
-        .chart-description {
+
+        .chart-description, .empty, .url {
             font-style: italic;
             color: #888;
         }
-        .tab-content {
-            min-height: 150px;
-        }
-        .empty {
-            font-style: italic;
-            color: #888;
-            padding: 0 13px;
-        }
+
+        .empty { padding: 0 13px; }
+
+        .tab-content { min-height: 150px; }
     }
 }
 
-.io-ox-dialog-popup input.input-large {
-    width: 360px;
-}
-
-.io-ox-dialog-popup .busynotice {
-    text-align: center;
-}
-
 .io-ox-dialog-popup {
+
+    input.input-large { width: 360px; }
+
+    .busynotice { text-align: center; }
+
     .add-mail-account-address, .add-mail-account-password {
-        display:block;
-        max-width:355px;
+        display: block;
+        max-width: 355px;
     }
 }
 
@@ -216,23 +195,19 @@
     border-bottom: 1px solid #E5E5E5;
 }
 
-
 @media (max-width: 480px), (max-device-width: 480px)  {
 
     .io-ox-settings-window {
-        .vgrid-cell {
-            font-size: 15px;
-        }
+        .vgrid-cell { font-size: 15px; }
     }
 
     .settings-detail-pane {
-        h1:first-child, h1.pane-headline:first-child {
-            margin: 0 0 0 0;
-        }
+
+        h1:first-child, h1.pane-headline:first-child { margin: 0; }
 
         h1 + .sectiondelimiter {
             border: none;
-            margin-top: 0px;
+            margin-top: 0;
         }
 
         .io-ox-mail-settings {
@@ -240,83 +215,59 @@
             .form-horizontal .control-group>label {
                 float: none;
                 width: 160px;
-             }
+            }
 
-             .form-inline .controls {
+            .form-inline .controls {
                 text-align: left;
                 width: auto;
-             }
 
-             .form-inline .controls span {
-                display: inherit;
-                line-height: 29px;
-             }
+                span {
+                    display: inherit;
+                    line-height: 29px;
+                }
 
+                input {
+                    width: 70px;
+                    float: left;
+                }
 
-             .form-inline .controls input {
-                width: 70px;
-                float: left;
-             }
+                input + span {
+                    display: inline-block;
+                    padding-left: 5px;
+                    float: none;
+                }
+            }
 
-             .form-inline .controls input + span {
-                display: inline-block;
-                padding-left: 5px;
-                float: none;
-             }
-
-             legend+.control-group {
-                margin-top: 0px;
-             }
-
+            legend+.control-group { margin-top: 0; }
         }
 
         .io-ox-accounts-settings {
 
             .controls {
-                padding-left: 0px;
-            }
+                padding-left: 0;
 
-            .controls .btn-group.pull-right {
-                float: none;
+                 .btn-group.pull-right { float: none; }
             }
-
         }
 
-        .io-ox-calendar-settings {
+        .io-ox-calendar-settings, .io-ox-tasks-settings {
 
             .form-horizontal .control-group>label {
                 float: none;
                 width: 160px;
              }
-
-        }
-
-        .io-ox-tasks-settings {
-
-            .form-horizontal .control-group>label {
-                float: none;
-                width: 160px;
-             }
-
         }
 
         .form-horizontal {
 
-            .control-group > label {
-                text-align: left;
-                margin-left: 5px;
-            }
-            .controls, .help-inline {
-                margin-left: 5px;
-            }
+            .control-group > label { text-align: left; }
 
-           .control-group label.control-label {
+            .controls, .help-inline, .control-group > label { margin-left: 5px; }
+
+            .control-group label.control-label {
                 float: none;
                 width: auto;
-             }
-
+            }
         }
-
     }
-
 }

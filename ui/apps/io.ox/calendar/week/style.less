@@ -35,9 +35,9 @@
     .week-view-container {
 
         position: absolute;
-        left: 0px;
-        right: 0px;
-        bottom: 0px;
+        left: 0;
+        right: 0;
+        bottom: 0;
         top: @calendarToolbarHeight + @weekviewFooterHeight;
 
         .fulltime-container {
@@ -48,7 +48,7 @@
             overflow-x: hidden;
             border-bottom: 1px solid #ccc;
             left: @weekviewTimeWith;
-            right: 0px;
+            right: 0;
 
             .fulltime {
 
@@ -65,7 +65,7 @@
                     text-align: right;
                     .ellipsis;
                     .user-select(none);
-                    padding: 0px 10px;
+                    padding: 0 10px;
                 }
 
                 .day {
@@ -238,7 +238,7 @@
             height: 100%;
             font-size: 12px;
             color: #fff;
-            padding: 0px 7px 0px 7px;
+            padding: 0 7px 0 7px;
             .ellipsis;
 
             * {
@@ -279,7 +279,7 @@
     .ui-resizable-e {
         cursor: e-resize;
         width: 7px;
-        right: 0px;
+        right: 0;
         top: 0;
         height: 100%;
     }
@@ -287,7 +287,7 @@
     .ui-resizable-w {
         cursor: w-resize;
         width: 7px;
-        left: 0px;
+        left: 0;
         top: 0;
         height: 100%;
     }

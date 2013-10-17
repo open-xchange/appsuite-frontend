@@ -307,8 +307,8 @@
         padding-bottom: 14px;
         background-image: none;
         background-color: #fff;
-        border-top: 0px none;
-        border-bottom: 0px none;
+        border-top: 0 none;
+        border-bottom: 0 none;
     }
 
     .shown_as {
@@ -336,7 +336,7 @@
 
     .vgrid-cell.calendar {
 
-        padding: 7px 0px;
+        padding: 7px 0;
 
         &:last-child {
             border: none;
@@ -346,7 +346,7 @@
     .buttons {
         display: inline-block;
         width: 100%;
-        margin: 10px 0px;
+        margin: 10px 0;
 
         .span12 {
             position: relative;
@@ -427,13 +427,11 @@
 
     .io-ox-label.participants-block .io-ox-inline-links {
         float: right;
-        margin: 0px;
+        margin: 0;
         font-size: 9pt;
         font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
 
-        a {
-            color: #333;
-        }
+        a { color: #333; }
     }
 
     .io-ox-label.sublabel {
@@ -575,9 +573,9 @@
 
     @media all and (max-width: 480px), all and (max-device-width: 480px) {
         .io-ox-inline-links:first-child {
-            margin:0;
+            margin: 0;
             span.io-ox-action-link.dropdown {
-                float:right;
+                float: right;
             }
         }
     }
