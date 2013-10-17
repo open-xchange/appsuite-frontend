@@ -48,7 +48,8 @@ define('io.ox/core/extPatterns/links',
                     'data-section': self.section || 'default',
                     'data-prio': self.prio || 'lo',
                     'data-ref': self.ref,
-                    'data-prio-mobile': self.prioMobile || 'none'
+                    'data-prio-mobile': self.prioMobile || 'none',
+                    'role': 'button'
                 })
                 .data({ ref: self.ref, baton: baton })
                 .click(click)
@@ -66,7 +67,8 @@ define('io.ox/core/extPatterns/links',
                         'data-section': self.section || 'default',
                         'data-prio': self.prio || 'lo',
                         'data-ref': self.ref,
-                        'data-prio-mobile': self.prioMobile || 'none'
+                        'data-prio-mobile': self.prioMobile || 'none',
+                        'role': 'button'
                     })
                     .text(String(self.label))
                 );
@@ -300,6 +302,7 @@ define('io.ox/core/extPatterns/links',
                                     var items = [], currentSection = '';
                                     lo.each(function () {
                                         var node = $(this), section = node.attr('data-section');
+                                        node = node.attr('role', 'menuitem');
                                         // add divider?
                                         if (currentSection !== '' && currentSection !== section) {
                                             items.push($('<li class="divider" role="presentation">'));
