@@ -68,7 +68,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/publish', {
         requires: function (e) {
-            return !(e.collection.has('one') && _.isEmpty(e.baton.data.filename));
+            return _.device('!small') && !(e.collection.has('one') && _.isEmpty(e.baton.data.filename));
         },
         action: function (baton) {
             require(['io.ox/core/pubsub/publications'], function (publications) {
@@ -201,7 +201,7 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/sendlink', {
         capabilities: 'webmail !alone',
         requires: function (e) {
-            return e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
+            return _.device('!small') && e.collection.has('some') &&  (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
         },
         multiple: function (list) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -248,7 +248,7 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/showlink', {
         capabilities: '!alone',
         requires: function (e) {
-            return e.collection.has('some');
+            return _.device('!small') && e.collection.has('some');
         },
         multiple: function (list) {
 
@@ -351,7 +351,7 @@ define('io.ox/files/actions',
         capabilities: '!alone',
         requires: function (e) {
             var list = _.getArray(e.context);
-            return e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/write') &&//hide in mail write preview
+            return _.device('!small') && e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/write') &&//hide in mail write preview
                 _(list).reduce(function (memo, obj) {
                     return memo || !api.tracker.isLocked(obj);
                 }, false);
@@ -380,7 +380,7 @@ define('io.ox/files/actions',
         capabilities: '!alone',
         requires: function (e) {
             var list = _.getArray(e.context);
-            return e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/write') &&//hide in mail write preview
+            return _.device('!small') && e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/write') &&//hide in mail write preview
                 _(list).reduce(function (memo, obj) {
                     return memo || api.tracker.isLockedByMe(obj);
                 }, false);
