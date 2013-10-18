@@ -682,9 +682,6 @@ define('io.ox/calendar/week/view',
                     this.pane.empty().append(timeLabel, self.weekCon)
                 )
             );
-
-            this.renderDayLabel();
-            this.pane.focus();
             return this;
         },
 
@@ -737,6 +734,10 @@ define('io.ox/calendar/week/view',
             var days = [],
                 tmpDate = new date.Local(this.startDate.getTime());
 
+            if (this.options.todayClass) {
+                $('.day.' + this.options.todayClass, this.$el).removeClass(this.options.todayClass);
+            }
+
             // something new?
             if (this.startDate.getTime() === this.dayLabelRef) return;
             this.dayLabelRef = this.startDate.getTime();
@@ -759,8 +760,10 @@ define('io.ox/calendar/week/view',
                     .width(100 / this.columns + '%');
                 // mark today
                 if (new date.Local().getDays() === tmpDate.getDays()) {
-                    $('.day[date="' + d + '"]', this.pane).addClass(this.options.todayClass);
-                    day.addClass('today');
+                    if (this.columns > 1) {
+                        $('.day[date="' + d + '"]', this.pane).addClass(this.options.todayClass);
+                    }
+                    day.addClass(this.options.todayClass);
                     this.timeline.show();
                 }
                 days.push(day);
@@ -791,16 +794,13 @@ define('io.ox/calendar/week/view',
         renderAppointments: function () {
             this.showDeclined = settings.get('showDeclinedAppointments', false);
 
-            // clear all first
-            $('.appointment', this.$el).remove();
-            if (this.options.todayClass) {
-                $('.day.' + this.options.todayClass, this.$el).removeClass(this.options.todayClass);
-            }
-
             var self = this,
                 draw = {},
                 fulltimeColPos = [0],
                 fulltimeCount = 0;
+
+            // clear all first
+            $('.appointment', this.$el).remove();
 
             this.renderDayLabel();
 
