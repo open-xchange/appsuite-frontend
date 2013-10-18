@@ -678,13 +678,13 @@ define('io.ox/files/api',
      * @return {string} url
      */
     api.getUrl = function (file, mode, options) {
-        options = options || {};
+        options = $.extend({scaletype: 'contain'}, options || {});
         var url = ox.apiRoot + '/files',
             query = '?action=document&folder=' + file.folder_id + '&id=' + file.id +
                 (file.version !== undefined && options.version !== false ? '&version=' + file.version : ''),
             name = (file.filename ? '/' + encodeURIComponent(file.filename) : ''),
             thumbnail = 'thumbnailWidth' in options && 'thumbnailHeight' in options ?
-                '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight : '';
+                '&scaleType=' + options.scaletype + '&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight : '';
         switch (mode) {
         case 'open':
         case 'view':
