@@ -85,34 +85,31 @@ define('io.ox/core/commons-folderview',
 
                 function openContextMenu(e) {
 
-                    // return early if not up, down, escape or enter
-                    if (!/(27|13|38|40|9)/.test(e.keyCode) && e.type !== 'click') {
-                        return;
-                    }
+                    // return early if not up, down, escape, enter, click or contextmenu
+                    if (!/(27|13|38|40|9)/.test(e.keyCode) && e.type !== 'click' && e.type !== 'contextmenu') return;
 
                     var current = $(e.currentTarget),
                         dropdown = baton.$.sidepanel.find('.context-dropdown');
+
+                    // get node of cog button if opened via contextmenu
+                    if (current.hasClass('folder')) current = current.find('a.folder-options-badge');
 
                     // close dropdown when shift tabbing from button
                     if (/(9)/.test(e.keyCode)) {
                         if (e.shiftKey) {
                             dropdown.removeClass('open');
                             current.removeClass('dropdown-opened');
-                            return;
                         }
-                        if (dropdown.hasClass('open')) {
-                            dropdown.find('ul > li:first > a').focus();
-                        }
+                        if (dropdown.hasClass('open')) dropdown.find('ul > li:first > a').focus();
                         return;
                     }
 
                     // to refocus button on dropdown close
                     ul.off('keydown.foldertreecontext')
-                    .on('keydown.foldertreecontext', 'a', function (e) {
+                      .on('keydown.foldertreecontext', 'a', function (e) {
                         if (/(27)/.test(e.keyCode)) {
                             dropdown.removeClass('open');
-                            current.removeClass('dropdown-opened');
-                            current.focus();
+                            current.removeClass('dropdown-opened').focus();
                             return false;
                         }
                     });
@@ -137,18 +134,24 @@ define('io.ox/core/commons-folderview',
                         return;
                     }
 
-
                     setTimeout(function () {
+                        var offset, top, left, menu, height, maxHeight;
                         // show first to get proper dimensions
                         dropdown.find('.dropdown-toggle').dropdown('toggle');
-                        $(e.currentTarget).addClass('dropdown-opened');
+                        current.addClass('dropdown-opened');
                         // exceeds window?
-                        var offset = $(e.currentTarget).offset(),
-                            top = offset.top - 4,
-                            left = offset.left + $(e.currentTarget).parent().width(),
-                            menu = dropdown.find('.dropdown-menu'),
-                            height = menu.outerHeight(),
-                            maxHeight = $(document).height();
+                        if (e.type !== 'contextmenu') {
+                            offset = current.offset();
+                            top = offset.top - 4;
+                            left = offset.left + current.parent().width();
+                        } else {
+                            top = e.pageY - 15;
+                            left = e.pageX + 15;
+                        }
+                        menu = dropdown.find('.dropdown-menu');
+                        height = menu.outerHeight();
+                        maxHeight = $(document).height();
+
                         if ((top + height) > maxHeight) top = Math.max(10, maxHeight - height - 10);
                         // update position
                         menu.css({ top: top, left: left });
