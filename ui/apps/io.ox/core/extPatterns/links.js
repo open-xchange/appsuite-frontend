@@ -140,9 +140,8 @@ define('io.ox/core/extPatterns/links',
     var drawLinks = function (extension, collection, node, baton, args, bootstrapMode) {
 
         baton = ext.Baton.ensure(baton);
-        var nav = $('<nav role="presentation">').appendTo(node);
+        var nav = $('<ul role="menu">').appendTo(node);
 
-        nav.attr('role', 'menu');
         // customize
         if (extension.attributes) {
             nav.attr(extension.attributes);
@@ -278,9 +277,7 @@ define('io.ox/core/extPatterns/links',
                 var all = nav.children(),
                     lo = all.children().filter('[data-prio="lo"]').parent(),
                     isSmall = _.device('small');
-                nav.empty().append(
-                    nav = $('<ul class="io-ox-inline-links">').append(all)
-                );
+
                 all.addClass('io-ox-action-link');
                 if ((!multiple || options.forcelimit) && (isSmall || (all.length > 5 && lo.length > 1))) {
                     nav.append(
