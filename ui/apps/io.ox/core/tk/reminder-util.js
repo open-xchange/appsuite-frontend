@@ -106,7 +106,7 @@ define('io.ox/core/tk/reminder-util',
                    'model-cid': model.cid,
                    'aria-label': label,
                    'focus-id': 'reminder-notification-' + focusId,//calendar and task are a bit different here (recurrenceposition etc)
-                   role: 'menuitem',
+                   role: 'listItem',
                    'tabindex': 1
         }).addClass('reminder-item refocus');
         buildActions(actions, options, 'reminder-notification-' + focusId);
