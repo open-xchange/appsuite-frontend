@@ -2136,6 +2136,18 @@ input.nice-input {
             color: #bbb;
             font-style: italic;
         }
+
+        &:focus {
+
+            &.selected {
+
+                background-color: @foldertreeSelectedFocusBackground;
+
+                * {
+                    color: @foldertreeFocusedLabelColor;
+                }
+            }
+        }
     }
 
     // more space for fat fingers
@@ -2143,17 +2155,6 @@ input.nice-input {
         line-height: 34px;
     }
 
-    &:focus .folder {
-
-        &.selected {
-
-            background-color: @foldertreeSelectedFocusBackground;
-
-            * {
-                color: @foldertreeFocusedLabelColor;
-            }
-        }
-    }
 
     .subfolders.io-ox-busy {
         min-height: 70px;
