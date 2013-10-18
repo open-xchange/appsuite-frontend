@@ -175,7 +175,7 @@ define('io.ox/files/api',
         return data;
     };
 
-    var allColumns = '20,23,1,5,700,702,703,705,707,3';
+    var allColumns = '20,23,1,5,700,702,703,704,705,707,3';
 
     // generate basic API
     var api = apiFactory({
