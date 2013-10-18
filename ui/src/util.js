@@ -13,7 +13,7 @@
 
 (function () {
 
-    "use strict";
+    'use strict';
 
     // shortcut
     var slice = Array.prototype.slice,
@@ -40,6 +40,9 @@
         queryData = deserialize(document.location.search.substr(1), /&/),
         // local timezone offset
         timezoneOffset = (new Date()).getTimezoneOffset() * 60 * 1000,
+
+        //units
+        sizes = ['Byte', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
 
         // taken from backbone
         Class = function () {},
@@ -604,6 +607,40 @@
         pad: function (val, length, fill) {
             var str = String(val), n = length || 1, diff = n - str.length;
             return (diff > 0 ? new Array(diff + 1).join(fill || "0") : "") + str;
+        },
+
+        /**
+         * return human readable filesize
+         * @param  {numeric} size    in bytes
+         * @param  {object} options
+         * @param  {numeric} options.digits    (number of digits) appear after the decimal point
+         * @param  {boolean} options.force     using fixed-point notation
+         * @param  {string} options.zerochar  replace value of 0 with this char
+         * @return {string}
+         */
+        //TODO: gt for sizes
+        filesize: function (size, options) {
+
+            var opt = _.extend({
+                    digits: 0,
+                    force: true,
+                    zerochar: undefined
+                }, options || {});
+
+            //for security so math.pow doesn't get really high values
+            if (opt.digits > 10) {
+                opt.digits = 10;
+            }
+            var i = 0, dp = Math.pow(10, opt.digits || 0), val;
+            while (size > 1024 && i < sizes.length) {
+                size = size / 1024;
+                i++;
+            }
+            val = (Math.round(size * dp, 1) / dp);
+            //replacement to 0
+            if (typeof opt.zerochar !== 'undefined' && val === 0)
+                return opt.zerochar;
+            return (opt.force ? val : val.toFixed(opt.digits)) + '\xA0' + sizes[i];
         },
 
         /**
