@@ -55,6 +55,10 @@ define('io.ox/files/guidance/statistics',
             'docx': 'Documents',
             'dotx': 'Documents',
 
+            //books
+            'epub' : 'Books',
+            'mobi' : 'Books',
+
             //Spreadsheet
             'ods' : 'Spreadsheets',
             'ots' : 'Spreadsheets',
@@ -83,6 +87,13 @@ define('io.ox/files/guidance/statistics',
             'rar' : 'Archive',
             '7z'  : 'Archive',
             'bz2' : 'Archive',
+
+            //comic books
+            'cbz' : 'Comics',
+            'cbr' : 'Comics',
+            'cb7' : 'Comics',
+            'cbt' : 'Comics',
+            'cba' : 'Comics',
 
             //Web development
             'html': 'Web',
