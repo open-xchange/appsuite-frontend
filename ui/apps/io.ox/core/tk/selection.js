@@ -41,6 +41,8 @@ define('io.ox/core/tk/selection',
             dropzone: false,
             dropzoneSelector: '.selectable',
             dropType: '',
+            scrollpane: container,
+            focus: '[tabindex]',
             tabFix: false
         }, options);
 
@@ -75,6 +77,7 @@ define('io.ox/core/tk/selection',
             selectOnly,
             deselect,
             toggle,
+            isSelectable,
             isCheckbox,
             isMultiple,
             isRange,
@@ -90,6 +93,10 @@ define('io.ox/core/tk/selection',
             fnKey,
             hasMultiple,
             mobileSelectMode;
+
+        isSelectable = function (e) {
+            return !$(e.target).hasClass('not-selectable');
+        };
 
         isCheckbox = function (e) {
             var closest = $(e.target).closest(editableSelector);
@@ -240,7 +247,7 @@ define('io.ox/core/tk/selection',
                 key = node.attr('data-obj-id');
                 id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
                 // checkbox click?
-                if (id !== undefined && isCheckbox(e)) {
+                if (id !== undefined && isCheckbox(e) && isSelectable(e)) {
                     apply(id, e);
                 }
             }
@@ -291,7 +298,7 @@ define('io.ox/core/tk/selection',
                 setTimeout(function () {
                     // exists?
                     if (id !== undefined) {
-                        if (node.hasClass('pending-select')) {
+                        if (node.hasClass('pending-select') && isSelectable(e)) {
                             clear();
                             apply(id, e);
                         }
@@ -347,7 +354,7 @@ define('io.ox/core/tk/selection',
 
         select = function (id, silent) {
             if (id) {
-                fastSelect(id).intoViewport(container);
+                fastSelect(id).intoViewport(options.scrollpane);
                 last = id;
                 lastIndex = getIndex(id);
                 if (prev === empty) {
@@ -710,7 +717,7 @@ define('io.ox/core/tk/selection',
                         node = fastSelect(elem, hash[cid]);
                     }
                     // put first item into viewport
-                    if (index === 0) node.intoViewport(container);
+                    if (index === 0) node.intoViewport(options.scrollpane);
                 } else {
                     selectedItems[cid] = elem;
                 }
@@ -1102,7 +1109,7 @@ define('io.ox/core/tk/selection',
                     .on('mouseup.dnd', stop);
                 // prevent text selection and kills the focus
                 if (!_.browser.IE) { // Not needed in IE - See #27981
-                    container.find('[tabindex]').first().focus();
+                    (options.focus ? container.find(options.focus).first() : container).focus();
                 }
                 e.preventDefault();
             }
