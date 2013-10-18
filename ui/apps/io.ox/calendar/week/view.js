@@ -140,7 +140,6 @@ define('io.ox/calendar/week/view',
          * @param  {array}  data      all appointments returend by API
          */
         reset: function (startDate, data) {
-            console.log('startDate', startDate, 'this.startDate', this.startDate);
             if (startDate === this.apiRefTime.getTime()) {
                 var ws = this.startDate.getTime(),
                     we = ws + (this.columns * date.DAY);
