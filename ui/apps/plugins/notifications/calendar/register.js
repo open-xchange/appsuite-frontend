@@ -47,7 +47,7 @@ define('plugins/notifications/calendar/register',
         draw: function (baton) {
             var model = baton.model;
             this.attr({
-                role: 'listitem',
+                role: 'menuitem',
                 'data-cid': model.get('cid'),
                 'focus-id': 'calendar-invite-' + model.get('cid'),
                 'tabindex': 1,
@@ -60,13 +60,13 @@ define('plugins/notifications/calendar/register',
                 'aria-label': gt('Appointement invitation. %1$s %2$s %3$s %4$s %5$s. Press [enter] to open',
                         _.noI18n(model.get('title')), _.noI18n(model.get('date')),
                         _.noI18n(model.get('time')), _.noI18n(model.get('location')) || '',
-                        _.noI18n(model.get('blue')))
+                        _.noI18n(model.get('organizer')))
             }).append(
                 $('<div class="time">').text(model.get('time')),
                 $('<div class="date">').text(model.get('date')),
                 $('<div class="title">').text(model.get('title')),
                 $('<div class="location">').text(model.get('location')),
-                $('<div class="organizer">').text(model.get('blue')),
+                $('<div class="organizer">').text(model.get('organizer')),
                 $('<div class="actions">').append(
                     $('<button type="button" tabindex="1" class="refocus btn btn-inverse" data-action="accept_decline">')
                         .attr('focus-id', 'calendar-invite-' + model.get('cid') + '-accept-decline')
@@ -74,6 +74,7 @@ define('plugins/notifications/calendar/register',
                         .text(gt('Accept / Decline')),
                     $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
                         .attr({'title': gt('Accept invitation'),
+                               'aria-label': gt('Accept invitation'),
                                'focus-id': 'calendar-invite-' + model.get('cid') + '-accept'})
                         .append('<i class="icon-ok">')
                 )

@@ -49,7 +49,7 @@ define('plugins/notifications/tasks/register',
         var label = gt('Overdue Task. %1$s %2$s. Press [enter] to open', _.noI18n(model.get('title')), endText);
 
         node.append(
-            $('<div class="taskNotification item refocus" tabindex="1" role="listitem">')
+            $('<div class="taskNotification item refocus" tabindex="1" role="menuitem">')
             .attr({'data-cid': model.get('cid'),
                    'focus-id': 'task-overdue-notification-' + model.get('cid'),
                    'model-cid': model.cid,
@@ -280,10 +280,11 @@ define('plugins/notifications/tasks/register',
         },
 
         onClickItem: function (e) {
-            if ($(e.target).is('a') || $(e.target).is('i') || $(e.target).is('button')) {
+            if ($(e.target).is('a') || $(e.target).is('i') || $(e.target).is('button') || $(e.target).is('ul')) {
                 //ignore chevron and dropdownlinks
                 return;
             }
+
             if ((e.type !== 'click') && (e.which !== 13)) { return; }
 
             var overlay = $('#io-ox-notifications-overlay'),
@@ -418,7 +419,7 @@ define('plugins/notifications/tasks/register',
                     //#. %2$s task end date
                     //#, c-format
             var label = gt('Task invitation. %1$s %2$s %3$s. Press [enter] to open', _.noI18n(baton.model.get('title')), endText);
-            this.attr({role: 'listitem',
+            this.attr({role: 'menuitem',
                        'data-cid': _.ecid(baton.model.attributes),
                        'focus-id': 'task-invitation-' + _.ecid(baton.model.attributes),
                        tabindex: 1,
