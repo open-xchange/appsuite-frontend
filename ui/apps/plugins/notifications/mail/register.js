@@ -42,7 +42,7 @@ define('plugins/notifications/mail/register',
         if (data) {
             var f = data.from || [['', '']];
             node.append(
-                $('<div class="item refocus" tabindex="1" role="listitem">')
+                $('<div class="item refocus" tabindex="1" role="menuitem">')
                     .attr({'focus-id': 'mail-notification-' + _.cid(data),//special attribute to restore focus on redraw
                            'data-cid': _.cid(data),
                             //#. %1$s mail sender

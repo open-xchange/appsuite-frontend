@@ -32,7 +32,7 @@ define('io.ox/core/tk/reminder-util',
                             }
                             return ret;
                         }),
-                    $('<button type="button" tabindex="1" class="btn btn-inverse remindOkBtn" data-action="ok">').text(gt('OK'))
+                    $('<button type="button" tabindex="1" class="btn btn-inverse remindOkBtn" data-action="ok">').text(gt('OK')).attr('aria-label', gt('Close this reminder'))
                 );
         } else {
             // special link dropdown
@@ -54,7 +54,8 @@ define('io.ox/core/tk/reminder-util',
                         return ret;
                     })
                 ),
-                $('<button type="button" tabindex="1" class="btn btn-inverse remindOkBtn refocus" focus-id="' + focusId + '-button" data-action="ok">').text(gt('OK'))
+                $('<button role= type="button" tabindex="1" class="btn btn-inverse remindOkBtn refocus" focus-id="' + focusId + '-button" data-action="ok">').text(gt('OK'))
+                .attr('aria-label', gt('Close this reminder'))
             ).find('after').css('clear', 'both');
         }
     }
@@ -105,7 +106,7 @@ define('io.ox/core/tk/reminder-util',
                    'model-cid': model.cid,
                    'aria-label': label,
                    'focus-id': 'reminder-notification-' + focusId,//calendar and task are a bit different here (recurrenceposition etc)
-                   role: 'listitem',
+                   role: 'menuitem',
                    'tabindex': 1
         }).addClass('reminder-item refocus');
         buildActions(actions, options, 'reminder-notification-' + focusId);
