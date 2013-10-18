@@ -253,10 +253,16 @@ define('io.ox/core/extPatterns/links',
     /**
      * @param {object}  options
      * @param {boolean} options.forcelimit force usage of 'more...'
+     * @param {string} add options.title for better accessibility (add context to 'Inline menu')
      */
     var InlineLinks = function (options) {
 
-        var extension = _.extend(this, { classes: 'io-ox-inline-links' }, options);
+        var extension = _.extend(this, {
+            classes: 'io-ox-inline-links',
+            attributes: {
+                'aria-label': gt.format('Inline menu %s', options.title || '')
+            }
+        }, options);
 
         this.draw = function (baton) {
 
