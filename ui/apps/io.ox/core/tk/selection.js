@@ -219,24 +219,29 @@ define('io.ox/core/tk/selection',
         fnKey = function (e) {
             // also trigger keyboard event to internal hub
             self.trigger('keyboard', e, e.which);
+
             // process event
             switch (e.which) {
             case 38:
+                e.preventDefault();
+                if ($(e.target).hasClass('folder-options-badge dropdown-opened')) return;
                 // cursor up
                 if (e.metaKey || e.ctrlKey) {
                     selectFirst(e);
                 } else {
                     selectPrevious(e);
                 }
-                return false;
+                break;
             case 40:
+                e.preventDefault();
+                if ($(e.target).hasClass('folder-options-badge dropdown-opened')) return;
                 // cursor down
                 if (e.metaKey || e.crtlKey) {
                     selectLast(e);
                 } else {
                     selectNext(e);
                 }
-                return false;
+                break;
             }
         };
 
