@@ -895,6 +895,7 @@ define('io.ox/files/actions',
         id: 'move',
         index: index += 100,
         label: gt('Move'),
+        prio: 'hi',
         ref: 'io.ox/files/actions/move',
         section: 'file-op'
     }));
@@ -902,6 +903,7 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'copy',
         index: index += 100,
+        prio: 'hi',
         label: gt('Copy'),
         ref: 'io.ox/files/actions/copy',
         section: 'file-op'
@@ -919,7 +921,6 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'unlock',
         index: index += 100,
-        prio: 'hi',
         label: gt('Unlock'),
         ref: 'io.ox/files/actions/unlock',
         section: 'file-op'
