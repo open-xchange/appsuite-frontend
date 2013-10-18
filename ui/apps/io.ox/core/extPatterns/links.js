@@ -52,7 +52,8 @@ define('io.ox/core/extPatterns/links',
                 })
                 .data({ ref: self.ref, baton: baton })
                 .click(click)
-                .text(String(self.label))
+                .append(self.label ? $.txt(String(self.label)) : $())
+                .append(self.icon ? $('<i>').addClass(String(self.icon)) : $())
             );
         };
 
