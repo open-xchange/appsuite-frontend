@@ -174,29 +174,25 @@ define('io.ox/files/fluid/perspective',
             pers.selection
                 .setEditable(true, '.checkbox')
                 .keyboard(scrollpane, true)
-                //toggle visibility of multiselect actions
+                // toggle visibility of multiselect actions
                 .on('change', function (e, selected) {
-                    //multiselection actions
-                    var self = this,
-                        isEmpty = $.trim(topActions.html()) === '',
-                        dummy = $('<div>');
+
+                    var self = this, dummy = $('<div>');
+
+                    // clear top-bar
+                    topActions.empty();
+
                     if (selected.length > 1) {
+                        // draw inline links
                         commons.multiSelection('io.ox/files', dummy, selected, api, {test: selected.length}, {forcelimit: true});
-                        if (isEmpty) {
-                            topActions.append(dummy.find('.io-ox-inline-links'));
-                            topBar.fadeIn(250);
-                        } else {
-                            topActions.children().fadeOut(250, function () {
-                                topActions.empty()
-                                          .append(dummy.find('.io-ox-inline-links').hide())
-                                          .children().fadeIn(250);
-                            });
+                        // append to bar
+                        topActions.append(dummy.find('.io-ox-inline-links'));
+                        // fade in or yet visible?
+                        if (!topActions.is(':visible')) {
+                            topBar.stop().fadeIn(250);
                         }
-                    }
-                    else if (selected.length <= 1) {
-                        topBar.fadeOut(250, function () {
-                            (topActions || $()).empty();
-                        });
+                    } else {
+                        topBar.stop().hide();
                     }
                     // set url
                     var id = _(selected.length > 50 ? selected.slice(0, 1) : selected).map(function (obj) {
