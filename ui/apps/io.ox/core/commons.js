@@ -39,7 +39,8 @@ define('io.ox/core/commons',
          */
         multiSelection: (function () {
 
-            var points = {};
+            var points = {},
+                options = {};
 
             ext.point('io.ox/links/multi-selection')
             .extend({
@@ -58,8 +59,8 @@ define('io.ox/core/commons',
                 index: 200,
                 draw: function (baton) {
                     // inline links
-                    var node = $('<div>'), id = baton.id;
-                    (points[id] || (points[id] = new links.InlineLinks({ id: 'inline-links', ref: id + '/links/inline' })))
+                    var node = $('<div>'), id = baton.id, opt = baton.opt || {};
+                    (points[id] || (points[id] = new links.InlineLinks({ id: 'inline-links', ref: id + '/links/inline', forcelimit: opt.forcelimit})))
                         .draw.call(node, { data: baton.selection, grid: baton.grid }); // needs grid to add busy animations without using global selectors
                     this.append(
                         node.children().first()
@@ -67,10 +68,12 @@ define('io.ox/core/commons',
                 }
             });
 
-            return function (id, node, selection, api, grid) {
+            return function (id, node, selection, api, grid, opt) {
+                opt = _.extend({}, options, opt || {});
+
                 if (selection.length > 1) {
                     // draw
-                    var baton = ext.Baton({ id: id, grid: grid, selection: selection });
+                    var baton = ext.Baton({ id: id, grid: grid, selection: selection, opt: opt });
                     node.idle().empty().append(function () {
                         var container, box;
                         container = (api ? $.createViewContainer(selection, api) : $('<div>'))

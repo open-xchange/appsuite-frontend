@@ -178,6 +178,50 @@ define('io.ox/core/extPatterns/links',
             });
     };
 
+    var drawInlineButtonGroup = function (extension, collection, node, baton, args, bootstrapMode) {
+        baton = ext.Baton.ensure(baton);
+        var group = $('<div class="btn-group">'),
+            nav = $('<nav role="presentation">').append(group).appendTo(node);
+
+        // customize
+        if (extension.attributes) {
+            nav.attr(extension.attributes);
+        }
+        if (extension.classes) {
+            nav.addClass(extension.classes);
+        }
+
+        return getLinks(extension, collection, baton, args)
+            .always(function (links) {
+                // count resolved links
+                var count = 0;
+                // draw links
+                _(links).each(function (item) {
+                    var link = item.link;
+                    if (item.state === false) {
+                        if (_.isFunction(link.drawDisabled)) {
+                            link.drawDisabled.call(bootstrapMode ? $('<li>').appendTo(group) : group, baton);
+                            count++;
+                        }
+                    }
+                    else if (_.isFunction(link.draw)) {
+                        link.draw.call(bootstrapMode ? $('<li>').appendTo(group) : group, baton);
+                        if (_.isFunction(link.customize)) {
+                            link.customize.call(group.find('a'), baton);
+                        }
+                        count++;
+                    }
+                });
+                // empty?
+                if (count === 0) {
+                    group.addClass('empty');
+                }
+            })
+            .then(function () {
+                return group;
+            });
+    };
+
     var ToolbarLinks = function (options) {
         var self = _.extend(this, options);
         this.draw = function (baton) {
@@ -206,6 +250,10 @@ define('io.ox/core/extPatterns/links',
         return $('<li>').append(this).get(0);
     };
 
+    /**
+     * @param {object}  options
+     * @param {boolean} options.forcelimit force usage of 'more...'
+     */
     var InlineLinks = function (options) {
 
         var extension = _.extend(this, { classes: 'io-ox-inline-links' }, options);
@@ -225,8 +273,7 @@ define('io.ox/core/extPatterns/links',
                     lo = all.filter('[data-prio="lo"]'),
                     stayOnTop = all.filter('[data-prio-mobile="none"]'),
                     isSmall = _.device('small');
-
-                if (!multiple && (isSmall || (all.length > 5 && lo.length > 1))) {
+                if ((!multiple || options.forcelimit) && (isSmall || (all.length > 5 && lo.length > 1))) {
                     nav.append(
                         $('<span class="io-ox-action-link dropdown">').append(
                             $('<a href="#" data-toggle="dropdown" data-action="more" aria-haspopup="true" tabindex="1">')
@@ -248,7 +295,7 @@ define('io.ox/core/extPatterns/links',
                                         return all.stayOnTop.map(wrapAsListItem);
                                     }
                                 } else {
-                                    // loop over all items and visually group by "section"
+                                    // loop over all items and visually group by 'section'
                                     var items = [], currentSection = '';
                                     lo.each(function () {
                                         var node = $(this), section = node.attr('data-section');
@@ -272,6 +319,19 @@ define('io.ox/core/extPatterns/links',
                     options.customizeNode(nav);
                 }
             });
+        };
+    };
+
+    var InlineButtonGroup = function (options) {
+        var extension = _.extend(this, { classes: 'io-ox-inline-buttongroup' }, options);
+        this.draw = function (baton) {
+            baton = ext.Baton.ensure(baton);
+            drawInlineButtonGroup(extension, new Collection(baton.data), this, baton, $.makeArray(arguments))
+                .done(function (group) {
+                    if (options.customizeNode) {
+                        options.customizeNode(group);
+                    }
+                });
         };
     };
 
@@ -299,7 +359,7 @@ define('io.ox/core/extPatterns/links',
         }
         $toggle.addClass(options.classes);
 
-        // TODO remove this whole "inline-js-spacing" solution
+        // TODO remove this whole 'inline-js-spacing' solution
         // better use CSS :after to insert spaces
         // dont' do this crap on mobile, textnode can not be styled or overwritten later...
         if (_.device('!smartphone')) {
@@ -466,6 +526,7 @@ define('io.ox/core/extPatterns/links',
         ToolbarButtons: ToolbarButtons,
         ToolbarLinks: ToolbarLinks,
         InlineLinks: InlineLinks,
+        InlineButtonGroup: InlineButtonGroup,
         DropdownLinks: DropdownLinks,
         Dropdown: Dropdown,
         ButtonGroup: ButtonGroup,
