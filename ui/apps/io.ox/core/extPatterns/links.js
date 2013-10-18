@@ -49,7 +49,7 @@ define('io.ox/core/extPatterns/links',
                     'data-prio': self.prio || 'lo',
                     'data-ref': self.ref,
                     'data-prio-mobile': self.prioMobile || 'none',
-                    'role': 'button'
+                    'role': 'menuitem'
                 })
                 .data({ ref: self.ref, baton: baton })
                 .click(click)
@@ -68,7 +68,7 @@ define('io.ox/core/extPatterns/links',
                         'data-prio': self.prio || 'lo',
                         'data-ref': self.ref,
                         'data-prio-mobile': self.prioMobile || 'none',
-                        'role': 'button'
+                        'role': 'menuitem'
                     })
                     .text(String(self.label))
                 );
@@ -142,6 +142,7 @@ define('io.ox/core/extPatterns/links',
         baton = ext.Baton.ensure(baton);
         var nav = $('<nav role="presentation">').appendTo(node);
 
+        nav.attr('role', 'menu');
         // customize
         if (extension.attributes) {
             nav.attr(extension.attributes);
@@ -249,10 +250,6 @@ define('io.ox/core/extPatterns/links',
         };
     };
 
-    var wrapAsListItem = function () {
-        return $('<li>').append(this).get(0);
-    };
-
     /**
      * @param {object}  options
      * @param {boolean} options.forcelimit force usage of 'more...'
@@ -269,18 +266,28 @@ define('io.ox/core/extPatterns/links',
             var args = $.makeArray(arguments),
                 multiple = _.isArray(baton.data) && baton.data.length > 1;
 
-            drawLinks(extension, new Collection(baton.data), this, baton, args).done(function (nav) {
+            drawLinks(extension, new Collection(baton.data), this, baton, args, true).done(function (nav) {
 
                 // add toggle unless multi-selection
                 var all = nav.children(),
-                    lo = all.filter('[data-prio="lo"]'),
-                    stayOnTop = all.filter('[data-prio-mobile="none"]'),
+                    lo = all.children().filter('[data-prio="lo"]').parent(),
                     isSmall = _.device('small');
+                nav.empty().append(
+                    nav = $('<ul class="io-ox-inline-links">').append(all)
+                );
+                all.addClass('io-ox-action-link');
                 if ((!multiple || options.forcelimit) && (isSmall || (all.length > 5 && lo.length > 1))) {
                     nav.append(
-                        $('<span class="io-ox-action-link dropdown">').append(
-                            $('<a href="#" data-toggle="dropdown" data-action="more" aria-haspopup="true" tabindex="1">')
-                            .append(
+                        $('<li class="io-ox-action-link dropdown">').append(
+                            $('<a>')
+                            .attr({
+                                'href': '#',
+                                'data-toggle': 'dropdown',
+                                'data-action': 'more',
+                                'aria-haspopup': 'true',
+                                'tabindex': '1',
+                                'role': 'menuitem'
+                            }).append(
                                 isSmall ?
                                     [$.txt(gt('Actions')), $('<b class="caret">')] :
                                     [$.txt(gt('More')), $.txt(_.noI18n(' ...')), $('<b class="caret">')]
@@ -295,30 +302,20 @@ define('io.ox/core/extPatterns/links',
                                 'role': 'menu',
                                 'aria-label': isSmall ? gt('Actions') : gt('More')
                             }).append((function () {
-                                if (isSmall) {
-                                    if (stayOnTop) {
-                                        return stayOnTop.map(wrapAsListItem);
-                                    } else {
-                                        return all.stayOnTop.map(wrapAsListItem);
+                                // loop over all items and visually group by "section"
+                                var items = [], currentSection = '';
+                                lo.each(function () {
+                                    var node = $(this), section = node.attr('data-section');
+                                    // add divider?
+                                    if (currentSection !== '' && currentSection !== section) {
+                                        items.push($('<li class="divider" role="presentation">'));
                                     }
-                                } else {
-                                    // loop over all items and visually group by 'section'
-                                    var items = [], currentSection = '';
-                                    lo.each(function () {
-                                        var node = $(this), section = node.attr('data-section');
-                                        node = node.attr('role', 'menuitem');
-                                        // add divider?
-                                        if (currentSection !== '' && currentSection !== section) {
-                                            items.push($('<li class="divider" role="presentation">'));
-                                        }
-                                        currentSection = section;
-                                        // add item
-                                        items.push($('<li>').append(node));
-                                    });
-                                    return items;
-                                }
-                            }())
-                            )
+                                    currentSection = section;
+                                    // add item
+                                    items.push(node);
+                                });
+                                return items;
+                            }()))
                         )
                     );
                 }

@@ -1772,9 +1772,13 @@ nav.io-ox-inline-links + header {
 }
 
 .io-ox-inline-links > a,
-.io-ox-inline-links > span.dropdown {
+.io-ox-inline-links > li.dropdown {
     color: @inlineLinkColor;
     text-decoration: none;
+
+    li.io-ox-action-link {
+        margin-right: 0;
+    }
 }
 
 .io-ox-action-link {
@@ -1782,11 +1786,11 @@ nav.io-ox-inline-links + header {
     &.btn-primary:hover { text-decoration: none; }
 }
 
-.io-ox-inline-links span.dropdown ul {
+.io-ox-inline-links li.dropdown ul {
     text-align: left;
 }
 
-.io-ox-inline-links span.dropdown .caret {
+.io-ox-inline-links li.dropdown .caret {
     margin-right: 5px;
 }
 
