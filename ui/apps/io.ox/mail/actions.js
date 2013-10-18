@@ -40,6 +40,15 @@ define('io.ox/mail/actions',
 
     // actions
 
+    new Action('io.ox/mail/actions/unselect', {
+        requires: function (e) {
+            return e.collection.has('toplevel', 'some');
+        },
+        multiple: function (list, baton) {
+            if (baton.grid) baton.grid.selection.clear();
+        }
+    });
+
     new Action('io.ox/mail/actions/compose', {
         id: 'compose',
         action: function (baton) {
@@ -903,6 +912,14 @@ define('io.ox/mail/actions',
     // inline links
 
     var INDEX = 0;
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: 10, // should be first
+        prio: 'hi',
+        id: 'unselect',
+        label: gt('Unselect all'),
+        ref: 'io.ox/mail/actions/unselect'
+    }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
