@@ -645,13 +645,31 @@ define('io.ox/calendar/week/view',
                     $('<div class="pagination">').append(
                         $('<ul>').append(
                             $('<li>').append(
-                                $('<a href="#" tabindex="1">').addClass('control prev').append($('<i>').addClass('icon-chevron-left'))
+                                $('<a>').attr({
+                                        href: '#',
+                                        tabindex: 1,
+                                        role: 'button',
+                                        title: gt('previous week'),
+                                        'aria-label': gt('Previous Week')
+                                    })
+                                    .addClass('control prev')
+                                    .append($('<i>').addClass('icon-chevron-left'))
                             ),
                             $('<li>').append(
-                                $('<a href="#" tabindex="1">').addClass('control today').text(gt('Today'))
+                                $('<a href="#" tabindex="1" role="button">')
+                                    .addClass('control today')
+                                    .text(gt('Today'))
                             ),
                             $('<li>').append(
-                                $('<a href="#" tabindex="1">').addClass('control next').append($('<i>').addClass('icon-chevron-right'))
+                                $('<a>').attr({
+                                        href: '#',
+                                        tabindex: 1,
+                                        role: 'button',
+                                        title: gt('next week'),
+                                        'aria-label': gt('Next Week')
+                                    })
+                                    .addClass('control next')
+                                    .append($('<i>').addClass('icon-chevron-right'))
                             )
                         )
                     )
@@ -726,16 +744,18 @@ define('io.ox/calendar/week/view',
             // refresh dayLabel, timeline and today-label
             this.timeline.hide();
             for (var d = 0; d < this.columns; d++) {
-                var day = $('<a>')
+                var formatDate = tmpDate.format(date.DAYOFWEEK_DATE),
+                    day = $('<a>')
                     .addClass('weekday')
                     .attr({
                         date: d,
                         title: gt('Click for whole day appointment'),
                         role: 'button',
                         tabindex: 1,
-                        href: '#'
+                        href: '#',
+                        'aria-label': formatDate + ', ' + gt('Click for whole day appointment')
                     })
-                    .text(gt.noI18n(tmpDate.format(date.DAYOFWEEK_DATE)))
+                    .text(gt.noI18n(formatDate))
                     .width(100 / this.columns + '%');
                 // mark today
                 if (new date.Local().getDays() === tmpDate.getDays()) {
