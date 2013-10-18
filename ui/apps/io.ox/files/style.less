@@ -50,6 +50,19 @@
     -webkit-overflow-scrolling: touch;
     -webkit-tap-highlight-color: transparent;
 
+    //used for selected
+    .image-effect-1 {
+        img, .preview-cover, [class^="icon-"] {
+            -webkit-filter: grayscale(1) opacity(0.5);
+        }
+    }
+    //used for hover
+    .image-effect-2 {
+        img, .preview-cover, [class^="icon-"] {
+            opacity: 0.9;
+        }
+    }
+
     .files-scrollable-pane {
 
         outline: 0;
@@ -132,19 +145,6 @@
                 color: black;
                 padding: 2px 0;
 
-                //highlighting
-                &.selected {
-                    background-color: #ddd;
-                }
-                &:hover {
-                    outline: 0;
-                    background-color: #F8F8F8;
-                }
-                &.selected:hover {
-                    outline: 0;
-                    background-color: #31A1D9;
-                }
-
                 //hidden ones
                 .preview, .title-hover {
                     display: none;
@@ -169,6 +169,7 @@
                     background-size: cover;
                     background-repeat: no-repeat;
                     background-position: center;
+                    background-color: white;
 
                     //generic icons
                     i {
@@ -231,6 +232,20 @@
                     margin-right: 13px;
                 }
 
+                //highlighting
+                &.selected {
+                    background-color: #ddd;
+                    .image-effect-1
+                }
+                &:hover {
+                    background-color: #F6F6F6;
+                    .image-effect-2;
+                }
+                &.selected:hover {
+                    background-color: #ccc;
+                    .image-effect-1;
+                }
+
             }
         }
 
@@ -252,7 +267,7 @@
                 }
 
                 .preview-border {
-                    display: inline-block;
+                    display: inline-flex;
                 };
 
                 .preview {
@@ -277,8 +292,11 @@
                     background-position: center;
 
                     [class^="icon-"] {
-                        font-size: 60px;
-                        color: #ccc;
+                        line-height: 100px;
+                        font-size: 48px;
+                        width: 75px;
+                        height: 100px;
+                        color: #bbb;
                     }
 
                     i.file-type-doc { color: #0092D0; }
@@ -312,29 +330,26 @@
                 }
 
                 //image
-                &.selected .preview-border {
-                    border: 3px solid #ddd;
-                }
-                &.selected img {
-                    -webkit-filter: grayscale(1) opacity(0.5);
+                &.selected {
+                    .preview-border {
+                        border: 3px solid #ddd;
+                    }
+                    .image-effect-1;
                 }
 
-                &:hover .preview-border {
-                    border: 3px solid rgba(0, 136, 204, 1);
-                }
-                &.selected {
-                    &:hover .preview-border {
-                        border: 3px solid rgba(0, 170, 255, 1);
+                &:hover {
+                    .preview-border {
+                        border: 3px solid #ddd;
                     }
-                    &:hover img {
-                        opacity: 0.9;
+                    .image-effect-2;
+                }
+                &.selected:hover {
+                    .preview-border {
+                        border: 3px solid #ccc;
                     }
+                    .image-effect-1;
                 }
-                //generic icon
-                &.selected [class^="icon-"],  &:hover [class^="icon-"] {
-                    color: rgba(0, 136, 204, 1);
-                }
-            }
+             }
         }
 
         &.view-tile {
@@ -345,30 +360,6 @@
                 margin: 2px;
                 .box-sizing(border-box);
 
-                &.selected {
-                    border: 6px solid #ddd;
-                    .preview-cover {
-                        -webkit-filter: grayscale(1) opacity(0.5);
-                        [class^="icon-"] {
-                            font-size: 86px;
-                        }
-                    }
-                    .details {
-                        top: 116px;
-                    }
-                    .title-hover {
-                        top: -144px;
-                    }
-                }
-                //show short title on hover
-                &:hover {
-                    .details {
-                        display: block;
-                    }
-                    .title-hover {
-                        display: initial;
-                    }
-                }
 
                 .img-polaroid {
                     border: 1px solid black;
@@ -393,7 +384,7 @@
                     [class^="icon-"] {
                         font-size: 100px;
                         line-height: 1.65em;
-                        color: #ccc;
+                        color: #bbb;
                     }
 
                     .icon-music {
@@ -430,6 +421,38 @@
                         color: #c00;
                     }
                  }
+
+                .bordered {
+                    .details {
+                        display: block;
+                        top: 116px;
+                    }
+                    .title-hover {
+                        display: initial;
+                        top: -144px;
+                    }
+                    [class^="icon-"] {
+                        font-size: 88px;
+                    }
+                }
+
+                &.selected {
+                    border: 6px solid #ddd;
+                    .bordered;
+                    .image-effect-1;
+                }
+                //show short title on hover
+                &:hover {
+                    border: 6px solid #ddd;
+                    .bordered;
+                    .image-effect-2;
+                }
+
+                &.selected:hover {
+                    border: 6px solid #ccc;
+                    .image-effect-1;
+                }
+
 
             }
         }

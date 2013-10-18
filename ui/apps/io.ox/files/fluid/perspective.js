@@ -277,38 +277,32 @@ define('io.ox/files/fluid/perspective',
                 options = _.extend({ version: true, scaletype: 'cover' }, baton.options),
                 mode = previewMode(file),
                 changed = getDateFormated(baton.data.last_modified),
-                preview,
-                genericIcon,
-                wrap = $('<div class="preview">').append(genericIcon = drawGenericIcon(file.filename)),
-                genericIconCover = drawGenericIcon(file.filename),
-                wrapcover = $('<div class="preview-cover">').append(genericIconCover);
+                //view mode: icon
+                iconImage = drawGenericIcon(file.filename),
+                previewImage = $('<div class="preview">').append($('<span class="preview-border">').append(iconImage)),
+                //view modes: list, tile
+                iconBackground = drawGenericIcon(file.filename),
+                previewBackground = $('<div class="preview-cover">').append(iconBackground);
 
-            /**
-             * view modes
-             * a) preview (div): containing icon- OR img-tag (view-icons)
-             * b) preview-cover (div): containing icon-tag OR empty with backgroundimage (view-list, view-tiles)
-             */
-
-            //previewable
+            //add preview image
             if (mode) {
                 var url = api.getUrl(file, mode, options);
-                //preview node with img tag and wrapping border span
-                preview = $('<span class="preview-border">')
-                        .append(
-                            $('<img>', {
+                previewImage.find('.preview-border')
+                    .append(
+                        $('<img>', {
                                 alt: '',
                                 'data-src': url
                             })
                             .addClass('img-polaroid lazy')
                             .one({
                                 load: function () {
-                                    genericIcon.remove();
-                                    genericIconCover.remove();
-                                    wrapcover.css('backgroundImage', 'url(' + url + ')');
+                                    iconImage.remove();
+                                    iconBackground.remove();
+                                    previewBackground.css('backgroundImage', 'url(' + url + ')');
                                 },
                                 error: iconError
                             })
-                );
+                    );
             }
 
             this.addClass('file-cell pull-left selectable')
@@ -321,9 +315,8 @@ define('io.ox/files/fluid/perspective',
                             $('<input type="checkbox" class="reflect-selection" aria-hidden="true" tabindex="-1">')
                         )
                     ),
-                    //preview: used for icon
-                    (preview ? wrap.append(preview) : wrap),
-                    wrapcover,
+                    //preview
+                    previewImage, previewBackground,
                     //details
                     $('<div class="details">').append(
                         //title
