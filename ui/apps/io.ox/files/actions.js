@@ -32,21 +32,6 @@ define('io.ox/files/actions',
         POINT = 'io.ox/files';
 
     // actions
-
-    new Action('io.ox/files/actions/switch-to-list-view', {
-        requires: true,
-        action: function (baton) {
-            ox.ui.Perspective.show(baton.app, 'list');
-        }
-    });
-
-    new Action('io.ox/files/actions/switch-to-icon-view', {
-        requires: true,
-        action: function (baton) {
-            ox.ui.Perspective.show(baton.app, 'icons');
-        }
-    });
-
     new Action('io.ox/files/actions/upload', {
         requires: function (e) {
             return e.baton.app.folder.getData().then(function (data) {
@@ -63,6 +48,27 @@ define('io.ox/files/actions',
                     }
                 });
             });
+        }
+    });
+
+    new Action('io.ox/files/actions/layout-tile', {
+        require: true,
+        action: function (baton) {
+            ox.ui.Perspective.show(baton.app, 'fluid:tile');
+        }
+    });
+
+    new Action('io.ox/files/actions/layout-icon', {
+        require: true,
+        action: function (baton) {
+            ox.ui.Perspective.show(baton.app, 'fluid:icon');
+        }
+    });
+
+    new Action('io.ox/files/actions/layout-list', {
+        require: true,
+        action: function (baton) {
+            ox.ui.Perspective.show(baton.app, 'fluid:list');
         }
     });
 
@@ -746,17 +752,24 @@ define('io.ox/files/actions',
     });
 
     new ActionLink(POINT + '/links/toolbar/view', {
-        id: 'icons',
+        id: 'list',
         index: 100,
-        label: gt('Icons'),
-        ref: 'io.ox/files/actions/switch-to-icon-view'
+        label: gt('List'),
+        ref: 'io.ox/files/actions/layout-list'
     });
 
     new ActionLink(POINT + '/links/toolbar/view', {
-        id: 'list',
+        id: 'icon',
         index: 200,
-        label: gt('List'),
-        ref: 'io.ox/files/actions/switch-to-list-view'
+        label: gt('Icons'),
+        ref: 'io.ox/files/actions/layout-icon'
+    });
+
+    new ActionLink(POINT + '/links/toolbar/view', {
+        id: 'tile',
+        index: 300,
+        label: gt('Tile'),
+        ref: 'io.ox/files/actions/layout-tile'
     });
 
     //guidance
@@ -1175,4 +1188,40 @@ define('io.ox/files/actions',
         label: gt('Play video files'),
         ref: 'io.ox/files/icons/videoplayer'
     }));
+
+    //rightside
+    ext.point('io.ox/files/icons/actions-right').extend(new links.InlineButtonGroup({
+        index: 100,
+        id: 'inline-links',
+        ref: 'io.ox/files/icons/inline-right'
+    }));
+
+    ext.point('io.ox/files/icons/inline-right').extend(new links.Link({
+        index: 100,
+        prio: 'hi',
+        id: 'layout-list',
+        ref: 'io.ox/files/actions/layout-list',
+        icon: 'icon-align-justify',
+        cssClasses: 'io-ox-action-link btn'
+    }));
+
+    ext.point('io.ox/files/icons/inline-right').extend(new links.Link({
+        index: 200,
+        prio: 'hi',
+        id: 'layout-icon',
+        ref: 'io.ox/files/actions/layout-icon',
+        icon: 'icon-th',
+        cssClasses: 'io-ox-action-link btn'
+    }));
+
+    ext.point('io.ox/files/icons/inline-right').extend(new links.Link({
+        index: 300,
+        prio: 'hi',
+        id: 'layout-tile',
+        ref: 'io.ox/files/actions/layout-tile',
+        icon: 'icon-th-large',
+        cssClasses: 'io-ox-action-link btn'
+    }));
+
+
 });

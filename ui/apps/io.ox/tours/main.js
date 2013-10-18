@@ -471,13 +471,13 @@ define('io.ox/tours/main',
                     {
                         title: gt('The Icons view'),
                         placement: 'bottom',
-                        target: function () { return $('.files-iconview .files-scrollable-pane')[0]; },
+                        target: function () { return $('.files-wrapper .files-scrollable-pane')[0]; },
                         content: gt('In the Icons view you can see the files of the selected folder in the display area.')
                     },
                     {
                         title: gt('The folder path'),
                         placement: 'bottom',
-                        target: function () { return $('.files-iconview .breadcrumb:visible')[0]; },
+                        target: function () { return $('.files-wrapper .breadcrumb:visible')[0]; },
                         content: gt('At the top of the display area the path to the selected folder is shown. Click on the path to switch to another folder.')
                     },
                     {
@@ -489,7 +489,7 @@ define('io.ox/tours/main',
                     {
                         title: gt('Displaying information'),
                         placement: 'bottom',
-                        target: function () { return $('.file-icon')[0]; },
+                        target: function () { return $('.file-cell')[0]; },
                         content: gt('To view further information, click on a file. The information are displayed in a pop-up window.')
                     }]
                 },

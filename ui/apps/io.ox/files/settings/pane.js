@@ -27,8 +27,11 @@ define('io.ox/files/settings/pane',
             DEFAULT_VIEW: gt('Default view'),
             SHOW_HIDDEN: gt('Show hidden files and folders')
         },
-        optionsView = [{label: gt('Icon view'), value: 'icons'},
-                       {label: gt('List view'), value: 'list'}],
+        optionsView = [
+            {label: gt('List'), value: 'fluid:list'},
+            {label: gt('Icons'), value: 'fluid:icon'},
+            {label: gt('Tiles'), value: 'fluid:tile'}
+        ],
         filesViewSettings;
 
     var FilesSettingsView = Backbone.View.extend({

@@ -59,9 +59,12 @@ define('io.ox/files/main',
             .pipe(commons.showWindow(win))
             .done(function () {
                 // switch to view in url hash or default
-                var p = settings.get('view', 'icons');
-                if (!/^(icons|list)$/.test(p)) {
-                    p = 'icons';
+                var p = settings.get('view', 'fluid');
+                if (/^(icons)$/.test(p)) {
+                    //old setting value support
+                    p = 'fluid:icon';
+                } else if (!/^(fluid:list|fluid:icon|fluid:tile)$/.test(p)) {
+                    p = 'fluid:list';
                 }
                 ox.ui.Perspective.show(app, options.perspective || _.url.hash('perspective') || p);
             });
