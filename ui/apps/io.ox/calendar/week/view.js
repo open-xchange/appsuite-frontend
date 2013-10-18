@@ -50,6 +50,7 @@ define('io.ox/calendar/week/view',
         folderData:     {},     // current folder object
         restoreCache:   null,   // object, which contains data for save and restore functions
         extPoint:       null,   // appointment extension
+        dayLabelRef:    null,
 
         // startup options
         options:        {
@@ -139,6 +140,7 @@ define('io.ox/calendar/week/view',
          * @param  {array}  data      all appointments returend by API
          */
         reset: function (startDate, data) {
+            console.log('startDate', startDate, 'this.startDate', this.startDate);
             if (startDate === this.apiRefTime.getTime()) {
                 var ws = this.startDate.getTime(),
                     we = ws + (this.columns * date.DAY);
@@ -718,12 +720,22 @@ define('io.ox/calendar/week/view',
             var days = [],
                 tmpDate = new date.Local(this.startDate.getTime());
 
+            // something new?
+            if (this.startDate.getTime() === this.dayLabelRef) return;
+            this.dayLabelRef = this.startDate.getTime();
+
             // refresh dayLabel, timeline and today-label
             this.timeline.hide();
             for (var d = 0; d < this.columns; d++) {
-                var day = $('<a href="#" class="weekday" tabindex="1">')
-                    .attr('date', d)
-                    .attr('title', gt('Click for whole day appointment'))
+                var day = $('<a>')
+                    .addClass('weekday')
+                    .attr({
+                        date: d,
+                        title: gt('Click for whole day appointment'),
+                        role: 'button',
+                        tabindex: 1,
+                        href: '#'
+                    })
                     .text(gt.noI18n(tmpDate.format(date.DAYOFWEEK_DATE)))
                     .width(100 / this.columns + '%');
                 // mark today
