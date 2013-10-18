@@ -651,6 +651,7 @@ define('io.ox/core/commons-folderview',
                 windowContainer.on('mousemove', function (e) {
                     var newWidth = e.pageX;
                     if (newWidth < maxSidePanelWidth && newWidth > minSidePanelWidth) {
+                        app.trigger('folderview:resize');
                         applyWidth(newWidth);
                     }
                 });
