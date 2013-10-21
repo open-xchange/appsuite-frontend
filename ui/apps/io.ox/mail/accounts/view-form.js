@@ -263,12 +263,12 @@ define('io.ox/mail/accounts/view-form',
                         var label = gt('Select folder'),
                             dialog = new dialogs.ModalDialog()
                             .header($('<h4>').text(label))
-                            .addPrimaryButton('select', label)
-                            .addButton('cancel', gt('Cancel'));
+                            .addPrimaryButton('select', label, 'select', {'tabIndex': '1'})
+                            .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
                         dialog.getBody().css({ height: '250px' });
                         var tree = new views.FolderTree(dialog.getBody(), {
                                 type: 'mail',
-                                tabindex: 0,
+                                tabindex: 1,
                                 rootFolderId: 'default' + self.model.get('id')
                             });
                         dialog.show(function () {
