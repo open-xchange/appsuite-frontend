@@ -45,7 +45,7 @@ define('io.ox/core/import/import',
 
             //lable and select
             nodes.label = $('<label>').text(gt('Format')).appendTo(nodes.row);
-            nodes.select = $('<select name="action">').appendTo(nodes.row);
+            nodes.select = $('<select name="action" tabindex="1" aria-label="' + gt('select format') + '">').appendTo(nodes.row);
 
             //add option
             formats = ext.point('io.ox/core/import/format').invoke('draw', null, baton)._wrapped;
@@ -113,7 +113,7 @@ define('io.ox/core/import/import',
         draw: function () {
             this.append(
                 $('<label class="checkbox">').append(
-                    $('<input type="checkbox" name="ignore_uuids">'),
+                    $('<input type="checkbox" tabindex="1" name="ignore_uuids">'),
                     gt('Ignore existing events. Helpful to import public holiday calendars, for example.')
                 )
             );
@@ -124,8 +124,8 @@ define('io.ox/core/import/import',
     ext.point('io.ox/core/import/buttons').extend({
         id: 'default',
         draw: function () {
-            this.addPrimaryButton('import', gt('Import'))
-                .addButton('cancel', gt('Cancel'));
+            this.addPrimaryButton('import', gt('Import'), 'import', {'tabIndex': '1'})
+                .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
         }
     });
 
@@ -157,10 +157,6 @@ define('io.ox/core/import/import',
                     ext.point('io.ox/core/import/buttons')
                         .invoke('draw', this);
                     this.getPopup().addClass('import-dialog');
-                })
-                .show(function () {
-                    //focus
-                    this.find('select').focus();
                 });
                 dialog.on('import', function () {
                     var type = baton.nodes.select.val() || '',
@@ -222,7 +218,10 @@ define('io.ox/core/import/import',
                     })
                     .fail(failHandler);
                 })
-                .show();
+                .show(function () {
+                    //focus
+                    this.find('select').focus();
+                });
             });
         }
     };

@@ -575,7 +575,11 @@ define('io.ox/core/tk/attachments',
                                 .text(gt('Upload file')).hide() : ''
                         ),
                         (options.drive ? $('<button type="button" class="btn" data-action="addinternal">').text(gt('Files')) : '')
-                    )
+                    ).on('keypress', function (e) {
+                        if (e.which === 13) {
+                            node.find('input[name="file"]').trigger('click');
+                        }
+                    })
                 )
             )
 
