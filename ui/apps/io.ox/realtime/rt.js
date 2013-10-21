@@ -582,7 +582,7 @@ define.async('io.ox/realtime/rt',
             }
             api.trigger('offline');
             stop();
-        }, 120000);
+        }, 10000);
     });
 
     damage.on('working', function () {
