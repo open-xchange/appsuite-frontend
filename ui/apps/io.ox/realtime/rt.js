@@ -388,6 +388,9 @@ define.async('io.ox/realtime/rt',
             }
             seq = newSequence;
             serverSequenceThreshhold = -1;
+            if (api.debug) {
+                console.log('Sequence number was reset to ' + seq + '. Triggering reset event.');
+            }
             api.trigger('reset');
         });
 
@@ -572,7 +575,11 @@ define.async('io.ox/realtime/rt',
         if (api.debug) {
             console.log('Connection seems to be broken. Waiting 2 minutes for the connection to return.');
         }
+
         offlineCountdown = setTimeout(function () {
+            if (api.debug) {
+                console.log('Connection was still broken after 2 minute grace period. Triggering offline event.');
+            }
             api.trigger('offline');
             stop();
         }, 120000);
@@ -580,7 +587,7 @@ define.async('io.ox/realtime/rt',
 
     damage.on('working', function () {
         if (api.debug) {
-            console.log('Connection seems to be working again. Triggering online');
+            console.log('Connection seems to be working again. Triggering online event');
         }
         if (offlineCountdown) {
             clearTimeout(offlineCountdown);
