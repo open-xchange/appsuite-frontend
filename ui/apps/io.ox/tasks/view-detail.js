@@ -79,30 +79,9 @@ define('io.ox/tasks/view-detail',
             }
             infoPanel.append(
                 $('<br>'),
+                // status
                 $('<div>').text(task.status).addClass('status ' +  task.badge)
             );
-
-            var blackStars,
-                grayStars;
-
-            switch (data.priority) {
-            case 1:
-                blackStars = '\u2605';
-                grayStars = '\u2605\u2605';
-                break;
-            case 2:
-                blackStars = '\u2605\u2605';
-                grayStars = '\u2605';
-                break;
-            case 3:
-                blackStars = '\u2605\u2605\u2605';
-                grayStars = '';
-                break;
-            }
-            $('<br>').appendTo(infoPanel);
-            $('<div>').append($('<span>').text(gt.noI18n(grayStars)).css('color', '#aaa'),
-                              $('<span>').text(gt.noI18n(blackStars))).addClass('priority').appendTo(infoPanel);
-            blackStars = grayStars = null;
 
             //check to see if there is a leading <br> and remove it
             var firstBr = infoPanel.find('br:first');
@@ -113,8 +92,16 @@ define('io.ox/tasks/view-detail',
             node.append(
                 header.append(
                     infoPanel,
-                    data.private_flag ? $('<i class="icon-lock private-flag">') : [],
-                    $('<div class="title clear-title">').text(gt.noI18n(task.title))
+                    $('<div class="title clear-title">').append(
+                        // lock icon
+                        data.private_flag ? $('<i class="icon-lock private-flag">') : [],
+                        // title
+                        $.txt(gt.noI18n(task.title)),
+                        // priority
+                        $('<span class="priority">').append(
+                            util.getPriority(task)
+                        )
+                    )
                 )
             );
 
