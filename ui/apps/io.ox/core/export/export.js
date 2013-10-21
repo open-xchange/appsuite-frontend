@@ -47,7 +47,7 @@ define('io.ox/core/export/export',
 
             //lable and select
             nodes.label = $('<label class="span3">').text(gt('Format')).appendTo(nodes.row);
-            nodes.select = $('<select class="span9">').appendTo(nodes.row);
+            nodes.select = $('<select class="span9" tabindex="1" aria-label="' + gt('select format') + '">').appendTo(nodes.row);
 
             //add option
             formats = ext.point('io.ox/core/export/export/format').invoke('draw', null, baton)._wrapped;
@@ -68,8 +68,8 @@ define('io.ox/core/export/export',
         id: 'default',
         draw: function () {
             this
-                .addButton('cancel', gt('Cancel'))
-                .addPrimaryButton('export', gt('Export'));
+                .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
+                .addPrimaryButton('export', gt('Export'), 'export', {'tabIndex': '1'});
         }
     });
 
