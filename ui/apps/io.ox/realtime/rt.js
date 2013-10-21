@@ -244,7 +244,6 @@ define.async('io.ox/realtime/rt',
             if (m.count < INFINITY) {
                 api.sendWithoutSequence(m.msg);
             } else {
-                console.log('REJECT');
                 delete resendBuffer[Number(m.msg.seq)];
                 resendDeferreds[Number(m.msg.seq)].reject();
                 delete resendDeferreds[Number(m.msg.seq)];
