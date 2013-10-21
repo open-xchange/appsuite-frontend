@@ -350,7 +350,7 @@ define('io.ox/core/tk/selection',
                 .addClass(self.classSelected)
                 .attr({
                     'aria-selected': 'true',
-                    'tabindex': options.tabFix !== false ? options.tabFix : -1
+                    'tabindex': options.tabFix !== false ? options.tabFix : null
                 })
                 .find('input.reflect-selection')
                 .prop('checked', true)
@@ -379,7 +379,7 @@ define('io.ox/core/tk/selection',
                 .removeClass(self.classSelected)
                 .attr({
                     'aria-selected': 'false',
-                    tabindex: -1
+                    tabindex: options.tabFix !== false ? -1 : null
                 })
                 .find('input.reflect-selection').prop('checked', false);
             self.trigger('deselect', key);
@@ -426,7 +426,7 @@ define('io.ox/core/tk/selection',
             // clear nodes
             container.find('.selectable.' + self.classSelected).removeClass(self.classSelected).attr({
                 'aria-selected': 'false',
-                'tabindex': -1
+                'tabindex': options.tabFix !== false ? -1 : null
             });
             container.find('.selectable input.reflect-selection').prop('checked', false);
         };
@@ -482,7 +482,7 @@ define('io.ox/core/tk/selection',
                     $('input.reflect-selection', node).prop('checked', true);
                     node.addClass(self.classSelected).attr({
                         'aria-selected': 'true',
-                        'tabindex': options.tabFix !== false ? options.tabFix : -1
+                        'tabindex': options.tabFix !== false ? options.tabFix : null
                     });
                     if (options.tabFix !== false) {
                         node.focus();
@@ -491,7 +491,7 @@ define('io.ox/core/tk/selection',
                     $('input.reflect-selection', node).prop('checked', false);
                     node.removeClass(self.classSelected).attr({
                         'aria-selected': 'true',
-                        'tabindex': -1
+                        'tabindex': options.tabFix !== false ? -1 : null
                     });
                 }
             });
