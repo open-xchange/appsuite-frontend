@@ -45,10 +45,10 @@ define('io.ox/calendar/edit/main',
                 //be gently
                 if (self.getDirtyStatus()) {
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                        new dialogs.ModalDialog()
+                        new dialogs.ModalDialog({'tabTrap': true})
                             .text(gt('Do you really want to discard your changes?'))
-                            .addPrimaryButton('delete', gt('Discard'))
-                            .addButton('cancel', gt('Cancel'))
+                            .addPrimaryButton('delete', gt('Discard'), 'delete', {'tabIndex': '1'})
+                            .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
                             .show()
                             .done(function (action) {
                                 if (action === 'delete') {
@@ -64,6 +64,7 @@ define('io.ox/calendar/edit/main',
                     self.dispose();
                     df.resolve();
                 }
+                app.getWindow().nodes.main.find('input')[0].focus();
                 return df;
             },
             /*
