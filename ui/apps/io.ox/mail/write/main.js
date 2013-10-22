@@ -1015,8 +1015,6 @@ define('io.ox/mail/write/main',
             if (editorMode === 'html') {
                 attachments = {
                     content: (app.getEditor() ? app.getEditor().getContent() : '')
-                        // reverse img fix
-                        .replace(/(<img[^>]+src=")(\/appsuite\/)?api\//g, '$1/ajax/')
                 };
                 //don’t send emoji images, but unicode characters
                 attachments.content = emoji.imageTagsToUnified(attachments.content);
@@ -1024,8 +1022,6 @@ define('io.ox/mail/write/main',
                 attachments = {
                     content: (app.getEditor() ? app.getEditor().getContent() : ''),
                     raw: true
-                        // .replace(/</g, '&lt;') // escape <
-                        // .replace(/\n/g, '<br>\n') // escape line-breaks
                 };
             }
 
@@ -1101,6 +1097,12 @@ define('io.ox/mail/write/main',
                 //convert to send encoding (NOOP, if target encoding is 'unified')
                 mail.data.attachments[0].content = convert(mail.data.attachments[0].content, mail.format);
             }
+
+            // fix inline images
+            mail.data.attachments[0].content = mail.data.attachments[0].content
+                    .replace(/(<img[^>]+src=")(\/appsuite\/)?api\//g, '$1/ajax/')
+                    .replace(/on(mousedown|contextmenu)="return false;"\s?/g, '')
+                    .replace(/data-mce-src="[^"]+"\s?/, '');
 
             function cont() {
                 // start being busy
