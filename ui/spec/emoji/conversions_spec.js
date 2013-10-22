@@ -57,6 +57,29 @@ define([
                     expect(this.convert(this.testIcons.unified)).toBe(this.testIcons.unified);
                 });
 
+                it('should leave non-emoji characters intact in text format', function () {
+                    expect(this.convert('> \u2600')).toBe('> \ue04a');
+                });
+
+                it('should leave embedded HTML intact', function () {
+                    //TODO: converting <img src="test.png" /> will be converted to <img src="test.png">
+                    //this is because of jQuery doing to much magic, may be this can break stuff :\
+                    expect(this.convert('<img src="test.png">\u2600')).toEqual('<img src="test.png">\ue04a');
+                });
+
+                it('should leave "<" or ">" characters embedded in text intact', function () {
+                    var testStr = 'On Tuesday "Some Body" <somebody@example.com> wrote:';
+                    expect(this.convert(testStr)).toEqual(testStr);
+                });
+
+                it('should also convert on emoji enabled devices', function () {
+                    var stub = sinon.stub(_, 'device');
+                    stub.withArgs('emoji').returns(true);
+
+                    expect(this.convert('> \u2600')).toBe('> \ue04a');
+                    stub.restore();
+                });
+
                 describe('convert image tags to PUA encoding', function () {
                     it('should convert black sun with rays', function () {
                         var text = emoji.unifiedToImageTag('\u2600');
