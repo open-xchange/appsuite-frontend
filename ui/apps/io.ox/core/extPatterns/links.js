@@ -112,24 +112,36 @@ define('io.ox/core/extPatterns/links',
             tag = options.tagtype ? options.tagtype : 'a',
 
             click = function (e) {
+                if (node.hasClass('io-ox-busy')) {
+                    return false;
+                }
                 e.preventDefault();
                 var extension = e.data.extension;
                 e.data.baton.e = e;
                 actions.invoke(extension.ref, extension, e.data.baton);
-            };
+            },
+            node;
 
         this.draw = function (baton) {
             baton = ext.Baton.ensure(baton);
             var attr = { href: '#', 'class': 'btn', 'data-action': self.id, tabIndex: self.tabIndex };
             if (tag === 'button') attr.type = 'button';
             this.append(
-                $('<' + tag + '>', attr)
+                node = $('<' + tag + '>', attr)
                 .addClass(self.cssClasses)
                 .css(self.css || {})
                 .on('click', { extension: self, baton: baton }, click)
                 .append(_.isString(self.label) ? $.txt(self.label) : $())
                 .append(_.isString(self.icon) ? $('<i>').addClass(self.icon) : $())
             );
+        };
+
+        this.busy = function () {
+            node.busy();
+        };
+
+        this.idle = function () {
+            node.idle();
         };
     };
 
