@@ -58,8 +58,8 @@ $(document).ready(function () {
             });
             this.$menu
                 .on('click', $.proxy(this.click, this))
-                .on('mouseenter', 'li', $.proxy(this.mouseenter, this));
-
+                .on('mouseenter', 'li', $.proxy(this.mouseenter, this))
+                .on('mouseleave', $.proxy(this.mouseleave, this));
         },
         hide: function () {
             this.$menu.hide();
@@ -81,6 +81,9 @@ $(document).ready(function () {
             setTimeout(function () {
                 self.select();
             }, 0);
+        },
+        mouseleave: function(e) {
+            this.$li.removeClass('active');
         },
         move: function (e) {
             if (!this.shown) return;
