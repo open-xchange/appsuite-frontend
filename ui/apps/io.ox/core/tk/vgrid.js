@@ -699,6 +699,7 @@ define('io.ox/core/tk/vgrid',
             scrollpane.find('.io-ox-center').remove().end();
             if (list.length === 0 && loaded) {
                 detachPool();
+                self.selection.trigger('change', []);
                 scrollpane.append(
                     $.fail(emptyMessage ?
                         emptyMessage(self.getMode()) :
