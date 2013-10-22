@@ -26,11 +26,11 @@ define('io.ox/core/api/pubsub',
      */
     var clearCache = function (api, data) {
         var keys = {
-                general: api.cid(''),
-                folder: api.cid({folder: data.folder}),
-                pub: '.' + data.id,
-                sub: data.folder + '.'
-            };
+            general: api.cid(''),
+            folder: api.cid({ folder: data.folder }),
+            pub: '.' + data.id,
+            sub: data.folder + '.'
+        };
         return $.when(
             //api.caches.all.remove(keys.folder), //enable to support getAll({folder: folder})
             api.caches.all.remove(keys.general),
@@ -66,7 +66,8 @@ define('io.ox/core/api/pubsub',
              * @return {deferred}
              */
             update: function (data) {
-                return clearCache(this, {id: data.id || '', folder: data.folder || data.entity.folder || ''}).pipe(function () {
+                return clearCache(this, { id: data.id || '', folder: data.folder || data.entity.folder || '' })
+                .then(function () {
                     return http.PUT({
                         module: opt.module,
                         params: {

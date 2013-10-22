@@ -33,7 +33,7 @@ define('io.ox/core/pubsub/model',
             },
             update: function (model) {
                 return settingsUtil.yellOnReject(
-                     api.update(model.attributes)
+                    api.update(model.attributes)
                 );
             },
             destroy: function (model) {
