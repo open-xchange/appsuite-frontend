@@ -89,6 +89,28 @@ define('io.ox/core/pubsub/publications',
 
             this._modelBinder = new Backbone.ModelBinder();
         },
+
+        finish: function (url) {
+
+            url = _.escape(url);
+
+            var isFolder = !!this.model.attributes.entity.folder,
+                message = isFolder ?
+                    //#. %1$s is the publication link http://...
+                    gt('The folder is available at %1$s') :
+                    //#. %1$s is the publication link http://...
+                    gt('The file is available at %1$s');
+
+            new dialogs.ModalDialog()
+                .append(
+                    $('<div>').html(
+                        gt.format(message, '<a href="' + url + '" target="_blank">' + url + '</a>')
+                    )
+                )
+                .addPrimaryButton('cancel', gt('Close'))
+                .show();
+        },
+
         render: function () {
             var self = this;
             //build popup
@@ -118,16 +140,6 @@ define('io.ox/core/pubsub/publications',
                         var publications = pubsub.publications(),
                             pubUrl = model[model.target].url;
 
-                        notifications.yell({
-                            type: 'success',
-                            html: true,
-                            message: gt(
-                                'The publication has been made available as %s',
-                                '<a href="' + pubUrl + '" target="_blank">' + pubUrl + '</a>'
-                            ),
-                            duration: 10000
-                        });
-
                         //update the model-(collection)
                         publications.add(model, {merge: true});
                         if (self.model.get('invite')) {
@@ -136,10 +148,12 @@ define('io.ox/core/pubsub/publications',
                             baton.model.attributes = $.extend(true, baton.model.attributes, model);
                             sendInvitation(baton).always(function () {
                                 popup.close();
+                                self.finish(pubUrl);
                             });
                         } else {
                             // close popup now
                             popup.close();
+                            self.finish(pubUrl);
                         }
                         folderAPI.reload(baton.model.get('entity').folder);
                     });
