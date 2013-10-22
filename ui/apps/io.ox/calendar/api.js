@@ -398,8 +398,16 @@ define('io.ox/calendar/api',
          * @return {deferred}
          */
         confirm: function (o) {
+
             var folder_id = o.folder_id || o.folder,
-                key = folder_id + '.' + o.id + '.' + (o.recurrence_position || 0);
+                key = folder_id + '.' + o.id + '.' + (o.recurrence_position || 0),
+                alarm = -1;
+
+            // contains alarm?
+            if ('alarm' in o.data) {
+                alarm = o.data.alarm;
+                delete o.data.alarm;
+            }
 
             return http.PUT({
                 module: 'calendar',
@@ -410,17 +418,24 @@ define('io.ox/calendar/api',
                 },
                 data: o.data
             })
-            .pipe(function () {
+            .then(function () {
+                if (alarm === -1) return;
+                return api.update({
+                    folder: o.folder,
+                    id: o.id,
+                    alarm: alarm
+                });
+            })
+            .then(function () {
                 get_cache = {};
                 api.trigger('mark:invite:confirmed', o); //redraw detailview to be responsive and remove invites
                 all_cache = {};
                 delete get_cache[key];
-                return api.get(o)
-                        .pipe(function (data) {
-                            api.trigger('update', data);
-                            api.trigger('update:' + _.ecid(data), data);
-                            return data;
-                        });
+                return api.get(o).then(function (data) {
+                    api.trigger('update', data);
+                    api.trigger('update:' + _.ecid(data), data);
+                    return data;
+                });
             });
         }
     };

@@ -20,8 +20,9 @@ define('plugins/notifications/calendar/register',
      'io.ox/core/api/folder',
      'io.ox/core/api/user',
      'io.ox/core/tk/reminder-util',
+     'settings!io.ox/calendar',
      'gettext!plugins/notifications'
-    ], function (calAPI, reminderAPI, util, ext, folderAPI, userAPI, reminderUtil, gt) {
+    ], function (calAPI, reminderAPI, util, ext, folderAPI, userAPI, reminderUtil, settings, gt) {
 
     'use strict';
 
@@ -157,7 +158,11 @@ define('plugins/notifications/calendar/register',
             e.stopPropagation();
             var o = calAPI.reduce(this.model.get('data'));
             folderAPI.get({ folder: o.folder }).done(function (folder) {
-                o.data = { confirmmessage: '', confirmation: 1 };
+                o.data = {
+                    alarm: parseInt(settings.get('defaultReminder', 15), 10), // default reminder
+                    confirmmessage: '',
+                    confirmation: 1
+                };
                 // add current user id in shared or public folder
                 if (folderAPI.is('shared', folder)) {
                     o.data.id = folder.created_by;
