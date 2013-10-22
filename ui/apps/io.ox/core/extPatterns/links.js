@@ -90,11 +90,15 @@ define("io.ox/core/extPatterns/links",
             tag = options.tagtype ? options.tagtype : 'a',
 
             click = function (e) {
+                if (node.hasClass('io-ox-busy')) {
+                    return false;
+                }
                 e.preventDefault();
                 var extension = e.data.extension;
                 e.data.baton.e = e;
                 actions.invoke(extension.ref, extension, e.data.baton);
-            };
+            },
+            node;
 
         this.draw = function (baton) {
             baton = ext.Baton.ensure(baton);
@@ -107,6 +111,14 @@ define("io.ox/core/extPatterns/links",
                 .append(_.isString(self.label) ? $.txt(self.label) : $())
                 .append(_.isString(self.icon) ? $('<i>').addClass(self.icon) : $())
             );
+        };
+
+        this.busy = function () {
+            node.busy();
+        };
+
+        this.idle = function () {
+            node.idle();
         };
     };
 
