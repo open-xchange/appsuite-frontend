@@ -350,7 +350,7 @@ define('io.ox/core/tk/selection',
                 .addClass(self.classSelected)
                 .attr({
                     'aria-selected': 'true',
-                    'tabindex': options.tabFix !== false ? options.tabFix : -1
+                    'tabindex': options.tabFix !== false ? options.tabFix : null
                 })
                 .find('input.reflect-selection')
                 .prop('checked', true)
@@ -379,7 +379,7 @@ define('io.ox/core/tk/selection',
                 .removeClass(self.classSelected)
                 .attr({
                     'aria-selected': 'false',
-                    tabindex: -1
+                    tabindex: options.tabFix !== false ? -1 : null
                 })
                 .find('input.reflect-selection').prop('checked', false);
             self.trigger('deselect', key);
@@ -394,7 +394,6 @@ define('io.ox/core/tk/selection',
         };
 
         update = function (updateIndex) {
-
             if (container.is(':hidden')) return;
 
             updateIndex = updateIndex || false;
@@ -402,9 +401,12 @@ define('io.ox/core/tk/selection',
 
             // get nodes
             var nodes = $('.selectable:visible', container),
-                i = 0, $i = nodes.length, node = null;
+                i = 0, node = null;
 
-            for (; i < $i; i++) {
+            // clear
+            nodes.removeClass(self.classSelected).find('input.reflect-selection').prop('checked', false);
+
+            for (; i < nodes.length; i++) {
                 node = nodes.eq(i);
                 // is selected?
                 var objID = node.attr('data-obj-id');
@@ -414,9 +416,6 @@ define('io.ox/core/tk/selection',
                 if (isSelected(objID)) {
                     $('input.reflect-selection', node).prop('checked', true);
                     node.addClass(self.classSelected);
-                } else {
-                    $('input.reflect-selection', node).prop('checked', false);
-                    node.removeClass(self.classSelected);
                 }
             }
         };
@@ -426,8 +425,8 @@ define('io.ox/core/tk/selection',
             selectedItems = {};
             // clear nodes
             container.find('.selectable.' + self.classSelected).removeClass(self.classSelected).attr({
-                'aria-selected': 'true',
-                'tabindex': -1
+                'aria-selected': 'false',
+                'tabindex': options.tabFix !== false ? -1 : null
             });
             container.find('.selectable input.reflect-selection').prop('checked', false);
         };
@@ -483,7 +482,7 @@ define('io.ox/core/tk/selection',
                     $('input.reflect-selection', node).prop('checked', true);
                     node.addClass(self.classSelected).attr({
                         'aria-selected': 'true',
-                        'tabindex': options.tabFix !== false ? options.tabFix : -1
+                        'tabindex': options.tabFix !== false ? options.tabFix : null
                     });
                     if (options.tabFix !== false) {
                         node.focus();
@@ -492,7 +491,7 @@ define('io.ox/core/tk/selection',
                     $('input.reflect-selection', node).prop('checked', false);
                     node.removeClass(self.classSelected).attr({
                         'aria-selected': 'true',
-                        'tabindex': -1
+                        'tabindex': options.tabFix !== false ? -1 : null
                     });
                 }
             });

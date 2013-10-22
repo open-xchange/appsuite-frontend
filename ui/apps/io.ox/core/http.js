@@ -377,7 +377,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         if (xhr.status === 0) {
             return true;
         }
-        return (/^(5\d\d)$/).test(xhr.status);
+        return isLoss(xhr.status);
     };
 
     // error log

@@ -91,7 +91,7 @@
         display: inline;
     }
 
-    .info-panel, .priority, .status, .end-date, .alarm-date, .task-progress { float: right; }
+    .info-panel, .status, .end-date, .alarm-date, .task-progress { float: right; }
 
     br { line-height: 21px; } // to correct strange behavior of priority
 
@@ -142,12 +142,25 @@
     .participants-table-confirmmessage { padding-left: 10px; }
 
     .task-participant { padding-bottom: 5px; }
+
+    .priority {
+        font-weight: bold;
+        vertical-align: top;
+        white-space: nowrap;
+        .high {
+            color: @taskPriority;
+        }
+        .low {
+            i:first-child { color: #888; }
+            color: #ccc;
+        }
+    }
 }
 
 @media all and (max-width: 480px), all and (max-device-width: 480px) {
 
     .tasks-detailview {
-        
+
         header { margin-bottom: 13px; }
 
         .detail-item, .detail-label, .detail-value, .participants-table-confirmmessage { display: block; }

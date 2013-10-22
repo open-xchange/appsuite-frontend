@@ -65,7 +65,8 @@ define('io.ox/calendar/main',
             draw: function (baton) {
 
                 if (baton.id !== 'private') return;
-                if (!baton.data) return;
+                if (!baton.data || !baton.options) return;
+                if (baton.options.type !== 'calendar') return;
 
                 // hide "show all" checkbox when only one calendar is available
                 var count =

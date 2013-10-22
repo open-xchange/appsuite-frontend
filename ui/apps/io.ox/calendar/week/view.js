@@ -1603,7 +1603,7 @@ define('io.ox/calendar/week/view',
                     end: end,
                     work_day_start_time: self.workStart * date.HOUR,
                     work_day_end_time: self.workEnd * date.HOUR
-                });
+                }).print();
             });
         }
     });

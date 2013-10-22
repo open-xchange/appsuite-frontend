@@ -652,21 +652,34 @@ define('io.ox/core/commons-folderview',
             app.off('folder:change', changeFolder);
         };
 
-        onChangeFolder = function (e, selection) {
-            var id = _(selection).first();
+        onChangeFolder = (function () {
 
-            api.get({ folder: id }).done(function (data) {
-                if (_.device('small')) {
-                    // close tree
-                    fnHideSml();
-                }
-                if (data.module === options.type) {
-                    changeFolderOff();
-                    app.folder.set(id);
-                    changeFolderOn();
-                }
-            });
-        };
+            var current = null;
+
+            return function (e, selection) {
+
+                var id = _(selection).first();
+                current = id;
+
+                api.get({ folder: id }).done(function (data) {
+                    if (_.device('small')) {
+                        // close tree
+                        fnHideSml();
+                    }
+                    // debugger;
+                    if (data.module === options.type) {
+                        if (id !== current) return;
+                        changeFolderOff();
+                        app.folder.set(id)
+                            .done(function () {
+                                if (id !== current) return;
+                                app.folderView.selection.set(id);
+                            })
+                            .always(changeFolderOn);
+                    }
+                });
+            };
+        }());
 
         restoreWidth = $.noop;
 

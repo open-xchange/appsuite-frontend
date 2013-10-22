@@ -117,7 +117,9 @@
     _.browser = {
         /** is IE? */
         IE: navigator.appName === "Microsoft Internet Explorer" ?
-            Number(navigator.appVersion.match(/MSIE (\d+\.\d+)/)[1]) : ((!!(navigator.userAgent.match(/Trident/))) ? Number(navigator.userAgent.match(/rv:?(\d+.\d+)/)[1]): undefined),
+            Number(navigator.appVersion.match(/MSIE (\d+\.\d+)/)[1]) : (
+                !!navigator.userAgent.match(/Trident/) ? Number(navigator.userAgent.match(/rv(:| )(\d+.\d+)/)[2]) : undefined
+            ),
         /** is Opera? */
         Opera: isOpera ?
             ua.split('Opera/')[1].split(' ')[0].split('.')[0] : undefined,

@@ -46,8 +46,9 @@ define.async('io.ox/realtime/rt',
     var enroled = false;
     var traceAll = false;
 
-    var INFINITY = 10;
     var TIMEOUT = 2 * 60 * 1000;
+    var INFINITY = TIMEOUT / 5000;
+    var offlineCountdown;
 
     var mode = 'lazy';
     var intervals = {
@@ -55,6 +56,31 @@ define.async('io.ox/realtime/rt',
         eager: 1000, // When traffic is high, ask for data more frequently
         lazyThreshhold: 5 * 60 * 1000 // Switch from eager to lazy mode when 5 minutes without a message have elapsed
     };
+
+    var damage = {
+        value: 0,
+        threshhold: 10,
+        state: 'working',
+        increase: function (value) {
+            this.value += value;
+            this.trigger('change');
+            if (api.debug) {
+                console.log('Connection does not seem to be working well. ', this.value, this.threshhold);
+            }
+            if (this.value > this.threshhold && this.state === 'working') {
+                this.state = 'broken';
+                this.trigger('broken');
+            }
+        },
+        reset: function () {
+            this.value = 0;
+            if (this.state !== 'working') {
+                this.state = 'working';
+                this.trigger('working');
+            }
+        }
+    };
+    Event.extend(damage);
 
     var queue = {
         stanzas: []
@@ -202,14 +228,19 @@ define.async('io.ox/realtime/rt',
 
     // Periodically flush resend buffer
     actions.flushResendBuffer = function (ticks) {
+        var hasBegunCountout = false;
         if (ticks % 5 !== 0) {
             return;
         }
         if (purging) {
             return;
         }
+
         _(resendBuffer).each(function (m) {
             m.count++;
+            if (m.count > 2) {
+                hasBegunCountout = true;
+            }
             if (m.count < INFINITY) {
                 api.sendWithoutSequence(m.msg);
             } else {
@@ -218,6 +249,9 @@ define.async('io.ox/realtime/rt',
                 delete resendDeferreds[Number(m.msg.seq)];
             }
         });
+        if (hasBegunCountout) {
+            damage.increase(1);
+        }
     };
 
     Event.extend(api);
@@ -354,6 +388,9 @@ define.async('io.ox/realtime/rt',
             }
             seq = newSequence;
             serverSequenceThreshhold = -1;
+            if (api.debug) {
+                console.log('Sequence number was reset to ' + seq + '. Triggering reset event.');
+            }
             api.trigger('reset');
         });
 
@@ -446,15 +483,19 @@ define.async('io.ox/realtime/rt',
                 console.log('Got error 1006, so resetting sequence');
             }
             resetSequence(0);
+            return;
         }
 
         if (error.code === 'RT_STANZA-1007' || error.code === 1007) {
             enroled = false;
             enrol();
+            return;
         }
     }
 
     function handleResponse(resp) {
+        damage.reset();
+
         var result = null;
         if (resp.acks) {
             _(resp.acks).each(function (sequenceNumber) {
@@ -501,73 +542,60 @@ define.async('io.ox/realtime/rt',
     }
 
     ox.on('relogin:required', function () {
+        if (api.debug) {
+            console.log('Session seems to have expired. Relogin requiered.');
+        }
         flushAllBuffers();
         stop();
     });
 
     ox.on('relogin:success', function () {
+        if (api.debug) {
+            console.log('Relogin was successful, resuming operation');
+        }
         start();
     });
 
     ox.on('change:session', function () {
+        if (api.debug) {
+            console.log('Got a new sessionID. Resuming operation.');
+        }
         start();
     });
 
     ox.on('connection:down connection:offline', function () {
-        api.trigger('offline');
-        stop();
+        damage.increase(1);
     });
 
-    ox.on('connetion:up connection:online', function () {
+    ox.on('connection:up connection:online', function () {
+        damage.reset();
+    });
+
+    damage.on('broken', function () {
+        if (api.debug) {
+            console.log('Connection seems to be broken. Waiting 2 minutes for the connection to return.');
+        }
+
+        offlineCountdown = setTimeout(function () {
+            if (api.debug) {
+                console.log('Connection was still broken after 2 minute grace period. Triggering offline event.');
+            }
+            api.trigger('offline');
+            stop();
+        }, 10000);
+    });
+
+    damage.on('working', function () {
+        if (api.debug) {
+            console.log('Connection seems to be working again. Triggering online event');
+        }
+        if (offlineCountdown) {
+            clearTimeout(offlineCountdown);
+        }
         api.trigger('online');
         start();
+
     });
-
-    /* jshint unused: false */
-    /* This function doesn't seem to be used, can it be removed? */
-    function drainAckBuffer() {
-        if (_(ackBuffer).isEmpty()) {
-            return;
-        }
-        var start, stop;
-
-        start = stop = -1;
-        var seqExpression = [];
-
-        function addToSeqExpression(start, stop) {
-            if (start === stop) {
-                seqExpression.push(start);
-            } else {
-                seqExpression.push([start, stop]);
-            }
-        }
-
-        _(_(ackBuffer).keys().sort()).each(function (seq) {
-            if (start === -1) {
-                start = stop = seq;
-            } else if (seq === stop + 1) {
-                stop = seq;
-            } else {
-                addToSeqExpression(start, stop);
-                start = stop = seq;
-            }
-        });
-
-        addToSeqExpression(start, stop);
-        http.PUT({
-            module: 'rt',
-            params: {
-                action: 'send',
-                resource: tabId
-            },
-            timeout: TIMEOUT,
-            data: {type: 'ack', seq: seqExpression}
-        }).done(handleResponse).fail(handleError);
-        ackBuffer = {};
-
-    }
-
-
 
     api.internal = {
         setSequence: function (newSequence) {
@@ -635,11 +663,11 @@ define.async('io.ox/realtime/rt',
             if (api.debug) {
                 console.log('Enqueuing in resendBuffer', options.seq);
             }
-            resendBuffer[Number(options.seq)] = {count: 0, msg: options};
             if (resendDeferreds[Number(options.seq)]) {
                 def = resendDeferreds[Number(options.seq)];
             } else {
                 resendDeferreds[Number(options.seq)] = def;
+                resendBuffer[Number(options.seq)] = {count: 0, msg: options};
             }
         }
 

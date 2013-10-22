@@ -34,6 +34,7 @@ define('io.ox/files/fluid/perspective',
 
     var dropZone,
         loadFilesDef = $.Deferred(),
+        dialog = new dialogs.SidePopup(),
         //nodes
         filesContainer, breadcrumb, inlineRight, inline, wrapper,
         scrollpane = $('<div class="files-scrollable-pane" role="section">'),
@@ -157,6 +158,38 @@ define('io.ox/files/fluid/perspective',
         wrapper.scrollTop(y);
     }
 
+    function preview(e, cid) {
+        var app = this.baton.app, el;
+        api.get(cid).done(function (file) {
+            app.currentFile = file;
+            if (dropZone) {
+                dropZone.update();
+            }
+            dialog.show(e, function (popup) {
+                popup.append(viewDetail.draw(file, app));
+                el = popup.closest('.io-ox-sidepopup');
+            });
+            dialog.on('close', function () {
+                if (window.mejs) {
+                    _(window.mejs.players).each(function (player) {
+                        if ($(player.node).parents('.preview').length > 0) {
+                            player.pause();
+                        }
+                    });
+                }
+                if (dropZone) {
+                    var tmp = app.currentFile;
+                    app.currentFile = null;
+                    dropZone.update();
+                    dropZoneInit(app);
+                    app.currentFile = tmp;
+                }
+                focus();
+            });
+            _.defer(function () { el.focus(); }); // Focus SidePopup
+        });
+    }
+
     // *** ext points ***
 
     ext.point('io.ox/files/icons/options').extend({
@@ -168,7 +201,7 @@ define('io.ox/files/fluid/perspective',
 
     ext.point('io.ox/files/icons').extend({
         id: 'selection',
-        register: function () {
+        register: function (baton) {
             var pers = this;
             Selection.extend(pers, scrollpane, { draggable: true, dragType: 'mail', scrollpane: wrapper, focus: undefined });
             pers.selection
@@ -225,7 +258,8 @@ define('io.ox/files/fluid/perspective',
                         return id !== undefined ? id.split(/,/) : [];
                     }
                     var list = this.get(),
-                        ids = list.length ? _(list).map(this.serialize) : getIds();
+                        ids = list.length ? _(list).map(this.serialize) : getIds(),
+                        cid, node, deeplink;
 
                     //string to object
                     ids = _(ids).map(_.cid);
@@ -237,8 +271,24 @@ define('io.ox/files/fluid/perspective',
                             _.url.hash('id', null);
                             this.clear();
                         }
+                        deeplink = ids.length === 1;
                     } else {
                         this.selectFirst();
+                    }
+
+                    //deep link handling
+                    if (deeplink) {
+                        cid = _.cid(this.get()[0]);
+                        node = filesContainer.find('[data-obj-id="' + cid + '"]');
+                        //node not drawn yet?
+                        if (!node.length) {
+                            //draw gap
+                            pers.redrawGap(baton.allIds, cid);
+                            node = filesContainer.find('[data-obj-id="' + cid + '"]');
+                            wrapper.scrollTop(wrapper.prop('scrollHeight'));
+                        }
+                        //trigger click
+                        node.trigger('click', 'automated');
                     }
                 });
         }
@@ -380,8 +430,7 @@ define('io.ox/files/fluid/perspective',
                 allIds = [],
                 drawnCids = [],
                 displayedRows,
-                baton = new ext.Baton({ app: app }),
-                dialog = new dialogs.SidePopup();
+                baton = new ext.Baton({ app: app });
             self.baton = baton;
             baton.mode = identifyMode(opt);
 
@@ -433,43 +482,14 @@ define('io.ox/files/fluid/perspective',
                 });
 
             //register click handler
-            scrollpane.on('click', '.selectable', function (e) {
-                var el, cid = _.cid($(this).attr('data-obj-id')),
-                    simple = !(e.metaKey || e.ctrlKey || e.shiftKey || e.target.type === 'checkbox' || $(e.target).attr('class') === 'checkbox'),
-                    action = !filesContainer.hasClass('view-list') || $(e.target).hasClass('not-selectable');
-                if (action && simple) {
-                    //just preview
-                    api.get(cid).done(function (file) {
-                        app.currentFile = file;
-                        if (dropZone) {
-                            dropZone.update();
-                        }
-                        dialog.show(e, function (popup) {
-                            popup.append(viewDetail.draw(file, app));
-                            el = popup.closest('.io-ox-sidepopup');
-                        });
-                        dialog.on('close', function () {
-                            if (window.mejs) {
-                                _(window.mejs.players).each(function (player) {
-                                    if ($(player.node).parents('.preview').length > 0) {
-                                        player.pause();
-                                    }
-                                });
-                            }
-                            if (dropZone) {
-                                var tmp = app.currentFile;
-                                app.currentFile = null;
-                                dropZone.update();
-                                dropZoneInit(app);
-                                app.currentFile = tmp;
-                            }
-                            focus();
-                        });
-                        _.defer(function () { el.focus(); }); // Focus SidePopup
-                    });
-                } else {
+            scrollpane.on('click', '.selectable', function (e, data) {
+                var cid = _.cid($(this).attr('data-obj-id')),
+                    special = (e.metaKey || e.ctrlKey || e.shiftKey || e.target.type === 'checkbox' || $(e.target).attr('class') === 'checkbox'),
+                    valid = !filesContainer.hasClass('view-list') || $(e.target).hasClass('not-selectable') || data === 'automated';
+                if (valid & !special)
+                    preview.call(self, e, cid);
+                else
                     dialog.close();
-                }
             });
 
             drawFile = function (file) {
@@ -536,6 +556,19 @@ define('io.ox/files/fluid/perspective',
                 });
 
                 self.selection.update();
+            };
+
+            self.redrawGap = function (ids, cid) {
+                start = end;
+                _.find(ids, function (file, index) {
+                    //identify gap
+                    if (cid === _.cid(file)) {
+                        end = Math.min(index + 1, baton.allIds.length);
+                        return true;
+                    }
+                });
+                //draw gap
+                redraw(baton.allIds.slice(start, end));
             };
 
             drawFirst = function () {

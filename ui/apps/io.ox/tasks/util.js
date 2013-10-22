@@ -412,8 +412,19 @@ define('io.ox/tasks/util',
                     resultArray = _.flatten(resultArray);
                 }
                 return resultArray;
-            }
+            },
 
+            getPriority: function (data) {
+                // normal?
+                if (data && data.priority === 2) return $();
+                var i = '<i class="icon-exclamation"/>',
+                    indicator = $('<span>').append(_.noI18n('\u00A0'), i, i, i);
+                if (data && data.priority === 3) {
+                    return indicator.addClass('high').attr('title', gt('High priority'));
+                } else {
+                    return indicator.addClass('low').attr('title', gt('Low priority'));
+                }
+            }
         };
 
     var prepareTime = function (time) {

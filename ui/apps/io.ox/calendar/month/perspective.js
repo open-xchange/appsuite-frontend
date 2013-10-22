@@ -348,7 +348,7 @@ define('io.ox/calendar/month/perspective',
                 template: 'cp_monthview_table_appsuite.tmpl',
                 start: self.current.local,
                 end: end.local
-            });
+            }).print();
         },
 
         refresh: function () {

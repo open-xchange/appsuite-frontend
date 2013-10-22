@@ -466,21 +466,36 @@ define('io.ox/contacts/actions',
         }
     });
 
+    function isMSISDN(value) {
+        if (/\/TYPE=PLMN$/.test(value)) return true;
+        if (/^\+?\d+$/.test(value)) return true;
+        return false;
+    }
+
     new Action('io.ox/contacts/actions/add-to-contactlist', {
         requires: function (e) {
             return e.collection.has('one') && !e.context.folder_id && !e.context.id;
         },
         action: function (baton) {
-            var container = $(this).closest('.contact-detail.view');
+
+            var container = $(this).closest('.contact-detail.view'),
+                def = $.Deferred(),
+                contact = {};
+
+            // copy data with values
+            _(baton.data).each(function (value, key) {
+                if (!!value) contact[key] = value;
+            });
+            // create in default folder
+            contact.folder_id = String(coreConfig.get('folder/contacts'));
+            // MSISDN fix: email1 might be a phone number, so we should move that to cellular_telephone1
+            if (isMSISDN(contact.email1)) {
+                contact.cellular_telephone1 = contact.email1;
+                delete contact.email1;
+            }
+
+            // launch edit app
             require(['io.ox/contacts/edit/main'], function (m) {
-                var def = $.Deferred(),
-                    contact = baton.data;
-                contact.folder_id = coreConfig.get('folder/contacts') + '';
-                _.map(contact, function (value, key, contact) {
-                    if (!!!value) {
-                        delete contact[key];
-                    }
-                });
                 m.getApp(contact).launch(def);
                 def.done(function (data) {
                     baton.data = data;
