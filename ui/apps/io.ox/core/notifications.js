@@ -30,13 +30,13 @@ define('io.ox/core/notifications',
             var count = this.model.get('count');
             this.$el.find('.badge').toggleClass('empty', count === 0);
             this.$el.find('.number').text(_.noI18n(count >= 100 ? '99+' : count));
-                
+
             this.$el.attr(
                     //#. %1$d number of notifications
                     //#, c-format
                     'aria-label', gt.ngettext('You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.',
                             'You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.', this.model.get('count')));
-            
+
         },
         onToggle: function (open) {
             this.$el.find('.badge i').attr('class', open ? 'icon-caret-down' : 'icon-caret-right');
@@ -318,7 +318,9 @@ define('io.ox/core/notifications',
             //their app
             if ($('#io-ox-notifications').hasClass('active')) {
                 this.hideList();
-                if (_.device('smartphone')) { $('#io-ox-notifications-overlay').empty().removeClass('active'); }
+                if (_.device('smartphone')) {
+                    $('#io-ox-notifications-overlay').empty().removeClass('active');
+                }
             } else {
                 this.showList();
             }
@@ -341,16 +343,17 @@ define('io.ox/core/notifications',
             }, this));
         },
         hideList: function () {
+
             _.each(this.badges, function (badgeView) {
                 badgeView.setNotifier(false);
             });
             this.badgeView.onToggle(false);
             $('#io-ox-notifications').removeClass('active');
-            if (_.device('!smartphone')) {
-                $('#io-ox-notifications-overlay').empty().removeClass('active');
-            } else {
+            $('#io-ox-notifications-overlay').empty().removeClass('active');
+            if (_.device('smartphone')) {
                 $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
             }
+
         },
 
         // type = info | warning | error | success
