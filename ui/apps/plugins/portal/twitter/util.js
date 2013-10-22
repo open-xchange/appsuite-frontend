@@ -102,7 +102,7 @@ define('plugins/portal/twitter/util',
             }
         },
         function fail() {
-            notifications.yell('error', gt('An internal error occured'));
+            notifications.yell('error', gt('An internal error occurred'));
         });
     };
 
@@ -143,7 +143,7 @@ define('plugins/portal/twitter/util',
                         }
                     },
                     function fail() {
-                        notifications.yell('error', gt('An internal error occured'));
+                        notifications.yell('error', gt('An internal error occurred'));
                     }
                     );
                 }
@@ -269,7 +269,7 @@ define('plugins/portal/twitter/util',
                             options.replyBoxContainer.remove();
                         },
                         function fail() {
-                            notifications.yell('error', gt('An internal error occured'));
+                            notifications.yell('error', gt('An internal error occurred'));
                         });
                     }
                 });
@@ -301,7 +301,7 @@ define('plugins/portal/twitter/util',
                             }
                         }
                     }, function fail() {
-                        notifications.yell('error', gt('An internal error occured'));
+                        notifications.yell('error', gt('An internal error occurred'));
                     });
                 } else {
                     showRetweet(tweet, $myTweet);
@@ -359,19 +359,28 @@ define('plugins/portal/twitter/util',
         if (!following) {
             //display usual button
             btn.empty().append(
-                    $('<div>').text(gt('Follow'))
+                    $('<div>').text(
+                        //#. twitter: Follow this person
+                        gt('Follow')
+                    )
                 )
                 .removeClass('btn-primary btn-danger following')
                 .attr({'aria-pressed': 'false'});
         } else {
             if (hover) {
                 //display unfollow
-                btn.empty().text(gt('Unfollow'))
+                btn.empty().text(
+                        //#. twitter: Stop following this person
+                        gt('Unfollow')
+                    )
                     .removeClass('btn-primary').addClass('btn-danger following')
                     .attr({'aria-pressed': 'true'});
             } else {
                 //display following
-                btn.empty().text(gt('Following'))
+                btn.empty().text(
+                        //#. twitter: already following this person
+                        gt('Following')
+                    )
                     .removeClass('btn-danger').addClass('btn-primary following')
                     .attr({'aria-pressed': 'true'});
             }
@@ -415,7 +424,7 @@ define('plugins/portal/twitter/util',
                 }
             },
             function fail() {
-                notifications.yell('error', gt('An internal error occured'));
+                notifications.yell('error', gt('An internal error occurred'));
             });
         })
         .hover(function mouseEnter() {
@@ -460,7 +469,7 @@ define('plugins/portal/twitter/util',
                         }
                     },
                     function fail() {
-                        notifications.yell('error', gt('An internal error occured'));
+                        notifications.yell('error', gt('An internal error occurred'));
                     });
                 }
             });

@@ -484,15 +484,19 @@ define('io.ox/core/main',
         }
 
         function addUserContent(model, launcher, first) {
-            var ariaBasicLabel = gt('close for '),
-                quitApp = $('<a href="#" class="closelink" tabindex="1" role="button" aria-label="' + ariaBasicLabel +  model.get('title') + '">').append(
-                    $('<i class="icon-remove">')
-                ).on('click', function (e) {
-                e.stopImmediatePropagation();
-                model.getWindow().app.quit();
-            }).on('focus', function () {
-                quitApp.attr('aria-label', ariaBasicLabel + model.get('title'));
-            });
+
+            var ariaBasicLabel =
+                    //#. %1$s is app title/name
+                    gt('close for %1$s', model.get('title')),
+                quitApp = $('<a href="#" class="closelink" tabindex="1" role="button" aria-label="' + ariaBasicLabel + '">')
+                    .append($('<i class="icon-remove">'))
+                    .on('click', function (e) {
+                        e.stopImmediatePropagation();
+                        model.getWindow().app.quit();
+                    })
+                    .on('focus', function () {
+                        quitApp.attr('aria-label', ariaBasicLabel);
+                    });
 
             if (model.get('closable')) {
                 if (first) {
