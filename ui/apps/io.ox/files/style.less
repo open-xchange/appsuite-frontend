@@ -267,7 +267,13 @@
                 }
 
                 .preview-border {
+                    display: -ms-inline-flexbox;
+                    display: -moz-inline-flex;
+                    display: -webkit-inline-flex;
                     display: inline-flex;
+                    &.non-flexbox {
+                        display: block;
+                    }
                 };
 
                 .preview {
