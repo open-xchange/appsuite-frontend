@@ -370,7 +370,7 @@ define('io.ox/files/fluid/perspective',
                     //details
                     $('<div class="details">').append(
                         //title
-                        $('<span class="text title drag-title">').append(
+                        $('<div class="text title drag-title">').append(
                             $('<span class="not-selectable">').text(gt.noI18n(cut(file.filename || file.title, 55))).append(
                                     (file.locked_until ? $('<i class="icon-lock">') : '')
                                 )
