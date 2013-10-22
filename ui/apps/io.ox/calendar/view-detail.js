@@ -332,9 +332,36 @@ define('io.ox/calendar/view-detail',
         }
     });
 
-    // show as
+    // organizer
     ext.point('io.ox/calendar/detail/details').extend({
         index: 100,
+        id: 'organizer',
+        draw: function (data) {
+
+            // internal or external organizer?
+            if (!data.organizerId && !data.organizer) return;
+
+            this.append(
+                $('<span class="detail-label">').append(
+                    $.txt(gt('Organizer')), $.txt(gt.noI18n(':\u00A0'))
+                ),
+                $('<span class="detail organizer">').append(
+                    data.organizerId ?
+                        $('<a href="#" class="halo-link">').data({ user_id: data.organizerId }).append(
+                            userAPI.getTextNode(data.organizerId)
+                        ) :
+                        $('<a href="#" class="halo-link">').data({ email1: data.organizer }).text(
+                            data.organizer
+                        )
+                ),
+                $('<br>')
+             );
+        }
+    });
+
+    // show as
+    ext.point('io.ox/calendar/detail/details').extend({
+        index: 200,
         id: 'shownAs',
         draw: function (data) {
             this.append(
@@ -354,7 +381,7 @@ define('io.ox/calendar/view-detail',
 
     // folder
     ext.point('io.ox/calendar/detail/details').extend({
-        index: 200,
+        index: 300,
         id: 'folder',
         draw: function (data) {
             if (data.folder_id) {
@@ -372,7 +399,7 @@ define('io.ox/calendar/view-detail',
 
     // created on/by
     ext.point('io.ox/calendar/detail/details').extend({
-        index: 200,
+        index: 400,
         id: 'created',
         draw: function (data) {
             if (data.creation_date || data.created_by) {
@@ -395,7 +422,7 @@ define('io.ox/calendar/view-detail',
 
     // modified on/by
     ext.point('io.ox/calendar/detail/details').extend({
-        index: 200,
+        index: 500,
         id: 'modified',
         draw: function (data) {
             if (data.last_modified || data.modified_by) {
@@ -408,27 +435,6 @@ define('io.ox/calendar/view-detail',
                         $('<span>').text(gt.noI18n(data.last_modified ? ' \u2013 ' : '')),
                         $('<a href="#" class="halo-link">').data({ user_id: data.modified_by }).append(
                             data.modified_by ? userAPI.getTextNode(data.modified_by) : ''
-                        )
-                    ),
-                    $('<br>')
-                 );
-            }
-        }
-    });
-
-    // organizer
-    ext.point('io.ox/calendar/detail/details').extend({
-        index: 200,
-        id: 'organizer',
-        draw: function (data) {
-            if (data.organizerId) {
-                this.append(
-                    $('<span class="detail-label">').append(
-                        $.txt(gt('Organizer')), $.txt(gt.noI18n(':\u00A0'))
-                    ),
-                    $('<span class="detail organizer">').append(
-                        $('<a href="#" class="halo-link">').data({ user_id: data.organizerId }).append(
-                            data.organizerId ? userAPI.getTextNode(data.organizerId) : ''
                         )
                     ),
                     $('<br>')
