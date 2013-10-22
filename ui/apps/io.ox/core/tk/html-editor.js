@@ -463,7 +463,7 @@ define.async('io.ox/core/tk/html-editor',
             theme_advanced_toolbar_align: settings.get('tinyMCE/theme_advanced_toolbar_align', 'left'),
 
             // formats
-            theme_advanced_blockformats: 'h1,h2,h3,h4,p,blockquote',
+            theme_advanced_blockformats: 'h1,h2,h3,h4,p',
 
             // colors
             theme_advanced_more_colors: false,
