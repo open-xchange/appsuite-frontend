@@ -248,7 +248,7 @@ define('io.ox/core/settings/pane',
             selectOptions: options,
             updateModel: function () {
                 this.setValueInModel(this.nodes.element.val());
-                ox.autoLogoutRestart();
+                ox.autoLogout.restart();
             }
         }));
 

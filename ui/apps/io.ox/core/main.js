@@ -343,7 +343,7 @@ define('io.ox/core/main',
         var resetTimeout = function () {
             clearTimeout(timeout);
             timeout = setTimeout(function () {
-                logout({autologout: true});
+                logout({ autologout: true });
             }, interval);
             timeoutStart = _.now();
             changed = false;
@@ -434,16 +434,21 @@ define('io.ox/core/main',
             start();
         };
 
-        ox.autoLogoutRestart = restart;
-
-        start();
-
-        ox.autoLogoutRestartDebug = function () {
+        var debug = function () {
             CHECKINTERVAL = 1;
             WARNINGSTART = 10;
             getInterval = function () { return 12000; };
             restart();
         };
+
+        ox.autoLogout = {
+            start: start,
+            stop: stop,
+            restart: restart,
+            debug: debug
+        };
+
+        start();
 
     }());
 
