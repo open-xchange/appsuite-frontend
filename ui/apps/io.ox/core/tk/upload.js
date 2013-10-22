@@ -238,13 +238,13 @@ define('io.ox/core/tk/upload',
                     _.each(files, function (f) {
                         fileTitle = f.name;
                         total += f.size;
-                        if (maxSize !== 0 && f.size > maxSize) {
+                        if (maxSize > 0 && f.size > maxSize) {
                             proceed = false;
                             notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, strings.fileSize(maxSize)));
                             self.stop();
                             return;
                         }
-                        if (quota !== -1) {
+                        if (quota > 0) {
                             if (total > quota - properties.infostoreUsage) {
                                 proceed = false;
                                 notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, strings.fileSize(quota)));
