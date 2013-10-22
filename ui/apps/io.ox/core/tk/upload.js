@@ -271,6 +271,8 @@ define('io.ox/core/tk/upload',
         };
 
         this.start = function () {
+            // disable autologout -> bug 29389
+            ox.autoLogout.stop();
             delegate.start(files[position], position, files);
             this.trigger('start', files[position], position, files);
         };
@@ -282,6 +284,8 @@ define('io.ox/core/tk/upload',
         };
 
         this.stop = function () {
+            // reenable autologout -> bug 29389
+            ox.autoLogout.start();
             delegate.stop(files[position], position, files);
             this.trigger('stop', files[position], position, files);
             files = [];
