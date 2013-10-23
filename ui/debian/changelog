@@ -1,3 +1,9 @@
+open-xchange-appsuite (7.4.1-2) stable; urgency=low
+
+  * Second candidate for 7.4.1 release
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Wed, 23 Oct 2013 10:11:10 +0200
+
 open-xchange-appsuite (7.4.1-1) stable; urgency=low
 
   * First sprint increment for 7.4.1 release
