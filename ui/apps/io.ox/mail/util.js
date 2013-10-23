@@ -427,6 +427,11 @@ define('io.ox/mail/util',
             }, false).value();
         },
 
+        //is obj only an attachment of another email
+        isAttachment: function (data) {
+            return typeof (data || {}).parent !== 'undefined';
+        },
+
         byMyself: function (data) {
             data = data || {};
             return data.from && data.from.length && String(data.from[0][1] || '').toLowerCase() in addresses;

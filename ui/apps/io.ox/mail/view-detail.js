@@ -694,7 +694,7 @@ define('io.ox/mail/view-detail',
                 }
 
                 // make sure this mail is seen
-                if (api.tracker.isUnseen(baton.data)) {
+                if (api.tracker.isUnseen(baton.data) && !util.isAttachment(baton.data)) {
                     api.markRead(baton.data);
                 }
 

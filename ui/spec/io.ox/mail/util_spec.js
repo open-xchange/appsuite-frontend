@@ -229,6 +229,8 @@ define(['io.ox/mail/util',
             it('should return "false" for invalid data', function () {
                 expect(util.isAnswered(undefined), 'isAnswered').is.false;
                 expect(util.isForwarded(undefined), 'isForwarded').is.false;
+                expect(util.isAttachment(undefined), 'isAttachment').is.false;
+                expect(util.isAttachment([]), 'isAttachment').is.false;
                 expect(util.hasOtherRecipients(undefined), 'hasOtherRecipients').is.false;
             });
             it('should return "0" for invalid data', function () {
@@ -240,17 +242,20 @@ define(['io.ox/mail/util',
                     .to.be.empty;
             });
             it('should return a boolean for valid data', function () {
+                //valid: returns true
                 expect(util.isUnseen({flags: 16}), 'isUnseen').is.true;
                 expect(util.isDeleted({flags: 2}), 'isDeleted').is.true;
                 expect(util.isSpam({flags: 128}), 'isSpam').is.true;
                 expect(util.isAnswered({flags: 1}), 'isAnswered').is.true;
                 expect(util.isForwarded({flags: 256}), 'isForwarded').is.true;
+                expect(util.isAttachment({id: 4711, parent: {}}), 'isAttachment').is.true;
                 expect(util.hasOtherRecipients({to: [['', 'some address']], cc: '', bcc: ''}), 'hasOtherRecipients').is.true;
                 //valid: returns false
                 expect(util.isUnseen({flags: 32}), 'isUnseen').is.false;
                 expect(util.isDeleted({flags: 1}), 'isDeleted').is.false;
                 expect(util.isSpam({flags: 64}), 'isSpam').is.false;
                 expect(util.isAnswered({flags: 2}), 'isAnswered').is.false;
+                expect(util.isAttachment({id: 4711}), 'isAttachment').is.false;
                 expect(util.isForwarded({flags: 128}), 'isForwarded').is.false;
             });
             it('should return a number for valid data', function () {
