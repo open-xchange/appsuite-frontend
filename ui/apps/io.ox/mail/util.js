@@ -299,7 +299,7 @@ define('io.ox/mail/util',
 
         // takes care of special edge-case: no from address
         hasFrom: function (data) {
-            return data && _.isArray(data.from) && !!data.from[0][1];
+            return data && _.isArray(data.from) && data.from.length > 0 && !!data.from[0][1];
         },
 
         getFrom: function (data, field) {
