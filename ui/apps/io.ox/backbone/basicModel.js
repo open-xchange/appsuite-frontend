@@ -132,7 +132,7 @@ define('io.ox/backbone/basicModel',
                 this.trigger(action + ':start');
                 this.trigger('sync:start');
 
-                return this.syncer[action].call(this.syncer, model)
+                return this.syncer[action](model)
                     .done(function (response) {
                         callbacks.success(model, response);
                         self.trigger(action, response);

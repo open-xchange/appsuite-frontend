@@ -85,7 +85,7 @@ define('io.ox/mail/view-detail',
         regAppointmentAlt = /^(\s*)(http[^#]+#!&?app=io\.ox\/calendar(?:&perspective=list)?&folder=(\d+)&id=([\d\.]+))(\s*)$/i,
         regLink = /^(.*)(https?:\/\/\S+)(\s.*)?$/i,
         regMail = /([^\s<;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/i,
-        regMailReplace = /([^\s<;\(\)\[\]\|]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/ig, /* dedicated one to avoid strange side effects */
+        regMailReplace = /([^\s<;\(\)\[\]\|\"]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/ig, /* dedicated one to avoid strange side effects */
         regMailComplex = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&]+)&gt;/, /* "name" <address> */
         regMailComplexReplace = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&]+)&gt;/g, /* "name" <address> */
         regImageSrc = /(<img[^>]+src=")\/ajax/g;
@@ -694,7 +694,7 @@ define('io.ox/mail/view-detail',
                 }
 
                 // make sure this mail is seen
-                if (api.tracker.isUnseen(baton.data)) {
+                if (api.tracker.isUnseen(baton.data) && !util.isAttachment(baton.data)) {
                     api.markRead(baton.data);
                 }
 

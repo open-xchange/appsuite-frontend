@@ -343,7 +343,7 @@ define('io.ox/core/main',
         var resetTimeout = function () {
             clearTimeout(timeout);
             timeout = setTimeout(function () {
-                logout({autologout: true});
+                logout({ autologout: true });
             }, interval);
             timeoutStart = _.now();
             changed = false;
@@ -434,16 +434,21 @@ define('io.ox/core/main',
             start();
         };
 
-        ox.autoLogoutRestart = restart;
-
-        start();
-
-        ox.autoLogoutRestartDebug = function () {
+        var debug = function () {
             CHECKINTERVAL = 1;
             WARNINGSTART = 10;
             getInterval = function () { return 12000; };
             restart();
         };
+
+        ox.autoLogout = {
+            start: start,
+            stop: stop,
+            restart: restart,
+            debug: debug
+        };
+
+        start();
 
     }());
 
@@ -484,15 +489,19 @@ define('io.ox/core/main',
         }
 
         function addUserContent(model, launcher, first) {
-            var ariaBasicLabel = gt('close for '),
-                quitApp = $('<a href="#" class="closelink" tabindex="1" role="button" aria-label="' + ariaBasicLabel +  model.get('title') + '">').append(
-                    $('<i class="icon-remove">')
-                ).on('click', function (e) {
-                e.stopImmediatePropagation();
-                model.getWindow().app.quit();
-            }).on('focus', function () {
-                quitApp.attr('aria-label', ariaBasicLabel + model.get('title'));
-            });
+
+            var ariaBasicLabel =
+                    //#. %1$s is app title/name
+                    gt('close for %1$s', model.get('title')),
+                quitApp = $('<a href="#" class="closelink" tabindex="1" role="button" aria-label="' + ariaBasicLabel + '">')
+                    .append($('<i class="icon-remove">'))
+                    .on('click', function (e) {
+                        e.stopImmediatePropagation();
+                        model.getWindow().app.quit();
+                    })
+                    .on('focus', function () {
+                        quitApp.attr('aria-label', ariaBasicLabel);
+                    });
 
             if (model.get('closable')) {
                 if (first) {

@@ -73,6 +73,14 @@ define([
                     expect(this.convert(testStr)).toEqual(testStr);
                 });
 
+                it('should also convert on emoji enabled devices', function () {
+                    var stub = sinon.stub(_, 'device');
+                    stub.withArgs('emoji').returns(true);
+
+                    expect(this.convert('> \u2600')).toBe('> \ue04a');
+                    stub.restore();
+                });
+
                 describe('convert image tags to PUA encoding', function () {
                     it('should convert black sun with rays', function () {
                         var text = emoji.unifiedToImageTag('\u2600');

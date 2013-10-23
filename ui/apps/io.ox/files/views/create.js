@@ -70,6 +70,9 @@ define('io.ox/files/views/create',
                     var files = ($form.find('input[type="file"]').length > 0 ? $form.find('input[type="file"]').prop('disabled', false)[0].files : []) || [],
                         folder = app.folder.get();
                     if ($form.find('input[type="file"]').val()) {
+                        // disable autologout -> bug 29389
+                        ox.autoLogout.stop();
+
                         api.uploadFile({
                             form: $form,
                             file: _(files).first(),
@@ -89,6 +92,10 @@ define('io.ox/files/views/create',
                                 notifications.yell(e.data.custom.type, e.data.custom.text);
                             }
                             dialog.close();
+                        })
+                        .always(function () {
+                            // reenable autologout -> bug 29389
+                            ox.autoLogout.start();
                         });
                     } else {
                         notifications.yell('error', gt('No file selected for upload.'));

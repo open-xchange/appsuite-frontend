@@ -121,6 +121,11 @@ define('io.ox/calendar/invitations/register',
 
         function render(baton) {
 
+            if (!baton.analysis) {
+                if (baton.$.well) baton.$.well.remove();
+                return;
+            }
+
             if (baton.analysis.actions.length !== 1 || baton.analysis.actions[0] !== 'ignore') {
 
                 var appointments = [],
@@ -225,9 +230,7 @@ define('io.ox/calendar/invitations/register',
 
                 $node.append(baton.$.well.show());
             } else {
-                if (baton.$.well) {
-                    baton.$.well.remove();
-                }
+                if (baton.$.well) baton.$.well.remove();
             }
 
             // draw appointment details and well

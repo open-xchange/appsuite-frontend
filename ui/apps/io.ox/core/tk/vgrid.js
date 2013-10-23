@@ -274,7 +274,7 @@ define('io.ox/core/tk/vgrid',
                     // show toggle
                     options.showToggle === false ?
                         [] :
-                        $('<a>', { href: '#', tabindex: 1, role: 'button', 'aria-label': gt('Touchselect on/off')})
+                        $('<a>', { href: '#', tabindex: 1, role: 'button', 'aria-label': gt('Toggle checkboxes')})
                         .css('float', 'left')
                         .append($('<i class="icon-th-list">'))
                         .on('click', { grid: this }, fnToggleEditable)
@@ -699,6 +699,7 @@ define('io.ox/core/tk/vgrid',
             scrollpane.find('.io-ox-center').remove().end();
             if (list.length === 0 && loaded) {
                 detachPool();
+                self.selection.trigger('change', []);
                 scrollpane.append(
                     $.fail(emptyMessage ?
                         emptyMessage(self.getMode()) :

@@ -93,7 +93,7 @@ define('io.ox/core/tk/reminder-util',
                     //#. %3$s Appointment time
                     //#. %4$s Appointment location
                     //#, c-format
-            label = gt('Appointement reminder. %1$s %2$s %3$s %4$s. Press [enter] to open',
+            label = gt('Appointment reminder. %1$s %2$s %3$s %4$s. Press [enter] to open',
                     _.noI18n(model.get('title')), _.noI18n(model.get('date')), _.noI18n(model.get('time')), _.noI18n(model.get('location')) || '');
         }
 
@@ -110,7 +110,7 @@ define('io.ox/core/tk/reminder-util',
                    'tabindex': 1
         }).addClass('reminder-item refocus');
         buildActions(actions, options, 'reminder-notification-' + focusId);
-        
+
         node.append(
                 info,
                 actions

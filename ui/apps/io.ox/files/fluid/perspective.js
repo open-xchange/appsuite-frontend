@@ -334,6 +334,11 @@ define('io.ox/files/fluid/perspective',
                 iconBackground = drawGenericIcon(file.filename),
                 previewBackground = $('<div class="preview-cover">').append(iconBackground);
 
+            //use block instead flexbox
+            if (_.browser.IE < 11 || _.browser.safari < 7) {
+                previewImage.find('.preview-border').addClass('non-flexbox');
+            }
+
             //add preview image
             if (mode) {
                 var url = api.getUrl(file, mode, options);
@@ -370,7 +375,7 @@ define('io.ox/files/fluid/perspective',
                     //details
                     $('<div class="details">').append(
                         //title
-                        $('<span class="text title drag-title">').append(
+                        $('<div class="text title drag-title">').append(
                             $('<span class="not-selectable">').text(gt.noI18n(cut(file.filename || file.title, 55))).append(
                                     (file.locked_until ? $('<i class="icon-lock">') : '')
                                 )

@@ -21,16 +21,16 @@ define('io.ox/settings/util',
 
     return {
         yellOnReject: function (def, options) {
-            //be robust
-            if (!(def && def.promise && def.resolve))
-                def = new $.Deferred();
+
+            // be robust
+            if (!(def && def.promise && def.done)) return $.when();
 
             var opt = $.extend({
                     details: true,
                     debug: false
                 }, options || {});
 
-            //debug
+            // debug
             if (opt.debug) {
                 def.always(function () {
                     var list = _.isArray(this) ? this : [this];
@@ -43,7 +43,7 @@ define('io.ox/settings/util',
                 });
             }
 
-            //yell on error
+            // yell on error
             return def.fail(
                 function (e) {
                     //try to add a suitable message (new property)
@@ -65,7 +65,7 @@ define('io.ox/settings/util',
                         obj.message = gt(obj.error);
                     }
 
-                    //notification.yell favors obj.message over obj.error
+                    // notification.yell favors obj.message over obj.error
                     notifications.yell(obj);
                 }
             );

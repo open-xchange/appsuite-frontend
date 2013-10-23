@@ -2961,17 +2961,8 @@ input.flat-input {
     }
 
     .ios {
-        .io-ox-foldertree {
-            .overflow();
-        }
-    }
-    .foldertree-sidepanel {
         .foldertree-container {
-            .io-ox-foldertree {
-                .folder.selectable:hover {
-                    background-color: inherit;
-                }
-            }
+            .overflow();
         }
     }
 
@@ -3037,7 +3028,7 @@ input.flat-input {
     //** blur style for body when mobile custom menus are shown **/
     .ios {
         #io-ox-core {
-             transition: -webkit-filter 150ms ease-in-out;
+             transition: -webkit-filter 100ms ease-in;
              -webkit-filter: blur(0px);
 
             &.menu-blur {

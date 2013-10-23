@@ -1010,6 +1010,15 @@ define('io.ox/mail/write/view-main',
                 createEditor(),
                 this.spacer = $('<div class="spacer">').css('height', '205px')
             );
+
+            // iOS 7 has problems with rotation changes while the keyboard is shown (on iPad)
+            // blur to dismiss the keyboard
+            // fix for bug 29386
+            if (_.browser.ios >= 7) {
+                $(this.leftside, this.tightside).on('orientationchange', function () {
+                    $('input, textarea', this.leftside).blur();
+                });
+            }
         }
     });
 

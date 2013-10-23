@@ -449,7 +449,8 @@ define('io.ox/core/api/folder',
                         params: {
                             action: 'delete',
                             folder_id: opt.folder,
-                            tree: '1'
+                            tree: '1',
+                            failOnError: true
                         },
                         data: [opt.folder],
                         appendColumns: false

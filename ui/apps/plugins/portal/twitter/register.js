@@ -164,7 +164,7 @@ define('plugins/portal/twitter/register',
                         options.buttonContainer.addClass('io-ox-twitter-hidden');
                     },
                     function fail() {
-                        notifications.yell('error', gt('An internal error occured'));
+                        notifications.yell('error', gt('An internal error occurred'));
                     });
                 }
             }).get();

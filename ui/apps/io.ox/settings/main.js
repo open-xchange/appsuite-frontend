@@ -36,7 +36,10 @@ define('io.ox/settings/main',
                         title = $('<div>')
                             .addClass('title')
                     );
-                if (_.device('smartphone')) title.prepend($('<i class="icon-chevron-right" style="float:right">'));
+                if (_.device('smartphone')) {
+                    title.css('margin', '4px 0'); // must use inline styles because vgrid's height calculon-o-mat does not respect any css values bound via classes for its calculation..
+                    title.prepend($('<i class="icon-chevron-right pull-right">'));
+                }
                 return { title: title };
             },
             set: function (data, fields) {

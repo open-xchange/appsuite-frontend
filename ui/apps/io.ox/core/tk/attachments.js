@@ -290,12 +290,12 @@ define('io.ox/core/tk/attachments',
                                     fileSize = item.file_size || item.size;
                                 if (fileSize) {
                                     total += fileSize;
-                                    if (maxFileSize !== 0 && fileSize > maxFileSize) {
+                                    if (maxFileSize > 0 && fileSize > maxFileSize) {
                                         proceed = false;
                                         notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, strings.fileSize(maxFileSize)));
                                         return;
                                     }
-                                    if (quota !== -1) {
+                                    if (quota > 0) {
                                         if (total > quota - properties.infostoreUsage) {
                                             proceed = false;
                                             notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, strings.fileSize(quota)));

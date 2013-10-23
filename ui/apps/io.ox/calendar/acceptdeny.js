@@ -123,15 +123,12 @@ define('io.ox/calendar/acceptdeny',
                             return;
                         }
 
-                        api.confirm(o).then(
-                            function success() {
-                                if (showReminderSelect) {
-                                    var reminder = parseInt(reminderSelect.find('select').val(), 10);
-                                    delete o.data;
-                                    o.alarm = reminder;
-                                    api.update(o);
-                                }
-                            },
+                        // set (default) reminder?
+                        if (showReminderSelect) {
+                            o.data.alarm = parseInt(reminderSelect.find('select').val(), 10);
+                        }
+
+                        api.confirm(o).fail(
                             function fail(e) {
                                 if (ox.debug) console.log('error', e);
                             }

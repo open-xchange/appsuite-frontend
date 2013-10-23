@@ -363,7 +363,9 @@ define('io.ox/emoji/main',
                 return _.identity;
             } else if (options.from === 'unified' && options.to === 'pua') {
                 return function (text, format) {
-                    return self.imageTagsToPUA(self.unifiedToImageTag(text), format);
+                    return self.imageTagsToPUA(self.unifiedToImageTag(text, {
+                        forceEmojiIcons: true
+                    }), format);
                 };
             }
             return;
