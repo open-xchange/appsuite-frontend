@@ -1341,6 +1341,8 @@ define('io.ox/mail/view-detail',
                 attachments = util.getAttachments(data), length = attachments.length,
                 aLabel;
 
+            console.log("attachments", attachments);
+            
             if (length > 0) {
                 var outer = $('<div>').addClass('list attachment-list'),
                     aLabel;
@@ -1395,7 +1397,8 @@ define('io.ox/mail/view-detail',
                 // how 'all' drop down?
                 if (length > 1) {
                     attachments.subject = data.subject;
-                    drawAttachmentDropDown(outer, gt('All attachments'), attachments).find('a').removeClass('attachment-link');
+                    drawAttachmentDropDown(outer, gt('All attachments'), attachments)
+                    .find('a').removeClass('attachment-link').addClass('attachment-link-all');
                 }
                 if (_.device('smartphone')) {
                     outer.addClass('attachments-collapsed').find('.dropdown').hide();
