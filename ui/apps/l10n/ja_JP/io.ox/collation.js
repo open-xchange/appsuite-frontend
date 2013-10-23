@@ -18,12 +18,12 @@ define('l10n/ja_JP/io.ox/collation', [], function () {
     // see http://en.wikipedia.org/wiki/Goj%C5%ABon
     // or http://en.wikipedia.org/wiki/Japanese_writing_system#Collation
     var tableau = [
-            'あ い う え お',
+            'あ い う え お ゔ',
             'か き く け こ が ぎ ぐ げ ご',
             'さ し す せ そ ざ じ ず ぜ ぞ',
             'た ち つ て と だ ぢ づ で ど',
             'な に ぬ ね の',
-            'は ひ ふ へ ほ ば び ぶ ぼ ぱ ぴ ぷ ぺ ぽ',
+            'は ひ ふ へ ほ ば び ぶ ぺ ぼ ぱ ぴ ぷ ぺ ぽ',
             'ま み む め も',
             'や ゆ よ',
             'ら り る れ ろ',
