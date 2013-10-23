@@ -187,6 +187,8 @@ define('io.ox/files/fluid/view-detail',
             $commentArea,
             $comment,
             $uploadButton,
+            $progressBarWrapper,
+            $progressBar,
             $input = attachments.fileUploadWidget({
                 displayLabel: true,
                 displayButton: false,
@@ -200,6 +202,7 @@ define('io.ox/files/fluid/view-detail',
                     ),
                     $uploadButton = $('<button type="button" data-action="upload" tabindex="1">')
                         .addClass('uploadbutton btn btn-primary pull-right').text(gt('Upload file')),
+                    $progressBarWrapper = $('<div>').addClass('row-fluid').append($progressBar = $('<div>').addClass('bar')),
                     $('<div>').addClass('comment').append(
                         $comment = $('<div class="row-fluid">').append(
                             $('<label>').text(gt('Version Comment')),
@@ -218,6 +221,9 @@ define('io.ox/files/fluid/view-detail',
                     //general upload error
                     $uploadButton.removeClass('disabled');
                     $input.closest('form').get(0).reset();
+                    //hide progressbar
+                    $progressBarWrapper.removeClass('progress');
+                    $progressBar.css('width', '0%');
                 }
             };
 
@@ -236,6 +242,7 @@ define('io.ox/files/fluid/view-detail',
                 $commentArea.addClass('disabled');
 
                 if (_.browser.IE !== 9) {
+                    $progressBarWrapper.addClass('progress');//show progressbar
                     var files = $input.find('input[type="file"]')[0].files || [];
 
                     filesAPI.uploadNewVersion({
@@ -244,6 +251,9 @@ define('io.ox/files/fluid/view-detail',
                         folder: file.folder_id,
                         timestamp: _.now(),
                         json: {version_comment: $commentArea.val()}
+                    }).progress(function (e) {
+                        var sub = (e.loaded / e.total) * 100;
+                        $progressBar.css('width', sub + '%');
                     }).done(resetCommentArea)
                     .fail(uploadFailed);
                 } else {
