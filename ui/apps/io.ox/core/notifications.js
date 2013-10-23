@@ -259,7 +259,7 @@ define('io.ox/core/notifications',
                 module.collection = new Backbone.Collection();
                 module.collection
                     .on('add reset', _.bind(this.updateNotification, this))
-                    .on('remove', _.bind(this.update, this));
+                    .on('remove', _.bind(this.delayedUpdate, this));
                 this.notifications[key] = module;
             }
             return this.notifications[key];
@@ -268,11 +268,20 @@ define('io.ox/core/notifications',
             $('#io-ox-notifications-overlay').off('mail-detail-closed');
             this.hideList();
         },
+        delayedUpdate: function () {//delays updating by 100ms (prevents updating the view multiple times in a row)
+            var self = this;
+            if (!this.updateTimer) {
+                this.updateTimer = setTimeout(function () {
+                    self.update();
+                    self.updateTimer = undefined;
+                }, 100);
+            }
+        },
         updateNotification: function () {
             _.each(this.badges, function (badgeView) {
                 badgeView.setNotifier(true);
             });
-            this.update();
+            this.delayedUpdate();
         },
         update: function () {
             var newMails = 0,
