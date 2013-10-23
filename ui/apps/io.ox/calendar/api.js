@@ -234,7 +234,7 @@ define('io.ox/calendar/api',
                         action: 'update',
                         id: o.id,
                         folder: folder_id,
-                        timestamp: _.now(),
+                        timestamp: o.timestamp || _.now(),
                         timezone: 'UTC'
                     },
                     data: o
@@ -414,15 +414,18 @@ define('io.ox/calendar/api',
                 params: {
                     action: 'confirm',
                     folder: o.folder,
-                    id: o.id
+                    id: o.id,
+                    timestamp: _.now(),
+                    timezone: 'UTC'
                 },
                 data: o.data
             })
-            .then(function () {
+            .then(function (resp, timestamp) {
                 if (alarm === -1) return;
                 return api.update({
                     folder: o.folder,
                     id: o.id,
+                    timestamp: timestamp,//ie gets conflict error so manual timestamp is needed here
                     alarm: alarm
                 });
             })
