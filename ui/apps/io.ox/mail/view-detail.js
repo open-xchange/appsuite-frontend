@@ -1340,8 +1340,6 @@ define('io.ox/mail/view-detail',
             var data = baton.data,
                 attachments = util.getAttachments(data), length = attachments.length,
                 aLabel;
-
-            console.log("attachments", attachments);
             
             if (length > 0) {
                 var outer = $('<div>').addClass('list attachment-list'),
