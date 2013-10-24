@@ -818,7 +818,6 @@ define('io.ox/core/commons-folderview',
         };
 
         initTree = function (views) {
-
             // work with old non-device specific setting (<= 7.2.2) and new device-specific approach (>= 7.4)
             var open = app.settings.get('folderview/open', {});
             if (open && open[_.display()]) open = open[_.display()];
@@ -898,10 +897,9 @@ define('io.ox/core/commons-folderview',
                         tree.removeNode(id);
                     });
 
-                    api.on('delete', function (e, id) {
+                    api.on('delete', _.throttle(function (e, id) {
                         app.trigger('folder:delete', id);
-                        api.sync();
-                    });
+                    }, 100));
 
                     api.on('refresh', function () {
                         tree.repaint();
