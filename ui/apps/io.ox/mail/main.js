@@ -808,6 +808,21 @@ define('io.ox/mail/main',
             grid.selection.retrigger(true);//to refresh detailviews and grid
         });
 
+        //update trash after mail is deleted
+        folderAPI.on('delete:mail', function () {
+            var deletedId = arguments[1].id; //gets the id of the deleted folder
+
+            _(account.getFoldersByType('trash')).each(function (folder) {
+                //select appropriate trash folder
+                if (account.parseAccountId(folder, true) === account.parseAccountId(deletedId, true)) {
+                    folderAPI.getSubFolders({folder: folder, cache: false}).done(function () {
+                        //refresh folder tree
+                        folderAPI.trigger('refresh');
+                    });
+                }
+            });
+        });
+
         // search
         (function () {
 

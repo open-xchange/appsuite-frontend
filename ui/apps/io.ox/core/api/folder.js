@@ -430,7 +430,6 @@ define('io.ox/core/api/folder',
 
             // get folder
             return this.get({ folder: opt.folder }).then(function (data) {
-
                 var id = data.id, folder_id = data.folder_id;
 
                 // clear caches first
