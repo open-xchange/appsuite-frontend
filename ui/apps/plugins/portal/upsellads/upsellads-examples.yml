@@ -19,6 +19,7 @@ io.ox/portal//widgets/protected:
 
 
 io.ox/upsell//ads:
+  delayInMilliseconds: 10000
   lipsum:
     capabilities: loremgibsum-active
     startDate: 2013-01-01

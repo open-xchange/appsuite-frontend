@@ -20,7 +20,7 @@ define('plugins/portal/upsellads/register',
     'use strict';
 
     var adInterval = {},
-        intervalDuration = 5000,
+        intervalDuration = settings.get('ads/delayInMilliseconds', 5000),
         addContent,
         nextAd,
         getSlides;

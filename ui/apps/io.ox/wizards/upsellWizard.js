@@ -235,14 +235,7 @@ define('io.ox/wizards/upsellWizard', [
     point.extend({
         id: 'upsell-acknowledgement',
         index: 300,
-        title: gt('Thank you!'),
-        activate: function (baton) {
-            ext.point('io.ox/wizards/upsellWizard').each(function (elem) {
-                if (elem.id === 'upsell-acknowledgement') {
-                    elem.invoke('draw', baton);
-                }
-            });
-        },
+        title: gt('Purchase confirmation'),
         draw: function (baton) {
             var cartContents,
                 idList,
@@ -268,8 +261,10 @@ define('io.ox/wizards/upsellWizard', [
                 prod.attributes.inCart = false;
             });
             baton.buttons.enableNext();
+            $('.wizard-prev').hide();
         }
     });
+
 
 
     return {
