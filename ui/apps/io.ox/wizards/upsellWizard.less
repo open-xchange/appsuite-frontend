@@ -1,0 +1,125 @@
+.upsell-wizard-container {
+	.upsell-product-choice {
+		box-sizing: border-box;
+		display: block;
+		height: 400px;
+		overflow-y: scroll;
+		width: 200px;
+		position: absolute;
+		top: 0;
+		left: 0;
+		padding: 5px;
+
+		border-right: 2px solid #ccc;
+	}
+
+	.upsell-shopping-cart {
+		box-sizing: border-box;
+		position: absolute;
+		top: 0;
+		left: 350px;
+		height: 200px;
+		padding: 0 10px;
+	}
+
+	.upsell-product-details {
+		box-sizing: border-box;
+		position: absolute;
+		top: 0;
+		left: 200px;
+		padding-left: 5px;
+		height: 400px;
+		overflow-y: scroll;
+	}
+
+	/* Page 1, product selection */
+	.upsell-product-choice {
+		.upsell-product input {
+			display: inline-block;
+			float: left;
+			margin-right: 0.5em;
+		}
+
+		.upsell-product label {
+			display: inline-block;
+		}
+
+		.upsell-product-image {
+			width: 100px;
+			height: 100px;
+			background-size: cover;
+			margin: auto;
+		}
+
+		.upsell-product-price {
+			display: block;
+		}
+		.upsell-product {
+			margin-bottom: 18px;
+		}
+	}
+	.upsell-shopping-cart {
+		.icon-shopping-cart.icon-2x	{
+			display: inline-block;
+			padding: 0 .25em .25em 0;
+		}
+		.title {
+			font-weight: bold;
+		}
+	}
+
+	/* Page 1, detail view */
+	.upsell-product-details {
+		.upsell-product-image {
+			width: 150px;
+			height: 150px;
+			background-size: cover;
+			margin: 0;
+		}
+		.upsell-product-name {
+			font-weight: bold;
+		}
+		.filler {
+			width: 100%;
+			overflow: hidden;
+			padding-top: 40%;
+			text-align: center;
+			font-style: italic;
+		}
+	}
+
+	/* Page 2, review of shopping cart contents */
+	.upsell-shopping-cart-review {
+		margin: 13px;
+
+		.upsell-product-price {
+			text-align: right
+		}
+		.upsell-total {
+			font-weight: bold;
+		}
+		td {
+			padding: 0 .25em;
+		}
+	}
+	.upsell-disclaimer {
+		padding: 13px;
+		font-size: 90%;
+	}
+
+	/* Page 3, confirmation of activation */
+	.upsell-activation {
+		padding: 13px;
+	}
+
+	/* General settings */
+	.modal-body {
+		padding: 0;
+		height: 400px;
+		padding-left: 5px;
+	}
+
+	.btn.wizard-close {
+		float: left;
+	}
+}

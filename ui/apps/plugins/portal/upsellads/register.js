@@ -29,7 +29,7 @@ define('plugins/portal/upsellads/register',
         var slides, languages, slideKeys, result = [];
 
         if (!data.slides || _(data.slides).isEmpty()) {
-            console.error('No slides present"´', data);
+            console.error('No slides present', data);
             return;
         }
         languages = _(data.slides).keys();
@@ -121,6 +121,14 @@ define('plugins/portal/upsellads/register',
                     .on('click', function () { return nextAd(content, ad, slides); })
                     .append($('<i class="icon-circle-arrow-right icon-2x">'))
             );
+            content.on('click', function () {
+                var def = $.Deferred();
+                require(['io.ox/wizards/upsellWizard'], function (w) {
+                    w.getInstance().start({cssClass: 'upsell-wizard-container'})
+                        .done(function () {})
+                        .fail(def.reject);
+                });
+            });
             addContent(slides[startPos], content);
             adInterval[ad] = setInterval(function () { return nextAd(content, ad, slides); },  intervalDuration);
         }
