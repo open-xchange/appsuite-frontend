@@ -257,65 +257,50 @@ define('io.ox/core/tk/attachments',
                 return _.map(list, function (file) {
                             return file.file;
                         });
-                    }
-                    return _.map(list, function (file) {
-                                return file.file;
-                            });
-                },
+            },
 
-                getNode: function () {
-                    return $el;
-                },
+            getNode: function () {
+                return $el;
+            },
 
-                clear: function () {
-                    files = [];
-                    this.listChanged();
-                },
+            clear: function () {
+                files = [];
+                this.listChanged();
+            },
 
-                add: function (file) {
-                    var proceed = true, self = this,
-                        list = [].concat(file);
+            add: function (file) {
+                var proceed = true, self = this,
+                    list = [].concat(file);
 
 
-                    if (list.length) {
-                        //check
-                        require(['settings!io.ox/core', 'io.ox/core/notifications'], function (settings, notifications) {
+                if (list.length) {
+                    //check
+                    require(['settings!io.ox/core', 'io.ox/core/notifications'], function (settings, notifications) {
 
-                            var properties = settings.get('properties');
-                            if (baton.app && baton.app.app.attributes.name !== 'io.ox/mail/write') {
-                                proceed = false;
-                            }
-                            if (properties && proceed) {
-                                var total = 0,
-                                    maxFileSize = properties.infostoreMaxUploadSize,
-                                    quota = properties.infostoreQuota;
-                                _.each(list, function (item) {
-                                    var fileTitle = item.filename || item.name || item.subject,
-                                        fileSize = item.file_size || item.size;
-                                    if (fileSize) {
-                                        total += fileSize;
-                                        if (maxFileSize > 0 && fileSize > maxFileSize) {
+                        var properties = settings.get('properties');
+                        if (baton.app && baton.app.app.attributes.name !== 'io.ox/mail/write') {
+                            proceed = false;
+                        }
+                        if (properties && proceed) {
+                            var total = 0,
+                                maxFileSize = properties.infostoreMaxUploadSize,
+                                quota = properties.infostoreQuota;
+                            _.each(list, function (item) {
+                                var fileTitle = item.filename || item.name || item.subject,
+                                    fileSize = item.file_size || item.size;
+                                if (fileSize) {
+                                    total += fileSize;
+                                    if (maxFileSize > 0 && fileSize > maxFileSize) {
+                                        proceed = false;
+                                        notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, strings.fileSize(maxFileSize)));
+                                        return;
+                                    }
+                                    if (quota > 0) {
+                                        if (total > quota - properties.infostoreUsage) {
                                             proceed = false;
                                             notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, strings.fileSize(quota)));
                                             return;
                                         }
-                                        if (quota > 0) {
-                                            if (total > quota - properties.infostoreUsage) {
-                                                proceed = false;
-                                                notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, strings.fileSize(quota)));
-                                                return;
-                                            }
-                                        }
-                                    }
-                                    //add
-                                    if (proceed) {
-                                        files.push({
-                                            file: (oldMode && item.hiddenField ? item.hiddenField : item),
-                                            name: fileTitle,
-                                            size: fileSize,
-                                            group: item.group || 'unknown',
-                                            cid: counter++
-                                        });
                                     }
                                 }
                                 //add
