@@ -324,7 +324,7 @@ define('io.ox/files/fluid/perspective',
     ext.point('io.ox/files/icons/file').extend({
         draw: function (baton) {
             var file = baton.data,
-                options = _.extend({ version: true, scaletype: 'cover' }, baton.options),
+                options = _.extend({ version: true, scaletype: 'contain' }, baton.options),
                 mode = previewMode(file),
                 changed = getDateFormated(baton.data.last_modified),
                 //view mode: icon
