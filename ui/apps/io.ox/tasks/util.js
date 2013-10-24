@@ -123,7 +123,6 @@ define('io.ox/tasks/util',
                 }
 
                 endDate.setTime(prepareTime(endDate));
-                endDate.setHours(6);
                 if (weekDay < 1 || weekDay > 4) {
                     weekDay = (((endDate.getDay() - 1) % 7) + 7) % 7;
                     endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * (7 - weekDay));
@@ -135,6 +134,8 @@ define('io.ox/tasks/util',
                 if (alarmDate.getTime() > endDate.getTime()) {//endDate should not be before alarmDate
                     endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * 7);
                 }
+                //end Date does not have a time
+                endDate.setHours(0);
                 var result = {
                         endDate: endDate,
                         alarmDate: alarmDate
@@ -248,7 +249,7 @@ define('io.ox/tasks/util',
 
                 if (o.bootstrapDropdown) {
                     _(options).each(function (obj, index) {
-                        options[index] = $('<li>').append(obj);
+                        options[index] = $('<li>').append(obj).val(obj.val());
                     });
                 }
 

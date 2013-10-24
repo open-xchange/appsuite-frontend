@@ -506,12 +506,18 @@ define('io.ox/tasks/actions',
                     )
                     .delegate('li a', 'click', {task: data}, function (e) {
                         e.preventDefault();
-                        var finderId = $(this).attr('value');
+                        var finderId = $(e.target).val();
                         ox.load(['io.ox/tasks/api']).done(function (api) {
-                            var endDate = util.computePopupTime(new Date(), finderId).alarmDate,
-                                modifications = {end_date: endDate.getTime(),
-                                                 id: e.data.task.id,
-                                                 folder_id: e.data.task.folder_id || e.data.task.folder};
+                            var endDate = util.computePopupTime(new Date(), finderId).alarmDate, modifications;
+                            //remove Time
+                            endDate.setHours(0);
+                            endDate.setMinutes(0);
+                            endDate.setSeconds(0);
+                            endDate.setMilliseconds(0);
+                            
+                            modifications = {end_date: endDate.getTime(),
+                                             id: e.data.task.id,
+                                             folder_id: e.data.task.folder_id || e.data.task.folder};
 
                             //check if startDate is still valid with new endDate, if not, show dialog
                             if (e.data.task.start_date && e.data.task.start_date > endDate.getTime()) {
