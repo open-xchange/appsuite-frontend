@@ -373,7 +373,12 @@ define('io.ox/core/main',
                             countdownTimer = setInterval(function () {
                                 countdown--;
                                 node.text(getString(countdown));
+                                if (countdownTimer <= 0) {
+                                    logout({ autologout: true });
+                                }
                             }, 1000);
+
+                        clearTimeout(timeout);
 
                         dialog = new dialogs.ModalDialog({ easyOut: false })
                             .header($('<h4>').text(gt('Automatic sign out')))
