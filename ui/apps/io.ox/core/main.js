@@ -717,30 +717,42 @@ define('io.ox/core/main',
         });
 
         ext.point('io.ox/core/topbar/right/dropdown').extend({
-            id: 'fullscreen',
-            index: 300,
+            id: 'divider-before-fullscreen',
+            index: 290,
             draw: function () {
-                if (BigScreen.enabled) {
-                    var fullscreenButton;
-                    BigScreen.onenter = function () {
-                        fullscreenButton.text(gt('Exit Fullscreen'));
-                    };
-                    BigScreen.onexit = function () {
-                        fullscreenButton.text(gt('Fullscreen'));
-                    };
-                    this.append(
-                        $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
-                        $('<li>').append(
-                            fullscreenButton = $('<a href="#" data-action="fullscreen" role="menuitem" tabindex="1">').text(gt('Fullscreen'))
-                        )
-                        .on('click', function (e) {
-                            e.preventDefault();
-                            BigScreen.toggle();
-                        })
-                    );
-                }
+                this.append(
+                    $('<li class="divider" aria-hidden="true" role="presentation">')
+                );
             }
         });
+
+        // fullscreen doesn't work for safari (see )
+        if (_.device('!safari')) {
+            ext.point('io.ox/core/topbar/right/dropdown').extend({
+                id: 'fullscreen',
+                index: 300,
+                draw: function () {
+                    if (BigScreen.enabled) {
+                        var fullscreenButton;
+                        BigScreen.onenter = function () {
+                            fullscreenButton.text(gt('Exit Fullscreen'));
+                        };
+                        BigScreen.onexit = function () {
+                            fullscreenButton.text(gt('Fullscreen'));
+                        };
+                        this.append(
+                            $('<li>').append(
+                                fullscreenButton = $('<a href="#" data-action="fullscreen" role="menuitem" tabindex="1">').text(gt('Fullscreen'))
+                            )
+                            .on('click', function (e) {
+                                e.preventDefault();
+                                BigScreen.toggle();
+                            })
+                        );
+                    }
+                }
+            });
+        }
 
         ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'about',
