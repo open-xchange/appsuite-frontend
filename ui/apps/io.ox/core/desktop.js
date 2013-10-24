@@ -20,8 +20,9 @@ define('io.ox/core/desktop',
      'io.ox/core/notifications',
      'io.ox/core/upsell',
      'io.ox/core/adaptiveLoader',
+     'settings!io.ox/core',
      'gettext!io.ox/core'
-    ], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, gt) {
+    ], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, coreConfig, gt) {
 
     'use strict';
 
@@ -196,7 +197,7 @@ define('io.ox/core/desktop',
 
                     setDefault: function () {
                         var def = new $.Deferred();
-                        require(['settings!io.ox/core', 'settings!io.ox/mail'], function (coreConfig, mailConfig) {
+                        require(['settings!io.ox/mail'], function (mailConfig) {
                             var defaultFolder = type === 'mail' ?
                                     mailConfig.get('folder/inbox') :
                                     coreConfig.get('folder/' + type);
@@ -424,7 +425,7 @@ define('io.ox/core/desktop',
         saveRestorePoint: function () {
             var self = this, uniqueID = self.get('uniqueID');
             if (this.failSave) {
-                appCache.get('savepoints').done(function (list) {
+                ox.ui.App.getSavePoints().done(function (list) {
                     // might be null, so:
                     list = list || [];
                     var data, ids, pos;
@@ -447,7 +448,7 @@ define('io.ox/core/desktop',
                         if (pos > -1) { list.splice(pos, 1); delete self.failSave; }
                     }
                     if (list.length > 0) {
-                        appCache.add('savepoints', list);
+                        ox.ui.App.setSavePoints(list);
                     }
                 });
             }
@@ -464,19 +465,29 @@ define('io.ox/core/desktop',
 
         canRestore: function () {
             // use get instead of contains since it might exist as empty list
-            return this.getSavePoints().pipe(function (list) {
+            return this.getSavePoints().then(function (list) {
                 return list && list.length;
             });
         },
 
         getSavePoints: function () {
-            return appCache.get('savepoints').pipe(function (list) {
+            return appCache.get('savepoints').then(function (list) {
+                if (!list) {
+                    list = coreConfig.get('savepoints', []);
+                }
                 return _(list || []).filter(function (obj) { return 'point' in obj; });
             });
         },
 
+        setSavePoints: function (list) {
+            list = list || [];
+            coreConfig.set('savepoints', list);
+            return appCache.add('savepoints', list);
+        },
+
         removeRestorePoint: function (id) {
-            return appCache.get('savepoints').pipe(function (list) {
+            var self =  this;
+            return this.getSavePoints().then(function (list) {
                 list = list || [];
                 var ids = _(list).pluck('id'),
                     pos = _(ids).indexOf(id);
@@ -484,13 +495,14 @@ define('io.ox/core/desktop',
                 if (pos > -1) {
                     list.splice(pos, 1);
                 }
-                return appCache.add('savepoints', list).then(function () {
+                return self.setSavePoints(list).then(function () {
                     return list;
                 });
             });
         },
 
         restore: function () {
+            var self = this;
             this.getSavePoints().done(function (data) {
                 $.when.apply($,
                     _(data).map(function (obj) {
@@ -511,7 +523,7 @@ define('io.ox/core/desktop',
                 .done(function () {
                     // we don't remove that savepoint now because the app might crash during restore!
                     // in this case, data would be lost
-                    appCache.add('savepoints', data || []);
+                    self.setSavePoints(data);
                 });
             });
         },
@@ -543,6 +555,14 @@ define('io.ox/core/desktop',
 
         getCurrentWindow: function () {
             return currentWindow;
+        }
+    });
+
+    // listen for logout event
+    ext.point('io.ox/core/logout').extend({
+        id: 'saveCoreSettings',
+        logout: function () {
+            return coreConfig.save();
         }
     });
 
