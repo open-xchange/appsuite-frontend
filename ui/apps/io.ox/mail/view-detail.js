@@ -1044,13 +1044,22 @@ define('io.ox/mail/view-detail',
         index: 120,
         id: 'fromlist',
         draw: function (baton) {
-            var data = baton.data, list = util.serializeList(data, 'from'), node;
+
+            var data = baton.data, list, node;
+
+            if (!util.hasFrom(data)) {
+                return this.append(
+                    $('<div class="from list">').text(gt('No sender'))
+                );
+            }
+
             this.append(
                 $('<div class="from list">').append(
-                    baton.data.from ? list.removeAttr('style') : $.txt('\u00A0')
+                    list = util.serializeList(data, 'from').removeAttr('style')
                 )
             );
-            if (baton.data.from && ox.ui.App.get('io.ox/mail').length) {
+
+            if (ox.ui.App.get('io.ox/mail').length) {
                 node = list.last();
                 node.after(
                     $('<i class="icon-search">').on('click', node.data('person'), searchSender)

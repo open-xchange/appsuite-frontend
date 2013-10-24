@@ -109,6 +109,7 @@ define('io.ox/contacts/edit/main',
 
                         if (!data.id) {
                             editView.listenTo(contact, 'change', function () {
+                                if (!getDirtyStatus) return;
                                 var isDirty = getDirtyStatus();
                                 fnToggleSave(isDirty);
                             });

@@ -504,6 +504,7 @@ define('io.ox/core/main',
                     });
 
             if (model.get('closable')) {
+                launcher.addClass('closable');
                 if (first) {
                     launcher.find('a').after(quitApp);
                 }
@@ -672,7 +673,10 @@ define('io.ox/core/main',
                 }
                 node.append(
                     $('<li>', {'class': 'io-ox-specificHelp'}).append(
-                        $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(gt('Tour: Coming from OX6'))
+                        $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(
+                            //#. Tour name; general introduction
+                            gt('Getting started')
+                        )
                         .on('click', function (e) {
                             tours.runTour('io.ox/intro');
                             e.preventDefault();
@@ -692,7 +696,10 @@ define('io.ox/core/main',
                 }
                 node.append(
                     $('<li>', {'class': 'io-ox-specificHelp'}).append(
-                        $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(gt('Guided tour for this module'))
+                        $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(
+                            //#. app-specific
+                            gt('Guided tour for this app')
+                        )
                         .on('click', function (e) {
                             var currentApp = ox.ui.App.getCurrentApp(),
                                 currentType = currentApp.attributes.name;

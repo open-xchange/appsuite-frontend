@@ -346,8 +346,8 @@ define('io.ox/tasks/edit/view-template',
                 temp = $('<li>').css('width', 100 / tabs.length + '%').appendTo(table);
                 tabs[i].invoke('draw', temp, baton, contentNode, content[tabs[i].id], i);
             }
-            table.find('li :first').addClass('active');
-            contentNode.find('div :first').addClass('active');
+            table.find('li:first').addClass('active');
+            contentNode.find('div:first').addClass('active');
 
             if (tabs.length === 1) {//hide if only one tab is available
                 table.replaceWith($('<legend class="sectiontitle collapsed">' + tabs[0].title + '</legend>'));
