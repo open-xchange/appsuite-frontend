@@ -839,7 +839,7 @@ define('io.ox/mail/actions',
                 var dateSelector = $('<select>', {name: 'dateselect'})
                 .appendTo(popupBody);
                 var endDate = new Date();
-                dateSelector.append(tasksUtil.buildDropdownMenu(endDate));
+                dateSelector.append(tasksUtil.buildDropdownMenu({time: endDate}));
 
                 //ready for work
                 var def = popup.show();

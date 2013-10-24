@@ -502,7 +502,7 @@ define('io.ox/tasks/actions',
                     .text(gt('Change due date')).append($('<b class="caret">')).dropdown(),
                     // drop down
                     $('<ul class="dropdown-menu dropdown-right" role="menu">').append(
-                        util.buildDropdownMenu(new Date(), true)
+                        util.buildDropdownMenu({time: new Date(), bootstrapDropdown: true, daysOnly: true})
                     )
                     .delegate('li a', 'click', {task: data}, function (e) {
                         e.preventDefault();
