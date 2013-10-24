@@ -290,11 +290,10 @@ define('io.ox/core/extPatterns/links',
                     lo = all.children().filter('[data-prio="lo"]').parent(),
                     isSmall = _.device('small');
 
-                all.addClass('io-ox-action-link');
                 if ((!multiple || options.forcelimit) && (isSmall || (all.length > 5 && lo.length > 1))) {
                     nav.append(
-                        $('<li class="io-ox-action-link dropdown">').append(
-                            $('<a>')
+                        $('<li class="dropdown">').append(
+                            $('<a class="actionlink">')
                             .attr({
                                 'href': '#',
                                 'data-toggle': 'dropdown',
@@ -317,6 +316,9 @@ define('io.ox/core/extPatterns/links',
                                 'role': 'menu',
                                 'aria-label': isSmall ? gt('Actions') : gt('More')
                             }).append((function () {
+                                if (isSmall) {
+                                    return all.children().filter('[data-prio-mobile="none"]').parent();
+                                }
                                 // loop over all items and visually group by "section"
                                 var items = [], currentSection = '';
                                 lo.each(function () {
