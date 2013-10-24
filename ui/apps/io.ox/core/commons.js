@@ -488,6 +488,84 @@ define('io.ox/core/commons',
             }
         },
 
+        /**
+         * stores state of propery collection for a specfied key property
+         * @param {object} grid
+         * @param {object} options
+         * @param {string} options.keyprop  cache id / changes on this trigger cache set
+         * @param {array}  options.props    cached properties
+         */
+        addPropertyCaching: function (grid, options) {
+            //be robust
+            grid = grid || {prop: $.noop()};
+
+            var mapping = {},
+                superprop = grid.prop,
+                opt = $.extend({
+                    keyprop: 'folder',
+                    props: ['sort', 'order']
+                }, options || {}),
+                //fluent cache
+                storage = {},
+                cache = {
+                    set: function (id, key, value) {
+                        storage[id] = storage[id] || {};
+                        storage[id][key] = value;
+                    },
+                    get: function (id, key) {
+                        //return specific/all prop(s)
+                        return !key ? storage[id] || {} : (storage[id] || {})[key];
+                    },
+                    remove: function (id) {
+                        storage[id] = {};
+                    },
+                    clear: function () {
+                        storage = {};
+                    }
+                };
+
+            //ensure array
+            opt.props = [].concat(opt.props);
+
+            //register props
+            _.each(opt.props, function (key) {
+                mapping[key] = true;
+            });
+
+            //save state if key property is changed
+            function process(key, value) {
+                var id,
+                    fulfilled = key === opt.keyprop &&
+                               typeof value !== 'undefined' &&
+                               value !== superprop(opt.keyprop);
+                //condition fulfilled
+                if (fulfilled) {
+                    //current key property value valid (used as cache id)
+                    id = superprop(opt.keyprop);
+                    if (id) {
+                        //collect and store current props
+                        cache.remove(id);
+                        _.each(opt.props, function (prop) {
+                            cache.set(id, prop, superprop(prop));
+                        });
+                    }
+                }
+            }
+            if (_.isUndefined(grid.propcache)) {
+                //access property cache via grid
+                grid.propcache = function (key, fallback, id) {
+                    id = id || superprop(opt.keyprop);
+                    return mapping[key] ? cache.get(id, key) || fallback : fallback;
+                };
+
+                //overwrite prop method
+                grid.prop = function (key, value) {
+                    process(key, value);
+                    return superprop.call(grid, key, value);
+                };
+            }
+        },
+
         addGridFolderSupport: function (app, grid) {
             app.folder.updateGrid(grid);
             app.getWindow().on('show', function () {
