@@ -504,6 +504,7 @@ define('io.ox/core/main',
                     });
 
             if (model.get('closable')) {
+                launcher.addClass('closable');
                 if (first) {
                     launcher.find('a').after(quitApp);
                 }

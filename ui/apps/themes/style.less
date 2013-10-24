@@ -262,7 +262,7 @@
 
     }
 
-    .launcher.user-content:hover {
+    .launcher.closable {
         color: @topbarLauncherColor-hover;
         background-color: @topbarLauncherBackgroundHover;
     }
@@ -311,7 +311,7 @@
             & > a { color: @topbarLauncherColorActive; }
         }
 
-        &.user-content {
+        &.closable {
             max-width: none;
             text-overflow: clip;
 
@@ -327,24 +327,24 @@
             }
         }
 
-        &.user-content i[class^="icon-"] {
+        &.closable i[class^="icon-"]  {
             font-size: 14px; // default font size (see Bug 27900)
             top: 0px;
             margin-right: 7px;
             color: #ccc;
         }
 
-        &.user-content i.icon-remove {
+        &.closable i.icon-remove {
             padding: 13px 16px;
             margin: 0px;
         }
 
-        &.user-content i.icon-remove:hover {
+        &.closable i.icon-remove:hover {
             color: @topbarLauncherColor-hover;
             background-color: @topbarLauncherBackgroundHover;
         }
 
-        &.active-app.user-content i[class^="icon-"] {
+        &.active-app.closable i[class^="icon-"]{
             color: @linkOnDark;
         }
 
