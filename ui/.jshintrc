@@ -14,6 +14,7 @@
 
     // Relaxing
     "debug"         : true,    // true: Allow debugger statements e.g. browser breakpoints.
+    "browser"       : true,    // true: defines globals exposed by modern browsers
     "shadow"        : true,    // true: Allows re-define variables later in code e.g. `var x=1; x=2;`
     "validthis"     : true,    // true: Tolerate using this in a non-constructor function
     "boss"          : true,    // true: Tolerate assignments where comparisons would be expected
@@ -31,10 +32,6 @@
     // Custom Globals
     "globals": {
         "$": false,
-        "window": false,
-        "localStorage": false,
-        "document": false,
-        "location": false,
         "ox": false,
         "_": false,
         "Modernizr": false,
