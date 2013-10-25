@@ -1093,7 +1093,7 @@ define('io.ox/files/actions',
             return api.getList(e.baton.allIds).then(function (data) {
                 e.baton.allIds = data;
                 return _(data).reduce(function (memo, obj) {
-                    return memo || api.checkMediaFile(type, obj.filename);
+                    return memo || !!(obj && api.checkMediaFile(type, obj.filename));
                 }, false);
             });
         } else {

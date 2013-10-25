@@ -235,7 +235,7 @@ define('io.ox/files/api',
             },
             listPost: function (data) {
                 _(data).each(function (obj) {
-                    api.tracker.addFile(obj);
+                    if (obj) api.tracker.addFile(obj);
                 });
                 return data;
             },
