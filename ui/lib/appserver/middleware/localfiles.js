@@ -49,7 +49,10 @@
             .filter(function (filename) {
                 return (path.existsSync(filename) && fs.statSync(filename).isFile());
             })[0];
-            if (!filename) return next();
+            if (!filename) {
+                if (verbose.local) console.log('localfile not found: ', pathname);
+                return next();
+            }
 
             if (pathname === 'core' || pathname === 'signin') {
                 type = 'text/html';
