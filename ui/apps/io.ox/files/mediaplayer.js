@@ -132,7 +132,7 @@ define('io.ox/files/mediaplayer',
         },
 
         getURL: function (file) {
-            return api.getUrl(file, 'play') + '&content_type=' + file.file_mimetype;
+            return api.getUrl(file, 'play') + '&content_type=' + String(file.file_mimetype).split(';')[0];
         },
 
         drawItems: function () {

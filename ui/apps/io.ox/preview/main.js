@@ -133,7 +133,7 @@ define('io.ox/preview/main',
                 require(['apps/mediaelement/mediaelement-and-player.js',
                         'css!mediaelement/mediaelementplayer.css'], function () {
 
-                    var pw = self.closest('.file-details').width();
+                    var pw = self.closest('.file-details, .scrollable-pane').width() || '100%';
 
                     self.find('audio').mediaelementplayer({
                         audioWidth: pw,

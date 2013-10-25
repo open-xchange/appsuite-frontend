@@ -1403,7 +1403,7 @@ define('io.ox/mail/api',
             }
         } else {
             // inject filename for more convenient file downloads
-            url += (data.filename ? '/' + encodeURIComponent(data.filename.replace(/[\\:]/g, '_') + '.eml') : '') + '?' +
+            url += (data.filename ? '/' + encodeURIComponent(data.filename.replace(/[\\:]/g, '_')) : '') + '?' +
                 $.param({
                     action: 'attachment',
                     folder: (data.parent || data.mail).folder_id,
