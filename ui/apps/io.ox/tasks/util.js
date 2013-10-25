@@ -358,14 +358,14 @@ define('io.ox/tasks/util',
                 }
 
                 if (task.end_date !== undefined && task.end_date !== null) {
-                    task.end_date = new date.Local(task.end_date).format();
+                    task.end_date = new date.Local(task.end_date).format(date.DATE);
                 } else {
                     task.end_date = '';
                 }
 
                 if (detail) {
                     if (task.start_date !== undefined && task.start_date !== null) {
-                        task.start_date = new date.Local(task.start_date).format();
+                        task.start_date = new date.Local(task.start_date).format(date.DATE);
                     } else {
                         task.start_date = '';
                     }
