@@ -123,7 +123,6 @@ define('io.ox/tasks/util',
                 }
 
                 endDate.setTime(prepareTime(endDate));
-                endDate.setHours(6);
                 if (weekDay < 1 || weekDay > 4) {
                     weekDay = (((endDate.getDay() - 1) % 7) + 7) % 7;
                     endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * (7 - weekDay));
@@ -135,6 +134,8 @@ define('io.ox/tasks/util',
                 if (alarmDate.getTime() > endDate.getTime()) {//endDate should not be before alarmDate
                     endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * 7);
                 }
+                //end Date does not have a time
+                endDate.setHours(0);
                 var result = {
                         endDate: endDate,
                         alarmDate: alarmDate
@@ -177,50 +178,63 @@ define('io.ox/tasks/util',
             },
 
             //builds dropdownmenu nodes, if bootstrapDropdown is set listnodes are created else option nodes
-            buildDropdownMenu: function (time, bootstrapDropdown) {
-                if (!time) {
-                    time = new Date();
+            buildDropdownMenu: function (o) {
+                if (!o) {
+                    o = {};
+                }
+                if (!o.time) {
+                    o.time = new Date();
+                }
+                var type = '<option>';
+                if (o.bootstrapDropdown) {
+                    type = '<a tabindex="1" role="menuitem" href="#">';
                 }
 
                 //normal times
-                var appendString = '<option value="5">' + gt('in 5 minutes') + '</option>' +
-                '<option value="15">' + gt('in 15 minutes') + '</option>' +
-                '<option value="30">' + gt('in 30 minutes') + '</option>' +
-                '<option value="60">' + gt('in one hour') + '</option>';
+                var options = [];
 
-                // variable daytimes
-                var i = time.getHours(),
-                    temp;
+                var i, temp;
+                if (!o.daysOnly) {
 
-                if (i < 6) {
-                    i = 0;
-                } else if (i < 12) {
-                    i = 1;
-                } else if (i < 15) {
-                    i = 2;
-                } else if (i < 18) {
-                    i = 3;
-                } else if (i < 22) {
-                    i = 4;
-                }
+                    //normal times
+                    options = [$(type).val('5').text(gt('in 5 minutes')),
+                                   $(type).val('15').text(gt('in 15 minutes')),
+                                   $(type).val('30').text(gt('in 30 minutes')),
+                                   $(type).val('60').text(gt('in one hour'))];
 
-                while (i < lookupDaytimeStrings.length) {
-                    temp = lookupDaytimeStrings[i];
-                    appendString = appendString + '<option value="d' + i + '">' + temp + '</option>';
-                    i++;
+                    // variable daytimes
+                    i = o.time.getHours();
+    
+                    if (i < 6) {
+                        i = 0;
+                    } else if (i < 12) {
+                        i = 1;
+                    } else if (i < 15) {
+                        i = 2;
+                    } else if (i < 18) {
+                        i = 3;
+                    } else if (i < 22) {
+                        i = 4;
+                    }
+
+                    while (i < lookupDaytimeStrings.length) {
+                        temp = lookupDaytimeStrings[i];
+                        options.push($(type).val('d' + i).text(temp));
+                        i++;
+                    }
                 }
 
                 //weekdays
                 var circleIncomplete = true,
-                    startday = time.getDay();
+                    startday = o.time.getDay();
 
-                i = (time.getDay() + 2) % 7;
+                i = (o.time.getDay() + 2) % 7;
 
-                appendString = appendString + '<option value="t">' + gt('tomorrow') + '</option>';
+                options.push($(type).val('t').text(gt('tomorrow')));
 
                 while (circleIncomplete) {
                     temp = lookupWeekdayStrings[i];
-                    appendString = appendString + '<option value="w' + i + '">' + temp + '</option>';
+                    options.push($(type).val('w' + i).text(temp));
                     if (i < 6) {
                         i++;
                     } else {
@@ -228,17 +242,18 @@ define('io.ox/tasks/util',
                     }
 
                     if (i === startday) {
-                        appendString = appendString + '<option value="ww">' + gt('in one week') + '</option>';
+                        options.push($(type).val('ww').text(gt('in one week')));
                         circleIncomplete = false;
                     }
                 }
 
-                if (bootstrapDropdown) {
-                    appendString = appendString.replace(/<option/g, '<li><a tabindex="1" role="menuitem" href="#"');
-                    appendString = appendString.replace(/option>/g, 'a></li>');
+                if (o.bootstrapDropdown) {
+                    _(options).each(function (obj, index) {
+                        options[index] = $('<li>').append(obj).val(obj.val());
+                    });
                 }
 
-                return appendString;
+                return options;
             },
 
             //returns the same as buildDropdownMenu but returns an array of value string pairs

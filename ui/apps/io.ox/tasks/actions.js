@@ -408,10 +408,10 @@ define('io.ox/tasks/actions',
         id: 'download',
         requires: 'some',
         multiple: function (list) {
-            ox.load(['io.ox/core/api/attachment']).done(function (attachmentAPI) {
+            ox.load(['io.ox/core/api/attachment', 'io.ox/core/download']).done(function (attachmentAPI, download) {
                 _(list).each(function (data) {
                     var url = attachmentAPI.getUrl(data, 'download');
-                    window.open(url);
+                    download.url(url);
                 });
             });
         }
@@ -502,16 +502,22 @@ define('io.ox/tasks/actions',
                     .text(gt('Change due date')).append($('<b class="caret">')).dropdown(),
                     // drop down
                     $('<ul class="dropdown-menu dropdown-right" role="menu">').append(
-                        util.buildDropdownMenu(new Date(), true)
+                        util.buildDropdownMenu({time: new Date(), bootstrapDropdown: true, daysOnly: true})
                     )
                     .delegate('li a', 'click', {task: data}, function (e) {
                         e.preventDefault();
-                        var finderId = $(this).attr('value');
+                        var finderId = $(e.target).val();
                         ox.load(['io.ox/tasks/api']).done(function (api) {
-                            var endDate = util.computePopupTime(new Date(), finderId).alarmDate,
-                                modifications = {end_date: endDate.getTime(),
-                                                 id: e.data.task.id,
-                                                 folder_id: e.data.task.folder_id || e.data.task.folder};
+                            var endDate = util.computePopupTime(new Date(), finderId).alarmDate, modifications;
+                            //remove Time
+                            endDate.setHours(0);
+                            endDate.setMinutes(0);
+                            endDate.setSeconds(0);
+                            endDate.setMilliseconds(0);
+
+                            modifications = {end_date: endDate.getTime(),
+                                             id: e.data.task.id,
+                                             folder_id: e.data.task.folder_id || e.data.task.folder};
 
                             //check if startDate is still valid with new endDate, if not, show dialog
                             if (e.data.task.start_date && e.data.task.start_date > endDate.getTime()) {

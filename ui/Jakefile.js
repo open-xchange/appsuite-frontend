@@ -43,10 +43,6 @@ if ((!pkgName || !ver || !rev) && path.existsSync('debian/changelog')) {
     rev = rev || changelogEntry[3];
 }
 
-if (!pkgName) {
-    console.error('Please specify the package name using package=<NAME>');
-    process.exit(1);
-}
 ver = ver || "0.0.1";
 rev = rev || "1";
 
@@ -412,10 +408,11 @@ utils.topLevelTask('app', ['buildApp'], utils.summary('app'));
 
 // common task for external apps and the GUI
 
-utils.topLevelTask('buildApp', ['ox.pot', 'update-themes'], function () {
-    utils.includes.save();
-    i18n.modules.save();
-});
+utils.topLevelTask('buildApp', ['ox.pot', 'update-themes', 'manifests'],
+    function () {
+        utils.includes.save();
+        i18n.modules.save();
+    });
 
 i18n.modules.load("tmp/i18n.json");
 utils.includes.load("tmp/includes.json");
@@ -480,46 +477,47 @@ if (apps.rest) utils.copy(apps.rest);
 
 // manifests
 
-utils.merge('manifests/' + pkgName + '.json',
-    utils.list('apps/**/manifest.json'),
-    {
-        to: process.env.manifestDir || utils.builddir,
-        merge: function (manifests, names) {
-            var combinedManifest = [];
-            _.each(manifests, function (m, i) {
-                var prefix = /^apps[\\\/](.*)[\\\/]manifest\.json$/
-                             .exec(names[i])[1].replace(/\\/g, '/') + '/';
-                var data = null;
-                try {
-                    data = new Function('return (' + m + ')')();
-                } catch (e) {
-                    fail('Invalid manifest ' + names[i], e);
-                }
-                if (!_.isArray(data)) {
-                    data = [data];
-                }
-                _(data).each(function (entry) {
-                    if (!entry.path) {
-                        if (entry.namespace) {
-                            // Assume Plugin
-                            if (path.existsSync("apps/" + prefix +
-                                                "register.js"))
-                            {
-                                entry.path = prefix + "register";
-                            }
-                        } else {
-                            // Assume App
-                            if (path.existsSync("apps/" + prefix + "main.js")) {
-                                entry.path = prefix + "main";
-                            }
-                        }
-                    }
-                    combinedManifest.push(entry);
-                });
-            });
-            return JSON.stringify(combinedManifest, null, debug ? 4 : null);
+var manifestDir = path.join(process.env.manifestDir || utils.builddir,
+                            'manifests');
+directory(manifestDir);
+task('manifests', [manifestDir], function () {
+    var combinedManifests = {}, defaultPackage = pkgName || 'manifest';
+    _.each(utils.list('apps/**/manifest.json'), function (name) {
+        var prefix = /^apps[\\\/](.*)[\\\/]manifest\.json$/
+            .exec(name)[1].replace(/\\/g, '/') + '/';
+        try {
+            var data = fs.readFileSync(name, 'utf8');
+            data = new Function('return (' + data + ')')();
+        } catch (e) {
+            fail('Invalid manifest ' + name, e);
         }
+        if (!_.isArray(data)) data = [data];
+        _(data).each(function (entry) {
+            if (!entry.path) {
+                if (entry.namespace) {
+                    // Assume Plugin
+                    if (path.existsSync("apps/" + prefix + "register.js")) {
+                        entry.path = prefix + "register";
+                    }
+                } else {
+                    // Assume App
+                    if (path.existsSync("apps/" + prefix + "main.js")) {
+                        entry.path = prefix + "main";
+                    }
+                }
+            }
+            var packageName = entry['package'] || defaultPackage;
+            delete entry['package'];
+            var manifest = combinedManifests[packageName];
+            if (!manifest) manifest = combinedManifests[packageName] = [];
+            manifest.push(entry);
+        });
     });
+    _.each(combinedManifests, function (manifest, packageName) {
+        fs.writeFileSync(path.join(manifestDir, packageName + '.json'),
+            JSON.stringify(manifest, null, debug ? 4 : null));
+    });
+});
 
 // update-themes task
 
@@ -559,6 +557,7 @@ utils.concat("doc/index.html", indexFiles);
 utils.copy(utils.list("doc/lib", ["prettify.*", "default.css", "newwin.png"]),
            { to: utils.dest("doc") });
 utils.copyFile("lib/jquery.min.js", utils.dest("doc/jquery.min.js"));
+utils.topLevelTask();
 
 // update-i18n task
 
@@ -628,14 +627,10 @@ task("deps", [depsPath], function() {
 // initialization of packaging
 
 desc('Initializes packaging information for a new app.');
-utils.topLevelTask('init-packaging', [], function() {
-    utils.summary('init-packaging');
-});
-(function () {
+task('init-packaging', ['clean'], function() {
     var packagingVariables = {
         '': '',
         '@': '@',
-        'package': pkgName,
         timestamp: formatDate(new Date())
     };
     function formatDate(d) {
@@ -651,79 +646,102 @@ utils.topLevelTask('init-packaging', [], function() {
             '+0000'
         ].join(' ');
     }
-    task('prompt-packaging', [], function () {
-        var varDefs = [
-            { key: 'version', prompt: 'Version', def: ver },
-            { key: 'maintainer', prompt: 'Maintainer (Name <e-mail>)' },
-            {
-                key: 'copyright',
-                prompt: 'Copyright line',
-                def: '2013 Open-Xchange, Inc'
-            },
-            {
-                key: 'licenseName',
-                prompt: 'License name',
-                def: 'CC-BY-NC-SA-3.0',
-                handler: function (answer) {
-                    var license = path.join(utils.source('lib/build/licenses'),
-                        answer.toLowerCase().replace(/(\.0)*\+?$/, '.txt'));
-                    if (path.existsSync(license)) {
-                        packagingVariables.license = license;
-                    }
-                }
-            },
-            { key: 'license', prompt: 'License file' },
-            {
-                key: 'description',
-                prompt: 'Short description'
-            },
-        ];
-        var rl = readline.createInterface(process.stdin, process.stdout);
-        prompt(0);
-        function prompt(i) {
-            if (i < varDefs.length) {
-                var varDef = varDefs[i];
-                if (packagingVariables[varDef.key]) {
-                    prompt(i + 1);
-                } else if (varDef.key in process.env) {
-                    reply(process.env[varDef.key]);
-                } else {
-                    var question = varDef.prompt;
-                    if (varDef.def) question += ' [' + varDef.def + ']';
-                    rl.question(question + ': ', reply);
-                }
-                function reply(answer) {
-                    answer = answer || varDef.def;
-                    if (!answer) return prompt(i);
-                    packagingVariables[varDef.key] = answer;
-                    if (varDef.handler) varDef.handler(answer);
-                    prompt(i + 1);
-                }
-            } else {
-                rl.close();
-                process.stdin.destroy();
-                var text = fs.readFileSync(packagingVariables.license, 'utf8');
-                packagingVariables.license = text.replace(/^.*$/gm,
-                    function(line) {
-                        return /\S/.test(line) ? ' ' + line : ' .';
-                    });
-                complete();
-            }
-        }
-    }, { async: true });
-
-    var files = utils.list(utils.source('lib/build/pkg-template'), '**/*');
-    utils.copy(files, { to: '.', filter: replace, mapper: replace });
-    function replace(data) {
-        return data.replace(/@(\w*)@/g, function (m, key) {
-            return packagingVariables[key];
-        });
+    var licenses = _.map(fs.readdirSync(utils.source('lib/build/licenses')),
+            function (s) { return s.replace(/(.*)\.txt/, '$1').toUpperCase(); })
+        .join(', ');
+    var list = [], width = process.stdout.columns || Infinity;
+    while (licenses.length > width) {
+        var pos = licenses.lastIndexOf(' ', width);
+        if (pos < 0) pos = licenses.indexOf(' ', width);
+        if (pos < 0) break;
+        list.push(licenses.slice(0, pos));
+        licenses = licenses.slice(pos + 1);
     }
-    _.each(files, function(name) {
-        file(replace(name), ['prompt-packaging']);
-    });
-}());
-utils.topLevelTask();
+    list.push(licenses);
+    licenses = list.join('\n');
+    var varDefs = [
+        { key: 'package', prompt: 'Package name', def: pkgName },
+        { key: 'version', prompt: 'Version', def: ver },
+        {
+            key: 'maintainer',
+            prompt: 'Maintainer (Name <e-mail>)',
+            handler: function (answer) {
+                if (/^\S+(\s+\S+)* <\S+@\S+>$/.test(answer)) return answer;
+            }
+        },
+        {
+            key: 'copyright',
+            prompt: 'Copyright line',
+            def: '2013 Open-Xchange, Inc'
+        },
+        {
+            key: 'licenseName',
+            intro: '\nKnown licenses for which you don\'t need to ' +
+                   'specify a file:\n' + licenses + '\n',
+            prompt: 'License name',
+            def: 'CC-BY-NC-SA-3.0',
+            handler: function (answer) {
+                var license = path.join(utils.source('lib/build/licenses'),
+                    answer.toLowerCase().replace(/(\.0)*\+?$/, '.txt'));
+                if (path.existsSync(license)) {
+                    packagingVariables.license = license;
+                }
+                return answer;
+            }
+        },
+        { key: 'license', prompt: 'License file' },
+        { key: 'description', prompt: 'Short description' }
+    ];
+    var rl = readline.createInterface(process.stdin, process.stdout);
+    prompt(0);
+    function prompt(i) {
+        if (i < varDefs.length) {
+            var varDef = varDefs[i];
+            if (packagingVariables[varDef.key]) {
+                prompt(i + 1);
+            } else if (varDef.key in process.env) {
+                reply(process.env[varDef.key]);
+            } else {
+                if (varDef.intro) console.log(varDef.intro);
+                var question = varDef.prompt;
+                if (varDef.def) question += ' [' + varDef.def + ']';
+                rl.question(question + ': ', reply);
+            }
+            function reply(answer) {
+                answer = answer || varDef.def;
+                if (varDef.handler) answer = varDef.handler(answer);
+                if (!answer) return prompt(i);
+                packagingVariables[varDef.key] = answer;
+                prompt(i + 1);
+            }
+        } else {
+            // clean up readline
+            rl.close();
+            process.stdin.destroy();
+            
+            // read license text
+            var text = fs.readFileSync(packagingVariables.license, 'utf8');
+            packagingVariables.license = text.replace(/^.*$/gm,
+                function(line) { return /\S/.test(line) ? ' ' + line : ' .'; });
+            
+            // process templates
+            var ff = utils.list(utils.source('lib/build/pkg-template'), '**/*');
+            for (var i = 0; i < ff.length; i++) {
+                var src = path.join(ff.dir, ff[i]), dest = replace(ff[i]);
+                jake.mkdirP(path.dirname(dest));
+                fs.writeFileSync(dest, replace(fs.readFileSync(src, 'utf8')));
+                fs.chmodSync(dest, fs.statSync(src).mode);
+            }
+            function replace(data) {
+                return data.replace(/@(\w*)@/g, function (m, key) {
+                    return packagingVariables[key];
+                });
+            }
+            
+            complete();
+        }
+    }
+}, { async: true });
 
 // packaging
 
@@ -733,6 +751,7 @@ directory(distDest, ["clean"]);
 
 desc("Creates source packages");
 task("dist", [distDest], function () {
+    if (!pkgName) fail('Please specify the package name using package=<NAME>');
     var toCopy = _.reject(fs.readdirSync("."), function(f) {
         return /^(tmp|ox\.pot|build|local\.conf)$/.test(f);
     });

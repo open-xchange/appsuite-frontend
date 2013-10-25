@@ -518,8 +518,10 @@ define('io.ox/core/tk/attachments',
         id: 'download',
         requires: 'one',
         action: function (baton) {
-            var url = attachmentAPI.getUrl(baton.data, 'download');
-            window.open(url);
+            require(['io.ox/core/download'], function (download) {
+                var url = attachmentAPI.getUrl(baton.data, 'download');
+                download.url(url);
+            });
         }
     });
 
@@ -574,7 +576,7 @@ define('io.ox/core/tk/attachments',
                             $('<button type="button" class="btn btn-primary" data-action="upload" tabindex="1">')
                                 .text(gt('Upload file')).hide() : ''
                         ),
-                        (options.drive ? $('<button type="button" class="btn" data-action="addinternal">').text(gt('Files')) : '')
+                        ((options.drive && _.device('!smartphone')) ? $('<button type="button" class="btn" data-action="addinternal">').text(gt('Files')) : '')
                     ).on('keypress', function (e) {
                         if (e.which === 13) {
                             node.find('input[name="file"]').trigger('click');

@@ -195,13 +195,12 @@ define('io.ox/mail/write/view-main',
                 $('<label>', { 'for' : 'writer_field_' + id })
                 .addClass('wrapping-label')
                 .append(
-                    $('<input>', {
-                        type: 'text',
+                    $('<input type="text" class="discreet" data-ime="inactive">')
+                    .attr({
                         tabindex: (id === 'to' ? '2' : '7'),
-                        id: 'writer_field_' + id
+                        id: 'writer_field_' + id,
+                        'data-type': id // not name=id!
                     })
-                    .attr('data-type', id) // not name=id!
-                    .addClass('discreet')
                     .autocomplete({
                         api: autocompleteAPI,
                         reduce: function (data) {
@@ -234,10 +233,22 @@ define('io.ox/mail/write/view-main',
                             copyRecipients.call(self, id, $(this));
                         }
                     })
-                    .on('keyup', function (e) {
-                        if (e.which === 13) {
-                            copyRecipients.call(self, id, $(this));
-                        } else {
+                    .on({
+                        // IME support (e.g. for Japanese)
+                        compositionstart: function () {
+                            $(this).attr('data-ime', 'active');
+                        },
+                        compositionend: function () {
+                            $(this).attr('data-ime', 'inactive');
+                        },
+                        keydown: function (e) {
+                            if (e.which === 13 && $(this).attr('data-ime') !== 'active') {
+                                copyRecipients.call(self, id, $(this));
+                            }
+                        },
+                        // shortcuts (to/cc/bcc)
+                        keyup: function (e) {
+                            if (e.which === 13) return;
                             // look for special prefixes
                             var val = $(this).val();
                             if ((/^to:?\s/i).test(val)) {
@@ -522,7 +533,7 @@ define('io.ox/mail/write/view-main',
 
             // Attachments
             this.fileCount = 0;
-            var uploadSection = this.createSection('attachments', gt('Attachments'), false, true),
+            var uploadSection = this.createSection('attachments', gt('Attachments'), _.device('!smartphone'), true),
                 dndInfo =  $('<div class="alert alert-info">').text(gt('You can drag and drop files from your computer here to add as attachment.'));
 
             var $inputWrap = attachments.fileUploadWidget({
@@ -664,8 +675,8 @@ define('io.ox/mail/write/view-main',
                     this.createLink('attachments', gt('Attachments')),
                     uploadSection.label,
                     uploadSection.section.append(
-                        (_.device('!touch') && (!_.browser.IE || _.browser.IE > 9) ? dndInfo : ''),
-                        $inputWrap
+                        $inputWrap,
+                        (_.device('!touch') && (!_.browser.IE || _.browser.IE > 9) ? dndInfo : '')
                     )
                 )
             );

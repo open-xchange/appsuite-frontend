@@ -200,6 +200,7 @@ define('io.ox/mail/main',
         };
 
         grid = new VGrid(left, options);
+        commons.addPropertyCaching(grid, {props: ['sort', 'order'], keyprop: 'folder'});
 
         // tail click
         left.on('click', '.vgrid-cell.tail', function (e) {
@@ -256,8 +257,9 @@ define('io.ox/mail/main',
             //reset properties on folder change
             if (type === 'folder') {
                 target = {
-                    sort: sortSettings.sort,
-                    order: sortSettings.order,
+                    //using last state of sort/order of folder
+                    sort: grid.propcache('sort', sortSettings.sort),
+                    order: grid.propcache('order', sortSettings.order),
                     unread: sortSettings.unread
                 };
             }

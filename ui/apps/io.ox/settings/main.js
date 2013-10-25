@@ -325,6 +325,7 @@ define('io.ox/settings/main',
 
         // listen for logout event
         ext.point('io.ox/core/logout').extend({
+            id: 'saveSettings',
             logout: function () {
                 return saveSettings('logout');
             }

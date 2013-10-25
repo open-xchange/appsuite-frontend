@@ -13,9 +13,10 @@
  */
 
 define('io.ox/core/tk/autocomplete',
-    ['gettext!io.ox/mail',
-     'io.ox/core/util'
-    ], function (gt, util) {
+    ['io.ox/core/util',
+     'settings!io.ox/contacts',
+     'gettext!io.ox/mail'
+    ], function (util, settings, gt) {
 
     'use strict';
 
@@ -26,7 +27,7 @@ define('io.ox/core/tk/autocomplete',
     $.fn.autocomplete = function (o) {
 
         o = $.extend({
-            minLength: 1,
+            minLength: settings.get('search/minimumQueryLength', 3),
             maxResults: 25,
             delay: 100,
             collection: null,

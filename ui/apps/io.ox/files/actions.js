@@ -147,20 +147,18 @@ define('io.ox/files/actions',
             filterUnsupported(list).done(function (filtered) {
                 if (filtered.length === 1) {
                     var o = _.first(filtered);
-                    api.get(o).done(function (file) {
-                        if (o.version) {
-                            file = _.extend({}, file, { version: o.version });
-                        }
-                        window.open(api.getUrl(file, 'download'));
+                    require(['io.ox/core/download'], function (download) {
+                        download.file(o);
                     });
                 } else if (filtered.length > 1) {
-                    window.open(api.getUrl(filtered, 'zip'));
+                    require(['io.ox/core/download'], function (download) {
+                        download.zip(filtered);
+                    });
                 }
-                //'description only' items
+                // 'description only' items
                 if (filtered.length === 0 || list.length !== filtered.length) {
                     notifications.yell('info', gt('Items without a file can not be downloaded.'));
                 }
-
             });
         }
     });
@@ -169,12 +167,11 @@ define('io.ox/files/actions',
         requires: 'one',
         multiple: function (list) {
             // loop over list, get full file object and trigger downloads
-            _(list).each(function (o) {
-                api.get(o).done(function (file) {
-                    if (o.version) {
-                        file = _.extend({}, file, { version: o.version });
-                    }
-                    window.open(api.getUrl(file, 'download'));
+            require(['io.ox/core/download'], function (download) {
+                _(list).each(function (o) {
+                    api.get(o).done(function (file) {
+                        download.file(file);
+                    });
                 });
             });
         }
@@ -1079,10 +1076,10 @@ define('io.ox/files/actions',
      */
     function filterUnsupported(list) {
         return api.getList(list, false).then(function (data) {//no cache use here or just the current version is returned
-                return _(data).filter(function (obj) {
-                    return !_.isEmpty(obj.filename) || obj.file_size > 0;
-                });
+            return _(data).filter(function (obj) {
+                return !_.isEmpty(obj.filename) || obj.file_size > 0;
             });
+        });
     }
 
     function checkMedia(e, type, fromSelection) {

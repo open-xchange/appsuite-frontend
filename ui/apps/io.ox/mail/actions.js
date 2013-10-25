@@ -473,20 +473,16 @@ define('io.ox/mail/actions',
             return _.device('!ios') && e.collection.has('some');
         },
         multiple: function (list) {
-            var url;
-            if (list.length === 1) {
-                // download single attachment
-                url = api.getUrl(_(list).first(), 'download');
-            } else {
-                // download zip file
-                url = api.getUrl(list, 'zip');
-            }
+
+            // download single attachment or zip file
+            var url = list.length === 1 ?
+                api.getUrl(_(list).first(), 'download') :
+                api.getUrl(list, 'zip');
+
             // download via iframe
-            // window.location.assign(url); has a weird impact on ongoing uploads (see Bug 27420)
-            // window.open(url); might leave open tabs
-            $('#tmp').append(
-                $('<iframe>', { src: url }).addClass('hidden download-frame')
-            );
+            require(['io.ox/core/download'], function (download) {
+                download.url(url);
+            });
         }
     });
 
@@ -618,11 +614,9 @@ define('io.ox/mail/actions',
                 url = api.getUrl(_(data).first(), 'download');
             }
             // download via iframe
-            // window.location.assign(url); has a weird impact on ongoing uploads (see Bug 27420)
-            // window.open(url); might leave open tabs
-            $('#tmp').append(
-                $('<iframe>', { src: url }).addClass('hidden download-frame')
-            );
+            require(['io.ox/core/download'], function (download) {
+                download.url(url);
+            });
         }
     });
 
@@ -839,7 +833,7 @@ define('io.ox/mail/actions',
                 var dateSelector = $('<select>', {name: 'dateselect'})
                 .appendTo(popupBody);
                 var endDate = new Date();
-                dateSelector.append(tasksUtil.buildDropdownMenu(endDate));
+                dateSelector.append(tasksUtil.buildDropdownMenu({time: endDate}));
 
                 //ready for work
                 var def = popup.show();

@@ -24,46 +24,15 @@ define('io.ox/core/settings/downloads/pane',
     // please no download on mobile devices or when disabled via setting
     if (_.device('!desktop') || settings.get('settings/downloadsDisabled')) return;
 
-    ext.point('io.ox/settings/pane').extend({
-        id: 'io.ox/core/downloads',
-        index: 'last',
-        title: gt('Downloads'),
-        pane: 'io.ox/core/settings/downloads/pane'
-    });
-
-    ext.point('io.ox/core/settings/downloads/pane').extend({
-        draw: function () {
-
-            this.addClass('downloads-settings-pane')
-                .append(
-                    $('<h1>').text(gt('Downloads'))
-                );
-
-            var point = ext.point('io.ox/core/settings/downloads/pane/detail');
-
-            if (point.list().length === 0) {
-                this.append(
-                    $('<div class="alert alert-info">').text(gt('No downloads available'))
-                );
-            } else {
-                // draw download items
-                ext.point('io.ox/core/settings/downloads/pane/detail').invoke('draw', this);
-            }
-        }
-    });
-
     /*
      * Default download: Updater
      */
-
     if (capabilities.has('oxupdater')) {
         ext.point('io.ox/core/settings/downloads/pane/detail').extend({
             id: 'updater',
             index: 100,
             draw: function () {
-
                 var href = ox.apiRoot + '/updater/installer/oxupdater-install.exe?session=' + ox.session;
-
                 this.append(
                     $('<section>').append(
                         $('<h2>').text(gt('Updater')),
@@ -82,4 +51,28 @@ define('io.ox/core/settings/downloads/pane',
             }
         });
     }
+
+    // no download available?
+    if (ext.point('io.ox/core/settings/downloads/pane/detail').list().length === 0) return;
+
+    //
+    // draw settings pane
+    //
+    ext.point('io.ox/settings/pane').extend({
+        id: 'io.ox/core/downloads',
+        index: 'last',
+        title: gt('Downloads'),
+        pane: 'io.ox/core/settings/downloads/pane'
+    });
+
+    ext.point('io.ox/core/settings/downloads/pane').extend({
+        draw: function () {
+            // headline
+            this.addClass('downloads-settings-pane').append(
+                $('<h1>').text(gt('Downloads'))
+            );
+            // draw download items
+            ext.point('io.ox/core/settings/downloads/pane/detail').invoke('draw', this);
+        }
+    });
 });

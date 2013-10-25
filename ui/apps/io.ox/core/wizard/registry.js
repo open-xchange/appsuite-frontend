@@ -47,10 +47,10 @@ define('io.ox/core/wizard/registry',
             $('<button class="btn wizard-prev">').text(gt('Previous')).on('click', function () {
                 self.back();
             }),
-            $('<button class="btn btn-primary wizard-next btn-disabled">').text(gt('Next')).on('click', function () {
+            $('<button class="btn wizard-next">').text(gt('Next')).on('click', function () {
                 self.next();
             }),
-            $('<button class="btn btn-primary wizard-done btn-disabled">').text(gt('Done')).on('click', function () {
+            $('<button class="btn btn-primary wizard-done">').text(gt('Done')).on('click', function () {
                 self.done();
             })
         );
@@ -253,11 +253,21 @@ define('io.ox/core/wizard/registry',
                 return;
             }
             if (isNextEnabled()) {
-                this.navButtons.find('.next').prop('disabled', false);
-                this.navButtons.find('.done').prop('disabled', false);
+                var next = this.navButtons.find('.wizard-next'),
+                    done = this.navButtons.find('.wizard-done');
+                next.prop('disabled', false);
+                next.addClass('btn-primary');
+                next.removeClass('btn-disabled');
+                done.prop('disabled', false);
+                done.removeClass('btn-disabled');
             } else {
-                this.navButtons.find('.next').prop('disabled', true);
-                this.navButtons.find('.done').prop('disabled', false);
+                var next = this.navButtons.find('.wizard-next'),
+                    done = this.navButtons.find('.wizard-done');
+                next.prop('disabled', true);
+                next.removeClass('btn-primary');
+                next.addClass('btn-disabled');
+                done.prop('disabled', false);
+                done.removeClass('btn-disabled');
             }
         };
 
@@ -285,7 +295,12 @@ define('io.ox/core/wizard/registry',
             }
             this.dialog = new dialogs.ModalDialog({easyOut: !!this.options.closeable});
             this.dialog.getContentControls().append(this.navButtons);
-
+            if (!!options.id) {
+                this.dialog.getPopup().attr('id', options.id);
+            }
+            if (!!options.cssClass) {
+                this.dialog.getPopup().addClass(options.cssClass);
+            }
             this.runOptions = options || {};
             goToPage(0);
             this.wizardIsRunning = this.dialog.show();

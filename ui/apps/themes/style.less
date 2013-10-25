@@ -1744,9 +1744,16 @@ span.hint {
     z-index: 3;
     .user-select(none);
     min-height: 20px;
+
+    li {
+        display: inline-block;
+        white-space: nowrap;
+        margin-right: 22px;
+        list-style-type: none;
+    }
 }
 
-nav.io-ox-inline-links + header {
+ul.io-ox-inline-links + header {
     position: static; /* see Bug 27736: dropdowns; */
     z-index: 2;
 }
@@ -1780,7 +1787,7 @@ nav.io-ox-inline-links + header {
     color: @inlineLinkColor;
     text-decoration: none;
 
-    li.io-ox-action-link {
+    li {
         margin-right: 0;
     }
 }
@@ -1803,9 +1810,6 @@ nav.io-ox-inline-links + header {
 }
 
 .io-ox-action-link {
-    display: inline-block;
-    white-space: nowrap;
-    margin-right: 22px;
 }
 
 .io-ox-action-link.disabled {
