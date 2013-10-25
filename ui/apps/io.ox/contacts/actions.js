@@ -591,10 +591,10 @@ define('io.ox/contacts/actions',
         id: 'download',
         requires: 'some',
         multiple: function (list) {
-            require(['io.ox/core/api/attachment'], function (attachmentAPI) {
+            require(['io.ox/core/api/attachment', 'io.ox/core/download'], function (attachmentAPI, download) {
                 _(list).each(function (data) {
                     var url = attachmentAPI.getUrl(data, 'download');
-                    window.open(url);
+                    download.url(url);
                 });
             });
         }

@@ -408,10 +408,10 @@ define('io.ox/tasks/actions',
         id: 'download',
         requires: 'some',
         multiple: function (list) {
-            ox.load(['io.ox/core/api/attachment']).done(function (attachmentAPI) {
+            ox.load(['io.ox/core/api/attachment', 'io.ox/core/download']).done(function (attachmentAPI, download) {
                 _(list).each(function (data) {
                     var url = attachmentAPI.getUrl(data, 'download');
-                    window.open(url);
+                    download.url(url);
                 });
             });
         }
@@ -514,7 +514,7 @@ define('io.ox/tasks/actions',
                             endDate.setMinutes(0);
                             endDate.setSeconds(0);
                             endDate.setMilliseconds(0);
-                            
+
                             modifications = {end_date: endDate.getTime(),
                                              id: e.data.task.id,
                                              folder_id: e.data.task.folder_id || e.data.task.folder};

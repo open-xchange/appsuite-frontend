@@ -518,8 +518,10 @@ define('io.ox/core/tk/attachments',
         id: 'download',
         requires: 'one',
         action: function (baton) {
-            var url = attachmentAPI.getUrl(baton.data, 'download');
-            window.open(url);
+            require(['io.ox/core/download'], function (download) {
+                var url = attachmentAPI.getUrl(baton.data, 'download');
+                download.url(url);
+            });
         }
     });
 
