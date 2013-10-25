@@ -373,7 +373,7 @@ define('io.ox/core/main',
                             countdownTimer = setInterval(function () {
                                 countdown--;
                                 node.text(getString(countdown));
-                                if (countdownTimer <= 0) {
+                                if (countdown <= 0) {
                                     logout({ autologout: true });
                                 }
                             }, 1000);
