@@ -471,11 +471,8 @@
         line-height: 2em;
         display: inline-block;
         width: 250px;
-        overflow: hidden;
-        text-overflow: ellipsis;
         margin: 0 20px 0em 0;
         float: left;
-        white-space: nowrap;
         cursor: pointer;
     }
 
@@ -521,6 +518,12 @@
 
         .person {
 
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			max-width: 236px; //icons are 14px
+			display: inline-block;
+
             &.accepted {
                 color: #799952;  /* green */
             }
@@ -532,6 +535,9 @@
         }
 
         .status {
+
+			position: absolute;
+			margin-left: 2px;
 
             &.accepted {
 
