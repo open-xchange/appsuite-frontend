@@ -734,12 +734,13 @@ define('io.ox/calendar/week/view',
             var days = [],
                 tmpDate = new date.Local(this.startDate.getTime());
 
+            // something new?
+            if (this.startDate.getTime() === this.dayLabelRef) return;
+
             if (this.options.todayClass) {
                 $('.day.' + this.options.todayClass, this.$el).removeClass(this.options.todayClass);
             }
 
-            // something new?
-            if (this.startDate.getTime() === this.dayLabelRef) return;
             this.dayLabelRef = this.startDate.getTime();
 
             // refresh dayLabel, timeline and today-label
