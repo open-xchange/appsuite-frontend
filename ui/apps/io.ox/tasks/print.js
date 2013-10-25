@@ -23,9 +23,9 @@ define('io.ox/tasks/print',
 
     'use strict';
 
-    function getDate(data, prop) {
+    function getDate(data, prop, format) {
         var t = data[prop];
-        return _.isNumber(t) ? new date.Local(t).format(date.DATETIME) : ''; // setting right format and timezone
+        return _.isNumber(t) ? new date.Local(t).format(format) : ''; // setting right format and timezone
     }
 
     var states = { 1: gt('Not started'), 2: gt('In progress'), 3: gt('Done'), 4: gt('Waiting'), 5: gt('Deferred') },
@@ -52,8 +52,8 @@ define('io.ox/tasks/print',
             return _.extend(unified, {
                 original: data,
                 subject: data.title,
-                start: getDate(data, 'start_date'),
-                due: getDate(data, 'end_date'),
+                start: getDate(data, 'start_date', date.DATE),
+                due: getDate(data, 'end_date', date.DATE),
                 recurrence: calendarUtil.getRecurrenceString(data),
                 state: getState(data),
                 content: $.trim(data.note),
@@ -66,8 +66,8 @@ define('io.ox/tasks/print',
                 trip_meter: data.trip_meter,
                 billing_information: data.billing_information,
                 companies: data.companies,
-                date_completed: getDate(data, 'date_completed'),
-                alarm: getDate(data, 'alarm')
+                date_completed: getDate(data, 'date_completed', date.DATETIME),
+                alarm: getDate(data, 'alarm', date.DATETIME)
             });
         });
     }
