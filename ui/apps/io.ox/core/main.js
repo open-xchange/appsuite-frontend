@@ -376,7 +376,6 @@ define('io.ox/core/main',
                                 if (countdown <= 0) {
                                     logout({ autologout: true });
                                 } else {
-                                    countdown--;
                                     node.text(getString(countdown));
                                 }
                             }, 1000);
