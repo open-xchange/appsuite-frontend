@@ -36,16 +36,26 @@
             var pathname = url.parse(request.url).pathname,
                 filename,
                 type;
-            pathname = pathname.slice(pathname.indexOf('/apps/'));
+
+            if (/\/appsuite\/api\//.test(pathname)) {
+                return next();
+            }
+            pathname = pathname.slice(pathname.indexOf('/appsuite/') + 10);
+            pathname = pathname.replace(/^v=[^\/]+\//, '');
+            pathname = pathname.replace(/^$/, 'core');
             filename = prefixes.map(function (p) {
-                return p + pathname;
+                return path.join(p, pathname);
             })
             .filter(function (filename) {
                 return (path.existsSync(filename) && fs.statSync(filename).isFile());
             })[0];
             if (!filename) return next();
 
-            type = mime.lookup(filename);
+            if (pathname === 'core' || pathname === 'signin') {
+                type = 'text/html';
+            } else {
+                type = mime.lookup(filename);
+            }
             // set headers
             if (verbose.local) console.log(filename);
             response.setHeader('Content-Type', type + charset(type));
