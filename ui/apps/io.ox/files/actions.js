@@ -29,7 +29,18 @@ define('io.ox/files/actions',
     var Action = links.Action,
         ActionGroup = links.ActionGroup,
         ActionLink = links.ActionLink,
-        POINT = 'io.ox/files';
+        POINT = 'io.ox/files',
+
+        returnIframe = function (src) {
+            return $('<iframe>', {
+                name: 'downloadframe',
+                src: src
+            }).css({
+                'display': 'none',
+                'width': '0px',
+                'height': '0px'
+            });
+        };
 
     // actions
     new Action('io.ox/files/actions/upload', {
@@ -151,10 +162,14 @@ define('io.ox/files/actions',
                         if (o.version) {
                             file = _.extend({}, file, { version: o.version });
                         }
-                        window.open(api.getUrl(file, 'download'));
+                        $('body').append(
+                            returnIframe(api.getUrl(file, 'download'))
+                        );
                     });
                 } else if (filtered.length > 1) {
-                    window.open(api.getUrl(filtered, 'zip'));
+                    $('body').append(
+                        returnIframe(api.getUrl(filtered, 'zip'))
+                    );
                 }
                 //'description only' items
                 if (filtered.length === 0 || list.length !== filtered.length) {
