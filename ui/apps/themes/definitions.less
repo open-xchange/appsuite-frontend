@@ -440,3 +440,15 @@
     }
 }
 
+//used in files module
+.image-effect-1(@filter: none) {
+    img, .preview-cover, [class^="icon-"] {
+        -webkit-filter: @filter
+    }
+}
+//used for hover
+.image-effect-2 (@opacity: 1) {
+    img, .preview-cover, [class^="icon-"] {
+        opacity: @opacity;
+    }
+}
