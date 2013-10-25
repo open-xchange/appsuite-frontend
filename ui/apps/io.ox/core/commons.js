@@ -119,7 +119,15 @@ define('io.ox/core/commons',
             return function (id, node, selection, api, grid) {
                 var buttons = $('.window-toolbar .toolbar-button'),
                     toolbar = $('.window-toolbar'),
-                    container = $('<div id="multi-select-toolbar">');
+                    toolbarID = 'multi-select-toolbar',
+                    container;
+                if ($('#' + toolbarID).length > 0) {
+                    // reuse old toolbar
+                    container = $('#' + toolbarID);
+                } else {
+                    // or creaet a new one
+                    container = $('<div>', {id: toolbarID});
+                }
                 if (selection.length > 0) {
 
                     buttons.hide();
