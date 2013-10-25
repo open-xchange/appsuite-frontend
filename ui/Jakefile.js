@@ -408,10 +408,11 @@ utils.topLevelTask('app', ['buildApp'], utils.summary('app'));
 
 // common task for external apps and the GUI
 
-utils.topLevelTask('buildApp', ['ox.pot', 'update-themes'], function () {
-    utils.includes.save();
-    i18n.modules.save();
-});
+utils.topLevelTask('buildApp', ['ox.pot', 'update-themes', 'manifests'],
+    function () {
+        utils.includes.save();
+        i18n.modules.save();
+    });
 
 i18n.modules.load("tmp/i18n.json");
 utils.includes.load("tmp/includes.json");
@@ -476,46 +477,47 @@ if (apps.rest) utils.copy(apps.rest);
 
 // manifests
 
-utils.merge('manifests/' + (pkgName || 'manifest') + '.json',
-    utils.list('apps/**/manifest.json'),
-    {
-        to: process.env.manifestDir || utils.builddir,
-        merge: function (manifests, names) {
-            var combinedManifest = [];
-            _.each(manifests, function (m, i) {
-                var prefix = /^apps[\\\/](.*)[\\\/]manifest\.json$/
-                             .exec(names[i])[1].replace(/\\/g, '/') + '/';
-                var data = null;
-                try {
-                    data = new Function('return (' + m + ')')();
-                } catch (e) {
-                    fail('Invalid manifest ' + names[i], e);
-                }
-                if (!_.isArray(data)) {
-                    data = [data];
-                }
-                _(data).each(function (entry) {
-                    if (!entry.path) {
-                        if (entry.namespace) {
-                            // Assume Plugin
-                            if (path.existsSync("apps/" + prefix +
-                                                "register.js"))
-                            {
-                                entry.path = prefix + "register";
-                            }
-                        } else {
-                            // Assume App
-                            if (path.existsSync("apps/" + prefix + "main.js")) {
-                                entry.path = prefix + "main";
-                            }
-                        }
-                    }
-                    combinedManifest.push(entry);
-                });
-            });
-            return JSON.stringify(combinedManifest, null, debug ? 4 : null);
+var manifestDir = path.join(process.env.manifestDir || utils.builddir,
+                            'manifests');
+directory(manifestDir);
+task('manifests', [manifestDir], function () {
+    var combinedManifests = {}, defaultPackage = pkgName || 'manifest';
+    _.each(utils.list('apps/**/manifest.json'), function (name) {
+        var prefix = /^apps[\\\/](.*)[\\\/]manifest\.json$/
+            .exec(name)[1].replace(/\\/g, '/') + '/';
+        try {
+            var data = fs.readFileSync(name, 'utf8');
+            data = new Function('return (' + data + ')')();
+        } catch (e) {
+            fail('Invalid manifest ' + name, e);
         }
+        if (!_.isArray(data)) data = [data];
+        _(data).each(function (entry) {
+            if (!entry.path) {
+                if (entry.namespace) {
+                    // Assume Plugin
+                    if (path.existsSync("apps/" + prefix + "register.js")) {
+                        entry.path = prefix + "register";
+                    }
+                } else {
+                    // Assume App
+                    if (path.existsSync("apps/" + prefix + "main.js")) {
+                        entry.path = prefix + "main";
+                    }
+                }
+            }
+            var packageName = entry['package'] || defaultPackage;
+            delete entry['package'];
+            var manifest = combinedManifests[packageName];
+            if (!manifest) manifest = combinedManifests[packageName] = [];
+            manifest.push(entry);
+        });
     });
+    _.each(combinedManifests, function (manifest, packageName) {
+        fs.writeFileSync(path.join(manifestDir, packageName + '.json'),
+            JSON.stringify(manifest, null, debug ? 4 : null));
+    });
+});
 
 // update-themes task
 
