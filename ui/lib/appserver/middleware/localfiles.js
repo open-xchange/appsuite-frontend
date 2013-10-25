@@ -36,7 +36,7 @@
             var pathname = url.parse(request.url).pathname,
                 filename,
                 type;
-            pathname = pathname.slice(pathname.indexOf('/apps/') + 6);
+            pathname = pathname.slice(pathname.indexOf('/apps/'));
             filename = prefixes.map(function (p) {
                 return p + pathname;
             })

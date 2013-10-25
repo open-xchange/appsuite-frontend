@@ -58,12 +58,13 @@ function create(options) {
         // find local files, request unknown files from server
         var files = [], remoteCounter = 0;
         for (var i in list) {
-            var m = /^(?:\/(text|raw);)?([\w\/+-]+(?:\.[\w\/+-]+)*)$/.exec(list[i]);
+            var m = /^(?:\/(text|raw);)?([\w\/+-]+(?:\.[\w\/+-]+)*)$/.exec(list[i]),
+                isTZ = m[2].slice(0, tzModule.length) === tzModule;
             if (!m) {
                 files.push(invalid(list[i]));
                 continue;
             }
-            if (m[2].slice(0, tzModule.length) === tzModule) {
+            if (isTZ) {
                 var paths = tzPath;
                 var name = m[2].slice(tzModule.length);
             } else {
@@ -71,7 +72,8 @@ function create(options) {
                 var name = m[2];
             }
             for (var j = 0; j < paths.length; j++) {
-                var filename = path.join(paths[j], name);
+                var filename = path.join(paths[j], isTZ ? '' : 'apps', name);
+
                 if (path.existsSync(filename) && fs.statSync(filename).isFile()) {
                     break;
                 }

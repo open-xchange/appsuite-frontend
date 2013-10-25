@@ -72,7 +72,6 @@ var prefixes = options.argv.remain.map(function (s) {
 if (!prefixes.length) prefixes =  ['/var/www/appsuite/'];
 var manifests = options.manifests || append(prefixes, 'manifests/');
 manifests.reverse();
-prefixes = append(prefixes, 'apps/');
 
 function append(array, suffix) {
     return array.map(function(prefix) {
