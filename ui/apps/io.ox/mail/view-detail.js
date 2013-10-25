@@ -75,10 +75,10 @@ define('io.ox/mail/view-detail',
     var regHTML = /^text\/html$/i,
         regImage = /^image\/(jpe?g|png|gif|bmp)$/i,
         regFolder = /^(\s*)(http[^#]+#m=infostore&f=(\d+))(\s*)$/i,
-        regFolderAlt = /^(\s*)(http[^#]+#!&?app=io\.ox\/files&folder=(\d+))(\s*)$/i,
+        regFolderAlt = /^(\s*)(http[^#]+#!&?app=io\.ox\/files(?:&perspective=\S*)?&folder=(\d+))(\s*)$/i,
         regDocument = /^(\s*)(http[^#]+#m=infostore&f=(\d+)&i=(\d+))(\s*)$/i,
-        regDocumentAlt = /^(\s*)(http[^#]+#!&?app=io\.ox\/files(?:&perspective=list)?&folder=(\d+)&id=([\d\.]+))(\s*)$/i,
-        regDocumentAlt2 = /^(\s*)(http[^#]+#!&?app=io\.ox\/files&folder=(\d+)(?:&perspective=list)?&id=([\d\.]+))(\s*)$/i,
+        regDocumentAlt = /^(\s*)(http[^#]+#!&?app=io\.ox\/files(?:&perspective=\S*)?&folder=(\d+)&id=([\d\.]+))(\s*)$/i,
+        regDocumentAlt2 = /^(\s*)(http[^#]+#!&?app=io\.ox\/files&folder=(\d+)(?:&perspective=\S*)?&id=([\d\.]+))(\s*)$/i,
         regTask = /^(\s*)(http[^#]+#m=task&i=(\d+)&f=(\d+))(\s*)$/i,
         regTaskAlt = /^(\s*)(http[^#]+#!&?app=io\.ox\/tasks?&id=\d+.(\d+)&folder=([\d\.]+))(\s*)$/i,
         regAppointment = /^(\s*)(http[^#]+#m=calendar&i=(\d+)&f=(\d+))(\s*)$/i,
@@ -225,42 +225,28 @@ define('io.ox/mail/view-detail',
         return match && match.length && _(ox.serverConfig.hosts).indexOf(match[1]) > -1;
     };
 
-    var drawDocumentLink, drawFolderLink;
-
-    (function () {
-
-        function draw(matches, title, perspective) {
-            var link, href, folder, id;
-            // create link
-            link = $('<a>', { href: '#' })
-                .css({ textDecoration: 'none', fontFamily: 'Arial' })
-                .append($('<span class="label label-info">').text(title));
-            // get values
-            href = matches[2];
-            folder = matches[3];
-            id = matches[4];
-            // internal document?
-            /* TODO: activate internal Links when files app is ready */
-            if (isValidHost(href)) {
-                // yep, internal
-                href = '#app=io.ox/files&perspective=' + perspective + '&folder=' + folder + '&id=' + id;
-                link.on('click', { hash: href, folder: folder, id: id }, openDocumentLink);
-            } else {
-                // nope, external
-                link.attr({ href: matches[0], target: '_blank' });
-            }
-            return link;
+    var drawInfostoreLink = function (matches, title) {
+        var link, href, folder, id;
+        // create link
+        link = $('<a>', { href: '#' })
+            .css({ textDecoration: 'none', fontFamily: 'Arial' })
+            .append($('<span class="label label-info">').text(title));
+        // get values
+        href = matches[2];
+        folder = matches[3];
+        id = matches[4];
+        // internal document?
+        /* TODO: activate internal Links when files app is ready */
+        if (isValidHost(href)) {
+            // yep, internal
+            href = '#app=io.ox/files&folder=' + folder + '&id=' + id;
+            link.on('click', { hash: href, folder: folder, id: id }, openDocumentLink);
+        } else {
+            // nope, external
+            link.attr({ href: matches[0], target: '_blank' });
         }
-
-        drawFolderLink = function (matches, title) {
-            return draw(matches, title, 'icons');
-        };
-
-        drawDocumentLink = function (matches, title) {
-            return draw(matches, title, 'list');
-        };
-
-    }());
+        return link;
+    };
 
     // biggeleben: the following is not really DRY ...
 
@@ -483,22 +469,22 @@ define('io.ox/mail/view-detail',
                             if ((m = text.match(regDocument)) && m.length) {
                                 // link to document
                                 node.replaceWith(
-                                     $($.txt(m[1])).add(drawDocumentLink(m, gt('Document'))).add($.txt(m[5]))
+                                     $($.txt(m[1])).add(drawInfostoreLink(m, gt('Document'))).add($.txt(m[5]))
                                 );
                             } else if ((m = (text.match(regDocumentAlt) || text.match(regDocumentAlt2))) && m.length) {
                                 // link to document (new syntax)
                                 node.replaceWith(
-                                     $($.txt(m[1])).add(drawDocumentLink(m, gt('Document'))).add($.txt(m[6]))
+                                     $($.txt(m[1])).add(drawInfostoreLink(m, gt('Document'))).add($.txt(m[6]))
                                 );
                             } else if ((m = text.match(regFolder)) && m.length) {
                                 // link to folder
                                 node.replaceWith(
-                                    $($.txt(m[1])).add(drawFolderLink(m, gt('Folder'))).add($.txt(m[4]))
+                                    $($.txt(m[1])).add(drawInfostoreLink(m, gt('Folder'))).add($.txt(m[4]))
                                 );
                             } else if ((m = text.match(regFolderAlt)) && m.length) {
                                 // link to folder
                                 node.replaceWith(
-                                    $($.txt(m[1])).add(drawFolderLink(m, gt('Folder'))).add($.txt(m[4]))
+                                    $($.txt(m[1])).add(drawInfostoreLink(m, gt('Folder'))).add($.txt(m[4]))
                                 );
                             } else if ((m = text.match(regTask) || text.match(regTaskAlt)) && m.length) {
                                 // link to folder
@@ -514,17 +500,17 @@ define('io.ox/mail/view-detail',
                                 if ((m = n[2].match(regDocument)) && m.length) {
                                     // link to document
                                     node.replaceWith(
-                                        $($.txt(m[1])).add(drawDocumentLink(m, gt('Document'))).add($.txt(m[3]))
+                                        $($.txt(m[1])).add(drawInfostoreLink(m, gt('Document'))).add($.txt(m[3]))
                                     );
                                 } else if ((m = n[2].match(regDocumentAlt)) && m.length) {
                                     // link to document
                                     node.replaceWith(
-                                        $($.txt(m[1])).add(drawDocumentLink(m, gt('Document'))).add($.txt(m[4]))
+                                        $($.txt(m[1])).add(drawInfostoreLink(m, gt('Document'))).add($.txt(m[4]))
                                     );
                                 } else if ((m = n[2].match(regFolder)) && m.length) {
                                     // link to folder
                                     node.replaceWith(
-                                        $($.txt(m[1])).add(drawDocumentLink(m, gt('Folder'))).add($.txt(m[4]))
+                                        $($.txt(m[1])).add(drawInfostoreLink(m, gt('Folder'))).add($.txt(m[4]))
                                     );
                                 } else if ((m = n[2].match(regTask) || n[2].match(regTaskAlt)) && m.length) {
                                     // link to folder
