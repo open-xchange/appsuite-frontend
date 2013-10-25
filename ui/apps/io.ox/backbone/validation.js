@@ -69,6 +69,12 @@ define('io.ox/backbone/validation',
                 util.isValidPhoneNumber(val) ||
                 gt('Please enter a valid phone number. Allowed characters are: %1$s', '0-9 , . - ( ) # + ; /');
         },
+        'email/phone': function (val) {
+            return util.isValidMailAddress(val) ||
+                settings.get('features/validatePhoneNumbers', false) === false ||
+                util.isValidPhoneNumber(val) ||
+                gt('Please enter a valid email address or phone number');
+        },
         url: function () {
             return true;
         },
