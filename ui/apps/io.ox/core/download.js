@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/download', ['io.ox/files/api'], function (filesApi) {
+define('io.ox/core/download', ['io.ox/files/api'], function (api) {
 
     'use strict';
 
@@ -54,11 +54,11 @@ define('io.ox/core/download', ['io.ox/files/api'], function (filesApi) {
 
         // download single file
         file: function (options) {
-            filesApi.get(filesApi.reduce(options)).done(function (file) {
+            api.get(api.reduce(options)).done(function (file) {
                 if (options.version) {
                     file = _.extend({}, file, { version: options.version });
                 }
-                var url = filesApi.getUrl(file, 'download');
+                var url = api.getUrl(file, 'download');
                 iframe(url);
             });
         },
@@ -67,7 +67,15 @@ define('io.ox/core/download', ['io.ox/files/api'], function (filesApi) {
         files: function (list) {
             form({
                 url: ox.apiRoot + '/files?action=zipdocuments&session=' + ox.session,
-                body: JSON.stringify(_.map(list, map))
+                body: JSON.stringify(_.map(list, map)) // this one wants folder_id
+            });
+        },
+
+        // download multiple emails (EML) as zip file
+        mails: function (list) {
+            form({
+                url: ox.apiRoot + '/mail?action=zip_messages&session=' + ox.session,
+                body: JSON.stringify(_.map(list, api.reduce)) // this one wants folder - not folder_id
             });
         }
     };
