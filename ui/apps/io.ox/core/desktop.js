@@ -434,6 +434,9 @@ define('io.ox/core/desktop',
                         ids = _(list).pluck('id');
                         pos = _(ids).indexOf(uniqueID);
                         data.id = uniqueID;
+                        data.timestamp = _.now();
+                        data.version = ox.version;
+                        data.ua = navigator.userAgent;
                         if (data) {
                             if (pos > -1) {
                                 // replace
@@ -475,7 +478,12 @@ define('io.ox/core/desktop',
                 if (!list) {
                     list = coreConfig.get('savepoints', []);
                 }
-                return _(list || []).filter(function (obj) { return 'point' in obj; });
+                return _(list || []).filter(function (obj) {
+                    var hasPoint = 'point' in obj,
+                        sameVersion = obj.version === ox.version,
+                        sameUA = obj.ua === navigator.userAgent;
+                    return (hasPoint && sameVersion && sameUA);
+                });
             });
         },
 
