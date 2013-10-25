@@ -54,7 +54,7 @@ define('io.ox/core/cache',
                 return clear();
             } else {
                 return ox.ui.App.canRestore().then(function (canRestore) {
-                    if (canRestore) {
+                    if (canRestore && !ox.online) {
                         return ox.load(['io.ox/core/tk/dialogs', 'gettext!io.ox/core']).then(function (dialogs, gt) {
                             var def = $.Deferred();
                             new dialogs.ModalDialog()
