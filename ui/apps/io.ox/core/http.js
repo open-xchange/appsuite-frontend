@@ -784,22 +784,23 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
 
         function send(r) {
 
-            var hash;
+            var hash = null;
 
-            // look for concurrent identical GET requests
-            if (r.o.type === 'GET') {
-                // get hash value - we just use stringify here
-                hash = JSON.stringify(r.xhr);
-                if (requests[hash] !== undefined) {
+            // look for concurrent identical GET/PUT requests
+            if (r.o.type === 'GET' || r.o.type === 'PUT') {
+
+                // get hash value - we just use stringify here (xhr contains payload for unique PUT requests)
+                try { hash = JSON.stringify(r.xhr); } catch (e) { }
+
+                if (hash && requests[hash] !== undefined) {
                     // enqueue callbacks
-                    requests[hash]
-                        .then(r.def.resolve, r.def.reject)
+                    requests[hash].then(r.def.resolve, r.def.reject)
                         .then(
-                            function () {
+                            function success() {
                                 that.trigger('stop done', r.xhr);
                                 r = null;
                             },
-                            function () {
+                            function fail() {
                                 that.trigger('stop fail', r.xhr);
                                 r  = null;
                             }
