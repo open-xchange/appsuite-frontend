@@ -86,19 +86,37 @@ define('plugins/notifications/mail/register',
             baton = ext.Baton({ view: view, size: size, more: size > $i });
             ext.point('io.ox/core/notifications/mail/header').invoke('draw', this.$el.empty(), baton);
 
-            // draw placeholders
             for (i = 0; i < $i; i++) {
                 mails[i] = api.reduce(this.collection.at(i).toJSON());
             }
 
-            api.getList(mails).done(function (response) {
+            //no need to request mails where we have all the information already
+            mails = _(mails).filter(function (item) {
+                return view.collection._byId[item.id].get('subject') === undefined;
+            });
+
+            if (mails.length > 0) {
+                api.getList(mails).done(function (response) {
+                    view.$el.find('.item').remove();//remove mails that may be drawn already. ugly race condition fix
+                    //save data to model so we don't need to ask again everytime
+                    for (i = 0; i < mails.length; i++) {
+                        view.collection._byId[response[i].id].attributes = response[i];
+                    }
+                    // draw mails
+                    for (i = 0; i < $i; i++) {
+                        baton = ext.Baton({ data: view.collection.models[i].attributes, view: view });
+                        ext.point('io.ox/core/notifications/mail/item').invoke('draw', view.$('.notifications'), baton);
+                    }
+                    
+                });
+            } else {
                 view.$el.find('.item').remove();//remove mails that may be drawn already. ugly race condition fix
                 // draw mails
                 for (i = 0; i < $i; i++) {
-                    baton = ext.Baton({ data: response[i], view: view });
+                    baton = ext.Baton({ data: view.collection.models[i].attributes, view: view });
                     ext.point('io.ox/core/notifications/mail/item').invoke('draw', view.$('.notifications'), baton);
                 }
-            });
+            }
 
             return this;
         },

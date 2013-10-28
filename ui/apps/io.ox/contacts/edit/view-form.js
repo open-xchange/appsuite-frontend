@@ -396,6 +396,8 @@ define('io.ox/contacts/edit/view-form',
             )
             .on({
                 invalid: function (e, message) {
+                    // check if already invalid to avoid endless focus calls
+                    if ($(this).hasClass('error')) return;
                     $(this).addClass('error')
                         .find('.inline-error').text(message).show().end()
                         .find('input').attr('aria-invalid', true).focus();

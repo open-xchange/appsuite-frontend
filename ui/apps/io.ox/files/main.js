@@ -29,6 +29,18 @@ define('io.ox/files/main',
         // app window
         win;
 
+    //map old settings/links
+    function map(pers) {
+        var mapping;
+        if (/^(icons)$/.test(pers)) {
+            //support old setting value
+            mapping = 'fluid:icon';
+        } else if (!/^(fluid:list|fluid:icon|fluid:tile)$/.test(pers)) {
+            mapping = 'fluid:list';
+        }
+        return mapping || pers;
+    }
+
     // launcher
     app.setLauncher(function (options) {
         // get window
@@ -58,15 +70,8 @@ define('io.ox/files/main',
         return commons.addFolderSupport(app, null, 'infostore', options.folder)
             .pipe(commons.showWindow(win))
             .done(function () {
-                // switch to view in url hash or default
-                var p = settings.get('view', 'fluid');
-                if (/^(icons)$/.test(p)) {
-                    //old setting value support
-                    p = 'fluid:icon';
-                } else if (!/^(fluid:list|fluid:icon|fluid:tile)$/.test(p)) {
-                    p = 'fluid:list';
-                }
-                ox.ui.Perspective.show(app, options.perspective || _.url.hash('perspective') || p);
+                var pers = map(options.perspective || _.url.hash('perspective') || settings.get('view', 'fluid:list'));
+                ox.ui.Perspective.show(app, pers);
             });
     });
 

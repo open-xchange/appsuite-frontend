@@ -600,21 +600,27 @@ define('io.ox/mail/actions',
             return _.device('!ios') && e.collection.has('some', 'read');
         },
         multiple: function (data) {
-            var url;
-            if (_(data).first().msgref && _.isObject(_(data).first().parent)) {
-                //using msgref reference if previewing during compose (forward previewed mail as attachment)
-                url = api.getUrl(data, 'eml:reference');
-            } else if (!_.isObject(_(data).first().parent)) {
-                url = api.getUrl(data, 'eml');
-            } else {
-                // adjust attachment id for previewing nested email within compose view
-                var adjustFn = _(data).first().parent.adjustid || '';
-                _(data).first().id = _.isFunction(adjustFn) ? adjustFn(_(data).first().id) : _(data).first().id;
-                // download attachment eml
-                url = api.getUrl(_(data).first(), 'download');
-            }
-            // download via iframe
+
             require(['io.ox/core/download'], function (download) {
+
+                var url, first = _(data).first();
+
+                // download plain EML?
+                if (!_.isObject(first.parent)) {
+                    return download.mails(data);
+                }
+
+                if (first.msgref && _.isObject(first.parent)) {
+                    // using msgref reference if previewing during compose (forward previewed mail as attachment)
+                    url = api.getUrl(data, 'eml:reference');
+                } else {
+                    // adjust attachment id for previewing nested email within compose view
+                    var adjustFn = first.parent.adjustid || '';
+                    first.id = _.isFunction(adjustFn) ? adjustFn(first.id) : first.id;
+                    // download attachment eml
+                    url = api.getUrl(first, 'download');
+                }
+
                 download.url(url);
             });
         }

@@ -1,23 +1,24 @@
 /**
- * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
- * LICENSE. This work is protected by copyright and/or other applicable
- * law. Any use of the work other than as authorized under this license
- * or copyright law is prohibited.
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * Copyright (C) Open-Xchange Inc., 2006-2012
+ * Mail: info@open-xchange.com
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/contacts/model',
-    ['io.ox/backbone/modelFactory',
-     'io.ox/backbone/validation',
-     'io.ox/contacts/api',
-     'io.ox/settings/util',
-     'gettext!io.ox/contacts'
-    ], function (ModelFactory, Validators, api, settingsUtil, gt) {
+      ['io.ox/backbone/modelFactory',
+       'io.ox/backbone/validation',
+       'io.ox/contacts/api',
+       'io.ox/core/capabilities',
+       'io.ox/settings/util',
+       'gettext!io.ox/contacts'
+       ], function (ModelFactory, Validators, api, capabilities, settingsUtil, gt) {
 
     'use strict';
 
@@ -156,9 +157,9 @@ define('io.ox/contacts/model',
             cellular_telephone2: { format: 'phone'},
             telephone_other: { format: 'phone'},
             fax_other: { format: 'phone'},
-            email1: { format: 'email'},
-            email2: { format: 'email'},
-            email3: { format: 'email'},
+            email1: { format: capabilities.has('msisdn') ? 'email/phone' : 'email' },
+            email2: { format: 'email' },
+            email3: { format: 'email' },
             url: { format: 'url'},
             telephone_isdn: { format: 'phone'},
             telephone_pager: { format: 'phone'},
@@ -273,7 +274,7 @@ define('io.ox/contacts/model',
         cellular_telephone2: gt('Cell phone alt'),
         telephone_other: gt('Phone (other)'),
         fax_other: gt('Fax (alt)'),
-        email1: gt('Email 1'),
+        email1: capabilities.has('msisdn') ? gt('Email 1 / Phone number') : gt('Email 1'),
         email2: gt('Email 2'),
         email3: gt('Email 3'),
         url: gt('URL'),
