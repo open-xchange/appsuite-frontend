@@ -88,8 +88,8 @@ define('io.ox/contacts/settings/pane',
                             center: false,
                             maximize: true
                         })
-                        .addPrimaryButton('save', gt('Save'))
-                        .addButton('discard', gt('Discard'));
+                        .addPrimaryButton('save', gt('Save'), 'save', {'tabIndex': '1'})
+                        .addButton('discard', gt('Discard'), 'discard', {'tabIndex': '1'});
 
                     var $node = dialog.getContentNode();
 
