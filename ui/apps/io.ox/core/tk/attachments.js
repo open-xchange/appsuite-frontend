@@ -219,8 +219,11 @@ define('io.ox/core/tk/attachments',
 
             render: function () {
                 var self = this,
-                    nodes = $('<div>').css('margin-bottom', '20px');
-                this.empty();
+                    nodes = $('<div>');
+                $el.empty();
+                if (files && files.length > 0) {
+                    nodes.css('margin-bottom', '20px');
+                }
                 _(files).each(function (file) {
                     nodes.append(self.renderFile(file));
                 });
