@@ -211,7 +211,6 @@ define(['io.ox/mail/util',
                 expect(util.getTime(1379508350), 'getTime').to.be.equal('16.1.1970');
                 expect(util.getDateTime(1379508350), 'getDateTime').to.be.equal('16.1.1970 23:11');
                 expect(util.getFullDate(1379508350), 'getFullDate').to.be.equal('16.1.1970 23:11');
-                expect(util.getSmartTime(new Date().getTime()), 'getSmartTime').to.be.equal('2 hours ago');
             });
         });
 
