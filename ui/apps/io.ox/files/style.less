@@ -130,7 +130,9 @@
             &.view-tile {
                 .file-cell {
                     &.selected {
-                        border: 6px solid rgba(0, 136, 204, 1);
+                        .preview-cover {
+                            border: 6px solid rgba(0, 136, 204, 0.7);
+                        }
                     }
                 }
             }
@@ -389,6 +391,9 @@
                     background-size: cover;
                     background-repeat: no-repeat;
                     background-position: center;
+                    -moz-box-sizing: border-box;
+                    -webkit-box-sizing: border-box;
+                    box-sizing: border-box;
 
                     [class^="icon-"] {
                         font-size: 100px;
@@ -417,7 +422,7 @@
                 .title-hover {
                     padding: 6px;
                     position: relative;
-                    top: -156px;
+                    top: -152px;
                     font-size: 18px;
                     font-weight: 600;
                     color: white;
@@ -434,11 +439,13 @@
                 .bordered {
                     .details {
                         display: block;
-                        top: 116px;
+                        top: 123px;
+                        margin-left: 6px;
+                        margin-right: 6px;
                     }
                     .title-hover {
                         display: inline;
-                        top: -144px;
+                        top: -152px;
                     }
                     [class^="icon-"] {
                         font-size: 88px;
@@ -446,19 +453,28 @@
                 }
 
                 &.selected {
-                    border: 6px solid #ddd;
+                    .preview-cover {
+                        border: 6px solid rgba(221, 221, 221, 0.7);
+                        background-origin: border-box;
+                    }
                     .bordered;
                     .image-effect-1;
                 }
                 //show short title on hover
                 &:hover {
-                    border: 6px solid #ddd;
+                    .preview-cover {
+                        border: 6px solid rgba(221, 221, 221, 0.7);
+                        background-origin: border-box;
+                    }
                     .bordered;
                     .image-effect-2;
                 }
 
                 &.selected:hover {
-                    border: 6px solid #ccc;
+                    .preview-cover {
+                        border: 6px solid rgba(204, 204, 204, 0.7);
+                        background-origin: border-box;
+                    }
                     .image-effect-1;
                 }
 
