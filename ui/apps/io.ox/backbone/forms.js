@@ -672,6 +672,13 @@ define('io.ox/backbone/forms',
     }
 
     function DatePicker(options) {
+        options = _.extend({
+            required: true,
+            display: 'DATETIME',
+            utc: false,
+            clearButton: false
+        }, options);
+
         var BinderUtils = {
             _toDate: function (value, attribute, model) {
                 if (value === undefined || value === null || value === '') {//dont use !value or 0 will result in false
@@ -727,8 +734,13 @@ define('io.ox/backbone/forms',
             _dateStrToDate: function (value, attribute, model) {
                 var myValue = parseInt(model.get(attribute), 10),
                     formatStr;
+
+                if (value === '' && !options.required) {
+                    return null;
+                }
+
                 if (isNaN(myValue)) {
-                    return value;
+                    myValue = new date.Local().setHours(0, 0, 0, 0).getTime();
                 }
 
                 if (options.display === 'DATETIME' && _.device('small') && !model.get('full_time')) {
@@ -749,6 +761,10 @@ define('io.ox/backbone/forms',
 
                 if (options.display !== 'DATETIME' || !_.device('small') || model.get('full_time')) {
                     parsedDate = new date.Local(myValue).setYear(parsedDate.getYear(), parsedDate.getMonth(), parsedDate.getDate());
+                }
+
+                if (options.utc) {
+                    return date.Local.localTime(parsedDate.getTime());
                 }
 
                 return parsedDate.getTime();
