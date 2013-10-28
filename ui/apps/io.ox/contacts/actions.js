@@ -50,8 +50,8 @@ define('io.ox/contacts/actions',
             require(['io.ox/contacts/api', 'io.ox/core/tk/dialogs'], function (api, dialogs) {
                 new dialogs.ModalDialog()
                 .text(question)
-                .addPrimaryButton('delete', gt('Delete'), 'delete')
-                .addButton('cancel', gt('Cancel'), 'cancel')
+                .addPrimaryButton('delete', gt('Delete'), 'delete', {'tabIndex': '1'})
+                .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
                 .show()
                 .done(function (action) {
                     if (action === 'delete') {
@@ -147,15 +147,15 @@ define('io.ox/contacts/actions',
                     } else {
                         var dialog = new dialogs.ModalDialog()
                             .header($('<h4>').text(label))
-                            .addPrimaryButton('ok', label)
-                            .addButton('cancel', gt('Cancel'));
+                            .addPrimaryButton('ok', label, 'ok', {'tabIndex': '1'})
+                            .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
                         dialog.getBody().css({ height: '250px' });
                         var folderId = String(list[0].folder_id),
                             id = settings.get('folderpopup/last') || folderId,
                             tree = new views.FolderList(dialog.getBody(), {
                                 type: 'contacts',
                                 open: settings.get('folderpopup/open', []),
-                                tabindex: 0,
+                                tabindex: 1,
                                 toggle: function (open) {
                                     settings.set('folderpopup/open', open).save();
                                 },
