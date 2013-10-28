@@ -52,7 +52,7 @@ define(['shared/examples/for/api',
         //retured deferreds
         describe('has some methods that return deferreds', function () {
             it('should return a deferred promise object for search', function () {
-                expect(instance.search('foo')).toBePromise();
+                expect(instance.search(this.description)).toBePromise();
             });
         });
 
@@ -60,7 +60,7 @@ define(['shared/examples/for/api',
         describe('has some methods calling ser', function () {
             it('with all needed parameters for search', function () {
                 var spy = sinon.spy($, 'ajax'),
-                    query = 'foo',
+                    query = this.description,
                     param;
                 //call search
                 instance.search(query);
