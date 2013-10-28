@@ -473,6 +473,10 @@ define.async('io.ox/realtime/rt',
                     }
                     resetSequence(0);
                 }
+            } else {
+                if (api.debug) {
+                    console.log('Already received ' + stanza.seq + '. Waiting for ' + (serverSequenceThreshhold + 1));
+                }
             }
         }
     }
