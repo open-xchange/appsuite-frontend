@@ -209,6 +209,9 @@ define.async('io.ox/realtime/rt',
         var interval = _.now() - lastDelivery;
         if (lastFetchInterval >= intervals[mode] && !purging) {
             lastCheck = _.now();
+            if (api.debug) {
+                console.log('Polling');
+            }
             http.GET({
                 module: 'rt',
                 params: {
