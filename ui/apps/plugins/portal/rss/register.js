@@ -26,61 +26,35 @@ define('plugins/portal/rss/register',
 
     'use strict';
 
-    var migrate = function (settings) {
-
-        if (true || !settings.get('rss-migrated')) {
-            return $.when();
-        }
-
-        return accountAPI.all('com.openexchange.messaging.rss').pipe(function (accounts) {
-            var index = 0;
-            _(accounts).each(function (account) {
-                index += 100;
-                settings.set('widgets/user/rss-migrated-' + index, {
-                    plugin: 'plugins/portal/rss/register',
-                    color: 'lightblue',
-                    index: index,
-                    props: {
-                        url: account.configuration.url,
-                        description: account.displayName
-                    }
-                });
-            });
-            return settings.save();
-        });
-    };
-
     ext.point('io.ox/portal/widget/rss').extend({
 
         title: gt('RSS Feed'),
 
         load: function (baton) {
+            var urls = baton.model.get('props').url || [],
+                title = baton.model.attributes.title;
+            return rss.getMany(urls).done(function (data) {
+                //limit data manually till api call can be limited
+                data = data.slice(0, 100);
+                baton.data = {
+                    items: data,
+                    title: '',
+                    link: '',
+                    urls: urls
+                };
 
-            // console.log('RSS title fix', this);
-            // this.find('.title').text('YEAH!!!');
-            // var props = baton.model.get('props');
-            // props.title = "YEAH !!!!";
-            // baton.model.set('props', props);
+                //use existing title or the title of the first feed
+                if (title !== undefined && title !== '') {
+                    baton.data.title = title;
+                } else {
+                    var elem = _(data).first();
 
-            return migrate().pipe(function () {
-                var urls = baton.model.get('props').url || [];
-                return rss.getMany(urls).done(function (data) {
-                    //limit data manually till api call can be limited
-                    data = data.slice(0, 100);
-                    baton.data = {
-                        items: data,
-                        title: '',
-                        link: '',
-                        urls: urls
-                    };
-                    // get title & link of the first found feed
-                    _(data).find(function (item) {
-                        if (urls.length > 1) {
-                            baton.data.title = item.feedTitle || '';
-                        }
-                        baton.data.link = item.feedLink || '';
-                    });
-                });
+                    if (elem !== undefined && elem.feedTitle !== undefined) {
+                        baton.data.title = elem.feedTitle;
+                    } else {
+                        baton.data.title = gt('RSS Feed');
+                    }
+                }
             });
         },
 
@@ -126,7 +100,7 @@ define('plugins/portal/rss/register',
 
                 this.append(
                     $('<div class="text">').append(
-                        $('<h2>').html(_.noI18n(item.subject)),
+                        $('<h4>').html(_.noI18n(item.subject)),
                         $('<div class="text-body noI18n">').append($body),
                         $('<div class="rss-url">').append(
                             $('<a>').attr({ href: item.url, target: '_blank' }).text(_.noI18n(item.feedTitle + ' - ' + publishedDate))
@@ -141,7 +115,7 @@ define('plugins/portal/rss/register',
                     node = $('<div class="portal-feed">');
 
                 if (data.title) {
-                    node.append($('<h1>').text(_.noI18n(data.title)));
+                    node.append($('<h2>').text(_.noI18n(data.title)));
                 }
 
                 _(data.items).each(drawItem, node);
