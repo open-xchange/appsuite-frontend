@@ -212,7 +212,7 @@ define('io.ox/core/emoji/view', ['moxiecode/tiny_mce/plugins/emoji/main'], funct
             // add "reset" link for recently
             if (list.length > 0 && this.currentCategory === 'recently') {
                 node.append(
-                    $('<a href="#" class="reset-recents">').text('Reset this list')
+                    $('<a href="#" class="reset-recents">').text(gt('Reset this list'))
                 );
             }
 
