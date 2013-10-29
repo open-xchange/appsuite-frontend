@@ -166,7 +166,7 @@
                 padding: 2px 0;
 
                 //hidden ones
-                .preview, .title-hover {
+                .preview {
                     display: none;
                 }
 
@@ -328,7 +328,7 @@
                     text-align: center;
                 }
 
-                .size, .modified, .checkbox, .title-hover {
+                .size, .modified, .checkbox {
                     display: none;
                 }
 
@@ -413,46 +413,11 @@
                         padding-right: 10px;
                     }
                 }
-                .size, .modified, .checkbox, .title {
+                .size, .modified, .checkbox, .title, .details {
                     display: none;
                 }
-
-                //prepare title on hover
-                .details {
-                    height: 32px;
-                    position: relative;
-                    top: 128px;
-                    background: rgba(0,0,0,0.5);
-                    background: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0)), to(rgba(0,0,0,0.6)));
-                    display: none;
-                }
-
-                .title-hover {
-                    padding: 6px;
-                    position: relative;
-                    top: 6 - @tile;
-                    font-size: 18px;
-                    font-weight: 600;
-                    color: #fff;
-                    text-shadow: #000 0 1px 1px;
-                    -webkit-text-shadow: #000 0 1px 1px;
-                    display: none;
-                    i.icon-lock {
-                        margin-left: 5px;
-                        font-size: 15px;
-                        color: #c00;
-                    }
-                 }
 
                 .bordered {
-                    .details {
-                        display: block;
-                        top: @tile - @tile-border - 32;
-                        margin: 0 @tile-border;
-                    }
-                    .title-hover {
-                        display: inline;
-                    }
                     .preview-cover [class^="icon-"] {
                         line-height: @tile - (2 * @tile-border);
                     }
@@ -744,46 +709,10 @@ ul.breadcrumb li.prefix {
                     margin: 0;
                     &:hover {
                         border: inherit;
-                        .details {
-                            top: 139px;
-                        }
                     }
                     &.selected {
                         border: 0;
                         .image-effect();
-                    }
-                    .details {
-                        background: rgba(0, 0, 0, 0.5);
-                        height: 20px;
-                        top: 139px;
-                        display: block;
-                    }
-
-                    .title-hover {
-                        padding: 6px;
-                        position: relative;
-                        top: -159px;
-                        font-size: 12px;
-                        font-weight: normal;
-                        color: #fff;
-                        text-shadow: none;
-                        -webkit-text-shadow: none;
-                        display: block;
-                        i.icon-lock {
-                            margin-left:5px;
-                            font-size:15px;
-                            color: #c00;
-                        }
-                    }
-                    .bordered {
-                        .details {
-                            display: block;
-                            top: inherit;
-                        }
-                        .title-hover {
-                            display: inline;
-                            top: inherit;
-                        }
                     }
                 }
             }

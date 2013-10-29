@@ -406,10 +406,6 @@ define('io.ox/files/fluid/perspective',
                                     (file.locked_until ? $('<i class="icon-lock">') : '')
                                 )
                         ),
-                        //title-short
-                        $('<span class="text title-hover">').text(gt.noI18n(cut(file.filename || file.title, 12))).append(
-                                (file.locked_until ? $('<i class="icon-lock">') : '')
-                            ),
                         //smart last modified
                         $('<span class="text modified">').text(gt.noI18n(changed)),
                         //filesize
