@@ -54,7 +54,7 @@ define('io.ox/files/fluid/perspective',
         else if ((/(cbz|cbr|cb7|cbt|cba)$/i).test(name)) { node.addClass('icon-comment-alt'); }
         else if ((/(zip|tar|gz|rar|7z|bz2)$/i).test(name)) { node.addClass('icon-archive'); }
         else { node.addClass('icon-file'); }
-        return node;
+        return node.addClass('not-selectable');
     }
 
     function iconError() {
@@ -273,6 +273,7 @@ define('io.ox/files/fluid/perspective',
                             //trigger click event on title (preview action)
                             $(orgEvent.target).find('[data-obj-id="' + _.cid(sel[0])  + '"]')
                                 .find('.not-selectable')
+                                .first()
                                 .trigger('click');
                         }
                         break;
@@ -363,7 +364,7 @@ define('io.ox/files/fluid/perspective',
                 previewImage = $('<div class="preview">').append(iconImage),
                 //view modes: list, tile
                 iconBackground = drawGenericIcon(file.filename),
-                previewBackground = $('<div class="preview-cover">').append(iconBackground);
+                previewBackground = $('<div class="preview-cover not-selectable">').append(iconBackground);
 
             //add preview image
             if (mode) {
