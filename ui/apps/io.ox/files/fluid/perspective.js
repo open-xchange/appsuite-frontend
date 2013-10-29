@@ -152,9 +152,14 @@ define('io.ox/files/fluid/perspective',
         return mode;
     }
 
-    function focus() {
+    function focus(prevent) {
         var y = wrapper.scrollTop();
-        filesContainer.focus();
+        if (!!prevent) {
+            //in some cases IE flickers without this hack
+            filesContainer.addClass('fixed').focus().removeClass('fixed');
+        } else {
+            filesContainer.focus();
+        }
         wrapper.scrollTop(y);
     }
 
@@ -168,23 +173,6 @@ define('io.ox/files/fluid/perspective',
             dialog.show(e, function (popup) {
                 popup.append(viewDetail.draw(file, app));
                 el = popup.closest('.io-ox-sidepopup');
-            });
-            dialog.on('close', function () {
-                if (window.mejs) {
-                    _(window.mejs.players).each(function (player) {
-                        if ($(player.node).parents('.preview').length > 0) {
-                            player.pause();
-                        }
-                    });
-                }
-                if (dropZone) {
-                    var tmp = app.currentFile;
-                    app.currentFile = null;
-                    dropZone.update();
-                    dropZoneInit(app);
-                    app.currentFile = tmp;
-                }
-                focus();
             });
             _.defer(function () { el.focus(); }); // Focus SidePopup
         });
@@ -313,9 +301,7 @@ define('io.ox/files/fluid/perspective',
                             _.url.hash('id', null);
                             this.clear();
                         }
-
                     } else {
-
                         if (_.device('!smartphone')) {
                             this.selectFirst();
                         }
@@ -596,8 +582,25 @@ define('io.ox/files/fluid/perspective',
                     valid = !filesContainer.hasClass('view-list') || $(e.target).hasClass('not-selectable') || data === 'automated';
                 if (valid & !special)
                     preview.call(self, e, cid);
-                else
-                    dialog.close();
+            });
+
+            //register dialog handler
+            dialog.on('close', function () {
+                if (window.mejs) {
+                    _(window.mejs.players).each(function (player) {
+                        if ($(player.node).parents('.preview').length > 0) {
+                            player.pause();
+                        }
+                    });
+                }
+                if (dropZone) {
+                    var tmp = app.currentFile;
+                    app.currentFile = null;
+                    dropZone.update();
+                    dropZoneInit(app);
+                    app.currentFile = tmp;
+                }
+                focus(true);
             });
 
             drawFile = function (file) {
