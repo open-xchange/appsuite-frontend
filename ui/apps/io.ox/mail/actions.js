@@ -76,16 +76,18 @@ define('io.ox/mail/actions',
 
             if (check) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog()
+                    new dialogs.ModalDialog({tabTrap: true})
                         .append(
-                            $('<div>').text(question)
+                            $('<div role="document" tabindex="0">').text(question)
                         )
-                        .addPrimaryButton('delete', gt('Delete'))
-                        .addButton('cancel', gt('Cancel'))
+                        .addPrimaryButton('delete', gt('Delete'), 'delete', {tabIndex: '1'})
+                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                         .on('delete', function () {
                             api.remove(list).fail(notifications.yell);
                         })
-                        .show();
+                        .show(function () {
+                            this.find('[role="document"]').focus();
+                        });
                 });
             } else {
                 api.remove(list).done(function () {
@@ -93,7 +95,7 @@ define('io.ox/mail/actions',
                     // mail quota exceeded?
                     if (e.code === 'MSG-0039') {
                         require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                            new dialogs.ModalDialog()
+                            new dialogs.ModalDialog({tabTrap: true})
                                 .header(
                                     $('<h4>').text(gt('Mail quota exceeded'))
                                 )
@@ -101,8 +103,8 @@ define('io.ox/mail/actions',
                                     $('<div>').text(gt('Emails cannot be put into trash folder while your mail quota is exceeded.')),
                                     $('<div>').text(question)
                                 )
-                                .addPrimaryButton('delete', gt('Delete'))
-                                .addButton('cancel', gt('Cancel'))
+                                .addPrimaryButton('delete', gt('Delete'), 'delete', {tabIndex: '1'})
+                                .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                                 .on('delete', function () {
                                     api.remove(list, { force: true });
                                 })
@@ -183,8 +185,8 @@ define('io.ox/mail/actions',
         action: function (baton) {
             var getSource = api.getSource(baton.data), textarea;
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                new dialogs.ModalDialog({ width: 700 })
-                    .addPrimaryButton('close', gt('Close'))
+                new dialogs.ModalDialog({ width: 700, tabTrap: true })
+                    .addPrimaryButton('close', gt('Close'), 'close', {tabIndex: '1'})
                     .header(
                         $('<h4>').text(gt('Mail source') + ': ' + (baton.data.subject || ''))
                     )
@@ -253,10 +255,10 @@ define('io.ox/mail/actions',
                         }
 
                     } else {
-                        var dialog = new dialogs.ModalDialog()
+                        var dialog = new dialogs.ModalDialog({tabTrap: true})
                             .header($('<h4>').text(label))
-                            .addPrimaryButton('ok', label)
-                            .addButton('cancel', gt('Cancel'));
+                            .addPrimaryButton('ok', label, 'ok', {tabIndex: '1'})
+                            .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
                         dialog.getBody().css({ height: '250px' });
                         var folderId = String(list[0].folder_id),
                             id = settings.get('folderpopup/last') || folderId,
@@ -808,9 +810,9 @@ define('io.ox/mail/actions',
             var data = baton.data;
             require(['io.ox/core/tk/dialogs', 'io.ox/tasks/api', 'io.ox/tasks/util'], function (dialogs, taskAPI, tasksUtil) {
                 //create popup dialog
-                var popup = new dialogs.ModalDialog()
-                    .addPrimaryButton('create', gt('Create reminder'))
-                    .addButton('cancel', gt('Cancel'));
+                var popup = new dialogs.ModalDialog({tabTrap: true})
+                    .addPrimaryButton('create', gt('Create reminder'), 'create', {tabIndex: '1'})
+                    .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
 
                 //Header
                 popup.getHeader()
@@ -820,23 +822,23 @@ define('io.ox/mail/actions',
                 //fill popup body
                 var popupBody = popup.getBody();
 
-                popupBody.append($('<div>').text(gt('Subject')));
-                var titleInput = $('<input>', { type: 'text', value: gt('Mail reminder') + ': ' + data.subject, width: '90%' })
+                popupBody.append($('<div>', {id: 'subject'}).text(gt('Subject')));
+                var titleInput = $('<input>', { type: 'text', value: gt('Mail reminder') + ': ' + data.subject, width: '90%', tabindex: '1', 'aria-labeledby': 'subject' })
                     .focus(function () {
                             this.select();
                         })
                     .appendTo(popupBody);
 
-                popupBody.append('<div>' + gt('Note') + '</div>');
-                var noteInput = $('<textarea>', { width: '90%', rows: '5', value: gt('Mail reminder for') + ': ' + data.subject + ' \n' +
+                popupBody.append('<div id="note">' + gt('Note') + '</div>');
+                var noteInput = $('<textarea>', { width: '90%', rows: '5', tabindex: '1', 'aria-labeledby': 'note', value: gt('Mail reminder for') + ': ' + data.subject + ' \n' +
                     gt('From') + ': ' + util.formatSender(data.from[0]) })
                     .focus(function () {
                         this.select();
                     })
                     .appendTo(popupBody);
 
-                popupBody.append('<div>' + gt('Remind me') + '</div>');
-                var dateSelector = $('<select>', {name: 'dateselect'})
+                popupBody.append('<div id="remindme">' + gt('Remind me') + '</div>');
+                var dateSelector = $('<select>', {name: 'dateselect', tabindex: '1', 'aria-labeledby': 'remindme'})
                 .appendTo(popupBody);
                 var endDate = new Date();
                 dateSelector.append(tasksUtil.buildDropdownMenu({time: endDate}));
