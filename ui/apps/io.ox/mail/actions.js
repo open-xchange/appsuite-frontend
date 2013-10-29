@@ -969,9 +969,9 @@ define('io.ox/mail/actions',
         id: 'markunread',
         label:
             //#. Translation should be as short a possible
-            //#. Instead of "Mark as unread" or "Mark unread" it's just "Unread"
-            //#. German, for example, should be "Ungelesen"
-            gt('Unread'),
+            //#. Instead of "Mark as unread" it's just "Mark unread"
+            //#. German, for example, should be just "Ungelesen"
+            gt('Mark unread'),
         ref: 'io.ox/mail/actions/markunread'
     }));
 
