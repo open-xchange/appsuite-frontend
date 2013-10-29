@@ -1094,7 +1094,7 @@ define('io.ox/mail/write/main',
 
             // fix inline images
             mail.data.attachments[0].content = mail.data.attachments[0].content
-                    .replace(/(<img[^>]+src=")(\/appsuite\/)?api\//g, '$1/ajax/')
+                    .replace(new RegExp('(<img[^>]+src=")' + ox.apiRoot, 'g'), '$1/ajax')
                     .replace(/on(mousedown|contextmenu)="return false;"\s?/g, '')
                     .replace(/data-mce-src="[^"]+"\s?/, '');
 
