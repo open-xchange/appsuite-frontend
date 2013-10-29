@@ -103,7 +103,10 @@ define(['shared/examples/for/api',
             it('should be added to \"Attachment upload in progress\" list if attachments are present', function () {
                 //make copy of testData
                 var testCopy = _.copy(options.tempTestData, true),
-                    result = api.create(testCopy);
+                    result;
+
+                testCopy.testDescr = this.description;
+                result = api.create(testCopy);
                 this.server.respond();
                 expect(result).toResolve();
                 result.done(function () {
@@ -149,7 +152,10 @@ define(['shared/examples/for/api',
             it('should be added to \"Attachment upload in progress\" list if attachments are present', function () {
               //make copy of testData
                 var testCopy = _.copy(options.tempTestDataUpdate, true),
-                    result = api.update(testCopy);
+                    result;
+
+                testCopy.testDescr = this.description;
+                result = api.update(testCopy);
                 this.server.respond();
                 expect(result).toResolve();
                 result.done(function () {

@@ -184,13 +184,8 @@ define('io.ox/tasks/edit/view-template',
         display: 'DATETIME',
         attribute: 'alarm',
         label: gt('Date'),
-        clearButton: _.device('small'),//add clearbutton on mobile devices
-        updateModelDate: function () {
-            this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model), {validate: true});
-        },
-        updateModelTime: function () {
-            this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model), {validate: true});
-        }
+        required: false,
+        clearButton: _.device('small')//add clearbutton on mobile devices
     }), {
         row: '6'
     });
@@ -774,86 +769,18 @@ define('io.ox/tasks/edit/view-template',
 
     //DatePickers
 
-    //Datepickers need Custom methods because standard methods show odd behaviour with undefined dates
-    var CustomBinderUtils = {
-        _timeStrToDate: function (value, attribute, model) {
-            var myValue = parseInt(model.get(attribute), 10) || false;
-            if (!myValue) {
-                //check if attribute is undefined or null
-                if (model.get(attribute) === undefined || model.get(attribute) === null) {
-                    myValue = _.now();
-                } else { //attribute seems to be broken
-                    return null;
-                }
-            }
-            var mydate = new date.Local(myValue),
-                parsedDate = date.Local.parse(value, date.TIME);
-
-            // just reject the change, if it's not parsable
-            if (value !== '' && _.isNull(parsedDate)) {
-                model.trigger('change:' + attribute);//reset inputfields
-                return model.get(attribute);
-            }
-            //set hours to 6:00 am if nothing is set
-            if (value === '') {
-                mydate.setHours(6, 0, 0, 0);
-            } else {
-                mydate.setHours(parsedDate.getHours(), parsedDate.getMinutes(), 0, 0);
-            }
-            return mydate.getTime();
-        },
-        _dateStrToDate: function (value, attribute, model) {
-            var myValue = parseInt(model.get(attribute), 10) || false;
-            if (!myValue) {
-                //check if attribute is just undefined
-                if (model.get(attribute) === undefined || model.get(attribute) === null) {
-                    myValue = _.now();
-                } else { //attribute seems to be broken
-                    return null;
-                }
-            }
-            var mydate = new date.Local(myValue),
-                parsedDate;
-
-            if (_.device('small')) {
-                parsedDate = date.Local.parse(value, date.DATE_TIME);
-            } else {
-                parsedDate = date.Local.parse(value, date.DATE);
-            }
-
-            if (value === '') { //empty input means date should be undefined
-                return null;
-            }
-            // just reject the change, if it's not parsable
-            if (_.isNull(parsedDate)) {
-                model.trigger('change:' + attribute);//reset inputfields
-                return model.get(attribute);
-            }
-            if (_.device('small')) {
-                return parsedDate.getTime();
-            } else {
-                mydate.setYear(parsedDate.getYear(), parsedDate.getMonth(), parsedDate.getDate()).setSeconds(0, 0);
-                return mydate.getTime();
-            }
-        }
-    };
-
     // start date
     point.extend(new forms.DatePicker({
         id: 'start_date',
         index: 500,
         className: 'span6 collapsed',
         labelClassName: 'task-edit-label',
-        display: 'DATETIME',
+        display: 'DATE',
         attribute: 'start_date',
+        required: false,
+        utc: true,
         label: gt('Starts on'),
-        clearButton: _.device('small'),//add clearbutton on mobile devices
-        updateModelDate: function () {
-            this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model), { validate: true });
-        },
-        updateModelTime: function () {
-            this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model), { validate: true });
-        }
+        clearButton: _.device('small')//add clearbutton on mobile devices
     }), {
         row: '4'
     });
@@ -864,16 +791,12 @@ define('io.ox/tasks/edit/view-template',
         index: 600,
         className: 'span6 collapsed',
         labelClassName: 'task-edit-label',
-        display: 'DATETIME',
+        display: 'DATE',
         attribute: 'end_date',
+        required: false,
+        utc: true,
         label: gt('Due date'),
-        clearButton: _.device('small'),//add clearbutton on mobile devices
-        updateModelDate: function () {
-            this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model), {validate: true});
-        },
-        updateModelTime: function () {
-            this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model), {validate: true});
-        }
+        clearButton: _.device('small')//add clearbutton on mobile devices
     }), {
         row: '4'
     });

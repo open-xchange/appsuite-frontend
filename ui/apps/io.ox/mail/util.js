@@ -372,6 +372,12 @@ define('io.ox/mail/util',
         },
 
         getSmartTime: function (timestamp) {
+            //FIXME: remove this method later
+            //this method is unused, because it brings a lot of problems to manually update the string
+            //without the page being reloaded. This might confuse the user and therefore we decided not
+            //to use this method any longer. It has not been removed, yet but should so in the future.
+            //The following warning is there to inform potential 3rd-party developers about the change.
+            console.warn('This method is deprecated and will be removed with 7.6.0 or at any random date later');
             if (!_.isNumber(timestamp))
                 return gt('unknown');
             var now = new Date(),

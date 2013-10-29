@@ -673,7 +673,6 @@ define('io.ox/mail/write/view-main',
             this.scrollpane.append(
                 $('<form class="oldschool">').append(
                     this.createLink('attachments', gt('Attachments')),
-                    uploadSection.label,
                     uploadSection.section.append(
                         $inputWrap,
                         (_.device('!touch') && (!_.browser.IE || _.browser.IE > 9) ? dndInfo : '')

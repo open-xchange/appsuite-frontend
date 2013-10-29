@@ -252,32 +252,29 @@ define('io.ox/files/fluid/perspective',
                         break;
                     }
                 })
-                .on('update', function () {
-                    function getIds() {
-                        var id = _.url.hash('id');
-                        return id !== undefined ? id.split(/,/) : [];
-                    }
-                    var list = this.get(),
-                        ids = list.length ? _(list).map(this.serialize) : getIds(),
-                        cid, node, deeplink;
+                .on('update', function (e, state) {
+                    var id = _.url.hash('id'),
+                        list, cid, node;
 
-                    //string to object
-                    ids = _(ids).map(_.cid);
-                    if (_.isArray(ids) && ids.length) {
+                    //ids to list of objects
+                    list = _.isEmpty(id) ? [] : id.split(/,/);
+                    list = _(list).map(_.cid);
+
+                    //set selection
+                    if (list.length) {
                         // select by object (cid)
-                        if (this.contains(ids)) {
-                            this.set(ids);
+                        if (this.contains(list)) {
+                            this.set(list);
                         } else {
                             _.url.hash('id', null);
                             this.clear();
                         }
-                        deeplink = ids.length === 1;
                     } else {
                         this.selectFirst();
                     }
 
                     //deep link handling
-                    if (deeplink) {
+                    if (state === 'inital' && list.length === 1) {
                         cid = _.cid(this.get()[0]);
                         node = filesContainer.find('[data-obj-id="' + cid + '"]');
                         //node not drawn yet?
@@ -621,7 +618,7 @@ define('io.ox/files/fluid/perspective',
 
                         self.selection
                                 .init(allIds)
-                                .trigger('update');
+                                .trigger('update', 'inital');
 
                         focus();
                     },

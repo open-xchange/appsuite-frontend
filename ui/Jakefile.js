@@ -789,9 +789,11 @@ task("dist", [distDest], function () {
 
         var file = path.join(dest, pkgName + '.spec');
         if (path.existsSync(file)) {
-            fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')
-                .replace(/^(Version:\s*)\S+/gm, '$01' + ver)
-                .replace(/^(%define\s+ox_release\s+)\S+/gm, '$01' + rev)));
+            var specFile = addL10n(fs.readFileSync(file, 'utf8')
+                    .replace(/^(Version:\s*)\S+/gm, '$01' + ver)
+                    .replace(/^(%define\s+ox_release\s+)\S+/gm, '$01' + rev));
+            fs.writeFileSync(file, specFile); // deprecated, hard to find
+            fs.writeFileSync(path.join(distDest, pkgName + '.spec'), specFile);
         }
         file = path.join(dest, 'debian/control');
         if (path.existsSync(file)) {

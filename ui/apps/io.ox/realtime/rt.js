@@ -209,6 +209,9 @@ define.async('io.ox/realtime/rt',
         var interval = _.now() - lastDelivery;
         if (lastFetchInterval >= intervals[mode] && !purging) {
             lastCheck = _.now();
+            if (api.debug) {
+                console.log('Polling');
+            }
             http.GET({
                 module: 'rt',
                 params: {
@@ -472,6 +475,10 @@ define.async('io.ox/realtime/rt',
                         console.log('Out of order, so resetting sequence to 0');
                     }
                     resetSequence(0);
+                }
+            } else {
+                if (api.debug) {
+                    console.log('Already received ' + stanza.seq + '. Waiting for ' + (serverSequenceThreshhold + 1));
                 }
             }
         }

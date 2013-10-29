@@ -205,13 +205,11 @@ define(['io.ox/mail/util',
                 expect(util.getTime(undefined), 'getTime').to.be.equal('unbekannt');
                 expect(util.getDateTime(undefined), 'getDateTime').to.be.equal('unbekannt');
                 expect(util.getFullDate(undefined), 'getFullDate').to.be.equal('unbekannt');
-                expect(util.getSmartTime(undefined), 'getSmartTime').to.be.equal('unbekannt');
             });
             it('should return a date string for valid data', function () {
                 expect(util.getTime(1379508350), 'getTime').to.be.equal('16.1.1970');
                 expect(util.getDateTime(1379508350), 'getDateTime').to.be.equal('16.1.1970 23:11');
                 expect(util.getFullDate(1379508350), 'getFullDate').to.be.equal('16.1.1970 23:11');
-                expect(util.getSmartTime(new Date().getTime()), 'getSmartTime').to.be.equal('2 hours ago');
             });
         });
 

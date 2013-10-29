@@ -72,9 +72,10 @@
         .box-sizing(border-box);
 
         .inline-actions {
+            min-height: 30px;
+            float: left;
             //space for inline-actions-right
             margin: 0 125px 20px 0;
-            float: left;
 
             .io-ox-inline-links {
                 margin: 0 0 0 0;
@@ -212,6 +213,8 @@
                 .title {
                     float: left;
                     width: 300px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                     i.icon-lock {
                         margin-left: 5px;
                         font-size: 15px;

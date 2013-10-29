@@ -672,6 +672,13 @@ define('io.ox/backbone/forms',
     }
 
     function DatePicker(options) {
+        options = _.extend({
+            required: true,
+            display: 'DATETIME',
+            utc: false,
+            clearButton: false
+        }, options);
+
         var BinderUtils = {
             _toDate: function (value, attribute, model) {
                 if (value === undefined || value === null || value === '') {//dont use !value or 0 will result in false
@@ -727,8 +734,13 @@ define('io.ox/backbone/forms',
             _dateStrToDate: function (value, attribute, model) {
                 var myValue = parseInt(model.get(attribute), 10),
                     formatStr;
+
+                if (value === '' && !options.required) {
+                    return null;
+                }
+
                 if (isNaN(myValue)) {
-                    return value;
+                    myValue = new date.Local().setHours(0, 0, 0, 0).getTime();
                 }
 
                 if (options.display === 'DATETIME' && _.device('small') && !model.get('full_time')) {
@@ -749,6 +761,10 @@ define('io.ox/backbone/forms',
 
                 if (options.display !== 'DATETIME' || !_.device('small') || model.get('full_time')) {
                     parsedDate = new date.Local(myValue).setYear(parsedDate.getYear(), parsedDate.getMonth(), parsedDate.getDate());
+                }
+
+                if (options.utc) {
+                    return date.Local.localTime(parsedDate.getTime());
                 }
 
                 return parsedDate.getTime();
@@ -887,20 +903,7 @@ define('io.ox/backbone/forms',
 
                 this.nodes.dayField.on('change', _.bind(this.updateModelDate, this));
 
-                if (!mobileMode && options.overwritePositioning) {
-                    this.nodes.dayField.on('focus', _.bind(this.repositioning, this));
-                }
-
                 return this;
-            },
-
-            repositioning: function () {
-                var element = this.nodes.controlGroup;
-
-                this.nodes.controlGroup.find('.datepicker.dropdown-menu').css({
-                    top: $(element)[0].offsetTop + $(element)[0].offsetHeight,
-                    left: $(element)[0].offsetLeft
-                });
             },
 
             setValueInField: function () {
