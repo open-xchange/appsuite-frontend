@@ -6,7 +6,7 @@
                 <label for="label_14" class="control-label">{{=it.strings.ACCOUNT_NAME}}</label>
                 <div class="controls">
                     <label class="text">
-                        <input type="text" data-property="name" id="label_14" />
+                        <input type="text" data-property="name" id="label_14" tabindex="1" />
                     </label>
                 </div>
             </div>
@@ -14,7 +14,7 @@
                 <label for="personal" class="control-label">{{=it.strings.PERSONAL}}</label>
                 <div class="controls">
                     <label class="text">
-                        <input type="text" data-property="personal" id="personal" />
+                        <input type="text" data-property="personal" id="personal" tabindex="1" />
                     </label>
                 </div>
             </div>
@@ -22,14 +22,14 @@
                 <label for="label_15" class="control-label">{{=it.strings.EMAIL_ADDRESS}}</label>
                 <div class="controls">
                     <label class="text">
-                    <input type="text" data-property="primary_address" id="label_15" />
+                    <input type="text" data-property="primary_address" id="label_15" tabindex="1" />
                     </label>
                 </div>
             </div>
             <div class="control-group">
                 <div class="controls">
                     <label class="checkbox">
-                        <input type="checkbox" data-property="unified_inbox_enabled" />
+                        <input type="checkbox" data-property="unified_inbox_enabled" tabindex="1" />
                         {{=it.strings.UNIFIED_MAIL}}
                     </label>
                 </div>
@@ -43,7 +43,7 @@
                 <label for="label_16" class="control-label">{{=it.strings.SERVER_TYPE}}</label>
                 <div class="controls">
                     <label class="select">
-                        <select data-property="mail_protocol">
+                        <select data-property="mail_protocol" tabindex="1">
                             {{~it.optionsServer :value:index}}<option value="{{=value}}">{{= String(value).toUpperCase() }}</option>{{~}}
                         </select>
                     </label>
@@ -53,7 +53,7 @@
                 <label class="control-label"></label>
                 <div class="controls">
                     <label class="checkbox">
-                        <input type="checkbox" data-property="mail_secure" />
+                        <input type="checkbox" data-property="mail_secure" tabindex="1" />
                         {{=it.strings.SERVER_SSL}}
                     </label>
                 </div>
@@ -62,7 +62,7 @@
                 <label for="label_17" class="control-label">{{=it.strings.SERVER_NAME}}</label>
                 <div class="controls">
                     <label class="text">
-                        <input type="text" data-property="mail_server" id="label_17" />
+                        <input type="text" data-property="mail_server" id="label_17" tabindex="1" />
                     </label>
                 </div>
             </div>
@@ -70,7 +70,7 @@
                 <label for="label_18" class="control-label">{{=it.strings.SERVER_PORT}}</label>
                 <div class="controls">
                     <label class="text">
-                        <input type="text" data-property="mail_port" id="label_18" />
+                        <input type="text" data-property="mail_port" id="label_18" tabindex="1" />
                     </label>
                 </div>
             </div>
@@ -78,7 +78,7 @@
                 <label for="label_19" class="control-label">{{=it.strings.LOGIN}}</label>
                 <div class="controls">
                     <label class="text">
-                        <input type="text" data-property="login" id="label_19" />
+                        <input type="text" data-property="login" id="label_19" tabindex="1" />
                     </label>
                 </div>
             </div>
@@ -86,7 +86,7 @@
                 <label for="label_20" class="control-label">{{=it.strings.PASSWORD}}</label>
                 <div class="controls">
                     <label class="text">
-                        <input type="password" data-property="password" id="label_20" />
+                        <input type="password" data-property="password" id="label_20" tabindex="1" />
                     </label>
                 </div>
             </div>
@@ -94,7 +94,7 @@
                 <label for="label_21" class="control-label">{{=it.strings.POP_3_REFRESH}}</label>
                 <div class="controls">
                     <label class="select">
-                        <select data-property="pop3_refresh_rate">
+                        <select data-property="pop3_refresh_rate" tabindex="1">
                             {{~it.optionsRefreshRate :value:index}}<option value="{{=value}}">{{=value}}</option>{{~}}
                         </select>
                     </label>
@@ -104,7 +104,7 @@
                 <label class="control-label"></label>
                 <div class="controls">
                     <label class="checkbox">
-                        <input type="checkbox" data-property="pop3_expunge_on_quit" />
+                        <input type="checkbox" data-property="pop3_expunge_on_quit" tabindex="1" />
                         {{=it.strings.EXPUNGE_MESSAGES}}
                     </label>
                 </div>
@@ -113,7 +113,7 @@
                 <label class="control-label"></label>
                 <div class="controls">
                     <label class="checkbox">
-                        <input type="checkbox" data-property="pop3_delete_write_through">
+                        <input type="checkbox" data-property="pop3_delete_write_through" tabindex="1">
                         {{=it.strings.DELETING_ON_LOCAL}}
                     </label>
                 </div>
@@ -125,7 +125,7 @@
                 <label class="control-label"></label>
                 <div class="controls">
                     <label class="checkbox">
-                        <input type="checkbox" data-property="transport_secure" />
+                        <input type="checkbox" data-property="transport_secure" tabindex="1" />
                         {{=it.strings.SERVER_OUT_SSL}}
                     </label>
                 </div>
@@ -134,7 +134,7 @@
                 <label for="label_22" class="control-label">{{=it.strings.SERVER_OUT_NAME}}</label>
                 <div class="controls">
                     <label class="text">
-                        <input type="text" data-property="transport_server" id="label_22" />
+                        <input type="text" data-property="transport_server" id="label_22" tabindex="1" />
                     </label>
                 </div>
             </div>
@@ -142,7 +142,7 @@
                 <label for="label_23" class="control-label">{{=it.strings.SERVER_OUT_PORT}}</label>
                 <div class="controls">
                     <label class="text">
-                        <input type="text" data-property="transport_port" id="label_23" />
+                        <input type="text" data-property="transport_port" id="label_23" tabindex="1" />
                     </label>
                 </div>
             </div>
@@ -150,7 +150,7 @@
                 <label class="control-label"></label>
                 <div class="controls">
                     <label class="checkbox">
-                        <input type="checkbox" data-property="mail-common-selectfirst" />
+                        <input type="checkbox" data-property="mail-common-selectfirst" tabindex="1" />
                         {{=it.strings.LOGIN_AND_PASS}}
                     </label>
                 </div>
@@ -159,7 +159,7 @@
                 <label for="label_24" class="control-label">{{=it.strings.LOGIN_OUT}}</label>
                 <div class="controls">
                     <label class="text">
-                        <input type="text" data-property="transport_login" id="label_24" />
+                        <input type="text" data-property="transport_login" id="label_24" tabindex="1" />
                     </label>
                 </div>
             </div>
@@ -167,7 +167,7 @@
                 <label for="label_25" class="control-label">{{=it.strings.PASSWORD_OUT}}</label>
                 <div class="controls">
                     <label class="text">
-                        <input type="password" data-property="transport_password" id="label_25"></label>
+                        <input type="password" data-property="transport_password" id="label_25" tabindex="1" ></label>
                 </div>
             </div>
         </div>
@@ -178,28 +178,28 @@
                 <div class="controls">
                     <label class="text">
                         <input type="text" data-property="sent_fullname" disabled="disabled" id="label_26" />
-                        <button type="button" class="btn folderselect">{{=it.strings.SPAN_SELECT_FOLDER}}</button>
+                        <button type="button" class="btn folderselect" tabindex="1" >{{=it.strings.SPAN_SELECT_FOLDER}}</button>
                     </label>
                 </div>
                 <label for="label_29" class="control-label">{{=it.strings.FOLDER_TRASH}}</label>
                 <div class="controls">
                     <label class="text">
                             <input type="text" data-property="trash_fullname" disabled="disabled" id="label_29" />
-                            <button type="button" class="btn folderselect">{{=it.strings.SPAN_SELECT_FOLDER}}</button>
+                            <button type="button" class="btn folderselect" tabindex="1" >{{=it.strings.SPAN_SELECT_FOLDER}}</button>
                     </label>
                 </div>
                 <label for="label_27" class="control-label">{{=it.strings.FOLDER_DRAFTS}}</label>
                 <div class="controls">
                     <label class="text">
                         <input type="text" data-property="drafts_fullname" disabled="disabled" id="label_27" />
-                        <button type="button" class="btn folderselect">{{=it.strings.SPAN_SELECT_FOLDER}}</button>
+                        <button type="button" class="btn folderselect" tabindex="1">{{=it.strings.SPAN_SELECT_FOLDER}}</button>
                     </label>
                 </div>
                 <label for="label_28" class="control-label">{{=it.strings.FOLDER_SPAM}}</label>
                 <div class="controls">
                     <label class="text">
                         <input type="text" data-property="spam_fullname" disabled="disabled" id="label_28" />
-                        <button type="button" class="btn folderselect">{{=it.strings.SPAN_SELECT_FOLDER}}</button>
+                        <button type="button" class="btn folderselect" tabindex="1">{{=it.strings.SPAN_SELECT_FOLDER}}</button>
                     </label>
                 </div>
             </div>

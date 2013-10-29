@@ -33,14 +33,15 @@ define('io.ox/mail/accounts/settings',
 
         myView.dialog = new dialogs.ModalDialog({
             width: 600,
-            async: true
+            async: true,
+            tabTrap: true
         });
 
         myView.dialog.append(
             myView.render().el
         )
-        .addPrimaryButton('save', gt('Save'))
-        .addButton('cancel', gt('Cancel'))
+        .addPrimaryButton('save', gt('Save'), 'save', {tabIndex: '1'})
+        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
         .show(function () {
             this.find('input[type=text]:first').focus();
         });
@@ -80,7 +81,7 @@ define('io.ox/mail/accounts/settings',
         draw: function () {
             this.append(
                 $('<label>').text(gt('Your mail address')).append(
-                    $('<input type="text" class="span6 add-mail-account-address">')
+                    $('<input type="text" class="span6 add-mail-account-address" tabindex="1">')
                 )
             );
         }
@@ -92,7 +93,7 @@ define('io.ox/mail/accounts/settings',
         draw: function () {
             this.append(
                 $('<label>').text(gt('Your password')).append(
-                    $('<input type="password" class="span6 add-mail-account-password">')
+                    $('<input type="password" class="span6 add-mail-account-password" tabindex="1">')
                 )
             );
         }
@@ -127,10 +128,10 @@ define('io.ox/mail/accounts/settings',
                 $('<div>')
                 .addClass('alert alert-error alert-block')
                 .append(
-                    $('<a>').attr({ href: '#', 'data-dismiss': 'alert' })
+                    $('<a>').attr({ href: '#', 'data-dismiss': 'alert', 'aria-label': message + '. ' + gt('Press [enter] to close this alertbox.'), 'role': 'button' })
                     .addClass('close')
                     .html('&times;'),
-                    $('<p>').text(message)
+                    $('<p tabindex="1">').text(message)
                 )
             );
         },
@@ -171,6 +172,7 @@ define('io.ox/mail/accounts/settings',
                         var message = gt('There was no suitable server found for this mail/password combination');
                         drawAlert(getAlertPlaceholder(popup), message);
                         popup.idle();
+                        popup.getBody().find('a.close').focus();
                     } else {
                         myModel.save(data, deferedSave);
                         deferedSave.done(function (response) {
@@ -239,7 +241,8 @@ define('io.ox/mail/accounts/settings',
                 new dialogs.ModalDialog({
                     width: 400,
                     async: true,
-                    enter: 'add'
+                    enter: 'add',
+                    tabTrap: true
                 })
                 .header(
                     $('<h4>').text(gt('Add mail account'))
@@ -248,9 +251,9 @@ define('io.ox/mail/accounts/settings',
                     // invoke extensions
                     ext.point('io.ox/mail/add-account/wizard').invoke('draw', this.getContentNode());
                 })
-                .addPrimaryButton('add', gt('Add'))
-                .addButton('cancel', gt('Cancel'))
-                .addAlternativeButton('skip', gt('Manual'))
+                .addPrimaryButton('add', gt('Add'), 'add', {tabIndex: '1'})
+                .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+                .addAlternativeButton('skip', gt('Manual'), 'skip', {tabIndex: '1'})
                 .on('add', function () {
 
                     var content = this.getContentNode(),
@@ -293,13 +296,14 @@ define('io.ox/mail/accounts/settings',
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 var successDialogbox = new dialogs.ModalDialog({
                         width: 400,
-                        async: true
+                        async: true,
+                        tabTrap: true
                     });
                 successDialogbox.header()
                 .append(
                     alertPlaceholder
                 )
-                .addButton('cancel', gt('Close'))
+                .addButton('cancel', gt('Close'), 'cancel', {tabIndex: '1'})
                 .show(function () {
                     successDialogbox.getFooter().find('.btn').addClass('closebutton');
                     var message = gt('Account added successfully');
@@ -315,13 +319,14 @@ define('io.ox/mail/accounts/settings',
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 var failDialogbox = new dialogs.ModalDialog({
                         width: 400,
-                        async: true
+                        async: true,
+                        tabTrap: true
                     });
                 failDialogbox.header()
                 .append(
                     alertPlaceholder
                 )
-                .addButton('cancel', gt('Close'))
+                .addButton('cancel', gt('Close'), 'cancel', {tabIndex: '1'})
                 .show(function () {
                     failDialogbox.getFooter().find('.btn').addClass('closebutton');
                     drawMessageWarning(alertPlaceholder, message);
