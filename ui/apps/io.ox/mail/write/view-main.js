@@ -229,8 +229,8 @@ define('io.ox/mail/write/view-main',
                         click: function (e) {
                             copyRecipients.call(self, id, $(this), e);
                         },
-                        blur: function () {
-                            copyRecipients.call(self, id, $(this));
+                        blur: function (e) {
+                            copyRecipients.call(self, id, $(this), e);
                         }
                     })
                     .on({
@@ -243,7 +243,7 @@ define('io.ox/mail/write/view-main',
                         },
                         keydown: function (e) {
                             if (e.which === 13 && $(this).attr('data-ime') !== 'active') {
-                                copyRecipients.call(self, id, $(this));
+                                copyRecipients.call(self, id, $(this), e);
                             }
                         },
                         // shortcuts (to/cc/bcc)
@@ -1061,9 +1061,9 @@ define('io.ox/mail/write/view-main',
 
         var valBase, list;
 
-        //normalize data
-        if (e && e.data.distlistarray !== null) {
-            //distribution list
+        // normalize data
+        if (e && e.data && e.data.distlistarray !== null) {
+            // distribution list
             list = _(e.data.distlistarray).map(function (member) {
                 return {
                     full_name: member.display_name,
@@ -1071,9 +1071,9 @@ define('io.ox/mail/write/view-main',
                     email: member.mail
                 };
             });
-        } else if (e && e.data.id) {
-            //selected contact list
-            list = [ e.data ];
+        } else if (e && e.data && e.data.id) {
+            // selected contact list
+            list = [e.data];
         } else {
             valBase = node.val();
             list = mailUtil.parseRecipients(valBase);
@@ -1082,7 +1082,8 @@ define('io.ox/mail/write/view-main',
         if (list.length) {
             // add
             this.addRecipients(id, list);
-            node.val('').focus();
+            // don't refocus on blur
+            if (e.type !== 'blur') node.val('').focus();
         } else if ($.trim(node.val()) !== '') {
             // not accepted but has content
             node.prop('disabled', true)

@@ -982,7 +982,7 @@ define('io.ox/mail/actions',
         label:
             //#. Translation should be as short a possible
             //#. Instead of "Mark as read" it's just "Mark read"
-            //#. German, for example, should be "Gelesen"
+            //#. German, for example, should be just "Gelesen"
             gt('Mark read'),
         ref: 'io.ox/mail/actions/markread'
     }));
