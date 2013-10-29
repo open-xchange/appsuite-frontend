@@ -37,32 +37,10 @@ define('io.ox/core/extPatterns/links',
                     ref = node.data('ref');
                 baton.e = e;
                 actions.invoke(ref, this, baton, e);
-            };
-
-        this.draw = this.draw || function (baton) {
-            baton = ext.Baton.ensure(baton);
-            this.append(
-                $('<a>', { href: '#', tabindex: 1, 'data-action': self.id })
-                .addClass(self.cssClasses || 'io-ox-action-link')
-                .attr({
-                    'data-section': self.section || 'default',
-                    'data-prio': self.prio || 'lo',
-                    'data-ref': self.ref,
-                    'data-prio-mobile': self.prioMobile || 'none',
-                    'role': 'menuitem'
-                })
-                .data({ ref: self.ref, baton: baton })
-                .click(click)
-                .append(self.label ? $.txt(String(self.label)) : $())
-                .append(self.icon ? $('<i>').addClass(String(self.icon)) : $())
-            );
-        };
-
-        if (this.drawDisabled === true) {
-            this.drawDisabled = function () {
-                this.append(
-                    $('<span>', { 'data-action': self.id })
-                    .addClass('io-ox-action-link disabled')
+            },
+            drawDefault = function () {
+                return $('<a>', { href: '#', tabindex: 1, 'data-action': self.id })
+                    .addClass(self.cssClasses || 'io-ox-action-link')
                     .attr({
                         'data-section': self.section || 'default',
                         'data-prio': self.prio || 'lo',
@@ -70,7 +48,28 @@ define('io.ox/core/extPatterns/links',
                         'data-prio-mobile': self.prioMobile || 'none',
                         'role': 'menuitem'
                     })
-                    .text(String(self.label))
+                    .append(self.label ? $.txt(String(self.label)) : $())
+                    .append(self.icon ? $('<i>').addClass(String(self.icon)) : $());
+            };
+
+        this.draw = this.draw || function (baton) {
+            baton = ext.Baton.ensure(baton);
+
+            this.append(
+                drawDefault(baton)
+                .data({ ref: self.ref, baton: baton })
+                .click(click)
+            );
+        };
+
+        if (this.drawDisabled === true) {
+            this.drawDisabled = function () {
+                this.append(
+                    drawDefault()
+                    .addClass('disabled')
+                    .attr({
+                        'aria-disabled': true
+                    })
                 );
             };
         }
