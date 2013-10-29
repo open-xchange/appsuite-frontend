@@ -4,6 +4,13 @@
 
 .upsell-wizard-container {
 	width: @upsell-popup-width;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+
+	* {
+		box-sizing: border-box;
+		-moz-box-sizing: border-box;
+	}
 
 	.upsell-product-choice {
 		box-sizing: border-box;
@@ -22,8 +29,9 @@
 		box-sizing: border-box;
 		position: absolute;
 		top: 0;
-		left: @upsell-popup-width / 2;
+		right: 0;
 		height: 200px;
+		width: 300px;
 		padding: 0 10px;
 	}
 
@@ -31,10 +39,11 @@
 		box-sizing: border-box;
 		position: absolute;
 		top: 0;
-		left: 200px;
-		padding-left: 5px;
+		left: @upsell-left-width;
+		padding: 0 13px;
 		height: 400px;
 		width: @upsell-right-width;
+		overflow-x: hidden;
 		overflow-y: scroll;
 	}
 
