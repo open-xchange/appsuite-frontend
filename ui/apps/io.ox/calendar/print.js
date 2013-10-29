@@ -27,7 +27,7 @@ define('io.ox/calendar/print',
 
     function injectInternalConfirmations(users, confirmations) {
         _(users).each(function (user) {
-            var obj = confirmations[user.id];
+            var obj = confirmations[user.id] || {};
             user.status = obj.status || 0;
             user.comment = obj.comment || '';
             // polish display_name
@@ -38,7 +38,7 @@ define('io.ox/calendar/print',
 
     function injectExternalConfirmations(contacts, confirmations) {
         _(contacts).each(function (contact) {
-            var obj = confirmations[contact.mail];
+            var obj = confirmations[contact.mail] || {};
             contact.status = (obj && obj.status) || 0;
             contact.comment = (obj && obj.comment) || '';
             // fix missing display_name
