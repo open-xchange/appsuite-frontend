@@ -129,13 +129,13 @@ define('io.ox/core/commons',
                     container = $('<div>', {id: toolbarID});
                 }
                 if (selection.length > 0) {
-
+                    // update selection in toolbar
                     buttons.hide();
-                    $('#multi-select-toolbar').remove();
+                    $('#' + toolbarID).remove();
                     toolbar.append(container.append(draw(id, selection, grid)));
                 } else {
                     // selection empty
-                    $('#multi-select-toolbar').remove();
+                    $('#' + toolbarID).remove();
                     buttons.show();
                 }
             };

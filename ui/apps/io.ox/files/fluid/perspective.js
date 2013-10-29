@@ -38,7 +38,7 @@ define('io.ox/files/fluid/perspective',
         //nodes
         filesContainer, breadcrumb, inlineRight, inline, wrapper,
         scrollpane = $('<div class="files-scrollable-pane" role="section">'),
-        topBar = $('<div class="window-content-top">'),
+        topBar = $('<div class="window-content-top">'), // used on desktop
         topActions = $('<div class="inline-actions-ms">').appendTo(topBar);
 
     // *** helper functions ***
@@ -189,6 +189,45 @@ define('io.ox/files/fluid/perspective',
             _.defer(function () { el.focus(); }); // Focus SidePopup
         });
     }
+    // mobile multiselect helpers
+    // Not DRYed, duplicated code from io.ox/core/commons because files modules
+    // does not use a Vgrid. So we have to rewrite some code here to be used without a
+    // vgrid.
+    function drawMobileMultiselect(id, selected, selection) {
+        var node = $('<div>'),
+            points = {};
+        ext.point('io.ox/core/commons/mobile/multiselect').invoke('draw', node, {count: selected.length});
+
+        (points[id] || (points[id] = ext.point(id + '/mobileMultiSelect/toolbar')))
+            .invoke('draw', node, {data: selected, selection: selection});
+        return node;
+    }
+
+    function toggleToolbar(selected, selection) {
+        // get current toolbar buttons
+        var buttons = $('.window-toolbar .toolbar-button'),
+            toolbar = $('.window-toolbar'),
+            toolbarID = 'multi-select-toolbar',
+            container;
+        if ($('#' + toolbarID).length > 0) {
+            // reuse old toolbar
+            container = $('#' + toolbarID);
+        } else {
+            // or creaet a new one
+            container = $('<div>', {id: toolbarID});
+        }
+        if (selected.length > 0) {
+
+            buttons.hide();
+            $('#multi-select-toolbar').remove();
+            toolbar.append(container.append(drawMobileMultiselect('io.ox/files', selected, selection)));
+        } else {
+            // selection empty
+            $('#multi-select-toolbar').remove();
+            buttons.show();
+        }
+    }
+    // END mobile multiselect helpers
 
     // *** ext points ***
 
@@ -203,29 +242,34 @@ define('io.ox/files/fluid/perspective',
         id: 'selection',
         register: function (baton) {
             var pers = this;
-            Selection.extend(pers, scrollpane, { draggable: true, dragType: 'mail', scrollpane: wrapper, focus: undefined });
+            Selection.extend(pers, scrollpane, { draggable: true, dragType: 'mail', scrollpane: wrapper, focus: undefined});
             pers.selection
                 .setEditable(true, '.checkbox')
                 .keyboard(scrollpane, true)
                 // toggle visibility of multiselect actions
                 .on('change', function (e, selected) {
-
                     var self = this, dummy = $('<div>');
 
                     // clear top-bar
                     topActions.empty();
 
-                    if (selected.length > 1) {
-                        // draw inline links
-                        commons.multiSelection('io.ox/files', dummy, selected, api, {test: selected.length}, {forcelimit: true});
-                        // append to bar
-                        topActions.append(dummy.find('.io-ox-inline-links'));
-                        // fade in or yet visible?
-                        if (!topActions.is(':visible')) {
-                            topBar.stop().fadeIn(250);
-                        }
+                    if (_.device('smartphone')) {
+                        // use custom multiselect toolbar
+                        toggleToolbar(selected, self);
                     } else {
-                        topBar.stop().hide();
+
+                        if (selected.length > 1) {
+                            // draw inline links
+                            commons.multiSelection('io.ox/files', dummy, selected, api, {test: selected.length}, {forcelimit: true});
+                            // append to bar
+                            topActions.append(dummy.find('.io-ox-inline-links'));
+                            // fade in or yet visible?
+                            if (!topActions.is(':visible')) {
+                                topBar.stop().fadeIn(250);
+                            }
+                        } else {
+                            topBar.stop().hide();
+                        }
                     }
                     // set url
                     var id = _(selected.length > 50 ? selected.slice(0, 1) : selected).map(function (obj) {
@@ -269,8 +313,12 @@ define('io.ox/files/fluid/perspective',
                             _.url.hash('id', null);
                             this.clear();
                         }
+
                     } else {
-                        this.selectFirst();
+                        deeplink = ids.length === 1;
+                        if (_.device('!smartphone')) {
+                            this.selectFirst();
+                        }
                     }
 
                     //deep link handling
@@ -298,11 +346,11 @@ define('io.ox/files/fluid/perspective',
             if (baton.app.getWindow().search.active) {
                 this.append(
                     breadcrumb = $('<li class="breadcrumb">').append(
-                                            $('<li class="active">').text(
-                                                //#. Appears in file icon view during searches
-                                                gt('Searched for: %1$s', baton.app.getWindow().search.query)
-                                            )
-                                        )
+                        $('<li class="active">').text(
+                            //#. Appears in file icon view during searches
+                            gt('Searched for: %1$s', baton.app.getWindow().search.query)
+                        )
+                    )
                 );
             }
         }
@@ -387,6 +435,64 @@ define('io.ox/files/fluid/perspective',
                         $('<span class="text size">').text(gt.noI18n(_.filesize(file.file_size || 0, {digits: 1, zerochar: ''})))
                     )
                 );
+        }
+    });
+
+    // Mobile multi select extension points
+    // action
+
+    // move
+    ext.point('io.ox/files/mobileMultiSelect/toolbar').extend({
+        id: 'move',
+        index: 10,
+        draw: function (data) {
+            //var baton = new ext.Baton({data: data.data}),
+            var btn;
+            $(this).append($('<div class="toolbar-button">')
+                .append(btn = $('<a href="#" data-action="io.ox/files/actions/move">')
+                    .append(
+                        $('<i class="icon-signin">')
+                    )
+                )
+            );
+            actions.updateCustomControls($(this), data.data, {cssDisable: true, eventType: 'tap'});
+
+        }
+    });
+
+    ext.point('io.ox/files/mobileMultiSelect/toolbar').extend({
+        id: 'delete',
+        index: 20,
+        draw: function (data) {
+            //var baton = new ext.Baton({data: data.data});
+            $(this).append($('<div class="toolbar-button">')
+                .append($('<a href="#" data-action="io.ox/files/actions/delete">')
+                    .append(
+                        $('<i>')
+                            .addClass('icon-trash')
+                    )
+                )
+            );
+            actions.updateCustomControls($(this), data.data,  {cssDisable: true, eventType: 'tap'});
+        }
+    });
+
+    // selection clear button
+    ext.point('io.ox/files/mobileMultiSelect/toolbar').extend({
+        id: 'selectionclear',
+        index: 50,
+        draw: function (data) {
+            $(this).append($('<div class="toolbar-button" style="float:right">')
+                .append($('<a href="#">')
+                    .append(
+                        $('<i class="icon-remove">').on('tap', function (e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            data.selection.clear();
+                        })
+                    )
+                )
+            );
         }
     });
 
@@ -484,7 +590,7 @@ define('io.ox/files/fluid/perspective',
                 });
 
             //register click handler
-            scrollpane.on('click', '.selectable', function (e, data) {
+            scrollpane.on(_.device('smartphone') ? 'tap' : 'click', '.selectable', function (e, data) {
                 var cid = _.cid($(this).attr('data-obj-id')),
                     special = (e.metaKey || e.ctrlKey || e.shiftKey || e.target.type === 'checkbox' || $(e.target).attr('class') === 'checkbox'),
                     valid = !filesContainer.hasClass('view-list') || $(e.target).hasClass('not-selectable') || data === 'automated';
