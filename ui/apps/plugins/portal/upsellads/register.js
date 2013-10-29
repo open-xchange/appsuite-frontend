@@ -86,7 +86,7 @@ define('plugins/portal/upsellads/register',
         var nextPos = (settings.get(ad + '.position') + 1) % slides.length;
 
         /* remember position */
-        settings.set(ad + '.position', nextPos).save();
+        //settings.set(ad + '.position', nextPos).save();
 
         /* show next ad */
         content.empty();
