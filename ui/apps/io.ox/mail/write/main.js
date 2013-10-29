@@ -535,10 +535,8 @@ define('io.ox/mail/write/main',
                 //add to file list and show section
                 if (items.length) {
                     view.fileList.add(items);
-                    view.showSection('attachments');
                 }
             } else {
-                var found = false;
                 _(data.attachments || []).each(function (attachment) {
                     if (attachment.disp === 'attachment') {
                         // add as linked attachment
@@ -546,16 +544,12 @@ define('io.ox/mail/write/main',
                             attachment.atmsgref = data.msgref;
                         }
                         attachment.type = 'file';
-                        found = true;
 
                         view.form.find('input[type=file]').last()
                             .prop('attachment', attachment)
                             .trigger('change');
                     }
                 });
-                if (found) {
-                    view.showSection('attachments');
-                }
             }
         };
 
@@ -576,25 +570,17 @@ define('io.ox/mail/write/main',
                 });
                 if (items.length) {
                     view.fileList.add(items);
-                    view.showSection('attachments');
                 }
             } else {
-                var found = false;
                 _(list || []).each(function (obj) {
-                    found = true;
                     view.form.find('input[type=file]').last()
                         .prop('nested', { message: obj, name: obj.subject, content_type: 'message/rfc822' })
                         .trigger('change');
                 });
-                if (found) {
-                    view.showSection('attachments');
-                }
             }
         };
 
         app.addFiles = function (list, group) {
-            var found = false;
-
             //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
             if (_.browser.IE !== 9) {
                 var items = _.map(list || [], function (obj) {
@@ -602,18 +588,13 @@ define('io.ox/mail/write/main',
                 });
                 if (items.length) {
                     view.fileList.add(items);
-                    view.showSection('attachments');
                 }
             } else {
                 _(list || []).each(function (obj) {
-                    found = true;
                     view.form.find('input[type=file]').last()
                         .prop('file', obj)
                         .trigger('change');
                 });
-                if (found) {
-                    view.showSection('attachments');
-                }
             }
         };
 
