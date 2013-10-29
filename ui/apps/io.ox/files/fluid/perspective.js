@@ -315,7 +315,7 @@ define('io.ox/files/fluid/perspective',
                         }
 
                     } else {
-                        deeplink = ids.length === 1;
+
                         if (_.device('!smartphone')) {
                             this.selectFirst();
                         }
