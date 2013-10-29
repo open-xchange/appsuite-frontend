@@ -11,7 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/emoji/view', ['moxiecode/tiny_mce/plugins/emoji/main'], function (emoji) {
+define('io.ox/core/emoji/view', [
+    'io.ox/emoji/main',
+    'gettext!io.ox/mail/emoji'
+], function (emoji, gt) {
 
     'use strict';
 
