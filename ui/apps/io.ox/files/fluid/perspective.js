@@ -360,20 +360,15 @@ define('io.ox/files/fluid/perspective',
                 changed = getDateFormated(baton.data.last_modified),
                 //view mode: icon
                 iconImage = drawGenericIcon(file.filename),
-                previewImage = $('<div class="preview">').append($('<span class="preview-border">').append(iconImage)),
+                previewImage = $('<div class="preview">').append(iconImage),
                 //view modes: list, tile
                 iconBackground = drawGenericIcon(file.filename),
                 previewBackground = $('<div class="preview-cover">').append(iconBackground);
 
-            //use block instead flexbox
-            if (_.browser.IE < 11 || _.browser.safari < 7) {
-                previewImage.find('.preview-border').addClass('non-flexbox');
-            }
-
             //add preview image
             if (mode) {
                 var url = api.getUrl(file, mode, options);
-                previewImage.find('.preview-border')
+                previewImage
                     .append(
                         $('<img>', {
                                 alt: '',
@@ -421,6 +416,64 @@ define('io.ox/files/fluid/perspective',
                         $('<span class="text size">').text(gt.noI18n(_.filesize(file.file_size || 0, {digits: 1, zerochar: ''})))
                     )
                 );
+        }
+    });
+
+    // Mobile multi select extension points
+    // action
+
+    // move
+    ext.point('io.ox/files/mobileMultiSelect/toolbar').extend({
+        id: 'move',
+        index: 10,
+        draw: function (data) {
+            //var baton = new ext.Baton({data: data.data}),
+            var btn;
+            $(this).append($('<div class="toolbar-button">')
+                .append(btn = $('<a href="#" data-action="io.ox/files/actions/move">')
+                    .append(
+                        $('<i class="icon-signin">')
+                    )
+                )
+            );
+            actions.updateCustomControls($(this), data.data, {cssDisable: true, eventType: 'tap'});
+
+        }
+    });
+
+    ext.point('io.ox/files/mobileMultiSelect/toolbar').extend({
+        id: 'delete',
+        index: 20,
+        draw: function (data) {
+            //var baton = new ext.Baton({data: data.data});
+            $(this).append($('<div class="toolbar-button">')
+                .append($('<a href="#" data-action="io.ox/files/actions/delete">')
+                    .append(
+                        $('<i>')
+                            .addClass('icon-trash')
+                    )
+                )
+            );
+            actions.updateCustomControls($(this), data.data,  {cssDisable: true, eventType: 'tap'});
+        }
+    });
+
+    // selection clear button
+    ext.point('io.ox/files/mobileMultiSelect/toolbar').extend({
+        id: 'selectionclear',
+        index: 50,
+        draw: function (data) {
+            $(this).append($('<div class="toolbar-button" style="float:right">')
+                .append($('<a href="#">')
+                    .append(
+                        $('<i class="icon-remove">').on('tap', function (e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            data.selection.clear();
+                        })
+                    )
+                )
+            );
         }
     });
 

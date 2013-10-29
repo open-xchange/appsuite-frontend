@@ -50,8 +50,17 @@
     -webkit-overflow-scrolling: touch;
     -webkit-tap-highlight-color: transparent;
 
-    .files-scrollable-pane {
+    .ico-polaroid {
+        padding: 14px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border: 1px solid rgba(0,0,0,.2);
+        .box-shadow(0 1px 3px rgba(0,0,0,.1));
+        //IE9
+        margin: 6px;
+    }
 
+    .files-scrollable-pane {
         outline: 0;
         padding: 15px 40px;
         width: 100%;
@@ -107,6 +116,9 @@
                 .file-cell {
                     &.selected  {
                         background-color: #08c;
+                        &:hover {
+                            background-color: darken(#08c, 10%);
+                        }
                     }
                     &.selected span {
                         color: #fff;
@@ -115,15 +127,27 @@
             }
             &.view-icon {
                 .file-cell {
-                    &.selected .preview-border  {
-                        border: 3px solid rgba(0, 136, 204, 1);
+                    &.selected {
+                        img, .preview [class^="icon-"] {
+                            box-shadow: 0 0 0 3px rgba(0, 136, 204, 1);
+                        }
+                        .preview:hover {
+                            img, [class^="icon-"] {
+                                box-shadow: 0 0 0 3px darken(rgba(0, 136, 204, 1), 10%);
+                            }
+                        }
                     }
                 }
             }
             &.view-tile {
                 .file-cell {
                     &.selected {
-                        border: 6px solid rgba(0, 136, 204, 1);
+                        .preview-cover {
+                            border-color: rgba(0, 136, 204, 1);
+                            &:hover {
+                                border-color: darken(rgba(0, 136, 204, 1), 10%);
+                            }
+                        }
                     }
                 }
             }
@@ -234,15 +258,15 @@
                 //highlighting
                 &.selected {
                     background-color: #ddd;
-                    .image-effect-1(grayscale(1) opacity(0.5))
+                    .image-effect(0.9);
                 }
                 &:hover {
                     background-color: #F6F6F6;
-                    .image-effect-2(0.9);
+                    .image-effect(0.9);
                 }
                 &.selected:hover {
                     background-color: #ccc;
-                    .image-effect-1(grayscale(1) opacity(0.5));
+                    .image-effect(0.9);
                 }
 
             }
@@ -265,17 +289,6 @@
                     display: none;
                 }
 
-                .preview-border {
-                    display: -ms-inline-flexbox;
-                    display: -moz-inline-flex;
-                    display: -webkit-inline-flex;
-                    display: inline-flex;
-                    border: 3px solid transparent;
-                    &.non-flexbox {
-                        display: block;
-                    }
-                };
-
                 .preview {
                     width: @outerWidth;
                     height: @innerHeight + 20;
@@ -287,8 +300,6 @@
                         // till backend fix
                         max-height: 90px;
                         max-width: 122px;
-                        width: 100%;
-                        height: 100%;
                     }
 
                     .lazy {
@@ -300,6 +311,7 @@
                     background-position: center;
 
                     [class^="icon-"] {
+                        .ico-polaroid;
                         line-height: 100px;
                         font-size: 48px;
                         width: 75px;
@@ -316,7 +328,7 @@
                     text-align: center;
                 }
 
-                .size, .modified, .checkbox, .title-hover{
+                .size, .modified, .checkbox, .title-hover {
                     display: none;
                 }
 
@@ -339,35 +351,36 @@
 
                 //image
                 &.selected {
-                    .preview-border {
-                        border: 3px solid #ddd;
+                    img, .preview [class^="icon-"] {
+                        box-shadow: 0 0 0 3px #ddd;
                     }
-                    .image-effect-1(grayscale(1) opacity(0.5));
+                    .image-effect(0.9);
                 }
 
                 &:hover {
-                    .preview-border {
-                        border: 3px solid #ddd;
+                    img, .preview [class^="icon-"] {
+                        box-shadow: 0 0 0 3px #ddd;
                     }
-                    .image-effect-2(0.9);
+                    .image-effect(0.9);
                 }
-                &.selected:hover {
-                    .preview-border {
-                        border: 3px solid #ccc;
+                &.selected .preview:hover {
+                    img, .preview [class^="icon-"] {
+                        box-shadow: 0 0 0 3px #ccc;
                     }
-                    .image-effect-1(grayscale(1) opacity(0.5));
+                    .image-effect(0.9);
                 }
              }
         }
 
         &.view-tile {
+            @tile: 160px;
+            @tile-border: 6px;
+
             .view-icon;
             .file-cell {
-                width: 160px;
-                height: 160px;
+                width: @tile;
+                height: @tile;
                 margin: 2px;
-                .box-sizing(border-box);
-
 
                 .img-polaroid {
                     border: 1px solid black;
@@ -388,10 +401,11 @@
                     background-size: cover;
                     background-repeat: no-repeat;
                     background-position: center;
+                    .box-sizing(border-box);
 
                     [class^="icon-"] {
                         font-size: 100px;
-                        line-height: 1.65em;
+                        line-height: @tile;
                         color: #bbb;
                     }
 
@@ -416,7 +430,7 @@
                 .title-hover {
                     padding: 6px;
                     position: relative;
-                    top: -156px;
+                    top: 6 - @tile;
                     font-size: 18px;
                     font-weight: 600;
                     color: #fff;
@@ -424,8 +438,8 @@
                     -webkit-text-shadow: #000 0 1px 1px;
                     display: none;
                     i.icon-lock {
-                        margin-left:5px;
-                        font-size:15px;
+                        margin-left: 5px;
+                        font-size: 15px;
                         color: #c00;
                     }
                  }
@@ -433,32 +447,42 @@
                 .bordered {
                     .details {
                         display: block;
-                        top: 116px;
+                        top: @tile - @tile-border - 32;
+                        margin: 0 @tile-border;
                     }
                     .title-hover {
                         display: inline;
-                        top: -144px;
                     }
-                    [class^="icon-"] {
-                        font-size: 88px;
+                    .preview-cover [class^="icon-"] {
+                        line-height: @tile - (2 * @tile-border);
                     }
                 }
 
                 &.selected {
-                    border: 6px solid #ddd;
+                    .preview-cover {
+                        border: @tile-border solid #ddd;
+                        background-origin: border-box;
+                    }
                     .bordered;
-                    .image-effect-1(grayscale(1) opacity(0.5));
+                    .image-effect(0.9);
                 }
                 //show short title on hover
                 &:hover {
-                    border: 6px solid #ddd;
+                    .preview-cover {
+                        border: @tile-border solid #ddd;
+                        background-origin: border-box;
+                    }
                     .bordered;
-                    .image-effect-2(0.9);
+                    .image-effect(0.9);
                 }
 
                 &.selected:hover {
-                    border: 6px solid #ccc;
-                    .image-effect-1(grayscale(1) opacity(0.5));
+                     .preview-cover {
+                        border: @tile-border solid #ccc;
+                        background-origin: border-box;
+                    }
+                    .bordered;
+                    .image-effect(0.9);
                 }
 
 
@@ -698,7 +722,7 @@ ul.breadcrumb li.prefix {
         }
         .files-scrollable-pane {
             //reduce padding, margin, right (27px)
-            padding: 0;
+            padding: 0px;
             .inline-actions {
                 margin: 12px 0 12px 12px;
                 a {
@@ -726,7 +750,7 @@ ul.breadcrumb li.prefix {
                     }
                     &.selected {
                         border: 0;
-                        .image-effect-1();
+                        .image-effect();
                     }
                     .details {
                         background: rgba(0, 0, 0, 0.5);
@@ -781,7 +805,7 @@ ul.breadcrumb li.prefix {
                         }
                     }
                     &.selected {
-                        .image-effect-1();
+                        .image-effect();
                     }
                 }
             }
@@ -789,15 +813,15 @@ ul.breadcrumb li.prefix {
                 .file-cell {
                     &.selected {
                         background-color: #ddd;
-                        .image-effect-1();
+                        .image-effect();
                     }
                     &:hover {
                         background-color: #F6F6F6;
-                        .image-effect-2();
+                        .image-effect();
                     }
                     &.selected:hover {
                         background-color: #ccc;
-                        .image-effect-1();
+                        .image-effect();
                     }
                     &.selected span {
                         color: #000;
