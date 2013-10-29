@@ -30,7 +30,7 @@ define('io.ox/files/views/create',
 
             show = function (app) {
                 var win = app.getWindow(),
-                    dialog = new dialogs.CreateDialog({ width: 450, center: true, async: true, container: $('.io-ox-files-window') }),
+                    dialog = new dialogs.CreateDialog({ width: 450, center: true, async: true, container: $('.io-ox-files-window'), 'tabTrap': true }),
                     $form = $('<form>', { 'class': 'files-create', 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' }),
                     queue, description = '';
                 dialog.getContentNode().css('height', '300px'); // 400 is quite much
@@ -145,15 +145,15 @@ define('io.ox/files/views/create',
                 );
                 dialog.getBody().append(baton.fileList.getNode());
                 dialog
-                    .addPrimaryButton('save', gt('Save'), 'save')
-                    .addButton('cancel', gt('Cancel'), 'cancel')
+                    .addPrimaryButton('save', gt('Save'), 'save', {'tabIndex': '1'})
+                    .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
                     .on('save', function () {
                         if (oldMode)
                             uploadFilesIE9();
                         else
                             uploadFiles();
                     })
-                    .show(function () { $form.find('input:first').focus(); });
+                    .show(function () { $form.find('.btn-file').focus(); });
             };
 
         ext.point(POINT + '/form').extend({
