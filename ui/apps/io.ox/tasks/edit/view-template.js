@@ -54,9 +54,9 @@ define('io.ox/tasks/edit/view-template',
                             e.stopPropagation();
                             app.getWindow().busy();
 
-                            //check if waiting for attachmenthandling is needed
-                            if (baton.attachmentList.attachmentsToAdd.length +
-                                baton.attachmentList.attachmentsToDelete.length > 0) {
+                            // check if waiting for attachmenthandling is needed
+                            var list = baton.attachmentList;
+                            if (list && (list.attachmentsToAdd.length + list.attachmentsToDelete.length) > 0) {
                                 baton.model.attributes.tempAttachmentIndicator = true; //temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
                             }
 
