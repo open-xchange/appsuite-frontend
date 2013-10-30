@@ -552,7 +552,11 @@ define('io.ox/files/fluid/perspective',
                                      .addClass('view-' + mode);
                 //update baton
                 baton.mode = mode;
-                focus();
+                //clear selection on mobile
+                if (_.device('smartphone'))
+                    this.selection.clear();
+                if (!app.folderViewIsVisible())
+                    focus();
             }
         },
 
@@ -779,7 +783,8 @@ define('io.ox/files/fluid/perspective',
                                 .init(allIds)
                                 .trigger('update', 'inital');
 
-                        focus();
+                        if (!app.folderViewIsVisible())
+                            focus();
                     },
                     function fail(response) {
                         if (response) {
@@ -993,8 +998,8 @@ define('io.ox/files/fluid/perspective',
                         self.selection
                                 .init(allIds)
                                 .trigger('update');
-
-                        focus();
+                        if (!app.folderViewIsVisible())
+                            focus();
                         hash = oldhash = oldIds = newIds = changed = deleted = added = indexPrev = indexPrevPosition = indexNextPosition = null;
                     });
                 }

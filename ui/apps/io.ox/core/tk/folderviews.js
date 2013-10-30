@@ -834,8 +834,11 @@ define('io.ox/core/tk/folderviews',
             }
 
             // set title
-            var shortTitle = api.getFolderTitle(data.title, 30);
-            label.attr('title', data.title).text(_.noI18n(shortTitle));
+            var shortTitle = api.getFolderTitle(data.title, 15);
+            label.attr('title', data.title).empty().append(
+                $('<span class="short-title">').text(_.noI18n(shortTitle)),
+                $('<span class="long-title">').text(_.noI18n(data.title))
+            );
             this.attr('aria-label', data.title);
 
             // set counter (mail only)

@@ -33,6 +33,8 @@ define('io.ox/files/mediasupport', function () {
     var browserSupportsMedia = {
         hasSupport: function (mediatype) {
             // Early exit if mediatype is not supported
+            // Disable Audio for Android stock browser
+            if (mediatype === 'audio' && _.browser.chrome === 18 && _.device('android')) return false;
             if (!Modernizr[mediatype]) return false;
             return true;
         },

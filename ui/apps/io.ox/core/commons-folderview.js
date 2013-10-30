@@ -332,7 +332,15 @@ define('io.ox/core/commons-folderview',
         ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'pubsub-divider',
             after: 'subscribe',
-            draw: function () {
+            draw: function (baton) {
+                if ((!capabilities.has('publication') ||
+                    !api.can('publish', baton.data)) &&
+                    (!capabilities.has('subscription') ||
+                    !api.can('subscribe', baton.data)))
+                {
+                    return;
+                }
+
                 this.append($('<li class="divider">'));
             }
         });
