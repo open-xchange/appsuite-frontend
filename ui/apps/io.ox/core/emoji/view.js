@@ -12,7 +12,7 @@
  */
 
 define('io.ox/core/emoji/view', [
-    'io.ox/emoji/main',
+    'moxiecode/tiny_mce/plugins/emoji/main',
     'gettext!io.ox/mail/emoji'
 ], function (emoji, gt) {
 
