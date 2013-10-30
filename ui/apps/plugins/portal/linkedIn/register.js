@@ -23,8 +23,12 @@ define('plugins/portal/linkedIn/register',
 
     'use strict';
 
-    function fnClick(e) {
+    var fnClick,
+        gtWithNode,
+        displayNameLink;
 
+
+    fnClick = function (e) {
         var person = e.data;
         e.preventDefault();
 
@@ -55,19 +59,35 @@ define('plugins/portal/linkedIn/register',
                         .append(viewer.draw(completeProfile));
                 });
         });
-    }
+    };
 
-    function displayName(person) {
+
+    gtWithNode = function (gtString, nodes) {
+        var arr = gtString.split(/%\d\$[sid]/),
+            node = $('<div>');
+        //TODO: order
+        _(arr).each(function (elem) {
+            var replacement = nodes.shift();
+            node.append($('<span>').text(elem));
+            if (replacement) {
+                node.append(replacement);
+            }
+        });
+        return node;
+    };
+
+
+    displayNameLink = function (person) {
         var dname = person.firstName + ' ' + person.lastName;
         return $('<a href="#" />')
             .text(dname)
             .on('click', person, fnClick);
-    }
+    };
+
 
     ext.point('io.ox/plugins/portal/linkedIn/updates/renderer').extend({
         id: 'CONN',
         draw: function (activity) {
-
             var deferred = new $.Deferred();
 
             if (activity.updateType !== 'CONN') {
@@ -82,9 +102,35 @@ define('plugins/portal/linkedIn/register',
             // Check presence of all variables
             if (activity.updateContent.person.connections) {
                 $updateEntry.append(
-                    displayName(activity.updateContent.person),
-                    $('<span>').text(' is now connected with '),
-                    displayName(activity.updateContent.person.connections.values[0])
+                    gtWithNode(
+                        gt('%1$s is now connected with %2$s'), [displayNameLink(activity.updateContent.person), displayNameLink(activity.updateContent.person.connections.values[0])]
+                    )
+                );
+            }
+
+            return deferred.resolve();
+        }
+    });
+
+
+    ext.point('io.ox/plugins/portal/linkedIn/updates/renderer').extend({
+        id: 'NCON',
+        draw: function (activity) {
+            var deferred = new $.Deferred();
+
+            if (activity.updateType !== 'NCON') {
+                return deferred.resolve();
+            }
+
+            var $newEntry = $('<div class="io-ox-portal-linkedin-new-entry">'),
+                $detailEntry = $('<div class="io-ox-portal-linkedin-new-details">').hide();
+
+            this.append($newEntry, $detailEntry);
+
+            // Check presence of all variables
+            if (activity.updateContent.person) {
+                $newEntry.append(
+                    $('<span>').text(gtWithNode(gt('%1$s is a new contact'), [displayNameLink(activity.updateContent.person)]))
                 );
             }
 
@@ -118,26 +164,26 @@ define('plugins/portal/linkedIn/register',
     };
 
 
-    if (capabilities.has('linkedinPlus')) {
-        ext.point('io.ox/portal/widget/linkedIn').extend({
+    ext.point('io.ox/portal/widget/linkedIn').extend({
 
-            title: 'LinkedIn',
+        title: 'LinkedIn',
 
-            isEnabled: function () {
-                return keychain.isEnabled('linkedin') && capabilities.has('linkedinPlus');
-            },
+        isEnabled: function () {
+            return keychain.isEnabled('linkedin');
+        },
 
-            requiresSetUp: function () {
-                return keychain.isEnabled('linkedin') && !keychain.hasStandardAccount('linkedin');
-            },
+        requiresSetUp: function () {
+            return keychain.isEnabled('linkedin') && !keychain.hasStandardAccount('linkedin');
+        },
 
-            performSetUp: function () {
-                var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
-                return keychain.createInteractively('linkedin', win);
-            },
+        performSetUp: function () {
+            var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
+            return keychain.createInteractively('linkedin', win);
+        },
 
-            load: function (baton) {
 
+        load: function (baton) {
+            if (capabilities.has('linkedinPlus')) {
                 if (!keychain.hasStandardAccount('linkedin'))
                     return $.Deferred().reject({ code: 'OAUTH-0006' });
 
@@ -155,11 +201,27 @@ define('plugins/portal/linkedIn/register',
                 .fail(function (err) {
                     console.log('Nope', err);
                 });
-            },
 
-            preview: function (baton) {
-                var content = $('<div class="content">');
+            } else {
+                return http.GET({
+                    module: 'integrations/linkedin/portal',
+                    params: { action: 'updates' }
+                })
+                .then(function (activities) {
+                    if (activities.values && activities.values !== 0) {
+                        baton.data = activities.values;
+                    } else {
+                        baton.data = activities;
+                    }
+                });
+            }
+        },
 
+
+        preview: function (baton) {
+            var content = $('<div class="content">');
+
+            if (capabilities.has('linkedinPlus')) {
                 if (baton.data && baton.data.length) {
                     content.addClass('pointer');
                     _(baton.data).each(function (message) {
@@ -181,12 +243,37 @@ define('plugins/portal/linkedIn/register',
                 }
 
                 this.append(content);
-            },
 
-            draw: function (baton) {
+            } else {
+                var previewData = [];
+                for (var i = 0; i < Math.min(3, baton.data.length); i++) {
+                    previewData.push(baton.data[i]);
+                }
+                if (baton.data && baton.data.length) {
+                    content.addClass('pointer');
 
-                var node = $('<div class="portal-feed linkedin-content">');
+                    _(previewData).each(function (activity) {
+                        var renderers = ext.point('io.ox/plugins/portal/linkedIn/updates/renderer');
+                        renderers.invoke('draw', content, activity);
+                    });
+                } else if (baton.data && baton.data.errorCode !== undefined) {
+                    content.removeClass('pointer');
+                    handleError(content, baton);
+                }
 
+                if (content.children().length === 0) {
+                    content.text(gt('There were not activities in your network'));
+                }
+
+                this.append(content);
+
+            }
+        },
+
+        draw: function (baton) {
+            var node = $('<div class="portal-feed linkedin-content">');
+
+            if (capabilities.has('linkedinPlus')) {
                 node.append(
                     $('<h1>').text(gt('LinkedIn Network Updates'))
                 );
@@ -199,7 +286,7 @@ define('plugins/portal/linkedIn/register',
                         node.addClass(index % 2 ? 'odd' : 'even')
                         .append(
                             $('<div class="linkedin-message">').append(
-                                $('<span class="linkedin-name">').append(displayName(message.from.person), ': '),
+                                $('<span class="linkedin-name">').append(displayNameLink(message.from.person), ': '),
                                 $('<span class="linkedin-subject">').html(_.escape(message.subject)),
                                 $('<div class="linkedin-body">').html(_.escape(message.body).replace(/\n/g, '<br>'))
                             )
@@ -221,81 +308,9 @@ define('plugins/portal/linkedIn/register',
                         });
                     }
                 });
-
                 this.append(node);
-            },
 
-            drawCreationDialog: function () {
-                var $node = $(this);
-                $node.append(
-                    $('<h1>').text('LinkedIn'),
-                    $('<div class="io-ox-portal-preview centered">').append(
-                        $('<div>').text(gt('Add your account'))
-                    )
-                );
-            }
-        });
-    } else {
-        ext.point('io.ox/portal/widget/linkedIn').extend({
-
-            title: 'LinkedIn',
-
-            isEnabled: function () {
-                return keychain.isEnabled('linkedin');
-            },
-
-            requiresSetUp: function () {
-                return keychain.isEnabled('linkedin') && !keychain.hasStandardAccount('linkedin');
-            },
-
-            performSetUp: function () {
-                var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
-                return keychain.createInteractively('linkedin', win);
-            },
-
-            load: function (baton) {
-                return http.GET({
-                    module: 'integrations/linkedin/portal',
-                    params: { action: 'updates' }
-                })
-                .then(function (activities) {
-                    if (activities.values && activities.values !== 0) {
-                        baton.data = activities.values;
-                    } else {
-                        baton.data = [];
-                    }
-                });
-            },
-
-            preview: function (baton) {
-                var content = $('<div class="content">');
-                var previewData = [];
-                var i = 0;
-
-                for (i = 0; i < Math.min(3, baton.data.length); i++) {
-                    previewData.push(baton.data[i]);
-                }
-                if (baton.data && baton.data.length) {
-                    content.addClass('pointer');
-
-                    _(previewData).each(function (activity) {
-                        ext.point('portal/linkedIn/updates/renderer').invoke('draw', content, activity);
-                    });
-                } else if (baton.data && baton.data.errorCode !== undefined) {
-                    content.removeClass('pointer');
-                    handleError(content, baton);
-                }
-
-                if (content.children().length === 0) {
-                    content.text(gt('There were not activities in your network'));
-                }
-
-                this.append(content);
-            },
-
-            draw: function (baton) {
-
-                var node = $('<div class="portal-feed linkedin-content">');
+            } else {
                 var profile = $('<div>');
                 node.append(profile);
 
@@ -321,21 +336,20 @@ define('plugins/portal/linkedIn/register',
                     ext.point('portal/linkedIn/updates/renderer').invoke('draw', node, activity);
                 });
 
-
                 this.append(node);
-            },
-
-            drawCreationDialog: function () {
-                var $node = $(this);
-                $node.append(
-                    $('<h1>').text('LinkedIn'),
-                    $('<div class="io-ox-portal-preview centered">').append(
-                        $('<div>').text(gt('Add your account'))
-                    )
-                );
             }
-        });
-    }
+        },
+
+        drawCreationDialog: function () {
+            var $node = $(this);
+            $node.append(
+                $('<h1>').text('LinkedIn'),
+                $('<div class="io-ox-portal-preview centered">').append(
+                    $('<div>').text(gt('Add your account'))
+                )
+            );
+        }
+    });
 
 
 
