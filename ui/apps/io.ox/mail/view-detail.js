@@ -139,7 +139,9 @@ define('io.ox/mail/view-detail',
                 var args = _(arguments).toArray();
                 // need to ignore line breaks, i.e. <br> tags inside this pattern (see Bug 28960)
                 if (/<br\/?>/.test(args[0])) return args[0];
-                return '<a href="mailto:' + args[6] + '">' + args[2] + args[3] + '</a>';
+                // ignore if display name is again mail address
+                if (/@/.test(args[2])) return args[0];
+                return '<a href="mailto:' + args[6] + '">' + args[2] + (args[3] || '') + '</a>';
             });
 
         // split source to safely ignore tags
@@ -533,7 +535,7 @@ define('io.ox/mail/view-detail',
                                 // escape first
                                 text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
                                 // try the "NAME" <ADDRESS> pattern
-                                if (regMailComplex.test(text)) {
+                                if (isHTML && regMailComplex.test(text)) {
                                     node.replaceWith(
                                         $('<div>')
                                         .html(text.replace(regMailComplexReplace, '<a href="mailto:$6">$2$3</a>'))
@@ -1385,7 +1387,7 @@ define('io.ox/mail/view-detail',
                         if (_.device('smartphone')) {
                             dd.hide();
                         } else {
-                            dd.find('a').before(
+                            dd.find('a.attachment-link').before(
                                 $('<i class="icon-paper-clip">'),
                                 $.txt('\u00A0')
                             );

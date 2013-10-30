@@ -74,7 +74,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/publish', {
         requires: function (e) {
-            return _.device('!small') && !(e.collection.has('one') && _.isEmpty(e.baton.data.filename));
+            return e.collection.has('one') && !_.isEmpty(e.baton.data.filename);
         },
         action: function (baton) {
             require(['io.ox/core/pubsub/publications'], function (publications) {
@@ -259,7 +259,7 @@ define('io.ox/files/actions',
 
                 // create dialog
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog({ width: 500 })
+                    new dialogs.ModalDialog({ width: 500, 'tabTrap': true })
                         .build(function () {
                             // header
                             this.header($('<h4>').text('Direct link'));
@@ -276,7 +276,7 @@ define('io.ox/files/actions',
                                     return $('<p>').append(
                                         $('<div>').text(file.filename || file.title || ''),
                                         $('<div>').append(
-                                            $('<a class="direct-link" target="_blank">')
+                                            $('<a class="direct-link" target="_blank" tabindex="1">')
                                             .attr('href', url)
                                             .html(util.breakableHTML(url))
                                         )
@@ -284,8 +284,10 @@ define('io.ox/files/actions',
                                 })
                             );
                         })
-                        .addPrimaryButton('cancel', gt('Close'))
-                        .show();
+                        .addPrimaryButton('cancel', gt('Close'), 'cancel', {'tabIndex': '1'})
+                        .show(function () {
+                            this.find('a.direct-link').focus();
+                        });
                 });
             });
         }
@@ -319,10 +321,10 @@ define('io.ox/files/actions',
             );
 
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                new dialogs.ModalDialog()
+                new dialogs.ModalDialog({'tabTrap': true})
                     .text(question)
-                    .addPrimaryButton('delete', gt('Delete'))
-                    .addButton('cancel', gt('Cancel'))
+                    .addPrimaryButton('delete', gt('Delete'), 'delete', {'tabIndex': '1'})
+                    .addButton('cancel', gt('Cancel'),  'cancel', {'tabIndex': '1'})
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {
@@ -470,17 +472,17 @@ define('io.ox/files/actions',
                         );
                 }
 
-                new dialogs.ModalDialog({ enter: 'rename', async: true })
+                new dialogs.ModalDialog({ enter: 'rename', async: true, 'tabTrap': true })
                     .header(
                         $('<h4>').text(gt('Rename'))
                     )
                     .append(
                         $('<div class="row-fluid">').append(
-                            $('<input type="text" name="name" class="span12">')
+                            $('<input type="text" name="name" class="span12" tabindex="1">')
                         )
                     )
-                    .addPrimaryButton('rename', gt('Rename'))
-                    .addButton('cancel', gt('Cancel'))
+                    .addPrimaryButton('rename', gt('Rename'), 'rename', {'tabIndex': '1'})
+                    .addButton('cancel', gt('Cancel'),  'cancel', {'tabIndex': '1'})
                     .on('rename', function () {
                         var $input = this.getContentNode().find('input[name="name"]');
                         process($input).then(this.close, this.idle);
@@ -500,8 +502,8 @@ define('io.ox/files/actions',
         action: function (baton) {
             require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/keys'], function (dialogs, KeyListener) {
                 var keys = new KeyListener($input),
-                    dialog = new dialogs.ModalDialog(),
-                    $input = $('<textarea rows="10"></textarea>')
+                    dialog = new dialogs.ModalDialog({'tabTrap': true}),
+                    $input = $('<textarea rows="10" tabindex="1"></textarea>')
                             .css({width: '507px'})
                             .val(baton.data.description),
                     $form = $('<form>')
@@ -534,8 +536,8 @@ define('io.ox/files/actions',
                 .append(
                     $form
                 )
-                .addPrimaryButton('save', gt('Save'))
-                .addButton('cancel', gt('Cancel'))
+                .addPrimaryButton('save', gt('Save'), 'save', {'tabIndex': '1'})
+                .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
                 .show(function () {
                     $input.select();
                     keys.include();
@@ -581,10 +583,10 @@ define('io.ox/files/actions',
                     if (baton.target) {
                         commit(baton.target);
                     } else {
-                        var dialog = new dialogs.ModalDialog()
+                        var dialog = new dialogs.ModalDialog({'tabTrap': true})
                             .header($('<h4>').text(label))
-                            .addPrimaryButton('ok', label)
-                            .addButton('cancel', gt('Cancel'));
+                            .addPrimaryButton('ok', label, 'ok', {'tabIndex': '1'})
+                            .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
                         dialog.getBody().css({ height: '250px' });
                         var folderId = String(list[0].folder_id),
                             id = settings.get('folderpopup/last') || folderId,
@@ -679,10 +681,10 @@ define('io.ox/files/actions',
                         _.isArray(data) ? data.length : 1
                 );
                 // ask
-                new dialogs.ModalDialog()
+                new dialogs.ModalDialog({'tabTrap': true})
                     .text(question)
-                    .addPrimaryButton('delete', gt('Delete'))
-                    .addButton('cancel', gt('Cancel'))
+                    .addPrimaryButton('delete', gt('Delete'), 'delete', {'tabIndex': '1'})
+                    .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {

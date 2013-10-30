@@ -54,12 +54,29 @@ define('io.ox/mail/accounts/model',
                 if (this.attributes.id !== 0 && $.trim(value) === '')
                     return gt('This field has to be filled');
             },
+            password: {
+                required: true,
+                msg: gt('This field has to be filled')
+            },
             transport_server: {
                 required: true,
                 msg: gt('This field has to be filled')
             },
             transport_port: {
                 required: true,
+                msg: gt('This field has to be filled')
+            },
+            // pop3 credentials
+            transport_password: {
+                required: function (a, prop, attributes) {
+                    return !!attributes['mail-common-selectfirst'];
+                },
+                msg: gt('This field has to be filled')
+            },
+            transport_login: {
+                required: function (a, prop, attributes) {
+                    return !!attributes['mail-common-selectfirst'];
+                },
                 msg: gt('This field has to be filled')
             }
         },

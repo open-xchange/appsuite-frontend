@@ -162,17 +162,18 @@ define('io.ox/calendar/invitations/register',
                 }
 
                 baton.$.well.find('.itip-actions').addClass('block').append(
-
                     _(priority).chain()
                     .filter(function (action) {
                         return _(baton.analysis.actions).contains(action);
                     })
                     .map(function (action) {
-                        return $('<button type="button" class="btn">')
+                        var button = $('<button type="button" class="btn">')
                             .attr('data-action', action)
                             .addClass(buttonClasses[action])
-                            .text(i18n[action])
-                            .add($.txt('\u00A0'));
+                            .text(i18n[action]);
+                        return button
+                            .add($('<span>').text('\u00A0'))
+                            .addClass(button.hasClass('pull-left') ? 'pull-left' : '');
                     })
                     .value()
                 )

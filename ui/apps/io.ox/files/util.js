@@ -50,12 +50,12 @@ define('io.ox/files/util',
                     }
                     //confirmation needed
                     if (message) {
-                        new dialogs.ModalDialog()
+                        new dialogs.ModalDialog({'tabTrap': true})
                             .header($('<h4>').text(gt('Confirmation')))
                             .append(message)
                             .append($hint)
-                            .addPrimaryButton('rename', gt('Yes'))
-                            .addButton('change', gt('Adjust'))
+                            .addPrimaryButton('rename', gt('Yes'), 'rename', {'tabIndex': '1'})
+                            .addButton('change', gt('Adjust'), 'change', {'tabIndex': '1'})
                             .show()
                             .done(function (action) {
                                 if (action === 'rename')

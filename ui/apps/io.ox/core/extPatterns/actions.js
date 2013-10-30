@@ -100,7 +100,6 @@ define('io.ox/core/extPatterns/actions',
     };
 
     var processActions = function (ref, collection, baton) {
-
         // allow extensions to cancel actions
         var stopped = false, stopPropagation = function () {
             stopped = true;
@@ -130,7 +129,6 @@ define('io.ox/core/extPatterns/actions',
                 if (ret !== undefined && !ret.promise) {
                     ret = $.Deferred().resolve(ret);
                 }
-
                 return ret;
             })
             .value();
@@ -142,11 +140,14 @@ define('io.ox/core/extPatterns/actions',
         invoke(e.data.ref, this, e.data.selection, e);
     };
 
-    var updateCustomControls = function (container, selection) {
-
+    var updateCustomControls = function (container, selection, options) {
         var deferred = $.Deferred(),
             collection = new Collection(selection),
-            controls = container.find('[data-action]');
+            controls = container.find('[data-action]'),
+            options = $.extend({
+                cssDisable: false,
+                eventType: 'click'
+            }, options);
 
         collection.getProperties().done(function () {
             // find nodes that refer to an action
@@ -156,10 +157,15 @@ define('io.ox/core/extPatterns/actions',
                     var ref = node.attr('data-action');
                     return processActions(ref, collection, selection).done(function (result) {
                         if (result === false) {
-                            node.prop('disabled', true).off('click.action');
+                            node.prop('disabled', true).off(options.eventType + '.action');
+                            if (options.cssDisable) {
+                                node.addClass('disabled');
+                            }
                         } else {
-                            node.prop('disabled', false).off('click.action')
-                                .on('click.action', { ref: ref, selection: selection }, customClick);
+                            node.prop('disabled', false)
+                                .removeClass('disabled')
+                                .off(options.eventType + '.action')
+                                .on(options.eventType + '.action', { ref: ref, selection: selection }, customClick);
                         }
                     });
                 })

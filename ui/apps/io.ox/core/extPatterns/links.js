@@ -37,32 +37,10 @@ define('io.ox/core/extPatterns/links',
                     ref = node.data('ref');
                 baton.e = e;
                 actions.invoke(ref, this, baton, e);
-            };
-
-        this.draw = this.draw || function (baton) {
-            baton = ext.Baton.ensure(baton);
-            this.append(
-                $('<a>', { href: '#', tabindex: 1, 'data-action': self.id })
-                .addClass(self.cssClasses || 'io-ox-action-link')
-                .attr({
-                    'data-section': self.section || 'default',
-                    'data-prio': self.prio || 'lo',
-                    'data-ref': self.ref,
-                    'data-prio-mobile': self.prioMobile || 'none',
-                    'role': 'menuitem'
-                })
-                .data({ ref: self.ref, baton: baton })
-                .click(click)
-                .append(self.label ? $.txt(String(self.label)) : $())
-                .append(self.icon ? $('<i>').addClass(String(self.icon)) : $())
-            );
-        };
-
-        if (this.drawDisabled === true) {
-            this.drawDisabled = function () {
-                this.append(
-                    $('<span>', { 'data-action': self.id })
-                    .addClass('io-ox-action-link disabled')
+            },
+            drawDefault = function () {
+                return $('<a>', { href: '#', tabindex: 1, 'data-action': self.id })
+                    .addClass(self.cssClasses || 'io-ox-action-link')
                     .attr({
                         'data-section': self.section || 'default',
                         'data-prio': self.prio || 'lo',
@@ -70,7 +48,28 @@ define('io.ox/core/extPatterns/links',
                         'data-prio-mobile': self.prioMobile || 'none',
                         'role': 'menuitem'
                     })
-                    .text(String(self.label))
+                    .append(self.label ? $.txt(String(self.label)) : $())
+                    .append(self.icon ? $('<i>').addClass(String(self.icon)) : $());
+            };
+
+        this.draw = this.draw || function (baton) {
+            baton = ext.Baton.ensure(baton);
+
+            this.append(
+                drawDefault(baton)
+                .data({ ref: self.ref, baton: baton })
+                .click(click)
+            );
+        };
+
+        if (this.drawDisabled === true) {
+            this.drawDisabled = function () {
+                this.append(
+                    drawDefault()
+                    .addClass('disabled')
+                    .attr({
+                        'aria-disabled': true
+                    })
                 );
             };
         }
@@ -363,7 +362,7 @@ define('io.ox/core/extPatterns/links',
             z = options.zIndex;
         }
         var args = $.makeArray(arguments),
-            $parent = $('<div>').addClass('dropdown')
+            node = $('<div>').addClass('dropdown')
                 .css('display', 'inline-block')
                 .appendTo(this),
             label = options.label || baton.label || '###',
@@ -374,10 +373,10 @@ define('io.ox/core/extPatterns/links',
                     $('<span>').text(_.noI18n(' ')),
                     $('<b>').addClass('caret')
                 )
-                .appendTo($parent);
+                .appendTo(node);
 
         if (options.zIndex !== undefined) {
-            $parent.css('zIndex', (z = z > 0 ? z - 1 : 11000));
+            node.css('zIndex', (z = z > 0 ? z - 1 : 11000));
         }
         $toggle.addClass(options.classes);
 
@@ -385,24 +384,24 @@ define('io.ox/core/extPatterns/links',
         // better use CSS :after to insert spaces
         // dont' do this crap on mobile, textnode can not be styled or overwritten later...
         if (_.device('!smartphone')) {
-            $parent.append($.txt(_.noI18n('\u00A0\u00A0 '))); // a bit more space
+            node.append($.txt(_.noI18n('\u00A0\u00A0 '))); // a bit more space
         }
 
         // create & add node first, since the rest is async
-        var node = $('<ul role="menu">').addClass('dropdown-menu').appendTo($parent);
+        options.classes += ' dropdown-menu';
         if (options.open === 'left') {
-            node.addClass('pull-right').css({textAligh: 'left'});
+            options.classes += ' pull-right';
         } else {
             $toggle.on(Modernizr.touch ? 'touchstart' : 'click', function () {
                 // fix dropdown position on-the-fly
-                node.addClass($parent.position().left < 100 ? '' : ' dropdown-right');
+                node.find('ul.dropdown-menu').addClass(node.position().left < 100 ? '' : 'dropdown-right');
             });
         }
         drawLinks(options, new Collection(baton.data), node, baton, args, true);
 
         $toggle.dropdown();
 
-        return $parent;
+        return node;
     };
 
     var DropdownLinks = function (options) {

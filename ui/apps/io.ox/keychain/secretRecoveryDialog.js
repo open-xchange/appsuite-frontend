@@ -22,7 +22,7 @@ define('io.ox/keychain/secretRecoveryDialog',
 
     return {
         show: function () {
-            new dialogs.ModalDialog({ easyOut: false, async: true, width: 500, enter: 'migrate' })
+            new dialogs.ModalDialog({ easyOut: false, async: true, width: 500, enter: 'migrate', tapTrap: true })
                 .build(function () {
                     this.getHeader().append(
                         $('<h4>').text(gt('Recover passwords'))
@@ -31,12 +31,12 @@ define('io.ox/keychain/secretRecoveryDialog',
                         $('<p>').text(gt('Please provide the old password so the account passwords can be recovered.')),
                         $('<label>').append(
                             $.txt(gt('Your old password')), $('<br>'),
-                            $('<input type="password" name"recovery-password" class="input-xlarge">')
+                            $('<input type="password" name"recovery-password" class="input-xlarge" tabindex="1">')
                         )
                     );
                 })
-                .addPrimaryButton('migrate', gt('Recover'))
-                .addButton('cancel', gt('Cancel'))
+                .addPrimaryButton('migrate', gt('Recover'), 'migrate', {'tabIndex': '1'})
+                .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
                 .on('cancel', function () {
                     this.getContentNode().find('input').val('');
                 })

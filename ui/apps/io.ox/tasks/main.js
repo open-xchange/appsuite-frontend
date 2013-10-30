@@ -126,7 +126,8 @@ define('io.ox/tasks/main',
         // grid
         grid = new VGrid(left, {
             settings: settings,
-            swipeRightHandler: swipeRightHandler
+            swipeRightHandler: swipeRightHandler,
+            showToggle: _.device('smartphone') ? false: true,
         });
 
         grid.addTemplate(template.main);

@@ -62,15 +62,18 @@ define('io.ox/backbone/validation',
             return _.now() > val || gt('Please enter a date in the past');
         },
         email: function (val) {
-            return util.isValidMailAddress(val) || gt('Please enter a valid email address');
+            return settings.get('features/validateMailAddresses', true) === false || // enabled by default
+                util.isValidMailAddress(val) ||
+                gt('Please enter a valid email address');
         },
         phone: function (val) {
-            return settings.get('features/validatePhoneNumbers', false) === false ||
+            return settings.get('features/validatePhoneNumbers', false) === false || // disabled by default
                 util.isValidPhoneNumber(val) ||
                 gt('Please enter a valid phone number. Allowed characters are: %1$s', '0-9 , . - ( ) # + ; /');
         },
         'email/phone': function (val) {
-            return util.isValidMailAddress(val) ||
+            return settings.get('features/validateMailAddresses', true) === false ||
+                util.isValidMailAddress(val) ||
                 settings.get('features/validatePhoneNumbers', false) === false ||
                 util.isValidPhoneNumber(val) ||
                 gt('Please enter a valid email address or phone number');
