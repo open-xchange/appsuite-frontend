@@ -18,8 +18,7 @@ define('io.ox/core/export/export',
      'io.ox/core/api/folder',
      'io.ox/core/notifications',
      'io.ox/formats/vcard',
-     'gettext!io.ox/core',
-     'less!io.ox/core/export/style.less'
+     'gettext!io.ox/core'
     ], function (ext, dialogs, api, folderAPI, notifications, vcard, gt) {
 
     'use strict';
@@ -29,9 +28,9 @@ define('io.ox/core/export/export',
      */
     ext.point('io.ox/core/export/export/title').extend({
         id: 'default',
-        draw: function (id, title) {
+        draw: function () {
             this.append(
-                folderAPI.getBreadcrumb(id, { subfolders: false, prefix: gt(title) })
+                $('<h4>').text(gt('Export folder'))
             );
         }
     });
@@ -41,23 +40,56 @@ define('io.ox/core/export/export',
      */
     ext.point('io.ox/core/export/export/select').extend({
         id: 'default',
+        index: 100,
         draw: function (baton) {
-            var nodes = {}, formats;
-            nodes.row = $('<div class="row-fluid">').appendTo($(this));
 
-            //lable and select
-            nodes.label = $('<label class="span3">').text(gt('Format')).appendTo(nodes.row);
-            nodes.select = $('<select class="span9" tabindex="1" aria-label="' + gt('select format') + '">').appendTo(nodes.row);
+            this.append(
+                $('<label>').append(
+                    $.txt(gt('Format')),
+                    $('<br>'),
+                    baton.$.select = $('<select tabindex="1" aria-label="' + gt('select format') + '">')
+                )
+            );
 
-            //add option
-            formats = ext.point('io.ox/core/export/export/format').invoke('draw', null, baton)._wrapped;
-            formats.forEach(function (node) {
-                if (node)
-                    node.appendTo(nodes.select);
+            // add options
+            ext.point('io.ox/core/export/export/format').invoke('draw', baton.$.select, baton);
+        }
+    });
+
+    function toggle(type) {
+        var note = this.find('.alert'), label = this.find('.include_distribution_lists');
+        if (type === 'csv') {
+            note.hide();
+            label.show();
+        } else {
+            note.show();
+            label.hide();
+        }
+    }
+
+    ext.point('io.ox/core/export/export/select').extend({
+        id: 'checkbox',
+        index: 200,
+        draw: function (baton) {
+
+            if (baton.module !== 'contacts') return;
+
+            this.append(
+                $('<div class="alert alert-info">').hide().text(
+                    gt('Note: The vCard format cannot contain distribution lists')
+                ),
+                // checkbox
+                $('<label class="checkbox include_distribution_lists">').append(
+                    baton.$.include = $('<input type="checkbox" name="include_distribution_lists" checked="checked">'),
+                    $.txt(gt('Include distribution lists'))
+                )
+            );
+
+            this.find('select').on('change', function () {
+                toggle.call($(this).closest('.modal-body'), $(this).val());
             });
 
-            //avoid find
-            baton.nodes.select = nodes.select;
+            toggle.call(this, this.find('select').val());
         }
     });
 
@@ -68,8 +100,8 @@ define('io.ox/core/export/export',
         id: 'default',
         draw: function () {
             this
-                .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
-                .addPrimaryButton('export', gt('Export'), 'export', {'tabIndex': '1'});
+                .addPrimaryButton('export', gt('Export'), 'export', { 'tabIndex': '1' })
+                .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' });
         }
     });
 
@@ -82,7 +114,9 @@ define('io.ox/core/export/export',
         draw: function (baton) {
             if (baton.module === 'contacts') {
                 baton.format.csv = { getDeferred: function () { return api.getCSV(baton.id, baton.simulate); } };
-                return $('<option value="csv">CSV</option>');
+                this.append(
+                    $('<option value="csv">CSV</option>')
+                );
             }
         }
     });
@@ -96,7 +130,9 @@ define('io.ox/core/export/export',
         draw: function (baton) {
             if (baton.module === 'contacts') {
                 baton.format.vcard = { getDeferred: function () { return api.getVCARD(baton.id, baton.simulate); } };
-                return $('<option value="vcard">vCard</option>');
+                this.append(
+                    $('<option value="vcard">vCard</option>')
+                );
             }
         }
     });
@@ -110,7 +146,9 @@ define('io.ox/core/export/export',
         draw: function (baton) {
             if (baton.module === 'calendar' || baton.module === 'tasks') {
                 baton.format.ical = { getDeferred: function () { return api.getICAL(baton.id, baton.simulate); } };
-                return $('<option value="ical">iCalendar</option>');
+                this.append(
+                    $('<option value="ical">iCalendar</option>')
+                );
             }
         }
     });
@@ -119,20 +157,17 @@ define('io.ox/core/export/export',
         show: function (module, id) {
             var id = String(id),
                 dialog = new dialogs.ModalDialog({ width: 500 }),
-                baton = {id: id, module: module, simulate: true, format: {}, nodes: {}};
+                baton = new ext.Baton({id: id, module: module, simulate: true, format: {} });
             // get folder and build dialog
             folderAPI.get({ folder: id}).done(function () {
                 dialog
                     .build(function () {
                         //header
-                        ext.point('io.ox/core/export/export/title')
-                            .invoke('draw', this.getHeader(), id, 'Export');
+                        ext.point('io.ox/core/export/export/title').invoke('draw', this.getHeader(), id, 'Export');
                         //body
-                        ext.point('io.ox/core/export/export/select')
-                            .invoke('draw', this.getContentNode(), baton);
+                        ext.point('io.ox/core/export/export/select').invoke('draw', this.getContentNode(), baton);
                         //buttons
-                        ext.point('io.ox/core/export/export/buttons')
-                            .invoke('draw', this);
+                        ext.point('io.ox/core/export/export/buttons').invoke('draw', this);
                         //apply style
                         this.getPopup().addClass('export-dialog');
                     })
@@ -142,11 +177,12 @@ define('io.ox/core/export/export',
                     })
                     .done(function (action) {
                         if (action === 'export') {
-                            var id = baton.nodes.select.val() || '',
-                                def = baton.format[id].getDeferred() || new $.Deferred();
+                            var id = baton.$.select.val() || '',
+                                include = F.include.prop('checked') || false,
+                                def = baton.format[id].getDeferred() || $.when();
                             def.done(function (data) {
                                 if (data) {
-                                    window.location.href = data + '&content_disposition=attachment';
+                                    window.location.href = data + '&export_dlists=' + include + '&content_disposition=attachment';
                                 }
                             })
                             .fail(function (obj) {
