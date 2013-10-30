@@ -219,12 +219,10 @@
                     white-space: nowrap;
                     word-wrap: break-word;
                     line-height: 3.2em;
-                }
-
-                .not-selectable {
-                    display: block;
-                    &:hover {
-                        text-decoration: underline;
+                    &.not-selectable {
+                        &:hover {
+                            text-decoration: underline;
+                        }
                     }
                 }
 
@@ -656,6 +654,9 @@ ul.breadcrumb li.prefix {
                 .file-cell {
                     span {
                         line-height: 1.6em;
+                        &.not-selectable {
+                            display: block;
+                        }
                     }
                     .title {
                         width: 100%;
@@ -719,6 +720,9 @@ ul.breadcrumb li.prefix {
                     }
                     &.selected span {
                         color: #000;
+                    }
+                    span.not-selectable {
+                        display: block;
                     }
                     .modified {
                         width: 100px;
