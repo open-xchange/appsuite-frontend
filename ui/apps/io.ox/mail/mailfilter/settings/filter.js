@@ -70,14 +70,15 @@ define('io.ox/mail/mailfilter/settings/filter',
             width: 800,
             center: false,
             maximize: true,
-            async: true
+            async: true,
+            tabTrap: true
         }).header($('<h4>').text(header));
 
         myView.dialog.append(
             myView.render().el
         )
-        .addPrimaryButton('save', gt('Save'))
-        .addButton('cancel', gt('Cancel'));
+        .addPrimaryButton('save', gt('Save'), 'save', {tabIndex: '1'})
+        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
 
         myView.dialog.show();
         myView.$el.find('input[name="rulename"]').focus();

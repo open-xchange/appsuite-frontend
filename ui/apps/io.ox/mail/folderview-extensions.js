@@ -127,10 +127,10 @@ define('io.ox/mail/folderview-extensions',
             folderAPI.get({ folder: id }),
             ox.load(['io.ox/core/tk/dialogs'])
         ).done(function (folder, dialogs) {
-            new dialogs.ModalDialog()
+            new dialogs.ModalDialog({tabTrap: true})
                 .text(gt('Do you really want to empty folder "%s"?', folderAPI.getFolderTitle(folder.title, 30)))
-                .addPrimaryButton('delete', gt('Empty folder'))
-                .addButton('cancel', gt('Cancel'))
+                .addPrimaryButton('delete', gt('Empty folder'), 'delete', {tabIndex: '1'})
+                .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                 .show()
                 .done(function (action) {
                     if (action === 'delete') {

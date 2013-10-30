@@ -97,6 +97,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             return $(el).find('[data-test-id]');
         },
 
+        setFocus = function (el, type) {
+            $(el).find('[data-' + type + '-id]').last().find('[tabindex="1"]').first().focus();
+        },
+
         renderWarningForEmptyTests = function (node) {
             var warning = $('<div>').addClass('alert alert-block').text(gt('This rule applies to all messages. Please add a condition to restrict this rule to specific messages.'));
             node.append(warning);
@@ -189,7 +193,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             onChangeValueExtern: function (e) {
                 e.preventDefault();
                 var node = $(e.target),
-                    data = node.data();
+                    data = node.data(),
+                    valueType = data.test ? 'test' : 'action';
                 if (data.target) {
                     var arrayOfTests = this.model.get('test');
                     arrayOfTests.id = data.value;
@@ -220,6 +225,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 }
                 this.render();
 
+                setFocus(this.el, valueType);
             },
 
             onChangeValue: function (e) {
@@ -244,6 +250,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 }
                 this.model.set('test', testArray);
 
+                link.focus();
             },
 
             onChangeValueAction: function (e) {
@@ -262,6 +269,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 actionsArray[actionID].flags = [value];
                 this.model.set('actioncmds', actionsArray);
 
+                link.focus();
             },
 
             onChangeTextTest: function (e) {
@@ -348,10 +356,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
 
                     var label = gt('Select folder'),
-                        dialog = new dialogs.ModalDialog({ easyOut: true })
+                        dialog = new dialogs.ModalDialog({ easyOut: true, tabTrap: true })
                         .header($('<h4>').text(label))
-                        .addPrimaryButton('select', label)
-                        .addButton('cancel', gt('Cancel'));
+                        .addPrimaryButton('select', label, 'select', {tabIndex: '1'})
+                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
                     dialog.getBody().css({ height: '250px' });
                     var tree = new views.FolderTree(dialog.getBody(), {
                             type: 'mail'
@@ -378,6 +386,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                             tree = dialog = null;
                         });
                         self.dialog.getPopup().show();
+                        self.$el.find('[data-action-id="' + actionID + '"] .folderselect').focus();
                     });
                 });
             },
@@ -392,6 +401,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 actionArray[actionID].flags[0] = '$cl_' + colorValue;
                 this.model.set('actioncmds', actionArray);
                 this.render();
+
+                this.$el.find('[data-action-id="' + actionID + '"] .dropdown-toggle').focus();
             }
 
 
@@ -580,7 +591,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         index: 100,
         fluid: true,
         label: gt('Rule name'),
-        control: '<input type="text" class="span7" name="rulename">',
+        control: '<input type="text" class="span7" name="rulename" tabindex="1">',
         attribute: 'rulename'
     }));
 
