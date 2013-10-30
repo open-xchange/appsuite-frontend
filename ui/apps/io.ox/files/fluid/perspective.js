@@ -552,6 +552,9 @@ define('io.ox/files/fluid/perspective',
                                      .addClass('view-' + mode);
                 //update baton
                 baton.mode = mode;
+                //clear selection on mobile
+                if (_.device('smartphone'))
+                    this.selection.clear();
                 focus();
             }
         },
