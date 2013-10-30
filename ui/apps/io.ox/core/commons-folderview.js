@@ -867,8 +867,12 @@ define('io.ox/core/commons-folderview',
                 sidepanel.on('swipeleft', toggle);
 
             }
+
+            tree.selection.on('change', onChangeFolder);
+            changeFolderOn();
+
             // paint now
-            return tree.paint().pipe(function () {
+            return tree.paint().then(function () {
 
                 if (options.visible === false) {
                     initResize();
@@ -876,11 +880,8 @@ define('io.ox/core/commons-folderview',
 
                 return tree.select(app.folder.get()).done(function () {
 
-                    tree.selection.on('change', onChangeFolder);
                     toggleTree = toggle;
                     sidepanel.idle();
-
-                    changeFolderOn();
 
                     api.on('create', function (e, data) {
                         tree.repaint().done(function () {
