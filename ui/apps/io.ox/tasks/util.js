@@ -177,7 +177,7 @@ define('io.ox/tasks/util',
                 node.val(interval);
             },
 
-            //builds dropdownmenu nodes, if bootstrapDropdown is set listnodes are created else option nodes
+            //builds dropdownmenu nodes, if o.bootstrapDropdown is set listnodes are created else option nodes
             buildDropdownMenu: function (o) {
                 if (!o) {
                     o = {};
@@ -185,23 +185,40 @@ define('io.ox/tasks/util',
                 if (!o.time) {
                     o.time = new Date();
                 }
-                var type = '<option>';
+                //get the values
+                var options = this.buildOptionArray(o),
+                    result = [];
+
+                //put the values in nodes
                 if (o.bootstrapDropdown) {
-                    type = '<a tabindex="1" role="menuitem" href="#">';
+                    _(options).each(function (obj) {
+                        result.push($('<li>').append($('<a tabindex="1" role="menuitem" href="#">').val(obj[0]).text(obj[1])));
+                    });
+                } else {
+                    _(options).each(function (obj) {
+                        result.push($('<option>').val(obj[0]).text(obj[1]));
+                    });
                 }
 
-                //normal times
-                var options = [];
+                return result;
+            },
 
-                var i, temp;
+            //returns the same as buildDropdownMenu but returns an array of value string pairs
+            buildOptionArray: function (o) {
+                if (!o) {
+                    o = {};
+                }
+                if (!o.time) {
+                    o.time = new Date();
+                }
+                var result = [],
+                    i;
                 if (!o.daysOnly) {
-
-                    //normal times
-                    options = [$(type).val('5').text(gt('in 5 minutes')),
-                                   $(type).val('15').text(gt('in 15 minutes')),
-                                   $(type).val('30').text(gt('in 30 minutes')),
-                                   $(type).val('60').text(gt('in one hour'))];
-
+                    result = [[5, gt('in 5 minutes')],
+                              [15, gt('in 15 minutes')],
+                              [30, gt('in 30 minutes')],
+                              [60, gt('in one hour')]];
+    
                     // variable daytimes
                     i = o.time.getHours();
     
@@ -216,10 +233,9 @@ define('io.ox/tasks/util',
                     } else if (i < 22) {
                         i = 4;
                     }
-
+    
                     while (i < lookupDaytimeStrings.length) {
-                        temp = lookupDaytimeStrings[i];
-                        options.push($(type).val('d' + i).text(temp));
+                        result.push(['d' + i, lookupDaytimeStrings[i]]);
                         i++;
                     }
                 }
@@ -229,68 +245,6 @@ define('io.ox/tasks/util',
                     startday = o.time.getDay();
 
                 i = (o.time.getDay() + 2) % 7;
-
-                options.push($(type).val('t').text(gt('tomorrow')));
-
-                while (circleIncomplete) {
-                    temp = lookupWeekdayStrings[i];
-                    options.push($(type).val('w' + i).text(temp));
-                    if (i < 6) {
-                        i++;
-                    } else {
-                        i = 0;
-                    }
-
-                    if (i === startday) {
-                        options.push($(type).val('ww').text(gt('in one week')));
-                        circleIncomplete = false;
-                    }
-                }
-
-                if (o.bootstrapDropdown) {
-                    _(options).each(function (obj, index) {
-                        options[index] = $('<li>').append(obj).val(obj.val());
-                    });
-                }
-
-                return options;
-            },
-
-            //returns the same as buildDropdownMenu but returns an array of value string pairs
-            buildOptionArray: function (time) {
-                if (!time) {
-                    time = new Date();
-                }
-                var result = [ [5, gt('in 5 minutes')],
-                               [15, gt('in 15 minutes')],
-                               [30, gt('in 30 minutes')],
-                               [60, gt('in one hour')]];
-
-                // variable daytimes
-                var i = time.getHours();
-
-                if (i < 6) {
-                    i = 0;
-                } else if (i < 12) {
-                    i = 1;
-                } else if (i < 15) {
-                    i = 2;
-                } else if (i < 18) {
-                    i = 3;
-                } else if (i < 22) {
-                    i = 4;
-                }
-
-                while (i < lookupDaytimeStrings.length) {
-                    result.push(['d' + i, lookupDaytimeStrings[i]]);
-                    i++;
-                }
-
-                //weekdays
-                var circleIncomplete = true,
-                    startday = time.getDay();
-
-                i = (time.getDay() + 2) % 7;
 
                 result.push(['t', gt('tomorrow')]);
 
