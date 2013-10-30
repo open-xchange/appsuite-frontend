@@ -702,21 +702,28 @@ ul.breadcrumb li.prefix {
 
         .files-container {
 
-            &.view-tile {
-                margin: 0;
+            &.view-list {
                 .file-cell {
-                    width: 50%;
-                    margin: 0;
-                    &:hover {
-                        border: inherit;
-                    }
                     &.selected {
-                        border: 0;
+                        background-color: #ddd;
                         .image-effect();
+                    }
+                    &:hover {
+                        background-color: #F6F6F6;
+                        .image-effect();
+                    }
+                    &.selected:hover {
+                        background-color: #ccc;
+                        .image-effect();
+                    }
+                    &.selected span {
+                        color: #000;
+                    }
+                    .modified {
+                        width: 100px;
                     }
                 }
             }
-
             &.view-icon {
                 .file-cell {
                     width: 27%;
@@ -738,25 +745,17 @@ ul.breadcrumb li.prefix {
                     }
                 }
             }
-            &.view-list {
+            &.view-tile {
+                margin: 0;
                 .file-cell {
-                    &.selected {
-                        background-color: #ddd;
-                        .image-effect();
-                    }
+                    width: 50%;
+                    margin: 0;
                     &:hover {
-                        background-color: #F6F6F6;
+                        border: inherit;
+                    }
+                    &.selected {
+                        border: 0;
                         .image-effect();
-                    }
-                    &.selected:hover {
-                        background-color: #ccc;
-                        .image-effect();
-                    }
-                    &.selected span {
-                        color: #000;
-                    }
-                    .modified {
-                        width: 100px;
                     }
                 }
             }
