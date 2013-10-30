@@ -378,7 +378,6 @@ define('io.ox/core/extPatterns/links',
         if (options.zIndex !== undefined) {
             node.css('zIndex', (z = z > 0 ? z - 1 : 11000));
         }
-        $toggle.addClass(options.classes);
 
         // TODO remove this whole 'inline-js-spacing' solution
         // better use CSS :after to insert spaces
