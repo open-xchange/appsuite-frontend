@@ -237,7 +237,7 @@ define('io.ox/tasks/edit/view-template',
         index: 1100,
         row: '7',
         draw: function (baton) {
-            var progressField = util.buildProgress();
+            var progressField = util.buildProgress(baton.model.get('percent_completed'));
             this.append($('<div class="span3 collapsed">')
                 .append(
                      $('<label>').text(gt('Progress in %')).addClass('task-edit-label').attr('for', 'task-edit-progress-field'), $(progressField.wrapper)
