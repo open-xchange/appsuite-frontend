@@ -178,7 +178,7 @@ define('io.ox/core/export/export',
                     .done(function (action) {
                         if (action === 'export') {
                             var id = baton.$.select.val() || '',
-                                include = F.include.prop('checked') || false,
+                                include = baton.$.include.prop('checked') || false,
                                 def = baton.format[id].getDeferred() || $.when();
                             def.done(function (data) {
                                 if (data) {
