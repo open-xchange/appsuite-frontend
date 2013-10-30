@@ -1387,7 +1387,8 @@ define('io.ox/mail/view-detail',
                         if (_.device('smartphone')) {
                             dd.hide();
                         } else {
-                            dd.find('a').before(
+                            console.log(dd.find('a.attachment-link'));
+                            dd.find('a.attachment-link').before(
                                 $('<i class="icon-paper-clip">'),
                                 $.txt('\u00A0')
                             );
