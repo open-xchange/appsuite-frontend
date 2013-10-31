@@ -126,6 +126,11 @@ define('io.ox/files/fluid/view-detail',
                 if (isEnabled(baton.data)) {
                     $previewNode = $('<div class="preview">');
                     this.append($previewNode);
+
+                    if (_.device('small && android')) {//ugly hack for samsung galaxy s4 stock browser. Cannot exclude chrome because the stock browser says it's chrome
+                        //delayed drawing of to large previews does not make the sidepane scrollable
+                        this.css('height', window.innerHeight + 1 + 'px');//make it 1 pixel to big to force the s4 stockbrowser into scrolling mode
+                    }
                     drawResizedPreview = _.debounce(fnDrawPreview, 300);
                     $(window).on('resize', drawResizedPreview);
                     $previewNode.on('dispose', function () {
