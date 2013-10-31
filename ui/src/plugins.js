@@ -65,11 +65,15 @@
                     request = tx.objectStore('version').get('version');
                     request.onerror = fail;
                     request.onsuccess = function (e) {
+                        // check version
                         if (!e.target.result || e.target.result.version !== ox.version) {
                             // Clear the filecache
                             tx.objectStore('filecache').clear().onsuccess = initialization.resolve;
+                            if (ox.debug === true) {
+                                console.warn('FileCache: Clearing persistent file cache due to UI update');
+                            }
                             // Save the new version number
-                            tx.objectStore('version').put({name: 'version', version: ox.version});
+                            tx.objectStore('version').put({ name: 'version', version: ox.version });
                             if (request.transaction) {
                                 request.transaction.oncomplete = initialization.resolve;
                             }
@@ -196,7 +200,9 @@
         })();
     }
 
-
+    function badSource(source) {
+        return /throw new Error\("Could not read/.test(source);
+    }
 
     function dirname(filename) {
         return filename.replace(/(?:^|(\/))[^\/]+$/, "$1");
@@ -255,23 +261,36 @@
                 return;
             }
 
-            // Try file cache
-            fileCache.retrieve(modulename).done(function (contents) {
-                runCode(modulename, contents);
-                context.completeLoad(modulename);
-                if (_.url.hash('debug-filecache')) {
-                    console.log("CACHE HIT!", modulename);
-                }
-            }).fail(function () {
-                if (_.url.hash('debug-filecache')) {
-                    console.log("CACHE MISS!", modulename);
-                }
+            function handleCacheMiss() {
                 // Append and load in bulk
                 req.nextTick(null, loaded);
                 var next = deps[modulename];
                 if (next && next.length) context.require(next);
                 queue.push(url);
-            });
+            }
+
+            // Try file cache
+            fileCache.retrieve(modulename).then(
+                function hit(contents) {
+                    // bad?
+                    if (badSource(contents)) {
+                        if (_.url.hash('debug-filecache')) console.warn('FileCache: Ignoring ' + modulename);
+                        handleCacheMiss();
+                        return $.Deferred().reject();
+                    }
+                    runCode(modulename, contents);
+                    context.completeLoad(modulename);
+                    if (_.url.hash('debug-filecache')) {
+                        console.log('FileCache: Cache HIT! ' + modulename);
+                    }
+                },
+                function miss() {
+                    if (_.url.hash('debug-filecache')) {
+                        console.log('FileCache: Cache MISS! ' + modulename);
+                    }
+                    handleCacheMiss();
+                }
+            );
 
             function load(module, modulename) {
                  $.ajax({ url: [ox.apiRoot, '/apps/load/', ox.base, ',', module].join(''), dataType: "text" })
@@ -287,14 +306,15 @@
                                     name = match[2].substr(1, match[2].length -2);
                                 }
                                 if (name) {
-                                    if (_.url.hash('debug-filecache')) {
-                                        console.log("Caching " + name);
+                                    // cache file?
+                                    if (badSource(moduleText)) {
+                                        if (_.url.hash('debug-filecache')) console.warn('FileCache: NOT Caching ' + name);
+                                        return;
                                     }
+                                    if (_.url.hash('debug-filecache')) console.log('FileCache: Caching ' + name);
                                     fileCache.cache(name, moduleText);
-                                } else {
-                                    if (_.url.hash('debug-filecache')) {
-                                        console.log("Couldn't determine name for " + moduleText);
-                                    }
+                                } else if (_.url.hash('debug-filecache')) {
+                                    console.log('FileCache: Could not determine name for ' + moduleText);
                                 }
                             })();
                         });
