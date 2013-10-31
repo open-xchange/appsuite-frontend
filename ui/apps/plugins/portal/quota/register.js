@@ -73,18 +73,25 @@ define('plugins/portal/quota/register',
      *
      * @return a progressbar element
      */
-    buildbar = function (usage, size) {
-        var width       = (Math.min(usage, size) / Math.max(usage, size)) * 100,
-            progressbar = $('<div>').addClass('bar').css('width', width + '%');
+    buildbar = (function () {
 
-        if (width < 90) {
-            progressbar.addClass('default'); // removed unnecessary if
-        } else {
-            progressbar.addClass('bar-danger');
+        function getWidth(usage, size) {
+            if (!size) return 100;
+            if (!usage) return 0;
+            if (usage >= size) return 100;
+            return Math.round(usage / size * 100);
         }
 
-        return progressbar;
-    },
+        return function (usage, size) {
+
+            var width = getWidth(usage, size);
+
+            return $('<div class="bar">')
+                .css('width', width + '%')
+                .addClass(width < 90 ? 'default' : 'bar-danger');
+        };
+    }()),
+
     /**
      * Add a quota section with a given (internal) @param quota.name and a
      * user visible @param quota.i18nName to the element @param el
@@ -101,12 +108,13 @@ define('plugins/portal/quota/register',
      * @return - a div element containing some fields for data
      */
     addQuotaArea = function (el, quota) {
+
         var label = $('<span>').addClass('pull-right gray quota-' + quota.name),
             bar = $('<div>').addClass('plugins-portal-quota-' + quota.name + 'bar');
 
         el.append(
-            $('<div>').addClass('paragraph')
-            .append($('<span>').text(quota.i18nName),
+            $('<div class="paragraph">').append(
+                $('<span>').text(quota.i18nName),
                 label,
                 bar
             )
@@ -118,22 +126,29 @@ define('plugins/portal/quota/register',
         } else {
             if (quota.name === 'mailcount') {//mailcount must not be shown in bytes
                 label.text(
+                    quota.usage < quota.quota ?
                         //#. %1$s is the number of mails in use
                         //#. %2$s is the max number of mails
                         //#, c-format
-                        gt('%1$s of %2$s', quota.usage, quota.quota)
-                    );
+                        gt('%1$s of %2$s', quota.usage, quota.quota) :
+                        //#. Quota maxed out; 100%
+                        gt('100%')
+                );
             } else {
                 label.text(
-                    //#. %1$s is the storagespace in use
-                    //#. %2$s is the max storagespace
-                    //#, c-format
-                    gt('%1$s of %2$s', strings.fileSize(quota.usage, 2), strings.fileSize(quota.quota, 2))
+                    quota.usage < quota.quota ?
+                        //#. %1$s is the storagespace in use
+                        //#. %2$s is the max storagespace
+                        //#, c-format
+                        gt('%1$s of %2$s', strings.fileSize(quota.usage, 2), strings.fileSize(quota.quota, 2)) :
+                        //#. Quota maxed out; 100%
+                        gt('100%')
                 );
             }
 
-            bar.addClass('progress progress-striped')
-            .append(buildbar(quota.usage, quota.quota));
+            bar.addClass('progress progress-striped').append(
+                buildbar(quota.usage, quota.quota)
+            );
         }
     },
 

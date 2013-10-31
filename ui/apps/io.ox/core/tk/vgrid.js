@@ -760,7 +760,10 @@ define('io.ox/core/tk/vgrid',
 
             return function updateSelection(changed) {
 
-                if (!all.length) return;
+                if (!all.length) {
+                    self.selection.clear();
+                    return;
+                }
 
                 var list = self.selection.get();
                 var ids = list.length ? _(list).map(self.selection.serialize) : getIds();

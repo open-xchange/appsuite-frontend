@@ -2212,6 +2212,13 @@ input.nice-input {
                 color: @foldertreePassiveLabelColor;
             }
 
+            .long-title { display: inline; }
+            .short-title { display: none; }
+        }
+
+        &.selected .folder-label {
+            .long-title { display: none; }
+            .short-title { display: inline; }
         }
 
         .folder-pubsub {

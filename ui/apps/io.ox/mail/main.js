@@ -245,7 +245,8 @@ define('io.ox/mail/main',
         function drawGridOptions(e, type) {
             var ul = grid.getToolbar().find('ul.dropdown-menu'),
                 threadView = settings.get('threadView'),
-                isInbox = account.is('inbox', grid.prop('folder')),
+                folder = grid.prop('folder'),
+                isInbox = account.is('inbox', folder),
                 isOn = threadView === 'on' || (threadView === 'inbox' && isInbox),
                 //set current or default values
                 target = {
@@ -264,13 +265,13 @@ define('io.ox/mail/main',
                 };
             }
 
-            // some auto toggling
-            if (target.sort === 'thread' && !isOn) {
-                target.sort = '610';
-            } //jump back only if thread was the original setting
-            else if (target.sort === '610' && type === 'folder' && isOn && sortSettings.sort === 'thread') {
+            //jump back only if thread was the original setting
+            if (target.sort === '610' && type === 'folder' && isOn && sortSettings.sort === 'thread') {
                 target.sort = 'thread';
             }
+
+            //adjusts sort property for invalid values
+            target.sort = adjustSort(target.sort, folder);
 
             //update grid
             grid.prop('sort', target.sort)
@@ -466,17 +467,29 @@ define('io.ox/mail/main',
             });
         }
 
+        //adjusts sort property for invalid values (potential workaround for 28096)
+        function adjustSort(sort, folder) {
+            var threadView = settings.get('threadView'),
+                isInbox = account.is('inbox', folder),
+                isOn = threadView === 'on' || (threadView === 'inbox' && isInbox);
+            return sort === 'thread' && !isOn ? '610' : sort;
+        }
+
         grid.setAllRequest(function () {
 
-            var sort = this.prop('sort'),
+            var call,
                 unread = this.prop('unread'),
-                call = sort === 'thread' ? 'getAllThreads' : 'getAll',
                 options = {
                     folder: this.prop('folder'),
                     max: this.option('max'),
                     order: this.prop('order'),
-                    sort: sort
+                    sort: this.prop('sort')
                 };
+
+            //adjust invalid sort values
+            options.sort = adjustSort(options.sort, options.folder);
+            this.prop('sort', options.sort);
+            call = options.sort === 'thread' ? 'getAllThreads' : 'getAll';
 
             return api[call](options, 'auto').then(function (response) {
                 var data = response.data || response;
@@ -497,7 +510,11 @@ define('io.ox/mail/main',
         });
 
         grid.setListRequest(function (ids) {
-            var sort = this.prop('sort');
+            var sort = this.prop('sort'),
+                folder = this.prop('folder');
+            //adjust invalid sort values
+            sort = adjustSort(sort, folder);
+            this.prop('sort', sort);
             return api[sort === 'thread' ? 'getThreads' : 'getList'](ids);
         });
 

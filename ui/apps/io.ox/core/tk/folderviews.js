@@ -96,16 +96,7 @@ define('io.ox/core/tk/folderviews',
                     //    }, 1000);
                     //    return def;
                     // })
-                    .fail(function () {
-                        // reset folder and show local error
-                        nodes.sub.idle().empty().append(
-                            $.fail(gt('Couldn\'t load subfolders.'), function () {
-                                drawChildren(reload, method);
-                            })
-                            .attr('data-folder-id', id)
-                        );
-                    })
-                    .then(function (children) {
+                    .then(function success(children) {
                         // tricky one liner: we invoke 'paint' for all child nodes.
                         // invoke returns a nice array of all return values which all are deferred objects.
                         // we use this array to feed $.when(). Thus, we get a proper combined deferred object
@@ -118,6 +109,15 @@ define('io.ox/core/tk/folderviews',
                             wasOpen = true;
                         }
                         return $.when.apply(null, _(children).invoke(method, nodes.sub));
+                    }, function fail() {
+                        // reset folder and show local error
+                        nodes.sub.idle().empty().append(
+                            $.fail(gt('Couldn\'t load subfolders.'), function () {
+                                drawChildren(reload, method);
+                            })
+                            .attr('data-folder-id', id)
+                        );
+                        return $.when();
                     })
                     .always(_.defer(function () {
                         // need to use defer here, otherwise tree selection gets broken
@@ -280,7 +280,7 @@ define('io.ox/core/tk/folderviews',
                 childrenLoaded = false;
                 // we assume that folder API takes care of clearing caches for periodic refreshes
                 // get sub folders
-                return api.getSubFolders({ folder: id, all: all, storage: storage }).then(function (data) {
+                return api.getSubFolders({ folder: id, all: all, storage: storage }).then(function success(data) {
                     // create new children array
                     http.pause();
                     children = _.chain(data)
@@ -834,8 +834,11 @@ define('io.ox/core/tk/folderviews',
             }
 
             // set title
-            var shortTitle = api.getFolderTitle(data.title, 30);
-            label.attr('title', data.title).text(_.noI18n(shortTitle));
+            var shortTitle = api.getFolderTitle(data.title, 15);
+            label.attr('title', data.title).empty().append(
+                $('<span class="short-title">').text(_.noI18n(shortTitle)),
+                $('<span class="long-title">').text(_.noI18n(data.title))
+            );
             this.attr('aria-label', data.title);
 
             // set counter (mail only)

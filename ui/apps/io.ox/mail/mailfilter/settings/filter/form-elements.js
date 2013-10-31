@@ -17,40 +17,40 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
 
     return {
         drawInputfieldTest: function (activeValue) {
-            return $('<input>').attr({ type: 'text', 'data-action': 'change-text-test'}).val(activeValue);
+            return $('<input>').attr({ type: 'text', 'data-action': 'change-text-test', 'tabindex': '1'}).val(activeValue);
         },
 
         drawInputfieldTestSecond: function (activeValue, label) {
             return $('<label>').text(label = label ? label : '').append(
-                $('<input>').attr({ type: 'text', 'data-action': 'change-text-test-second'}).val(activeValue)
+                $('<input>').attr({ type: 'text', 'data-action': 'change-text-test-second', 'tabindex': '1'}).val(activeValue)
             );
         },
 
         drawInputfieldAction: function (activeValue) {
-            return $('<input>').attr({ type: 'text', 'data-action': 'change-text-action'}).val(activeValue);
+            return $('<input>').attr({ type: 'text', 'data-action': 'change-text-action', 'tabindex': '1'}).val(activeValue);
         },
 
         drawDisabledInputfield: function (activeValue) {
-            return $('<input>').attr({ type: 'text', disabled: 'disabled', title: activeValue, 'data-action': 'change-text-action'}).val(activeValue);
+            return $('<input>').attr({ type: 'text', disabled: 'disabled', title: activeValue, 'data-action': 'change-text-action', 'tabindex': '1'}).val(activeValue);
         },
 
         drawFolderSelect: function () {
-            return $('<a href="#">').addClass('folderselect').text('Select folder');
+            return $('<a href="#" tabindex="1">').addClass('folderselect').text('Select folder');
         },
 
         drawDeleteButton: function (type) {
-            return $('<a href="#" class="close" data-action="remove-' + type + '">').append($('<i class="icon-trash"/>'));
+            return $('<a href="#" class="close" tabindex="1" data-action="remove-' + type + '">').append($('<i class="icon-trash"/>'));
         },
 
         drawOptions: function (activeValue, values) {
 
             var active = values[activeValue];
             return $('<div class="action dropdown value">').append(
-                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').text(active),
+                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">').text(active),
                 $('<ul class="dropdown-menu" role="menu">').append(
                     _(values).map(function (name, value) {
                         return $('<li>').append(
-                            $('<a>', { href: '#', 'data-action': 'change-value', 'data-value': value}).append(
+                            $('<a>', { href: '#', 'data-action': 'change-value', 'data-value': value, 'tabindex': '1'}).append(
                                 $.txt(name)
                             )
                         );
@@ -66,11 +66,11 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
                 active = active + '<b class="caret">';
             }
             return $('<div class="action ' + options.toggle + ' value ">').addClass(options.classes).append(
-                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').html(active),
+                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">').html(active),
                 $('<ul class="dropdown-menu" role="menu">').append(
                     _(values).map(function (name, value) {
                         return $('<li>').append(
-                            $('<a>', { href: '#', 'data-action': 'change-value-extern', 'data-value': value}).data(options).append(
+                            $('<a>', { href: '#', 'data-action': 'change-value-extern', 'data-value': value, 'tabindex': '1'}).data(options).append(
                                 $.txt(name)
                             )
                         );
@@ -84,11 +84,11 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
             var active = values[activeValue];
             classes = classes ? classes : '';
             return $('<div class="action dropdown value ' + classes + '">').append(
-                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').text(active),
+                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">').text(active),
                 $('<ul class="dropdown-menu">').append(
                     _(values).map(function (name, value) {
                         return $('<li>').append(
-                            $('<a>', { href: '#', 'data-action': 'change-value-actions', 'data-value': value}).append(
+                            $('<a>', { href: '#', 'data-action': 'change-value-actions', 'data-value': value, 'tabindex': '1'}).append(
                                 $.txt(name)
                             )
                         );
@@ -109,13 +109,13 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
             .addClass(flagclass)
             .append(
                 // box
-                $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true">'),
+                $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">'),
                 // drop down
                 $('<ul class="dropdown-menu" role="menu">')
                 .append(
                     _(colors).map(function (colorObject) {
                         return $('<li>').append(
-                            $('<a href="#">').attr({'data-action': 'change-color'}).append(
+                            $('<a href="#">').attr({'data-action': 'change-color', 'tabindex': '1'}).append(
                                 colorObject.value > 0 ? $('<span class="flag-example">').addClass('flag_' + colorObject.value) : $(),
                                 $.txt(colorObject.text)
                             )
@@ -130,7 +130,7 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
             return $('<div>').addClass('control-group mailfilter').append(
                 $('<div>').addClass('controls'),
                 $('<label>').addClass('checkbox').text(gt('Process subsequent rules')).append(
-                    $('<input type="checkbox">').attr({'data-action': 'check-for-stop', 'checked': value})
+                    $('<input type="checkbox" tabindex="1   ">').attr({'data-action': 'check-for-stop', 'checked': value})
                 )
             );
         }

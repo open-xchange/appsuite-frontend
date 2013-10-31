@@ -969,9 +969,11 @@ define('io.ox/core/api/folder',
         return ready;
     };
 
-    //shortens the folder title and adds ellipsis
+    // shortens the folder title and adds ellipsis
     api.getFolderTitle = function (title, max) {
+
         title = String(title || '').trim();
+
         var split = title.split(/[ _-]+/),
             delimiters = title.split(/[^ _-]+/),
             length = title.length;
@@ -986,7 +988,7 @@ define('io.ox/core/api/folder',
         }
 
         if (length > max) {
-            return _.ellipsis(title, {charpos: 'middle', max: max, length: Math.floor(max / 2 - 1)});
+            return _.ellipsis(title, { charpos: 'middle', max: max, length: Math.floor(max / 2 - 1) });
         }
 
         return _(split).map(function (val, key) { return val + delimiters[key + 1]; }).join('');

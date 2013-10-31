@@ -37,8 +37,9 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
             return $('<label>').text(text).addClass('task-edit-label').attr('for', id);
         },
         //build progressField and buttongroup
-        buildProgress: function () {
-            var progress = $('<input>').attr({type: 'text', id: 'task-edit-progress-field', tabindex: 1}).val('0')
+        buildProgress: function (val) {
+            var val = val || 0,
+                progress = $('<input>').attr({type: 'text', id: 'task-edit-progress-field', tabindex: 1}).val(val)
                 .addClass('span6 progress-field'),
 
                 wrapper = $('<div>').addClass('input-append').append(progress,

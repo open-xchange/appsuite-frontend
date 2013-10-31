@@ -332,7 +332,15 @@ define('io.ox/core/commons-folderview',
         ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'pubsub-divider',
             after: 'subscribe',
-            draw: function () {
+            draw: function (baton) {
+                if ((!capabilities.has('publication') ||
+                    !api.can('publish', baton.data)) &&
+                    (!capabilities.has('subscription') ||
+                    !api.can('subscribe', baton.data)))
+                {
+                    return;
+                }
+
                 this.append($('<li class="divider">'));
             }
         });
@@ -858,8 +866,12 @@ define('io.ox/core/commons-folderview',
                 sidepanel.on('swipeleft', toggle);
 
             }
+
+            tree.selection.on('change', onChangeFolder);
+            changeFolderOn();
+
             // paint now
-            return tree.paint().pipe(function () {
+            return tree.paint().then(function () {
 
                 if (options.visible === false) {
                     initResize();
@@ -867,11 +879,8 @@ define('io.ox/core/commons-folderview',
 
                 return tree.select(app.folder.get()).done(function () {
 
-                    tree.selection.on('change', onChangeFolder);
                     toggleTree = toggle;
                     sidepanel.idle();
-
-                    changeFolderOn();
 
                     api.on('create', function (e, data) {
                         tree.repaint().done(function () {

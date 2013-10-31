@@ -82,19 +82,17 @@ define('plugins/portal/upsellads/register',
         }
     };
 
-    nextAd = function (content, ad, slides) {
-        var nextPos = (settings.get(ad + '.position') + 1) % slides.length;
+    nextAd = function (currPos, content, ad, slides) {
+        currPos = (currPos + 1) % slides.length;
 
-        /* remember position */
-        settings.set(ad + '.position', nextPos).save();
 
         /* show next ad */
         content.empty();
-        addContent(slides[nextPos], content);
+        addContent(slides[currPos], content);
 
         /* if user clicked "next", reset timer to zero; if here because of interval: no problem either. */
         clearInterval(adInterval[ad]);
-        adInterval[ad] = setInterval(function () { return nextAd(content, ad, slides); },  intervalDuration);
+        adInterval[ad] = setInterval(function () { return nextAd(currPos, content, ad, slides); },  intervalDuration);
 
     };
 
@@ -118,7 +116,7 @@ define('plugins/portal/upsellads/register',
             content.parent().find('h2').remove();
             content.parent().append(
                 $('<div class="upsellads-next">')
-                    .on('click', function () { return nextAd(content, ad, slides); })
+                    .on('click', function () { return nextAd(0, content, ad, slides); })
                     .append($('<i class="icon-circle-arrow-right icon-2x">'))
             );
             content.on('click', function () {
@@ -130,7 +128,7 @@ define('plugins/portal/upsellads/register',
                 });
             });
             addContent(slides[startPos], content);
-            adInterval[ad] = setInterval(function () { return nextAd(content, ad, slides); },  intervalDuration);
+            adInterval[ad] = setInterval(function () { return nextAd(0, content, ad, slides); },  intervalDuration);
         }
     });
 });

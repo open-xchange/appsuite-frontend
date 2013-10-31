@@ -99,7 +99,9 @@ define('io.ox/editor/main',
 
         getFilename: function () {
             var title = this.getTitle(),
-                filename = String(title || this.getContent().substr(0, 20).split('.')[0] || 'unnamed');
+                filename = String(title || this.getContent().substr(0, 20).split('.')[0]
+                .replace(/(\r\n|\n|\r)/gm, '')//remove linebreaks
+                .replace(/[%&#\/$*!`´'"=:@+\^\\.+?{}|]/g, '_') || 'unnamed');//remove unsupported characters
             // has file extension?
             if (!/\.\w{1,4}$/.test(filename)) {
                 filename += '.txt';

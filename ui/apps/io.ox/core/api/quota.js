@@ -47,21 +47,20 @@ define('io.ox/core/api/quota', ['io.ox/core/http'], function (http) {
             this.getMail();
             this.getFile();
             return http.resume()
-                .pipe(function (req) {
+                .then(function (req) {
                     return { mail: req[0].data, file: req[1].data };
-                })
+                });
                 // for demo purposes
-                // TODO: comment out or remove later
-                /*.pipe(function (quotas) {
-                    // create fake values for testing
-                    quotas.file.quota = 50 * 1024 * 1024; // 50mb limit
-                    quotas.file.use = 26 * 1024 * 1024; // 26mb in use
-                    quotas.mail.quota = 100 * 1024 * 1024; // 100mb limit
-                    quotas.mail.use = 87 * 1024 * 1024; // 87mb in use
-                    quotas.mail.countquota = 200; // 200 limit
-                    quotas.mail.countuse = 191;  // 191 in use
-                    return quotas;
-                })*/;
+                // .then(function (quotas) {
+                //     // create fake values for testing
+                //     quotas.file.quota = 50 * 1024 * 1024; // 50mb limit
+                //     quotas.file.use = 26 * 1024 * 1024; // 26mb in use
+                //     quotas.mail.quota = 4.88 * 1024 * 1024; // 100mb limit
+                //     quotas.mail.use = 5.85 * 1024 * 1024; // 87mb in use
+                //     quotas.mail.countquota = 200; // 200 limit
+                //     quotas.mail.countuse = 191;  // 191 in use
+                //     return quotas;
+                // });
         }
     };
 

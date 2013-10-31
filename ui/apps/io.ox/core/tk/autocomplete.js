@@ -361,6 +361,7 @@ define('io.ox/core/tk/autocomplete',
                 $(this)
                     .on('keydown', fnKeyDown)
                     .on('keyup', fnKeyUp)
+                    .on('compositionend', fnKeyUp) // for IME support
                     .on('blur', o.blur)
                     .on('blur', fnBlur)
                     .attr({

@@ -231,7 +231,7 @@ define('plugins/notifications/tasks/register',
 
     ext.point('io.ox/core/notifications/task-reminder/item').extend({
         draw: function (baton) {
-            reminderUtil.draw(this, baton.model, util.buildOptionArray(new Date()));
+            reminderUtil.draw(this, baton.model, util.buildOptionArray({time: new Date()}));
         }
     });
 

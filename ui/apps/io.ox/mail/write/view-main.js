@@ -1024,9 +1024,20 @@ define('io.ox/mail/write/view-main',
             // iOS 7 has problems with rotation changes while the keyboard is shown (on iPad)
             // blur to dismiss the keyboard
             // fix for bug 29386
-            if (_.browser.ios >= 7) {
+            // PLEASE REMOVE THIS UGLY PIECE OF CODE ASA APPLE HAS FIXED THIS BUG
+            if (_.browser.ios >= 7 && _.device('medium')) {
                 $(this.leftside, this.tightside).on('orientationchange', function () {
                     $('input, textarea', this.leftside).blur();
+                    if ('orientation' in window) {
+                        if (window.orientation === 0 || window.orientation === 180) {
+                            setTimeout(function () {
+                                $('body').css('width', window.innerWidth + 1 + 'px');
+                                setTimeout(function () {
+                                    $('body').removeAttr('style');
+                                }, 300);
+                            }, 1000);
+                        }
+                    }
                 });
             }
         }
