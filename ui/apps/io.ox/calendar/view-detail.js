@@ -321,10 +321,7 @@ define('io.ox/calendar/view-detail',
     ext.point('io.ox/calendar/detail').extend({
         index: 800,
         id: 'details',
-        draw: function (baton, options) {
-            if (options && options.brief) {
-                return $();
-            }
+        draw: function (baton) {
             var node = $('<div>').addClass('details')
                 .append($('<div>').addClass('io-ox-label').text(gt('Details')))
                 .appendTo(this);

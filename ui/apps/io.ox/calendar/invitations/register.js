@@ -293,7 +293,7 @@ define('io.ox/calendar/invitations/register',
         }
         var node = $('<div class="appointment well">');
         require(['io.ox/calendar/view-detail'], function (viewDetail) {
-            node.append(viewDetail.draw(appointment, {brief: true}));
+            node.append(viewDetail.draw(appointment));
         });
 
         return node;
@@ -647,9 +647,13 @@ define('io.ox/calendar/invitations/register',
                         );
                         baton.appointment = { folder_id: address[1], id: address[0] };
                         return loadAppointment(baton).then(function (app) {
+                            var newBaton = ext.Baton.ensure(app);
+                            // disable actions and appointment-details in detail view
+                            newBaton.disable('io.ox/calendar/detail', 'inline-actions');
+                            newBaton.disable('io.ox/calendar/detail', 'details');
                             node.append(
                                 $('<div class="io-ox-calendar-itip-analysis">').append(
-                                    $('<div class="change">').append(renderAppointment(app))
+                                    $('<div class="change">').append(renderAppointment(newBaton))
                                 )
                             );
                         });
