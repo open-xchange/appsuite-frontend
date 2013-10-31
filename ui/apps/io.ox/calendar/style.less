@@ -636,7 +636,7 @@
 
 /* Invitations */
 .itip-section {
-    min-height: 100px;
+    min-height: 40px;
 }
 
 .itip-actions {
@@ -658,7 +658,6 @@
 .io-ox-calendar-itip-analysis {
 
     margin: 20px 0 0 0;
-    min-height: 110px;
 
     .date {
         margin-right: 14px;
@@ -670,7 +669,7 @@
 
     .confirmation-status {
 
-        margin: 1em 0 1em 0;
+        margin: 0.5em 0 0.5em 0;
 
         &.accepted {
             color: @green;
@@ -686,17 +685,21 @@
 
     }
 
+    .change {
+
+        .appointment, .task {
+            background-color: white;
+        }
+
+    }
 
     .changes {
+
         margin: 1em 0;
         font-size: 11pt;
 
         .original, .recurrencePosition, .updated {
             font-weight: bold;
-        }
-
-        .updated {
-            color: @green;
         }
     }
 }
