@@ -20,8 +20,9 @@ define('io.ox/core/cache/simple', ['io.ox/core/extensions'], function (ext) {
         instances = {};
 
     function resolve(val) {
+        return $.Deferred().resolve(val);
         // $.Deferred().resolve(); wrapped by setTimeout(..., 0)
-        return _.wait(0).then(function () { return val; });
+        // return _.wait(0).then(function () { return val; });
     }
 
     function SimpleStorage(id) {

@@ -31,6 +31,7 @@ define('io.ox/core/api/folder',
         folderCache = new cache.SimpleCache('folder', false),
         subFolderCache = new cache.SimpleCache('subfolder', true),
         visibleCache = new cache.SimpleCache('visible-folder', true),
+        firstSubFolderFetch = {},
 
         /**
          * checks if folder is currently blacklisted
@@ -195,88 +196,108 @@ define('io.ox/core/api/folder',
             if (opt.all) opt.cache = false;
 
                 // get cache
-            var cache = opt.storage ? opt.storage.subFolderCache : subFolderCache,
-                // cache miss?
-                getter = function () {
-                    return http.GET({
-                        module: 'folders',
-                        params: {
-                            action: 'list',
-                            parent: opt.folder,
-                            tree: '1',
-                            all: opt.all ? '1' : '0',
-                            altNames: true,
-                            timezone: 'UTC'
-                        },
-                        appendColumns: true
+            var cache = opt.storage ? opt.storage.subFolderCache : subFolderCache;
+
+            function updateFolderCache(folder, data, cache) {
+                firstSubFolderFetch[folder] = false;
+                return $.when.apply($,
+                    // add to cache
+                    cache.add(folder, data),
+                    // also add to folder cache
+                    _(data).map(function (subfolder) {
+                        return folderCache.add(subfolder.id, subfolder);
                     })
-                    .pipe(function (data, timestamp) {
+                )
+                .then(function () {
+                    return data;
+                });
+            }
 
-                        // rearrange on multiple ???
-                        if (data.timestamp) {
-                            timestamp = _.then(); // force update
-                            data = data.data;
-                        }
+            function getter() {
+                return http.GET({
+                    module: 'folders',
+                    params: {
+                        action: 'list',
+                        parent: opt.folder,
+                        tree: '1',
+                        all: opt.all ? '1' : '0',
+                        altNames: true,
+                        timezone: 'UTC'
+                    },
+                    appendColumns: true
+                })
+                .then(function (data, timestamp) {
 
-                        // apply blacklist
-                        data = _.filter(data, visible);
+                    // rearrange on multiple ???
+                    if (data.timestamp) {
+                        timestamp = _.then(); // force update
+                        data = data.data;
+                    }
 
-                        // fix order of mail folders (INBOX first)
-                        if (opt.folder === '1') {
+                    // apply blacklist
+                    data = _.filter(data, visible);
 
-                            var head = new Array(1 + 5), types = 'inbox sent drafts trash spam'.split(' ');
+                    // fix order of mail folders (INBOX first)
+                    if (opt.folder === '1') {
 
-                            // get unified folder first
-                            _(data).find(function (folder) {
-                                return account.isUnified(folder.id) && !!(head[0] = folder);
-                            });
+                        var head = new Array(1 + 5), types = 'inbox sent drafts trash spam'.split(' ');
 
-                            // get standard folders
-                            _(data).each(function (folder) {
-                                _(types).find(function (type, index) {
-                                    return account.is(type, folder.id) && !!(head[index + 1] = folder);
-                                });
-                            });
-
-                            // exclude unified and standard folders
-                            data = _(data).reject(function (folder) {
-                                return account.isUnified(folder.id) || account.isStandardFolder(folder.id);
-                            });
-
-                            // sort the rest
-                            data.sort(function (a, b) {
-                                // external accounts at last
-                                if (account.isExternal(a.id)) return +1;
-                                if (account.isExternal(b.id)) return -1;
-                                return a.title.toLowerCase() > b.title.toLowerCase() ? +1 : -1;
-                            });
-
-                            // combine
-                            data.unshift.apply(data, _(head).compact());
-                        }
-
-                        return $.when(
-                            // add to cache
-                            cache.add(opt.folder, data),
-                            // also add to folder cache
-                            $.when.apply($,
-                                _(data).map(function (folder) {
-                                    return folderCache.add(folder.id, folder);
-                                })
-                            )
-                        )
-                        .pipe(function () {
-                            return data;
+                        // get unified folder first
+                        _(data).find(function (folder) {
+                            return account.isUnified(folder.id) && !!(head[0] = folder);
                         });
-                    })
-                    .fail(function (e) {
-                        if (ox.debug) {
-                            console.error('folder.getSubFolders', opt.folder, e.error, e);
-                        }
-                    });
-                };
 
-            return opt.cache === false ? getter() : cache.get(opt.folder, getter);
+                        // get standard folders
+                        _(data).each(function (folder) {
+                            _(types).find(function (type, index) {
+                                return account.is(type, folder.id) && !!(head[index + 1] = folder);
+                            });
+                        });
+
+                        // exclude unified and standard folders
+                        data = _(data).reject(function (folder) {
+                            return account.isUnified(folder.id) || account.isStandardFolder(folder.id);
+                        });
+
+                        // sort the rest
+                        data.sort(function (a, b) {
+                            // external accounts at last
+                            if (account.isExternal(a.id)) return +1;
+                            if (account.isExternal(b.id)) return -1;
+                            return a.title.toLowerCase() > b.title.toLowerCase() ? +1 : -1;
+                        });
+
+                        // combine
+                        data.unshift.apply(data, _(head).compact());
+                    }
+
+                    return $.when(
+                        // add to cache
+                        cache.add(opt.folder, data),
+                        // also add to folder cache
+                        $.when.apply($,
+                            _(data).map(function (folder) {
+                                return folderCache.add(folder.id, folder);
+                            })
+                        )
+                    )
+                    .pipe(function () {
+                        return data;
+                    });
+                })
+                .fail(function (e) {
+                    if (ox.debug) {
+                        console.error('folder.getSubFolders', opt.folder, e.error, e);
+                    }
+                });
+            }
+
+            return opt.cache === false ?
+                getter() :
+                cache.get(opt.folder, getter).then(function (data) {
+                    return firstSubFolderFetch[opt.folder] !== false ?
+                        updateFolderCache(opt.folder, data, cache) : data;
+                });
         },
 
         getPath: function (options) {
