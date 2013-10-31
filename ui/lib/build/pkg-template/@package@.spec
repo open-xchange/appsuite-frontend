@@ -59,15 +59,26 @@ sh /opt/open-xchange-appsuite-dev/bin/build-appsuite clean skipLess=1 \
 ## Uncomment for multiple packages (3/4)
 #rm -r "%{buildroot}%{docroot}"
 
+%define update_flag "%{_localstatedir}/run/open-xchange-appsuite.update"
+%define update /opt/open-xchange/appsuite/share/update-themes.sh
+
 %post
-if [ "$1" = 1 ]; then
-    UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
-    [ -x $UPDATE ] && $UPDATE
-fi
+if [ $1 -eq 1 ]; then touch "%{update_flag}"; fi
 
 %postun
-UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
-[ -x $UPDATE ] && $UPDATE
+if [ $1 -lt 1 ]; then
+    rm -f "%{update_flag}"
+    if [ -x %{update} ]; then %{update}; fi
+else
+    touch "%{update_flag}"
+fi
+
+%posttrans
+if [ -f "%{update_flag}" ]; then
+    rm "%{update_flag}"
+    if [ -x %{update} ]; then %{update}; fi
+fi
+
 
 %files
 %defattr(-,root,root)
