@@ -601,6 +601,12 @@ define('io.ox/files/fluid/perspective',
             adjustWidth = function () {
                 var width = wrapper.width(),
                     container = self.main;
+
+                if (!wrapper.is(':visible')) {
+                    //do not change anything if wrapper is not visible.
+                    return;
+                }
+
                 if (width > 768)
                     container.removeClass('width-less-than-768 width-less-than-480');
                 else if (width >= 480 && width <= 768) {
