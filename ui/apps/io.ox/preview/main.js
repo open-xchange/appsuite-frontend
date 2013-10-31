@@ -211,8 +211,9 @@ define('io.ox/preview/main',
             require(['io.ox/core/emoji/util', 'less!io.ox/preview/style.less'], function (emoji) {
                 $.ajax({ url: file.dataURL, dataType: 'text' }).done(function (text) {
                     // plain text preview with emoji support
-                    text = emoji.processEmoji(text);
-                    node.addClass('preview-plaintext').html(_.escape(text));
+                    // need to escape here; plain text might surprise with bad HTML
+                    var html = emoji.processEmoji(_.escape(text));
+                    node.addClass('preview-plaintext').html(html);
                 });
             });
         },
