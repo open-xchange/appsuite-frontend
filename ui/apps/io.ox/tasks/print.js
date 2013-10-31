@@ -82,6 +82,8 @@ define('io.ox/tasks/print',
                     return api.get(obj);
                 },
 
+                title: selection.length === 1 ? selection[0].title : undefined,
+
                 i18n: {
                     due: gt('Due'),
                     start: gt('Start'),
