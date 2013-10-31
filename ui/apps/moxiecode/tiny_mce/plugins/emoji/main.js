@@ -99,7 +99,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
             var icon = emoji.EMOJI_MAP[unicode];
 
-            if (!this.category_map[unicode]) {
+            if (!this.category_map[unicode] || !icon) {
                 return undefined;
             }
 
@@ -362,7 +362,9 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                 return _.identity;
             } else if (options.from === 'unified' && options.to === 'pua') {
                 return function (text, format) {
-                    return self.imageTagsToPUA(self.unifiedToImageTag(text), format || 'html');
+                    return self.imageTagsToPUA(self.unifiedToImageTag(text, {
+                        forceEmojiIcons: true
+                    }), format || 'html');
                 };
             }
             return;

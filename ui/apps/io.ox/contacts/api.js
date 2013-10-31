@@ -619,7 +619,6 @@ define('io.ox/contacts/api',
     * @return {deferred}
     */
     api.getPictureURL = function (obj, options) {
-
         var deferred = $.Deferred(),
             defaultUrl = ox.base + '/apps/themes/default/dummypicture.png',
             id,
@@ -644,10 +643,7 @@ define('io.ox/contacts/api',
             else
                 return deferred.resolve(defaultUrl);
         }
-        if (!_.isUndefined(obj.image1_url)) {
-            if (!obj.image1_url) {
-                return deferred.resolve(defaultUrl);
-            }
+        if (!_.isUndefined(obj.image1_url) && !_.isEmpty(obj.image1_url)) {
             return deferred.resolve(obj.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param($.extend({}, options)));
         }
         if (obj.id || obj.contact_id) {

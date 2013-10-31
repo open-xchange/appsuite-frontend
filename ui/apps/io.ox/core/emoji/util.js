@@ -11,7 +11,7 @@
  */
 
 define('io.ox/core/emoji/util',
-    ['settings!io.ox/mail'], function (settings) {
+    ['settings!io.ox/mail/emoji'], function (settings) {
 
     'use strict';
 
@@ -34,7 +34,7 @@ define('io.ox/core/emoji/util',
                 text = emoji.softbankToUnified(text);
                 text = emoji.jisToUnified(text);
                 text = emoji.unifiedToImageTag(text, {
-                    forceEmojiIcons: settings.get('emoji/forceEmojiIcons', false)
+                    forceEmojiIcons: settings.get('forceEmojiIcons', false)
                 });
             } else {
                 require(['moxiecode/tiny_mce/plugins/emoji/main'], function (code) {
