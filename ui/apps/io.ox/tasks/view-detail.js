@@ -27,7 +27,11 @@ define('io.ox/tasks/view-detail',
 
     var taskDetailView = {
 
-        draw: function (data) {
+        draw: function (baton) {
+
+            // make sure we have a baton
+            var baton = ext.Baton.ensure(baton),
+                data = baton.data;
 
             if (!data) return $('<div>');
 
@@ -40,7 +44,7 @@ define('io.ox/tasks/view-detail',
                 .addClass('tasks-detailview');
 
             // inline links
-            ext.point('io.ox/tasks/detail-inline').invoke('draw', node, data);
+            ext.point('io.ox/tasks/detail-inline').invoke('draw', node, baton);
 
             var header = $('<header>');
 

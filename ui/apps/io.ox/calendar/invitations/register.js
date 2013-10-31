@@ -664,10 +664,13 @@ define('io.ox/calendar/invitations/register',
                             drawScaffold.call(baton.$.well = drawWell(), 'task')
                         );
                         baton.task = { folder_id: address[1], id: address[0] };
-                        return loadTask(baton).then(function (app) {
+                        return loadTask(baton).then(function (task) {
+                            var newBaton = ext.Baton.ensure(task);
+                            // disable actions and appointment-details in detail view
+                            newBaton.disable('io.ox/tasks/detail-inline', 'inline-links');
                             node.append(
                                 $('<div class="io-ox-calendar-itip-analysis">').append(
-                                    $('<div class="change">').append(renderTask(app))
+                                    $('<div class="change">').append(renderTask(newBaton))
                                 )
                             );
                         });
