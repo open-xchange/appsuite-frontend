@@ -93,7 +93,7 @@ define('plugins/portal/recentfiles/register',
 
             draw: function (baton) {
                 var popup = this.busy();
-                require(['io.ox/files/list/view-detail'], function (view) {
+                require(['io.ox/files/fluid/view-detail'], function (view) {
                     var obj = filesAPI.reduce(baton.item);
                     filesAPI.get(obj).done(function (data) {
                         popup.idle().append(view.draw(data));

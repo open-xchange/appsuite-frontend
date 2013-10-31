@@ -35,7 +35,7 @@ define('io.ox/core/pubsub/settings/pane',
         e.preventDefault();
         var cid = target.attr('data-cid'), obj = _.cid(cid);
         popup.busy();
-        require(['io.ox/files/api', 'io.ox/files/list/view-detail'], function (api, view) {
+        require(['io.ox/files/api', 'io.ox/files/fluid/view-detail'], function (api, view) {
             api.get(obj).done(function (data) {
                 popup.idle().append(view.draw(data));
             });
