@@ -902,12 +902,13 @@ define('io.ox/files/fluid/perspective',
                     api.getAll({ folder: app.folder.get() }, false).done(function (ids) {
 
                         var hash = {},
-                            oldhash  = {},
-                            oldIds   = [],
-                            newIds   = [],
-                            changed  = [],
-                            deleted  = [],
-                            added    = [],
+                            oldhash   = {},
+                            oldIds    = [],
+                            newIds    = [],
+                            changed   = [],
+                            deleted   = [],
+                            added     = [],
+                            duplicates = {},
                             indexPrev,
                             indexPrevPosition,
                             indexNextPosition;
@@ -925,18 +926,25 @@ define('io.ox/files/fluid/perspective',
                         };
 
                         _(allIds).each(function (obj) {
-                            oldhash[_.cid(obj)] = obj;
+                            var cid = _.cid(obj);
+                            if (cid in oldhash)
+                                duplicates[cid] = true;
+                            else
+                                oldhash[cid] = obj;
                         });
 
                         _(ids).each(function (obj) {
                             var cid = _.cid(obj);
-                            hash[cid] = obj;
-
-                            // Update if cid still exists, has already been drawn and object was modified.
-                            // Note: If title is changed, last_modified date is not updated
-                            if (_.isObject(oldhash[cid]) && (_.indexOf(drawnCids, cid) !== -1) &&
-                               (obj.last_modified !== oldhash[cid].last_modified || obj.title !== oldhash[cid].title)) {
-                                changed.push(cid);
+                            if (cid in hash) {
+                                duplicates[cid] = true;
+                            } else {
+                                hash[cid] = obj;
+                                // Update if cid still exists, has already been drawn and object was modified.
+                                // Note: If title is changed, last_modified date is not updated
+                                if (_.isObject(oldhash[cid]) && (_.indexOf(drawnCids, cid) !== -1) &&
+                                   (obj.last_modified !== oldhash[cid].last_modified || obj.title !== oldhash[cid].title)) {
+                                    changed.push(cid);
+                                }
                             }
                         });
 
@@ -982,6 +990,12 @@ define('io.ox/files/fluid/perspective',
                         _(deleted).each(function (cid) {
                             var nodes = scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]');
                             end = end - nodes.remove().length;
+                        });
+
+                        _(duplicates).each(function (value, cid) {
+                            //remove all nodes for given cid except the first one
+                            var nodes = scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]');
+                            end = end - nodes.slice(1).remove().length;
                         });
 
                         _(added).each(function (cid) {
