@@ -7,7 +7,7 @@ Standards-Version: 3.9.2
 
 Package: @package@
 Architecture: all
-Depends: ${misc:Depends}, open-xchange-appsuite-manifest
+Depends: ${misc:Depends}, open-xchange-appsuite-manifest (>= 7.4.1-0)
 Description: @description@
 
 ## Uncomment for multiple packages

@@ -202,11 +202,13 @@ define('io.ox/core/api/folder',
                 firstSubFolderFetch[folder] = false;
                 return $.when.apply($,
                     // add to cache
-                    cache.add(folder, data),
-                    // also add to folder cache
-                    _(data).map(function (subfolder) {
-                        return folderCache.add(subfolder.id, subfolder);
-                    })
+                    [].concat(
+                        cache.add(folder, data),
+                        // also add to folder cache
+                        _(data).map(function (subfolder) {
+                            return folderCache.add(subfolder.id, subfolder);
+                        })
+                    )
                 )
                 .then(function () {
                     return data;

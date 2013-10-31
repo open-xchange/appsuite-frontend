@@ -397,7 +397,7 @@ define('io.ox/core/tk/folderviews',
                     nodes.arrow = $('<div class="folder-arrow" role="presentation"><i class="icon-chevron-right"></i></div>');
                     nodes.label = $('<div class="folder-label">');
                     nodes.counter = $('<div class="folder-counter">').append('<span class="folder-counter-badge">');
-                    nodes.subscriber = $('<input>').attr({ 'type': 'checkbox', 'name': 'folder', tabindex: -1, 'value': data.id }).css('float', 'right');
+                    nodes.subscriber = $('<input>').attr({ 'type': 'checkbox', 'name': 'folder', tabindex: -1, 'value': data.id });
                     if (data.subscribed) {
                         nodes.subscriber.prop('checked', true);
                     }
@@ -411,8 +411,12 @@ define('io.ox/core/tk/folderviews',
                 updateArrow();
                 // add to DOM
                 // (data.own_rights & 0x3f80 /* read access */) || data.subscribed /* to get rid of folder */)
-                if (checkbox && ((data.own_rights & 0x3f80) || data.subscribed)) {
-                    nodes.folder.append(nodes.arrow, nodes.label, nodes.counter, nodes.subscriber);
+                if (checkbox) {
+                    if (!(data.own_rights & 0x3f80) && !data.subscribed) {
+                        nodes.subscriber.prop('disabled', true);
+                        nodes.subscriber.prop('checked', false);
+                    }
+                    nodes.folder.append(nodes.arrow, $('<div>').addClass('subscribe-wrapper').append(nodes.subscriber), nodes.label, nodes.counter);
                 } else {
                     nodes.folder.append(nodes.arrow, nodes.label, nodes.counter);
                 }
