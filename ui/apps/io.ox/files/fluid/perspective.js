@@ -960,22 +960,23 @@ define('io.ox/files/fluid/perspective',
                         ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), baton);
 
                         _(changed).each(function (cid) {
-
                             var data = hash[cid],
-                                prev = indexPrevPosition(newIds, cid);
+                                prev = indexPrevPosition(newIds, cid),
+                                outdated = scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]'),
+                                anchor;
 
-                            scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]').remove();
+                            outdated.remove();
 
                             if (indexPrev(newIds, cid)) {
-                                if (scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]').length) {
-                                    scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]').after(drawFile(data));
+                                anchor = scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]');
+                                if (anchor.length) {
+                                    anchor.after(drawFile(data));
                                 } else {
                                     scrollpane.find('.files-container').prepend(drawFile(data));
                                 }
                             } else {
                                 end = end - 1;
                             }
-
                         });
 
                         _(deleted).each(function (cid) {
@@ -986,13 +987,14 @@ define('io.ox/files/fluid/perspective',
                         });
 
                         _(added).each(function (cid) {
-
                             var data = hash[cid],
-                                prev = indexPrevPosition(newIds, cid);
+                                prev = indexPrevPosition(newIds, cid),
+                                anchor;
 
                             if (indexPrev(newIds, cid)) {
-                                if (scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]').length) {
-                                    scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]').after(drawFile(data));
+                                anchor = scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]');
+                                if (anchor.length) {
+                                    anchor.after(drawFile(data));
                                 } else {
                                     scrollpane.find('.files-container').prepend(drawFile(data));
                                 }
