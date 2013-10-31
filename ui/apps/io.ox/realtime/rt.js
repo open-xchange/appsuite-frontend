@@ -626,6 +626,12 @@ define.async('io.ox/realtime/rt',
             timeout: TIMEOUT,
             data: options
         }).pipe(function (resp) {
+            var stanzas = resp.stanzas;
+            resp.stanzas = [];
+            // Handle the regular stanzas later
+            setTimeout(function () {
+                handleResponse({stanzas: stanzas});
+            }, 0);
             return handleResponse(resp);
         }).fail(function (resp) {
             handleError(resp);
