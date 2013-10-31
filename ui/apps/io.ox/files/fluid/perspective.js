@@ -220,8 +220,8 @@ define('io.ox/files/fluid/perspective',
     // *** ext points ***
 
     ext.point('io.ox/files/icons/options').extend({
-        thumbnailWidth: 128,
-        thumbnailHeight: 128,
+        thumbnailWidth: 160,
+        thumbnailHeight: 160,
         fileIconWidth: 158,
         fileIconHeight: 182
     });
