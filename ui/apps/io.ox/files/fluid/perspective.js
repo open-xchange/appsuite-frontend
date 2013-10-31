@@ -759,7 +759,7 @@ define('io.ox/files/fluid/perspective',
                         //anchor node
                         if (!breadcrumb)
                             scrollpane.prepend(breadcrumb = $('<div>'));
-                         // add inline link
+                        // add inline link
                         if ($('.inline-actions', scrollpane).length === 0) {
                             breadcrumb.after(
                                 inline = $('<div>').addClass('inline-actions'),
@@ -970,20 +970,18 @@ define('io.ox/files/fluid/perspective',
                             if (indexPrev(newIds, cid)) {
                                 anchor = scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]');
                                 if (anchor.length) {
-                                    anchor.after(drawFile(data));
+                                    anchor.first().after(drawFile(data));
                                 } else {
                                     scrollpane.find('.files-container').prepend(drawFile(data));
                                 }
                             } else {
-                                end = end - 1;
+                                end = end - outdated.length;
                             }
                         });
 
                         _(deleted).each(function (cid) {
-
-                            scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]').remove();
-                            end = end - 1;
-
+                            var nodes = scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]');
+                            end = end - nodes.remove().length;
                         });
 
                         _(added).each(function (cid) {
@@ -994,7 +992,7 @@ define('io.ox/files/fluid/perspective',
                             if (indexPrev(newIds, cid)) {
                                 anchor = scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]');
                                 if (anchor.length) {
-                                    anchor.after(drawFile(data));
+                                    anchor.first().after(drawFile(data));
                                 } else {
                                     scrollpane.find('.files-container').prepend(drawFile(data));
                                 }
