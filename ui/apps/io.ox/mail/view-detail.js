@@ -1672,11 +1672,10 @@ define('io.ox/mail/view-detail',
         index: 300,
         id: 'content',
         draw: function (baton) {
-
-            var data = baton.data, content = that.getContent(data, baton.options);
+            var article, data = baton.data, content = that.getContent(data, baton.options);
 
             this.append(
-                $('<article>').attr({
+                article = $('<article>').attr({
                     'data-cid': data.folder_id + '.' + data.id,
                     'data-content-type': content.type
                 })
@@ -1696,6 +1695,19 @@ define('io.ox/mail/view-detail',
                     $('<div class="mail-detail-clear-both">')
                 )
             );
+
+            // show toggle info box instead of original mail
+            if (baton.hideOriginalMail) {
+                article.hide();
+                this.append(
+                    $('<div>').addClass('alert alert-info cursor-pointer').append(
+                        $('<a href="#" role="button">').text(gt('Show original message'))
+                    ).on('click', function () {
+                        article.show();
+                        $(this).remove();
+                    })
+                );
+            }
 
             var content = this.find('.content');
 

@@ -29,6 +29,10 @@ define('io.ox/core/print',
 
         callbacks = {};
 
+    function escapeTitle(str) {
+        return (str || '').replace(/[#%&§\/$*!`´'"=:@+\^\\.+?{}|]/g, '_');
+    }
+
     function addCallback(options, it) {
 
         var id = 'print_' + _.now();
@@ -39,9 +43,11 @@ define('io.ox/core/print',
                 //do not use 'item' as doT variable name for current element
                 var selector = options.selector || 'script',
                     template = $(document.body).find('[type="text/template"]').filter(selector).html(),
-                    compiled = doT.template(template);
+                    compiled = doT.template(template),
+                    title = (options.title  || '').trim();
                 $(document.body).html(compiled(it));
-                document.title = ox.serverConfig.pageTitle + ' ' + gt('Printout');
+                //hint: in case title contains a '.' chrome will cut off at this char when suggesting a filename
+                document.title = escapeTitle(ox.serverConfig.pageTitle) + escapeTitle(title.length ? ' ' + title : '') + ' ' + gt('Printout');
             } catch (e) {
                 console.error(e);
             }

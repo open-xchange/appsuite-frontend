@@ -190,6 +190,8 @@ define('io.ox/calendar/print',
                     return api.get(obj);
                 },
 
+                title: selection.length === 1 ? selection[0].title : undefined,
+
                 i18n: {
                     accepted: gt('Accepted'),
                     declined: gt('Declined'),

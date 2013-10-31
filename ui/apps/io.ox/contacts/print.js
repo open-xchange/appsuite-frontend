@@ -73,6 +73,8 @@ define('io.ox/contacts/print',
                     return api.get(obj);
                 },
 
+                title: selection.length === 1 ? selection[0].display_name : undefined,
+
                 i18n: {
                     phonelist: gt('Phone list'),
                     name: gt('Name') + ', ' + gt('Department') + ', ' + gt('City'),

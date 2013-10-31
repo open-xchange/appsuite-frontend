@@ -18,11 +18,12 @@ define('io.ox/contacts/view-detail',
      'io.ox/contacts/util',
      'io.ox/contacts/api',
      'io.ox/contacts/actions',
+     'io.ox/contacts/model',
      'io.ox/core/api/folder',
      'io.ox/core/extPatterns/links',
      'io.ox/core/date',
      'less!io.ox/contacts/style.less'
-    ], function (ext, gt, util, api, actions, folderAPI, links, date) {
+    ], function (ext, gt, util, api, actions, model, folderAPI, links, date) {
 
     'use strict';
 
@@ -266,28 +267,22 @@ define('io.ox/contacts/view-detail',
         );
     }
 
-    function row(label, builder, id) {
-
-        if (_.isFunction(label)) {
-            builder = label;
-            label = null;
-        }
+    function row(id, builder) {
 
         var build = builder();
-
         if (!build) return null;
 
         return $('<div>').attr('data-property', id).append(
-            label ? $('<label>').text(label) : [],
+            $('<label>').text(model.fields[id]),
             _.isString(build) ? $.txt(build) : build
         );
     }
 
-    function simple(label, data, id) {
+    function simple(data, id, label) {
         var value = $.trim(data[id]);
         if (!value) return null;
         return $('<div>').attr('data-property', id).append(
-            $('<label>').text(label),
+            $('<label>').text(label || model.fields[id]),
             $('<span>').text(value)
         );
     }
@@ -325,12 +320,12 @@ define('io.ox/contacts/view-detail',
             .value();
     }
 
-    function phone(label, data, id) {
+    function phone(data, id, label) {
         var number = $.trim(data[id]);
         if (!number) return null;
         return $('<div>').attr('data-property', id).append(
-            $('<label>').text(label),
-            $('<a>', { href: _.device('smartphone') ? 'tel:' + number: 'callto:' + number }).text(number)
+            $('<label>').text(label || model.fields[id]),
+            $('<a>', { href: _.device('smartphone') ? 'tel:' + number : 'callto:' + number }).text(number)
         );
     }
 
@@ -358,7 +353,7 @@ define('io.ox/contacts/view-detail',
         }
 
         obj[id] = number;
-        return simple(gt('Messenger'), obj, id);
+        return simple(id, gt('Messenger'), obj);
     }
 
     // data is full contact data
@@ -419,12 +414,12 @@ define('io.ox/contacts/view-detail',
 
                 this.append(
                     block(gt('Personal'),
-                        simple(gt('Title'), data, 'title'),
-                        simple(gt('Name'), { fullname: fullname }, 'name'),
-                        simple(gt('Middle name'), data, 'second_name'),
-                        simple(gt('Suffix'), data, 'suffix'),
-                        simple(gt('Nickname'), data, 'nickname'),
-                        row(gt('Birthday'), function () {
+                        simple(data, 'title'),
+                        simple({ fullname: fullname }, 'name', gt('Name')),
+                        simple(data, 'second_name'),
+                        simple(data, 'suffix'),
+                        simple(data, 'nickname'),
+                        row('birthday', function () {
                             if (baton.data.birthday) {
                                 var birthday = new date.UTC(baton.data.birthday);//use utc time. birthdays must not be converted
                                 if (birthday.getYear() === 1) {//Year 0 is special for birthdays without year (backend changes this to 1...)
@@ -433,12 +428,12 @@ define('io.ox/contacts/view-detail',
                                     return birthday.format(date.DATE);
                                 }
                             }
-                        }, 'birthday'),
-                        row(gt('URL'), function () {
+                        }),
+                        row('URL', function () {
                             if (baton.data.url) {
                                 return $('<a>', { href: baton.data.url, target: '_blank' }).text(baton.data.url);
                             }
-                        }, 'URL')
+                        })
                     )
                     .attr('data-block', 'personal')
                 );
@@ -454,11 +449,11 @@ define('io.ox/contacts/view-detail',
 
                 this.append(
                     block(gt('Job'),
-                        simple(gt('Position'), data, 'position'),
-                        simple(gt('Department'), data, 'department'),
-                        simple(gt('Profession'), data, 'profession'),
-                        simple(gt('Company'), data, 'company'),
-                        simple(gt('Room number'), data, 'room_number')
+                        simple(data, 'position'),
+                        simple(data, 'department'),
+                        simple(data, 'profession'),
+                        simple(data, 'company'),
+                        simple(data, 'room_number')
                     )
                     .attr('data-block', 'job')
                 );
@@ -496,16 +491,16 @@ define('io.ox/contacts/view-detail',
 
                 this.append(
                     block(gt('Phone numbers'),
-                        phone(gt('Mobile'), data, 'cellular_telephone1'),
-                        phone(gt('Mobile'), data, 'cellular_telephone2'),
-                        phone(gt('Phone (business)'), data, 'telephone_business1'),
-                        phone(gt('Phone (business)'), data, 'telephone_business2'),
-                        phone(gt('Phone (private)'), data, 'telephone_home1'),
-                        phone(gt('Phone (private)'), data, 'telephone_home2'),
-                        phone(gt('Phone (other)'), data, 'telephone_other'),
-                        simple(gt('Fax (business)'), data, 'fax_business'),
-                        simple(gt('Fax (private)'), data, 'fax_home'),
-                        simple(gt('Fax (other)'), data, 'fax_other')
+                        phone(data, 'cellular_telephone1'),
+                        phone(data, 'cellular_telephone2'),
+                        phone(data, 'telephone_business1'),
+                        phone(data, 'telephone_business2'),
+                        phone(data, 'telephone_home1'),
+                        phone(data, 'telephone_home2'),
+                        phone(data, 'telephone_other'),
+                        simple(data, 'fax_business'),
+                        simple(data, 'fax_home'),
+                        simple(data, 'fax_other')
                     )
                     .attr('data-block', 'phone')
                 );
@@ -572,26 +567,26 @@ define('io.ox/contacts/view-detail',
                         //#. section name for contact fields in detail view
                         gt('Miscellaneous'),
                         // looks stupid but actually easier to read and not much shorter than any smart-ass solution
-                        simple(gt('Optional 01'), data, 'userfield01'),
-                        simple(gt('Optional 02'), data, 'userfield02'),
-                        simple(gt('Optional 03'), data, 'userfield03'),
-                        simple(gt('Optional 04'), data, 'userfield04'),
-                        simple(gt('Optional 05'), data, 'userfield05'),
-                        simple(gt('Optional 06'), data, 'userfield06'),
-                        simple(gt('Optional 07'), data, 'userfield07'),
-                        simple(gt('Optional 08'), data, 'userfield08'),
-                        simple(gt('Optional 09'), data, 'userfield09'),
-                        simple(gt('Optional 10'), data, 'userfield10'),
-                        simple(gt('Optional 11'), data, 'userfield11'),
-                        simple(gt('Optional 12'), data, 'userfield12'),
-                        simple(gt('Optional 13'), data, 'userfield13'),
-                        simple(gt('Optional 14'), data, 'userfield14'),
-                        simple(gt('Optional 15'), data, 'userfield15'),
-                        simple(gt('Optional 16'), data, 'userfield16'),
-                        simple(gt('Optional 17'), data, 'userfield17'),
-                        simple(gt('Optional 18'), data, 'userfield18'),
-                        simple(gt('Optional 19'), data, 'userfield19'),
-                        simple(gt('Optional 20'), data, 'userfield20')
+                        simple(data, 'userfield01'),
+                        simple(data, 'userfield02'),
+                        simple(data, 'userfield03'),
+                        simple(data, 'userfield04'),
+                        simple(data, 'userfield05'),
+                        simple(data, 'userfield06'),
+                        simple(data, 'userfield07'),
+                        simple(data, 'userfield08'),
+                        simple(data, 'userfield09'),
+                        simple(data, 'userfield10'),
+                        simple(data, 'userfield11'),
+                        simple(data, 'userfield12'),
+                        simple(data, 'userfield13'),
+                        simple(data, 'userfield14'),
+                        simple(data, 'userfield15'),
+                        simple(data, 'userfield16'),
+                        simple(data, 'userfield17'),
+                        simple(data, 'userfield18'),
+                        simple(data, 'userfield19'),
+                        simple(data, 'userfield20')
                     )
                     .attr('data-block', 'misc')
                 );

@@ -1,3 +1,0 @@
-#!/bin/sh
-UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
-[ -x $UPDATE ] && $UPDATE

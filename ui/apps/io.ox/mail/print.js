@@ -66,6 +66,8 @@ define('io.ox/mail/print',
                     return api.get(_.extend({ view: type}, obj));
                 },
 
+                title: selection.length === 1 ? selection[0].subject : undefined,
+
                 i18n: {
                     to: gt('To'),
                     copy: gt.npgettext('CC', 'Copy', 'Copy', 1)

@@ -33,8 +33,8 @@ define('io.ox/calendar/view-detail',
     ext.point('io.ox/calendar/detail').extend({
         index: 100,
         id: 'inline-actions',
-        draw: function (data) {
-            ext.point('io.ox/calendar/detail/actions').invoke('draw', this, data);
+        draw: function (baton) {
+            ext.point('io.ox/calendar/detail/actions').invoke('draw', this, baton);
         }
     });
 
@@ -42,10 +42,10 @@ define('io.ox/calendar/view-detail',
     ext.point('io.ox/calendar/detail').extend({
         index: 200,
         id: 'date',
-        draw: function (data) {
+        draw: function (baton) {
             var node;
             this.append(node = $('<div class="appointment-date">'));
-            ext.point('io.ox/calendar/detail/date').invoke('draw', node, data);
+            ext.point('io.ox/calendar/detail/date').invoke('draw', node, baton);
         }
     });
 
@@ -53,9 +53,9 @@ define('io.ox/calendar/view-detail',
     ext.point('io.ox/calendar/detail/date').extend({
         index: 100,
         id: 'time',
-        draw: function (data) {
+        draw: function (baton) {
             this.append(
-                util.addTimezoneLabel($('<div>').addClass('interval'), data)
+                util.addTimezoneLabel($('<div>').addClass('interval'), baton.data)
             );
         }
     });
@@ -64,11 +64,11 @@ define('io.ox/calendar/view-detail',
     ext.point('io.ox/calendar/detail/date').extend({
         index: 200,
         id: 'date',
-        draw: function (data) {
-            var recurrenceString = util.getRecurrenceString(data);
+        draw: function (baton) {
+            var recurrenceString = util.getRecurrenceString(baton.data);
             this.append(
                 $('<div>').addClass('day').append(
-                    $.txt(gt.noI18n(util.getDateInterval(data))),
+                    $.txt(gt.noI18n(util.getDateInterval(baton.data))),
                     $.txt(gt.noI18n((recurrenceString !== '' ? ' \u2013 ' + recurrenceString : '')))
                 )
             );
@@ -79,8 +79,8 @@ define('io.ox/calendar/view-detail',
     ext.point('io.ox/calendar/detail').extend({
         index: 250,
         id: 'private-flag',
-        draw: function (data) {
-            if (data.private_flag) {
+        draw: function (baton) {
+            if (baton.data.private_flag) {
                 $('<i>').addClass('icon-lock private-flag').appendTo(this);
             }
         }
@@ -90,9 +90,9 @@ define('io.ox/calendar/view-detail',
     ext.point('io.ox/calendar/detail').extend({
         index: 300,
         id: 'title',
-        draw: function (data) {
+        draw: function (baton) {
             this.append(
-                $('<div>').addClass('title clear-title').text(gt.noI18n(data.title || ''))
+                $('<div>').addClass('title clear-title').text(gt.noI18n(baton.data.title || ''))
             );
         }
     });
@@ -101,10 +101,10 @@ define('io.ox/calendar/view-detail',
     ext.point('io.ox/calendar/detail').extend({
         index: 400,
         id: 'location',
-        draw: function (data) {
-            if (data.location) {
+        draw: function (baton) {
+            if (baton.data.location) {
                 this.append(
-                    $('<div class="location">').text(gt.noI18n(data.location))
+                    $('<div class="location">').text(gt.noI18n(baton.data.location))
                 );
             }
         }
@@ -114,10 +114,10 @@ define('io.ox/calendar/view-detail',
     ext.point('io.ox/calendar/detail').extend({
         index: 500,
         id: 'note',
-        draw: function (data) {
-            if (data.note) {
+        draw: function (baton) {
+            if (baton.data.note) {
                 this.append(
-                    $('<div>').addClass('note').html(util.getNote(data))
+                    $('<div>').addClass('note').html(util.getNote(baton.data))
                 );
             }
         }
@@ -169,16 +169,16 @@ define('io.ox/calendar/view-detail',
     ext.point('io.ox/calendar/detail').extend({
         index: 600,
         id: 'participants',
-        draw: function (data) {
+        draw: function (baton) {
 
-            var list = data.participants || {}, $i = list.length, MIN = 0,
+            var list = baton.data.participants || {}, $i = list.length, MIN = 0,
                 participants = $i > MIN ? $('<div>').addClass('participants') : $(),
                 confirmations = {};
 
             // has participants? should always be true. Was $i > 1 (see bug #23295).
             if ($i > MIN) {
 
-                confirmations = util.getConfirmations(data);
+                confirmations = util.getConfirmations(baton.data);
                 participants.busy();
 
                 // get internal users
@@ -309,9 +309,9 @@ define('io.ox/calendar/view-detail',
     ext.point('io.ox/calendar/detail').extend({
         index: 700,
         id: 'inline-actions-participantrelated',
-        draw: function (data) {
-            if (data.participants && data.participants.length > 1) {
-                ext.point('io.ox/calendar/detail/actions-participantrelated').invoke('draw', this, data);
+        draw: function (baton) {
+            if (baton.data.participants && baton.data.participants.length > 1) {
+                ext.point('io.ox/calendar/detail/actions-participantrelated').invoke('draw', this, baton);
             }
 
         }
@@ -321,14 +321,11 @@ define('io.ox/calendar/view-detail',
     ext.point('io.ox/calendar/detail').extend({
         index: 800,
         id: 'details',
-        draw: function (data, options) {
-            if (options && options.brief) {
-                return $();
-            }
+        draw: function (baton) {
             var node = $('<div>').addClass('details')
                 .append($('<div>').addClass('io-ox-label').text(gt('Details')))
                 .appendTo(this);
-            ext.point('io.ox/calendar/detail/details').invoke('draw', node, data);
+            ext.point('io.ox/calendar/detail/details').invoke('draw', node, baton);
         }
     });
 
@@ -336,22 +333,22 @@ define('io.ox/calendar/view-detail',
     ext.point('io.ox/calendar/detail/details').extend({
         index: 100,
         id: 'organizer',
-        draw: function (data) {
+        draw: function (baton) {
 
             // internal or external organizer?
-            if (!data.organizerId && !data.organizer) return;
+            if (!baton.data.organizerId && !baton.data.organizer) return;
 
             this.append(
                 $('<span class="detail-label">').append(
                     $.txt(gt('Organizer')), $.txt(gt.noI18n(':\u00A0'))
                 ),
                 $('<span class="detail organizer">').append(
-                    data.organizerId ?
-                        $('<a href="#" class="halo-link">').data({ user_id: data.organizerId }).append(
-                            userAPI.getTextNode(data.organizerId)
+                    baton.data.organizerId ?
+                        $('<a href="#" class="halo-link">').data({ user_id: baton.data.organizerId }).append(
+                            userAPI.getTextNode(baton.data.organizerId)
                         ) :
-                        $('<a href="#" class="halo-link">').data({ email1: data.organizer }).text(
-                            data.organizer
+                        $('<a href="#" class="halo-link">').data({ email1: baton.data.organizer }).text(
+                            baton.data.organizer
                         )
                 ),
                 $('<br>')
@@ -363,17 +360,17 @@ define('io.ox/calendar/view-detail',
     ext.point('io.ox/calendar/detail/details').extend({
         index: 200,
         id: 'shownAs',
-        draw: function (data) {
+        draw: function (baton) {
             this.append(
                 $('<span>')
                     .addClass('detail-label')
                     .append($.txt(gt('Show as')), $.txt(gt.noI18n(':\u00A0'))),
                 $('<span>')
-                    .addClass('detail shown_as ' + util.getShownAsClass(data))
+                    .addClass('detail shown_as ' + util.getShownAsClass(baton.data))
                     .text(gt.noI18n('\u00A0')),
                 $('<span>')
                     .addClass('detail shown-as')
-                    .append($.txt(gt.noI18n('\u00A0')), $.txt(util.getShownAs(data))),
+                    .append($.txt(gt.noI18n('\u00A0')), $.txt(util.getShownAs(baton.data))),
                 $('<br>')
             );
         }
@@ -383,14 +380,14 @@ define('io.ox/calendar/view-detail',
     ext.point('io.ox/calendar/detail/details').extend({
         index: 300,
         id: 'folder',
-        draw: function (data) {
-            if (data.folder_id) {
+        draw: function (baton) {
+            if (baton.data.folder_id) {
                 this.append(
                     $('<span class="detail-label">')
                         .append($.txt(gt('Folder')), $.txt(gt.noI18n(':\u00A0'))),
                     $('<span class="detail folder">')
-                        .attr('data-folder', data.folder_id)
-                        .append(folderAPI.getTextNode(data.folder_id)),
+                        .attr('data-folder', baton.data.folder_id)
+                        .append(folderAPI.getTextNode(baton.data.folder_id)),
                     $('<br>')
                 );
             }
@@ -401,17 +398,17 @@ define('io.ox/calendar/view-detail',
     ext.point('io.ox/calendar/detail/details').extend({
         index: 400,
         id: 'created',
-        draw: function (data) {
-            if (data.creation_date || data.created_by) {
+        draw: function (baton) {
+            if (baton.data.creation_date || baton.data.created_by) {
                 this.append(
                     $('<span class="detail-label">').append(
                         $.txt(gt('Created')), $.txt(gt.noI18n(':\u00A0'))
                     ),
                     $('<span class="detail created">').append(
-                        $('<span>').text(gt.noI18n(data.creation_date ? util.getDate(data.creation_date) : '')),
-                        $('<span>').text(gt.noI18n(data.creation_date ? ' \u2013 ' : '')),
-                        $('<a href="#" class="halo-link">').data({ user_id: data.created_by }).append(
-                            data.created_by ? userAPI.getTextNode(data.created_by) : ''
+                        $('<span>').text(gt.noI18n(baton.data.creation_date ? util.getDate(baton.data.creation_date) : '')),
+                        $('<span>').text(gt.noI18n(baton.data.creation_date ? ' \u2013 ' : '')),
+                        $('<a href="#" class="halo-link">').data({ user_id: baton.data.created_by }).append(
+                            baton.data.created_by ? userAPI.getTextNode(baton.data.created_by) : ''
                         )
                     ),
                     $('<br>')
@@ -424,17 +421,17 @@ define('io.ox/calendar/view-detail',
     ext.point('io.ox/calendar/detail/details').extend({
         index: 500,
         id: 'modified',
-        draw: function (data) {
-            if (data.last_modified || data.modified_by) {
+        draw: function (baton) {
+            if (baton.data.last_modified || baton.data.modified_by) {
                 this.append(
                     $('<span class="detail-label">').append(
                         $.txt(gt('Modified')), $.txt(gt.noI18n(':\u00A0'))
                     ),
                     $('<span class="detail modified">').append(
-                        $('<span>').text(gt.noI18n(data.last_modified ? util.getDate(data.last_modified) : '')),
-                        $('<span>').text(gt.noI18n(data.last_modified ? ' \u2013 ' : '')),
-                        $('<a href="#" class="halo-link">').data({ user_id: data.modified_by }).append(
-                            data.modified_by ? userAPI.getTextNode(data.modified_by) : ''
+                        $('<span>').text(gt.noI18n(baton.data.last_modified ? util.getDate(baton.data.last_modified) : '')),
+                        $('<span>').text(gt.noI18n(baton.data.last_modified ? ' \u2013 ' : '')),
+                        $('<a href="#" class="halo-link">').data({ user_id: baton.data.modified_by }).append(
+                            baton.data.modified_by ? userAPI.getTextNode(baton.data.modified_by) : ''
                         )
                     ),
                     $('<br>')
@@ -446,19 +443,19 @@ define('io.ox/calendar/view-detail',
     ext.point('io.ox/calendar/detail').extend({
         id: 'attachments',
         index: 550,
-        draw: function (data) {
+        draw: function (baton) {
             var $node;
-            if (calAPI.uploadInProgress(_.ecid(data))) {
+            if (calAPI.uploadInProgress(_.ecid(baton.data))) {
                 this.append(
                         $('<div class="io-ox-label">').text(gt('Attachments')),
                         $node = $('<div>').css({width: '30%', height: '12px'}).busy()
                     );
-            } else if (data.number_of_attachments && data.number_of_attachment !== 0) {
+            } else if (baton.data.number_of_attachments && baton.data.number_of_attachment !== 0) {
                 this.append(
                     $('<div class="io-ox-label">').text(gt('Attachments')),
                     $node = $('<div>')
                 );
-                ext.point('io.ox/calendar/detail/attachments').invoke('draw', $node, new ext.Baton({ data: data }));
+                ext.point('io.ox/calendar/detail/attachments').invoke('draw', $node, baton);
             }
         }
     });
@@ -470,18 +467,19 @@ define('io.ox/calendar/view-detail',
         selector: '.window-container.io-ox-calendar-window'
     }));
 
-    function redraw(e, data) {
-        $(this).replaceWith(e.data.view.draw(data));
+    function redraw(e, baton) {
+        $(this).replaceWith(e.data.view.draw(baton));
     }
 
     return {
 
-        draw: function (data, options) {
-
+        draw: function (baton, options) {
+            // make sure we have a baton
+            baton = ext.Baton.ensure(baton);
             try {
-                var node = $.createViewContainer(data, calAPI).on('redraw', { view: this }, redraw);
-                node.addClass('calendar-detail view user-select-text').attr('data-cid', String(_.cid(data)));
-                ext.point('io.ox/calendar/detail').invoke('draw', node, data, options);
+                var node = $.createViewContainer(baton.data, calAPI).on('redraw', { view: this }, redraw);
+                node.addClass('calendar-detail view user-select-text').attr('data-cid', String(_.cid(baton.data)));
+                ext.point('io.ox/calendar/detail').invoke('draw', node, baton, options);
 
                 return node;
 

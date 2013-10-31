@@ -96,29 +96,32 @@ define('io.ox/core/tk/folderviews',
                     //    }, 1000);
                     //    return def;
                     // })
-                    .then(function success(children) {
-                        // tricky one liner: we invoke 'paint' for all child nodes.
-                        // invoke returns a nice array of all return values which all are deferred objects.
-                        // we use this array to feed $.when(). Thus, we get a proper combined deferred object
-                        // that will be resolved once all child nodes are resolved.
-                        if (!children || children.length === 0) {
-                            nodes.sub.idle().hide(); // Robustness. Sometimes the folder interface seems unsure about subfolders.
-                            hideArrow();
+                    .then(
+                        function success(children) {
+                            // tricky one liner: we invoke 'paint' for all child nodes.
+                            // invoke returns a nice array of all return values which all are deferred objects.
+                            // we use this array to feed $.when(). Thus, we get a proper combined deferred object
+                            // that will be resolved once all child nodes are resolved.
+                            if (!children || children.length === 0) {
+                                nodes.sub.idle().hide(); // Robustness. Sometimes the folder interface seems unsure about subfolders.
+                                hideArrow();
+                                return $.when();
+                            } else {
+                                wasOpen = true;
+                            }
+                            return $.when.apply(null, _(children).invoke(method, nodes.sub));
+                        },
+                        function fail() {
+                            // reset folder and show local error
+                            nodes.sub.idle().empty().append(
+                                $.fail(gt('Couldn\'t load subfolders.'), function () {
+                                    drawChildren(reload, method);
+                                })
+                                .attr('data-folder-id', id)
+                            );
                             return $.when();
-                        } else {
-                            wasOpen = true;
                         }
-                        return $.when.apply(null, _(children).invoke(method, nodes.sub));
-                    }, function fail() {
-                        // reset folder and show local error
-                        nodes.sub.idle().empty().append(
-                            $.fail(gt('Couldn\'t load subfolders.'), function () {
-                                drawChildren(reload, method);
-                            })
-                            .attr('data-folder-id', id)
-                        );
-                        return $.when();
-                    })
+                    )
                     .always(_.defer(function () {
                         // need to use defer here, otherwise tree selection gets broken
                         // with second repaint (visually ok but lacks addToIndex calls)
@@ -282,7 +285,6 @@ define('io.ox/core/tk/folderviews',
                 // get sub folders
                 return api.getSubFolders({ folder: id, all: all, storage: storage }).then(function success(data) {
                     // create new children array
-                    http.pause();
                     children = _.chain(data)
                         .filter(function (folder) {
                             // ignore system folders without sub folders, e.g. 'Shared folders'
@@ -296,14 +298,11 @@ define('io.ox/core/tk/folderviews',
                                 return node;
                             } else {
                                 // new node
-
                                 return new TreeNode(tree, folder.id, nodes.sub, skip() ? level : level + 1, checkbox, all, storage);
                             }
                         })
                         .value();
-                    http.resume();
                     childrenLoaded = true;
-
                     // destroy remaining and thus deprecated tree nodes
                     _(hash).each(function (child) {
                         child.destroy();

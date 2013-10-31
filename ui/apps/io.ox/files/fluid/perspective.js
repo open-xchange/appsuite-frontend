@@ -220,8 +220,8 @@ define('io.ox/files/fluid/perspective',
     // *** ext points ***
 
     ext.point('io.ox/files/icons/options').extend({
-        thumbnailWidth: 128,
-        thumbnailHeight: 128,
+        thumbnailWidth: 160,
+        thumbnailHeight: 160,
         fileIconWidth: 158,
         fileIconHeight: 182
     });
@@ -601,6 +601,12 @@ define('io.ox/files/fluid/perspective',
             adjustWidth = function () {
                 var width = wrapper.width(),
                     container = self.main;
+
+                if (!wrapper.is(':visible')) {
+                    //do not change anything if wrapper is not visible.
+                    return;
+                }
+
                 if (width > 768)
                     container.removeClass('width-less-than-768 width-less-than-480');
                 else if (width >= 480 && width <= 768) {
@@ -746,6 +752,11 @@ define('io.ox/files/fluid/perspective',
                 loadFilesDef.then(
                     function success(ids) {
 
+                        //filter duplicates
+                        ids = _.uniq(ids, function (file) {
+                            return _.cid(file);
+                        });
+
                         scrollpane.empty().idle();
                         baton.allIds = allIds = ids;
                         ext.point('io.ox/files/icons').invoke('draw', scrollpane, baton);
@@ -753,7 +764,7 @@ define('io.ox/files/fluid/perspective',
                         //anchor node
                         if (!breadcrumb)
                             scrollpane.prepend(breadcrumb = $('<div>'));
-                         // add inline link
+                        // add inline link
                         if ($('.inline-actions', scrollpane).length === 0) {
                             breadcrumb.after(
                                 inline = $('<div>').addClass('inline-actions'),
@@ -896,15 +907,21 @@ define('io.ox/files/fluid/perspective',
                     api.getAll({ folder: app.folder.get() }, false).done(function (ids) {
 
                         var hash = {},
-                            oldhash  = {},
-                            oldIds   = [],
-                            newIds   = [],
-                            changed  = [],
-                            deleted  = [],
-                            added    = [],
+                            oldhash   = {},
+                            oldIds    = [],
+                            newIds    = [],
+                            changed   = [],
+                            deleted   = [],
+                            added     = [],
+                            duplicates = {},
                             indexPrev,
                             indexPrevPosition,
                             indexNextPosition;
+
+                        //filter duplicates
+                        ids = _.uniq(ids, function (file) {
+                            return _.cid(file);
+                        });
 
                         indexPrev = function (index, cid) {
                             return _.indexOf(drawnCids, _.indexOf(index, cid) - 1);
@@ -919,18 +936,25 @@ define('io.ox/files/fluid/perspective',
                         };
 
                         _(allIds).each(function (obj) {
-                            oldhash[_.cid(obj)] = obj;
+                            var cid = _.cid(obj);
+                            if (cid in oldhash)
+                                duplicates[cid] = true;
+                            else
+                                oldhash[cid] = obj;
                         });
 
                         _(ids).each(function (obj) {
                             var cid = _.cid(obj);
-                            hash[cid] = obj;
-
-                            // Update if cid still exists, has already been drawn and object was modified.
-                            // Note: If title is changed, last_modified date is not updated
-                            if (_.isObject(oldhash[cid]) && (_.indexOf(drawnCids, cid) !== -1) &&
-                               (obj.last_modified !== oldhash[cid].last_modified || obj.title !== oldhash[cid].title)) {
-                                changed.push(cid);
+                            if (cid in hash) {
+                                duplicates[cid] = true;
+                            } else {
+                                hash[cid] = obj;
+                                // Update if cid still exists, has already been drawn and object was modified.
+                                // Note: If title is changed, last_modified date is not updated
+                                if (_.isObject(oldhash[cid]) && (_.indexOf(drawnCids, cid) !== -1) &&
+                                   (obj.last_modified !== oldhash[cid].last_modified || obj.title !== oldhash[cid].title)) {
+                                    changed.push(cid);
+                                }
                             }
                         });
 
@@ -954,39 +978,45 @@ define('io.ox/files/fluid/perspective',
                         ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), baton);
 
                         _(changed).each(function (cid) {
-
                             var data = hash[cid],
-                                prev = indexPrevPosition(newIds, cid);
+                                prev = indexPrevPosition(newIds, cid),
+                                outdated = scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]'),
+                                anchor;
 
-                            scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]').remove();
+                            outdated.remove();
 
                             if (indexPrev(newIds, cid)) {
-                                if (scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]').length) {
-                                    scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]').after(drawFile(data));
+                                anchor = scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]');
+                                if (anchor.length) {
+                                    anchor.first().after(drawFile(data));
                                 } else {
                                     scrollpane.find('.files-container').prepend(drawFile(data));
                                 }
                             } else {
-                                end = end - 1;
+                                end = end - outdated.length;
                             }
-
                         });
 
                         _(deleted).each(function (cid) {
+                            var nodes = scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]');
+                            end = end - nodes.remove().length;
+                        });
 
-                            scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]').remove();
-                            end = end - 1;
-
+                        _(duplicates).each(function (value, cid) {
+                            //remove all nodes for given cid except the first one
+                            var nodes = scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]');
+                            end = end - nodes.slice(1).remove().length;
                         });
 
                         _(added).each(function (cid) {
-
                             var data = hash[cid],
-                                prev = indexPrevPosition(newIds, cid);
+                                prev = indexPrevPosition(newIds, cid),
+                                anchor;
 
                             if (indexPrev(newIds, cid)) {
-                                if (scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]').length) {
-                                    scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]').after(drawFile(data));
+                                anchor = scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]');
+                                if (anchor.length) {
+                                    anchor.first().after(drawFile(data));
                                 } else {
                                     scrollpane.find('.files-container').prepend(drawFile(data));
                                 }
