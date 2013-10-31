@@ -752,6 +752,11 @@ define('io.ox/files/fluid/perspective',
                 loadFilesDef.then(
                     function success(ids) {
 
+                        //filter duplicates
+                        ids = _.uniq(ids, function (file) {
+                            return _.cid(file);
+                        });
+
                         scrollpane.empty().idle();
                         baton.allIds = allIds = ids;
                         ext.point('io.ox/files/icons').invoke('draw', scrollpane, baton);
@@ -912,6 +917,11 @@ define('io.ox/files/fluid/perspective',
                             indexPrev,
                             indexPrevPosition,
                             indexNextPosition;
+
+                        //filter duplicates
+                        ids = _.uniq(ids, function (file) {
+                            return _.cid(file);
+                        });
 
                         indexPrev = function (index, cid) {
                             return _.indexOf(drawnCids, _.indexOf(index, cid) - 1);
