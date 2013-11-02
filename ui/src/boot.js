@@ -846,6 +846,14 @@ $(window).load(function () {
             // hide checkbox?
             if (!capabilities.has("autologin")) {
                 $('#io-ox-login-store').remove();
+            } else {
+                // check/uncheck?
+                var box = $('#io-ox-login-store-box'), cookie = _.getCookie('staySignedIn');
+                if (cookie !== undefined) box.prop('checked', cookie === 'true');
+                else if ('staySignedIn' in sc) box.prop('checked', !!sc.staySignedIn);
+                box.on('change', function () {
+                    _.setCookie('staySignedIn', $(this).prop('checked'));
+                });
             }
 
             // hide forgot password?
