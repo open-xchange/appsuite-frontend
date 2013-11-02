@@ -344,14 +344,15 @@ define('io.ox/core/desktop',
 
             var deferred = $.when(),
                 self = this,
-                isDisabled = ox.manifests.isDisabled(this.getName() + '/main');
+                name = this.getName(),
+                isDisabled = ox.manifests.isDisabled(name + '/main');
 
             // update hash
-            if (this.get('name') !== _.url.hash('app')) {
+            if (name !== _.url.hash('app')) {
                 _.url.hash({ folder: null, perspective: null, id: null });
             }
-            if (this.has('name')) {
-                _.url.hash('app', this.get('name'));
+            if (name) {
+                _.url.hash('app', name);
             }
 
             if (this.get('state') === 'ready') {
@@ -359,19 +360,24 @@ define('io.ox/core/desktop',
                 if (isDisabled) {
                     deferred = $.Deferred().reject();
                 } else {
-                    deferred = this.get('launch').call(this, options || {}) || $.when();
+                    options = options || {};
+                    if (name) {
+                        ext.point(name + '/main').invoke('launch', this, options);
+                    }
+                    deferred = this.get('launch').call(this, options) || $.when();
                 }
-                deferred
-                .done(function () {
-                    ox.ui.apps.add(self);
-                    self.set('state', 'running');
-                    self.trigger('launch', self);
-                })
-                .fail(function () {
-                    ox.launch(
-                        require('settings!io.ox/core').get('autoStart')
-                    );
-                });
+                deferred.then(
+                    function success() {
+                        ox.ui.apps.add(self);
+                        self.set('state', 'running');
+                        self.trigger('launch', self);
+                    },
+                    function fail() {
+                        ox.launch(
+                            require('settings!io.ox/core').get('autoStart')
+                        );
+                    }
+                );
             } else if (this.has('window')) {
                 // toggle app window
                 this.get('window').show();
