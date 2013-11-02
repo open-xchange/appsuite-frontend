@@ -304,6 +304,14 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
         this.invoke = function (name, context, baton) {
             var o = list(),
                 args = ['invoke'].concat($.makeArray(arguments));
+            // let's have debug-friendly exceptions
+            function error(e) {
+                console.error('point("' + self.id + '").invoke("' + name + '")', e.message, {
+                    args: args.slice(3),
+                    context: context,
+                    exeption: e
+                });
+            }
             // manual invoke to consider baton
             if (baton instanceof Baton) {
                 return o
@@ -311,10 +319,18 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
                         return !baton.isDisabled(self.id, ext.id) && _.isFunction(ext[name]);
                     })
                     .map(function (ext) {
-                        return ext[name].apply(context, args.slice(3));
+                        try {
+                            return ext[name].apply(context, args.slice(3));
+                        } catch (e) {
+                            error(e);
+                        }
                     });
             } else {
-                return o.invoke.apply(o, args);
+                try {
+                    return o.invoke.apply(o, args);
+                } catch (e) {
+                    error(e);
+                }
             }
         };
 

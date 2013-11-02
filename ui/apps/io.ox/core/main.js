@@ -599,12 +599,10 @@ define('io.ox/core/main',
                 // we don't need this right from the start,
                 // so let's delay this for responsiveness
                 if (ox.online) {
-                    //setTimeout(function () {
                     _.defer(function () {
                         self.prepend(notifications.attach(addLauncher));
                         tabManager();
                     });
-                    //}, 5000);
                 }
             }
         });
