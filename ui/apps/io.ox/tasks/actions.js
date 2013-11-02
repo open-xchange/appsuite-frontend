@@ -613,7 +613,7 @@ define('io.ox/tasks/actions',
     ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
         id: 'save',
         index: 400,
-        label: gt('Save in file store'),
+        label: gt('Save to drive'),
         ref: 'io.ox/tasks/actions/save-attachment'
     }));
 });

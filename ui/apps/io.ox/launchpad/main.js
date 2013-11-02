@@ -32,7 +32,7 @@ define('io.ox/launchpad/main',
     gt.pgettext('app', 'Calendar');
     gt.pgettext('app', 'Scheduling');
     gt.pgettext('app', 'Tasks');
-    gt.pgettext('app', 'Files');
+    gt.pgettext('app', 'Drive');
     gt.pgettext('app', 'Conversations');
     gt.pgettext('app', 'Settings');
     gt.pgettext('app', 'Documents');

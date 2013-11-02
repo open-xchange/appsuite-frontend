@@ -432,7 +432,7 @@ define('io.ox/core/tk/attachments',
     ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
         id: 'save',
         index: 400,
-        label: gt('Save in file store'),
+        label: gt('Save to drive'),
         ref: 'io.ox/core/tk/attachment/actions/save-attachment'
     }));
 

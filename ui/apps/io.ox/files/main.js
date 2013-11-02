@@ -25,7 +25,7 @@ define('io.ox/files/main',
     'use strict';
 
     // application object
-    var app = ox.ui.createApp({ name: 'io.ox/files', title: 'Files' }),
+    var app = ox.ui.createApp({ name: 'io.ox/files', title: 'Drive' }),
         // app window
         win;
 
@@ -46,7 +46,7 @@ define('io.ox/files/main',
         // get window
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/files',
-            title: 'Files',
+            title: 'Drive',
             toolbar: true,
             search: true
         }));
