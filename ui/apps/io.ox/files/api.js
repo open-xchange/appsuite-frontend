@@ -218,6 +218,8 @@ define('io.ox/files/api',
                     api.caches.versions.remove(String(obj.id));
                     // this can be solved smarter once backend send correct
                     // number_of_version in 'all' requests; always zero now
+                    // make sure "meta" is object
+                    if (obj.meta === null) obj.meta = {};
                 });
                 return data;
             },
@@ -692,11 +694,14 @@ define('io.ox/files/api',
         case 'play':
             return url + query + '&delivery=view';
         case 'download':
-            return url + name + query + '&delivery=download';
+            return (file.meta && file.meta.downloadUrl) ||
+                url + name + query + '&delivery=download';
         case 'thumbnail':
-            return url + query + '&delivery=view' + thumbnail + '&content_type=' + file.file_mimetype;
+            return (file.meta && file.meta.thumbnailUrl) ||
+                url + query + '&delivery=view' + thumbnail + '&content_type=' + file.file_mimetype;
         case 'preview':
-            return url + query + '&delivery=view' + thumbnail + '&format=preview_image&content_type=image/jpeg';
+            return (file.meta && file.meta.previewUrl) ||
+                url + query + '&delivery=view' + thumbnail + '&format=preview_image&content_type=image/jpeg';
         case 'cover':
             return ox.apiRoot + '/image/file/mp3Cover?' + 'folder=' + file.folder_id + '&id=' + file.id + thumbnail + '&content_type=image/jpeg';
         case 'zip':
