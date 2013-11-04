@@ -114,11 +114,9 @@ rm -r "%{buildroot}/opt/open-xchange-appsuite-dev"
 %define update_themes /opt/open-xchange/appsuite/share/update-themes.sh
 
 %post manifest
-set -ex
 if [ $1 -eq 1 ]; then touch "%{update_flag}"; fi
 
 %postun manifest
-set -ex
 if [ $1 -lt 1 ]; then
     rm -f "%{update_flag}"
     rm -rf /opt/open-xchange/appsuite/apps/themes/*/less || true
@@ -127,7 +125,6 @@ else
 fi
 
 %posttrans manifest
-set -ex
 if [ -f "%{update_flag}" ]; then
     rm "%{update_flag}"
     if [ -x %{update_themes} ]; then %{update_themes}; fi
