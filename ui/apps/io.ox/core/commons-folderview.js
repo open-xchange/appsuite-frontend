@@ -666,11 +666,13 @@ define('io.ox/core/commons-folderview',
 
             return function (e, selection) {
 
-                var id = _(selection).first();
+                var id = _(selection).first(),
+                    previous = current;
+
                 current = id;
 
                 api.get({ folder: id }).done(function (data) {
-                    if (_.device('small')) {
+                    if (_.device('small') && previous !== null) {
                         // close tree
                         fnHideSml();
                     }
