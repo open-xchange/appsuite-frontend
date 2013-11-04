@@ -493,7 +493,6 @@ define('io.ox/tasks/actions',
         prio: 'lo',
         ref: 'io.ox/tasks/actions/placeholder',
         draw: function (baton) {
-            if (_.device('smartphone')) return;
             var data = baton.data;
             this.append(
                 $('<span class="dropdown io-ox-action-link">').append(
@@ -504,7 +503,7 @@ define('io.ox/tasks/actions',
                     $('<ul class="dropdown-menu dropdown-right" role="menu">').append(
                         util.buildDropdownMenu({time: new Date(), bootstrapDropdown: true, daysOnly: true})
                     )
-                    .delegate('li a', 'click', {task: data}, function (e) {
+                    .on('click', 'li>a:not([data-action="close-menu"])', {task: data}, function (e) {
                         e.preventDefault();
                         var finderId = $(e.target).val();
                         ox.load(['io.ox/tasks/api']).done(function (api) {
