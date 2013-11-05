@@ -238,6 +238,17 @@ module.exports = function (grunt) {
                         dest: 'build/manifests/<%= pkg.name %>.json',
                     }
                 ]
+            },
+            libs: {
+                files: [
+                    {
+                        src: ['hopscotch/*'],
+                        cwd: 'lib',
+                        expand: true,
+                        dest: 'build/apps/'
+                    }
+                ]
+            },
             }
         },
         uglify: {
