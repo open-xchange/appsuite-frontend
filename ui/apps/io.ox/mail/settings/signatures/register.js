@@ -26,10 +26,11 @@ define('io.ox/mail/settings/signatures/register',
         id: 'name',
         index: 100,
         draw: function (baton) {
+            var inputId = _.uniqueId('signature-name_');
             this.append(
                 $('<div class="row-fluid">').append(
-                    $('<label id="name">').text(gt('Signature name')),
-                    baton.$.name = $('<input type="text" class="span12" aria-labeledby="name" tabindex="1">')
+                    $('<label>').attr('for', inputId).text(gt('Signature name')),
+                    baton.$.name = $('<input type="text" class="span12" tabindex="1">').attr('id', inputId)
                 )
             );
         }
@@ -49,10 +50,11 @@ define('io.ox/mail/settings/signatures/register',
         id: 'textarea',
         index: 300,
         draw: function (baton) {
+            var inputId = _.uniqueId('signature-textarea_');
             this.append(
                 $('<div class="row-fluid">').append(
-                    $('<label id="text">').text(gt('Signature text')),
-                    baton.$.signature = $('<textarea class="span12" rows="10" aria-labeledby="text" tabindex="1">')
+                    $('<label>').attr('for', inputId).text(gt('Signature text')),
+                    baton.$.signature = $('<textarea class="span12" rows="10" tabindex="1">').attr('id', inputId)
                 )
             );
         }
@@ -62,10 +64,11 @@ define('io.ox/mail/settings/signatures/register',
         id: 'position',
         index: 400,
         draw: function (baton) {
+            var inputId = _.uniqueId('signature-position_');
             this.append(
                 $('<div class="row-fluid">').append(
-                    $('<label id="position">').text(gt('Signature position')),
-                    baton.$.insertion = $('<select aria-labeledby="position" tabindex="1">')
+                    $('<label>').attr('for', inputId).text(gt('Signature position')),
+                    baton.$.insertion = $('<select tabindex="1">').attr('id', inputId)
                         .append(
                             $('<option value="above">').text(gt('Above quoted text')),
                             $('<option value="below">').text(gt('Below quoted text'))
