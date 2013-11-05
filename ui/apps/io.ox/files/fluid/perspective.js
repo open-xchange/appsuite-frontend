@@ -570,6 +570,7 @@ define('io.ox/files/fluid/perspective',
                 adjustWidth,
                 redraw,
                 drawFirst,
+                events,
                 layout,
                 recalculateLayout,
                 //simple
@@ -594,6 +595,13 @@ define('io.ox/files/fluid/perspective',
             ext.point('io.ox/files/icons').invoke(
                 'register', self, baton
             );
+
+            //get list of relevant events
+            events = function (type) {
+                return _.map(['list', 'icon', 'tile'], function (pers) {
+                    return 'perspective:fluid:' + pers + ':' + type;
+                }).join(' ');
+            };
 
             layout = calculateLayout(scrollpane.parent(), options);
 
@@ -620,8 +628,8 @@ define('io.ox/files/fluid/perspective',
 
             //register dnd handler
             dropZoneInit(app);
-            app.on('perspective:fluid:hide', dropZoneOff)
-               .on('perspective:fluid:show', dropZoneOn)
+            app.on('perspective:fluid:hide ' + events('hide'), dropZoneOff)
+               .on('perspective:fluid:show ' + events('show'), dropZoneOn)
                .on('folder:change', function () {
                     app.currentFile = null;
                     dropZoneInit(app);
