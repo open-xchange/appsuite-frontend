@@ -456,18 +456,18 @@ define('io.ox/portal/main',
                 if (model) {
                     // do we have custom data that might be lost?
                     if (!_.isEmpty(model.get('props'))) {
-                        var dialog = new dialogs.ModalDialog()
+                        var dialog = new dialogs.ModalDialog({tabTrap: true})
                         .header($('<h4>').text(gt('Delete widget')))
                         .append($('<span>').text(gt('Do you really want to delete this widget?')))
                         .addPrimaryButton('delete',
                             //#. Really delete portal widget - in contrast to "just disable"
-                            gt('Delete')
+                            gt('Delete'), 'delete', {tabIndex: '1'}
                         )
-                        .addButton('cancel', gt('Cancel'));
+                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
                         if (model.get('enabled')) {
                             dialog.addAlternativeButton('disable',
                                 //#. Just disable portal widget - in contrast to delete
-                                gt('Just disable widget')
+                                gt('Just disable widget'), 'disable', {tabIndex: '1'}
                             );
                         }
                         dialog.show().done(function (action) {

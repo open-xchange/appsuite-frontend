@@ -68,18 +68,18 @@ define('io.ox/oauth/settings',
                     $('<div class="control-group">').append(
                         $('<label for="displayName">').text(gt('Display Name')),
                         $('<div class="controls">').append(
-                            $displayNameField = $('<input type="text" name="displayName">').val(account.displayName)
+                            $displayNameField = $('<input type="text" name="displayName" tabindex="1">').val(account.displayName)
                         ) // End controls
                     ) // End control-group
                 ) // End form
             ); // End detail-pane
 
-            dialog = new dialogs.ModalDialog();
+            dialog = new dialogs.ModalDialog({tabTrap: true});
             dialog
                 .append($form)
-                .addPrimaryButton('save', gt('Save'))
-                .addAlternativeButton('reauthorize', gt('Reauthorize'))
-                .addButton('cancel', gt('Cancel'))
+                .addPrimaryButton('save', gt('Save'), 'save', {tabIndex: '1'})
+                .addAlternativeButton('reauthorize', gt('Reauthorize'), 'reauthorize', {tabIndex: '1'})
+                .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                 .show()
                 .done(function (action) {
                     if (action === 'save') {
