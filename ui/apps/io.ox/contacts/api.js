@@ -572,8 +572,6 @@ define('io.ox/contacts/api',
         url = ox.apiRoot + '/halo/contact/picture?' + params;
         img = new Image();
 
-        console.log('pictureHalo', options, '>', url);
-
         $(img).one('load error', function (e) {
             var fail = img.width === 1 || e.type === 'error';
             node.css('background-image', 'url(' + (fail ? fallback : url) + ')');
