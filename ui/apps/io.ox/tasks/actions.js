@@ -55,9 +55,9 @@ define('io.ox/tasks/actions',
                 numberOfTasks = data.length || 1;
             ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
                 //build popup
-                var popup = new dialogs.ModalDialog({async: true})
-                    .addPrimaryButton('deleteTask', gt('Delete'))
-                    .addButton('cancel', gt('Cancel'));
+                var popup = new dialogs.ModalDialog({async: true, tabTrap: true})
+                    .addPrimaryButton('deleteTask', gt('Delete'), 'deleteTask', {tabIndex: '1'})
+                    .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
                 //Header
                 popup.getBody()
                     .append($('<h4>')
