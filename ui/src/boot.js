@@ -21,7 +21,7 @@ $(window).load(function () {
 
     'use strict';
 
-    if (_.url.hash("cacheBusting")) {
+    if (_.url.hash('cacheBusting')) {
         ox.base = ox.base + _.now();
     }
 
@@ -33,7 +33,6 @@ $(window).load(function () {
     // animations
     var DURATION = 250,
         // functions
-        boot,
         appCache = $.Deferred(),
         cont,
         cleanUp,
@@ -84,14 +83,12 @@ $(window).load(function () {
     //if device small wait 10ms check again
     //maybe the check was made too early could be wrong
     //desktop was recognized as mobile in some cases because of this
-    if(_.device('small')) {
+    if (_.device('small')) {
         setTimeout(function () {
             _.recheckDevice();
         }, 10);
 
     }
-
-
 
     // continuation
     cont = function () {
@@ -127,7 +124,7 @@ $(window).load(function () {
 
     if (_.device('Android')) {
         if (_.browser.chrome === 18 || !_.browser.chrome) {
-             $('html').addClass('legacy-chrome');
+            $('html').addClass('legacy-chrome');
         }
         // disable context menu on chrome for android
         document.oncontextmenu = function (e) {
@@ -148,16 +145,15 @@ $(window).load(function () {
         ox.windowState = e.type === 'blur' ? 'background' : 'foreground';
     });
 
-    // detect if backend is down
-    var serverTimeout = setTimeout(serverDown, 30000); // long timeout for slow connections & IE
+    var serverTimeout;
 
-    function serverUp() {
+    var serverUp = function () {
         $('body').removeClass('down'); // to be safe
         serverDown = $.noop;
         clearTimeout(serverTimeout);
-    }
+    };
 
-    function serverDown() {
+    var serverDown = function () {
         $('body').addClass('down');
         $('#io-ox-login-container').empty().append(
             $('<div class="alert alert-info">').append(
@@ -168,16 +164,19 @@ $(window).load(function () {
         $('#background-loader').idle().fadeOut(DURATION);
         console.warn('Server is down.');
         serverDown = $.noop;
-    }
+    };
+
+    // detect if backend is down
+    serverTimeout = setTimeout(serverDown, 30000); // long timeout for slow connections & IE
 
     // teach require.js to use deferred objects
-    var req = window.req = require;
-    require = function (deps, success, fail) {
+    var req = window.req = window.require;
+    window.require = function (deps, success, fail) {
         if (_.isArray(deps)) {
             // use deferred object
             _(deps).each(function (m) {
-                $(window).trigger("require:require", m);
-            })
+                $(window).trigger('require:require', m);
+            });
             var def = $.Deferred().done(success).fail(fail);
             req(deps, def.resolve, def.reject);
             return def.promise();
@@ -322,7 +321,7 @@ $(window).load(function () {
                 }
 
                 function fail() {
-                    console.error('Could not load theme: ' + theme);
+                    console.error('Could not load theme: default');
                     gotoSignin('autologin=false');
                 }
 
@@ -407,10 +406,18 @@ $(window).load(function () {
                         target = (node.attr('data-i18n-attr') || 'text').split(',');
                     _.each(target, function (el) {
                         switch (el) {
-                        case 'value': node.val(val); break;
-                        case 'text': node.text(val); break;
-                        case 'label': node.contents().get(-1).nodeValue = val; break;
-                        default: node.attr(el, val); break;
+                        case 'value':
+                            node.val(val);
+                            break;
+                        case 'text':
+                            node.text(val);
+                            break;
+                        case 'label':
+                            node.contents().get(-1).nodeValue = val;
+                            break;
+                        default:
+                            node.attr(el, val);
+                            break;
                         }
                     });
                 });
@@ -516,8 +523,7 @@ $(window).load(function () {
         }
 
         var configCache,
-            HOUR = 60000 * 60,
-            DAY = HOUR * 24;
+            HOUR = 60000 * 60;
 
         function fetchServerConfig(cacheKey) {
             var def = $.Deferred();
@@ -561,7 +567,7 @@ $(window).load(function () {
             var ref = (location.hash || '').replace(/^#/, ''),
                 path = String(ox.serverConfig.loginLocation || ox.loginLocation),
                 glue = path.indexOf('#') > -1 ? '&' : '#';
-            path = path.replace("[hostname]", window.location.hostname);
+            path = path.replace('[hostname]', window.location.hostname);
             hash = (hash || '') + (ref ? '&ref=' + enc(ref) : '');
             _.url.redirect((hash ? path + glue + hash : path));
         }
@@ -650,7 +656,7 @@ $(window).load(function () {
                         if (hash.user && hash.language && hash.user_id) {
                             whoami.resolve(hash);
                         } else {
-                            require(["io.ox/core/http"], function (http) {
+                            require(['io.ox/core/http'], function (http) {
                                 http.GET({
                                     module: 'system',
                                     params: {
@@ -765,7 +771,6 @@ $(window).load(function () {
                 id = '',
                 footer = '',
                 i = 0,
-                cl = $('#io-ox-current-language').parent(),
                 maxLang = 30;
 
             debug('boot.js: initialize ...');
@@ -779,14 +784,13 @@ $(window).load(function () {
 
                 var langCount = _.size(lang),
                     defaultLanguage = _.getCookie('language') || getBrowserLanguage(),
-                    // Display native select box for languages if there are up to "maxLang" languages
+                    // Display native select box for languages if there are up to 'maxLang' languages
                     langSorted = _.toArray(_.invert(lang)).sort(function (a, b) {
                         return lang[a] <= lang[b] ? -1 : +1;
                     });
 
                 if (langCount < maxLang && !_.url.hash('language-select')) {
                     for (id in langSorted) {
-                        var link;
                         i++;
                         node.attr({'role': 'menu', 'aria-labeledby': 'io-ox-languages-label'}).append(
                             $('<a role="menuitem" href="#" aria-label="' + lang[langSorted[id]] + '">')
@@ -799,7 +803,7 @@ $(window).load(function () {
                     }
                 } else {
                     $('#io-ox-language-list').append(
-                        $('<select>').change(function(e) {
+                        $('<select>').change(function (e) {
                             var id = $(this).val();
                             if (id !== '') {
                                 e.data = { id: id };
@@ -821,7 +825,7 @@ $(window).load(function () {
                     );
                 }
             } else {
-                $("#io-ox-languages").remove();
+                $('#io-ox-languages').remove();
             }
 
             // update header
@@ -837,7 +841,7 @@ $(window).load(function () {
             $('#io-ox-copyright').text(footer);
 
             // hide checkbox?
-            if (!capabilities.has("autologin")) {
+            if (!capabilities.has('autologin')) {
                 $('#io-ox-login-store').remove();
             } else {
                 // check/uncheck?
@@ -948,10 +952,10 @@ $(window).load(function () {
                     // Offer Chrome to all non-chrome users on android
                     feedback('info', function () {
                         return $('<b>').text(
-                            //#. "Google Chrome" is a brand and should not be translated
+                            //#. 'Google Chrome' is a brand and should not be translated
                             gt('For best results we recommend using Google Chrome for Android.'))
                             .add($.txt(_.noI18n('\xa0')))
-                            //.# The missing word at the end of the sentence ("Play Store") will be injected later by script
+                            //.# The missing word at the end of the sentence ('Play Store') will be injected later by script
                             .add($.txt(gt('Get the latest version from the ')))
                             .add($('<a href="http://play.google.com/store/apps/details?id=com.android.chrome">Play Store</>'));
                     });
@@ -991,8 +995,8 @@ $(window).load(function () {
     require([
         'io.ox/core/http', 'io.ox/core/session', 'io.ox/core/cache', 'io.ox/core/extensions',
         'gettext', 'io.ox/core/manifests', 'io.ox/core/capabilities',
-        'themes', 'io.ox/core/settings'],
-        loadSuccess, loadFail
+        'themes', 'io.ox/core/settings'
+    ], loadSuccess, loadFail
     );
 
     // reload if files have change; need this during development
@@ -1018,7 +1022,7 @@ $(window).load(function () {
                 }
             };
 
-            cont = function (e) {
+            cont = function () {
                 clear();
                 debug('boot.js: applicationcache > resolve');
                 appCache.resolve();

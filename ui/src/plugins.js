@@ -15,14 +15,14 @@
  * LESS is distributed under the terms of the Apache License, Version 2.0
  */
 
-(function() {
+(function () {
 
     // File Caching
     var fileCache, dummyFileCache = {
-        retrieve: function (name) {
+        retrieve: function () {
             return $.Deferred().reject();
         },
-        cache: function (name, content) {
+        cache: function () {
             return;
         }
     };
@@ -30,10 +30,10 @@
     fileCache = dummyFileCache;
 
     function runCode(name, code) {
-        eval("//@ sourceURL=" + name + ".js\n" + code);
+        eval('//@ sourceURL=' + name + '.js\n' + code);
     }
 
-    if (_.device('desktop') && !_.device("Safari") && window.IDBVersionChangeEvent !== undefined && Modernizr.indexeddb && window.indexedDB) {
+    if (_.device('desktop') && !_.device('Safari') && window.IDBVersionChangeEvent !== undefined && Modernizr.indexeddb && window.indexedDB) {
         // IndexedDB
         (function () {
 
@@ -87,7 +87,7 @@
                 }
             };
 
-            request.onerror = function (e) {
+            request.onerror = function () {
                 // fallback
                 // console.log('request error outerlevel', e);
                 fileCache = dummyFileCache;
@@ -127,7 +127,7 @@
             };
 
         })();
-    } /*else if (Modernizr.localstorage && !_.device("desktop")) {
+    } /*else if (Modernizr.localstorage && !_.device('desktop')) {
         (function () {
             var queue = null;
             fileCache.retrieve = function (name) {
@@ -152,19 +152,19 @@
                 }
             };
         }());
-    }*/ else if (Modernizr.websqldatabase && ! _.device("Safari && desktop") && (_.browser.ios < 7)) {
+    }*/ else if (Modernizr.websqldatabase && ! _.device('Safari && desktop') && (_.browser.ios < 7)) {
         // Web SQL
         (function () {
             var initialization = $.Deferred();
-            var db = openDatabase("filecache", "1.0", "caches files for OX", 4 * 1024 * 1024);
+            var db = openDatabase('filecache', '1.0', 'caches files for OX', 4 * 1024 * 1024);
             db.transaction(function (tx) {
-                tx.executeSql("CREATE TABLE IF NOT EXISTS version (version TEXT)");
-                tx.executeSql("SELECT 1 FROM version WHERE version = ?", [ox.version], function (tx, result) {
+                tx.executeSql('CREATE TABLE IF NOT EXISTS version (version TEXT)');
+                tx.executeSql('SELECT 1 FROM version WHERE version = ?', [ox.version], function (tx, result) {
                     if (result.rows.length === 0) {
-                        tx.executeSql("DROP TABLE IF EXISTS files");
-                        tx.executeSql("CREATE TABLE files (name TEXT unique, contents TEXT, version TEXT)");
-                        tx.executeSql("DELETE FROM version");
-                        tx.executeSql("INSERT INTO version VALUES (?)", [ox.version]);
+                        tx.executeSql('DROP TABLE IF EXISTS files');
+                        tx.executeSql('CREATE TABLE files (name TEXT unique, contents TEXT, version TEXT)');
+                        tx.executeSql('DELETE FROM version');
+                        tx.executeSql('INSERT INTO version VALUES (?)', [ox.version]);
                     }
                     initialization.resolve();
 
@@ -174,7 +174,7 @@
                 var def = $.Deferred();
                 initialization.done(function () {
                     db.transaction(function (tx) {
-                        tx.executeSql("SELECT contents FROM files WHERE name = ? and version = ?", [name, ox.version], function (tx, result) {
+                        tx.executeSql('SELECT contents FROM files WHERE name = ? and version = ?', [name, ox.version], function (tx, result) {
                             if (result.rows.length === 0) {
                                 def.reject();
                             } else {
@@ -192,7 +192,7 @@
             fileCache.cache = function (name, contents) {
                 initialization.done(function () {
                     db.transaction(function (tx) {
-                        tx.executeSql("INSERT OR REPLACE INTO files (name, contents, version) VALUES (?,?,?) ", [name, contents, ox.version]);
+                        tx.executeSql('INSERT OR REPLACE INTO files (name, contents, version) VALUES (?,?,?) ', [name, contents, ox.version]);
                     });
                 });
             };
@@ -200,16 +200,16 @@
     }
 
     function badSource(source) {
-        return /throw new Error\("Could not read/.test(source);
+        return (/throw new Error\("Could not read/).test(source);
     }
 
     function dirname(filename) {
-        return filename.replace(/(?:^|(\/))[^\/]+$/, "$1");
+        return filename.replace(/(?:^|(\/))[^\/]+$/, '$1');
     }
 
     function relativeCSS(path, css) {
         return css.replace(/url\((\s*["']?)(?!\/|[A-Za-z][A-Za-z0-9+.-]*\:)/g,
-                           "url($1" + path);
+                           'url($1' + path);
     }
 
     var concatCSS = {}, nodes = {};
@@ -217,7 +217,7 @@
     function insertCommon(name, css, selector, node) {
         if (node) return node.text(css);
         return $('<style type="text/css">').text(css)
-            .attr("data-require-src", name)
+            .attr('data-require-src', name)
             .insertBefore(selector);
     }
 
@@ -237,10 +237,6 @@
     // Replace the load function of RequireJS with our own, which fetches
     // dynamically concatenated files.
     (function () {
-        function defaultImpl(name, parentRequire, load, config) {
-            $.ajax({ url: config.baseUrl + name, dataType: "text" })
-                .done(load).fail(load.error);
-        };
         var req = require, oldload = req.load;
         var queue = [];
         var deps = window.dependencies;
@@ -264,7 +260,7 @@
                 queue = [];
                 load(q.join(), modulename);
                 _.each(q, function (module) {
-                    $(window).trigger("require:load", module);
+                    $(window).trigger('require:load', module);
                 });
 
                 if (queue.length) console.error('recursive require', queue);
@@ -307,7 +303,10 @@
             );
 
             function load(module, modulename) {
-                 $.ajax({ url: [ox.apiRoot, '/apps/load/', ox.version, ',', module].join(''), dataType: "text" })
+                //$.ajax({ url: [ox.apiRoot, '/apps/load/', ox.base, ',', module].join(''), dataType: 'text' })
+                //.done(function (concatenatedText) {
+                //    runCode([ox.apiRoot, '/apps/load/', ox.base, ',', module].join(''), concatenatedText);
+                 $.ajax({ url: [ox.apiRoot, '/apps/load/', ox.version, ',', module].join(''), dataType: 'text' })
                  .done(function (concatenatedText) {
                         runCode([ox.apiRoot, '/apps/load/', ox.version, ',', module].join(''), concatenatedText);
                         context.completeLoad(modulename);
@@ -330,28 +329,31 @@
                                 } else if (_.url.hash('debug-filecache')) {
                                     console.log('FileCache: Could not determine name for ' + moduleText);
                                 }
-                            })();
-                        });
-                 });
-
-
+                                if (_.url.hash('debug-filecache')) console.log('FileCache: Caching ' + name);
+                                fileCache.cache(name, moduleText);
+                            } else if (_.url.hash('debug-filecache')) {
+                                console.log('FileCache: Could not determine name for ' + moduleText);
+                            }
+                        })();
+                    });
+                });
             }
         };
 
-        define('text', { load: function (name, parentRequire, load, config) {
+        define('text', { load: function (name, parentRequire, load) {
             req(['/text;' + name], load, load.error);
         } });
-        define('raw', { load: function (name, parentRequire, load, config) {
+        define('raw', { load: function (name, parentRequire, load) {
             req(['/raw;' + name], load, load.error);
         } });
     }());
 
     // css plugin
-    define("css", {
+    define('css', {
         load: function (name, parentRequire, load, config) {
-            require(["text!" + name], function (css) {
+            require(['text!' + name], function (css) {
                 var path = config.baseUrl + name;
-                load(insert(path, relativeCSS(dirname(path), css), "#css"));
+                load(insert(path, relativeCSS(dirname(path), css), '#css'));
             });
         }
     });
@@ -378,7 +380,7 @@
             });
     }
 
-    define("less", {
+    define('less', {
         load: function (name, parentRequire, load, config) {
             var file = {
                 path: config.baseUrl + name,
@@ -395,7 +397,7 @@
     });
 
     // themes module
-    define("themes", {
+    define('themes', {
         /**
          * Loads a new theme.
          * @param {String} name The name of the new theme.
@@ -424,7 +426,7 @@
                 win8Icon: 'icon144_win.png'
             };
             for (var i in icons) {
-                var t = $('head #' + i).attr({ href: path + icons[i] })
+                $('head #' + i).attr({ href: path + icons[i] })
                                .detach().appendTo('head');
             }
             if (name !== 'login') {
@@ -436,8 +438,10 @@
             }
         },
 
+        //FIXME: this function might be broken. Not sure, what it is doing!
+        //only used by theme-maker, as far as I can see
         getDefinitions: function () {
-            return (currentTheme || '').replace(/:/g, ': ');
+            return (this.currentTheme || '').replace(/:/g, ': ');
         }
     });
 }());
@@ -473,7 +477,7 @@
         enable: function () {
             require(['io.ox/core/gettext'], function (gt) { gt.enable(); });
         },
-        load: function (name, parentRequire, load, config) {
+        load: function (name, parentRequire, load) {
             assert(langDef.state !== 'pending', _.printf(
                 'Invalid gettext dependency on %s (before login).', name));
             langDef.done(function () {
@@ -489,9 +493,10 @@
             function wrap(f) {
                 var f2 = function () { return f.apply(this, arguments); };
                 // _.each by foot to avoid capturing members of f in closures
-                for (var i in f) (function (i) {
+                var f3 = function (i) {
                     f2[i] = function () { f[i].apply(f, arguments); };
-                }(i));
+                };
+                for (var i in f) f3(i);
                 callbacks[name] = function (newF) { f = newF; };
                 load(f2);
             }
@@ -579,8 +584,8 @@
     }
 
     define('dot', {
-        load: function (name, parentRequire, loaded, config) {
-            parentRequire(["text!" + name, 'io.ox/core/extensions'], function (html, ext) {
+        load: function (name, parentRequire, loaded) {
+            parentRequire(['text!' + name, 'io.ox/core/extensions'], function (html, ext) {
                 // get template fragment - just elements, no comments, no text nodes
                 var fragment = $(html).filter(function () { return this.nodeType === 1; }),
                     parts = fragment.filter('part'),
@@ -598,7 +603,7 @@
     });
 
     define('withPluginsFor', {
-        load: function (name, parentRequire, loaded, config) {
+        load: function (name, parentRequire, loaded) {
             parentRequire(ox.withPluginsFor(name, []), loaded);
         }
     });
