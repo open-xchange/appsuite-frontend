@@ -47,7 +47,7 @@ module.exports = function (grunt) {
         local: local,
         jshint: {
             all: {
-                src: ['Gruntfile.js', 'apps/**/*.js'],
+                src: ['Gruntfile.js', 'apps/**/*.js', 'src/*.js'],
                 options: {
                     jshintrc: '.jshintrc',
                     ignores: ['apps/io.ox/core/date.js'] // date.js has some funky include stuff we have to figure out
