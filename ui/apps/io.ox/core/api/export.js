@@ -29,76 +29,20 @@ define('io.ox/core/api/export',
     });
 
     /**
-     * requesting server data and generalizes server response
-     * @private
-     * @param  {string} type (target format)
-     * @param  {string} id of folder whose contents should be exported
-     * @param  {boolean} simulate return only request url (optional)
-     * @param  {string} columns as comma separated list (optional, only if type is 'csv')
-     * @return {deferred}
+     * returns export url
+     * @param  {string} type/format
+     * @param  {string} folder
+     * @param  {object} options
+     * @return {string} url
      */
-    var get = function (type, folder, simulate, columns) {
-        var def = $.Deferred(),
-            params = {
-                action: type,
-                folder: _.isString(folder) ? folder : folder.id || ''
-            };
-        if (columns) {
-            params.columns = columns;
-        }
-        http.GET({
-            simulate: !!simulate,
-            module: 'export',
-            params: params,
-            dataType: 'text'
-        })
-        .done(function (data) {
-            // only error messages will be returned as json
-            try {
-                //qualified server error
-                data = $.parseJSON(data);
-                def.reject(data);
-            } catch (e) {
-                // [csv|ical|vcard] string
-                def.resolve(data);
-            }
-        })
-        .fail(function (data) {
-            //http error
-            def.reject(data);
-        });
-        return def;
-    };
-
-    /**
-     * done: returns csv string; fail: returns error object
-     * @param  {string} id of folder (contacts) whose contents should be exported
-     * @param  {boolean} simulate return only request url (optional)
-     * @param  {string} columns as comma separated list (optional)
-     * @return {deferred}
-     */
-    api.getCSV = function (folder, simulate, columns) {
-        return get('CSV', folder, simulate, columns);
-    };
-
-    /**
-     * done: returns ical string; fail: returns error object
-     * @param  {string} id of folder (calendar or tasks) whose contents should be exported
-     * @param  {boolean} simulate return only request url (optional)
-     * @return {deferred}
-     */
-    api.getICAL = function (folder, simulate) {
-        return get('ICAL', folder, simulate);
-    };
-
-    /**
-     * done: returns vcard string; fail: returns error object
-     * @param  {string} id of folder (contacts) whose contents should be exported
-     * @param  {boolean} simulate return only request url (optional)
-     * @return {deferred}
-     */
-    api.getVCARD = function (folder, simulate) {
-        return get('VCARD', folder, simulate);
+    api.getUrl = function (type, folder, options) {
+        var opt = $.extend({include: true}, options || {});
+        return  ox.apiRoot + '/export' +
+                '?action=' + type +
+                '&folder=' + folder +
+                '&export_dlists=' + opt.include +
+                '&content_disposition=attachment' +
+                '&session=' + ox.session;
     };
 
     return api;

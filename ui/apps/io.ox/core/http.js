@@ -682,16 +682,6 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 }, false);
             }
 
-            // simulation: abort request and return url in fail handler
-            if (r.o.simulate) {
-                if (ajaxOptions.beforeSend)
-                    console.error('existing beforeSend method will be overwritten');
-                ajaxOptions.beforeSend = function (jqXHR) {
-                    this.targeturl = this.url;
-                    jqXHR.abort();
-                };
-            }
-
             var t0, ajax;
 
             t0 = _.now();
@@ -772,12 +762,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                     r = null;
                 })
                 .fail(function (xhr, textStatus, errorThrown) {
-                    if (r.o.simulate)
-                        r.def.resolve(this.targeturl);
-                    else {
-                        that.trigger('stop fail', r.xhr);
-                        r.def.reject({ error: xhr.status + ' ' + (errorThrown || 'general') }, xhr);
-                    }
+                    that.trigger('stop fail', r.xhr);
+                    r.def.reject({ error: xhr.status + ' ' + (errorThrown || 'general') }, xhr);
                     r = null;
                 });
         }
