@@ -987,22 +987,13 @@ define('io.ox/mail/view-detail',
         index: 100,
         id: 'contact-picture',
         draw: function (baton) {
-            var data = baton.data, picture;
-            this.append(
-                picture = $('<div>').addClass('contact-picture')
-            );
-            require(['io.ox/contacts/api'], function (api) {
-                // get contact picture
-                api.getPictureURL(data.from && data.from.length ? data.from[0][1] : '', { width: 64, height: 64, scaleType: 'contain' })
-                    .done(function (url) {
-                        if (url) {
-                            picture.css({ backgroundImage: 'url(' + url + ')' });
-                        }
-                        if (/dummypicture\.png$/.test(url)) {
-                            picture.addClass('default-picture');
-                        }
-                        url = picture = data = null;
-                    });
+            this.append(function () {
+                var picture = $('<div class="contact-picture">');
+                require(['io.ox/contacts/api'], function (api) {
+                    api.pictureHalo(picture, { email: util.hasFrom(baton.data) && baton.data.from[0][1], width: 64, height: 64, scaleType: 'cover' });
+                    picture = null;
+                });
+                return picture;
             });
         }
     });

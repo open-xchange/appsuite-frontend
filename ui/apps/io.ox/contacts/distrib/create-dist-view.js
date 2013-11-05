@@ -235,7 +235,10 @@ define('io.ox/contacts/distrib/create-dist-view',
                 .attr('data-mail', o.display_name + '_' + o.mail)
                 .append(
                     // contact picture
-                    api.getPicture(o, { scaleType: 'cover', width: 54, height: 54 }).addClass('contact-image'),
+                    api.pictureHalo(
+                        $('<div class="contact-image">'),
+                        $.extend(o, { width: 48, height: 48, scaleType: 'cover' })
+                    ),
                     // name
                     $('<div class="person-name ellipsis">').text(o.display_name),
                     // mail address

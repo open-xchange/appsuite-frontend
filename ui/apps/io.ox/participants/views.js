@@ -11,9 +11,10 @@
  */
 
 define('io.ox/participants/views',
-    ['gettext!io.ox/calendar/edit/main',
+    ['io.ox/contacts/api',
+     'gettext!io.ox/calendar/edit/main',
      'less!io.ox/participants/participants.less'
-    ], function (gt) {
+    ], function (api, gt) {
 
     'use strict';
 
@@ -83,10 +84,10 @@ define('io.ox/participants/views',
         },
 
         setCustomImage: function () {
-            var url = this.model.getImage();
-            if ((/api\/image/).test(url)) {
-                this.nodes.$img.css('backgroundImage', 'url(' + url + ')');
-            }
+            api.pictureHalo(
+                this.nodes.$img,
+                $.extend(this.model.toJSON(), { width: 54, height: 54, scaleType: 'cover' })
+            );
         },
 
         setOrganizer: function () {

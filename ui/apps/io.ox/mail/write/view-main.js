@@ -1177,15 +1177,17 @@ define('io.ox/mail/write/view-main',
     }
 
     function drawAutoCompleteItem(node, data) {
-        var url = contactsUtil.getImage(data.data, contactPictureOptions), labelnode = '';
-        //source field label
-        if (getFieldLabel(data.field) !== '')
-            labelnode = ' <span style="color: #888;">(' + getFieldLabel(data.field) + ')</span>';
-
         node.addClass('io-ox-mail-write-contact').append(
-            $('<div class="contact-image">').css('backgroundImage', 'url(' + url + ')'),
+            contactsAPI.pictureHalo(
+                $('<div class="contact-image">'),
+                $.extend(data.data, contactPictureOptions)
+            ),
             $('<div class="ellipsis">').text(_.noI18n(data.display_name + '\u00A0')),
-            $('<div class="ellipsis email">').html(_.noI18n(data.email) + _.noI18n(data.phone || '') + labelnode)
+            $('<div class="ellipsis email">').append(
+                $.txt(data.email + (data.phone || '') + ' '),
+                getFieldLabel(data.field) !== '' ?
+                    $('<span style="color: #888;">').text('(' + getFieldLabel(data.field) + ')') : []
+            )
         );
     }
 
@@ -1209,7 +1211,10 @@ define('io.ox/mail/write/view-main',
             //draw node
             node.addClass('io-ox-mail-write-contact section-item').append(
                 // picture
-                contactsAPI.getPicture(data, contactPictureOptions).addClass('contact-image'),
+                contactsAPI.pictureHalo(
+                    $('<div class="contact-image">'),
+                    $.extend(data, contactPictureOptions)
+                ),
                 // hidden field
                 $('<input>', { type: 'hidden', name: id, value: serialize(data) }),
                 // display name

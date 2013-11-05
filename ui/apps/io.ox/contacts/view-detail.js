@@ -115,11 +115,13 @@ define('io.ox/contacts/view-detail',
         index: 100,
         id: 'contact-picture',
         draw: function (baton) {
-            if (!api.looksLikeDistributionList(baton.data)) {
-                this.append(
-                    api.getPicture(baton.data, { scaleType: 'contain', width: 80, height: 80 }).addClass('picture')
-                );
-            }
+            if (api.looksLikeDistributionList(baton.data)) return;
+            this.append(
+                api.pictureHalo(
+                    $('<div class="picture">'),
+                    { id: baton.data.id, folder: baton.data.folder_id, width: 64, height: 64, scaleType: 'cover' }
+                )
+            );
         }
     });
 
@@ -217,7 +219,10 @@ define('io.ox/contacts/view-detail',
             // draw member
             this.append(
                 $('<div class="member">').append(
-                    api.getPicture(data, { scaleType: 'cover', width: 48, height: 48 }).addClass('member-picture'),
+                    api.pictureHalo(
+                        $('<div class="member-picture">'),
+                        $.extend(data, { width: 48, height: 48, scaleType: 'cover' })
+                    ),
                     $('<div class="member-name">').text(data.display_name),
                     $('<a href="#" class="halo-link">').data({ email1: data.mail }).text(data.mail)
                 )

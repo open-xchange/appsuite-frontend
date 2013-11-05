@@ -143,7 +143,10 @@ define('plugins/portal/birthdays/register',
 
                         $list.append(
                             $('<div class="birthday">').data('contact', contact).append(
-                                api.getPicture(contact, { width: 48, height: 48, scaleType: 'cover' }).addClass('picture'),
+                                api.pictureHalo(
+                                    $('<div class="picture">'),
+                                    $.extend(contact, { width: 48, height: 48, scaleType: 'cover' })
+                                ),
                                 $('<div class="name">').text(_.noI18n(name)),
                                 $('<div>').append(
                                     $('<span class="date">').text(_.noI18n(birthday.format(birthday.getYear() === 1 ? date.DATE_NOYEAR : date.DATE))), $.txt(' '),
