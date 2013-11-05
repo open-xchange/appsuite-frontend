@@ -17,8 +17,7 @@ define('io.ox/calendar/util',
      'io.ox/core/api/user',
      'io.ox/contacts/api',
      'io.ox/core/api/group',
-     'io.ox/core/util'
-    ], function (date, gt, userAPI, contactAPI, groupAPI, util) {
+    ], function (date, gt, userAPI, contactAPI, groupAPI) {
 
     'use strict';
 
@@ -471,7 +470,7 @@ define('io.ox/calendar/util',
                 .replace(/</g, '&lt;')
                 .replace(/(https?\:\/\/\S+)/g, function ($1) {
                     // soft-break long words (like long URLs)
-                    return '<a href="' + $1 + '" target="_blank">' + util.breakableHTML($1) + '</a>';
+                    return '<a href="' + $1 + '" target="_blank">' + $1 + '</a>';
                 });
         },
 

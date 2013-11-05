@@ -12,8 +12,7 @@ BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-root
 BuildRequires:  open-xchange-appsuite-dev
 
-Requires:       open-xchange-appsuite-manifest >= 7.4.1
-Requires(post): open-xchange-appsuite-manifest >= 7.4.1
+Requires(post): open-xchange-appsuite-manifest
 
 %description
 @description@
@@ -60,26 +59,13 @@ sh /opt/open-xchange-appsuite-dev/bin/build-appsuite clean skipLess=1 \
 ## Uncomment for multiple packages (3/4)
 #rm -r "%{buildroot}%{docroot}"
 
-%define update_flag "%{_localstatedir}/run/open-xchange-appsuite.update"
 %define update /opt/open-xchange/appsuite/share/update-themes.sh
 
 %post
-if [ $1 -eq 1 ]; then touch "%{update_flag}"; fi
+if [ $1 -eq 1 -a -x %{update} ]; then %{update}; fi
 
 %postun
-if [ $1 -lt 1 ]; then
-    rm -f "%{update_flag}"
-    if [ -x %{update} ]; then %{update}; fi
-else
-    touch "%{update_flag}"
-fi
-
-%posttrans
-if [ -f "%{update_flag}" ]; then
-    rm "%{update_flag}"
-    if [ -x %{update} ]; then %{update}; fi
-fi
-
+if [ -x %{update} ]; then %{update}; fi
 
 %files
 %defattr(-,root,root)

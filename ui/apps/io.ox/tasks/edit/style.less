@@ -130,7 +130,7 @@
     @media all and (max-width: 980px) {
         .progress-field { width: 49px; }
     }
-    @media all and (max-width: 480px), (max-device-width: 480px) {
+    @media all and (max-width: 480px), all and (max-device-width: 480px) {
         .title {
             width: 100%; //to push the buttons under the title
         }
@@ -145,6 +145,12 @@
         }
         .task-edit-wrapper {
             margin-top: 0;
+        }
+
+        .participant-wrapper {
+            .participant-email {
+                display: block;
+            }
         }
     }
 }

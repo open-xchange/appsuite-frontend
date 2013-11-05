@@ -756,6 +756,8 @@ define.async('io.ox/core/tk/html-editor',
         this.destroy = function () {
             this.handleHide();
             if (ed) {
+                // fix IE9/10 focus bug (see bug 29616); similar: http://bugs.jqueryui.com/ticket/9122
+                $('iframe', ed.getContentAreaContainer()).attr('src', 'blank.html');
                 $(ed.getWin()).off('focus blur');
             }
             if (textarea.tinymce()) {

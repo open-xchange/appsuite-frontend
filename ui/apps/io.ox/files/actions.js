@@ -152,7 +152,7 @@ define('io.ox/files/actions',
                     });
                 } else if (filtered.length > 1) {
                     require(['io.ox/core/download'], function (download) {
-                        download.zip(filtered);
+                        download.files(filtered);
                     });
                 }
                 // 'description only' items
