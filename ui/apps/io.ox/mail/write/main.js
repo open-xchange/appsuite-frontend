@@ -1193,10 +1193,10 @@ define('io.ox/mail/write/main',
                 } else if ($.trim(mail.data.subject) === '') {
                     // show dialog
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                        new dialogs.ModalDialog()
+                        new dialogs.ModalDialog({tabTrap: true})
                             .text(gt('Mail has empty subject. Send it anyway?'))
-                            .addPrimaryButton('send', gt('Yes, send without subject'))
-                            .addButton('subject', gt('Add subject'))
+                            .addPrimaryButton('send', gt('Yes, send without subject'), 'send', {tabIndex: '1'})
+                            .addButton('subject', gt('Add subject'), 'subject', {tabIndex: '1'})
                             .show(function () {
                                 def.notify('empty subject');
                             })
@@ -1312,11 +1312,11 @@ define('io.ox/mail/write/main',
 
             if (app.dirty()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog()
+                    new dialogs.ModalDialog({tabTrap: true})
                         .text(gt('Do you really want to discard this mail?'))
-                        .addPrimaryButton('delete', gt('Discard'))
-                        .addAlternativeButton('savedraft', gt('Save as draft'))
-                        .addButton('cancel', gt('Cancel'))
+                        .addPrimaryButton('delete', gt('Discard'), 'delete', {tabIndex: '1'})
+                        .addAlternativeButton('savedraft', gt('Save as draft'), 'savedraft', {tabIndex: '1'})
+                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {

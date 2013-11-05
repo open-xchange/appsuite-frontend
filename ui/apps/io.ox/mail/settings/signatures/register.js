@@ -28,8 +28,8 @@ define('io.ox/mail/settings/signatures/register',
         draw: function (baton) {
             this.append(
                 $('<div class="row-fluid">').append(
-                    $('<label>').text(gt('Signature name')),
-                    baton.$.name = $('<input type="text" class="span12">')
+                    $('<label id="name">').text(gt('Signature name')),
+                    baton.$.name = $('<input type="text" class="span12" aria-labeledby="name" tabindex="1">')
                 )
             );
         }
@@ -51,8 +51,8 @@ define('io.ox/mail/settings/signatures/register',
         draw: function (baton) {
             this.append(
                 $('<div class="row-fluid">').append(
-                    $('<label>').text(gt('Signature text')),
-                    baton.$.signature = $('<textarea class="span12" rows="10">')
+                    $('<label id="text">').text(gt('Signature text')),
+                    baton.$.signature = $('<textarea class="span12" rows="10" aria-labeledby="text" tabindex="1">')
                 )
             );
         }
@@ -64,8 +64,8 @@ define('io.ox/mail/settings/signatures/register',
         draw: function (baton) {
             this.append(
                 $('<div class="row-fluid">').append(
-                    $('<label>').text(gt('Signature position')),
-                    baton.$.insertion = $('<select>')
+                    $('<label id="position">').text(gt('Signature position')),
+                    baton.$.insertion = $('<select aria-labeledby="position" tabindex="1">')
                         .append(
                             $('<option value="above">').text(gt('Above quoted text')),
                             $('<option value="below">').text(gt('Below quoted text'))
@@ -97,14 +97,14 @@ define('io.ox/mail/settings/signatures/register',
 
         if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
 
-        var popup = new dialogs.ModalDialog({ async: true });
+        var popup = new dialogs.ModalDialog({ async: true, tabTrap: true });
         popup.header($('<h4>').text(signature.id === null ? gt('Add signature') : gt('Edit signature')));
 
         var baton = new ext.Baton();
         ext.point('io.ox/mail/settings/signature-dialog').invoke('draw', popup.getContentNode(), baton);
 
-        popup.addPrimaryButton('save', gt('Save'))
-        .addButton('cancel', gt('Discard'))
+        popup.addPrimaryButton('save', gt('Save'), 'save', {tabIndex: '1'})
+        .addButton('cancel', gt('Discard'), 'cancel', {tabIndex: '1'})
         .on('save', function () {
             if (baton.$.name.val() !== '') {
                 var update = signature.id ? {} : {type: 'signature', module: 'io.ox/mail', displayname: '', content: '', misc: {insertion: 'below'}};

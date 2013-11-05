@@ -603,7 +603,8 @@ define('io.ox/mail/write/view-main',
                         pane = new dialogs.ModalDialog({
                             width: window.innerWidth * 0.8,
                             height: 350,
-                            addclass: 'add-infostore-file'
+                            addclass: 'add-infostore-file',
+                            tabTrap: true
                         }),
                         self = this;
 
@@ -616,8 +617,8 @@ define('io.ox/mail/write/view-main',
                         .build(function () {
                             this.getContentNode().append(container, filesPane);
                         })
-                        .addPrimaryButton('save', gt('Add'))
-                        .addButton('cancel', gt('Cancel'))
+                        .addPrimaryButton('save', gt('Add'), 'save', {tabIndex: '1'})
+                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                         .show(function () {
                             tree.paint().done(function () {
                                 tree.selection.updateIndex().selectFirst();
