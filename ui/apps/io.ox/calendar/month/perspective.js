@@ -103,13 +103,14 @@ define('io.ox/calendar/month/perspective',
                 api.update(obj).fail(function (con) {
                     if (con.conflicts) {
                         new dialogs.ModalDialog({
+                                tabTrap: true,
                                 top: '20%',
                                 center: false,
                                 container: self.main
                             })
                             .append(conflictView.drawList(con.conflicts))
-                            .addDangerButton('ignore', gt('Ignore conflicts'))
-                            .addButton('cancel', gt('Cancel'))
+                            .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', {tabIndex: '1'})
+                            .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                             .show()
                             .done(function (action) {
                                 if (action === 'cancel') {
@@ -126,10 +127,10 @@ define('io.ox/calendar/month/perspective',
             };
 
             if (obj.recurrence_type > 0) {
-                new dialogs.ModalDialog()
+                new dialogs.ModalDialog({ tabTrap: true })
                     .text(gt('By changing the date of this appointment you are creating an appointment exception to the series. Do you want to continue?'))
-                    .addButton('appointment', gt('Yes'))
-                    .addButton('cancel', gt('No'))
+                    .addButton('appointment', gt('Yes'), 'appointment', {tabIndex: '1'})
+                    .addButton('cancel', gt('No'), 'cancel', {tabIndex: '1'})
                     .show()
                     .done(function (action) {
                         if (action === 'appointment') {

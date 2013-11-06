@@ -144,6 +144,7 @@ define('io.ox/calendar/edit/main',
 
                                 ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/conflicts/conflictList']).done(function (dialogs, conflictView) {
                                     var dialog = new dialogs.ModalDialog({
+                                            tabTrap: true,
                                             top: '20%',
                                             center: false,
                                             container: self.getWindowNode()
@@ -155,9 +156,9 @@ define('io.ox/calendar/edit/main',
                                                 .text(gt('Conflicts with resources cannot be ignored'))
                                         );
                                     } else {
-                                        dialog.addDangerButton('ignore', gt('Ignore conflicts'));
+                                        dialog.addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', {tabIndex: '1'});
                                     }
-                                    dialog.addButton('cancel', gt('Cancel'))
+                                    dialog.addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                                         .show()
                                         .done(function (action) {
                                             if (action === 'cancel') {
