@@ -190,10 +190,10 @@ define('io.ox/tasks/actions',
                 } else {
 
                     //build popup
-                    var popup = new dialogs.ModalDialog()
+                    var popup = new dialogs.ModalDialog({tabTrap: true})
                         .header($('<h4>').text(gt('Move')))
-                        .addPrimaryButton('ok', gt('Move'))
-                        .addButton('cancel', gt('Cancel'));
+                        .addPrimaryButton('ok', gt('Move'), 'ok', {tabIndex: '1'})
+                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
                     popup.getBody().css({ height: '250px' });
                     var tree = new views.FolderList(popup.getBody(), {
                             type: 'tasks',
@@ -521,9 +521,9 @@ define('io.ox/tasks/actions',
                             //check if startDate is still valid with new endDate, if not, show dialog
                             if (e.data.task.start_date && e.data.task.start_date > endDate.getTime()) {
                                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                                    var popup = new dialogs.ModalDialog()
-                                        .addButton('cancel', gt('Cancel'))
-                                        .addPrimaryButton('change', gt('Adjust start date'));
+                                    var popup = new dialogs.ModalDialog({tabTrap: true})
+                                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+                                        .addPrimaryButton('change', gt('Adjust start date'), 'changechange', {tabIndex: '1'});
                                     //text
                                     popup.getBody().append(
                                         $('<h4>').text(gt('Inconsistent dates')),
