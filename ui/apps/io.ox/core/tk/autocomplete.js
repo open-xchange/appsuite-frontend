@@ -371,7 +371,9 @@ define('io.ox/core/tk/autocomplete',
                     });
             });
 
-            popup.on('mousedown', blurOff).on('mouseup', blurOn);
+            if (_.device('!desktop')) {
+                popup.on('mousedown', blurOff).on('mouseup', blurOn);
+            }
         }
 
         return this;
