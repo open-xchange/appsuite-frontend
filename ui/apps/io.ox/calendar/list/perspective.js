@@ -50,7 +50,6 @@ define('io.ox/calendar/list/perspective',
             optDropdown = null,
             months = 1; // how many months do we display
 
-        this.grid = grid;
 
         // show "load more" link
         gridOptions.tail = function () {
@@ -60,6 +59,7 @@ define('io.ox/calendar/list/perspective',
         };
 
         grid = new VGrid(left, gridOptions);
+        this.grid = grid;
 
         if (_.url.hash('id') && _.url.hash('id').split(',').length === 1) {// use only for single items
             findRecurrence = _.url.hash('id').split('.').length === 2;//check if recurrencePosition is missing
@@ -343,8 +343,7 @@ define('io.ox/calendar/list/perspective',
      * triggered by desktop.js
      */
     perspective.afterShow = function () {
-        this.updateGridOptions();
-        this.grid.refresh(true);
+        this.refresh();
     };
 
     return perspective;
