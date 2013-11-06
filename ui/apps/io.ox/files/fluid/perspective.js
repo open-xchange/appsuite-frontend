@@ -642,6 +642,16 @@ define('io.ox/files/fluid/perspective',
                     self.selection.clear();
                     drawFirst();
                 });
+            
+            //retrigger selection to set the id in the url properly when comming back from editor etc. In other apps this is handled by vgrid.
+            win.on('show', function () {
+                self.selection.retriggerUnlessEmpty();
+            });
+            win.on('hide', function () {
+                app.off('show', function () {
+                    self.selection.retriggerUnlessEmpty();
+                });
+            });
 
             //register click handler
             scrollpane.on(_.device('smartphone') ? 'tap' : 'click', '.selectable', function (e, data) {

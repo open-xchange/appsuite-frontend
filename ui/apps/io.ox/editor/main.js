@@ -262,7 +262,7 @@ define('io.ox/editor/main',
                 )
                 .done(function (data, text) {
                     win.idle();
-                    app.setState({ folder: o.folder_id, id: o.id });
+                    app.setState({ folder: o.folder_id, id: o.folder_id + '.' + o.id });
                     model.set(previous = $.extend(data, { content: text[0] }));
                     view.focus();
                     def.resolve();
