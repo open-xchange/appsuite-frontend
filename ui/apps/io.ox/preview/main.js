@@ -57,11 +57,12 @@ define('io.ox/preview/main',
 
         point: ext.point('io.ox/preview/engine'),
 
-        getByExtension: function (fileExtension) {
+        getByExtension: function (fileExtension, file) {
             return this.point.chain().find(function (ext) {
-                var tmp = ext.metadata('supports');
+                var tmp = ext.metadata('supports', fileExtension, file), match;
                 tmp = _.isArray(tmp) ? tmp : [tmp];
-                return _(tmp).contains(fileExtension);
+                match = _(tmp).contains(fileExtension);
+                return (match && _.isFunction(ext.verify)) ? ext.verify(file) : match;
             }).value();
         }
     };
@@ -121,9 +122,13 @@ define('io.ox/preview/main',
             supports: (function () {
                 return mediasupport.supportedExtensionsArray('audio');
             }()),
+            verify: function (file) {
+                // chrome cannot play audio files attachments (content-length issue; see bug 29491)
+                return !file || !file.attachment || !_.device('chrome');
+            },
             draw: function (file) {
                 $('<audio>').attr({
-                    src: file.dataURL + '&delivery=view&content_type=' + file.mimetype,
+                    src: file.dataURL + '&delivery=view&content_type=' + String(file.mimetype || '').split(';')[0],
                     type: file.mimetype,
                     preload: 'metadata',
                     controls: 'control',
@@ -255,7 +260,7 @@ define('io.ox/preview/main',
 
         // get matching renderer
         if (this.extension || this.file.mimetype) {
-            this.renderer = Renderer.getByExtension(this.extension || this.file.mimetype);
+            this.renderer = Renderer.getByExtension(this.extension || this.file.mimetype, this.file);
         }
     };
 
