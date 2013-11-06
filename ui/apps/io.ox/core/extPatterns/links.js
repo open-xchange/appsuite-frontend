@@ -69,7 +69,12 @@ define('io.ox/core/extPatterns/links',
                     .addClass('disabled')
                     .attr({
                         'aria-disabled': true
+                        // may be, tabindex should be set to 0, to 'hide'
+                        // the link during keyboard navigation. Anyway,
+                        // IMHO a menu should be as static as possible to support
+                        // users to 'learn' the navigation
                     })
+                    .removeAttr('href')
                 );
             };
         }
