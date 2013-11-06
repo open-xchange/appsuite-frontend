@@ -20,6 +20,10 @@
         -webkit-tap-highlight-color: rgba(0,0,0,0);
     }
 
+    .info {
+        cursor: pointer;
+    }
+
     .week {
         width: 100%;
         min-height: 100%;
@@ -131,6 +135,53 @@
 
         }
 
+        .day {
+
+            position: relative;
+            height: 100%;
+            float: left;
+            border-left: 1px solid #ccc;
+            background-color: rgba(0, 0, 0, 0.01);
+            .user-select(none);
+
+            .timeslot {
+
+                -webkit-touch-callout: none !important;
+                border-bottom: 1px solid #ccc;
+                height: 24px;
+
+                &:nth-child(2n+1) {
+                    border-bottom-style: dotted;
+                }
+
+                &:last-child, .time:last-child {
+                    border: none;
+                }
+
+                &.in {
+                    background-color: @weekviewDayIn;
+                }
+
+                &.out {
+                    background-color: @weekviewDayOut;
+                }
+
+            }
+
+            &.today .timeslot {
+
+                &.in {
+                    background-color: darken(@weekviewDayIn, 5%);
+                }
+
+                &.out {
+                    background-color: darken(@weekviewDayOut, 3%);
+                }
+
+            }
+
+        }
+
     }
 
     /* Hide days in dayview */
@@ -146,53 +197,6 @@
 
         .footer-container {
             display: none;
-        }
-
-    }
-
-    .day {
-
-        position: relative;
-        height: 100%;
-        float: left;
-        border-left: 1px solid #ccc;
-        background-color: rgba(0, 0, 0, 0.01);
-        .user-select(none);
-
-        .timeslot {
-
-            -webkit-touch-callout: none !important;
-            border-bottom: 1px solid #ccc;
-            height: 24px;
-
-            &:nth-child(2n+1) {
-                border-bottom-style: dotted;
-            }
-
-            &:last-child, .time:last-child {
-                border: none;
-            }
-
-            &.in {
-                background-color: @weekviewDayIn;
-            }
-
-            &.out {
-                background-color: @weekviewDayOut;
-            }
-
-        }
-
-        &.today .timeslot {
-
-            &.in {
-                background-color: darken(@weekviewDayIn, 5%);
-            }
-
-            &.out {
-                background-color: darken(@weekviewDayOut, 3%);
-            }
-
         }
 
     }
@@ -294,6 +298,10 @@
 
     /* Mobile */
     @media all and (max-width: 480px), all and (max-device-width: 480px)  {
+
+        .info {
+            cursor: auto;
+        }
 
         .week-view-container {
 
