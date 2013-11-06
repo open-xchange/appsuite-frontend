@@ -12,10 +12,10 @@ then
         NODEJS=node
     else
         java -jar /opt/open-xchange/bundles/com.openexchange.scripting.rhino/lib/js.jar \
-             share/update-themes.js
-        exit
+             share/update-themes.js || :
+        exit 0
     fi
 fi
 
 $NODEJS share/lib/jake/bin/cli.js -f share/lib/build/themes.js update-themes \
-    builddir=. --trace
+    builddir=. --trace || :
