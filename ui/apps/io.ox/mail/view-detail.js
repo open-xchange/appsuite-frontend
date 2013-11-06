@@ -650,7 +650,7 @@ define('io.ox/mail/view-detail',
                             ext.point('io.ox/mail/detail').get('inline-links', function (extension) {
                                 var div = $('<div>'), baton = ext.Baton({ data: _.extend(copy, fresh) });
                                 extension.draw.call(div, baton);
-                                node.find('ul.io-ox-inline-links').replaceWith(div.find('ul'));
+                                node.find('ul.io-ox-inline-links').replaceWith(div);
                             });
                         }
                         if (current.color_label !== fresh.color_label) {

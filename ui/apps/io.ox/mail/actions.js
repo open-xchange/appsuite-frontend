@@ -322,6 +322,7 @@ define('io.ox/mail/actions',
             var self = this;
             api.markUnread(list).done(function () {
                 $(self).parents('.io-ox-multi-selection').trigger('redraw');
+                $(self).parents('section.mail-detail').trigger('redraw');
             });
         }
     });
@@ -348,6 +349,7 @@ define('io.ox/mail/actions',
             var self = this;
             api.markRead(list).done(function () {
                 $(self).parents('.io-ox-multi-selection').trigger('redraw');
+                $(self).parents('section.mail-detail').trigger('redraw');
             });
         }
     });
