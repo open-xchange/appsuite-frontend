@@ -62,6 +62,8 @@ define('io.ox/calendar/week/view',
 
         // init values from prespective
         initialize: function (opt) {
+            var self = this;
+
             // init options
             _.extend(this.options, opt);
 
@@ -103,8 +105,39 @@ define('io.ox/calendar/week/view',
             this.fulltimeNote   = $('<div>').addClass('note');
             this.timeline       = $('<div>').addClass('timeline');
             this.dayLabel       = $('<div>').addClass('footer');
-            this.kwInfo         = $('<div>').addClass('info');
+            this.kwInfo         = _.device('small') ? $('<div>').addClass('info') : $('<a href="#">').addClass('info');
             this.weekCon        = $('<div>').addClass('week-container');
+
+            //append datepicker
+            if (!_.device('small')) {
+                this.kwInfo.on('changeDate', function (e) {
+                    var elem = $(this);
+                    e.preventDefault();
+
+                    self.setStartDate.call(self, new date.Local(elem.datepicker('getUTCDate')), true);
+                    self.trigger('onRefresh');
+                })
+                .on('show', function () {
+                    var elem = $(this),
+                        date = new Date(self.startDate.local);
+
+                    //adjust hours to 0 in utc time
+                    date.setUTCHours(0);
+
+                    elem.datepicker('update', date);
+                    //elem.datepicker('setUTCDate', new Date(self.startDate.t));
+                })
+                .datepicker({
+                    format: date.getFormat(date.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
+                    weekStart: date.locale.weekStart,
+                    parentEl: this.$el,
+                    orientation: 'top left',
+                    calendarWeeks: true,
+                    todayHighlight: true,
+                    todayBtn: true,
+                    daysOfWeekDisabled: opt.mode === 'workweek' ? [0, 6] : []
+                });
+            }
 
             this.mode = opt.mode || 'day';
             this.extPoint = opt.appExtPoint;
@@ -582,6 +615,7 @@ define('io.ox/calendar/week/view',
          * @return {Backbone.View} this view
          */
         render: function () {
+
             // create timelabels
             var timeLabel = [],
                 self = this;
@@ -682,6 +716,7 @@ define('io.ox/calendar/week/view',
                     this.pane.empty().append(timeLabel, self.weekCon)
                 )
             );
+
             return this;
         },
 
@@ -731,6 +766,7 @@ define('io.ox/calendar/week/view',
          * show and hide timeline
          */
         renderDayLabel: function () {
+
             var days = [],
                 tmpDate = new date.Local(this.startDate.getTime());
 
@@ -738,7 +774,7 @@ define('io.ox/calendar/week/view',
             if (this.startDate.getTime() === this.dayLabelRef) return;
 
             if (this.options.todayClass) {
-                $('.day.' + this.options.todayClass, this.$el).removeClass(this.options.todayClass);
+                $('.week-view-container').find('.day.' + this.options.todayClass, this.$el).removeClass(this.options.todayClass);
             }
 
             this.dayLabelRef = this.startDate.getTime();
@@ -762,7 +798,7 @@ define('io.ox/calendar/week/view',
                 // mark today
                 if (new date.Local().getDays() === tmpDate.getDays()) {
                     if (this.columns > 1) {
-                        $('.day[date="' + d + '"]', this.pane).addClass(this.options.todayClass);
+                        $('.week-view-container').find('.day[date="' + d + '"]', this.pane).addClass(this.options.todayClass);
                     }
                     day.addClass(this.options.todayClass);
                     this.timeline.show();
