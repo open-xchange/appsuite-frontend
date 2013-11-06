@@ -57,7 +57,12 @@ define('io.ox/calendar/month/perspective',
             api.get(obj).done(function (data) {
                 self.dialog
                     .show(e, function (popup) {
-                        popup.append(detailView.draw(data));
+                        popup
+                        .append(detailView.draw(data))
+                        .attr({
+                            'role': 'complementary',
+                            'aria-label': gt('Appointment Details')
+                        });
                     });
             });
         },
@@ -373,6 +378,10 @@ define('io.ox/calendar/month/perspective',
             this.main
                 .addClass('month-view')
                 .empty()
+                .attr({
+                    'role': 'main',
+                    'aria-label': gt('Month View')
+                })
                 .append(this.scaffold = View.drawScaffold());
 
             var refresh = function () {

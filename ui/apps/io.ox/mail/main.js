@@ -98,7 +98,12 @@ define('io.ox/mail/main',
             showSwipeButton = false,
             canDeletePermission;
         left = vsplit.left.addClass('border-right');
-        right = vsplit.right.addClass('mail-detail-pane').scrollable();
+        right = vsplit.right.addClass('mail-detail-pane')
+                .attr({
+                    'role': 'complementary',
+                    'aria-label': gt('Mail Details')
+                })
+                .scrollable();
 
         ext.point('io.ox/mail/vgrid/options').extend({
             max: _.device('smartphone') ? 50: settings.get('threadMax', 500),

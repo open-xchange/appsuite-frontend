@@ -784,6 +784,7 @@ define('io.ox/mail/view-detail',
                             frag.appendChild(inline.get(0));
                         } else {
                             node.parent().parent().find('.rightside-inline-actions').empty().append(inline);
+                            node.parent().attr('aria-label', gt('Mail Thread Details'));
                         }
                         // replace delete action with one excluding the sent folder
                         scrubThreadDelete(inline.find('[data-action=delete]'));

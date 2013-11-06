@@ -134,6 +134,10 @@ define('io.ox/core/main',
         launchers = $('.launchers', topbar),
         launcherDropdown = $('.launcher-dropdown ul', topbar);
 
+    topbar.attr({
+        'aria-label': gt('Applications')
+    });
+
     $('a.dropdown-toggle', topbar).attr({
         'aria-label': gt('Launcher dropdown. Press [enter] to jump to the dropdown.'),
         'role': 'button',

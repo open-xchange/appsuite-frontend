@@ -428,7 +428,11 @@ define('io.ox/portal/main',
             simple: _.device('smartphone')
         }));
 
-        win.nodes.main.addClass('io-ox-portal f6-target').attr('tabindex', '1');
+        win.nodes.main.addClass('io-ox-portal f6-target').attr({
+            'tabindex': '1',
+            'role': 'main',
+            'aria-label': gt('Portal Widgets')
+        });
 
         ext.point('io.ox/portal/sections').invoke('draw', win.nodes.main, appBaton);
 

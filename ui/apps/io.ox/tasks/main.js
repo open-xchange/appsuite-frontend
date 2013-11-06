@@ -71,7 +71,13 @@ define('io.ox/tasks/main',
 
         var vsplit = commons.vsplit(win.nodes.main, app);
         left = vsplit.left.addClass('border-right');
-        right = vsplit.right.addClass('default-content-padding f6-target task-detail-container').attr('tabindex', 1).scrollable();
+        right = vsplit.right.addClass('default-content-padding f6-target task-detail-container')
+            .attr({
+                'tabindex': 1,
+                'role': 'complementary',
+                'aria-label': gt('Task Details')
+            })
+            .scrollable();
 
         var removeButton = function () {
             if (showSwipeButton) {

@@ -171,7 +171,12 @@ define('io.ox/files/fluid/perspective',
                 dropZone.update();
             }
             dialog.show(e, function (popup) {
-                popup.append(viewDetail.draw(file, app));
+                popup
+                    .append(viewDetail.draw(file, app))
+                    .attr({
+                        'role': 'complementary',
+                        'aria-label': gt('File Details')
+                    });
                 el = popup.closest('.io-ox-sidepopup');
             });
             _.defer(function () { el.focus(); }); // Focus SidePopup
@@ -586,6 +591,10 @@ define('io.ox/files/fluid/perspective',
             self.main.empty().append(
                                 topBar,
                                 wrapper = $('<div class="files-wrapper">')
+                                            .attr({
+                                                'role': 'main',
+                                                'aria-label': gt('Files View')
+                                            })
                                             .append(
                                                 scrollpane
                                             )

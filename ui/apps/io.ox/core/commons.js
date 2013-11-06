@@ -142,7 +142,7 @@ define('io.ox/core/commons',
         }()),
 
         wireGridAndSelectionChange: function (grid, id, draw, node, api) {
-            var last = '';
+            var last = '', label;
             grid.selection.on('change', function (e, selection) {
 
                 var len = selection.length,
@@ -150,6 +150,20 @@ define('io.ox/core/commons',
                     flat = JSON.stringify(_([].concat(selection)).map(function (o) {
                         return { folder_id: String(o.folder_id || o.folder), id: String(o.id), recurrence_position: String(o.recurrence_position || 0) };
                     }));
+
+                function updateLabel() {
+                    var parent = node.parent();
+                    if (len <= 1 && label) {
+                        //reset label
+                        parent.attr('aria-label', label);
+                    } else if (len > 1) {
+                        //remember label
+                        label = label || parent.attr('aria-label');
+                        //overwrite
+                        parent.attr('aria-label', gt('Selection Details'));
+                    }
+                }
+
                 // has anything changed?
                 if (flat !== last) {
                     if (len === 1) {
@@ -178,6 +192,8 @@ define('io.ox/core/commons',
                             }
                         }
                     }
+                    //landmark label
+                    updateLabel();
                     // remember current selection
                     last = flat;
                 }
@@ -617,7 +633,12 @@ define('io.ox/core/commons',
                 var sides = {};
                 parent.addClass('vsplit').append(
                     // left
-                    sides.left = $('<div class="leftside">').on('select', select),
+                    sides.left = $('<div class="leftside">')
+                    .attr({
+                        'role': 'main',
+                        'aria-label': gt('Items')
+                    })
+                    .on('select', select),
                     // navigation
                     $('<div class="rightside-navbar">').append(
                         $('<div class="rightside-inline-actions">'),

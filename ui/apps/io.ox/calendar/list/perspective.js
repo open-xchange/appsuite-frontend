@@ -40,7 +40,13 @@ define('io.ox/calendar/list/perspective',
             self = this,
             vsplit = commons.vsplit(this.main, app),
             left = vsplit.left.addClass('border-right'),
-            right = vsplit.right.addClass('default-content-padding calendar-detail-pane').attr('tabindex', 1).scrollable(),
+            right = vsplit.right.addClass('default-content-padding calendar-detail-pane')
+            .attr({
+                'tabindex': 1,
+                'role': 'complementary',
+                'aria-label': gt('Appointment Details')
+            })
+            .scrollable(),
             gridOptions = {
                 settings: settings,
                 showToggle: _.device('smartphone') ? false: true

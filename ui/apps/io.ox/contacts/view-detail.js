@@ -724,8 +724,11 @@ define('io.ox/contacts/view-detail',
 
                 var node = $.createViewContainer(baton.data, api)
                     .on('redraw', { view: this, data: baton.data }, redraw)
-                    .addClass('contact-detail view');
-
+                    .addClass('contact-detail view')
+                    .attr({
+                        'role': 'complementary',
+                        'aria-label': gt('Contact Details')
+                    });
                 ext.point('io.ox/contacts/detail').invoke('draw', node, baton);
 
                 return node;

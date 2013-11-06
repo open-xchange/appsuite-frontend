@@ -47,7 +47,12 @@ define('io.ox/calendar/week/perspective',
             api.get(obj).then(
                 function success(data) {
                     self.dialog.show(e, function (popup) {
-                        popup.append(detailView.draw(data));
+                        popup
+                        .append(detailView.draw(data))
+                        .attr({
+                            'role': 'complementary',
+                            'aria-label': gt('Appointment Details')
+                        });
                     });
                     if (self.setNewStart) {//if view should change week to the start of this appointment(used by deeplinks)
                         self.setNewStart = false;//one time only
@@ -258,6 +263,24 @@ define('io.ox/calendar/week/perspective',
                     refDate: this.app.refDate,
                     appExtPoint: 'io.ox/calendar/week/view/appointment'
                 });
+                switch (this.view.mode) {
+                case 'day':
+                    this.main.attr({
+                        'aria-label': gt('Day View')
+                    });
+                    break;
+                case 'workweek':
+                    this.main.attr({
+                        'aria-label': gt('Workweek View')
+                    });
+                    break;
+                default:
+                case 'week':
+                    this.main.attr({
+                        'aria-label': gt('Week View')
+                    });
+                    break;
+                }
 
                 // bind listener for view events
                 this.view
@@ -303,7 +326,13 @@ define('io.ox/calendar/week/perspective',
 
             // init perspective
             this.app = app;
-            this.main.addClass('week-view').empty();
+            this.main
+                .addClass('week-view')
+                .empty()
+                .attr({
+                    'role': 'main'
+                });
+
             this.collection = new Backbone.Collection([]);
 
             var refresh = function () { self.refresh(true); },

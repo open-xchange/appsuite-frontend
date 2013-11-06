@@ -930,7 +930,11 @@ define('io.ox/core/desktop',
                 ext.point(name + '/window-toolbar').extend({
                     id: 'default',
                     draw: function () {
-                        return $('<div class="window-toolbar">');
+                        return $('<div class="window-toolbar">')
+                            .attr({
+                                'role': 'navigation',
+                                'aria-label': gt('Application Toolbar')
+                            });
                     }
                 });
 
@@ -1453,7 +1457,11 @@ define('io.ox/core/desktop',
                     }
                 };
 
-                $('<form class="form-search form-inline">').append(
+                $('<form class="form-search form-inline" role="search">')
+                .attr({
+                    'aria-label': gt('Search for items')
+                })
+                .append(
                     $('<div class="input-append">').append(
                         $('<label>', { 'for': searchId }).addClass('search-query-container').append(
                             // search field
