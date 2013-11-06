@@ -19,9 +19,8 @@ define('io.ox/calendar/actions',
      'io.ox/core/notifications',
      'io.ox/core/print',
      'settings!io.ox/core',
-     'settings!io.ox/contacts',
      'gettext!io.ox/calendar'
-    ], function (ext, links, api, util, notifications, print, coreSettings, settings, gt) {
+    ], function (ext, links, api, util, notifications, print, coreSettings, gt) {
 
     'use strict';
 
@@ -120,15 +119,17 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/edit', {
         id: 'edit',
         requires: function (e) {
-            var exists = e.baton && e.baton.data ? e.baton.data.id !== undefined : true;
-            var allowed = e.collection.has('one') && e.collection.has('create');
+            var exists = e.baton && e.baton.data ? e.baton.data.id !== undefined : true,
+                allowed = e.collection.has('one', 'create');
             if (allowed) {
                 //if you have no permission to edit you don't have a folder id (see calendar/freebusy response)
                 if (!e.baton.data.folder_id) {//you need to have a folder id to edit
                     allowed = false;
                 }
             }
-            return allowed && exists;
+            return util.isBossyAppointmentHandling({ app: e.baton.data }).then(function (isBossy) {
+                return allowed && exists && isBossy;
+            });
         },
         action: function (baton) {
             var params = baton.data,
@@ -197,7 +198,11 @@ define('io.ox/calendar/actions',
 
     new Action('io.ox/calendar/detail/actions/delete', {
         id: 'delete',
-        requires: 'delete',
+        requires: function (e) {
+            return util.isBossyAppointmentHandling({ app: e.baton.data }).then(function (isBossy) {
+                return e.collection.has('delete') && isBossy;
+            });
+        },
         multiple: function (list) {
 
             var apiCalls = [];
@@ -285,7 +290,7 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/create', {
         id: 'create',
         requires: function (e) {
-            return e.collection.has('one') && e.collection.has('create');
+            return e.collection.has('one', 'create');
         },
         action: function (baton, obj) {
             // FIXME: if this action is invoked by the menu button, both
@@ -317,7 +322,10 @@ define('io.ox/calendar/actions',
                     }
                 }
             }
-            return iamUser && e.collection.has('one');
+            return util.isBossyAppointmentHandling({ app: e.baton.data, invert: true }).then(function (isBossy) {
+                console.log('changestatus bossy', isBossy);
+                return e.collection.has('one') && iamUser && isBossy;
+            });
         },
         action: function (baton) {
             // load & call
@@ -374,7 +382,7 @@ define('io.ox/calendar/actions',
 
             var vGrid = baton.grid || (baton.app && baton.app.getGrid());
 
-            ox.load(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/api/folder']).done(function (dialogs, views, folderAPI) {
+            ox.load(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/api/folder', 'settings!io.ox/contacts']).done(function (dialogs, views, folderAPI, contactSettings) {
 
                 function commit(target) {
                     if (type === 'move' && vGrid) vGrid.busy();
@@ -400,16 +408,16 @@ define('io.ox/calendar/actions',
                         .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
                     dialog.getBody().css('height', '250px');
                     var folderId = String(list[0].folder_id),
-                        id = settings.get('folderpopup/last') || folderId,
+                        id = contactSettings.get('folderpopup/last') || folderId,
                         tree = new views.FolderList(dialog.getBody(), {
                             type: 'calendar',
-                            open: settings.get('folderpopup/open', []),
+                            open: contactSettings.get('folderpopup/open', []),
                             tabindex: 0,
                             toggle: function (open) {
-                                settings.set('folderpopup/open', open).save();
+                                contactSettings.set('folderpopup/open', open).save();
                             },
                             select: function (id) {
-                                settings.set('folderpopup/last', id).save();
+                                contactSettings.set('folderpopup/last', id).save();
                             }
                         });
                     dialog.show(function () {
@@ -437,7 +445,11 @@ define('io.ox/calendar/actions',
 
     new Action('io.ox/calendar/detail/actions/move', {
         id: 'move',
-        requires: 'some delete',
+        requires: function (e) {
+            return util.isBossyAppointmentHandling({ app: e.baton.data }).then(function (isBossy) {
+                return e.collection.has('some', 'delete') && isBossy;
+            });
+        },
         multiple: copyMove('move', gt('Move'))
     });
 

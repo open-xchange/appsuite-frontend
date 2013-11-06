@@ -14,10 +14,12 @@
 define('io.ox/calendar/util',
     ['io.ox/core/date',
      'gettext!io.ox/calendar',
+     'settings!io.ox/calendar',
      'io.ox/core/api/user',
      'io.ox/contacts/api',
      'io.ox/core/api/group',
-    ], function (date, gt, userAPI, contactAPI, groupAPI) {
+     'io.ox/core/api/folder'
+    ], function (date, gt, settings, userAPI, contactAPI, groupAPI, folderAPI) {
 
     'use strict';
 
@@ -42,6 +44,38 @@ define('io.ox/calendar/util',
             THURSDAY: 16,
             FRIDAY: 32,
             SATURDAY: 64
+        },
+
+        isBossyAppointmentHandling: function (opt) {
+
+            _.extend({
+                app: {},
+                invert: false,
+                folderData: null
+            }, opt);
+
+            if (settings.get('bossyAppointmentHandling', false)) {
+
+                var check = function (data) {
+                    if (folderAPI.is('private', data)) {
+                        var isOrganizer = opt.app.organizerId === ox.user_id;
+                        return opt.invert ? !isOrganizer : isOrganizer;
+                    } else {
+                        return true;
+                    }
+                };
+
+                if (opt.folderData) {
+                    return $.Deferred().resolve(check(opt.folderData));
+                } else {
+                    return folderAPI.get({ folder: opt.app.folder_id }).then(function (data) {
+                        return check(data);
+                    });
+                }
+
+            } else {
+                return $.Deferred().resolve(true);
+            }
         },
 
         getFirstWeekDay: function () {

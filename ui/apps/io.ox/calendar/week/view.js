@@ -1649,7 +1649,8 @@ define('io.ox/calendar/week/view',
         id: 'default',
         index: 100,
         draw: function (baton) {
-            var a = baton.model,
+            var self = this,
+                a = baton.model,
                 folder = baton.folder,
                 conf = 1,
                 confString = _.noI18n('%1$s'),
@@ -1670,6 +1671,7 @@ define('io.ox/calendar/week/view',
                 }
             }
 
+
             this
                 .attr({ tabindex: 1 })
                 .addClass(classes)
@@ -1685,6 +1687,12 @@ define('io.ox/calendar/week/view',
                 .attr({
                     'data-extension': 'default'
                 });
+
+            util.isBossyAppointmentHandling({ app: a.attributes, folderData: folder }).then(function (isBossy) {
+                if (!isBossy) {
+                    self.removeClass('modify');
+                }
+            });
         }
     });
 
