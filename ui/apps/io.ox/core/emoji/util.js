@@ -21,11 +21,14 @@ define('io.ox/core/emoji/util',
 
         processEmoji: function (text) {
 
-            var i = 0, asciiOnly = true;
+            var i = 0, asciiOnly = true, exceptions = {
+                '\u00a9': true,
+                '\u00ae': true
+            };
 
             // check if there might be any emojis; pure ascii cannot contain them
             for (var i = 0; asciiOnly && i < text.length; i++) {
-                if (text.charCodeAt(i) > 255) asciiOnly = false;
+                if (text.charCodeAt(i) > 255 || exceptions[text.charAt(i)]) asciiOnly = false;
             }
 
             if (asciiOnly) return text;
