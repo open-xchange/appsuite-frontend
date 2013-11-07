@@ -8,15 +8,6 @@ io.ox/portal//widgets/protected:
     props:
       ad: "lipsum"
 
-  upsellads_1:
-    plugin: "plugins/portal/upsellads/register"
-    type: "upsellads"
-    index: 2
-    changeable:
-      index: true
-    props:
-      ad: "countNumber"
-
 
 io.ox/upsell//ads:
   delayInMilliseconds: 10000
@@ -45,26 +36,6 @@ io.ox/upsell//ads:
           type: image-only
           image: http://placekitten.com/1280/1024
           text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-
-  countNumber:
-    slides:
-      en_US:
-        slide1:
-          type: text-only
-          text: <h3>1</h3>
-        slide4:
-          type: text-only
-          text: <h3>4</h3>
-        slide2:
-          type: text-only
-          text: <h3>2</h3>
-        slide3:
-          type: text-only
-          text: <h3>3</h3>
-        slide5:
-          type: text-only
-          text: <h3>5</h3>
-
 
 
 io.ox/upsell//shop:
