@@ -323,7 +323,6 @@ define('io.ox/calendar/actions',
                 }
             }
             return util.isBossyAppointmentHandling({ app: e.baton.data, invert: true }).then(function (isBossy) {
-                console.log('changestatus bossy', isBossy);
                 return e.collection.has('one') && iamUser && isBossy;
             });
         },
