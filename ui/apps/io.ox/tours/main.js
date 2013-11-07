@@ -15,9 +15,10 @@
 define('io.ox/tours/main',
     ['io.ox/core/extensions',
      'io.ox/core/notifications',
+     'io.ox/core/extPatterns/stage',
      'gettext!io.ox/tours',
      'css!hopscotch/hopscotch.css'
-    ], function (ext, notifications, gt) {
+    ], function (ext, notifications, Stage, gt) {
 
     'use strict';
 
@@ -697,6 +698,29 @@ define('io.ox/tours/main',
             }]
         }
     });
+
+
+    new Stage('io.ox/core/stages', {
+        id: 'tours',
+        index: 1000,
+        run: function () {
+
+            console.debug('core: Stage "tours"');
+
+            ox.load(['io.ox/tours/main', 'settings!io.ox/tours']).done(function (tours, tourSettings) {
+                var disableTour = tourSettings.get('server/disableTours'),
+                    startOnFirstLogin = tourSettings.get('server/startOnFirstLogin'),
+                    tourVersion = tourSettings.get('server/version', 0),
+                    tourVersionSeen = tourSettings.get('user/alreadySeenVersion', -1);
+                debugger;
+                if (!disableTour && startOnFirstLogin && tourVersion > tourVersionSeen) {
+                    tourSettings.set('user/alreadySeenVersion', tourVersion).save();
+                    tours.runTour('io.ox/intro');
+                }
+            });
+        }
+    });
+
 
     return {
         availableTours: function () {

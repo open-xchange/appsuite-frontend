@@ -1,4 +1,5 @@
 {
+	"namespace": "io.ox/core/main",
     "title": "Guided tours",
     "company": "Open-Xchange",
     "icon": "/images/icon.png",
