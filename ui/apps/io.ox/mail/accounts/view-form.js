@@ -236,11 +236,15 @@ define('io.ox/mail/accounts/view-form',
                 }
 
                 if (needToValidate(list, differences)) {
-                    validationCheck(this.model.attributes).done(function (response) {
+                    validationCheck(this.model.attributes).done(function (response, warnings) {
                         if (response) {
                             saveAccount();
                         } else {
-                            notifications.yell('error', gt('This account cannot be validated'));
+                            if (warnings && warnings.error) {
+                                notifications.yell('error', _.noI18n(warnings.error));
+                            } else {
+                                notifications.yell('error', gt('This account cannot be validated'));
+                            }
                             self.dialog.idle();
                         }
                     });
