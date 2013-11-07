@@ -291,41 +291,46 @@ define('io.ox/files/fluid/perspective',
                     }
                 })
                 .on('update', function (e, state) {
-                    var id = _.url.hash('id'),
-                        list, cid, node;
-
-                    //ids to list of objects
-                    list = _.isEmpty(id) ? [] : id.split(/,/);
-                    list = _(list).map(_.cid);
-
-                    //set selection
-                    if (list.length) {
-                        // select by object (cid)
-                        if (this.contains(list)) {
-                            this.set(list);
+                    //carefull here, if we are not in the files app (editor is opened or so)
+                    //this messes up a valid selection(wrong or missing id parameters in url) and sets it to the first item
+                    //so only do something if we actually are in the files app
+                    if (_.url.hash('app') === 'io.ox/files') {
+                        var id = _.url.hash('id'),
+                            list, cid, node;
+    
+                        //ids to list of objects
+                        list = _.isEmpty(id) ? [] : id.split(/,/);
+                        list = _(list).map(_.cid);
+    
+                        //set selection
+                        if (list.length) {
+                            // select by object (cid)
+                            if (this.contains(list)) {
+                                this.set(list);
+                            } else {
+                                _.url.hash('id', null);
+                                this.clear();
+                            }
                         } else {
-                            _.url.hash('id', null);
-                            this.clear();
+                            if (_.device('!smartphone')) {
+                                this.selectFirst();
+                            }
                         }
-                    } else {
-                        if (_.device('!smartphone')) {
-                            this.selectFirst();
-                        }
-                    }
-
-                    //deep link handling
-                    if (state === 'inital' && list.length === 1) {
-                        cid = _.cid(this.get()[0]);
-                        node = filesContainer.find('[data-obj-id="' + cid + '"]');
-                        //node not drawn yet?
-                        if (!node.length) {
-                            //draw gap
-                            pers.redrawGap(baton.allIds, cid);
+    
+                        //deep link handling
+                        if (state === 'inital' && list.length === 1) {
+                            cid = _.cid(this.get()[0]);
                             node = filesContainer.find('[data-obj-id="' + cid + '"]');
-                            wrapper.scrollTop(wrapper.prop('scrollHeight'));
+                            //node not drawn yet?
+                            if (!node.length) {
+                                //draw gap
+                                pers.redrawGap(baton.allIds, cid);
+                                node = filesContainer.find('[data-obj-id="' + cid + '"]');
+                                wrapper.scrollTop(wrapper.prop('scrollHeight'));
+                            }
+                            //trigger click
+                            node.trigger('click', 'automated');
                         }
-                        //trigger click
-                        node.trigger('click', 'automated');
                     }
                 });
         }

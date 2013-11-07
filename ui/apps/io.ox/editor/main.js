@@ -236,7 +236,7 @@ define('io.ox/editor/main',
                             return api.uploadFile({ folder: data.folder_id, file: blob, filename: data.filename })
                                 .done(function (data) {
                                     delete data.content;
-                                    app.setState({ folder: data.folder_id, id: data.id });
+                                    app.setState({ folder: data.folder_id, id: data.folder_id + '.' + data.id });
                                     model.set(data);
                                     previous = model.toJSON();
                                     view.idle();
