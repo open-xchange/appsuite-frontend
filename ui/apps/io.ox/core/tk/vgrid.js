@@ -61,7 +61,17 @@ define('io.ox/core/tk/vgrid',
         };
 
         this.getHeight = function () {
-            return isEmpty ? 0 : getHeight(this.getClone().node);
+            if (isEmpty) {
+                return 0;
+            } else {
+                // not sure if template ever contains more than one element
+                if (template[0].getHeight) {
+                    return template[0].getHeight();
+                } else {
+                    return getHeight(this.getClone().node);
+                }
+            }
+
         };
 
         this.getDefaultClassName = function () {

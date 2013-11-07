@@ -40,7 +40,7 @@ define('io.ox/calendar/actions',
 
     new Action('io.ox/calendar/actions/switch-to-month-view', {
         requires: function () {
-            return _.device('!small');
+            return true;
         },
         action: function (baton) {
             ox.ui.Perspective.show(baton.app, 'month');

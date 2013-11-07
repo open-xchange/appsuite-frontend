@@ -37,15 +37,15 @@ define('io.ox/calendar/view-grid-template',
             build: function () {
                 var title, location, time, date, shown_as, conflicts, isPrivate;
                 this.addClass('calendar').append(
-                    time = $('<div>').addClass('time'),
-                    date = $('<div>').addClass('date'),
+                    time = $('<div class="time">'),
+                    date = $('<div class="date">'),
                     isPrivate = $('<i class="icon-lock private-flag">').hide(),
-                    title = $('<div>').addClass('title'),
+                    title = $('<div class="title">'),
                     $('<div class="location-row">').append(
                         shown_as = $('<span class="shown_as label label-info">&nbsp;</span>'),
                         location = $('<span class="location">')
                     ),
-                    conflicts = $('<div>').addClass('conflicts').hide()
+                    conflicts = $('<div class="conflicts">').hide()
                 );
 
                 return {

@@ -14,7 +14,7 @@
 define('io.ox/calendar/list/perspective',
     ['io.ox/calendar/api',
      'io.ox/core/tk/vgrid',
-     'io.ox/calendar/view-grid-template',
+     'io.ox/calendar/list/view-grid-template',
      'io.ox/calendar/view-detail',
      'io.ox/core/commons',
      'io.ox/core/extensions',
@@ -27,7 +27,8 @@ define('io.ox/calendar/list/perspective',
 
     'use strict';
 
-    var perspective = new ox.ui.Perspective('list');
+    var perspective = new ox.ui.Perspective('list'),
+        start, end;
 
     perspective.refresh = function () {
         this.updateGridOptions();
@@ -55,12 +56,14 @@ define('io.ox/calendar/list/perspective',
             findRecurrence = false,
             optDropdown = null,
             months = 1; // how many months do we display
-
+        this.main.addClass('list-view');
 
         // show "load more" link
         gridOptions.tail = function () {
             return $('<div class="vgrid-cell tail">').append(
-                $('<a href="#" tabindex="-1">').text(gt('More'))
+                //#. Label for a button which shows more upcoming
+                //#. appointments in a listview
+                $('<a href="#" tabindex="-1">').text(gt('Show more appointments'))
             );
         };
 
@@ -291,8 +294,8 @@ define('io.ox/calendar/list/perspective',
         // based on the months variable which will be increased each time
         // this gets called
         var getIncreasedTimeFrame = function () {
-            var start = new date.Local().setHours(0, 0, 0, 0);
-            var end = new date.Local(start).setMonth(start.getMonth() + months);
+            start = new date.Local().setHours(0, 0, 0, 0);
+            end = new date.Local(start).setMonth(start.getMonth() + months);
             // increase for next run
             months++;
             return {start: start, end: end};

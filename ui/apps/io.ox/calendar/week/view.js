@@ -77,7 +77,8 @@ define('io.ox/calendar/week/view',
                     'taphold .week-container>.day,.fulltime>.day': 'onCreateAppointment',
                     'tap .appointment': 'onClickAppointment',
                     'swipeleft .timeslot' : 'onControlView',
-                    'swiperight .timeslot' : 'onControlView'
+                    'swiperight .timeslot' : 'onControlView',
+                    'tap .weekday': 'onCreateAppointment'
                 });
             } else {
                 _.extend(events, {

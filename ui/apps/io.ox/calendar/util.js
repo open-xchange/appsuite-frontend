@@ -180,6 +180,36 @@ define('io.ox/calendar/util',
             return showDate ? d.format(date.DATE) : date.locale.months[d.getMonth()] + ' ' + d.getYear();
         },
 
+        getEvenSmarterDate: function (data) {
+
+            var timestamp = data.full_time ? date.Local.utc(data.start_date) : data.start_date,
+                d = timestamp !== undefined ? new date.Local(timestamp) : new date.Local(),
+                now = new date.Local(), diff = 0;
+
+            // normalize
+            d.setHours(0, 0, 0, 0);
+            now.setHours(0, 0, 0, 0);
+
+            // get difference
+            diff = d - now;
+
+            // past?
+            if (diff < 0) {
+                if (diff >= -1 * date.DAY) {
+                    return gt('Yesterday');
+                }
+            } else {
+                // future
+                if (diff < date.DAY) {
+                    return gt('Today');
+                } else if (diff < 2 * date.DAY) {
+                    return gt('Tomorrow');
+                } else {
+                    return d.format('EE, ') + d.format(date.DATE);
+                }
+            }
+        },
+
         getDateInterval: function (data) {
             var startDate = data.start_date,
                 endDate = data.end_date;
@@ -280,7 +310,23 @@ define('io.ox/calendar/util',
                 return stuff;
             }
         },
-
+        getStartAndEndTime: function (data, D) {
+            var length;
+            D = D || date.Local;
+            length = (data.end_date - data.start_date) / date.DAY >> 0;
+            if (data.full_time) {
+                return length <= 1 ? [gt('Whole day')] : [gt.format(
+                    //#. General duration (nominative case): X days
+                    //#. %d is the number of days
+                    //#, c-format
+                    gt.ngettext('%d day', '%d days', length), length)];
+            } else {
+                return [new D(data.start_date).format(date.TIME), new D(data.end_date).format(date.TIME)];
+            }
+        },
+        getDurationInDays: function (data) {
+            return (data.end_date - data.start_date) / date.DAY >> 0;
+        },
         addTimezoneLabel: function (parent, data) {
 
             var current = date.Local.getTTInfoLocal(data.start_date);

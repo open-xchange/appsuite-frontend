@@ -101,7 +101,7 @@
 
         .toolbar {
 
-            height: @calendarToolbarHeight + 15;
+            height: @calendarToolbarHeight - 7px;
             padding-top: 0;
 
             .info {
@@ -238,7 +238,9 @@
     }
 }
 
-/* Grid */
+/* Grid , only used in conflicts. Listview styles are located under
+   list/style.less
+*/
 .vgrid-cell {
 
     &.calendar {
