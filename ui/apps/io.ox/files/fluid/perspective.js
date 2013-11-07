@@ -291,7 +291,7 @@ define('io.ox/files/fluid/perspective',
                     }
                 })
                 .on('update', function (e, state) {
-                    //carefull here, if we are not in the files app (editor is opened or so)
+                    //careful here, if we are not in the files app (editor is opened or so)
                     //this messes up a valid selection(wrong or missing id parameters in url) and sets it to the first item
                     //so only do something if we actually are in the files app
                     if (_.url.hash('app') === 'io.ox/files') {
