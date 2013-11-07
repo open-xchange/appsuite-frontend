@@ -271,8 +271,8 @@ define('l10n/ja_JP/io.ox/register',
             // return String.fromCharCode(c);
 
             var c = String(data.sort_name || '').substr(0, 1).toUpperCase();
-            // empty?
-            if (c === '') return 'その他';
+            // empty? (append at end, therefore A～Z)
+            if (c === '') return 'A～Z';
             // kana?
             if (collation.isKana(c)) return collation.getKanaLabel(c);
             // latin?
@@ -282,58 +282,33 @@ define('l10n/ja_JP/io.ox/register',
         }
     });
 
-    function isCollapsed(node) {
-        return node.children().last().outerHeight() * 36 > node.height();
-    }
-
     ext.point('io.ox/contacts/thumbIndex').extend({
         index: 200,
         id: 'furigana',
-        draw: function (baton) {
-            if (baton.furiganaRegistered) return;
-            baton.furiganaRegistered = true;
-            var self = this;
-            baton.app.registerWindowResizeHandler(_.debounce(function () {
-                if (isCollapsed(self) === baton.furiganaCollapsed) return;
-                ext.point('io.ox/contacts/thumbIndex')
-                    .invoke('draw', self, baton);
-            }, 300));
-        },
         getIndex: function (baton) {
 
             var keys = _(baton.labels).keys(),
-                // get all latin keys A-Z plus umlauts
-                hasLatin = _(keys).any(function (char) { return char === 'A～Z'; }),
                 // get ASCII without latin
                 hasOther = _(keys).any(function (char) { return char === 'その他'; }),
-                // add thumb index for ABC
-                abcThumb = new baton.Thumb({
-                    label: _.noI18n('A～Z'),
-                    text: 'A～Z',
-                    enabled: function () { return hasLatin; }
-                }),
+                // get all latin keys A-Z plus umlauts
+                hasLatin = _(keys).any(function (char) { return char === 'A～Z'; }),
                 // add thumb index for other characters
                 otherThumb = new baton.Thumb({
                     label: _.noI18n('その他'),
                     text: 'その他',
                     enabled: function () { return hasOther; }
+                }),
+                // add thumb index for ABC
+                abcThumb = new baton.Thumb({
+                    label: _.noI18n('A～Z'),
+                    text: 'A～Z',
+                    enabled: function () { return hasLatin; }
                 });
 
-            baton.furiganaCollapsed = isCollapsed(this);
             baton.data = _.map(kana, baton.Thumb);
 
-            if (baton.furiganaCollapsed) {
-                // this could still be improved.
-                // once we know the codes or the range of the Japanese alphabet
-                // we could definer other as "all characters except latin except japanese"
-                baton.data.push(abcThumb, otherThumb);
-            } else {
-                // apply "other" index if A-Z is expanded, too
-                baton.data = baton.data.concat(otherThumb);
-                // append a-z expanded
-                var az = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                baton.data = baton.data.concat(_.map(az.split(''), baton.Thumb));
-            }
+            // restrict to collapsed version, just kana, other, ABC.
+            baton.data.push(otherThumb, abcThumb);
         }
     });
 
