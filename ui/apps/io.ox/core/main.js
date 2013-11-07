@@ -676,21 +676,29 @@ define('io.ox/core/main',
             index: 280,
             draw: function () { //replaced by module
                 var node = this;
+
                 if (_.device('mobileOS') || _.device('touch')) {
                     return;
                 }
-                node.append(
-                    $('<li>', {'class': 'io-ox-specificHelp'}).append(
-                        $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(
-                            //#. Tour name; general introduction
-                            gt('Getting started')
+
+                require(['settings!io.ox/tours'], function (tourSettings) {
+                    if (tourSettings.get('disableTours', false)) {
+                        return;
+                    }
+
+                    node.append(
+                        $('<li>', {'class': 'io-ox-specificHelp'}).append(
+                            $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(
+                                //#. Tour name; general introduction
+                                gt('Getting started')
+                            )
+                            .on('click', function (e) {
+                                tours.runTour('io.ox/intro');
+                                e.preventDefault();
+                            })
                         )
-                        .on('click', function (e) {
-                            tours.runTour('io.ox/intro');
-                            e.preventDefault();
-                        })
-                    )
-                );
+                    );
+                });
             }
         });
 
@@ -699,23 +707,36 @@ define('io.ox/core/main',
             index: 281,
             draw: function () { //replaced by module
                 var node = this;
+
                 if (_.device('mobileOS') || _.device('touch')) {
                     return;
                 }
-                node.append(
-                    $('<li>', {'class': 'io-ox-specificHelp'}).append(
-                        $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(
-                            //#. app-specific
-                            gt('Guided tour for this app')
-                        )
+
+                require(['settings!io.ox/tours'], function (tourSettings) {
+                    var tourLink = $('<li>', {'class': 'io-ox-specificHelp'}).appendTo(node);
+
+                    tourLink.append(
+                        $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(gt('Guided tour for this app'))
                         .on('click', function (e) {
                             var currentApp = ox.ui.App.getCurrentApp(),
                                 currentType = currentApp.attributes.name;
+
                             tours.runTour(currentType);
                             e.preventDefault();
                         })
-                    )
-                );
+                    );
+
+                    ox.ui.windowManager.events.on('window.show', function () {
+                        var currentApp = ox.ui.App.getCurrentApp(),
+                            currentType = currentApp.attributes.name;
+
+                        if (tourSettings.get('disableTours', false) || tourSettings.get('disable/' + currentType, false)) {
+                            tourLink.hide();
+                        } else {
+                            tourLink.show();
+                        }
+                    });
+                });
             }
         });
 

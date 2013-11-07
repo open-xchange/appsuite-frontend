@@ -104,11 +104,15 @@ chmod +x "%{buildroot}/opt/open-xchange/sbin/touch-appsuite"
 mkdir -p "%{buildroot}/opt/open-xchange-appsuite-dev"
 cp -r bin lib Jakefile.js "%{buildroot}/opt/open-xchange-appsuite-dev/"
 
+mkdir -p "%{buildroot}/opt/open-xchange/etc/settings"
+cp conf/settings/* "%{buildroot}/opt/open-xchange/etc/settings/"
+
 %clean
 APPSUITE=/opt/open-xchange/appsuite/
 sh build.sh clean builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
     manifestDir="%{buildroot}$APPSUITE" version=%{version} revision=%{ox_release}
 rm -r "%{buildroot}/opt/open-xchange-appsuite-dev"
+rm -r "%{buildroot}/opt/open-xchange/etc/settings"
 
 %define udpate /opt/open-xchange/appsuite/share/update-themes.sh
 
