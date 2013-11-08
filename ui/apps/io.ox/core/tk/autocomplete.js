@@ -371,7 +371,7 @@ define('io.ox/core/tk/autocomplete',
                     });
             });
 
-            if (_.device('!desktop')) {
+            if (_.device('!desktop') || _.device('ie')) {//internet explorer needs this fix too or it closes if you try to scroll
                 popup.on('mousedown', blurOff).on('mouseup', blurOn);
             }
         }
