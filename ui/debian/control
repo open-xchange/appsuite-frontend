@@ -41,3 +41,8 @@ Description: SDK for the OX App Suite HTML5 client
 #Breaks: open-xchange-l10n-## lang ## (<< 7.0.1)
 #Description: Translation of the OX App Suite HTML5 client (## Lang ##)
 ## end ##
+
+Package: open-xchange-guidedtours
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-manifest
+Description: The default version of the guided tours for the typical applications.

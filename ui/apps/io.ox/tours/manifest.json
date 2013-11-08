@@ -6,5 +6,6 @@
     "category": "Dev",
     "settings": false,
     "requires": "dev",
-    "index": 100
+    "index": 100,
+    "package": "open-xchange-guidedtours"
 }

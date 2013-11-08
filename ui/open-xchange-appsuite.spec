@@ -71,6 +71,14 @@ SDK for the OX App Suite HTML5 client
 #Translation of the OX App Suite HTML5 client (## Lang ##)
 ## end ##
 
+%package        -n open-xchange-guidedtours
+Group:          Applications/Productivity
+Summary:        The default version of the guided tours for the typical applications.
+Requires:       open-xchange-appsuite-manifest
+
+%description    -n open-xchange-guidedtours
+The default version of the guided tours for the typical applications.
+
 %prep
 %setup -q
 
@@ -104,15 +112,15 @@ chmod +x "%{buildroot}/opt/open-xchange/sbin/touch-appsuite"
 mkdir -p "%{buildroot}/opt/open-xchange-appsuite-dev"
 cp -r bin lib Jakefile.js "%{buildroot}/opt/open-xchange-appsuite-dev/"
 
-mkdir -p "%{buildroot}/opt/open-xchange/etc/settings"
-cp conf/settings/* "%{buildroot}/opt/open-xchange/etc/settings/"
+mkdir -p "%{buildroot}/opt/open-xchange/etc"
+cp -r conf/* "%{buildroot}/opt/open-xchange/etc/"
 
 %clean
 APPSUITE=/opt/open-xchange/appsuite/
 sh build.sh clean builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
     manifestDir="%{buildroot}$APPSUITE" version=%{version} revision=%{ox_release}
 rm -r "%{buildroot}/opt/open-xchange-appsuite-dev"
-rm -r "%{buildroot}/opt/open-xchange/etc/settings"
+rm -r "%{buildroot}/opt/open-xchange/etc"
 
 %define udpate /opt/open-xchange/appsuite/share/update-themes.sh
 
@@ -164,6 +172,14 @@ if [ -x %{udpate} ]; then %{udpate}; fi
 #%dir /opt/open-xchange/etc/languages/appsuite
 #/opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-## lang ##.properties
 ## end ##
+
+%files -n open-xchange-guidedtours
+%defattr(-,root,root)
+%dir /opt/open-xchange-appsuite/apps/io.ox/tours
+/opt/open-xchange-appsuite/apps/io.ox/tours
+%dir /opt/open-xchange/etc
+%dir /opt/open-xchange/etc/settings
+/opt/open-xchange-appsuite/etc/settings/guidedtours.properties
 
 %changelog
 * Thu Nov 10 2011 viktor.pracht@open-xchange.com

@@ -10,6 +10,7 @@ endif
 
 BACKEND := debian/open-xchange-appsuite-manifest/opt/open-xchange/appsuite
 FRONTEND := debian/open-xchange-appsuite/var/www/appsuite
+SETTINGS := debian/open-xchange-guidedtours/opt/open-xchange/etc
 
 override_dh_auto_install:
 	sh build.sh skipLess=1 builddir=$(FRONTEND) manifestDir=$(BACKEND) \
@@ -27,6 +28,12 @@ override_dh_auto_install:
 	sed -e "s:## cd ##:cd /var/www/appsuite:" bin/touch-appsuite > \
 	    debian/open-xchange-appsuite/opt/open-xchange/sbin/touch-appsuite
 	chmod +x debian/open-xchange-appsuite/opt/open-xchange/sbin/touch-appsuite
+	mkdir -p debian/open-xchange-guidedtours/opt/open-xchange/appsuite/apps/io.ox
+	mv $(BACKEND)/apps/io.ox/tours debian/open-xchange-guidedtours/opt/open-xchange/appsuite/apps/io.ox/
+	mkdir -p "$(SETTINGS)"
+	cp -r conf/* "$(SETTINGS)"
+	mkdir -p "debian/open-xchange-guidedtours/opt/open-xchange/appsuite/manifests"
+	mv $(BACKEND)/manifests/open-xchange-guidedtours.json debian/open-xchange-guidedtours/opt/open-xchange/appsuite/manifests/
 
 override_dh_auto_clean:
 	sh build.sh clean skipLess=1 builddir=$(FRONTEND) manifestDir=$(BACKEND) \
