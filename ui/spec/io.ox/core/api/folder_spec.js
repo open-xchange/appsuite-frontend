@@ -21,7 +21,7 @@ define(['shared/examples/for/api',
             var sendObject = JSON.parse('{"' + decodeURI(xhr.url)
                 .replace('/api/folders?', '')
                 .replace(/"/g, '\\"').replace(/&/g, '","')
-                .replace(/=/g,'":"') + '"}'),
+                .replace(/=/g, '":"') + '"}'),
                 parentFolderIDs = {'2': '1',
                     '3' : '2',
                     '4' : '2',
@@ -30,7 +30,7 @@ define(['shared/examples/for/api',
                 };
 
             xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
-                JSON.stringify({timestamp:1378223251586, data: {id: sendObject.id, folder_id: parentFolderIDs[sendObject.id]}})
+                JSON.stringify({timestamp: 1378223251586, data: {id: sendObject.id, folder_id: parentFolderIDs[sendObject.id]}})
             );
         });
 
@@ -51,25 +51,25 @@ define(['shared/examples/for/api',
         //sends a path from a folder
         server.respondWith('GET', /api\/folders\?action=path/, function (xhr) {
             xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
-                JSON.stringify({"timestamp":9223372036854775807,
-                    "data":[
-                        ["3",0,0,0,0,0,"2",null,"Subfolder","infostore",2,true,0,null,null,true,2,null,null,null,null,true,true,8,null,false,false,"Name"],
-                        ["2",0,0,0,0,0,"1",null,"Folder","infostore",2,true,0,null,null,true,2,null,null,null,null,true,true,8,null,false,false,"Name"],
-                        ["1",0,0,0,0,0,"0",null,"Root","infostore",2,true,0,null,null,true,2,null,null,null,null,true,true,8,null,false,false,"Name"]]})
+                JSON.stringify({"timestamp": 9223372036854775807,
+                    "data": [
+                        ["3", 0, 0, 0, 0, 0, "2", null, "Subfolder", "infostore", 2, true, 0, null, null, true, 2, null, null, null, null, true, true, 8, null, false, false, "Name"],
+                        ["2", 0, 0, 0, 0, 0, "1", null, "Folder", "infostore", 2, true, 0, null, null, true, 2, null, null, null, null, true, true, 8, null, false, false, "Name"],
+                        ["1", 0, 0, 0, 0, 0, "0", null, "Root", "infostore", 2, true, 0, null, null, true, 2, null, null, null, null, true, true, 8, null, false, false, "Name"]]})
             );
         });
 
         //sends the created folder
         server.respondWith('PUT', /api\/folders\?action=(new|delete)/, function (xhr) {
             xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
-                JSON.stringify({timestamp:1378223251586, data: '21'})
+                JSON.stringify({timestamp: 1378223251586, data: '21'})
             );
         });
 
         //responds with empty message to allVisible calls
         server.respondWith(/api\/folders\?action=allVisible/, function (xhr) {
             xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
-                JSON.stringify({timestamp:1378223251586, data: []})
+                JSON.stringify({timestamp: 1378223251586, data: []})
             );
         });
     };
@@ -121,10 +121,10 @@ define(['shared/examples/for/api',
                 this.server.restore();
             });
 
-            it('should return a folder with correct id', function() {
+            it('should return a folder with correct id', function () {
                 var result = api.get({folder: '2', cache: false});
 
-                result.done(function(data) {
+                result.done(function (data) {
                     expect(data.id).toBe('2');
                 });
 
@@ -347,7 +347,7 @@ define(['shared/examples/for/api',
                 });
             });
 
-            describe('with "show hidden files" option disabled (default)', function() {
+            describe('with "show hidden files" option disabled (default)', function () {
                 it('should hide folders starting with a dot', function () {
                     var def = require([
                             'settings!io.ox/core',
