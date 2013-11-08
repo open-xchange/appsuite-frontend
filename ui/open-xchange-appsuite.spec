@@ -175,11 +175,11 @@ if [ -x %{udpate} ]; then %{udpate}; fi
 
 %files -n open-xchange-guidedtours
 %defattr(-,root,root)
-%dir /opt/open-xchange-appsuite/apps/io.ox/tours
-/opt/open-xchange-appsuite/apps/io.ox/tours
+%dir /opt/open-xchange/appsuite/apps/io.ox/tours
+/opt/open-xchange/appsuite/apps/io.ox/tours
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/settings
-/opt/open-xchange-appsuite/etc/settings/guidedtours.properties
+/opt/open-xchange/appsuite/etc/settings/guidedtours.properties
 
 %changelog
 * Thu Nov 10 2011 viktor.pracht@open-xchange.com
