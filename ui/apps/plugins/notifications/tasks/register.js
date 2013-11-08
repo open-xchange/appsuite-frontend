@@ -32,7 +32,8 @@ define('plugins/notifications/tasks/register',
     ext.point('io.ox/core/notifications/due-tasks/header').extend({
         draw: function () {
             this.append(
-                $('<legend class="section-title">').text(gt('Overdue Tasks')),
+                $('<legend class="section-title">').text(gt('Overdue Tasks'))
+                    .append($('<div tabindex="1" data-action="clear" role="button" class="clear-button icon-remove">')),
                 $('<div class="notifications">')
             );
         }
@@ -81,6 +82,7 @@ define('plugins/notifications/tasks/register',
         events: {
             'click [data-action="done"]': 'setStatus',
             'click .item': 'openTask',
+            'click [data-action="clear"]': 'clearItems',
             'keydown .item': 'openTask'
         },
 
@@ -95,6 +97,14 @@ define('plugins/notifications/tasks/register',
             }, this);
 
             return this;
+        },
+
+        clearItems: function () {
+            //hide all items from view
+            this.collection.each(function (item) {
+                hiddenOverDueItems[_.ecid(item.attributes)] = true;
+            });
+            this.collection.reset();
         },
 
         setStatus: function (e) {
@@ -160,6 +170,8 @@ define('plugins/notifications/tasks/register',
         }
     });
 
+    var hiddenOverDueItems = {};//object to store hidden items (clear button uses this)
+
     ext.point('io.ox/core/notifications/register').extend({
         id: 'dueTasks',
         index: 350,
@@ -169,20 +181,22 @@ define('plugins/notifications/tasks/register',
             function add(e, tasks, reset) {
                 var items = [];
                 _(tasks).each(function (taskObj) {
-                    var task = util.interpretTask(taskObj),
-                        tmp = new Backbone.Model({
-                            id: task.id,
-                            folder_id: task.folder_id,
-                            badge: task.badge,
-                            title: _.noI18n(task.title),
-                            end_date: task.end_date,
-                            status: task.status,
-                            cid: _.cid(task)
-                        });
-                    if (reset) {
-                        items.push(tmp);
-                    } else {
-                        notifications.collection.push(tmp, {silent: true});
+                    if (!hiddenOverDueItems[_.ecid(taskObj)]) {
+                        var task = util.interpretTask(taskObj),
+                            tmp = new Backbone.Model({
+                                id: task.id,
+                                folder_id: task.folder_id,
+                                badge: task.badge,
+                                title: _.noI18n(task.title),
+                                end_date: task.end_date,
+                                status: task.status,
+                                cid: _.cid(task)
+                            });
+                        if (reset) {
+                            items.push(tmp);
+                        } else {
+                            notifications.collection.push(tmp, {silent: true});
+                        }
                     }
                 });
                 if (reset) {
@@ -222,8 +236,8 @@ define('plugins/notifications/tasks/register',
     ext.point('io.ox/core/notifications/task-reminder/header').extend({
         draw: function () {
             this.append(
-                $('<legend class="section-title">').text(gt('Reminder')),
-                $('<legend class="section-title smallertitle">').text(gt('Tasks')),
+                $('<legend class="section-title">').text(gt('Task reminders'))
+                    .append($('<div tabindex="1" data-action="clear" role="button" class="clear-button icon-remove">')),
                 $('<div class="notifications">')
             );
         }
@@ -333,6 +347,9 @@ define('plugins/notifications/tasks/register',
 
         className: 'notifications',
         id: 'io-ox-notifications-reminder-tasks',
+        events: {
+            'click [data-action="clear"]': 'clearItems'
+        },
 
         render: function () {
 
@@ -340,14 +357,24 @@ define('plugins/notifications/tasks/register',
             ext.point('io.ox/core/notifications/task-reminder/header').invoke('draw', this.$el.empty(), baton);
 
             this.collection.each(function (model) {
-                this.$el.append(
+                this.$el.find('.notifications').append(
                     new ReminderView({ model: model }).render().$el
                 );
             }, this);
 
             return this;
+        },
+
+        clearItems: function () {
+            //hide all items from view
+            this.collection.each(function (item) {
+                hiddenReminderItems[_.ecid(item.attributes)] = true;
+            });
+            this.collection.reset();
         }
     });
+
+    var hiddenReminderItems = {};//object to store hidden items (clear button uses this)
 
     ext.point('io.ox/core/notifications/register').extend({
         id: 'reminderTasks',
@@ -358,9 +385,12 @@ define('plugins/notifications/tasks/register',
             reminderAPI.on('add:tasks:reminder', function (e, reminders) {
                 var taskIds = [];
                 _(reminders).each(function (reminder) {
-                    taskIds.push({id: reminder.target_id,
-                                  folder: reminder.folder});
+                    if (!hiddenReminderItems[_.ecid(reminder)]) {
+                        taskIds.push({id: reminder.target_id,
+                                      folder: reminder.folder});
+                    }
                 });
+
                 api.getList(taskIds).done(function (tasks) {
                     _(tasks).each(function (task) {
                         _(reminders).each(function (reminder) {
