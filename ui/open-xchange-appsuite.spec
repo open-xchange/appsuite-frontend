@@ -73,7 +73,7 @@ SDK for the OX App Suite HTML5 client
 
 %package        -n open-xchange-guidedtours
 Group:          Applications/Productivity
-Summary:        The default version of the guided tours for the typical applications.
+Summary:        The default version of the guided tours for the typical applications
 Requires:       open-xchange-appsuite-manifest
 
 %description    -n open-xchange-guidedtours
