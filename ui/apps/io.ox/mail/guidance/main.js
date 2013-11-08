@@ -122,36 +122,35 @@ define('io.ox/mail/guidance/main',
     // Upsell
 
     // biggeleben: disabled for 7.4
-    // petersen: enabled again. nevertheless
     // we need a proper way to detect if upsell is generally enabled for that user
 
-    ext.point('io.ox/mail/guidance').extend({
-        id: 'upsell',
-        index: INDEX += 100,
-        draw: function () {
+    // ext.point('io.ox/mail/guidance').extend({
+    //     id: 'upsell',
+    //     index: INDEX += 100,
+    //     draw: function () {
 
-            $('head').append(
-                $('<link href="http://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">')
-            );
+    //         $('head').append(
+    //             $('<link href="http://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">')
+    //         );
 
-            var node = $('<section>')
-                .css({
-                    fontFamily: '"Nunito", Arial, sans-serif',
-                    fontSize: '24px',
-                    lineHeight: '28px',
-                    padding: '14px',
-                    color: '#fff',
-                    backgroundColor: '#FF5F13', // kind of nato orange
-                    borderRadius: '5px',
-                    textShadow: '1px 1px 3px #000',
-                    maxWidth: '450px',
-                    whiteSpace: 'pre'
-                })
-                .text('Upgrade to premium.\nGet a 90-day free trial ...');
+    //         var node = $('<section>')
+    //             .css({
+    //                 fontFamily: '"Nunito", Arial, sans-serif',
+    //                 fontSize: '24px',
+    //                 lineHeight: '28px',
+    //                 padding: '14px',
+    //                 color: '#fff',
+    //                 backgroundColor: '#FF5F13', // kind of nato orange
+    //                 borderRadius: '5px',
+    //                 textShadow: '1px 1px 3px #000',
+    //                 maxWidth: '450px',
+    //                 whiteSpace: 'pre'
+    //             })
+    //             .text('Upgrade to premium.\nGet a 90-day free trial ...');
 
-            this.append(node);
-        }
-    });
+    //         this.append(node);
+    //     }
+    // });
 
     // Statistics
 
