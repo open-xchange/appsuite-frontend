@@ -692,8 +692,6 @@ define('io.ox/tours/main',
         index: 1000,
         run: function () {
 
-            console.debug('core: Stage "tours"');
-
             ox.load(['io.ox/tours/main', 'settings!io.ox/tours']).done(function (tours, tourSettings) {
                 var disableTour = tourSettings.get('server/disableTours'),
                     startOnFirstLogin = tourSettings.get('server/startOnFirstLogin'),
