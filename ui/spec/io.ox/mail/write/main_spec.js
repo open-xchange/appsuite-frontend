@@ -65,6 +65,9 @@ define(['io.ox/mail/write/main',
                             }
                         ]
                     };
+
+                    if (notifications.yell.restore)
+                        notifications.yell.restore();
                     this.notificationSpy = sinon.spy(notifications, 'yell');
                     setupFakeServer(this.server);
                 });

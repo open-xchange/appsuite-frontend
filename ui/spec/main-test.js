@@ -61,3 +61,101 @@ if (jasmine) {
         this.results_.failedCount = 0;
     };
 }
+
+if (sinon) {
+
+    ox.testUtils.modules = (function () {
+        var modules = {}, usedby = {}, tree = {},
+            traverse, update, flatten;
+
+        //remember loaded modules/dependencies
+        require.onResourceLoad = function (context, module, dependencies) {
+            if (module.name && !(module.name in modules)) {
+                modules[module.name] = _.pluck(dependencies, 'id');
+                //inversed ddependency
+                _.each(_.pluck(dependencies, 'id'), function (dep) {
+                    usedby[dep] = usedby[dep] || [];
+                    usedby[dep].push(module.name);
+                });
+            }
+        };
+
+        //build dependency tree
+        traverse = function (module, target, level) {
+            //reset when called by redefine()
+            target = target || (tree = {});
+            level = level || 0;
+
+            var current = {},
+                children = usedby[module] || [];
+
+            if (children.length) {
+                //add
+                target[module] = tree[module] = current;
+                //recursion
+                _.each(children, function (id) {
+                    if (typeof tree[id] !== 'undefined')
+                        current[id] = tree[id];
+                    else
+                        traverse(id, current, level + 1);
+                });
+            } else if (level !== 0) {
+                //resolve
+                return current;
+            } else {
+                //return root target
+                return target;
+            }
+        };
+
+        //ids of (directly/indirectly) consuming modules
+        flatten = function (module, hash) {
+            var children = Object.keys(tree[module] || {});
+            //ignore module of first call
+            if (hash) {
+                hash[module] = true;
+            } else {
+                hash = {};
+            }
+            _.each(children, function (id) {
+                flatten(id, hash);
+            });
+            return Object.keys(hash);
+        };
+
+        return {
+            reload: function (id) {
+                //build dependency tree
+                traverse('io.ox/core/capabilities');
+
+                //get affected consumers
+                consumers = flatten('io.ox/core/capabilities');
+
+                //undefine
+                _.each(consumers, function (id) {
+                    requirejs.undef(id);
+                });
+                //define again
+                _.each(consumers, function (id) {
+                    requirejs([id]);
+                });
+            },
+
+            //activte capabilites during runtime / reload modules
+            caps: function (list, id) {
+                list = [].concat(list);
+                //stub has functions
+                capabilities = requirejs('io.ox/core/capabilities');
+                if (capabilities.has.restore)
+                    capabilities.has.restore();
+                has = sinon.stub(capabilities, 'has');
+                //apply stub response
+                _.each(list, function (key) {
+                    has.withArgs(key).returns(true);
+                });
+                //reload modules
+                this.reload(id);
+            }
+        };
+    })();
+}
