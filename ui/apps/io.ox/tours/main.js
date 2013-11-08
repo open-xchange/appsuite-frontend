@@ -58,6 +58,7 @@ define('io.ox/tours/main',
         };
 
 
+    /* Tour: intro. The special one that does not belong to an app */
     ext.point('io.ox/tours/extensions').extend({
         id: 'default/io.ox/intro',
         app: 'io.ox/intro',
@@ -145,7 +146,7 @@ define('io.ox/tours/main',
     });
 
 
-
+    /* Tour: portal */
     ext.point('io.ox/tours/extensions').extend({
         id: 'default/io.ox/portal',
         app: 'io.ox/portal',
@@ -197,7 +198,7 @@ define('io.ox/tours/main',
     });
 
 
-
+    /* Tour: e-mail */
     ext.point('io.ox/tours/extensions').extend({
         id: 'default/io.ox/mail',
         app: 'io.ox/mail',
@@ -320,7 +321,7 @@ define('io.ox/tours/main',
     });
 
 
-
+    /* Tour: contacts / address book */
     ext.point('io.ox/tours/extensions').extend({
         id: 'default/io.ox/contacts',
         app: 'io.ox/contacts',
@@ -357,7 +358,7 @@ define('io.ox/tours/main',
     });
 
 
-
+    /* Tour: calendar / appointments */
     ext.point('io.ox/tours/extensions').extend({
         id: 'default/io.ox/calendar',
         app: 'io.ox/calendar',
@@ -463,7 +464,7 @@ define('io.ox/tours/main',
     });
 
 
-
+    /* Tour: Files / Infostore */
     ext.point('io.ox/tours/extensions').extend({
         id: 'default/io.ox/files',
         app: 'io.ox/files',
@@ -538,7 +539,7 @@ define('io.ox/tours/main',
     });
 
 
-
+    /* Tour: Tasks */
     ext.point('io.ox/tours/extensions').extend({
         id: 'default/io.ox/tasks',
         app: 'io.ox/tasks',
@@ -644,7 +645,7 @@ define('io.ox/tours/main',
     });
 
 
-
+    /* Tour: Settings */
     ext.point('io.ox/tours/extensions').extend({
         id: 'default/io.ox/settings',
         app: 'io.ox/settings',
@@ -684,22 +685,8 @@ define('io.ox/tours/main',
         }
     });
 
-    ext.point('io.ox/tours/extensions').extend({
-        id: 'default/io.ox/portal',
-        app: 'io.ox/portal',
-        priority: 2,
-        tour: {
-            id: 'Settings',
-            steps: [{
-                title: gt('HONK!'),
-                placement: 'left',
-                target: function () { return $('#io-ox-topbar .launcher .icon-cog')[0]; },
-                content: gt('TRÖÖÖÖT!')
-            }]
-        }
-    });
 
-
+    /* New stage: Starts a tour upon login (unless it was already seen in that particular version) */
     new Stage('io.ox/core/stages', {
         id: 'tours',
         index: 1000,
@@ -712,7 +699,7 @@ define('io.ox/tours/main',
                     startOnFirstLogin = tourSettings.get('server/startOnFirstLogin'),
                     tourVersion = tourSettings.get('server/version', 0),
                     tourVersionSeen = tourSettings.get('user/alreadySeenVersion', -1);
-                debugger;
+
                 if (!disableTour && startOnFirstLogin && tourVersion > tourVersionSeen) {
                     tourSettings.set('user/alreadySeenVersion', tourVersion).save();
                     tours.runTour('io.ox/intro');
@@ -721,6 +708,80 @@ define('io.ox/tours/main',
         }
     });
 
+
+    /* Link: Intro tour in settings toolbar */
+    ext.point('io.ox/core/topbar/right/dropdown').extend({
+        id: 'intro-tour',
+        index: 210, /* close to the help link */
+        draw: function () {
+            var node = this,
+                link = $('<li>', {'class': 'io-ox-specificHelp'}).appendTo(node);
+
+            if (_.device('mobileOS') || _.device('touch')) {
+                return;
+            }
+
+            require(['settings!io.ox/tours', 'io.ox/tours/main'], function (tourSettings, thisIsStupid) {
+                if (tourSettings.get('disableTours', false)) {
+                    link.remove();
+                    return;
+                }
+
+                link.append(
+                    $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(
+                        //#. Tour name; general introduction
+                        gt('Getting started')
+                    )
+                    .on('click', function (e) {
+                        thisIsStupid.runTour('io.ox/intro');
+                        e.preventDefault();
+                    })
+                );
+            });
+        }
+    });
+
+    /* Link: Tour specifically for this app in settings toolbar */
+    ext.point('io.ox/core/topbar/right/dropdown').extend({
+        id: 'app-specific-tour',
+        index: 220, /* close to the intro tour and the help link */
+        draw: function () {
+            var node = this,
+                tourLink = $('<li>', {'class': 'io-ox-specificHelp'}).appendTo(node);
+
+            if (_.device('mobileOS') || _.device('touch')) {
+                tourLink.remove();
+                return;
+            }
+
+            require(['settings!io.ox/tours', 'io.ox/tours/main'], function (tourSettings, thisIsStupid) {
+                tourLink.append(
+                    $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(gt('Guided tour for this app'))
+                    .on('click', function (e) {
+                        var currentApp = ox.ui.App.getCurrentApp(),
+                            currentType = currentApp.attributes.name;
+
+                        thisIsStupid.runTour(currentType);
+                        e.preventDefault();
+                    })
+                );
+
+                ox.ui.windowManager.events.on('window.show', function () {
+                    var currentApp = ox.ui.App.getCurrentApp(),
+                        currentType = currentApp.attributes.name,
+                        isAvailable = thisIsStupid.isAvailable(currentType);
+
+                    if (tourSettings.get('disableTours', false) || tourSettings.get('disable/' + currentType, false) || !isAvailable) {
+                        tourLink.hide();
+                    } else {
+                        tourLink.show();
+                    }
+                });
+            });
+        }
+    });
+
+    ext.point('io.ox/core/topbar/right/dropdown').sort();
 
     return {
         availableTours: function () {
