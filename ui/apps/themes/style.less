@@ -401,7 +401,7 @@
             }
             a {
                 max-width: 10em;
-                .ellipsis;
+                .ellipsis();
             }
         }
 
@@ -600,11 +600,11 @@
             .title {
                 pointer-events: none;
                 font-weight: bold;
-                .ellipsis;
+                .ellipsis();
             }
 
             .subject {
-                .ellipsis;
+                .ellipsis();
                 pointer-events: none;
             }
 
@@ -618,7 +618,7 @@
                 line-height: 16px;
                 max-height: 5 * 16px; /* 5 rows */
                 margin-top: 3px;
-                .ellipsis;
+                .ellipsis();
             }
 
             .time {
@@ -998,7 +998,7 @@
     font-size: 22px;
     line-height: 30px;
     text-shadow: 0px 0px 2px #000;
-    .ellipsis;
+    .ellipsis();
     .box-sizing(border-box);
     /* override h1 */
     display: block;
@@ -1254,7 +1254,7 @@ a.button {
         .grid-info {
             text-align: center;
             margin: 0 30px;
-            .ellipsis;
+            .ellipsis();
             .folder-count {
                 font-size: 13px;
                 color: #888;
@@ -1336,7 +1336,7 @@ a.button {
     background-color: @background; /* resolves hw accel anti-aliasing */
 
     * {
-        .ellipsis;
+        .ellipsis();
     }
 
     &.selectable, &.hover {
@@ -2652,7 +2652,7 @@ a.toolbar-action, .toolbar-action > a {
     color: #333;
     text-shadow: 0 0 5px white;
     font-weight: bold;
-    .ellipsis;
+    .ellipsis();
     .badge { margin-right: 1em; }
 }
 
@@ -2666,7 +2666,7 @@ a.toolbar-action, .toolbar-action > a {
     font-weight: bold;
     cursor: default;
     max-width: 230px;
-    .ellipsis;
+    .ellipsis();
 }
 
 .dropdown-header {
@@ -3105,7 +3105,7 @@ input.flat-input {
             }
         }
         li > a, li > span {
-            .ellipsis;
+            .ellipsis();
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
             user-select: none;

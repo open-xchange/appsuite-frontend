@@ -240,9 +240,9 @@ define('io.ox/contacts/distrib/create-dist-view',
                         $.extend(o, { width: 48, height: 48, scaleType: 'cover' })
                     ),
                     // name
-                    $('<div class="person-name ellipsis">').text(o.display_name),
+                    $('<div class="person-name">').text(o.display_name),
                     // mail address
-                    $('<div class="person-mail ellipsis">').append(
+                    $('<div class="person-mail">').append(
                         $('<a href="#" class="halo-link" tabindex="1">')
                             .data({ email1: o.mail })
                             .text(o.mail)
