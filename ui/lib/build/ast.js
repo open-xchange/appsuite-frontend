@@ -13,7 +13,7 @@
 
 var jsp = require("../uglify-js/uglify-js").parser;
 var pro = require("../uglify-js/uglify-js").uglify;
-var _ = require("../underscore");
+var _ = require("../underscore/underscore");
 
 // discards ["toplevel", [["stat", *]]]
 function ast(source) { return new AST(jsp.parse(source)[1][0][1]); }

@@ -15,7 +15,7 @@ var vows = require("vows");
 var assert = require("assert");
 var jsp = require("../lib/uglify-js/uglify-js").parser;
 var pro = require("../lib/uglify-js/uglify-js").uglify;
-var _ = require("../lib/underscore");
+var _ = require("../lib/underscore/underscore");
 
 var ast = require("../lib/build/ast");
 

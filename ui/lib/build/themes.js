@@ -17,7 +17,7 @@ var path = require('path');
 
 var utils = require('./fileutils');
 var less = require('../less.js/lib/less/index.js');
-var _ = require('../underscore');
+var _ = require('../underscore/underscore');
 
 // themes
 

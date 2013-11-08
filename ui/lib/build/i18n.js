@@ -19,7 +19,7 @@ var pro = require("../uglify-js/uglify-js").uglify;
 var ast = require("./ast");
 var rimraf = require("../rimraf/rimraf");
 var jshint = require("../jshint/jshint").JSHINT;
-var _ = require("../underscore.js");
+var _ = require("../underscore/underscore");
 
 var potHeader = 'msgid ""\nmsgstr ""\n' +
     '"Project-Id-Version: Open-Xchange 7\\n"\n' +

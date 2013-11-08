@@ -19,7 +19,7 @@ var http = require("http");
 var readline = require('readline');
 var util = require("util");
 var utils = require("./lib/build/fileutils");
-var _ = require("./lib/underscore.js");
+var _ = require("./lib/underscore/underscore");
 var jsp = require("./lib/uglify-js/uglify-js").parser;
 var pro = require("./lib/uglify-js/uglify-js").uglify;
 var ast = require("./lib/build/ast");
@@ -292,9 +292,9 @@ _.each(['core', 'signin', 'core.appcache', 'signin.appcache'],
 utils.concat("boot.js",
     [utils.string("// NOJSHINT\ndependencies = "), "tmp/dependencies.json",
      utils.string(';\n'),
-     "lib/jquery.js",
+     "lib/jquery/jquery.js",
      "lib/jquery.mobile.touch.min.js",
-     "lib/underscore.js", // load this before require.js to keep global object
+     "lib/underscore/underscore.js", // load this before require.js to keep global object
      "lib/require.js",
      "lib/require-fix.js",
      "lib/modernizr.js",
@@ -386,7 +386,7 @@ utils.copy(utils.list('lib',
      'jake/',
      'less.js/lib/',
      'node_modules/',
-     'underscore.js']),
+     'underscore/underscore.js']),
     { to: utils.dest('share/lib') });
 utils.concat('update-themes.js', utils.list('lib',
     ['less.js/build/require-rhino.js',
@@ -556,7 +556,7 @@ utils.concat("doc/index.html", indexFiles);
 
 utils.copy(utils.list("doc/lib", ["prettify.*", "default.css", "newwin.png"]),
            { to: utils.dest("doc") });
-utils.copyFile("lib/jquery.min.js", utils.dest("doc/jquery.min.js"));
+utils.copyFile("lib/jquery/jquery.min.js", utils.dest("doc/jquery.min.js"));
 utils.topLevelTask();
 
 // update-i18n task
@@ -718,12 +718,12 @@ task('init-packaging', ['clean'], function() {
             // clean up readline
             rl.close();
             process.stdin.destroy();
-            
+
             // read license text
             var text = fs.readFileSync(packagingVariables.license, 'utf8');
             packagingVariables.license = text.replace(/^.*$/gm,
                 function(line) { return /\S/.test(line) ? ' ' + line : ' .'; });
-            
+
             // process templates
             var ff = utils.list(utils.source('lib/build/pkg-template'), '**/*');
             for (var i = 0; i < ff.length; i++) {
@@ -737,7 +737,7 @@ task('init-packaging', ['clean'], function() {
                     return packagingVariables[key];
                 });
             }
-            
+
             complete();
         }
     }
