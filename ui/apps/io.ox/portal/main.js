@@ -151,7 +151,7 @@ define('io.ox/portal/main',
         win,
         scrollPos = window.innerHeight,
         appBaton = ext.Baton({ app: app }),
-        sidepopup = new dialogs.SidePopup(),
+        sidepopup = new dialogs.SidePopup({tabTrap: true}),
         collection = widgets.getCollection();
 
     app.settings = settings;

@@ -525,7 +525,7 @@ define('io.ox/core/tk/dialogs',
             pane = $('<div class="io-ox-sidepopup-pane default-content-padding abs" tabindex="1">'),
 
             closer = $('<div class="io-ox-sidepopup-close">').append(
-                    $('<a class="btn-sidepopup" data-action="close" tabindex="1">')
+                    $('<a class="btn-sidepopup" data-action="close" role="button" tabindex="1">')
                         .text(options.saveOnClose ? gt('Save') : gt('Close'))
                 ),
 
@@ -539,9 +539,30 @@ define('io.ox/core/tk/dialogs',
 
             target = null,
 
-            self = this;
+            self = this,
 
-        pane = pane.scrollable();
+            fnKey = function (e) {
+                var items, focus, index;
+                if (e.which === 9 && options.tabTrap) {
+
+                    items = $(this).find('[tabindex][disabled!="disabled"]:visible');
+                    if (items.length) {
+                        e.preventDefault();
+                        focus = $(document.activeElement);
+                        index = (items.index(focus) >= 0) ? items.index(focus) : 0;
+                        index += (e.shiftKey) ? -1 : 1;
+
+                        if (index >= items.length) {
+                            index = 0;
+                        } else if (index < 0) {
+                            index = items.length - 1;
+                        }
+                        items.eq(index).focus();
+                    }
+                }
+            },
+
+            pane = pane.scrollable();
 
         // add event hub
         Events.extend(this);
@@ -631,6 +652,8 @@ define('io.ox/core/tk/dialogs',
         };
 
         popup.on('close', close);
+
+        popup.on('keydown', fnKey);
 
         closer.find('.btn-sidepopup')
             .on('click', function (e) {
