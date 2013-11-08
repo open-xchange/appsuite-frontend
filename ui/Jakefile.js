@@ -339,7 +339,7 @@ utils.copy(utils.list("lib", ["jquery.imageloader.js"]),
 
 // Mediaelement.js
 
-utils.copy(utils.list("lib", "mediaelement/"), {to: utils.dest("apps") });
+utils.copy(utils.list("lib/mediaelement/build", "*"), {to: utils.dest("apps/3rd.party/mediaelement") });
 
 // Ace editor
 

@@ -135,8 +135,8 @@ define('io.ox/preview/main',
                     autoplay: false
                 }).hide().appendTo(this.on('click', function () { return false; }));
                 var self = this;
-                require(['apps/mediaelement/mediaelement-and-player.js',
-                        'css!mediaelement/mediaelementplayer.css'], function () {
+                require(['apps/3rd.party/mediaelement/mediaelement-and-player.js',
+                        'css!3rd.party/mediaelement/mediaelementplayer.css'], function () {
 
                     var pw = self.closest('.file-details, .scrollable-pane').width() || '100%';
 
@@ -144,7 +144,7 @@ define('io.ox/preview/main',
                         audioWidth: pw,
                         videoWidth: pw,
                         plugins: ['flash', 'silverlight'],
-                        pluginPath: 'apps/mediaelement/',
+                        pluginPath: 'apps/3rd.party/mediaelement/',
                         enableAutosize: false,
                         timerRate: 250,
                         features: ['playpause', 'progress', 'current', 'volume'],
