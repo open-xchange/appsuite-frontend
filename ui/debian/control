@@ -46,3 +46,5 @@ Package: open-xchange-guidedtours
 Architecture: all
 Depends: ${misc:Depends}, open-xchange-appsuite-manifest
 Description: The default version of the guided tours for the typical applications.
+Replaces: open-xchange-manifest (<< 7.4.2)
+Breaks: open-xchange-manifest (<< 7.4.2)
