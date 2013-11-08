@@ -2,6 +2,7 @@ mediaelement/demo
 mediaelement/media
 mediaelement/src
 mediaelement/test
+mediaelement/*.md
 mediaelement/build/jquery.js
 mediaelement/build/*.md
 mediaelement/build/DO*
