@@ -12,4 +12,4 @@ underscore/Rakefile
 underscore/CNAME
 underscore/*.html
 underscore/*.ico
-underscore/*.yml
+underscore/.*.yml
