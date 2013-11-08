@@ -219,14 +219,14 @@ define('plugins/portal/linkedIn/register',
 
 
         preview: function (baton) {
-            var content = $('<div class="content">');
+            var content = $('<ul class="content" tabindex="1" role="button" aria-label="' + gt('Press [enter] to jump to the linkedin stream.') + '">');
 
             if (capabilities.has('linkedinPlus')) {
                 if (baton.data && baton.data.length) {
                     content.addClass('pointer');
                     _(baton.data).each(function (message) {
                         content.append(
-                            $('<div class="paragraph">').append(
+                            $('<li class="paragraph">').append(
                                 $('<span class="bold">').text(message.from.person.firstName + ' ' + message.from.person.lastName + ': '),
                                 $('<span class="normal">').text(message.subject), $.txt(' '),
                                 $('<span class="gray">').text(message.body)

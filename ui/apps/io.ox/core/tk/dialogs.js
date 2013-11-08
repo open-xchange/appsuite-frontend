@@ -761,6 +761,13 @@ define('io.ox/core/tk/dialogs',
                     open.call(this, e, handler);
                 }
             });
+
+            $(node).on('keypress', selector, function (e) {
+                if (e.which === 13 && (e.originalEvent || e).processed !== true) {
+                    open.call(this, e, handler);
+                }
+            });
+
             return this;
         };
 

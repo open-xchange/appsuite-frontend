@@ -61,7 +61,7 @@ define('plugins/portal/recentfiles/register',
 
             preview: function (baton) {
 
-                var content = $('<div class="content recentfiles">').appendTo(this),
+                var content = $('<ul class="content recentfiles">').appendTo(this),
                     data = baton.data;
 
                 if (!data || data.length === 0) {
@@ -79,7 +79,7 @@ define('plugins/portal/recentfiles/register',
                             .replace(/[0-9_\-\.]{5,}(\.\w+)?$/, '\u2026$1');
                     }
                     content.append(
-                        $('<div class="item">').data('item', file).append(
+                        $('<li class="item" tabindex="1">').data('item', file).append(
                             $('<b>').text(_.noI18n(filename)), $.txt(' '),
                             $('<span class="gray">').text(
                                 type === 'recentfiles' ?

@@ -20,6 +20,14 @@ define('plugins/portal/userSettings/register',
 
     'use strict';
 
+    function keyClickFilter(e) {
+        if (e.which === 13 || e.type === 'click') {
+            if (_.isFunction(e.data.fn)) {
+                e.data.fn();
+            }
+        }
+    }
+
     function changeUserData() {
 
         require(['io.ox/core/tk/dialogs', 'io.ox/core/settings/user'], function (dialogs, users) {
@@ -117,8 +125,9 @@ define('plugins/portal/userSettings/register',
             this.append(
                 content = $('<div class="content">').append(
                     // user data
-                    $('<div class="action">').text(gt('My contact data'))
-                    .on('click', changeUserData)
+                    $('<div class="action" role="button" tabindex="1">').text(gt('My contact data'))
+                    .on('click keypress', { fn: changeUserData }, keyClickFilter)
+
                 )
             );
             // password
@@ -126,8 +135,8 @@ define('plugins/portal/userSettings/register',
             require(['io.ox/core/capabilities'], function (capabilities) {
                 if (capabilities.has('edit_password')) {
                     content.append(
-                        $('<div class="action">').text(gt('My password'))
-                        .on('click', changePassword)
+                        $('<div class="action" role="button" tabindex="1">').text(gt('My password'))
+                        .on('click keypress', { fn: changePassword}, keyClickFilter)
                     );
                 }
             });

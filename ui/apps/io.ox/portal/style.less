@@ -161,6 +161,11 @@
             .bold { font-weight: bold; }
             .italic { font-style: italic; }
             .gray { color: rgba(0, 0, 0, 0.5); }
+            &:focus { background-color: rgba(0, 0, 0, 0.10); outline: none; }
+        }
+
+        ul.content {
+            margin-left: 0px;
         }
     }
 
@@ -177,6 +182,7 @@
         margin-bottom: 13px;
         cursor: pointer;
         &:hover { text-decoration: underline; color: white; }
+        &:focus { text-decoration: underline; color: white; outline: none; }
     }
 
     h2 {
@@ -264,6 +270,7 @@
     .item {
         cursor: pointer;
         &:hover { text-decoration: underline; }
+        &:focus { background-color: rgba(0, 0, 0, 0.10); outline: none; }
     }
 
     .line { line-height: @line-height; }

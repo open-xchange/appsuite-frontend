@@ -76,12 +76,12 @@ define('plugins/portal/facebook/register',
 
         if (!wall || wall.length === 0) {
             content.append(
-                $('<div class="paragraph">').text(gt('No wall posts yet.')));
+                $('<li class="paragraph">').text(gt('No wall posts yet.')));
         } else {
             _(wall).each(function (post) {
                 var message = _.ellipsis(post.message || post.description || post.attachment.caption || '', {max: 150});
                 content.append(
-                    $('<div class="paragraph">').append(
+                    $('<li class="paragraph">').append(
                         $('<span class="bold">').text(getProfile(profiles, post.actor_id).name + ': '),
                         $('<span class="normal">').text(message)
                     )
@@ -152,7 +152,7 @@ define('plugins/portal/facebook/register',
         },
 
         preview: function (baton) {
-            var content = $('<div class="content">');
+            var content = $('<ul class="content" tabindex="1" role="button "aria-label="' + gt('Press [enter] to jump to the facebook stream.') + '">');
             baton.contentNode = content;
             drawPreview(baton);
             this.append(content);

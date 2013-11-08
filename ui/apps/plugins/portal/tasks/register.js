@@ -49,7 +49,7 @@ define('plugins/portal/tasks/register',
 
         preview: function (baton) {
 
-            var content = $('<div class="content">'),
+            var content = $('<ul class="content">'),
                 tasks;
 
             tasks = _(baton.data).filter(function (task) {
@@ -66,7 +66,7 @@ define('plugins/portal/tasks/register',
             _(tasks.slice(0, 10)).each(function (task) {
                 task = util.interpretTask(task);
                 content.append(
-                    $('<div class="item">').data('item', task).append(
+                    $('<li class="item" tabindex="1">').data('item', task).append(
                         $('<span class="bold">').text(gt.noI18n(_.ellipsis(task.title, {max: 50}))), $.txt(' '),
                         task.end_date === '' ? $() :
                             $('<span class="accent">').text(

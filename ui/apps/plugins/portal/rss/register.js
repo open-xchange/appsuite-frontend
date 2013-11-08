@@ -62,14 +62,14 @@ define('plugins/portal/rss/register',
 
             var data = baton.data,
                 count = _.device('small') ? 5 : 10,
-                $content = $('<div class="content pointer">');
+                $content = $('<ul class="content pointer" tabindex="1" role="button" aria-label="' + gt('Press [enter] to jump to the rss stream.') + '">');
 
             if (data.items.length === 0) {
-                $('<div class="item">').text(gt('No RSS feeds found.')).appendTo($content);
+                $('<li class="item">').text(gt('No RSS feeds found.')).appendTo($content);
             } else {
                 $(data.items).slice(0, count).each(function (index, entry) {
                     $content.append(
-                        $('<div class="paragraph">').append(
+                        $('<li class="paragraph">').append(
                             function () {
                                 if (data.urls.length > 1) {
                                     return $('<span class="gray">').text(_.noI18n(entry.feedTitle + ' '));

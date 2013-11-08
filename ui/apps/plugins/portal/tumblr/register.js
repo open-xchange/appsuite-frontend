@@ -85,7 +85,11 @@ define('plugins/portal/tumblr/register',
                     }
                 });
                 this.addClass('photo-stream').append(
-                    $('<div class="content pointer decoration">').css('backgroundImage', 'url(' + url + ')')
+                    $('<ul class="content pointer decoration">').css('backgroundImage', 'url(' + url + ')').attr({
+                        'tabindex': '1',
+                        'role': 'button',
+                        'aria-label': gt('Press [enter] to jump to the tumblr feed.')
+                    })
                 );
 
             } else {
@@ -93,7 +97,7 @@ define('plugins/portal/tumblr/register',
                 _(firstPosts).each(function (post) {
                     if (post.title) {
                         titles.push(
-                            $('<div class="paragraph">').append(
+                            $('<li class="paragraph">').append(
                                 $('<span class="bold">').html(_.noI18n(post.title)), $.txt('')
                             )
                         );
@@ -101,7 +105,11 @@ define('plugins/portal/tumblr/register',
                 });
 
                 this.append(
-                    $('<div class="content pointer">').append(titles)
+                    $('<li class="content pointer" >').attr({
+                        'tabindex': '1',
+                        'role': 'button',
+                        'aria-label': gt('Press [enter] to jump to the tumblr feed.')
+                    }).append(titles)
                 );
             }
 

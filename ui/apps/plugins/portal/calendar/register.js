@@ -88,7 +88,7 @@ define('plugins/portal/calendar/register',
         preview: function (baton) {
 
             var appointments = baton.data,
-                $content = $('<div class="content">'),
+                $content = $('<ul class="content">'),
                 showDeclined = settings.get('showDeclinedAppointments', false);
 
             if (appointments.length === 0) {
@@ -109,7 +109,7 @@ define('plugins/portal/calendar/register',
 
                     if (showDeclined || !declined) {
                         $content.append(
-                            $('<div class="item">')
+                            $('<li class="item" tabindex="1">')
                             .css('text-decoration', declined ? 'line-through' : 'none')
                             .data('item', nextApp)
                             .append(

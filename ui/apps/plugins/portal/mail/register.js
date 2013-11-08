@@ -62,7 +62,7 @@ define('plugins/portal/mail/register',
         },
 
         preview: function (baton) {
-            var $content = $('<div class="content">');
+            var $content = $('<ul class="content">');
             var updater = function () {
                 require(['io.ox/portal/main'], function (portal) {
                     var portalApp = portal.getApp(),
@@ -95,7 +95,7 @@ define('plugins/portal/mail/register',
                         api.on('update:' + ecid + '.portalTitle', updater);
 
                         var received = new date.Local(mail.received_date).format(date.DATE);
-                        return $('<div class="item">')
+                        return $('<li class="item" tabindex="1">')
                             .data('item', mail)
                             .append(
                                 (function () {

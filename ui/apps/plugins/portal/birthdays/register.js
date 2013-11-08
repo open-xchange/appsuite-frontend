@@ -55,7 +55,7 @@ define('plugins/portal/birthdays/register',
 
         preview: function (baton) {
 
-            var $list = $('<div class="content">'),
+            var $list = $('<ul class="content" tabindex="1" role="button" aria-label="' +  gt('Press [enter] to jump to complete list of next birthdays.') + '">'),
                 hash = {},
                 contacts = baton.data,
                 numOfItems = _.device('small') ? 5 : 15;
@@ -68,7 +68,7 @@ define('plugins/portal/birthdays/register',
 
             if (contacts.length === 0) {
                 $list.append(
-                    $('<div class="line">').text(gt('No birthdays within the next %1$d weeks', WEEKS))
+                    $('<li class="line">').text(gt('No birthdays within the next %1$d weeks', WEEKS))
                 );
             } else {
                 $list.addClass('pointer');
@@ -83,7 +83,7 @@ define('plugins/portal/birthdays/register',
 
                     if (!isDuplicate(name, hash)) {
                         $list.append(
-                            $('<div class="line">').append(
+                            $('<li class="line">').append(
                                 $('<span class="bold">').text(name), $.txt(' '),
                                 $('<span class="accent">').text(_.noI18n(birthday))
                             )

@@ -282,8 +282,13 @@ define('io.ox/portal/main',
         baton.model.node
             .addClass('requires-setup')
             .append(
-                $('<div class="content">').text(gt('Click here to add your account'))
+                $('<div class="content" tabindex="1" role="button">').text(gt('Click here to add your account'))
                 .on('click', { baton: baton }, setup)
+                .on('keypress', { baton: baton }, function (e) {
+                    if (e.which === 13) {
+                        setup(e);
+                    }
+                })
             );
     };
 

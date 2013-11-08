@@ -58,7 +58,7 @@ define('plugins/portal/quota/register',
     },
 
     drawTile = function (quota) {
-        var contentFields = $('<div>').addClass('content no-pointer');
+        var contentFields = $('<ul>').addClass('content no-pointer');
 
         this.append(contentFields);
         _.each(availableQuota(quota), function (q) {
@@ -113,7 +113,7 @@ define('plugins/portal/quota/register',
             bar = $('<div>').addClass('plugins-portal-quota-' + quota.name + 'bar');
 
         el.append(
-            $('<div class="paragraph">').append(
+            $('<li class="paragraph">').append(
                 $('<span>').text(quota.i18nName),
                 label,
                 bar

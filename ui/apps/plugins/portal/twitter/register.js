@@ -201,7 +201,7 @@ define('plugins/portal/twitter/register',
         var content = baton.contentNode;
         if (baton.data.length === 0) {
             content.append(
-                $('<div class="paragraph">').text(gt('No Tweets yet.'))
+                $('<li class="paragraph">').text(gt('No Tweets yet.'))
             );
 
         } else if (baton.data.errors && baton.data.errors.length > 0) {
@@ -217,7 +217,7 @@ define('plugins/portal/twitter/register',
             _(baton.data).each(function (tweet) {
                 var message = String(tweet.text).replace(/((#|@)[\wäöüß]+)/ig, '<span class="accent">$1</span>');
                 content.append(
-                    $('<div class="paragraph">').append(
+                    $('<li class="paragraph">').append(
                         $('<span class="bold">').text('@' + tweet.user.name + ': '),
                         $('<span class="normal">').html(message)
                     )
@@ -298,7 +298,7 @@ define('plugins/portal/twitter/register',
 
         preview: function (baton) {
             if (!baton.data) { return; }
-            var content = $('<div class="content pointer">');
+            var content = $('<ul class="content pointer" tabindex="1" role="button" aria-label="' +  gt('Press [enter] to jump to the twitter feed.') + '">');
             baton.contentNode = content;
             drawPreview(baton);
             this.append(content);

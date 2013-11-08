@@ -15,8 +15,9 @@ define('plugins/portal/files/register',
     ['io.ox/core/extensions',
      'io.ox/files/api',
      'io.ox/preview/main',
-     'io.ox/portal/widgets'
-    ], function (ext, api, preview, portalWidgets) {
+     'io.ox/portal/widgets',
+     'gettext!plugins/portal',
+    ], function (ext, api, preview, portalWidgets, gt) {
 
     'use strict';
 
@@ -46,7 +47,7 @@ define('plugins/portal/files/register',
 
         preview: function (baton) {
 
-            var content = $('<div class="content pointer">'),
+            var content = $('<div class="content pointer" tabindex="1" role="button" aria-label="' + gt('Press [enter] to jump to ') + baton.data.filename + '">'),
                 data, options, url;
 
             if (_.isEmpty(baton.data.filename)) {
