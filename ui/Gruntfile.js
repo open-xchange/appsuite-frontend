@@ -116,7 +116,13 @@ module.exports = function (grunt) {
                     compress: true,
                     paths: 'apps',
                     imports: {
-                        less: ['themes/definitions.less', 'themes/default/definitions.less']
+                        less: [
+                            'lib/bootstrap/less/variables.less',
+                            'themes/definitions.less',
+                            'themes/default/definitions.less',
+                            'lib/bootstrap/less/mixins.less',
+                            'themes/mixins.less'
+                        ]
                     }
                 },
                 files: [
@@ -129,7 +135,7 @@ module.exports = function (grunt) {
                         dest: 'build/apps/themes/default/less/common.css'
                     },
                     {
-                        src: ['apps/themes/default/style.less'],
+                        src: ['lib/bootstrap/less/bootstrap.less', 'apps/themes/default/style.less'],
                         expand: true,
                         rename: function (dest) {
                             return dest;
