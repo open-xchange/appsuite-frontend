@@ -17,26 +17,29 @@ define(['io.ox/mail/util',
     describe('Utilities for mail:', function () {
         describe('has some capability depending msisdn methods that', function () {
 
+            describe('work with enabled capability and', function () {
+                beforeEach(function () {
+                    ox.testUtils.modules.caps('', 'io.ox/core/util', util);
+                });
 
-            describe('activated capability', function () {
                 it('should correctly identify channel "email" or "phone"', function () {
-                    ox.testUtils.modules.caps('');
                     expect(util.getChannel('017012345678')).toEqual('email');
                     expect(util.getChannel('+17012345678')).toEqual('email');
                     expect(util.getChannel('(01701) 23456-78')).toEqual('email');
                 });
             });
 
-            describe('activated capability', function () {
+            describe('work with disabled capability and', function () {
+                beforeEach(function () {
+                    ox.testUtils.modules.caps('msisdn', 'io.ox/mail/util', util);
+                });
+
                 it('should correctly identify channel "email" or "phone"', function () {
-                    ox.testUtils.modules.caps('msisdn');
                     expect(util.getChannel('017012345678')).toEqual('phone');
                     expect(util.getChannel('+17012345678')).toEqual('phone');
                     expect(util.getChannel('(01701) 23456-78')).toEqual('phone');
                 });
-                //FIXME: capability in utils is stored on lib load
-                xit('should correctly remove "' + util.getChannelSuffixes().msisdn +  '" typesuffix from data', function () {
-                    ox.testUtils.modules.caps('msisdn');
+                it('should correctly remove "' + util.getChannelSuffixes().msisdn +  '" typesuffix from data', function () {
                     var suffix = util.getChannelSuffixes().msisdn,
                         mail = {
                             from: [
@@ -60,9 +63,7 @@ define(['io.ox/mail/util',
                             ]
                         });
                 });
-                //FIXME: capability in utils is stored on lib load
-                xit('should handle empty from fields', function () {
-                    ox.testUtils.modules.caps('msisdn');
+                it('should handle empty from fields', function () {
                     var mail = {
                         from: [],
                         to: [
@@ -74,9 +75,6 @@ define(['io.ox/mail/util',
                 });
             });
         });
-
-
-
 
         describe('has some capability independent msisdn methods and', function () {
             it('should correctly identify channel "email" or "phone"', function () {

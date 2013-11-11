@@ -8,6 +8,9 @@ for (var file in window.__karma__.files) {
 }
 
 require(['io.ox/core/extPatterns/stage'], function (Stage) {
+
+    'use strict';
+
     ox.testUtils.stubAppsuiteBody();
 
     new Stage('io.ox/core/stages', {
@@ -44,6 +47,9 @@ if (jasmine) {
      *
      */
     jasmine.Spec.prototype.handleExpectedFail = function (markedPending) {
+
+        'use strict';
+
         if (!markedPending[this.getFullName()]) {
             return;
         }
@@ -63,16 +69,20 @@ if (jasmine) {
 }
 
 if (sinon) {
-
     ox.testUtils.modules = (function () {
-        var modules = {}, usedby = {}, tree = {},
-            traverse, update, flatten;
 
-        //remember loaded modules/dependencies
+        'use strict';
+
+        var modules = {}, usedby = {}, tree = {},
+            traverse, update, getConsumers, self, setCaps, latest = '';
+
+        /**
+         * remember loaded modules/dependencies
+         */
         require.onResourceLoad = function (context, module, dependencies) {
             if (module.name && !(module.name in modules)) {
                 modules[module.name] = _.pluck(dependencies, 'id');
-                //inversed ddependency
+                //inversed dependency
                 _.each(_.pluck(dependencies, 'id'), function (dep) {
                     usedby[dep] = usedby[dep] || [];
                     usedby[dep].push(module.name);
@@ -80,9 +90,15 @@ if (sinon) {
             }
         };
 
-        //build dependency tree
+        /**
+         * build dependency tree
+         * @param  {string}  module id
+         * @param  {object}  target
+         * @param  {numeric} level level of recursion
+         * @return {object}  root target
+         */
         traverse = function (module, target, level) {
-            //reset when called by redefine()
+            //reset when called without target
             target = target || (tree = {});
             level = level || 0;
 
@@ -94,10 +110,12 @@ if (sinon) {
                 target[module] = tree[module] = current;
                 //recursion
                 _.each(children, function (id) {
-                    if (typeof tree[id] !== 'undefined')
+                    if (typeof tree[id] !== 'undefined') {
+                        //reuse already visited modules
                         current[id] = tree[id];
-                    else
+                    } else {
                         traverse(id, current, level + 1);
+                    }
                 });
             } else if (level !== 0) {
                 //resolve
@@ -108,29 +126,83 @@ if (sinon) {
             }
         };
 
-        //ids of (directly/indirectly) consuming modules
-        flatten = function (module, hash) {
+        /**
+         * ids of (directly/indirectly) consuming modules
+         * @param  {string} module id
+         * @param  {object} hash
+         * @return {object} hash
+         */
+        getConsumers = function (module, hash) {
             var children = Object.keys(tree[module] || {});
-            //ignore module of first call
-            if (hash) {
-                hash[module] = true;
-            } else {
+            //ignore root module
+            if (!hash) {
                 hash = {};
+            } else {
+                hash[module] = true;
             }
+            //recursion
             _.each(children, function (id) {
-                flatten(id, hash);
+                getConsumers(id, hash);
             });
             return Object.keys(hash);
         };
 
-        return {
+        /**
+         * set capabilites during runtime / reload affected modules
+         * @param  {array|string} list of caps to enable
+         */
+        setCaps = function (list) {
+            var capabilities, has;
+            list = [].concat(list);
+
+            //caps changed?
+            if (latest !== list) {
+                latest = list;
+                //init
+                capabilities = requirejs('io.ox/core/capabilities');
+                if (capabilities.has.restore)
+                    capabilities.has.restore();
+                //create stub
+                has = sinon.stub(capabilities, 'has');
+                //apply faked response
+                _.each(list, function (key) {
+                    has.withArgs(key).returns(true);
+                });
+                //reload modules
+                self.reload();
+            }
+        };
+
+        self = {
+            /**
+             * list consumers
+             * @param  {string} module id
+             * @return {string} deep
+             */
+            list: function (id, deep) {
+                traverse(id);
+                return deep ? getConsumers(id) : usedby[id];
+            },
+
+            /**
+             * list consumer tree
+             * @param  {string} module id
+             */
+            tree: function (id) {
+                traverse(id);
+                return tree[id];
+            },
+
+            /**
+             * reload modules consuming capabilities module
+             */
             reload: function (id) {
+                id = id || 'io.ox/core/capabilities';
+                var consumers;
                 //build dependency tree
-                traverse('io.ox/core/capabilities');
-
+                traverse(id);
                 //get affected consumers
-                consumers = flatten('io.ox/core/capabilities');
-
+                consumers = getConsumers(id);
                 //undefine
                 _.each(consumers, function (id) {
                     requirejs.undef(id);
@@ -141,21 +213,33 @@ if (sinon) {
                 });
             },
 
-            //activte capabilites during runtime / reload modules
-            caps: function (list, id) {
-                list = [].concat(list);
-                //stub has functions
-                capabilities = requirejs('io.ox/core/capabilities');
-                if (capabilities.has.restore)
-                    capabilities.has.restore();
-                has = sinon.stub(capabilities, 'has');
-                //apply stub response
-                _.each(list, function (key) {
-                    has.withArgs(key).returns(true);
+            /**
+             * used as beforeEach function to set capabilities during runtime
+             * @param  {string|array} list of caps to enable
+             * @param  {string|array} ids of modules used in current test suite
+             * @param  {object|array} vars used references in current test suiet
+             */
+            caps: function (list, ids, vars) {
+                var done = false;
+                ids = [].concat(ids);
+                vars = [].concat(vars);
+
+                runs(function () {
+                    setCaps(list);
+                    //overwrite used references
+                    require(ids, function () {
+                        for (var i = 0; i < vars.length; i++) {
+                            $.extend(vars[i], arguments[i] || {});
+                        }
+                        done = true;
+                    });
                 });
-                //reload modules
-                this.reload(id);
+
+                waitsFor(function () {
+                    return done;
+                });
             }
         };
+        return self;
     })();
 }
