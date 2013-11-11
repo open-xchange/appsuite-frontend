@@ -37,6 +37,8 @@
   Dropdown.prototype.toggle = function (e) {
     var $this = $(this)
 
+    var $ul
+
     if ($this.is('.disabled, :disabled')) return
 
     var $parent  = getParent($this)
