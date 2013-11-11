@@ -14,3 +14,7 @@ underscore/CNAME
 underscore/*.html
 underscore/*.ico
 underscore/.*.yml
+
+bootstrap-datepicker/docs
+bootstrap-datepicker/tests
+bootstrap-datepicker/build

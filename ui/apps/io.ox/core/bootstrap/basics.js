@@ -1,6 +1,6 @@
 // NOJSHINT
 //@include ../../../../lib/bootstrap/js/bootstrap.js
-//@include ../../../../lib/bootstrap-datepicker.js
+//@include ../../../../lib/bootstrap-datepicker/js/bootstrap-datepicker.js
 //@include ../../../../lib/bootstrap-combobox.js
 //@include ../../../../lib/bootstrap-fileupload.js
 
