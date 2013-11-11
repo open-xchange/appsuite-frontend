@@ -297,11 +297,11 @@ define('io.ox/files/fluid/perspective',
                     if (_.url.hash('app') === 'io.ox/files') {
                         var id = _.url.hash('id'),
                             list, cid, node;
-    
+
                         //ids to list of objects
                         list = _.isEmpty(id) ? [] : id.split(/,/);
                         list = _(list).map(_.cid);
-    
+
                         //set selection
                         if (list.length) {
                             // select by object (cid)
@@ -316,7 +316,7 @@ define('io.ox/files/fluid/perspective',
                                 this.selectFirst();
                             }
                         }
-    
+
                         //deep link handling
                         if (state === 'inital' && list.length === 1) {
                             cid = _.cid(this.get()[0]);
@@ -656,7 +656,7 @@ define('io.ox/files/fluid/perspective',
                     self.selection.clear();
                     drawFirst();
                 });
-            
+
             //retrigger selection to set the id in the url properly when comming back from editor etc. In other apps this is handled by vgrid.
             win.on('show', function () {
                 self.selection.retriggerUnlessEmpty();
