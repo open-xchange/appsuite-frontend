@@ -51,8 +51,7 @@ module.exports = function(grunt) {
           'js/button.js',
           'js/carousel.js',
           'js/collapse.js',
-          /*'js/dropdown.js', */ // original dropdowns are disabled
-          'js/enhanced_dropdown.js',
+          'js/dropdown.js',
           'js/modal.js',
           'js/tooltip.js',
           'js/popover.js',

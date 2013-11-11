@@ -691,10 +691,6 @@ if (typeof jQuery === "undefined") { throw new Error("Bootstrap requires jQuery"
  * limitations under the License.
  * ======================================================================== */
 
-/**
- * enhanced bootstrap dropdown for use in app suite with mobile support
- * author: Alexander Quast <alexander.quast@open-xchange.com>
- */
 
 +function ($) { "use strict";
 
@@ -706,7 +702,6 @@ if (typeof jQuery === "undefined") { throw new Error("Bootstrap requires jQuery"
   var Dropdown = function (element) {
     var $el = $(element).on('click.bs.dropdown', this.toggle)
   }
-  var phone = _.device('smartphone');
 
   Dropdown.prototype.toggle = function (e) {
     var $this = $(this)
@@ -716,30 +711,13 @@ if (typeof jQuery === "undefined") { throw new Error("Bootstrap requires jQuery"
     var $parent  = getParent($this)
     var isActive = $parent.hasClass('open')
 
-    // on a phone detach the menu and attach it to the body again
-    // with position fixed. Then it will be a modal menu in fullscreen
-    if (phone) {
-      $ul = $parent.find('ul');
-      if ($ul.length > 0) {
-        $parent.data('menu', $ul);
-        $('body').append($ul.addClass('custom-dropdown')
-          // add extra close item to the first li
-          .prepend($('<li><a href="#" class="io-ox-action-link" data-action="close-menu"><i class="icon-chevron-down"></i></a></li>')
-            .on('click', function (e) {
-              e.preventDefault();
-              clearMenus();
-            })));
-
-      }
-    }
-
     clearMenus()
 
     if (!isActive) {
-     /* if ('ontouchstart' in document.documentElement && !$parent.closest('.navbar-nav').length) {
+      if ('ontouchstart' in document.documentElement && !$parent.closest('.navbar-nav').length) {
         // if mobile we we use a backdrop because click events don't delegate
         $('<div class="dropdown-backdrop"/>').insertAfter($(this)).on('click', clearMenus)
-      }*/
+      }
 
       $parent.trigger(e = $.Event('show.bs.dropdown'))
 
@@ -750,12 +728,6 @@ if (typeof jQuery === "undefined") { throw new Error("Bootstrap requires jQuery"
         .trigger('shown.bs.dropdown')
 
       $this.focus()
-
-      if (phone) {
-        ox.disable(true);
-        $('#io-ox-core').addClass('menu-blur');
-        $parent.data('menu').show();
-      }
     }
 
     return false
@@ -794,11 +766,6 @@ if (typeof jQuery === "undefined") { throw new Error("Bootstrap requires jQuery"
 
   function clearMenus() {
     $(backdrop).remove()
-    if (phone) {
-      $('#io-ox-core').removeClass('menu-blur');
-      $('.dropdown-menu').hide();
-      ox.idle();
-    }
     $(toggle).each(function (e) {
       var $parent = getParent($(this))
       if (!$parent.hasClass('open')) return

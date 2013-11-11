@@ -209,7 +209,7 @@ module.exports = function (grunt) {
                              'lib/bootstrap/js/button.js',
                              'lib/bootstrap/js/carousel.js',
                              'lib/bootstrap/js/collapse.js',
-                             'lib/bootstrap/js/enhanced_dropdown.js',
+                             'lib/bootstrap-custom-dropdown/custom-dropdown.js',
                              'lib/bootstrap/js/modal.js',
                              'lib/bootstrap/js/tooltip.js',
                              'lib/bootstrap/js/popover.js',
