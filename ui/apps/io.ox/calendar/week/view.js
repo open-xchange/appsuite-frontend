@@ -290,7 +290,7 @@ define('io.ox/calendar/week/view',
          * @param  {MouseEvent} e Hover event (mouseenter, mouseleave)
          */
         onHover: function (e) {
-            if (!this.lasso && e.relatedTarget.tagName.toLowerCase() === 'div') {
+            if (!this.lasso && (e.relatedTarget && $(e.relatedTarget).hasClass('timeslot'))) {
                 var cid = _.cid($(e.currentTarget).data('cid') + ''),
                     el = $('[data-cid^="' + cid.folder_id + '.' + cid.id + '"]', this.$el);
                 switch (e.type) {
