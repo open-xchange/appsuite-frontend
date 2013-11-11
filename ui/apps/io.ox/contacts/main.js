@@ -170,33 +170,27 @@ define('io.ox/contacts/main',
                 return { name: name, private_flag: private_flag, description: description };
             },
             set: function (data, fields) {
-                var a11yLabel = '';
+                var name, description;
                 if (data.mark_as_distributionlist === true) {
-                    fields.name.text(a11yLabel = _.noI18n(data.display_name || ''));
-                    if (data.private_flag) {
-                        fields.private_flag.show();
-                    } else {
-                        fields.private_flag.hide();
-                    }
+                    name = data.display_name || '';
+                    fields.name.text(_.noI18n(name));
+                    fields.private_flag.toggle(!!data.private_flag);
                     fields.description.text(gt('Distribution list'));
                 } else {
-                    fields.name.text(a11yLabel = _.noI18n(util.getFullName(data)));
-                    if (data.private_flag) {
-                        fields.private_flag.show();
-                    } else {
-                        fields.private_flag.hide();
-                    }
-                    fields.description.text(_.noI18n(util.getDescription(data)));
-                    if ((_.noI18n(util.getFullName(data)) + _.noI18n(util.getDescription(data))).trim().length === 0) {
+                    name = $.trim(util.getFullName(data) || data.yomiLastName || data.yomiFirstName || data.display_name);
+                    description = $.trim(util.getDescription(data));
+                    fields.name.text(_.noI18n(name));
+                    fields.private_flag.toggle(!!data.private_flag);
+                    fields.description.text(_.noI18n(description));
+                    if (name === '' && description === '') {
                         // nothing is written down, add some text, so user isn’t confused
-                        fields.name.addClass('bright-text').append(gt('Empty name and description found.'));
-                        fields.description.append(gt('Edit to set a name.'));
+                        fields.name.addClass('bright-text').text(gt('Empty name and description found.'));
+                        fields.description.text(gt('Edit to set a name.'));
                     } else {
                         fields.name.removeClass('bright-text');
                     }
                 }
-                this.attr({ 'aria-label': a11yLabel });
-
+                this.attr({ 'aria-label': _.noI18n(name) });
             }
         });
 

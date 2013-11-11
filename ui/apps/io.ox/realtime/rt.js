@@ -212,6 +212,7 @@ define.async('io.ox/realtime/rt',
             if (api.debug) {
                 console.log('Polling');
             }
+            purging = true;
             http.GET({
                 module: 'rt',
                 params: {
@@ -485,6 +486,7 @@ define.async('io.ox/realtime/rt',
     }
 
     function handleError(error) {
+        purging = false;
         if (error.code === 'RT_STANZA-1006' || error.code === 'RT_STANZA-0006' || error.code === 1006 || error.code === 6) {
             if (api.debug) {
                 console.log('Got error 1006, so resetting sequence');
@@ -501,6 +503,7 @@ define.async('io.ox/realtime/rt',
     }
 
     function handleResponse(resp) {
+        purging = false;
         damage.reset();
 
         var result = null;
@@ -617,6 +620,7 @@ define.async('io.ox/realtime/rt',
         }
         options.seq = seq;
         seq++;
+        purging = true;
         return http.PUT({
             module: 'rt',
             params: {

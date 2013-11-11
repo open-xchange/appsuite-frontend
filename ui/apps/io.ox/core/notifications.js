@@ -398,6 +398,7 @@ define('io.ox/core/notifications',
                     clearTimeout(timer);
 
                     $('.io-ox-alert')
+                        .trigger('notification:removed')
                         .on('transitionend webkitTransitionEnd', function () {
                             $(this).remove();
                         })
