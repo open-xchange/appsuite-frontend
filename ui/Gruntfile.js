@@ -176,9 +176,9 @@ module.exports = function (grunt) {
                 },
                 files: [
                     {
-                        src: ['lib/jquery.js',
+                        src: ['lib/jquery/jquery.js',
                              'lib/jquery.mobile.touch.min.js',
-                             'lib/underscore.js', // load this before require.js to keep global object
+                             'lib/underscore/underscore.js', // load this before require.js to keep global object
                              'lib/require.js',
                              'lib/require-fix.js',
                              'lib/modernizr.js',
