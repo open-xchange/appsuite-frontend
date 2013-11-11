@@ -358,7 +358,7 @@ define('io.ox/files/fluid/perspective',
         index: 200,
         draw: function (baton) {
             this.append(
-                filesContainer = $('<div class="files-container f6-target view-' + baton.mode + '" tabindex="1">')
+                filesContainer = $('<div class="files-container f6-target view-' + baton.options.mode + '" tabindex="1">')
             );
         }
     });
@@ -549,7 +549,7 @@ define('io.ox/files/fluid/perspective',
         afterShow: function (app, opt) {
             var mode = identifyMode(opt), baton = this.baton;
             //mode changed?
-            if (baton.mode !== mode) {
+            if (baton.options.mode !== mode) {
                 //set button group state
                 inlineRight
                     .find('a')
@@ -558,10 +558,10 @@ define('io.ox/files/fluid/perspective',
                     .find('[data-action="layout-' + mode + '"]')
                     .addClass('active');
                 //switch to mode
-                filesContainer.removeClass('view-' + baton.mode)
+                filesContainer.removeClass('view-' + baton.options.mode)
                                      .addClass('view-' + mode);
                 //update baton
-                baton.mode = mode;
+                baton.options.mode = mode;
                 //clear selection on mobile
                 if (_.device('smartphone'))
                     this.selection.clear();
@@ -591,7 +591,7 @@ define('io.ox/files/fluid/perspective',
                 displayedRows,
                 baton = new ext.Baton({ app: app });
             self.baton = baton;
-            baton.mode = identifyMode(opt);
+            baton.options.mode = identifyMode(opt);
 
             self.main.empty().append(
                                 topBar,
@@ -698,7 +698,7 @@ define('io.ox/files/fluid/perspective',
             drawFile = function (file) {
                 var node = $('<a>');
                 ext.point('io.ox/files/icons/file').invoke(
-                    'draw', node, new ext.Baton({ data: file, options: options })
+                    'draw', node, new ext.Baton({ data: file, options: $.extend(baton.options, options) })
                 );
                 return node;
             };
@@ -820,7 +820,7 @@ define('io.ox/files/fluid/perspective',
                         ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), baton);
                         ext.point('io.ox/files/icons/actions-right').invoke('draw', inlineRight.empty(), baton);
                         //set button state
-                        inlineRight.find('[data-ref="io.ox/files/actions/layout-' + baton.mode + '"]').addClass('active');
+                        inlineRight.find('[data-ref="io.ox/files/actions/layout-' + baton.options.mode + '"]').addClass('active');
 
                         self.selection
                                 .init(allIds)
