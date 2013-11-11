@@ -6,3 +6,4 @@ ui/node_modules
 *~
 *.swp
 *.kate-swp
+ui/lib/bootstrap/node_modules
