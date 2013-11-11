@@ -219,7 +219,7 @@ define('plugins/portal/linkedIn/register',
 
 
         preview: function (baton) {
-            var content = $('<ul class="content" tabindex="1" role="button" aria-label="' + gt('Press [enter] to jump to the linkedin stream.') + '">');
+            var content = $('<ul class="content list-unstyled" tabindex="1" role="button" aria-label="' + gt('Press [enter] to jump to the linkedin stream.') + '">');
 
             if (capabilities.has('linkedinPlus')) {
                 if (baton.data && baton.data.length) {

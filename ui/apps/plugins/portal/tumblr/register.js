@@ -85,7 +85,7 @@ define('plugins/portal/tumblr/register',
                     }
                 });
                 this.addClass('photo-stream').append(
-                    $('<ul class="content pointer decoration">').css('backgroundImage', 'url(' + url + ')').attr({
+                    $('<ul class="content pointer decoration list-unstyled">').css('backgroundImage', 'url(' + url + ')').attr({
                         'tabindex': '1',
                         'role': 'button',
                         'aria-label': gt('Press [enter] to jump to the tumblr feed.')

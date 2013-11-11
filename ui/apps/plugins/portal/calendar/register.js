@@ -88,7 +88,7 @@ define('plugins/portal/calendar/register',
         preview: function (baton) {
 
             var appointments = baton.data,
-                $content = $('<ul class="content">'),
+                $content = $('<ul class="content list-unstyled">'),
                 showDeclined = settings.get('showDeclinedAppointments', false);
 
             if (appointments.length === 0) {

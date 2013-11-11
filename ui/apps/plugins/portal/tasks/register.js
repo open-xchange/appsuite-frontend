@@ -49,7 +49,7 @@ define('plugins/portal/tasks/register',
 
         preview: function (baton) {
 
-            var content = $('<ul class="content">'),
+            var content = $('<ul class="content list-unstyled">'),
                 tasks;
 
             tasks = _(baton.data).filter(function (task) {

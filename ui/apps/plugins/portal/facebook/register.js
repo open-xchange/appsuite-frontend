@@ -152,7 +152,7 @@ define('plugins/portal/facebook/register',
         },
 
         preview: function (baton) {
-            var content = $('<ul class="content" tabindex="1" role="button "aria-label="' + gt('Press [enter] to jump to the facebook stream.') + '">');
+            var content = $('<ul class="content list-unstyled" tabindex="1" role="button "aria-label="' + gt('Press [enter] to jump to the facebook stream.') + '">');
             baton.contentNode = content;
             drawPreview(baton);
             this.append(content);

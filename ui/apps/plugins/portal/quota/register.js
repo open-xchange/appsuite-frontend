@@ -58,7 +58,7 @@ define('plugins/portal/quota/register',
     },
 
     drawTile = function (quota) {
-        var contentFields = $('<ul>').addClass('content no-pointer');
+        var contentFields = $('<ul>').addClass('content no-pointer list-unstyled');
 
         this.append(contentFields);
         _.each(availableQuota(quota), function (q) {

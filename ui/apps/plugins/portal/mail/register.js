@@ -62,7 +62,7 @@ define('plugins/portal/mail/register',
         },
 
         preview: function (baton) {
-            var $content = $('<ul class="content">');
+            var $content = $('<ul class="content list-unstyled">');
             var updater = function () {
                 require(['io.ox/portal/main'], function (portal) {
                     var portalApp = portal.getApp(),

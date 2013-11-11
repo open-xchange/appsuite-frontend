@@ -61,7 +61,7 @@ define('plugins/portal/recentfiles/register',
 
             preview: function (baton) {
 
-                var content = $('<ul class="content recentfiles">').appendTo(this),
+                var content = $('<ul class="content recentfiles list-unstyled">').appendTo(this),
                     data = baton.data;
 
                 if (!data || data.length === 0) {
