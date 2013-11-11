@@ -288,6 +288,7 @@ define('io.ox/calendar/month/perspective',
                     nextFirstDay = $('#' + param.date.getYear() + '-' + (param.date.getMonth() + 1) + '-1', self.pane),
                     scrollToDate = function () {
                         // scroll to position
+                        if (firstDay.length === 0) return;
                         if (param.duration === 0) {
                             firstDay.get(0).scrollIntoView();
                             self.isScrolling = false;
