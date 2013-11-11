@@ -710,8 +710,13 @@ define('io.ox/core/tk/dialogs',
                 if (self.nodes.closest.is('.io-ox-sidepopup-pane')) {
                     closer.find('.close-all').remove();
                     closer.prepend(
-                        $('<a class="btn-sidepopup close-all" data-action="close-all">').text(gt('Close all'))
+                        $('<a class="btn-sidepopup close-all" role="button" tabindex="1" data-action="close-all">').text(gt('Close all'))
                         .on('click', { target: self.nodes.target }, closeAll)
+                        .on('keypress', { target: self.nodes.target }, function (e) {
+                            if (e.which === 13) {
+                                closeAll(e);
+                            }
+                        })
                     );
                 }
 
