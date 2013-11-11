@@ -196,7 +196,21 @@ module.exports = function (grunt) {
                              'src/plugins.js',
                              'src/jquery.plugins.js',
                              'apps/io.ox/core/gettext.js',
-                             'src/boot.js'],
+                             'src/boot.js',
+                             // add bootstrap JavaScript
+                             'lib/bootstrap/js/transition.js',
+                             'lib/bootstrap/js/alert.js',
+                             'lib/bootstrap/js/button.js',
+                             'lib/bootstrap/js/carousel.js',
+                             'lib/bootstrap/js/collapse.js',
+                             'lib/bootstrap/js/enhanced_dropdown.js',
+                             'lib/bootstrap/js/modal.js',
+                             'lib/bootstrap/js/tooltip.js',
+                             'lib/bootstrap/js/popover.js',
+                             'lib/bootstrap/js/scrollspy.js',
+                             'lib/bootstrap/js/tab.js',
+                             'lib/bootstrap/js/affix.js'
+                        ],
                         dest: 'build/src/boot.js'
                     }
                 ]
