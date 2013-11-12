@@ -216,7 +216,11 @@ module.exports = function (grunt) {
                              'lib/bootstrap/js/popover.js',
                              'lib/bootstrap/js/scrollspy.js',
                              'lib/bootstrap/js/tab.js',
-                             'lib/bootstrap/js/affix.js'
+                             'lib/bootstrap/js/affix.js',
+                             // add bootstrap plugins
+                             'lib/bootstrap-typeahead/bootstrap3-typeahead.js',
+                             'lib/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                             'lib/bootstrap-combobox.js'
                         ],
                         dest: 'build/src/boot.js'
                     }
