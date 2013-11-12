@@ -135,7 +135,11 @@ module.exports = function (grunt) {
                         dest: 'build/apps/themes/default/common.css'
                     },
                     {
-                        src: ['lib/bootstrap/less/bootstrap.less', 'apps/themes/default/style.less'],
+                        src: [
+                            'lib/bootstrap/less/bootstrap.less',
+                            'lib/bootstrap-datepicker/less/datepicker3.less',
+                            'apps/themes/default/style.less'
+                        ],
                         expand: true,
                         rename: function (dest) {
                             return dest;
