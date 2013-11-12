@@ -273,6 +273,16 @@ module.exports = function (grunt) {
                     }
                 ]
             },
+            dateData: {
+                files: [
+                    {
+                        src: ['apps/io.ox/core/date/*.json'],
+                        expand: true,
+                        filter: 'isFile',
+                        dest: 'build/'
+                    }
+                ]
+            },
             specs: {
                 files: [
                     {
