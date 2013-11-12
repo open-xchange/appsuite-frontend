@@ -142,7 +142,7 @@ define('plugins/portal/birthdays/register',
                         delta = days === 0 && delta <= 1 ? gt('Today') : days === 1 && delta <= 2 ? gt('Tomorrow') : gt('In %1$d days', Math.ceil(delta));
 
                         $list.append(
-                            $('<div class="birthday">').data('contact', contact).append(
+                            $('<div class="birthday" tabindex="1">').data('contact', contact).append(
                                 api.pictureHalo(
                                     $('<div class="picture">'),
                                     $.extend(contact, { width: 48, height: 48, scaleType: 'cover' })
@@ -159,7 +159,7 @@ define('plugins/portal/birthdays/register',
                 });
                 // init sidepopup
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    sidepopup = sidepopup || new dialogs.SidePopup({ modal: false });
+                    sidepopup = sidepopup || new dialogs.SidePopup({ modal: false, tabTrap: true });
                     sidepopup.delegate($list, '.birthday', function (popup, e, target) {
                         var data = target.data('contact');
                         require(['io.ox/contacts/view-detail'], function (view) {

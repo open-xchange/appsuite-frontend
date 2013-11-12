@@ -41,7 +41,7 @@ define('plugins/portal/linkedIn/register',
                     .append(viewer.draw(person))
                     .append(busy);
 
-            new dialogs.SidePopup(({ modal: true }))
+            new dialogs.SidePopup(({ modal: true, tabTrap: true}))
                 .show(e, function (popup) {
                     popup.append(node);
                 });
@@ -79,7 +79,7 @@ define('plugins/portal/linkedIn/register',
 
     displayNameLink = function (person) {
         var dname = person.firstName + ' ' + person.lastName;
-        return $('<a href="#" />')
+        return $('<a tabindex="1" href="#" />')
             .text(dname)
             .on('click', person, fnClick);
     };
