@@ -185,16 +185,16 @@ define('io.ox/mail/view-detail',
 
     var openDocumentLink = function (e) {
         e.preventDefault();
-        ox.launch('io.ox/files/main', { folder: e.data.folder, perspective: 'list' }).done(function () {
+        ox.launch('io.ox/files/main', { folder: e.data.folder, perspective: 'fluid:list' }).done(function () {
             var app = this, folder = e.data.folder, id = e.data.id;
             // switch to proper perspective
-            ox.ui.Perspective.show(app, 'list').done(function () {
+            ox.ui.Perspective.show(app, 'fluid:list').done(function () {
                 // set proper folder
                 if (app.folder.get() === folder) {
-                    app.getGrid().selection.set(id);
+                    app.selection.set(id);
                 } else {
                     app.folder.set(folder).done(function () {
-                        app.getGrid().selection.set(id);
+                        app.selection.set(id);
                     });
                 }
             });
