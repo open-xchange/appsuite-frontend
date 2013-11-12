@@ -635,7 +635,6 @@ define('io.ox/calendar/invitations/register',
                 node;
 
             if (reminder) {
-                baton.hideOriginalMail = true;
                 baton.imip = true;
                 module = baton.data.headers['X-Open-Xchange-Module'];
 
@@ -653,13 +652,22 @@ define('io.ox/calendar/invitations/register',
                             drawScaffold.call(baton.$.well = drawWell(), 'appointment')
                         );
                         baton.appointment = { folder_id: address[1], id: address[0] };
-                        return loadAppointment(baton).then(function (app) {
+
+                        loadAppointment(baton).then(function (app) {
                             node.append(
-                                $('<div class="io-ox-calendar-itip-analysis">').append(
-                                    $('<div class="change">').append(renderAppointment(app))
-                                )
+                                $('<div>').addClass('alert alert-info cursor-pointer').append(
+                                    $('<a href="#" role="button">').text(gt('Show appointment'))
+                                ).on('click', function () {
+                                    node.append(
+                                        $('<div class="io-ox-calendar-itip-analysis">').append(
+                                            $('<div class="change">').append(renderAppointment(app))
+                                        )
+                                    );
+                                    $(this).remove();
+                                })
                             );
                         });
+
                     }
 
                     if (module === 'Tasks') {
@@ -667,14 +675,24 @@ define('io.ox/calendar/invitations/register',
                             drawScaffold.call(baton.$.well = drawWell(), 'task')
                         );
                         baton.task = { folder_id: address[1], id: address[0] };
-                        return loadTask(baton).then(function (task) {
+
+                        loadTask(baton).then(function (task) {
                             node.append(
-                                $('<div class="io-ox-calendar-itip-analysis">').append(
-                                    $('<div class="change">').append(renderTask(task))
-                                )
+                                $('<div>').addClass('alert alert-info cursor-pointer').append(
+                                    $('<a href="#" role="button">').text(gt('Show task'))
+                                ).on('click', function () {
+                                    node.append(
+                                        $('<div class="io-ox-calendar-itip-analysis">').append(
+                                            $('<div class="change">').append(renderTask(task))
+                                        )
+                                    );
+                                    $(this).remove();
+                                })
                             );
                         });
                     }
+
+                    return $.when();
                 }
             }
         }
