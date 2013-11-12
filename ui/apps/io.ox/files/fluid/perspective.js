@@ -34,7 +34,7 @@ define('io.ox/files/fluid/perspective',
 
     var dropZone,
         loadFilesDef = $.Deferred(),
-        dialog = new dialogs.SidePopup(),
+        dialog = new dialogs.SidePopup({ tabTrap: true }),
         //nodes
         filesContainer, breadcrumb, inlineRight, inline, wrapper,
         scrollpane = $('<div class="files-scrollable-pane" role="section">'),

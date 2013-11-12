@@ -161,7 +161,8 @@ define('io.ox/mail/settings/signatures/register',
     function fnImportSignatures(evt, signatures) {
 
         var popup = new dialogs.SidePopup({
-            modal: true
+            modal: true,
+            tabTrap: true
         })
         .show(evt, function ($pane) {
             $pane.addClass('io-ox-signature-import');

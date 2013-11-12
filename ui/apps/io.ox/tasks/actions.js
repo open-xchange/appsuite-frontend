@@ -368,7 +368,7 @@ define('io.ox/tasks/actions',
                      'io.ox/preview/main',
                      'io.ox/core/api/attachment']).done(function (dialogs, p, attachmentAPI) {
                 //build Sidepopup
-                new dialogs.SidePopup().show(baton.e, function (popup) {
+                new dialogs.SidePopup({ tabTrap: true }).show(baton.e, function (popup) {
                     _(list).each(function (data) {
                         data.dataURL = attachmentAPI.getUrl(data, 'view');
                         var pre = new p.Preview(data, {

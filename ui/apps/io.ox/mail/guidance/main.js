@@ -25,7 +25,7 @@ define('io.ox/mail/guidance/main',
         var id = app.get('name'),
             folder = app.folder.get();
 
-        new dialogs.SidePopup({ closely: true }).show(e, function (popup) {
+        new dialogs.SidePopup({ closely: true, tabTrap: true }).show(e, function (popup) {
             app.folder.getData().done(function (data) {
                 var baton = new ext.Baton({ id: id, app: app, folder: folder, data: data, options: { type: 'mail' } });
                 ext.point('io.ox/mail/guidance').invoke('draw', popup.addClass('guidance'), baton);

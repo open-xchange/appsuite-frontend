@@ -412,7 +412,7 @@ define('io.ox/mail/actions',
             list[0].id = _.isFunction(adjustFn) ? adjustFn(list[0].id) : list[0].id;
             // open side popup
             require(['io.ox/core/tk/dialogs', 'io.ox/preview/main'], function (dialogs, p) {
-                new dialogs.SidePopup().show(baton.e, function (popup) {
+                new dialogs.SidePopup({ tabTrap: true }).show(baton.e, function (popup) {
                     _(list).each(function (data) {
                         var pre = new p.Preview({
                             data: data,

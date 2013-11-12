@@ -33,7 +33,7 @@ define('io.ox/files/guidance/main',
         folderAPI.get({ folder: folderID }).done(function (folderObj) {
             folder = folderObj;
 
-            var dialog = new dialogs.SidePopup({closely: true });
+            var dialog = new dialogs.SidePopup({closely: true, tabTrap: true });
 
             dialog.show(e, function (popup) {
                 app.folder.getData().done(function (data) {

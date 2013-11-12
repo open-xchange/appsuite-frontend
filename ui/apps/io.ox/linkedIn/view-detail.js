@@ -164,7 +164,7 @@ define('io.ox/linkedIn/view-detail',
                         });
                     };
 
-                new dialogs.SidePopup()
+                new dialogs.SidePopup({ tabTrap: true })
                     .delegate($myNode, '.linkedin-profile-picture', open);
 
                 _(data.relationToViewer.connections.values).each(function (relation) {
