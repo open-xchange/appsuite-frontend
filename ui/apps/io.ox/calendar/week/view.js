@@ -108,6 +108,10 @@ define('io.ox/calendar/week/view',
             this.kwInfo         = _.device('small') ? $('<div>').addClass('info') : $('<a href="#" tabindex="1">').addClass('info');
             this.weekCon        = $('<div>').addClass('week-container');
 
+            this.kwInfo.attr({
+                'aria-label': gt('Use cursor keys to change the date. Press ctrl-key at the same time to chnage year or shift-key to change month.')
+            });
+
             this.mode = opt.mode || 'day';
             this.extPoint = opt.appExtPoint;
             this.refDate = opt.refDate || new date.Local();
@@ -147,10 +151,8 @@ define('io.ox/calendar/week/view',
                 };
 
                 this.kwInfo
-                    .data('date', new Date(self.startDate.getTime()))
                     .on('changeDate', function (e) {
-                        e.preventDefault();
-                        self.setStartDate.call(self, new date.Local($(this).datepicker('getUTCDate')), true);
+                        self.setStartDate(e.date.getTime());
                         self.trigger('onRefresh');
                     })
                     .on('show', function () {
