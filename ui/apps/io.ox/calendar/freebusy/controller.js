@@ -186,7 +186,7 @@ define('io.ox/calendar/freebusy/controller',
                 self.getCalendarView().$el.find('.appointment').removeClass('opac current');
             }
 
-            this.sidePopup = new dialogs.SidePopup().on('close', unmarkAppointments);
+            this.sidePopup = new dialogs.SidePopup({ tabTrap: true }).on('close', unmarkAppointments);
 
             function openSidePopup(e, data) {
                 self.sidePopup.show(e, function (popup) {
