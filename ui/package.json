@@ -1,7 +1,7 @@
 {
   "name": "open-xchange-appsuite",
-  "version": "7.4.0",
-  "revision": "9",
+  "version": "7.6.0",
+  "revision": "1",
   "devDependencies": {
     "grunt": ">=0.4",
     "karma-script-launcher": "~0.1.0",
