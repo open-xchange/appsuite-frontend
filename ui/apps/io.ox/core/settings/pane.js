@@ -28,6 +28,8 @@ define('io.ox/core/settings/pane',
 
     'use strict';
 
+    console.log('hier?');
+
     var point = views.point('io.ox/core/settings/entry'),
         SettingView = point.createView({ tagName: 'form', className: 'form-horizontal'}),
         reloadMe = ['language', 'timezone', 'theme', 'refreshInterval', 'autoOpenNotification'];

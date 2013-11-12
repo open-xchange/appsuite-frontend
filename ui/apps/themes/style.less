@@ -1275,6 +1275,58 @@ a.button {
     .user-select(text)
 }
 
+/* List View */
+.list-view {
+
+    height: 100%;
+    overflow: auto;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    .user-select(none);
+
+    .list-item {
+        position: relative;
+        font-size: 13px;
+        line-height: 19px;
+        padding: 10px @list-view-padding 12px @list-view-padding;
+        cursor: pointer;
+        outline: 0;
+    }
+
+    .list-item.selected {
+        background-color: #ddd;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    &.has-focus .list-item.selected {
+        color: white;
+        background-color: @selectedBackground;
+    }
+
+    .list-item-row {
+        clear: both;
+    }
+
+    .list-item.busy-indicator {
+        color: #aaa;
+        background-color: #eee;
+        text-align: center;
+        padding: 2 * @list-view-padding @list-view-padding;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    // just for debugging
+    // .list-item:focus {
+    //     border-color: rgba(0, 0, 0, 0.50);
+    // }
+}
+
 /* vGrid */
 .vgrid {
 

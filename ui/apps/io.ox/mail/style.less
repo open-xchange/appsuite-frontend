@@ -6,10 +6,130 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
+
+/* ListView */
+
+.list-view.mail {
+
+    .from {
+        .ellipsis();
+        span.person {
+            color: inherit;
+            font-weight: 500;
+        }
+    }
+
+    .date {
+        font-weight: 300;
+        display: inline-block;
+        margin-left: 0.5em;
+        float: right;
+        opacity: 0.70;
+    }
+
+    .subject {
+
+        font-weight: 300;
+        .ellipsis();
+
+        i {
+            display: inline-block;
+            float: left;
+            line-height: 20px;
+            margin-right: 7px;
+        }
+
+        i.icon-unread { color: @linkColor; }
+        i.icon-answered { color: @linkColor; }
+        i.icon-forwarded { color: #888; }
+    }
+
+    .list-item.selected i {
+        color: rgba(255, 255, 255, 0.50);
+    }
+
+    .icon-paper-clip {
+        font-size: 20px;
+        width: 18px;
+        height: 18px;
+        margin-left: 0.5em;
+        float: right;
+    }
+
+    .flag {
+        font-size: 18px;
+        padding: 0;
+        margin-left: 1em;
+        float: right;
+        .box-sizing(border-box);
+    }
+
+    .priority {
+        font-weight: bold;
+        float: right;
+        .high {
+            color: @mailPriority;
+        }
+        .low {
+            i:first-child { color: #888; }
+            color: #ccc;
+        }
+    }
+
+    &.selected .priority {
+        .low {
+            i:first-child { opacity: 1; }
+            i { opacity: 0.5; }
+        }
+    }
+
+    .list-item.unread {
+        .from span.person { font-weight: 800; }
+    }
+
+    .thread-size {
+        min-width: 1em;
+        font-weight: normal;
+        padding: 0 0.5em 0 0.5em;
+        margin-left: 10px;
+        display: inline-block;
+        float: right;
+        cursor: pointer;
+        overflow: visible;
+        text-align: center;
+        border-radius: 5px;
+
+        color: rgba(0, 0, 0, 0.3);
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    &.has-focus .selected .thread-size {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .thread-item {
+
+        padding: 5px @list-view-padding 5px (@list-view-padding * 2.5);
+
+        .from span.person {
+            font-weight: normal;
+        }
+
+        i.icon-unread {
+            color: @linkColor;
+            position: absolute;
+            line-height: 20px;
+            left: @list-view-padding;
+        }
+    }
+
+    .thread-item:first-child { padding-top: 7px; }
+    .thread-item:last-child { padding-bottom: 7px; }
+}
 
 /* VGrid elements */
 

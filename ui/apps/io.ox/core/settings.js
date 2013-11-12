@@ -320,7 +320,7 @@ define('io.ox/core/settings',
         Event.extend(this);
     };
 
-    var list = 'io.ox/core io.ox/core/updates io.ox/mail io.ox/contacts io.ox/calendar'.split(' '), promise;
+    var list = 'io.ox/core io.ox/core/updates io.ox/core/settingOptions io.ox/mail io.ox/mail/emoji io.ox/contacts io.ox/calendar io.ox/tasks io.ox/files'.split(' '), promise;
 
     function preload(path) {
         if (!promise) {

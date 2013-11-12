@@ -24,14 +24,13 @@ define('io.ox/core/ping',
         intervalHandle = null;
 
     function ping() {
-        if (!ox.session || ox.session === 'unset' || !ox.online || _.device('phantomjs || karma')) return;
+        // don't ping if offline, invalid session, or within first 10 seconds
+        if (!ox.session || ox.session === 'unset' || !ox.online || _.device('phantomjs || karma') || (_.now() - ox.t0) < 10000) return;
         http.ping();
     }
 
     function stopInterval() {
-        if (intervalHandle) {
-            clearInterval(intervalHandle);
-        }
+        if (intervalHandle) clearInterval(intervalHandle);
     }
 
     function normalPing() {
@@ -50,9 +49,7 @@ define('io.ox/core/ping',
     }
 
     function hecticPing() {
-        if (mode === 'hectic') {
-            return;
-        }
+        if (mode === 'hectic') return;
         stopInterval();
         ox.reachable = false;
         ox.trigger('reachableChange');

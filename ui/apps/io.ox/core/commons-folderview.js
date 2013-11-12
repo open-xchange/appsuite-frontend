@@ -17,10 +17,9 @@ define('io.ox/core/commons-folderview',
      'io.ox/core/notifications',
      'io.ox/core/api/folder',
      'settings!io.ox/core',
-     'settings!io.ox/caldav',
      'io.ox/core/capabilities',
      'gettext!io.ox/core'
-    ], function (ext, links, notifications, api, coreConfig, caldavConfig, capabilities, gt) {
+    ], function (ext, links, notifications, api, coreConfig, capabilities, gt) {
 
     'use strict';
 
@@ -482,7 +481,7 @@ define('io.ox/core/commons-folderview',
             var baton = e.data.baton, id = baton.app.folder.get();
 
             api.get({ folder: id }).done(function (folder) {
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                require(['io.ox/core/tk/dialogs', 'settings!io.ox/caldav'], function (dialogs, caldavConfig) {
                     var title = gt('Properties'),
                     dialog = new dialogs.ModalDialog()
                     .header(

@@ -485,7 +485,7 @@ define('io.ox/mail/api',
         options = options || {};
         options = $.extend(options, {
             action: 'threadedAll',
-            columns: '601,600,611,102', // +flags +color_label
+            columns: options.columns || '601,600,611,102', // +flags +color_label
             sort: options.sort || '610',
             sortKey: 'threaded-' + (options.sort || '610'),
             konfetti: true,

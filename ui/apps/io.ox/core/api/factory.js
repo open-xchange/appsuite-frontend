@@ -601,6 +601,20 @@ define('io.ox/core/api/factory',
             api.refresh(); // write it this way so that API's can overwrite refresh
         });
 
+        // basic model with custom cid
+        api.Model = Backbone.Model.extend({
+            constructor: function () {
+                Backbone.Model.apply(this, arguments);
+                this.cid = _.cid(this.attributes);
+            }
+        });
+
+        // collection using custom models
+        api.Collection = Backbone.Collection.extend({
+            comparator: 'index',
+            model: api.Model
+        });
+
         return api;
     };
 
