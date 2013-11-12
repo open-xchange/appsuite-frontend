@@ -86,8 +86,9 @@ The default version of the guided tours for the typical applications.
 
 %install
 APPSUITE=/opt/open-xchange/appsuite/
-sh build.sh skipLess=1 builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
-    manifestDir="%{buildroot}$APPSUITE" version=%{version} revision=%{ox_release}
+sh bin/build-appsuite skipLess=1 builddir="%{buildroot}%{docroot}" \
+    l10nDir=tmp/l10n manifestDir="%{buildroot}$APPSUITE" \
+    version=%{version} revision=%{ox_release}
 cp -r "%{buildroot}%{docroot}/apps" "%{buildroot}$APPSUITE"
 
 mv "%{buildroot}%{docroot}/share" "%{buildroot}$APPSUITE"
@@ -117,25 +118,26 @@ cp -r conf/* "%{buildroot}/opt/open-xchange/etc/"
 
 %clean
 APPSUITE=/opt/open-xchange/appsuite/
-sh build.sh clean builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
-    manifestDir="%{buildroot}$APPSUITE" version=%{version} revision=%{ox_release}
+sh bin/build-appsuite clean skipLess=1 builddir="%{buildroot}%{docroot}" \
+    l10nDir=tmp/l10n manifestDir="%{buildroot}$APPSUITE" \
+    version=%{version} revision=%{ox_release}
 rm -r "%{buildroot}/opt/open-xchange-appsuite-dev"
 rm -r "%{buildroot}/opt/open-xchange/etc"
 
-%define udpate /opt/open-xchange/appsuite/share/update-themes.sh
+%define update /opt/open-xchange/appsuite/share/update-themes.sh
 
 %post manifest
-if [ $1 -eq 1 -a -x %{udpate} ]; then %{udpate}; fi
+if [ $1 -eq 1 -a -x %{update} ]; then %{update}; fi
 
 %postun manifest
 if [ $1 -lt 1 ]; then
     rm -rf /opt/open-xchange/appsuite/apps/themes/*/less || true
 else
-    if [ -x %{udpate} ]; then %{udpate}; fi
+    if [ -x %{update} ]; then %{update}; fi
 fi
 
 %triggerpostun manifest -- open-xchange-appsuite-manifest < 7.2.0
-if [ -x %{udpate} ]; then %{udpate}; fi
+if [ -x %{update} ]; then %{update}; fi
 
 %files
 %defattr(-,root,root)
