@@ -22,7 +22,7 @@ define('io.ox/portal/main',
      'io.ox/portal/settings/pane',
      'gettext!io.ox/portal',
      'settings!io.ox/portal',
-     'less!io.ox/portal/style.less'
+     'less!io.ox/portal/style'
     ], function (ext, userAPI, date, dialogs, widgets, util, settingsPane, gt, settings) {
 
     'use strict';

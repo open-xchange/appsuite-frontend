@@ -14,7 +14,7 @@ define('io.ox/core/wizard/registry',
     ['io.ox/core/extensions',
      'io.ox/core/tk/dialogs',
      'gettext!io.ox/core/wizard',
-     'less!io.ox/core/wizard/style.less'
+     'less!io.ox/core/wizard/style'
     ], function (ext, dialogs, gt) {
 
     'use strict';

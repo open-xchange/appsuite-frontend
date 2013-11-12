@@ -15,7 +15,7 @@ define('io.ox/mail/autoforward/settings/view-form',
     ['io.ox/mail/autoforward/settings/model',
      'io.ox/backbone/views',
      'io.ox/backbone/forms',
-     'less!io.ox/mail/autoforward/settings/style.less'
+     'less!io.ox/mail/autoforward/settings/style'
     ], function (model, views, forms) {
 
     'use strict';

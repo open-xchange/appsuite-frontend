@@ -13,7 +13,7 @@
 define('io.ox/contacts/widgets/pictureUpload',
     ['io.ox/core/notifications',
      'gettext!io.ox/contacts',
-     'less!io.ox/contacts/widgets/widgets.less'
+     'less!io.ox/contacts/widgets/widgets'
     ], function (notifications, gt) {
 
     'use strict';

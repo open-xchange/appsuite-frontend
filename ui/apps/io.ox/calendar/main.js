@@ -19,7 +19,7 @@ define('io.ox/calendar/main',
      'settings!io.ox/calendar',
      'gettext!io.ox/calendar',
      'io.ox/calendar/actions',
-     'less!io.ox/calendar/style.less'
+     'less!io.ox/calendar/style'
     ], function (date, coreConfig, commons, ext, settings, gt) {
 
     'use strict';

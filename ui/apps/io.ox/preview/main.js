@@ -212,7 +212,7 @@ define('io.ox/preview/main',
         supports: ['txt', 'plain/text', 'asc', 'js', 'md'],
         draw: function (file) {
             var node = this;
-            require(['io.ox/core/emoji/util', 'less!io.ox/preview/style.less'], function (emoji) {
+            require(['io.ox/core/emoji/util', 'less!io.ox/preview/style'], function (emoji) {
                 $.ajax({ url: file.dataURL, dataType: 'text' }).done(function (text) {
                     // plain text preview with emoji support
                     // need to escape here; plain text might surprise with bad HTML

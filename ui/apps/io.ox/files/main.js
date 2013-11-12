@@ -19,7 +19,7 @@ define('io.ox/files/main',
      'io.ox/core/api/folder',
      'io.ox/core/extPatterns/actions',
      'io.ox/files/actions',
-     'less!io.ox/files/style.less'
+     'less!io.ox/files/style'
     ], function (commons, gt, settings, folderAPI, actions) {
 
     'use strict';

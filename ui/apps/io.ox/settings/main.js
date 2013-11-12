@@ -23,7 +23,7 @@ define('io.ox/settings/main',
      'settings!io.ox/core',
      'io.ox/core/settings/errorlog/settings/pane',
      'io.ox/core/settings/downloads/pane',
-     'less!io.ox/settings/style.less'
+     'less!io.ox/settings/style'
     ], function (VGrid, appsAPI, ext, forms, View, commons, gt, configJumpSettings, advancedModeSettings) {
 
     'use strict';

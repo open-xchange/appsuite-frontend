@@ -16,7 +16,7 @@ define('io.ox/editor/main',
      'io.ox/core/api/folder',
      'io.ox/core/notifications',
      'gettext!io.ox/editor',
-     'less!io.ox/editor/style.less'
+     'less!io.ox/editor/style'
     ], function (api, folderAPI, notifications, gt) {
 
     'use strict';

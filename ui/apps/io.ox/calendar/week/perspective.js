@@ -20,7 +20,7 @@ define('io.ox/calendar/week/perspective',
      'io.ox/calendar/conflicts/conflictList',
      'io.ox/core/notifications',
      'gettext!io.ox/calendar',
-     'less!io.ox/calendar/week/style.less'
+     'less!io.ox/calendar/week/style'
     ], function (View, api, ext, dialogs, detailView, conflictView, notifications, gt) {
 
     'use strict';

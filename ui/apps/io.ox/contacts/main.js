@@ -25,7 +25,7 @@ define('io.ox/contacts/main',
      'gettext!io.ox/contacts',
      'settings!io.ox/contacts',
      'io.ox/core/api/folder',
-     'less!io.ox/contacts/style.less'
+     'less!io.ox/contacts/style'
     ], function (util, api, VGrid, hints, viewDetail, dropdownOptions, ext, actions, commons, gt, settings, folderAPI) {
 
     'use strict';

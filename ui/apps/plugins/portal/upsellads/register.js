@@ -15,7 +15,7 @@ define('plugins/portal/upsellads/register',
     ['io.ox/core/extensions',
      'gettext!plugins/portal',
      'settings!plugins/upsell',
-     'less!plugins/portal/upsellads/style.less'], function (ext, gt, settings) {
+     'less!plugins/portal/upsellads/style'], function (ext, gt, settings) {
 
     'use strict';
 

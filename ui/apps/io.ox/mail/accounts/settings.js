@@ -19,7 +19,7 @@ define('io.ox/mail/accounts/settings',
      'io.ox/core/tk/dialogs',
      'io.ox/core/notifications',
      'gettext!io.ox/mail/accounts/settings',
-     'less!io.ox/settings/style.less'
+     'less!io.ox/settings/style'
     ], function (ext, api, AccountModel, AccountDetailView, dialogs, notifications, gt) {
 
     'use strict';

@@ -19,7 +19,7 @@ define('io.ox/tasks/view-detail',
      'io.ox/core/extPatterns/links',
      'io.ox/tasks/api',
      'io.ox/tasks/actions',
-     'less!io.ox/tasks/style.less'
+     'less!io.ox/tasks/style'
     ], function (util, calendarUtil, gt, ext, links, api) {
 
     'use strict';

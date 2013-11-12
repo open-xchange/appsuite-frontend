@@ -19,7 +19,7 @@ define('io.ox/calendar/view-grid-template',
      'gettext!io.ox/calendar',
      'io.ox/core/api/user',
      'io.ox/core/api/resource',
-     'less!io.ox/calendar/style.less'
+     'less!io.ox/calendar/style'
     ], function (util, VGrid, ext, folderAPI, gt, userAPI, resourceAPI) {
 
     'use strict';

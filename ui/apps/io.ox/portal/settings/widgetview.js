@@ -18,7 +18,7 @@ define('io.ox/portal/settings/widgetview',
      'io.ox/core/manifests',
      'io.ox/core/upsell',
      'gettext!io.ox/portal',
-     'less!io.ox/portal/style.less'
+     'less!io.ox/portal/style'
     ], function (ext, dialogs, manifests, upsell, gt) {
 
     'use strict';

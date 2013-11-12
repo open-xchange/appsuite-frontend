@@ -15,7 +15,7 @@ define('io.ox/mail/vacationnotice/settings/view-form',
     ['io.ox/mail/vacationnotice/settings/model',
      'io.ox/backbone/views',
      'io.ox/backbone/forms',
-     'less!io.ox/mail/vacationnotice/settings/style.less'
+     'less!io.ox/mail/vacationnotice/settings/style'
     ], function (model, views, forms) {
 
     'use strict';

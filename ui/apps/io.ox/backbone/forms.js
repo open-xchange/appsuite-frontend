@@ -17,7 +17,7 @@ define('io.ox/backbone/forms',
      'io.ox/core/date',
      'settings!io.ox/calendar',
      'gettext!io.ox/core',
-     'less!io.ox/backbone/forms.less'
+     'less!io.ox/backbone/forms'
     ], function (ext, Events, date, settings, gt) {
 
     'use strict';

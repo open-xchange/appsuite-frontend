@@ -17,7 +17,7 @@ define('plugins/portal/facebook/register',
      'io.ox/oauth/proxy',
      'io.ox/keychain/api',
      'gettext!plugins/portal',
-     'less!plugins/portal/facebook/style.less'
+     'less!plugins/portal/facebook/style'
     ], function (ext, proxy, keychain, gt) {
 
     'use strict';

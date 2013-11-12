@@ -15,7 +15,7 @@ define('io.ox/help/center',
     ['io.ox/core/extensions',
      'io.ox/help/core_doc',
      'gettext!io.ox/help',
-     'less!io.ox/help/style.less'
+     'less!io.ox/help/style'
     ], function (ext, core_doc, gt) {
     //TODO Launcher refactoren, hier hin
     'use strict';

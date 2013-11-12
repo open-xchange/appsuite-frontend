@@ -21,7 +21,7 @@ define('io.ox/core/pubsub/settings/pane',
      'io.ox/core/capabilities',
      'settings!io.ox/core/pubsub',
      'gettext!io.ox/core/pubsub',
-     'less!io.ox/core/pubsub/style.less'
+     'less!io.ox/core/pubsub/style'
     ], function (ext, model, views, folderAPI, dialogs, notifications, capabilities, settings, gt) {
 
     'use strict';

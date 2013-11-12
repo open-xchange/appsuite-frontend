@@ -24,7 +24,7 @@ define('io.ox/files/fluid/view-detail',
      'io.ox/core/api/folder',
      'io.ox/core/tk/attachments',
      'gettext!io.ox/files',
-     'less!io.ox/files/style.less'
+     'less!io.ox/files/style'
     ], function (ext, links, actionPerformer, date, actions, filesAPI, preview, userAPI, folderAPI, attachments, gt) {
 
     'use strict';

@@ -18,7 +18,7 @@ define('io.ox/calendar/invitations/register',
      'io.ox/calendar/util',
      'gettext!io.ox/calendar/main',
      'io.ox/core/notifications',
-     'less!io.ox/calendar/style.less'
+     'less!io.ox/calendar/style'
     ], function (ext, http, settings, util, gt, notifications) {
 
     'use strict';

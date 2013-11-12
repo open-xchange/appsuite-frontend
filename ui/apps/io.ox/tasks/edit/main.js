@@ -17,7 +17,7 @@ define('io.ox/tasks/edit/main',
      'io.ox/tasks/model',
      'io.ox/tasks/edit/view',
      'io.ox/core/extPatterns/dnd',
-     'less!io.ox/tasks/edit/style.less'
+     'less!io.ox/tasks/edit/style'
     ], function (gt, ext, model, view, dnd) {
 
     'use strict';

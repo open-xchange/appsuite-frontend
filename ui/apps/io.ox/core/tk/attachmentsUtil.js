@@ -18,7 +18,7 @@ define('io.ox/core/tk/attachmentsUtil',
      'gettext!io.ox/core/tk/attachments',
      'io.ox/core/extPatterns/links',
      'io.ox/core/capabilities',
-     'less!io.ox/core/tk/attachments.less'
+     'less!io.ox/core/tk/attachments'
     ], function (strings, pre, dialogs, gt, links, capabilities) {
 
     'use strict';

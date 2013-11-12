@@ -17,7 +17,7 @@ define('io.ox/emoji/main',
        'io.ox/core/extensions',
        'settings!io.ox/mail/emoji',
        'css!3rd.party/emoji/emoji.css',
-       'less!io.ox/emoji/emoji.less'
+       'less!io.ox/emoji/emoji'
     ], function (emoji, categories, conversions, ext, settings) {
 
     'use strict';

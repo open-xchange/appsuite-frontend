@@ -17,7 +17,7 @@ define('io.ox/mail/settings/signatures/register',
      'settings!io.ox/mail',
      'io.ox/core/tk/dialogs',
      'io.ox/core/api/snippets',
-     'less!io.ox/mail/settings/signatures/style.less'
+     'less!io.ox/mail/settings/signatures/style'
     ], function (ext, gt, settings, dialogs, snippets) {
 
     'use strict';

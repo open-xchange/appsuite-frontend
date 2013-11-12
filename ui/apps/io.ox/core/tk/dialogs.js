@@ -14,7 +14,7 @@
 define('io.ox/core/tk/dialogs',
     ['io.ox/core/event',
      'gettext!io.ox/core',
-     'less!io.ox/core/tk/dialog.less'
+     'less!io.ox/core/tk/dialog'
     ], function (Events, gt) {
 
     'use strict';

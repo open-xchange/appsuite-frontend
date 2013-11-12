@@ -23,8 +23,7 @@ define('io.ox/core/tk/attachments',
      'io.ox/core/extPatterns/links',
      'settings!io.ox/core',
      'io.ox/core/notifications',
-     'less!io.ox/core/tk/attachments.less',
-
+     'less!io.ox/core/tk/attachments',
     ], function (ext, attachmentAPI, strings, util, capabilities, pre, dialogs, gt, links, settings, notifications) {
 
     'use strict';

@@ -16,7 +16,7 @@ define('io.ox/core/settings/downloads/pane',
      'io.ox/core/capabilities',
      'gettext!io.ox/core',
      'settings!io.ox/core',
-     'less!io.ox/core/settings/downloads/style.less'
+     'less!io.ox/core/settings/downloads/style'
     ], function (ext, capabilities, gt, settings) {
 
     'use strict';

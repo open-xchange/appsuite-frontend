@@ -13,7 +13,7 @@
 
 define('plugins/halo/linkedIn/view-halo',
     ['io.ox/linkedIn/view-detail',
-     'less!io.ox/linkedIn/style.less'
+     'less!io.ox/linkedIn/style'
     ], function (viewer) {
 
     'use strict';

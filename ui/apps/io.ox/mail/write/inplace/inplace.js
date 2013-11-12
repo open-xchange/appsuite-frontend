@@ -19,7 +19,7 @@ define('io.ox/mail/write/inplace/inplace',
      'io.ox/core/util',
      'io.ox/backbone/mini-views/abstract',
      'gettext!io.ox/mail',
-     'less!io.ox/mail/write/inplace/inplace.less'
+     'less!io.ox/mail/write/inplace/inplace'
     ], function (api, accountAPI, dialogs, notifications, util, AbstractView, gt) {
 
     'use strict';

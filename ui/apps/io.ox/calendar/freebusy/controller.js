@@ -27,8 +27,8 @@ define('io.ox/calendar/freebusy/controller',
      'io.ox/calendar/view-detail',
      'gettext!io.ox/calendar/freebusy',
      'settings!io.ox/core',
-     'less!io.ox/calendar/week/style.less',
-     'less!io.ox/calendar/freebusy/style.less'
+     'less!io.ox/calendar/week/style',
+     'less!io.ox/calendar/freebusy/style'
     ], function (dialogs, WeekView, templates, folderAPI, AddParticipantsView, participantsModel, participantsView, userAPI, contactsUtil, api, notifications, date, detailView, gt, settings) {
 
     'use strict';

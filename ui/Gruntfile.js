@@ -132,7 +132,7 @@ module.exports = function (grunt) {
                         rename: function (dest) {
                             return dest;
                         },
-                        dest: 'build/apps/themes/default/less/common.css'
+                        dest: 'build/apps/themes/default/common.css'
                     },
                     {
                         src: ['lib/bootstrap/less/bootstrap.less', 'apps/themes/default/style.less'],
@@ -140,7 +140,7 @@ module.exports = function (grunt) {
                         rename: function (dest) {
                             return dest;
                         },
-                        dest: 'build/apps/themes/default/less/style.css'
+                        dest: 'build/apps/themes/default/style.css'
                     },
                     {
                         src: ['lib/bootstrap/less/bootstrap.less'],
@@ -153,8 +153,9 @@ module.exports = function (grunt) {
                     {
                         src: ['**/*.less', '!themes/**/*.less', '!themes/*.less'],
                         expand: true,
+                        ext: '.css',
                         cwd: 'apps/',
-                        dest: 'build/apps/themes/default/less/'
+                        dest: 'build/apps/themes/default/'
                     }
                 ]
             }

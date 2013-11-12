@@ -17,7 +17,7 @@ define('plugins/portal/quota/register',
      'io.ox/core/api/quota',
      'io.ox/core/strings',
      'io.ox/core/capabilities',
-     'less!plugins/portal/quota/style.less'
+     'less!plugins/portal/quota/style'
     ], function (ext, gt, api, strings, capabilities) {
 
     'use strict';

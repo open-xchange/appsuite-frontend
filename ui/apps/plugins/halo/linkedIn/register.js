@@ -27,7 +27,7 @@ define('plugins/halo/linkedIn/register', ['io.ox/core/extensions'], function (ex
 
             var node = this, def = $.Deferred();
 
-            require(['plugins/halo/linkedIn/view-halo', 'less!io.ox/linkedIn/style.less'], function (base) {
+            require(['plugins/halo/linkedIn/view-halo', 'less!io.ox/linkedIn/style'], function (base) {
                 var data = baton.data.values ? baton.data.values[0] : baton.data;
                 node.append(base.draw(data));
                 def.resolve();

@@ -21,7 +21,7 @@ define('io.ox/contacts/edit/main',
      'io.ox/core/capabilities',
      'io.ox/core/notifications',
      'io.ox/core/util',
-     'less!io.ox/contacts/edit/style.less'
+     'less!io.ox/contacts/edit/style'
     ], function (view, model, gt, ext, util, dnd, capabilities, notifications, coreUtil) {
 
     'use strict';

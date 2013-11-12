@@ -22,7 +22,7 @@ define('io.ox/core/pubsub/publications',
      'io.ox/core/tk/dialogs',
      'settings!io.ox/core',
      'gettext!io.ox/core/pubsub',
-     'less!io.ox/core/pubsub/style.less'
+     'less!io.ox/core/pubsub/style'
     ], function (pubsub, ext, forms, api, templAPI, folderAPI, notifications, dialogs, settings, gt)  {
 
     'use strict';

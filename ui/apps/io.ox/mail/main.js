@@ -29,7 +29,7 @@ define('io.ox/mail/main',
      'io.ox/core/api/account',
      'settings!io.ox/mail',
      'io.ox/mail/actions',
-     'less!io.ox/mail/style.less',
+     'less!io.ox/mail/style',
      'io.ox/mail/folderview-extensions'
     ], function (util, api, ext, commons, VGrid, viewDetail, tmpl, gt, upload, dnd, actions, dropdownOptions, notifications, folderAPI, account, settings) {
 

@@ -19,7 +19,7 @@ define('io.ox/calendar/edit/main',
      'io.ox/core/notifications',
      'gettext!io.ox/calendar/edit/main',
      'settings!io.ox/calendar',
-     'less!io.ox/calendar/edit/style.less'
+     'less!io.ox/calendar/edit/style'
     ], function (appointmentModel, api, dnd, MainView, notifications, gt, settings) {
 
     'use strict';

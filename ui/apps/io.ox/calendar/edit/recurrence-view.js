@@ -15,7 +15,7 @@ define('io.ox/calendar/edit/recurrence-view',
      'io.ox/core/tk/config-sentence',
      'io.ox/core/date',
      'gettext!io.ox/calendar/edit/main',
-     'less!io.ox/calendar/edit/style.less'
+     'less!io.ox/calendar/edit/style'
     ], function (model, ConfigSentence, dateAPI, gt) {
 
     'use strict';

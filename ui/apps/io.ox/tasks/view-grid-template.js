@@ -13,7 +13,7 @@
 
 define('io.ox/tasks/view-grid-template',
     ['io.ox/core/tk/vgrid',
-     'less!io.ox/tasks/style.less'
+     'less!io.ox/tasks/style'
     ], function (VGrid) {
 
     'use strict';

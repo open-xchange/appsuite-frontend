@@ -13,7 +13,7 @@
 
 define('io.ox/preview/officePreview/main',
     ['io.ox/core/tk/keys',
-     'less!io.ox/preview/officePreview/style.less'
+     'less!io.ox/preview/officePreview/style'
     ], function (KeyListener) {
 
     'use strict';

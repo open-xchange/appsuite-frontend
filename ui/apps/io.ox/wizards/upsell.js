@@ -23,8 +23,9 @@ define('io.ox/wizards/upsell', [
     'io.ox/backbone/mini-views',
     'settings!plugins/upsell',
     'gettext!io.ox/wizards',
-    'less!io.ox/wizards/upsell.less'
+    'less!io.ox/wizards/upsell'
 ], function (ext, wizards, miniViews, settings, gt)  {
+
     'use strict';
 
     var getProducts,

@@ -361,13 +361,13 @@
         // Name of the current theme, or falsy before a theme is set.
     var theme = '',
         // LessCSS files of the current theme.
-        themeCommon = { name: 'common.css', selector: '#theme' },
-        themeStyle = { name: 'style.css', selector: '#custom' },
+        themeCommon = { name: 'common', selector: '#theme' },
+        themeStyle = { name: 'style', selector: '#custom' },
         // List of LessCSS files to update for theme changes.
         lessFiles = [themeCommon, themeStyle];
 
     function insertLess(file) {
-        return require(['text!themes/' + theme + '/less/' + file.name], function (css) {
+        return require(['text!themes/' + theme + '/' + file.name + '.css'], function (css) {
                 file.node = insert(file.path, css, file.selector, file.node);
             });
     }
@@ -422,8 +422,8 @@
                                .detach().appendTo('head');
             }
             if (name !== 'login') {
-                themeCommon.path = path + 'common.css';
-                themeStyle.path = path + 'style.css';
+                themeCommon.path = path + 'common';
+                themeStyle.path = path + 'style';
                 return $.when.apply($, _.map(lessFiles, insertLess));
             } else {
                 return $.when();

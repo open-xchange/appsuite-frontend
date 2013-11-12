@@ -17,7 +17,7 @@ define('io.ox/files/carousel',
      'gettext!io.ox/files',
      'io.ox/files/api',
      'io.ox/core/api/folder',
-     'less!io.ox/files/carousel.less'
+     'less!io.ox/files/carousel'
     ], function (commons, gt, api, folderAPI) {
 
     'use strict';

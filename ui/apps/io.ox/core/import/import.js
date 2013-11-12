@@ -20,7 +20,7 @@ define('io.ox/core/import/import',
      'io.ox/core/api/import',
      'io.ox/core/notifications',
      'gettext!io.ox/core',
-     'less!io.ox/core/import/style.less'
+     'less!io.ox/core/import/style'
     ], function (ext, dialogs, attachments, folderAPI, api, notifications, gt) {
 
     'use strict';

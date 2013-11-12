@@ -17,7 +17,7 @@ define('io.ox/contacts/distrib/main',
      'io.ox/contacts/model',
      'io.ox/contacts/distrib/create-dist-view',
      'gettext!io.ox/contacts',
-     'less!io.ox/contacts/distrib/style.less'
+     'less!io.ox/contacts/distrib/style'
     ], function (api, contactModel, ContactCreateDistView, gt) {
 
     'use strict';

@@ -35,7 +35,7 @@ define('io.ox/core/tk/upload',
     //      {id: 'action1', label: 'Some cool Action'}, {id: 'action2', label: 'Some other cool action'}
     // ]}
     function DropZone(options) {
-        require(['less!io.ox/core/tk/upload.less']);
+        require(['less!io.ox/core/tk/upload']);
         var self = this, highlightedAction, dragLeaveTimer,
             $overlay = $('<div class="abs io-ox-dropzone-multiple-overlay">').on('click', removeOverlay),
 

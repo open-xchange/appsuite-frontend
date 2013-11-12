@@ -21,7 +21,7 @@ define('plugins/portal/twitter/register',
      'plugins/portal/twitter/network',
      'io.ox/core/cache',
      'plugins/portal/twitter/util',
-     'less!plugins/portal/twitter/style.less'
+     'less!plugins/portal/twitter/style'
     ], function (ext, strings, keychain, gt, notifications, network, cache, util) {
 
     'use strict';

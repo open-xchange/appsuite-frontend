@@ -29,8 +29,8 @@ define('io.ox/mail/write/main',
      'settings!io.ox/mail',
      'settings!io.ox/core',
      'gettext!io.ox/mail',
-     'less!io.ox/mail/style.less',
-     'less!io.ox/mail/write/style.less'
+     'less!io.ox/mail/style',
+     'less!io.ox/mail/write/style'
     ], function (mailAPI, mailUtil, ext, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, emoji, notifications, sender, settings, coreSettings, gt) {
 
     'use strict';
