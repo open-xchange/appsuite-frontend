@@ -839,7 +839,9 @@ define('io.ox/backbone/forms',
                 if (!mobileMode) {
                     // get the right date format
                     var dateFormat = date.getFormat(date.DATE).replace(/\by\b/, 'yyyy').toLowerCase();
-                    this.nodes.dayField.datepicker({
+                    this.nodes.dayField.attr({
+                        'aria-label': gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month.')
+                    }).datepicker({
                         format: dateFormat,
                         weekStart: date.locale.weekStart,
                         parentEl: self.nodes.controlGroup,
