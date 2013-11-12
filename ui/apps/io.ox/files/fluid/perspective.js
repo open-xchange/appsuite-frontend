@@ -236,6 +236,9 @@ define('io.ox/files/fluid/perspective',
         register: function (baton) {
             var pers = this;
             Selection.extend(pers, scrollpane, { draggable: true, dragType: 'mail', scrollpane: wrapper, focus: undefined});
+            //selection accessible via app
+            baton.app.selection = pers.selection;
+            //init
             pers.selection
                 .setEditable(true, '.checkbox')
                 .keyboard(scrollpane, true)
