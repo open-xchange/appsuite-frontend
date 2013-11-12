@@ -546,9 +546,17 @@ define.async('io.ox/core/tk/html-editor',
             // trim white-space and clean up pseudo XHTML
             // remove empty paragraphs at the end
             get = function () {
-                return trimOut(emoji.imageTagsToUnified(ed.getContent()))
+                // get raw content
+                var content = ed.getContent({ format: 'raw' });
+                // clean up
+                content = content
+                    .replace(/\s?data-mce-bogus="1"/g, '') // remove bogus attribute
                     .replace(/<(\w+)[ ]?\/>/g, '<$1>')
                     .replace(/(<p>(<br>)?<\/p>)+$/, '');
+                // convert emojies
+                content = emoji.imageTagsToUnified(content);
+                // remove trailing white-space
+                return trimOut(content);
             };
 
         // publish internal 'done'

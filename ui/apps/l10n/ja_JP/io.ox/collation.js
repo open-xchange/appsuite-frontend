@@ -18,12 +18,12 @@ define('l10n/ja_JP/io.ox/collation', [], function () {
     // see http://en.wikipedia.org/wiki/Goj%C5%ABon
     // or http://en.wikipedia.org/wiki/Japanese_writing_system#Collation
     var tableau = [
-            'あ い う え お',
+            'あ い う え お ゔ',
             'か き く け こ が ぎ ぐ げ ご',
             'さ し す せ そ ざ じ ず ぜ ぞ',
             'た ち つ て と だ ぢ づ で ど',
             'な に ぬ ね の',
-            'は ひ ふ へ ほ ば び ぶ ぼ ぱ ぴ ぷ ぺ ぽ',
+            'は ひ ふ へ ほ ば び ぶ べ ぼ ぱ ぴ ぷ ぺ ぽ',
             'ま み む め も',
             'や ゆ よ',
             'ら り る れ ろ',
@@ -46,7 +46,7 @@ define('l10n/ja_JP/io.ox/collation', [], function () {
     });
 
     // the sorter
-    // order is: Kana, Latin, Other, Empty
+    // order is: Kana, Other, Latin, Empty
     sorter = function (a, b) {
         a = a.sort_name[0];
         b = b.sort_name[0];
@@ -61,11 +61,11 @@ define('l10n/ja_JP/io.ox/collation', [], function () {
         // case-insensitive
         a = a.toUpperCase();
         b = b.toUpperCase();
-        // latin (second)
-        if (isABC.test(a) && isABC.test(b)) return a < b ? -1 : (a > b ? +1 : 0);
-        if (isABC.test(a)) return -1;
-        if (isABC.test(b)) return +1;
-        // other (third)
+        // other (second: not kana / not latin)
+        if (!isABC.test(a) && !isABC.test(b)) return a < b ? -1 : (a > b ? +1 : 0);
+        if (!isABC.test(a)) return -1;
+        if (!isABC.test(b)) return +1;
+        // latin (third)
         return a < b ? -1 : (a > b ? +1 : 0);
     };
 
