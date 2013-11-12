@@ -105,39 +105,8 @@ define('io.ox/calendar/week/view',
             this.fulltimeNote   = $('<div>').addClass('note');
             this.timeline       = $('<div>').addClass('timeline');
             this.dayLabel       = $('<div>').addClass('footer');
-            this.kwInfo         = _.device('small') ? $('<div>').addClass('info') : $('<a href="#">').addClass('info');
+            this.kwInfo         = _.device('small') ? $('<div>').addClass('info') : $('<a href="#" tabindex="1">').addClass('info');
             this.weekCon        = $('<div>').addClass('week-container');
-
-            //append datepicker
-            if (!_.device('small')) {
-                this.kwInfo.on('changeDate', function (e) {
-                    var elem = $(this);
-                    e.preventDefault();
-
-                    self.setStartDate.call(self, new date.Local(elem.datepicker('getUTCDate')), true);
-                    self.trigger('onRefresh');
-                })
-                .on('show', function () {
-                    var elem = $(this),
-                        date = new Date(self.startDate.local);
-
-                    //adjust hours to 0 in utc time
-                    date.setUTCHours(0);
-
-                    elem.datepicker('update', date);
-                    //elem.datepicker('setUTCDate', new Date(self.startDate.t));
-                })
-                .datepicker({
-                    format: date.getFormat(date.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
-                    weekStart: date.locale.weekStart,
-                    parentEl: this.$el,
-                    orientation: 'top left',
-                    calendarWeeks: true,
-                    todayHighlight: true,
-                    todayBtn: true,
-                    daysOfWeekDisabled: opt.mode === 'workweek' ? [0, 6] : []
-                });
-            }
 
             this.mode = opt.mode || 'day';
             this.extPoint = opt.appExtPoint;
@@ -164,6 +133,39 @@ define('io.ox/calendar/week/view',
 
             this.setStartDate(this.refDate);
             this.initSettings();
+
+            //append datepicker
+            if (!_.device('small')) {
+                //just localize the picker, use en as default with current languages
+                $.fn.datepicker.dates.en = {
+                    days: date.locale.days,
+                    daysShort: date.locale.daysShort,
+                    daysMin: date.locale.daysStandalone,
+                    months: date.locale.months,
+                    monthsShort: date.locale.monthsShort,
+                    today: gt('Today')
+                };
+
+                this.kwInfo
+                    .data('date', new Date(self.startDate.getTime()))
+                    .on('changeDate', function (e) {
+                        e.preventDefault();
+                        self.setStartDate.call(self, new date.Local($(this).datepicker('getUTCDate')), true);
+                        self.trigger('onRefresh');
+                    })
+                    .on('show', function () {
+                        $(this).datepicker('update', new Date(self.startDate.getTime()));
+                    })
+                    .datepicker({
+                        format: date.getFormat(date.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
+                        parentEl: this.$el,
+                        weekStart: date.locale.weekStart,
+                        autoclose: true,
+                        calendarWeeks: true,
+                        todayHighlight: true,
+                        todayBtn: true
+                    });
+            }
         },
 
         /**
@@ -809,7 +811,6 @@ define('io.ox/calendar/week/view',
 
             this.dayLabel.empty().append(days);
 
-            //            new date.Local(this.weekStart + date.DAY).format('w')
             this.kwInfo.empty().append(
                 $.txt(
                     gt.noI18n(this.columns > 1 ?
