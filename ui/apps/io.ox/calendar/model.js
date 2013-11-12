@@ -47,7 +47,8 @@ define('io.ox/calendar/model',
                 start_date: defStart.getTime(),
                 end_date: defStart.getTime() + date.HOUR,
                 recurrence_type: 0,
-                notification: true
+                notification: true,
+                shown_as: 1
             },
             init: function () {
 
