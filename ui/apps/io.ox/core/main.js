@@ -24,12 +24,11 @@ define('io.ox/core/main',
      'io.ox/core/upsell',
      'io.ox/core/capabilities',
      'io.ox/core/ping',
-     'io.ox/tours/main',
      'settings!io.ox/core',
      'gettext!io.ox/core',
      'io.ox/core/relogin',
      'io.ox/core/bootstrap/basics'
-    ], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, ping, tours, settings, gt) {
+    ], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, ping, settings, gt) {
 
     'use strict';
 
