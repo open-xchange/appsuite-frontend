@@ -417,7 +417,6 @@ define('io.ox/mail/api',
     var cacheControl = {},
         getAll = api.getAll,
         getList = api.getList,
-        get = api.get,
         remove = api.remove,
         search = api.search;
 
@@ -449,23 +448,6 @@ define('io.ox/mail/api',
         return getList.call(this, ids, useCache, options).then(function (data) {
             _.each(data, util.removeChannelSuffix);
             return data;
-        });
-    };
-
-    /**
-     * pipes get() to remove typesuffix from sender
-     * @param  {object} options
-     * @param  {boolan} useCache (default is true)
-     * @fires api#refresh.list
-     * @return {deferred} (resolve returns response)
-     */
-    api.get = function (options, useCache) {
-        //TOOD: use this until backend removes channel suffix
-        return get.call(this, options, useCache).then(function (mail) {
-            if (_.isObject(mail)) {
-                util.removeChannelSuffix(mail);
-            }
-            return mail;
         });
     };
 
