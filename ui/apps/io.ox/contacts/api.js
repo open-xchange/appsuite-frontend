@@ -582,6 +582,9 @@ define('io.ox/contacts/api',
             url = options.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(params);
 
         }
+        else if (_.device('phantomjs')) {
+            url = fallback;
+        }
 
         // already done?
         if (url) return node ? node.css('background-image', 'url(' + url + ')') : url;

@@ -32,6 +32,11 @@ define('io.ox/mail/listview',
                 t = data.received_date,
                 d = new date.Local(t);
 
+            // ignore deleted mails
+            data.threadSize = _(data.thread).reduce(function (sum, data) {
+                return sum + (util.isDeleted(data) ? 0 : 1);
+            }, 0);
+
             this.append(
                 $('<div class="list-item-row">').append(
                     // date
@@ -52,7 +57,7 @@ define('io.ox/mail/listview',
         index: 110,
         draw: function (baton) {
             var data = baton.data;
-            if (api.tracker.isUnseen(data) || (('threadSize' in data) && api.tracker.isPartiallyUnseen(data))) {
+            if (util.isUnseen(data) || (('threadSize' in data) && api.tracker.isPartiallyUnseen(data))) {
                 this.addClass('unread');
             }
         }
@@ -74,11 +79,11 @@ define('io.ox/mail/listview',
         draw: function (baton) {
 
             var data = baton.data;
-            if (!data.thread || data.thread.length <= 1) return;
+            if (data.threadSize <= 1) return;
 
             this.append(
-                $('<div class="thread-size" aria-hidden="true">').append(
-                    $('<span class="number">').text(_.noI18n(data.thread.length)),
+                $('<div class="thread-size" aria-hidden="true" data-open="false">').append(
+                    $('<span class="number">').text(_.noI18n(data.threadSize)),
                     $.txt(' '),
                     $('<i class="icon-caret-right">')
                 )
@@ -130,7 +135,7 @@ define('io.ox/mail/listview',
 
             var data = baton.data,
                 thread = api.tracker.getThread(data) || data,
-                isUnread = api.tracker.isUnseen(data) || (('threadSize' in data) && api.tracker.isPartiallyUnseen(data)),
+                isUnread = util.isUnseen(data) || (('threadSize' in data) && api.tracker.isPartiallyUnseen(data)),
                 isAnswered = util.isAnswered(thread, data),
                 isForwarded = util.isForwarded(thread, data);
 
@@ -191,6 +196,8 @@ define('io.ox/mail/listview',
             this.$el.addClass('mail');
             this.on('cursor:right', this.openThread);
             this.on('cursor:left', this.closeThread);
+
+            this.$el.on('click', '.thread-size', $.proxy(this.toggleThread, this));
         },
 
         filter: function (model) {
@@ -198,12 +205,32 @@ define('io.ox/mail/listview',
             return !util.isDeleted(data);
         },
 
+        onRemove: function (model) {
+            ListView.prototype.onRemove.call(this, model);
+            this.$el.find('li[data-thread="' + model.cid + '"]').remove();
+        },
+
+        onChange: function (model) {
+            ListView.prototype.onChange.call(this, model);
+            this.updateThread(model);
+        },
+
+        getThread: function (cid) {
+            return this.$el.find('li[data-thread="' + cid + '"]');
+        },
+
+        toggleThread: function (e) {
+            var open = $(e.currentTarget).attr('data-open') === 'true';
+            if (open) this.closeThread(); else this.openThread();
+        },
+
         openThread: function () {
 
             var node, cid, model, thread, li;
 
-            // get node and cid
             node = this.selection.getNode();
+            if (node.find('.thread-size').attr('data-open') === 'true') return;
+
             cid = node.attr('data-cid');
             if (cid === undefined) return;
 
@@ -215,26 +242,39 @@ define('io.ox/mail/listview',
             thread = model.get('thread');
             if (thread.length <= 1) return;
 
+            node.find('.thread-size')
+                .attr('data-open', 'true')
+                .find('i').attr('class', 'icon-caret-down');
+
             li = this.getThread(cid);
             if (li.length) return li.stop().slideDown(ANIMATION_DURATION); // avoid "remove" callback of running closeThread()
 
             this.renderThread(node, model);
         },
 
-        getThread: function (cid) {
-            return this.$el.find('li[data-thread="' + cid + '"]');
-        },
-
         closeThread: function () {
 
-            // get node and cid
-            var node = this.selection.getNode(),
-                cid = node.attr('data-cid');
+            var node, cid;
+
+            node = this.selection.getNode();
+            if (node.find('.thread-size').attr('data-open') === 'false') return;
+
+            cid = node.attr('data-cid');
             if (cid === undefined) return;
+
+            node.find('.thread-size')
+                .attr('data-open', 'false')
+                .find('i').attr('class', 'icon-caret-right');
 
             this.getThread(cid).slideUp(ANIMATION_DURATION, function () {
                 $(this).remove();
             });
+        },
+
+        updateThread: function (model) {
+            var li = this.getThread(model.cid);
+            if (li.length === 0) return;
+            this.renderThreadList(li.children('ul').empty(), model);
         },
 
         renderThread: function (node, model) {
@@ -242,12 +282,22 @@ define('io.ox/mail/listview',
             .attr('data-thread', model.cid)
             .hide()
             .append(
-                $('<ul>').append(
-                    _(model.get('thread').slice(1)).map(this.renderThreadItem, this)
-                )
+                this.renderThreadList($('<ul>'), model)
             )
             .insertAfter(node)
             .slideDown(ANIMATION_DURATION);
+        },
+
+        renderThreadList: function (ul, model) {
+            return ul.append(
+                _(model.get('thread').slice(1))
+                .chain()
+                .filter(function (data) {
+                    return !util.isDeleted(data);
+                })
+                .map(this.renderThreadItem, this)
+                .value()
+            );
         },
 
         renderThreadItem: function (data) {

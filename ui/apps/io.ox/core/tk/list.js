@@ -37,6 +37,7 @@ define('io.ox/core/tk/list',
         // a11y: use role=option and aria-selected here; no need for "aria-posinset" or "aria-setsize"
         // see http://blog.paciellogroup.com/2010/04/html5-and-the-myth-of-wai-aria-redundance/
         scaffold: $('<li class="list-item selectable" tabindex="-1" role="option" aria-selected="false">'),
+        busyIndicator: $('<li class="list-item busy-indicator"><i class="icon-chevron-down"/></li>'),
 
         events: {
             'focus': 'onFocus',
@@ -69,21 +70,35 @@ define('io.ox/core/tk/list',
             var height = this.$el.height(),
                 scrollTop = this.$el.scrollTop(),
                 scrollHeight = this.$el.prop('scrollHeight'),
+                hidden = scrollHeight - (scrollTop + height),
                 self = this;
 
-            if ((scrollTop + height) < (scrollHeight - 50)) return;
-
-            this.busy().fetch().always(function () {
+            // do anything?
+            if (hidden > height) return;
+            // show indicator
+            this.addBusyIndicator();
+            // really refresh?
+            if (hidden > 0) return;
+            // load more
+            (this.busy().fetch() || $.when()).always(function () {
                 self.idle();
             });
 
-        }, 100),
+        }, 50),
 
         initialize: function (options) {
+
             this.ref = this.ref || options.ref;
             this.selection = new Selection(this);
             this.model = options.model || new Backbone.Model();
             this.isBusy = false;
+
+            this.$el.attr({
+                'aria-multiselectable': true,
+                'data-ref': this.ref,
+                'role': 'listbox',
+                'tabindex': 1
+            });
         },
 
         setCollection: function (collection) {
@@ -99,18 +114,30 @@ define('io.ox/core/tk/list',
             return this;
         },
 
+        getBusyIndicator: function () {
+            return this.$el.find('.list-item.busy-indicator');
+        },
+
+        addBusyIndicator: function () {
+            var indicator = this.getBusyIndicator();
+            return indicator.length ? indicator : this.busyIndicator.clone().appendTo(this.$el);
+        },
+
+        removeBusyIndicator: function () {
+            this.getBusyIndicator().remove();
+        },
+
         busy: function () {
             if (this.isBusy) return;
-            this.$el.append(
-                $('<li class="list-item busy-indicator"><i class="icon-refresh icon-spin"></i></div>')
-            );
+            var indicator = this.addBusyIndicator();
+            indicator.find('i').attr('class', 'icon-refresh icon-spin');
             this.isBusy = true;
             return this;
         },
 
         idle: function () {
             if (!this.isBusy) return;
-            this.$el.find('.list-item.busy-indicator').remove();
+            this.removeBusyIndicator();
             this.isBusy = false;
             return this;
         },
@@ -126,8 +153,7 @@ define('io.ox/core/tk/list',
         onReset: function () {
             this.idle();
             this.$el.empty().append(
-                this.collection
-                .map(this.renderListItem, this)
+                this.collection.map(this.renderListItem, this)
             );
         },
 
@@ -160,12 +186,6 @@ define('io.ox/core/tk/list',
         },
 
         render: function () {
-            this.$el.attr({
-                'aria-multiselectable': true,
-                'data-ref': this.ref,
-                'role': 'listbox',
-                'tabindex': 1
-            });
             return this;
         },
 

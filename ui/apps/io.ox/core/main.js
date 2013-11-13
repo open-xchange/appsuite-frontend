@@ -989,13 +989,7 @@ define('io.ox/core/main',
         }
 
         requirejs.onError = function (e) {
-<<<<<<< HEAD
             console.error('requirejs', e.message, arguments);
-=======
-            console.error('requirejs.onError()', e.message, {
-                exception: e
-            });
->>>>>>> First draft: Pagination
         };
 
         // start loading stuff

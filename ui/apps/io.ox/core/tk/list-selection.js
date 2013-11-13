@@ -41,9 +41,11 @@ define('io.ox/core/tk/list-selection', [], function () {
     _.extend(Selection.prototype, {
 
         get: function () {
-            return this.view.$el.find(SELECTABLE + '.selected').map(function () {
+            // don't return jQuery's result directly, because it doesn't return a "normal" array (tests might fail)
+            var list = this.view.$el.find(SELECTABLE + '.selected').map(function () {
                 return _.cid($(this).attr('data-cid'));
             });
+            return _(list).toArray();
         },
 
         getCid: function () {
