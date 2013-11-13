@@ -1,5 +1,5 @@
 {
-	"namespace": "io.ox/core/main",
+    "namespace": "io.ox/core/main",
     "title": "Guided tours",
     "company": "Open-Xchange",
     "icon": "/images/icon.png",
@@ -7,5 +7,6 @@
     "settings": false,
     "requires": "dev",
     "index": 100,
-    "package": "open-xchange-guidedtours"
+    "package": "open-xchange-guidedtours",
+    "path": "io.ox/tours/main"
 }
