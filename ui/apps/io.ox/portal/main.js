@@ -135,7 +135,7 @@ define('io.ox/portal/main',
                     $('<h2>').append(
                         // add remove icon
                         baton.model.get('protectedWidget') ? [] :
-                            $('<a class="disable-widget"><i class="icon-remove"/></a>')
+                            $('<a class="disable-widget"><i class="fa fa-times icon-remove"/></a>')
                             .attr({
                                 href: '#',
                                 role: 'button',

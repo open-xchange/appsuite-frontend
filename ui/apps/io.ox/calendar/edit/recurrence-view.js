@@ -39,12 +39,12 @@ define('io.ox/calendar/edit/recurrence-view',
                     selectedDays = [];
 
                 _(nodes).each(function (node, day) {
-                    node.find('span').removeClass('icon-ok icon-remove');
+                    node.find('span').removeClass('fa-check fa-times');
                     if (value[day]) {
                         selectedDays.push(DAYS.i18n[day]);
-                        node.find('span').addClass('icon-ok');
+                        node.find('span').addClass('fa fa-check');
                     } else {
-                        node.find('span').addClass('icon-remove');
+                        node.find('span').addClass('fa fa-times');
                     }
                 });
 
@@ -65,7 +65,7 @@ define('io.ox/calendar/edit/recurrence-view',
                         .append($('<a href="#">')
                             .attr({ tabindex: $anchor.attr('tabindex') })
                             .text(DAYS.i18n[day])
-                            .append('<span class="icon-ok pull-left"></span>')
+                            .append('<span class="fa fa-check pull-left"></span>')
                             .on('click', function (e) {
                                 e.preventDefault();
                                 var bitmask = self[attribute];
@@ -218,7 +218,7 @@ define('io.ox/calendar/edit/recurrence-view',
                 this.controls = {
                     checkbox: $('<input tabindex="1" type="checkbox">'),
                     checkboxLabel: $('<label class="checkbox control-label desc">'),
-                    detailToggle: $('<a href="#" class="recurrence-detail-toggle">').css({'float': 'right'}).append($('<i class="icon-remove">'))
+                    detailToggle: $('<a href="#" class="recurrence-detail-toggle">').css({'float': 'right'}).append($('<i class="fa fa-times">'))
                 };
 
                 // add tabindex to all control elements

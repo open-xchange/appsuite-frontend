@@ -1006,9 +1006,9 @@ define('io.ox/mail/write/view-main',
                     this.priorityOverlay = $('<div class="priority-overlay">')
                         .attr('title', 'Priority')
                         .append(
-                            $('<i class="icon-exclamation">'),
-                            $('<i class="icon-exclamation">'),
-                            $('<i class="icon-exclamation">')
+                            $('<i class="fa fa-exclamation">'),
+                            $('<i class="fa fa-exclamation">'),
+                            $('<i class="fa fa-exclamation">')
                         )
                         .on('click', $.proxy(togglePriority, this))
                 ),
@@ -1294,7 +1294,7 @@ define('io.ox/mail/write/view-main',
                     $('<a href="#" class="remove">')
                         .attr('title', gt('Remove from recipient list'))
                         .append(
-                            $('<i class="icon-trash">')
+                            $('<i class="fa fa-trash-o">')
                         )
                         .on('click', { id: id }, function (e) {
                             e.preventDefault();

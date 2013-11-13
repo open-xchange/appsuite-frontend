@@ -271,7 +271,7 @@ define('io.ox/core/main',
             if (count === 0 && timer === null) {
                 if (useSpinner) {
                     refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('i');
-                    refreshIcon.addClass('icon-spin-paused').removeClass('icon-spin');
+                    refreshIcon.addClass('fa-spin-paused').removeClass('fa-spin');
                 } else {
                     $('#io-ox-refresh-icon').removeClass('io-ox-progress');
                 }
@@ -283,7 +283,7 @@ define('io.ox/core/main',
                 if (timer === null) {
                     if (useSpinner) {
                         refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('i');
-                        refreshIcon.addClass('icon-spin').removeClass('icon-spin-paused');
+                        refreshIcon.addClass('fa-spin').removeClass('fa-spin-paused');
                     } else {
                         $('#io-ox-refresh-icon').addClass('io-ox-progress');
                     }
@@ -497,7 +497,7 @@ define('io.ox/core/main',
                 node.addClass('placeholder');
                 if (!upsell.has(model.get('requires'))) {
                     node.addClass('upsell').children('a').first().prepend(
-                        $('<i class="icon-lock">')
+                        $('<i class="fa fa-lock">')
                     );
                 }
             } else {
@@ -514,7 +514,7 @@ define('io.ox/core/main',
                     //#. %1$s is app title/name
                     _.escape(gt('close for %1$s', model.get('title'))),
                 quitApp = $('<a href="#" class="closelink" tabindex="1" role="button" aria-label="' + ariaBasicLabel + '">')
-                    .append($('<i class="icon-remove">'))
+                    .append($('<i class="fa fa-times">'))
                     .on('click', function (e) {
                         e.preventDefault();
                         e.stopImmediatePropagation();
@@ -627,7 +627,7 @@ define('io.ox/core/main',
             index: 200,
             draw: function () {
                 this.append(
-                    addLauncher('right', $('<i class="icon-refresh launcher-icon">').attr('aria-hidden', 'true'), function () {
+                    addLauncher('right', $('<i class="fa fa-refresh launcher-icon">').attr('aria-hidden', 'true'), function () {
                         refresh();
                         return $.when();
                     },  gt('Refresh'))
@@ -763,7 +763,7 @@ define('io.ox/core/main',
                 this.append(
                     div = $('<div class="launcher" role="presentation">').append(
                         a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" tabindex="1">').append(
-                            $('<i class="icon-cog icon-white launcher-icon" aria-hidden="true">')
+                            $('<i class="fa fa-cog icon-white launcher-icon" aria-hidden="true">')
                         ),
                         ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu" role="menu">')
                     )
@@ -802,7 +802,7 @@ define('io.ox/core/main',
             id: 'default',
             draw: function () {
                 if (capabilities.has('launchpad')) {
-                    addLauncher('left', $('<i class="icon-th icon-white">').attr('aria-label', gt('Your Applications')), function () {
+                    addLauncher('left', $('<i class="fa fa-th icon-white">').attr('aria-label', gt('Your Applications')), function () {
                         return require(['io.ox/launchpad/main'], function (m) {
                             launchers.children().removeClass('active-app');
                             launcherDropdown.children().removeClass('active-app');
@@ -1106,7 +1106,7 @@ define('io.ox/core/main',
                             this.append(
                                 $('<li class="restore-item">').append(
                                     $('<a href="#" role="button" class="remove">').data(item).append(
-                                        $('<i class="icon-trash">')
+                                        $('<i class="fa fa-trash-o">')
                                     ),
                                     item.icon ? $('<i class="' + item.icon + '">') : $(),
                                     $('<span>').text(gt.noI18n(item.description || item.module))

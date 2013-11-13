@@ -27,12 +27,12 @@ define('io.ox/tasks/view-grid-template',
                     this.addClass('tasks').append(
                         $('<div class="first-row">').append(
                             end_date = $('<span>').addClass('end_date'),
-                            private_flag = $('<i class="icon-lock private-flag">').hide(),
+                            private_flag = $('<i class="fa fa-lock private-flag">').hide(),
                             title = $('<div>').addClass('title')
                         ),
                         $('<div class="second-row">').append(
                             status = $('<span>').addClass('status'),
-                            user = $('<i class="participants icon-user">').hide(),
+                            user = $('<i class="participants fa fa-user">').hide(),
                             progress = $('<div class="progress"><div class="progress-bar" style="width: 0%;"></div></div>').hide()
                         )
                     );

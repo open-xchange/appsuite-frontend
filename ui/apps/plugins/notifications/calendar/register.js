@@ -89,7 +89,7 @@ define('plugins/notifications/calendar/register',
                         .attr({'title': gt('Accept invitation'),
                                'aria-label': gt('Accept invitation'),
                                'focus-id': 'calendar-invite-' + model.get('cid') + '-accept'})
-                        .append('<i class="icon-ok">')
+                        .append('<i class="fa fa-check">')
                 )
             );
         }

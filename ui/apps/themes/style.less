@@ -34,7 +34,7 @@ label { font-weight:normal; }
         display: block;
     }
 
-    i.icon-paper-clip:after {
+    i.fa-paperclip:after {
         content: ' ';
     }
 }
@@ -297,7 +297,7 @@ label { font-weight:normal; }
         & > a.closelink:focus {
             outline: 0;
             background-color: #08c;
-            i[class^="icon-"] {
+            i[class^="fa-"] {
                 color: @topbar-launcher-color-hover;
             }
         }
@@ -349,7 +349,7 @@ label { font-weight:normal; }
 
             color: darken(@topbar-launcher-color, 20%);
 
-            i.icon-lock {
+            i.fa-lock {
                 color: inherit;
                 font-size: 14px;
                 position: static;
@@ -379,24 +379,24 @@ label { font-weight:normal; }
             }
         }
 
-        &.closable i[class^="icon-"]  {
+        &.closable i[class^="fa-"]  {
             font-size: 14px; // default font size (see Bug 27900)
             top: 0;
             margin-right: 7px;
             color: #ccc;
         }
 
-        &.closable i.icon-remove {
+        &.closable i.fa-times {
             padding: 13px 16px;
             margin: 0px;
         }
 
-        &.closable i.icon-remove:hover {
+        &.closable i.fa-times:hover {
             color: @topbar-launcher-color-hover;
             background-color: @topbar-launcher-background-hover;
         }
 
-        &.active-app.closable i[class^="icon-"]{
+        &.active-app.closable i[class^="fa-"]{
             color: @link-on-dark;
         }
 
@@ -447,7 +447,7 @@ label { font-weight:normal; }
 
         li {
             text-align: left;
-            &.upsell i.icon-lock {
+            &.upsell i.fa-lock {
                 color: #AAA;
                 width: 1.25em;
             }
@@ -472,7 +472,7 @@ label { font-weight:normal; }
         }
     }
 
-    i[class^="icon-"].launcher-icon {
+    i.fa.launcher-icon {
         color: @topbar-icon-color;
         font-size: 20px;
         text-decoration: none;
@@ -491,7 +491,7 @@ label { font-weight:normal; }
           to { color: #555; }
     }
 
-    .icon-refresh {
+    .fa-refresh {
 
         color: @gray;
         .transition(color 0.2s linear);
@@ -499,11 +499,11 @@ label { font-weight:normal; }
         /* http://stackoverflow.com/questions/7947385/hovering-over-css-transition-in-safari-lightens-certain-font-color */
         -webkit-transform: translateZ(0);
 
-        &.icon-spin {
+        &.fa-spin {
             color: #fff;
         }
 
-        &.icon-spin-paused {
+        &.fa-spin-paused {
             -webkit-animation-play-state: paused;
             -moz-animation-play-state: paused;
             animation-play-state: paused;
@@ -1614,7 +1614,7 @@ input[type=search] {
 }
 
 .search-options + ul {
-    i.icon-none, i.icon-ok { display: inline-block; }
+    i.icon-none, i.fa-check { display: inline-block; }
 }
 .search-options { border-radius: 0; }
 
@@ -2755,7 +2755,7 @@ a.toolbar-action, .toolbar-action > a {
     // fixes dropdown in breadcrumb
     li { display: block; text-shadow: none; }
     // icons in dropdowns
-    li [class^="icon-"], li [class*=" icon-"] { width: 2em; text-align: left; }
+    li [class^="fa-"], li [class*=" fa-"] { width: 2em; text-align: left; }
 }
 
 .to-cc { position: relative }
@@ -3115,7 +3115,7 @@ input.flat-input {
                 border-bottom-width: 0;
             }
 
-            [class^="icon-"], [class*=" icon-"] {
+            [class^="fa-"], [class*=" fa-"] {
                 line-height: inherit;
                 width: 30px;
             }

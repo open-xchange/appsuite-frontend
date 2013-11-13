@@ -205,11 +205,11 @@ define('io.ox/calendar/list/perspective',
             list.find(
                 '[data-option="' + props.order + '"], ' +
                 '[data-option="' + (settings.get('showAllPrivateAppointments', false) ? 'all' : '~all') + '"]')
-                .find('i').attr('class', 'icon-ok');
+                .find('i').attr('class', 'fa-check');
             // order
             var opacity = [1, 0.4][props.order === 'asc' ? 'slice' : 'reverse']();
-            dropdown.find('.icon-arrow-down').css('opacity', opacity[0]).end()
-                .find('.icon-arrow-up').css('opacity', opacity[1]).end();
+            dropdown.find('.fa-arrow-down').css('opacity', opacity[0]).end()
+                .find('.fa-arrow-up').css('opacity', opacity[1]).end();
         };
 
         ext.point('io.ox/calendar/vgrid/toolbar').extend({
@@ -221,8 +221,8 @@ define('io.ox/calendar/list/perspective',
                         .append(
                             $('<a href="#" tabindex="1" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').attr('aria-label', gt('Sort options'))
                                 .append(
-                                    $('<i class="icon-arrow-down">'),
-                                    $('<i class="icon-arrow-up">')
+                                    $('<i class="fa fa-arrow-down">'),
+                                    $('<i class="fa fa-arrow-up">')
                                 )
                                 .dropdown(),
                             $('<ul class="dropdown-menu" role="menu">')

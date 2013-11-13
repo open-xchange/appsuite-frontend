@@ -1474,11 +1474,11 @@ define('io.ox/core/desktop',
                         .on(searchHandler)
                         .placeholder(),
                         // 'clear' X
-                        $('<i class="icon-remove clear-query">').on('click', searchHandler.clear),
+                        $('<i class="fa fa-times clear-query">').on('click', searchHandler.clear),
                         $('<span class="input-group-btn">').append(
                             $('<button type="submit" data-action="search" class="btn btn-default" aria-hidden="true">')
                                 .on('click', searchHandler.change)
-                                .append('<i class="icon-search">')
+                                .append($('<i class="fa fa-search">'))
                         )
                     ),
                     //abort button
@@ -1526,7 +1526,7 @@ define('io.ox/core/desktop',
                         id: 'search',
                         index: 300,
                         icon: function () {
-                            return $('<i class="icon-search">').attr('aria-label', gt('Search'));
+                            return $('<i class="fa fa-search">').attr('aria-label', gt('Search'));
                         }
                     });
 
@@ -1560,7 +1560,7 @@ define('io.ox/core/desktop',
                         id: 'fullscreen',
                         index: 1000,
                         icon: function () {
-                            return $('<i class="icon-resize-full">');
+                            return $('<i class="fa fa-expand">');
                         }
                     });
                 }

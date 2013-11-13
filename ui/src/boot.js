@@ -66,7 +66,7 @@ $(window).load(function () {
         'input[type=checkbox]',
         '.btn',
         '.dropdown',
-        '.icon-search',
+        '.fa-search',
         '.contact-grid-index',
         '.file-icon .wrap',
         '.carousel',

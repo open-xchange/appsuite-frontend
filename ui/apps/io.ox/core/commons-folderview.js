@@ -1041,14 +1041,15 @@ define('io.ox/core/commons-folderview',
         sidepanel = baton.$.sidepanel;
         container = baton.$.container;
 
-        var icon = $('<i class="icon-folder-close">').attr('aria-label', gt('Toggle folder'));
+        var icon = $('<i class="fa fa-folder">').attr('aria-label', gt('Toggle folder'));
 
         app.on('folderview:open', function () {
-            icon.attr('class', 'icon-folder-open');
+            icon.attr('class', 'fa fa-folder-open');
+            icon.addClass('fa-folder-open').removeClass('fa-folder');
         });
 
         app.on('folderview:close', function () {
-            icon.attr('class', 'icon-folder-close');
+            icon.addClass('fa-folder').removeClass('fa-folder-open');
         });
 
         new links.ActionGroup(TOGGLE, {

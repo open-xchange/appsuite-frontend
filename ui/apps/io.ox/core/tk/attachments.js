@@ -80,12 +80,12 @@ define('io.ox/core/tk/attachments',
                 var size, removeFile;
                 var $el = $('<div class="col-lg-6 col-md-6">').append(
                     $('<div class="io-ox-core-tk-attachment file">').append(
-                        $('<i class="icon-paper-clip">'),
+                        $('<i class="fa-paperclip">'),
                         $('<div class="row-1">').text(_.ellipsis(attachment.filename, {max: 40, charpos: 'middel'})),
                         $('<div class="row-2">').append(
                             size = $('<span class="filesize">').text(strings.fileSize(attachment.file_size))
                         ),
-                        removeFile = $('<a href="#" class="remove" tabindex="1" title="Remove attachment">').append($('<i class="icon-trash">'))
+                        removeFile = $('<a href="#" class="remove" tabindex="1" title="Remove attachment">').append($('<i class="fa fa-trash-o">'))
                     )
                 );
 
@@ -584,7 +584,7 @@ define('io.ox/core/tk/attachments',
 
         var node = $('<div>').addClass((options.wrapperClass ? options.wrapperClass : 'form-group')),
             input = $('<input name="file" type="file" class="file-input">').prop({ multiple: options.multi }).attr({ tabindex: options.tabindex }),
-            uploadButton = $('<span class="btn btn-default btn-file" role="button">').append($('<i class="icon icon-paper-clip">'), $.txt(options.buttontext)).append(input),
+            uploadButton = $('<span class="btn btn-default btn-file" role="button">').append($('<i class="fa fa-paperclip">'), $.txt(options.buttontext)).append(input),
             driveButton = $('<button type="button" class="btn btn-default" data-action="addinternal">').text(gt('Files'));
 
         if (options.drive && _.device('!smartphone')) {

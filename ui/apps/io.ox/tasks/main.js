@@ -278,14 +278,14 @@ define('io.ox/tasks/main',
                     '[data-option="' + props.sort + '"], ' +
                     '[data-option="' + props.order + '"], ' +
                     '[data-option="' + (props.done ? 'done' : '~done') + '"]'
-                ).find('i').attr('class', 'icon-ok');
+                ).find('i').attr('class', 'fa fa-check');
             // order
             if (props.order === 'desc') {
-                dropdown.find('.icon-arrow-down').css('opacity', 1).end()
-                    .find('.icon-arrow-up').css('opacity', 0.4);
+                dropdown.find('.fa-arrow-down').css('opacity', 1).end()
+                    .find('.fa-arrow-up').css('opacity', 0.4);
             } else {
-                dropdown.find('.icon-arrow-up').css('opacity', 1).end()
-                    .find('.icon-arrow-down').css('opacity', 0.4);
+                dropdown.find('.fa-arrow-up').css('opacity', 1).end()
+                    .find('.fa-arrow-down').css('opacity', 0.4);
             }
             //update api property (used cid in api.updateAllCache, api.create)
             api.options.requests.all.sort = props.sort !== 'state' ? props.sort : 202;
@@ -326,7 +326,7 @@ define('io.ox/tasks/main',
                 $('<div class="grid-options dropdown">')
                 .append(
                     $('<a href="#" tabindex="1" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').attr('aria-label', gt('Sort options'))
-                    .append($('<i class="icon-arrow-down">'), $('<i class="icon-arrow-up">'))
+                    .append($('<i class="fa fa-arrow-down">'), $('<i class="fa fa-arrow-up">'))
                     .dropdown(),
                     $('<ul class="dropdown-menu" role="menu">')
                     .append(

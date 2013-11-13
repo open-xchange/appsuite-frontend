@@ -250,7 +250,7 @@ define('plugins/portal/facebook/register',
                 $('<div class="io-ox-portal-content centered">').append(
                     $('<span>').text(gt('Add your account'))),
                 $('<div class="io-ox-portal-actions"').append(
-                    $('<i class="icon-remove io-ox-portal-action">'))
+                    $('<i class="fa fa-times io-ox-portal-action">'))
             );
         },
 
@@ -261,7 +261,7 @@ define('plugins/portal/facebook/register',
             $(this).empty().append(
                 $('<div class="decoration">').append(
                     $('<h2>').append(
-                        $('<a href="#" class="disable-widget"><i class="icon-remove"/></a>'),
+                        $('<a href="#" class="disable-widget"><i class="fa fa-times"/></a>'),
                         $('<span class="title">').text(gt('Facebook'))
                     )
                 ),

@@ -326,7 +326,7 @@ define('io.ox/tasks/util',
             getPriority: function (data) {
                 // normal?
                 if (data && data.priority === 2) return $();
-                var i = '<i class="icon-exclamation"/>',
+                var i = $('<i class="fa fa-exclamation">'),
                     indicator = $('<span>').append(_.noI18n('\u00A0'), i, i, i);
                 if (data && data.priority === 3) {
                     return indicator.addClass('high').attr('title', gt('High priority'));

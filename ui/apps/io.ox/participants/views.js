@@ -42,7 +42,7 @@ define('io.ox/participants/views',
                 $text: $('<div class="participant-name">'),
                 $mail: $('<a class="participant-email">'),
                 $extra: $('<a class="extra-decorator">'),
-                $removeButton: $('<a href="#" class="remove" tabindex="1"><div class="icon"><i class="icon-trash"></i></div></a>')
+                $removeButton: $('<a href="#" class="remove" tabindex="1"><div class="icon"><i class="fa fa-trash-o"></i></div></a>')
             };
 
             this.setDisplayName();

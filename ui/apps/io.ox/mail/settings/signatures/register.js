@@ -271,7 +271,7 @@ define('io.ox/mail/settings/signatures/register',
                                             'data-action': 'delete',
                                             title: gt('Delete'),
                                             tabindex: 1
-                                        }).append($('<i class="icon-trash">'))
+                                        }).append($('<i class="fa fa-trash-o">'))
                                     ),
                                     $('<span class="list-title">').text(gt.noI18n(signature.displayname))
                                 );

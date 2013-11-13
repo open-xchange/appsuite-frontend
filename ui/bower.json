@@ -15,6 +15,7 @@
     "mediaelement": "~2.13.1",
     "bootstrap": "~3.0.2",
     "bootstrap-datepicker": "https://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git#bs3",
-    "bootstrap-typeahead": "https://github.com/bassjobsen/Bootstrap-3-Typeahead.git"
+    "bootstrap-typeahead": "https://github.com/bassjobsen/Bootstrap-3-Typeahead.git",
+    "font-awesome": "~4.0.3"
   }
 }

@@ -636,8 +636,7 @@ define('io.ox/contacts/actions',
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i>')
-                            .addClass('icon-envelope')
+                        $('<i class="fa fa-envelope">')
                             .on('click', {grid: data.grid}, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -659,8 +658,7 @@ define('io.ox/contacts/actions',
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i>')
-                            .addClass('icon-trash')
+                        $('<i class="fa fa-trash-o">')
                             .on('click', {grid: data.grid}, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -686,7 +684,7 @@ define('io.ox/contacts/actions',
         id: 'default',
         index: 100,
         icon: function () {
-            return $('<i class="icon-plus accent-color">');
+            return $('<i class="fa fa-plus accent-color">');
         }
     });
 

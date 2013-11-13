@@ -126,13 +126,13 @@ define('io.ox/portal/settings/pane',
     function appendIconText(target, text, type, activeColor) {
         if (type === 'color') {
             if (_.device('small')) {
-                return $(target).addClass('widget-color-' + activeColor).append($('<i>').addClass('icon-tint').css('font-size', '20px'));
+                return $(target).addClass('widget-color-' + activeColor).append($('<i class="fa fa-tint">').css('font-size', '20px'));
             } else {
                 return target.text(text);
             }
         } else {
             if (_.device('small')) {
-                var iconClass = (type === 'edit' ? 'icon-pencil' : 'icon-off');
+                var iconClass = (type === 'edit' ? 'fa fa-pencil' : 'icon-off');
                 return $(target).append($('<i>').addClass(iconClass).css('font-size', '20px'));
             } else {
                 return target.text(text);
@@ -255,7 +255,7 @@ define('io.ox/portal/settings/pane',
                         role: 'button',
                         tabindex: 1
                     })
-                    .append($('<i class="icon-reorder">'))
+                    .append($('<i class="fa fa-bars">'))
                     .on('click', $.preventDefault)
                     .on('keydown', dragViaKeyboard)
                 );
@@ -344,7 +344,7 @@ define('io.ox/portal/settings/pane',
                         tabindex: 1,
                         'data-action': 'remove',
                         'aria-label': title + ', ' + gt('remove')
-                    }).append('<i class="icon-trash"/>')
+                    }).append('<i class="fa fa-trash-o">')
             );
 
             this.append($controls);

@@ -52,7 +52,7 @@
         $parent.data('menu', $ul);
         $('body').append($ul.addClass('custom-dropdown')
           // add extra close item to the first li
-          .prepend($('<li><a href="#" class="io-ox-action-link" data-action="close-menu"><i class="icon-chevron-down"></i></a></li>')
+          .prepend($('<li><a href="#" class="io-ox-action-link" data-action="close-menu"><i class="fa fa-chevron-down"></i></a></li>')
             .on('click', function (e) {
               e.preventDefault();
               clearMenus();

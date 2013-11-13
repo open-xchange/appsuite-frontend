@@ -163,7 +163,7 @@ define('plugins/portal/twitter/util',
             var $temp = renderTweet(tweet.retweeted_status, opt);
             $temp.find('.text').append(
                 $('<div class="io-ox-twitter-retweet-source">').append(
-                    $('<i class="icon-retweet">'),
+                    $('<i class="fa fa-retweet">'),
                     ' ',
                     $('<span>').text(gt('Retweeted by %s', tweet.user.screen_name))
                 )
@@ -314,7 +314,7 @@ define('plugins/portal/twitter/util',
                 'href': '#',
                 role: 'button'})
             .append(
-                $('<i>').addClass('icon-trash'),
+                $('<i class="fa fa-trash-o">'),
                 $('<span>').text(gt('Delete'))
                 .on('click', function (e) {
                     e.preventDefault();

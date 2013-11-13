@@ -129,7 +129,7 @@ define('plugins/portal/mail/register',
                             .append(
                                 (function () {
                                     if ((mail.flags & 32) === 0) {
-                                        return $('<i class="icon-circle new-item accent">');
+                                        return $('<i class="fa fa-circle new-item accent">');
                                     }
                                 })(),
                                 $('<span class="bold">').text(_.noI18n(util.getDisplayName(mail.from[0]))), $.txt(' '),

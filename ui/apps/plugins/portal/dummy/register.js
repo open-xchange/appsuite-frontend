@@ -35,8 +35,8 @@ define('plugins/portal/dummy/register', $.noop);
                 $('<div class="io-ox-portal-item">').text('item #9')
             ),
             $('<div class="io-ox-portal-actions">').append(
-                $('<i class="icon-edit io-ox-portal-tile-action">').text(' '),
-                $('<i class="icon-remove io-ox-portal-tile-action">').text(' ')
+                $('<i class="fa fa-edit io-ox-portal-tile-action">').text(' '),
+                $('<i class="fa fa-times io-ox-portal-tile-action">').text(' ')
             )
         );
         return $node;
@@ -49,8 +49,8 @@ define('plugins/portal/dummy/register', $.noop);
         var $node = $('<div class="io-ox-tile-container io-ox-portal-typeB">').append(
             $('<div class="io-ox-portal-image">').attr({'style': 'background-image: url(' + img + ')'}),
             $('<div class="io-ox-portal-title">').text('Dummy Type B' + pos).append(
-                $('<i class="icon-edit io-ox-portal-action">').text(' '),
-                $('<i class="icon-remove io-ox-portal-action">').text(' ')
+                $('<i class="fa fa-edit io-ox-portal-action">').text(' '),
+                $('<i class="fa fa-times io-ox-portal-action">').text(' ')
             )
         );
         return $node;

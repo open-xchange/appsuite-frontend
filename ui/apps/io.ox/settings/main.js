@@ -39,7 +39,7 @@ define('io.ox/settings/main',
                     );
                 if (_.device('smartphone')) {
                     title.css('margin', '4px 0'); // must use inline styles because vgrid's height calculon-o-mat does not respect any css values bound via classes for its calculation..
-                    title.prepend($('<i class="icon-chevron-right pull-right">'));
+                    title.prepend($('<i class="fa fa-chevron-right pull-right">'));
                 }
                 return { title: title };
             },

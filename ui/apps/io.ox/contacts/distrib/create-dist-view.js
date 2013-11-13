@@ -88,7 +88,7 @@ define('io.ox/contacts/distrib/create-dist-view',
                         $('<input tabindex="1" type="text" class="add-participant form-control">').attr('placeholder', gt('Add contact') + ' ...'),
                         $('<span class="input-group-btn">').append(
                             $('<button type="button" class="btn btn-default" data-action="add" tabindex="1">')
-                                .append($('<i class="icon-plus">'))
+                                .append($('<i class="fa fa-plus">'))
                         )
                     )
                 ),
@@ -245,7 +245,7 @@ define('io.ox/contacts/distrib/create-dist-view',
                     // remove icon
                     $('<a href="#" class="remove" tabindex="1">').append(
                         $('<div class="icon">').append(
-                            $('<i class="icon-trash">')
+                            $('<i class="fa fa-trash-o">')
                         )
                     )
                     .on('click', { mail: o.mail, name: o.display_name }, function (e) {

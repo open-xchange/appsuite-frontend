@@ -87,7 +87,7 @@ define('io.ox/calendar/freebusy/templates',
             return $('<div class="abs autocomplete-controls input-group">').append(
                 $('<input type="text" class="add-participant form-control" tabindex="1">').attr('placeholder', gt('Add participant') + ' ...'),
                 $('<span class="input-group-btn">').append(
-                    $('<button type="button" class="btn btn-default add-button" data-action="add" tabindex="-1">').append($('<i class="icon-plus">'))
+                    $('<button type="button" class="btn btn-default add-button" data-action="add" tabindex="-1">').append($('<i class="fa fa-plus">'))
                 )
             );
         },
@@ -114,13 +114,13 @@ define('io.ox/calendar/freebusy/templates',
         getBackControl: function () {
             return $('<div class="close-control">').append(
                 $('<a href="#" tabindex="3" data-action="cancel">').text(gt('Back to appointment')),
-                $('<i class="icon-reply">')
+                $('<i class="fa fa-reply">')
             );
         },
 
         getQuitControl: function () {
             return $('<div class="close-control">').append(
-                $('<a href="#" tabindex="3" data-action="quit">').text(gt('Quit')).append($('<i class="icon-remove">'))
+                $('<a href="#" tabindex="3" data-action="quit">').text(gt('Quit')).append($('<i class="fa fa-times">'))
             );
         },
 

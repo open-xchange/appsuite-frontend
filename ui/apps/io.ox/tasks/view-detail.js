@@ -87,7 +87,7 @@ define('io.ox/tasks/view-detail',
                     infoPanel,
                     $('<div class="title clear-title">').append(
                         // lock icon
-                        data.private_flag ? $('<i class="icon-lock private-flag">') : [],
+                        data.private_flag ? $('<i class="fa fa-lock private-flag">') : [],
                         // title
                         $.txt(gt.noI18n(task.title)),
                         // priority

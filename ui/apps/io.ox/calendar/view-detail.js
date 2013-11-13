@@ -81,7 +81,7 @@ define('io.ox/calendar/view-detail',
         id: 'private-flag',
         draw: function (baton) {
             if (baton.data.private_flag) {
-                $('<i>').addClass('icon-lock private-flag').appendTo(this);
+                $('<i class="fa fa-lock private-flag">').appendTo(this);
             }
         }
     });

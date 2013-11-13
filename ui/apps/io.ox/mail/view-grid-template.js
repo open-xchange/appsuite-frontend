@@ -24,8 +24,8 @@ define('io.ox/mail/view-grid-template',
 
     'use strict';
 
-    var colorLabelIconEmpty = 'icon-bookmark-empty',
-        colorLabelIcon = 'icon-bookmark';
+    var colorLabelIconEmpty = 'fa fa-bookmark-o',
+        colorLabelIcon = 'fa fa-bookmark';
 
     var that = {
 
@@ -53,16 +53,16 @@ define('io.ox/mail/view-grid-template',
                         threadSize = $('<div class="thread-size">').append(
                             threadSizeCount = $('<span class="number">'),
                             $.txt(' '),
-                            threadSizeIcon = $('<i class="icon-caret-right">')
+                            threadSizeIcon = $('<i class="fa fa-caret-right">')
                         ),
                         flag = $('<i class="flag ' + colorLabelIconEmpty + '">'),
-                        attachment = $('<i class="icon-paper-clip">'),
+                        attachment = $('<i class="fa fa-paperclip">'),
                         priority = $('<span class="priority">'),
                         $('<div class="subject">').append(
                             $('<span>').append(
-                                unread = $('<i class="icon-unread icon-circle">'),
-                                answered = $('<i class="icon-answered icon-reply">'),
-                                forwarded = $('<i class="icon-forwarded icon-mail-forward">')
+                                unread = $('<i class="fa icon-unread fa-circle">'),
+                                answered = $('<i class="fa icon-answered fa-reply">'),
+                                forwarded = $('<i class="fa icon-forwarded fa-mail-forward">')
                             ),
                             subject = $('<span class="drag-title">')
                         )
@@ -113,7 +113,7 @@ define('io.ox/mail/view-grid-template',
                 } else {
                     fields.threadSize.css('display', '');
                     fields.threadSizeCount.text(_.noI18n(data.threadSize));
-                    fields.threadSizeIcon.attr('class', (index + 1) in that.openThreads ? 'icon-caret-down' : 'icon-caret-right');
+                    fields.threadSizeIcon.attr('class', (index + 1) in that.openThreads ? 'fa fa-caret-down' : 'fa fa-caret-right');
                 }
                 fields.from.empty().append(
                     util.getFrom(data, (data.threadSize || 1) === 1 && account.is('sent|drafts', data.folder_id) ? 'to' : 'from')

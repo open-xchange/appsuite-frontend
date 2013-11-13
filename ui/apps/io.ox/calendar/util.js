@@ -32,7 +32,7 @@ define('io.ox/calendar/util',
         shownAsLabel = 'label-info label-warning label-important label-success'.split(' '),
         // confirmation status (none, accepted, declined, tentative)
         confirmClass = 'unconfirmed accepted declined tentative'.split(' '),
-        n_confirm = ['', '<i class="icon-ok">', '<i class="icon-remove">', '<i class="icon-question-sign">'];
+        n_confirm = ['', '<i class="fa fa-check">', '<i class="fa fa-times">', '<i class="fa fa-question-circle">'];
 
     var that = {
 

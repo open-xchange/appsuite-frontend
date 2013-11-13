@@ -49,15 +49,15 @@ define('io.ox/files/fluid/perspective',
 
     function drawGenericIcon(name) {
         var node = $('<i>');
-        if (/docx?$/i.test(name)) { node.addClass('icon-align-left file-type-doc'); }
-        else if (/xlsx?$/i.test(name)) { node.addClass('icon-table file-type-xls'); }
-        else if (/pptx?$/i.test(name)) { node.addClass('icon-picture file-type-ppt'); }
-        else if ((/(aac|mp3|m4a|m4b|ogg|opus|wav)$/i).test(name)) { node.addClass('icon-music'); }
-        else if ((/(mp4|ogv|webm)$/i).test(name)) { node.addClass('icon-film'); }
-        else if ((/(epub|mobi)$/i).test(name)) { node.addClass('icon-book'); }
-        else if ((/(cbz|cbr|cb7|cbt|cba)$/i).test(name)) { node.addClass('icon-comment-alt'); }
-        else if ((/(zip|tar|gz|rar|7z|bz2)$/i).test(name)) { node.addClass('icon-archive'); }
-        else { node.addClass('icon-file'); }
+        if (/docx?$/i.test(name)) { node.addClass('fa fa-align-left file-type-doc'); }
+        else if (/xlsx?$/i.test(name)) { node.addClass('fa fa-table file-type-xls'); }
+        else if (/pptx?$/i.test(name)) { node.addClass('fa fa-picture file-type-ppt'); }
+        else if ((/(aac|mp3|m4a|m4b|ogg|opus|wav)$/i).test(name)) { node.addClass('fa fa-music'); }
+        else if ((/(mp4|ogv|webm)$/i).test(name)) { node.addClass('fa fa-film'); }
+        else if ((/(epub|mobi)$/i).test(name)) { node.addClass('fa fa-book'); }
+        else if ((/(cbz|cbr|cb7|cbt|cba)$/i).test(name)) { node.addClass('fa fa-comment-o'); }
+        else if ((/(zip|tar|gz|rar|7z|bz2)$/i).test(name)) { node.addClass('fa fa-archive'); }
+        else { node.addClass('fa fa-file'); }
         return node.addClass('not-selectable');
     }
 
@@ -474,7 +474,7 @@ define('io.ox/files/fluid/perspective',
                         //title
                         $('<div class="text title drag-title">').append(
                             $('<span class="not-selectable">').text(gt.noI18n(cut(file.filename || file.title, 90))).append(
-                                    (api.tracker.isLocked(file) ? $('<i class="icon-lock">') : '')
+                                    (api.tracker.isLocked(file) ? $('<i class="fa fa-lock">') : '')
                                 )
                         ),
                         //smart last modified
@@ -499,7 +499,7 @@ define('io.ox/files/fluid/perspective',
             $(this).append($('<div class="toolbar-button">')
                 .append(btn = $('<a href="#" data-action="io.ox/files/actions/move">')
                     .append(
-                        $('<i class="icon-signin">')
+                        $('<i class="fa fa-sign-in">')
                     )
                 )
             );
@@ -516,8 +516,7 @@ define('io.ox/files/fluid/perspective',
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#" data-action="io.ox/files/actions/delete">')
                     .append(
-                        $('<i>')
-                            .addClass('icon-trash')
+                        $('<i class="fa fa-trash-o">')
                     )
                 )
             );
@@ -533,7 +532,7 @@ define('io.ox/files/fluid/perspective',
             $(this).append($('<div class="toolbar-button" style="float:right">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i class="icon-remove">').on('tap', function (e) {
+                        $('<i class="fa fa-times">').on('tap', function (e) {
                             e.preventDefault();
                             e.stopPropagation();
                             data.selection.clear();
@@ -557,7 +556,7 @@ define('io.ox/files/fluid/perspective',
             $(this).append($('<div class="toolbar-button">')
                 .append(btn = $('<a href="#" data-action="io.ox/files/actions/move">')
                     .append(
-                        $('<i class="icon-signin">')
+                        $('<i class="fa fa-sign-in">')
                     )
                 )
             );
@@ -574,8 +573,7 @@ define('io.ox/files/fluid/perspective',
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#" data-action="io.ox/files/actions/delete">')
                     .append(
-                        $('<i>')
-                            .addClass('icon-trash')
+                        $('<i class="fa fa-trash-o">')
                     )
                 )
             );
@@ -591,7 +589,7 @@ define('io.ox/files/fluid/perspective',
             $(this).append($('<div class="toolbar-button" style="float:right">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i class="icon-remove">').on('tap', function (e) {
+                        $('<i class="fa fa-times">').on('tap', function (e) {
                             e.preventDefault();
                             e.stopPropagation();
                             data.selection.clear();

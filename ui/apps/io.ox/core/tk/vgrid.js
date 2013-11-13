@@ -286,7 +286,7 @@ define('io.ox/core/tk/vgrid',
                         [] :
                         $('<a>', { href: '#', tabindex: 1, role: 'button', 'aria-label': gt('Toggle checkboxes')})
                         .css('float', 'left')
-                        .append($('<i class="icon-th-list">'))
+                        .append($('<i class="fa fa-th-list">'))
                         .on('click', { grid: this }, fnToggleEditable)
                 )
                 .appendTo(node),

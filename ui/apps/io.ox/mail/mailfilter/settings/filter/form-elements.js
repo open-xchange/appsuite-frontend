@@ -43,7 +43,7 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
         },
 
         drawDeleteButton: function (type) {
-            return $('<a href="#" class="remove" tabindex="1" data-action="remove-' + type + '">').append($('<i class="icon-trash">'));
+            return $('<a href="#" class="remove" tabindex="1" data-action="remove-' + type + '">').append($('<i class="fa fa-trash-o">'));
         },
 
         drawOptions: function (activeValue, values) {

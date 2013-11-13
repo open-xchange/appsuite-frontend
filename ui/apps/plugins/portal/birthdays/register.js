@@ -127,7 +127,7 @@ define('plugins/portal/birthdays/register',
                         $('<div class="buy-a-gift">').append(
                             $('<a>', { href: url, target: '_blank', title: gt('External link') }).text(gt('Buy a gift')),
                             $.txt(' '),
-                            $('<i class="icon-external-link">')
+                            $('<i class="fa fa-external-link">')
                         )
                     );
                 }

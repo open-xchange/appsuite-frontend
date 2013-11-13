@@ -78,7 +78,7 @@ define('io.ox/backbone/mini-views/attachments',
             var size = attachment.file_size > 0 ? strings.fileSize(attachment.file_size) : '\u00A0';
 
             return $('<div class="attachment">').append(
-                $('<i class="icon-paper-clip">'),
+                $('<i class="fa fa-paperclip">'),
                 $('<div class="row-1">').text(attachment.filename),
                 $('<div class="row-2">').append(
                     $('<span class="filesize">').text(size)
@@ -86,7 +86,7 @@ define('io.ox/backbone/mini-views/attachments',
                 $('<a href="#" class="remove" tabindex="1" title="Remove attachment">')
                 .data(attachment)
                 .append(
-                    $('<i class="icon-trash">')
+                    $('<i class="fa fa-trash-o">')
                 )
             );
         },

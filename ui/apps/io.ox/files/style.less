@@ -130,11 +130,11 @@
             &.view-icon {
                 .file-cell {
                     &.selected {
-                        img, .preview [class^="icon-"] {
+                        img, .preview .fa {
                             box-shadow: 0 0 0 3px rgba(0, 136, 204, 1);
                         }
                         .preview:hover {
-                            img, [class^="icon-"] {
+                            img, .fa {
                                 box-shadow: 0 0 0 3px darken(rgba(0, 136, 204, 1), 10%);
                             }
                         }
@@ -202,10 +202,10 @@
                         font-size: 32px;
                         line-height: 1.3em;
                     }
-                    .icon-film {
+                    .fa-film {
                         font-size: 28px;
                     }
-                    .icon-music {
+                    .fa-music {
                         padding-right: 4px;
                     }
                     i.file-type-doc { color: #0092D0; }
@@ -236,7 +236,7 @@
                     width: 60%;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    i.icon-lock {
+                    i.fa-lock {
                         margin-left: 5px;
                         font-size: 15px;
                         color: #c00;
@@ -312,7 +312,7 @@
                     background-repeat: no-repeat;
                     background-position: center;
 
-                    [class^="icon-"] {
+                    .fa {
                         .ico-polaroid;
                         line-height: 100px;
                         font-size: 48px;
@@ -345,7 +345,7 @@
                     color: black;
                     margin: 0.5em 0 0.5em 0;
 
-                    i.icon-lock {
+                    i.fa-lock {
                         margin-left: 5px;
                         font-size: 15px;
                         color: #c00;
@@ -354,20 +354,20 @@
 
                 //image
                 &.selected {
-                    img, .preview [class^="icon-"] {
+                    img, .preview [class^="fa-"] {
                         box-shadow: 0 0 0 3px #ddd;
                     }
                     .image-effect(0.9);
                 }
 
                 &:hover {
-                    img, .preview [class^="icon-"] {
+                    img, .preview .fa {
                         box-shadow: 0 0 0 3px #ddd;
                     }
                     .image-effect(0.9);
                 }
                 &.selected .preview:hover {
-                    img, .preview [class^="icon-"] {
+                    img, .preview .fa {
                         box-shadow: 0 0 0 3px #ccc;
                     }
                     .image-effect(0.9);
@@ -405,13 +405,13 @@
                     background-repeat: no-repeat;
                     background-position: center;
 
-                    [class^="icon-"] {
+                    .fa {
                         font-size: 100px;
                         line-height: @tile;
                         color: #bbb;
                     }
 
-                    .icon-music {
+                    .fa-music {
                         padding-right: 10px;
                     }
                 }
@@ -420,7 +420,7 @@
                 }
 
                 .bordered {
-                    .preview-cover [class^="icon-"] {
+                    .preview-cover .fa {
                         line-height: @tile - (2 * @tile-border);
                     }
                 }

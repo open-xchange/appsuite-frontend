@@ -147,11 +147,11 @@ define('io.ox/core/tk/dropdown-options',
             _(nodes).each(function (node, name) {
                 var item = data[name];
                 //reset
-                node.find('i').removeClass('icon-ok icon-none');
+                node.find('i').removeClass('fa-check icon-none');
                 //set icons
                 if (item.checked) {
                     selected.push(item.label);
-                    node.find('i').addClass('icon-ok');
+                    node.find('i').addClass('fa fa-check');
                 } else {
                     node.find('i').addClass('icon-none');
                 }

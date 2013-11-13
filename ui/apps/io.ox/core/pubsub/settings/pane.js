@@ -213,7 +213,7 @@ define('io.ox/core/pubsub/settings/pane',
                 $('<div class="actions">').append(
                     enabled ? dynamicAction : '',
                     $('<a href="#" tabindex="1" class="action" data-action="toggle">').text(enabled ? gt('Disable') : gt('Enable')),
-                    $('<a href="#" tabindex="1" class="close" data-action="remove">').append($('<i class="icon-trash">'))
+                    $('<a href="#" tabindex="1" class="close" data-action="remove">').append($('<i class="fa fa-trash-o">'))
                 ),
                 $('<div class="content">').append(
                     $('<div class="name">').text(getDisplayName(data) || '\u00A0'),
@@ -231,7 +231,7 @@ define('io.ox/core/pubsub/settings/pane',
             if (data.source && (baton.model.refreshState() === 'pending')) {
                 // this is a subscription and we are refreshing
                 this.find('.name').append(
-                    $('<i class="icon-refresh icon-spin">')
+                    $('<i class="fa fa-refresh fa-spin">')
                 );
             }
         }

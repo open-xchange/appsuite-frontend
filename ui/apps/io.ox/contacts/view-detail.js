@@ -140,7 +140,7 @@ define('io.ox/contacts/view-detail',
             this.append(
                 $('<div class="next-to-picture">').append(
                     // right side
-                    $('<i class="icon-lock private-flag">').attr('title', gt('Private')).hide(),
+                    $('<i class="fa fa-lock private-flag">').attr('title', gt('Private')).hide(),
                     $('<h1 class="header-name">').append(name),
                     company ? $('<h2 class="header-company">').append($('<span class="company">').text(company)) : [],
                     $('<h2 class="header-job">').append(job),
@@ -386,7 +386,7 @@ define('io.ox/contacts/view-detail',
             .append(
                 $.txt($.trim(text)),
                 $('<caption>').append(
-                    $('<i class="icon-external-link">'),
+                    $('<i class="fa fa-external-link">'),
                     $.txt(' Google Maps \u2122') // \u2122 = &trade;
                 )
             );
@@ -651,18 +651,16 @@ define('io.ox/contacts/view-detail',
             // not supported
             if (!Modernizr.canvas || data.mark_as_distributionlist) return;
 
-            var node = $('<div>').addClass('block'),
+            var node = $('<div class="block">'),
                 show = function (e) {
                     e.preventDefault();
                     node.empty().busy();
                     require(['io.ox/contacts/view-qrcode'], function (qr) {
                         var vc = qr.getVCard(data);
                         node.append(
-                            $('<span>').addClass('qrcode').append(
-                                $('<i class="icon-qrcode">'), $.txt(' '),
-                                $('<a>', { href: '#' })
-                                .text(gt('Hide QR code'))
-                                .on('click', hide)
+                            $('<span class="qrcode">').append(
+                                $('<i class="fa fa-qrcode">'), $.txt(' '),
+                                $('<a href="#">').text(gt('Hide QR code')).on('click', hide)
                             )
                         );
                         node.idle().qrcode(vc);
@@ -673,18 +671,16 @@ define('io.ox/contacts/view-detail',
                     e.preventDefault();
                     node.empty();
                     node.append(
-                        $('<i class="icon-qrcode">'), $.txt(' '),
+                        $('<i class="fa fa-qrcode">'), $.txt(' '),
                         showLink
                     );
                 },
                 showLink = $('<a>', { href: '#' }).text(gt('Show QR code')).on('click', show);
 
-            this.append(
-                node
-             );
+            this.append(node);
 
             node.append(
-                $('<i class="icon-qrcode">'), $.txt(' '),
+                $('<i class="fa fa-qrcode">'), $.txt(' '),
                 showLink
             );
         }

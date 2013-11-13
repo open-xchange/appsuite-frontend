@@ -530,7 +530,7 @@ define('io.ox/core/extPatterns/links',
         }
 
         function icon() {
-            return $('<i class="icon-magic">');
+            return $('<i class="fa fa-magic">');
         }
 
         return function ActionGroup(id, extension) {

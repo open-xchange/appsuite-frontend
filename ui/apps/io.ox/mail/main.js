@@ -311,14 +311,14 @@ define('io.ox/mail/main',
                 list = dataMenu;
             }
             // uncheck all, except the mobile-menu close row
-            list.find('i:not(.icon-chevron-down)').attr('class', 'icon-none');
+            list.find('i:not(.fa-chevron-down)').attr('class', 'icon-none');
             // sort
             list.find(
                     '[data-option="' + props.sort + '"], ' +
                     '[data-option="' + props.order + '"], ' +
                     '[data-option="' + (props.unread ? 'unread' : '~unread') + '"]'
                 )
-                .find('i').attr('class', 'icon-ok');
+                .find('i').attr('class', 'fa fa-check');
             // sent folder?
             list.find('[data-option="from-to"] span').text(
                 account.is('sent|drafts', props.folder) ? gt('To') : gt('From')
@@ -326,14 +326,14 @@ define('io.ox/mail/main',
             // unread
             if (props.unread) {
                 // some browsers append style="display: block;" on this inline element. See bug 28956
-                dropdown.find('.icon-envelope').css('display', '');
+                dropdown.find('.fa-envelope').css('display', '');
             } else {
-                dropdown.find('.icon-envelope').hide();
+                dropdown.find('.fa-envelope').hide();
             }
             // order
             var opacity = [1, 0.4][props.order === 'desc' ? 'slice' : 'reverse']();
-            dropdown.find('.icon-arrow-down').css('opacity', opacity[0]).end()
-                .find('.icon-arrow-up').css('opacity', opacity[1]).end();
+            dropdown.find('.fa-arrow-down').css('opacity', opacity[0]).end()
+                .find('.fa-arrow-up').css('opacity', opacity[1]).end();
         }
 
         function buildOption(value, text) {
@@ -402,8 +402,8 @@ define('io.ox/mail/main',
                     .append(
                         $('<a href="#" tabindex="1" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').attr('aria-label', gt('Sort options'))
                         .append(
-                            $('<i class="icon-envelope">').css('marginRight', '0.5em').hide(),
-                            $('<i class="icon-arrow-down">'), $('<i class="icon-arrow-up">')
+                            $('<i class="fa fa-envelope">').css('marginRight', '0.5em').hide(),
+                            $('<i class="fa fa-arrow-down">'), $('<i class="fa fa-arrow-up">')
                         )
                         .dropdown(),
                         $('<ul class="dropdown-menu" role="menu">')
@@ -580,7 +580,7 @@ define('io.ox/mail/main',
                 grid.getContainer()
                     .find('.vgrid-cell[data-obj-id="' + cid + '"]')
                     .find('.thread-size i')
-                    .attr('class', 'icon-caret-' + type);
+                    .attr('class', 'fa fa-caret-' + type);
             }
 
             function open(index, cid) {
@@ -897,7 +897,7 @@ define('io.ox/mail/main',
 
             //add dropdown button
             button = $('<button type="button" data-action="search-options" class="btn btn-default search-options" aria-hidden="true">')
-                    .append('<i class="icon-gear">');
+                    .append($('<i class="fa fa-cog">'));
             win.nodes.search.find('.form-search > .input-group > .input-group-btn').prepend(button);
 
             //add dropdown menue

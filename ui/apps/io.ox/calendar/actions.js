@@ -472,7 +472,7 @@ define('io.ox/calendar/actions',
         id: 'default',
         index: 100,
         icon: function () {
-            return $('<i class="icon-plus accent-color">');
+            return $('<i class="fa fa-plus accent-color">');
         }
     });
 
@@ -489,7 +489,7 @@ define('io.ox/calendar/actions',
         id: 'view',
         index: 400,
         icon: function () {
-            return $('<i class="icon-eye-open">');
+            return $('<i class="fa fa-eye">');
         }
     });
 
@@ -534,7 +534,7 @@ define('io.ox/calendar/actions',
         id: 'freebusy',
         index: 500,
         icon: function () {
-            return $('<i class="icon-group">');
+            return $('<i class="fa fa-group">');
         }
     });
 
@@ -549,7 +549,7 @@ define('io.ox/calendar/actions',
         id: 'print',
         index: 600,
         icon: function () {
-            return $('<i class="icon-print">');
+            return $('<i class="fa fa-print">');
         }
     });
 

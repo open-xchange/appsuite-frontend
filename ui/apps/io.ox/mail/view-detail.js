@@ -468,7 +468,7 @@ define('io.ox/mail/view-detail',
             if (ox.ui.App.get('io.ox/mail').length) {
                 node = list.last();
                 node.after(
-                    $('<i class="icon-search">').on('click', node.data('person'), searchSender)
+                    $('<i class="fa fa-search">').on('click', node.data('person'), searchSender)
                         .css({ marginLeft: '0.5em', opacity: 0.3, cursor: 'pointer' })
                 );
             }
@@ -490,8 +490,8 @@ define('io.ox/mail/view-detail',
         YELLOW:     gt('Yellow')
     };
 
-    var colorLabelIconEmpty = 'icon-bookmark-empty',
-        colorLabelIcon = 'icon-bookmark';
+    var colorLabelIconEmpty = 'fa fa-bookmark-o',
+        colorLabelIcon = 'fa fa-bookmark';
 
     function setLabel(node, color) {
         // set proper icon class
@@ -598,7 +598,7 @@ define('io.ox/mail/view-detail',
                 .addClass('subject' + (_.device('!smartphone') ? ' clear-title' : '') + (subject === '' ? ' empty' : ''))
                 .append(
                     // unread
-                    $('<i class="icon-unread icon-circle">'),
+                    $('<i class="fa icon-unread fa-circle">'),
                     // inject some zero width spaces for better word-break
                     subject || $.txt(gt('No subject')),
                     // priority
@@ -677,7 +677,7 @@ define('io.ox/mail/view-detail',
                 if (_.device('!smartphone')) {
                     if (!(!showCC && showTO && data.to[0][1] === 'undisclosed-recipients:;')) {
                         var dd = $('<div class="recipient-actions">');
-                        drawAllDropDown(dd, $('<i class="icon-group">'), data);
+                        drawAllDropDown(dd, $('<i class="fa fa-group">'), data);
                         dd.find('.dropdown').addClass('pull-right');
                         dd.appendTo(container);
                     }

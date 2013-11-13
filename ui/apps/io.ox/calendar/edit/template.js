@@ -329,7 +329,7 @@ define('io.ox/calendar/edit/template',
                     $('<input type="text" class="add-participant form-control" tabindex="1">').attr('placeholder', gt('Add participant/resource')),
                     $('<span class="input-group-btn">').append(
                         $('<button type="button" class="btn btn-default" data-action="add" tabindex="1">')
-                            .append($('<i class="icon-plus">'))
+                            .append($('<i class="fa fa-plus">'))
                     )
                 )
             );

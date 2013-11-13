@@ -65,6 +65,19 @@ module.exports = function (grunt) {
                 src: ['apps/themes/style.less']
             }
         },
+        copy: {
+            fonts: {
+                files: [
+                    {
+                        expand: true,
+                        src: ['*', '!*.otf'],
+                        cwd: 'lib/font-awesome/fonts/',
+                        dest: 'build/apps/fonts/',
+                        filter: 'isFile'
+                    }
+                ]
+            }
+        },
         assemble: {
             options: {
                 version: '<%= pkg.version %>-<%= pkg.revision %>.' + now,
@@ -114,10 +127,12 @@ module.exports = function (grunt) {
             default: {
                 options: {
                     compress: true,
+                    ieCompat: false,
                     paths: 'apps',
                     imports: {
                         less: [
                             'lib/bootstrap/less/variables.less',
+                            'lib/font-awesome/less/variables.less',
                             'themes/definitions.less',
                             'themes/default/definitions.less',
                             'lib/bootstrap/less/mixins.less',
@@ -138,6 +153,7 @@ module.exports = function (grunt) {
                         src: [
                             'lib/bootstrap/less/bootstrap.less',
                             'lib/bootstrap-datepicker/less/datepicker3.less',
+                            'lib/font-awesome/less/font-awesome.less',
                             'apps/themes/default/style.less'
                         ],
                         expand: true,
@@ -351,6 +367,7 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('assemble');
     grunt.loadNpmTasks('assemble-less');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -371,5 +388,5 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-karma');
     grunt.registerTask('test', ['default', 'karma:unit:start', 'watch']);
 
-    grunt.registerTask('default', ['lint', 'newer:assemble', 'newer:concat', 'newer:less', 'force_update', 'newer:uglify']);
+    grunt.registerTask('default', ['lint', 'newer:copy', 'newer:assemble', 'newer:concat', 'newer:less', 'force_update', 'newer:uglify']);
 };

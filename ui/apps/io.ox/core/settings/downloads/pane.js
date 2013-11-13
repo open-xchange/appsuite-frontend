@@ -37,7 +37,7 @@ define('io.ox/core/settings/downloads/pane',
                     $('<section>').append(
                         $('<h2>').text(gt('Updater')),
                         $('<p>').append(
-                            $('<i class="icon-download-alt">'),
+                            $('<i class="fa fa-download">'),
                             $.txt(' '),
                             $('<a>', { href: href, target: '_blank' }).addClass('action').text(gt('Download install file (for Windows)'))
                         ),

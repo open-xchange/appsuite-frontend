@@ -119,7 +119,7 @@ define('io.ox/editor/main',
 
         busy: function () {
             this.$el.find('input.title, button.save').prop('disabled', true);
-            this.$el.find('button.save').empty().append($('<i class="icon-refresh icon-spin">'));
+            this.$el.find('button.save').empty().append($('<i class="fa fa-refresh fa-spin">'));
         },
 
         idle: function () {

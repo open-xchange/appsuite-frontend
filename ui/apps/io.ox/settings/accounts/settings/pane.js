@@ -62,7 +62,7 @@ define('io.ox/settings/accounts/settings/pane',
                                 'data-action': 'delete',
                                 'aria-label': o.get('displayName') + ', ' + gt('Delete')
                             })
-                            .append($('<i class="icon-trash">')) :
+                            .append($('<i class="fa fa-trash-o">')) :
                             // empty dummy
                             $('<a class="remove">').attr({
                                 href: '#',
@@ -71,7 +71,7 @@ define('io.ox/settings/accounts/settings/pane',
                                 title: gt('Delete'),
                                 'aria-label': o.get('displayName') + ', ' + gt('Delete')
                             })
-                            .append($('<i class="icon-trash" style="visibility: hidden">'))
+                            .append($('<i class="fa fa-trash-o" style="visibility: hidden">'))
                     )
                 );
         },

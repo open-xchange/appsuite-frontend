@@ -139,7 +139,7 @@ define('plugins/portal/tumblr/register',
                     if (post.tags && post.tags.length > 0) {
                         _(post.tags).each(function (tag) {
                             tags.push($('<a>', { href: tagBaseUri + tag, target: '_blank' })
-                                .addClass('tag').text(tag).prepend($('<i class="icon-tag">')));
+                                .addClass('tag').text(tag).prepend($('<i class="fa fa-tag">')));
                         });
                     }
                     return tags;
@@ -182,7 +182,7 @@ define('plugins/portal/tumblr/register',
                     return $('<a>', { href: post.post_url, target: '_blank', title: gt('Read article on tumblr.com') }).append($('<i class="icon-tumblr-sign">'));
                 },
                 postExternalLink = function () {
-                    return $('<a>', { href: post.url, target: '_blank', title: gt('Open external link') }).append($('<i class="icon-external-link-sign">'));
+                    return $('<a>', { href: post.url, target: '_blank', title: gt('Open external link') }).append($('<i class="fa fa-external-link-square">'));
                 },
                 postNav = function () {
                     var nav = $('<div class="post-bar">');

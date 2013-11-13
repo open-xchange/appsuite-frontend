@@ -223,7 +223,7 @@ define('io.ox/contacts/edit/view-form',
 
             var isCompact = node.hasClass('compact'),
                 label = isCompact ? gt('Extended view') : gt('Compact view'),
-                icon = isCompact ? 'icon-expand-alt' : 'icon-collapse-alt';
+                icon = isCompact ? 'fa fa-plus-square-o' : 'fa fa-minus-square-o';
 
             // update hidden
             node.find('.block').each(function () {
@@ -284,7 +284,7 @@ define('io.ox/contacts/edit/view-form',
                     $('<nav class="toggle-compact">').append(
                         $('<a href="#" tabindex="1">').click(toggle).text(gt('Extended view')),
                         $.txt(' '),
-                        $('<i class="icon-expand-alt">')
+                        $('<i class="fa fa-plus-square-o">')
                     )
                 );
             }
@@ -299,7 +299,7 @@ define('io.ox/contacts/edit/view-form',
                     $('<nav class="toggle-compact clear">').append(
                         link = $('<a href="#" tabindex="1">').click(toggle).text(gt('Extended view')),
                         $.txt(' '),
-                        $('<i class="icon-expand-alt">')
+                        $('<i class="fa fa-plus-square-o">')
                     )
                 );
 

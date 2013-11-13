@@ -26,8 +26,8 @@ define('io.ox/core/tk/folderviews',
 
     'use strict';
 
-    var OPEN = 'icon-chevron-right',
-        CLOSE = 'icon-chevron-down',
+    var OPEN = 'fa fa-chevron-right',
+        CLOSE = 'fa fa-chevron-down',
 
         SMALL_FOLDER_PADDING = 15, // for small devices like smartphons
         DESKTOP_FOLDER_PADDING = 30, // for mouse-based devices (could be smaller but irrelevant) and for fat finger support
@@ -394,7 +394,7 @@ define('io.ox/core/tk/folderviews',
 
                 if (nodes && nodes.arrow === undefined) {
                     // create DOM nodes
-                    nodes.arrow = $('<div class="folder-arrow" role="presentation"><i class="icon-chevron-right"></i></div>');
+                    nodes.arrow = $('<div class="folder-arrow" role="presentation"><i class="fa fa-chevron-right"></i></div>');
                     nodes.label = $('<div class="folder-label">');
                     nodes.counter = $('<div class="folder-counter">').append('<span class="folder-counter-badge">');
                     nodes.subscriber = $('<input>').attr({ 'type': 'checkbox', 'name': 'folder', tabindex: -1, 'value': data.id });
@@ -840,7 +840,7 @@ define('io.ox/core/tk/folderviews',
                     $('<span class="folder-options">').append(
                         $('<a href="#" class="folder-options-badge" tabindex="1">')
                         .attr('title', gt('Folder-specific actions'))
-                        .append($('<i class="icon-cog"></i></span>'))
+                        .append($('<i class="fa fa-cog"></i></span>'))
                     )
                 );
             }
@@ -884,13 +884,13 @@ define('io.ox/core/tk/folderviews',
         id: 'published',
         customize: function (data, options) {
 
-            this.find('.icon-cloud-download.folder-pubsub').remove();
+            this.find('.fa-cloud-download.folder-pubsub').remove();
 
             if (!options.app) return;
             if (!capabilities.has('publication') || !api.is('published|subscribed', data)) return;
 
             this.append(
-                $('<i class="icon-cloud-download folder-pubsub">').attr('title', gt('This folder has publications and/or subscriptions'))
+                $('<i class="fa fa-cloud-download folder-pubsub">').attr('title', gt('This folder has publications and/or subscriptions'))
                 .on('click', { folder: data }, openPubSubSettings)
             );
         }
@@ -907,13 +907,13 @@ define('io.ox/core/tk/folderviews',
         id: 'shared',
         customize: function (data, options) {
 
-            this.find('.icon-unlock.folder-pubsub').remove();
+            this.find('.fa-unlock.folder-pubsub').remove();
 
             if (!options.app) return;
             if (!api.is('unlocked', data)) return;
 
             this.append(
-                $('<i class="icon-unlock folder-pubsub">').attr('title', gt('You share this folder with other users'))
+                $('<i class="fa fa-unlock folder-pubsub">').attr('title', gt('You share this folder with other users'))
                 .on('click', { folder: data.id }, openPermissions)
             );
         }

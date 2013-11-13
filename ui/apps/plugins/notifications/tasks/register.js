@@ -32,12 +32,14 @@ define('plugins/notifications/tasks/register',
     ext.point('io.ox/core/notifications/due-tasks/header').extend({
         draw: function () {
             this.append(
-                $('<legend class="section-title">').text(gt('Overdue Tasks'))
-                    .append($('<div>').attr({ tabindex: 1,
+                $('<legend class="section-title">').text(gt('Overdue Tasks')).append(
+                    $('<div class="clear-button fa fa-times">').attr({ tabindex: 1,
                         'aria-label': gt('Press to hide all notifications for overdue tasks.'),
                         'data-action': 'clear',
                         'focus-id': 'task-overdue-notification-clear',
-                        role: 'button'}).addClass('clear-button icon-remove refocus')),
+                        role: 'button'
+                    })
+                ),
                 $('<div class="notifications">')
             );
         }
@@ -242,13 +244,14 @@ define('plugins/notifications/tasks/register',
     ext.point('io.ox/core/notifications/task-reminder/header').extend({
         draw: function () {
             this.append(
-                $('<legend class="section-title">').text(gt('Task reminders'))
-                    .append($('<div>')
-                    .attr({ tabindex: 1,
+                $('<legend class="section-title">').text(gt('Task reminders')).append(
+                    $('<div class="clear-button fa fa-times refocus">').attr({
+                        tabindex: 1,
                         'aria-label': gt('Press to hide all task reminders.'),
                         'data-action': 'clear',
                         'focus-id': 'task-reminder-notification-clear',
-                        role: 'button'}).addClass('clear-button icon-remove refocus')),
+                        role: 'button'})
+                    ),
                 $('<div class="notifications">')
             );
         }
@@ -481,7 +484,7 @@ define('plugins/notifications/tasks/register',
                         .attr({'title': gt('Accept invitation'),
                                'aria-label': gt('Accept invitation'),
                                'focus-id': 'task-invite-accept-' + _.ecid(baton.model.attributes)})
-                        .append('<i class="icon-ok">')
+                        .append('<i class="fa fa-check">')
                 )
             );
             task = null;

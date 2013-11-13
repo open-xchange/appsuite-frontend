@@ -439,7 +439,7 @@ define('io.ox/tasks/actions',
         id: 'default',
         index: 100,
         icon: function () {
-            return $('<i class="icon-plus accent-color">');
+            return $('<i class="fa fa-plus accent-color">');
         }
     });
 

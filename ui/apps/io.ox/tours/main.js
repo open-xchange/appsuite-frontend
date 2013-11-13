@@ -77,7 +77,7 @@ define('io.ox/tours/main',
                 onShow: function () { notifications.hideList(); },
                 title: gt('Displaying the help or the settings'),
                 placement: 'left',
-                target: function () { return $('.launcher .icon-cog:visible')[0]; },
+                target: function () { return $('.launcher .fa-cog:visible')[0]; },
                 content: gt('To display the help or the settings, use the icons on the right side of the menu bar.'),
                 arrowOffset: 1,
                 yOffset: -5
@@ -101,7 +101,7 @@ define('io.ox/tours/main',
                 onShow: function () { notifications.hideList(); },
                 title: gt('Creating new items'),
                 placement: 'right',
-                target: function () { return $('.window-toolbar .icon-pencil:visible')[0]; },
+                target: function () { return $('.window-toolbar .fa-pencil:visible')[0]; },
                 content: gt('To create a new E-Mail, click the Compose new E-Mail icon at the top.'),
                 arrowOffset: 1,
                 yOffset: -5
@@ -139,7 +139,7 @@ define('io.ox/tours/main',
             {
                 title: gt('Further information'),
                 placement: 'left',
-                target: function () { return $('.launcher .icon-cog:visible')[0]; },
+                target: function () { return $('.launcher .fa-cog:visible')[0]; },
                 content: gt('Detailed guides for all modules are located in the help section of the settings.'),
                 arrowOffset: 1,
                 yOffset: -5
@@ -188,7 +188,7 @@ define('io.ox/tours/main',
             {
                 title: gt('Closing a tile'),
                 placement: 'bottom',
-                target: function () { return $('.widget .disable-widget .icon-remove:visible')[0]; },
+                target: function () { return $('.widget .disable-widget .fa-times:visible')[0]; },
                 content: gt('If you no longer want to display a tile, click the cross on the upper right side.'),
                 xOffset: -10,
                 arrowOffset: 1
@@ -282,7 +282,7 @@ define('io.ox/tours/main',
             {
                 title: gt('Sorting your E-Mails'),
                 placement: 'top',
-                target: function () { return $('.vgrid-toolbar .icon-arrow-down:visible')[0]; },
+                target: function () { return $('.vgrid-toolbar .fa-arrow-down:visible')[0]; },
                 content: gt('The icon on the bottom right side helps you sort your E-Mails. Click the icon to get a list of sort criteria.'),
                 xOffset: -15
             },
@@ -312,14 +312,14 @@ define('io.ox/tours/main',
             {
                 title: gt('Editing multiple E-Mails'),
                 placement: 'top',
-                target: function () { return $('.vgrid-toolbar.bottom .icon-th-list:visible')[0]; },
+                target: function () { return $('.vgrid-toolbar.bottom .fa-th-list:visible')[0]; },
                 content: gt('In order to edit multiple E-Mails at once, enable the checkboxes on the left side of the E-Mails. If the checkboxes are not displayed, click the icon on the bottom left side.'),
                 xOffset: -15
             },
             {
                 title: gt('Opening the E-Mail settings'),
                 placement: 'left',
-                target: function () { return $('.launcher .icon-cog:visible')[0]; },
+                target: function () { return $('.launcher .fa-cog:visible')[0]; },
                 content: gt('To open the E-Mail settings, click the Gearwheel icon on the upper right side of the menu bar. Select Settings. Click on E-Mail on the left side.'),
                 arrowOffset: 1,
                 yOffset: -5
@@ -337,7 +337,7 @@ define('io.ox/tours/main',
             steps: [{
                 title: gt('Creating a new contact'),
                 placement: 'right',
-                target: function () { return $('.window-toolbar .icon-plus:visible')[0]; },
+                target: function () { return $('.window-toolbar .fa-plus:visible')[0]; },
                 content: gt('To create a new contact, click the Add contact icon on top.'),
                 yOffset: -10
             },
@@ -356,7 +356,7 @@ define('io.ox/tours/main',
             {
                 title: gt('Editing multiple contacts'),
                 placement: 'top',
-                target: function () { return $('.vgrid-toolbar.bottom .icon-th-list:visible')[0]; },
+                target: function () { return $('.vgrid-toolbar.bottom .fa-th-list:visible')[0]; },
                 content: gt('To edit multiple contacts at once, enable the checkboxes on the left side of the contacts. If the checkboxes are not displayed, click the icon on the bottom left side.'),
                 xOffset: -20
             }]
@@ -671,14 +671,14 @@ define('io.ox/tours/main',
             {
                 title: gt('Sorting your tasks'),
                 placement: 'top',
-                target: function () { return $('.vgrid-toolbar.bottom .icon-arrow-down:visible')[0]; },
+                target: function () { return $('.vgrid-toolbar.bottom .fa-arrow-down:visible')[0]; },
                 content: gt('The icon at the bottom right side helps you sort your tasks. Click the icon to get a list of sort criteria.'),
                 xOffset: -10
             },
             {
                 title: gt('Editing multiple tasks'),
                 placement: 'top',
-                target: function () { return $('.vgrid-toolbar.bottom .icon-th-list:visible')[0]; },
+                target: function () { return $('.vgrid-toolbar.bottom .fa-th-list:visible')[0]; },
                 content: gt('To edit multiple tasks at once, enable the checkboxes at the left side of the tasks. If the checkboxes are not displayed, click the icon at the bottom left side.'),
                 xOffset: -10
             }]
@@ -695,7 +695,7 @@ define('io.ox/tours/main',
             steps: [{
                 title: gt('Opening the settings'),
                 placement: 'left',
-                target: function () { return $('#io-ox-topbar .launcher .icon-cog')[0]; },
+                target: function () { return $('#io-ox-topbar .launcher .fa-cog')[0]; },
                 content: gt('To open the settings, click the System menu icon on the upper right side of the menu bar. Select Settings. ')
             },
             {
@@ -713,13 +713,13 @@ define('io.ox/tours/main',
             {
                 title: gt('Opening the help'),
                 placement: 'left',
-                target: function () { return $('#io-ox-topbar .launcher .icon-cog')[0]; },
+                target: function () { return $('#io-ox-topbar .launcher .fa-cog')[0]; },
                 content: gt('To open the help, click the System menu icon on the upper right side of the menu bar. Select Help. ')
             },
             {
                 title: gt('Signing out'),
                 placement: 'left',
-                target: function () { return $('#io-ox-topbar .launcher .icon-cog')[0]; },
+                target: function () { return $('#io-ox-topbar .launcher .fa-cog')[0]; },
                 content: gt('To sign out, click the System menu icon on the upper right side of the menu bar. Select Sign out.')
             }]
         }
@@ -846,9 +846,9 @@ define('io.ox/tours/main',
                     return;
                 }
                 tour.i18n = {
-                    prevBtn: '<i class="icon-chevron-left">&nbsp;</i>',
-                    nextBtn: '<i class="icon-chevron-right">&nbsp;</i>',
-                    doneBtn: '<i class="icon-ok">&nbsp;</i>'
+                    prevBtn: '<i class="fa fa-chevron-left">&nbsp;</i>',
+                    nextBtn: '<i class="fa fa-chevron-right">&nbsp;</i>',
+                    doneBtn: '<i class="fa fa-check">&nbsp;</i>'
                 };
 
                 //RESET

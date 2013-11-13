@@ -194,11 +194,11 @@ define('io.ox/core/tk/attachmentsUtil',
 
             if (obj.group !== 'vcard') {
                 //default
-                icon = $('<i>').addClass('icon-paper-clip');
+                icon = $('<i class="fa fa-paperclip">');
                 info = $('<span>').addClass('filesize').text(size);
             } else {
                 //vcard
-                icon = $('<i>').addClass('icon-list-alt');
+                icon = $('<i class="fa fa-list-alt">');
                 info = $('<span>').addClass('filesize').text(gt.noI18n('vCard\u00A0'));
                 //lazy way; use contactsUtil.getFullName(attachment) for the perfect solution
                 name = obj.file.display_name || obj.file.email1 || '';
@@ -223,7 +223,7 @@ define('io.ox/core/tk/attachmentsUtil',
                             $('<a href="#" class="remove" tabindex="6">')
                             .attr('title', gt('Remove attachment'))
                             .append(
-                                $('<i class="icon-trash">')
+                                $('<i class="fa fa-trash-o">')
                             )
                             .on('click', function (e) {
                                 e.preventDefault();

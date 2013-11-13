@@ -210,7 +210,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                             .addClass('widget-settings-view draggable ' + getEditableState() + ' ' + (self.model.get('active') ? 'active' : 'disabled'))
                             .append(
                                 $('<a>').addClass('drag-handle').append(
-                                    $('<i/>').addClass('icon-reorder')
+                                    $('<i class="fa fa-bars">')
                                 ).attr({
                                     href: '#',
                                     role: 'button',

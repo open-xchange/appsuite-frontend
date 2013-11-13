@@ -163,7 +163,7 @@ define('io.ox/contacts/main',
             build: function () {
                 var name, description, private_flag;
                 this.addClass('contact').append(
-                    private_flag = $('<i class="icon-lock private_flag">').hide(),
+                    private_flag = $('<i class="fa fa-lock private_flag">').hide(),
                     name = $('<div class="fullname">'),
                     description = $('<div class="bright-text">')
                 );
@@ -369,7 +369,7 @@ define('io.ox/contacts/main',
 
         //add dropdown button
         button = $('<button type="button" data-action="search-options" class="btn btn-default search-options" aria-hidden="true">')
-                .append('<i class="icon-gear">');
+                .append('<i class="fa fa-cog">');
         win.nodes.search.find('.form-search > .input-group > .input-group-btn').prepend(button);
 
         //add dropdown menue

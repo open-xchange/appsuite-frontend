@@ -909,7 +909,7 @@ define('io.ox/mail/actions',
         id: 'default',
         index: 100,
         icon: function () {
-            return $('<i class="icon-pencil accent-color">');
+            return $('<i class="fa fa-pencil accent-color">');
         }
     });
 
@@ -924,7 +924,7 @@ define('io.ox/mail/actions',
         id: 'guidance',
         index: 400,
         icon: function () {
-            return $('<i class="icon-question-sign">');
+            return $('<i class="fa fa-question-circle">');
         }
     });
 
@@ -1194,7 +1194,7 @@ define('io.ox/mail/actions',
                 .append($('<a href="#">')
                     .append(
                         $('<i>')
-                            .addClass((allUnread ? 'icon-envelope' : 'icon-envelope-alt'))
+                            .addClass((allUnread ? 'fa-envelope' : 'fa-envelope-o'))
                             .on('click', function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -1215,7 +1215,7 @@ define('io.ox/mail/actions',
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i class="icon-trash">').on('tap', function (e) {
+                        $('<i class="fa fa-trash-o">').on('tap', function (e) {
                             e.preventDefault();
                             e.stopPropagation();
                             actions.invoke('io.ox/mail/actions/delete', null, baton);
@@ -1234,7 +1234,7 @@ define('io.ox/mail/actions',
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i class="icon-signin">').on('tap', function (e) {
+                        $('<i class="fa fa-sign-in">').on('tap', function (e) {
                             e.preventDefault();
                             e.stopPropagation();
                             actions.invoke('io.ox/mail/actions/move', null, baton);

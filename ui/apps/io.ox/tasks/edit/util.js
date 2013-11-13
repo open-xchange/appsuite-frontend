@@ -44,7 +44,7 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
                     progress,
                     $('<div class="input-group-btn">').append(
                         $('<button type="button" tabindex="1" class="btn btn-default" data-action="minus">').append(
-                            $('<i>').addClass('icon-minus')
+                            $('<i class="fa fa-minus">')
                         )
                         .on('click', function () {
                             var temp = parseInt(progress.val(), 10);
@@ -58,7 +58,7 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
                             }
                         }),
                         $('<button type="button" tabindex="1" class="btn btn-default" data-action="plus">').append(
-                            $('<i>').addClass('icon-plus')
+                            $('<i class="fa fa-plus">')
                         )
                         .on('click', function () {
                             var temp = parseInt(progress.val(), 10);

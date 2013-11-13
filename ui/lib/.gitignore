@@ -18,3 +18,10 @@ underscore/.*.yml
 bootstrap-datepicker/docs
 bootstrap-datepicker/tests
 bootstrap-datepicker/build
+
+font-awesome/css
+font-awesome/scss
+font-awesome/src
+font-awesome/*.yml
+font-awesome/*.md
+font-awesome/Gem*

@@ -41,7 +41,7 @@ define('io.ox/core/tk/reminder-util',
                     .attr({'data-toggle': 'dropdown', 'focus-id': focusId + '-select'})
                     .text(gt('Remind me again')).addClass('refocus')
                     .append(
-                        $('<i>').addClass('icon-chevron-down').css({color: 'white', paddingLeft: '5px', textDecoration: 'none'})
+                        $('<i class="fa fa-chevron-down">').css({color: 'white', paddingLeft: '5px', textDecoration: 'none'})
                     ),
                     $('<ul role="menu">').addClass('dropdown-menu dropdown-left').css({minWidth: 'auto'}).append(function () {
                         var ret = [];

@@ -48,7 +48,7 @@ define('io.ox/launchpad/main',
             '<a href="#" class="app" tabindex="1" data-app-name="<%= id %>">' +
             '  <img src="<%= icon %>" class="icon" alt="">' +
             '  <div class="title ellipsis"><%= title %></div>' +
-            '  <div class="lock abs"><i class="icon-lock"></i></div>' +
+            '  <div class="lock abs"><i class="fa fa-lock"></i></div>' +
             '</a>'
         ),
 

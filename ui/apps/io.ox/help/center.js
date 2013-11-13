@@ -115,7 +115,7 @@ define('io.ox/help/center',
 
         //add cancel button
         console.log('Check help button:', $helpButton);
-        $('<i class="icon-remove-circle icon-white" id="io-ox-help-off">')
+        $('<i class="fa fa-times-circle icon-white" id="io-ox-help-off">')
         .css({
             position: 'absolute',
             top: $helpButton.offset().top,

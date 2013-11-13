@@ -713,7 +713,7 @@ define('io.ox/files/actions',
         id: 'default',
         index: 100,
         icon: function () {
-            return $('<i class="icon-plus accent-color">');
+            return $('<i class="fa fa-plus accent-color">');
         }
     });
 
@@ -740,7 +740,7 @@ define('io.ox/files/actions',
         id: 'view',
         index: 400,
         icon: function () {
-            return $('<i class="icon-eye-open">').attr('aria-label', gt('Change View'));
+            return $('<i class="fa fa-eye">').attr('aria-label', gt('Change View'));
         }
     });
 
@@ -771,7 +771,7 @@ define('io.ox/files/actions',
         id: 'guidance',
         index: 500,
         icon: function () {
-            return $('<i class="icon-question-sign">');
+            return $('<i class="fa fa-question-circle">');
         }
     });
 
@@ -788,7 +788,7 @@ define('io.ox/files/actions',
     //     index: 150,
     //     label: gt('Publish'),
     //     icon: function () {
-    //         return $('<i class="icon-rss">');
+    //         return $('<i class="fa fa-rss">');
     //     }
     // });
 
@@ -1225,8 +1225,8 @@ define('io.ox/files/actions',
         prio: 'hi',
         id: 'layout-list',
         ref: 'io.ox/files/actions/layout-list',
-        icon: 'icon-align-justify',
         title: gt('List'),
+        icon: 'fa fa-align-justify',
         cssClasses: 'io-ox-action-link btn layout'
     }));
 
@@ -1235,8 +1235,8 @@ define('io.ox/files/actions',
         prio: 'hi',
         id: 'layout-icon',
         ref: 'io.ox/files/actions/layout-icon',
-        icon: 'icon-th',
         title: gt('Icons'),
+        icon: 'fa fa-th',
         cssClasses: 'io-ox-action-link btn layout'
     }));
 
@@ -1246,7 +1246,7 @@ define('io.ox/files/actions',
         id: 'layout-tile',
         ref: 'io.ox/files/actions/layout-tile',
         title: gt('Tile'),
-        icon: 'icon-th-large',
+        icon: 'fa fa-th-large',
         cssClasses: 'io-ox-action-link btn layout'
     }));
 

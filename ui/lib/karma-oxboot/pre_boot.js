@@ -62,7 +62,7 @@ window.ox = {
                     $('<ul class="launchers" role="menubar">'),
                     $('<div class="launcher-dropdown dropdown" aria-hidden="true">').append(
                         $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').append(
-                            $('<i class="icon-reorder">')
+                            $('<i class="fa fa-bars">')
                         ),
                         $('<ul class="dropdown-menu" role="menu">')
                     )

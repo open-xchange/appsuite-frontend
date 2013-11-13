@@ -39,7 +39,7 @@ define('io.ox/core/notifications',
 
         },
         onToggle: function (open) {
-            this.$el.find('.badge i').attr('class', open ? 'icon-caret-down' : 'icon-caret-right');
+            this.$el.find('.badge i').attr('class', open ? 'fa fa-caret-down' : 'fa fa-caret-right');
         },
         render: function () {
             var numberNode;
@@ -54,7 +54,7 @@ define('io.ox/core/notifications',
                 $('<span class="badge">').append(
                     numberNode = $('<span class="number">'),
                     $.txt(' '),
-                    $('<i class="icon-caret-right">')
+                    $('<i class="fa fa-caret-right">')
                 )
              );
 
@@ -386,11 +386,11 @@ define('io.ox/core/notifications',
                 },
 
                 icons = {
-                    busy: 'icon-refresh icon-spin',
-                    error: 'icon-exclamation',
-                    info: 'icon-exclamation',
-                    success: 'icon-ok',
-                    warning: 'icon-exclamation'
+                    busy: 'fa fa-refresh fa-spin',
+                    error: 'fa fa-exclamation',
+                    info: 'fa fa-exclamation',
+                    success: 'fa fa-ok',
+                    warning: 'fa fa-exclamation'
                 },
 
                 remove = function (immediately) {

@@ -627,7 +627,7 @@ define('io.ox/tasks/edit/view-template',
                         $('<input type="text" class="add-participant task-participant-input-field form-control" tabindex="1">').attr('placeholder', gt('Add participant/resource')),
                         $('<span class="input-group-btn">').append(
                             $('<button type="button" class="btn btn-default" data-action="add" tabindex="1">')
-                                .append($('<i class="icon-plus">'))
+                                .append($('<i class="fa fa-plus">'))
                         )
                     ),
                     $('<div>').css('height', '220px') // default height of autocomplete popup, we do need expand the page to a height which can show the autocomplete popup

@@ -212,7 +212,7 @@ define('io.ox/core/permissions/permissions',
             } else {
                 this.append(
                     $('<div class="pull-left contact-picture group">').append(
-                        $('<i class="icon-group">')
+                        $('<i class="fa fa-group">')
                     )
                 );
             }
@@ -263,7 +263,7 @@ define('io.ox/core/permissions/permissions',
 
     addRemoveButton = function (entity) {
         if (isFolderAdmin && entity !== ox.user_id) {
-            return $('<a href="# "class="close">').append($('<i class="icon-trash">'));
+            return $('<a href="# "class="close">').append($('<i class="fa fa-trash-o">'));
         } else {
             return $();
         }
@@ -403,7 +403,7 @@ define('io.ox/core/permissions/permissions',
                                 }),
                                 $('<span class="input-group-btn">').append(
                                     $('<button type="button" class="btn btn-default" data-action="add">')
-                                        .append($('<i class="icon-plus">'))
+                                        .append($('<i class="fa fa-plus">'))
                                 )
                             ),
                             autocomplete = new AddParticipantsView({ el: node });

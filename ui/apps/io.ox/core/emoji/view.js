@@ -118,7 +118,7 @@ define('io.ox/core/emoji/view', [
                             $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="5">')
                             .attr('arial-label', gt('Options'))
                             .append(
-                                $('<i class="icon-cog" aria-hidden="true" role="presentation">')
+                                $('<i class="fa fa-cog" aria-hidden="true" role="presentation">')
                             ),
                             // list
                             $('<ul class="dropdown-menu" role="menu">')
@@ -161,7 +161,7 @@ define('io.ox/core/emoji/view', [
                         $('<a href="#" class="emoji-option">')
                         .attr('data-collection', collection)
                         .append(
-                            $('<i>').addClass(collection === current ? 'icon-ok' : 'icon-none'),
+                            $('<i>').addClass(collection === current ? 'fa fa-check' : 'icon-none'),
                             $.txt(self.emoji.getTitle(collection))
                         )
                     );
@@ -259,7 +259,7 @@ define('io.ox/core/emoji/view', [
                     var options = this.$el.find('.emoji-options');
                     options.find('[data-collection] i').attr('class', 'icon-none');
                     options.find('[data-collection="' + collection + '"]')
-                        .find('i').attr('class', 'icon-ok');
+                        .find('i').attr('class', 'fa fa-check');
                 }
 
                 this.drawCategoryIcons();
