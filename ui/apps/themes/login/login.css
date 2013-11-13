@@ -74,9 +74,11 @@ body.down #io-ox-login-container .alert.alert-info {
     font-family: 'OpenSans';
     src: local('Open Sans Light'),
          local('OpenSans-Light'),
-         url('fonts/OpenSans-Light-webfont.woff') format('woff'),
-         url('fonts/OpenSans-Light-webfont.ttf') format('truetype');
-    font-weight: normal;
+         url('../../fonts/OpenSans-Light.eot'),
+         url('../../fonts/OpenSans-Light.woff') format('woff'),
+         url('../../fonts/OpenSans-Light.ttf') format('truetype'),
+         url('../../fonts/OpenSans-Light.svg#OpenSansLight') format('svg');
+    font-weight: 300;
     font-style: normal;
 }
 

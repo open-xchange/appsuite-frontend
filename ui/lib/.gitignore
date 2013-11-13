@@ -25,3 +25,13 @@ font-awesome/src
 font-awesome/*.yml
 font-awesome/*.md
 font-awesome/Gem*
+
+open-sans-fontface/*.css
+open-sans-fontface/*.scss
+open-sans-fontface/*.md
+open-sans-fontface/font/B*
+open-sans-fontface/font/E*
+open-sans-fontface/font/I*
+open-sans-fontface/font/LightItalic
+open-sans-fontface/font/R*
+open-sans-fontface/font/S*

@@ -74,6 +74,13 @@ module.exports = function (grunt) {
                         cwd: 'lib/font-awesome/fonts/',
                         dest: 'build/apps/fonts/',
                         filter: 'isFile'
+                    },
+                    {
+                        expand: true,
+                        src: ['*', '!*.otf'],
+                        cwd: 'lib/open-sans-fontface/font/Light/',
+                        dest: 'build/apps/fonts/',
+                        filter: 'isFile'
                     }
                 ]
             }
