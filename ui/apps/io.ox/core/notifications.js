@@ -308,7 +308,7 @@ define('io.ox/core/notifications',
             var focusBadge =  function (e) {
                 e.preventDefault();//prevent default to not jump to reload button
                 if (e.which === 9) { //tabkey
-                    $('#io-ox-notifications .item').first().focus();
+                    $('#io-ox-notifications .refocus').first().focus();
                 }
             };
 

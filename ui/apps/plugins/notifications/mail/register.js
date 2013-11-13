@@ -28,7 +28,12 @@ define('plugins/notifications/mail/register',
             this.append(
                 $('<legend class="section-title">').text(gt('New Mails'))
                     .attr('focusId', 'mail-notification-')//special attribute to restore focus on redraw
-                    .append($('<div tabindex="1" data-action="clear" role="button" class="clear-button icon-remove">')),
+                    .append($('<div>')
+                        .attr({ tabindex: 1,
+                            'aria-label': gt('Press to hide all notifications for new mails.'),
+                            'data-action': 'clear',
+                            'focus-id': 'mail-notification-clear',
+                            role: 'button'}).addClass('clear-button icon-remove refocus')),
                 $('<div class="notifications">'),
                 $('<div class="open-app">').append(
                     $('<a role="button" href="#" data-action="open-app" tabindex="1" class="refocus" focus-id="mail-notification-open-app">').text(
@@ -71,6 +76,7 @@ define('plugins/notifications/mail/register',
         id: 'io-ox-notifications-mail',
         events: {
             'click [data-action="open-app"]': 'openApp',
+            'keydown [data-action="clear"]': 'clearItems',
             'click [data-action="clear"]': 'clearItems',
             'click .item': 'openMail',
             'keydown .item': 'openMail',
@@ -177,7 +183,8 @@ define('plugins/notifications/mail/register',
             });
         },
 
-        clearItems: function () {
+        clearItems: function (e) {
+            if ((e.type === 'keydown') && (e.which !== 13)) { return; }
             //hide all items from view
             this.collection.each(function (item) {
                 seenMails[_.ecid(item.attributes)] = true;

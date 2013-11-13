@@ -30,7 +30,12 @@ define('plugins/notifications/calendar/register',
         draw: function () {
             this.append(
                 $('<legend class="section-title">').text(gt('Invitations'))
-                    .append($('<div tabindex="1" data-action="clear" role="button" class="clear-button icon-remove">')),
+                    .append($('<div>')
+                        .attr({ tabindex: 1,
+                            'aria-label': gt('Press to hide all appointment invitations.'),
+                            'data-action': 'clear',
+                            'focus-id': 'calendar-invite-clear',
+                            role: 'button'}).addClass('clear-button icon-remove refocus')),
                 $('<div class="notifications">')
             );
         }
@@ -40,7 +45,12 @@ define('plugins/notifications/calendar/register',
         draw: function () {
             this.append(
                 $('<legend class="section-title">').text(gt('Reminder'))
-                    .append($('<div tabindex="1" data-action="clear" role="button" class="clear-button icon-remove">')),
+                    .append($('<div>')
+                        .attr({ tabindex: 1,
+                            'aria-label': gt('Press to hide all appointment reminders.'),
+                            'data-action': 'clear',
+                            'focus-id': 'calendar-reminder-notification-clear',
+                            role: 'button'}).addClass('clear-button icon-remove refocus')),
                 $('<div class="reminder">')
             );
         }
@@ -287,6 +297,7 @@ define('plugins/notifications/calendar/register',
         id: 'io-ox-notifications-calendar',
 
         events: {
+            'keydown [data-action="clear"]': 'clearItems',
             'click [data-action="clear"]': 'clearItems'
         },
 
@@ -308,7 +319,8 @@ define('plugins/notifications/calendar/register',
             return this;
         },
 
-        clearItems: function () {
+        clearItems: function (e) {
+            if ((e.type === 'keydown') && (e.which !== 13)) { return; }
             //hide all items from view
             this.collection.each(function (item) {
                 hiddenCalInvitationItems[_.ecid(item.attributes.data)] = true;
@@ -323,6 +335,7 @@ define('plugins/notifications/calendar/register',
         id: 'io-ox-notifications-calendar-reminder',
         
         events: {
+            'keydown [data-action="clear"]': 'clearItems',
             'click [data-action="clear"]': 'clearItems'
         },
 
@@ -348,7 +361,8 @@ define('plugins/notifications/calendar/register',
             return this;
         },
 
-        clearItems: function () {
+        clearItems: function (e) {
+            if ((e.type === 'keydown') && (e.which !== 13)) { return; }
             //hide all items from view
             this.collection.each(function (item) {
                 hiddenCalReminderItems[_.ecid(item.attributes)] = true;

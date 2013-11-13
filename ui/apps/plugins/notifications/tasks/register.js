@@ -33,7 +33,11 @@ define('plugins/notifications/tasks/register',
         draw: function () {
             this.append(
                 $('<legend class="section-title">').text(gt('Overdue Tasks'))
-                    .append($('<div tabindex="1" data-action="clear" role="button" class="clear-button icon-remove">')),
+                    .append($('<div>').attr({ tabindex: 1,
+                        'aria-label': gt('Press to hide all notifications for overdue tasks.'),
+                        'data-action': 'clear',
+                        'focus-id': 'task-overdue-notification-clear',
+                        role: 'button'}).addClass('clear-button icon-remove refocus')),
                 $('<div class="notifications">')
             );
         }
@@ -81,8 +85,9 @@ define('plugins/notifications/tasks/register',
 
         events: {
             'click [data-action="done"]': 'setStatus',
-            'click .item': 'openTask',
             'click [data-action="clear"]': 'clearItems',
+            'keydown [data-action="clear"]': 'clearItems',
+            'click .item': 'openTask',
             'keydown .item': 'openTask'
         },
 
@@ -99,7 +104,8 @@ define('plugins/notifications/tasks/register',
             return this;
         },
 
-        clearItems: function () {
+        clearItems: function (e) {
+            if ((e.type === 'keydown') && (e.which !== 13)) { return; }
             //hide all items from view
             this.collection.each(function (item) {
                 hiddenOverDueItems[_.ecid(item.attributes)] = true;
@@ -237,7 +243,12 @@ define('plugins/notifications/tasks/register',
         draw: function () {
             this.append(
                 $('<legend class="section-title">').text(gt('Task reminders'))
-                    .append($('<div tabindex="1" data-action="clear" role="button" class="clear-button icon-remove">')),
+                    .append($('<div>')
+                    .attr({ tabindex: 1,
+                        'aria-label': gt('Press to hide all task reminders.'),
+                        'data-action': 'clear',
+                        'focus-id': 'task-reminder-notification-clear',
+                        role: 'button'}).addClass('clear-button icon-remove refocus')),
                 $('<div class="notifications">')
             );
         }
@@ -348,6 +359,7 @@ define('plugins/notifications/tasks/register',
         className: 'notifications',
         id: 'io-ox-notifications-reminder-tasks',
         events: {
+            'keydown [data-action="clear"]': 'clearItems',
             'click [data-action="clear"]': 'clearItems'
         },
 
@@ -365,7 +377,8 @@ define('plugins/notifications/tasks/register',
             return this;
         },
 
-        clearItems: function () {
+        clearItems: function (e) {
+            if ((e.type === 'keydown') && (e.which !== 13)) { return; }
             //hide all items from view
             this.collection.each(function (item) {
                 hiddenReminderItems[_.ecid(item.attributes)] = true;
@@ -426,14 +439,19 @@ define('plugins/notifications/tasks/register',
     *
     * CONFIRMATION TASKS
     *
-    *------------------------------------------
+    *-------------------------------------------
     */
 
     ext.point('io.ox/core/notifications/task-confirmation/header').extend({
         draw: function () {
             this.append(
                 $('<legend class="section-title">').text(gt('Task invitations'))
-                    .append($('<div tabindex="1" data-action="clear" role="button" class="clear-button icon-remove">')),
+                    .append($('<div>')
+                    .attr({ tabindex: 1,
+                        'aria-label': gt('Press to hide all task invitations.'),
+                        'data-action': 'clear',
+                        'focus-id': 'task-invitation-notification-clear',
+                        role: 'button'}).addClass('clear-button icon-remove refocus')),
                 $('<div class="notifications">')
             );
         }
@@ -591,6 +609,7 @@ define('plugins/notifications/tasks/register',
         id: 'io-ox-notifications-confirmation-tasks',
         
         events: {
+            'keydown [data-action="clear"]': 'clearItems',
             'click [data-action="clear"]': 'clearItems'
         },
 
@@ -608,7 +627,8 @@ define('plugins/notifications/tasks/register',
             return this;
         },
 
-        clearItems: function () {
+        clearItems: function (e) {
+            if ((e.type === 'keydown') && (e.which !== 13)) { return; }
             //hide all items from view
             this.collection.each(function (item) {
                 hiddenInvitationItems[_.ecid(item.attributes)] = true;
