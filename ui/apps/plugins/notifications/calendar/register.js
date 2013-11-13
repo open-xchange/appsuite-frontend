@@ -301,10 +301,6 @@ define('plugins/notifications/calendar/register',
             'click [data-action="clear"]': 'clearItems'
         },
 
-        initialize: function () {
-            this.collection.on('reset add remove', this.render, this);
-        },
-
         render: function () {
 
             var baton = ext.Baton({ view: this });

@@ -118,14 +118,16 @@ define('io.ox/core/notifications',
                 //find next possible focus
                 var items = $('#io-ox-notifications .item'),
                     lastFocusItemId = lastFocused.closest('.item').attr('focus-id');
-                for (var i = 0; i < items.length; i++) {
-                    if (lastFocusItemId === $(items[i]).attr('focus-id')) {
-                        if ((i + 1) < items.length) { //prevent index out fo bounds
-                            nextFocus = $(items[i + 1]).attr('focus-id');
+                if (lastFocusItemId !== undefined) {//refocus only when inside of items (clear buttons or inbox link are outside)
+                    for (var i = 0; i < items.length; i++) {
+                        if (lastFocusItemId === $(items[i]).attr('focus-id')) {
+                            if ((i + 1) < items.length) { //prevent index out of bounds
+                                nextFocus = $(items[i + 1]).attr('focus-id');
+                            }
+                            break;
+                        } else {
+                            nextFocus = $(items[i]).attr('focus-id');
                         }
-                        break;
-                    } else {
-                        nextFocus = $(items[i]).attr('focus-id');
                     }
                 }
                 lastFocused = lastFocused.attr('focus-id');
@@ -161,7 +163,7 @@ define('io.ox/core/notifications',
                     if (found.length > 0) {//focus if its there
                         found.focus();
                     } else {//just focus first
-                        $('#io-ox-notifications .item').first().focus();
+                        $('#io-ox-notifications .refocus').first().focus();
                     }
                 }
             }
