@@ -234,7 +234,7 @@ define('io.ox/files/carousel',
                             .on('error', this.imgError) /* error doesn't seem to bubble */,
                         $('<div class="carousel-caption">').append(
                             $('<h4>').text(gt.noI18n(file.filename)),
-                            folderAPI.getBreadcrumb(file.folder_id, { handler: hChangeFolder, subfolder: false, last: false })
+                            file.folder_id ? folderAPI.getBreadcrumb(file.folder_id, { handler: hChangeFolder, subfolder: false, last: false }) : $()
                         )
                     );
                 } else {

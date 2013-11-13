@@ -46,8 +46,8 @@ define.async('io.ox/realtime/rt',
     var enroled = false;
     var traceAll = false;
 
-    var TIMEOUT = 2 * 60 * 1000;
-    var INFINITY = TIMEOUT / 5000;
+    var TIMEOUT = 10 * 1000;
+    var INFINITY = (2 * 60 * 1000) / 5000;
     var offlineCountdown;
 
     var mode = 'lazy';
@@ -207,12 +207,17 @@ define.async('io.ox/realtime/rt',
     actions.poll = function () {
         var lastFetchInterval = _.now() - lastCheck;
         var interval = _.now() - lastDelivery;
-        if (lastFetchInterval >= intervals[mode] && !purging) {
+        if (lastFetchInterval >= intervals[mode]) {
+            if (transmitting) {
+                if (api.debug) {
+                    console.log('Transmitting so skipping poll');
+                }
+            }
             lastCheck = _.now();
             if (api.debug) {
                 console.log('Polling');
             }
-            purging = true;
+            transmitting = true;
             http.GET({
                 module: 'rt',
                 params: {
@@ -237,6 +242,9 @@ define.async('io.ox/realtime/rt',
             return;
         }
         if (purging) {
+            if (api.debug) {
+                console.log('Skipping resend buffer sending, purge in progress');
+            }
             return;
         }
 
@@ -486,7 +494,7 @@ define.async('io.ox/realtime/rt',
     }
 
     function handleError(error) {
-        purging = false;
+        transmitting = false;
         if (error.code === 'RT_STANZA-1006' || error.code === 'RT_STANZA-0006' || error.code === 1006 || error.code === 6) {
             if (api.debug) {
                 console.log('Got error 1006, so resetting sequence');
@@ -503,7 +511,7 @@ define.async('io.ox/realtime/rt',
     }
 
     function handleResponse(resp) {
-        purging = false;
+        transmitting = false;
         damage.reset();
 
         var result = null;
@@ -620,7 +628,7 @@ define.async('io.ox/realtime/rt',
         }
         options.seq = seq;
         seq++;
-        purging = true;
+        transmitting = true;
         return http.PUT({
             module: 'rt',
             params: {
