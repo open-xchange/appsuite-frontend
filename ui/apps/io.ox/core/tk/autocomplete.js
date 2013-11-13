@@ -361,6 +361,7 @@ define('io.ox/core/tk/autocomplete',
                 $(this)
                     .on('keydown', fnKeyDown)
                     .on('keyup', fnKeyUp)
+                    .on('compositionend', fnKeyUp) // for IME support
                     .on('blur', o.blur)
                     .on('blur', fnBlur)
                     .attr({
@@ -370,7 +371,9 @@ define('io.ox/core/tk/autocomplete',
                     });
             });
 
-            popup.on('mousedown', blurOff).on('mouseup', blurOn);
+            if (_.device('!desktop') || _.device('ie')) {//internet explorer needs this fix too or it closes if you try to scroll
+                popup.on('mousedown', blurOff).on('mouseup', blurOn);
+            }
         }
 
         return this;
