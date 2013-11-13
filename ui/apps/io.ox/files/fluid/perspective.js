@@ -951,7 +951,8 @@ define('io.ox/files/fluid/perspective',
                             duplicates = {},
                             indexPrev,
                             indexPrevPosition,
-                            indexNextPosition;
+                            indexNextPosition,
+                            node;
 
                         //filter duplicates
                         ids = _.uniq(ids, function (file) {
@@ -1008,64 +1009,72 @@ define('io.ox/files/fluid/perspective',
                             }
                         }
 
-                        baton.allIds = allIds = ids;
+                        //something changed?
+                        if (changed.length + deleted.length + added.length + Object.keys(duplicates).length) {
+                            baton.allIds = allIds = ids;
+                            ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), baton);
 
-                        ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), baton);
+                            //use clone
+                            node = scrollpane.clone(true).attr('origin', 'clone');
 
-                        _(changed).each(function (cid) {
-                            var data = hash[cid],
-                                prev = indexPrevPosition(newIds, cid),
-                                outdated = scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]'),
-                                anchor;
+                            _(changed).each(function (cid) {
+                                var data = hash[cid],
+                                    prev = indexPrevPosition(newIds, cid),
+                                    outdated = node.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]'),
+                                    anchor;
 
-                            outdated.remove();
+                                outdated.remove();
 
-                            if (indexPrev(newIds, cid)) {
-                                anchor = scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]');
-                                if (anchor.length) {
-                                    anchor.first().after(drawFile(data));
+                                if (indexPrev(newIds, cid)) {
+                                    anchor = node.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]');
+                                    if (anchor.length) {
+                                        anchor.first().after(drawFile(data));
+                                    } else {
+                                        node.find('.files-container').prepend(drawFile(data));
+                                    }
                                 } else {
-                                    scrollpane.find('.files-container').prepend(drawFile(data));
+                                    end = end - outdated.length;
                                 }
-                            } else {
-                                end = end - outdated.length;
-                            }
-                        });
+                            });
 
-                        _(deleted).each(function (cid) {
-                            var nodes = scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]');
-                            end = end - nodes.remove().length;
-                        });
+                            _(deleted).each(function (cid) {
+                                var nodes = node.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]');
+                                end = end - nodes.remove().length;
+                            });
 
-                        _(duplicates).each(function (value, cid) {
-                            //remove all nodes for given cid except the first one
-                            var nodes = scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]');
-                            end = end - nodes.slice(1).remove().length;
-                        });
+                            _(duplicates).each(function (value, cid) {
+                                //remove all nodes for given cid except the first one
+                                var nodes = node.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]');
+                                end = end - nodes.slice(1).remove().length;
+                            });
 
-                        _(added).each(function (cid) {
-                            var data = hash[cid],
-                                prev = indexPrevPosition(newIds, cid),
-                                anchor;
+                            _(added).each(function (cid) {
+                                var data = hash[cid],
+                                    prev = indexPrevPosition(newIds, cid),
+                                    anchor;
 
-                            if (indexPrev(newIds, cid)) {
-                                anchor = scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]');
-                                if (anchor.length) {
-                                    anchor.first().after(drawFile(data));
-                                } else {
-                                    scrollpane.find('.files-container').prepend(drawFile(data));
+                                if (indexPrev(newIds, cid)) {
+                                    anchor = node.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]');
+                                    if (anchor.length) {
+                                        anchor.first().after(drawFile(data));
+                                    } else {
+                                        node.find('.files-container').prepend(drawFile(data));
+                                    }
+                                    end = end + 1;
                                 }
-                                end = end + 1;
-                            }
-                        });
-                        recalculateLayout();
+                            });
+                            scrollpane.replaceWith(node);
+                            scrollpane = node;
+
+                            recalculateLayout();
+                        }
 
                         self.selection
                                 .init(allIds)
                                 .trigger('update');
                         if (!app.folderViewIsVisible())
                             focus();
-                        hash = oldhash = oldIds = newIds = changed = deleted = added = indexPrev = indexPrevPosition = indexNextPosition = null;
+                        hash = oldhash = oldIds = newIds = changed = deleted = added = indexPrev = indexPrevPosition = indexNextPosition = node = null;
                     });
                 }
             });
