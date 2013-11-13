@@ -432,7 +432,8 @@ define('plugins/notifications/tasks/register',
     ext.point('io.ox/core/notifications/task-confirmation/header').extend({
         draw: function () {
             this.append(
-                $('<legend class="section-title">').text(gt('Task invitations')),
+                $('<legend class="section-title">').text(gt('Task invitations'))
+                    .append($('<div tabindex="1" data-action="clear" role="button" class="clear-button icon-remove">')),
                 $('<div class="notifications">')
             );
         }
@@ -588,6 +589,10 @@ define('plugins/notifications/tasks/register',
 
         className: 'notifications',
         id: 'io-ox-notifications-confirmation-tasks',
+        
+        events: {
+            'click [data-action="clear"]': 'clearItems'
+        },
 
         render: function () {
 
@@ -601,8 +606,18 @@ define('plugins/notifications/tasks/register',
             }, this);
 
             return this;
+        },
+
+        clearItems: function () {
+            //hide all items from view
+            this.collection.each(function (item) {
+                hiddenInvitationItems[_.ecid(item.attributes)] = true;
+            });
+            this.collection.reset();
         }
     });
+    
+    var hiddenInvitationItems = {};//object to store hidden items (clear button uses this)
 
     ext.point('io.ox/core/notifications/register').extend({
         id: 'confirmationTasks',
@@ -612,9 +627,11 @@ define('plugins/notifications/tasks/register',
             api.on('set:tasks:to-be-confirmed', function (e, confirmationTasks) {
                 var items = [];
                 _(confirmationTasks).each(function (task) {
-                    items.push(
-                        new Backbone.Model(task)
-                    );
+                    if (!hiddenInvitationItems[_.ecid(task)]) {
+                        items.push(
+                            new Backbone.Model(task)
+                        );
+                    }
                 });
                 notifications.collection.reset(items);
             }).on('mark:task:confirmed', function (e, ids) {
