@@ -1201,6 +1201,7 @@ define('io.ox/files/actions',
         id: 'layout-list',
         ref: 'io.ox/files/actions/layout-list',
         icon: 'icon-align-justify',
+        title: gt('List'),
         cssClasses: 'io-ox-action-link btn'
     }));
 
@@ -1210,6 +1211,7 @@ define('io.ox/files/actions',
         id: 'layout-icon',
         ref: 'io.ox/files/actions/layout-icon',
         icon: 'icon-th',
+        title: gt('Icons'),
         cssClasses: 'io-ox-action-link btn'
     }));
 
@@ -1218,6 +1220,7 @@ define('io.ox/files/actions',
         prio: 'hi',
         id: 'layout-tile',
         ref: 'io.ox/files/actions/layout-tile',
+        title: gt('Tile'),
         icon: 'icon-th-large',
         cssClasses: 'io-ox-action-link btn'
     }));

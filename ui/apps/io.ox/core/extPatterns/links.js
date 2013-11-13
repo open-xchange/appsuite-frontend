@@ -49,7 +49,8 @@ define('io.ox/core/extPatterns/links',
                         'role': 'menuitem'
                     })
                     .append(self.label ? $.txt(String(self.label)) : $())
-                    .append(self.icon ? $('<i>').addClass(String(self.icon)) : $());
+                    .append(self.icon ? $('<i>').addClass(String(self.icon)) : $())
+                    .attr('title', options.title || '');
             };
 
         this.draw = this.draw || function (baton) {
