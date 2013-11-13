@@ -1069,6 +1069,7 @@ define('io.ox/mail/view-detail',
 
     function setLabel(node, color) {
         // set proper icon class
+        color = color || 0;
         var className = 'flag-dropdown-icon ';
         className += color === 0 ? colorLabelIconEmpty : colorLabelIcon;
         className += ' flag_' + color;
