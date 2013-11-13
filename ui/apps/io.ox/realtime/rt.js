@@ -130,6 +130,7 @@ define.async('io.ox/realtime/rt',
             if (api.debug) {
                 console.log('Transmitting so skipping purge');
             }
+            purging = false;
             return;
         }
         if (!enroled) {
