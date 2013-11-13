@@ -4,7 +4,7 @@ var noop = function () {
 var createCustomFileHandler = function(handlers, builddir) {
     var options = {
         verbose: {local: false, remote: false, proxy: false},
-        prefixes: [builddir + '/apps/']
+        prefixes: [builddir]
     };
     var appsLoad = function (request, response) {
         var f = require('../appserver/middleware/appsload').create(options);

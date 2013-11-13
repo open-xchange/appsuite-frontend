@@ -12,39 +12,64 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-function create(options) {
+'use strict';
+
+(function (module) {
     var fs = require('fs');
     var url = require('url');
     var path = require('path');
+    var mime = require('connect').static.mime;
 
-    var verbose = options.verbose;
-    var prefixes = options.prefixes;
-
-    return function (request, response, next) {
-        if (request.url.slice(-3) !== '.js') {
-            return next();
-        }
-        var pathname = url.parse(request.url).pathname,
-            filename;
-        pathname = pathname.slice(pathname.indexOf('/apps/') + 6);
-        filename = prefixes.map(function (p) {
-            return p + pathname;
-        })
-        .filter(function (filename) {
-            return (path.existsSync(filename) && fs.statSync(filename).isFile());
-        })[0];
-        if (!filename) return next();
-
-        // set headers
-        if (verbose.local) console.log(filename);
-        response.setHeader('Content-Type', 'text/javascript;charset=UTF-8');
-        response.setHeader('Expires', '0');
-        response.write(fs.readFileSync(filename) + "\n/*:oxsep:*/\n");
-        response.end();
-        return true;
+    function charset(type) {
+        var t = mime.charsets.lookup(type);
+        return t ? ';charset=' + t : '';
     }
-}
 
-module.exports = {
-    create: create
-}
+    function create(options) {
+        var verbose = options.verbose;
+        var prefixes = options.prefixes;
+
+        return function (request, response, next) {
+            if ('GET' != request.method && 'HEAD' != request.method) {
+                return next();
+            }
+            var pathname = url.parse(request.url).pathname,
+                filename,
+                type;
+
+            if (/\/appsuite\/api\//.test(pathname)) {
+                return next();
+            }
+            pathname = pathname.slice(pathname.indexOf('/appsuite/') + 10);
+            pathname = pathname.replace(/^v=[^\/]+\//, '');
+            pathname = pathname.replace(/^$/, 'core');
+            filename = prefixes.map(function (p) {
+                return path.join(p, pathname);
+            })
+            .filter(function (filename) {
+                return (path.existsSync(filename) && fs.statSync(filename).isFile());
+            })[0];
+            if (!filename) {
+                if (verbose.local) console.log('localfile not found: ', pathname);
+                return next();
+            }
+
+            if (pathname === 'core' || pathname === 'signin') {
+                type = 'text/html';
+            } else {
+                type = mime.lookup(filename);
+            }
+            // set headers
+            if (verbose.local) console.log(filename);
+            response.setHeader('Content-Type', type + charset(type));
+            response.setHeader('Expires', '0');
+            response.write(fs.readFileSync(filename));
+            response.end();
+            return true;
+        };
+    }
+
+    module.exports = {
+        create: create
+    };
+}(module));
