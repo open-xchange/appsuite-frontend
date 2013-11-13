@@ -46,8 +46,8 @@ define.async('io.ox/realtime/rt',
     var enroled = false;
     var traceAll = false;
 
-    var TIMEOUT = 2 * 60 * 1000;
-    var INFINITY = TIMEOUT / 5000;
+    var TIMEOUT = 10 * 1000;
+    var INFINITY = (2 * 60 * 1000) / 5000;
     var offlineCountdown;
 
     var mode = 'lazy';
