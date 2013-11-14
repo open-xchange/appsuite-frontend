@@ -843,7 +843,9 @@ define('io.ox/mail/main',
         });
 
         // search
-        (function () {
+        function initSearch() {
+            var isSentfolder = (app.folder.get() === app.settings.get('defaultFolder/sent')) ? true : false,
+                searchSettingId = isSentfolder ? 'mail.search.sent' : 'mail.search';
 
             ext.point('io.ox/mail/search/defaults').extend({
                 from: true,
@@ -865,31 +867,42 @@ define('io.ox/mail/main',
                 defaults = ext.point('io.ox/mail/search/defaults').options(),
                 data = {}, button;
 
-            //normalise data
-            _(checkboxes).each(function (flag, name) {
-                if (flag === true) {
-                    data[name] = {
-                        name: name,
-                        label: translations[name] || name,
-                        checked: defaults[name] || false
-                    };
-                }
-            });
+            if (settings.get('options/' + searchSettingId) === undefined) {
+                //normalise data
+                _(checkboxes).each(function (flag, name) {
+                    if (flag === true) {
+                        data[name] = {
+                            name: name,
+                            label: translations[name] || name,
+                            checked: defaults[name] || false
+                        };
+                    }
+                });
+            } else {
+                data = settings.get('options/' + searchSettingId);
+            }
 
             //add dropdown button
             button = $('<button type="button" data-action="search-options" class="btn fixed-btn search-options" aria-hidden="true">')
                     .append('<i class="icon-gear">');
+            win.nodes.search.find('.dropdown').remove();
             win.nodes.search.find('.search-query-container').after(button);
 
             //add dropdown menue
             dropdownOptions({
-                id: 'mail.search',
+                id: searchSettingId,
                 anchor: button,
                 defaults: data,
                 settings: settings
             });
 
-        }());
+        }
+
+        initSearch();
+
+        app.on('folder:change', function () {
+            initSearch();
+        });
 
         // drag & drop
         win.nodes.outer.on('selection:drop', function (e, baton) {
