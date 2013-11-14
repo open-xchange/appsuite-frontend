@@ -19,7 +19,7 @@
     "karma-junit-reporter": "~0.2.1",
     "karma-spec-reporter": "0.0.6",
     "grunt-karma": "~0.6.2",
-    "jshint": "~2.1.10",
+    "jshint": "Open-Xchange-Frontend/jshint",
     "grunt-modernizr": "~0.3.0",
     "grunt-contrib-uglify": "~0.2.4",
     "grunt-contrib-jshint": "~0.6.4",
