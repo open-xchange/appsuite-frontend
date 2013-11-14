@@ -121,7 +121,7 @@ define('plugins/portal/upsellads/register',
             );
             content.on('click', function () {
                 var def = $.Deferred();
-                require(['io.ox/wizards/upsellWizard'], function (w) {
+                require(['io.ox/wizards/upsell'], function (w) {
                     w.getInstance().start({cssClass: 'upsell-wizard-container'})
                         .done(function () {})
                         .fail(def.reject);

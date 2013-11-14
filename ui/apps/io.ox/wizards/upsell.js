@@ -17,20 +17,20 @@
 * - remove ticked checkboxes after buying product
 * - show un-uncheckable checkboxes if product is owned
 */
-define('io.ox/wizards/upsellWizard', [
+define('io.ox/wizards/upsell', [
     'io.ox/core/extensions',
     'io.ox/core/wizard/registry',
     'io.ox/backbone/mini-views',
     'settings!io.ox/upsell',
     'gettext!io.ox/wizards',
-    'less!io.ox/wizards/upsellWizard.less'
+    'less!io.ox/wizards/upsell.less'
 ], function (ext, wizards, miniViews, settings, gt)  {
     'use strict';
 
     var getProducts,
         link,
         shop = settings.get('shop'),
-        point = ext.point('io.ox/wizards/upsellWizard'),
+        point = ext.point('io.ox/wizards/upsell'),
         priceFormat = '%sEUR',
         printPrice,
         Product = Backbone.Model.extend({}),
@@ -132,7 +132,7 @@ define('io.ox/wizards/upsellWizard', [
 
             /* draw cart */
             $cart.append(
-                $('<i class="icon-shopping-cart icon-2x">'),
+                $('<i class="fa fa-shopping-cart fa-2x">'),
                 $('<span class="title">').text(gt('Shopping cart')),
                 $('<br/>'),
                 $('<span class="upsell-shopping-cart-status">').text(gt('Cart is empty.'))
@@ -271,7 +271,7 @@ define('io.ox/wizards/upsellWizard', [
         getInstance: function () {
             // Create a new instance of the wizard. Note that the id of the wizard determines the extension point
             // that pages have to extend
-            return wizards.getWizard({id: 'io.ox/wizards/upsellWizard', closeable: true});
+            return wizards.getWizard({id: 'io.ox/wizards/upsell', closeable: true});
         }
     };
 });
