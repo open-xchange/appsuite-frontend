@@ -38,7 +38,7 @@ define('io.ox/calendar/month/perspective',
         lastWeek: 0,        // timestamp of the last week
         updateLoad: 8,      // amount of weeks to be loaded on scroll events
         initLoad: 2,        // amount of initial called updates
-        scrollOffset: 250,  // offset space to trigger update event on scroll stop
+        scrollOffset: _.device('smartphone') ? 130 : 250,  // offset space to trigger update event on scroll stop
         collections: {},    // all week collections of appointments
         current: null,      // current month as date object
         folder: null,
@@ -201,7 +201,13 @@ define('io.ox/calendar/month/perspective',
                 // add collection for week
                 self.collections[day] = new Backbone.Collection([]);
                 // new view
-                var view = new View({ collection: self.collections[day], day: day, folder: self.folder, pane: this.pane });
+                var view = new View({
+                    collection: self.collections[day],
+                    day: day,
+                    folder: self.folder,
+                    pane: this.pane,
+                    app: this.app
+                });
                 view.on('showAppointment', self.showAppointment, self)
                     .on('createAppoinment', self.createAppointment, self)
                     .on('openEditAppointment', self.openEditAppointment, self)
