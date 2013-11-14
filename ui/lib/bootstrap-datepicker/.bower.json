@@ -9,11 +9,11 @@
     "bootstrap": ">=3.0 <4.0"
   },
   "homepage": "https://github.com/Open-Xchange-Frontend/bootstrap-datepicker",
-  "_release": "fda46bbcf5",
+  "_release": "1e9063c08d",
   "_resolution": {
     "type": "branch",
     "branch": "bs3",
-    "commit": "fda46bbcf5747c54c3f795ed259a215ae1e1fbf6"
+    "commit": "1e9063c08d5ac3f4015944c016e02b0c7eaa090b"
   },
   "_source": "https://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git",
   "_target": "bs3",
