@@ -202,25 +202,37 @@ define('plugins/portal/flickr/register',
         model.set('candidate', true, { silent: true, validate: true });
 
         var dialog = new dialogs.ModalDialog({ async: true, width: 400 }),
-            $q = $('<input type="text" class="form-control">'),
-            $description = $('<input type="text" class="form-control">'),
-            $method = $('<select class="form-control">').append(
+            $q = $('<input id="flickr_search" type="text" class="form-control">'),
+            $description = $('<input id="flickr_desc" type="text" class="form-control">'),
+            $method = $('<select id="flickr_option" class="form-control">').append(
                 $('<option>').attr('value', 'flickr.photos.search').text(gt('flickr.photos.search')),
                 $('<option>').attr('value', 'flickr.people.getPublicPhotos').text(gt('flickr.people.getPublicPhotos'))
             ),
-            $error = $('<div>').addClass('alert alert-error').hide(),
+            $error = $('<div>').addClass('alert alert-danger').css('margin-top', '15px').hide(),
             props = model.get('props') || {};
 
         dialog.header($('<h4>').text(gt('Edit Flickr photo stream')))
             .build(function () {
                 this.getContentNode().append(
-                    $('<label>').text(gt('Search')),
-                    $q.val(props.query),
-                    $('<br>'),
-                    $method.val(props.method),
-                    $('<label>').text(gt('Description')),
-                    $description.val(props.description),
-                    $error
+                    $('<div class="row">').append(
+                        $('<div class="col-sm-12">').append(
+                            $('<label for="flickr_search">').text(gt('Search')),
+                            $q.val(props.query)
+                        )
+                    ),
+                    $('<div class="row">').append(
+                        $('<div class="col-sm-12">').append(
+                            $('<label for="flickr_option">').text(gt('Type')),
+                            $method.val(props.method)
+                        )
+                    ),
+                    $('<div class="row">').append(
+                        $('<div class="col-sm-12">').append(
+                            $('<label for="flickr_desc">').text(gt('Description')),
+                            $description.val(props.description),
+                            $error
+                        )
+                    )
                 );
             })
             .addPrimaryButton('save', gt('Save'))

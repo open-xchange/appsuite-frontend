@@ -177,7 +177,7 @@ define('io.ox/core/pubsub/subscriptions',
 
     function showErrorInline(node, label, msg) {
         node.find('div.alert').remove();
-        node.prepend($('<div class="alert alert-error alert-block">').append(
+        node.prepend($('<div class="alert alert-danger alert-block">').append(
             $('<strong>').text(label),
             $.txt(' ' + msg),
             $('<button type="button" data-dismiss="alert" class="btn btn-default close">').text('x'))
@@ -265,7 +265,7 @@ define('io.ox/core/pubsub/subscriptions',
                 $('<label>').addClass('control-label').attr('for', 'service-value').text(gt('Source')),
                 $('<div>').addClass('controls').append(
                     node = $('<select>').attr('name', 'service-value').addClass('form-control service-value').on('change', function () {
-                        userform.parent().find('.alert-error').remove();
+                        userform.parent().find('.alert-danger').remove();
                         userform.parent().find('.error').removeClass('error');
                         baton.model.setSource(findId(baton.services, node.val()));
                         buildForm(userform, baton);

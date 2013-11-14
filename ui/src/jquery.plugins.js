@@ -231,7 +231,7 @@
     }());
 
     $.alert = function (title, text, classes) {
-        return $('<div>').addClass('alert alert-block ' + (classes || 'alert-error'))
+        return $('<div>').addClass('alert alert-block ' + (classes || 'alert-danger'))
             .append(
                 $('<a>', { href: '#' }).addClass('close').attr('data-dismiss', 'alert').html('&times;'),
                 title ? $('<h4>').addClass('alert-heading').text(title) : $(),

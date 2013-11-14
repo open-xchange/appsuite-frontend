@@ -227,18 +227,26 @@ define('plugins/portal/tumblr/register',
         model.set('candidate', true, { silent: true, validate: true });
 
         var dialog = new dialogs.ModalDialog({ async: true, width: 400 }),
-            $url = $('<input type="text" class="form-control" placeholder=".tumblr.com">').placeholder(),
-            $description = $('<input type="text" class="form-control">'),
-            $error = $('<div>').addClass('alert alert-error').hide(),
+            $url = $('<input id="tumblr_url" type="text" class="form-control" placeholder=".tumblr.com">').placeholder(),
+            $description = $('<input id="tumblr_desc" type="text" class="form-control">'),
+            $error = $('<div>').addClass('alert alert-danger').css('margin-top', '15px').hide(),
             props = model.get('props') || {};
 
         dialog.header($('<h4>').text(gt('Edit Tumblr feed')))
             .build(function () {
                 this.getContentNode().append(
-                    $('<label>').text(gt('Feed URL')),
-                    $url.val(props.url),
-                    $('<label>').text(gt('Description')),
-                    $description.val(props.description),
+                    $('<div class="row">').append(
+                        $('<div class="col-sm-12">').append(
+                            $('<label for="tumblr_url">').text(gt('Feed URL')),
+                            $url.val(props.url)
+                        )
+                    ),
+                    $('<div class="row">').append(
+                        $('<div class="col-sm-12">').append(
+                            $('<label for="tumblr_desc">').text(gt('Description')),
+                            $description.val(props.description)
+                        )
+                    ),
                     $error
                 );
             })

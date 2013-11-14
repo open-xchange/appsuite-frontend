@@ -135,19 +135,27 @@ define('plugins/portal/rss/register',
         model.set('candidate', true, { silent: true, validate: true });
 
         var dialog = new dialogs.ModalDialog({ async: true }),
-            $url = $('<textarea class="form-control" rows="5">').attr('placeholder', 'http://').placeholder(),
-            $description = $('<input type="text" class="form-control">'),
-            $error = $('<div class="alert alert-error">').hide(),
+            $url = $('<textarea id="rss_url" class="form-control" rows="5">').attr('placeholder', 'http://').placeholder(),
+            $description = $('<input id="rss_desc" type="text" class="form-control">'),
+            $error = $('<div class="alert alert-danger">').css('margin-top', '15px').hide(),
             props = model.get('props') || {};
 
         dialog.header($('<h4>').text(gt('RSS Feeds')))
             .build(function () {
                 this.getContentNode().append(
-                    $('<label>').text(gt('URL')),
-                    $url.val((props.url || []).join('\n')),
-                    $('<label>').text(gt('Description')),
-                    $description.val(props.description),
-                    $error
+                    $('<div class="row">').append(
+                        $('<div class="col-sm-12">').append(
+                            $('<label for="rss_url">').text(gt('URL')),
+                            $url.val((props.url || []).join('\n'))
+                        )
+                    ),
+                    $('<div class="row">').append(
+                        $('<div class="col-sm-12">').append(
+                            $('<label for="rss_desc">').text(gt('Description')),
+                            $description.val(props.description),
+                            $error
+                        )
+                    )
                 );
             })
             .addPrimaryButton('save', gt('Save'))
