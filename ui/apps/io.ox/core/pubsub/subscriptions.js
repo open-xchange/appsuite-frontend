@@ -133,7 +133,8 @@ define('io.ox/core/pubsub/subscriptions',
                 popup.on('subscribe', function () {
 
                     popup.busy();
-                    var invalid;
+                    var module = self.model.get('entityModule'),
+                        invalid, folder;
 
                     _.each(popup.getBody().find('input'), function (input) {
                         if (!$(input).val()) {
@@ -147,12 +148,16 @@ define('io.ox/core/pubsub/subscriptions',
 
                     if (invalid) { return; }
 
+                    // add new folders under module's default folder!
+                    folder = require('settings!io.ox/core').get('folder/' + module);
+
+                    //...but drive uses current selected folder instead
+                    if (module === 'infostore')
+                        folder = app.folder.get() || folder;
                     if (baton.newFolder) {
 
                         var service = findId(baton.services, baton.model.get('source'));
 
-                        // add new folders under module's default folder!
-                        var folder = require('settings!io.ox/core').get('folder/' + self.model.get('entityModule'));
                         folderAPI.create({
                             folder: folder,
                             data: {
@@ -166,6 +171,7 @@ define('io.ox/core/pubsub/subscriptions',
                             saveModel(true);
                         });
                     } else {
+                        self.model.attributes.folder = folder;
                         saveModel();
                     }
 
