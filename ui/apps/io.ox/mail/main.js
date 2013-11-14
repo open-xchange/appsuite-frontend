@@ -720,11 +720,6 @@ define('io.ox/mail/main',
                     .done(_.lfo(drawMail))
                     .fail(_.lfo(drawFail, obj));
             }
-
-            api.on('refresh.seen', function () {
-                app.getWindow().nodes.body.find('[data-action="markread"]').trigger('redraw', obj);
-            });
-
         };
 
         showMail.cancel = function () {
