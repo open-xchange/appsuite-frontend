@@ -4411,7 +4411,7 @@ msgid ""
 "The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType\" "
 "data-widget=\"options\">weekly</a>."
 msgstr ""
-"De afspraak wordt a <href=\"#\" data-attribute=\"recurrenceType\" data-"
+"De afspraak wordt <a href=\"#\" data-attribute=\"recurrenceType\" data-"
 "widget=\"options\">wekelijks</a> herhaald."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:253
