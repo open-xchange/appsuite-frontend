@@ -231,11 +231,11 @@ define('io.ox/calendar/edit/recurrence-view',
                 this.nodes = {
                     recView: $('<div class="io-ox-recurrence-view">').hide(),
                     summary: $('<span>'),
-                    typeChoice: $('<div class="row inset">'),
-                    hint: $('<div class="row muted inset">'),
-                    alternative1: $('<div class="row inset">'),
-                    alternative2: $('<div class="row inset">'),
-                    endsChoice: $('<div class="row inset">')
+                    typeChoice: $('<div class="inset">'),
+                    hint: $('<div class="muted inset">'),
+                    alternative1: $('<div class="inset">'),
+                    alternative2: $('<div class="inset">'),
+                    endsChoice: $('<div class="inset">')
                 };
 
                 // UI state
@@ -686,7 +686,7 @@ define('io.ox/calendar/edit/recurrence-view',
                             .css('fontSize', 'small')
                     );
                 if (this.model.get('recurrence_type') !== RECURRENCE_TYPES.NO_RECURRENCE) {
-                    this.controls.checkboxLabel.css('display', 'inline-block');
+                    this.controls.checkboxLabel.css({'display': 'inline-block', 'margin-top': 0});
                     sum.append(
                         this.choice.ghost(),
                         (this.choice && this.choice.id === 'no-choice') ? $() : this.endsChoice.ghost(),
@@ -972,10 +972,10 @@ define('io.ox/calendar/edit/recurrence-view',
                             this.controls.detailToggle,
                             this.nodes.hint,
                             this.nodes.typeChoice,
-                            $('<div class="row">&nbsp;</div>'),
+                            $('<div>&nbsp;</div>'),
                             this.nodes.alternative1,
                             this.nodes.alternative2,
-                            $('<div class="row">&nbsp;</div>'),
+                            $('<div>&nbsp;</div>'),
                             this.nodes.endsChoice
                         )
                     );
