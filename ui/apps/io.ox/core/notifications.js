@@ -34,8 +34,8 @@ define('io.ox/core/notifications',
             this.$el.attr(
                     //#. %1$d number of notifications
                     //#, c-format
-                    'aria-label', gt.ngettext('You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.',
-                            'You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.', this.model.get('count')));
+                    'aria-label', gt.format(gt.ngettext('You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.',
+                            'You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.', this.model.get('count')), this.model.get('count')));
 
         },
         onToggle: function (open) {
@@ -48,8 +48,8 @@ define('io.ox/core/notifications',
                             role: 'button',
                             //#. %1$d number of notifications
                             //#, c-format
-                            'aria-label': gt.ngettext('You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.',
-                                    'You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.', this.model.get('count'))})
+                            'aria-label': gt.format(gt.ngettext('You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.',
+                                    'You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.', this.model.get('count')), this.model.get('count'))})
                 .append(
                 $('<span class="badge">').append(
                     numberNode = $('<span class="number">'),
@@ -66,7 +66,7 @@ define('io.ox/core/notifications',
                     'aria-relevant': 'all',
                     //#. %1$d number of notifications
                     //#, c-format
-                    'aria-label': gt.ngettext('You have %1$d notification', 'You have %1$d notifications', this.model.get('count'))
+                    'aria-label': gt.format(gt.ngettext('You have %1$d notification', 'You have %1$d notifications', this.model.get('count')), this.model.get('count'))
                 });
             } else {
                 numberNode.attr({role: 'alert',
@@ -75,7 +75,7 @@ define('io.ox/core/notifications',
                     'aria-relevant': 'all',
                     //#. %1$d number of notifications
                     //#, c-format
-                    'aria-label': gt.ngettext('You have %1$d notification', 'You have %1$d notifications', this.model.get('count'))
+                    'aria-label': gt.format(gt.ngettext('You have %1$d notification', 'You have %1$d notifications', this.model.get('count')), this.model.get('count'))
                 });
             }
             this.onChange();
