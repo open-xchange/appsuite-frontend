@@ -320,8 +320,9 @@ define('io.ox/mail/actions',
         },
         multiple: function (list) {
             var self = this;
-            api.markUnread(list).done(function () {
-                $(self).parents('.io-ox-multi-selection').trigger('redraw');
+            api.markUnread(list).done(function (trackerResponse, updateResponse) {
+                $(self).parents('.io-ox-multi-selection').trigger('redraw', updateResponse);
+                $(self).parents('section.mail-detail').trigger('redraw', updateResponse);
             });
         }
     });
@@ -346,8 +347,9 @@ define('io.ox/mail/actions',
         },
         multiple: function (list) {
             var self = this;
-            api.markRead(list).done(function () {
-                $(self).parents('.io-ox-multi-selection').trigger('redraw');
+            api.markRead(list).done(function (trackerResponse, updateResponse) {
+                $(self).parents('.io-ox-multi-selection').trigger('redraw', updateResponse);
+                $(self).parents('section.mail-detail').trigger('redraw', updateResponse);
             });
         }
     });
