@@ -42,7 +42,6 @@ define('io.ox/core/pubsub/subscriptions',
     },
 
     isDestructiveSubscription = function (baton) {
-        console.log(baton, baton.data.entityModule, baton.data.entityModule === 'calendar');
         return baton.data.entityModule === 'calendar';
     },
 
