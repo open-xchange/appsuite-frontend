@@ -197,7 +197,7 @@ define('io.ox/participants/views',
 
     var UserContainer = Backbone.View.extend({
         tagName: 'div',
-        className: 'participantsrow',
+        className: 'participantsrow col-xs-12',
         initialize: function (options) {
             options.collection.on('add remove reset', _.bind(this.updateContainer, this));
         },
@@ -226,7 +226,7 @@ define('io.ox/participants/views',
             return new ParticipantEntryView({
                 model: participant,
                 baton: this.options.baton,
-                className: 'col-md-6',
+                className: 'col-xs-12 col-sm-6',
                 halo: true,
                 callbacks: this.options.baton.callbacks || {}
             }).render().$el;

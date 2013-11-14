@@ -125,7 +125,7 @@ define('io.ox/calendar/edit/template',
     point.extend(new forms.InputField({
         id: 'title',
         index: 200,
-        className: 'col-md-12',
+        className: 'col-xs-12',
         labelClassName: 'control-label desc',
         control: '<input type="text" class="form-control">',
         attribute: 'title',
@@ -136,7 +136,7 @@ define('io.ox/calendar/edit/template',
     // location input
     point.extend(new forms.InputField({
         id: 'location',
-        className: 'col-md-12',
+        className: 'col-xs-12',
         labelClassName: 'control-label desc',
         index: 300,
         control: '<input type="text" class="form-control">',
@@ -144,12 +144,11 @@ define('io.ox/calendar/edit/template',
         label: gt('Location')
     }));
 
-    var datepickerSpan = _.device('small') ? 'col-md-6' : 'col-md-4';
     // start date
     point.extend(new forms.DatePicker({
         id: 'start-date',
         index: 400,
-        className: datepickerSpan,
+        className: 'col-xs-12 col-sm-6 col-md-4',
         labelClassName: 'control-label desc',
         display: 'DATETIME',
         attribute: 'start_date',
@@ -159,7 +158,7 @@ define('io.ox/calendar/edit/template',
     // end date
     point.extend(new forms.DatePicker({
         id: 'end-date',
-        className: datepickerSpan,
+        className: 'col-xs-12 col-sm-6 col-md-4',
         labelClassName: 'control-label desc',
         display: 'DATETIME',
         index: 500,
@@ -176,18 +175,16 @@ define('io.ox/calendar/edit/template',
         index: 550,
         nextTo: 'end-date',
         draw: function () {
-            if (_.device('!small')) {
-                this.append(
-                    $('<div class="col-md-4 find-free-time-top"></div>')
-                );
-            }
+            this.append(
+                $('<div class="hidden-xs col-sm-12 col-md-4 find-free-time-top"></div>')
+            );
         }
     });
 
     // full time
     point.extend(new forms.CheckBoxField({
         id: 'full_time',
-        className: 'col-md-12',
+        className: 'col-xs-12',
         labelClassName: 'control-label desc',
         label: gt('All day'),
         attribute: 'full_time',
@@ -199,7 +196,7 @@ define('io.ox/calendar/edit/template',
     // recurrence
     point.extend(new RecurrenceView({
         id: 'recurrence',
-        className: 'col-md-12',
+        className: 'col-xs-12',
         index: recurrenceIndex
     }), {
         rowClass: 'collapsed'
@@ -209,7 +206,7 @@ define('io.ox/calendar/edit/template',
     point.extend(new forms.InputField({
         id: 'note',
         index: 700,
-        className: 'col-md-12',
+        className: 'col-xs-12',
         labelClassName: 'control-label desc',
         control: '<textarea class="note form-control">',
         attribute: 'note',
@@ -225,7 +222,7 @@ define('io.ox/calendar/edit/template',
                 this.append(
                     $('<a href="#">')
                         .text(gt('Expand form'))
-                        .addClass('actionToggle spacer')
+                        .addClass('btn btn-link actionToggle spacer')
                         .on('click', function (e) {
                             e.preventDefault();
                             $('.row.collapsed', baton.parentView.$el).toggle();
@@ -422,7 +419,7 @@ define('io.ox/calendar/edit/template',
         attribute: 'notification',
         index: 1510,
         customizeNode: function () {
-            this.$el.css('paddingTop', '5px');
+            this.$el.css({'top': '-12px'});
         }
     }), {
         nextTo: 'add-participant',
@@ -543,10 +540,10 @@ define('io.ox/calendar/edit/template',
         index: 100000,
         draw: function (baton) {
             // because that works
-            if (capabilities.has('freebusy !alone') && _.device('!small')) {
+            if (capabilities.has('freebusy !alone')) {
                 var selector = '.find-free-time-top, .find-free-time legend';
                 this.parent().find(selector).append(
-                    $('<button class="btn btn-link pull-right" tabindex="1">').text(gt('Find a free time'))
+                    $('<button class="btn btn-link pull-right hidden-xs" tabindex="1">').text(gt('Find a free time'))
                         .on('click', { app: baton.app, model: baton.model }, openFreeBusyView)
                 );
             }
