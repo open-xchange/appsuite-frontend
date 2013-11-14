@@ -49,12 +49,12 @@ label { font-weight:normal; }
     }
 
     i.fa-paperclip:after {
-        content: ' ';
+        content: '\00a0';
     }
 }
 
-.breadcrumb>li+li:before { content: "/"; }
-.breadcrumb>.prefix+li:before { content: ""; }
+.breadcrumb>li+li:before { content: '/'; }
+.breadcrumb>.prefix+li:before { content: ''; }
 
 @media (min-width: 768px) {
     .form-inline .form-group {
@@ -136,7 +136,7 @@ label { font-weight:normal; }
 }
 
 .scrollable-pane:after {
-    content: "\00A0"; /* make sure margins/paddings are applied properly */
+    content: '\00a0'; /* make sure margins/paddings are applied properly */
 }
 
 .core-boot-dialog {
@@ -311,7 +311,7 @@ label { font-weight:normal; }
         & > a.closelink:focus {
             outline: 0;
             background-color: #08c;
-            i[class^="fa-"] {
+            i.fa {
                 color: @topbar-launcher-color-hover;
             }
         }
@@ -393,7 +393,7 @@ label { font-weight:normal; }
             }
         }
 
-        &.closable i[class^="fa-"]  {
+        &.closable i.fa  {
             font-size: 14px; // default font size (see Bug 27900)
             top: 0;
             margin-right: 7px;
@@ -410,7 +410,7 @@ label { font-weight:normal; }
             background-color: @topbar-launcher-background-hover;
         }
 
-        &.active-app.closable i[class^="fa-"]{
+        &.active-app.closable i.fa {
             color: @link-on-dark;
         }
 
@@ -2767,9 +2767,10 @@ a.toolbar-action, .toolbar-action > a {
 
 .dropdown {
     // fixes dropdown in breadcrumb
-    li { display: block; text-shadow: none; }
-    // icons in dropdowns
-    li [class^="fa-"], li [class*=" fa-"] { width: 2em; text-align: left; }
+    li {
+        display: block; text-shadow: none;
+        .fa { width: 2em; text-align: left; } // icons in dropdowns
+    }
 }
 
 .to-cc { position: relative }
@@ -3129,7 +3130,7 @@ input.flat-input {
                 border-bottom-width: 0;
             }
 
-            [class^="fa-"], [class*=" fa-"] {
+            .fa {
                 line-height: inherit;
                 width: 30px;
             }
