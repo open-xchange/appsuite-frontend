@@ -162,56 +162,6 @@
         return document.createTextNode(str !== undefined ? str : '');
     };
 
-    $.inlineEdit = function () {
-
-        var restore, blur, key, click;
-
-        restore = function (node, text) {
-            node.text(text).insertBefore(this);
-            $(this).remove();
-        };
-
-        blur = function (e) {
-            restore.call(this, e.data.node, $(this).val());
-        };
-
-        key = function (e) {
-            var val;
-            if (e.which === 13) {
-                // enter = update
-                if ((val = $.trim($(this).val()))) {
-                    restore.call(this, e.data.node, val);
-                    e.data.node.trigger('update', val);
-                }
-            } else if (e.which === 27) {
-                // escape = cancel
-                restore.call(this, e.data.node, e.data.text);
-            }
-        };
-
-        click = function () {
-            // create input field as replacement for current element
-            var self = $(this);
-            $('<input type="text" class="nice-input">')
-            .css({
-                width: self.width() + 'px',
-                fontSize: self.css('fontSize'),
-                fontWeight: self.css('fontWeight'),
-                lineHeight: self.css('lineHeight'),
-                marginBottom: self.css('marginBottom')
-            })
-            .val(self.text())
-            .on('keydown', { node: self, text: self.text() }, key)
-            .on('blur', { node: self }, blur)
-            .insertBefore(self)
-            .focus()
-            .select();
-            self.detach();
-        };
-
-        return $('<div>').on('dblclick', click);
-    };
-
     $.fn.scrollable = function () {
         return $('<div>').addClass('scrollable-pane').appendTo(this.addClass('scrollable'));
     };
@@ -237,24 +187,6 @@
                 title ? $('<h4>').addClass('alert-heading').text(title) : $(),
                 text ? $('<p>').text(text) : $()
             );
-    };
-
-    $.linkSplit = function (str) {
-        var regex = new RegExp('(?:https?:\/\/|ftp:\/\/|mailto:|news\\\\.|www\\\\.)[-A-Za-z0-9+&@#\/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#\/%=~_()|]', 'gi');
-        var parts = [], match, lastIndex = 0;
-
-        while (match = regex.exec(str)) {
-            parts.push($(document.createTextNode(str.substring(lastIndex, match.index))));
-            parts.push($(document.createTextNode(' ')));
-            parts.push($('<a>', {href: match[0], target: '_blank'}).text(match[0]));
-            parts.push($(document.createTextNode(' ')));
-            lastIndex = match.index + match[0].length;
-        }
-        if (lastIndex < str.length) {
-            parts.push($(document.createTextNode(str.substring(lastIndex, str.length))));
-        }
-
-        return parts;
     };
 
 }());
