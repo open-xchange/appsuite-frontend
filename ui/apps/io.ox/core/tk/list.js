@@ -101,6 +101,7 @@ define('io.ox/core/tk/list',
             this.$el.empty().append(
                 this.collection.map(this.renderListItem, this)
             );
+            this.selection.reset();
         },
 
         onAdd: function (model) {
@@ -111,17 +112,15 @@ define('io.ox/core/tk/list',
                 children = this.getItems(),
                 li = this.renderListItem(model);
 
-            if (index < children.length) {
-                // insert
-                children.eq(index).before(li);
-            } else {
-                // fast append - used by initial reset when list is empty
-                this.$el.append(li);
-            }
+            // insert or append
+            if (index < children.length) children.eq(index).before(li); else this.$el.append(li);
+            this.selection.add(model.cid, li);
         },
 
         onRemove: function (model) {
-            this.$el.find('li[data-cid="' + model.cid + '"]').remove();
+            var node = this.$el.find('li[data-cid="' + model.cid + '"]');
+            this.selection.remove(model.cid, node);
+            node.remove();
         },
 
         // called whenever a model inside the collection changes
@@ -159,6 +158,7 @@ define('io.ox/core/tk/list',
                 remove: this.onRemove,
                 reset: this.onReset
             });
+            this.selection.reset();
             return this;
         },
 
@@ -181,6 +181,11 @@ define('io.ox/core/tk/list',
             return $.when();
         },
 
+        // generate composite keys (might differ from _.cid)
+        stringify: function (data) {
+            return _.cid(data);
+        },
+
         render: function () {
             this.$el.attr({
                 'aria-multiselectable': true,
@@ -196,7 +201,7 @@ define('io.ox/core/tk/list',
                 data = model.toJSON(),
                 baton = ext.Baton({ data: data, model: model });
             // add cid and full data
-            li.attr('data-cid', _.cid(data));
+            li.attr('data-cid', this.stringify(data));
             // draw via extensions
             ext.point(this.ref + '/item').invoke('draw', li, baton);
             return li;

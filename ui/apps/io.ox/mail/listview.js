@@ -256,10 +256,10 @@ define('io.ox/mail/listview',
 
             var node, cid, model, thread, li;
 
-            node = this.selection.getNode();
+            node = this.selection.getCurrentNode();
             if (!node || node.find('.thread-size').attr('data-open') === 'true') return;
 
-            cid = node.attr('data-cid');
+            cid = node.attr('data-cid').replace(/^thread\./, '');
             if (cid === undefined) return;
 
             // get model by cid
@@ -284,10 +284,10 @@ define('io.ox/mail/listview',
 
             var node, cid;
 
-            node = this.selection.getNode();
+            node = this.selection.getCurrentNode();
             if (!node || node.find('.thread-size').attr('data-open') === 'false') return;
 
-            cid = node.attr('data-cid');
+            cid = node.attr('data-cid').replace(/^thread\./, '');
             if (cid === undefined) return;
 
             node.find('.thread-size')
@@ -318,7 +318,7 @@ define('io.ox/mail/listview',
 
         renderThreadList: function (ul, model) {
             return ul.append(
-                _(model.get('thread').slice(1))
+                _(model.get('thread'))
                 .chain()
                 .filter(function (data) {
                     return !util.isDeleted(data);

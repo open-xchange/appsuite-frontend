@@ -536,15 +536,23 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
 
                 thread = this.list.$el.find('[data-thread="' + cid + '"]');
                 expect(thread.length).toBe(1);
-                expect(thread.find('.list-item.selectable').length).toBe(9); // 10 minus 1
+                expect(thread.find('.list-item.selectable').length).toBe(10);
 
                 // cursor down
                 e = $.Event('keydown', { which: 40 });
                 $(document.activeElement).trigger(e);
 
                 // check selection
-                expect(this.list.selection.get()).toEqual([{ id: '2', folder_id: 'default0/INBOX' }]);
-                expect(thread.find('.list-item.selectable').first().is('.selected')).toBe(true);
+                expect(this.list.selection.get()).toEqual(['default0/INBOX.1']);
+                expect(thread.find('.list-item.selectable').eq(0).is('.selected')).toBe(true);
+
+                // cursor down
+                e = $.Event('keydown', { which: 40 });
+                $(document.activeElement).trigger(e);
+
+                // check selection
+                expect(this.list.selection.get()).toEqual(['default0/INBOX.2']);
+                expect(thread.find('.list-item.selectable').eq(1).is('.selected')).toBe(true);
             });
         });
     });

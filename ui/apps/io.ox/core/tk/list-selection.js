@@ -40,30 +40,34 @@ define('io.ox/core/tk/list-selection', [], function () {
 
     _.extend(Selection.prototype, {
 
+        // returns array of composite keys (strings)
         get: function () {
             // don't return jQuery's result directly, because it doesn't return a "normal" array (tests might fail)
             var list = this.view.$el.find(SELECTABLE + '.selected').map(function () {
-                return _.cid($(this).attr('data-cid'));
+                return $(this).attr('data-cid');
             });
             return _(list).toArray();
         },
 
-        getCid: function () {
-            if (this.lastIndex === -1) return;
-            return this.getItems().eq(this.lastIndex).attr('data-cid');
+        getItems: function () {
+            return this.view.$el.find(SELECTABLE);
         },
 
-        getNode: function () {
+        getNode: function (cid) {
+            this.getItems().filter('[data-cid="' + cid + '"]');
+        },
+
+        getCurrentNode: function () {
             if (this.lastIndex === -1) return;
             return this.getItems().eq(this.lastIndex);
         },
 
-        check: function (node) {
-            node.addClass('selected').attr('aria-selected', true);
+        check: function (nodes) {
+            nodes.addClass('selected').attr('aria-selected', true);
         },
 
-        uncheck: function (node) {
-            node.removeClass('selected').attr({ 'aria-selected': false, tabindex: '-1' });
+        uncheck: function (nodes) {
+            nodes.removeClass('selected').attr({ 'aria-selected': false, tabindex: '-1' });
         },
 
         toggle: function (node) {
@@ -97,15 +101,31 @@ define('io.ox/core/tk/list-selection', [], function () {
             }
         },
 
+        triggerChange: _.debounce(function () {
+            this.view.trigger('selection:change', this.get());
+        }, 100),
+
         clear: function (items) {
             items = items || this.getItems();
             this.resetTabIndex(items);
             this.resetCheckmark(items);
-            this.lastIndex = -1;
+            this.reset();
         },
 
-        getItems: function () {
-            return this.view.$el.find(SELECTABLE);
+        // a collection reset implies a clear
+        reset: function () {
+            this.lastIndex = -1;
+            this.triggerChange();
+        },
+
+        add: function (/* cid, node */) {
+            // TODO: predefined selection
+        },
+
+        remove: function (cid, node) {
+            node = node || this.getNode(cid);
+            if (!node.is('.selected')) return;
+            this.triggerChange();
         },
 
         isRange: function (e) {
@@ -171,19 +191,24 @@ define('io.ox/core/tk/list-selection', [], function () {
                 // range select / single select
                 this.select(index, items, e);
             }
+
+            this.triggerChange();
         },
 
         onClick: function (e) {
 
             var items = this.getItems(),
                 current = $(e.currentTarget),
-                index = items.index(current) || 0;
+                index = items.index(current) || 0,
+                previous = this.get();
 
             this.resetTabIndex(items);
             if (!this.isMultiple(e)) this.resetCheckmark(items);
 
             // range select / single select
             this.select(index, items, e);
+
+            if (!_.isEqual(previous, this.get())) this.triggerChange();
         }
     });
 
