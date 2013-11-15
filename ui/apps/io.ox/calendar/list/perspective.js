@@ -60,10 +60,12 @@ define('io.ox/calendar/list/perspective',
 
         // show "load more" link
         gridOptions.tail = function () {
+            // no link in empty folders
+            if (this.getIds().length < 1) return $();
             return $('<div class="vgrid-cell tail">').append(
                 //#. Label for a button which shows more upcoming
                 //#. appointments in a listview
-                $('<a href="#" tabindex="-1">').text(gt('Show more appointments'))
+                $('<a href="#" tabindex="1">').text(gt('Show more appointments'))
             );
         };
 
