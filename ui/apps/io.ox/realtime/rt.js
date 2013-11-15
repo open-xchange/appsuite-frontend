@@ -182,6 +182,7 @@ define.async('io.ox/realtime/rt',
             transmitting = false;
             handleResponse(resp);
             if (!_.isEmpty(queue.stanzas) || !_.isEmpty(ackBuffer)) {
+                purging = true;
                 purge();
             } else {
                 purging = false;
@@ -190,6 +191,7 @@ define.async('io.ox/realtime/rt',
             transmitting = false;
             handleError(resp);
             if (!_.isEmpty(queue.stanzas) || !_.isEmpty(ackBuffer)) {
+                purging = true;
                 purge();
             } else {
                 purging = false;
@@ -238,6 +240,9 @@ define.async('io.ox/realtime/rt',
             return;
         }
         if (purging) {
+            if (api.debug) {
+                console.log('Skipping flush, purging or transmission in progress');
+            }
             return;
         }
 
