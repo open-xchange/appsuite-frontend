@@ -88,6 +88,51 @@ define('io.ox/core/tk/list',
 
         }, 50),
 
+        // called when the view model changes (not collection models)
+        onModelChange: function () {
+            this.collection.reset();
+            this.busy();
+            (this.reload() || $.when()).always(this.idle);
+        },
+
+        onReset: function () {
+            this.idle();
+            this.toggleComplete(false);
+            this.$el.empty().append(
+                this.collection.map(this.renderListItem, this)
+            );
+        },
+
+        onAdd: function (model) {
+
+            this.idle();
+
+            var index = model.get('index'),
+                children = this.getItems(),
+                li = this.renderListItem(model);
+
+            if (index < children.length) {
+                // insert
+                children.eq(index).before(li);
+            } else {
+                // fast append - used by initial reset when list is empty
+                this.$el.append(li);
+            }
+        },
+
+        onRemove: function (model) {
+            this.$el.find('li[data-cid="' + model.cid + '"]').remove();
+        },
+
+        // called whenever a model inside the collection changes
+        onChange: function (model) {
+            var li = this.$el.find('li[data-cid="' + model.cid + '"]'),
+                data = model.toJSON(),
+                baton = ext.Baton({ data: data, model: model });
+            // draw via extensions
+            ext.point(this.ref + '/item').invoke('draw', li.empty(), baton);
+        },
+
         initialize: function (options) {
 
             this.ref = this.ref || options.ref;
@@ -101,12 +146,6 @@ define('io.ox/core/tk/list',
 
             // make sure busy & idle use proper this (for convenient callbacks)
             _.bindAll(this, 'busy', 'idle');
-        },
-
-        onModelChange: function () {
-            this.collection.reset();
-            this.busy();
-            (this.reload() || $.when()).always(this.idle);
         },
 
         setCollection: function (collection) {
@@ -126,6 +165,41 @@ define('io.ox/core/tk/list',
         toggleComplete: function (state) {
             this.$el.toggleClass('complete', state);
             this.complete = !!state;
+        },
+
+        // return alls items of this list
+        // the filter is important, as we might have a header
+        getItems: function () {
+            return this.$el.children('.list-item');
+        },
+
+        load: function () {
+            return $.when();
+        },
+
+        reload: function () {
+            return $.when();
+        },
+
+        render: function () {
+            this.$el.attr({
+                'aria-multiselectable': true,
+                'data-ref': this.ref,
+                'role': 'listbox',
+                'tabindex': 1
+            });
+            return this;
+        },
+
+        renderListItem: function (model) {
+            var li = this.scaffold.clone(),
+                data = model.toJSON(),
+                baton = ext.Baton({ data: data, model: model });
+            // add cid and full data
+            li.attr('data-cid', _.cid(data));
+            // draw via extensions
+            ext.point(this.ref + '/item').invoke('draw', li, baton);
+            return li;
         },
 
         getBusyIndicator: function () {
@@ -153,72 +227,6 @@ define('io.ox/core/tk/list',
             this.removeBusyIndicator();
             this.isBusy = false;
             return this;
-        },
-
-        load: function () {
-            return $.when();
-        },
-
-        reload: function () {
-            return $.when();
-        },
-
-        onReset: function () {
-            this.idle();
-            this.toggleComplete(false);
-            this.$el.empty().append(
-                this.collection.map(this.renderListItem, this)
-            );
-        },
-
-        onAdd: function (model) {
-
-            this.idle();
-
-            var index = model.get('index'),
-                children = this.$el.children('.list-item'),
-                li = this.renderListItem(model);
-
-            if (index < children.length) {
-                // insert
-                children.eq(index).before(li);
-            } else {
-                // fast append - used by initial reset when list is empty
-                this.$el.append(li);
-            }
-        },
-
-        onRemove: function (model) {
-            this.$el.find('li[data-cid="' + model.cid + '"]').remove();
-        },
-
-        onChange: function (model) {
-            var li = this.$el.find('li[data-cid="' + model.cid + '"]'),
-                data = model.toJSON(),
-                baton = ext.Baton({ data: data, model: model });
-            // draw via extensions
-            ext.point(this.ref + '/item').invoke('draw', li.empty(), baton);
-        },
-
-        render: function () {
-            this.$el.attr({
-                'aria-multiselectable': true,
-                'data-ref': this.ref,
-                'role': 'listbox',
-                'tabindex': 1
-            });
-            return this;
-        },
-
-        renderListItem: function (model) {
-            var li = this.scaffold.clone(),
-                data = model.toJSON(),
-                baton = ext.Baton({ data: data, model: model });
-            // add cid and full data
-            li.attr('data-cid', _.cid(data));
-            // draw via extensions
-            ext.point(this.ref + '/item').invoke('draw', li, baton);
-            return li;
         }
     });
 

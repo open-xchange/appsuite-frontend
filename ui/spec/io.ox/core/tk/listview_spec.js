@@ -261,6 +261,10 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
             beforeEach(function () {
                 // three undeleted, seen mails
                 this.collection.reset([createItem(3, 0), createItem(5, 1), createItem(6, 2)]);
+                // add header element
+                list.$el.append(
+                    $('<li class="list-header" style="background: red; height: 50px">')
+                );
             });
 
             it('is exptected that models have an index attribute', function () {
