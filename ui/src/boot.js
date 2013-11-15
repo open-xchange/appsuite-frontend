@@ -11,6 +11,16 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+// change ms-viewport rule for WP8 devices
+// http://mattstow.com/responsive-design-in-ie10-on-windows-phone-8.html
+if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
+    var vpRule = document.createElement('style');
+    vpRule.appendChild(
+        document.createTextNode('@-ms-viewport{width:auto!important}')
+    );
+    document.getElementsByTagName('head')[0].appendChild(vpRule);
+}
+
 // add fake console (esp. for IE)
 if (typeof window.console === 'undefined') {
     window.console = { log: $.noop, debug: $.noop, error: $.noop, warn: $.noop, info: $.noop };

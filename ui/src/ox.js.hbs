@@ -1,0 +1,33 @@
+var root = location.pathname.replace(/\/[^\/]*$/, '');
+//fix URL
+var oldRoot = root;
+root = root.replace(/^\/\//, '/');
+if (oldRoot !== root) {//only change if it's different, otherwise we get infinite reloads
+    location.href = location.href.replace(oldRoot, root);
+}
+
+window.ox = _.extend({
+    abs: location.protocol + '//' + location.host,
+    apiRoot: root + '/api',
+    base: '{{ base }}',
+    context_id: 0,
+    debug: {{ enable_debug }},
+    language: 'en_US',
+    loginLocation: 'signin',
+    logoutLocation: 'signin',
+    online: navigator.onLine !== undefined ? navigator.onLine : true,
+    relogin: function () {},
+    revision: '{{ revision }}',
+    root: root,
+    secretCookie: false, // auto-login
+    serverConfig: {},
+    session: '',
+    signin: false,
+    t0: new Date().getTime(), // for profiling
+    testTimeout: 30000,
+    ui: { session: {} },
+    user: '',
+    user_id: 0,
+    version: '{{ version }}',
+    windowState: 'foreground'
+}, window.ox);

@@ -1,10 +1,10 @@
 
-<!-- Visual overlays -->
+{{!-- Visual overlays --}}
 <div id="background-loader" class="busy"></div>
 
-<!-- Core Panel -->
+{{!-- Core Panel --}}
 <div id="io-ox-core" class="abs unselectable" style="display: none">
-    <!-- top bar -->
+    {{!-- top bar --}}
     <div id="io-ox-topbar" role="navigation" class="f6-target">
         <ul class="launchers list-unstyled" role="menubar"></ul>
         <div class="launcher-dropdown dropdown">
@@ -12,22 +12,22 @@
             <ul class="dropdown-menu"></ul>
         </div>
     </div>
-    <!-- screens -->
+    {{!-- screens --}}
     <div id="io-ox-screens" class="abs">
-        <!-- window manager -->
+        {{!-- window manager --}}
         <div id="io-ox-windowmanager" class="abs" style="display: none">
             <div id="io-ox-windowmanager-pane" class="atb"></div>
         </div>
-        <!-- empty desktop -->
+        {{!-- empty desktop --}}
         <div id="io-ox-desktop" class="abs"></div>
     </div>
 </div>
 
-<!-- Login screen -->
+{{!-- Login screen --}}
 <div id="io-ox-login-screen-decorator" style="display: none"></div>
 <div id="io-ox-login-screen" class="unselectable" style="display: block">
 
-    <!-- Background decoration -->
+    {{!-- Background decoration --}}
     <div id="io-ox-login-background" class="wallpaper"></div>
     <div id="io-ox-login-form-background"></div>
 
@@ -49,9 +49,9 @@
 
             <div class="css-table-row">
             <div class="css-table-cell" id="io-ox-login-form-container">
-                <!-- login dialog; must be hard-coded this way, otherwise browsers won't inject credentials -->
+                {{!-- login dialog; must be hard-coded this way, otherwise browsers won't inject credentials --}}
                 <form action="/appsuite/api/redirect" method="post" id="io-ox-login-form" novalidate>
-                    <input type="hidden" name="location" value=""><!-- used by redirect servlet -->
+                    <input type="hidden" name="location" value="">{{!-- used by redirect servlet --}}
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                             <input type="email" id="io-ox-login-username" name="username" tabindex="1"
@@ -88,7 +88,7 @@
                         </div>
                     </div>
 
-                    <!-- Feedback area -->
+                    {{!-- Feedback area --}}
                     <div id="io-ox-login-feedback"></div>
 
                 </form>
@@ -107,10 +107,10 @@
     </div>
 </div>
 
-<!-- offline notifier -->
+{{!-- offline notifier --}}
 <div id="io-ox-offline" style="bottom: -41px; display: none;"></div>
 
 <div id="tmp" style="display: none;"></div>
 
-<!-- blur effect overlay for browsers without cssfilter support -->
+{{!-- blur effect overlay for browsers without cssfilter support --}}
 <svg style="height:0;"><filter id="overlay-effect"><feGaussianBlur stdDeviation="2"/></filter></svg>

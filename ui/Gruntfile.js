@@ -114,6 +114,20 @@ module.exports = function (grunt) {
                     }
                 ]
             },
+            ox: {
+                options: {
+                    layout: false,
+                    ext: ''
+                },
+                files: [
+                    {
+                        src: ['ox.js.hbs'],
+                        expand: true,
+                        cwd: 'src/',
+                        dest: 'build/'
+                    }
+                ]
+            },
             appcache: {
                 options: {
                     layout: false,
@@ -213,6 +227,7 @@ module.exports = function (grunt) {
                         src: ['lib/jquery/jquery.js',
                              'lib/jquery.mobile.touch.min.js',
                              'lib/underscore/underscore.js', // load this before require.js to keep global object
+                             'build/ox.js',
                              'lib/require.js',
                              'lib/require-fix.js',
                              'lib/modernizr.js',
@@ -390,6 +405,7 @@ module.exports = function (grunt) {
 
     // Custom tasks
     grunt.registerTask('force_update', ['assemble:base', 'assemble:appcache']);
+    grunt.registerTask('bootjs', ['newer:assemble:ox', 'newer:concat:bootjs']);
 
     // Testing stuff
     grunt.loadNpmTasks('grunt-karma');

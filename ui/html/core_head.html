@@ -5,18 +5,18 @@
 <meta name="msapplication-tap-highlight" content="no">
 <meta name="google" value="notranslate">
 
-<!-- windows 8 icon to place homescreen tile -->
+{{!-- windows 8 icon to place homescreen tile --}}
 <meta id="win8Icon" name="msapplication-TileImage" content="">
 <meta id="win8TileColor" name="msapplication-TileColor" content="#3c739b">
 
-<!-- Never change status-bar-style! There is an iOS bug that freezes home screen apps once this changes. -->
+{{!-- Never change status-bar-style! There is an iOS bug that freezes home screen apps once this changes. --}}
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 <link id="favicon" rel="shortcut icon" href="v=@ version @/apps/themes/default/favicon.ico" type="image/x-icon">
 
-<!-- iOS home screen icons -->
+{{!-- iOS home screen icons --}}
 <link id="icon57" rel="apple-touch-icon" href="">
 <link id="icon72" rel="apple-touch-icon" sizes="72x72" href="">
 <link id="icon76" rel="apple-touch-icon" sizes="76x76" href="">
@@ -25,11 +25,11 @@
 <link id="icon144" rel="apple-touch-icon" sizes="144x144" href="">
 <link id="icon152" rel="apple-touch-icon" sizes="152x152" href="">
 
-<!-- iPhone 3.5" SPLASHSCREEN -->
+{{!-- iPhone 3.5" SPLASHSCREEN --}}
 <link id="splash460" href="" media="(device-width: 320px)" rel="apple-touch-startup-image">
-<!-- iPhone 3.5" (Retina) SPLASHSCREEN-->
+{{!-- iPhone 3.5" (Retina) SPLASHSCREEN --}}
 <link id="splash920" href="" media="(device-width: 320px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
-<!-- iPhone 4" (Retina) SPLASHSCREEN-->
+{{!-- iPhone 4" (Retina) SPLASHSCREEN --}}
 <link id="splash1096" href="" media="(device-aspect-ratio: 40/71)" rel="apple-touch-startup-image">
 
 <style type="text/css">
@@ -40,55 +40,6 @@ body { overflow: hidden; }
     width: 100%; height: 100%; background-color: #fff; z-index: 65300;
 }
 </style>
-
-<script>
-var root = location.pathname.replace(/\/[^\/]*$/, '');
-//fix URL
-var oldRoot = root;
-root = root.replace(/^\/\//, '/');
-if (oldRoot !== root) {//only change if it's different, otherwise we get infinite reloads
-    location.href = location.href.replace(oldRoot, root);
-}
-
-// change ms-viewport rule for WP8 devices
-// http://mattstow.com/responsive-design-in-ie10-on-windows-phone-8.html
-if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
-    var vpRule = document.createElement("style");
-    vpRule.appendChild(
-        document.createTextNode(
-            "@-ms-viewport{width:auto!important}"
-        )
-    );
-    document.getElementsByTagName("head")[0].
-        appendChild(vpRule);
-}
-
-window.ox = {
-    abs: location.protocol + '//' + location.host,
-    apiRoot: root + '/api',
-    base: '{{ base }}',
-    context_id: 0,
-    debug: {{ enable_debug }},
-    language: 'en_US',
-    loginLocation: 'signin',
-    logoutLocation: 'signin',
-    online: navigator.onLine !== undefined ? navigator.onLine : true,
-    relogin: function () {},
-    revision: '{{ revision }}',
-    root: root,
-    secretCookie: false, // auto-login
-    serverConfig: {},
-    session: '',
-    signin: false,
-    t0: new Date().getTime(), // for profiling
-    testTimeout: 30000,
-    ui: { session: {} },
-    user: '',
-    user_id: 0,
-    version: '{{ version }}',
-    windowState: 'foreground'
-};
-</script>
 
 <script src="{{ base }}/boot.js"></script>
 
