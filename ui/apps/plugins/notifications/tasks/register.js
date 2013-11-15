@@ -250,8 +250,9 @@ define('plugins/notifications/tasks/register',
                         'aria-label': gt('Press to hide all task reminders.'),
                         'data-action': 'clear',
                         'focus-id': 'task-reminder-notification-clear',
-                        role: 'button'})
-                    ),
+                        role: 'button'
+                    })
+                ),
                 $('<div class="notifications">')
             );
         }
