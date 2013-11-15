@@ -636,6 +636,7 @@ define.async('io.ox/realtime/rt',
             timeout: TIMEOUT,
             data: options
         }).pipe(function (resp) {
+            purging = false;
             var stanzas = resp.stanzas;
             resp.stanzas = [];
             // Handle the regular stanzas later
