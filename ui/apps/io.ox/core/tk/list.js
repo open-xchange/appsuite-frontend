@@ -70,19 +70,16 @@ define('io.ox/core/tk/list',
             var height = this.$el.height(),
                 scrollTop = this.$el.scrollTop(),
                 scrollHeight = this.$el.prop('scrollHeight'),
-                hidden = scrollHeight - (scrollTop + height),
-                self = this;
+                tail = scrollHeight - (scrollTop + height);
 
             // do anything?
-            if (hidden > height) return;
+            if (tail > height) return;
             // show indicator
             this.addBusyIndicator();
             // really refresh?
-            if (hidden > 0) return;
+            if (tail > 0) return;
             // load more
-            (this.busy().fetch() || $.when()).always(function () {
-                self.idle();
-            });
+            (this.busy().load() || $.when()).always(this.idle);
 
         }, 50),
 
@@ -90,15 +87,20 @@ define('io.ox/core/tk/list',
 
             this.ref = this.ref || options.ref;
             this.selection = new Selection(this);
-            this.model = options.model || new Backbone.Model();
+            this.model = new Backbone.Model();
             this.isBusy = false;
 
-            this.$el.attr({
-                'aria-multiselectable': true,
-                'data-ref': this.ref,
-                'role': 'listbox',
-                'tabindex': 1
-            });
+            // don't know why but listenTo doesn't work here
+            this.model.on('change', this.onModelChange, this);
+
+            // make sure busy & idle use proper this (for convenient callbacks)
+            _.bindAll(this, 'busy', 'idle');
+        },
+
+        onModelChange: function () {
+            this.collection.reset();
+            this.busy();
+            (this.reload() || $.when()).always(this.idle);
         },
 
         setCollection: function (collection) {
@@ -129,8 +131,7 @@ define('io.ox/core/tk/list',
 
         busy: function () {
             if (this.isBusy) return;
-            var indicator = this.addBusyIndicator();
-            indicator.find('i').attr('class', 'icon-refresh icon-spin');
+            this.addBusyIndicator().addClass('io-ox-busy').find('i').remove();
             this.isBusy = true;
             return this;
         },
@@ -142,11 +143,11 @@ define('io.ox/core/tk/list',
             return this;
         },
 
-        filter: function () {
-            return true;
+        load: function () {
+            return $.when();
         },
 
-        fetch: function () {
+        reload: function () {
             return $.when();
         },
 
@@ -179,13 +180,17 @@ define('io.ox/core/tk/list',
             var li = this.$el.find('li[data-cid="' + model.cid + '"]'),
                 data = model.toJSON(),
                 baton = ext.Baton({ data: data, model: model });
-            // filter?
-            if (!this.filter(model)) return li.addClass('hidden');
             // draw via extensions
-            ext.point(this.ref + '/item').invoke('draw', li.removeClass('hidden').empty(), baton);
+            ext.point(this.ref + '/item').invoke('draw', li.empty(), baton);
         },
 
         render: function () {
+            this.$el.attr({
+                'aria-multiselectable': true,
+                'data-ref': this.ref,
+                'role': 'listbox',
+                'tabindex': 1
+            });
             return this;
         },
 
@@ -195,8 +200,6 @@ define('io.ox/core/tk/list',
                 baton = ext.Baton({ data: data, model: model });
             // add cid and full data
             li.attr('data-cid', _.cid(data));
-            // filter?
-            if (!this.filter(model)) return li.addClass('hidden');
             // draw via extensions
             ext.point(this.ref + '/item').invoke('draw', li, baton);
             return li;

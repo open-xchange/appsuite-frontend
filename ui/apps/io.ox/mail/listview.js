@@ -19,7 +19,7 @@ define('io.ox/mail/listview',
      'io.ox/core/tk/list',
      'io.ox/core/date',
      'gettext!io.ox/core'
-    ], function (ext, util, api, account, ListView, date) {
+    ], function (ext, util, api, account, ListView, date, gt) {
 
     'use strict';
 
@@ -28,25 +28,43 @@ define('io.ox/mail/listview',
         index: 100,
         draw: function (baton) {
 
-            var data = baton.data,
-                t = data.received_date,
-                d = new date.Local(t);
+            var data = baton.data;
 
             // ignore deleted mails
             data.threadSize = _(data.thread).reduce(function (sum, data) {
                 return sum + (util.isDeleted(data) ? 0 : 1);
             }, 0);
 
+            var row = $('<div class="list-item-row">');
+            ext.point('io.ox/mail/listview/item/row1').invoke('draw', row, baton);
+            this.append(row);
+        }
+    });
+
+    ext.point('io.ox/mail/listview/item/row1').extend({
+        id: 'date',
+        index: 100,
+        draw: function (baton) {
+            var data = baton.data, t = data.received_date, d;
+            if (!_.isNumber(t)) return;
+            d = new date.Local(t);
             this.append(
-                $('<div class="list-item-row">').append(
-                    // date
-                    $('<time class="date">')
-                    .attr('datetime', d.format('yyyy-MM-dd hh:mm'))
-                    .text(_.noI18n(util.getTime(t))),
-                    // from
-                    $('<div class="from">').append(
-                        util.getFrom(data, (data.threadSize || 1) === 1 && account.is('sent|drafts', data.folder_id) ? 'to' : 'from')
-                    )
+                $('<time class="date">')
+                .attr('datetime', d.format('yyyy-MM-dd hh:mm'))
+                .text(_.noI18n(util.getTime(t)))
+            );
+        }
+    });
+
+    ext.point('io.ox/mail/listview/item/row1').extend({
+        id: 'from',
+        index: 200,
+        draw: function (baton) {
+            var data = baton.data,
+                field = data.threadSize === 1 && account.is('sent|drafts', data.folder_id) ? 'to' : 'from';
+            this.append(
+                $('<div class="from">').append(
+                    util.getFrom(data, field)
                 )
             );
         }
@@ -60,6 +78,15 @@ define('io.ox/mail/listview',
             if (util.isUnseen(data) || (('threadSize' in data) && api.tracker.isPartiallyUnseen(data))) {
                 this.addClass('unread');
             }
+        }
+    });
+
+    ext.point('io.ox/mail/listview/item').extend({
+        id: 'deleted',
+        index: 120,
+        draw: function (baton) {
+            var data = baton.data;
+            if (util.isDeleted(data)) this.addClass('deleted');
         }
     });
 
@@ -96,7 +123,7 @@ define('io.ox/mail/listview',
         index: 200,
         draw: function (baton) {
 
-            var color = api.tracker.getColorLabel(baton.data);
+            var color = baton.data.color_label || 0;
             if (color === 0) return;
 
             this.append(
@@ -137,14 +164,15 @@ define('io.ox/mail/listview',
                 thread = api.tracker.getThread(data) || data,
                 isUnread = util.isUnseen(data) || (('threadSize' in data) && api.tracker.isPartiallyUnseen(data)),
                 isAnswered = util.isAnswered(thread, data),
-                isForwarded = util.isForwarded(thread, data);
+                isForwarded = util.isForwarded(thread, data),
+                subject = $.trim(data.subject || '') || gt('No subject');
 
             this.append(
                 $('<div class="subject">').append(
                     isUnread ? $('<i class="icon-unread icon-circle" aria-hidden="true">') : [],
                     isAnswered ? $('<i class="icon-answered icon-reply" aria-hidden="true">') : [],
                     isForwarded ? $('<i class="icon-forwarded icon-mail-forward" aria-hidden="true">') : [],
-                    $('<span class="drag-title">').text(data.subject)
+                    $('<span class="drag-title">').text(subject)
                 )
             );
         }
@@ -229,7 +257,7 @@ define('io.ox/mail/listview',
             var node, cid, model, thread, li;
 
             node = this.selection.getNode();
-            if (node.find('.thread-size').attr('data-open') === 'true') return;
+            if (!node || node.find('.thread-size').attr('data-open') === 'true') return;
 
             cid = node.attr('data-cid');
             if (cid === undefined) return;
@@ -257,7 +285,7 @@ define('io.ox/mail/listview',
             var node, cid;
 
             node = this.selection.getNode();
-            if (node.find('.thread-size').attr('data-open') === 'false') return;
+            if (!node || node.find('.thread-size').attr('data-open') === 'false') return;
 
             cid = node.attr('data-cid');
             if (cid === undefined) return;

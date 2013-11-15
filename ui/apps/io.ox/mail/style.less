@@ -80,7 +80,7 @@
         }
     }
 
-    &.selected .priority {
+    .list-item.selected .priority {
         .low {
             i:first-child { opacity: 1; }
             i { opacity: 0.5; }
@@ -89,6 +89,14 @@
 
     .list-item.unread {
         .from span.person { font-weight: 800; }
+    }
+
+    .list-item.deleted {
+        text-decoration: line-through;
+        color: rgba(0, 0, 0, 0.20);
+        &.selected {
+            color: rgba(255, 255, 255, 0.50);
+        }
     }
 
     .thread-size {

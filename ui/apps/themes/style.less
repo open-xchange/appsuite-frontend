@@ -1313,13 +1313,24 @@ a.button {
     }
 
     .list-item.busy-indicator {
-        color: #888;
         background-color: #f5f5f5;
         font-size: 20px;
-        line-height: 100px;
+        line-height: 20px;
+        height: 100px;
         text-align: center;
-        padding: 0;
+        padding: 40px 0;
         margin-bottom: 0px;
+        .box-sizing(border-box);
+    }
+
+    .list-item.busy-indicator.io-ox-busy {
+        text-align: left;
+    }
+
+    // use this for empty list
+    .list-item.busy-indicator:first-child {
+        height: 100%;
+        background-color: transparent;
     }
 
     ul {
@@ -2463,7 +2474,7 @@ input.nice-input {
 
     left: @window-head-width;
 
-    box-shadow: 0 0 3px -1px rgba(0, 0, 0, 1.0) inset;
+    box-shadow: 0 0 2px -1px #aaa inset;
 
     @c1: lighten(@foldertree-sidepanel-background, 8%);
     @c2: @foldertree-sidepanel-background;

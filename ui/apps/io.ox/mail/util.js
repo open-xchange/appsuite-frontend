@@ -306,7 +306,9 @@ define('io.ox/mail/util',
             field = field || 'from';
             var list = data[field] || [['', '']],
                 dn = that.getDisplayName(list[0]);
-            if (field === 'to' && dn === '') {
+            if (field === 'from' && dn === '') {
+                dn = gt('Unknown sender');
+            } else if (field === 'to' && dn === '') {
                 dn = gt('No recipients');
             } else {
                 dn = _.noI18n(dn);
@@ -410,15 +412,15 @@ define('io.ox/mail/util',
         },
 
         isUnseen: function (data) {
-            return data && data.hasOwnProperty('flags') ? (data.flags & 32) !== 32 : undefined;
+            return data && _.isNumber(data.flags) ? (data.flags & 32) !== 32 : undefined;
         },
 
         isDeleted: function (data) {
-            return data && data.hasOwnProperty('flags') ? (data.flags & 2) === 2 : undefined;
+            return data && _.isNumber(data.flags) ? (data.flags & 2) === 2 : undefined;
         },
 
         isSpam: function (data) {
-            return data && data.hasOwnProperty('flags') ? (data.flags & 128) === 128 : undefined;
+            return data && _.isNumber(data.flags) ? (data.flags & 128) === 128 : undefined;
         },
 
         isAnswered: function () {

@@ -254,10 +254,24 @@ body.down #io-ox-login-container .alert.alert-info {
 }
 
 .io-ox-busy {
-    background-image: url(busy.gif);
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 31px 8px;
+    position: relative;
+}
+
+.io-ox-busy:before {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    /* icon-refresh */
+    font-size: 20px;
+    font-family: 'FontAwesome';
+    content: '\f021';
+    color: #aaa;
+    /* icon-spin */
+    -moz-animation: spin 1.5s infinite linear;
+    -o-animation: spin 1.5s infinite linear;
+    -webkit-animation: spin 1.5s infinite linear;
+    animation: spin 1.5s infinite linear;
 }
 
 #io-ox-login-feedback {
