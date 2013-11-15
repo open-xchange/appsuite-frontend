@@ -686,7 +686,7 @@ define('io.ox/files/api',
             thumbnail = 'thumbnailWidth' in options && 'thumbnailHeight' in options ?
                 '&scaleType=' + options.scaletype + '&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight : '',
             userContext = '&' + $.param({
-                context: String(ox.user_id) + String(ox.context_id)
+                context: [String(ox.user_id), '_' ,String(ox.context_id)]
             });
 
         query += userContext;
