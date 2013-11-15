@@ -40,15 +40,10 @@ define('io.ox/core/tk/list',
         busyIndicator: $('<li class="list-item busy-indicator"><i class="icon-chevron-down"/></li>'),
 
         events: {
-            'focus': 'onFocus',
             'focus .list-item': 'onItemFocus',
             'blur .list-item': 'onItemBlur',
             'keydown .list-item': 'onItemKeydown',
             'scroll': 'onScroll',
-        },
-
-        onFocus: function () {
-
         },
 
         onItemFocus: function () {
@@ -65,12 +60,13 @@ define('io.ox/core/tk/list',
 
         onScroll: _.debounce(function () {
 
-            if (this.isBusy) return;
+            if (this.isBusy || this.complete) return;
 
             var height = this.$el.height(),
                 scrollTop = this.$el.scrollTop(),
                 scrollHeight = this.$el.prop('scrollHeight'),
-                tail = scrollHeight - (scrollTop + height);
+                tail = scrollHeight - (scrollTop + height),
+                length = this.collection.length;
 
             // do anything?
             if (tail > height) return;
@@ -79,7 +75,16 @@ define('io.ox/core/tk/list',
             // really refresh?
             if (tail > 0) return;
             // load more
-            (this.busy().load() || $.when()).always(this.idle);
+            (this.busy().load() || $.when()).then(
+                // success
+                function checkIfComplete() {
+                    // if collection hasn't grown we assume that it's complete
+                    if (this.collection.length <= length) this.toggleComplete(true);
+                    this.idle();
+                }.bind(this),
+                // fails
+                this.idle
+            );
 
         }, 50),
 
@@ -89,6 +94,7 @@ define('io.ox/core/tk/list',
             this.selection = new Selection(this);
             this.model = new Backbone.Model();
             this.isBusy = false;
+            this.complete = false;
 
             // don't know why but listenTo doesn't work here
             this.model.on('change', this.onModelChange, this);
@@ -107,6 +113,7 @@ define('io.ox/core/tk/list',
             // remove listeners
             this.stopListening(this.collection);
             this.collection = collection;
+            this.toggleComplete(false);
             this.listenTo(collection, {
                 add: this.onAdd,
                 change: this.onChange,
@@ -114,6 +121,11 @@ define('io.ox/core/tk/list',
                 reset: this.onReset
             });
             return this;
+        },
+
+        toggleComplete: function (state) {
+            this.$el.toggleClass('complete', state);
+            this.complete = !!state;
         },
 
         getBusyIndicator: function () {
@@ -153,19 +165,23 @@ define('io.ox/core/tk/list',
 
         onReset: function () {
             this.idle();
+            this.toggleComplete(false);
             this.$el.empty().append(
                 this.collection.map(this.renderListItem, this)
             );
         },
 
         onAdd: function (model) {
+
             this.idle();
+
             var index = model.get('index'),
-                children = this.$el.children(),
+                children = this.$el.children('.list-item'),
                 li = this.renderListItem(model);
+
             if (index < children.length) {
                 // insert
-                children.eq(index - 1).after(li);
+                children.eq(index).before(li);
             } else {
                 // fast append - used by initial reset when list is empty
                 this.$el.append(li);

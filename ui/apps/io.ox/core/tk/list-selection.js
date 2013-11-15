@@ -105,7 +105,7 @@ define('io.ox/core/tk/list-selection', [], function () {
         },
 
         getItems: function () {
-            return this.view.$el.find(SELECTABLE).not('.hidden');
+            return this.view.$el.find(SELECTABLE);
         },
 
         isRange: function (e) {

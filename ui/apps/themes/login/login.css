@@ -260,6 +260,7 @@ body.down #io-ox-login-container .alert.alert-info {
 .io-ox-busy:before {
     position: absolute;
     top: 50%;
+    margin-top: -10px;
     width: 100%;
     text-align: center;
     /* icon-refresh */

@@ -249,6 +249,83 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
             });
         });
 
+        function createItem(id, index) {
+            var obj = JSON.parse('{"to":[["\\"Matthias Biggeleben\\"","matthias.biggeleben@open-xchange.com"]],"flags":32,"account_id":0,"subject":"A simple text email","color_label":0,"unreadCount":1,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"account_name":"E-Mail","id":"' + id + '","folder_id":"default0/INBOX","priority":3,"thread":[{"to":[["\\"Matthias Biggeleben\\\"","matthias.biggeleben@open-xchange.com"]],"id":"' + id + '","folder_id":"default0/INBOX","flags":32,"account_id":0,"priority":3,"subject":"A simple text email","color_label":0,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"cc":[],"account_name":"E-Mail"}],"cc":[]}');
+            obj.subject = obj.subject + ' #' + id;
+            obj.index = index;
+            return obj;
+        }
+
+        describe('reload data', function () {
+
+            beforeEach(function () {
+                // three undeleted, seen mails
+                this.collection.reset([createItem(3, 0), createItem(5, 1), createItem(6, 2)]);
+            });
+
+            it('is exptected that models have an index attribute', function () {
+                expect(this.collection.at(0).has('index')).toBe(true);
+            });
+
+            it('should have three mails', function () {
+                expect(this.list.$el.children().length).toBe(3);
+            });
+
+            it('should update properly (case: empty)', function () {
+
+                // remove all
+                this.collection.set([]);
+
+                var nodes = this.list.$el.children();
+                expect(this.list.collection.length).toBe(0);
+                expect(nodes.length).toBe(0);
+            });
+
+            it('should update properly (case: prepend)', function () {
+
+                // add 1, add 2
+                this.collection.set([createItem(1, 0), createItem(2, 1), createItem(3, 2), createItem(4, 3), createItem(6, 4)]);
+
+                var nodes = this.list.$el.children();
+                expect(this.list.collection.length).toBe(5);
+                expect(nodes.length).toBe(5);
+                expect(nodes.eq(0).is('[data-cid="default0/INBOX.1"]')).toBe(true);
+                expect(nodes.eq(1).is('[data-cid="default0/INBOX.2"]')).toBe(true);
+                expect(nodes.eq(2).is('[data-cid="default0/INBOX.3"]')).toBe(true);
+                expect(nodes.eq(3).is('[data-cid="default0/INBOX.4"]')).toBe(true);
+                expect(nodes.eq(4).is('[data-cid="default0/INBOX.6"]')).toBe(true);
+            });
+
+            it('should update properly (case: append)', function () {
+
+                // add 7
+                this.collection.reset([createItem(3, 0), createItem(5, 1), createItem(6, 2), createItem(7, 3)]);
+
+                var nodes = this.list.$el.children();
+                expect(this.list.collection.length).toBe(4);
+                expect(nodes.length).toBe(4);
+                expect(nodes.eq(0).is('[data-cid="default0/INBOX.3"]')).toBe(true);
+                expect(nodes.eq(1).is('[data-cid="default0/INBOX.5"]')).toBe(true);
+                expect(nodes.eq(2).is('[data-cid="default0/INBOX.6"]')).toBe(true);
+                expect(nodes.eq(3).is('[data-cid="default0/INBOX.7"]')).toBe(true);
+            });
+
+            it('should update properly (case: mixed)', function () {
+
+                // add 1, add 2, remove 3, add 4, remove 5, add 7
+                this.collection.set([createItem(1, 0), createItem(2, 1), createItem(4, 2), createItem(6, 3), createItem(7, 4)])
+
+                var nodes = this.list.$el.children();
+                expect(this.list.collection.length).toBe(5);
+                expect(nodes.length).toBe(5);
+                expect(nodes.eq(0).is('[data-cid="default0/INBOX.1"]')).toBe(true);
+                expect(nodes.eq(1).is('[data-cid="default0/INBOX.2"]')).toBe(true);
+                expect(nodes.eq(2).is('[data-cid="default0/INBOX.4"]')).toBe(true);
+                expect(nodes.eq(3).is('[data-cid="default0/INBOX.6"]')).toBe(true);
+                expect(nodes.eq(4).is('[data-cid="default0/INBOX.7"]')).toBe(true);
+            });
+        });
+
         describe('busy state', function () {
 
             beforeEach(function () {
@@ -277,10 +354,6 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
                 expect(this.list.getBusyIndicator().length).toBe(0);
             });
         });
-
-        function createItem(index) {
-            return JSON.parse('{"to":[["\\"Matthias Biggeleben\\"","matthias.biggeleben@open-xchange.com"]],"flags":32,"account_id":0,"subject":"A simple text email","color_label":0,"unreadCount":1,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"account_name":"E-Mail","id":"' + index + '","folder_id":"default0/INBOX","priority":3,"thread":[{"to":[["\\"Matthias Biggeleben\\\"","matthias.biggeleben@open-xchange.com"]],"id":"' + index + '","folder_id":"default0/INBOX","flags":32,"account_id":0,"priority":3,"subject":"A simple text email","color_label":0,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"cc":[],"account_name":"E-Mail"}],"cc":[]}');
-        }
 
         describe('scroll test', function () {
 
@@ -422,11 +495,11 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
 
             beforeEach(function () {
                 // create thread
-                var item = createItem(1), data = item.thread[0];
+                var item = createItem(1, 0), data = item.thread[0];
                 item.thread = _.range(1, 11).map(function (index) {
                     return _.extend({}, data, { id: index, subject: data.subject + ' #' + index });
                 });
-                this.collection.reset([item, createItem(11), createItem(12)]);
+                this.collection.reset([item, createItem(11, 1), createItem(12, 2)]);
             });
 
             it('should have one thread size indicator', function () {
