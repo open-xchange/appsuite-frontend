@@ -68,27 +68,59 @@ define('io.ox/files/api',
                 }
             },
 
-            // add file to tracker
+            /**
+             * add file to tracker
+             * @param {object} obj
+             * @return {object} tracker
+             */
             addFile: function (obj) {
-                if (obj.locked_until === 0) return;
+                if (obj.locked_until === 0) return self;
                 var cid = getCID(obj);
                 fileLocks[cid] = obj.locked_until;
                 if (obj.modified_by !== ox.user_id) {
                     explicitFileLocks[cid] = obj.locked_until;
                 }
+                return self;
             },
 
-            // remove file from tracker
+            /**
+             * resolve inconsistencies
+             * @param {object} obj
+             * @return {object} tracker
+             */
+            //resolve inconsistencies
+            updateFile: function (obj) {
+                var cid = getCID(obj),
+                    inconsistent = obj.locked_until !== (fileLocks[cid] ? fileLocks[cid] : 0);
+                if (inconsistent) {
+                    if (obj.locked_until)
+                        self.addFile(obj);
+                    else
+                        self.removeFile(cid);
+                }
+                return self;
+            },
+
+            /**
+             * remove file from tracker
+             * @param {object|string} obj/cid
+             * @return {object} tracker
+             */
             removeFile: function (obj) {
                 var cid = getCID(obj);
                 delete fileLocks[cid];
                 delete explicitFileLocks[cid];
+                return self;
             },
 
-            // clear tracker and clear timeouts
+            /**
+             * clear tracker and clear timeouts (chainable)
+             * @return {object} tracker
+             */
             clear: function () {
                 fileLocks = {};
                 explicitFileLocks = {};
+                return self;
             }
         };
 
@@ -225,7 +257,7 @@ define('io.ox/files/api',
             },
             allPost: function (data) {
                 _(data).each(function (obj) {
-                    api.tracker.addFile(obj);
+                    api.tracker.updateFile(obj);
                 });
                 return data;
             },
@@ -237,18 +269,18 @@ define('io.ox/files/api',
             },
             listPost: function (data) {
                 _(data).each(function (obj) {
-                    if (obj) api.tracker.addFile(obj);
+                    if (obj) api.tracker.updateFile(obj);
                 });
                 return data;
             },
             get: function (data) {
-                api.tracker.addFile(data);
+                api.tracker.updateFile(data);
                 return fixContentType(data);
             },
             search: function (data) {
                 _(data).each(function (obj) {
                     fixContentType(obj);
-                    api.tracker.addFile(obj);
+                    api.tracker.updateFile(obj);
                 });
                 return data;
             }
@@ -849,7 +881,7 @@ define('io.ox/files/api',
             } else {
                 // unlock
                 return _(list).map(function (obj, index) {
-                    api.tracker.removeFile(obj);
+                    // removeFile is done by propagate's get
                     var isNotLast = index < list.length - 1;
                     // last one triggers refresh.all
                     return api.propagate('change', obj, false, isNotLast);

@@ -417,7 +417,7 @@ define('io.ox/files/fluid/perspective',
                         //title
                         $('<div class="text title drag-title">').append(
                             $('<span class="not-selectable">').text(gt.noI18n(cut(file.filename || file.title, 55))).append(
-                                    (file.locked_until ? $('<i class="icon-lock">') : '')
+                                    (api.tracker.isLocked(file) ? $('<i class="icon-lock">') : '')
                                 )
                         ),
                         //smart last modified
