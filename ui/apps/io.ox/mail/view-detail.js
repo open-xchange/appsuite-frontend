@@ -683,7 +683,10 @@ define('io.ox/mail/view-detail',
 
                 // make sure this mail is seen
                 if (api.tracker.isUnseen(baton.data) && !util.isAttachment(baton.data)) {
-                    api.markRead(baton.data);
+                    api.markRead(baton.data).done(function () {
+                        //update detailview because if update was faster than cache the inline links have wrong data
+                        api.trigger('update:' + _.ecid(baton.data), baton.data);
+                    });
                 }
 
                 ext.point('io.ox/mail/detail').invoke('draw', node, baton);

@@ -319,11 +319,16 @@ define('io.ox/mail/actions',
             return e.collection.has('toplevel') && data && (data.flags & api.FLAGS.SEEN) === api.FLAGS.SEEN;
         },
         multiple: function (list) {
-            var self = this;
-            api.markUnread(list).done(function (trackerResponse, updateResponse) {
-                $(self).parents('.io-ox-multi-selection').trigger('redraw', updateResponse);
-                $(self).parents('section.mail-detail').trigger('redraw', updateResponse);
-            });
+            if ($(this).prop('disabled') !== true) {
+                $(this).prop('disabled', true);//prevent user from hammering the inline link
+                var self = this;
+                api.markUnread(list).done(function (trackerResponse, updateResponse) {
+                    $(self).parents('.io-ox-multi-selection').trigger('redraw', updateResponse);
+                    $(self).parents('section.mail-detail').trigger('redraw', updateResponse);
+                }).fail(function () {
+                    $(self).prop('disabled', false);//enable clicking again
+                });
+            }
         }
     });
 
@@ -346,11 +351,16 @@ define('io.ox/mail/actions',
             return e.collection.has('toplevel') && data && (data.flags & api.FLAGS.SEEN) === 0;
         },
         multiple: function (list) {
-            var self = this;
-            api.markRead(list).done(function (trackerResponse, updateResponse) {
-                $(self).parents('.io-ox-multi-selection').trigger('redraw', updateResponse);
-                $(self).parents('section.mail-detail').trigger('redraw', updateResponse);
-            });
+            if ($(this).prop('disabled') !== true) {
+                $(this).prop('disabled', true);//prevent user from hammering the inline link
+                var self = this;
+                api.markRead(list).done(function (trackerResponse, updateResponse) {
+                    $(self).parents('.io-ox-multi-selection').trigger('redraw', updateResponse);
+                    $(self).parents('section.mail-detail').trigger('redraw', updateResponse);
+                }).fail(function () {
+                    $(self).prop('disabled', false);//enable clicking again
+                });
+            }
         }
     });
 
