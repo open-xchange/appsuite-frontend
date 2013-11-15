@@ -188,9 +188,9 @@ define('io.ox/core/pubsub/publications',
                     folderAPI.get({ folder: baton.model.get('entity').folder }).then(
                         function success(data) {
                             var target = baton.model.get('target'),
-                                description = baton.model.get(target);
-                            description.siteName = data.title;
-                            popup.getBody().find('.siteName-value').val(data.title);
+                                description = baton.model.get(target),
+                                name = description.siteName || data.title;
+                            popup.getBody().find('.siteName-value').val(name);
                             show();
                         },
                         function fail() {
