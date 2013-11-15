@@ -12,16 +12,45 @@
  */
 
 define('io.ox/wizards/firstStart/main', [
-    'io.ox/core/extPatterns/stage'
-], function (Stage) {
+    'io.ox/core/extPatterns/stage',
+    'io.ox/core/extensions',
+    'settings!io.ox/wizards/firstStart'
+], function (Stage, ext, settings) {
 
     'use strict';
+
+    var point = ext.point('io.ox/wizards/firstStart');
 
     new Stage('io.ox/core/stages', {
         id: 'firstStartWizard',
         index: 550,
         run: function () {
-            return $.when();
+            if (ox.manifests.pluginsFor('io.ox/wizards/firstStart').length === 0 ||
+                settings.get('finished', false)) {
+                return $.when();
+            }
+            var def = $.Deferred();
+            ox.idle();
+            ox.manifests.loadPluginsFor('io.ox/wizards/firstStart')
+                .then(function () {
+                    if (point.all().length === 0) {
+                        def.resolve();
+                        return $.Deferred().reject();
+                    }
+                    return require(['io.ox/core/wizard/registry']);
+                })
+                .then(function (registry) {
+                    return registry.getWizard({
+                        id: 'io.ox/wizards/firstStart'
+                    }).start({cssClass: 'first-start-wizard'});
+                })
+                .done(function () {
+                    settings.set({finished: true}).save();
+                    ox.busy();
+                    def.resolve();
+                });
+
+            return def;
         }
     });
 
