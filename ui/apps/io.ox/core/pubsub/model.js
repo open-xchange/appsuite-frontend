@@ -176,9 +176,12 @@ define('io.ox/core/pubsub/model',
 
     ext.point('io.ox/core/pubsub/subscription/validation').extend({
         validate: function (obj, errors) {
-            var ref = obj[obj.source];
+            var ref = obj[obj.source], logincheck = false;
             if (!ref) { errors.add(gt('Model is incomplete.')); return; }
-            if (ref === {} || (!ref.login || !ref.password) && !ref.account && !ref.url) {
+            if (ref.login) {
+                logincheck = (!obj.id && ref.password) || (obj.id && !ref.password);
+            }
+            if (ref === {} || !logincheck && !ref.account && !ref.url) {
                 errors.add(gt('You have to enter a username and password to subscribe.'));
                 return;
             }
