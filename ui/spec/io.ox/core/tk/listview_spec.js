@@ -359,7 +359,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
             });
         });
 
-        describe('scroll test', function () {
+        describe('infinite scrolling', function () {
 
             var N = 30;
 
@@ -399,6 +399,28 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
 
                 runs(function () {
                     expect(this.list.getBusyIndicator().length).toBe(1);
+                });
+            });
+        });
+
+        describe('keep scroll position during updates', function () {
+
+            _([20, 50, 80]).each(function (INDEX) {
+
+                it('keeps excact scroll position during updates (INDEX=' + INDEX + ')', function () {
+
+                    // fill
+                    this.collection.reset(_.range(1, 100).map(createItem));
+                    this.list.selection.select(INDEX);
+                    var top = this.list.getItems().eq(INDEX).offset().top;
+
+                    // remove some
+                    this.collection.set(_.range(20, 80).map(createItem));
+
+                    // re-add
+                    this.collection.set(_.range(1, 100).map(createItem));
+
+                    expect(this.list.getItems().eq(INDEX).offset().top).toBe(top);
                 });
             });
         });
