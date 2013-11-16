@@ -948,6 +948,7 @@ define('io.ox/mail/actions',
         index: INDEX += 100,
         prio: 'hi',
         id: 'reply',
+        icon: 'icon-reply',
         label: gt('Reply'),
         ref: 'io.ox/mail/actions/reply'
     }));
@@ -957,6 +958,7 @@ define('io.ox/mail/actions',
         prio: 'hi',
         id: 'reply-all',
         label: gt('Reply All'),
+        icon: 'icon-reply-all',
         ref: 'io.ox/mail/actions/reply-all',
         drawDisabled: true
     }));
@@ -965,6 +967,7 @@ define('io.ox/mail/actions',
         index: INDEX += 100,
         prio: 'hi',
         id: 'forward',
+        icon: 'icon-mail-forward',
         label: gt('Forward'),
         ref: 'io.ox/mail/actions/forward'
     }));
@@ -982,6 +985,7 @@ define('io.ox/mail/actions',
         index: INDEX += 100,
         prio: 'hi',
         id: 'delete',
+        icon: 'icon-trash',
         label: gt('Delete'),
         ref: 'io.ox/mail/actions/delete'
     }));
@@ -990,6 +994,7 @@ define('io.ox/mail/actions',
         index: INDEX += 100,
         prio: 'hi',
         id: 'markunread',
+        icon: 'icon-circle',
         label:
             //#. Translation should be as short a possible
             //#. Instead of "Mark as unread" it's just "Mark unread"
@@ -1002,6 +1007,7 @@ define('io.ox/mail/actions',
         index: INDEX + 1,
         prio: 'hi',
         id: 'markread',
+        icon: 'icon-circle-blank',
         label:
             //#. Translation should be as short a possible
             //#. Instead of "Mark as read" it's just "Mark read"

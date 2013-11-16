@@ -831,6 +831,7 @@ define('io.ox/files/actions',
         id: 'delete',
         index: index += 100,
         prio: 'hi',
+        icon: 'icon-trash',
         label: gt('Delete'),
         ref: 'io.ox/files/actions/delete'
     }));
@@ -902,7 +903,7 @@ define('io.ox/files/actions',
         id: 'move',
         index: index += 100,
         label: gt('Move'),
-        prio: 'hi',
+        prio: 'lo',
         ref: 'io.ox/files/actions/move',
         section: 'file-op'
     }));
@@ -910,7 +911,7 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'copy',
         index: index += 100,
-        prio: 'hi',
+        prio: 'lo',
         label: gt('Copy'),
         ref: 'io.ox/files/actions/copy',
         section: 'file-op'

@@ -46,11 +46,15 @@ define('io.ox/core/extPatterns/links',
                         'data-prio': self.prio || 'lo',
                         'data-ref': self.ref,
                         'data-prio-mobile': self.prioMobile || 'none',
-                        'role': 'menuitem'
+                        'role': 'menuitem',
+                        'title': self.label || ''
                     })
-                    .append(self.label ? $.txt(String(self.label)) : $())
-                    .append(self.icon ? $('<i>').addClass(String(self.icon)) : $())
-                    .attr('title', options.title || '');
+                    .append(
+                        // icons are prefered over labels
+                        (self.icon && $('<i>').addClass(self.icon)) ||
+                        (self.label && $.txt(self.label || '')) ||
+                        $()
+                    );
             };
 
         this.draw = this.draw || function (baton) {
@@ -324,14 +328,15 @@ define('io.ox/core/extPatterns/links',
                             .attr({
                                 'role': 'menu',
                                 'aria-label': isSmall ? gt('Actions') : gt('More')
-                            }).append((function () {
+                            })
+                            .append(function () {
                                 if (isSmall) {
                                     return all.children().filter('[data-prio-mobile="none"]').parent();
                                 }
                                 // loop over all items and visually group by "section"
                                 var items = [], currentSection = '';
                                 lo.each(function () {
-                                    var node = $(this), section = node.attr('data-section');
+                                    var node = $(this), section = node.find('a').attr('data-section');
                                     // add divider?
                                     if (currentSection !== '' && currentSection !== section) {
                                         items.push($('<li class="divider" role="presentation">'));
@@ -341,7 +346,7 @@ define('io.ox/core/extPatterns/links',
                                     items.push(node);
                                 });
                                 return items;
-                            }()))
+                            })
                         )
                     );
                 }

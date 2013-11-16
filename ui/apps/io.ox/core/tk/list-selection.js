@@ -101,7 +101,11 @@ define('io.ox/core/tk/list-selection', [], function () {
         },
 
         triggerChange: _.debounce(function () {
-            this.view.trigger('selection:change', this.get());
+            var list = this.get(), events = 'selection:change ';
+            if (list.length === 0) events += 'selection:empty';
+            else if (list.length === 1) events += 'selection:one';
+            else if (list.length > 1) events += 'selection:multiple';
+            this.view.trigger(events, list);
         }, 100),
 
         clear: function (items) {

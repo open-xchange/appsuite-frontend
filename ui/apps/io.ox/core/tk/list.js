@@ -102,6 +102,7 @@ define('io.ox/core/tk/list',
                 this.collection.map(this.renderListItem, this)
             );
             this.selection.reset();
+            this.$el.scrollTop(0);
         },
 
         onAdd: function (model) {
@@ -115,12 +116,23 @@ define('io.ox/core/tk/list',
             // insert or append
             if (index < children.length) children.eq(index).before(li); else this.$el.append(li);
             this.selection.add(model.cid, li);
+
+            if (li.position().top <= 0) {
+                this.$el.scrollTop(this.$el.scrollTop() + li.outerHeight(true));
+            }
         },
 
         onRemove: function (model) {
-            var node = this.$el.find('li[data-cid="' + model.cid + '"]');
-            this.selection.remove(model.cid, node);
-            node.remove();
+
+            var li = this.$el.find('li[data-cid="' + model.cid + '"]'),
+                top = this.$el.scrollTop();
+
+            if (li.position().top < top) {
+                this.$el.scrollTop(top - li.outerHeight(true));
+            }
+
+            this.selection.remove(model.cid, li);
+            li.remove();
         },
 
         // called whenever a model inside the collection changes

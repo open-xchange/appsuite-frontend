@@ -460,30 +460,6 @@ define('io.ox/tasks/actions',
         ref: 'io.ox/tasks/actions/edit'
     }));
 
-    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
-        id: 'delete',
-        index: 200,
-        prio: 'hi',
-        label: gt('Delete'),
-        ref: 'io.ox/tasks/actions/delete'
-    }));
-
-    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
-        id: 'done',
-        index: 300,
-        prio: 'hi',
-        label: gt('Done'),
-        ref: 'io.ox/tasks/actions/done'
-    }));
-
-    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
-        id: 'unDone',
-        index: 310,
-        prio: 'hi',
-        label: gt('Undone'),
-        ref: 'io.ox/tasks/actions/undone'
-    }));
-
     //strange workaround because extend only takes new links instead of plain objects with draw method
     new Action('io.ox/tasks/actions/placeholder', {
         action: $.noop
@@ -491,8 +467,8 @@ define('io.ox/tasks/actions',
 
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'changeDueDate',
-        index: 400,
-        prio: 'lo',
+        index: 200,
+        prio: 'hi',
         ref: 'io.ox/tasks/actions/placeholder',
         draw: function (baton) {
             var data = baton.data;
@@ -553,6 +529,34 @@ define('io.ox/tasks/actions',
             );
         }
     }));
+
+    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
+        id: 'done',
+        index: 300,
+        prio: 'hi',
+        icon: 'icon-check-sign',
+        label: gt('Done'),
+        ref: 'io.ox/tasks/actions/done'
+    }));
+
+    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
+        id: 'unDone',
+        index: 310,
+        prio: 'hi',
+        label: gt('Undone'),
+        ref: 'io.ox/tasks/actions/undone'
+    }));
+
+
+    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
+        id: 'delete',
+        index: 400,
+        prio: 'hi',
+        icon: 'icon-trash',
+        label: gt('Delete'),
+        ref: 'io.ox/tasks/actions/delete'
+    }));
+
 
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'move',

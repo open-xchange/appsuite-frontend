@@ -750,6 +750,7 @@ define('io.ox/contacts/actions',
         id: 'delete',
         index: INDEX += 100,
         prio: 'hi',
+        icon: 'icon-trash',
         label: gt('Delete'),
         ref: 'io.ox/contacts/actions/delete'
     }));

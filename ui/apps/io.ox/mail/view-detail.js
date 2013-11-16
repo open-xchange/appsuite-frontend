@@ -410,6 +410,14 @@ define('io.ox/mail/view-detail',
         }
     });
 
+    ext.point('io.ox/mail/detail').extend({
+        id: 'ruler',
+        after: 'header',
+        draw: function () {
+            this.append('<hr>');
+        }
+    });
+
     ext.point('io.ox/mail/detail/header').extend({
         index: 100,
         id: 'contact-picture',
