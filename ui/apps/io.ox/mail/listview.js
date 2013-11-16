@@ -194,7 +194,7 @@ define('io.ox/mail/listview',
                 .text(_.noI18n(util.getTime(t))),
                 // from
                 $('<div class="from">').append(
-                    util.getFrom(data, (data.threadSize || 1) === 1 && account.is('sent|drafts', data.folder_id) ? 'to' : 'from')
+                    util.getFrom(data, 'from')
                 )
             );
         }

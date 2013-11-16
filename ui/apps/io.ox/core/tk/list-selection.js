@@ -20,22 +20,22 @@ define('io.ox/core/tk/list-selection', [], function () {
     function Selection(view) {
 
         this.lastIndex = -1;
-
         this.view = view;
-        this.view.$el.on('keydown', SELECTABLE, $.proxy(this.onKeydown, this));
-        this.view.$el.on(Modernizr.touch ? 'tap' : 'mousedown', SELECTABLE, $.proxy(this.onClick, this));
 
-        // help accessing the list via keyboard if selection is empty
         var self = this;
-        this.view.$el.on({
-            focus: function () {
+
+        this.view.$el
+            // normal click/keybard navigation
+            .on('keydown', SELECTABLE, $.proxy(this.onKeydown, this))
+            .on(Modernizr.touch ? 'tap' : 'mousedown', SELECTABLE, $.proxy(this.onClick, this))
+            // help accessing the list via keyboard if selection is empty
+            .on('focus', function () {
                 var node = $(this).find('[tabindex="1"]').first();
                 if (node.length) node.focus();
-            },
-            keydown: function (e) {
+            })
+            .on('keydown', function (e) {
                 if (e.target === this) self.onKeydown(e);
-            }
-        });
+            });
     }
 
     _.extend(Selection.prototype, {
@@ -43,10 +43,9 @@ define('io.ox/core/tk/list-selection', [], function () {
         // returns array of composite keys (strings)
         get: function () {
             // don't return jQuery's result directly, because it doesn't return a "normal" array (tests might fail)
-            var list = this.view.$el.find(SELECTABLE + '.selected').map(function () {
-                return $(this).attr('data-cid');
+            return _(this.view.$el.find(SELECTABLE + '.selected')).map(function (node) {
+                return $(node).attr('data-cid');
             });
-            return _(list).toArray();
         },
 
         getItems: function () {
@@ -159,11 +158,7 @@ define('io.ox/core/tk/list-selection', [], function () {
             } else {
                 // single select
                 node = items.eq(index).attr('tabindex', '1').focus();
-                if (this.isMultiple(e)) {
-                    this.toggle(node);
-                } else {
-                    this.check(node);
-                }
+                if (this.isMultiple(e)) this.toggle(node); else this.check(node);
                 this.lastIndex = (items.length + index) % items.length; // support for negative index like -1
             }
         },
@@ -184,14 +179,9 @@ define('io.ox/core/tk/list-selection', [], function () {
             this.resetTabIndex(items);
             this.resetCheckmark(items);
 
-            if (this.isMultiple(e)) {
-                // jump to top/bottom
-                this.select(e.which === 38 ? 0 : -1, items);
-            } else {
-                // range select / single select
-                this.select(index, items, e);
-            }
-
+            // jump to top/bottom OR range select / single select
+            index = this.isMultiple(e) ? (e.which === 38 ? 0 : -1) : index;
+            this.select(index, items, e);
             this.triggerChange();
         },
 
@@ -207,7 +197,6 @@ define('io.ox/core/tk/list-selection', [], function () {
 
             // range select / single select
             this.select(index, items, e);
-
             if (!_.isEqual(previous, this.get())) this.triggerChange();
         }
     });
