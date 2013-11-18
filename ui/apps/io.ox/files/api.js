@@ -718,7 +718,12 @@ define('io.ox/files/api',
                 (file.version !== undefined && options.version !== false ? '&version=' + file.version : ''),
             name = (file.filename ? '/' + encodeURIComponent(file.filename) : ''),
             thumbnail = 'thumbnailWidth' in options && 'thumbnailHeight' in options ?
-                '&scaleType=' + options.scaletype + '&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight : '';
+                '&scaleType=' + options.scaletype + '&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight : '',
+            userContext = '&' + $.param({
+                context: [String(ox.user_id), '_', String(ox.context_id)].join()
+            });
+
+        query += userContext;
         switch (mode) {
         case 'open':
         case 'view':
@@ -735,13 +740,13 @@ define('io.ox/files/api',
             return (file.meta && file.meta.previewUrl) ||
                 url + query + '&delivery=view' + thumbnail + '&format=preview_image&content_type=image/jpeg';
         case 'cover':
-            return ox.apiRoot + '/image/file/mp3Cover?' + 'folder=' + file.folder_id + '&id=' + file.id + thumbnail + '&content_type=image/jpeg';
+            return ox.apiRoot + '/image/file/mp3Cover?' + 'folder=' + file.folder_id + '&id=' + file.id + thumbnail + '&content_type=image/jpeg' + userContext;
         case 'zip':
             return url + '?' + $.param({
                 action: 'zipdocuments',
                 body: JSON.stringify(_.map(file, function (o) { return { id: o.id, folder_id: o.folder_id }; })),
                 session: ox.session // required here!
-            });
+            }) + userContext;
         default:
             return url + query;
         }
