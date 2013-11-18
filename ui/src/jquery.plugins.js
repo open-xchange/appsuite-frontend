@@ -95,9 +95,7 @@
             clearTimeout(self.data('busy-timeout'));
             self.data('busy-timeout', setTimeout(function () {
                 self.addClass('io-ox-busy');
-                if (empty) {
-                    self.empty();
-                }
+                if (empty) self.empty();
             }, 200));
         });
     };

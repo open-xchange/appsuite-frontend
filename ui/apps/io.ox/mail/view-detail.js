@@ -111,7 +111,7 @@ define('io.ox/mail/view-detail',
                 }
 
                 // threaded & send by myself (and not in sent folder)?
-                if (data.threadSize > 1 && util.byMyself(data) && !account.is('sent', data.folder_id)) {
+                if (data.threadSize > 1 && util.byMyself(data) && baton.app && !account.is('sent', baton.app.folder.get())) {
                     node.addClass('by-myself');
                 }
 
@@ -379,32 +379,24 @@ define('io.ox/mail/view-detail',
 
     // extensions
 
-    // inline links for each mail
-    ext.point('io.ox/mail/detail').extend(new links.InlineLinks({
-        index: 100,
-        id: 'inline-links',
-        ref: 'io.ox/mail/links/inline'
-    }));
+    // should be solved via CSS now:
+    // function resizeHeader() {
+    //     // use global selector
+    //     $('.mail-detail:visible .header-content').each(function () {
+    //         var width = _.device('smartphone') ? $(window).width() - 25 : $(this).closest('.mail-detail-pane').width() - 80;
+    //         console.log('resizeHeader', width);
+    //         if (width > 0) $(this).css('max-width', width);
+    //     });
+    // }
+
+    // $(window).on('resize orientationchange', _.debounce(resizeHeader, 100));
 
     ext.point('io.ox/mail/detail').extend({
         index: 200,
         id: 'header',
         draw: function (baton) {
             var header = $('<header>');
-            function setHeaderWidth() {
-                var wW = $(window).width();
-                return wW - 25;
-            }
-            if (_.device('smartphone')) {
-                $(window)
-                    .off('orientationchange.mailheader')
-                    .on('orientationchange.mailheader', function () {
-                    header.css('max-width', setHeaderWidth());
-                });
-                header.addClass('details-collapsed');
-                header.css('max-width', setHeaderWidth());
-
-            }
+            if (_.device('smartphone')) header.addClass('details-collapsed');
             ext.point('io.ox/mail/detail/header').invoke('draw', header, baton);
             this.append(header);
         }
@@ -418,8 +410,15 @@ define('io.ox/mail/view-detail',
         }
     });
 
-    ext.point('io.ox/mail/detail/header').extend({
+    // inline links for each mail
+    ext.point('io.ox/mail/detail/header').extend(new links.InlineLinks({
         index: 100,
+        id: 'inline-links',
+        ref: 'io.ox/mail/links/inline'
+    }));
+
+    ext.point('io.ox/mail/detail/header').extend({
+        index: 105,
         id: 'contact-picture',
         draw: function (baton) {
             this.append(function () {

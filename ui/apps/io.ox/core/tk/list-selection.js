@@ -136,7 +136,7 @@ define('io.ox/core/tk/list-selection', [], function () {
         },
 
         isMultiple: function (e) {
-            return e && (e.metaKey || e.ctrlKey);
+            return e && (e.metaKey || e.ctrlKey || $(e.target).is('.list-item-checkmark, .icon-checkmark'));
         },
 
         resetTabIndex: function (items) {

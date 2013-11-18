@@ -1289,14 +1289,38 @@ a.button {
         position: relative;
         font-size: 13px;
         line-height: 19px;
-        padding: 10px @list-view-padding 12px @list-view-padding;
+        padding: 10px @list-view-padding 12px (@list-view-padding + 30);
         cursor: pointer;
         outline: 0;
+    }
+
+    .list-item .list-item-checkmark {
+
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 30px;
+        margin: 0;
+
+        .icon-checkmark {
+            color: #ccc;
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            font-size: 18px;
+            margin-top: -10px;
+            &:before { content: "\f10c"; }
+        }
     }
 
     .list-item.selected {
         background-color: #ddd;
         -webkit-font-smoothing: antialiased;
+        .icon-checkmark {
+            color: #aaa;
+            &:before { content: "\f05d"; }
+        }
     }
 
     &.has-focus .list-item.selected {

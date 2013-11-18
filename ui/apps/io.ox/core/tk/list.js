@@ -36,7 +36,13 @@ define('io.ox/core/tk/list',
 
         // a11y: use role=option and aria-selected here; no need for "aria-posinset" or "aria-setsize"
         // see http://blog.paciellogroup.com/2010/04/html5-and-the-myth-of-wai-aria-redundance/
-        scaffold: $('<li class="list-item selectable" tabindex="-1" role="option" aria-selected="false">'),
+        scaffold: $(
+            '<li class="list-item selectable" tabindex="-1" role="option" aria-selected="false">' +
+            '<div class="list-item-checkmark"><i class="icon-checkmark"/></div>' +
+            '<div class="list-item-content"></div>' +
+            '</li>'
+        ),
+
         busyIndicator: $('<li class="list-item busy-indicator"><i class="icon-chevron-down"/></li>'),
 
         events: {
@@ -141,7 +147,7 @@ define('io.ox/core/tk/list',
                 data = model.toJSON(),
                 baton = ext.Baton({ data: data, model: model });
             // draw via extensions
-            ext.point(this.ref + '/item').invoke('draw', li.empty(), baton);
+            ext.point(this.ref + '/item').invoke('draw', li.children().eq(1).empty(), baton);
         },
 
         initialize: function (options) {
@@ -215,7 +221,7 @@ define('io.ox/core/tk/list',
             // add cid and full data
             li.attr('data-cid', this.stringify(data));
             // draw via extensions
-            ext.point(this.ref + '/item').invoke('draw', li, baton);
+            ext.point(this.ref + '/item').invoke('draw', li.children().eq(1), baton);
             return li;
         },
 

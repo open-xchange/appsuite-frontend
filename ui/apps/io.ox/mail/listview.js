@@ -167,6 +167,8 @@ define('io.ox/mail/listview',
                 isForwarded = util.isForwarded(thread, data),
                 subject = $.trim(data.subject || '') || gt('No subject');
 
+            if (data.threadSize > 1) subject = subject.replace(/^((re|fwd|aw|wg):\s?)+/i, '');
+
             this.append(
                 $('<div class="subject">').append(
                     isUnread ? $('<i class="icon-unread icon-circle" aria-hidden="true">') : [],

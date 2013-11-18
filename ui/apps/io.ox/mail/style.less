@@ -412,7 +412,7 @@
         height: 110%; /* allows hiding "Entire thread" */
     }
 
-    .mail-detail.by-myself {
+    .mail-detail.by-myself header {
         background-color: #f5f5f5;
     }
 
@@ -446,12 +446,10 @@
 
         .mail-detail {
             background-color: white;
-            padding: 20px;
         }
 
         .mail-detail:focus {
             outline: 0;
-            .box-shadow(0 1px 3px 1px #ccc);
         }
     }
 }
@@ -460,8 +458,6 @@
 
     overflow-y: visible;
     clear: both;
-
-    display: table;
     width: 100%;
 
     .io-ox-inline-links:first-child {
@@ -550,14 +546,10 @@
     }
 
     &.unread .subject {
-<<<<<<< HEAD
-        color: @link-color;
-=======
         position: relative;
         padding-left: 28px;
->>>>>>> Pagination: Introduced icons to inline actions
         .icon-unread {
-            color: @linkColor;
+            color: @link-color;
             display: inline-block;
             position: absolute;
             left: 0px;
@@ -711,6 +703,25 @@
         font-weight: bold;
     }
 
+    header {
+        font-weight: 300;
+        padding: 20px;
+    }
+
+    header + hr {
+        height: 0;
+        margin: 0;
+        border-top-color: #ccc;
+        border-bottom: 0px none;
+    }
+
+    article {
+        padding: 19px;
+        border: 1px solid white; // to work with outline
+        display: table;
+        background-color: white;
+    }
+
     article.io-ox-busy {
         min-height: 100px;
     }
@@ -720,15 +731,6 @@
         overflow-x: auto;
         box-sizing: border-box;
         margin-right: -10000px; /* funky trick */
-    }
-
-    header {
-        font-weight: 300;
-    }
-
-    header + hr {
-        margin: 20px -20px;
-        border-top-color: #ccc;
     }
 
     .content {
