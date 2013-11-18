@@ -60,16 +60,16 @@ define('io.ox/calendar/list/perspective',
 
         // show "load more" link
         gridOptions.tail = function () {
+
+            // no tail for search
+            if (this.getMode() === 'search') return $();
+
             var link = $('<div class="vgrid-cell tail">').append(
                 //#. Label for a button which shows more upcoming
                 //#. appointments in a listview by extending the search
                 //#. by one month in the future
                 $('<a href="#" tabindex="1">').text(gt('Expand timeframe by one month'))
             );
-            // no link in empty folders
-            if (grid.getIds().length === 0) {
-                link.addClass('tail-middle');
-            }
             return link;
         };
 
@@ -247,8 +247,12 @@ define('io.ox/calendar/list/perspective',
         var generateAllRequest = function (dates) {
             //var timeframe = util.getDateInterval({start_date: dates.start, end_date: dates.end});
             var endDate = new date.Local(dates.end).format(date.DATE);
-            grid.setEmptyMessage(function () {
-                return gt.format('No appointments found until %s', endDate);
+            grid.setEmptyMessage(function (mode) {
+                if (mode === 'search') {
+                    return gt.format('No appointments found for "%s"', win.search.query);
+                } else {
+                    return gt.format('No appointments found until %s', endDate);
+                }
             });
             return function () {
                 var prop = grid.prop(),
