@@ -11,16 +11,17 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 define(['io.ox/files/api', 'shared/examples/for/api'], function (api, sharedExamplesFor) {
-    var expect = chai.expect,
+    var jexpect = this.expect,
+        expect = chai.expect
         tracker = api.tracker,
         unlocked = {
             id: '1',
-            folder: '4711',
+            folder_id: '4711',
             locked_until: 0
         },
         locked = {
             id: '2',
-            folder: '4711',
+            folder_id: '4711',
             //in 3 days
             locked_until: _.now() + (604800000 / 2),
             modified_by : ox.user_id
@@ -152,6 +153,79 @@ define(['io.ox/files/api', 'shared/examples/for/api'], function (api, sharedExam
                     });
                 });
 
+            });
+        });
+
+        it('has a version cache', function () {
+            expect((api.caches.versions).get).to.be.a('function');
+        });
+        describe('has some methods', function () {
+            it('to lock/unlock files', function () {
+                var resp = api.unlock(locked);
+                jexpect(resp).toBeDeferred();
+                resp = api.lock(locked);
+                jexpect(resp).toBeDeferred();
+            });
+            describe('to construct concrete api urls', function () {
+                var mode, options = {};
+                it('to view a file', function () {
+                    var resp = api.getUrl(locked, 'view'),
+                        exp = '/api/files?action=document&folder=4711&id=2&context=1337%2C_%2C0&delivery=view';
+                    expect(resp).to.be.equal(exp);
+                    //alias
+                    expect(resp).to.be.equal(api.getUrl(locked, 'open'));
+                });
+                it('to play a file', function () {
+                    var resp = api.getUrl(locked, 'play'),
+                        exp = '/api/files?action=document&folder=4711&id=2&context=1337%2C_%2C0&delivery=view';
+                    expect(resp).to.be.equal(exp);
+                });
+                it('to download a file', function () {
+                    var resp = api.getUrl(locked, 'download'),
+                        exp = '/api/files?action=document&folder=4711&id=2&context=1337%2C_%2C0&delivery=download';
+                    expect(resp).to.be.equal(exp);
+                });
+                it('to get a thumbnail of a file', function () {
+                    var resp = api.getUrl(locked, 'thumbnail'),
+                        exp = '/api/files?action=document&folder=4711&id=2&context=1337%2C_%2C0&delivery=view&content_type=undefined';
+                    expect(resp).to.be.equal(exp);
+                });
+                it('to get a preview of a file', function () {
+                    var resp = api.getUrl(locked, 'preview'),
+                        exp = '/api/files?action=document&folder=4711&id=2&context=1337%2C_%2C0&delivery=view&format=preview_image&content_type=image/jpeg';
+                    expect(resp).to.be.equal(exp);
+                });
+                it('to get a cover of a file', function () {
+                    var resp = api.getUrl(locked, 'cover'),
+                        exp = '/api/image/file/mp3Cover?folder=4711&id=2&content_type=image/jpeg&context=1337%2C_%2C0';
+                    expect(resp).to.be.equal(exp);
+                });
+                it('to get a zip of a file', function () {
+                    var resp = api.getUrl(locked, 'zip'),
+                        exp = '/api/files?action=zipdocuments&body=%5B%7B%7D%2C%7B%7D%2C%7B%7D%2C%7B%7D%5D&session=13371337133713371337133713371337&context=1337%2C_%2C0';
+                    expect(resp).to.be.equal(exp);
+                });
+            });
+            it('to gather file information', function () {
+                //should be checked in io.ox/files/mediasupport_spec
+                expect(api.checkMediaFile).to.be.a('function');
+            });
+            it('to move/copy files within folder structure', function () {
+                expect(api.move).to.be.a('function');
+                expect(api.copy).to.be.a('function');
+            });
+            it('to handle different file versions', function () {
+                expect(api.versions).to.be.a('function');
+                expect(api.detach).to.be.a('function');
+                expect(api.uploadNewVersion).to.be.a('function');
+                expect(api.uploadNewVersionOldSchool).to.be.a('function');
+            });
+            it('to handle caching and event firing', function () {
+                expect(api.propagate).to.be.a('function');
+            });
+            it('to create and update', function () {
+                expect(api.update).to.be.a('function');
+                expect(api.uploadFile).to.be.a('function');
             });
         });
     });
