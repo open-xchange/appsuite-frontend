@@ -111,8 +111,8 @@
         WindowsPhone = ua.indexOf('Windows Phone') > -1,
         Android = (ua.indexOf('Android') > -1) ? ua.split('Android')[1].split(';')[0].trim() : undefined,
         iOS = (navigator.userAgent.match(/(iPad|iPhone|iPod)/i)) ? ua.split('like')[0].split('OS')[1].trim().replace(/_/g,'.') : undefined,
-        standalone = ("standalone" in window.navigator) && window.navigator.standalone;
-
+        standalone = ("standalone" in window.navigator) && window.navigator.standalone,
+        uiwebview = ua.indexOf('AppleWebKit/') > -1 && ua.indexOf('Mobile/11B508') > -1;
     // add namespaces, just sugar
     _.browser = {
         /** is IE? */
@@ -126,7 +126,7 @@
         /** is WebKit? */
         WebKit: webkit,
         /** Safari */
-        Safari: !Android && webkit && !chrome && !phantom ?
+        Safari: !Android && webkit && !chrome && !phantom && !uiwebview ?
             (standalone ? iOS : ua.split('Version/')[1].split(' Safari')[0]) : undefined,
         /** PhantomJS (needed for headless spec runner) */
         PhantomJS: webkit && phantom ?
@@ -137,6 +137,7 @@
         /** is Firefox? */
         Firefox: (ua.indexOf('Gecko') > -1 && ua.indexOf('Firefox') > -1 && ua.indexOf('KHTML') === -1) ?
             ua.split(/Firefox(\/| )/)[2].split('.')[0] : undefined,
+        UIWebView: uiwebview,
         /** OS **/
         Blackberry: Blackberry,
         WindowsPhone: (WindowsPhone && (ua.indexOf('IEMobile/10.0') > -1 )) ? true : undefined, // no version here yet
@@ -222,6 +223,11 @@
             display.tablet = display.medium && mobileOS; // maybe to fuzzy...
             display.desktop = !mobileOS;
             _.displayInfo = display;
+            if (display.small) {
+                $('html').addClass('x-small');
+            } else {
+                $('html').removeClass('x-small');
+            }
         },
         // combination of browser & display
         device: function (condition, debug) {
@@ -284,6 +290,8 @@
          */
         deserialize: deserialize
     });
+
+    $(window).resize(_.recheckDevice);
 
     _.url = {
         /**
