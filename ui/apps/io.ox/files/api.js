@@ -84,12 +84,13 @@ define('io.ox/files/api',
             },
 
             /**
-             * resolve inconsistencies
+             * wrapper to add/remove file; resolves inconsistencies
              * @param {object} obj
              * @return {object} tracker
              */
-            //resolve inconsistencies
             updateFile: function (obj) {
+                obj = _.isObject(obj) ? obj : {};
+
                 var cid = getCID(obj),
                     inconsistent = obj.locked_until !== (fileLocks[cid] ? fileLocks[cid] : 0);
                 if (inconsistent) {
