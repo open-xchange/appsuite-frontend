@@ -296,28 +296,22 @@ define('io.ox/files/api',
     // publish tracker
     api.tracker = tracker;
 
-    /**
-     * TOOD: deprecated/unused? (31f5a4a, b856ca5)
-     * @param  {object} options
-     * @return {deferred}
-     */
-    api.getUpdates = function (options) {
-
-        var params = {
-            action: 'updates',
-            columns: '20,23,1,700,702,703,706',
-            folder: options.folder,
-            timestamp: options.timestamp,
-            ignore: 'deleted'
-            /*sort: '700',
-            order: 'asc'*/
-        };
-
-        return http.GET({
-            module: 'files',
-            params: params
-        });
-    };
+    // deprecated/unused? (31f5a4a, b856ca5)
+    // api.getUpdates = function (options) {
+    //     var params = {
+    //         action: 'updates',
+    //         columns: '20,23,1,700,702,703,706',
+    //         folder: options.folder,
+    //         timestamp: options.timestamp,
+    //         ignore: 'deleted'
+    //         /*sort: '700',
+    //         order: 'asc'*/
+    //     };
+    //     return http.GET({
+    //         module: 'files',
+    //         params: params
+    //     });
+    // };
 
     api.caches.versions = new cache.SimpleCache('files-versions', true);
 
@@ -581,33 +575,28 @@ define('io.ox/files/api',
             });
     };
 
-    /**
-     * TODO: deprecated/unused?
-     */
-    api.create = function (options) {
-
-        options = $.extend({
-            folder: coreConfig.get('folder/infostore')
-        }, options || {});
-
-        if (!options.json.folder_id) {
-            options.json.folder_id = options.folder;
-        }
-
-        return http.PUT({
-                module: 'files',
-                params: { action: 'new' },
-                data: options.json,
-                appendColumns: false
-            })
-            .pipe(function (data) {
-                // clear folder cache
-                return api.propagate('new', { folder_id: options.folder }).pipe(function () {
-                    api.trigger('create.file', {id: data, folder: options.folder});
-                    return { folder_id: String(options.folder), id: String(data ? data : 0) };
-                });
-            });
-    };
+    // deprecated/unused; commented out on 18.11.2013
+    // api.create = function (options) {
+    //     options = $.extend({
+    //         folder: coreConfig.get('folder/infostore')
+    //     }, options || {});
+    //     if (!options.json.folder_id) {
+    //         options.json.folder_id = options.folder;
+    //     }
+    //     return http.PUT({
+    //             module: 'files',
+    //             params: { action: 'new' },
+    //             data: options.json,
+    //             appendColumns: false
+    //         })
+    //         .pipe(function (data) {
+    //             // clear folder cache
+    //             return api.propagate('new', { folder_id: options.folder }).pipe(function () {
+    //                 api.trigger('create.file', {id: data, folder: options.folder});
+    //                 return { folder_id: String(options.folder), id: String(data ? data : 0) };
+    //             });
+    //         });
+    // };
 
     /**
      * update caches and fire events (if not suppressed)
