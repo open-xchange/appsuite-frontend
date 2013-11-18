@@ -13,6 +13,9 @@
 
 define('fixture', {
     load: function (name, parentRequire, load, config) {
-        return parentRequire(['/base/spec/fixtures/' + name], load);
+        if (name.substr(-5,5) === '.json') {
+            return $.getJSON('/base/spec/fixtures/' + name, load, load.error);
+        }
+        return require(['/base/spec/fixtures/' + name], load);
     }
 });
