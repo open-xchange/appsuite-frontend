@@ -10,7 +10,7 @@
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
-define(['io.ox/files/api'], function (api) {
+define(['io.ox/files/api', 'shared/examples/for/api'], function (api, sharedExamplesFor) {
     var expect = chai.expect,
         tracker = api.tracker,
         unlocked = {
@@ -42,6 +42,9 @@ define(['io.ox/files/api'], function (api) {
         };
 
     describe('files API', function () {
+
+        //use shared examples
+        sharedExamplesFor(api);
 
         //tracker
         describe('has a tracker', function () {

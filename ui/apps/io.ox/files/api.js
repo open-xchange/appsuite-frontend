@@ -89,7 +89,7 @@ define('io.ox/files/api',
              * @return {object} tracker
              */
             updateFile: function (obj) {
-                obj = _.isObject(obj) ? obj : {};
+                obj = _.isObject(obj) ? obj : {};
 
                 var cid = getCID(obj),
                     inconsistent = obj.locked_until !== (fileLocks[cid] ? fileLocks[cid] : 0);
