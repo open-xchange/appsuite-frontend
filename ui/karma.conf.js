@@ -20,6 +20,7 @@ module.exports = function(config) {
     files: [
         'spec/main-test.js',
         {pattern: 'spec/**/*_spec.js', included: false},
+        {pattern: 'spec/fixtures/**/*.*', included: false, served: true},
         {pattern: 'spec/shared/**/*.js'},
         {pattern: 'apps/**/*.js', included: false}
     ],
