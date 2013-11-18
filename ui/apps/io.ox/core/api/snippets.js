@@ -45,14 +45,19 @@ define('io.ox/core/api/snippets',
                 action: 'all'
             }
         })
-        .then(function (data) {
-            cache = _(data).map(function (sig) {
-                // robustness: snippet migration
-                sig.misc = $.extend({ insertion: 'below'}, sig.misc || {});
-                return sig;
-            });
-            return cache;
-        });
+        .then(
+            function success(data) {
+                cache = _(data).map(function (sig) {
+                    // robustness: snippet migration
+                    sig.misc = $.extend({ insertion: 'below'}, sig.misc || {});
+                    return sig;
+                });
+                return cache;
+            },
+            function fail() {
+                return (cache = []);
+            }
+        );
     };
 
     /**

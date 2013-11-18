@@ -133,6 +133,8 @@ define('io.ox/core/tk/list',
             var li = this.$el.find('li[data-cid="' + model.cid + '"]'),
                 top = this.$el.scrollTop();
 
+            if (li.length === 0) return;
+
             if (li.position().top < top) {
                 this.$el.scrollTop(top - li.outerHeight(true));
             }

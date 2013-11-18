@@ -74,10 +74,9 @@ define('io.ox/mail/listview',
         id: 'unread',
         index: 110,
         draw: function (baton) {
-            var data = baton.data;
-            if (util.isUnseen(data) || (('threadSize' in data) && api.tracker.isPartiallyUnseen(data))) {
-                this.addClass('unread');
-            }
+            var data = baton.data,
+                unread = util.isUnseen(data) || (('threadSize' in data) && api.tracker.isPartiallyUnseen(data));
+            this.parent().toggleClass('unread', unread);
         }
     });
 
@@ -85,8 +84,7 @@ define('io.ox/mail/listview',
         id: 'deleted',
         index: 120,
         draw: function (baton) {
-            var data = baton.data;
-            if (util.isDeleted(data)) this.addClass('deleted');
+            this.parent().toggleClass('deleted', util.isDeleted(baton.data));
         }
     });
 
