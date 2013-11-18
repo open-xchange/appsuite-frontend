@@ -183,7 +183,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 var self = this;
                 this.model.save().then(function (id) {
                     //first rule gets 0
-                    if (!_.isUndefined(id)) {
+                    if (!_.isUndefined(id) && !_.isNull(id)) {
                         self.model.set('id', id);
                         self.options.listView.collection.add(self.model);
                     }
