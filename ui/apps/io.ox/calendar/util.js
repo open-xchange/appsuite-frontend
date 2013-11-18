@@ -196,14 +196,14 @@ define('io.ox/calendar/util',
             // past?
             if (diff < 0) {
                 if (diff >= -1 * date.DAY) {
-                    return gt('Yesterday');
+                    return gt('Yesterday') + ', ' + d.format(date.DATE);
                 }
             } else {
                 // future
                 if (diff < date.DAY) {
-                    return gt('Today');
+                    return gt('Today') + ', ' + d.format(date.DATE);
                 } else if (diff < 2 * date.DAY) {
-                    return gt('Tomorrow');
+                    return gt('Tomorrow') + ', ' + d.format(date.DATE);
                 } else {
                     return d.format('EE, ') + d.format(date.DATE);
                 }

@@ -60,13 +60,17 @@ define('io.ox/calendar/list/perspective',
 
         // show "load more" link
         gridOptions.tail = function () {
-            // no link in empty folders
-            if (this.getIds().length < 1) return $();
-            return $('<div class="vgrid-cell tail">').append(
+            var link = $('<div class="vgrid-cell tail">').append(
                 //#. Label for a button which shows more upcoming
-                //#. appointments in a listview
-                $('<a href="#" tabindex="1">').text(gt('Show more appointments'))
+                //#. appointments in a listview by extending the search
+                //#. by one month in the future
+                $('<a href="#" tabindex="1">').text(gt('Expand timeframe by one month'))
             );
+            // no link in empty folders
+            if (grid.getIds().length === 0) {
+                link.addClass('tail-middle');
+            }
+            return link;
         };
 
         grid = new VGrid(left, gridOptions);
@@ -241,6 +245,11 @@ define('io.ox/calendar/list/perspective',
          * @return {function}       the all request function for the vgrid
          */
         var generateAllRequest = function (dates) {
+            //var timeframe = util.getDateInterval({start_date: dates.start, end_date: dates.end});
+            var endDate = new date.Local(dates.end).format(date.DATE);
+            grid.setEmptyMessage(function () {
+                return gt.format('No appointments found until %s', endDate);
+            });
             return function () {
                 var prop = grid.prop(),
                     start = dates.start,
