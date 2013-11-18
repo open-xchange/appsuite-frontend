@@ -132,14 +132,7 @@ define('io.ox/mail/accounts/settings',
             alertPlaceholder.find('.alert').remove();
             alertPlaceholder.find('.busynotice').remove();
             alertPlaceholder.append(
-                $('<div>')
-                .addClass('alert alert-danger alert-block')
-                .append(
-                    $('<a>').attr({ href: '#', 'data-dismiss': 'alert', 'aria-label': message + '. ' + gt('Press [enter] to close this alertbox.'), 'role': 'button' })
-                    .addClass('close')
-                    .html('&times;'),
-                    $('<p tabindex="1">').text(message)
-                )
+                $.alert({message: message, dismissable: true})
             );
         },
 

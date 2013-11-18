@@ -216,7 +216,7 @@ $(window).load(function () {
             if (typeof node === 'string') node = $.txt(gt(node));
 
             $('#io-ox-login-feedback').empty().append(
-                $('<div role="alert" class="selectable-text alert alert-block alert-info">').append(
+                $('<div role="alert" class="selectable-text alert alert-info">').append(
                     node
                 )
             );

@@ -106,7 +106,7 @@ define('plugins/portal/userSettings/register',
                     strengthBarWrapper = $('<div class="progress">').append(
                         strengthBar = $('<div class="bar password-strength-bar">')).hide(),//hide till new pw is inserted
                     passwordHintContainer = $('<div class=password-hint-container>').hide(),
-                    $('<div class="alert alert-block alert-info">')
+                    $('<div class="alert alert-info">')
                     .css('margin', '14px 0px')
                     .text(
                         gt('If you change the password, you will be signed out. Please ensure that everything is closed and saved.')

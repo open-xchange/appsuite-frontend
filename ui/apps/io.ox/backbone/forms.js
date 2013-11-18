@@ -37,7 +37,7 @@ define('io.ox/backbone/forms',
                     if (!self.isRelevant(error, xhr)) {
                         return;
                     }
-                    var alert = $.alert(self.errorTitle, self.formatError(error));
+                    var alert = $.alert({title: self.errorTitle, message: self.formatError(error)});
                     self.$el.find('.alert').remove();
                     self.$el.append(alert);
 

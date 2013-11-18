@@ -180,13 +180,21 @@
         };
     }());
 
-    $.alert = function (title, text, classes) {
-        return $('<div>').addClass('alert alert-block ' + (classes || 'alert-danger'))
-            .append(
-                $('<a>', { href: '#' }).addClass('close').attr('data-dismiss', 'alert').html('&times;'),
-                title ? $('<h4>').addClass('alert-heading').text(title) : $(),
-                text ? $('<p>').text(text) : $()
-            );
+    $.alert = function (o) {
+        o = _.extend({
+            title: false,
+            message: false,
+            classes: 'alert-danger',
+            dismissable: false
+        }, o);
+        return $('<div class="alert fade in">')
+            .addClass(o.classes)
+            .addClass(o.dismissable ? 'alert-dismissable' : '')
+                .append(
+                    o.dismissable ? $('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">').html('&times;') : $(),
+                    o.title ? $('<h4 class="alert-heading">').text(o.title) : $(),
+                    o.text ? $('<p>').text(o.text) : $()
+                );
     };
 
 }());
