@@ -703,6 +703,7 @@ define('io.ox/tours/main',
                     tours.runTour('io.ox/intro');
                 }
             });
+            return $.when();
         }
     });
 
