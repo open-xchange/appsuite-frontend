@@ -27,6 +27,11 @@ define(['io.ox/contacts/api'], function (api) {
             expect(url).toBe(ox.apiRoot + '/halo/contact/picture?action=get&folder=6&id=1337');
         });
 
+        it('should consider width, height, and scaleType', function () {
+            var url = api.pictureHalo({ folder_id: 6, id: 1337, width: 48, height: 48, scaleType: 'cover' });
+            expect(url).toBe(ox.apiRoot + '/halo/contact/picture?action=get&folder=6&id=1337&width=48&height=48&scaleType=cover');
+        });
+
         it('should return proper image path for recipients', function () {
             var url = api.pictureHalo({ email: 'test@open-xchange.com' });
             expect(url).toBe(ox.apiRoot + '/halo/contact/picture?action=get&email=test%40open-xchange.com');
