@@ -166,6 +166,7 @@ define('io.ox/portal/main',
                 model.set('baton', null, {validate: true});
                 model.isDeleted = true;
             }
+            widgets.save(appBaton.$.widgets);
         })
         .on('add', function (model) {
             app.drawScaffold(model, true);
