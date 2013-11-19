@@ -29,18 +29,6 @@ define('io.ox/mail/view-detail',
     ], function (ext, links, util, api, http, coreUtil, account, settings, gt, folder, emoji) {
 
     'use strict';
-    // define global iframe resize handler
-    window.iframeResize = function (guid, doc) {
-        _.defer(function () {
-            var height = $(doc.body).outerHeight(true);
-            $('#tmp-iframe-' + guid).css('height', height + 30 + 'px');
-        });
-        if (Modernizr.touch) {
-            $(doc).on('touchmove', function (e) {
-                e.preventDefault();
-            });
-        }
-    };
 
     /*
      * Helpers to beautify text mails
