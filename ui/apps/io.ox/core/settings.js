@@ -49,8 +49,8 @@ define('io.ox/core/settings',
         return clone(tmp);
     };
 
-    // once cache for all
-    var settingsCache;
+    var settingsCache,      // once cache for all
+        pending = {};       // pending requests?
 
     var Settings = function (path, tree, meta) {
 
@@ -221,6 +221,14 @@ define('io.ox/core/settings',
             });
         };
 
+        this.isPending = function () {
+            return !!pending[path];
+        };
+
+        this.getAllPendingSettings = function () {
+            return pending;
+        };
+
         /**
          * Save settings to cache and backend.
          *
@@ -231,20 +239,28 @@ define('io.ox/core/settings',
          *
          */
         this.save = (function () {
+            var request,
+                sendRequest = function (data) {
+                    request = http.PUT({
+                        module: 'jslob',
+                        params: { action: 'set', id: path },
+                        data: data
+                    })
+                    .done(function () {
+                        saved = JSON.parse(JSON.stringify(data));
+                        self.trigger('save');
+                    })
+                    .always(function () {
+                        delete pending[path];
+                    });
+                },
+                save = _.throttle(sendRequest, 5000); // limit to 5 seconds
 
-            var request, save = _.throttle(function (data) {
-                request = http.PUT({
-                    module: 'jslob',
-                    params: { action: 'set', id: path },
-                    data: data
-                })
-                .done(function () {
-                    saved = JSON.parse(JSON.stringify(data));
-                    self.trigger('save');
-                });
-            }, 5000); // limit to 5 seconds
-
-            return function (custom) {
+            return function (custom, options) {
+                //options
+                var opt = $.extend({
+                    force: false
+                }, options);
 
                 if (detached) {
                     console.warn('Not saving detached settings.', path);
@@ -253,8 +269,12 @@ define('io.ox/core/settings',
 
                 var data = { tree: custom || tree, meta: meta };
                 settingsCache.add(path, data);
-                save(data.tree);
-
+                pending[path] = this;
+                if (opt.force) {
+                    sendRequest(data.tree);
+                } else {
+                    save(data.tree);
+                }
                 return request;
             };
         }());

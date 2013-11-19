@@ -93,10 +93,25 @@ define('io.ox/core/main',
         });
     };
 
+    // listen for logout event
+    ext.point('io.ox/core/logout').extend({
+        id: 'saveSettings',
+        logout: function () {
+            // force save requests for all pending settings
+            var pending = settings.getAllPendingSettings(),
+                defs = [];
+            if (!_.isEmpty(pending)) {
+                _(pending).each(function (setting) {
+                    defs.push(setting.save(undefined, { force: true }));
+                });
+            }
+            return $.when(defs);
+        }
+    });
+
     //
     // handle online/offline mode
     //
-
     function showIndicator(text) {
         $('#io-ox-offline').text(text).stop().show().animate({ bottom: '0px' }, 200);
     }
