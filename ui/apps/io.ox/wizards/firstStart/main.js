@@ -40,14 +40,33 @@ define('io.ox/wizards/firstStart/main', [
                     return require(['io.ox/core/wizard/registry']);
                 })
                 .then(function (registry) {
-                    return registry.getWizard({
-                        id: 'io.ox/wizards/firstStart'
-                    }).start({cssClass: 'first-start-wizard'});
+                    return $.when(
+                        registry.getWizard({
+                            id: 'io.ox/wizards/firstStart'
+                        }),
+                        require(['gettext!io.ox/core/wizard'])
+                    );
+                })
+                .then(function (wizard, gt) {
+                    wizard.navButtons.append(
+                        $('<button class="btn wizard-close">').text(gt('Close')).on('click', function () {
+                            def.reject();
+                            wizard.close();
+                        })
+                     );
+                    wizard.start({cssClass: 'first-start-wizard'}).done(function () {
+                        if (def.state() === 'pending') {
+                            def.resolve();
+                        }
+                    });
+                    return def;
                 })
                 .done(function () {
                     settings.set({finished: true}).save();
                     ox.busy();
-                    def.resolve();
+                })
+                .fail(function () {
+                    require('io.ox/core/main').logout();
                 });
 
             return def;
