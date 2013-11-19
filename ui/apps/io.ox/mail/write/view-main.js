@@ -1149,7 +1149,7 @@ define('io.ox/mail/write/view-main',
                 folder_id: elem.folder_id || '',
                 id: elem.id || ''
             };
-            obj.url = contactsUtil.getImage(obj, contactPictureOptions);
+
             return obj;
         });
     }

@@ -42,14 +42,7 @@ define(["io.ox/contacts/util"], function (util) {
 
     describe("Contact util", function () {
 
-        it('should return a proper image path ', function () {
-            expect(util.getImage(testPerson)).toEqual(ox.apiRoot + '/image/contact/picture?folder=11179&id=510778&timestamp=1379590562489');
-            expect(util.getImage(testPersonWOPic)).toEqual(ox.base + '/apps/themes/default/dummypicture.png');
-            expect(util.getImage(testDistList)).toEqual(ox.base + '/apps/themes/default/dummypicture_group.png');
-            expect(util.getImage(testPersonHttps)).toEqual(ox.apiRoot + '/image/contact/picture?folder=11179&id=510778&timestamp=1379590562489');
-        });
-
-        it('should return a prepared full contact name for sorting purpose ', function () {
+        it('should return a prepared full contact name for sorting purpose', function () {
             expect(util.getSortName(testPerson)).toEqual('tester, georg');
             expect(util.getSortName({})).toEqual('');
         });
@@ -92,14 +85,10 @@ define(["io.ox/contacts/util"], function (util) {
             expect(util.getJob(testPerson)).toEqual('position, conpany');
         });
 
-//            nameSort is not used any more
-
         it('should return the mailfield ID of a selected E-Mail', function () {
             expect(util.calcMailField(testPerson, testPerson.email2)).toEqual(2);
             expect(util.calcMailField(testPerson, testPerson.email1)).toEqual(1);
             expect(util.calcMailField(testPerson, testPerson.email3)).toEqual(3);
         });
-
     });
-
 });

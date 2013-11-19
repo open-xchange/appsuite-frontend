@@ -522,11 +522,17 @@ define('io.ox/contacts/api',
         });
     };
 
-    api.pictureHalo = function (node, options) {
+    // node is optional. if missing function returns just the URL
+    api.pictureHalo = function (/* [node], options */) {
 
-        var params, fallback, url, img;
+        var args = _(arguments).toArray(), node, options, params, fallback, url, img;
 
-        options = options || {};
+        if (args.length === 1) {
+            options = args[0];
+        } else {
+            node = args[0];
+            options = args[1];
+        }
 
         // duck checks
         if (api.looksLikeResource(options)) {
@@ -546,10 +552,10 @@ define('io.ox/contacts/api',
         }
 
         // already done?
-        if (url) return node.css('background-image', 'url(' + url + ')');
+        if (url) return node ? node.css('background-image', 'url(' + url + ')') : url;
 
         // preference
-        if (options.internal_userid) {
+        if (options.internal_userid !== undefined) {
             delete options.folder_id;
             delete options.folder;
             delete options.id;
@@ -570,14 +576,17 @@ define('io.ox/contacts/api',
         }));
         fallback = ox.base + '/apps/themes/default/dummypicture.png';
         url = ox.apiRoot + '/halo/contact/picture?' + params;
-        img = new Image();
 
+        // just return URL
+        if (!node) return url;
+
+        // load image and return node
+        img = new Image();
         $(img).one('load error', function (e) {
             var fail = img.width === 1 || e.type === 'error';
             node.css('background-image', 'url(' + (fail ? fallback : url) + ')');
             node = img = null;
         });
-
         img.src = url;
 
         return node;
