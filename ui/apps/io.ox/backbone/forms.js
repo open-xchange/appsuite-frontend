@@ -840,7 +840,7 @@ define('io.ox/backbone/forms',
                     // get the right date format
                     var dateFormat = date.getFormat(date.DATE).replace(/\by\b/, 'yyyy').toLowerCase();
                     this.nodes.dayField.attr({
-                        'aria-label': gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month.')
+                        'aria-label': gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key.')
                     }).datepicker({
                         format: dateFormat,
                         weekStart: date.locale.weekStart,

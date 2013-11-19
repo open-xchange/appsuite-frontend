@@ -110,7 +110,7 @@ define('io.ox/calendar/week/view',
             this.weekCon        = $('<div>').addClass('week-container');
 
             this.kwInfo.attr({
-                'aria-label': gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month.')
+                'aria-label': gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key.')
             });
 
             this.mode = opt.mode || 'day';
