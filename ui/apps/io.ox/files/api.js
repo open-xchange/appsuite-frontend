@@ -668,9 +668,10 @@ define('io.ox/files/api',
     };
 
     /**
-     * [versions description]
-     * @param  {[type]} options
-     * @return {[type]}
+     * returns versions
+     * @param  {object} options
+     * @param  {string} options.id
+     * @return {deferred}
      */
     api.versions = function (options) {
         options = _.extend({ action: 'versions', timezone: 'utc' }, options);
