@@ -223,6 +223,7 @@ define.async('io.ox/realtime/rt',
             purgingCountdown--;
             if (purgingCountdown === 0) {
                 purging = false;
+                purgingCountdown = 10;
                 if (api.debug) {
                     console.log('10 seconds of detected, setting purging to false to get back to normal');
                 }
