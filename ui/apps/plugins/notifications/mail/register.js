@@ -210,7 +210,7 @@ define('plugins/notifications/mail/register',
 
     ext.point('io.ox/core/notifications/register').extend({
         id: 'mail',
-        index: 500,
+        index: 600,
         register: function (controller) {
             var notifications = controller.get('io.ox/mail', NotificationsView);
 
