@@ -12,7 +12,7 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define('io.ox/upsell/bubbles/main',
+define('plugins/upsell/bubbles/main',
     ['io.ox/core/extPatterns/stage',
      'io.ox/core/extensions',
      'io.ox/core/date',
