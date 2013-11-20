@@ -16,7 +16,7 @@ define('plugins/upsell/bubbles/main',
     ['io.ox/core/extPatterns/stage',
      'io.ox/core/extensions',
      'io.ox/core/date',
-     'settings!io.ox/upsell'
+     'settings!plugins/upsell'
     ], function (Stage, ext, date, settings) {
 
     'use strict';
@@ -30,7 +30,7 @@ define('plugins/upsell/bubbles/main',
         initBubbles;
 
     if (_(bubbleSettings).isEmpty()) {
-        console.error('The upsell bubbles app does not work without settings for io.ox/upsell//bubbles.');
+        console.error('The upsell bubbles app does not work without settings for plugins/upsell//bubbles.');
         return;
     }
 

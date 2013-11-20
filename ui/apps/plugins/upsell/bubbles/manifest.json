@@ -6,6 +6,6 @@
     "category": "Dev",
     "settings": false,
     "index": 100,
-    "path": "io.ox/upsell/bubbles/main",
+    "path": "plugins/upsell/bubbles/main",
     "requires": "upsell"
 }

@@ -21,7 +21,7 @@ define('io.ox/wizards/upsell', [
     'io.ox/core/extensions',
     'io.ox/core/wizard/registry',
     'io.ox/backbone/mini-views',
-    'settings!io.ox/upsell',
+    'settings!plugins/upsell',
     'gettext!io.ox/wizards',
     'less!io.ox/wizards/upsell.less'
 ], function (ext, wizards, miniViews, settings, gt)  {

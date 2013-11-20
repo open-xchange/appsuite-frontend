@@ -14,7 +14,7 @@
 define('plugins/portal/upsellads/register',
     ['io.ox/core/extensions',
      'gettext!plugins/portal',
-     'settings!io.ox/upsell',
+     'settings!plugins/upsell',
      'less!plugins/portal/upsellads/style.less'], function (ext, gt, settings) {
 
     'use strict';
@@ -23,7 +23,8 @@ define('plugins/portal/upsellads/register',
         intervalDuration = settings.get('ads/delayInMilliseconds', 5000),
         addContent,
         nextAd,
-        getSlides;
+        getSlides,
+        currPos = 0;
 
     getSlides = function (data) {
         var slides, languages, slideKeys, result = [];
@@ -82,7 +83,7 @@ define('plugins/portal/upsellads/register',
         }
     };
 
-    nextAd = function (currPos, content, ad, slides) {
+    nextAd = function (content, ad, slides) {
         currPos = (currPos + 1) % slides.length;
 
 
@@ -92,7 +93,7 @@ define('plugins/portal/upsellads/register',
 
         /* if user clicked "next", reset timer to zero; if here because of interval: no problem either. */
         clearInterval(adInterval[ad]);
-        adInterval[ad] = setInterval(function () { return nextAd(currPos, content, ad, slides); },  intervalDuration);
+        adInterval[ad] = setInterval(function () { return nextAd(content, ad, slides); },  intervalDuration);
 
     };
 
@@ -116,7 +117,10 @@ define('plugins/portal/upsellads/register',
             content.parent().find('h2').remove();
             content.parent().append(
                 $('<div class="upsellads-next">')
-                    .on('click', function () { return nextAd(0, content, ad, slides); })
+                    .on('click', function (e) {
+                        console.log('Clicked next', e);
+                        return nextAd(content, ad, slides);
+                    })
                     .append($('<i class="icon-circle-arrow-right icon-2x">'))
             );
             content.on('click', function () {
@@ -128,7 +132,7 @@ define('plugins/portal/upsellads/register',
                 });
             });
             addContent(slides[startPos], content);
-            adInterval[ad] = setInterval(function () { return nextAd(0, content, ad, slides); },  intervalDuration);
+            adInterval[ad] = setInterval(function () { return nextAd(content, ad, slides); },  intervalDuration);
         }
     });
 });
