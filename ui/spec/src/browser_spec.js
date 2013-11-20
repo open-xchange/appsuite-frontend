@@ -10,7 +10,31 @@
  *
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
-define([], function () {
+define(['fixture!browser_support/userAgents.json'], function (userAgents) {
+    describe('_.device utilities:', function () {
+        afterEach(function () {
+            _.device.loadUA(window.navigator);
+        });
 
+        it('should be defined', function () {
+            expect(_.device).toBeDefined();
+        });
+
+        it('should return an object if no param was given', function () {
+            var isObject = _.isObject(_.device());
+            expect(isObject).toBe(true);
+        });
+
+        _(userAgents).each(function (a, browser) {
+            _(userAgents[browser]).each(function (b, version) {
+                //console.log('testing ', browser, version);
+                it('should detect ' + browser + ' ' + version, function () {
+                    _.device.loadUA(userAgents[browser][version]);
+                    expect(_.device(browser)).toBe(true);
+                    expect(_.browser[browser]).toMatch(version);
+                });
+            })
+        });
+    });
 });
 
