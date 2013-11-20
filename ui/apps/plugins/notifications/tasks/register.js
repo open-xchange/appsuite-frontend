@@ -180,7 +180,7 @@ define('plugins/notifications/tasks/register',
 
     ext.point('io.ox/core/notifications/register').extend({
         id: 'dueTasks',
-        index: 350,
+        index: 600,
         register: function (controller) {
             var notifications = controller.get('io.ox/tasks', NotificationsView);
 
@@ -391,7 +391,7 @@ define('plugins/notifications/tasks/register',
 
     ext.point('io.ox/core/notifications/register').extend({
         id: 'reminderTasks',
-        index: 300,
+        index: 200,
         register: function (controller) {
             var notifications = controller.get('io.ox/tasksreminder', NotificationsReminderView);
 

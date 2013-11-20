@@ -29,7 +29,7 @@ define('plugins/notifications/calendar/register',
     ext.point('io.ox/core/notifications/invites/header').extend({
         draw: function () {
             this.append(
-                $('<legend class="section-title">').text(gt('Invitations'))
+                $('<legend class="section-title">').text(gt('Appointment invitations'))
                     .append($('<div>')
                         .attr({ tabindex: 1,
                             'aria-label': gt('Press to hide all appointment invitations.'),
@@ -44,7 +44,7 @@ define('plugins/notifications/calendar/register',
     ext.point('io.ox/core/notifications/reminder/header').extend({
         draw: function () {
             this.append(
-                $('<legend class="section-title">').text(gt('Reminder'))
+                $('<legend class="section-title">').text(gt('Appointment reminders'))
                     .append($('<div>')
                         .attr({ tabindex: 1,
                             'aria-label': gt('Press to hide all appointment reminders.'),
@@ -371,68 +371,11 @@ define('plugins/notifications/calendar/register',
         hiddenCalReminderItems = {};
 
     ext.point('io.ox/core/notifications/register').extend({
-        id: 'appointments',
+        id: 'appointmentReminder',
         index: 100,
         register: function (controller) {
-            var InviteNotifications = controller.get('io.ox/calendar', InviteNotificationsView),
-                ReminderNotifications = controller.get('io.ox/calendarreminder', ReminderNotificationsView);
+            var ReminderNotifications = controller.get('io.ox/calendarreminder', ReminderNotificationsView);
             ReminderNotifications.collection.hidden = [];
-            calAPI
-                .on('new-invites', function (e, invites) {
-                    var tmp = [];
-
-                    $.when.apply($,
-                        _(invites).map(function (invite) {
-                            //test if this invites are hidden
-                            if (hiddenCalInvitationItems[_.ecid(invite)]) {
-                                return undefined;
-                            }
-                            var inObj = {
-                                cid: _.cid(invite),
-                                title: invite.title,
-                                location: invite.location || '',
-                                date: util.getDateInterval(invite),
-                                time: util.getTimeInterval(invite),
-                                data: invite
-                            };
-                            // TODO: ignore organizerId until we know better
-                            var def = $.Deferred();
-                            userAPI.get({ id: invite.organizerId || invite.created_by })
-                                .done(function (user) {
-                                    inObj.organizer = user.display_name;
-                                    tmp.push(inObj);
-                                    def.resolve();
-                                })
-                                .fail(function () {
-                                    // no organizer
-                                    inObj.organizer = invite.organizer || false;
-                                    tmp.push(inObj);
-                                    def.resolve();
-                                });
-                            return def;
-                        })
-                    )
-                    .done(function () {
-                        InviteNotifications.collection.reset(tmp);
-                    });
-
-                })
-                .on('mark:invite:confirmed', removeInvites)
-                .on('delete:appointment', removeInvites)
-                .getInvites();
-
-            function removeInvites(e, invites) {
-              //make sure we have an array
-                invites = invites ? [].concat(invites) : [];
-                _(invites).each(function (invite) {
-                    for (var i = 0; InviteNotifications.collection.length > i; i++) {
-                        var model = InviteNotifications.collection.models[i];
-                        if (model.attributes.data.id === invite.id && model.attributes.data.folder_id === (invite.folder || invite.folder_id)) {
-                            InviteNotifications.collection.remove(model);
-                        }
-                    }
-                });
-            }
 
             function removeReminders(e, reminders) {
                 //make sure we have an array
@@ -518,6 +461,72 @@ define('plugins/notifications/calendar/register',
             reminderAPI.getReminders();
         }
     });
+    
+    ext.point('io.ox/core/notifications/register').extend({
+        id: 'appointmentInvitations',
+        index: 300,
+        register: function (controller) {
+            var InviteNotifications = controller.get('io.ox/calendar', InviteNotificationsView);
+
+            calAPI
+                .on('new-invites', function (e, invites) {
+                    var tmp = [];
+
+                    $.when.apply($,
+                        _(invites).map(function (invite) {
+                            //test if this invites are hidden
+                            if (hiddenCalInvitationItems[_.ecid(invite)]) {
+                                return undefined;
+                            }
+                            var inObj = {
+                                cid: _.cid(invite),
+                                title: invite.title,
+                                location: invite.location || '',
+                                date: util.getDateInterval(invite),
+                                time: util.getTimeInterval(invite),
+                                data: invite
+                            };
+                            // TODO: ignore organizerId until we know better
+                            var def = $.Deferred();
+                            userAPI.get({ id: invite.organizerId || invite.created_by })
+                                .done(function (user) {
+                                    inObj.organizer = user.display_name;
+                                    tmp.push(inObj);
+                                    def.resolve();
+                                })
+                                .fail(function () {
+                                    // no organizer
+                                    inObj.organizer = invite.organizer || false;
+                                    tmp.push(inObj);
+                                    def.resolve();
+                                });
+                            return def;
+                        })
+                    )
+                    .done(function () {
+                        InviteNotifications.collection.reset(tmp);
+                    });
+
+                })
+                .on('mark:invite:confirmed', removeInvites)
+                .on('delete:appointment', removeInvites)
+                .getInvites();
+
+            function removeInvites(e, invites) {
+              //make sure we have an array
+                invites = invites ? [].concat(invites) : [];
+                _(invites).each(function (invite) {
+                    for (var i = 0; InviteNotifications.collection.length > i; i++) {
+                        var model = InviteNotifications.collection.models[i];
+                        if (model.attributes.data.id === invite.id && model.attributes.data.folder_id === (invite.folder || invite.folder_id)) {
+                            InviteNotifications.collection.remove(model);
+                        }
+                    }
+                });
+            }
+        }
+    });
+
     return true;
 });
 
