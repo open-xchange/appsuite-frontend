@@ -17,6 +17,8 @@ define(['io.ox/mail/detail/content', 'settings!io.ox/mail'], function (content, 
 
     describe('Mail content processing', function () {
 
+        ox.serverConfig.hosts = ['localhost'];
+
         function process(str, type) {
             return content.get({
                 attachments: [{ content: str, content_type: type || 'text/html', disp: 'inline' }]

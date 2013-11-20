@@ -96,7 +96,7 @@ define('io.ox/mail/detail/links',
     });
 
     // fix hosts (still need a configurable list on the backend)
-    ox.serverConfig.hosts = (ox.serverConfig.hosts || []).concat('localhost', 'appsuite-dev.open-xchange.com', 'ui-dev.open-xchange.com', 'ox6-dev.open-xchange.com', 'ox6.open-xchange.com');
+    // ox.serverConfig.hosts = (ox.serverConfig.hosts || []).concat('localhost', 'appsuite-dev.open-xchange.com', 'ui-dev.open-xchange.com', 'ox6-dev.open-xchange.com', 'ox6.open-xchange.com');
 
     var isValidHost = function (url) {
         var match = url.match(/^https?:\/\/([^\/#]+)/i);
