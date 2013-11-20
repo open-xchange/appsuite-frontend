@@ -117,8 +117,7 @@ define('plugins/portal/upsellads/register',
             content.parent().find('h2').remove();
             content.parent().append(
                 $('<div class="upsellads-next">')
-                    .on('click', function (e) {
-                        console.log('Clicked next', e);
+                    .on('click', function () {
                         return nextAd(content, ad, slides);
                     })
                     .append($('<i class="icon-circle-arrow-right icon-2x">'))
