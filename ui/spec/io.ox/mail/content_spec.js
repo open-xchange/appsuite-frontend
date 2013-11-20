@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define(['io.ox/mail/content', 'settings!io.ox/mail'], function (content, settings) {
+define(['io.ox/mail/detail/content', 'settings!io.ox/mail'], function (content, settings) {
 
     'use strict';
 
@@ -59,6 +59,11 @@ define(['io.ox/mail/content', 'settings!io.ox/mail'], function (content, setting
             expect(result.content.html()).toBe('text<br><br>text<br><br>');
         });
 
+        it('should simplify links', function () {
+            var result = process('text <a href="http://localhost/path?query" target="_blank">http://localhost/path?query</a> &lt;<a href="http://localhost/path?query" target="_blank">http://localhost/path?query</a>&gt; text');
+            expect(result.content.html()).toBe('text <a href="http://localhost/path?query" target="_blank">http://localhost/path?query</a> text');
+        });
+
         // Mail address
 
         it('should detect email addresses (text/plain)', function () {
@@ -81,58 +86,58 @@ define(['io.ox/mail/content', 'settings!io.ox/mail'], function (content, setting
 
         it('should detect folder links (html, old-school)', function () {
             var result = process('<p>Link: <a href="http://localhost/appsuite/?foo#m=infostore&f=1234">http://localhost/appsuite/?foo#m=infostore&f=1234</a>.</p>');
-            expect(result.content.html()).toBe('<p>Link: <a href="http://localhost/appsuite/?foo#m=infostore&amp;f=1234" style="text-decoration: none; font-family: Arial; " target="_blank"><span class="label label-info">Ordner</span></a>.</p>');
+            expect(result.content.html()).toBe('<p>Link: <a href="http://localhost/appsuite/?foo#m=infostore&amp;f=1234" target="_blank" class="deep-link deep-link-files" style="text-decoration: none; font-family: Arial; "><span class="label label-info">Ordner</span></a>.</p>');
         });
 
         it('should detect folder links (html)', function () {
             var result = process('<p>Link: <a href="http://localhost/appsuite/#app=io.ox/files&folder=1337">http://localhost/appsuite/#app=io.ox/files&folder=1337</a>.</p>');
-            expect(result.content.html()).toBe('<p>Link: <a href="http://localhost/appsuite/#app=io.ox/files&amp;folder=1337" style="text-decoration: none; font-family: Arial; " target="_blank"><span class="label label-info">Ordner</span></a>.</p>');
+            expect(result.content.html()).toBe('<p>Link: <a href="http://localhost/appsuite/#app=io.ox/files&amp;folder=1337" target="_blank" class="deep-link deep-link-files" style="text-decoration: none; font-family: Arial; "><span class="label label-info">Ordner</span></a>.</p>');
         });
 
         it('should detect folder links (html, variant)', function () {
             var result = process('<p>Link: <a href="http://localhost/appsuite/#app=io.ox/files&perspective=fluid:icon&folder=1337">http://localhost/appsuite/#app=io.ox/files&perspective=fluid:icon&folder=1337</a>.</p>');
-            expect(result.content.html()).toBe('<p>Link: <a href="http://localhost/appsuite/#app=io.ox/files&amp;perspective=fluid:icon&amp;folder=1337" style="text-decoration: none; font-family: Arial; " target="_blank"><span class="label label-info">Ordner</span></a>.</p>');
+            expect(result.content.html()).toBe('<p>Link: <a href="http://localhost/appsuite/#app=io.ox/files&amp;perspective=fluid:icon&amp;folder=1337" target="_blank" class="deep-link deep-link-files" style="text-decoration: none; font-family: Arial; "><span class="label label-info">Ordner</span></a>.</p>');
         });
 
         // File
 
         it('should detect file links (html, old-school)', function () {
             var result = process('<p>Link: <a href="http://localhost/appsuite/?foo#m=infostore&f=1234&i=0">http://localhost/appsuite/?foo#m=infostore&f=1234&i=0</a>.</p>');
-            expect(result.content.html()).toBe('<p>Link: <a href="http://localhost/appsuite/?foo#m=infostore&amp;f=1234&amp;i=0" style="text-decoration: none; font-family: Arial; " target="_blank"><span class="label label-info">Dokument</span></a>.</p>');
+            expect(result.content.html()).toBe('<p>Link: <a href="http://localhost/appsuite/?foo#m=infostore&amp;f=1234&amp;i=0" target="_blank" class="deep-link deep-link-files" style="text-decoration: none; font-family: Arial; "><span class="label label-info">Datei</span></a>.</p>');
         });
 
         it('should detect file links (html)', function () {
             var result = process('<p>Link: <a href="http://localhost/appsuite/#app=io.ox/files&folder=1337&id=0">http://localhost/appsuite/#app=io.ox/files&folder=1337&id=0</a>.</p>');
-            expect(result.content.html()).toBe('<p>Link: <a href="http://localhost/appsuite/#app=io.ox/files&amp;folder=1337&amp;id=0" style="text-decoration: none; font-family: Arial; " target="_blank"><span class="label label-info">Dokument</span></a>.</p>');
+            expect(result.content.html()).toBe('<p>Link: <a href="http://localhost/appsuite/#app=io.ox/files&amp;folder=1337&amp;id=0" target="_blank" class="deep-link deep-link-files" style="text-decoration: none; font-family: Arial; "><span class="label label-info">Datei</span></a>.</p>');
         });
 
         it('should detect file links (html, variant)', function () {
             var result = process('<p>Link: <a href="http://localhost/appsuite/#app=io.ox/files&perspective=fluid:icon&folder=1337&id=0">http://localhost/appsuite/#app=io.ox/files&perspective=fluid:icon&folder=1337&id=0</a>.</p>');
-            expect(result.content.html()).toBe('<p>Link: <a href="http://localhost/appsuite/#app=io.ox/files&amp;perspective=fluid:icon&amp;folder=1337&amp;id=0" style="text-decoration: none; font-family: Arial; " target="_blank"><span class="label label-info">Dokument</span></a>.</p>');
+            expect(result.content.html()).toBe('<p>Link: <a href="http://localhost/appsuite/#app=io.ox/files&amp;perspective=fluid:icon&amp;folder=1337&amp;id=0" target="_blank" class="deep-link deep-link-files" style="text-decoration: none; font-family: Arial; "><span class="label label-info">Datei</span></a>.</p>');
         });
 
         // Appointment
 
         it('should detect appointment links (html, old-school)', function () {
             var result = process('<p>Link: <a href="http://localhost/appsuite/?foo#m=calendar&i=0&f=1234">http://localhost/appsuite/?foo#m=calendar&i=0&f=1234</a>.</p>');
-            expect(result.content.html()).toBe('<p>Link: <a href="http://localhost/appsuite/?foo#m=calendar&amp;i=0&amp;f=1234" style="text-decoration: none; font-family: Arial; " target="_blank"><span class="label label-info">Termin</span></a>.</p>');
+            expect(result.content.html()).toBe('<p>Link: <a href="http://localhost/appsuite/?foo#m=calendar&amp;i=0&amp;f=1234" target="_blank" class="deep-link deep-link-calendar" style="text-decoration: none; font-family: Arial; "><span class="label label-info">Termin</span></a>.</p>');
         });
 
         it('should detect appointment links (html)', function () {
             var result = process('<p>Link: <a href="http://localhost/appsuite/#app=io.ox/calendar&folder=1337&id=0">http://localhost/appsuite/#app=io.ox/calendar&folder=1337&id=0</a>.</p>');
-            expect(result.content.html()).toBe('<p>Link: <a href="http://localhost/appsuite/#app=io.ox/calendar&amp;folder=1337&amp;id=0" style="text-decoration: none; font-family: Arial; " target="_blank"><span class="label label-info">Termin</span></a>.</p>');
+            expect(result.content.html()).toBe('<p>Link: <a href="http://localhost/appsuite/#app=io.ox/calendar&amp;folder=1337&amp;id=0" target="_blank" class="deep-link deep-link-calendar" style="text-decoration: none; font-family: Arial; "><span class="label label-info">Termin</span></a>.</p>');
         });
 
         // Task
 
         it('should detect task links (html, old-school)', function () {
-            var result = process('<p>Link: <a href="http://localhost/appsuite/?foo#m=task&i=0&f=1234">http://localhost/appsuite/?foo#m=task&i=0&f=1234</a>.</p>');
-            expect(result.content.html()).toBe('<p>Link: <a href="http://localhost/appsuite/?foo#m=task&amp;i=0&amp;f=1234" style="text-decoration: none; font-family: Arial; " target="_blank"><span class="label label-info">Aufgabe</span></a>.</p>');
+            var result = process('<p>Link: <a href="http://localhost/appsuite/?foo#m=tasks&i=0&f=1234">http://localhost/appsuite/?foo#m=tasks&i=0&f=1234</a>.</p>');
+            expect(result.content.html()).toBe('<p>Link: <a href="http://localhost/appsuite/?foo#m=tasks&amp;i=0&amp;f=1234" target="_blank" class="deep-link deep-link-tasks" style="text-decoration: none; font-family: Arial; "><span class="label label-info">Aufgabe</span></a>.</p>');
         });
 
         it('should detect task links (html)', function () {
             var result = process('<p>Link: <a href="http://localhost/appsuite/#app=io.ox/tasks&id=1337.0&folder=1337">http://localhost/appsuite/#app=io.ox/tasks&id=1337.0&folder=1337</a>.</p>');
-            expect(result.content.html()).toBe('<p>Link: <a href="http://localhost/appsuite/#app=io.ox/tasks&amp;id=1337.0&amp;folder=1337" style="text-decoration: none; font-family: Arial; " target="_blank"><span class="label label-info">Aufgabe</span></a>.</p>');
+            expect(result.content.html()).toBe('<p>Link: <a href="http://localhost/appsuite/#app=io.ox/tasks&amp;id=1337.0&amp;folder=1337" target="_blank" class="deep-link deep-link-tasks" style="text-decoration: none; font-family: Arial; "><span class="label label-info">Aufgabe</span></a>.</p>');
         });
     });
 });

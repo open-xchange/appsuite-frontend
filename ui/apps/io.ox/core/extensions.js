@@ -320,6 +320,11 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
                     })
                     .map(function (ext) {
                         try {
+                            // stopped?
+                            if (baton.isPropagationStopped()) return;
+                            // prevent default?
+                            if (ext.id === 'default' && baton.isDefaultPrevented()) return;
+                            // call
                             return ext[name].apply(context, args.slice(3));
                         } catch (e) {
                             error(e);

@@ -983,8 +983,8 @@ define('io.ox/core/main',
             };
         }
 
-        requirejs.onError = function () {
-            console.error('requirejs', arguments);
+        requirejs.onError = function (e) {
+            console.error('requirejs', e.message, arguments);
         };
 
         // start loading stuff

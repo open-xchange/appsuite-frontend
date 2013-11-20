@@ -13,7 +13,7 @@
  */
 
 define('io.ox/mail/view-detail',
-    ['io.ox/mail/content',
+    ['io.ox/mail/detail/content',
      'io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'io.ox/mail/util',
