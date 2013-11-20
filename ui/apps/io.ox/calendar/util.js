@@ -197,6 +197,8 @@ define('io.ox/calendar/util',
             if (diff < 0) {
                 if (diff >= -1 * date.DAY) {
                     return gt('Yesterday') + ', ' + d.format(date.DATE);
+                } else {
+                    return d.format('EE, ') + d.format(date.DATE);
                 }
             } else {
                 // future
@@ -232,6 +234,7 @@ define('io.ox/calendar/util',
         getReminderOptions: function () {
             var reminderListValues = [
                 {value: -1, format: 'string'},
+
                 {value: 0, format: 'minutes'},
                 {value: 5, format: 'minutes'},
                 {value: 10, format: 'minutes'},
