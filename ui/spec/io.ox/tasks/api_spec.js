@@ -9,6 +9,7 @@
  * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
+ * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 define(['shared/examples/for/api',
        'io.ox/tasks/api'
@@ -191,6 +192,25 @@ define(['shared/examples/for/api',
             it('should trigger mark:task:confirmed event', function () {
                 expect(api).toTrigger('mark:task:confirmed');
                 var result = api.confirm(options.testDataConfirm);
+                this.server.respond();
+                expect(result).toResolve();
+            });
+        });
+        describe('getting Task Notifications', function () {
+            beforeEach(function () {
+                this.server.respondWith('GET', /api\/tasks\?action=all/, function (xhr) {
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": []}');
+                });
+            });
+            it('should trigger new-tasks event', function () {
+                expect(api).toTrigger('new-tasks');
+                var result = api.getTasks();
+                this.server.respond();
+                expect(result).toResolve();
+            });
+            it('should trigger set:tasks:to-be-confirmed event', function () {
+                expect(api).toTrigger('set:tasks:to-be-confirmed');
+                var result = api.getTasks();
                 this.server.respond();
                 expect(result).toResolve();
             });
