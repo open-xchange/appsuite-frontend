@@ -27,7 +27,6 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
 
         _(userAgents).each(function (a, browser) {
             _(userAgents[browser]).each(function (b, version) {
-                //console.log('testing ', browser, version);
                 it('should detect ' + browser + ' ' + version, function () {
                     _.device.loadUA(userAgents[browser][version]);
                     expect(_.device(browser)).toBe(true);
