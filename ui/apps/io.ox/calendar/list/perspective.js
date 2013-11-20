@@ -123,6 +123,12 @@ define('io.ox/calendar/list/perspective',
             if (optDropdown && cur) {
                 optDropdown[cur === 'search' ? 'hide' : 'show']();
             }
+            if (cur === 'search') {
+                $(grid.getContainer()).addClass('search-view');
+            } else {
+                $(grid.getContainer()).removeClass('search-view');
+
+            }
         });
 
         var directAppointment;//directly linked appointments are stored here
