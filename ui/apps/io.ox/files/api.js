@@ -348,6 +348,38 @@ define('io.ox/files/api',
     };
 
     /**
+     * returns an error object in case arguments/properties are missing
+     * @param  {object}           obj
+     * @param  {string|array}     property keys
+     * @param  {object}           options
+     * @return {undefined|object}
+     */
+    var missing = function (obj, keys, options) {
+        var opt, empty = [], undef = [], response, missing;
+        //preparation
+        obj = obj || {};
+        keys = [].concat(keys.split(','));
+        opt = $.extend({type: 'undefined'}, options);
+        //idenfity undefined/empty
+        _.each(keys, function (key) {
+            if (!(key in obj))
+                undef.push(key);
+            else if (_.isEmpty(obj[key]))
+                empty.push(key);
+        });
+        //consider option
+        missing = opt.type === 'undefined' ? undef : undef.concat(empty);
+        //set response
+        if (missing.length) {
+            response = failedUpload({
+                    categories: 'ERROR',
+                    error: opt.message || gt('Please specify these missing variables: ') + missing
+                });
+        }
+        return response;
+    };
+
+    /**
      * upload a new file and store it
      * @param  {object} options
      *         'folder' - The folder ID to upload the file to. This is optional and defaults to the standard files folder
@@ -447,6 +479,10 @@ define('io.ox/files/api',
         }
         formData.append('json', JSON.stringify(options.json));
 
+        //missing arguments / argument properties
+        var error = missing(options, 'file,id,json');
+        if (error) return $.Deferred().reject(error).promise();
+
         return http.UPLOAD({
                 module: 'files',
                 params: {
@@ -484,6 +520,10 @@ define('io.ox/files/api',
         options = $.extend({
             folder: coreConfig.get('folder/infostore')
         }, options || {});
+
+        //missing arguments / argument properties
+        var error = missing(options, 'form,file,json,id');
+        if (error) return $.Deferred().reject(error).promise();
 
         var formData = options.form,
             deferred = $.Deferred();
@@ -524,7 +564,7 @@ define('io.ox/files/api',
             target: tmpName
         });
         formData.submit();
-        return deferred;
+        return deferred.promise();
     };
 
     function handleExtendedResponse(file, response, options) {
@@ -558,6 +598,10 @@ define('io.ox/files/api',
             //if the other fields are present theres a backend error
             updateData = { version: file.version };
         }
+
+        //missing arguments / argument properties
+        var error = missing(file, 'id');
+        if (error) return $.Deferred().reject(error).promise();
 
         return http.PUT({
                 module: 'files',
@@ -675,9 +719,11 @@ define('io.ox/files/api',
      */
     api.versions = function (options) {
         options = _.extend({ action: 'versions', timezone: 'utc' }, options);
-        if (!options.id) {
-            throw new Error('Please specify an id for which to fetch versions');
-        }
+
+        //missing arguments / argument properties
+        var error = missing(options, 'id');
+        if (error) return $.Deferred().reject(error).promise();
+
         var id = String(options.id);
         return api.caches.versions.get(id).pipe(function (data) {
             if (data !== null) {
@@ -750,6 +796,10 @@ define('io.ox/files/api',
      * @return {deferred}
      */
     api.detach = function (version) {
+        //missing arguments / argument properties
+        var error = missing(version, 'id,folder_id,version');
+        if (error) return $.Deferred().reject(error).promise();
+
         return http.PUT({
             module: 'files',
             params: {
