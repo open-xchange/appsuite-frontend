@@ -303,7 +303,7 @@ define('io.ox/tasks/util',
                 return task;
             },
 
-            sortTasks: function (tasks, order) {//done tasks last, overduetasks first, same date alphabetical
+            sortTasks: function (tasks, order) {//done tasks last, overduetasks first, same or no date alphabetical
                 tasks = _.copy(tasks, true);//make local copy
                 if (!order) {
                     order = 'asc';
@@ -311,33 +311,42 @@ define('io.ox/tasks/util',
 
                 var resultArray = [],
                     dateArray = [],
-                    emptyDateArray = [];
+                    emptyDateArray = [],
+                    alphabetSort = function (a, b) {//sort by alphabet
+                            if (a.title > b.title) {
+                                return 1;
+                            } else {
+                                return -1;
+                            }
+                        },
+                    dateSort = function (a, b) {//sort by endDate. If equal, sort by alphabet
+                            /* jshint eqeqeq: false */
+                            if (a.end_date > b.end_date) {
+                                return 1;
+                            } else if (a.end_date == b.end_date) {// use == here so end_date=null and end_date=undefined are equal. may happen with done tasks
+                                return alphabetSort(a, b);
+                            }
+                            else {
+                                return -1;
+                            }
+                            /* jshint eqeqeq: true */
+                        };
 
                 for (var i = 0; i < tasks.length; i++) {
                     if (tasks[i].status === 3) {
                         resultArray.push(tasks[i]);
                     } else if (tasks[i].end_date === null || tasks[i].end_date === undefined) {
-                        emptyDateArray.push(tasks[i]);
+                        emptyDateArray.push(tasks[i]);//tasks without end_date
                     } else {
-                        dateArray.push(tasks[i]);
+                        dateArray.push(tasks[i]);// tasks with end_date
                     }
                 }
-
-                emptyDateArray.sort(function (a, b) {
-                    if (a.title > b.title) {
-                        return 1;
-                    } else {
-                        return -1;
-                    }
-                });
-
-                dateArray.sort(function (a, b) {
-                    if (a.end_date > b.end_date) {
-                        return 1;
-                    } else {
-                        return -1;
-                    }
-                });
+                //sort by end_date and alphabet
+                resultArray.sort(dateSort);
+                //sort by alphabet
+                emptyDateArray.sort(alphabetSort);
+                //sort by end_date and alphabet
+                dateArray.sort(dateSort);
 
                 if (order === 'desc') {
                     resultArray.push(emptyDateArray.reverse(), dateArray.reverse());

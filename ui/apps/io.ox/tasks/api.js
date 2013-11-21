@@ -244,7 +244,7 @@ define('io.ox/tasks/api',
                 } else if (obj.folder_id) {
                     folder = obj.folder_id;
                 } else {
-                    console.log('no folderAttribute for cache Keygen found, using default');
+                    //no folderAttribute for cache Keygen found, using default
                     folder = folderAPI.getDefaultFolder('tasks');
                 }
             }
