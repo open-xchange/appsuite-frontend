@@ -218,7 +218,7 @@ define('io.ox/core/desktop',
 
                     getData: function () {
 
-                        if (folder === null) return $.Deferred.resolve({});
+                        if (folder === null) return $.Deferred().resolve({});
 
                         return require(['io.ox/core/api/folder']).pipe(function (api) {
                             return api.get({ folder: folder });
