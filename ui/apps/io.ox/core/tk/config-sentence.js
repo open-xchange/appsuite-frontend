@@ -189,7 +189,7 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
             $ghost.find('a').each(function () {
                 $(this).replaceWith($.txt($(this).text()));
             });
-            $ghost.find(".no-clone, .datepicker").remove();
+            $ghost.find(".popover, .no-clone, .datepicker").remove();
             return $ghost;
         };
 
