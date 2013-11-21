@@ -42,30 +42,16 @@ define('plugins/wizards/mandatory/main', [
         id: 'name',
         title: gt('Personal information'),
         load: function (baton) {
-            // The load method is an optional method. It is called to load data that you need to set up the page
-            // And it is called as soon as the page is the 'next' or 'previous' page of the active page, so you can start loading
-            // even before the page shows up. Return a deferred to let the wizard framework know when you're done.
-
-            // We will fetch the user data for our example.
             var def = $.Deferred();
 
             require(['io.ox/core/api/user', 'io.ox/backbone/basicModel', 'io.ox/backbone/mini-views'], function (userAPI, Model, mini) {
-                // Alright, let's stick the APIs into our baton, we'll need these later
-                // This is also a nice little trick for loading APIs in the wizard framework.
                 baton.libraries = {
                     userAPI: userAPI,
                     mini: mini
                 };
-
-                // And let's load the current user
-
                 userAPI.getCurrentUser().done(function (user) {
-                    // Note, that this is a backbone model
-                    // We could turn this into a model by instantiating a BasicModel, otherwise.
                     baton.user = user;
 
-                    // We want to enable the next button on this page based on whether a first an last name is set, so, let's
-                    // listen for the change events on the user object
                     function updateButtonState() {
                         if (!_.isEmpty(user.get('first_name')) && !_.isEmpty(user.get('last_name'))) {
                             baton.buttons.enableNext();
@@ -77,7 +63,6 @@ define('plugins/wizards/mandatory/main', [
 
                     updateButtonState();
 
-                    // And we're done
                     def.resolve();
                 }).fail(def.reject);
             });
@@ -86,23 +71,7 @@ define('plugins/wizards/mandatory/main', [
         },
 
         draw: function (baton) {
-            // Now, for fun, let's try and build a backbone backed form
-            // Depending on the complexity of the form, this is a good route to take
-            // I would, however, also suggest to scour the appsuite source code for
-            // reusable parts, as they will usually be internationalized, localized,
-            // responsive to different devices and accessible. Depending on the use of this
-            // wizard, you'll have to take care of these aspects yourself.
-
-            // Firstly some fun, though. Why not have this wizard be flirtatious, since it's just
-            // getting to know the user. Personally, I think software would do well to be more flirtatious, but
-            // I'm just a lonely developer, so YMMV
-            if (baton.wizard.pageData.gender && baton.wizard.pageData.gender === 'male') {
-                this.append($('<p>').text('So, who are you, handsome?'));
-            } else if (baton.wizard.pageData.gender && baton.wizard.pageData.gender === 'female') {
-                this.append($('<p>').text('So, who are you, beautiful?'));
-            } else {
-                this.append($('<p>').text('So, who are you, stranger?'));
-            }
+            this.append($('<h4>').text(gt('Your name')));
 
             // Now, on to the serious business
             var mini = baton.libraries.mini;
@@ -110,13 +79,13 @@ define('plugins/wizards/mandatory/main', [
             this.append(
                 $('<form class="form-horizontal" />').append(
                     $('<div class="control-group" />').append(
-                        $('<label class="control-label" for="first_name" />').text('First Name'), // Don't forget i18n in your own wizard!
+                        $('<label class="control-label" for="first_name" />').text(gt('First name')),
                         $('<div class="controls" />').append(
                             new mini.InputView({name: 'first_name', model: baton.user}).render().$el
                         )
                     ),
                     $('<div class="control-group" />').append(
-                        $('<label class="control-label" for="last_name" />').text('Last Name'), // Don't forget i18n in your own wizard!
+                        $('<label class="control-label" for="last_name" />').text(gt('Last name')),
                         $('<div class="controls" />').append(
                             new mini.InputView({name: 'last_name', model: baton.user}).render().$el
                         )
