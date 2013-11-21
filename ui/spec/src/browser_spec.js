@@ -32,7 +32,7 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
                     expect(_.device(browser)).toBe(true);
                     expect(_.browser[browser]).toMatch(version);
                 });
-            })
+            });
         });
     });
 });

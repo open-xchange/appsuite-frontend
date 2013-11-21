@@ -250,7 +250,7 @@ define(['io.ox/files/api', 'shared/examples/for/api'], function (api, sharedExam
                         first = $.Deferred();
                     //first: cache add executed
                     jexpect(def).toResolveWith(function (response) {
-                        var resp = (versions.toString() == response.toString()) &&
+                        var resp = (versions.toString() === response.toString()) &&
                                    (api.caches.versions.add.callCount === 1);
                         first.resolve();
                         return resp;
@@ -259,7 +259,7 @@ define(['io.ox/files/api', 'shared/examples/for/api'], function (api, sharedExam
                     first.done(function () {
                         var second = api.versions(locked);
                         jexpect(second).toResolveWith(function (response) {
-                            var resp = (versions.toString() == response.toString()) &&
+                            var resp = (versions.toString() === response.toString()) &&
                                 (api.caches.versions.add.callCount === 1);
                             api.caches.versions.add.restore();
                             return resp;

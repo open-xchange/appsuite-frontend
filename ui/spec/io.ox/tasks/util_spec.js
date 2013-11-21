@@ -10,7 +10,7 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define(['io.ox/tasks/util','gettext!io.ox/tasks'
+define(['io.ox/tasks/util', 'gettext!io.ox/tasks'
 ], function (util, gt) {
     describe('tasks utility', function () {
         var options = {
@@ -25,7 +25,7 @@ define(['io.ox/tasks/util','gettext!io.ox/tasks'
                 util.interpretTask(options.testData);
                 expect(options.testData).not.hasKey('badge');
             });
-            
+
             it('should add badge', function () {
                 var result = util.interpretTask(options.testData);
                 expect(result).hasKey('badge');
