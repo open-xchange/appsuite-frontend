@@ -823,7 +823,7 @@ define('io.ox/mail/view-detail',
                         if (_.device('smartphone')) {
                             dd.hide();
                         } else {
-                            dd.find('a>b.caret').before(
+                            dd.find('a').addClass('attachment-link').prepend(
                                 $('<i class="icon-paper-clip">'),
                                 $.txt('\u00A0')
                             );
