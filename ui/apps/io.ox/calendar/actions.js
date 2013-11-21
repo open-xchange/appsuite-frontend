@@ -109,7 +109,7 @@ define('io.ox/calendar/actions',
             util.createDistlistArrayFromPartisipantList(baton.data.participants).done(function (initdata) {
                 ox.load(['io.ox/contacts/distrib/main']).done(function (m) {
                     m.getApp().launch().done(function () {
-                        this.create(coreSettings.get('folder/contacts'), initdata);
+                        this.create(coreSettings.get('folder/contacts'), { distribution_list: initdata });
                     });
                 });
             });
