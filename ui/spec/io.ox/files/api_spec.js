@@ -244,7 +244,7 @@ define(['io.ox/files/api', 'shared/examples/for/api'], function (api, sharedExam
                 beforeEach(function () {
                     clearCache();
                 });
-                it('and use the provided versions cache', function () {
+                xit('and use the provided versions cache', function () {
                     sinon.spy(api.caches.versions, 'add');
                     var def = api.versions(locked),
                         first = $.Deferred();
@@ -273,7 +273,7 @@ define(['io.ox/files/api', 'shared/examples/for/api'], function (api, sharedExam
                         sinon.spy(api, 'propagate');
 
                     });
-                    it('after calling detach', function () {
+                    xit('after calling detach', function () {
                         var def = api.detach($.extend({}, locked, {version: '1'}));
                         jexpect(def).toResolveWith(function () {
                             return api.propagate.callCount === 1;
