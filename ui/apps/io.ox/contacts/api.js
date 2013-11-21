@@ -556,6 +556,7 @@ define('io.ox/contacts/api',
 
         // preference
         if (options.internal_userid !== undefined) {
+            delete options.contact_id;
             delete options.folder_id;
             delete options.folder;
             delete options.id;
@@ -563,7 +564,7 @@ define('io.ox/contacts/api',
 
         // empty extend trick to restrict to non-undefined values
         params = $.param($.extend({}, {
-            action: 'get',
+            //action: 'get',
             // identifier
             email: options.email && String(options.email).toLowerCase(),
             folder: options.folder_id || options.folder,
