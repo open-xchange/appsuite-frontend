@@ -213,9 +213,9 @@ define('io.ox/calendar/util',
         },
 
         getDateInterval: function (data) {
-            var startDate = data.start_date,
-                endDate = data.end_date;
-            if (startDate && endDate) {
+            if (data && data.start_date && data.end_date) {
+                var startDate = data.start_date,
+                    endDate = data.end_date;
                 if (data.full_time) {
                     startDate = date.Local.utc(startDate);
                     endDate = date.Local.utc(endDate);
@@ -297,6 +297,7 @@ define('io.ox/calendar/util',
         getTimeInterval: function (data, D) {
             var length;
             D = D || date.Local;
+            if (!data || !data.start_date || !data.end_date) return '';
             if (data.full_time) {
                 length = (data.end_date - data.start_date) / date.DAY >> 0;
                 return length <= 1 ? gt('Whole day') : gt.format(
