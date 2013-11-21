@@ -200,6 +200,15 @@ define('io.ox/mail/detail/content',
         }
     });
 
+    ext.point('io.ox/mail/detail/source').extend({
+        id: 'remove-wbr',
+        index: 400,
+        process: function (baton) {
+            if (baton.isLarge) return;
+            baton.source = baton.source.replace(/<wbr>/g, '');
+        }
+    });
+
     // content
 
     ext.point('io.ox/mail/detail/content').extend({
