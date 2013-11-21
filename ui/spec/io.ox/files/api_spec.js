@@ -10,9 +10,12 @@
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
-define(['io.ox/files/api', 'shared/examples/for/api'], function (api, sharedExamplesFor) {
+define(['io.ox/files/api',
+        'shared/examples/for/api',
+        'sinon-wrapper'], function (api, sharedExamplesFor, wrapper) {
     var jexpect = this.expect,
-        expect = chai.expect
+        expect = chai.expect,
+        sinon = wrapper.create(),
         unlocked = {
             id: '1',
             folder_id: '4711',
@@ -27,20 +30,6 @@ define(['io.ox/files/api', 'shared/examples/for/api'], function (api, sharedExam
         },
         lockedOther = $.extend({}, locked, {id: 3, locked_until: _.now() + (604800000 * 2), modified_by: 'other'}),
         versions = ["83971", 395, 395, 1376641135612, 1384501324622, "14048", null, null, 0, "136hs.jpg", null, "136hs.jpg", "image/jpeg", 44032, "1", "", 0, "b5d896b4e5caa1249300fad41d3670fc", null, true, 0];
-        spy = function (tracker) {
-            //dirty
-            if (!tracker.addFile.restore) {
-                //create
-                sinon.spy(tracker, 'addFile');
-                sinon.spy(tracker, 'updateFile');
-                sinon.spy(tracker, 'removeFile');
-            } else {
-                //reset counter
-                tracker.addFile.reset();
-                tracker.updateFile.reset();
-                tracker.removeFile.reset();
-            }
-        },
         clearCache = function () {
             var def;
             runs(function () {
@@ -94,7 +83,10 @@ define(['io.ox/files/api', 'shared/examples/for/api'], function (api, sharedExam
                         //add data
                         tracker.addFile(locked);
                         tracker.addFile(unlocked);
-                        spy(tracker);
+                        //create/reset spies
+                        sinon.spy(tracker, 'addFile');
+                        sinon.spy(tracker, 'updateFile');
+                        sinon.spy(tracker, 'removeFile');
 
                     });
                     it('of locked files', function () {
@@ -268,10 +260,7 @@ define(['io.ox/files/api', 'shared/examples/for/api'], function (api, sharedExam
                 });
                 describe('calling api.propagete to update caches and fire events', function () {
                     beforeEach(function () {
-                        if (api.propagate.restore)
-                            api.propagate.restore();
                         sinon.spy(api, 'propagate');
-
                     });
                     xit('after calling detach', function () {
                         var def = api.detach($.extend({}, locked, {version: '1'}));
@@ -328,4 +317,6 @@ define(['io.ox/files/api', 'shared/examples/for/api'], function (api, sharedExam
             });
         });
     });
+
+    sinon.restore();
 });
