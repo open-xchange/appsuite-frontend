@@ -19,7 +19,8 @@ define('io.ox/wizards/firstStart/main', [
 
     'use strict';
 
-    var point = ext.point('io.ox/wizards/firstStart');
+    var point = ext.point('io.ox/wizards/firstStart'),
+        topbar = $('#io-ox-topbar');
 
     new Stage('io.ox/core/stages', {
         id: 'firstStartWizard',
@@ -30,6 +31,7 @@ define('io.ox/wizards/firstStart/main', [
                 return $.when();
             }
             var def = $.Deferred();
+            topbar.hide();
             ox.idle();
             ox.manifests.loadPluginsFor('io.ox/wizards/firstStart')
                 .then(function () {
@@ -63,6 +65,7 @@ define('io.ox/wizards/firstStart/main', [
                 })
                 .done(function () {
                     settings.set({finished: true}).save();
+                    topbar.show();
                     ox.busy();
                 })
                 .fail(function () {
