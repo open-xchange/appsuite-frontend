@@ -52,6 +52,9 @@ define('plugins/wizards/mandatory/main', [
                 userAPI.getCurrentUser().done(function (user) {
                     baton.user = user;
 
+                    user.set('first_name');
+                    user.set('last_name');
+
                     function updateButtonState() {
                         if (!_.isEmpty(user.get('first_name')) && !_.isEmpty(user.get('last_name'))) {
                             baton.buttons.enableNext();
