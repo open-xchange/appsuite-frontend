@@ -24,6 +24,20 @@ define('plugins/wizards/mandatory/main', [
 
     var point = ext.point('io.ox/wizards/firstStart');
 
+    /**
+     * Don’t use gt for this, because it contains some example text that should not be translated
+     */
+    point.extend({
+        id: 'example_welcome',
+        title: 'Welcome',
+        draw: function (baton) {
+            this.append(
+                'Welcome to Appsuite, please enter some important information during the next steps'
+            );
+            baton.buttons.enableNext();
+        }
+    });
+
     point.extend({
         id: 'name',
         title: gt('Personal information'),
