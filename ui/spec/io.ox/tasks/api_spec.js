@@ -93,13 +93,13 @@ define(['shared/examples/for/api',
                 //make copy of testData
                 var testCopy = _.copy(options.tempTestData, true),
                     result = api.create(testCopy);
-                expect(testCopy).not.hasKey('tempAttachmentIndicator');
+                expect(testCopy).not.toHaveKey('tempAttachmentIndicator');
             });
             it('should remove alarm if it\'s null', function () {
                 //make copy of testData
                 var testCopy = _.copy(options.tempTestData, true),
                     result = api.create(testCopy);
-                expect(testCopy).not.hasKey('alarm');
+                expect(testCopy).not.toHaveKey('alarm');
             });
             it('should be added to \"Attachment upload in progress\" list if attachments are present', function () {
                 //make copy of testData
@@ -118,7 +118,7 @@ define(['shared/examples/for/api',
                 //make copy of testData
                 var testCopy = _.copy(options.testData, true),
                     result = api.create(testCopy);
-                expect(testCopy).hasKey('date_completed');
+                expect(testCopy).toHaveKey('date_completed');
             });
         });
         describe('updating a task', function () {
@@ -148,7 +148,7 @@ define(['shared/examples/for/api',
                 //make copy of testData
                 var testCopy = _.copy(options.tempTestDataUpdate, true),
                     result = api.update(testCopy);
-                expect(testCopy).not.hasKey('tempAttachmentIndicator');
+                expect(testCopy).not.toHaveKey('tempAttachmentIndicator');
             });
             it('should be added to \"Attachment upload in progress\" list if attachments are present', function () {
               //make copy of testData
@@ -167,7 +167,7 @@ define(['shared/examples/for/api',
                 //make copy of testData
                 var testCopy = _.copy(options.testDataUpdate, true),
                     result = api.update(testCopy);
-                expect(testCopy).hasKey('date_completed');
+                expect(testCopy).toHaveKey('date_completed');
             });
             it('should set date_completed to null if status != 3', function () {
                 //make copy of testData

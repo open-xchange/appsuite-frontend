@@ -42,12 +42,12 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks'
 
             it('should work on a copy', function () {
                 util.interpretTask(options.testData);
-                expect(options.testData).not.hasKey('badge');
+                expect(options.testData).not.toHaveKey('badge');
             });
 
             it('should add badge', function () {
                 var result = util.interpretTask(options.testData);
-                expect(result).hasKey('badge');
+                expect(result).toHaveKey('badge');
             });
 
             it('should change status to a string', function () {
