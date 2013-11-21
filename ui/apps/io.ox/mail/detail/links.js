@@ -131,9 +131,8 @@ define('io.ox/mail/detail/links',
         processDeepLink = function (text, node) {
 
             var data = parse(text),
-                link = $('<a>', { href: data.link, target: '_blank' })
-                    .addClass('deep-link')
-                    .css({ textDecoration: 'none', fontFamily: 'Arial' })
+                link = $('<a href="" target="_blank" class="deep-link" style="text-decoration: none; font-family: Arial;">')
+                    .attr('href', data.link)
                     .append(
                         $('<span class="label label-info">').text(
                             'id' in data ? items[data.app] : folders[data.app]
