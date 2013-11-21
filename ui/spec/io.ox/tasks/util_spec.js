@@ -17,7 +17,26 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks'
                 testData: {
                     'status': 2,
                     'title': undefined
-                }
+                },
+                testDataArray: [
+                    {
+                        'status': 3,
+                        'title': 'Top Test'
+                    }, {
+                        'end_date': 1895104800000,
+                        'status': 1,
+                        'title': 'Blabla'
+                    },
+                    {
+                        'end_date': 1895104800000,
+                        'status': 1,
+                        'title': 'Abc'
+                    }, {
+                        'status': 1,
+                        'title': 'Test Title',
+                        'end_date': 1384999200000
+                    }
+                    ]
             };
         describe('interpreting a task', function () {
 
@@ -138,6 +157,29 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks'
                 expect(result.endDate.getMinutes()).toEqual(0);
                 expect(result.endDate.getSeconds()).toEqual(0);
                 expect(result.endDate.getMilliseconds()).toEqual(0);
+            });
+        });
+        describe('sortTasks', function () {
+
+            it('should work on a copy', function () {
+                util.sortTasks(options.testDataArray);
+                expect(options.testDataArray[0]).toEqual({'status': 3, 'title': 'Top Test'});
+            });
+
+            it('should sort overdue tasks to first position', function () {
+                var result = util.sortTasks(options.testDataArray);
+                expect(result[0]).toEqual({'status': 1, 'title': 'Test Title','end_date': 1384999200000 });
+            });
+
+            it('should sort done tasks to last position', function () {
+                var result = util.sortTasks(options.testDataArray);
+                expect(result[3]).toEqual({'status': 3, 'title': 'Top Test'});
+            });
+            
+            it('should sort same dates alphabetically', function () {
+                var result = util.sortTasks(options.testDataArray);
+                expect(result[1]).toEqual({'end_date': 1895104800000, 'status': 1, 'title': 'Abc'});
+                expect(result[2]).toEqual({'end_date': 1895104800000, 'status': 1, 'title': 'Blabla'});
             });
         });
     });
