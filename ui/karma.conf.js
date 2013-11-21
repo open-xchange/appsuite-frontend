@@ -67,6 +67,11 @@ module.exports = function(config) {
     // - IE (only Windows)
     browsers: ['PhantomJS'],
 
+    phantomjsLauncher: {
+        options: {
+            viewportSize: { width: 1024, height: 768 }
+        }
+    },
 
     // If browser does not capture in given timeout [ms], kill it
     captureTimeout: 60000,
