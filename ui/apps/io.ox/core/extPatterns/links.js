@@ -103,7 +103,7 @@ define("io.ox/core/extPatterns/links",
         this.draw = function (baton) {
             baton = ext.Baton.ensure(baton);
             this.append(
-                $('<' + tag + ' href="#" class="btn">')
+                node = $('<' + tag + ' href="#" class="btn">')
                 .attr({ "data-action": self.id, tabIndex: self.tabIndex })
                 .addClass(self.cssClasses)
                 .css(self.css || {})
@@ -114,7 +114,8 @@ define("io.ox/core/extPatterns/links",
         };
 
         this.busy = function () {
-            node.busy();
+//            node.busy();
+            node.addClass('io-ox-busy');
         };
 
         this.idle = function () {
