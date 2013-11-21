@@ -119,24 +119,10 @@ define('io.ox/calendar/util',
             return localDate.format(date.TIME);
         },
 
-// OLD STUFF - looks nice
         getDate: function (timestamp) {
             var d = timestamp !== undefined ? new date.Local(timestamp) : new date.Local();
             return d.format(date.DAYOFWEEK_DATE);
         },
-
-// NEW STUFF - not yet done
-//
-//        getTime: function (timestamp) {
-//            return (new date.Local(date.Local.utc(timestamp)))
-//                .format(date.locale.time);
-//        },
-//
-//        getDate: function (timestamp) {
-//            var d = timestamp !== undefined ?
-//                new date.Local(date.Local.utc(timestamp)) : new date.Local();
-//            return d.format(date.locale.date);
-//        },
 
         getSmartDate: function (data, showDate) {
 
@@ -294,43 +280,41 @@ define('io.ox/calendar/util',
             return new date.Local(t1).getDays() === new date.Local(t2).getDays();
         },
 
-        getTimeInterval: function (data, D) {
-            var length;
-            D = D || date.Local;
-            if (!data || !data.start_date || !data.end_date) return '';
-            if (data.full_time) {
-                length = (data.end_date - data.start_date) / date.DAY >> 0;
-                return length <= 1 ? gt('Whole day') : gt.format(
-                    //#. General duration (nominative case): X days
-                    //#. %d is the number of days
-                    //#, c-format
-                    gt.ngettext('%d day', '%d days', length), length);
-            } else {
-                var L = date.locale,
-                    diff = L.intervals[(L.h12 ? 'hm' : 'Hm') +
-                                       (date.TIME & date.TIMEZONE ? 'v' : '')];
-                var stuff = new D(data.start_date).formatInterval(
-                        new D(data.end_date), diff.a || diff.m);
-                return stuff;
-            }
-        },
-        getStartAndEndTime: function (data, D) {
-            var length;
-            D = D || date.Local;
-            length = (data.end_date - data.start_date) / date.DAY >> 0;
-            if (data.full_time) {
-                return length <= 1 ? [gt('Whole day')] : [gt.format(
-                    //#. General duration (nominative case): X days
-                    //#. %d is the number of days
-                    //#, c-format
-                    gt.ngettext('%d day', '%d days', length), length)];
-            } else {
-                return [new D(data.start_date).format(date.TIME), new D(data.end_date).format(date.TIME)];
-            }
-        },
         getDurationInDays: function (data) {
             return (data.end_date - data.start_date) / date.DAY >> 0;
         },
+
+        getFullTimeInterval: function (data) {
+            var length = this.getDurationInDays(data);
+            return length <= 1 ? gt('Whole day') : gt.format(
+                //#. General duration (nominative case): X days
+                //#. %d is the number of days
+                //#, c-format
+                gt.ngettext('%d day', '%d days', length), length);
+        },
+
+        getTimeInterval: function (data, D) {
+            if (!data || !data.start_date || !data.end_date) return '';
+            if (data.full_time) {
+                return this.getFullTimeInterval(data);
+            } else {
+                D = D || date.Local;
+                var diff = date.locale.intervals[(date.locale.h12 ? 'hm' : 'Hm') + (date.TIME & date.TIMEZONE ? 'v' : '')];
+                return new D(data.start_date).formatInterval(new D(data.end_date), diff.a || diff.m);
+            }
+        },
+
+        getStartAndEndTime: function (data) {
+            var ret = [];
+            if (!data || !data.start_date || !data.end_date) return ret;
+            if (data.full_time) {
+                ret.push(this.getFullTimeInterval(data));
+            } else {
+                ret.push(new date.Local(data.start_date).format(date.TIME), new date.Local(data.end_date).format(date.TIME));
+            }
+            return ret;
+        },
+
         addTimezoneLabel: function (parent, data) {
 
             var current = date.Local.getTTInfoLocal(data.start_date);

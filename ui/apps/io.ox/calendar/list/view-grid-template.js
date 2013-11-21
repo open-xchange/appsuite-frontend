@@ -83,7 +83,7 @@ define('io.ox/calendar/list/view-grid-template',
 
                 fields.date.empty().text(util.getDateInterval(data));
 
-                if ((util.getDurationInDays(data) > 0) && !data.full_time) {
+                if (!data.full_time && (util.getDurationInDays(data) > 0)) {
                     fields.date.show();
                 }
 
