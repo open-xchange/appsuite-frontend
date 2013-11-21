@@ -143,40 +143,6 @@ define('io.ox/tasks/util',
                 return result;
             },
 
-            //selects the default reminder if its available, otherwise the next item
-            selectDefaultReminder: function (node) {
-                var interval = settings.get('interval', '5'),
-                    options  = [];
-                _(node.prop('options')).each(function (obj) {
-                    options.push($(obj).val());
-                });
-                if (!(_.contains(options, interval))) {//default option not present
-                    //check if its today or weekday
-                    if (interval[0] === 'd') {
-                        var found = false;
-                        for (var i = parseInt(interval[1], 10) + 1; i < 5; i++) {
-                            if (_.contains(options, 'd' + i)) {
-                                found = true;
-                                interval = 'd' + i;
-                                break;
-                            }
-                        }
-
-                        if (!found) {//too late for today. use tomorrow
-                            interval = 't';
-                        }
-                    } else {//weekday not found. must be either tomorrow or today
-                        var weekDay = new Date().getDay();
-                        if (weekDay === parseInt(interval[1], 10)) {//its today, make it next week
-                            interval = 'ww';
-                        } else {//must be tomorrow
-                            interval = 't';
-                        }
-                    }
-                }
-                node.val(interval);
-            },
-
             //builds dropdownmenu nodes, if o.bootstrapDropdown is set listnodes are created else option nodes
             buildDropdownMenu: function (o) {
                 if (!o) {
