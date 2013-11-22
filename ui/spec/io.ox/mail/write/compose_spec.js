@@ -26,19 +26,18 @@ define(['io.ox/mail/write/main'], function (writer) {
 
         var app = null, ed = null, form = null;
 
-        it('opens compose dialog in HTML mode', function () {
+        ox.testUtils.stubAppsuiteBody();
+
+        it('opens in HTML mode', function () {
 
             var loaded = new Done();
 
             waitsFor(loaded, 'compose dialog');
 
             writer.getApp().launch().done(function () {
-                console.log('Yihaa');
                 app = this;
                 app.compose().done(function () {
-                    console.log('Yihaa > compose > done');
                     app.setFormat('html').done(function () {
-                        console.log('Yihaa > compose > done > setFormat > done');
                         ed = app.getEditor();
                         form = app.getWindow().nodes.main.find('form');
                         loaded.yep();
@@ -54,86 +53,85 @@ define(['io.ox/mail/write/main'], function (writer) {
             // enter email address and press <enter>
             form.find('input[data-type=to]').val('otto.xentner@io.ox')
                 .focus()
-                .trigger($.Event('keyup', { which: 13 }));
+                .trigger($.Event('keydown', { which: 13 }));
             // check for proper DOM node
             var to = form.find('.recipient-list input[type=hidden][name=to]');
-            expect(to.val())
-                .toEqual('"otto.xentner" <otto.xentner@io.ox>');
+            expect(to.val()).toBe('"otto.xentner" <otto.xentner@io.ox>');
+        });
+
+        it('does not add duplicates', function () {
+            // enter email address and press <enter>
+            form.find('input[data-type=to]').val('"Otto" <otto.xentner@io.ox>')
+                .focus()
+                .trigger($.Event('keydown', { which: 13 }));
+            // check for proper DOM node
+            var to = form.find('.recipient-list input[type=hidden][name=to]');
+            expect(to.length).toBe(1);
         });
 
         it('adds recipient with display name', function () {
             // enter email address and press <enter>
-            form.find('input[data-type=to]').val('"Otto X." <otto.xentner@io.ox>')
+            form.find('input[data-type=to]').val('"Otto X." <otto.xentner.two@io.ox>')
                 .focus()
-                .trigger($.Event('keyup', { which: 13 }));
+                .trigger($.Event('keydown', { which: 13 }));
             // check for proper DOM node
             var to = form.find('.recipient-list input[type=hidden][name=to]').last();
-            expect(to.val())
-                .toEqual('"Otto X." <otto.xentner@io.ox>');
+            expect(to.val()).toBe('"Otto X." <otto.xentner.two@io.ox>');
         });
 
         it('adds recipient by focussing another element', function () {
             // enter email address and blur
-            form.find('input[data-type=to]').val('"Otto;must escape,this" <otto.xentner@io.ox>')
+            form.find('input[data-type=to]').val('"Otto;must escape,this" <otto.xentner.three@io.ox>')
                 .focus().blur(); // IE has delay when focusing another element
             // check for proper DOM node
             var to = form.find('.recipient-list input[type=hidden][name=to]').last();
-            expect(to.val())
-                .toEqual('"Otto;must escape,this" <otto.xentner@io.ox>');
+            expect(to.val()).toBe('"Otto;must escape,this" <otto.xentner.three@io.ox>');
         });
 
         it('adds multiple recipients at once', function () {
             // enter email address and blur
             form.find('input[data-type=to]')
-                .val(' "Otto;must escape,this" <otto.xentner@io.ox>; "Hannes" <hannes@ox.io>, ' +
-                        'Horst <horst@ox.io>;, ')
+                .val(' "Otto;must escape,this" <otto.xentner.four@io.ox>; "Hannes" <hannes@ox.io>, Horst <horst@ox.io>;, ')
                 .focus().blur();
             // check for proper DOM node
             var to = form.find('.recipient-list input[type=hidden][name=to]').slice(-3);
-            expect(true)
-                .toEqual(
-                    to.eq(0).val() === '"Otto;must escape,this" <otto.xentner@io.ox>' &&
-                    to.eq(1).val() === '"Hannes" <hannes@ox.io>' &&
-                    to.eq(2).val() === '"Horst" <horst@ox.io>'
-                );
+            expect(to.eq(0).val()).toBe('"Otto;must escape,this" <otto.xentner.four@io.ox>');
+            expect(to.eq(1).val()).toBe('"Hannes" <hannes@ox.io>');
+            expect(to.eq(2).val()).toBe('"Horst" <horst@ox.io>');
         });
 
         it('opens CC section', function () {
             // open section
             form.find('[data-section-link=cc]').trigger('click');
             var section = form.find('[data-section=cc]:visible');
-            expect(section.length)
-                .toEqual(1);
+            expect(section.length).toBe(1);
         });
 
         it('adds recipient to CC', function () {
             // enter email address and press <enter>
-            form.find('input[data-type=cc]').val('otto.xentner@io.ox')
+            form.find('input[data-type=cc]').val('otto.xentner.five@io.ox')
                 .focus()
-                .trigger($.Event('keyup', { which: 13 }));
+                .trigger($.Event('keydown', { which: 13 }));
             // check for proper DOM node
             var cc = form.find('.recipient-list input[type=hidden][name=cc]');
-            expect(cc.val())
-                .toEqual('"otto.xentner" <otto.xentner@io.ox>');
+            expect(cc.val()).toBe('"otto.xentner.five" <otto.xentner.five@io.ox>');
         });
 
         it('opens BCC section', function () {
             // open section
             form.find('[data-section-link=bcc]').trigger('click');
             var section = form.find('[data-section=bcc]:visible');
-            expect(section.length)
-                .toEqual(1);
+            expect(section.length).toBe(1);
         });
 
         it('adds recipient to BCC', function () {
             // enter email address and press <enter>
             form.find('input[data-type=bcc]').val('hannes@io.ox')
                 .focus()
-                .trigger($.Event('keyup', { which: 13 }));
+                .trigger($.Event('keydown', { which: 13 }));
             // check for proper DOM node
             var bcc = form.find('.recipient-list input[type=hidden][name=bcc]');
-            expect(bcc.val())
-                .toEqual('"hannes" <hannes@io.ox>');
+            expect(bcc.val()).toBe('"hannes" <hannes@io.ox>');
         });
 
         it('removes recipient from BCC', function () {
@@ -143,16 +141,15 @@ define(['io.ox/mail/write/main'], function (writer) {
             a.parent().find('a.remove').trigger('click');
             // get proper DOM node (again)
             b = form.find('.recipient-list input[type=hidden][name=bcc]');
-            expect(true)
-                .toEqual(a.length === 1 && b.length === 0);
+            expect(a.length).toBe(1);
+            expect(b.length).toBe(0);
         });
 
         it('closes BCC section', function () {
             // open section
             form.find('[data-section-label=bcc]').trigger('click');
             var section = form.find('[data-section=bcc]:visible');
-            expect(section.length)
-                .toEqual(0);
+            expect(section.length).toBe(0);
         });
 
         it('sets high priority', function () {
@@ -160,127 +157,113 @@ define(['io.ox/mail/write/main'], function (writer) {
             form.find('input[name=priority]').eq(0).focus().prop('checked', true).trigger('change').blur();
             // check priority overlay
             var overlay = form.find('.priority-overlay');
-            expect(overlay.hasClass('high'))
-                .toEqual(true);
+            expect(overlay.hasClass('high')).toBe(true);
         });
 
         it('sets subject', function () {
             // set subject via class
             form.find('input.subject').val('TEST: Hello World');
             // check via name attribute
-            expect(form.find('input[name=subject]').val())
-                .toEqual('TEST: Hello World');
+            expect(form.find('input[name=subject]').val()).toBe('TEST: Hello World');
         });
 
         it('sets editor content', function () {
             ed.setContent(' <p>Lorem ipsum</p>\r\n ');
-            expect(ed.getContent())
-                .toEqual('<p>Lorem ipsum</p>');
+            expect(ed.getContent()).toBe('<p>Lorem ipsum</p>');
         });
 
         it('has correct mail body', function () {
             var data = app.getMail().data;
-            expect(
-                    data.attachments &&
-                    data.attachments.length &&
-                    data.attachments[0].content_type === 'text/html'
-                ).toEqual(true);
-            expect(data.attachments[0].content)
-                .toEqual('<p>Lorem ipsum</p>');
+            expect(data.attachments).toBeDefined();
+            expect(data.attachments.length).toBeGreaterThan(0);
+            expect(data.attachments[0].content_type).toBe('alternative');
+            expect(data.attachments[0].content).toBe('<p>Lorem ipsum</p>');
         });
 
         it('has correct mail props (bcc)', function () {
             var data = app.getMail().data;
-            expect(_.isArray(data.bcc) && data.bcc.length === 0)
-                .toEqual(true);
+            expect(_.isArray(data.bcc)).toBe(true);
+            expect(data.bcc.length).toBe(0);
         });
 
         it('has correct mail props (cc)', function () {
             var data = app.getMail().data;
-            expect(
-                    _.isArray(data.cc) && data.cc.length === 1 &&
-                    data.cc[0][0] === '"otto.xentner"' && data.cc[0][1] === 'otto.xentner@io.ox'
-                )
-                .toEqual(true);
+            expect(_.isArray(data.cc)).toBe(true);
+            expect(data.cc.length).toBe(1);
+            expect(data.cc[0][0]).toBe('"otto.xentner.five"');
+            expect(data.cc[0][1]).toBe('otto.xentner.five@io.ox');
         });
 
         it('has correct mail props (from)', function () {
             var data = app.getMail().data;
-            expect(_.isArray(data.from) && data.from.length === 1)
-                .toEqual(true);
+            expect(_.isArray(data.from)).toBe(true);
+            expect(data.from.length).toBe(1);
         });
 
         it('has correct mail props (priority)', function () {
             var data = app.getMail().data;
-            expect(data.priority === 1)
-                .toEqual(true);
+            expect(data.priority).toBe(1);
         });
 
         it('has correct mail props (subject)', function () {
             var data = app.getMail().data;
-            expect(data.subject === 'TEST: Hello World')
-                .toEqual(true);
+            expect(data.subject).toBe('TEST: Hello World');
         });
 
         it('has correct mail props (to)', function () {
             var data = app.getMail().data;
-            expect(
-                    _.isArray(data.to) && data.to.length === 6 &&
-                    data.to[4][0] === '"Hannes"' && data.to[4][1] === 'hannes@ox.io'
-                )
-                .toEqual(true);
+            expect(_.isArray(data.to)).toBe(true);
+            expect(data.to.length).toBe(6);
+            expect(data.to[4][0]).toBe('"Hannes"');
+            expect(data.to[4][1]).toBe('hannes@ox.io');
         });
 
         it('has correct mail props (vcard)', function () {
             var data = app.getMail().data;
-            expect(data.vcard === 0)
-                .toEqual(true);
+            expect(data.vcard).toBe(0);
         });
 
-        var sentMailId = {}, sentOriginalData;
+        // var sentMailId = {}, sentOriginalData;
 
-        if (1 > 2) {
+        // it('sends mail successfully', function () {
+        //     var data = app.getMail().data, done = new Done();
+        //     waitsFor(done, 'mail being send');
+        //     // get myself
+        //     accountAPI.getPrimaryAddress().done(function (address) {
+        //             // just send to myself
+        //             data.to = [address];
+        //             data.cc = [];
+        //             data.bcc = [];
+        //             sentOriginalData = data;
+        //             mailAPI.send(data)
+        //                 .always(function (result) {
+        //                     done.yep();
+        //                     sentMailId = String(result.data);
+        //                     expect(result.error).toBeUndefined();
+        //                 });
+        //         });
+        // });
 
-            it('sends mail successfully', function () {
-                var data = app.getMail().data, done = new Done();
-                waitsFor(done, 'mail being send');
-                // get myself
-                accountAPI.getPrimaryAddress().done(function (address) {
-                        // just send to myself
-                        data.to = [address];
-                        data.cc = [];
-                        data.bcc = [];
-                        sentOriginalData = data;
-                        mailAPI.send(data)
-                            .always(function (result) {
-                                done.yep();
-                                sentMailId = String(result.data);
-                                expect(result.error).toBeUndefined();
-                            });
-                    });
-            });
-
-            it('verifies that sent mail is ok', function () {
-                var done = new Done(),
-                    data = sentOriginalData,
-                    split = sentMailId.split(/\/(\d+$)/);
-                waitsFor(done, 'mail being fetched');
-                mailAPI.get({ folder: split[0], id: split[1] })
-                    .done(function (sent) {
-                        done.yep();
-                        expect(
-                                _.isEqual(sent.subject, data.subject) &&
-                                _.isEqual(sent.from, data.from) &&
-                                _.isEqual(sent.to, data.to) &&
-                                _.isEqual(sent.cc, data.cc) &&
-                                _.isEqual(sent.bcc, data.bcc) &&
-                                _.isEqual(sent.priority, data.priority) &&
-                                _.isEqual(sent.vcard || undefined, data.vcard || undefined)
-                            )
-                            .toEqual(true);
-                    });
-            });
-        }
+        // it('verifies that sent mail is ok', function () {
+        //     var done = new Done(),
+        //         data = sentOriginalData,
+        //         split = sentMailId.split(/\/(\d+$)/);
+        //     waitsFor(done, 'mail being fetched');
+        //     mailAPI.get({ folder: split[0], id: split[1] })
+        //         .done(function (sent) {
+        //             done.yep();
+        //             expect(
+        //                     _.isEqual(sent.subject, data.subject) &&
+        //                     _.isEqual(sent.from, data.from) &&
+        //                     _.isEqual(sent.to, data.to) &&
+        //                     _.isEqual(sent.cc, data.cc) &&
+        //                     _.isEqual(sent.bcc, data.bcc) &&
+        //                     _.isEqual(sent.priority, data.priority) &&
+        //                     _.isEqual(sent.vcard || undefined, data.vcard || undefined)
+        //                 )
+        //                 .toEqual(true);
+        //         });
+        // });
 
         it('closes compose dialog', function () {
             // mark app as clean so no save as draft question will pop up
