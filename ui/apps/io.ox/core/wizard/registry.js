@@ -320,9 +320,12 @@ define('io.ox/core/wizard/registry',
                 }
             }
             busy();
-            def.done(function () {
+            def.then(function () {
                 idle();
                 goToPage(self.index + 1);
+            }, function () {
+                idle();
+                goToPage(self.index);
             });
         };
 
