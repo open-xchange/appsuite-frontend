@@ -164,6 +164,8 @@ define('plugins/wizards/mandatory/main', [
         draw: function (baton) {
             var forms = baton.libraries.forms;
 
+            this.append($('<h4>').text(gt('Your timezone')));
+
             new forms.SelectBoxField({
                 label: gt('Timezone'),
                 attribute: 'timezone',
